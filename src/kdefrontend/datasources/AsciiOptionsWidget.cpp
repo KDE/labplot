@@ -113,10 +113,11 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.kleVectorNames->setToolTip(info);
 
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
+	connect(ui.sbHeaderLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &AsciiOptionsWidget::headerLineChanged);
 }
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
-	DEBUG("AsciiOptionsWidget::showAsciiHeaderOptions(" << visible << ")");
+	DEBUG(Q_FUNC_INFO);
 	ui.chbHeader->setVisible(visible);
 	if (visible) {
 		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());

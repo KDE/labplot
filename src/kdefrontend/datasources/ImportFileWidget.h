@@ -113,6 +113,7 @@ private Q_SLOTS:
 	void selectFile();
 	void showFileInfo();
 	void refreshPreview();
+	void updateStartRow(int);
 
 Q_SIGNALS:
 	void fileNameChanged();

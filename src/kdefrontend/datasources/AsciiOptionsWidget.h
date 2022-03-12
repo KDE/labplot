@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget providing options for the import of ascii data
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -29,6 +29,9 @@ public:
 
 public Q_SLOTS:
 	void headerChanged(bool);
+
+Q_SIGNALS:
+	void headerLineChanged(int);
 
 private:
 	Ui::AsciiOptionsWidget ui;

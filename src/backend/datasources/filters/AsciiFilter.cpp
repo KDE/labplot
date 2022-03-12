@@ -305,6 +305,8 @@ bool AsciiFilter::isHeaderEnabled() const {
 
 void AsciiFilter::setHeaderLine(int line) {
 	d->headerLine = line;
+	if (line >= d->startRow)	// adapt start row to start after header
+		d->startRow = line + 1;
 }
 
 void AsciiFilter::setSkipEmptyParts(const bool b) {
@@ -572,8 +574,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	// parse first data line to determine data type for each column
 	if (headerEnabled && !device.isSequential()) {
 		m_actualStartRow++;
-		if (headerLine)	// start from headerLine
-			m_actualStartRow += headerLine - 1;
+		if (headerLine)	// start from beginning
+			m_actualStartRow -= headerLine - 1;
 		firstLineStringList = getLineString(device);
 	}
 

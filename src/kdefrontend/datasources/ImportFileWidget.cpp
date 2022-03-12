@@ -419,6 +419,9 @@ void ImportFileWidget::initSlots() {
 	connect(ui.cbFilter, static_cast<void (KComboBox::*) (int)>(&KComboBox::activated), this, &ImportFileWidget::filterChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportFileWidget::refreshPreview);
 
+	if (m_asciiOptionsWidget)
+		connect(m_asciiOptionsWidget.get(), &AsciiOptionsWidget::headerLineChanged, this, &ImportFileWidget::updateStartRow);
+
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {
@@ -431,6 +434,7 @@ void ImportFileWidget::initSlots() {
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &ImportFileWidget::enableWill);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::subscriptionChanged, this, &ImportFileWidget::refreshPreview);
 #endif
+
 }
 
 void ImportFileWidget::showAsciiHeaderOptions(bool b) {
@@ -1618,6 +1622,11 @@ void ImportFileWidget::refreshPreview() {
 		m_fileEmpty = true;
 
 	RESET_CURSOR;
+}
+
+void ImportFileWidget::updateStartRow(int line) {
+	if (line >= ui.sbStartRow->value())
+		ui.sbStartRow->setValue(line + 1);
 }
 
 void ImportFileWidget::updateContent(const QString& fileName) {
