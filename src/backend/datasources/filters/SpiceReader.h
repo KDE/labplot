@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDateTime>
 #include <QTextStream>
+#include <QVector>
 
 class SpiceFileReader: public QObject {
 	Q_OBJECT

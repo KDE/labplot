@@ -237,8 +237,8 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 					}
 				} else {
 					const double value = locale.toDouble(valueString, &isNumber);
-					auto v = static_cast<QVector<double>*>(data[j]);
-					static_cast<QVector<double>*>(data[j])->operator[](linesRead) = (isNumber ? value : NAN);
+					auto* v = static_cast<QVector<double>*>(data[j]);
+					v->operator[](linesRead) = (isNumber ? value : NAN);
 				}
 			}
 			linesRead ++;
