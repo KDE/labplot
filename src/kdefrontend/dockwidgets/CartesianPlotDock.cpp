@@ -28,6 +28,7 @@
 #include <QPainter>
 #include <QRadioButton>
 #include <QWheelEvent>
+#include <QDebug>
 
 namespace {
 enum TwRangesColumn{
