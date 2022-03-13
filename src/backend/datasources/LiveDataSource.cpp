@@ -3,7 +3,7 @@
     Project		: LabPlot
     Description	: Represents live data source
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
     SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
@@ -46,10 +46,11 @@
 LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(name, loading, AspectType::LiveDataSource),
 	m_updateTimer(new QTimer(this)), m_watchTimer(new QTimer(this)) {
 
-	initActions();
+	m_watchTimer->setSingleShot(true);
+	m_watchTimer->setInterval(100);
 
 	//stop reading from the source before removing the child from the project
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &LiveDataSource::pauseReading);
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved,  [this](const AbstractAspect* aspect) { if (aspect == this) pauseReading(); } );
 
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 	connect(m_watchTimer, &QTimer::timeout, this, &LiveDataSource::readOnUpdate);
@@ -66,13 +67,6 @@ LiveDataSource::~LiveDataSource() {
 #ifdef HAVE_QTSERIALPORT
 	delete m_serialPort;
 #endif
-}
-
-void LiveDataSource::initActions() {
-	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
-	connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
-	m_watchTimer->setSingleShot(true);
-	m_watchTimer->setInterval(100);
 }
 
 QWidget* LiveDataSource::view() const {
@@ -425,6 +419,11 @@ QMenu* LiveDataSource::createContextMenu() {
 	//and insert the action at the beginning of the menu.
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
+
+	if (!m_plotDataAction) {
+		m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+		connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
+	}
 
 	menu->insertAction(firstAction, m_plotDataAction);
 	menu->insertSeparator(firstAction);

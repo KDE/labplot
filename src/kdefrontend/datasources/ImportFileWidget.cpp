@@ -590,7 +590,7 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	if (m_currentFilter && m_currentFilter->type() != fileType)
 		m_currentFilter.reset();
 
