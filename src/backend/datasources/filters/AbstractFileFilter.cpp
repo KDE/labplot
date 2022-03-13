@@ -10,8 +10,7 @@
 */
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
-#include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
+#include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QDateTime>
@@ -140,14 +139,14 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("har"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = FileType::JSON;
+	} else if (SpiceFilter::isSpiceAsciiFile(fileName)) {
+		fileType = FileType::SpiceRawAscii;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
 		|| fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
 		|| fileInfo.contains(QLatin1String("compressed data"))/* for gzipped ascii data */ ) {
-		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
-			fileType = FileType::NgspiceRawAscii;
-		else if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
+		if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
 			fileType = FileType::READSTAT;
 		else //probably ascii data
 			fileType = FileType::Ascii;
@@ -196,8 +195,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;
-	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
-		fileType = FileType::NgspiceRawBinary;
+	else if (SpiceFilter::isSpiceBinaryFile(fileName))
+		fileType = FileType::SpiceRawBinary;
 	else
 		fileType = FileType::Binary;
 
@@ -216,8 +215,8 @@ QStringList AbstractFileFilter::fileTypes() {
 		<< i18n("Flexible Image Transport System Data Format (FITS)")
 		<< i18n("JSON Data")
 		<< i18n("ROOT (CERN) Histograms")
-		<< i18n("Ngspice RAW ASCII")
-		<< i18n("Ngspice RAW Binary")
+		<< i18n("Spice RAW ASCII")
+		<< i18n("Spice RAW Binary")
 		<< i18n("SAS, Stata or SPSS")
 	);
 }

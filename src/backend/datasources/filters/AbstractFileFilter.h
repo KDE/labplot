@@ -27,7 +27,7 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
-	enum class FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, NgspiceRawAscii, NgspiceRawBinary, READSTAT, MATIO};
+	enum class FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, SpiceRawAscii, SpiceRawBinary, READSTAT, MATIO};
 	enum class ImportMode {Append, Prepend, Replace};
 
 	explicit AbstractFileFilter(FileType type) : m_type(type) {}

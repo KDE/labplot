@@ -408,8 +408,8 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme("application-x-root");
 		break;
-	case AbstractFileFilter::FileType::NgspiceRawAscii:
-	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::SpiceRawAscii:
+	case AbstractFileFilter::FileType::SpiceRawBinary:
 		break;
 	}
 
@@ -562,8 +562,8 @@ void LiveDataSource::read() {
 			// bytes = qSharedPointerCast<BinaryFilter>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 // 			m_bytesRead += bytes;
 		case AbstractFileFilter::FileType::ROOT:
-		case AbstractFileFilter::FileType::NgspiceRawAscii:
-		case AbstractFileFilter::FileType::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::SpiceRawAscii:
+		case AbstractFileFilter::FileType::SpiceRawBinary:
 			//only re-reading of the whole file is supported
 			m_filter->readDataFromFile(m_fileName, this);
 			break;

@@ -1,29 +1,35 @@
 /*
-    File                 : NgspiceRawNgspiceRawAsciiFilterPrivate.h
+    File                 : SpiceFilterPrivate.h
     Project              : LabPlot
-    Description          : Ngspice RAW ASCII filter
+    Description          : Private of Spice Filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef NGSPICERAWASCIIFILTERPRIVATE_H
-#define NGSPICERAWASCIIFILTERPRIVATE_H
+#ifndef SPICEFILTERPRIVATE_H
+#define SPICEFILTERPRIVATE_H
+
+#include <QStringList>
+#include "AbstractFileFilter.h"
 
 class AbstractDataSource;
+class SpiceFileReader;
+class SpiceFilter;
 
-class NgspiceRawAsciiFilterPrivate {
+class SpiceFilterPrivate {
 
 public:
-	explicit NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter*);
+	explicit SpiceFilterPrivate(SpiceFilter *);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
+	void generateVectorNamesColumnModes(const SpiceFileReader& reader);
 
-	const NgspiceRawAsciiFilter* q;
+	const SpiceFilter* q;
 
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
@@ -34,4 +40,4 @@ private:
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers
 };
 
-#endif
+#endif // SPICEFILTERPRIVATE_H

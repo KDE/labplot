@@ -1,0 +1,7 @@
+add_executable (SpiceFilterTest SpiceFilterTest.cpp)
+target_compile_definitions(SpiceFilterTest PRIVATE SPICEFILTERTEST_EN)
+
+target_link_libraries(SpiceFilterTest labplot2lib Qt5::Test)
+target_compile_definitions(labplot2lib PRIVATE SPICEFILTERTEST_EN)
+
+add_test(NAME SpiceFilterTest COMMAND SpiceFilterTest)

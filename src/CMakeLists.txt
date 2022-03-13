@@ -301,8 +301,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
-	${BACKEND_DIR}/datasources/filters/NgspiceRawAsciiFilter.cpp
-	${BACKEND_DIR}/datasources/filters/NgspiceRawBinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
 	${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp

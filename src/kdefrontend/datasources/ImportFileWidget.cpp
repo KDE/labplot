@@ -104,8 +104,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawAscii));
-		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawAscii));
+		ui.cbFileType->addItem(i18n("Spice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawBinary));
 #ifdef HAVE_READSTAT
 		ui.cbFileType->addItem(i18n("SAS, Stata or SPSS"), static_cast<int>(AbstractFileFilter::FileType::READSTAT));
 #endif
@@ -125,8 +125,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawAscii));
-		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawAscii));
+		ui.cbFileType->addItem(i18n("Spice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawBinary));
 
 		ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
@@ -726,21 +726,21 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawAscii: {
-		DEBUG(Q_FUNC_INFO <<", NgspiceRawAscii");
+	case AbstractFileFilter::FileType::SpiceRawAscii: {
+		DEBUG(Q_FUNC_INFO <<", SpiceRawAscii");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new NgspiceRawAsciiFilter);
-		auto filter = static_cast<NgspiceRawAsciiFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new SpiceFilter(SpiceFilter::Type::Ascii));
+		auto filter = static_cast<SpiceFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawBinary: {
-		DEBUG(Q_FUNC_INFO <<", NgspiceRawBinary");
+	case AbstractFileFilter::FileType::SpiceRawBinary: {
+		DEBUG(Q_FUNC_INFO <<", SpiceRawBinary");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new NgspiceRawBinaryFilter);
-		auto filter = static_cast<NgspiceRawBinaryFilter*>(m_currentFilter.get());
+			m_currentFilter.reset(new SpiceFilter(SpiceFilter::Type::Binary));
+		auto filter = static_cast<SpiceFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 
@@ -981,8 +981,8 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		break;
-	case AbstractFileFilter::FileType::NgspiceRawAscii:
-	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::SpiceRawAscii:
+	case AbstractFileFilter::FileType::SpiceRawBinary:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
@@ -1127,8 +1127,8 @@ void ImportFileWidget::initOptionsWidget() {
 			m_matioOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
 		break;
-	case AbstractFileFilter::FileType::NgspiceRawAscii:
-	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::SpiceRawAscii:
+	case AbstractFileFilter::FileType::SpiceRawBinary:
 	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
@@ -1262,11 +1262,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::FileType::NgspiceRawAscii:
-			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
-			break;
-		case AbstractFileFilter::FileType::NgspiceRawBinary:
-			infoStrings << NgspiceRawBinaryFilter::fileInfoString(fileName);
+		case AbstractFileFilter::FileType::SpiceRawAscii:
+		case AbstractFileFilter::FileType::SpiceRawBinary:
+			infoStrings << SpiceFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::READSTAT:
 			infoStrings << ReadStatFilter::fileInfoString(fileName);
@@ -1325,8 +1323,8 @@ void ImportFileWidget::refreshPreview() {
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
-	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
+	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::SpiceRawAscii
+	        || fileType == AbstractFileFilter::FileType::SpiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1519,17 +1517,17 @@ void ImportFileWidget::refreshPreview() {
 		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Double);
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawAscii: {
+	case AbstractFileFilter::FileType::SpiceRawAscii: {
 		ui.tePreview->clear();
-		auto filter = static_cast<NgspiceRawAsciiFilter*>(currentFileFilter());
+		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
 	}
-	case AbstractFileFilter::FileType::NgspiceRawBinary: {
+	case AbstractFileFilter::FileType::SpiceRawBinary: {
 		ui.tePreview->clear();
-		auto filter = static_cast<NgspiceRawBinaryFilter*>(currentFileFilter());
+		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
 		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -1663,8 +1661,8 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:
-		case AbstractFileFilter::FileType::NgspiceRawAscii:
-		case AbstractFileFilter::FileType::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::SpiceRawAscii:
+		case AbstractFileFilter::FileType::SpiceRawBinary:
 		case AbstractFileFilter::FileType::READSTAT:
 			break;
 		}

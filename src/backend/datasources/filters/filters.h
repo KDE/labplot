@@ -19,8 +19,7 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
-#include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
-#include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
+#include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
 #include "backend/datasources/filters/MatioFilter.h"
 
