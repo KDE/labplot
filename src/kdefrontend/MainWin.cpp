@@ -562,7 +562,7 @@ void MainWin::initActions() {
 	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source..."),this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
-	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
+	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
 
 	//Import/Export
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File..."), this);
@@ -2623,7 +2623,7 @@ void MainWin::editFitsFileDialog() {
 /*!
   adds a new file data source to the current project.
 */
-void MainWin::newLiveDataSourceActionTriggered() {
+void MainWin::newLiveDataSource() {
 	auto* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
 		if (dlg->sourceType() == LiveDataSource::SourceType::MQTT) {

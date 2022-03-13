@@ -11,6 +11,7 @@
 */
 
 #include "ImportFileWidget.h"
+#include "backend/lib/macros.h"
 #include "backend/datasources/filters/filters.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
@@ -21,7 +22,6 @@
 #include "FITSOptionsWidget.h"
 #include "JsonOptionsWidget.h"
 #include "ROOTOptionsWidget.h"
-
 #include <QCompleter>
 #include <QDir>
 #include <QDirModel>
@@ -525,9 +525,9 @@ int ImportFileWidget::baudRate() const {
 	saves the settings to the data source \c source.
 */
 void ImportFileWidget::saveSettings(LiveDataSource* source) const {
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
-	LiveDataSource::SourceType sourceType = currentSourceType();
+	auto sourceType = currentSourceType();
 	auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
 	source->setFileType(fileType);

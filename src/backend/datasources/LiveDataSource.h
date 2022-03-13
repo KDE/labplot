@@ -13,7 +13,6 @@
 #define LIVEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
 
 #include <QLocalSocket>
 #include <QTimer>
@@ -87,7 +86,7 @@ public:
 
 	bool isPaused() const;
 
-	void setSerialPort(const QString& name);
+	void setSerialPort(const QString&);
 	QString serialPortName() const;
 
 	QString host() const;

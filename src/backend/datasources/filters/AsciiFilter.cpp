@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/filters/AsciiFilterPrivate.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"

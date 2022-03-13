@@ -119,6 +119,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 	DEBUG(Q_FUNC_INFO);
 	ui.chbHeader->setVisible(visible);
+	ui.sbHeaderLine->setVisible(visible);
 	if (visible) {
 		ui.lVectorNames->setVisible(!ui.chbHeader->isChecked());
 		ui.kleVectorNames->setVisible(!ui.chbHeader->isChecked());

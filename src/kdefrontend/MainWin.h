@@ -322,7 +322,7 @@ private Q_SLOTS:
 	void newNotes();
 	void newDatapicker();
 	//TODO: void newScript();
-	void newLiveDataSourceActionTriggered();
+	void newLiveDataSource();
 
 	void createContextMenu(QMenu*) const;
 	void createFolderContextMenu(const Folder*, QMenu*) const;
