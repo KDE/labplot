@@ -1,3 +1,11 @@
+/*
+	File                 : SpiceFilter.cpp
+	Project              : LabPlot
+	Description          : Filters for reading spice files
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "SpiceFilter.h"
 #include "SpiceFilterPrivate.h"
 #include "SpiceReader.h"
@@ -37,10 +45,10 @@ QString SpiceFilter::fileInfoString(const QString& fileName) {
 
 	SpiceFileReader reader(fileName);
 	if (!reader.open())
-		return QString();
+		return {};
 
 	if (!reader.validSpiceFile())
-		return QString();
+		return {};
 
 	return reader.infoString();
 }
@@ -124,7 +132,7 @@ void SpiceFilterPrivate::generateVectorNamesColumnModes(const SpiceFileReader& r
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int lines) {
-	DEBUG("NgspiceRawAsciiFilterPrivate::preview()");
+	DEBUG(Q_FUNC_INFO);
 	QVector<QStringList> dataStrings;
 
 	SpiceFileReader reader(fileName);
@@ -145,7 +153,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	// create new datacontainer to store the preview
 	std::vector<void*> dataContainer;
 	dataContainer.resize(numberVariables * (1+ !reader.isReal()));
-	for (uint i=0; i < dataContainer.size(); i++)
+	for (uint i = 0; i < dataContainer.size(); i++)
 		dataContainer[i] = new QVector<double>(lines);
 
 	const int linesRead = reader.readData(dataContainer, skip, lines);
@@ -153,7 +161,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	QStringList lineString;
 	int isComplex = !reader.isReal();
 
-	for (int l=0; l < linesRead; l++) {
+	for (int l = 0; l < linesRead; l++) {
 		lineString.clear();
 		for (int i = 0; i < numberVariables * (1 + isComplex); i++) {
 			const auto values = static_cast<const QVector<double>*>(dataContainer[i]);
