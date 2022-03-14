@@ -56,6 +56,9 @@ private Q_SLOTS:
 	void updateLinesWithGapMidPointVertical();
 	void updateLinesWithGapSegments2();
 	void updateLinesWithGapSegments3();
+
+	// Hover XYCurve
+	void hooverCurveIntegerEndingZeros();
 };
 
 #endif // XYCURVETEST_H

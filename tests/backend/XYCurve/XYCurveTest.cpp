@@ -52,6 +52,27 @@
 	GET_CURVE_PRIVATE(plot, 2, "withGap", withGapCurve) \
 	GET_CURVE_PRIVATE(plot, 3, "withGap2", withGapCurve2)
 
+#define LOAD_HOVER_PROJECT \
+	Project project; \
+	project.load(QFINDTESTDATA(QLatin1String("data/curveHover.lml"))); \
+	auto* spreadsheet = project.child<AbstractAspect>(0); \
+	QVERIFY(spreadsheet != nullptr); \
+	QCOMPARE(spreadsheet->name(), QLatin1String("Spreadsheet")); \
+	QCOMPARE(spreadsheet->type(), AspectType::Spreadsheet); \
+ \
+	auto* worksheet = project.child<AbstractAspect>(1); \
+	QVERIFY(worksheet != nullptr); \
+	QCOMPARE(worksheet->name(), QLatin1String("Worksheet - Spreadsheet")); \
+	QCOMPARE(worksheet->type(), AspectType::Worksheet); \
+ \
+	auto* plot = worksheet->child<CartesianPlot>(0); \
+	QVERIFY(plot != nullptr); \
+	QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet")); \
+	/* enable once implemented correctly */ \
+	/* QCOMPARE(plot->type(), AspectType::CartesianPlot); */ \
+ \
+	GET_CURVE_PRIVATE(plot, 0, "IntegerNonMonotonic", integerNonMonotonic)
+
 
 #define COMPARE_LINES(line1, line2) QVERIFY((line1.p1() == line2.p1() && line1.p2() == line2.p2()) || (line1.p1() == line2.p2() && line1.p2() == line2.p1()))
 
@@ -1054,5 +1075,17 @@ void XYCurveTest::updateLinesWithGapSegments3() {
 }
 
 // TODO: create tests for Splines
+
+//############################################################################
+// Hover tests
+//############################################################################
+void XYCurveTest::hooverCurveIntegerEndingZeros() {
+	LOAD_HOVER_PROJECT
+
+	QPointF mouseLogicalPos(13, 29.1); // extracted from the spreadsheet
+	bool visible;
+	auto mouseScenePos = plot->coordinateSystem(integerNonMonotonic->coordinateSystemIndex())->mapLogicalToScene(mouseLogicalPos, visible);
+	QCOMPARE(integerNonMonotonic->activateCurve(mouseScenePos, -1), true);
+}
 
 QTEST_MAIN(XYCurveTest)
