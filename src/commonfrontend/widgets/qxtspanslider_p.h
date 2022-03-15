@@ -32,19 +32,19 @@ public:
 	void triggerAction(QAbstractSlider::SliderAction action, bool main);
 	void swapControls();
 
-	int lower;
-	int upper;
-	int lowerPos;
-	int upperPos;
-	int offset;
-	int position;
-	QxtSpanSlider::SpanHandle lastPressed;
-	QxtSpanSlider::SpanHandle mainControl;
-	QStyle::SubControl lowerPressed;
-	QStyle::SubControl upperPressed;
-	QxtSpanSlider::HandleMovementMode movement;
-	bool firstMovement;
-	bool blockTracking;
+	int lower{0};
+	int upper{0};
+	int lowerPos{0};
+	int upperPos{0};
+	int offset{0};
+	int position{0};
+	QxtSpanSlider::SpanHandle lastPressed{QxtSpanSlider::NoHandle};
+	QxtSpanSlider::SpanHandle mainControl{QxtSpanSlider::LowerHandle};
+	QStyle::SubControl lowerPressed{QStyle::SC_None};
+	QStyle::SubControl upperPressed{QStyle::SC_None};
+	QxtSpanSlider::HandleMovementMode movement{QxtSpanSlider::FreeMovement};
+	bool firstMovement{false};
+	bool blockTracking{false};
 
 public Q_SLOTS:
 	void updateRange(int min, int max);

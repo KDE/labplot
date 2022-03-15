@@ -19,7 +19,7 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 class SymbolWidget;
-class QxtSpanSlider;
+class SpanSlider;
 
 class HistogramView : public QGraphicsView {
 	Q_OBJECT
@@ -58,11 +58,11 @@ private:
 	QList<DatapickerImage*> m_imagesList;
 	SymbolWidget* symbolWidget{nullptr};
 
-	QxtSpanSlider* ssIntensity;
-	QxtSpanSlider* ssForeground;
-	QxtSpanSlider* ssHue;
-	QxtSpanSlider* ssSaturation;
-	QxtSpanSlider* ssValue;
+	SpanSlider* ssIntensity;
+	SpanSlider* ssForeground;
+	SpanSlider* ssHue;
+	SpanSlider* ssSaturation;
+	SpanSlider* ssValue;
 
 	HistogramView* gvIntensity;
 	HistogramView* gvForeground;

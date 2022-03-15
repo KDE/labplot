@@ -10,21 +10,121 @@
 #include <QMouseEvent>
 #include <QStylePainter>
 #include <QStyleOptionSlider>
+#include <QHBoxLayout>
+#include <QSpinBox>
 
-QxtSpanSliderPrivate::QxtSpanSliderPrivate() :
-	lower(0),
-	upper(0),
-	lowerPos(0),
-	upperPos(0),
-	offset(0),
-	position(0),
-	lastPressed(QxtSpanSlider::NoHandle),
-	mainControl(QxtSpanSlider::LowerHandle),
-	lowerPressed(QStyle::SC_None),
-	upperPressed(QStyle::SC_None),
-	movement(QxtSpanSlider::FreeMovement),
-	firstMovement(false),
-	blockTracking(false) {
+// Copied from BaseDock
+struct Lock {
+	inline explicit Lock(bool& variable)
+		: variable(variable = true) {
+	}
+
+	inline ~Lock() {
+		variable = false;
+	}
+
+private:
+	bool& variable;
+};
+
+SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent): QWidget(parent) {
+
+	sbMin = new QSpinBox(this);
+	sbMax = new QSpinBox(this);
+	spanslider = new QxtSpanSlider(this);
+	spanslider->setOrientation(orientation);
+
+	QBoxLayout* l;
+	if (orientation == Qt::Orientation::Horizontal) {
+		l = new QHBoxLayout();
+		l->addWidget(sbMin);
+		l->addWidget(spanslider);
+		l->addWidget(sbMax);
+
+		auto policy = spanslider->sizePolicy();
+		policy.setHorizontalPolicy(QSizePolicy::Policy::Expanding);
+		spanslider->setSizePolicy(policy);
+	} else {
+		l = new QVBoxLayout();
+		l->addWidget(sbMax);
+		l->addWidget(spanslider);
+		l->addWidget(sbMin);
+	}
+
+	connect(sbMin, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpanSlider::spinBoxMinChanged);
+	connect(sbMax, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpanSlider::spinBoxMaxChanged);
+	connect(spanslider, &QxtSpanSlider::spanChanged, this, &SpanSlider::spanChanged);
+
+	setLayout(l);
+}
+
+void SpanSlider::sliderSpanChanged(int min, int max) {
+	if (mInitializing)
+		return;
+
+	Lock lock(mInitializing);
+
+	sbMin->setValue(min);
+	sbMax->setValue(max);
+
+	emit spanChanged(min, max);
+}
+
+void SpanSlider::spinBoxMinChanged(int min) {
+	if (mInitializing)
+		return;
+
+	Lock lock(mInitializing);
+
+	spanslider->setSpan(min, sbMax->value());
+
+	emit spanChanged(min, sbMax->value());
+}
+
+void SpanSlider::spinBoxMaxChanged(int max) {
+	if (mInitializing)
+		return;
+
+	Lock lock(mInitializing);
+
+	spanslider->setSpan(sbMin->value(), max);
+
+	emit spanChanged(sbMin->value(), max);
+}
+
+void SpanSlider::setToolTip(const QString& str) {
+	spanslider->setToolTip(str);
+}
+
+void SpanSlider::setRange(int min, int max) {
+	if (mInitializing)
+		return;
+
+	Lock lock(mInitializing);
+
+	sbMin->setMinimum(min);
+	sbMin->setMaximum(max);
+	sbMax->setMinimum(min);
+	sbMax->setMaximum(max);
+	spanslider->setRange(min, max);
+}
+
+void SpanSlider::setSpan(int min, int max) {
+	if (mInitializing)
+		return;
+
+	Lock lock(mInitializing);
+
+	spanslider->setSpan(min, max);
+	sbMin->setValue(min);
+	sbMax->setValue(max);
+}
+
+// ####################################################################################################################
+// QxtSpanSlider
+// ####################################################################################################################
+
+QxtSpanSliderPrivate::QxtSpanSliderPrivate() {
 }
 
 void QxtSpanSliderPrivate::initStyleOption(QStyleOptionSlider* option, QxtSpanSlider::SpanHandle handle) const {

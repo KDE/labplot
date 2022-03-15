@@ -11,6 +11,38 @@
 #include "qxtglobal.h"
 
 class QxtSpanSliderPrivate;
+class QxtSpanSlider;
+class QSpinBox;
+
+
+/*!
+ * \brief The SpanSlider class
+ * Spanslider widget which consists of a spanslider and two spinboxes
+ * to show minimum and maximum
+ */
+class SpanSlider: public QWidget {
+	Q_OBJECT
+public:
+	SpanSlider(Qt::Orientation, QWidget* parent=nullptr);
+
+	void setToolTip(const QString&);
+	void setRange(int, int);
+	void setSpan(int, int);
+
+private Q_SLOTS:
+	void sliderSpanChanged(int, int);
+	void spinBoxMinChanged(int);
+	void spinBoxMaxChanged(int);
+
+Q_SIGNALS:
+	void spanChanged(int lower, int upper);
+
+private:
+	QSpinBox* sbMin{nullptr};
+	QSpinBox* sbMax{nullptr};
+	QxtSpanSlider* spanslider{nullptr};
+	bool mInitializing{false};
+};
 
 class QxtSpanSlider : public QSlider {
 	Q_OBJECT

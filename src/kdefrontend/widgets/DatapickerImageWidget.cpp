@@ -125,27 +125,27 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	editTabLayout->setHorizontalSpacing(2);
 	editTabLayout->setVerticalSpacing(4);
 
-	ssHue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssHue = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	ssHue->setRange(0, 360);
 	editTabLayout->addWidget(ssHue, 3, 2);
 
-	ssSaturation = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssSaturation = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
 	ssSaturation->setRange(0,100);
 	editTabLayout->addWidget(ssSaturation, 5, 2);
 
-	ssValue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssValue = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
 	ssValue->setRange(0,100);
 	editTabLayout->addWidget(ssValue, 7, 2);
 
-	ssIntensity = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssIntensity = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	ssIntensity->setRange(0, 100);
 	editTabLayout->addWidget(ssIntensity, 9, 2);
 
-	ssForeground = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssForeground = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	ssForeground->setRange(0, 100);
 	editTabLayout->addWidget(ssForeground, 11, 2);
@@ -214,16 +214,16 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 			this, &DatapickerImageWidget::plotImageTypeChanged);
 	connect(ui.sbRotation, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::rotationChanged);
-	connect(ssIntensity, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
-	connect(ssIntensity, &QxtSpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
-	connect(ssForeground, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
-	connect(ssForeground, &QxtSpanSlider::spanChanged, gvForeground, &HistogramView::setSpan );
-	connect(ssHue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::hueSpanChanged);
-	connect(ssHue, &QxtSpanSlider::spanChanged, gvHue, &HistogramView::setSpan );
-	connect(ssSaturation, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::saturationSpanChanged);
-	connect(ssSaturation, &QxtSpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan );
-	connect(ssValue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
-	connect(ssValue, &QxtSpanSlider::spanChanged, gvValue, &HistogramView::setSpan );
+	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
+	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
+	connect(ssForeground, &SpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
+	connect(ssForeground, &SpanSlider::spanChanged, gvForeground, &HistogramView::setSpan );
+	connect(ssHue, &SpanSlider::spanChanged, this, &DatapickerImageWidget::hueSpanChanged);
+	connect(ssHue, &SpanSlider::spanChanged, gvHue, &HistogramView::setSpan );
+	connect(ssSaturation, &SpanSlider::spanChanged, this, &DatapickerImageWidget::saturationSpanChanged);
+	connect(ssSaturation, &SpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan );
+	connect(ssValue, &SpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
+	connect(ssValue, &SpanSlider::spanChanged, gvValue, &HistogramView::setSpan );
 	connect(ui.sbMinSegmentLength, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
 			this, &DatapickerImageWidget::minSegmentLengthChanged);
 	connect(ui.sbPointSeparation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
