@@ -128,11 +128,13 @@ CartesianPlot* TemplateChooserDialog::generatePlot() {
 	}
 
 	auto* plot = new CartesianPlot(i18n("xy-plot"));
+	plot->setIsLoading(true);
 	if (!plot->load(&reader, false)) {
 		updateErrorMessage(i18n("Unable to load plot template: ") + reader.errorString());
 		delete plot;
 		return nullptr;
 	}
+	plot->setIsLoading(false);
 	for (auto* child : plot->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 	plot->retransformAll();
