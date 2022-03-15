@@ -35,6 +35,7 @@ Q_SIGNALS:
 
 private:
 	Ui::AsciiOptionsWidget ui;
+	bool m_createTimeStampAvailable{false};
 };
 
 #endif

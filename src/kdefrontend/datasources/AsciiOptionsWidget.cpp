@@ -131,6 +131,7 @@ void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
 
 void AsciiOptionsWidget::showTimestampOptions(bool visible) {
 	ui.chbCreateTimestamp->setVisible(visible);
+	m_createTimeStampAvailable = visible;
 }
 
 /*!
@@ -160,7 +161,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 
 	//save the timestamp option only if it's visible, i.e. live source is used.
 	//use the default setting in the filter (false) otherwise for non-live source
-	if (ui.chbCreateTimestamp->isVisible())
+	if (m_createTimeStampAvailable)
 		filter->setCreateTimestampEnabled( ui.chbCreateTimestamp->isChecked() );
 
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
