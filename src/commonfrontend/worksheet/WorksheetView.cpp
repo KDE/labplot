@@ -1442,37 +1442,11 @@ void WorksheetView::addNew(QAction* action) {
 		TemplateChooserDialog d;
 		if (d.exec() != QDialog::Accepted)
 			return;
-		QFile file(d.templatePath());
-		if (!file.exists())
+
+		auto* plot = d.generatePlot();
+		if (!plot)
 			return;
 
-		if (!file.open(QIODevice::OpenModeFlag::ReadOnly))
-			return;
-
-		XmlStreamReader reader(&file);
-		while (!(reader.isStartDocument() || reader.atEnd()))
-			reader.readNext();
-
-		if (!(reader.atEnd())) {
-			if (!reader.skipToNextTag())
-				return;
-			if (!reader.isStartElement())
-				return;
-
-			if (reader.name() != "cartesianPlot")
-				return;
-		}
-
-
-
-		auto* plot = new CartesianPlot(i18n("xy-plot"));
-		plot->setMouseMode(m_cartesianPlotMouseMode);
-		//plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
-		auto res = plot->load(&reader, false);
-		//set "isLoading" to false for all worksheet elements
-		for (auto* child : plot->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
-			child->setIsLoading(false);
-		plot->retransformAll();
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);

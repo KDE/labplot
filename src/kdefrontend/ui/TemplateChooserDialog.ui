@@ -6,20 +6,72 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>523</width>
-    <height>369</height>
+    <width>796</width>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Installed Templates:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListView" name="lvInstalledTemplates"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="lPreview">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Preview:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="teMessage">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbCustomTemplatePreview">
+     <property name="text">
+      <string>Show preview custom template</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Template Path:</string>
+        <string>Custom Path:</string>
        </property>
       </widget>
      </item>
@@ -30,24 +82,6 @@
       <widget class="QPushButton" name="pbBrowse">
        <property name="text">
         <string>Browse</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="lPreview">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Preview:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="teMessage">
-       <property name="readOnly">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
