@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dock widget for the custom point on the plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,7 +11,6 @@
 #ifndef CUSTOMPOINTDOCK_H
 #define CUSTOMPOINTDOCK_H
 
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_custompointdock.h"
 
@@ -51,14 +50,13 @@ private Q_SLOTS:
 	void positionXLogicalChanged(const QString&);
 	void positionXLogicalDateTimeChanged(const QDateTime&);
 	void positionYLogicalChanged(const QString&);
-
-
+	void positionYLogicalDateTimeChanged(const QDateTime&);
 
 	//SLOTs for changes triggered in CustomPoint
 	//General-Tab
 	void updatePlotRanges() override;
 	void pointVisibilityChanged(bool);
-	void pointPositionChanged(const WorksheetElement::PositionWrapper &position);
+	void pointPositionChanged(const WorksheetElement::PositionWrapper&);
 	void pointPositionLogicalChanged(QPointF);
 	void pointCoordinateBindingEnabledChanged(bool);
 

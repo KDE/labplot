@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for CustomPoint properties
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -61,7 +61,11 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
-	// geometry
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
+
+	//positioning
+	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
 	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
@@ -69,9 +73,7 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &CustomPointDock::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
 	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &CustomPointDock::positionYLogicalChanged);
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
-	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
-	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
+	connect(ui.dtePositionYLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
 	//Template handler
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
@@ -125,6 +127,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 	ui.lePositionXLogical->setEnabled(enabled);
 	ui.lPositionXLogicalDateTime->setEnabled(enabled);
 	ui.lePositionYLogical->setEnabled(enabled);
+	ui.lPositionYLogicalDateTime->setEnabled(enabled);
 }
 
 void CustomPointDock::initConnections() const {
@@ -162,7 +165,6 @@ void CustomPointDock::updatePlotRanges() {
 	called when label's current horizontal position relative to its parent (left, center, right ) is changed.
 */
 void CustomPointDock::positionXChanged(int index) {
-
 	if (m_initializing)
 		return;
 
@@ -178,7 +180,6 @@ void CustomPointDock::positionXChanged(int index) {
 	called when label's current horizontal position relative to its parent (top, center, bottom) is changed.
 */
 void CustomPointDock::positionYChanged(int index) {
-
 	if (m_initializing)
 		return;
 
@@ -213,7 +214,6 @@ void CustomPointDock::customPositionYChanged(double value) {
 		point->setPosition(position);
 	}
 }
-
 
 //positioning using logical plot coordinates
 void CustomPointDock::positionXLogicalChanged(const QString& value) {
@@ -259,6 +259,17 @@ void CustomPointDock::positionYLogicalChanged(const QString& value) {
 	}
 }
 
+void CustomPointDock::positionYLogicalDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 x = dateTime.toMSecsSinceEpoch();
+	QPointF pos = m_point->positionLogical();
+	pos.setY(x);
+	for (auto* point : m_points)
+		point->setPositionLogical(pos);
+}
+
 void CustomPointDock::visibilityChanged(bool state) {
 	if (m_initializing)
 		return;
@@ -288,22 +299,27 @@ void CustomPointDock::bindingChanged(bool checked) {
 
 	//widgets for positioning using logical plot coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
-	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
-		ui.lPositionXLogicalDateTime->setVisible(checked);
-		ui.dtePositionXLogical->setVisible(checked);
+	if (plot) {
+		//x
+		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+		if (numeric) {
+			ui.lPositionXLogical->setVisible(checked);
+			ui.lePositionXLogical->setVisible(checked);
+		} else {
+			ui.lPositionXLogicalDateTime->setVisible(checked);
+			ui.dtePositionXLogical->setVisible(checked);
+		}
 
-		ui.lPositionXLogical->setVisible(false);
-		ui.lePositionXLogical->setVisible(false);
-	} else {
-		ui.lPositionXLogicalDateTime->setVisible(false);
-		ui.dtePositionXLogical->setVisible(false);
-
-		ui.lPositionXLogical->setVisible(checked);
-		ui.lePositionXLogical->setVisible(checked);
+		//y
+		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
+		if (numeric) {
+			ui.lPositionYLogical->setVisible(checked);
+			ui.lePositionYLogical->setVisible(checked);
+		} else {
+			ui.lPositionYLogicalDateTime->setVisible(checked);
+			ui.dtePositionYLogical->setVisible(checked);
+		}
 	}
-
-	ui.lPositionYLogical->setVisible(checked);
-	ui.lePositionYLogical->setVisible(checked);
 
 	if(m_initializing)
 		return;
@@ -335,6 +351,7 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 	ui.lePositionXLogical->setText(numberLocale.toString(pos.x()));
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
 	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
+	ui.dtePositionYLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.y()));
 }
 
 void CustomPointDock::pointVisibilityChanged(bool on) {
@@ -366,22 +383,31 @@ void CustomPointDock::load() {
 
 	if (allowLogicalCoordinates) {
 		const auto* plot = static_cast<const CartesianPlot*>(m_point->plot());
-		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
-			ui.lPositionXLogical->show();
-			ui.lePositionXLogical->show();
-			ui.lPositionXLogicalDateTime->hide();
-			ui.dtePositionXLogical->hide();
 
+		//x
+		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+		ui.lPositionXLogical->setVisible(numeric);
+		ui.lePositionXLogical->setVisible(numeric);
+		ui.lPositionXLogicalDateTime->setVisible(!numeric);
+		ui.dtePositionXLogical->setVisible(!numeric);
+		if (numeric)
 			ui.lePositionXLogical->setText(numberLocale.toString(m_point->positionLogical().x()));
-			ui.lePositionYLogical->setText(numberLocale.toString(m_point->positionLogical().y()));
-		} else { //DateTime
-			ui.lPositionXLogical->hide();
-			ui.lePositionXLogical->hide();
-			ui.lPositionXLogicalDateTime->show();
-			ui.dtePositionXLogical->show();
-
+		else {
 			ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().x()));
+		}
+
+		//y
+		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
+		ui.lPositionYLogical->setVisible(numeric);
+		ui.lePositionYLogical->setVisible(numeric);
+		ui.lPositionYLogicalDateTime->setVisible(!numeric);
+		ui.dtePositionYLogical->setVisible(!numeric);
+		if (numeric)
+			ui.lePositionYLogical->setText(numberLocale.toString(m_point->positionLogical().y()));
+		else {
+			ui.dtePositionYLogical->setDisplayFormat(plot->yRangeDateTimeFormat());
+			ui.dtePositionYLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().y()));
 		}
 
 		bindingChanged(m_point->coordinateBindingEnabled());
@@ -392,6 +418,8 @@ void CustomPointDock::load() {
 		ui.lePositionYLogical->hide();
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
+		ui.lPositionYLogicalDateTime->hide();
+		ui.dtePositionYLogical->hide();
 	}
 	ui.chkVisible->setChecked( m_point->isVisible() );
 }

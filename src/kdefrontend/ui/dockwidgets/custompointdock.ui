@@ -24,20 +24,13 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="11" column="3">
-        <widget class="QComboBox" name="cbPlotRanges"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lBindLogicalPos">
-         <property name="text">
-          <string>Logical coordinates</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lPositionXLogical">
-         <property name="text">
-          <string>x:</string>
+       <item row="1" column="3">
+        <widget class="ResizableTextEdit" name="teComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -48,62 +41,10 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>694</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="0" colspan="3">
-        <widget class="QLabel" name="lPositionXLogicalDateTime">
+       <item row="7" column="0">
+        <widget class="QLabel" name="lPositionXLogical">
          <property name="text">
           <string>x:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="3">
-        <widget class="QCheckBox" name="chbBindLogicalPos">
-         <property name="text">
-          <string/>
          </property>
         </widget>
        </item>
@@ -121,43 +62,13 @@
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lPositionX">
-         <property name="toolTip">
-          <string>Horizontal position relative to label's parent</string>
-         </property>
+       <item row="1" column="0" colspan="3">
+        <widget class="QLabel" name="lComment">
          <property name="text">
-          <string>x:</string>
+          <string>Comment:</string>
          </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="leName">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" colspan="3">
-        <widget class="QLabel" name="lPosition">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Position</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0" colspan="3">
-        <widget class="QLabel" name="lPlotRange">
-         <property name="text">
-          <string>Plot range:</string>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -177,6 +88,88 @@
          </property>
         </widget>
        </item>
+       <item row="12" column="3">
+        <widget class="QComboBox" name="cbPlotRanges"/>
+       </item>
+       <item row="7" column="3">
+        <widget class="QLineEdit" name="lePositionXLogical"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="leName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lBindLogicalPos">
+         <property name="text">
+          <string>Logical coordinates</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3">
+        <widget class="QLabel" name="lPosition">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Position</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="3">
+        <widget class="QLabel" name="lPositionXLogicalDateTime">
+         <property name="text">
+          <string>x:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0" colspan="3">
+        <widget class="QLabel" name="lPlotRange">
+         <property name="text">
+          <string>Plot range:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="8" column="3">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
@@ -191,32 +184,38 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0" colspan="3">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment:</string>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lPositionX">
+         <property name="toolTip">
+          <string>Horizontal position relative to label's parent</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         <property name="text">
+          <string>x:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
-        <widget class="ResizableTextEdit" name="teComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lPositionYLogical">
+         <property name="text">
+          <string>y:</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0" colspan="3">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
+       <item row="13" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>694</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="10" column="3">
+        <widget class="QLineEdit" name="lePositionYLogical"/>
        </item>
        <item row="6" column="3">
         <widget class="QDateTimeEdit" name="dtePositionXLogical">
@@ -225,18 +224,29 @@
          </property>
         </widget>
        </item>
+       <item row="14" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QCheckBox" name="chbBindLogicalPos">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
        <item row="9" column="0">
-        <widget class="QLabel" name="lPositionYLogical">
+        <widget class="QLabel" name="lPositionYLogicalDateTime">
          <property name="text">
           <string>y:</string>
          </property>
         </widget>
        </item>
        <item row="9" column="3">
-        <widget class="QLineEdit" name="lePositionYLogical"/>
-       </item>
-       <item row="7" column="3">
-        <widget class="QLineEdit" name="lePositionXLogical"/>
+        <widget class="QDateTimeEdit" name="dtePositionYLogical"/>
        </item>
       </layout>
      </widget>
