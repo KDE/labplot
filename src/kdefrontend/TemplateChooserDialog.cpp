@@ -78,7 +78,7 @@ QString TemplateChooserDialog::defaultTemplateInstallPath() {
 void TemplateChooserDialog::chooseTemplate() {
 	Lock lock(mLoading);
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("TemplateChooserDialog"));
-	const QString& dir = conf.readEntry(lastDirConfigEntry, QString());
+	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
 	const QString& path = QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Labplot Plot Templates (*%1)", format));
 	ui->leTemplatePath->setText(path);
