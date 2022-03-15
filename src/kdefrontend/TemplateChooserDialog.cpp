@@ -55,7 +55,7 @@ TemplateChooserDialog::TemplateChooserDialog(QWidget *parent) :
 	ui->lvInstalledTemplates->setModel(mTemplateListModel);
 
 	connect(ui->pbBrowse, &QPushButton::pressed, this, &TemplateChooserDialog::chooseTemplate);
-	connect(ui->leTemplatePath, &QLineEdit::textChanged, [=](const QString& filename) { mCurrentTemplateFilePath = filename; showPreview();});
+	connect(ui->leTemplatePath, &QLineEdit::textChanged, this, &TemplateChooserDialog::customTemplatePathChanged);
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &TemplateChooserDialog::listViewTemplateChanged);
 	connect(ui->cbCustomTemplatePreview, &QCheckBox::clicked, this, &TemplateChooserDialog::changePreviewSource);
 	updateErrorMessage("No template selected.");
@@ -65,6 +65,17 @@ TemplateChooserDialog::~TemplateChooserDialog()
 {
 	delete ui;
 	delete m_project;
+}
+
+void TemplateChooserDialog::customTemplatePathChanged(const QString& filename) {
+	if (mLoading)
+		return;
+
+	Lock lock(mLoading);
+
+	ui->cbCustomTemplatePreview->setChecked(true);
+	mCurrentTemplateFilePath = filename;
+	showPreview();
 }
 
 QString TemplateChooserDialog::defaultTemplateInstallPath() {

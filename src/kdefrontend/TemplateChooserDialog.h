@@ -33,6 +33,7 @@ private:
 	void chooseTemplate();
 	void listViewTemplateChanged(const QModelIndex &current, const QModelIndex &previous);
 	void changePreviewSource(bool custom);
+	void customTemplatePathChanged(const QString& filename);
 
 private:
 	Ui::TemplateChooserDialog *ui;
