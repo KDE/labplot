@@ -750,6 +750,27 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
 
+		//set the plot designation for columns Index, Timestamp and Values, if available
+		//index column
+		if (createIndexEnabled)
+			spreadsheet->column(0)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+
+		//timestamp column
+		if (createTimestampEnabled) {
+			const int index = (int)createIndexEnabled;
+			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+		}
+
+		//value column, available only when reading from sockets and serial port
+		auto type = spreadsheet->sourceType();
+		if (type == LiveDataSource::SourceType::NetworkTcpSocket
+			|| type == LiveDataSource::SourceType::NetworkUdpSocket
+			|| type == LiveDataSource::SourceType::LocalSocket
+			|| type == LiveDataSource::SourceType::SerialPort) {
+			const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
+			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+		}
+
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
 		//data changes will be propagated via an explicit Column::setChanged() call once new data was read.
