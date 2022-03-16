@@ -1719,7 +1719,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
+	auto* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
 
 	switch (sourceType) {
 	case LiveDataSource::SourceType::FileOrPipe:
@@ -1785,7 +1785,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
+		//don't allow to select "New Data" for network sockets.
+		//select "Periodically" in the combo box in case "New Data" was selected before
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		ui.cbUpdateType->setCurrentIndex(0);
 
 		ui.gbOptions->setEnabled(true);
 		ui.bManageFilters->setEnabled(true);
@@ -1846,7 +1849,10 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.chbRelativePath->hide();
 		ui.chbLinkFile->hide();
 
+		//don't allow to select "New Data" serial port.
+		//select "Periodically" in the combo box in case "New Data" was selected before
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		ui.cbUpdateType->setCurrentIndex(0);
 
 		ui.cbFileType->setEnabled(true);
 		ui.cbFileType->show();
@@ -1915,7 +1921,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//"whole file" read option is available for file or pipe only, disable it
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::ReadingType::WholeFile)
 			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
@@ -1929,7 +1935,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 
 		//enable "whole file" item for file or pipe
 		typeModel = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+		auto* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
@@ -1940,7 +1946,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	//and wants to use the header to set the column names or the user provides manually the column names.
 	//TODO: adjust this logic later once we allow to import multiple columns from sockets,
 	//it should be possible to provide the names of the columns
-	bool visible = (currentSourceType() == LiveDataSource::SourceType::FileOrPipe);
+	bool visible = (sourceType == LiveDataSource::SourceType::FileOrPipe);
 	if (m_asciiOptionsWidget)
 		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
