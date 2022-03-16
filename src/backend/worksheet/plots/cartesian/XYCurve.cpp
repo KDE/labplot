@@ -1018,9 +1018,6 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	if (!plot()->isPanningActive())
-		WAIT_CURSOR;
-
 	//calculate the scene coordinates
 	// This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()
 	// TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
@@ -1045,7 +1042,6 @@ void XYCurvePrivate::retransform() {
 
 		if (numberOfPixelX <= 0 || numberOfPixelY <= 0) {
 			DEBUG(Q_FUNC_INFO << ", number of pixel X <= 0 or number of pixel Y <= 0!")
-			RESET_CURSOR;
 			return;
 		}
 		DEBUG("	numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
@@ -1090,7 +1086,6 @@ void XYCurvePrivate::retransform() {
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
 
-		RESET_CURSOR;
 	}
 
 	m_suppressRecalc = true;
@@ -2910,14 +2905,11 @@ void XYCurvePrivate::updatePixmap() {
 	if (m_suppressRecalc)
 		return;
 
-	WAIT_CURSOR;
-
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
 		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
-		RESET_CURSOR;
 		return;
 	}
 	QPixmap pixmap(ceil(boundingRectangle.width()), ceil(boundingRectangle.height()));
@@ -2931,7 +2923,6 @@ void XYCurvePrivate::updatePixmap() {
 	m_pixmap = pixmap;
 
 	update();
-	RESET_CURSOR;
 }
 
 QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant & value) {
