@@ -115,9 +115,8 @@ void SpiceFilterTest::NgSpiceDCAscii() {
 	auto res = filter.preview(ngFile, refData.count());
 
 	QCOMPARE(res.length(), refData.length());
-	for (int i=0; i < res.length(); i++) {
+	for (int i = 0; i < res.length(); i++)
 		QCOMPARE(res.at(i), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -142,9 +141,8 @@ void SpiceFilterTest::NgSpiceDCBinary() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i=0; i < res.length(); i++) {
+	for (int i = 0; i < res.length(); i++)
 		QCOMPARE(res.at(i), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -158,30 +156,29 @@ void SpiceFilterTest::NgSpiceDCBinary() {
 }
 
 void SpiceFilterTest::NgSpiceACAscii() {
-    using namespace ac_ascii;
+	using namespace ac_ascii;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-    const QString ngFile = NGSpiceFile;
-    QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
-    const int refColumnCount = refData.at(0).count();
+	const QString ngFile = NGSpiceFile;
+	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
+	const int refColumnCount = refData.at(0).count();
 
-    SpiceFilter filter(SpiceFilter::Type::Ascii);
-    auto res = filter.preview(ngFile, refData.count());
+	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	auto res = filter.preview(ngFile, refData.count());
 
-    QCOMPARE(res.length(), refData.length());
-    for (int i=0; i < res.length(); i++) {
-        QCOMPARE(res.at(i), refData.at(i));
-    }
+	QCOMPARE(res.length(), refData.length());
+	for (int i = 0; i < res.length(); i++)
+		QCOMPARE(res.at(i), refData.at(i));
 
-    QString resFileInfoString = filter.fileInfoString(ngFile);
-    QCOMPARE(resFileInfoString, refFileInfoString);
+	QString resFileInfoString = filter.fileInfoString(ngFile);
+	QCOMPARE(resFileInfoString, refFileInfoString);
 
-    Spreadsheet sheet("Test", false);
-    filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
+	Spreadsheet sheet("Test", false);
+	filter.readDataFromFile(ngFile, &sheet, AbstractFileFilter::ImportMode::Replace);
 
-    COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
+	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
 
-    COMPARE_ROW_VALUES(sheet, refData, refDataRowCount, refColumnCount);
+	COMPARE_ROW_VALUES(sheet, refData, refDataRowCount, refColumnCount);
 }
 
 void SpiceFilterTest::NgSpiceACBinary() {
@@ -196,9 +193,8 @@ void SpiceFilterTest::NgSpiceACBinary() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i=0; i < res.length(); i++) {
+	for (int i = 0; i < res.length(); i++)
 		QCOMPARE(res.at(i), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -230,9 +226,8 @@ void SpiceFilterTest::NgSpiceDCAsciiStartRowNotZero() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i= startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++)
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -261,9 +256,8 @@ void SpiceFilterTest::NgSpiceDCBinaryStartRowNotZero() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i= startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++)
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -292,9 +286,8 @@ void SpiceFilterTest::NgSpiceACAsciiStartRowNotZero() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++)
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -323,9 +316,8 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i= startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++)
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -391,9 +383,8 @@ void SpiceFilterTest::NgSpiceACBinaryBulkReadNumberLines() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i= startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++)
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(ngFile);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -422,9 +413,8 @@ void SpiceFilterTest::LtSpiceACBinary() {
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i=0; i < res.length(); i++) {
+	for (int i = 0; i < res.length(); i++)
 		QCOMPARE(res.at(i), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);
@@ -449,10 +439,9 @@ void SpiceFilterTest::LtSpiceTranBinary() {
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i=0; i < res.length(); i++) {
-		for (int j=0; j < columnNames.length(); j++) {
+	for (int i = 0; i < res.length(); i++) {
+		for (int j = 0; j < columnNames.length(); j++)
 			QVERIFY(qFuzzyCompare(res.at(i).at(j).toFloat(), refData.at(i).at(j).toFloat()));
-		}
 	}
 
 	QString resFileInfoString = filter.fileInfoString(file);
@@ -480,9 +469,8 @@ void SpiceFilterTest::LtSpiceTranDoubleBinary() {
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i=0; i < res.length(); i++) {
+	for (int i = 0; i < res.length(); i++)
 		QCOMPARE(res.at(i), refData.at(i));
-	}
 
 	QString resFileInfoString = filter.fileInfoString(file);
 	QCOMPARE(resFileInfoString, refFileInfoString);

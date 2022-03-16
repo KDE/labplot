@@ -34,9 +34,8 @@ void SpiceFileReader::init() {
 		mInfoString += convertLTSpiceBinary(l + mFile.read(1)); // because of utf16 end of line "\n 0x00" the 0x00 must be flushed
 		stream.setCodec(QTextCodec::codecForMib(1015));
 		pos ++;
-	} else
-		mInfoString += QString(l);
-
+	} else // title: removed trailing '\r' and '\n'
+		addInfoStringLine(QString(l).trimmed());
 
 	QString line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Date:")))

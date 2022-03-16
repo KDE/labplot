@@ -802,7 +802,7 @@ void CartesianPlot::setSuppressRetransform(bool value) {
 }
 
 void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
-	PERFTRACE("CartesianPlot::processDropEvent");
+	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<AbstractColumn*> columns;
 	for (auto a : vec) {
