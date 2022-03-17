@@ -1261,7 +1261,7 @@ void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
 	ui.kcbBackgroundColor->setColor(color);
 
 	auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
-	if (mode == TextLabel::Mode::Markdown)
+	if (mode != TextLabel::Mode::Text)
 		return;
 
 	ui.teLabel->selectAll();
@@ -1356,20 +1356,13 @@ void LabelWidget::load() {
 			ui.teLabel->setText(m_label->text().textPlaceholder);
 	}
 
-	// if the text is empty, use LabelWidget::fontColor(),
-	// extract the color from the html formatted text otherwise
 	auto format = ui.teLabel->currentCharFormat();
-//	QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
-//	QDEBUG(Q_FUNC_INFO << ", format bg color = " << format.background().color())
-//	QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
-//	QDEBUG(Q_FUNC_INFO << ", label bg color = " << m_label->backgroundColor())
-	if (m_label->text().text.isEmpty() || mode != TextLabel::Mode::LaTeX) {
-		ui.kcbFontColor->setColor(m_label->fontColor());
-		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
-	} else {
-		ui.kcbFontColor->setColor(format.foreground().color());
-		ui.kcbBackgroundColor->setColor(format.background().color());
-	}
+
+	ui.kcbFontColor->setColor(m_label->fontColor());
+	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	// alternative:
+	// ui.kcbFontColor->setColor(format.foreground().color());
+	// ui.kcbBackgroundColor->setColor(format.background().color());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue(m_label->teXFont().pointSize());
