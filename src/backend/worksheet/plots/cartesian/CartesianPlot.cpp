@@ -758,9 +758,10 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = xRangeDirty(xIndex);
-		if (!autoScaleX(xIndex))
+		if (!autoScaleX(xIndex)) {
 			enableAutoScaleX(xIndex, true, true, true);
-		else
+			update = true;
+		} else
 			update |= scaleAutoX(xIndex, true);
 		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
@@ -772,9 +773,10 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
 		bool update = yRangeDirty(yIndex);
-		if (!autoScaleY(yIndex))
+		if (!autoScaleY(yIndex)) {
 			enableAutoScaleY(yIndex, true, true, true);
-		else
+			update = true;
+		} else
 			update |= scaleAutoY(yIndex, true);
 		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {

@@ -47,5 +47,8 @@ private Q_SLOTS:
 	void shiftDown_SingleRange();
 	void shiftUp_AllRanges();
 	void shiftDown_AllRanges();
+
+	void autoScaleYAfterZoomInX();
+	void autoScaleXAfterZoomInY();
 };
 #endif
