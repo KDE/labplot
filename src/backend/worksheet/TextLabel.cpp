@@ -615,7 +615,6 @@ void TextLabelPrivate::updateBoundingRect() {
 		h = teXImage.height() * teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		m_textItem->adjustSize();
 		//QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
 		// TODO: the shift and scaling is just a workaround to avoid the big bounding box
 		// s.a. TextLabelPrivate::size()
