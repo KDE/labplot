@@ -11,7 +11,6 @@
 #define COMMONTEST_H
 
 #include <QtTest>
-#include <backend/lib/macros.h>	// DEBUG()
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 extern "C" {

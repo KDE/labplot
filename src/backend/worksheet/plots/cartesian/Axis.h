@@ -15,7 +15,6 @@
 
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/Range.h"
-#include "backend/lib/macros.h"
 
 class CartesianPlot;
 class TextLabel;
