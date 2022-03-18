@@ -9,6 +9,8 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include <QAction>
+
 #define private public
 
 #include "MultiRangeTest.h"
@@ -26,8 +28,6 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 
 #undef private
-
-#include <QAction>
 
 //##############################################################################
 //#####################  import of LabPlot projects ############################

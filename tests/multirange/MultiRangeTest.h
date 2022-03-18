@@ -11,7 +11,6 @@
 #ifndef MULTIRANGETEST_H
 #define MULTIRANGETEST_H
 
-#include <QtTest>
 #include "tests/CommonTest.h"
 
 class MultiRangeTest : public CommonTest {
