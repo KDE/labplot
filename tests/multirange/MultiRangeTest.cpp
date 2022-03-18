@@ -13,9 +13,6 @@
 
 #define private public
 #include "MultiRangeTest.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
-#undef private
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
@@ -26,6 +23,10 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
+#undef private
 
 //##############################################################################
 //#####################  import of LabPlot projects ############################

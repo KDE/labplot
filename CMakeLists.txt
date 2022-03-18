@@ -142,10 +142,11 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
+	# -D_ALLOW_KEYWORD_MACROS for "#define private public" in MultiRangeTest.cpp
 	if(CMAKE_BUILD_TYPE STREQUAL Debug)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od -W3 -DPSAPI_VERSION=1")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od -W3 -DPSAPI_VERSION=1 -D_ALLOW_KEYWORD_MACROS")
 	else()
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1 -D_ALLOW_KEYWORD_MACROS")
 	endif()
 	set(MSVC_FOUND TRUE)
 else ()
