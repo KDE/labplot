@@ -418,6 +418,10 @@ QString& Axis::labelsTextColumnPath() const {
 	D(Axis);
 	return d->labelsTextColumnPath;
 }
+QVector<double> Axis::tickLabelValues() const {
+	D(Axis);
+	return d->tickLabelValues;
+}
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor)
 BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsBackgroundType, labelsBackgroundType, labelsBackgroundType)

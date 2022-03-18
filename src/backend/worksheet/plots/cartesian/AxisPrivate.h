@@ -127,6 +127,13 @@ public:
 	bool labelsFormatOverruled{false};
 	bool labelsFormatAutoChanged{false};
 
+	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
+	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
+	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
+	QVector<double> tickLabelValues; //!< major tick labels values
+	QVector<QString> tickLabelValuesString; //!<major tick labels used when a custom text column is selected
+	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
+
 private:
 	CartesianPlot* plot() const {
 		return q->m_plot;    // convenience method
@@ -149,13 +156,6 @@ private:
 	QPainterPath minorTicksPath;
 	QRectF boundingRectangle;
 	QPainterPath axisShape;
-
-	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
-	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
-	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
-	QVector<double> tickLabelValues; //!< major tick labels values
-	QVector<QString> tickLabelValuesString; //!<major tick labels used when a custom text column is selected
-	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};

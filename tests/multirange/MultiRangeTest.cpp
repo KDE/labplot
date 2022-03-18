@@ -9,9 +9,6 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QAction>
-
-#define private public
 #include "MultiRangeTest.h"
 
 #include "backend/core/Project.h"
@@ -23,10 +20,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
-#undef private
+
+#include <QAction>
 
 //##############################################################################
 //#####################  import of LabPlot projects ############################
@@ -594,9 +590,9 @@ void MultiRangeTest::shiftRight_AllRanges() {
 
 void MultiRangeTest::shiftUp_SingleRange() {
 	LOAD_PROJECT
-	auto refValuesAxis1 = vertAxisP1->d_func()->tickLabelValues;
-	auto refValuesAxis2 = vertAxis2P1->d_func()->tickLabelValues;
-	auto refValuesAxis3 = vertAxis3P1->d_func()->tickLabelValues;
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->shiftUpY(0);
 
@@ -618,16 +614,16 @@ void MultiRangeTest::shiftUp_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->d_func()->tickLabelValues, refValuesAxis1);
-	COMPARE_DOUBLE_VECTORS(vertAxis2P1->d_func()->tickLabelValues, refValuesAxis2);
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->d_func()->tickLabelValues, refValuesAxis3);
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3);
 }
 
 void MultiRangeTest::shiftDown_SingleRange() {
 	LOAD_PROJECT
-	auto refValuesAxis1 = vertAxisP1->d_func()->tickLabelValues;
-	auto refValuesAxis2 = vertAxis2P1->d_func()->tickLabelValues;
-	auto refValuesAxis3 = vertAxis3P1->d_func()->tickLabelValues;
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 
 	vertAxisP1->setSelected(true);
 	p1->shiftDownY(0);
@@ -651,15 +647,15 @@ void MultiRangeTest::shiftDown_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->d_func()->tickLabelValues, refValuesAxis1);
-	COMPARE_DOUBLE_VECTORS(vertAxis2P1->d_func()->tickLabelValues, refValuesAxis2);
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->d_func()->tickLabelValues, refValuesAxis3);
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3);
 }
 
 void MultiRangeTest::shiftUp_AllRanges() {
 	LOAD_PROJECT
-	auto refValuesAxis1 = vertAxisP1->d_func()->tickLabelValues;
-	auto refValuesAxis2 = vertAxis2P1->d_func()->tickLabelValues;
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->shiftUpY();
 
@@ -681,17 +677,17 @@ void MultiRangeTest::shiftUp_AllRanges() {
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 5);
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->d_func()->tickLabelValues, refValuesAxis1);
-	COMPARE_DOUBLE_VECTORS(vertAxis2P1->d_func()->tickLabelValues, refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	QVector<double> ref = {-10.0, -5, 0, 5};
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->d_func()->tickLabelValues, ref); // vertAxis3 is not autoscaled, so it does not work as above
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled, so it does not work as above
 }
 
 void MultiRangeTest::shiftDown_AllRanges() {
 	LOAD_PROJECT
-	auto refValuesAxis1 = vertAxisP1->d_func()->tickLabelValues;
-	auto refValuesAxis2 = vertAxis2P1->d_func()->tickLabelValues;
-	auto refValuesAxis3 = vertAxis3P1->d_func()->tickLabelValues;
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->shiftDownY();
 
@@ -714,10 +710,10 @@ void MultiRangeTest::shiftDown_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -10, 5);
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->d_func()->tickLabelValues, refValuesAxis1);
-	COMPARE_DOUBLE_VECTORS(vertAxis2P1->d_func()->tickLabelValues, refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	QVector<double> ref = {-10.0, -5, 0, 5};
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->d_func()->tickLabelValues, ref); // vertAxis3 is not autoscaled, so it does not work as above
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled, so it does not work as above
 }
 
 void MultiRangeTest::autoScaleYAfterZoomInX() {
@@ -725,7 +721,7 @@ void MultiRangeTest::autoScaleYAfterZoomInX() {
 	 * 2) Autoscale X
 	 * 3) Check that y also changed! */
 	LOAD_PROJECT
-	auto refValues = horAxisP1->d_func()->tickLabelValues;
+	auto refValues = horAxisP1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
@@ -743,12 +739,12 @@ void MultiRangeTest::autoScaleYAfterZoomInX() {
 
 	// retransform of horAxisP1 is done, so the tickLabelValues change back
 	// to be in the range of 0, 1
-	COMPARE_DOUBLE_VECTORS(horAxisP1->d_func()->tickLabelValues, refValues);
+	COMPARE_DOUBLE_VECTORS(horAxisP1->tickLabelValues(), refValues);
 }
 
 void MultiRangeTest::autoScaleXAfterZoomInY() {
 	LOAD_PROJECT
-	auto refValues = vertAxisP1->d_func()->tickLabelValues;
+	auto refValues = vertAxisP1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
 
@@ -766,7 +762,7 @@ void MultiRangeTest::autoScaleXAfterZoomInY() {
 	p1->navigate(tanCurve->coordinateSystemIndex(), CartesianPlot::NavigationOperation::ScaleAutoY);
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
-	COMPARE_DOUBLE_VECTORS(vertAxisP1->d_func()->tickLabelValues, refValues);
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValues);
 }
 
 QTEST_MAIN(MultiRangeTest)
