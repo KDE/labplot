@@ -24,7 +24,8 @@ mkdir -pv $INPREFIX/Resources/kxmlgui5/labplot2
 
 echo "Running macdeployqt ..."
 # -verbose=3
-macdeployqt $PREFIX/$NAME.app -verbose=2
+LIBPATH=/Users/user/kde/lib
+macdeployqt $PREFIX/$NAME.app -verbose=2 -libpath=$LIBPATH
 
 #########################################
 
