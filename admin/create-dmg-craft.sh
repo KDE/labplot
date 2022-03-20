@@ -44,6 +44,10 @@ cp -vr kde/share/$NAME/pics $INPREFIX/Resources/
 cp -vr kde/share/$NAME/color-schemes $INPREFIX/Resources/color-schemes
 #datasets
 cp -vr kde/share/$NAME/datasets $INPREFIX/Resources/datasets
+#color maps
+cp -vr kde/share/$NAME/colormaps $INPREFIX/Resources/colormaps
+#examples
+cp -vr kde/share/$NAME/examples $INPREFIX/Resources/examples
 # appdata
 cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
 cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
