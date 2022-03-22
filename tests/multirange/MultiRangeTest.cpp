@@ -186,6 +186,9 @@ void MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection() {
 
 void MultiRangeTest::zoomXSelection_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
@@ -205,10 +208,20 @@ void MultiRangeTest::zoomXSelection_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 20., 60.);	// zoom
 	CHECK_RANGE(p1, logCurve, y, -10., 10.);
+
+	QVector<double> ref = {-250, -150.0, -50, 50, 150, 250};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	ref = {-1, -0.5, 0.0, 0.5, 1.0};
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	ref = {-10, -5, 0.0, 5, 10.0}; // Due to nice Extend it will be changed
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomXSelection_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
@@ -222,10 +235,18 @@ void MultiRangeTest::zoomXSelection_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0., 100.);
 	CHECK_RANGE(p1, logCurve, y, -10, 6); // should not change, because y scale is not auto
+
+	QVector<double> ref = {-250, -150.0, -50, 50, 150, 250};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomYSelection_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
@@ -240,10 +261,20 @@ void MultiRangeTest::zoomYSelection_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -150., 100.);	// zoom
 	CHECK_RANGE(p1, logCurve, x, 0., 100.);
 	CHECK_RANGE(p1, logCurve, y, -7, 2);		// zoom
+
+	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	ref = {-1, -0.5, 0, 0.5};
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
+	ref = {-7, -4, -1, 2};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
 }
 
 void MultiRangeTest::zoomYSelection_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
 
@@ -257,10 +288,18 @@ void MultiRangeTest::zoomYSelection_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3);
 }
 
 void MultiRangeTest::zoomSelection_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomSelection)
@@ -275,10 +314,20 @@ void MultiRangeTest::zoomSelection_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
 	CHECK_RANGE(p1, logCurve, x, 20, 60);	// zoom
 	CHECK_RANGE(p1, logCurve, y, -7, 2);	// zoom
+
+	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	ref = {-1, -0.5, 0, 0.5};
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
+	ref = {-7, -4, -1, 2};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
 }
 
 void MultiRangeTest::zoomSelection_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomSelection)
@@ -293,12 +342,20 @@ void MultiRangeTest::zoomSelection_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3);
 }
 
 // ZOOM
 
 void MultiRangeTest::zoomInX_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->zoomInX(0);
 
@@ -310,8 +367,7 @@ void MultiRangeTest::zoomInX_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX(0);
-	p1->scaleAutoX(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -320,10 +376,17 @@ void MultiRangeTest::zoomInX_SingleRange() {
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
+
 }
 
 void MultiRangeTest::zoomInX_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->zoomInX();
 
@@ -335,19 +398,26 @@ void MultiRangeTest::zoomInX_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale (all)
-	p1->enableAutoScaleX();
-	p1->scaleAuto(-1, -1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
-	CHECK_RANGE(p1, logCurve, y, -10, 6);
+	CHECK_RANGE(p1, logCurve, y, -10, 5);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	QVector<double> ref = {-10.0, -5, 0, 5};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 void MultiRangeTest::zoomInY_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->zoomInY(0);
 
@@ -359,8 +429,7 @@ void MultiRangeTest::zoomInY_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleY(0);
-	p1->scaleAutoY(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoY);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -368,10 +437,17 @@ void MultiRangeTest::zoomInY_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomInY_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->zoomInY();
 
@@ -383,8 +459,7 @@ void MultiRangeTest::zoomInY_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -5, 0);		// zoom
 
 	// check auto scale
-	p1->enableAutoScaleY();
-	p1->scaleAutoY(-1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAutoY);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -392,10 +467,19 @@ void MultiRangeTest::zoomInY_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 5);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	QVector<double> ref = {-10.0, -5, 0, 5};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 void MultiRangeTest::zoomOutX_SingleRange() {
 	LOAD_PROJECT
+
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->zoomOutX(0);
 
@@ -407,8 +491,7 @@ void MultiRangeTest::zoomOutX_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX(0);
-	p1->scaleAutoX(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -416,10 +499,18 @@ void MultiRangeTest::zoomOutX_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomOutX_AllRanges() {
 	LOAD_PROJECT
+
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->zoomOutX();
 
@@ -431,8 +522,7 @@ void MultiRangeTest::zoomOutX_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX();
-	p1->scaleAutoX(-1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -440,10 +530,18 @@ void MultiRangeTest::zoomOutX_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomOutY_SingleRange() {
 	LOAD_PROJECT
+
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->zoomOutY(0);
 
@@ -455,8 +553,7 @@ void MultiRangeTest::zoomOutY_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleY(0);
-	p1->scaleAutoY(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoY);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -464,10 +561,17 @@ void MultiRangeTest::zoomOutY_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomOutY_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	vertAxisP1->setSelected(true);
 	p1->zoomOutY();
 
@@ -479,8 +583,7 @@ void MultiRangeTest::zoomOutY_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -15, 10);		// zoom
 
 	// check auto scale (all)
-	p1->enableAutoScaleY();
-	p1->scaleAuto(-1, -1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -488,12 +591,20 @@ void MultiRangeTest::zoomOutY_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 5);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	QVector<double> ref = {-10.0, -5, 0, 5};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 // SHIFT
 
 void MultiRangeTest::shiftLeft_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->shiftLeftX(0);
 
@@ -505,8 +616,7 @@ void MultiRangeTest::shiftLeft_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX(0);
-	p1->scaleAutoX(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -514,10 +624,17 @@ void MultiRangeTest::shiftLeft_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::shiftRight_SingleRange() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->shiftRightX(0);
 
@@ -529,8 +646,7 @@ void MultiRangeTest::shiftRight_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX(0);
-	p1->scaleAutoX(0, true);
+	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -538,10 +654,17 @@ void MultiRangeTest::shiftRight_SingleRange() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale
 }
 
 void MultiRangeTest::shiftLeft_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->shiftLeftX();
 
@@ -553,8 +676,7 @@ void MultiRangeTest::shiftLeft_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale (all)
-	p1->enableAutoScaleX();
-	p1->scaleAuto(-1, -1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -562,10 +684,18 @@ void MultiRangeTest::shiftLeft_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check if retransform is done by comparing the tickLabelValues
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale
 }
 
 void MultiRangeTest::shiftRight_AllRanges() {
 	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
 	horAxisP1->setSelected(true);
 	p1->shiftRightX();
 
@@ -577,8 +707,7 @@ void MultiRangeTest::shiftRight_AllRanges() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	p1->enableAutoScaleX();
-	p1->scaleAutoX(-1, true);
+	p1->navigate(-1, CartesianPlot::NavigationOperation::ScaleAutoX);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
@@ -586,6 +715,11 @@ void MultiRangeTest::shiftRight_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 	CHECK_RANGE(p1, logCurve, x, 0, 100);
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check if retransform is done by comparing the tickLabelValues
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale
 }
 
 void MultiRangeTest::shiftUp_SingleRange() {
@@ -680,7 +814,7 @@ void MultiRangeTest::shiftUp_AllRanges() {
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	QVector<double> ref = {-10.0, -5, 0, 5};
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled, so it does not work as above
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 void MultiRangeTest::shiftDown_AllRanges() {
@@ -713,7 +847,7 @@ void MultiRangeTest::shiftDown_AllRanges() {
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	QVector<double> ref = {-10.0, -5, 0, 5};
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled, so it does not work as above
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 }
 
 void MultiRangeTest::autoScaleYAfterZoomInX() {
