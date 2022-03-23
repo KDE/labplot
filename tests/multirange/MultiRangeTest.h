@@ -49,5 +49,7 @@ private Q_SLOTS:
 
 	void autoScaleYAfterZoomInX();
 	void autoScaleXAfterZoomInY();
+
+	void undoRedoScaleAutoX();
 };
 #endif
