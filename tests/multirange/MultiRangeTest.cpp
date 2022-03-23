@@ -915,10 +915,6 @@ void MultiRangeTest::undoRedoScaleAutoX() {
 	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	p1->mouseReleaseZoomSelectionMode(-1);
 
-	//DEBUG_RANGE(p1, sinCurve)
-	//DEBUG_RANGE(p1, tanCurve)
-	//DEBUG_RANGE(p1, logCurve)
-
 	auto refValuesAxis1Zoom = vertAxisP1->tickLabelValues();
 	auto refValuesAxis2Zoom = vertAxis2P1->tickLabelValues();
 	auto refValuesAxis3Zoom = vertAxis3P1->tickLabelValues();
@@ -927,23 +923,99 @@ void MultiRangeTest::undoRedoScaleAutoX() {
 
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	QVector<double> ref = {-10.0, -5, 0, 5};
-	auto value = vertAxis3P1->tickLabelValues();
+	QVector<double> ref = {-10.0, -5, 0, 5, 10}; // Not autoscaled! Due to nice extend it will be -10..10 instead of -10..6
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
 
+	// two different x axes
 	project.undoStack()->undo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
 
+	project.undoStack()->undo();
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1Zoom);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2Zoom);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
+
+	project.undoStack()->redo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
 
 	project.undoStack()->redo();
 
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	ref = {-10.0, -5, 0, 5, 10};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
+}
+
+void MultiRangeTest::undoRedoScaleAutoY() {
+	LOAD_PROJECT
+	auto refValuesAxis1 = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2 = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3 = vertAxis3P1->tickLabelValues();
+	vertAxisP1->setSelected(true);
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
+
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
+	p1->mouseReleaseZoomSelectionMode(-1);
+
+	QVector<double> ref = {-150.0, -100, -50, 0, 50, 100};
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
+	ref = {-1, -0.5, 0, 0.5};
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), ref);
+	ref = {-7, -4, -1, 2};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
+
+
+	auto refValuesAxis1Zoom = vertAxisP1->tickLabelValues();
+	auto refValuesAxis2Zoom = vertAxis2P1->tickLabelValues();
+	auto refValuesAxis3Zoom = vertAxis3P1->tickLabelValues();
+
+	p1->enableAutoScaleY(-1, true, false, true);
+
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
 	ref = {-10.0, -5, 0, 5};
 	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // vertAxis3 is not autoscaled when loading, after autoscaling the values are different
+	// third axis
+	project.undoStack()->undo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
 
+
+	// second axis
+	project.undoStack()->undo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2Zoom);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
+
+	// first axis
+	project.undoStack()->undo();
+	// All axis are back
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1Zoom);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2Zoom);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
+
+	project.undoStack()->redo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2Zoom);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
+
+	project.undoStack()->redo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3Zoom);
+
+	project.undoStack()->redo();
+	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValuesAxis1);
+	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
+	ref = {-10.0, -5, 0, 5};
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref);
 }
 
 QTEST_MAIN(MultiRangeTest)

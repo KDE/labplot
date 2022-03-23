@@ -1175,7 +1175,11 @@ public:
 			m_private->q->scaleAutoX(m_index, m_fullRange);
 
 			scaleAutoY();
+
+			if (!m_suppressRetransform)
+				m_private->q->retransform();
 		}
+		m_suppressRetransform = false; // When executed from the undostack retransform must be done!
 		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScale);
 	}
 
@@ -1185,17 +1189,21 @@ public:
 			m_private->retransformXScale(m_index);
 		}
 		m_private->enableAutoScaleX(m_index, m_autoScaleOld);
-		
-		scaleAutoY();
+		if (m_autoScaleOld) {
+			scaleAutoY();
+			if (!m_suppressRetransform)
+				m_private->q->retransform();
+		}
 		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScaleOld);
 	}
 	
 	void scaleAutoY() {
-			for (int i=0; i < m_private->q->coordinateSystemCount(); i++) {
-				auto cs = m_private->q->coordinateSystem(i);
-				if ((m_index == cs->xIndex()) && autoScaleY(cs->yIndex()))
-					scaleAutoY(cs->yIndex(), false);
-			}
+		auto* plot = m_private->q;
+		for (int i=0; i < plot->coordinateSystemCount(); i++) {
+			auto cs = plot->coordinateSystem(i);
+			if (m_index == cs->xIndex() && plot->autoScaleY(cs->yIndex()))
+				plot->scaleAutoY(cs->yIndex(), false);
+		}
 	}
 
 private:
@@ -1205,6 +1213,7 @@ private:
 	int m_index;
 	Range<double> m_oldRange;
 	bool m_fullRange;
+	bool m_suppressRetransform{true}; // First time it must be suppressed, because it will be done in the caller function
 };
 class CartesianPlotEnableAutoScaleYIndexCmd : public QUndoCommand {
 public:
@@ -1219,8 +1228,12 @@ public:
 		if (m_autoScale) {
 			m_oldRange = m_private->yRange(m_index);
 			m_private->q->scaleAutoY(m_index, m_fullRange);
-			scaleAutoX();
 		}
+		scaleAutoX();
+
+		if (!m_suppressRetransform)
+			m_private->q->retransform();
+		m_suppressRetransform = false; // When executed from the undostack retransform must be done!
 		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScale);
 	}
 
@@ -1231,15 +1244,18 @@ public:
 		}
 		m_private->enableAutoScaleY(m_index, m_autoScaleOld);
 		scaleAutoX();
+		if (!m_suppressRetransform)
+			m_private->q->retransform();
 		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScaleOld);
 	}
 	
 	void scaleAutoX() {
-			for (int i=0; i < m_private->q->coordinateSystemCount(); i++) {
-				auto cs = m_private->q->coordinateSystem(i);
-				if ((m_index == cs->yIndex()) && autoScaleX(cs->xIndex()))
-					scaleAutoX(cs->xIndex(), false);
-			}
+		auto* plot = m_private->q;
+		for (int i=0; i < plot->coordinateSystemCount(); i++) {
+			auto cs = plot->coordinateSystem(i);
+			if (m_index == cs->yIndex() && plot->autoScaleX(cs->xIndex()))
+				plot->scaleAutoX(cs->xIndex(), false);
+		}
 	}
 
 private:
@@ -1249,6 +1265,7 @@ private:
 	int m_index;
 	Range<double> m_oldRange = Range<double>(0.0, 0.0);
 	bool m_fullRange;
+	bool m_suppressRetransform{true}; // First time it must be suppressed, because it will be done in the caller function
 };
 
 // set auto scale for x range index (index == -1: all ranges)
