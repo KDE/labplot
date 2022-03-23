@@ -759,32 +759,32 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = xRangeDirty(xIndex);
 		if (!autoScaleX(xIndex)) {
-			enableAutoScaleX(xIndex, true, true, true);
-			update = true;
-		} else
+			enableAutoScaleX(xIndex, true, false, true);
+		} else {
 			update |= scaleAutoX(xIndex, true);
-		if (update) {
-			for (int i=0; i < m_coordinateSystems.count(); i++) {
-				auto cs = coordinateSystem(i);
-				if ((cSystemIndex == -1 || xIndex == cs->xIndex()) && autoScaleY(cs->yIndex()))
-					scaleAutoY(cs->yIndex(), false);
+			if (update) {
+				for (int i=0; i < m_coordinateSystems.count(); i++) {
+					auto cs = coordinateSystem(i);
+					if ((cSystemIndex == -1 || xIndex == cs->xIndex()) && autoScaleY(cs->yIndex()))
+						scaleAutoY(cs->yIndex(), false);
+				}
+				retransform();
 			}
-			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
 		bool update = yRangeDirty(yIndex);
 		if (!autoScaleY(yIndex)) {
-			enableAutoScaleY(yIndex, true, true, true);
-			update = true;
-		} else
+			enableAutoScaleY(yIndex, true, false, true);
+		} else {
 			update |= scaleAutoY(yIndex, true);
-		if (update) {
-			for (int i=0; i < m_coordinateSystems.count(); i++) {
-				auto cs = coordinateSystem(i);
-				if ((cSystemIndex == -1 || yIndex == cs->yIndex()) && autoScaleX(cs->xIndex()))
-					scaleAutoX(cs->xIndex(), false);
+			if (update) {
+				for (int i=0; i < m_coordinateSystems.count(); i++) {
+					auto cs = coordinateSystem(i);
+					if ((cSystemIndex == -1 || yIndex == cs->yIndex()) && autoScaleX(cs->xIndex()))
+						scaleAutoX(cs->xIndex(), false);
+				}
+				retransform();
 			}
-			retransform();
 		}
 	} else if (op == NavigationOperation::ZoomIn) zoomIn(xIndex, yIndex);
 	else if (op == NavigationOperation::ZoomOut) zoomOut(xIndex, yIndex);
@@ -1173,6 +1173,8 @@ public:
 		if (m_autoScale) {
 			m_oldRange = m_private->xRange(m_index);
 			m_private->q->scaleAutoX(m_index, m_fullRange);
+
+			scaleAutoY();
 		}
 		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScale);
 	}
@@ -1183,7 +1185,17 @@ public:
 			m_private->retransformXScale(m_index);
 		}
 		m_private->enableAutoScaleX(m_index, m_autoScaleOld);
+		
+		scaleAutoY();
 		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScaleOld);
+	}
+	
+	void scaleAutoY() {
+			for (int i=0; i < m_private->q->coordinateSystemCount(); i++) {
+				auto cs = m_private->q->coordinateSystem(i);
+				if ((m_index == cs->xIndex()) && autoScaleY(cs->yIndex()))
+					scaleAutoY(cs->yIndex(), false);
+			}
 	}
 
 private:
@@ -1207,6 +1219,7 @@ public:
 		if (m_autoScale) {
 			m_oldRange = m_private->yRange(m_index);
 			m_private->q->scaleAutoY(m_index, m_fullRange);
+			scaleAutoX();
 		}
 		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScale);
 	}
@@ -1217,7 +1230,16 @@ public:
 			m_private->retransformYScale(m_index);
 		}
 		m_private->enableAutoScaleY(m_index, m_autoScaleOld);
+		scaleAutoX();
 		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScaleOld);
+	}
+	
+	void scaleAutoX() {
+			for (int i=0; i < m_private->q->coordinateSystemCount(); i++) {
+				auto cs = m_private->q->coordinateSystem(i);
+				if ((m_index == cs->yIndex()) && autoScaleX(cs->xIndex()))
+					scaleAutoX(cs->xIndex(), false);
+			}
 	}
 
 private:
