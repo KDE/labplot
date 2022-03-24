@@ -224,19 +224,6 @@
     </screenshot>
     <screenshot type="default">
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
-      <caption xml:lang="ar">واجهة حاسوب دفتري للجلسات التفاعلية في Maxima و Octave و R و Sage و Scilab و Python و Julia و Lua</caption>
-      <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
-      <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
-      <caption xml:lang="de">Notebookschnittstelle zu interaktiven Sitzungen in Maxima, Octave, R, Sage, Scilab, Python, Julia oder Lua</caption>
-      <caption xml:lang="en-GB">Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua</caption>
-      <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia y Lua</caption>
-      <caption xml:lang="fr">Interface pour ordinateur de type » ;Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua.</caption>
-      <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia e Lua</caption>
-      <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia en Lua</caption>
-      <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua</caption>
-      <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia och Lua</caption>
-      <caption xml:lang="uk">Інтерфейс нотатника для інтерактивних сеансів Maxima, Octave, R, Sage, Scilab, Python, Julia та Lua</caption>
-      <caption xml:lang="x-test">xxNotebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Luaxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/08_maxima_tutorial_linux.png</image>
     </screenshot>
     <screenshot type="default">
