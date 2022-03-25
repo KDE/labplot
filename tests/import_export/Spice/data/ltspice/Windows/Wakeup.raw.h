@@ -1,3 +1,11 @@
+/*
+	File                 : Wakeup.raw.h
+	Project              : LabPlot
+	Description          : LTSpice reference data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 namespace Wakeup {
 
 const QString filename = "Windows/Wakeup.raw";
