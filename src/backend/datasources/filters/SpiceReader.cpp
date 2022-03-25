@@ -81,17 +81,22 @@ void SpiceFileReader::init() {
 			return;
 	}
 
+	line = stream.readLine();
 	if (!mNgspice) {
-		line = stream.readLine();
-		if (!line.startsWith(QLatin1String("Command:"))) // LTSpice specific
-			return;
-		addInfoStringLine(line);
-		mCommand = line.split("Command:")[1].simplified();
+		while(!line.startsWith(QLatin1String("Variables:")) && !stream.atEnd()) {
+			auto list = line.split(":");
+			if (list.length() < 2)
+				return;
+			addInfoStringLine(line);
+			mLtSpiceOptions.insert(list[0].simplified(), list[1].simplified());
+			line = stream.readLine();
+		}
 	}
 
-	line = stream.readLine();
-	if (!line.startsWith(QLatin1String("Variables:")))
+	if (!line.startsWith(QLatin1String("Variables:"))) {
+		DEBUG("SpiceReader: line does not start with the Variables key: " << line.toStdString());
 		return;
+	}
 	addInfoStringLine(line);
 
 	mVariables.resize(numberVariables);

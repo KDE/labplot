@@ -38,5 +38,7 @@ private Q_SLOTS:
 	void LtSpiceACBinary();
 	void LtSpiceTranBinary();
 	void LtSpiceTranDoubleBinary();
+
+	void LtSpiceWakeup();
 };
 #endif // SPICEFILTERTEST_H

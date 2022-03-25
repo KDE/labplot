@@ -81,7 +81,7 @@ private:
 	int mFlags;
 	int mNumberPoints;
 	double mOffset; // LtSpice specific
-	QString mCommand; // LtSpice specific
+	QHash<QString, QString> mLtSpiceOptions; // LtSpice specific
 	QVector<Variable> mVariables;
 
 	bool mBinary{true}; // If the read file is binary of ascii
