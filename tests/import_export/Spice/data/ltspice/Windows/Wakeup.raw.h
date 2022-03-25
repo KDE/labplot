@@ -10,7 +10,7 @@ namespace Wakeup {
 
 const QString filename = "Windows/Wakeup.raw";
 
-QString refFileInfoString = R"(Title: * Wakeup\Wakeup.asc
+QString refFileInfoString = R"(Title: * C:\Users\martinm\Documents\GIT\ACPB_BMS\Electronics Design\Wakeup\Wakeup.asc
 <br>Date: Wed Mar 23 09:44:38 2022
 <br>Plotname: Transient Analysis
 <br>Flags: real forward
