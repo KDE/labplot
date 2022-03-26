@@ -76,10 +76,9 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "10 " + QString::number(std::numeric_limits<long long>::max())
-						+ "\n20 " + QString::number(std::numeric_limits<long long>::min());
+	const QString str = "10 " + QString::number(std::numeric_limits<long long>::min())
+						+ "\n20 " + QString::number(std::numeric_limits<long long>::max());
 	QApplication::clipboard()->setText(str);
-	WARN("TEXT = " << STDSTRING(str))
 
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
@@ -94,9 +93,9 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 
 	//values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
-	QCOMPARE(sheet.column(1)->bigIntAt(0), std::numeric_limits<long long>::max());
+	QCOMPARE(sheet.column(1)->bigIntAt(0), std::numeric_limits<long long>::min());
 	QCOMPARE(sheet.column(0)->integerAt(1), 20);
-	QCOMPARE(sheet.column(1)->bigIntAt(1), std::numeric_limits<long long>::min());
+	QCOMPARE(sheet.column(1)->bigIntAt(1), std::numeric_limits<long long>::max());
 }
 
 /*!
