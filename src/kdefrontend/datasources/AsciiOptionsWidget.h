@@ -28,7 +28,7 @@ public:
 	void saveSettings();
 
 public Q_SLOTS:
-	void headerChanged(bool);
+	void headerChanged(bool) const;
 
 Q_SIGNALS:
 	void headerLineChanged(int);

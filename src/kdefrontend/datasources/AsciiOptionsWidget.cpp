@@ -138,7 +138,7 @@ void AsciiOptionsWidget::showTimestampOptions(bool visible) {
   Shows a text field for the vector names if the option "Use the first row..." was not selected.
   Hides it otherwise.
 */
-void AsciiOptionsWidget::headerChanged(bool state) {
+void AsciiOptionsWidget::headerChanged(bool state) const {
 	ui.sbHeaderLine->setEnabled(state);
 	ui.kleVectorNames->setVisible(!state);
 	ui.lVectorNames->setVisible(!state);
@@ -181,7 +181,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportAscii");
 
 	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
-	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
+	ui.cbSeparatingCharacter->setCurrentText(conf.readEntry("SeparatingCharacter", "auto"));
 
 	//TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
@@ -196,6 +196,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	ui.chbRemoveQuotes->setChecked(conf.readEntry("RemoveQuotes", false));
 	ui.chbSkipEmptyParts->setChecked(conf.readEntry("SkipEmptyParts", false));
 	ui.chbHeader->setChecked(conf.readEntry("UseFirstRow", true));
+	headerChanged(ui.chbHeader->isChecked()); //call this to update the status of the SpinBox for the header line
 	ui.kleVectorNames->setText(conf.readEntry("Names", ""));
 }
 
