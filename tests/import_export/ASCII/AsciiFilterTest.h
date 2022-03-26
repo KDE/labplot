@@ -4,6 +4,7 @@
     Description          : Tests for the ascii filter
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -74,5 +75,6 @@ private Q_SLOTS:
 
 	//datetime data
 	void testDateTime00();
+	void testDateTimeHex();
 };
 #endif
