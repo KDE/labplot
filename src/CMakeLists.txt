@@ -530,7 +530,7 @@ IF (ENABLE_READSTAT)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
 		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
 	ENDIF ()
-	target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+	target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)

@@ -421,13 +421,19 @@ ELSE ()
 	MESSAGE (STATUS "libcerf library DISABLED")
 ENDIF ()
 
+### ZLIB for ROOT and READSTAT #################
+
+FIND_PACKAGE(ZLIB)
+SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+	DESCRIPTION "General purpose compression library"
+	URL "https://www.zlib.net/"
+)
+IF (NOT ZLIB_FOUND)
+	SET(ZLIB_LIBRARIES "")
+ENDIF ()
+
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-	FIND_PACKAGE(ZLIB)
-	SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
-		DESCRIPTION "General purpose compression library"
-		URL "https://www.zlib.net/"
-	)
 	FIND_PACKAGE(LZ4)
 	IF (ZLIB_FOUND AND LZ4_FOUND)
 		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
