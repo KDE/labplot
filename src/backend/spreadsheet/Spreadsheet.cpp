@@ -73,13 +73,16 @@ void Spreadsheet::init() {
 		addChild(new_col);
 	}
 	setRowCount(rows);
-}
 
+	//the number of columns and rows is known now, initialize the model
+	m_model = new SpreadsheetModel(this);
+}
+/*
 void Spreadsheet::setModel(SpreadsheetModel* model) {
 	m_model = model;
 }
-
-SpreadsheetModel* Spreadsheet::model() {
+*/
+SpreadsheetModel* Spreadsheet::model() const {
 	return m_model;
 }
 
@@ -891,6 +894,9 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			}
 		}
 	}
+
+	//the number of columns and rows is known now, initialize the model
+	m_model = new SpreadsheetModel(this);
 
 	return !reader->hasError();
 }

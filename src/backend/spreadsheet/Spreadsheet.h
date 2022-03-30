@@ -33,8 +33,7 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
-	void setModel(SpreadsheetModel*);
-	SpreadsheetModel* model();
+	SpreadsheetModel* model() const;
 
 	QVector<AspectType> pasteTypes() const override;
 	QVector<AspectType> dropableOn() const override;

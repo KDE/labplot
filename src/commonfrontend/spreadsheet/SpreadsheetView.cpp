@@ -97,7 +97,6 @@ enum TukeyLadderPower {InverseSquared, Inverse, InverseSquareRoot, Log, SquareRo
 SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWidget(),
 	m_tableView(new QTableView(this)),
 	m_spreadsheet(spreadsheet),
-	m_model(new SpreadsheetModel(spreadsheet)),
 	m_readOnly(readOnly) {
 
 	auto* layout = new QVBoxLayout(this);
@@ -130,10 +129,10 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 }
 
 SpreadsheetView::~SpreadsheetView() {
-	delete m_model;
 }
 
 void SpreadsheetView::init() {
+	m_model = m_spreadsheet->model();
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
