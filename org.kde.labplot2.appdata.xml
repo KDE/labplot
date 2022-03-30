@@ -232,7 +232,7 @@
     <screenshot type="default">
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
       <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
-      <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -282,7 +282,7 @@
       <caption>Visualization of data calculated in an interactive Maxima session</caption>
       <caption xml:lang="ar">تصور البيانات المحسوبة في جَلسة ماكسيما تفاعلية</caption>
       <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
-      <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
+      <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva de Maxima</caption>
       <caption xml:lang="de">Visualisierung von Daten, die interaktiv in einer Maxima-Sitzung berechnet werden</caption>
       <caption xml:lang="en-GB">Visualisation of data calculated in an interactive Maxima session</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
