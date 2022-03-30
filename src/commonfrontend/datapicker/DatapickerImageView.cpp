@@ -348,8 +348,8 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 void DatapickerImageView::wheelEvent(QWheelEvent* event) {
 	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
-		int numDegrees = event->delta() / 8;
-		int numSteps = numDegrees / 15; // see QWheelEvent documentation
+		QPoint numDegrees = event->angleDelta() / 8;
+		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
 		zoom(numSteps);
 	} else
 		QGraphicsView::wheelEvent(event);
