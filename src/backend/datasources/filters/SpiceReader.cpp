@@ -182,6 +182,12 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 				double value;
 				memcpy(&value, &binary[lineNumber], 8);
 
+				if (!mNgspice && mLTSpiceBug) {
+					// Bug in the ltspice binary raw format
+					// For more information see MR !108
+					value = abs(value);
+				}
+
 				(*static_cast<QVector<double>*>(data[0]))[patchesIndexOffset + l] = value;
 
 				if (isComplex) {
