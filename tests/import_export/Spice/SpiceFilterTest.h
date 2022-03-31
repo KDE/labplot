@@ -40,5 +40,8 @@ private Q_SLOTS:
 	void LtSpiceTranDoubleBinary();
 
 	void LtSpiceWakeup();
+	void DCTransfer();
+
+	void FFT_From_TransientAnalysis();
 };
 #endif // SPICEFILTERTEST_H

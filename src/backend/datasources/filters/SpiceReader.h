@@ -31,6 +31,15 @@ public:
 		log = 0x8, // ?
 	};
 
+	enum class PlotMode {
+		Transient,
+		FFT,
+		AC,
+		DC,
+		Noise,
+		Unknown
+	};
+
 	SpiceFileReader(const QString& filename): mFilename(filename){
 		mFile.setFileName(mFilename);
 	}
@@ -56,6 +65,7 @@ public:
 	bool isDouble() const {return (mFlags & Flags::yDouble) > 0;}
 	int numberSimulationPoints() {return mNumberPoints;}
 	const QVector<Variable>& variables() const {return mVariables;}
+	PlotMode plotNameToPlotMode(const QString& name);
 
 	void setBulkReadLines(const int lines) {mNumberLines = lines;}
 
@@ -83,6 +93,8 @@ private:
 	double mOffset; // LtSpice specific
 	QHash<QString, QString> mLtSpiceOptions; // LtSpice specific
 	QVector<Variable> mVariables;
+	PlotMode mMode;
+	bool mLTSpiceBug{false};
 
 	bool mBinary{true}; // If the read file is binary of ascii
 

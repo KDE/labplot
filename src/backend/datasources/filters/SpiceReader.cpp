@@ -47,6 +47,7 @@ void SpiceFileReader::init() {
 	if (!line.startsWith(QLatin1String("Plotname:")))
 		return;
 	mPlotName = line.split("Plotname:")[1].simplified();
+	mMode = plotNameToPlotMode(mPlotName);
 	addInfoStringLine(line);
 
 	line = stream.readLine();
@@ -142,13 +143,13 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 	const int numberValuesPerVariable = 1 + isComplex;
 
 	if (data.size() < (uint)(mVariables.count() * numberValuesPerVariable))
-		return false;
+		return 0;
 
 	// Assumption: if not a nullptr is in the array,
 	// it is a valid pointer to an array
 	for (uint i = 0; i < data.size(); i++) {
 		if (data.at(i) == nullptr)
-			return false;
+			return 0;
 	}
 
 	int linesRead = 0;
@@ -170,12 +171,13 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 			const int length = ba.length();
 			if (length % lineBytes != 0) {
 				DEBUG("NgSpiceReader::readData: The data is corrupted")
-				return false;
+				return 0;
 			}
 			const int readLines = (int)(length/lineBytes);
 			const int patchesIndexOffset = patchesCount * mNumberLines;
 
 			for (int l = 0; l < qMin(readLines, mNumberLines); l++) {
+				// time / frequency real part
 				const int lineNumber = l * lineBytes;
 				double value;
 				memcpy(&value, &binary[lineNumber], 8);
@@ -183,6 +185,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 				(*static_cast<QVector<double>*>(data[0]))[patchesIndexOffset + l] = value;
 
 				if (isComplex) {
+					// time / frequency imaginary part
 					memcpy(&value, &binary[lineNumber + 1 * 8], 8);
 					(*static_cast<QVector<double>*>(data[1]))[patchesIndexOffset + l] = value;
 				}
@@ -266,6 +269,23 @@ QString SpiceFileReader::convertLTSpiceBinary(const QByteArray& s) {
 	// https://stackoverflow.com/questions/14131127/qbytearray-to-qstring
 
 	return QTextCodec::codecForMib(1015)->toUnicode(s);
+}
+
+SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& name) {
+	mLTSpiceBug = true;
+	if (name.contains("Transient"))
+		return PlotMode::Transient;
+	else if (name.contains("FFT"))
+		return PlotMode::FFT;
+	else if (name.contains("DC")) {
+		mLTSpiceBug = false;
+		return PlotMode::DC;
+	} else if (name.contains("AC"))
+		return PlotMode::AC;
+	else if (name.contains("Noise"))
+		return PlotMode::Noise;
+
+	return PlotMode::Unknown;
 }
 
 int SpiceFileReader::parseFlags(const QString& s) {

@@ -19,8 +19,10 @@
 #include <data/ngspice/ac_binary.raw.h>
 #include <data/ltspice/AC/LowPassFilter_AC.raw.h>
 #include <data/ltspice/transient/LowPassFilter.raw.h>
-#include <data/ltspice/LowPassFilter_transient_doubleFlag.raw.h>
+#include <data/ltspice/transientDouble/LowPassFilter_transient_doubleFlag.raw.h>
 #include <data/ltspice/Windows/Wakeup.raw.h>
+#include <data/ltspice/DCTransfer/DCTransfer.raw.h>
+#include <data/ltspice/FFT/FFT.raw.h>
 
 #include <QFile>
 
@@ -509,6 +511,75 @@ void SpiceFilterTest::LtSpiceWakeup() {
 //		qDebug() << i << resFileInfoString.at(i) << refFileInfoString.at(i);
 //		QCOMPARE(resFileInfoString.at(i), refFileInfoString.at(i));
 //	}
+	QCOMPARE(resFileInfoString, refFileInfoString);
+
+	Spreadsheet sheet("Test", false);
+	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
+
+	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
+
+	// Because the read data are floats, a float comparsion must be done, because
+	// comparing float and double will not work properly
+	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
+}
+
+void SpiceFilterTest::DCTransfer() {
+	// The Spice file contains an additional option called
+	// Backannotation which was not handled
+	using namespace DCTransfer;
+
+	READ_REFDATA(LTSpiceRefDataFile);
+	const QString file = LTSpiceFile;
+	const int refColumnCount = refData.at(0).count();
+
+	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
+	SpiceFilter filter(SpiceFilter::Type::Binary);
+	auto res = filter.preview(file, numberPreviewData);
+
+	QCOMPARE(res.length(), numberPreviewData);
+	for (int i = 0; i < res.length(); i++) {
+		for (int j = 0; j < columnNames.length(); j++)
+			QVERIFY(qFuzzyCompare(res.at(i).at(j).toFloat(), refData.at(i).at(j).toFloat()));
+	}
+
+	QString resFileInfoString = filter.fileInfoString(file);
+	QCOMPARE(resFileInfoString, refFileInfoString);
+
+	Spreadsheet sheet("Test", false);
+	filter.readDataFromFile(file, &sheet, AbstractFileFilter::ImportMode::Replace);
+
+	COMPARE_COLUMN_NAMES_MODE(sheet, columnNames, refColumnCount);
+
+	// Because the read data are floats, a float comparsion must be done, because
+	// comparing float and double will not work properly
+	COMPARE_ROW_VALUES_FLOAT(sheet, refData, refDataRowCount, refColumnCount);
+}
+
+void SpiceFilterTest::FFT_From_TransientAnalysis() {
+	// The Spice file contains an additional option called
+	// Backannotation which was not handled
+	using namespace FFT;
+
+	READ_REFDATA(LTSpiceRefDataFile);
+	const QString file = LTSpiceFile;
+	const int refColumnCount = refData.at(0).count();
+
+	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
+	SpiceFilter filter(SpiceFilter::Type::Binary);
+	auto res = filter.preview(file, numberPreviewData);
+
+	QCOMPARE(res.length(), numberPreviewData);
+	for (int i = 0; i < res.length(); i++) {
+		for (int j = 0; j < columnNames.length(); j++)
+			QVERIFY(qFuzzyCompare(res.at(i).at(j).toFloat(), refData.at(i).at(j).toFloat()));
+	}
+
+	QString resFileInfoString = filter.fileInfoString(file);
+//	// For debugging purpose
+	for (int i=0; i < resFileInfoString.length(); i++) {
+		qDebug() << i << resFileInfoString.at(i) << refFileInfoString.at(i);
+		QCOMPARE(resFileInfoString.at(i), refFileInfoString.at(i));
+	}
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
 	Spreadsheet sheet("Test", false);

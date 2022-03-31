@@ -22,21 +22,30 @@ if __name__ == "__main__":
     size = len(l.x_raw)
     for r in range(size):
         line = ""
-        for v in l.variables:
-            s = l.get_data(v)
-            line += f'"{s[r].real:{1}.{15}e}", '
+        for index, v in enumerate(l.variables):
+            if v == "time":
+                s = l.get_time()
+            elif v == "frequency":
+                s = l.get_frequency()
+            else:
+                s = l.get_data(v)
+            line += f'{s[r].real:{1}.{15}e}'
             if isComplex:
-                line += f'"{s[r].imag:{1}.{15}e}"' + ", "
-        data_str += f"{{{line}}},\n"
+                line += ","
+                line += f'{s[r].imag:{1}.{15}e}'
 
-    data_str = f"QVector<QStringList> refData = {{{data_str}}};"
-    filename_string = f'const QString filename = "{filename}";\n'
+            if index < len(l.variables) - 1:
+                line += ","
+        data_str += f"{line}\n"
+
+    #data_str = f"QVector<QStringList> refData = {{{data_str}}};"
+    #filename_string = f'const QString filename = "{filename}";\n'
 
 
-    data_str = f"namespace {namespace} {{\n\n{filename_string}\n{data_str}\n}}"
+    #data_str = f"namespace {namespace} {{\n\n{filename_string}\n{data_str}\n}}"
 
 
 
-    with open(filenameWithPath + ".h", "w") as f:
+    with open(filenameWithPath + ".refdata", "w") as f:
         f.write(data_str)
 
