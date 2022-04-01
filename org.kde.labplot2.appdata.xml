@@ -56,7 +56,7 @@
     </p>
     <p xml:lang="ar">معمل الرسم هو برنامج مجاني ومفتوح المصدر ومتعدد المنصات لتصور البيانات وتحليلها ويمكن للجميع الوصول إليه.</p>
     <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
-    <p xml:lang="ca-valencia">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
+    <p xml:lang="ca-valencia">LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
@@ -75,7 +75,7 @@
     <p xml:lang="ar">يوفر معمل الرسم طريقة سهلة لإنشاء وإدارة وتحرير الرسومات. يسمح لك بإنتاج الرسومات بناءً على بيانات من جدول بيانات أو على بيانات مستوردة من ملفات خارجية. يمكن تصدير الرسومات إلى العديد من تنسيقات الرسم البيكسي والمتجه.</p>
     <p xml:lang="bs">Grafikov LabPlot pruža jednostavan način za stvaranje, upravljanje i uređivanje crtanja dijagrama. On vam omogućava da proizvede crteže na osnovu podataka iz tabele ili podataka uvezenih iz eksternih fajlova. Crteži se mogu izvoziti u nekoliko pixmap i vektor grafičkih formata.</p>
     <p xml:lang="ca">El LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
-    <p xml:lang="ca-valencia">El LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
+    <p xml:lang="ca-valencia">LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="el">Το LabPlot παρέχει έναν εύκολο τρόπο δημιουργίας, διαχείρισης και επεξεργασίας γραφικών παραστάσεων. Σας επιτρέπει να δημιουργείτε γραφικές παρασασεις με βάση δεδομένα από φύλλα εργασίας ή εισηγμένα από εξωτερικά αρχεία. Οι γραφικές παραστάσεις μπορούν να εξαχθούν σε διάφορους τύπους αποθήκευσης χρωματικής περίπλεξης ή διανυσματικών γραφικών.</p>
     <p xml:lang="en-GB">LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.</p>
@@ -235,6 +235,7 @@
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua, itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -264,7 +265,7 @@
       <caption>Herzsprung-Russel diagram in LabPlot</caption>
       <caption xml:lang="ar">مخطط هيرتزبرونج-راسل في معمل الرسم</caption>
       <caption xml:lang="ca">Diagrama Herzsprung-Russel en el LabPlot</caption>
-      <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en el LabPlot</caption>
+      <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="de">Herzsprung-Russel-Diagramm in LabPlot</caption>
       <caption xml:lang="en-GB">Herzsprung-Russel diagram in LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
