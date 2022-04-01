@@ -53,6 +53,8 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemMode
 		beginInsertColumns(QModelIndex(), i, i);
 		handleAspectAdded(spreadsheet->column(i));
 	}
+
+	m_spreadsheet->setModel(this);
 }
 
 void SpreadsheetModel::suppressSignals(bool value) {

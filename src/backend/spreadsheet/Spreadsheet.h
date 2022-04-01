@@ -24,6 +24,7 @@ class Spreadsheet : public AbstractDataSource {
 
 public:
 	explicit Spreadsheet(const QString& name, bool loading = false, AspectType type = AspectType::Spreadsheet);
+	~Spreadsheet() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -33,6 +34,7 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
+	void setModel(SpreadsheetModel*);
 	SpreadsheetModel* model() const;
 
 	QVector<AspectType> pasteTypes() const override;

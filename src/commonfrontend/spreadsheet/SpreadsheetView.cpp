@@ -132,7 +132,14 @@ SpreadsheetView::~SpreadsheetView() {
 }
 
 void SpreadsheetView::init() {
+	//create a new SpreadsheetModel if not available yet.
+	//the creation of the model is done here since it's only required
+	//for the view but its lifecycle is managed in Spreadsheet,
+	//i.e. the deletion of the model is done in the destructor of Spreadsheet
 	m_model = m_spreadsheet->model();
+	if (!m_model)
+		m_model = new SpreadsheetModel(m_spreadsheet);
+
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
