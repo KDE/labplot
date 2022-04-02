@@ -40,27 +40,27 @@ void SpiceFileReader::init() {
 	QString line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Date:")))
 		return;
-	mDatetime = QDateTime::fromString(line.split("Date:")[1].simplified()); // TODO: set format
+	mDatetime = QDateTime::fromString(line.split(QLatin1String("Date:"))[1].simplified()); // TODO: set format
 	addInfoStringLine(line);
 
 	line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Plotname:")))
 		return;
-	mPlotName = line.split("Plotname:")[1].simplified();
+	mPlotName = line.split(QLatin1String("Plotname:"))[1].simplified();
 	mMode = plotNameToPlotMode(mPlotName);
 	addInfoStringLine(line);
 
 	line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Flags:")))
 		return;
-	mFlags = parseFlags(line.split("Flags:")[1].simplified());
+	mFlags = parseFlags(line.split(QLatin1String("Flags:"))[1].simplified());
 	addInfoStringLine(line);
 
 	line = stream.readLine();
 	if (!line.startsWith(QLatin1String("No. Variables:")))
 		return;
 	addInfoStringLine(line);
-	int numberVariables = line.split("No. Variables:")[1].simplified().toInt(&ok);
+	int numberVariables = line.split(QLatin1String("No. Variables:"))[1].simplified().toInt(&ok);
 	if (!ok)
 		return;
 
@@ -68,7 +68,7 @@ void SpiceFileReader::init() {
 	if (!line.startsWith(QLatin1String("No. Points:")))
 		return;
 	addInfoStringLine(line);
-	mNumberPoints = line.split("No. Points:")[1].simplified().toInt(&ok);
+	mNumberPoints = line.split(QLatin1String("No. Points:"))[1].simplified().toInt(&ok);
 	if (!ok)
 		return;
 
@@ -77,7 +77,7 @@ void SpiceFileReader::init() {
 		if (!line.startsWith(QLatin1String("Offset:"))) // LTSpice specific
 			return;
 		addInfoStringLine(line);
-		mOffset = line.split("Offset:")[1].simplified().toDouble(&ok);
+		mOffset = line.split(QLatin1String("Offset:"))[1].simplified().toDouble(&ok);
 		if (!ok)
 			return;
 	}
@@ -85,7 +85,7 @@ void SpiceFileReader::init() {
 	line = stream.readLine();
 	if (!mNgspice) {
 		while(!line.startsWith(QLatin1String("Variables:")) && !stream.atEnd()) {
-			auto list = line.split(":");
+			auto list = line.split(QLatin1Char(':'));
 			if (list.length() < 2)
 				return;
 			addInfoStringLine(line);
@@ -103,7 +103,7 @@ void SpiceFileReader::init() {
 	mVariables.resize(numberVariables);
 	for (int i = 0; i < numberVariables; i++) {
 		line = stream.readLine();
-		auto sl = line.split("\t");
+		auto sl = line.split(QLatin1Char('\t'));
 		if (sl.length() < 4)
 			return;
 		auto index = sl.at(1).toInt(&ok);
@@ -297,13 +297,13 @@ SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& nam
 int SpiceFileReader::parseFlags(const QString& s) {
 	//real, forward, double, complex
 
-	auto sl = s.split(" ");
+	auto sl = s.split(QLatin1Char(' '));
 	int value = 0;
 
-	value |= sl.contains("real") ? Flags::real : 0;
-	value |= sl.contains("complex") ? (value & ~Flags::real) : Flags::real; // TODO: check that real and complex are not in the same data
-	value |= sl.contains("forward") ? Flags::forward : 0;
-	value |= sl.contains("log") ? Flags::log : 0;
-	value |= sl.contains("double") ? Flags::yDouble : 0;
+	value |= sl.contains(QLatin1String("real")) ? Flags::real : 0;
+	value |= sl.contains(QLatin1String("complex")) ? (value & ~Flags::real) : Flags::real; // TODO: check that real and complex are not in the same data
+	value |= sl.contains(QLatin1String("forward")) ? Flags::forward : 0;
+	value |= sl.contains(QLatin1String("log")) ? Flags::log : 0;
+	value |= sl.contains(QLatin1String("double")) ? Flags::yDouble : 0;
 	return value;
 }
