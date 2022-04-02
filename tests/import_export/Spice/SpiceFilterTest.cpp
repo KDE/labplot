@@ -95,14 +95,14 @@ void SpiceFilterTest::initTestCase() {
 void SpiceFilterTest::NgSpiceAsciiFileToBinaryFilter() {
 	using namespace dc_ascii;
 
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), false);
 }
 
 void SpiceFilterTest::NgSpiceBinaryFileToAsciiFilter() {
 	using namespace dc_binary;
 
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), false);
 }
 
@@ -110,7 +110,7 @@ void SpiceFilterTest::NgSpiceDCAscii() {
 	using namespace dc_ascii;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
@@ -136,7 +136,7 @@ void SpiceFilterTest::NgSpiceDCBinary() {
 	using namespace dc_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -162,7 +162,7 @@ void SpiceFilterTest::NgSpiceACAscii() {
 	using namespace ac_ascii;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
 	const int refColumnCount = refData.at(0).count();
 
@@ -188,7 +188,7 @@ void SpiceFilterTest::NgSpiceACBinary() {
 	using namespace ac_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -217,7 +217,7 @@ void SpiceFilterTest::NgSpiceDCAsciiStartRowNotZero() {
 	using namespace dc_ascii;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
@@ -247,7 +247,7 @@ void SpiceFilterTest::NgSpiceDCBinaryStartRowNotZero() {
 	using namespace dc_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -277,7 +277,7 @@ void SpiceFilterTest::NgSpiceACAsciiStartRowNotZero() {
 	using namespace ac_ascii;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
 	const int refColumnCount = refData.at(0).count();
 
@@ -307,7 +307,7 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	using namespace ac_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -341,7 +341,7 @@ void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	using namespace dc_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -373,7 +373,7 @@ void SpiceFilterTest::NgSpiceACBinaryBulkReadNumberLines() {
 	using namespace ac_binary;
 
 	READ_REFDATA(NGSpiceRefDataFile);
-	const QString ngFile = NGSpiceFile;
+	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
@@ -408,7 +408,7 @@ void SpiceFilterTest::LtSpiceACBinary() {
 	using namespace LowPassFilter_AC;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
@@ -434,7 +434,7 @@ void SpiceFilterTest::LtSpiceTranBinary() {
 	using namespace LowPassFilter_Transient;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
@@ -464,7 +464,7 @@ void SpiceFilterTest::LtSpiceTranDoubleBinary() {
 	using namespace LowPassFilter_transient_doubleFlag;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
@@ -492,7 +492,7 @@ void SpiceFilterTest::LtSpiceWakeup() {
 	using namespace Wakeup;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
@@ -529,7 +529,7 @@ void SpiceFilterTest::DCTransfer() {
 	using namespace DCTransfer;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
@@ -561,7 +561,7 @@ void SpiceFilterTest::FFT_From_TransientAnalysis() {
 	using namespace FFT;
 
 	READ_REFDATA(LTSpiceRefDataFile);
-	const QString file = LTSpiceFile;
+	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
 	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
