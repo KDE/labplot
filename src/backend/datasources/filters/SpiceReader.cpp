@@ -279,16 +279,16 @@ QString SpiceFileReader::convertLTSpiceBinary(const QByteArray& s) {
 
 SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& name) {
 	mLTSpiceBug = true;
-	if (name.contains("Transient"))
+	if (name.contains(QLatin1String("Transient")))
 		return PlotMode::Transient;
-	else if (name.contains("FFT"))
+	else if (name.contains(QLatin1String("FFT")))
 		return PlotMode::FFT;
-	else if (name.contains("DC")) {
+	else if (name.contains(QLatin1String("DC"))) {
 		mLTSpiceBug = false;
 		return PlotMode::DC;
-	} else if (name.contains("AC"))
+	} else if (name.contains(QLatin1String("AC")))
 		return PlotMode::AC;
-	else if (name.contains("Noise"))
+	else if (name.contains(QLatin1String("Noise")))
 		return PlotMode::Noise;
 
 	return PlotMode::Unknown;
