@@ -39,6 +39,7 @@
 SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemModel(nullptr),
 	m_spreadsheet(spreadsheet),
 	m_rowCount(spreadsheet->rowCount()),
+	m_verticalHeaderCount(spreadsheet->rowCount()),
 	m_columnCount(spreadsheet->columnCount()) {
 
 	updateVerticalHeader();
@@ -208,7 +209,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		switch (role) {
 		case Qt::DisplayRole:
 		case Qt::ToolTipRole:
-			return m_vertical_header_data.at(section);
+			return section + 1;
 		}
 	}
 
@@ -418,24 +419,18 @@ void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*
 }
 
 void SpreadsheetModel::updateVerticalHeader() {
-	int old_rows = m_vertical_header_data.size();
+	int old_rows = m_verticalHeaderCount;
 	int new_rows = m_rowCount;
 
 	if (new_rows > old_rows) {
-		beginInsertRows(QModelIndex(), old_rows, new_rows-1);
-
-		for (int i = old_rows+1; i <= new_rows; i++)
-			m_vertical_header_data << i;
-
-		endInsertRows();
+		beginInsertRows(QModelIndex(), old_rows, new_rows - 1);
+		endRemoveRows();
 	} else if (new_rows < old_rows) {
-		beginRemoveRows(QModelIndex(), new_rows, old_rows-1);
-
-		while (m_vertical_header_data.size() > new_rows)
-			m_vertical_header_data.removeLast();
-
+		beginRemoveRows(QModelIndex(), new_rows, old_rows - 1);
 		endRemoveRows();
 	}
+
+	m_verticalHeaderCount = m_rowCount;
 }
 
 void SpreadsheetModel::updateHorizontalHeader() {
