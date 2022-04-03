@@ -1011,7 +1011,6 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
-			PERFTRACE(Q_FUNC_INFO);
 			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
