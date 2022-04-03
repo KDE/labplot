@@ -412,6 +412,7 @@ void SpreadsheetModel::updateVerticalHeader() {
 	int new_rows = m_rowCount;
 
 	if (new_rows > old_rows) {
+		qDebug()<<"old/new rows" << old_rows << "  " << new_rows;
 		beginInsertRows(QModelIndex(), old_rows, new_rows - 1);
 		endRemoveRows();
 	} else if (new_rows < old_rows) {
