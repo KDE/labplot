@@ -294,8 +294,8 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
-	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
-	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
+	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowCountChanged);
+	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowCountChanged);
 	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
@@ -396,18 +396,7 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
 }
 
-void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int /*before*/, int /*count*/) {
-	if (m_suppressSignals)
-		return;
-
-	int i = m_spreadsheet->indexOfChild<Column>(col);
-	m_rowCount = col->rowCount();
-	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
-	updateVerticalHeader();
-	m_spreadsheet->emitRowCountChanged();
-}
-
-void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*/, int /*count*/) {
+void SpreadsheetModel::handleRowCountChanged(const AbstractColumn* col, int /*before*/, int /*count*/) {
 	if (m_suppressSignals)
 		return;
 
