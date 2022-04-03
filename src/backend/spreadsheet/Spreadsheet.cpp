@@ -1011,6 +1011,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
+			newColumn->resizeTo(rows);
 			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
@@ -1019,6 +1020,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
+			newColumn->resizeTo(rows);
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
@@ -1035,6 +1037,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
+				newColumn->resizeTo(rows);
 				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
 		}
