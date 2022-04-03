@@ -419,13 +419,13 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	// read data
 	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
 	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
-		DEBUG("reading row " << i);
+		//DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
 			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i+1;
 
 		for (int n = startColumn; n < m_actualCols; ++n) {
-			DEBUG("reading column " << n);
+			//DEBUG("reading column " << n);
 			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
 			case BinaryFilter::DataType::INT8: {
