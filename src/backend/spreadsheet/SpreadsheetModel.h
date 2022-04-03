@@ -73,11 +73,11 @@ protected:
 private:
 	Spreadsheet* m_spreadsheet;
 	bool m_formula_mode{false};
-	QVector<int> m_vertical_header_data;
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
+	int m_verticalHeaderCount{0};
 	int m_columnCount{0};
 	QString m_searchText;
 
