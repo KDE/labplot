@@ -1,4 +1,5 @@
 add_subdirectory(ASCII)
+add_subdirectory(Binary)
 add_subdirectory(JSON)
 add_subdirectory(MQTT)
 add_subdirectory(Project)
