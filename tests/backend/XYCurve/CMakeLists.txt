@@ -1,4 +1,3 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
 add_executable (XYCurveTest XYCurveTest.cpp ../../CommonTest.cpp)
 
 # enable special access variables
