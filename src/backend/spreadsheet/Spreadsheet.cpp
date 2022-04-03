@@ -181,8 +181,10 @@ void Spreadsheet::insertRows(int before, int count) {
 	if ( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	for (auto* col : children<Column>())
+	for (auto* col : children<Column>()) {
+		qDebug()<<"inserting " << count <<" rows before " << before << " for column " << col->name();
 		col->insertRows(before, count);
+	}
 	endMacro();
 	RESET_CURSOR;
 }
@@ -940,6 +942,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
+		qDebug()<<"col size " << column->name() << "  " << column->rowCount();
 		//in most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
@@ -952,25 +955,21 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		switch (columnMode[n]) {
 		case AbstractColumn::ColumnMode::Double: {
 			auto* vector = static_cast<QVector<double>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			auto* vector = static_cast<QVector<int>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
 			auto* vector = static_cast<QVector<qint64>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			auto* vector = static_cast<QVector<QString>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
@@ -978,7 +977,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
 			auto* vector = static_cast<QVector<QDateTime>* >(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
@@ -1006,12 +1004,13 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
 	Column* newColumn = nullptr;
+	int rows = rowCount();
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
-			PERFTRACE(Q_FUNC_INFO);
+			newColumn->resizeTo(rows);
 			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
@@ -1019,12 +1018,12 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
+			newColumn->resizeTo(rows);
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
-
 
 		if (columns > cols) {
 			//there're more columns in the data source then required -> remove the superfluous columns
@@ -1035,6 +1034,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->setUndoAware(false);
+				newColumn->resizeTo(rows);
 				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
 		}
