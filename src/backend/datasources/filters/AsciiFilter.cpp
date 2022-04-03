@@ -1290,7 +1290,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		//parse columns
-		DEBUG(Q_FUNC_INFO << ", actual cols = " << m_actualCols)
+// 		DEBUG(Q_FUNC_INFO << ", actual cols = " << m_actualCols)
 		for (int n = 0; n < m_actualCols; ++n) {
 			// index column if required
 			if (n == 0 && createIndexEnabled) {
