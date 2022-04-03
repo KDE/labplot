@@ -156,7 +156,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const Points& logicalPoints,
 	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
  */
 void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const Points& logicalPoints, Points& scenePoints,
-		QVector<bool>& visiblePoints, MappingFlags flags) const {
+		std::vector<bool>& visiblePoints, MappingFlags flags) const {
 	//DEBUG(Q_FUNC_INFO << ", (curve points)")
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);

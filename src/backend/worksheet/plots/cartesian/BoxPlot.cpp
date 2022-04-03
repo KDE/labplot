@@ -1004,7 +1004,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		QVector<bool> m_pointVisible;
+		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
@@ -1018,7 +1018,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		QVector<bool> m_pointVisible;
+		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
@@ -1133,7 +1133,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		QVector<bool> m_pointVisible;
+		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
@@ -1146,7 +1146,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		QVector<bool> m_pointVisible;
+		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
@@ -1237,7 +1237,7 @@ void BoxPlotPrivate::mapOutliersToScene(int index) {
 	if (numberOfPoints > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_outlierPointsLogical[index].size() - 1;
-		QVector<bool> m_pointVisible;
+		std::vector<bool> m_pointVisible;
 		m_pointVisible.resize(numberOfPoints);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
