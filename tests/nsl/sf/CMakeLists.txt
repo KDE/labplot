@@ -1,4 +1,3 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
 
 # basic functions
 add_executable (NSLSFBasicTest NSLSFBasicTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
