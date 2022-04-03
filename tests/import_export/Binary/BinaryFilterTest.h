@@ -17,7 +17,10 @@ class BinaryFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void importDouble();
+	void importInt8();
+
+	void importFloatBE();
+	void importDoubleBE();
 
 };
 #endif
