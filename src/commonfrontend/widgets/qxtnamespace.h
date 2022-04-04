@@ -7,6 +7,7 @@
 #define QXTNAMESPACE_H
 
 #include "qxtglobal.h"
+#include <Qt>
 
 #if (defined BUILD_QXT | defined Q_MOC_RUN) && !defined(QXT_DOXYGEN_RUN)
 #include <QObject>
