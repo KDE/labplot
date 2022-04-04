@@ -11,6 +11,7 @@
 #define BIGINT2DOUBLE_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
+#include "backend/lib/macros.h"
 #include <QLocale>
 
 //! conversion filter double -> int.
