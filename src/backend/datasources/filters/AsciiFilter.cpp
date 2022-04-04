@@ -1251,7 +1251,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	lines = qMin(lines, m_actualRows);
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01*lines; //update on every 1% only
+	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
 	for (int i = 0; i < lines; ++i) {
 		line = device.readLine();

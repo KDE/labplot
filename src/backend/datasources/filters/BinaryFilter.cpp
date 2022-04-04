@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Binary I/O-filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,7 +18,6 @@
 #include <KLocalizedString>
 #include <KFilterDev>
 #include <array>
-#include <cmath>
 
 /*!
 \class BinaryFilter
@@ -188,7 +187,6 @@ bool BinaryFilter::isAutoModeEnabled() const {
 }
 
 QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
-	DEBUG("BinaryFilter::fileInfoString()");
 	QString info;
 
 	//TODO
@@ -206,7 +204,7 @@ BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : q(owner) {}
     Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("readDataFromFile()");
+	DEBUG(Q_FUNC_INFO);
 
 	KFilterDev device(fileName);
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
@@ -222,7 +220,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
  * returns 1 if the current read position in the device is at the end and 0 otherwise.
  */
 int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
-	DEBUG("prepareStreamToRead()");
+	DEBUG(Q_FUNC_INFO);
 
 	in.setByteOrder(byteOrder);
 
@@ -293,8 +291,12 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		lines = m_actualRows;
 
 	// read data
-	DEBUG("generating preview for " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
+	lines = qMin(lines, m_actualRows);
+	DEBUG("generating preview for " << lines  << " lines")
+	int progressIndex = 0;
+	const qreal progressInterval = 0.01 * lines; //update on every 1% only
+
+	for (int i = 0; i < lines; ++i) {
 		QStringList lineString;
 
 		//prepend the index if required
@@ -367,7 +369,16 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 			}
 		}
 		dataStrings << lineString;
-		Q_EMIT q->completed(100*i/m_actualRows);
+
+		//ask to update the progress bar only if we have more than 1000 lines
+		//only in 1% steps
+		progressIndex++;
+		if (lines > 1000 && progressIndex > progressInterval) {
+			double value = 100. * i/lines;
+			Q_EMIT q->completed(static_cast<int>(value));
+			progressIndex = 0;
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
 	}
 
 	return dataStrings;
@@ -378,7 +389,7 @@ reads the content of the file \c fileName to the data source \c dataSource or re
 Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG("BinaryFilterPrivate::readDataFromDevice()");
+	DEBUG(Q_FUNC_INFO);
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
@@ -417,8 +428,12 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		startColumn++;
 
 	// read data
-	DEBUG("reading " << qMin(lines, m_actualRows)  << " lines");
-	for (int i = 0; i < qMin(m_actualRows, lines); ++i) {
+	lines = qMin(lines, m_actualRows);
+	DEBUG("reading " << lines  << " lines");
+	int progressIndex = 0;
+	const qreal progressInterval = 0.01 * lines; //update on every 1% only
+
+	for (int i = 0; i < lines; ++i) {
 		//DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
@@ -490,8 +505,16 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 				}
 			}
 		}
-		if (m_actualRows > 0)
-			Q_EMIT q->completed(100*i/m_actualRows);
+
+		//ask to update the progress bar only if we have more than 1000 lines
+		//only in 1% steps
+		progressIndex++;
+		if (lines > 1000 && progressIndex > progressInterval) {
+			double value = 100. * i/lines;
+			Q_EMIT q->completed(static_cast<int>(value));
+			progressIndex = 0;
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, m_actualCols, QString(), importMode);
