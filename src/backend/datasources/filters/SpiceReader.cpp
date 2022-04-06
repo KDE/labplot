@@ -13,6 +13,8 @@
 #include <QTextCodec>
 #include <QDataStream>
 
+#include <cmath>
+
 void SpiceFileReader::init() {
 	bool ok;
 
@@ -185,7 +187,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 				if (!mNgspice && mLTSpiceBug) {
 					// Bug in the ltspice binary raw format
 					// For more information see MR !108
-					value = abs((long)value);
+					value = std::fabs(value);
 				}
 
 				(*static_cast<QVector<double>*>(data[0]))[patchesIndexOffset + l] = value;
