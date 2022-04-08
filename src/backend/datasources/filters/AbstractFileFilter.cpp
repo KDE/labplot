@@ -153,11 +153,12 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
 		fileType = FileType::MATIO;
 #endif
-#ifdef HAVE_HDF5
+#ifdef HAVE_HDF5	// before NETCDF to treat NetCDF 4 files with .nc ending as HDF5 when fileInfo detects it
 	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive)
-		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
+		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String("nc4"), Qt::CaseInsensitive) )
 		fileType = FileType::HDF5;
 #endif
 #ifdef HAVE_NETCDF
