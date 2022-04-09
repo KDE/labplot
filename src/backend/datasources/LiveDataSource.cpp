@@ -15,6 +15,7 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
+#include "backend/datasources/filters/SpiceFilter.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -402,8 +403,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 		icon = QIcon::fromTheme("application-x-root");
 		break;
-	case AbstractFileFilter::FileType::SpiceRawAscii:
-	case AbstractFileFilter::FileType::SpiceRawBinary:
+	case AbstractFileFilter::FileType::Spice:
 		break;
 	}
 
@@ -561,8 +561,7 @@ void LiveDataSource::read() {
 			// bytes = qSharedPointerCast<BinaryFilter>(m_filter)->readFromLiveDevice(*m_file, this, m_bytesRead);
 // 			m_bytesRead += bytes;
 		case AbstractFileFilter::FileType::ROOT:
-		case AbstractFileFilter::FileType::SpiceRawAscii:
-		case AbstractFileFilter::FileType::SpiceRawBinary:
+		case AbstractFileFilter::FileType::Spice:
 			//only re-reading of the whole file is supported
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
@@ -922,6 +921,10 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (reader->name() == "rootFilter") {
 			setFilter(new ROOTFilter);
+			if (!m_filter->load(reader))
+				return false;
+		} else if (reader->name() == "SpiceFilter") {
+			setFilter(new SpiceFilter);
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {

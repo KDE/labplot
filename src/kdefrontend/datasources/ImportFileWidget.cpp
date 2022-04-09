@@ -104,8 +104,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Spice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawAscii));
-		ui.cbFileType->addItem(i18n("Spice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice"), static_cast<int>(AbstractFileFilter::FileType::Spice));
 #ifdef HAVE_READSTAT
 		ui.cbFileType->addItem(i18n("SAS, Stata or SPSS"), static_cast<int>(AbstractFileFilter::FileType::READSTAT));
 #endif
@@ -125,8 +124,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
-		ui.cbFileType->addItem(i18n("Spice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawAscii));
-		ui.cbFileType->addItem(i18n("Spice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::SpiceRawBinary));
+		ui.cbFileType->addItem(i18n("Spice"), static_cast<int>(AbstractFileFilter::FileType::Spice));
 
 		ui.lePort->setValidator( new QIntValidator(ui.lePort) );
 		ui.cbBaudRate->addItems(LiveDataSource::supportedBaudRates());
@@ -726,20 +724,10 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
-	case AbstractFileFilter::FileType::SpiceRawAscii: {
-		DEBUG(Q_FUNC_INFO <<", SpiceRawAscii");
+	case AbstractFileFilter::FileType::Spice: {
+		DEBUG(Q_FUNC_INFO <<", Spice");
 		if (!m_currentFilter)
-			m_currentFilter.reset(new SpiceFilter(SpiceFilter::Type::Ascii));
-		auto filter = static_cast<SpiceFilter*>(m_currentFilter.get());
-		filter->setStartRow(ui.sbStartRow->value());
-		filter->setEndRow(ui.sbEndRow->value());
-
-		break;
-	}
-	case AbstractFileFilter::FileType::SpiceRawBinary: {
-		DEBUG(Q_FUNC_INFO <<", SpiceRawBinary");
-		if (!m_currentFilter)
-			m_currentFilter.reset(new SpiceFilter(SpiceFilter::Type::Binary));
+			m_currentFilter.reset(new SpiceFilter());
 		auto filter = static_cast<SpiceFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
@@ -981,8 +969,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.lPreviewLines->hide();
 		ui.sbPreviewLines->hide();
 		break;
-	case AbstractFileFilter::FileType::SpiceRawAscii:
-	case AbstractFileFilter::FileType::SpiceRawBinary:
+	case AbstractFileFilter::FileType::Spice:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		ui.lStartColumn->hide();
@@ -1127,8 +1114,7 @@ void ImportFileWidget::initOptionsWidget() {
 			m_matioOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
 		break;
-	case AbstractFileFilter::FileType::SpiceRawAscii:
-	case AbstractFileFilter::FileType::SpiceRawBinary:
+	case AbstractFileFilter::FileType::Spice:
 	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
@@ -1262,8 +1248,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::ROOT:
 			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
-		case AbstractFileFilter::FileType::SpiceRawAscii:
-		case AbstractFileFilter::FileType::SpiceRawBinary:
+		case AbstractFileFilter::FileType::Spice:
 			infoStrings << SpiceFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::READSTAT:
@@ -1323,8 +1308,8 @@ void ImportFileWidget::refreshPreview() {
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
-	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::SpiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::SpiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
+			|| fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::Spice
+			|| fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1517,15 +1502,7 @@ void ImportFileWidget::refreshPreview() {
 		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Double);
 		break;
 	}
-	case AbstractFileFilter::FileType::SpiceRawAscii: {
-		ui.tePreview->clear();
-		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
-		importedStrings = filter->preview(file, lines);
-		vectorNameList = filter->vectorNames();
-		columnModes = filter->columnModes();
-		break;
-	}
-	case AbstractFileFilter::FileType::SpiceRawBinary: {
+	case AbstractFileFilter::FileType::Spice: {
 		ui.tePreview->clear();
 		auto filter = static_cast<SpiceFilter*>(currentFileFilter());
 		importedStrings = filter->preview(file, lines);
@@ -1661,8 +1638,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:
-		case AbstractFileFilter::FileType::SpiceRawAscii:
-		case AbstractFileFilter::FileType::SpiceRawBinary:
+		case AbstractFileFilter::FileType::Spice:
 		case AbstractFileFilter::FileType::READSTAT:
 			break;
 		}

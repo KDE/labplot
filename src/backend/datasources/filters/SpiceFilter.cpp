@@ -11,21 +11,13 @@
 #include "SpiceReader.h"
 #include "backend/datasources/AbstractDataSource.h"
 
+#include <QXmlStreamWriter>
+
 #include "backend/lib/macros.h"
 
-SpiceFilter::SpiceFilter(Type t) : AbstractFileFilter(t == Type::Ascii ? FileType::SpiceRawAscii : FileType::SpiceRawBinary), d(new SpiceFilterPrivate(this)) {}
+SpiceFilter::SpiceFilter() : AbstractFileFilter(FileType::Spice), d(new SpiceFilterPrivate(this)) {}
 
 SpiceFilter::~SpiceFilter() = default;
-
-bool SpiceFilter::isSpiceAsciiFile(const QString& fileName) {
-	bool binary;
-	return SpiceFilter::isSpiceFile(fileName, &binary) && !binary;
-}
-
-bool SpiceFilter::isSpiceBinaryFile(const QString& fileName) {
-	bool binary;
-	return SpiceFilter::isSpiceFile(fileName, &binary) && binary;
-}
 
 bool SpiceFilter::isSpiceFile(const QString& fileName, bool* binary) {
 	SpiceFileReader reader(fileName);

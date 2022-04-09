@@ -20,17 +20,10 @@ class SpiceFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	enum class Type {
-		Ascii,
-		Binary,
-	};
-
-	SpiceFilter(Type t);
+	SpiceFilter();
 	~SpiceFilter() override;
 
 	static bool isSpiceFile(const QString& fileName, bool *binary=nullptr);
-	static bool isSpiceAsciiFile(const QString& fileName);
-	static bool isSpiceBinaryFile(const QString& fileName);
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);

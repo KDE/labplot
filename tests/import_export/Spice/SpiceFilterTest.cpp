@@ -96,14 +96,18 @@ void SpiceFilterTest::NgSpiceAsciiFileToBinaryFilter() {
 	using namespace dc_ascii;
 
 	const QString& ngFile = NGSpiceFile;
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), false);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, false);
 }
 
 void SpiceFilterTest::NgSpiceBinaryFileToAsciiFilter() {
 	using namespace dc_binary;
 
 	const QString& ngFile = NGSpiceFile;
-	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), false);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
 }
 
 void SpiceFilterTest::NgSpiceDCAscii() {
@@ -113,8 +117,11 @@ void SpiceFilterTest::NgSpiceDCAscii() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, false);
+
+	SpiceFilter filter;
 	auto res = filter.preview(ngFile, refData.count());
 
 	QCOMPARE(res.length(), refData.length());
@@ -139,8 +146,11 @@ void SpiceFilterTest::NgSpiceDCBinary() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -163,10 +173,13 @@ void SpiceFilterTest::NgSpiceACAscii() {
 
 	READ_REFDATA(NGSpiceRefDataFile);
 	const QString& ngFile = NGSpiceFile;
-	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, false);
+
 	const int refColumnCount = refData.at(0).count();
 
-	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	SpiceFilter filter;
 	auto res = filter.preview(ngFile, refData.count());
 
 	QCOMPARE(res.length(), refData.length());
@@ -191,8 +204,11 @@ void SpiceFilterTest::NgSpiceACBinary() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -220,8 +236,11 @@ void SpiceFilterTest::NgSpiceDCAsciiStartRowNotZero() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, false);
+
+	SpiceFilter filter;
 	const int startRow = 2;
 	const int endRow = 4;
 	filter.setStartRow(startRow);
@@ -250,8 +269,11 @@ void SpiceFilterTest::NgSpiceDCBinaryStartRowNotZero() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	const int startRow = 31;
 	const int endRow = 433;
 	filter.setStartRow(startRow);
@@ -278,10 +300,13 @@ void SpiceFilterTest::NgSpiceACAsciiStartRowNotZero() {
 
 	READ_REFDATA(NGSpiceRefDataFile);
 	const QString& ngFile = NGSpiceFile;
-	QCOMPARE(SpiceFilter::isSpiceAsciiFile(ngFile), true);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, false);
+
 	const int refColumnCount = refData.at(0).count();
 
-	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	SpiceFilter filter;
 	const int startRow = 2;
 	const int endRow = 4;
 	filter.setStartRow(startRow);
@@ -310,8 +335,11 @@ void SpiceFilterTest::NgSpiceACBinaryStartRowNotZero() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	const int startRow = 2;
 	const int endRow = 198;
 	filter.setStartRow(startRow);
@@ -344,8 +372,11 @@ void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Ascii);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	const int startRow = 31;
 	const int endRow = 433;
 	filter.setReaderBulkLineCount(100);
@@ -376,8 +407,11 @@ void SpiceFilterTest::NgSpiceACBinaryBulkReadNumberLines() {
 	const QString& ngFile = NGSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(ngFile), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(ngFile, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	filter.setReaderBulkLineCount(100);
 	const int startRow = 2;
 	const int endRow = 198;
@@ -411,8 +445,11 @@ void SpiceFilterTest::LtSpiceACBinary() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -437,8 +474,11 @@ void SpiceFilterTest::LtSpiceTranBinary() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -467,8 +507,11 @@ void SpiceFilterTest::LtSpiceTranDoubleBinary() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -495,8 +538,11 @@ void SpiceFilterTest::LtSpiceWakeup() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -532,8 +578,11 @@ void SpiceFilterTest::DCTransfer() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
@@ -564,8 +613,11 @@ void SpiceFilterTest::FFT_From_TransientAnalysis() {
 	const QString& file = LTSpiceFile;
 	const int refColumnCount = refData.at(0).count();
 
-	QCOMPARE(SpiceFilter::isSpiceBinaryFile(file), true);
-	SpiceFilter filter(SpiceFilter::Type::Binary);
+	bool binary;
+	QCOMPARE(SpiceFilter::isSpiceFile(file, &binary), true);
+	QCOMPARE(binary, true);
+
+	SpiceFilter filter;
 	auto res = filter.preview(file, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
