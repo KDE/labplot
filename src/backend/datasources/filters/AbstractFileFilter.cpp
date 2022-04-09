@@ -137,8 +137,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("har"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = FileType::JSON;
-	} else if (SpiceFilter::isSpiceAsciiFile(fileName)) {
-		fileType = FileType::SpiceRawAscii;
+	} else if (SpiceFilter::isSpiceFile(fileName)) {
+		fileType = FileType::Spice;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
 		|| fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive)
@@ -194,8 +194,6 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;
-	else if (SpiceFilter::isSpiceBinaryFile(fileName))
-		fileType = FileType::SpiceRawBinary;
 	else
 		fileType = FileType::Binary;
 
@@ -214,8 +212,7 @@ QStringList AbstractFileFilter::fileTypes() {
 		<< i18n("Flexible Image Transport System Data Format (FITS)")
 		<< i18n("JSON Data")
 		<< i18n("ROOT (CERN) Histograms")
-		<< i18n("Spice RAW ASCII")
-		<< i18n("Spice RAW Binary")
+		<< i18n("Spice")
 		<< i18n("SAS, Stata or SPSS")
 	);
 }
