@@ -783,7 +783,11 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); //general
 
 	//filter
-	m_filter->save(writer);
+	if (m_filter) {
+		// If older project do not have loaded the filter correctly
+		// The filter might not be available. So check before saving
+		m_filter->save(writer);
+	}
 
 	//columns
 	if (!m_fileLinked) {
@@ -923,7 +927,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			setFilter(new ROOTFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "SpiceFilter") {
+		} else if (reader->name() == SpiceFilter::xmlElementName) {
 			setFilter(new SpiceFilter);
 			if (!m_filter->load(reader))
 				return false;

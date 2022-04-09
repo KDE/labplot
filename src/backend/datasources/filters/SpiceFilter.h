@@ -51,6 +51,8 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 
+	static const QString xmlElementName;
+
 protected:
 	std::unique_ptr<SpiceFilterPrivate> const d;
 };

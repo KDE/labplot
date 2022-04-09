@@ -15,6 +15,8 @@
 
 #include "backend/lib/macros.h"
 
+const QString SpiceFilter::xmlElementName = QStringLiteral("SpiceFilter");
+
 SpiceFilter::SpiceFilter() : AbstractFileFilter(FileType::Spice), d(new SpiceFilterPrivate(this)) {}
 
 SpiceFilter::~SpiceFilter() = default;
@@ -215,7 +217,9 @@ void SpiceFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
 /*!
   Saves as XML.
  */
-void SpiceFilter::save(QXmlStreamWriter*) const {
+void SpiceFilter::save(QXmlStreamWriter* writer) const {
+	writer->writeStartElement(xmlElementName);
+	writer->writeEndElement();
 }
 
 /*!
