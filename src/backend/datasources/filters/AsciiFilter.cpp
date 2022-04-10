@@ -19,7 +19,10 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include "3rdparty/stringtokenizer/qstringtokenizer.h"
+#endif
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
