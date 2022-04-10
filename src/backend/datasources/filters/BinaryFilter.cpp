@@ -450,15 +450,15 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
-	for (int i = 0; i < lines; ++i) {
-		//DEBUG("reading row " << i);
-		//prepend the index if required
-		if (createIndexEnabled)
+	//prepend the index if required
+	if (createIndexEnabled)
+		for (int i = 0; i < lines; ++i)
 			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i + 1;
 
+	for (int i = 0; i < lines; ++i) {
+		//DEBUG("reading row " << i);
 		for (int n = startColumn; n < m_actualCols; ++n) {
 			//DEBUG("reading column " << n);
-			//TODO: use ColumnMode when it supports all types
 			switch (dataType) {
 			case BinaryFilter::DataType::INT8: {
 					qint8 value;
