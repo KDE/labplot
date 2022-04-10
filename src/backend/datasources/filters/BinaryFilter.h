@@ -9,8 +9,9 @@
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
-#include <QDataStream>
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include <QDataStream>
+#include <limits>
 
 class BinaryFilterPrivate;
 class QStringList;
@@ -29,7 +30,7 @@ public:
 
 	static QStringList dataTypes();
 	static int dataSize(BinaryFilter::DataType);
-	static size_t rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType);
+	static size_t rowNumber(const QString& fileName, size_t vectors, BinaryFilter::DataType, size_t maxRows = std::numeric_limits<std::size_t>::max());
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
