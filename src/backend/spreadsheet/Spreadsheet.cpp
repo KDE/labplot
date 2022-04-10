@@ -181,10 +181,8 @@ void Spreadsheet::insertRows(int before, int count) {
 	if ( count < 1 || before < 0 || before > rowCount()) return;
 	WAIT_CURSOR;
 	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	for (auto* col : children<Column>()) {
-		qDebug()<<"inserting " << count <<" rows before " << before << " for column " << col->name();
+	for (auto* col : children<Column>())
 		col->insertRows(before, count);
-	}
 	endMacro();
 	RESET_CURSOR;
 }
@@ -942,7 +940,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
-		qDebug()<<"col size " << column->name() << "  " << column->rowCount();
 		//in most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
