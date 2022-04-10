@@ -280,7 +280,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	if (deviceError)
 		return dataStrings << (QStringList() << i18n("data selection empty"));
 
-	//TODO: support other modes
+	// all columns as double is ok for preview
 	columnModes.resize(m_actualCols);
 
 	//TODO: use given names
@@ -293,7 +293,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 
 	// read data
 	lines = qMin(lines, m_actualRows);
-	DEBUG("generating preview for " << lines  << " lines")
+	DEBUG(Q_FUNC_INFO << ", generating preview for " << lines  << " lines")
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
@@ -394,21 +394,37 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
-
 	if (deviceError) {
 		dataSource->clear();
-		DEBUG("device error");
+		DEBUG(Q_FUNC_INFO << ", Device error. Gving up");
 		return;
 	}
 
 	if (createIndexEnabled)
 		m_actualCols++;
 
-	std::vector<void*> dataContainer;
-	int columnOffset = 0;
-
-	//TODO: support other modes
 	columnModes.resize(m_actualCols);
+	switch (dataType) {
+	case BinaryFilter::DataType::INT8:
+	case BinaryFilter::DataType::INT16:
+	case BinaryFilter::DataType::INT32:
+	case BinaryFilter::DataType::UINT8:
+	case BinaryFilter::DataType::UINT16:
+	case BinaryFilter::DataType::UINT32:
+		for (auto& c : columnModes)
+			c = AbstractColumn::ColumnMode::Integer;
+		break;
+	case BinaryFilter::DataType::INT64:
+	case BinaryFilter::DataType::UINT64:
+		for (auto& c : columnModes)
+			c = AbstractColumn::ColumnMode::BigInt;
+		break;
+	case BinaryFilter::DataType::REAL32:
+	case BinaryFilter::DataType::REAL64:
+		for (auto& c : columnModes)
+			c = AbstractColumn::ColumnMode::Double;
+		break;
+	}
 
 	//TODO: use given names
 	QStringList vectorNames;
@@ -418,19 +434,19 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		columnModes[0] = AbstractColumn::ColumnMode::Integer;
 	}
 
-	columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+	std::vector<void*> dataContainer;
+	int columnOffset = dataSource->prepareImport(dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 
 	if (lines == -1)
 		lines = m_actualRows;
 
-	// start column
 	int startColumn = 0;
 	if (createIndexEnabled)
 		startColumn++;
 
 	// read data
 	lines = qMin(lines, m_actualRows);
-	DEBUG("reading " << lines  << " lines");
+	DEBUG(Q_FUNC_INFO << ", Reading " << lines  << " lines");
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
@@ -447,49 +463,49 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			case BinaryFilter::DataType::INT8: {
 					qint8 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::INT16: {
 					qint16 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::INT32: {
 					qint32 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::INT64: {
 					qint64 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<quint64>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::UINT8: {
 					quint8 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::UINT16: {
 					quint16 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::UINT32: {
 					quint32 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<int>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::UINT64: {
 					quint64 value;
 					in >> value;
-					static_cast<QVector<double>*>(dataContainer[n])->operator[](i) = value;
+					static_cast<QVector<quint64>*>(dataContainer[n])->operator[](i) = value;
 					break;
 				}
 			case BinaryFilter::DataType::REAL32: {
