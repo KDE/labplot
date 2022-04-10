@@ -47,7 +47,7 @@ public:
 	int prepareDeviceToRead(QIODevice&);
 	void initDataContainers(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
-	void setValue(int col, int row, const QString& value);
+	void setValue(int col, int row, QStringView value);
 	QString getLine(QIODevice&);
 	QStringList getLineString(QIODevice&);
 

@@ -19,6 +19,7 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
+#include "3rdparty/stringtokenizer/qstringtokenizer.h"
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -1245,7 +1246,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		return;
 
 	QString line;
-	QString valueString;
 	//Don't put the definition QStringList lineStringList outside of the for-loop,
 	//the compiler doesn't seem to optimize the destructor of QList well enough in this case.
 
@@ -1253,69 +1253,129 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
-	for (int i = 0; i < lines; ++i) {
-		line = device.readLine();
+	// when reading numerical data the options removeQuotesEnabled, simplifyWhitespacesEnabled and skipEmptyParts
+	// are not relevant and we can provide a more faster version that avoids many of string allocations, etc.
+	if (!removeQuotesEnabled && !simplifyWhitespacesEnabled && !skipEmptyParts) {
+		for (int i = 0; i < lines; ++i) {
+			line = device.readLine();
 
-		// remove any newline
-		line.remove(QLatin1Char('\n'));
-		line.remove(QLatin1Char('\r'));
+			// remove any newline
+			line.remove(QLatin1Char('\n'));
+			line.remove(QLatin1Char('\r'));
 
-		if (removeQuotesEnabled)
-			line.remove(QLatin1Char('"'));
+			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
-		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
-			continue;
+			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
+				continue;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
-// 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+			int readColumns = 0;
 
-		if (simplifyWhitespacesEnabled) {
-			for (int i = 0; i < lineStringList.size(); ++i)
-				lineStringList[i] = lineStringList[i].simplified();
-		}
-
-		// remove left white spaces
-		if (skipEmptyParts) {
-			for (int n = 0; n < lineStringList.size(); ++n) {
-				valueString = lineStringList.at(n);
-				if (!QString::compare(valueString, " ")) {
-					lineStringList.removeAt(n);
-					n--;
-				}
-			}
-		}
-
-		//parse columns
-// 		DEBUG(Q_FUNC_INFO << ", actual cols = " << m_actualCols)
-		for (int n = 0; n < m_actualCols; ++n) {
 			// index column if required
-			if (n == 0 && createIndexEnabled) {
+			if (createIndexEnabled) {
 				static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = i + 1;
+				readColumns = 1;
 				continue;
 			}
 
-			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
-			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
-			QString valueString;
-			if (col < lineStringList.size())
-				valueString = lineStringList.at(col);
+			// parse the columns in the current line
+			int currentColumn = 0;
+			for (auto valueString : qTokenize(line, m_separator, (Qt::SplitBehavior)skipEmptyParts)) {
+				// skip the first columns up to the stat column
+				if (currentColumn < startColumn) {
+					++currentColumn;
+					continue;
+				}
 
-			setValue(n, currentRow, valueString);
+				// leave the loop if all required columns were read
+				if (readColumns == m_actualCols)
+					break;
+
+				// set the column value
+				int col = createIndexEnabled ? readColumns + 1 : readColumns;
+				setValue(col, currentRow, valueString);
+
+				++readColumns;
+				++currentColumn;
+			}
+
+			currentRow++;
+
+			//ask to update the progress bar only if we have more than 1000 lines
+			//only in 1% steps
+			progressIndex++;
+			if (lines > 1000 && progressIndex > progressInterval) {
+				double value = 100. * currentRow/lines;
+				Q_EMIT q->completed(static_cast<int>(value));
+				progressIndex = 0;
+				QApplication::processEvents(QEventLoop::AllEvents, 0);
+			}
 		}
-		currentRow++;
+	} else {
+		QString valueString;
+		for (int i = 0; i < lines; ++i) {
+			line = device.readLine();
 
-		//ask to update the progress bar only if we have more than 1000 lines
-		//only in 1% steps
-		progressIndex++;
-		if (lines > 1000 && progressIndex > progressInterval) {
-			double value = 100. * currentRow/lines;
-			Q_EMIT q->completed(static_cast<int>(value));
-			progressIndex = 0;
-			QApplication::processEvents(QEventLoop::AllEvents, 0);
+			// remove any newline
+			line.remove(QLatin1Char('\n'));
+			line.remove(QLatin1Char('\r'));
+
+			if (removeQuotesEnabled)
+				line.remove(QLatin1Char('"'));
+
+			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
+				continue;
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
+#else
+			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+#endif
+	// 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+
+			if (simplifyWhitespacesEnabled) {
+				for (int i = 0; i < lineStringList.size(); ++i)
+					lineStringList[i] = lineStringList[i].simplified();
+			}
+
+			// remove left white spaces
+			if (skipEmptyParts) {
+				for (int n = 0; n < lineStringList.size(); ++n) {
+					valueString = lineStringList.at(n);
+					if (!QString::compare(valueString, " ")) {
+						lineStringList.removeAt(n);
+						n--;
+					}
+				}
+			}
+
+			//parse columns
+	// 		DEBUG(Q_FUNC_INFO << ", actual cols = " << m_actualCols)
+			for (int n = 0; n < m_actualCols; ++n) {
+				// index column if required
+				if (n == 0 && createIndexEnabled) {
+					static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = i + 1;
+					continue;
+				}
+
+				//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
+				int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
+				if (col < lineStringList.size())
+					setValue(n, currentRow, lineStringList.at(col));
+				else
+					setValue(n, currentRow, QStringView());
+			}
+
+			currentRow++;
+
+			//ask to update the progress bar only if we have more than 1000 lines
+			//only in 1% steps
+			progressIndex++;
+			if (lines > 1000 && progressIndex > progressInterval) {
+				double value = 100. * currentRow/lines;
+				Q_EMIT q->completed(static_cast<int>(value));
+				progressIndex = 0;
+				QApplication::processEvents(QEventLoop::AllEvents, 0);
+			}
 		}
 	}
 
@@ -1603,7 +1663,8 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 }
 
 //set value depending on data type
-void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) {
+void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
+	qDebug()<<"set value " << col << "  " << row << "  " << valueString;
 	if (!valueString.isEmpty()) {
 		switch (columnModes.at(col)) {
 		case AbstractColumn::ColumnMode::Double: {
@@ -1625,13 +1686,13 @@ void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) 
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
-			QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
+			QDateTime valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
 			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			auto* colData = static_cast<QVector<QString>*>(m_dataContainer[col]);
-			colData->operator[](row) = valueString;
+			colData->operator[](row) = valueString.toString();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Month:	// never happens
