@@ -85,13 +85,15 @@ int BinaryFilter::dataSize(BinaryFilter::DataType type) {
 /*!
   returns the number of rows (length of vectors) in the file \c fileName.
 */
-size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType type) {
+size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType type, const size_t maxRows) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
 	size_t rows = 0;
 	while (!device.atEnd()) {
+		if (rows >= maxRows)	// stop when maxRows available
+			return rows;
 		// one row
 		for (size_t i = 0; i < vectors; ++i) {
 			for (int j = 0; j < BinaryFilter::dataSize(type); ++j)
@@ -263,14 +265,14 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
     reads \c lines lines of the device \c device and return as string for preview.
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
-	DEBUG("BinaryFilterPrivate::preview( " << STDSTRING(fileName) << ", " << lines << ")");
+	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
 	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
 	if (! device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 
-	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
+	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType, lines);
 
 	QDataStream in(&device);
 	const int deviceError = prepareStreamToRead(in);
@@ -283,7 +285,6 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 
 	//TODO: use given names
 	QStringList vectorNames;
-
 	if (createIndexEnabled)
 		vectorNames.prepend(i18n("Index"));
 
@@ -437,7 +438,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		//DEBUG("reading row " << i);
 		//prepend the index if required
 		if (createIndexEnabled)
-			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i+1;
+			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i + 1;
 
 		for (int n = startColumn; n < m_actualCols; ++n) {
 			//DEBUG("reading column " << n);
