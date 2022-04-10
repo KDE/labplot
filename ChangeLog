@@ -27,6 +27,7 @@
 		* HDF5: Use data type when importing data
 		* HDF5: Preview and import 2d data of strings
 		* Improved OPJ project import
+		* Improve binary data preview and import data types and speed
 	* [spreadsheet]:
 		* Allow to freeze the first column
 		* Search in the spreadsheet
