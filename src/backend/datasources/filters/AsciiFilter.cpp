@@ -1253,6 +1253,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; //update on every 1% only
 
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	// when reading numerical data the options removeQuotesEnabled, simplifyWhitespacesEnabled and skipEmptyParts
 	// are not relevant and we can provide a more faster version that avoids many of string allocations, etc.
 	if (!removeQuotesEnabled && !simplifyWhitespacesEnabled && !skipEmptyParts) {
@@ -1311,6 +1313,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			}
 		}
 	} else {
+#else
 		QString valueString;
 		for (int i = 0; i < lines; ++i) {
 			line = device.readLine();
@@ -1377,7 +1380,11 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				QApplication::processEvents(QEventLoop::AllEvents, 0);
 			}
 		}
+#endif
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	}
+#endif
 
 	DEBUG(Q_FUNC_INFO <<", Read " << currentRow << " lines");
 
