@@ -181,21 +181,22 @@ void BinaryFilterTest::importFloatBE() {
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(0))
+	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(999))
+	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(1)->valueAt(999))
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
-	QCOMPARE(spreadsheet.column(1)->valueAt(0), 5.27598034705257e-11);
-	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1.35065096884546e-08);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), 3.83760891509155e-07);
-	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.45766648024437e-06);
-	QCOMPARE(spreadsheet.column(1)->valueAt(2), 3.07619702653028e-05);
-	QCOMPARE(spreadsheet.column(0)->valueAt(3), 9.82427882263437e-05);
-	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.000295705918688327);
-	QCOMPARE(spreadsheet.column(0)->valueAt(4), 0.000885162618942559);
-	QCOMPARE(spreadsheet.column(1)->valueAt(4), 0.00276252860203385);
-	QCOMPARE(spreadsheet.column(0)->valueAt(998), 0.);
-	QCOMPARE(spreadsheet.column(1)->valueAt(998), 0.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(999), 0.);
-	QCOMPARE(spreadsheet.column(1)->valueAt(999), 0.);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.100100100040436);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 9.9932918548584);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 0.200200200080872);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 19.8865337371826);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 0.300300300121307);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 29.5806789398193);
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 0.400400400161743);
+	QCOMPARE(spreadsheet.column(1)->valueAt(4), 38.9786720275879);
+	QCOMPARE(spreadsheet.column(0)->valueAt(998), 99.89990234375);
+	QCOMPARE(spreadsheet.column(1)->valueAt(998), -59.0004920959473);
+	QCOMPARE(spreadsheet.column(0)->valueAt(999), 100);
+	QCOMPARE(spreadsheet.column(1)->valueAt(999), -50.6365623474121);
 }
 
 void BinaryFilterTest::importDoubleBE() {
