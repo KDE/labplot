@@ -1745,17 +1745,15 @@ void CartesianPlot::setCursor1Enable(const bool &enable) {
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetTheme, QString, theme)
 void CartesianPlot::setTheme(const QString& theme) {
 	Q_D(CartesianPlot);
-	if (theme != d->theme) {
-		QString info;
-		if (!theme.isEmpty())
-			info = i18n("%1: load theme %2", name(), theme);
-		else
-			info = i18n("%1: load default theme", name());
-		beginMacro(info);
-		exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
-		loadTheme(theme);
-		endMacro();
-	}
+	QString info;
+	if (!theme.isEmpty())
+		info = i18n("%1: load theme %2", name(), theme);
+	else
+		info = i18n("%1: load default theme", name());
+	beginMacro(info);
+	exec(new CartesianPlotSetThemeCmd(d, theme, ki18n("%1: set theme")));
+	loadTheme(theme);
+	endMacro();
 }
 
 void CartesianPlot::retransformAll() {

@@ -783,17 +783,15 @@ void Worksheet::setPrinting(bool on) const {
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
-	if (theme != d->theme) {
-		QString info;
-		if (!theme.isEmpty())
-			info = i18n("%1: load theme %2", name(), theme);
-		else
-			info = i18n("%1: load default theme", name());
-		beginMacro(info);
-		exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: set theme")));
-		loadTheme(theme);
-		endMacro();
-	}
+	QString info;
+	if (!theme.isEmpty())
+		info = i18n("%1: load theme %2", name(), theme);
+	else
+		info = i18n("%1: load default theme", name());
+	beginMacro(info);
+	exec(new WorksheetSetThemeCmd(d, theme, ki18n("%1: set theme")));
+	loadTheme(theme);
+	endMacro();
 }
 
 int Worksheet::cSystemIndex(WorksheetElement* e) {
