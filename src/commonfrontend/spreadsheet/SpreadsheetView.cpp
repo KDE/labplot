@@ -2973,7 +2973,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 
 	if (!forAll)
 		columns = selectedColumns();
-	else if (forAll) {
+	else {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
 			if (column->isNumeric() && column->hasValues())

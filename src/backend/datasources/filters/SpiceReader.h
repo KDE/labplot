@@ -88,12 +88,12 @@ private:
 	QString mTitle;
 	QDateTime mDatetime;
 	QString mPlotName;
-	int mFlags;
-	int mNumberPoints;
+	int mFlags{0};
+	int mNumberPoints{0};
 	double mOffset; // LtSpice specific
 	QHash<QString, QString> mLtSpiceOptions; // LtSpice specific
 	QVector<Variable> mVariables;
-	PlotMode mMode;
+	PlotMode mMode{PlotMode::Unknown};
 	bool mLTSpiceBug{false};
 
 	bool mBinary{true}; // If the read file is binary of ascii
