@@ -21,7 +21,7 @@
 </ToolBar>
 
 <ToolBar name="datapicker_toolbar">
-<text>Datapicker</text>
+<text>Data Extractor</text>
 </ToolBar>
 
 <ToolBar name="spreadsheet_toolbar">
