@@ -107,6 +107,7 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, co
 	if (!device.open(QIODevice::ReadOnly))
 		return 0;
 
+	// size() and bytesAvailable() return 0 and data may be compressed. Need to read the file once
 	size_t rows = 0;
 	while (!device.atEnd()) {
 		if (rows >= maxRows)	// stop when maxRows available
