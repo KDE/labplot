@@ -1284,7 +1284,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 			// parse the columns in the current line
 			int currentColumn = 0;
-			for (auto valueString : qTokenize(line, m_separator, (Qt::SplitBehavior)skipEmptyParts)) {
+			for (const auto &valueString : qTokenize(line, m_separator, (Qt::SplitBehavior)skipEmptyParts)) {
 				// skip the first columns up to the start column
 				if (currentColumn < startColumn - 1) {
 					++currentColumn;
@@ -1301,6 +1301,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				++readColumns;
 				++currentColumn;
 			}
+			// set not available values
+			for (int c = readColumns; c < m_actualCols; c++)
+				setValue(c, currentRow, QString());
 
 			currentRow++;
 
@@ -1358,7 +1361,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			for (int n = 0; n < m_actualCols; ++n) {
 				// index column if required
 				if (n == 0 && createIndexEnabled) {
-					static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = i + 1;
+					(*static_cast<QVector<int>*>(m_dataContainer[0]))[currentRow] = i + 1;
 					continue;
 				}
 
@@ -1679,29 +1682,29 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 		case AbstractColumn::ColumnMode::Double: {
 			bool isNumber;
 			const double value = locale.toDouble(valueString, &isNumber);
-			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : nanValue);
+			(*static_cast<QVector<double>*>(m_dataContainer[col]))[row] = (isNumber ? value : nanValue);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			bool isNumber;
 			const int value = locale.toInt(valueString, &isNumber);
-			static_cast<QVector<int>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : 0);
+			(*static_cast<QVector<int>*>(m_dataContainer[col]))[row] = (isNumber ? value : 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
 			bool isNumber;
 			const qint64 value = locale.toLongLong(valueString, &isNumber);
-			static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : 0);
+			(*static_cast<QVector<qint64>*>(m_dataContainer[col]))[row] = (isNumber ? value : 0);
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
 			QDateTime valueDateTime = parseDateTime(valueString.toString(), dateTimeFormat);
-			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+			(*static_cast<QVector<QDateTime>*>(m_dataContainer[col]))[row] = valueDateTime.isValid() ? valueDateTime : QDateTime();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			auto* colData = static_cast<QVector<QString>*>(m_dataContainer[col]);
-			colData->operator[](row) = valueString.toString();
+			(*colData)[row] = valueString.toString();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Month:	// never happens
@@ -1711,19 +1714,19 @@ void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
 	} else {	// missing columns in this line
 		switch (columnModes.at(col)) {
 		case AbstractColumn::ColumnMode::Double:
-			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = nanValue;
+			(*static_cast<QVector<double>*>(m_dataContainer[col]))[row] = nanValue;
 			break;
 		case AbstractColumn::ColumnMode::Integer:
-			static_cast<QVector<int>*>(m_dataContainer[col])->operator[](row) = 0;
+			(*static_cast<QVector<int>*>(m_dataContainer[col]))[row] = 0;
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
-			static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](row) = 0;
+			(*static_cast<QVector<qint64>*>(m_dataContainer[col]))[row] = 0;
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
-			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](row) = QDateTime();
+			(*static_cast<QVector<QDateTime>*>(m_dataContainer[col]))[row] = QDateTime();
 			break;
 		case AbstractColumn::ColumnMode::Text:
-			static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](row).clear();
+			(*static_cast<QVector<QString>*>(m_dataContainer[col]))[row].clear();
 			break;
 		case AbstractColumn::ColumnMode::Month:	// never happens
 		case AbstractColumn::ColumnMode::Day:
