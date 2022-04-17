@@ -1277,7 +1277,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 			// index column if required
 			if (createIndexEnabled) {
-				static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = i + 1;
+				(*static_cast<QVector<int>*>(m_dataContainer[0]))[currentRow] = i + 1;
 				readColumns = 1;
 				continue;
 			}
@@ -1296,8 +1296,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					break;
 
 				// set the column value
-				int col = createIndexEnabled ? readColumns + 1 : readColumns;
-				setValue(col, currentRow, valueString);
+				setValue(readColumns, currentRow, valueString);
 
 				++readColumns;
 				++currentColumn;
