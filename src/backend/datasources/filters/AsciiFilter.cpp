@@ -1285,8 +1285,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			// parse the columns in the current line
 			int currentColumn = 0;
 			for (auto valueString : qTokenize(line, m_separator, (Qt::SplitBehavior)skipEmptyParts)) {
-				// skip the first columns up to the stat column
-				if (currentColumn < startColumn) {
+				// skip the first columns up to the start column
+				if (currentColumn < startColumn - 1) {
 					++currentColumn;
 					continue;
 				}
@@ -1316,7 +1316,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			}
 		}
 	} else {
-#else
+#endif
 		QString valueString;
 		for (int i = 0; i < lines; ++i) {
 			line = device.readLine();
