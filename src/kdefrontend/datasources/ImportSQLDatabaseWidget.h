@@ -17,7 +17,7 @@
 #include "ui_importsqldatabasewidget.h"
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-#include <repository.h>
+#include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
 	class SyntaxHighlighter;
 }
