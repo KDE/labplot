@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Matio I/O-filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "MatioFilter.h"
@@ -1156,32 +1156,41 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						QDEBUG(Q_FUNC_INFO << ", WARNING: string import into matrix not supported.")
 						break;
 					}
+
+					if (fields[i]->rank == 2)
+						DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+					else
+						DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
 						auto* data = (mat_uint16_t*)fields[i]->data;
-						if (fields[i]->rank == 2) {
-							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-						} else
-							DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
-						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << STDSTRING(QString::fromUtf16(data)) << "\"")
+
+						QString s = QString::fromUtf16(data);
+						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << STDSTRING(s) << "\"")
 						//TODO: row
 						if (dataSource)
-							static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf16(data);
+							(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = s;
 						else
-							dataStrings[1][colIndex] = QString::fromUtf16(data);
+							dataStrings[1][colIndex] = s;
 					} else {
 						char* data = (char*)fields[i]->data;
 						if (fields[i]->data_type == MAT_T_UTF8) {
-							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << STDSTRING(QString::fromUtf8(data)) << "\"")
+							QString s;
+							if (fields[i]->rank == 2)
+								s = QString::fromUtf8(data, fields[i]->dims[1]);
+							else
+								s = QString::fromUtf8(data);
+							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << STDSTRING(s) << "\"")
 							//TODO: row
 							if (dataSource)
-								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf8(data);
+								(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = s;
 							else
-								dataStrings[1][colIndex] = QString::fromUtf8(data);
+								dataStrings[1][colIndex] = s;
 						} else {
 							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << STDSTRING(QString(data)) << "\"")
 							//TODO: row
 							if (dataSource)
-								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString(data);
+								(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = QString(data);
 							else
 								dataStrings[1][colIndex] = QString(data);
 						}
