@@ -1385,7 +1385,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 				QApplication::processEvents(QEventLoop::AllEvents, 0);
 			}
 		}
-#endif
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	}
