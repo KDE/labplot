@@ -1279,7 +1279,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			if (createIndexEnabled) {
 				(*static_cast<QVector<int>*>(m_dataContainer[0]))[currentRow] = i + 1;
 				readColumns = 1;
-				continue;
 			}
 
 			// parse the columns in the current line
