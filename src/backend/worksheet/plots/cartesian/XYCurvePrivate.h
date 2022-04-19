@@ -157,7 +157,7 @@ private:
 #endif
 	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
 	QVector<QPointF> m_scenePoints;		//points in scene coordinates
-	QVector<bool> m_pointVisible;		//if point is currently visible in plot (size of m_logicalPoints)
+	std::vector<bool> m_pointVisible;		//if point is currently visible in plot (size of m_logicalPoints)
 	QVector<QPointF> m_valuePoints;		//points for showing value
 	QVector<QString> m_valueStrings;	//strings for showing value
 	QVector<QPolygonF> m_fillPolygons;	//polygons for filling

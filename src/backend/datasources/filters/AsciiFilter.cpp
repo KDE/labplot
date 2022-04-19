@@ -346,12 +346,12 @@ bool AsciiFilter::simplifyWhitespacesEnabled() const {
 
 void AsciiFilter::setNaNValueToZero(bool b) {
 	if (b)
-		d->nanValue = 0;
+		d->nanValue = 0.;
 	else
 		d->nanValue = std::numeric_limits<double>::quiet_NaN();
 }
 bool AsciiFilter::NaNValueToZeroEnabled() const {
-	return (d->nanValue == 0);
+	return (d->nanValue == 0.);
 }
 
 void AsciiFilter::setRemoveQuotesEnabled(bool b) {

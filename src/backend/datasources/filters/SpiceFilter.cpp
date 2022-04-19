@@ -146,7 +146,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 
 	// create new datacontainer to store the preview
 	std::vector<void*> dataContainer;
-	dataContainer.resize(numberVariables * (1+ !reader.isReal()));
+	dataContainer.resize(numberVariables * (1 + !reader.isReal()));
 	for (uint i = 0; i < dataContainer.size(); i++)
 		dataContainer[i] = new QVector<double>(lines);
 

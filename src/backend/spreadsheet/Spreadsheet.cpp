@@ -952,25 +952,21 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		switch (columnMode[n]) {
 		case AbstractColumn::ColumnMode::Double: {
 			auto* vector = static_cast<QVector<double>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			auto* vector = static_cast<QVector<int>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
 			auto* vector = static_cast<QVector<qint64>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			auto* vector = static_cast<QVector<QString>*>(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
@@ -978,7 +974,6 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
 			auto* vector = static_cast<QVector<QDateTime>* >(column->data());
-			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
@@ -1006,24 +1001,28 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
 	Column* newColumn = nullptr;
+	int rows = rowCount();
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
+			newColumn->resizeTo(rows);
 			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
+			newColumn->resizeTo(rows);
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		//replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
-
 
 		if (columns > cols) {
 			//there're more columns in the data source then required -> remove the superfluous columns
@@ -1033,7 +1032,9 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			//create additional columns if needed
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
+				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
+				newColumn->resizeTo(rows);
 				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
 		}

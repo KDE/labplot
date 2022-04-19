@@ -47,7 +47,7 @@ public:
 	int columnCount(AbstractColumn::PlotDesignation) const;
 	Column* column(int index) const;
 	Column* column(const QString&) const;
-	int rowCount() const;
+	int rowCount() const;	// TODO: should be size_t?
 
 	void removeRows(int first, int count);
 	void insertRows(int before, int count);

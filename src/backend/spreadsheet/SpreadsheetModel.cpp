@@ -39,6 +39,7 @@
 SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemModel(nullptr),
 	m_spreadsheet(spreadsheet),
 	m_rowCount(spreadsheet->rowCount()),
+	m_verticalHeaderCount(spreadsheet->rowCount()),
 	m_columnCount(spreadsheet->columnCount()) {
 
 	updateVerticalHeader();
@@ -208,7 +209,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		switch (role) {
 		case Qt::DisplayRole:
 		case Qt::ToolTipRole:
-			return m_vertical_header_data.at(section);
+			return section + 1;
 		}
 	}
 
@@ -293,8 +294,8 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col, &Column::dataChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::formatChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col, &Column::modeChanged, this, &SpreadsheetModel::handleModeChange);
-	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowsInserted);
-	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowsRemoved);
+	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowCountChanged);
+	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowCountChanged);
 	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
 	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
@@ -395,18 +396,7 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
 }
 
-void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int /*before*/, int /*count*/) {
-	if (m_suppressSignals)
-		return;
-
-	int i = m_spreadsheet->indexOfChild<Column>(col);
-	m_rowCount = col->rowCount();
-	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
-	updateVerticalHeader();
-	m_spreadsheet->emitRowCountChanged();
-}
-
-void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*/, int /*count*/) {
+void SpreadsheetModel::handleRowCountChanged(const AbstractColumn* col, int /*before*/, int /*count*/) {
 	if (m_suppressSignals)
 		return;
 
@@ -418,24 +408,18 @@ void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*
 }
 
 void SpreadsheetModel::updateVerticalHeader() {
-	int old_rows = m_vertical_header_data.size();
+	int old_rows = m_verticalHeaderCount;
 	int new_rows = m_rowCount;
 
 	if (new_rows > old_rows) {
-		beginInsertRows(QModelIndex(), old_rows, new_rows-1);
-
-		for (int i = old_rows+1; i <= new_rows; i++)
-			m_vertical_header_data << i;
-
+		beginInsertRows(QModelIndex(), old_rows, new_rows - 1);
 		endInsertRows();
 	} else if (new_rows < old_rows) {
-		beginRemoveRows(QModelIndex(), new_rows, old_rows-1);
-
-		while (m_vertical_header_data.size() > new_rows)
-			m_vertical_header_data.removeLast();
-
+		beginRemoveRows(QModelIndex(), new_rows, old_rows - 1);
 		endRemoveRows();
 	}
+
+	m_verticalHeaderCount = m_rowCount;
 }
 
 void SpreadsheetModel::updateHorizontalHeader() {

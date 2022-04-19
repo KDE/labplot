@@ -172,7 +172,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 			const char* binary = ba.data();
 			const int length = ba.length();
 			if (length % lineBytes != 0) {
-				DEBUG("NgSpiceReader::readData: The data is corrupted")
+				DEBUG(Q_FUNC_INFO << ": The data is corrupted")
 				return 0;
 			}
 			const int readLines = (int)(length/lineBytes);

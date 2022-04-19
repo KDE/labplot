@@ -33,12 +33,12 @@ public:
 		CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
 	};
 
-	Qt::ItemFlags flags( const QModelIndex & index ) const override;
-	QVariant data(const QModelIndex& index, int role) const override;
-	QVariant headerData(int section, Qt::Orientation orientation,int role) const override;
+	Qt::ItemFlags flags(const QModelIndex&) const override;
+	QVariant data(const QModelIndex&, int role) const override;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-	bool setData(const QModelIndex& index, const QVariant& value, int role) override;
+	bool setData(const QModelIndex&, const QVariant& value, int role) override;
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex& child) const override;
 	bool hasChildren (const QModelIndex& parent = QModelIndex() ) const override;
@@ -64,8 +64,7 @@ private Q_SLOTS:
 	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
-	void handleRowsInserted(const AbstractColumn*, int before, int count);
-	void handleRowsRemoved(const AbstractColumn*, int first, int count);
+	void handleRowCountChanged(const AbstractColumn*, int before, int count);
 
 protected:
 	void updateVerticalHeader();
@@ -73,15 +72,15 @@ protected:
 private:
 	Spreadsheet* m_spreadsheet;
 	bool m_formula_mode{false};
-	QVector<int> m_vertical_header_data;
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
+	int m_verticalHeaderCount{0};
 	int m_columnCount{0};
 	QString m_searchText;
 
-	QVariant color(const AbstractColumn*, int row, AbstractColumn::Formatting type) const;
+	QVariant color(const AbstractColumn*, int row, AbstractColumn::Formatting) const;
 };
 
 #endif

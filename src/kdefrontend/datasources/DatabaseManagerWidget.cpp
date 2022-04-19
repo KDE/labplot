@@ -35,9 +35,8 @@
    \ingroup kdefrontend
 */
 DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, QString conn) : QWidget(parent),
+	m_configPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections"),
 	m_initConnName(std::move(conn)) {
-
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
 	ui.setupUi(this);
 
