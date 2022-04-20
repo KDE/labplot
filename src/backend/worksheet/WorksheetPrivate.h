@@ -38,12 +38,12 @@ public:
 	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
+	WorksheetElement::BackgroundType backgroundType{WorksheetElement::BackgroundType::Color};
+	WorksheetElement::BackgroundColorStyle backgroundColorStyle{WorksheetElement::BackgroundColorStyle::SingleColor};
+	WorksheetElement::BackgroundImageStyle backgroundImageStyle{WorksheetElement::BackgroundImageStyle::Scaled};
+	Qt::BrushStyle backgroundBrushStyle{Qt::SolidPattern};
+	QColor backgroundFirstColor{Qt::white};
+	QColor backgroundSecondColor{Qt::black};
 	QString backgroundFileName;
 	double backgroundOpacity{1.0};
 
