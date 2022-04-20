@@ -898,9 +898,9 @@ namespace Origin
 		//bool threeDimensional;
 		bool is3D() const
 		{
-			for (vector<GraphCurve>::const_iterator it = curves.begin(); it != curves.end(); ++it)
+			for (auto c: curves)
 			{
-				switch (it->type)
+				switch (c.type)
 				{
 					case GraphCurve::Scatter3D:
 					case GraphCurve::Surface3D:
