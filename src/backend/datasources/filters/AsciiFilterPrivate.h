@@ -44,7 +44,7 @@ public:
 	void write(const QString& fileName, AbstractDataSource*);
 
 	//helpers
-	int prepareDeviceToRead(QIODevice&);
+	int prepareDeviceToRead(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max());
 	void initDataContainers(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, QStringView value);

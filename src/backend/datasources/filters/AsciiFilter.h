@@ -4,7 +4,7 @@
     Description          : ASCII I/O-filter
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef ASCIIFILTER_H
@@ -35,8 +35,8 @@ public:
 
 	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
-	static size_t lineNumber(const QString& fileName);
-	size_t lineNumber(QIODevice&) const;	// calculate number of lines if device supports it
+	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
+	size_t lineNumber(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max()) const; // calculate number of lines if device supports it
 
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*,

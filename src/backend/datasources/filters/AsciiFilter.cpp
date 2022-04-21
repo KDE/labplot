@@ -200,7 +200,7 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 	return lineStringList.size();
 }
 
-size_t AsciiFilter::lineNumber(const QString& fileName) {
+size_t AsciiFilter::lineNumber(const QString& fileName, const size_t maxLines) {
 	KFilterDev device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
@@ -213,26 +213,31 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 
 	size_t lineCount = 0;
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
-	//on linux and BSD use wc, if available, which is much faster than counting lines in the file
-	const QString wcFullPath = QStandardPaths::findExecutable(QLatin1String("wc"));
-	if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
-		QProcess wc;
-		wc.start(wcFullPath, QStringList() << QLatin1String("-l") << fileName);
-		size_t lineCount = 0;
-		while (wc.waitForReadyRead()) {
-			QString line(wc.readLine());
-			// wc on macOS has leading spaces: use SkipEmptyParts
+	if (maxLines == std::numeric_limits<std::size_t>::max()) {	// only when reading all lines
+		//on Linux and BSD use wc, if available, which is much faster than counting lines in the file
+		DEBUG(Q_FUNC_INFO << ", using wc to count lines")
+		const QString wcFullPath = QStandardPaths::findExecutable(QLatin1String("wc"));
+		if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
+			QProcess wc;
+			wc.start(wcFullPath, QStringList() << QLatin1String("-l") << fileName);
+			size_t lineCount = 0;
+			while (wc.waitForReadyRead()) {
+				QString line(wc.readLine());
+				// wc on macOS has leading spaces: use SkipEmptyParts
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			lineCount = line.split(' ', Qt::SkipEmptyParts)[0].toInt();
+				lineCount = line.split(' ', Qt::SkipEmptyParts).at(0).toInt();
 #else
-			lineCount = line.split(' ', QString::SkipEmptyParts)[0].toInt();
+				lineCount = line.split(' ', QString::SkipEmptyParts).at(0).toInt();
 #endif
+			}
+			return lineCount;
 		}
-		return lineCount;
 	}
 #endif
 
 	while (!device.atEnd()) {
+		if (lineCount >= maxLines)	// stop when maxLines available
+			return lineCount;
 		device.readLine();
 		lineCount++;
 	}
@@ -241,10 +246,10 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 }
 
 /*!
-  returns the number of lines in the device \c device and 0 if sequential.
+  returns the number of lines in the device \c device (limited by maxLines) and 0 if sequential.
   resets the position to 0!
 */
-size_t AsciiFilter::lineNumber(QIODevice& device) const {
+size_t AsciiFilter::lineNumber(QIODevice& device, const size_t maxLines) const {
 	if (device.isSequential())
 		return 0;
 // 	if (!device.canReadLine())
@@ -253,9 +258,11 @@ size_t AsciiFilter::lineNumber(QIODevice& device) const {
 	size_t lineCount = 0;
 	device.seek(0);
 	if (d->readingFile)
-		lineCount = lineNumber(d->readingFileName);
+		lineCount = lineNumber(d->readingFileName, maxLines);
 	else {
 		while (!device.atEnd()) {
+			if (lineCount >= maxLines)	// stop when maxLines available
+				break;
 			device.readLine();
 			lineCount++;
 		}
@@ -428,7 +435,7 @@ QString AsciiFilterPrivate::separator() const {
 /*!
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
-int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
+int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxLines) {
 	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
 	if (!device.open(QIODevice::ReadOnly))
@@ -658,7 +665,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 #endif
 
 	// ATTENTION: This resets the position in the device to 0
-	m_actualRows = (int)q->lineNumber(device);
+	m_actualRows = (int)q->lineNumber(device, maxLines);
 
 	const int actualEndRow = (endRow == -1 || endRow > m_actualRows) ? m_actualRows : endRow;
 	if (actualEndRow > m_actualStartRow)
@@ -1532,14 +1539,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int lines) {
 	QVector<QStringList> dataStrings;
 
-	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
-	//that we're reading from a file and to benefit from much faster wc on linux
-	//TODO: redesign the APIs and remove this later
-	readingFile = true;
-	readingFileName = fileName;
 	KFilterDev device(fileName);
-	const int deviceError = prepareDeviceToRead(device);
-	readingFile = false;
+	const int deviceError = prepareDeviceToRead(device, lines);
 
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
