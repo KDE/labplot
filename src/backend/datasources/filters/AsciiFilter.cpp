@@ -476,9 +476,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 	// determine separator and split first line
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
-		DEBUG(Q_FUNC_INFO << ", automatic separator");
+		DEBUG(Q_FUNC_INFO << ", using AUTOMATIC separator");
 		if (firstLine.indexOf(QLatin1Char('\t')) != -1) {
-			//in case we have a mix of tabs and spaces in the header, give the tab character the preference
+			//in case we have a mix of tabs and spaces in the header, give the tab character preference
 			m_separator = QLatin1Char('\t');
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
@@ -497,11 +497,18 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 				int length1 = firstLineStringList.at(0).length();
 				if (firstLineStringList.size() > 1)
 					m_separator = firstLine.mid(length1, 1);
-				else
-					m_separator = ' ';
+				else {	// no spaces, use comma as default (CSV) and split
+					m_separator = ',';
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+					firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
+#else
+					firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+#endif
+				}
 			}
 		}
 	} else {	// use given separator
+		DEBUG(Q_FUNC_INFO << ", using GIVEN separator: " << STDSTRING(m_separator))
 		// replace symbolic "TAB" with '\t'
 		m_separator = separatingCharacter.replace(QLatin1String("2xTAB"), "\t\t", Qt::CaseInsensitive);
 		m_separator = separatingCharacter.replace(QLatin1String("TAB"), "\t", Qt::CaseInsensitive);
