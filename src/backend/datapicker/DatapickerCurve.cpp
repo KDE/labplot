@@ -367,6 +367,10 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
 
+	//resize the spreadsheet if needed (row starts with 0, add 1 when comparing with rowCount())
+	if (m_datasheet->rowCount() < row + 1)
+		m_datasheet->setRowCount(row + 1);
+
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 
 	if (d->posXColumn)
