@@ -4,7 +4,7 @@
     Description          : Datapicker
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -55,7 +55,7 @@ void Datapicker::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon Datapicker::icon() const {
-	return QIcon::fromTheme("color-picker-black");
+	return QIcon::fromTheme(QLatin1String("color-picker-black"));
 }
 
 /*!
@@ -63,7 +63,6 @@ QIcon Datapicker::icon() const {
  */
 QMenu* Datapicker::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
-	Q_ASSERT(menu);
 	m_image->createContextMenu(menu);
 	return menu;
 }
@@ -78,33 +77,27 @@ QWidget* Datapicker::view() const {
 
 
 bool Datapicker::exportView() const {
-	Spreadsheet* s = currentSpreadsheet();
-	bool ret;
+	auto* s = currentSpreadsheet();
 	if (s)
-		ret = s->exportView();
+		return s->exportView();
 	else
-		ret = m_image->exportView();
-	return ret;
+		return m_image->exportView();
 }
 
 bool Datapicker::printView() {
-	Spreadsheet* s = currentSpreadsheet();
-	bool ret;
+	auto* s = currentSpreadsheet();
 	if (s)
-		ret = s->printView();
+		return s->printView();
 	else
-		ret = m_image->printView();
-	return ret;
+		return m_image->printView();
 }
 
 bool Datapicker::printPreview() const {
-	Spreadsheet* s = currentSpreadsheet();
-	bool ret;
+	auto* s = currentSpreadsheet();
 	if (s)
-		ret = s->printPreview();
+		return s->printPreview();
 	else
-		ret = m_image->printPreview();
-	return ret;
+		return m_image->printPreview();
 }
 
 DatapickerCurve* Datapicker::activeCurve() {

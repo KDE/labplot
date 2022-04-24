@@ -107,6 +107,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);

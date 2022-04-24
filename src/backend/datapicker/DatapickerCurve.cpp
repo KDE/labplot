@@ -5,7 +5,7 @@
     of datapicker
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -83,9 +83,8 @@ QIcon DatapickerCurve::icon() const {
 }
 
 Column* DatapickerCurve::appendColumn(const QString& name) {
-	Column* col = new Column(i18n("Column"), AbstractColumn::ColumnMode::Double);
+	auto* col = new Column(name);
 	col->insertRows(0, m_datasheet->rowCount());
-	col->setName(name);
 	col->setFixed(true);
 	m_datasheet->addChild(col);
 
@@ -150,32 +149,64 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	m_datasheet = new Spreadsheet(i18n("Data"));
 	m_datasheet->setFixed(true);
 	addChild(m_datasheet);
-	QString xLabel('x');
-	QString yLabel('y');
 
-	if (type == DatapickerImage::GraphType::PolarInDegree) {
+	QString xLabel;
+	QString yLabel;
+
+	switch (type) {
+	case DatapickerImage::GraphType::Cartesian: {
+		xLabel = QLatin1Char('x');
+		yLabel = QLatin1Char('y');
+		break;
+	}
+	case DatapickerImage::GraphType::PolarInDegree: {
 		xLabel = QLatin1String("r");
 		yLabel = QLatin1String("y(deg)");
-	} else if (type == DatapickerImage::GraphType::PolarInRadians) {
+		break;
+	}
+	case DatapickerImage::GraphType::PolarInRadians: {
 		xLabel = QLatin1String("r");
 		yLabel = QLatin1String("y(rad)");
-	} else if (type == DatapickerImage::GraphType::LogarithmicX) {
+		break;
+	}
+	case DatapickerImage::GraphType::LogarithmicX: {
 		xLabel = QLatin1String("log(x)");
 		yLabel = QLatin1String("y");
-	} else if (type == DatapickerImage::GraphType::LogarithmicY) {
+		break;
+	}
+	case DatapickerImage::GraphType::LogarithmicY: {
 		xLabel = QLatin1String("x");
 		yLabel = QLatin1String("log(y)");
+		break;
+	}
+	case DatapickerImage::GraphType::Ternary: {
+		xLabel = QLatin1Char('a');
+		yLabel = QLatin1Char('b');
+		break;
+	}
 	}
 
+	//the default spreadsheet can have arbitrary number of colums as per user's default template.
+	//make sure we have the columns for x and y only
+	if (m_datasheet->columnCount() < 1)
+		appendColumn(xLabel);
+	if (m_datasheet->columnCount() < 2)
+		appendColumn(yLabel);
+	if (m_datasheet->columnCount() > 2)
+		m_datasheet->setColumnCount(2);
+
+	//add the third column for Ternary
 	if (type == DatapickerImage::GraphType::Ternary)
-		d->posZColumn = appendColumn(i18n("c"));
+		d->posZColumn = appendColumn(QLatin1String("c"));
 
 	d->posXColumn = m_datasheet->column(0);
 	d->posXColumn->setName(xLabel);
+	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 	d->posXColumn->setFixed(true);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
+	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 	d->posYColumn->setFixed(true);
 }
 
@@ -335,6 +366,7 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 
 	auto* datapicker = static_cast<Datapicker*>(parentAspect());
 	int row = indexOfChild<DatapickerPoint>(point, ChildIndexFlag::IncludeHidden);
+
 	QVector3D data = datapicker->mapSceneToLogical(point->position());
 
 	if (d->posXColumn)

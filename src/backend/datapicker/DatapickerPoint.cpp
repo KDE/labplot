@@ -324,7 +324,6 @@ void DatapickerPointPrivate::retransform() {
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
-	updatePoint();
 }
 
 /*!
