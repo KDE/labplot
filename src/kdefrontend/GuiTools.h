@@ -36,7 +36,7 @@ public:
 	static void highlight(QLineEdit*, bool);
 
 	static QString openImageFile(const QString&);
-	static QImage importPDFFile(const QString&, int dpi=0);
+	static QImage importPDFFile(const QString&);
 	static QImage imageFromPDFData(const QByteArray&, double zoomFactor = 1.);
 };
 

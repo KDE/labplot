@@ -283,7 +283,7 @@ QString GuiTools::openImageFile(const QString& className) {
 }
 
 // convert PDF to QImage using Poppler
-QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
+QImage GuiTools::importPDFFile(const QString& fileName) {
 	//DEBUG(Q_FUNC_INFO << ", PDF file name = " << STDSTRING(fileName));
 #ifdef HAVE_POPPLER
 	auto* document = Poppler::Document::load(fileName);
@@ -305,12 +305,9 @@ QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
 	document->setRenderHint(Poppler::Document::TextHinting);
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
-	const double scaling = 1.5;	// scale to reasonable size
-	QImage image;
-	if (dpi)
-		image = page->renderToImage((double)dpi, (double)dpi);
-	else
-		image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
+
+	const static int dpi = QApplication::desktop()->logicalDpiX();
+	QImage image = page->renderToImage(dpi, dpi);
 
 	delete page;
 	delete document;
