@@ -26,7 +26,7 @@ class Histogram : public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
-	enum HistogramType {Ordinary,Cumulative, AvgShift};
+	enum HistogramType {Ordinary, Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
 	enum HistogramNormalization {Count, Probability, CountDensity, ProbabilityDensity};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott};

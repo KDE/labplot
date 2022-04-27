@@ -4393,11 +4393,9 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		index = -1;
 
 	bool translated = false;
-	int xIndex = -1;
-	int yIndex = -1;
 	if (index < 0) {
 		QVector<int> translatedIndicesX, translatedIndicesY;
-		for (int i=0; i < q->m_coordinateSystems.count(); i++) {
+		for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
 			auto cs = coordinateSystem(i);
 			int xIndex = cs->xIndex();
 			int yIndex = cs->yIndex();
@@ -4421,8 +4419,8 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		}
 	} else {
 		auto cs = coordinateSystem(index);
-		xIndex = cs->xIndex();
-		yIndex = cs->yIndex();
+		int xIndex = cs->xIndex();
+		int yIndex = cs->yIndex();
 		translated = translateRange(xIndex, yIndex, logicalStart, logicalEnd, true, true);
 		if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleY(yIndex)) {
 			// only x was changed, so autoscale y

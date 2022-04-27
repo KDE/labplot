@@ -937,8 +937,8 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 		const auto& statistics = column->statistics();
 		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
-		const double notchMax = median + notch ;
-		const double notchMin = median - notch ;
+		const double notchMax = median + notch;
+		const double notchMin = median - notch;
 		double width = xMaxBox - xMinBox;
 
 		//first line starting at the top left corner of the box

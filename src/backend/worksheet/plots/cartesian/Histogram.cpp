@@ -95,7 +95,7 @@ void Histogram::init() {
 	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
 	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
 	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
-	d->valuesPrecision = group.readEntry("ValuesNumericFormat", 2);
+	d->valuesPrecision = group.readEntry("ValuesPrecision", 2);
 	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
 	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
 	d->valuesSuffix = group.readEntry("ValuesSuffix", "");

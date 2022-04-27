@@ -119,7 +119,7 @@ int nsl_corr_fft_type(double s[], size_t n, double r[], size_t m, nsl_corr_type_
 
 #ifdef HAVE_FFTW3
 int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]) {
-	if (n <= 0)
+	if (n == 0)
 		return -1;
 
 	const size_t size = 2*(n/2+1);
