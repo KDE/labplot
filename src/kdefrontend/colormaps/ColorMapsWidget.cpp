@@ -55,7 +55,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	m_manager = ColorMapsManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
 
-	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &ColorMapsWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ColorMapsWidget::showInfo);
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ColorMapsWidget::toggleIconView);

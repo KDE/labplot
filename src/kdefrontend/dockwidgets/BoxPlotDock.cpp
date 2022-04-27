@@ -138,8 +138,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
 
 	//Tab "Box"
-	connect(ui.sbWidthFactor, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &BoxPlotDock::widthFactorChanged);
+	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::widthFactorChanged);
 
 	//box filling
 	connect(ui.chkFillingEnabled, &QCheckBox::toggled, this, &BoxPlotDock::fillingEnabledChanged);
@@ -156,7 +155,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leFillingFileName, &QLineEdit::textChanged, this, &BoxPlotDock::fileNameChanged);
 	connect(ui.kcbFillingFirstColor, &KColorButton::changed, this, &BoxPlotDock::fillingFirstColorChanged);
 	connect(ui.kcbFillingSecondColor, &KColorButton::changed, this, &BoxPlotDock::fillingSecondColorChanged);
-	connect(ui.sbFillingOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	connect(ui.sbFillingOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &BoxPlotDock::fillingOpacityChanged);
 
 	//box border

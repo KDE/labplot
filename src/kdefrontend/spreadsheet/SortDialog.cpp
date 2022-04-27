@@ -36,8 +36,7 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::sortColumns);
 	connect(ui.buttonBox, &QDialogButtonBox::rejected, this, &SortDialog::reject);
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
-	connect(ui.cbSorting, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged),
-			this, &SortDialog::changeType);
+	connect(ui.cbSorting, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SortDialog::changeType);
 
 	//restore saved settings if available
 	create(); // ensure there's a window created

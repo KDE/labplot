@@ -211,9 +211,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 
 	// edit image
-	connect(ui.cbPlotImageType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &DatapickerImageWidget::plotImageTypeChanged);
-	connect(ui.sbRotation, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbRotation, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::rotationChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
@@ -225,33 +225,33 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	connect(ssSaturation, &SpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan );
 	connect(ssValue, &SpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
 	connect(ssValue, &SpanSlider::spanChanged, gvValue, &HistogramView::setSpan );
-	connect(ui.sbMinSegmentLength, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	connect(ui.sbMinSegmentLength, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &DatapickerImageWidget::minSegmentLengthChanged);
-	connect(ui.sbPointSeparation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+	connect(ui.sbPointSeparation, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &DatapickerImageWidget::pointSeparationChanged);
 
 	//axis point
-	connect(ui.cbGraphType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &DatapickerImageWidget::graphTypeChanged);
-	connect(ui.sbTernaryScale, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbTernaryScale, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::ternaryScaleChanged);
-	connect(ui.sbPositionX1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionX1, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionY1, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionX2, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionY2, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionX3, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionY3, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionZ1, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionZ2, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+	connect(ui.sbPositionZ3, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
 
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);

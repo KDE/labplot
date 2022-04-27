@@ -66,7 +66,7 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent) :
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));
 	}
 
-	connect(ui.cbOperator, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged );
+	connect(ui.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged );
 	connect(m_okButton, &QPushButton::clicked, this, &DropValuesDialog::okClicked);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &DropValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);

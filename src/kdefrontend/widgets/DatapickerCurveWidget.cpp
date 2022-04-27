@@ -55,18 +55,14 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
-	connect(ui.cbXErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerCurveWidget::xErrorTypeChanged);
-	connect(ui.cbYErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerCurveWidget::yErrorTypeChanged);
+	connect(ui.cbXErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::xErrorTypeChanged);
+	connect(ui.cbYErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::yErrorTypeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &DatapickerCurveWidget::visibilityChanged);
 
 	//error bar
-	connect(ui.cbErrorBarFillingStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
+	connect(ui.cbErrorBarFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
 	connect(ui.kcbErrorBarFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::errorBarFillingColorChanged);
-	connect(ui.sbErrorBarSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerCurveWidget::errorBarSizeChanged);
+	connect(ui.sbErrorBarSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
 
 	hideErrorBarWidgets(true);
 }

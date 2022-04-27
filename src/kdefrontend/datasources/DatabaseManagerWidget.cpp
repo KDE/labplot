@@ -59,12 +59,12 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, QString conn) : QW
 	connect(ui.tbDelete, &QToolButton::clicked, this, &DatabaseManagerWidget::deleteConnection);
 	connect(ui.bTestConnection, &QPushButton::clicked, this, &DatabaseManagerWidget::testConnection);
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatabaseManagerWidget::selectFile);
-	connect(ui.cbDriver, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &DatabaseManagerWidget::driverChanged);
+	connect(ui.cbDriver, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatabaseManagerWidget::driverChanged);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatabaseManagerWidget::nameChanged);
 	connect(ui.leDatabase, &QLineEdit::textChanged, this, &DatabaseManagerWidget::databaseNameChanged);
 	connect(ui.leHost, &QLineEdit::textChanged, this, &DatabaseManagerWidget::hostChanged);
-	connect(ui.sbPort, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &DatabaseManagerWidget::portChanged);
+	connect(ui.sbPort, QOverload<int>::of(&QSpinBox::valueChanged), this, &DatabaseManagerWidget::portChanged);
 	connect(ui.chkCustomConnection, &QCheckBox::toggled, this, &DatabaseManagerWidget::customConnectionEnabledChanged);
 	connect(ui.teCustomConnection, &QPlainTextEdit::textChanged, this, &DatabaseManagerWidget::customConnectionChanged);
 	connect(ui.leUserName, &QLineEdit::textChanged, this, &DatabaseManagerWidget::userNameChanged);

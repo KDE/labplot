@@ -80,7 +80,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	ui.leParameter2->setValidator( new QDoubleValidator(ui.leParameter2) );
 	ui.leParameter3->setValidator( new QDoubleValidator(ui.leParameter3) );
 
-	connect(ui.cbDistribution, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &RandomValuesDialog::distributionChanged);
+	connect(ui.cbDistribution, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RandomValuesDialog::distributionChanged);
 	connect(ui.leParameter1, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
 	connect(ui.leParameter2, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);
 	connect(ui.leParameter3, &QLineEdit::textChanged, this, &RandomValuesDialog::checkValues);

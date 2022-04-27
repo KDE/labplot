@@ -79,9 +79,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbResolution->addItem(QLatin1String("600"));
 	ui->cbResolution->setValidator(new QIntValidator(ui->cbResolution));
 
-	connect(ui->cbFormat, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+	connect(ui->cbFormat, QOverload<int>::of(&KComboBox::currentIndexChanged),
 			this, &ExportWorksheetDialog::formatChanged);
-	connect(ui->cbExportTo, static_cast<void (QComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+	connect(ui->cbExportTo, QOverload<int>::of(&KComboBox::currentIndexChanged),
 			this, &ExportWorksheetDialog::exportToChanged);
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportWorksheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportWorksheetDialog::fileNameChanged);

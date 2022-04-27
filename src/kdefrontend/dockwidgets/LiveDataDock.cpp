@@ -44,12 +44,12 @@ LiveDataDock::LiveDataDock(QWidget* parent) : BaseDock(parent)
 	connect(ui.leName, &QLineEdit::textChanged, this, &LiveDataDock::nameChanged);
 	connect(ui.bPausePlayReading, &QPushButton::clicked, this, &LiveDataDock::pauseContinueReading);
 	connect(ui.bUpdateNow, &QPushButton::clicked, this, &LiveDataDock::updateNow);
-	connect(ui.sbUpdateInterval, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
+	connect(ui.sbUpdateInterval, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::updateIntervalChanged);
 
-	connect(ui.sbKeepNValues, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
-	connect(ui.sbSampleSize, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
-	connect(ui.cbUpdateType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
-	connect(ui.cbReadingType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
+	connect(ui.sbKeepNValues, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::keepNValuesChanged);
+	connect(ui.sbSampleSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LiveDataDock::sampleSizeChanged);
+	connect(ui.cbUpdateType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LiveDataDock::updateTypeChanged);
+	connect(ui.cbReadingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LiveDataDock::readingTypeChanged);
 
 #ifdef HAVE_MQTT
 	connect(ui.bWillUpdateNow, &QPushButton::clicked, this, &LiveDataDock::willUpdateNow);

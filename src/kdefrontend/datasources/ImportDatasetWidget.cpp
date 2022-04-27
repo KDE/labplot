@@ -54,7 +54,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 	ui.leSearch->setPlaceholderText(i18n("Search..."));
 	ui.leSearch->setFocus();
 
-	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &ImportDatasetWidget::collectionChanged);
 	connect(ui.twCategories, &QTreeWidget::itemDoubleClicked, this, &ImportDatasetWidget::updateDatasets);
 	connect(ui.twCategories, &QTreeWidget::itemSelectionChanged, [this] {

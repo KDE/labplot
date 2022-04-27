@@ -55,7 +55,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	m_manager = ExamplesManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
 
-	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &ExamplesWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ExamplesWidget::showInfo);
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ExamplesWidget::toggleIconView);

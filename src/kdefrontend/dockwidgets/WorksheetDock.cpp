@@ -104,9 +104,9 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 			 this, &WorksheetDock::layoutHorizontalSpacingChanged);
 	connect( ui.sbLayoutVerticalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			 this, &WorksheetDock::layoutVerticalSpacingChanged);
-	connect( ui.sbLayoutRowCount, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+	connect( ui.sbLayoutRowCount, QOverload<int>::of(&QSpinBox::valueChanged),
 			 this, &WorksheetDock::layoutRowCountChanged);
-	connect( ui.sbLayoutColumnCount, static_cast<void (QSpinBox::*) (int)>(&QSpinBox::valueChanged),
+	connect( ui.sbLayoutColumnCount, QOverload<int>::of(&QSpinBox::valueChanged),
 			 this, &WorksheetDock::layoutColumnCountChanged);
 
 	//theme and template handlers

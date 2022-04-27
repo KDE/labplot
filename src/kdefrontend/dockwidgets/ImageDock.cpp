@@ -87,29 +87,29 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImageDock::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &ImageDock::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
-	connect(ui.sbOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
+	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
 	//Size
-	connect(ui.sbWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::widthChanged);
-	connect(ui.sbHeight, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::heightChanged);
+	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::widthChanged);
+	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::heightChanged);
 	connect(ui.chbKeepRatio, &QCheckBox::clicked, this, &ImageDock::keepRatioChanged);
 
 	//Position
-	connect(ui.cbPositionX, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
-	connect(ui.cbPositionY, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
-	connect(ui.sbPositionX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
-	connect(ui.sbPositionY, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
-	connect(ui.cbHorizontalAlignment, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::horizontalAlignmentChanged);
-	connect(ui.cbVerticalAlignment, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
-	connect(ui.sbRotation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
+	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
+	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
+	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::horizontalAlignmentChanged);
+	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
+	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 
 	//Border
-	connect(ui.cbBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
+	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &ImageDock::borderColorChanged);
-	connect(ui.sbBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &ImageDock::borderOpacityChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
+	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::borderOpacityChanged);
 }
 
 void ImageDock::setImages(QList<Image*> list) {
