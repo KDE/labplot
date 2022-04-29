@@ -19,7 +19,7 @@
 using namespace Origin;
 using namespace endianfstream;
 
-class OriginAnyParser : public OriginParser
+class ORIGIN_EXPORT OriginAnyParser : public OriginParser
 {
 public:
     explicit OriginAnyParser(const std::string &fileName);

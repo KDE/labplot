@@ -15,7 +15,7 @@
 
 #include <memory>
 
-class OriginFile
+class ORIGIN_EXPORT OriginFile
 {
 public:
     explicit OriginFile(const std::string &fileName);
@@ -57,10 +57,10 @@ private:
     std::unique_ptr<OriginParser> parser;
 };
 
-std::string liboriginVersionString();
-unsigned int liboriginVersion();
-unsigned int liboriginVersionMajor();
-unsigned int liboriginVersionMinor();
-unsigned int liboriginVersionBugfix();
+std::string ORIGIN_EXPORT liboriginVersionString();
+unsigned int ORIGIN_EXPORT liboriginVersion();
+unsigned int ORIGIN_EXPORT liboriginVersionMajor();
+unsigned int ORIGIN_EXPORT liboriginVersionMinor();
+unsigned int ORIGIN_EXPORT liboriginVersionBugfix();
 
 #endif // ORIGIN_FILE_H

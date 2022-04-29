@@ -14,7 +14,7 @@
 #include <fstream>
 
 namespace endianfstream {
-class iendianfstream : public std::ifstream
+class ORIGIN_EXPORT iendianfstream : public std::ifstream
 {
 public:
     iendianfstream(const char *_Filename, std::ios_base::openmode _Mode = std::ios_base::in)

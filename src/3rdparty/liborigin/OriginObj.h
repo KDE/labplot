@@ -15,6 +15,16 @@
 #include <vector>
 #include <string>
 
+#if defined(_WIN32) && defined(ORIGIN_DLL)
+#    ifdef ORIGIN_DLL_EXPORT
+#        define ORIGIN_EXPORT __declspec(dllexport)
+#    else
+#        define ORIGIN_EXPORT __declspec(dllimport)
+#    endif
+#else
+#    define ORIGIN_EXPORT
+#endif
+
 #define _ONAN (-1.23456789E-300)
 
 namespace Origin {

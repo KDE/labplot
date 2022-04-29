@@ -22,7 +22,7 @@
 #    define LOG_PRINT(logfile, ...) {};
 #endif
 
-class OriginParser
+class ORIGIN_EXPORT OriginParser
 {
 public:
     virtual ~OriginParser() = default;
