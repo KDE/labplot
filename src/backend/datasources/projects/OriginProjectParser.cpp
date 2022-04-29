@@ -738,7 +738,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 		case Origin::Text:
 			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
 				col->setTextAt(i, column.data[i].as_string());
 			break;
 		case Origin::Time: {
@@ -778,7 +778,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -839,7 +839,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format = "dd.MM.yyyy";
 			}
 
-			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -860,7 +860,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
@@ -881,7 +881,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < min((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
@@ -1355,7 +1355,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				break;
 				case 'F': {
 					Origin::Function function;
-					const vector<Origin::Function>::difference_type funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
+					const std::vector<Origin::Function>::difference_type funcIndex = m_originFile->functionIndex(data.right(data.length()-2).toStdString().c_str());
 					if (funcIndex < 0) {
 						++curveIndex;
 						continue;

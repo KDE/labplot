@@ -11,6 +11,7 @@
 #include <cctype>
 #include <locale>
 
+using namespace std;
 using namespace Origin;
 
 bool OriginParser::iequals(const string &s1, const string &s2, const std::locale &loc) const

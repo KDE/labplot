@@ -9,15 +9,16 @@
 #ifndef ENDIAN_FSTREAM_H
 #define ENDIAN_FSTREAM_H
 
-#include <fstream>
 #include "OriginObj.h"
 
-namespace std {
-class iendianfstream : public ifstream
+#include <fstream>
+
+namespace endianfstream {
+class iendianfstream : public std::ifstream
 {
 public:
-    iendianfstream(const char *_Filename, ios_base::openmode _Mode = ios_base::in)
-        : ifstream(_Filename, _Mode)
+    iendianfstream(const char *_Filename, std::ios_base::openmode _Mode = std::ios_base::in)
+        : std::ifstream(_Filename, _Mode)
     {
         short word = 0x4321;
         bigEndian = (*(char *)&word) != 0x21;
@@ -124,11 +125,11 @@ public:
         return *this;
     }
 
-    iendianfstream &operator>>(string &value)
+    iendianfstream &operator>>(std::string &value)
     {
         read(reinterpret_cast<char *>(&value[0]), value.size());
-        string::size_type pos = value.find_first_of('\0');
-        if (pos != string::npos)
+        std::string::size_type pos = value.find_first_of('\0');
+        if (pos != std::string::npos)
             value.resize(pos);
 
         return *this;

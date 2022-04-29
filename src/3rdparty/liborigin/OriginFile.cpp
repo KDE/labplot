@@ -4,14 +4,17 @@
     Description          : Origin file import class
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2005-2008, 2017 Stefan Gerlach
-    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su,
-   ion_vasilief*yahoo.fr (use @ for *)> SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "config.h"
 #include "OriginFile.h"
+
 #include <fstream>
 #include <string>
+
+using namespace std;
 
 OriginFile::OriginFile(const string &fileName) : fileVersion(0), buildVersion(0), ioError(0)
 {

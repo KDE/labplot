@@ -28,42 +28,48 @@ public:
     virtual ~OriginParser() = default;
     virtual bool parse() = 0;
 
-    vector<Origin::SpreadSheet>::difference_type findSpreadByName(const string &name) const;
-    vector<Origin::Matrix>::difference_type findMatrixByName(const string &name) const;
-    vector<Origin::Function>::difference_type findFunctionByName(const string &name) const;
-    vector<Origin::Excel>::difference_type findExcelByName(const string &name) const;
+    std::vector<Origin::SpreadSheet>::difference_type
+    findSpreadByName(const std::string &name) const;
+    std::vector<Origin::Matrix>::difference_type findMatrixByName(const std::string &name) const;
+    std::vector<Origin::Function>::difference_type
+    findFunctionByName(const std::string &name) const;
+    std::vector<Origin::Excel>::difference_type findExcelByName(const std::string &name) const;
 
 protected:
-    vector<Origin::SpreadColumn>::difference_type
-    findSpreadColumnByName(vector<Origin::SpreadSheet>::size_type spread, const string &name) const;
-    vector<Origin::SpreadColumn>::difference_type
-    findExcelColumnByName(vector<Origin::Excel>::size_type excel,
-                          vector<Origin::SpreadSheet>::size_type sheet, const string &name) const;
-    pair<string, string> findDataByIndex(unsigned int index) const;
-    pair<Origin::ProjectNode::NodeType, string> findObjectByIndex(unsigned int index) const;
-    pair<Origin::ProjectNode::NodeType, Origin::Window>
+    std::vector<Origin::SpreadColumn>::difference_type
+    findSpreadColumnByName(std::vector<Origin::SpreadSheet>::size_type spread,
+                           const std::string &name) const;
+    std::vector<Origin::SpreadColumn>::difference_type
+    findExcelColumnByName(std::vector<Origin::Excel>::size_type excel,
+                          std::vector<Origin::SpreadSheet>::size_type sheet,
+                          const std::string &name) const;
+    std::pair<std::string, std::string> findDataByIndex(unsigned int index) const;
+    std::pair<Origin::ProjectNode::NodeType, std::string>
+    findObjectByIndex(unsigned int index) const;
+    std::pair<Origin::ProjectNode::NodeType, Origin::Window>
     findWindowObjectByIndex(unsigned int index) const;
-    void convertSpreadToExcel(vector<Origin::SpreadSheet>::size_type spread);
+    void convertSpreadToExcel(std::vector<Origin::SpreadSheet>::size_type spread);
 
-    int findColumnByName(int spread, const string &name);
+    int findColumnByName(int spread, const std::string &name);
 
 private:
-    bool iequals(const string &, const string &, const std::locale & = std::locale()) const;
+    bool iequals(const std::string &, const std::string &,
+                 const std::locale & = std::locale()) const;
 
 public:
-    vector<Origin::SpreadColumn> datasets;
-    vector<Origin::SpreadSheet> spreadSheets;
-    vector<Origin::Matrix> matrixes;
-    vector<Origin::Excel> excels;
-    vector<Origin::Function> functions;
-    vector<Origin::Graph> graphs;
-    vector<Origin::Note> notes;
+    std::vector<Origin::SpreadColumn> datasets;
+    std::vector<Origin::SpreadSheet> spreadSheets;
+    std::vector<Origin::Matrix> matrixes;
+    std::vector<Origin::Excel> excels;
+    std::vector<Origin::Function> functions;
+    std::vector<Origin::Graph> graphs;
+    std::vector<Origin::Note> notes;
     tree<Origin::ProjectNode> projectTree;
-    string resultsLog;
+    std::string resultsLog;
     unsigned int windowsCount;
     unsigned int fileVersion, buildVersion;
 };
 
-OriginParser *createOriginAnyParser(const string &fileName);
+OriginParser *createOriginAnyParser(const std::string &fileName);
 
 #endif // ORIGIN_PARSER_H

@@ -3,8 +3,8 @@
     Description          : Origin internal object classes
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2005-2007, 2017 Stefan Gerlach
-    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su,
-   ion_vasilief*yahoo.fr (use @ for *)> SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ORIGIN_OBJ_H
@@ -14,8 +14,6 @@
 #include <ctime>
 #include <vector>
 #include <string>
-
-using namespace std;
 
 #define _ONAN (-1.23456789E-300)
 
@@ -212,7 +210,7 @@ struct ColorMapLevel
     bool labelVisible;
 };
 
-typedef vector<pair<double, ColorMapLevel>> ColorMapVector;
+typedef std::vector<std::pair<double, ColorMapLevel>> ColorMapVector;
 
 struct ColorMap
 {
@@ -225,8 +223,8 @@ struct Window
     enum State { Normal, Minimized, Maximized };
     enum Title { Name, Label, Both };
 
-    string name;
-    string label;
+    std::string name;
+    std::string label;
     int objectID;
     bool hidden;
     State state;
@@ -238,7 +236,8 @@ struct Window
     Color windowBackgroundColorBase;
     Color windowBackgroundColorEnd;
 
-    Window(const string &_name = string(), const string &_label = string(), bool _hidden = false)
+    Window(const std::string &_name = std::string(), const std::string &_label = std::string(),
+           bool _hidden = false)
         : name(_name),
           label(_label),
           objectID(-1),
@@ -268,7 +267,7 @@ public:
 
     Variant() { }
     Variant(const double d) : m_double(d) { }
-    Variant(const string &s) : m_type(V_STRING) { asgString(s.c_str()); }
+    Variant(const std::string &s) : m_type(V_STRING) { asgString(s.c_str()); }
 
     Variant(const Variant &v) : m_type(v.m_type)
     {
@@ -323,16 +322,16 @@ struct SpreadColumn
 {
     enum ColumnType { X, Y, Z, XErr, YErr, Label, NONE };
 
-    string name;
-    string dataset_name;
+    std::string name;
+    std::string dataset_name;
     ColumnType type;
     ValueType valueType;
     int valueTypeSpecification;
     int significantDigits;
     int decimalPlaces;
     NumericDisplayType numericDisplayType;
-    string command;
-    string comment;
+    std::string command;
+    std::string comment;
     int width;
     unsigned int index;
     unsigned int colIndex;
@@ -340,9 +339,9 @@ struct SpreadColumn
     unsigned int numRows;
     unsigned int beginRow;
     unsigned int endRow;
-    vector<variant> data;
+    std::vector<variant> data;
 
-    SpreadColumn(const string &_name = string(), unsigned int _index = 0)
+    SpreadColumn(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name),
           type(ColumnType::Y),
           valueType(Numeric),
@@ -364,9 +363,9 @@ struct SpreadSheet : public Window
     unsigned int maxRows;
     bool loose;
     unsigned int sheets;
-    vector<SpreadColumn> columns;
+    std::vector<SpreadColumn> columns;
 
-    SpreadSheet(const string &_name = string())
+    SpreadSheet(const std::string &_name = std::string())
         : Window(_name), maxRows(30), loose(true), sheets(1){};
 };
 
@@ -374,10 +373,10 @@ struct Excel : public Window
 {
     unsigned int maxRows;
     bool loose;
-    vector<SpreadSheet> sheets;
+    std::vector<SpreadSheet> sheets;
 
-    Excel(const string &_name = string(), const string &_label = string(), int _maxRows = 0,
-          bool _hidden = false, bool _loose = true)
+    Excel(const std::string &_name = std::string(), const std::string &_label = std::string(),
+          int _maxRows = 0, bool _hidden = false, bool _loose = true)
         : Window(_name, _label, _hidden), maxRows(_maxRows), loose(_loose){};
 };
 
@@ -385,22 +384,22 @@ struct MatrixSheet
 {
     enum ViewType { DataView, ImageView };
 
-    string name;
+    std::string name;
     unsigned short rowCount;
     unsigned short columnCount;
     int valueTypeSpecification;
     int significantDigits;
     int decimalPlaces;
     NumericDisplayType numericDisplayType;
-    string command;
+    std::string command;
     unsigned short width;
     unsigned int index;
     ViewType view;
     ColorMap colorMap;
-    vector<double> data;
-    vector<double> coordinates;
+    std::vector<double> data;
+    std::vector<double> coordinates;
 
-    MatrixSheet(const string &_name = string(), unsigned int _index = 0)
+    MatrixSheet(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name),
           rowCount(8),
           columnCount(8),
@@ -426,30 +425,31 @@ struct Matrix : public Window
 
     unsigned int activeSheet;
     HeaderViewType header;
-    vector<MatrixSheet> sheets;
+    std::vector<MatrixSheet> sheets;
 
-    Matrix(const string &_name = string()) : Window(_name), activeSheet(0), header(ColumnRow){};
+    Matrix(const std::string &_name = std::string())
+        : Window(_name), activeSheet(0), header(ColumnRow){};
 };
 
 struct Function
 {
     enum FunctionType { Normal, Polar };
 
-    string name;
+    std::string name;
     FunctionType type;
-    string formula;
+    std::string formula;
     double begin;
     double end;
     int totalPoints;
     unsigned int index;
 
-    Function(const string &_name = string(), unsigned int _index = 0)
+    Function(const std::string &_name = std::string(), unsigned int _index = 0)
         : name(_name), type(Normal), begin(0.0), end(0.0), totalPoints(0), index(_index){};
 };
 
 struct TextBox
 {
-    string text;
+    std::string text;
     Rect clientRect;
     Color color;
     unsigned short fontSize;
@@ -458,7 +458,7 @@ struct TextBox
     BorderType borderType;
     Attach attach;
 
-    TextBox(const string &_text = string())
+    TextBox(const std::string &_text = std::string())
         : text(_text),
           color({ Color::Regular, { Color::Black } }),
           fontSize(20),
@@ -467,7 +467,7 @@ struct TextBox
           borderType(BlackLine),
           attach(Frame){};
 
-    TextBox(const string &_text, Rect _clientRect, Color _color, unsigned short _fontSize,
+    TextBox(const std::string &_text, Rect _clientRect, Color _color, unsigned short _fontSize,
             int _rotation, int _tab, BorderType _borderType, Attach _attach)
         : text(_text),
           clientRect(_clientRect),
@@ -524,12 +524,12 @@ struct VectorProperties
     unsigned short arrowLength;
     unsigned char arrowAngle;
     bool arrowClosed;
-    string endXColumnName;
-    string endYColumnName;
+    std::string endXColumnName;
+    std::string endYColumnName;
 
     VectorPosition position;
-    string angleColumnName;
-    string magnitudeColumnName;
+    std::string angleColumnName;
+    std::string magnitudeColumnName;
     float multiplier;
     int constAngle;
     int constMagnitude;
@@ -707,11 +707,11 @@ struct GraphCurve
 
     bool hidden;
     unsigned char type;
-    string dataName;
-    string xDataName;
-    string xColumnName;
-    string yColumnName;
-    string zColumnName;
+    std::string dataName;
+    std::string xDataName;
+    std::string xColumnName;
+    std::string yColumnName;
+    std::string zColumnName;
     Color lineColor;
     unsigned char lineTransparency;
     unsigned char lineStyle;
@@ -804,9 +804,9 @@ struct GraphAxisFormat
     int axisPosition;
     double axisPositionValue;
     TextBox label;
-    string prefix;
-    string suffix;
-    string factor;
+    std::string prefix;
+    std::string suffix;
+    std::string factor;
 };
 
 struct GraphAxisTick
@@ -818,8 +818,8 @@ struct GraphAxisTick
     int decimalPlaces;
     unsigned short fontSize;
     bool fontBold;
-    string dataName;
-    string columnName;
+    std::string dataName;
+    std::string columnName;
     int rotation;
 };
 
@@ -910,11 +910,11 @@ struct Bitmap
     Rect clientRect;
     Attach attach;
     unsigned long size;
-    string windowName;
+    std::string windowName;
     BorderType borderType;
     unsigned char *data;
 
-    Bitmap(const string &_name = string())
+    Bitmap(const std::string &_name = std::string())
         : attach(Frame), size(0), windowName(_name), borderType(BlackLine), data(nullptr){};
 
     Bitmap(const Bitmap &bitmap)
@@ -976,12 +976,12 @@ struct GraphLayer
     ColorScale colorScale;
     ColorMap colorMap;
 
-    vector<TextBox> texts;
-    vector<TextBox> pieTexts;
-    vector<Line> lines;
-    vector<Figure> figures;
-    vector<Bitmap> bitmaps;
-    vector<GraphCurve> curves;
+    std::vector<TextBox> texts;
+    std::vector<TextBox> pieTexts;
+    std::vector<Line> lines;
+    std::vector<Figure> figures;
+    std::vector<Bitmap> bitmaps;
+    std::vector<GraphCurve> curves;
 
     float xAngle;
     float yAngle;
@@ -1069,15 +1069,15 @@ struct GraphLayerRange
 
 struct Graph : public Window
 {
-    vector<GraphLayer> layers;
+    std::vector<GraphLayer> layers;
     unsigned short width;
     unsigned short height;
     bool is3D;
     bool isLayout;
     bool connectMissingData;
-    string templateName;
+    std::string templateName;
 
-    Graph(const string &_name = string())
+    Graph(const std::string &_name = std::string())
         : Window(_name),
           width(400),
           height(300),
@@ -1088,8 +1088,8 @@ struct Graph : public Window
 
 struct Note : public Window
 {
-    string text;
-    Note(const string &_name = string()) : Window(_name){};
+    std::string text;
+    Note(const std::string &_name = std::string()) : Window(_name){};
 };
 
 struct ProjectNode
@@ -1097,12 +1097,12 @@ struct ProjectNode
     enum NodeType { SpreadSheet, Matrix, Excel, Graph, Graph3D, Note, Folder };
 
     NodeType type;
-    string name;
+    std::string name;
     time_t creationDate;
     time_t modificationDate;
     bool active;
 
-    ProjectNode(const string &_name = string(), NodeType _type = Folder,
+    ProjectNode(const std::string &_name = std::string(), NodeType _type = Folder,
                 const time_t _creationDate = time(nullptr),
                 const time_t _modificationDate = time(nullptr), bool _active = false)
         : type(_type),
