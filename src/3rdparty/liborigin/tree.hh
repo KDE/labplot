@@ -585,8 +585,8 @@ tree<T, tree_node_allocator>::~tree()
 template<class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::head_initialise_()
 {
-    head = alloc_.allocate(1, nullptr); // MSVC does not have default second argument
-    feet = alloc_.allocate(1, nullptr);
+    head = alloc_.allocate(1);
+    feet = alloc_.allocate(1);
 
     head->parent = nullptr;
     head->first_child = nullptr;
@@ -947,7 +947,7 @@ iter tree<T, tree_node_allocator>::append_child(iter position, const T &x)
     assert(position.node != head);
     assert(position.node);
 
-    tree_node *tmp = alloc_.allocate(1, nullptr);
+    tree_node *tmp = alloc_.allocate(1);
     kp::constructor(&tmp->data, x);
     tmp->first_child = nullptr;
     tmp->last_child = nullptr;
@@ -1060,7 +1060,7 @@ iter tree<T, tree_node_allocator>::insert(iter position, const T &x)
         position.node = feet; // Backward compatibility: when calling insert on a null node,
                               // insert before the feet.
     }
-    tree_node *tmp = alloc_.allocate(1, nullptr);
+    tree_node *tmp = alloc_.allocate(1);
     kp::constructor(&tmp->data, x);
     tmp->first_child = nullptr;
     tmp->last_child = nullptr;
