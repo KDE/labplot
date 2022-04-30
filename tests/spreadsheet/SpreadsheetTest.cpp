@@ -1070,6 +1070,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	sheet.setRowCount(10000);
 
 	QVector<double> xData;
+	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++)
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
@@ -1096,6 +1097,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 
 	QVector<double> xData;
 	QVector<int> yData;
+	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();

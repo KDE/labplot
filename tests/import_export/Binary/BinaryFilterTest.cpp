@@ -286,4 +286,112 @@ void BinaryFilterTest::importDoubleMatrixBE() {
 	QCOMPARE(spreadsheet.column(39)->valueAt(39), 0.909297426825682);
 }
 
+/////////////////////////////////////////////////////////////////
+
+// INT data
+
+void BinaryFilterTest::benchIntImport_data() {
+	QTest::addColumn<size_t>("lineCount");
+	// can't transfer file name since needed in clean up
+
+	// create data
+	QTemporaryFile file;
+	if (!file.open())
+		return;
+
+	file.setAutoRemove(false);
+	benchDataFileName = file.fileName();
+
+	QDataStream out(&file);
+
+	const size_t lines = 1e6;
+	QTest::newRow("3 int cols") << lines;
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	for (size_t i = 0; i < lines; i++)
+		out << static_cast<int>(i) << static_cast<int>(100*sin(i/100.)) << static_cast<int>(100*cos(i/100));
+	file.close();
+}
+
+void BinaryFilterTest::benchIntImport() {
+	QFETCH(size_t, lineCount);
+
+	Spreadsheet spreadsheet("test", false);
+	BinaryFilter filter;
+	filter.setDataType(BinaryFilter::DataType::INT32);
+	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
+	filter.setVectors(3);
+
+	QBENCHMARK {
+		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), 3);
+		QCOMPARE(spreadsheet.rowCount(), lineCount);
+
+		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), 100);
+	}
+}
+
+void BinaryFilterTest::benchIntImport_cleanup() {
+	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
+	QFile::remove(benchDataFileName);
+}
+
+// DOUBLE data
+
+void BinaryFilterTest::benchDoubleImport_data() {
+	QTest::addColumn<size_t>("lineCount");
+	// can't transfer file name since needed in clean up
+
+	// create data
+	QTemporaryFile file;
+	if (!file.open())
+		return;
+
+	file.setAutoRemove(false);
+	benchDataFileName = file.fileName();
+
+	QDataStream out(&file);
+
+	const size_t lines = 1e6;
+	QTest::newRow("3 double cols") << lines;
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	for (size_t i = 0; i < lines; i++) {
+		double x = (double)i/100.0;
+
+		out << x << 100.0*sin(x) << 100.0*cos(x);
+	}
+	file.close();
+}
+
+void BinaryFilterTest::benchDoubleImport() {
+	QFETCH(size_t, lineCount);
+
+	Spreadsheet spreadsheet("test", false);
+	BinaryFilter filter;
+	filter.setDataType(BinaryFilter::DataType::REAL64);
+	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
+	filter.setVectors(3);
+
+	QBENCHMARK {
+		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), 3);
+		QCOMPARE(spreadsheet.rowCount(), lineCount);
+
+		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), 100.0);
+	}
+}
+
+void BinaryFilterTest::benchDoubleImport_cleanup() {
+	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
+	QFile::remove(benchDataFileName);
+}
+
+
+///////////////////////////////////////////////////////
+
 QTEST_MAIN(BinaryFilterTest)

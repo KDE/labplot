@@ -28,5 +28,19 @@ private Q_SLOTS:
 	void importDoubleLE();
 	
 	void importDoubleMatrixBE();
+
+	void benchIntImport_data();
+	// this is called multiple times (warm-up of BENCHMARK)
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	void benchIntImport();
+	void benchIntImport_cleanup();	// delete data
+
+	void benchDoubleImport_data();
+	// this is called multiple times (warm-up of BENCHMARK)
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	void benchDoubleImport();
+	void benchDoubleImport_cleanup();	// delete data
+private:
+	QString benchDataFileName;
 };
 #endif
