@@ -1123,7 +1123,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		}
 
 		for (; row < linesToRead; ++row) {
-			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
+// 			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
 			QString line;
 			if (readingType == LiveDataSource::ReadingType::FromEnd)
 				line = newData.at(newDataIdx++);
@@ -1153,9 +1153,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 #endif
 			else
 				lineStringList << line;
-			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
+// 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
 
-			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+// 			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
 					lineStringList[i] = lineStringList[i].simplified();
@@ -1282,7 +1282,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			line.remove(QLatin1Char('\n'));
 			line.remove(QLatin1Char('\r'));
 
-			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+// 			DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
@@ -1682,7 +1682,6 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 
 //set value depending on data type
 void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
-	qDebug()<<"set value " << col << "  " << row << "  " << valueString;
 	if (!valueString.isEmpty()) {
 		switch (columnModes.at(col)) {
 		case AbstractColumn::ColumnMode::Double: {
