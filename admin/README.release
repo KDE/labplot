@@ -1,3 +1,8 @@
+0. Prepare release
+* Update splash screen src/kdefrontend/splash.png
+* add release in org.kde.labplot2.appdata.xml
+
+
 1. Tag the release
 * git tag "2.8.0" -a -m "Tagging 2.8.0"
 * git push --tags
