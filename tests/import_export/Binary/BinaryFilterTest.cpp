@@ -12,6 +12,11 @@
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+extern "C" {
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+}
+
 void BinaryFilterTest::importInt8() {
 	Spreadsheet spreadsheet("test", false);
 	BinaryFilter filter;
@@ -304,7 +309,6 @@ void BinaryFilterTest::benchIntImport_data() {
 
 	QDataStream out(&file);
 
-	const size_t lines = 1e6;
 	QTest::newRow("3 int cols") << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
 	for (size_t i = 0; i < lines; i++)
@@ -352,15 +356,25 @@ void BinaryFilterTest::benchDoubleImport_data() {
 	file.setAutoRemove(false);
 	benchDataFileName = file.fileName();
 
+	gsl_rng_env_setup();
+	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
+	gsl_rng_set(r, 12345);
+
 	QDataStream out(&file);
 
-	const size_t lines = 1e6;
-	QTest::newRow("3 double cols") << lines;
+	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
+	QTest::newRow(testName.toLatin1()) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
-	for (size_t i = 0; i < lines; i++) {
-		double x = (double)i/100.0;
 
-		out << x << 100.0*sin(x) << 100.0*cos(x);
+	const double delta = 0.25;
+	const int dt = 1;
+	const double sigma = delta*delta * dt;
+	double path[paths] = {0.0};
+	for (size_t i = 0; i < lines; i++) {
+		for (int p = 0; p < paths; p++) {
+			path[p] += gsl_ran_gaussian_ziggurat(r, sigma);
+			out << path[p];
+		}
 	}
 	file.close();
 }
@@ -372,17 +386,18 @@ void BinaryFilterTest::benchDoubleImport() {
 	BinaryFilter filter;
 	filter.setDataType(BinaryFilter::DataType::REAL64);
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
-	filter.setVectors(3);
+	filter.setVectors(paths);
 
+	const int p = paths;	// need local variable
 	QBENCHMARK {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-		QCOMPARE(spreadsheet.columnCount(), 3);
+		QCOMPARE(spreadsheet.columnCount(), p);
 		QCOMPARE(spreadsheet.rowCount(), lineCount);
 
-		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
-		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
-		QCOMPARE(spreadsheet.column(2)->valueAt(0), 100.0);
+		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.120997813055);
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.119301077563219);
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.0209979608555485);
 	}
 }
 

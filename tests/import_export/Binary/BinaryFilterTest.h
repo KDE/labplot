@@ -42,5 +42,7 @@ private Q_SLOTS:
 	void benchDoubleImport_cleanup();	// delete data
 private:
 	QString benchDataFileName;
+	const size_t lines = 1e6;
+	static const int paths = 5;
 };
 #endif

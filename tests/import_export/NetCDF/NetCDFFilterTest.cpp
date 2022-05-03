@@ -38,7 +38,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	benchDataFileName = file.fileName();
 	benchDataFileName.append(".nc4");
 
-	QString testName(QString::number(paths) + QLatin1String(" double cols"));
+	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
 	QTest::newRow(testName.toLatin1()) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
@@ -100,10 +100,11 @@ void NetCDFFilterTest::benchDoubleImport() {
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("paths"));
 
+	const int p = paths;	// need local variable
 	QBENCHMARK {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-		QCOMPARE(spreadsheet.columnCount(), 5);
+		QCOMPARE(spreadsheet.columnCount(), p);
 		QCOMPARE(spreadsheet.rowCount(), lineCount);
 
 		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.120997813055);
