@@ -64,6 +64,10 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	int varid;
 	if ((status = nc_def_var(ncid, "paths", NC_DOUBLE, ndims, dimids, &varid)))
 		ERR(status);
+	// compress data (~10-20% smaller, but 3x-5x slower)
+	// (ncid, varid, shuffle, deflate, deflatelevel)
+	//if ((status = nc_def_var_deflate(ncid, varid, 1, 1, 9)))
+	//	ERR(status);
 
 	if ((status = nc_enddef(ncid)))
 		ERR(status);
@@ -83,6 +87,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 			data[p + i*paths] = path[p];
 		}
 	}
+
 	nc_put_var_double(ncid, varid, data);
 
 	if ((status = nc_close(ncid)))
@@ -94,8 +99,6 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 }
 
 void NetCDFFilterTest::benchDoubleImport() {
-	QFETCH(size_t, lineCount);
-
 	Spreadsheet spreadsheet("test", false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("paths"));
@@ -105,7 +108,7 @@ void NetCDFFilterTest::benchDoubleImport() {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 		QCOMPARE(spreadsheet.columnCount(), p);
-		QCOMPARE(spreadsheet.rowCount(), lineCount);
+		QCOMPARE(spreadsheet.rowCount(), lines);
 
 		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.120997813055);
 		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.119301077563219);

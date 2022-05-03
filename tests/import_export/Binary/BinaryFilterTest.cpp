@@ -309,7 +309,7 @@ void BinaryFilterTest::benchIntImport_data() {
 
 	QDataStream out(&file);
 
-	QTest::newRow("3 int cols") << lines;
+	QTest::newRow("3 int cols");
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
 	for (size_t i = 0; i < lines; i++)
 		out << static_cast<int>(i) << static_cast<int>(100*sin(i/100.)) << static_cast<int>(100*cos(i/100));
@@ -317,8 +317,6 @@ void BinaryFilterTest::benchIntImport_data() {
 }
 
 void BinaryFilterTest::benchIntImport() {
-	QFETCH(size_t, lineCount);
-
 	Spreadsheet spreadsheet("test", false);
 	BinaryFilter filter;
 	filter.setDataType(BinaryFilter::DataType::INT32);
@@ -329,7 +327,7 @@ void BinaryFilterTest::benchIntImport() {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 		QCOMPARE(spreadsheet.columnCount(), 3);
-		QCOMPARE(spreadsheet.rowCount(), lineCount);
+		QCOMPARE(spreadsheet.rowCount(), lines);
 
 		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
 		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
