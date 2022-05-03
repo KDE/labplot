@@ -14,5 +14,8 @@ ENDIF ()
 IF (HDF5_FOUND)
 	add_subdirectory(HDF5)
 ENDIF ()
+IF (NETCDF_FOUND)
+	add_subdirectory(NetCDF)
+ENDIF ()
 
 # add_subdirectory(DATASETS)
