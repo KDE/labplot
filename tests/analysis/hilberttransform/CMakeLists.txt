@@ -1,5 +1,5 @@
-add_executable (HilbertTransformTest HilbertTransformTest.cpp ../AnalysisTest.cpp ../../CommonTest.cpp)
+add_executable (HilbertTransformTest HilbertTransformTest.cpp)
 
-target_link_libraries(HilbertTransformTest labplot2lib Qt5::Test)
+target_link_libraries(HilbertTransformTest labplot2lib Qt5::Test labplot2test)
 
 add_test(NAME HilbertTransformTest COMMAND HilbertTransformTest)

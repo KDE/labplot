@@ -1,5 +1,5 @@
-add_executable (NSLGeomTest NSLGeomTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLGeomTest NSLGeomTest.cpp)
 
-target_link_libraries(NSLGeomTest labplot2lib Qt5::Test)
+target_link_libraries(NSLGeomTest labplot2lib Qt5::Test labplot2test)
 
 add_test(NAME NSLGeomTest COMMAND NSLGeomTest)

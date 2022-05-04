@@ -1,5 +1,5 @@
-add_executable (BinaryFilterTest BinaryFilterTest.cpp ../../CommonTest.cpp)
+add_executable (BinaryFilterTest BinaryFilterTest.cpp)
 
-target_link_libraries(BinaryFilterTest labplot2lib Qt5::Test)
+target_link_libraries(BinaryFilterTest labplot2lib Qt5::Test labplot2test)
 
 add_test(NAME BinaryFilterTest COMMAND BinaryFilterTest)

@@ -1,5 +1,5 @@
-add_executable (ConvolutionTest ConvolutionTest.cpp ../AnalysisTest.cpp ../../CommonTest.cpp)
+add_executable (ConvolutionTest ConvolutionTest.cpp)
 
-target_link_libraries(ConvolutionTest labplot2lib Qt5::Test)
+target_link_libraries(ConvolutionTest labplot2lib Qt5::Test labplot2test)
 
 add_test(NAME ConvolutionTest COMMAND ConvolutionTest)
