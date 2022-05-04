@@ -65,4 +65,6 @@ d2594f62ecdd33c177d7673c550a8e830d47a3c1  labplot-2.8.0.dmg
 
 9. Update Package in MS Partner Center for Windows App Store https://partner.microsoft.com/en-us/dashboard
 
-9. Publish the release announcement on labplot.kde.org
+10. Ping Jonathan Riddell to update Snap and chtof tp update Chocolatey package
+
+11. Publish the release announcement on labplot.kde.org
