@@ -20,8 +20,7 @@ void HDF5FilterTest::testImportDouble() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
 	filter.setCurrentDataSetName(QLatin1String("/arrays/2D float array"));
-	const auto mode = AbstractFileFilter::ImportMode::Replace;
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 50);
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -62,13 +61,12 @@ void HDF5FilterTest::testImportDoublePortion() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
 	filter.setCurrentDataSetName(QLatin1String("/arrays/2D float array"));
-	const auto mode = AbstractFileFilter::ImportMode::Replace;
 	// set start/end row/col
 	filter.setStartRow(2);
 	filter.setEndRow(3);
 	filter.setStartColumn(2);
 	filter.setEndColumn(3);
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 2);
@@ -96,8 +94,7 @@ void HDF5FilterTest::testImportInt() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
 	filter.setCurrentDataSetName(QLatin1String("/arrays/2D int array"));
-	const auto mode = AbstractFileFilter::ImportMode::Replace;
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 50);
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -134,13 +131,12 @@ void HDF5FilterTest::testImportIntPortion() {
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/hdf5_test.h5"));
 	filter.setCurrentDataSetName(QLatin1String("/arrays/2D int array"));
-	const auto mode = AbstractFileFilter::ImportMode::Replace;
 	// set start/end row/col
 	filter.setStartRow(2);
 	filter.setEndRow(3);
 	filter.setStartColumn(2);
 	filter.setEndColumn(3);
-	filter.readDataFromFile(fileName, &spreadsheet, mode);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 2);

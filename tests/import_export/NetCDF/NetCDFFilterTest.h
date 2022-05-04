@@ -17,8 +17,9 @@ class NetCDFFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-//TODO
-//	void importXYZ();
+	void importFile1();	// classis NetCDF
+	void importFile2();	// HDF5
+	void importFile3();	// simple file
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)

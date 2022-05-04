@@ -21,10 +21,94 @@ extern "C" {
 #define ERRCODE -1
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 
-//void NetCDFFilterTest::importXYZ() {
-//}
+void NetCDFFilterTest::importFile1() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/madis-hydro.nc"));
 
-// DOUBLE data
+	Spreadsheet spreadsheet("test", false);
+	NetCDFFilter filter;
+	filter.setCurrentVarName(QLatin1String("lastRecord"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 2000);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1018);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1132);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 980);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1998), -1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1999), -1);
+
+	NetCDFFilter filter2;
+	filter2.setCurrentVarName(QLatin1String("latitude"));
+	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 1176);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 39.8050003052);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 39.8230018616);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 39.8199996948);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1174), 40.2159996033);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1175), 40.2480010986);
+}
+
+void NetCDFFilterTest::importFile2() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/OMI-Aura_L2-example.nc"));
+
+	Spreadsheet spreadsheet("test", false);
+	NetCDFFilter filter;
+	filter.setCurrentVarName(QLatin1String("CovarianceMatrix"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 465);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 76);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 78);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), -17);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), -18);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 49);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 50);
+
+	NetCDFFilter filter2;
+	filter2.setCurrentVarName(QLatin1String("O3.COLUMN.PARTIAL"));
+	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 18);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+
+	WARN(spreadsheet.column(0)->valueAt(1))
+	WARN(spreadsheet.column(1)->valueAt(0))
+	WARN(spreadsheet.column(1)->valueAt(1))
+	WARN(spreadsheet.column(17)->valueAt(0))
+	WARN(spreadsheet.column(17)->valueAt(1))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.323581278324);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.317059576511383);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.23419499397278);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1.224156498909);
+	QCOMPARE(spreadsheet.column(17)->valueAt(0), 8.46088886260986);
+	QCOMPARE(spreadsheet.column(17)->valueAt(1), 8.35280704498291);
+}
+
+void NetCDFFilterTest::importFile3() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testrh.nc"));
+
+	Spreadsheet spreadsheet("test", false);
+	NetCDFFilter filter;
+	filter.setCurrentVarName(QLatin1String("var1"));
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 10000);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 420);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 197);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 391.5);
+	QCOMPARE(spreadsheet.column(0)->valueAt(9998), 186.5);
+	QCOMPARE(spreadsheet.column(0)->valueAt(9999), 444);
+}
+
+// BENCHMARKS
 
 void NetCDFFilterTest::benchDoubleImport_data() {
 	QTest::addColumn<size_t>("lineCount");
@@ -120,6 +204,5 @@ void NetCDFFilterTest::benchDoubleImport_cleanup() {
 	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
 	QFile::remove(benchDataFileName);
 }
-
 
 QTEST_MAIN(NetCDFFilterTest)
