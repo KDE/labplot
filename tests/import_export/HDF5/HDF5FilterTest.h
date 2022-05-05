@@ -21,6 +21,17 @@ private Q_SLOTS:
 	void testImportDoublePortion();
 	void testImportInt();
 	void testImportIntPortion();
+
+	void benchDoubleImport_data();
+	// this is called multiple times (warm-up of BENCHMARK)
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	void benchDoubleImport();
+	void benchDoubleImport_cleanup();	// delete data
+
+private:
+	QString benchDataFileName;
+	const size_t lines = 1e6;
+	static const int paths = 5;
 };
 
 

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Tests for the HDF5 I/O-filter.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,12 @@
 #include "backend/matrix/Matrix.h"
 
 #include <KLocalizedString>
+
+extern "C" {
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+#include <hdf5.h>
+}
 
 void HDF5FilterTest::testImportDouble() {
 	Spreadsheet spreadsheet("test", false);
@@ -152,6 +158,91 @@ void HDF5FilterTest::testImportIntPortion() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1102);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1207);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1202);
+}
+
+// BENCHMARKS
+
+void HDF5FilterTest::benchDoubleImport_data() {
+	QTest::addColumn<size_t>("lineCount");
+	// can't transfer file name since needed in clean up
+
+	QTemporaryFile file;
+	if (!file.open())	// needed to generate file name
+		return;
+	file.close();	// only file name is used
+
+	benchDataFileName = file.fileName();
+	benchDataFileName.append(".h5");
+
+	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
+
+	QTest::newRow(testName.toLatin1()) << lines;
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+
+	gsl_rng_env_setup();
+	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
+	gsl_rng_set(r, 12345);
+
+	// create file
+        // see https://support.hdfgroup.org/HDF5/Tutor/introductory.html
+        hid_t file_id = H5Fcreate(benchDataFileName.toLatin1(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+
+        /* Create the data space for the dataset. */
+        hsize_t dims[2];
+        dims[0] = lines;
+        dims[1] = paths;
+        hid_t dataspace_id = H5Screate_simple(2, dims, nullptr);
+
+        /* Create the dataset. */
+        hid_t dataset_id = H5Dcreate(file_id, "/data", H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+	// create data
+	double path[paths] = {0.0};
+	double *data = new double[paths*lines];
+
+	const double delta = 0.25;
+	const int dt = 1;
+	const double sigma = delta*delta * dt;
+	for (size_t i = 0; i < lines; ++i) {
+		//std::cout << "line " << i+1 << std::endl;
+
+		for (int p = 0; p < paths; ++p) {
+			path[p] += gsl_ran_gaussian_ziggurat(r, sigma);
+			data[p + i*paths] = path[p];
+		}
+	}
+
+	herr_t status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+        status = H5Dclose(dataset_id);
+        status = H5Sclose(dataspace_id);
+        status = H5Fclose(file_id);
+
+	delete[] data;
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
+}
+
+void HDF5FilterTest::benchDoubleImport() {
+	Spreadsheet spreadsheet("test", false);
+	HDF5Filter filter;
+	filter.setCurrentDataSetName(QLatin1String("/data"));
+
+	const int p = paths;	// need local variable
+	QBENCHMARK {
+		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), p);
+		QCOMPARE(spreadsheet.rowCount(), lines);
+
+		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.120997813055);
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.119301077563219);
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.0209979608555485);
+	}
+}
+
+void HDF5FilterTest::benchDoubleImport_cleanup() {
+	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
+	QFile::remove(benchDataFileName);
 }
 
 QTEST_MAIN(HDF5FilterTest)
