@@ -1,32 +1,30 @@
 /*
-    File                 : NetCDFFilterTest.h
+    File                 : FITSFilterTest.h
     Project              : LabPlot
-    Description          : Tests for the NetCDF filter
+    Description          : Tests for the FITS filter
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef NETCDFFILTERTEST_H
-#define NETCDFFILTERTEST_H
+#ifndef FITSFILTERTEST_H
+#define FITSFILTERTEST_H
 
 #include "../../CommonTest.h"
 #include <QtTest>
 
-class NetCDFFilterTest : public CommonTest {
+class FITSFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void importFile1();	// classis NetCDF
-	void importFile2();	// HDF5
-	void importFile3();	// simple file
+	void importFile1();
 
-	void benchDoubleImport_data();
+/*	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
 	void benchDoubleImport_cleanup();	// delete data
-
+*/
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e6;

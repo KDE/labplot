@@ -1,7 +1,7 @@
 /*
     File                 : NetCDFFilterTest.cpp
     Project              : LabPlot
-    Description          : Tests for the binary filter
+    Description          : Tests for the NetCDF filter
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
