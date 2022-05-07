@@ -75,5 +75,18 @@ private Q_SLOTS:
 	//datetime data
 	void testDateTime00();
 	void testDateTimeHex();
+
+// benchmarks
+
+	void benchDoubleImport_data();
+	// this is called multiple times (warm-up of BENCHMARK)
+	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
+	void benchDoubleImport();
+	void benchDoubleImport_cleanup();	// delete data
+
+private:
+	QString benchDataFileName;
+	const size_t lines = 1e6;
+	static const int paths = 5;
 };
 #endif

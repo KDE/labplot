@@ -13,6 +13,11 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+extern "C" {
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_rng.h>
+}
+
 //##############################################################################
 //#################  handling of empty and sparse files ########################
 //##############################################################################
@@ -1011,6 +1016,77 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(14)->valueAt(0), 94.09);
 	QCOMPARE(spreadsheet.column(15)->integerAt(0), 9680);
 	QCOMPARE(spreadsheet.column(16)->textAt(0), QLatin1String("5AD17"));
+}
+
+// BENCHMARKS
+
+void AsciiFilterTest::benchDoubleImport_data() {
+	QTest::addColumn<size_t>("lineCount");
+	// can't transfer file name since needed in clean up
+
+	QTemporaryFile file;
+	if (!file.open())	// needed to generate file name
+		return;
+
+	file.setAutoRemove(false);
+	benchDataFileName = file.fileName();
+
+	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
+
+	QTest::newRow(testName.toLatin1()) << lines;
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+
+	gsl_rng_env_setup();
+	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
+	gsl_rng_set(r, 12345);
+
+	// create file
+	QTextStream out(&file);
+	// for higher precision
+	//out.setRealNumberPrecision(13);
+
+	// create data
+	double path[paths] = {0.0};
+
+	const double delta = 0.25;
+	const int dt = 1;
+	const double sigma = delta*delta * dt;
+	for (size_t i = 0; i < lines; ++i) {
+		//std::cout << "line " << i+1 << std::endl;
+
+		for (int p = 0; p < paths; ++p) {
+			path[p] += gsl_ran_gaussian_ziggurat(r, sigma);
+			out << path[p];
+			if (p < paths - 1)
+				out << ' ';
+		}
+		out << "\n";
+	}
+
+	DEBUG(Q_FUNC_INFO << ", DONE")
+}
+
+void AsciiFilterTest::benchDoubleImport() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	filter.setHeaderEnabled(false);
+
+	const int p = paths;	// need local variable
+	QBENCHMARK {
+		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+		QCOMPARE(spreadsheet.columnCount(), p);
+		QCOMPARE(spreadsheet.rowCount(), lines);
+
+		QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.120998);
+		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.119301);
+		QCOMPARE(spreadsheet.column(2)->valueAt(0), -0.0209980);
+	}
+}
+
+void AsciiFilterTest::benchDoubleImport_cleanup() {
+	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
+	QFile::remove(benchDataFileName);
 }
 
 QTEST_MAIN(AsciiFilterTest)

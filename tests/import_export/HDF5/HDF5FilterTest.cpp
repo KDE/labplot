@@ -213,6 +213,8 @@ void HDF5FilterTest::benchDoubleImport_data() {
 	}
 
 	herr_t status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+	if (status < 0)
+		WARN(Q_FUNC_INFO << ", ERROR writing data")
         status = H5Dclose(dataset_id);
         status = H5Sclose(dataspace_id);
         status = H5Fclose(file_id);
