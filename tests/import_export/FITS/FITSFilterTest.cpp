@@ -75,7 +75,7 @@ void FITSFilterTest::benchDoubleImport_data() {
 
 	// create data
 	double path[paths] = {0.0};
-	double* data = new double[paths*lines];
+	double* data = new double[paths * lines];
 
 	const double delta = 0.25;
 	const int dt = 1;
