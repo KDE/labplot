@@ -1442,7 +1442,7 @@ void ImportFileWidget::refreshPreview() {
 		return;
 	}
 	case AbstractFileFilter::FileType::HDF5: {
-		DEBUG("ImportFileWidget::refreshPreview: HDF5");
+		DEBUG(Q_FUNC_INFO << ", HDF5");
 		auto filter = static_cast<HDF5Filter*>(currentFileFilter());
 		lines = m_hdf5OptionsWidget->lines();
 
@@ -1451,6 +1451,7 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::NETCDF: {
+		DEBUG(Q_FUNC_INFO << ", NetCDF");
 		auto filter = static_cast<NetCDFFilter*>(currentFileFilter());
 		lines = m_netcdfOptionsWidget->lines();
 
@@ -1459,12 +1460,13 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::FITS: {
+		DEBUG(Q_FUNC_INFO << ", FITS");
 		auto filter = static_cast<FITSFilter*>(currentFileFilter());
 		lines = m_fitsOptionsWidget->lines();
 
 		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
 		if (!extensionName.isEmpty()) {
-			DEBUG("	extension name = " << STDSTRING(extensionName));
+			DEBUG(Q_FUNC_INFO << ", extension name = " << STDSTRING(extensionName));
 			file = extensionName;
 		}
 

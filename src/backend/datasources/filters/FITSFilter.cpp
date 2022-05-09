@@ -251,14 +251,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU() file name = " << STDSTRING(fileName));
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		DEBUG("	ERROR opening file " << STDSTRING(fileName));
+		DEBUG(Q_FUNC_INFO << ", ERROR opening file " << STDSTRING(fileName));
 		printError(status);
 		return dataStrings;
 	}
@@ -292,6 +292,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			return dataStrings;
 		actualRows = naxes[1];
 		actualCols = naxes[0];
+		DEBUG("rows/cols = " << actualRows << " " << actualCols)
 		if (lines == -1)
 			lines = actualRows;
 		else {
@@ -322,6 +323,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
+		DEBUG("lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
 		std::vector<void*> dataContainer;
 		if (!noDataSource) {
 			dataContainer.reserve(actualCols - j);
@@ -332,7 +334,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		double* data = new double[pixelCount];
 
 		if (!data) {
-			qDebug() << "Not enough memory for data";
+			DEBUG(Q_FUNC_INFO << ", Not enough memory for data");
 			return dataStrings;
 		}
 
@@ -416,7 +418,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		if (endRow != -1)
 			lines = endRow;
-        QVector<QVector<QString>*> stringDataPointers;
+		QVector<QVector<QString>*> stringDataPointers;
 		std::vector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
@@ -589,7 +591,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;
 	} else
-		qDebug() << "Incorrect header type";
+		DEBUG(Q_FUNC_INFO << ", Incorrect header type");
 
 	fits_close_file(m_fitsFile, &status);
 
@@ -946,7 +948,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
-	DEBUG("FITSFilterPrivate::extensionNames() file name = " << STDSTRING(fileName));
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
@@ -1384,6 +1386,7 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
  * \param keys The keywords that are provided if the keywords were read already.
  */
 void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<FITSFilter::Keyword>& keys) {
+	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_FITS
 	QList<FITSFilter::Keyword> keywords;
 	if (readKeys)
@@ -1414,14 +1417,14 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 			item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 		else
 			item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 0, item );
+		headerEditTable->setItem(i, 0, item);
 
 		item = new QTableWidgetItem(keyword.value);
 		if (notEditableValue)
 			item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 		else
 			item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 1, item );
+		headerEditTable->setItem(i, 1, item);
 		QString commentFieldText;
 		if (!keyword.unit.isEmpty()) {
 			if (keyword.updates.unitUpdated) {
@@ -1438,7 +1441,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 		item = new QTableWidgetItem(commentFieldText);
 
 		item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 2, item );
+		headerEditTable->setItem(i, 2, item);
 	}
 
 	headerEditTable->resizeColumnsToContents();
@@ -1459,9 +1462,9 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *key) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		printError(status);
-		return QString ();
+		return {};
 	}
 
 	char* keyVal = new char[FLEN_VALUE];
@@ -1473,7 +1476,7 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
 		printError(status);
 		delete[] keyVal;
 		fits_close_file(m_fitsFile, &status);
-		return QString();
+		return {};
 	}
 
 	delete[] keyVal;
@@ -1483,7 +1486,7 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(key)
-	return QString();
+	return {};
 #endif
 }
 
@@ -1495,7 +1498,7 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
  * if it's \c true and if the primary array it's empty, then the item won't be added to the tree
  */
 void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
-	DEBUG("FITSFilterPrivate::parseExtensions()");
+	DEBUG(Q_FUNC_INFO);
 #ifdef HAVE_FITS
 	const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
 	const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
@@ -1555,7 +1558,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	Q_UNUSED(tw)
 	Q_UNUSED(checkPrimary)
 #endif
-	DEBUG("FITSFilterPrivate::parseExtensions() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 /*!

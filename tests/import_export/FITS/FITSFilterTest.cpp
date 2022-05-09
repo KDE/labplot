@@ -22,18 +22,25 @@ extern "C" {
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 
 void FITSFilterTest::importFile1() {
-	const QString& fileName = QFINDTESTDATA(QLatin1String("data/HRSz0yd020fm_c2f.fits"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2ASSNu5780205bx.fits"));
 
 	Spreadsheet spreadsheet("test", false);
 	FITSFilter filter;
-	//TODO
-	//filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//QCOMPARE(spreadsheet.columnCount(), 2001);
-	//QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 100);
+	QCOMPARE(spreadsheet.rowCount(), 100);
 
-	// TODO: not reproducable!
-	//QCOMPARE(spreadsheet.column(0)->valueAt(0), 4.95209585675e-316);
+	WARN(spreadsheet.column(0)->valueAt(0))
+	WARN(spreadsheet.column(1)->valueAt(0))
+	WARN(spreadsheet.column(0)->valueAt(1))
+	WARN(spreadsheet.column(1)->valueAt(1))
+	WARN(spreadsheet.column(99)->valueAt(99))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.0315774679184);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.08554399013519);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.476544350385666);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.369004756212234);
+	QCOMPARE(spreadsheet.column(99)->valueAt(99), 0.487100154161453);
 }
 
 // BENCHMARKS
