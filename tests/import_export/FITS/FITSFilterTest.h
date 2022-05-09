@@ -23,7 +23,7 @@ private Q_SLOTS:
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
-	void benchDoubleImport_cleanup();	// delete data
+	void benchDoubleImport_cleanup(); // delete data
 private:
 	QString benchDataFileName;
 	const long lines = 1e6;
