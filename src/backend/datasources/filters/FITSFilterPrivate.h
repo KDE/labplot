@@ -41,9 +41,9 @@ public:
 
 	const FITSFilter* q;
 
-	int startRow{-1};
+	int startRow{1};
 	int endRow{-1};
-	int startColumn{-1};
+	int startColumn{1};
 	int endColumn{-1};
 
 	bool commentsAsUnits{false};
