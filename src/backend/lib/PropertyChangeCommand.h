@@ -1,10 +1,10 @@
 /*
-    File                 : PropertyChangeCommand.h
-    Project              : SciDAVis / LabPlot
-    Description          : Generic undo command changing a single variable.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : PropertyChangeCommand.h
+	Project              : SciDAVis / LabPlot
+	Description          : Generic undo command changing a single variable.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PROPERTY_CHANGE_COMMAND_H
@@ -22,13 +22,14 @@
  * The value type needs to support copy construction and assignment.
  */
 
-template<class T> class PropertyChangeCommand : public QUndoCommand {
-
+template<class T>
+class PropertyChangeCommand : public QUndoCommand {
 public:
-	PropertyChangeCommand(const QString &text, T *property, const T &new_value)
-		: m_property(property), m_other_value(new_value) {
-			setText(text);
-		}
+	PropertyChangeCommand(const QString& text, T* property, const T& new_value)
+		: m_property(property)
+		, m_other_value(new_value) {
+		setText(text);
+	}
 
 	void redo() override {
 		T tmp = *m_property;
@@ -56,7 +57,7 @@ public:
 		return true;
 	}
 
-	T *m_property;
+	T* m_property;
 
 private:
 	T m_other_value;

@@ -1,12 +1,12 @@
 /*
-    File                 : SimpleCopyThroughFilter.h
-    Project              : AbstractColumn
-    Description          : Filter which copies the provided input unaltered
-    to the output
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SimpleCopyThroughFilter.h
+	Project              : AbstractColumn
+	Description          : Filter which copies the provided input unaltered
+	to the output
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SIMPLE_COPY_THROUGH_FILTER_H
@@ -29,7 +29,7 @@ class SimpleCopyThroughFilter : public AbstractSimpleFilter {
 
 protected:
 	//! All types are accepted.
-	bool inputAcceptable(int, const AbstractColumn *) override{
+	bool inputAcceptable(int, const AbstractColumn*) override {
 		return true;
 	}
 };

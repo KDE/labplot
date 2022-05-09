@@ -1,30 +1,30 @@
 /*
-    File                 : Workbook.h
-    Project              : LabPlot
-    Description          : Aspect providing a container for storing data
+	File                 : Workbook.h
+	Project              : LabPlot
+	Description          : Aspect providing a container for storing data
 				   in form of spreadsheets and matrices
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "Workbook.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/workbook/WorkbookView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
-#include <QIcon>
 #include <KLocalizedString>
+#include <QIcon>
 
 /**
  * \class Workbook
  * \brief Top-level container for Spreadsheet and Matrix.
  * \ingroup backend
  */
-Workbook::Workbook(const QString& name) : AbstractPart(name, AspectType::Workbook) {
+Workbook::Workbook(const QString& name)
+	: AbstractPart(name, AspectType::Workbook) {
 }
 
 QIcon Workbook::icon() const {
@@ -35,7 +35,7 @@ QIcon Workbook::icon() const {
  * Returns a new context menu. The caller takes ownership of the menu.
  */
 QMenu* Workbook::createContextMenu() {
-	QMenu *menu = AbstractPart::createContextMenu();
+	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
@@ -139,13 +139,13 @@ void Workbook::setChildSelectedInView(int index, bool selected) {
 	if (selected) {
 		Q_EMIT childAspectSelectedInView(aspect);
 
-		//deselect the workbook in the project explorer, if a child (spreadsheet or matrix) was selected.
-		//prevents unwanted multiple selection with workbook if it was selected before.
+		// deselect the workbook in the project explorer, if a child (spreadsheet or matrix) was selected.
+		// prevents unwanted multiple selection with workbook if it was selected before.
 		Q_EMIT childAspectDeselectedInView(this);
 	} else {
 		Q_EMIT childAspectDeselectedInView(aspect);
 
-		//deselect also all children that were potentially selected before (columns of a spreadsheet)
+		// deselect also all children that were potentially selected before (columns of a spreadsheet)
 		for (auto* child : aspect->children<AbstractAspect>())
 			Q_EMIT childAspectDeselectedInView(child);
 	}
@@ -167,11 +167,11 @@ void Workbook::processDropEvent(const QVector<quintptr>& vec) {
 
 //! Save as XML
 void Workbook::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement( "workbook" );
+	writer->writeStartElement("workbook");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//serialize all children
+	// serialize all children
 	for (auto* aspect : children<AbstractAspect>())
 		aspect->save(writer);
 
@@ -210,7 +210,8 @@ bool Workbook::load(XmlStreamReader* reader, bool preview) {
 				addChild(matrix);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown workbook element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

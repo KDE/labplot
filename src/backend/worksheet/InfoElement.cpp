@@ -4,46 +4,44 @@
 	Description          : Marker which can highlight points of curves and
 						   show their values
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "InfoElement.h"
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
-#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/InfoElementPrivate.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/InfoElementPrivate.h"
-#include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/Worksheet.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QPainter>
-#include <QKeyEvent>
 #include <QAction>
-#include <QMenu>
-#include <QTextEdit>
 #include <QDateTime>
+#include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QPainter>
+#include <QTextEdit>
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
-	WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement)
-{
+InfoElement::InfoElement(const QString& name, CartesianPlot* plot)
+	: WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement) {
 	m_plot = plot;
 
 	init();
 	setVisible(false);
 }
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos):
-	WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement)
-{
+InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos)
+	: WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement) {
 	Q_D(InfoElement);
 	m_plot = p;
 
@@ -65,11 +63,11 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double xpos;
-			double y = curve->y(pos,xpos,valueFound);
+			double y = curve->y(pos, xpos, valueFound);
 			if (valueFound) {
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
-				custompoint->setPositionLogical(QPointF(xpos,y));
+				custompoint->setPositionLogical(QPointF(xpos, y));
 				DEBUG("Value found")
 			}
 		} else {
@@ -83,13 +81,13 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 
 		QString textString;
 		textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + ", ";
-		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
+		textString.append(QString(QString(markerpoints[0].curve->name() + ":")));
 		textString.append(QString::number(markerpoints[0].customPoint->positionLogical().y()));
 		text.text = textString;
 
 		// TODO: Find better solution than using textedit
-		QString str = QLatin1String("&(x), ") + markerpoints[0].curve->name()
-								+ QLatin1Char(':') + QLatin1String("&(") + markerpoints[0].curve->name() + QLatin1Char(')');
+		QString str =
+			QLatin1String("&(x), ") + markerpoints[0].curve->name() + QLatin1Char(':') + QLatin1String("&(") + markerpoints[0].curve->name() + QLatin1Char(')');
 		QTextEdit textedit(str);
 		text.textPlaceholder = textedit.toHtml();
 
@@ -138,12 +136,12 @@ void InfoElement::init() {
 	text.allowPlaceholder = true;
 	m_setTextLabelText = true;
 	m_title->setUndoAware(false);
-	m_title->setText(text);  // set placeholder to true
+	m_title->setText(text); // set placeholder to true
 	m_title->setUndoAware(true);
 	m_setTextLabelText = false;
 	addChild(m_title);
 
-	//use the color for the axis line from the theme also for info element's lines
+	// use the color for the axis line from the theme also for info element's lines
 	KConfig config;
 	InfoElement::loadThemeConfig(config);
 }
@@ -161,8 +159,12 @@ void InfoElement::initMenus() {
 void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
-	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
-	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
+	connect(curve, &XYCurve::moveBegin, this, [this]() {
+		m_curveGetsMoved = true;
+	});
+	connect(curve, &XYCurve::moveEnd, this, [this]() {
+		m_curveGetsMoved = false;
+	});
 }
 
 QMenu* InfoElement::createContextMenu() {
@@ -241,7 +243,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
-	m_title->setVisible(true); //show in the worksheet view
+	m_title->setVisible(true); // show in the worksheet view
 	m_title->setUndoAware(true);
 }
 
@@ -255,9 +257,9 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
  * @param curvePath path from the curve
  * @param custompoint adding already created custom point
  */
-void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
-	for(auto& markerpoint : markerpoints) {
-		if(curvePath == markerpoint.curvePath)
+void InfoElement::addCurvePath(QString& curvePath, CustomPoint* custompoint) {
+	for (auto& markerpoint : markerpoints) {
+		if (curvePath == markerpoint.curvePath)
 			return;
 	}
 
@@ -280,11 +282,11 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
  * @param curves
  * \return true if all markerpoints are assigned with a curve, false if one or more markerpoints don't have a curve assigned
  */
-bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
+bool InfoElement::assignCurve(const QVector<XYCurve*>& curves) {
 	bool success = true;
 	for (auto& mp : markerpoints) {
 		for (auto curve : curves) {
-			if(mp.curvePath == curve->path()) {
+			if (mp.curvePath == curve->path()) {
 				mp.curve = curve;
 				initCurveConnections(curve);
 				mp.customPoint->setVisible(curve->isVisible()); // initial visibility
@@ -324,13 +326,13 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
 
-	//hide the label if now curves are selected
+	// hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
 		m_title->setUndoAware(false);
-		m_title->setVisible(false); //hide in the worksheet view
+		m_title->setVisible(false); // hide in the worksheet view
 		m_title->setUndoAware(true);
 		Q_D(InfoElement);
-		d->update(); //redraw to remove all children graphic items belonging to InfoElement
+		d->update(); // redraw to remove all children graphic items belonging to InfoElement
 	}
 
 	m_title->setUndoAware(true);
@@ -346,7 +348,7 @@ void InfoElement::setZValue(qreal value) {
 	m_title->setZValue(value + 1);
 
 	for (auto& markerpoint : markerpoints)
-		markerpoint.customPoint->setZValue(value+1);
+		markerpoint.customPoint->setZValue(value + 1);
 }
 
 /*!
@@ -391,22 +393,20 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	}
 
 	if (!(markerpoints.at(0).curve && markerpoints.at(0).curve->xColumn()))
-		return wrapper; //no data is set in the curve yet, nothing to do
+		return wrapper; // no data is set in the curve yet, nothing to do
 
 	Q_D(const InfoElement);
 
 	QString text = wrapper.textPlaceholder;
 
-	//replace the placeholder for the x-value
+	// replace the placeholder for the x-value
 	QString xValueStr;
 	auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
-	if (columnMode== AbstractColumn::ColumnMode::Double
-		|| columnMode == AbstractColumn::ColumnMode::Integer
+	if (columnMode == AbstractColumn::ColumnMode::Double || columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
 		xValueStr = QString::number(d->positionLogical);
-	else if (columnMode== AbstractColumn::ColumnMode::Day ||
-			columnMode == AbstractColumn::ColumnMode::Month ||
-			columnMode == AbstractColumn::ColumnMode::DateTime) {
+	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
+			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
 		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical);
 		xValueStr = dateTime.toString(m_plot->xRangeDateTimeFormat());
 	}
@@ -416,7 +416,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	else
 		text.replace("&(x)", xValueStr);
 
-	//replace the placeholders for curve's y-values
+	// replace the placeholders for curve's y-values
 	for (const auto& markerpoint : qAsConst(markerpoints)) {
 		QString replace;
 		if (wrapper.mode == TextLabel::Mode::Text)
@@ -500,7 +500,7 @@ void InfoElement::curveCoordinateSystemIndexChanged(int /*index*/) {
 	auto* curve = static_cast<XYCurve*>(QObject::sender());
 	auto cSystemIndex = curve->coordinateSystemIndex();
 
-	for (auto& custompoint: markerpoints) {
+	for (auto& custompoint : markerpoints) {
 		if (custompoint.curve == curve) {
 			custompoint.customPoint->setCoordinateSystemIndex(cSystemIndex);
 			break;
@@ -515,7 +515,7 @@ void InfoElement::curveVisibilityChanged() {
 	bool visible = curve->isVisible();
 
 	bool oneMarkerpointVisible = false;
-	for (auto& custompoint: markerpoints) {
+	for (auto& custompoint : markerpoints) {
 		if (custompoint.curve == curve)
 			custompoint.customPoint->setVisible(visible);
 
@@ -668,7 +668,7 @@ double InfoElement::setMarkerpointPosition(double x) {
 	double x_new_first = 0;
 	for (int i = 0; i < markerpoints.length(); i++) {
 		bool valueFound;
-		double y = markerpoints[i].curve->y(x,x_new, valueFound);
+		double y = markerpoints[i].curve->y(x, x_new, valueFound);
 		d->positionLogical = x_new;
 		if (i == 0)
 			x_new_first = x_new;
@@ -678,7 +678,7 @@ double InfoElement::setMarkerpointPosition(double x) {
 			auto* point = markerpoints[i].customPoint;
 			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 			point->setUndoAware(false);
-			point->setPositionLogical(QPointF(x_new,y));
+			point->setPositionLogical(QPointF(x_new, y));
 			point->setUndoAware(false);
 			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 			m_suppressChildPositionChanged = false;
@@ -777,7 +777,7 @@ void InfoElement::setVisible(bool visible) {
 		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
 }
 
-//vertical line
+// vertical line
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLinePen, QPen, verticalLinePen, updateVerticalLine)
 void InfoElement::setVerticalLinePen(const QPen& pen) {
 	Q_D(InfoElement);
@@ -792,7 +792,7 @@ void InfoElement::setVerticalLineOpacity(qreal opacity) {
 		exec(new InfoElementSetVerticalLineOpacityCmd(d, opacity, ki18n("%1: set vertical line opacity")));
 }
 
-//connection line
+// connection line
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLinePen, QPen, connectionLinePen, updateConnectionLine)
 void InfoElement::setConnectionLinePen(const QPen& pen) {
 	Q_D(InfoElement);
@@ -815,13 +815,15 @@ void InfoElement::setConnectionLineOpacity(qreal opacity) {
 //####################### Private implementation ###############################
 //##############################################################################
 
-InfoElementPrivate::InfoElementPrivate(InfoElement* owner):
-	WorksheetElementPrivate(owner), q(owner) {
+InfoElementPrivate::InfoElementPrivate(InfoElement* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	init();
 }
 
-InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve*):
-	WorksheetElementPrivate(owner), q(owner) {
+InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve*)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	init();
 }
 
@@ -832,7 +834,7 @@ void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-	setPos(QPointF(0,0));
+	setPos(QPointF(0, 0));
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
 
@@ -847,7 +849,7 @@ void InfoElementPrivate::retransform() {
 
 	q->m_suppressChildPositionChanged = true;
 
-	//new bounding rectangle
+	// new bounding rectangle
 	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
 	boundingRectangle = mapFromParent(rect).boundingRect();
 	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
@@ -858,7 +860,7 @@ void InfoElementPrivate::retransform() {
 	for (auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->retransform();
 
-	//determine the position to connect the line to
+	// determine the position to connect the line to
 	QPointF pointPos;
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
@@ -866,8 +868,7 @@ void InfoElementPrivate::retransform() {
 			bool visible;
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
-			pointPos = cSystem->mapLogicalToScene(point->positionLogical(),
-					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
 	}
@@ -879,17 +880,16 @@ void InfoElementPrivate::retransform() {
 	else
 		m_titlePos = q->m_title->gluePointAt(gluePointIndex).point;
 
-	//connection line
+	// connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
-		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(),
-					pointPosItemCoords.x(), pointPosItemCoords.y());
+		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();
 	QDEBUG(Q_FUNC_INFO << ", connection line = " << connectionLine)
 
-	//vertical line
+	// vertical line
 	const QRectF& dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
@@ -900,7 +900,7 @@ void InfoElementPrivate::retransform() {
 }
 
 void InfoElementPrivate::updatePosition() {
-	//TODO?
+	// TODO?
 }
 
 /*!
@@ -918,9 +918,9 @@ void InfoElementPrivate::updateConnectionLine() {
 }
 
 void InfoElementPrivate::changeVisibility() {
-	for(auto& markerpoint : q->markerpoints)
+	for (auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
-	if(q->m_title) {
+	if (q->m_title) {
 		q->m_title->setUndoAware(false);
 		q->m_title->setVisible(visible);
 		q->m_title->setUndoAware(true);
@@ -928,7 +928,7 @@ void InfoElementPrivate::changeVisibility() {
 	update(boundingRect());
 }
 
-//reimplemented from QGraphicsItem
+// reimplemented from QGraphicsItem
 QRectF InfoElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
@@ -957,7 +957,7 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
 		if (verticalLinePen.style() != Qt::NoPen) {
 			const double width = verticalLinePen.widthF();
-			if (abs(xposLine.x1()-event->pos().x())< ((width < 3)? 3 : width)) {
+			if (abs(xposLine.x1() - event->pos().x()) < ((width < 3) ? 3 : width)) {
 				if (!isSelected())
 					setSelected(true);
 				m_suppressKeyPressEvents = false;
@@ -966,25 +966,25 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 				setFocus();
 				return;
 			}
-		}/* else {
-			for (int i=0; i< q->markerPointsCount(); i++) {
-				InfoElement::MarkerPoints_T markerpoint =  q->markerPointAt(i);
-				//if (markerpoint.customPoint->symbolSize())
-			}
-		}*/
+		} /* else {
+			 for (int i=0; i< q->markerPointsCount(); i++) {
+				 InfoElement::MarkerPoints_T markerpoint =  q->markerPointAt(i);
+				 //if (markerpoint.customPoint->symbolSize())
+			 }
+		 }*/
 
 		// https://stackoverflow.com/questions/11604680/point-laying-near-line
 		double dx12 = connectionLine.x2() - connectionLine.x1();
 		double dy12 = connectionLine.y2() - connectionLine.y1();
-		double vecLenght = sqrt(pow(dx12,2) + pow(dy12,2));
-		QPointF unitvec(dx12/vecLenght, dy12/vecLenght);
+		double vecLenght = sqrt(pow(dx12, 2) + pow(dy12, 2));
+		QPointF unitvec(dx12 / vecLenght, dy12 / vecLenght);
 
 		double dx1m = event->pos().x() - connectionLine.x1();
 		double dy1m = event->pos().y() - connectionLine.y1();
 
-		double dist_segm = abs(dx1m*unitvec.y() - dy1m*unitvec.x());
-		double scalar_product = dx1m*unitvec.x()+dy1m*unitvec.y();
-		//DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
+		double dist_segm = abs(dx1m * unitvec.y() - dy1m * unitvec.x());
+		double scalar_product = dx1m * unitvec.x() + dy1m * unitvec.y();
+		// DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
 
 		if (scalar_product > 0) {
 			const double width = connectionLinePen.widthF();
@@ -1009,15 +1009,14 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-
 	QPointF eventPos = mapToParent(event->pos());
-// 	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
+	// 	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
 	QPointF delta = eventPos - oldMousePos;
-	if (delta == QPointF(0,0))
+	if (delta == QPointF(0, 0))
 		return;
 
 	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	QPointF delta_logic =  eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
+	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 
 	if (!q->m_title)
 		return;
@@ -1031,7 +1030,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	for (int i = 1; i < q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 			// not possible to use index, because when the number of elements in the columns of the curves are not the same there is a problem
-			x = q->markerpoints[i].customPoint->positionLogical().x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
+			x = q->markerpoints[i].customPoint->positionLogical().x(); // q->markerpoints[i].curve->xColumn()->valueAt(m_index)
 			activeIndex = i;
 			break;
 		}
@@ -1047,8 +1046,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 	auto pointPos = q->markerpoints[activeIndex].customPoint->positionLogical().x();
 	if (abs(x_new - pointPos) > 0) {
-		if ((xColumn->rowCount() - 1 == xindex && pointPos > x_new) || (xindex == 0 && pointPos < x_new))
-		{
+		if ((xColumn->rowCount() - 1 == xindex && pointPos > x_new) || (xindex == 0 && pointPos < x_new)) {
 			q->setPositionLogical(x_new);
 		} else {
 			oldMousePos = eventPos;
@@ -1057,7 +1055,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 }
 
-void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
+void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 	if (m_suppressKeyPressEvents) {
 		event->ignore();
 		return QGraphicsItem::keyPressEvent(event);
@@ -1103,17 +1101,17 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
+	// general
 	writer->writeStartElement("general");
 	writer->writeAttribute("position", QString::number(d->positionLogical));
 	writer->writeAttribute("curve", d->connectionLineCurveName);
 	writer->writeAttribute("gluePointIndex", QString::number(d->gluePointIndex));
 	writer->writeAttribute("markerIndex", QString::number(d->m_index));
-	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
+	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
 	writer->writeAttribute("visible", QString::number(d->visible));
 	writer->writeEndElement();
 
-	//lines
+	// lines
 	writer->writeStartElement("verticalLine");
 	WRITE_QPEN(d->verticalLinePen);
 	writer->writeAttribute("opacity", QString::number(d->verticalLineOpacity));
@@ -1124,19 +1122,19 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("opacity", QString::number(d->connectionLineOpacity));
 	writer->writeEndElement();
 
-	//text label
+	// text label
 	m_title->save(writer);
 
-	//custom points
+	// custom points
 	if (!markerpoints.isEmpty()) {
 		writer->writeStartElement("points");
 		for (const auto& custompoint : markerpoints) {
 			writer->writeStartElement("point");
 			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
 			custompoint.customPoint->save(writer);
-			writer->writeEndElement(); //close "point"
+			writer->writeEndElement(); // close "point"
 		}
-		writer->writeEndElement(); //clost "points"
+		writer->writeEndElement(); // clost "points"
 	}
 
 	writer->writeEndElement(); // close "infoElement"
@@ -1162,7 +1160,8 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (!preview && reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
@@ -1195,13 +1194,13 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			if (!m_title->load(reader, preview))
 				return false;
 		} else if (reader->name() == "customPoint") {
-			if (curvePath.isEmpty()) //safety check in case the xml is broken
+			if (curvePath.isEmpty()) // safety check in case the xml is broken
 				continue;
 
 			auto* point = new CustomPoint(m_plot, QString());
 			point->setIsLoading(true);
-			if (!point->load(reader,preview)) {
-				delete  point;
+			if (!point->load(reader, preview)) {
+				delete point;
 				return false;
 			}
 			this->addChild(point);
@@ -1220,7 +1219,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void InfoElement::loadThemeConfig(const KConfig& config) {
-	//use the color for the axis line from the theme also for info element's lines
+	// use the color for the axis line from the theme also for info element's lines
 	const KConfigGroup& group = config.group("Axis");
 
 	QPen p;
@@ -1234,7 +1233,7 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 	this->setConnectionLinePen(p);
 	this->setConnectionLineOpacity(group.readEntry("LineOpacity", 1.0));
 
-	//load the theme for all the children
+	// load the theme for all the children
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children)
 		child->loadThemeConfig(config);

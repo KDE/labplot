@@ -1,10 +1,10 @@
 /*
-    File                 : ROOTFilter.h
-    Project              : LabPlot
-    Description          : ROOT(CERN) I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ROOTFilter.h
+	Project              : LabPlot
+	Description          : ROOT(CERN) I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ROOTFILTER_H
@@ -27,7 +27,7 @@ public:
 	ROOTFilter();
 	~ROOTFilter() override;
 
-	//UNUSED enum class ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
+	// UNUSED enum class ColumnTypes {Center = 1, Low = 2, Content = 4, Error = 8};
 
 	static QString fileInfoString(const QString&);
 
@@ -44,10 +44,9 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 	/// Internal directory structure in a ROOT file
-	struct Directory
-	{
+	struct Directory {
 		QString name;
-		QVector<QPair<QString, quint64> > content;
+		QVector<QPair<QString, quint64>> content;
 		QVector<Directory> children;
 	};
 

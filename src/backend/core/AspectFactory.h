@@ -1,45 +1,44 @@
 /*
-    File                 : AbstractAspect.h
-    Project              : LabPlot
-    Description          : Base class for all objects in a Project.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractAspect.h
+	Project              : LabPlot
+	Description          : Base class for all objects in a Project.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASPECTFACTORY_H
 
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
-#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/InfoElement.h"
 
 #ifndef SDK
-#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
+#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/matrix/Matrix.h"
 // #include "backend/datasources/LiveDataSource.h"
 #include "backend/note/Note.h"

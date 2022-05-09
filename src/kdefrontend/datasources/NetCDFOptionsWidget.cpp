@@ -1,11 +1,11 @@
 /*
-    File                 : NetCDFOptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of NetCDF data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NetCDFOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of NetCDF data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "NetCDFOptionsWidget.h"
 #include "ImportFileWidget.h"
@@ -14,14 +14,15 @@
 
 #include <KUrlComboBox>
 
- /*!
-	\class NetCDFOptionsWidget
-	\brief Widget providing options for the import of NetCDF data
+/*!
+   \class NetCDFOptionsWidget
+   \brief Widget providing options for the import of NetCDF data
 
-	\ingroup kdefrontend
- */
+   \ingroup kdefrontend
+*/
 NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
-		: QWidget(parent), m_fileWidget(fileWidget) {
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
 	QStringList headers;
@@ -34,7 +35,7 @@ NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* file
 	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
 
 	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -45,10 +46,10 @@ void NetCDFOptionsWidget::clear() {
 	ui.twPreview->clear();
 }
 
-void NetCDFOptionsWidget::updateContent(NetCDFFilter *filter, const QString& fileName) {
+void NetCDFOptionsWidget::updateContent(NetCDFFilter* filter, const QString& fileName) {
 	ui.twContent->clear();
 
-	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
+	QTreeWidgetItem* rootItem = ui.twContent->invisibleRootItem();
 	filter->parse(fileName, rootItem);
 	ui.twContent->insertTopLevelItem(0, rootItem);
 	ui.twContent->expandAll();

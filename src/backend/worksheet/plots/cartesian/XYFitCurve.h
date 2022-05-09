@@ -1,13 +1,12 @@
 /*
-    File                 : XYFitCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a fit model
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYFitCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a fit model
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYFITCURVE_H
 #define XYFITCURVE_H
@@ -32,7 +31,8 @@ class XYFitCurve : public XYAnalysisCurve {
 
 public:
 	struct FitData {
-		FitData() {}
+		FitData() {
+		}
 
 		nsl_fit_model_category modelCategory{nsl_fit_model_basic};
 		int modelType{0};
@@ -41,7 +41,7 @@ public:
 		int degree{1};
 		QString model;
 		QStringList paramNames;
-		QStringList paramNamesUtf8;	// Utf8 version of paramNames
+		QStringList paramNamesUtf8; // Utf8 version of paramNames
 		QVector<double> paramStartValues;
 		QVector<double> paramLowerLimits;
 		QVector<double> paramUpperLimits;
@@ -50,26 +50,27 @@ public:
 		int maxIterations{500};
 		double eps{1.e-4};
 		size_t evaluatedPoints{1000};
-		bool useDataErrors{true};	// use given data errors when fitting (default)
-		bool useResults{true};		// use results as new start values (default)
-		bool previewEnabled{true};	// preview fit function with given start parameters
-		double confidenceInterval{95.};	// confidence interval for fit result
+		bool useDataErrors{true}; // use given data errors when fitting (default)
+		bool useResults{true}; // use results as new start values (default)
+		bool previewEnabled{true}; // preview fit function with given start parameters
+		double confidenceInterval{95.}; // confidence interval for fit result
 
-		bool autoRange{true};		// use all data points? (default)
-		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
-		Range<double> fitRange{0., 0.};	// x range of data to fit
-		Range<double> evalRange{0., 0.};	// x range to evaluate fit function
+		bool autoRange{true}; // use all data points? (default)
+		bool autoEvalRange{true}; // evaluate fit function on full data range (default)
+		Range<double> fitRange{0., 0.}; // x range of data to fit
+		Range<double> evalRange{0., 0.}; // x range to evaluate fit function
 	};
 
 	struct FitResult {
-		FitResult() {}
+		FitResult() {
+		}
 
 		bool available{false};
 		bool valid{false};
 		QString status;
 		int iterations{0};
 		qint64 elapsedTime{0};
-		double dof{0}; //degrees of freedom
+		double dof{0}; // degrees of freedom
 		// residuals: r_i = y_i - Y_i
 		double sse{0}; // sum of squared errors (SSE) / residual sum of squares (RSS) / sum of sq. residuals (SSR) / S = chi^2 = \sum_i^n r_i^2
 		double sst{0}; // total sum of squares (SST) = \sum_i^n (y_i - <y>)^2
@@ -80,12 +81,12 @@ public:
 		double mae{0}; // mean absolute error = \sum_i^n |r_i|
 		double rsquare{0};
 		double rsquareAdj{0};
-		double chisq_p{0};	// chi^2 distribution p-value
-		double fdist_F{0};	// F distribution F-value
-		double fdist_p{0};	// F distribution p-value
-		double logLik{0};	// log likelihood
-		double aic{0};	// Akaike information criterion
-		double bic{0};	// Schwarz Bayesian information criterion
+		double chisq_p{0}; // chi^2 distribution p-value
+		double fdist_F{0}; // F distribution F-value
+		double fdist_p{0}; // F distribution p-value
+		double logLik{0}; // log likelihood
+		double aic{0}; // Akaike information criterion
+		double bic{0}; // Schwarz Bayesian information criterion
 		// see also https://www.originlab.com/doc/Origin-Help/NLFit-Theory
 		QVector<double> paramValues;
 		QVector<double> errorValues;

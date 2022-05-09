@@ -1,19 +1,18 @@
 /*
-    File                 : nsl_sf_basic.h
-    Project              : LabPlot
-    Description          : NSL special basic functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_sf_basic.h
+	Project              : LabPlot
+	Description          : NSL special basic functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
-#include <stdint.h>	/* fixed size int types */
-#include <gsl/gsl_version.h>
 #include "nsl_complex.h"
+#include <gsl/gsl_version.h>
+#include <stdint.h> /* fixed size int types */
 
 /* random functions */
 double nsl_sf_rand(void);
@@ -166,7 +165,7 @@ double nsl_sf_legendre_Plm(double l, double m, double x);
 double nsl_sf_legendre_sphPlm(double l, double m, double x);
 double nsl_sf_conicalP_sphreg(double l, double L, double x);
 double nsl_sf_conicalP_cylreg(double m, double l, double x);
-double nsl_sf_legendre_H3d(double l,  double L, double e);
+double nsl_sf_legendre_H3d(double l, double L, double e);
 
 #if (GSL_MAJOR_VERSION >= 2)
 double nsl_sf_mathieu_a(double n, double q);
@@ -179,7 +178,7 @@ double nsl_sf_mathieu_Ms(double j, double n, double q, double x);
 
 double nsl_sf_psiint(double n);
 double nsl_sf_psi1int(double n);
-double nsl_sf_psin(double n,  double x);
+double nsl_sf_psin(double n, double x);
 
 double nsl_sf_zetaint(double n);
 double nsl_sf_zetam1int(double n);

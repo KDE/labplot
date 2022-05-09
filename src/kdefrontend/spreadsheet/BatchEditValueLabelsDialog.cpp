@@ -1,10 +1,10 @@
 /*
 	File                 : BatchEditValueLabelsDialog.cpp
-    Project              : LabPlot
+	Project              : LabPlot
 	Description          : Dialog to modify multiply value labels in a batch mode
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BatchEditValueLabelsDialog.h"
@@ -13,10 +13,10 @@
 #include "backend/lib/macros.h"
 
 #include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QTextEdit>
 #include <QLabel>
 #include <QPushButton>
+#include <QTextEdit>
+#include <QVBoxLayout>
 #include <QWindow>
 
 #include <KLocalizedString>
@@ -29,9 +29,9 @@
 
 	\ingroup kdefrontend
  */
-BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialog(parent),
-	teValueLabels(new QTextEdit()) {
-
+BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent)
+	: QDialog(parent)
+	, teValueLabels(new QTextEdit()) {
 	setWindowTitle(i18nc("@title:window", "Edit Value Labels"));
 
 	auto* layout = new QVBoxLayout(this);
@@ -47,7 +47,7 @@ BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialo
 	connect(btnBox, &QDialogButtonBox::rejected, this, &BatchEditValueLabelsDialog::reject);
 	layout->addWidget(btnBox);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("BatchEditValueLabelsDialog"));
 
 	create(); // ensure there's a window created
@@ -59,7 +59,7 @@ BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialo
 }
 
 BatchEditValueLabelsDialog::~BatchEditValueLabelsDialog() {
-	//save the current settings
+	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("BatchEditValueLabelsDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
@@ -72,7 +72,7 @@ void BatchEditValueLabelsDialog::setColumns(QList<Column*> columns) {
 
 	m_column = m_columns.first();
 
-	//show the available value labels for the first columm
+	// show the available value labels for the first columm
 	if (m_column->hasValueLabels()) {
 		auto mode = m_column->columnMode();
 		QString text;
@@ -147,12 +147,12 @@ void BatchEditValueLabelsDialog::setColumns(QList<Column*> columns) {
 	}
 }
 
-void  BatchEditValueLabelsDialog::save() const {
-	//remove all already available labels first
+void BatchEditValueLabelsDialog::save() const {
+	// remove all already available labels first
 	for (auto* column : m_columns)
 		column->clearValueLabels();
 
-	//add new labels
+	// add new labels
 	SET_NUMBER_LOCALE
 	QString label;
 	QString valueStr;
@@ -171,7 +171,7 @@ void  BatchEditValueLabelsDialog::save() const {
 		if (valueStr.isEmpty() || label.isEmpty())
 			continue;
 
-		switch(mode) {
+		switch (mode) {
 		case AbstractColumn::ColumnMode::Double: {
 			double value = numberLocale.toDouble(valueStr, &ok);
 			if (!ok)

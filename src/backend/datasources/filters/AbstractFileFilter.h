@@ -1,21 +1,21 @@
 /*
-    File                 : AbstractFileFilter.h
-    Project              : LabPlot
-    Description          : file I/O-filter related interface
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : AbstractFileFilter.h
+	Project              : LabPlot
+	Description          : file I/O-filter related interface
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ABSTRACTFILEFILTER_H
 #define ABSTRACTFILEFILTER_H
 
 #include "backend/core/AbstractColumn.h"
-#include <QObject>
 #include <QLocale>
-#include <memory>	// smart pointer
+#include <QObject>
+#include <memory> // smart pointer
 
 class AbstractDataSource;
 class XmlStreamReader;
@@ -27,10 +27,12 @@ class AbstractFileFilter : public QObject {
 	Q_ENUMS(ImportMode)
 
 public:
-	enum class FileType {Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO};
-	enum class ImportMode {Append, Prepend, Replace};
+	enum class FileType { Ascii, Binary, Image, HDF5, NETCDF, FITS, JSON, ROOT, Spice, READSTAT, MATIO };
+	enum class ImportMode { Append, Prepend, Replace };
 
-	explicit AbstractFileFilter(FileType type) : m_type(type) {}
+	explicit AbstractFileFilter(FileType type)
+		: m_type(type) {
+	}
 	~AbstractFileFilter() override = default;
 
 	static bool isNan(const QString&);
@@ -50,7 +52,9 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*) = 0;
 
-	FileType type() const { return m_type; }
+	FileType type() const {
+		return m_type;
+	}
 
 Q_SIGNALS:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process

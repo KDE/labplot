@@ -1,11 +1,11 @@
 /*
-    File                 : String2DoubleFilter.h
-    Project              : AbstractColumn
-    Description          : Locale-aware conversion filter QString -> double.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : String2DoubleFilter.h
+	Project              : AbstractColumn
+	Description          : Locale-aware conversion filter QString -> double.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef STRING2DOUBLE_FILTER_H
@@ -20,10 +20,11 @@ class String2DoubleFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	String2DoubleFilter() {}
+	String2DoubleFilter() {
+	}
 
 	double valueAt(int row) const override {
-		//DEBUG("String2Double::valueAt()");
+		// DEBUG("String2Double::valueAt()");
 
 		if (!m_inputs.value(0))
 			return 0;
@@ -41,11 +42,13 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Double; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::Double;
+	}
 
 protected:
 	//! Using typed ports: only string inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Text;
 	}
 };

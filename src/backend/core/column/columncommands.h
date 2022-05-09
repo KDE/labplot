@@ -1,26 +1,25 @@
 /*
-    File                 : columncommands.h
-    Project              : LabPlot
-    Description          : Commands to be called by Column to modify ColumnPrivate
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : columncommands.h
+	Project              : LabPlot
+	Description          : Commands to be called by Column to modify ColumnPrivate
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef COLUMNCOMMANDS_H
 #define COLUMNCOMMANDS_H
 
-#include "backend/lib/IntervalAttribute.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
+#include "backend/lib/IntervalAttribute.h"
 
 #include <KLocalizedString>
 
-#include <QUndoCommand>
 #include <QDateTime>
+#include <QUndoCommand>
 
 class QStringList;
 class AbstractSimpleFilter;
@@ -72,7 +71,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	const AbstractColumn * m_src;
+	const AbstractColumn* m_src;
 	ColumnPrivate* m_col_backup{nullptr};
 	ColumnPrivate* m_src_backup{nullptr};
 	Column* m_col_backup_owner{nullptr};
@@ -139,14 +138,11 @@ private:
 	void* m_data{nullptr};
 	void* m_empty_data{nullptr};
 	bool m_undone{false};
-
 };
 
 class ColumnSetGlobalFormulaCmd : public QUndoCommand {
 public:
-	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula,
-									   QStringList variableNames, QVector<Column*> columns,
-									   bool autoUpdate);
+	explicit ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames, QVector<Column*> columns, bool autoUpdate);
 
 	void redo() override;
 	void undo() override;
@@ -193,7 +189,7 @@ private:
 	bool m_copied{false};
 };
 
-template <typename T>
+template<typename T>
 class ColumnSetCmd : public QUndoCommand {
 public:
 	/**
@@ -217,11 +213,15 @@ public:
 	 * \brief The old number of rows
 	 */
 	explicit ColumnSetCmd(ColumnPrivate* col, int row, const T& old_value, const T& new_value, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)) , m_old_value(std::move(old_value)){
+		: QUndoCommand(parent)
+		, m_col(col)
+		, m_row(row)
+		, m_new_value(std::move(new_value))
+		, m_old_value(std::move(old_value)) {
 		setText(i18n("%1: set value for row %2", col->name(), row));
 	}
 
-	void redo() override  {
+	void redo() override {
 		m_row_count = m_col->rowCount();
 		m_col->setValueAt(m_row, m_new_value);
 	}
@@ -270,7 +270,10 @@ public:
 	 * \brief The old number of rows
 	 */
 	explicit ColumnReplaceCmd(ColumnPrivate* col, int first, const QVector<T>& new_values, QUndoCommand* parent = nullptr)
-		: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
+		: QUndoCommand(parent)
+		, m_col(col)
+		, m_first(first)
+		, m_new_values(new_values) {
 		if (m_first < 0)
 			setText(i18n("%1: replace values", col->name()));
 		else

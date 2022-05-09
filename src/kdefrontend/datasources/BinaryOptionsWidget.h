@@ -1,11 +1,11 @@
 /*
-    File                 : BinaryOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget providing options for the import of binary data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2009 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BinaryOptionsWidget.h
+	Project              : LabPlot
+	Description          : widget providing options for the import of binary data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef BINARYOPTIONSWIDGET_H
@@ -16,7 +16,7 @@
 class BinaryFilter;
 
 class BinaryOptionsWidget : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit BinaryOptionsWidget(QWidget*);

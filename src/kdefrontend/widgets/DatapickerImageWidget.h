@@ -1,12 +1,12 @@
 /*
-    File                 : DatapickerImageWidget.h
-    Project              : LabPlot
-    Description          : widget for datapicker properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : DatapickerImageWidget.h
+	Project              : LabPlot
+	Description          : widget for datapicker properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERIMAGEWIDGET_H
@@ -14,9 +14,9 @@
 
 #include <QGraphicsView>
 
-#include "ui_datapickerimagewidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_datapickerimagewidget.h"
 
 class SymbolWidget;
 class SpanSlider;
@@ -27,13 +27,13 @@ class HistogramView : public QGraphicsView {
 public:
 	explicit HistogramView(QWidget*, int);
 	void setScalePixmap(const QString&);
-	int *bins{nullptr};
+	int* bins{nullptr};
 
 public Q_SLOTS:
 	void setSpan(int, int);
 
 private:
-	void resizeEvent(QResizeEvent *event) override;
+	void resizeEvent(QResizeEvent* event) override;
 	void drawBackground(QPainter*, const QRectF&) override;
 	QGraphicsRectItem* m_lowerSlider;
 	QGraphicsRectItem* m_upperSlider;
@@ -71,7 +71,7 @@ private:
 	HistogramView* gvValue;
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in DatapickerImageWidget
+	// SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
 	void fileNameChanged();
 	void selectFile();
@@ -91,10 +91,10 @@ private Q_SLOTS:
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
-	//symbol properties
+	// symbol properties
 	void pointsVisibilityChanged(bool);
 
-	//SLOTs for changes triggered in DatapickerImageWidget
+	// SLOTs for changes triggered in DatapickerImageWidget
 	void imageFileNameChanged(const QString&);
 	void imageRotationAngleChanged(float);
 	void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);
@@ -105,4 +105,4 @@ private Q_SLOTS:
 	void symbolVisibleChanged(bool);
 };
 
-#endif //DATAPICKERIMAGEWIDGET_H
+#endif // DATAPICKERIMAGEWIDGET_H

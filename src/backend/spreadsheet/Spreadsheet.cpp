@@ -1,23 +1,23 @@
 /*
-    File                 : Spreadsheet.cpp
-    Project              : LabPlot
-    Description          : Aspect providing a spreadsheet table with column logic
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2006-2009 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : Spreadsheet.cpp
+	Project              : LabPlot
+	Description          : Aspect providing a spreadsheet table with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2006-2009 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
-#include "backend/core/AspectPrivate.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AspectPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
@@ -52,7 +52,6 @@
 
 Spreadsheet::Spreadsheet(const QString& name, bool loading, AspectType type)
 	: AbstractDataSource(name, type) {
-
 	if (!loading)
 		init();
 }
@@ -72,7 +71,7 @@ void Spreadsheet::init() {
 	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
 	for (int i = 0; i < columns; i++) {
-		Column* new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Double);
+		Column* new_col = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(i == 0 ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y);
 		addChild(new_col);
 	}
@@ -138,11 +137,11 @@ void Spreadsheet::updateHorizontalHeader() {
 	m_model->updateHorizontalHeader();
 	const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 
-	//if the header name of the first column has changed (column mode to be shown, etc.),
-	//reset the column widths and request the view to adjuste the column sizes to the  content
+	// if the header name of the first column has changed (column mode to be shown, etc.),
+	// reset the column widths and request the view to adjuste the column sizes to the  content
 	if (oldHeader != newHeader && m_view) {
 		const auto& columns = children<Column>();
-		for (auto col: columns)
+		for (auto col : columns)
 			col->setWidth(0);
 		m_view->resizeHeader();
 	}
@@ -161,16 +160,17 @@ int Spreadsheet::rowCount() const {
 	int result = 0;
 	for (auto* col : children<Column>()) {
 		const int col_rows = col->rowCount();
-		if ( col_rows > result)
+		if (col_rows > result)
 			result = col_rows;
 	}
 	return result;
 }
 
 void Spreadsheet::removeRows(int first, int count) {
-	if ( count < 1 || first < 0 || first+count > rowCount()) return;
+	if (count < 1 || first < 0 || first + count > rowCount())
+		return;
 	WAIT_CURSOR;
-	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
+	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->removeRows(first, count);
 	endMacro();
@@ -178,9 +178,10 @@ void Spreadsheet::removeRows(int first, int count) {
 }
 
 void Spreadsheet::insertRows(int before, int count) {
-	if ( count < 1 || before < 0 || before > rowCount()) return;
+	if (count < 1 || before < 0 || before > rowCount())
+		return;
 	WAIT_CURSOR;
-	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
+	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
 	for (auto* col : children<Column>())
 		col->insertRows(before, count);
 	endMacro();
@@ -213,9 +214,9 @@ void Spreadsheet::prependColumns(int count) {
 void Spreadsheet::setRowCount(int new_size) {
 	int current_size = rowCount();
 	if (new_size > current_size)
-		insertRows(current_size, new_size-current_size);
+		insertRows(current_size, new_size - current_size);
 	if (new_size < current_size && new_size >= 0)
-		removeRows(new_size, current_size-new_size);
+		removeRows(new_size, current_size - new_size);
 }
 
 /*!
@@ -229,7 +230,7 @@ Column* Spreadsheet::column(int index) const {
 /*!
   Returns the column with the name \c name.
 */
-Column* Spreadsheet::column(const QString &name) const {
+Column* Spreadsheet::column(const QString& name) const {
 	return child<Column>(name);
 }
 
@@ -252,9 +253,10 @@ int Spreadsheet::columnCount(AbstractColumn::PlotDesignation pd) const {
 }
 
 void Spreadsheet::removeColumns(int first, int count) {
-	if ( count < 1 || first < 0 || first+count > columnCount()) return;
+	if (count < 1 || first < 0 || first + count > columnCount())
+		return;
 	WAIT_CURSOR;
-	beginMacro( i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count) );
+	beginMacro(i18np("%1: remove 1 column", "%1: remove %2 columns", name(), count));
 	for (int i = 0; i < count; i++)
 		child<Column>(first)->remove();
 	endMacro();
@@ -263,11 +265,11 @@ void Spreadsheet::removeColumns(int first, int count) {
 
 void Spreadsheet::insertColumns(int before, int count) {
 	WAIT_CURSOR;
-	beginMacro( i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count) );
-	Column * before_col = column(before);
+	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
+	Column* before_col = column(before);
 	int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		Column * new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Double);
+		Column* new_col = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
@@ -280,13 +282,13 @@ void Spreadsheet::insertColumns(int before, int count) {
 */
 void Spreadsheet::setColumnCount(int new_size) {
 	int old_size = columnCount();
-	if ( old_size == new_size || new_size < 0 )
+	if (old_size == new_size || new_size < 0)
 		return;
 
 	if (new_size < old_size)
-		removeColumns(new_size, old_size-new_size);
+		removeColumns(new_size, old_size - new_size);
 	else
-		insertColumns(old_size, new_size-old_size);
+		insertColumns(old_size, new_size - old_size);
 }
 
 /*!
@@ -325,7 +327,7 @@ QMenu* Spreadsheet::createContextMenu() {
 
 void Spreadsheet::moveColumn(int from, int to) {
 	Column* col = child<Column>(from);
-	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from+1, to+1));
+	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from + 1, to + 1));
 	col->remove();
 	insertChildBefore(col, child<Column>(to));
 	endMacro();
@@ -338,13 +340,13 @@ void Spreadsheet::copy(Spreadsheet* other) {
 	for (auto* col : children<Column>())
 		col->remove();
 	for (auto* src_col : other->children<Column>()) {
-		Column * new_col = new Column(src_col->name(), src_col->columnMode());
+		Column* new_col = new Column(src_col->name(), src_col->columnMode());
 		new_col->copy(src_col);
 		new_col->setPlotDesignation(src_col->plotDesignation());
-		QVector< Interval<int> > masks = src_col->maskedIntervals();
+		QVector<Interval<int>> masks = src_col->maskedIntervals();
 		for (const auto& iv : masks)
 			new_col->setMasked(iv);
-		QVector< Interval<int> > formulas = src_col->formulaIntervals();
+		QVector<Interval<int>> formulas = src_col->formulaIntervals();
 		for (const auto& iv : formulas)
 			new_col->setFormula(iv, src_col->formula(iv.start()));
 		new_col->setWidth(src_col->width());
@@ -361,12 +363,12 @@ void Spreadsheet::copy(Spreadsheet* other) {
   Determines the corresponding X column.
 */
 int Spreadsheet::colX(int col) {
-	for (int i = col-1; i >= 0; i--) {
+	for (int i = col - 1; i >= 0; i--) {
 		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			return i;
 	}
 	int cols = columnCount();
-	for (int i = col+1; i < cols; i++) {
+	for (int i = col + 1; i < cols; i++) {
 		if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::X)
 			return i;
 	}
@@ -379,24 +381,24 @@ int Spreadsheet::colX(int col) {
 int Spreadsheet::colY(int col) {
 	int cols = columnCount();
 
-	if (column(col)->plotDesignation() == AbstractColumn::PlotDesignation::XError ||
-	        column(col)->plotDesignation() == AbstractColumn::PlotDesignation::YError) {
+	if (column(col)->plotDesignation() == AbstractColumn::PlotDesignation::XError
+		|| column(col)->plotDesignation() == AbstractColumn::PlotDesignation::YError) {
 		// look to the left first
-		for (int i = col-1; i >= 0; i--) {
+		for (int i = col - 1; i >= 0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
-		for (int i = col+1; i < cols; i++) {
+		for (int i = col + 1; i < cols; i++) {
 			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
 	} else {
 		// look to the right first
-		for (int i = col+1; i < cols; i++) {
+		for (int i = col + 1; i < cols; i++) {
 			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
-		for (int i = col-1; i >= 0; i--) {
+		for (int i = col - 1; i >= 0; i--) {
 			if (column(i)->plotDesignation() == AbstractColumn::PlotDesignation::Y)
 				return i;
 		}
@@ -460,113 +462,113 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Double: {
-					QVector< QPair<double, int> > map;
+				QVector<QPair<double, int>> map;
 
-					for (int i = 0; i < rows; i++)
-						if (col->isValid(i))
-							map.append(QPair<double, int>(col->valueAt(i), i));
-					const int filledRows = map.size();
+				for (int i = 0; i < rows; i++)
+					if (col->isValid(i))
+						map.append(QPair<double, int>(col->valueAt(i), i));
+				const int filledRows = map.size();
 
-					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
-					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-					// put the values in the right order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					break;
+				// put the values in the right order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
+				break;
+			}
 			case AbstractColumn::ColumnMode::Integer: {
-					QVector< QPair<int, int> > map;
+				QVector<QPair<int, int>> map;
 
-					for (int i = 0; i < rows; i++)
-						map.append(QPair<int, int>(col->valueAt(i), i));
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<int, int>(col->valueAt(i), i));
 
-					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
-					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
-					// put the values in the right order into tempCol
-					for (int i = 0; i < rows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					break;
+				// put the values in the right order into tempCol
+				for (int i = 0; i < rows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
+				break;
+			}
 			case AbstractColumn::ColumnMode::BigInt: {
-					QVector< QPair<qint64, int> > map;
+				QVector<QPair<qint64, int>> map;
 
-					for (int i = 0; i < rows; i++)
-						map.append(QPair<qint64, int>(col->valueAt(i), i));
+				for (int i = 0; i < rows; i++)
+					map.append(QPair<qint64, int>(col->valueAt(i), i));
 
-					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
-					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
-					// put the values in the right order into tempCol
-					for (int i = 0; i < rows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					break;
+				// put the values in the right order into tempCol
+				for (int i = 0; i < rows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
+				break;
+			}
 			case AbstractColumn::ColumnMode::Text: {
-					QVector<QPair<QString, int>> map;
+				QVector<QPair<QString, int>> map;
 
-					for (int i = 0; i < rows; i++)
-						if (!col->textAt(i).isEmpty())
-							map.append(QPair<QString, int>(col->textAt(i), i));
-					const int filledRows = map.size();
+				for (int i = 0; i < rows; i++)
+					if (!col->textAt(i).isEmpty())
+						map.append(QPair<QString, int>(col->textAt(i), i));
+				const int filledRows = map.size();
 
-					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
-					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
-					// put the values in the right order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					break;
+				// put the values in the right order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
+				break;
+			}
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day: {
-					QVector< QPair<QDateTime, int> > map;
+				QVector<QPair<QDateTime, int>> map;
 
-					for (int i = 0; i < rows; i++)
-						if (col->isValid(i))
-							map.append(QPair<QDateTime, int>(col->dateTimeAt(i), i));
-					const int filledRows = map.size();
+				for (int i = 0; i < rows; i++)
+					if (col->isValid(i))
+						map.append(QPair<QDateTime, int>(col->dateTimeAt(i), i));
+				const int filledRows = map.size();
 
-					if (ascending)
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
-					else
-						std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+				if (ascending)
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+				else
+					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
-					// put the values in the right order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					break;
+				// put the values in the right order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
+				break;
+			}
 			}
 			// copy the sorted column
 			col->copy(tempCol.get(), 0, 0, rows);
@@ -577,191 +579,191 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 		switch (leading->columnMode()) {
 		case AbstractColumn::ColumnMode::Double: {
-				QVector<QPair<double, int>> map;
-				QVector<int> invalidIndex;
+			QVector<QPair<double, int>> map;
+			QVector<int> invalidIndex;
 
-				for (int i = 0; i < rows; i++)
-					if (leading->isValid(i))
-						map.append(QPair<double, int>(leading->valueAt(i), i));
-					else
-						invalidIndex << i;
-				const int filledRows = map.size();
-				const int invalidRows = invalidIndex.size();
-
-				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+			for (int i = 0; i < rows; i++)
+				if (leading->isValid(i))
+					map.append(QPair<double, int>(leading->valueAt(i), i));
 				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
+					invalidIndex << i;
+			const int filledRows = map.size();
+			const int invalidRows = invalidIndex.size();
 
-				for (auto* col : cols) {
-					auto columnMode = col->columnMode();
-					std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
-					// put the values in correct order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
+			if (ascending)
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleLess);
+			else
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::doubleGreater);
 
-					// copy the sorted column
-					if (col == leading)	// update all rows
-						col->copy(tempCol.get(), 0, 0, rows);
-					else {	// do not overwrite unused cols
-						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
-						for (int i = 0; i < invalidRows; i++) {
-							const int idx = invalidIndex.at(i);
-							//too slow: tempInvalidCol->copy(col, idx, i, 1);
-							tempInvalidCol->setFromColumn(i, col, idx);
-							tempInvalidCol->setMasked(col->isMasked(idx));
-						}
-						col->copy(tempCol.get(), 0, 0, filledRows);
-						col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
-					}
+			for (auto* col : cols) {
+				auto columnMode = col->columnMode();
+				std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
+				// put the values in correct order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
-				break;
+
+				// copy the sorted column
+				if (col == leading) // update all rows
+					col->copy(tempCol.get(), 0, 0, rows);
+				else { // do not overwrite unused cols
+					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					for (int i = 0; i < invalidRows; i++) {
+						const int idx = invalidIndex.at(i);
+						// too slow: tempInvalidCol->copy(col, idx, i, 1);
+						tempInvalidCol->setFromColumn(i, col, idx);
+						tempInvalidCol->setMasked(col->isMasked(idx));
+					}
+					col->copy(tempCol.get(), 0, 0, filledRows);
+					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+				}
 			}
+			break;
+		}
 		case AbstractColumn::ColumnMode::Integer: {
-				//TODO: check if still working when invalid integer entries are supported
-				QVector<QPair<int, int>> map;
+			// TODO: check if still working when invalid integer entries are supported
+			QVector<QPair<int, int>> map;
 
-				for (int i = 0; i < rows; i++)
-					map.append(QPair<int, int>(leading->valueAt(i), i));
+			for (int i = 0; i < rows; i++)
+				map.append(QPair<int, int>(leading->valueAt(i), i));
 
-				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
-				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
+			if (ascending)
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::integerLess);
+			else
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
-				for (auto* col : cols) {
-					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					// put the values in the right order into tempCol
-					for (int i = 0; i < rows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
+			for (auto* col : cols) {
+				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				// put the values in the right order into tempCol
+				for (int i = 0; i < rows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
-				break;
+				// copy the sorted column
+				col->copy(tempCol.get(), 0, 0, rows);
 			}
+			break;
+		}
 		case AbstractColumn::ColumnMode::BigInt: {
-				QVector<QPair<qint64, int>> map;
+			QVector<QPair<qint64, int>> map;
 
-				for (int i = 0; i < rows; i++)
-					map.append(QPair<qint64, int>(leading->valueAt(i), i));
+			for (int i = 0; i < rows; i++)
+				map.append(QPair<qint64, int>(leading->valueAt(i), i));
 
-				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
-				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
+			if (ascending)
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntLess);
+			else
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
-				for (auto* col : cols) {
-					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					// put the values in the right order into tempCol
-					for (int i = 0; i < rows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					// copy the sorted column
-					col->copy(tempCol.get(), 0, 0, rows);
+			for (auto* col : cols) {
+				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				// put the values in the right order into tempCol
+				for (int i = 0; i < rows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
-				break;
+				// copy the sorted column
+				col->copy(tempCol.get(), 0, 0, rows);
 			}
+			break;
+		}
 		case AbstractColumn::ColumnMode::Text: {
-				QVector<QPair<QString, int>> map;
-				QVector<int> emptyIndex;
+			QVector<QPair<QString, int>> map;
+			QVector<int> emptyIndex;
 
-				for (int i = 0; i < rows; i++)
-					if (!leading->textAt(i).isEmpty())
-						map.append(QPair<QString, int>(leading->textAt(i), i));
-					else
-						emptyIndex << i;
-				//QDEBUG("	empty indices: " << emptyIndex)
-				const int filledRows = map.size();
-				const int emptyRows = emptyIndex.size();
-
-				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
+			for (int i = 0; i < rows; i++)
+				if (!leading->textAt(i).isEmpty())
+					map.append(QPair<QString, int>(leading->textAt(i), i));
 				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
+					emptyIndex << i;
+			// QDEBUG("	empty indices: " << emptyIndex)
+			const int filledRows = map.size();
+			const int emptyRows = emptyIndex.size();
 
-				for (auto* col : cols) {
-					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					// put the values in the right order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
+			if (ascending)
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringLess);
+			else
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
-					// copy the sorted column
-					if (col == leading)	// update all rows
-						col->copy(tempCol.get(), 0, 0, rows);
-					else {	// do not overwrite unused cols
-						std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
-						for (int i = 0; i < emptyRows; i++) {
-							const int idx = emptyIndex.at(i);
-							//too slow: tempEmptyCol->copy(col, idx, i, 1);
-							tempEmptyCol->setFromColumn(i, col, idx);
-							tempEmptyCol->setMasked(col->isMasked(idx));
-						}
-						col->copy(tempCol.get(), 0, 0, filledRows);
-						col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
-					}
+			for (auto* col : cols) {
+				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				// put the values in the right order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
-				break;
+
+				// copy the sorted column
+				if (col == leading) // update all rows
+					col->copy(tempCol.get(), 0, 0, rows);
+				else { // do not overwrite unused cols
+					std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
+					for (int i = 0; i < emptyRows; i++) {
+						const int idx = emptyIndex.at(i);
+						// too slow: tempEmptyCol->copy(col, idx, i, 1);
+						tempEmptyCol->setFromColumn(i, col, idx);
+						tempEmptyCol->setMasked(col->isMasked(idx));
+					}
+					col->copy(tempCol.get(), 0, 0, filledRows);
+					col->copy(tempEmptyCol.get(), 0, filledRows, emptyRows);
+				}
 			}
+			break;
+		}
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day: {
-				QVector<QPair<QDateTime, int>> map;
-				QVector<int> invalidIndex;
+			QVector<QPair<QDateTime, int>> map;
+			QVector<int> invalidIndex;
 
-				for (int i = 0; i < rows; i++)
-					if (leading->isValid(i))
-						map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
-					else
-						invalidIndex << i;
-				const int filledRows = map.size();
-				const int invalidRows = invalidIndex.size();
-
-				if (ascending)
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+			for (int i = 0; i < rows; i++)
+				if (leading->isValid(i))
+					map.append(QPair<QDateTime, int>(leading->dateTimeAt(i), i));
 				else
-					std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+					invalidIndex << i;
+			const int filledRows = map.size();
+			const int invalidRows = invalidIndex.size();
 
-				for (auto* col : cols) {
-					std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
-					// put the values in the right order into tempCol
-					for (int i = 0; i < filledRows; i++) {
-						int idx = map.at(i).second;
-						//too slow: tempCol->copy(col, idx, i, 1);
-						tempCol->setFromColumn(i, col, idx);
-						tempCol->setMasked(col->isMasked(idx));
-					}
-					// copy the sorted column
-					if (col == leading)	// update all rows
-						col->copy(tempCol.get(), 0, 0, rows);
-					else {	// do not overwrite unused cols
-						std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
-						for (int i = 0; i < invalidRows; i++) {
-							const int idx = invalidIndex.at(i);
-							//too slow: tempInvalidCol->copy(col, idx, i, 1);
-							tempInvalidCol->setFromColumn(i, col, idx);
-							tempInvalidCol->setMasked(col->isMasked(idx));
-						}
-						col->copy(tempCol.get(), 0, 0, filledRows);
-						col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
-					}
+			if (ascending)
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeLess);
+			else
+				std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
+
+			for (auto* col : cols) {
+				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				// put the values in the right order into tempCol
+				for (int i = 0; i < filledRows; i++) {
+					int idx = map.at(i).second;
+					// too slow: tempCol->copy(col, idx, i, 1);
+					tempCol->setFromColumn(i, col, idx);
+					tempCol->setMasked(col->isMasked(idx));
 				}
-				break;
+				// copy the sorted column
+				if (col == leading) // update all rows
+					col->copy(tempCol.get(), 0, 0, rows);
+				else { // do not overwrite unused cols
+					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					for (int i = 0; i < invalidRows; i++) {
+						const int idx = invalidIndex.at(i);
+						// too slow: tempInvalidCol->copy(col, idx, i, 1);
+						tempInvalidCol->setFromColumn(i, col, idx);
+						tempInvalidCol->setMasked(col->isMasked(idx));
+					}
+					col->copy(tempCol.get(), 0, 0, filledRows);
+					col->copy(tempInvalidCol.get(), 0, filledRows, invalidRows);
+				}
 			}
+			break;
+		}
 		}
 	}
 
@@ -821,10 +823,10 @@ void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 	if (selected) {
 		Q_EMIT childAspectSelectedInView(child<Column>(index));
 
-		//deselect the spreadsheet in the project explorer, if a child (column) was selected
-		//and also all possible parents like folder, workbook, datapicker curve, datapicker
-		//to prevents unwanted multiple selection in the project explorer
-		//if one of the parents of the selected column was also selected before.
+		// deselect the spreadsheet in the project explorer, if a child (column) was selected
+		// and also all possible parents like folder, workbook, datapicker curve, datapicker
+		// to prevents unwanted multiple selection in the project explorer
+		// if one of the parents of the selected column was also selected before.
 		AbstractAspect* parent = this;
 		while (parent) {
 			Q_EMIT childAspectDeselectedInView(parent);
@@ -833,7 +835,6 @@ void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 	} else
 		Q_EMIT childAspectDeselectedInView(child<Column>(index));
 }
-
 
 QVector<AspectType> Spreadsheet::pasteTypes() const {
 	return QVector<AspectType>{AspectType::Column};
@@ -856,7 +857,7 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//columns
+	// columns
 	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
 	for (auto* column : columns)
 		column->save(writer);
@@ -875,11 +876,13 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement())
+			break;
 
 		if (reader->isStartElement()) {
 			if (reader->name() == "comment") {
-				if (!readCommentElement(reader)) return false;
+				if (!readCommentElement(reader))
+					return false;
 			} else if (reader->name() == "column") {
 				Column* column = new Column(QString());
 				column->setIsLoading(true);
@@ -889,9 +892,10 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 				addChildFast(column);
-			} else {	// unknown element
+			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-				if (!reader->skipToEndElement()) return false;
+				if (!reader->skipToEndElement())
+					return false;
 			}
 		}
 	}
@@ -902,8 +906,12 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //########################  Data Import  #######################################
 //##############################################################################
-int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
-                               int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
+int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
+							   AbstractFileFilter::ImportMode importMode,
+							   int actualRows,
+							   int actualCols,
+							   QStringList colNameList,
+							   QVector<AbstractColumn::ColumnMode> columnMode) {
 	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
@@ -912,8 +920,8 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	if (m_model != nullptr)
 		m_model->suppressSignals(true);
 
-	//make the available columns undo unaware before we resize and rename them below,
-	//the same will be done for new columns in this->resize().
+	// make the available columns undo unaware before we resize and rename them below,
+	// the same will be done for new columns in this->resize().
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(false);
 
@@ -923,7 +931,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		clear();
 		setRowCount(actualRows);
-	}  else {
+	} else {
 		if (rowCount() < actualRows)
 			setRowCount(actualRows);
 	}
@@ -936,14 +944,14 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	dataContainer.resize(actualCols);
 	for (int n = 0; n < actualCols; n++) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-		Column* column = this->child<Column>(columnOffset+n);
+		Column* column = this->child<Column>(columnOffset + n);
 		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
-		//in most cases the first imported column is meant to be used as x-data.
-		//Other columns provide mostly y-data or errors.
-		//TODO: this has to be configurable for the user in the import widget,
-		//it should be possible to specify x-error plot designation, etc.
+		// in most cases the first imported column is meant to be used as x-data.
+		// Other columns provide mostly y-data or errors.
+		// TODO: this has to be configurable for the user in the import widget,
+		// it should be possible to specify x-error plot designation, etc.
 		if (n == 0 && importMode == AbstractFileFilter::ImportMode::Replace)
 			column->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 		else
@@ -973,15 +981,15 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto* vector = static_cast<QVector<QDateTime>* >(column->data());
+			auto* vector = static_cast<QVector<QDateTime>*>(column->data());
 			dataContainer[n] = static_cast<void*>(vector);
 			break;
 		}
 		}
 	}
-//	QDEBUG("dataPointers =" << dataPointers);
+	//	QDEBUG("dataPointers =" << dataPointers);
 
-	//DEBUG(Q_FUNC_INFO << ", DONE");
+	// DEBUG(Q_FUNC_INFO << ", DONE");
 
 	return columnOffset;
 }
@@ -991,14 +999,14 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	returns column offset depending on import mode
 */
 int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
-//	PERFTRACE(Q_FUNC_INFO);
+	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
-	//QDEBUG("	column name list = " << colNameList)
-	// name additional columns
+	// QDEBUG("	column name list = " << colNameList)
+	//  name additional columns
 	for (int k = colNameList.size(); k < cols; k++)
-		colNameList.append( "Column " + QString::number(k+1) );
+		colNameList.append("Column " + QString::number(k + 1));
 
-	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
+	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
 	Column* newColumn = nullptr;
 	int rows = rowCount();
@@ -1021,21 +1029,21 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
-		//replace completely the previous content of the data source with the content to be imported.
+		// replace completely the previous content of the data source with the content to be imported.
 		int columns = childCount<Column>();
 
 		if (columns > cols) {
-			//there're more columns in the data source then required -> remove the superfluous columns
-			for (int i = 0; i < columns-cols; i++)
+			// there're more columns in the data source then required -> remove the superfluous columns
+			for (int i = 0; i < columns - cols; i++)
 				removeChild(child<Column>(0));
 		} else {
-			//create additional columns if needed
+			// create additional columns if needed
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
 				newColumn->resizeTo(rows);
-				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
+				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
 		}
 
@@ -1054,11 +1062,15 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	return columnOffset;
 }
 
-void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+void Spreadsheet::finalizeImport(size_t columnOffset,
+								 size_t startColumn,
+								 size_t endColumn,
+								 const QString& dateTimeFormat,
+								 AbstractFileFilter::ImportMode importMode) {
 	PERFTRACE(Q_FUNC_INFO);
-	//DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
+	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
-	//determine the dependent plots
+	// determine the dependent plots
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
@@ -1067,7 +1079,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 				column->addUsedInPlots(plots);
 		}
 
-		//suppress retransform in the dependent plots
+		// suppress retransform in the dependent plots
 		for (auto* plot : plots)
 			plot->setSuppressRetransform(true);
 	}
@@ -1075,9 +1087,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (size_t n = startColumn; n <= endColumn; n++) {
-		//DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
+		// DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
 		Column* column = this->column((int)(columnOffset + n - startColumn));
-		//DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
+		// DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1114,14 +1126,14 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	}
 
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
-		//retransform the dependent plots
+		// retransform the dependent plots
 		for (auto* plot : plots) {
 			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
 
-	//make the spreadsheet and all its children undo aware again
+	// make the spreadsheet and all its children undo aware again
 	setUndoAware(true);
 	for (int i = 0; i < childCount<Column>(); i++)
 		child<Column>(i)->setUndoAware(true);
@@ -1133,9 +1145,9 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
 #endif
-	//row count most probably changed after the import, notify the dock widget.
-	//no need to notify about the column count change, this is already done by add/removeChild signals
+	// row count most probably changed after the import, notify the dock widget.
+	// no need to notify about the column count change, this is already done by add/removeChild signals
 	rowCountChanged(rowCount());
 
-	//DEBUG(Q_FUNC_INFO << " DONE");
+	// DEBUG(Q_FUNC_INFO << " DONE");
 }

@@ -1,26 +1,26 @@
 /*
-    File                 : SettingsWorksheetPage.cpp
-    Project              : LabPlot
-    Description          : settings page for Worksheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsWorksheetPage.cpp
+	Project              : LabPlot
+	Description          : settings page for Worksheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "SettingsWorksheetPage.h"
-#include "tools/TeXRenderer.h"
 #include "kdefrontend/widgets/ThemesComboBox.h"
+#include "tools/TeXRenderer.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfigGroup>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(parent) {
+SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
+	: SettingsPage(parent) {
 	ui.setupUi(this);
 
 	m_cbThemes = new ThemesComboBox();
@@ -30,9 +30,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	m_cbThemes->setToolTip(info);
 
 	const int size = ui.cbTexEngine->height();
-	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
+	ui.lLatexWarning->setPixmap(QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size));
 
-	//add available TeX typesetting engines
+	// add available TeX typesetting engines
 	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
 		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
 
@@ -69,7 +69,7 @@ void SettingsWorksheetPage::applySettings() {
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
-	m_cbThemes->setItemText(0, i18n("Default")); //default theme
+	m_cbThemes->setItemText(0, i18n("Default")); // default theme
 	ui.chkPresenterModeInteractive->setChecked(false);
 	ui.chkDoubleBuffering->setChecked(true);
 
@@ -94,7 +94,7 @@ void SettingsWorksheetPage::loadSettings() {
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
 	int index = -1;
 	if (engine.isEmpty()) {
-		//empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
 		index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
 		if (index == -1) {
@@ -107,12 +107,11 @@ void SettingsWorksheetPage::loadSettings() {
 		}
 
 		if (index != -1) {
-			//one of the tex engines was found -> automatically save it in the settings without any user action
+			// one of the tex engines was found -> automatically save it in the settings without any user action
 			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
 		}
-	}
-	else
+	} else
 		index = ui.cbTexEngine->findData(engine);
 
 	ui.cbTexEngine->setCurrentIndex(index);
@@ -144,7 +143,7 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 			ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
 			return;
 		}
-		//to convert the generated PS files to DVI we need 'dvips'
+		// to convert the generated PS files to DVI we need 'dvips'
 		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
 			ui.lLatexWarning->show();
 			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));

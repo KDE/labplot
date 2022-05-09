@@ -10,8 +10,8 @@
 
 #include "backend/lib/macros.h"
 
-#include <QTextCodec>
 #include <QDataStream>
+#include <QTextCodec>
 
 #include <cmath>
 
@@ -35,7 +35,7 @@ void SpiceFileReader::init() {
 		mNgspice = false;
 		mInfoString += convertLTSpiceBinary(l + mFile.read(1)); // because of utf16 end of line "\n 0x00" the 0x00 must be flushed
 		stream.setCodec(QTextCodec::codecForMib(1015));
-		pos ++;
+		pos++;
 	} else // title: removed trailing '\r' and '\n'
 		addInfoStringLine(QString(l).trimmed());
 
@@ -86,7 +86,7 @@ void SpiceFileReader::init() {
 
 	line = stream.readLine();
 	if (!mNgspice) {
-		while(!line.startsWith(QLatin1String("Variables:")) && !stream.atEnd()) {
+		while (!line.startsWith(QLatin1String("Variables:")) && !stream.atEnd()) {
 			auto list = line.split(QLatin1Char(':'));
 			if (list.length() < 2)
 				return;
@@ -137,7 +137,6 @@ bool SpiceFileReader::open() {
 }
 
 int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLines) {
-
 	if (!mInitialized)
 		init();
 
@@ -156,7 +155,6 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 
 	int linesRead = 0;
 	if (mBinary) {
-
 		// NgSpice: All data are 64bit
 		// LtSpice: AC (complex): all data are 64bit
 		// LtSpice: Transient: time is 64bit, y data is 32bit
@@ -175,7 +173,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 				DEBUG(Q_FUNC_INFO << ": The data is corrupted")
 				return 0;
 			}
-			const int readLines = (int)(length/lineBytes);
+			const int readLines = (int)(length / lineBytes);
 			const int patchesIndexOffset = patchesCount * mNumberLines;
 
 			for (int l = 0; l < qMin(readLines, mNumberLines); l++) {
@@ -198,8 +196,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 					(*static_cast<QVector<double>*>(data[1]))[patchesIndexOffset + l] = value;
 				}
 
-
-				for (int i = numberValuesPerVariable; i < mVariables.count() * numberValuesPerVariable; i ++) {
+				for (int i = numberValuesPerVariable; i < mVariables.count() * numberValuesPerVariable; i++) {
 					const int lineIndex = 8 * numberValuesPerVariable + (i - numberValuesPerVariable) * yDataBytes;
 					if (lineIndex % (numberValuesPerVariable * 4) != 0)
 						return linesRead;
@@ -212,7 +209,7 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 					}
 					(*static_cast<QVector<double>*>(data[i]))[patchesIndexOffset + l] = value;
 				}
-				linesRead ++;
+				linesRead++;
 				if (maxLines > 0 && linesRead >= maxLines)
 					return linesRead;
 			}
@@ -235,26 +232,25 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 		linesRead = 0; // indexes the position in the vector(column). Because of the continue the loop index cannot be used
 		const int points = maxLines > 0 ? qMin(mNumberPoints - skipLines, maxLines) : mNumberPoints - skipLines;
 		for (int l = 0; l < points; l++) {
-
 			for (int j = 0; j < mVariables.count(); j++) {
 				line = stream.readLine();
 				QStringList tokens = line.split(QLatin1Char('\t'));
 
-				//skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
+				// skip lines that don't contain the proper number of tokens (wrong format, corrupted file)
 				if (tokens.size() < 2)
 					continue;
 
-				QString valueString = tokens.at(1).simplified(); //string containing the value(s), 0 is the index of the data
+				QString valueString = tokens.at(1).simplified(); // string containing the value(s), 0 is the index of the data
 				if (isComplex) {
 					QStringList realImgTokens = valueString.split(QLatin1Char(','));
-					if (realImgTokens.size() == 2) { //sanity check to make sure we really have both parts
-						//real part
+					if (realImgTokens.size() == 2) { // sanity check to make sure we really have both parts
+						// real part
 						double value = locale.toDouble(realImgTokens.at(0), &isNumber);
-						static_cast<QVector<double>*>(data[2*j])->operator[](linesRead) = (isNumber ? value : qQNaN());
+						static_cast<QVector<double>*>(data[2 * j])->operator[](linesRead) = (isNumber ? value : qQNaN());
 
-						//imaginary part
+						// imaginary part
 						value = locale.toDouble(realImgTokens.at(1), &isNumber);
-						static_cast<QVector<double>*>(data[2*j+1])->operator[](linesRead) = (isNumber ? value : qQNaN());
+						static_cast<QVector<double>*>(data[2 * j + 1])->operator[](linesRead) = (isNumber ? value : qQNaN());
 					}
 				} else {
 					const double value = locale.toDouble(valueString, &isNumber);
@@ -262,12 +258,11 @@ int SpiceFileReader::readData(std::vector<void*>& data, int skipLines, int maxLi
 					v->operator[](linesRead) = (isNumber ? value : qQNaN());
 				}
 			}
-			linesRead ++;
+			linesRead++;
 			stream.readLine(); // read the empty line between every dataset
 			if (maxLines > 0 && linesRead >= maxLines)
 				return linesRead;
 		}
-
 	}
 	return linesRead;
 }
@@ -297,7 +292,7 @@ SpiceFileReader::PlotMode SpiceFileReader::plotNameToPlotMode(const QString& nam
 }
 
 int SpiceFileReader::parseFlags(const QString& s) {
-	//real, forward, double, complex
+	// real, forward, double, complex
 
 	auto sl = s.split(QLatin1Char(' '));
 	int value = 0;

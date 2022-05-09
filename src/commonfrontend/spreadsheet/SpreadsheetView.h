@@ -1,12 +1,11 @@
 /*
-    File                 : SpreadsheetView.h
-    Project              : LabPlot
-    Description          : View class for Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SpreadsheetView.h
+	Project              : LabPlot
+	Description          : View class for Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SPREADSHEETVIEW_H
 #define SPREADSHEETVIEW_H
@@ -35,7 +34,7 @@ class QTableView;
 class QToolBar;
 
 #ifdef HAVE_TOUCHBAR
-	class KDMacTouchBar;
+class KDMacTouchBar;
 #endif
 
 class SpreadsheetView : public QWidget {
@@ -83,9 +82,13 @@ private:
 	void connectActions();
 	bool formulaModeActive() const;
 	void exportToFile(const QString&, const bool, const QString&, QLocale::Language) const;
-	void exportToLaTeX(const QString&, const bool exportHeaders,
-	                   const bool gridLines, const bool captions, const bool latexHeaders,
-	                   const bool skipEmptyRows,const bool exportEntire) const;
+	void exportToLaTeX(const QString&,
+					   const bool exportHeaders,
+					   const bool gridLines,
+					   const bool captions,
+					   const bool latexHeaders,
+					   const bool skipEmptyRows,
+					   const bool exportEntire) const;
 	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
 	void exportToSQLite(const QString& path) const;
 	int maxRowToExport() const;
@@ -113,15 +116,15 @@ private:
 	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
 
-	//selection related actions
+	// selection related actions
 	QAction* action_cut_selection;
 	QAction* action_copy_selection;
 	QAction* action_paste_into_selection;
 	QAction* action_mask_selection;
 	QAction* action_unmask_selection;
 	QAction* action_clear_selection;
-// 		QAction* action_set_formula;
-// 		QAction* action_recalculate;
+	// 		QAction* action_set_formula;
+	// 		QAction* action_recalculate;
 	QAction* action_fill_row_numbers;
 	QAction* action_fill_random;
 	QAction* action_fill_equidistant;
@@ -129,7 +132,7 @@ private:
 	QAction* action_fill_const;
 	QAction* action_fill_function;
 
-	//spreadsheet related actions
+	// spreadsheet related actions
 	QAction* action_toggle_comments;
 	QAction* action_select_all;
 	QAction* action_clear_spreadsheet;
@@ -141,7 +144,7 @@ private:
 	QAction* action_search;
 	QAction* action_statistics_all_columns;
 
-	//column related actions
+	// column related actions
 	QAction* action_insert_column_left;
 	QAction* action_insert_column_right;
 	QAction* action_insert_columns_left;
@@ -175,7 +178,7 @@ private:
 	QAction* action_statistics_columns;
 	QAction* action_freeze_columns;
 
-	//row related actions
+	// row related actions
 	QAction* action_insert_row_above;
 	QAction* action_insert_row_below;
 	QAction* action_insert_rows_above;
@@ -184,7 +187,7 @@ private:
 	QAction* action_clear_rows;
 	QAction* action_statistics_rows;
 
-	//analysis and plot data menu actions
+	// analysis and plot data menu actions
 	QAction* action_plot_data_xycurve;
 	QAction* action_plot_data_histogram;
 	QAction* action_plot_data_boxplot;
@@ -197,7 +200,7 @@ private:
 	QVector<QAction*> addFitAction;
 	QAction* addFourierFilterAction;
 
-	//Menus
+	// Menus
 	QMenu* m_selectionMenu{nullptr};
 	QMenu* m_formattingMenu{nullptr};
 	QMenu* m_columnMenu{nullptr};
@@ -241,7 +244,7 @@ private Q_SLOTS:
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
-// 		void recalculateSelectedCells();
+	// 		void recalculateSelectedCells();
 
 	void plotData();
 	void plotAnalysisData();
@@ -273,7 +276,7 @@ private Q_SLOTS:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
-// 	void joinColumns();
+	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
 
@@ -293,7 +296,7 @@ private Q_SLOTS:
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);
 	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
-	void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
+	void currentColumnChanged(const QModelIndex& current, const QModelIndex& previous);
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);

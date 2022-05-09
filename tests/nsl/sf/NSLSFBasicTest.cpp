@@ -1,11 +1,11 @@
 /*
-    File                 : NSLSFBasicTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for basic special functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLSFBasicTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for basic special functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLSFBasicTest.h"
@@ -36,7 +36,7 @@ void NSLSFBasicTest::testlog2_int() {
 	}
 }
 void NSLSFBasicTest::testlog2_longlong() {
-#ifndef _MSC_VER	/* not implemented yet */
+#ifndef _MSC_VER /* not implemented yet */
 	for (unsigned long long i = 1; i < 1e5; i++) {
 		int result = nsl_sf_log2_longlong(i);
 		QCOMPARE(result, (int)log2(i));
@@ -48,7 +48,6 @@ void NSLSFBasicTest::testlog2_longlong() {
 	}
 #endif
 }
-
 
 void NSLSFBasicTest::testlog2_int2() {
 	for (int i = 1; i < 1e5; i++) {
@@ -84,7 +83,6 @@ void NSLSFBasicTest::testlog2p1_int() {
 		for (int i = 1; i < 1e7; i++)
 			nsl_sf_log2p1_int(i);
 	}
-
 }
 
 QTEST_MAIN(NSLSFBasicTest)

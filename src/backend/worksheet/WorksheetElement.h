@@ -1,23 +1,22 @@
 /*
-    File                 : WorksheetElement.h
-    Project              : LabPlot
-    Description          : Base class for all Worksheet children.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : WorksheetElement.h
+	Project              : LabPlot
+	Description          : Base class for all Worksheet children.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef WORKSHEETELEMENT_H
 #define WORKSHEETELEMENT_H
 
-#include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/lib/macros.h"
 #include <QPainterPath>
 
-#define D(obj_class) auto * d = static_cast<obj_class##Private*>(d_ptr)
+#define D(obj_class) auto* d = static_cast<obj_class##Private*>(d_ptr)
 
 class CartesianPlot;
 class CartesianCoordinateSystem;
@@ -34,28 +33,35 @@ class WorksheetElement : public AbstractAspect {
 public:
 	~WorksheetElement() override;
 
-	enum class Orientation {Horizontal, Vertical, Both};
-	enum class HorizontalPosition {Left, Center, Right, Custom};
-	enum class VerticalPosition {Top, Center, Bottom, Custom};
+	enum class Orientation { Horizontal, Vertical, Both };
+	enum class HorizontalPosition { Left, Center, Right, Custom };
+	enum class VerticalPosition { Top, Center, Bottom, Custom };
 
-	enum class HorizontalAlignment {Left, Center, Right};
-	enum class VerticalAlignment {Top, Center, Bottom};
+	enum class HorizontalAlignment { Left, Center, Right };
+	enum class VerticalAlignment { Top, Center, Bottom };
 
-	enum class BackgroundType {Color, Image, Pattern};
-	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
-	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
-
-	enum class PositionLimit {
-		None,
-		X,
-		Y
+	enum class BackgroundType { Color, Image, Pattern };
+	enum class BackgroundColorStyle {
+		SingleColor,
+		HorizontalLinearGradient,
+		VerticalLinearGradient,
+		TopLeftDiagonalLinearGradient,
+		BottomLeftDiagonalLinearGradient,
+		RadialGradient
 	};
+	enum class BackgroundImageStyle { ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled };
+
+	enum class PositionLimit { None, X, Y };
 
 	struct PositionWrapper {
-		PositionWrapper() {}
-		PositionWrapper(QPointF p, HorizontalPosition hor, VerticalPosition vert, PositionLimit limit) :
-			point(p), horizontalPosition(hor), verticalPosition(vert), positionLimit(limit) {}
+		PositionWrapper() {
+		}
+		PositionWrapper(QPointF p, HorizontalPosition hor, VerticalPosition vert, PositionLimit limit)
+			: point(p)
+			, horizontalPosition(hor)
+			, verticalPosition(vert)
+			, positionLimit(limit) {
+		}
 
 		QPointF point;
 		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
@@ -102,8 +108,12 @@ public:
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
 
-	CartesianPlot* plot() const { return m_plot; }	// used in the element docks
-	int coordinateSystemIndex() const { return m_cSystemIndex; }
+	CartesianPlot* plot() const {
+		return m_plot;
+	} // used in the element docks
+	int coordinateSystemIndex() const {
+		return m_cSystemIndex;
+	}
 	void setCoordinateSystemIndex(int);
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
@@ -113,18 +123,17 @@ private:
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
-	int m_cSystemIndex{0};	// index of coordinate system used from plot
+	int m_cSystemIndex{0}; // index of coordinate system used from plot
 	// parent plot if available
 	// not const because of prepareGeometryChange()
 	// normally set in finalizeAdd()
 	CartesianPlot* m_plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
+	const CartesianCoordinateSystem* cSystem{nullptr}; // current cSystem
 
 public Q_SLOTS:
 	virtual void retransform() = 0;
 
 protected:
-
 	WorksheetElementPrivate* const d_ptr;
 
 private:

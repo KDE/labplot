@@ -1,10 +1,10 @@
 /*
-    File                 : SortDialog.h
-    Project              : LabPlot
-    Description          : Sorting options dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SortDialog.h
+	Project              : LabPlot
+	Description          : Sorting options dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SortDialog.h"
@@ -23,7 +23,8 @@
 
 	\ingroup kdefrontend
  */
-SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
+SortDialog::SortDialog(QWidget* parent)
+	: QDialog(parent) {
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
@@ -38,7 +39,7 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.buttonBox, &QDialogButtonBox::accepted, this, &SortDialog::accept);
 	connect(ui.cbSorting, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SortDialog::changeType);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
 	if (conf.exists()) {
@@ -53,7 +54,7 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 }
 
 SortDialog::~SortDialog() {
-	//save the current settings
+	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 

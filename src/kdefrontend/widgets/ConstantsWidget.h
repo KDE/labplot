@@ -1,10 +1,10 @@
 /*
-    File                 : ConstansWidget.h
-    Project              : LabPlot
-    Description          : widget for selecting constants
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ConstansWidget.h
+	Project              : LabPlot
+	Description          : widget for selecting constants
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CONSTANTSWIDGET_H
@@ -17,7 +17,7 @@
 class QStringList;
 class ExpressionParser;
 
-class ConstantsWidget: public QWidget {
+class ConstantsWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -38,4 +38,4 @@ private Q_SLOTS:
 	void insertClicked();
 };
 
-#endif //CONSTANTSWIDGET_H
+#endif // CONSTANTSWIDGET_H

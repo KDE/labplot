@@ -3,9 +3,9 @@
 	Project              : LabPlot
 	Description          : Dock widget for InfoElemnt
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef INFOELEMENTDOCK_H

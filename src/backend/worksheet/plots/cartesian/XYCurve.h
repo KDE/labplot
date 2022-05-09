@@ -1,21 +1,20 @@
 /*
-    File                 : XYCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
 #include "Curve.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 #include <QFont>
 #include <QPen>
@@ -40,17 +39,28 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
-	enum class LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
-	               SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic
-	              };
-	enum class DropLineType {NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline};
-	enum class ValuesType {NoValues, X, Y, XY, XYBracketed, CustomColumn};
-	enum class ValuesPosition {Above, Under, Left, Right};
-	enum class ErrorType {NoError, Symmetric, Asymmetric};
-	enum class FillingPosition {NoFilling, Above, Below, ZeroBaseline, Left, Right};
-	enum class ErrorBarsType {Simple, WithEnds};
+	enum class LineType {
+		NoLine,
+		Line,
+		StartHorizontal,
+		StartVertical,
+		MidpointHorizontal,
+		MidpointVertical,
+		Segments2,
+		Segments3,
+		SplineCubicNatural,
+		SplineCubicPeriodic,
+		SplineAkimaNatural,
+		SplineAkimaPeriodic
+	};
+	enum class DropLineType { NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline };
+	enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
+	enum class ValuesPosition { Above, Under, Left, Right };
+	enum class ErrorType { NoError, Symmetric, Asymmetric };
+	enum class FillingPosition { NoFilling, Above, Below, ZeroBaseline, Left, Right };
+	enum class ErrorBarsType { Simple, WithEnds };
 
-	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
+	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;
 
 	QIcon icon() const override;
@@ -60,11 +70,16 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
-	double y(double x, bool &valueFound) const;
-	QDateTime yDateTime(double x, bool &valueFound) const;
-	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType,
-			const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn,
-			const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars) const;
+	double y(double x, bool& valueFound) const;
+	QDateTime yDateTime(double x, bool& valueFound) const;
+	bool minMax(const AbstractColumn* column1,
+				const AbstractColumn* column2,
+				const ErrorType errorType,
+				const AbstractColumn* errorPlusColumn,
+				const AbstractColumn* errorMinusColumn,
+				const Range<int>& indexRange,
+				Range<double>& yRange,
+				bool includeErrorBars) const;
 	bool minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars = true) const;
 	bool minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars = true) const;
 
@@ -131,7 +146,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-	//margin plots
+	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::Orientation, rugOrientation, RugOrientation)
 	BASIC_D_ACCESSOR_DECL(double, rugOffset, RugOffset)
@@ -146,7 +161,7 @@ public:
 	void retransform() override;
 	void recalcLogicalPoints();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
-	double y(double x, double &x_new, bool &valueFound) const;
+	double y(double x, double& x_new, bool& valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
 private Q_SLOTS:
@@ -166,7 +181,7 @@ private Q_SLOTS:
 	void yErrorPlusColumnNameChanged();
 	void yErrorMinusColumnNameChanged();
 	void valuesColumnNameChanged();
-	//SLOTs for changes triggered via QActions in the context menu
+	// SLOTs for changes triggered via QActions in the context menu
 	void navigateTo();
 
 protected:
@@ -189,8 +204,8 @@ private:
 	bool m_menusInitialized{false};
 
 Q_SIGNALS:
-	//General-Tab
-	void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
+	// General-Tab
+	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
 	void xErrorPlusDataChanged();
@@ -204,7 +219,7 @@ Q_SIGNALS:
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);
 
-	//Line-Tab
+	// Line-Tab
 	void lineTypeChanged(XYCurve::LineType);
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
@@ -215,7 +230,7 @@ Q_SIGNALS:
 	void dropLinePenChanged(const QPen&);
 	void dropLineOpacityChanged(qreal);
 
-	//Values-Tab
+	// Values-Tab
 	void valuesTypeChanged(XYCurve::ValuesType);
 	void valuesColumnChanged(const AbstractColumn*);
 	void valuesPositionChanged(XYCurve::ValuesPosition);
@@ -230,7 +245,7 @@ Q_SIGNALS:
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
 
-	//Filling
+	// Filling
 	void fillingPositionChanged(XYCurve::FillingPosition);
 	void fillingTypeChanged(WorksheetElement::BackgroundType);
 	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -241,7 +256,7 @@ Q_SIGNALS:
 	void fillingFileNameChanged(QString&);
 	void fillingOpacityChanged(float);
 
-	//Error bars
+	// Error bars
 	void xErrorTypeChanged(XYCurve::ErrorType);
 	void xErrorPlusColumnChanged(const AbstractColumn*);
 	void xErrorMinusColumnChanged(const AbstractColumn*);
@@ -253,7 +268,7 @@ Q_SIGNALS:
 	void errorBarsPenChanged(QPen);
 	void errorBarsOpacityChanged(qreal);
 
-	//Margin Plots
+	// Margin Plots
 	void rugEnabledChanged(bool);
 	void rugOrientationChanged(WorksheetElement::Orientation);
 	void rugLengthChanged(double);

@@ -1,10 +1,10 @@
 /*
-    File                 : ExamplesDialog.h
-    Project              : LabPlot
-    Description          : dialog showing the available example projects
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExamplesDialog.h
+	Project              : LabPlot
+	Description          : dialog showing the available example projects
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef EXAMPLESDIALOG_H
@@ -25,7 +25,6 @@ public:
 
 private:
 	ExamplesWidget* m_examplesWidget;
-
 };
 
 #endif // EXAMPLESDIALOG_H

@@ -1,20 +1,20 @@
 /*
-    File                 : Axis.h
-    Project              : LabPlot
-    Description          : Axis for cartesian coordinate systems.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : Axis.h
+	Project              : LabPlot
+	Description          : Axis for cartesian coordinate systems.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef AXISNEW_H
 #define AXISNEW_H
 
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/Range.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class CartesianPlot;
 class TextLabel;
@@ -22,13 +22,13 @@ class AxisPrivate;
 class AbstractColumn;
 class QActionGroup;
 
-class Axis: public WorksheetElement {
+class Axis : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum class RangeType {Auto, AutoData, Custom};
-	enum class Position {Top, Bottom, Left, Right, Centered, Custom, Logical};
-	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific};
+	enum class RangeType { Auto, AutoData, Custom };
+	enum class Position { Top, Bottom, Left, Right, Centered, Custom, Logical };
+	enum class LabelsFormat { Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific };
 	Q_ENUM(LabelsFormat)
 	enum TicksFlags {
 		noTicks = 0x00,
@@ -38,12 +38,12 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum class TicksType {TotalNumber, Spacing, CustomColumn, CustomValues};
-	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
-	enum class ArrowPosition {Left, Right, Both};
-	enum class LabelsPosition {NoLabels, In, Out};
-	enum class LabelsTextType {PositionValues, CustomValues};
-	enum class LabelsBackgroundType {Transparent, Color};
+	enum class TicksType { TotalNumber, Spacing, CustomColumn, CustomValues };
+	enum class ArrowType { NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig };
+	enum class ArrowPosition { Left, Right, Both };
+	enum class LabelsPosition { NoLabels, In, Out };
+	enum class LabelsTextType { PositionValues, CustomValues };
+	enum class LabelsBackgroundType { Transparent, Color };
 
 	// LabelsFormat <-> index, see AxisDock::init()
 	static int labelsFormatToIndex(LabelsFormat format) {
@@ -85,7 +85,7 @@ public:
 		return LabelsFormat::Decimal;
 	}
 
-	typedef AxisPrivate Private;	// for Axis::Private used in macros instead of AxisPrivate
+	typedef AxisPrivate Private; // for Axis::Private used in macros instead of AxisPrivate
 
 	explicit Axis(const QString&, Orientation = Orientation::Horizontal);
 	~Axis() override;
@@ -132,7 +132,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
-	QString &majorTicksColumnPath() const;
+	QString& majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
@@ -142,7 +142,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
-	QString &minorTicksColumnPath() const;
+	QString& minorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
@@ -211,7 +211,7 @@ private Q_SLOTS:
 	void majorTicksColumnAboutToBeRemoved(const AbstractAspect*);
 	void minorTicksColumnAboutToBeRemoved(const AbstractAspect*);
 
-	//SLOTs for changes triggered via QActions in the context menu
+	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
@@ -231,7 +231,7 @@ Q_SIGNALS:
 	void showScaleOffsetChanged(bool);
 	void logicalPositionChanged(double);
 
-	//title
+	// title
 	void titleOffsetXChanged(qreal);
 	void titleOffsetYChanged(qreal);
 
@@ -263,7 +263,7 @@ Q_SIGNALS:
 	void minorTicksLengthChanged(qreal);
 	void minorTicksOpacityChanged(qreal);
 
-	//labels
+	// labels
 	void labelsFormatChanged(LabelsFormat);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);

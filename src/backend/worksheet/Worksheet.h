@@ -1,12 +1,12 @@
 /*
-    File                 : Worksheet.h
-    Project              : LabPlot
-    Description          : Worksheet (2D visualization) part
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : Worksheet.h
+	Project              : LabPlot
+	Description          : Worksheet (2D visualization) part
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef WORKSHEET_H
@@ -36,9 +36,9 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum class Unit {Millimeter, Centimeter, Inch, Point};
-	enum class Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
-	enum class CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY};
+	enum class Unit { Millimeter, Centimeter, Inch, Point };
+	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
+	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);

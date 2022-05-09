@@ -1,17 +1,17 @@
 /*
-    File                 : Double2StringFilter.cpp
-    Project              : AbstractColumn
-    Description          : Locale-aware conversion filter double -> QString.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Double2StringFilter.cpp
+	Project              : AbstractColumn
+	Description          : Locale-aware conversion filter double -> QString.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Double2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
-#include <QXmlStreamWriter>
 #include <QUndoCommand>
+#include <QXmlStreamWriter>
 
 #include <KLocalizedString>
 
@@ -39,7 +39,7 @@ private:
 	int m_other_digits;
 };
 
-void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
+void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("format", QString(QChar(numericFormat())));
 	writer->writeAttribute("digits", QString::number(numDigits()));
 }
@@ -75,7 +75,8 @@ void Double2StringFilter::setNumDigits(int digits) {
 }
 
 Double2StringFilterSetFormatCmd::Double2StringFilterSetFormatCmd(Double2StringFilter* target, char new_format)
-	: m_target(target), m_other_format(new_format) {
+	: m_target(target)
+	, m_other_format(new_format) {
 	if (m_target->parentAspect())
 		setText(i18n("%1: set numeric format to '%2'", m_target->parentAspect()->name(), new_format));
 	else
@@ -94,7 +95,8 @@ void Double2StringFilterSetFormatCmd::undo() {
 }
 
 Double2StringFilterSetDigitsCmd::Double2StringFilterSetDigitsCmd(Double2StringFilter* target, int new_digits)
-	: m_target(target), m_other_digits(new_digits) {
+	: m_target(target)
+	, m_other_digits(new_digits) {
 	if (m_target->parentAspect())
 		setText(i18n("%1: set decimal digits to %2", m_target->parentAspect()->name(), new_digits));
 	else

@@ -1,19 +1,19 @@
 /*
-    File                 : CartesianPlotLegendDock.h
-    Project              : LabPlot
-    Description          : widget for cartesian legend properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2020 Alexander Semke <alexander.semke@web.de>
+	File                 : CartesianPlotLegendDock.h
+	Project              : LabPlot
+	Description          : widget for cartesian legend properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTLEGENDDOCK_H
 #define CARTESIANPLOTLEGENDDOCK_H
 
-#include "ui_cartesianplotlegenddock.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_cartesianplotlegenddock.h"
 
 class LabelWidget;
 class KConfig;
@@ -42,7 +42,7 @@ private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
-	//SLOTs for changes triggered in CartesianPlotLegendDock
+	// SLOTs for changes triggered in CartesianPlotLegendDock
 	//"General"-tab
 	void visibilityChanged(bool);
 	void labelFontChanged(const QFont&);
@@ -58,9 +58,8 @@ private Q_SLOTS:
 	void rotationChanged(int value);
 	void bindingChanged(bool checked);
 
-
 	//"Background"-tab
-  	void backgroundTypeChanged(int);
+	void backgroundTypeChanged(int);
 	void backgroundColorStyleChanged(int);
 	void backgroundImageStyleChanged(int);
 	void backgroundBrushStyleChanged(int);
@@ -69,7 +68,7 @@ private Q_SLOTS:
 	void selectFile();
 	void fileNameChanged();
 	void backgroundOpacityChanged(int);
-  	void borderStyleChanged(int);
+	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
@@ -84,7 +83,7 @@ private Q_SLOTS:
 	void layoutVerticalSpacingChanged(double);
 	void layoutColumnCountChanged(int);
 
-	//SLOTs for changes triggered in CartesianPlotLegend
+	// SLOTs for changes triggered in CartesianPlotLegend
 	void legendLabelFontChanged(QFont&);
 	void legendLabelColorChanged(QColor&);
 	void legendLabelOrderChanged(bool);
@@ -117,7 +116,7 @@ private Q_SLOTS:
 	void legendLayoutHorizontalSpacingChanged(float);
 	void legendLayoutColumnCountChanged(int);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 

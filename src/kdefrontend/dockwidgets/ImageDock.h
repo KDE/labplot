@@ -1,18 +1,18 @@
 /*
-    File                 : ImageDock.h
-    Project              : LabPlot
-    Description          : widget for image properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	File                 : ImageDock.h
+	Project              : LabPlot
+	Description          : widget for image properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMAGEDOCK_H
 #define IMAGEDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_imagedock.h"
 
 class AbstractAspect;
@@ -37,13 +37,13 @@ private:
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in ImageDock
+	// SLOTs for changes triggered in ImageDock
 	void selectFile();
 	void fileNameChanged();
 	void embeddedChanged(int);
 	void opacityChanged(int);
 
-	//geometry
+	// geometry
 	void sizeChanged(int);
 	void widthChanged(double);
 	void heightChanged(double);
@@ -56,7 +56,7 @@ private Q_SLOTS:
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 
-	//border
+	// border
 	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
@@ -64,7 +64,7 @@ private Q_SLOTS:
 
 	void visibilityChanged(bool);
 
-	//SLOTs for changes triggered in Image
+	// SLOTs for changes triggered in Image
 	void imageFileNameChanged(const QString&);
 	void imageEmbeddedChanged(bool);
 	void imageOpacityChanged(float);

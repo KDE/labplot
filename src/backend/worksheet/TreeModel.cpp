@@ -1,11 +1,11 @@
 /*
-    File                 : TreeModel.cpp
-    Project              : LabPlot
-    Description 	     : This is an abstract treemodel which can be used by a treeview
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
+	File                 : TreeModel.cpp
+	Project              : LabPlot
+	Description 	     : This is an abstract treemodel which can be used by a treeview
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "TreeModel.h"
@@ -14,16 +14,16 @@
 // TreeItem ###############################################
 //##########################################################
 
-TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent) :
-	itemData(data),
-	parentItem(parent) {
+TreeItem::TreeItem(const QVector<QVariant>& data, TreeItem* parent)
+	: itemData(data)
+	, parentItem(parent) {
 }
 
 TreeItem::~TreeItem() {
 	qDeleteAll(childItems);
 }
 
-TreeItem *TreeItem::child(int number) {
+TreeItem* TreeItem::child(int number) {
 	return childItems.value(number);
 }
 
@@ -70,7 +70,7 @@ bool TreeItem::insertColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.insert(position, QVariant());
 
-	foreach (TreeItem *child, childItems)
+	foreach (TreeItem* child, childItems)
 		child->insertColumns(position, columns);
 
 	return true;
@@ -97,7 +97,7 @@ bool TreeItem::removeColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		itemData.remove(position);
 
-	foreach (TreeItem *child, childItems)
+	foreach (TreeItem* child, childItems)
 		child->removeColumns(position, columns);
 
 	return true;
@@ -152,7 +152,7 @@ QVariant TreeModel::data(const QModelIndex& index, int role) const {
 	if (role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::BackgroundRole)
 		return {};
 
-	TreeItem *item = getItem(index);
+	TreeItem* item = getItem(index);
 
 	if (role != Qt::BackgroundRole)
 		return item->data(index.column());
@@ -167,9 +167,9 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const {
 	return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
-TreeItem *TreeModel::getItem(const QModelIndex& index) const {
+TreeItem* TreeModel::getItem(const QModelIndex& index) const {
 	if (index.isValid()) {
-		auto *item = static_cast<TreeItem*>(index.internalPointer());
+		auto* item = static_cast<TreeItem*>(index.internalPointer());
 		if (item)
 			return item;
 	}
@@ -187,9 +187,9 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) con
 	if (parent.isValid() && parent.column() != 0)
 		return {};
 
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 
-	TreeItem *childItem = parentItem->child(row);
+	TreeItem* childItem = parentItem->child(row);
 	if (childItem)
 		return createIndex(row, column, childItem);
 	else
@@ -207,7 +207,7 @@ bool TreeModel::insertColumns(int position, int columns, const QModelIndex& pare
 }
 
 bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 	bool success;
 
 	beginInsertRows(parent, position, position + rows - 1);
@@ -217,12 +217,12 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
 	return success;
 }
 
-QModelIndex TreeModel::parent(const QModelIndex &index) const {
+QModelIndex TreeModel::parent(const QModelIndex& index) const {
 	if (!index.isValid())
 		return {};
 
-	TreeItem *childItem = getItem(index);
-	TreeItem *parentItem = childItem->parent();
+	TreeItem* childItem = getItem(index);
+	TreeItem* parentItem = childItem->parent();
 
 	if (parentItem == rootItem)
 		return {};
@@ -244,7 +244,7 @@ bool TreeModel::removeColumns(int position, int columns, const QModelIndex& pare
 }
 
 bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
-	TreeItem *parentItem = getItem(parent);
+	TreeItem* parentItem = getItem(parent);
 
 	beginRemoveRows(parent, position, position + rows - 1);
 	bool success = parentItem->removeChildren(position, rows);
@@ -253,8 +253,8 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex& parent) {
 	return success;
 }
 
-int TreeModel::rowCount(const QModelIndex &parent) const {
-	TreeItem *parentItem = getItem(parent);
+int TreeModel::rowCount(const QModelIndex& parent) const {
+	TreeItem* parentItem = getItem(parent);
 
 	return parentItem->childCount();
 }
@@ -265,9 +265,8 @@ bool TreeModel::setTreeData(const QVariant& data, const int row, const int colum
 }
 
 bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int role) {
-
 	if (role == Qt::EditRole || role == Qt::DisplayRole) {
-		TreeItem *item = getItem(index);
+		TreeItem* item = getItem(index);
 		bool result = item->setData(index.column(), value);
 
 		if (result)
@@ -275,7 +274,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int rol
 
 		return result;
 	} else if (role == Qt::BackgroundRole) {
-		TreeItem *item = getItem(index);
+		TreeItem* item = getItem(index);
 		bool result = item->setBackgroundColor(index.column(), value);
 
 		if (result)

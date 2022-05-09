@@ -9,8 +9,8 @@
 #ifndef SPICEFILTER_H
 #define SPICEFILTER_H
 
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 class QStringList;
 class SpiceFilterPrivate;
@@ -23,11 +23,12 @@ public:
 	SpiceFilter();
 	~SpiceFilter() override;
 
-	static bool isSpiceFile(const QString& fileName, bool *binary=nullptr);
+	static bool isSpiceFile(const QString& fileName, bool* binary = nullptr);
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;

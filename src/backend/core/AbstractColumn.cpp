@@ -1,23 +1,22 @@
 /*
-    File                 : AbstractColumn.cpp
-    Project              : LabPlot
-    Description          : Interface definition for data with column logic
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractColumn.cpp
+	Project              : LabPlot
+	Description          : Interface definition for data with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AbstractColumnPrivate.h"
 #include "backend/core/abstractcolumncommands.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
+#include "backend/lib/XmlStreamReader.h"
 
+#include <KLocalizedString>
 #include <QDateTime>
 #include <QIcon>
-#include <KLocalizedString>
 
 /**
  * \class AbstractColumn
@@ -61,8 +60,9 @@
  *
  * \param name the column name (= aspect name)
  */
-AbstractColumn::AbstractColumn(const QString &name, AspectType type)
-	: AbstractAspect(name, type), d( new AbstractColumnPrivate(this) ) {
+AbstractColumn::AbstractColumn(const QString& name, AspectType type)
+	: AbstractAspect(name, type)
+	, d(new AbstractColumnPrivate(this)) {
 }
 
 AbstractColumn::~AbstractColumn() {
@@ -71,18 +71,31 @@ AbstractColumn::~AbstractColumn() {
 }
 
 QStringList AbstractColumn::dateFormats() {
-	static const QStringList dates{"yyyy-MM-dd", "yyyy.MM.dd", "yyyy/MM/dd", "yyyyMMdd",
-									"dd-MM-yyyy", "dd.MM.yyyy", "dd/MM/yyyy", "ddMMyyyy",
-									"dd-MM-yy", "dd.MM.yy", "dd/MM/yy", "ddMMyy",
-									"MM-yyyy", "MM.yyyy", "MM/yyyy",
-									"dd-MM", "dd.MM", "dd/MM", "ddMM"};
+	static const QStringList dates{"yyyy-MM-dd",
+								   "yyyy.MM.dd",
+								   "yyyy/MM/dd",
+								   "yyyyMMdd",
+								   "dd-MM-yyyy",
+								   "dd.MM.yyyy",
+								   "dd/MM/yyyy",
+								   "ddMMyyyy",
+								   "dd-MM-yy",
+								   "dd.MM.yy",
+								   "dd/MM/yy",
+								   "ddMMyy",
+								   "MM-yyyy",
+								   "MM.yyyy",
+								   "MM/yyyy",
+								   "dd-MM",
+								   "dd.MM",
+								   "dd/MM",
+								   "ddMM"};
 
 	return dates;
 }
 
 QStringList AbstractColumn::timeFormats() {
-	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap",
-		"hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
+	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap", "hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
 
 	return times;
 }
@@ -212,7 +225,8 @@ QIcon AbstractColumn::modeIcon(ColumnMode mode) {
  * This sets the column mode and, if
  * necessary, converts it to another datatype.
  */
-void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {}
+void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {
+}
 
 /**
  * \brief Copy another column of the same type
@@ -253,14 +267,24 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
-	beginMacro( i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count) );
-	exec(new SignallingUndoCommand("pre-signal", this, "rowsAboutToBeInserted", "rowsRemoved",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
+	exec(new SignallingUndoCommand("pre-signal",
+								   this,
+								   "rowsAboutToBeInserted",
+								   "rowsRemoved",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, before),
+								   Q_ARG(int, count)));
 
 	handleRowInsertion(before, count);
 
-	exec(new SignallingUndoCommand("post-signal", this, "rowsInserted", "rowsAboutToBeRemoved",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,before), Q_ARG(int,count)));
+	exec(new SignallingUndoCommand("post-signal",
+								   this,
+								   "rowsInserted",
+								   "rowsAboutToBeRemoved",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, before),
+								   Q_ARG(int, count)));
 	endMacro();
 }
 
@@ -272,14 +296,24 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  * \brief Remove 'count' rows starting from row 'first'
  */
 void AbstractColumn::removeRows(int first, int count) {
-	beginMacro( i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count) );
-	exec(new SignallingUndoCommand("change signal", this, "rowsAboutToBeRemoved", "rowsInserted",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
+	exec(new SignallingUndoCommand("change signal",
+								   this,
+								   "rowsAboutToBeRemoved",
+								   "rowsInserted",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, first),
+								   Q_ARG(int, count)));
 
 	handleRowRemoval(first, count);
 
-	exec(new SignallingUndoCommand("change signal", this, "rowsRemoved", "rowsAboutToBeInserted",
-	                               Q_ARG(const AbstractColumn*,this), Q_ARG(int,first), Q_ARG(int,count)));
+	exec(new SignallingUndoCommand("change signal",
+								   this,
+								   "rowsRemoved",
+								   "rowsAboutToBeInserted",
+								   Q_ARG(const AbstractColumn*, this),
+								   Q_ARG(int, first),
+								   Q_ARG(int, count)));
 	endMacro();
 }
 
@@ -311,7 +345,8 @@ bool AbstractColumn::isPlottable() const {
 /**
  * \brief Clear the whole column
  */
-void AbstractColumn::clear() {}
+void AbstractColumn::clear() {
+}
 
 /**
  * \brief Convenience method for mode-independent testing of validity
@@ -320,7 +355,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double:
 		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
-	case ColumnMode::Integer:	// there is no invalid integer
+	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;
 	case ColumnMode::Text:
@@ -356,7 +391,7 @@ bool AbstractColumn::isMasked(const Interval<int>& i) const {
 /**
  * \brief Return all intervals of masked rows
  */
-QVector< Interval<int> > AbstractColumn::maskedIntervals() const {
+QVector<Interval<int>> AbstractColumn::maskedIntervals() const {
 	return d->m_masking.intervals();
 }
 
@@ -364,8 +399,7 @@ QVector< Interval<int> > AbstractColumn::maskedIntervals() const {
  * \brief Clear all masking information
  */
 void AbstractColumn::clearMasks() {
-	exec(new AbstractColumnClearMasksCmd(d),
-	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	exec(new AbstractColumnClearMasksCmd(d), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
 }
 
 /**
@@ -375,15 +409,14 @@ void AbstractColumn::clearMasks() {
  * \param mask true: mask, false: unmask
  */
 void AbstractColumn::setMasked(const Interval<int>& i, bool mask) {
-	exec(new AbstractColumnSetMaskedCmd(d, i, mask),
-	     "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*,this));
+	exec(new AbstractColumnSetMaskedCmd(d, i, mask), "maskingAboutToChange", "maskingChanged", Q_ARG(const AbstractColumn*, this));
 }
 
 /**
  * \brief Overloaded function for convenience
  */
 void AbstractColumn::setMasked(int row, bool mask) {
-	setMasked(Interval<int>(row,row), mask);
+	setMasked(Interval<int>(row, row), mask);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,7 +448,7 @@ QString AbstractColumn::formula(int /*row*/) const {
  * 	list << QString(interval.toString() + ": " + my_column.formula(interval.start()));
  * \endcode
  */
-QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
+QVector<Interval<int>> AbstractColumn::formulaIntervals() const {
 	return {};
 }
 
@@ -434,10 +467,10 @@ void AbstractColumn::setFormula(int /*row*/, const QString& /*formula*/) {
 /**
  * \brief Clear all formulas
  */
-void AbstractColumn::clearFormulas() {}
+void AbstractColumn::clearFormulas() {
+}
 
-
-//conditional formatting
+// conditional formatting
 bool AbstractColumn::hasHeatmapFormat() const {
 	return (d->m_heatmapFormat != nullptr);
 }
@@ -777,7 +810,7 @@ int AbstractColumn::indexForValue(double /*x*/) const {
 /**
  * \brief Read XML mask element
  */
-bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
+bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
 	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
 
 	bool ok1, ok2;
@@ -788,8 +821,9 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
 	}
-	setMasked(Interval<int>(start,end));
-	if (!reader->skipToEndElement()) return false;
+	setMasked(Interval<int>(start, end));
+	if (!reader->skipToEndElement())
+		return false;
 
 	return true;
 }
@@ -797,7 +831,7 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader *reader) {
 /**
  * \brief Write XML mask element
  */
-void AbstractColumn::XmlWriteMask(QXmlStreamWriter *writer) const {
+void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
 	for (const auto& interval : maskedIntervals()) {
 		writer->writeStartElement("mask");
 		writer->writeAttribute("start_row", QString::number(interval.start()));

@@ -1,10 +1,10 @@
 /*
-    File                 : FormattingHeatmapDialog.h
-    Project              : LabPlot
-    Description          : Dialog for the conditional formatting according to a heatmap
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FormattingHeatmapDialog.h
+	Project              : LabPlot
+	Description          : Dialog for the conditional formatting according to a heatmap
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "FormattingHeatmapDialog.h"
@@ -29,7 +29,9 @@
 	\ingroup kdefrontend
  */
 
-FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
+FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent)
+	: QDialog(parent)
+	, m_spreadsheet(s) {
 	setWindowTitle(i18nc("@title:window", "Conditional Formatting - Heatmap"));
 
 	auto* mainWidget = new QWidget(this);
@@ -65,7 +67,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 	connect(ui.leMinimum, &QLineEdit::textChanged, this, &FormattingHeatmapDialog::checkValues);
 	connect(ui.bColorMap, &QPushButton::clicked, this, &FormattingHeatmapDialog::selectColorMap);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	const KConfigGroup conf(KSharedConfig::openConfig(), "FormattingHeatmapDialog");
 	if (conf.exists()) {
@@ -80,11 +82,11 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
-		resize( QSize(400, 0).expandedTo(minimumSize()) );
+		resize(QSize(400, 0).expandedTo(minimumSize()));
 }
 
 FormattingHeatmapDialog::~FormattingHeatmapDialog() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "FormattingHeatmapDialog");
 	conf.writeEntry("AutoRange", (int)ui.chkAutoRange->checkState());
 	conf.writeEntry("Highlight", ui.cbHightlight->currentIndex());
@@ -106,9 +108,9 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 		if (col->maximum() > max)
 			max = col->maximum();
 
-		//show the format settings of the first column
+		// show the format settings of the first column
 		if (!formatShown && col->hasHeatmapFormat()) {
-			const auto& format =col->heatmapFormat();
+			const auto& format = col->heatmapFormat();
 
 			m_name = format.name;
 			m_colors = format.colors;
@@ -154,14 +156,13 @@ void FormattingHeatmapDialog::selectColorMap() {
 	if (dlg->exec() == QDialog::Accepted) {
 		m_name = dlg->name();
 		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
-		m_colors = dlg->colors(); //fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
+		m_colors = dlg->colors(); // fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
 		ui.lColorMapPreview->setFocus();
 	}
 }
 
 void FormattingHeatmapDialog::checkValues() {
-	if (ui.chkAutoRange->checkState() != Qt::Checked
-		&& (ui.leMaximum->text().isEmpty() || ui.leMinimum->text().isEmpty())) {
+	if (ui.chkAutoRange->checkState() != Qt::Checked && (ui.leMaximum->text().isEmpty() || ui.leMinimum->text().isEmpty())) {
 		m_okButton->setEnabled(false);
 		return;
 	}

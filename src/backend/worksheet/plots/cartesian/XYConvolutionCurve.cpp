@@ -1,12 +1,11 @@
 /*
-    File                 : XYConvolutionCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a convolution
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYConvolutionCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a convolution
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYConvolutionCurve
@@ -18,13 +17,13 @@
 #include "XYConvolutionCurve.h"
 #include "XYConvolutionCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
-#include <QIcon>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 extern "C" {
@@ -39,8 +38,8 @@ XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePr
 	: XYAnalysisCurve(name, dd, AspectType::XYConvolutionCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYConvolutionCurve::~XYConvolutionCurve() = default;
 
 void XYConvolutionCurve::recalculate() {
@@ -52,7 +51,7 @@ void XYConvolutionCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYConvolutionCurve::icon() const {
-// 	return QIcon::fromTheme("labplot-xy-convolution-curve");//not available yet
+	// 	return QIcon::fromTheme("labplot-xy-convolution-curve");//not available yet
 	return QIcon::fromTheme("labplot-xy-curve");
 }
 
@@ -78,23 +77,25 @@ void XYConvolutionCurve::setConvolutionData(const XYConvolutionCurve::Convolutio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
+XYConvolutionCurvePrivate::XYConvolutionCurvePrivate(XYConvolutionCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYConvolutionCurvePrivate::~XYConvolutionCurvePrivate() = default;
 
 void XYConvolutionCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create convolution result columns if not available yet, clear them otherwise
+	// create convolution result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
 		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -110,20 +111,20 @@ void XYConvolutionCurvePrivate::recalculate() {
 		yVector->clear();
 	}
 
-	//clear the previous result
+	// clear the previous result
 	convolutionResult = XYConvolutionCurve::ConvolutionResult();
 
-	//determine the data source columns
+	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
+		// spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
-		//curve columns as data source
+		// curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 		// no y2 column: use standard kernel
@@ -136,7 +137,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the convolution to temporary vectors
+	// copy all valid data point for the convolution to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> y2dataVector;
@@ -150,18 +151,17 @@ void XYConvolutionCurvePrivate::recalculate() {
 		xmax = convolutionData.xRange.last();
 	}
 
-	//only copy those data where values are valid and in range
-	if (tmpXDataColumn) {	// x-axis present (with possible range)
+	// only copy those data where values are valid and in range
+	if (tmpXDataColumn) { // x-axis present (with possible range)
 		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row)
-				&& tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
+			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row) && tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
 				if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				}
 			}
 		}
-	} else {	// no x-axis: take all valid values
+	} else { // no x-axis: take all valid values
 		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
 			if (tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row))
 				ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -183,8 +183,8 @@ void XYConvolutionCurvePrivate::recalculate() {
 		delete[] k;
 	}
 
-	const size_t n = (size_t)ydataVector.size();	// number of points for signal
-	const size_t m = (size_t)y2dataVector.size();	// number of points for response
+	const size_t n = (size_t)ydataVector.size(); // number of points for signal
+	const size_t m = (size_t)y2dataVector.size(); // number of points for response
 	if (n < 1 || m < 1) {
 		convolutionResult.available = true;
 		convolutionResult.valid = false;
@@ -215,7 +215,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	DEBUG("norm = " << nsl_conv_norm_name[norm]);
 	DEBUG("wrap = " << nsl_conv_wrap_name[wrap]);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	size_t np;
 	if (type == nsl_conv_type_linear)
 		np = n + m - 1;
@@ -235,26 +235,26 @@ void XYConvolutionCurvePrivate::recalculate() {
 	if (tmpXDataColumn != nullptr) {
 		int size = GSL_MIN(xdataVector.size(), (int)np);
 		memcpy(xVector->data(), xdata, size * sizeof(double));
-		double sampleInterval = (xVector->data()[size-1] - xVector->data()[0])/(xdataVector.size()-1);
+		double sampleInterval = (xVector->data()[size - 1] - xVector->data()[0]) / (xdataVector.size() - 1);
 		DEBUG("xdata size = " << xdataVector.size() << ", np = " << np << ", sample interval = " << sampleInterval);
-		for (int i = size; i < (int)np; i++)	// fill missing values
-			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleInterval;
-	} else {	// fill with index (starting with 0)
+		for (int i = size; i < (int)np; i++) // fill missing values
+			xVector->data()[i] = xVector->data()[size - 1] + (i - size + 1) * sampleInterval;
+	} else { // fill with index (starting with 0)
 		for (size_t i = 0; i < np; i++)
 			xVector->data()[i] = i * samplingInterval;
 	}
 
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	convolutionResult.available = true;
 	convolutionResult.valid = true;
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
 	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
@@ -264,38 +264,38 @@ void XYConvolutionCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
+void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYConvolutionCurve);
 
 	writer->writeStartElement("xyConvolutionCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-convolution-curve specific information
-	// convolution data
+	// write xy-convolution-curve specific information
+	//  convolution data
 	writer->writeStartElement("convolutionData");
-	writer->writeAttribute( "samplingInterval", QString::number(d->convolutionData.samplingInterval) );
-	writer->writeAttribute( "kernel", QString::number(d->convolutionData.kernel) );
-	writer->writeAttribute( "kernelSize", QString::number(d->convolutionData.kernelSize) );
-	writer->writeAttribute( "autoRange", QString::number(d->convolutionData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->convolutionData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->convolutionData.xRange.last()) );
-	writer->writeAttribute( "direction", QString::number(d->convolutionData.direction) );
-	writer->writeAttribute( "type", QString::number(d->convolutionData.type) );
-	writer->writeAttribute( "method", QString::number(d->convolutionData.method) );
-	writer->writeAttribute( "normalize", QString::number(d->convolutionData.normalize) );
-	writer->writeAttribute( "wrap", QString::number(d->convolutionData.wrap) );
-	writer->writeEndElement();// convolutionData
+	writer->writeAttribute("samplingInterval", QString::number(d->convolutionData.samplingInterval));
+	writer->writeAttribute("kernel", QString::number(d->convolutionData.kernel));
+	writer->writeAttribute("kernelSize", QString::number(d->convolutionData.kernelSize));
+	writer->writeAttribute("autoRange", QString::number(d->convolutionData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->convolutionData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->convolutionData.xRange.last()));
+	writer->writeAttribute("direction", QString::number(d->convolutionData.direction));
+	writer->writeAttribute("type", QString::number(d->convolutionData.type));
+	writer->writeAttribute("method", QString::number(d->convolutionData.method));
+	writer->writeAttribute("normalize", QString::number(d->convolutionData.normalize));
+	writer->writeAttribute("wrap", QString::number(d->convolutionData.wrap));
+	writer->writeEndElement(); // convolutionData
 
 	// convolution results (generated columns)
 	writer->writeStartElement("convolutionResult");
-	writer->writeAttribute( "available", QString::number(d->convolutionResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->convolutionResult.valid) );
-	writer->writeAttribute( "status", d->convolutionResult.status );
-	writer->writeAttribute( "time", QString::number(d->convolutionResult.elapsedTime) );
+	writer->writeAttribute("available", QString::number(d->convolutionResult.available));
+	writer->writeAttribute("valid", QString::number(d->convolutionResult.valid));
+	writer->writeAttribute("status", d->convolutionResult.status);
+	writer->writeAttribute("time", QString::number(d->convolutionResult.elapsedTime));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -323,7 +323,7 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "convolutionData") {
 			attribs = reader->attributes();
@@ -370,8 +370,8 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;

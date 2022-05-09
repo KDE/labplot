@@ -19,7 +19,6 @@ class TextLabelTest : public CommonTest {
 private Q_SLOTS:
 
 	void addPlot();
-
 };
 
 #endif

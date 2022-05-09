@@ -1,12 +1,11 @@
 /*
-    File                 : SettingsNotebookPage.h
-    Project              : LabPlot
-    Description          : Settings page for Notebook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsNotebookPage.h
+	Project              : LabPlot
+	Description          : Settings page for Notebook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SETTINGSNOTEBOOKPAGE_H
 #define SETTINGSNOTEBOOKPAGE_H

@@ -1,10 +1,10 @@
 /*
-    File                 : JSONFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the JSON I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : JSONFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the JSON I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "JSONFilterTest.h"
@@ -15,7 +15,7 @@
 
 void JSONFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
@@ -42,7 +42,7 @@ void JSONFilterTest::testArrayImport() {
 	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 1")); //TODO is translatable in JsonFilter
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 1")); // TODO is translatable in JsonFilter
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 2"));
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
@@ -255,7 +255,7 @@ void JSONFilterTest::testObjectImport04() {
 	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("4. close"));
 	QCOMPARE(spreadsheet.column(5)->name(), QLatin1String("5. volume"));
 
-	//TODO: the values are sorted with respect to the names of the objects, i.e. to the timestamp. Why?
+	// TODO: the values are sorted with respect to the names of the objects, i.e. to the timestamp. Why?
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0).toString(dateTimeFormat), QString("2018-06-14 15:56:00"));
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1).toString(dateTimeFormat), QString("2018-06-14 15:57:00"));
 

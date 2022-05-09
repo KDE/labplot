@@ -1,11 +1,11 @@
 /*
-    File                 : CantorWorksheet.h
-    Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CantorWorksheet.h
+	Project              : LabPlot
+	Description          : Aspect providing a Cantor Worksheets for Multiple backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CANTORWORKSHEET_H
@@ -67,8 +67,8 @@ private:
 
 private Q_SLOTS:
 	void dataChanged(const QModelIndex&);
-	void rowsInserted(const QModelIndex & parent, int first, int last);
-	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
+	void rowsInserted(const QModelIndex& parent, int first, int last);
+	void rowsAboutToBeRemoved(const QModelIndex& parent, int first, int last);
 	void modelReset();
 	void modified();
 

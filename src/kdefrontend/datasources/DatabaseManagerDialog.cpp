@@ -1,12 +1,11 @@
 /*
-    File                 : DatabaseManagerDialog.cc
-    Project              : LabPlot
-    Description          : dialog for managing database connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatabaseManagerDialog.cc
+	Project              : LabPlot
+	Description          : dialog for managing database connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
@@ -24,9 +23,9 @@
 
 	\ingroup kdefrontend
 */
-DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn) : QDialog(parent),
-	mainWidget(new DatabaseManagerWidget(this, conn)) {
-
+DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& conn)
+	: QDialog(parent)
+	, mainWidget(new DatabaseManagerWidget(this, conn)) {
 	setWindowIcon(QIcon::fromTheme("network-server-database"));
 	setWindowTitle(i18nc("@title:window", "SQL Database Connections"));
 
@@ -37,12 +36,12 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	layout->addWidget(buttonBox);
 
 	connect(mainWidget, &DatabaseManagerWidget::changed, this, &DatabaseManagerDialog::changed);
-	connect(buttonBox->button(QDialogButtonBox::Ok),&QPushButton::clicked, this, &DatabaseManagerDialog::save);
+	connect(buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, &DatabaseManagerDialog::save);
 	connect(buttonBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &DatabaseManagerDialog::close);
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
 	if (conf.exists()) {
@@ -57,7 +56,7 @@ QString DatabaseManagerDialog::connection() const {
 }
 
 DatabaseManagerDialog::~DatabaseManagerDialog() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatabaseManagerDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
@@ -68,7 +67,7 @@ void DatabaseManagerDialog::changed() {
 }
 
 void DatabaseManagerDialog::save() {
-	//ok-button was clicked, save the connections if they were changed
+	// ok-button was clicked, save the connections if they were changed
 	if (m_changed)
 		mainWidget->saveConnections();
 }

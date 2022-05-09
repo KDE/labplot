@@ -1,13 +1,12 @@
 /*
-    File                 : CantorWorksheetView.cpp
-    Project              : LabPlot
-    Description          : View class for CantorWorksheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CantorWorksheetView.cpp
+	Project              : LabPlot
+	Description          : View class for CantorWorksheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "CantorWorksheetView.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
@@ -17,13 +16,13 @@
 #include <QMenu>
 #include <QToolBar>
 
-#include <KToggleAction>
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
+#include <KToggleAction>
 
-CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget(),
-	m_worksheet(worksheet) {
-
+CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet)
+	: QWidget()
+	, m_worksheet(worksheet) {
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	m_part = worksheet->part();
@@ -45,22 +44,22 @@ void CantorWorksheetView::initActions() {
 	m_actionGroup = new QActionGroup(this);
 	m_actionGroup->setExclusive(false);
 
-	//general notebook specific actions
+	// general notebook specific actions
 	m_zoomIn = new QAction(QIcon::fromTheme(QLatin1String("zoom-in")), i18n("Zoom In"), m_actionGroup);
 	m_zoomIn->setData("view_zoom_in");
-	m_zoomIn->setShortcut(Qt::CTRL+Qt::Key_Plus);
+	m_zoomIn->setShortcut(Qt::CTRL + Qt::Key_Plus);
 
 	m_zoomOut = new QAction(QIcon::fromTheme(QLatin1String("zoom-out")), i18n("Zoom Out"), m_actionGroup);
 	m_zoomOut->setData("view_zoom_out");
-	m_zoomOut->setShortcut(Qt::CTRL+Qt::Key_Minus);
+	m_zoomOut->setShortcut(Qt::CTRL + Qt::Key_Minus);
 
 	m_find = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Find"), m_actionGroup);
 	m_find->setData("edit_find");
-	m_find->setShortcut(Qt::CTRL+Qt::Key_F);
+	m_find->setShortcut(Qt::CTRL + Qt::Key_F);
 
 	m_replace = new QAction(QIcon::fromTheme(QLatin1String("edit-find-replace")), i18n("Replace"), m_actionGroup);
 	m_replace->setData("edit_replace");
-	m_replace->setShortcut(Qt::CTRL+Qt::Key_R);
+	m_replace->setShortcut(Qt::CTRL + Qt::Key_R);
 
 	m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), m_actionGroup);
 	m_restartBackendAction->setData("restart_backend");
@@ -68,15 +67,15 @@ void CantorWorksheetView::initActions() {
 	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Notebook"), m_actionGroup);
 	m_evaluateWorsheetAction->setData("evaluate_worksheet");
 
-	//all other actions are initialized in initMenus() since they are only required for the main and context menu
+	// all other actions are initialized in initMenus() since they are only required for the main and context menu
 
 	connect(m_actionGroup, &QActionGroup::triggered, this, &CantorWorksheetView::triggerAction);
 }
 
 void CantorWorksheetView::initMenus() {
-	//initialize the remaining actions
+	// initialize the remaining actions
 
-	//entry specific actions
+	// entry specific actions
 	m_evaluateEntryAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Evaluate Entry"), m_actionGroup);
 	m_evaluateEntryAction->setShortcut(Qt::SHIFT + Qt::Key_Return);
 	m_evaluateEntryAction->setData("evaluate_current");
@@ -84,7 +83,7 @@ void CantorWorksheetView::initMenus() {
 	m_removeCurrentEntryAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Remove Current Entry"), m_actionGroup);
 	m_removeCurrentEntryAction->setData("remove_current");
 
-	//actions for the "Add New" menu
+	// actions for the "Add New" menu
 	auto* insertCommandEntryAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Command"), m_actionGroup);
 	insertCommandEntryAction->setData("insert_command_entry");
 	insertCommandEntryAction->setShortcut(Qt::CTRL + Qt::Key_Return);
@@ -92,7 +91,7 @@ void CantorWorksheetView::initMenus() {
 	auto* insertTextEntryAction = new QAction(QIcon::fromTheme(QLatin1String("draw-text")), i18n("Text"), m_actionGroup);
 	insertTextEntryAction->setData("insert_text_entry");
 
-	//markdown entry is only available if cantor was compiled with libdiscovery (cantor 18.12 and later)
+	// markdown entry is only available if cantor was compiled with libdiscovery (cantor 18.12 and later)
 	QAction* insertMarkdownEntryAction = nullptr;
 	if (m_part->action("insert_markdown_entry")) {
 		insertMarkdownEntryAction = new QAction(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"), m_actionGroup);
@@ -108,13 +107,13 @@ void CantorWorksheetView::initMenus() {
 	auto* insertPageBreakAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view-page")), i18n("Page Break"), m_actionGroup);
 	insertPageBreakAction->setData("insert_page_break_entry");
 
-// 	auto* insertHorizLineAction = new QAction(QIcon::fromTheme(QLatin1String("newline")), i18n("Horizontal Line"), m_actionGroup);
-// 	insertHorizLineAction->setData("insert_horizontal_line_entry");
+	// 	auto* insertHorizLineAction = new QAction(QIcon::fromTheme(QLatin1String("newline")), i18n("Horizontal Line"), m_actionGroup);
+	// 	insertHorizLineAction->setData("insert_horizontal_line_entry");
 
-// 	auto* insertHierarchyEntryAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Hierarchy"), m_actionGroup);
-// 	insertHierarchyEntryAction->setData("insert_hierarchy_entry");
+	// 	auto* insertHierarchyEntryAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Hierarchy"), m_actionGroup);
+	// 	insertHierarchyEntryAction->setData("insert_hierarchy_entry");
 
-	//actions for "assistants", that are backend specific and not always available
+	// actions for "assistants", that are backend specific and not always available
 	QAction* computeEigenvectorsAction = nullptr;
 	if (m_part->action("eigenvectors_assistant")) {
 		computeEigenvectorsAction = new QAction(i18n("Compute Eigenvectors"), m_actionGroup);
@@ -157,7 +156,7 @@ void CantorWorksheetView::initMenus() {
 		solveEquationsAction->setData("solve_assistant");
 	}
 
-	//menus
+	// menus
 
 	//"Add New"
 	m_addNewMenu = new QMenu(i18n("Add New"), m_part->widget());
@@ -171,8 +170,8 @@ void CantorWorksheetView::initMenus() {
 	m_addNewMenu->addAction(insertImageEntryAction);
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(insertPageBreakAction);
-// 	m_addNewMenu->addAction(insertHorizLineAction);
-// 	m_addNewMenu->addAction(insertHierarchyEntryAction);
+	// 	m_addNewMenu->addAction(insertHorizLineAction);
+	// 	m_addNewMenu->addAction(insertHierarchyEntryAction);
 
 	//"Assistants"
 	if (invertMatrixAction || createMatrixAction || computeEigenvectorsAction || computeEigenvaluesAction) {
@@ -222,9 +221,9 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 
 	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
-	//there're already actions available there. Skip the first title-action
-	//and insert the action at the beginning of the menu.
-	if (menu->actions().size()>1)
+	// there're already actions available there. Skip the first title-action
+	// and insert the action at the beginning of the menu.
+	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
 	if (!m_addNewMenu)
@@ -238,13 +237,13 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_removeCurrentEntryAction);
 
-	//results related actions
+	// results related actions
 	menu->insertSeparator(firstAction);
 	menu->addAction(m_part->action("all_entries_collapse_results"));
 	menu->addAction(m_part->action("all_entries_uncollapse_results"));
 	menu->addAction(m_part->action("all_entries_remove_all_results"));
 
-	//assistants, if available
+	// assistants, if available
 	if (m_linearAlgebraMenu || m_calculateMenu) {
 		menu->insertSeparator(firstAction);
 		auto* menuAssistants = new QMenu(i18n("Assistants"));
@@ -256,7 +255,6 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 
 		menu->insertMenu(firstAction, menuAssistants);
 	}
-
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_zoomIn);

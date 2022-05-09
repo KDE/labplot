@@ -1,12 +1,11 @@
 /*
-    File                 : ThemesComboBox.h
-    Project              : LabPlot
-    Description          : Preview of all themes in a QComboBox
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ThemesComboBox.h
+	Project              : LabPlot
+	Description          : Preview of all themes in a QComboBox
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef THEMESCOMBOBOX_H
 #define THEMESCOMBOBOX_H

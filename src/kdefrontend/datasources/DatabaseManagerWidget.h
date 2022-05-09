@@ -1,10 +1,10 @@
 /*
-    File                 : DatabaseManagerWidget.h
-    Project              : LabPlot
-    Description          : widget for managing database connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatabaseManagerWidget.h
+	Project              : LabPlot
+	Description          : widget for managing database connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATABASEMANAGERWIDGET_H
@@ -15,7 +15,7 @@
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 

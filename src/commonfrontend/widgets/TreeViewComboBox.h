@@ -1,12 +1,11 @@
 /*
-    File                 : TreeViewComboBox.h
-    Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TreeViewComboBox.h
+	Project              : LabPlot
+	Description          : Provides a QTreeView in a QComboBox
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H

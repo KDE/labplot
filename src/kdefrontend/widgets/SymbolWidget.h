@@ -1,17 +1,17 @@
 /*
-    File                 : SymbolWidget.h
-    Project              : LabPlot
-    Description          : symbol settings widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SymbolWidget.h
+	Project              : LabPlot
+	Description          : symbol settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SYMBOLWIDGET_H
 #define SYMBOLWIDGET_H
 
-#include "ui_symbolwidget.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "ui_symbolwidget.h"
 #include <KConfigGroup>
 
 class SymbolWidget : public QWidget {
@@ -37,7 +37,7 @@ Q_SIGNALS:
 	void dataChanged(bool);
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in SymbolWidget
+	// SLOTs for changes triggered in SymbolWidget
 	void styleChanged(int);
 	void sizeChanged(double);
 	void rotationChanged(int);
@@ -48,7 +48,7 @@ private Q_SLOTS:
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
 
-	//SLOTs for changes triggered in Symbol
+	// SLOTs for changes triggered in Symbol
 	void symbolStyleChanged(Symbol::Style);
 	void symbolSizeChanged(qreal);
 	void symbolRotationAngleChanged(qreal);
@@ -57,4 +57,4 @@ private Q_SLOTS:
 	void symbolPenChanged(const QPen&);
 };
 
-#endif //LABELWIDGET_H
+#endif // LABELWIDGET_H

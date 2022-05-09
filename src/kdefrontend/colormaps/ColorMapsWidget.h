@@ -3,11 +3,9 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-
 
 #ifndef COLORMAPSWIDGET_H
 #define COLORMAPSWIDGET_H

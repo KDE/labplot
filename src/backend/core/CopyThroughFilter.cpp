@@ -1,11 +1,11 @@
 /*
-    File                 : CopyThroughFilter.cpp
-    Project              : SciDAVis
-    Description          : Filter which copies all provided inputs unaltered
-    to an equal number of outputs.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CopyThroughFilter.cpp
+	Project              : SciDAVis
+	Description          : Filter which copies all provided inputs unaltered
+	to an equal number of outputs.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CopyThroughFilter.h"
@@ -36,8 +36,7 @@ int CopyThroughFilter::outputCount() const {
 /**
  * \brief When asked for an output port, just return the corresponding input port.
  */
-AbstractColumn *CopyThroughFilter::output(int port) const {
+AbstractColumn* CopyThroughFilter::output(int port) const {
 	return 0;
-	//TODO: return m_inputs.value(port);
+	// TODO: return m_inputs.value(port);
 }
-

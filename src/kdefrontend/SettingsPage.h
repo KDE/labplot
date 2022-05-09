@@ -1,10 +1,10 @@
 /*
-    File                 : SettingsPage.h
-    Project              : LabPlot
-    Description          : base class for all pages in the Settings-Dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsPage.h
+	Project              : LabPlot
+	Description          : base class for all pages in the Settings-Dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSPAGE_H
@@ -16,7 +16,7 @@ class SettingsPage : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit SettingsPage(QWidget*) {};
+	explicit SettingsPage(QWidget*){};
 	~SettingsPage() override = default;
 
 	virtual void applySettings() = 0;

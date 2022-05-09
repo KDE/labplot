@@ -1,30 +1,29 @@
 /*
-    File                 : ExportSpreadsheetDialog.cpp
-    Project              : LabPlot
-    Description          : export spreadsheet dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExportSpreadsheetDialog.cpp
+	Project              : LabPlot
+	Description          : export spreadsheet dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "ExportSpreadsheetDialog.h"
-#include "ui_exportspreadsheetwidget.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "kdefrontend/GuiTools.h"
+#include "ui_exportspreadsheetwidget.h"
 
 #include <QCompleter>
+#include <QDialogButtonBox>
 #include <QDirModel>
 #include <QFileDialog>
-#include <QStandardItemModel>
-#include <QDialogButtonBox>
 #include <QSqlDatabase>
+#include <QStandardItemModel>
 #include <QWindow>
 
-#include <KMessageBox>
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
 
@@ -34,7 +33,9 @@
 
 	\ingroup kdefrontend
 */
-ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(parent), ui(new Ui::ExportSpreadsheetWidget()) {
+ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
+	: QDialog(parent)
+	, ui(new Ui::ExportSpreadsheetWidget()) {
 	ui->setupUi(this);
 
 	ui->gbOptions->hide();
@@ -63,17 +64,17 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 		ui->cbFormat->addItem("SQLite", static_cast<int>(Format::SQLite));
 
 	QStringList separators = AsciiFilter::separatorCharacters();
-	separators.takeAt(0); //remove the first entry "auto"
+	separators.takeAt(0); // remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
 
-	//TODO: use general setting for decimal separator?
+	// TODO: use general setting for decimal separator?
 	ui->cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui->cbDecimalSeparator->addItem(i18n("Comma ','"));
 
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
-	ui->bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
 
 	ui->leFileName->setFocus();
 
@@ -82,7 +83,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportSpreadsheetDialog::selectFile);
-	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged );
+	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged);
 	connect(m_showOptionsButton, &QPushButton::clicked, this, &ExportSpreadsheetDialog::toggleOptions);
 	connect(ui->cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::formatChanged);
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
@@ -90,14 +91,14 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
 	setWindowIcon(QIcon::fromTheme("document-export-database"));
 
-	//restore saved settings if available
+	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	KWindowConfig::restoreWindowSize(windowHandle(), conf);
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
 
-	//TODO: use general setting for decimal separator?
+	// TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
@@ -113,8 +114,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->cbExportToFITS->setCurrentIndex(conf.readEntry("FITSTo", 0));
 	m_showOptions = conf.readEntry("ShowOptions", false);
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) : m_showOptionsButton->setText(i18n("Show Options"));
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -125,7 +125,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 }
 
 ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
@@ -148,7 +148,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
 	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty()) {	// use project dir as fallback
+	if (dir.isEmpty()) { // use project dir as fallback
 		KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
 		dir = conf2.readEntry("LastOpenDir", "");
 		if (dir.isEmpty())
@@ -186,7 +186,7 @@ void ExportSpreadsheetDialog::setMatrixMode(bool b) {
 
 		ui->lHeader->hide();
 		ui->chkHeaders->hide();
-		ui->cbLaTeXExport->setItemText(0,i18n("Export matrix"));
+		ui->cbLaTeXExport->setItemText(0, i18n("Export matrix"));
 		ui->cbExportToFITS->setCurrentIndex(0);
 
 		ui->lColumnAsUnits->hide();
@@ -270,10 +270,10 @@ void ExportSpreadsheetDialog::setExportToImage(bool possible) {
 	}
 }
 
-//SLOTS
+// SLOTS
 void ExportSpreadsheetDialog::okClicked() {
 	if (format() != Format::FITS)
-		if ( QFile::exists(ui->leFileName->text()) ) {
+		if (QFile::exists(ui->leFileName->text())) {
 			int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
 			if (r == KMessageBox::No)
 				return;
@@ -303,12 +303,11 @@ void ExportSpreadsheetDialog::okClicked() {
 void ExportSpreadsheetDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	ui->gbOptions->setVisible(m_showOptions);
-	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));
+	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) : m_showOptionsButton->setText(i18n("Show Options"));
 
-	//resize the dialog
+	// resize the dialog
 	layout()->activate();
-	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
+	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
 }
 
 /*!
@@ -358,11 +357,12 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-    extensions << ".txt" << ".tex";
+	extensions << ".txt"
+			   << ".tex";
 #ifdef HAVE_FITS
-    extensions<< ".fits";
+	extensions << ".fits";
 #endif
-    extensions << ".db";
+	extensions << ".db";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != -1) {
@@ -516,7 +516,7 @@ void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	if (!enable) {
 		const auto* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
 		QStandardItem* item = areaToExportModel->item(1);
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 }
 
@@ -524,7 +524,7 @@ void ExportSpreadsheetDialog::setFormat(Format format) {
 	m_format = format;
 }
 
-void ExportSpreadsheetDialog::setExportTo(const QStringList &to) {
+void ExportSpreadsheetDialog::setExportTo(const QStringList& to) {
 	ui->cbExportToFITS->addItems(to);
 }
 

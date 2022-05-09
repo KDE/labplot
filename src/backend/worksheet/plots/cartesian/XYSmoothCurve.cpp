@@ -1,13 +1,12 @@
 /*
-    File                 : XYSmoothCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a smooth
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYSmoothCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a smooth
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYSmoothCurve
@@ -19,20 +18,20 @@
 #include "XYSmoothCurve.h"
 #include "XYSmoothCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
 
-#include <QIcon>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 extern "C" {
-#include <gsl/gsl_math.h>	// gsl_pow_*
-#include "backend/nsl/nsl_stats.h"
 #include "backend/nsl/nsl_sf_kernel.h"
+#include "backend/nsl/nsl_stats.h"
+#include <gsl/gsl_math.h> // gsl_pow_*
 }
 
 XYSmoothCurve::XYSmoothCurve(const QString& name)
@@ -43,8 +42,8 @@ XYSmoothCurve::XYSmoothCurve(const QString& name, XYSmoothCurvePrivate* dd)
 	: XYAnalysisCurve(name, dd, AspectType::XYSmoothCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYSmoothCurve::~XYSmoothCurve() = default;
 
 void XYSmoothCurve::recalculate() {
@@ -81,11 +80,13 @@ void XYSmoothCurve::setSmoothData(const XYSmoothCurve::SmoothData& smoothData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {
+XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::recalculate() {
@@ -93,13 +94,13 @@ void XYSmoothCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create smooth result columns if not available yet, clear them otherwise
+	// create smooth result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
 		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
 
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -120,23 +121,23 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	if (!roughColumn) {
 		roughColumn = new Column("rough", AbstractColumn::ColumnMode::Double);
-		roughColumn->setFixed(true); //visible in the project explorer but cannot be modified (renamed, deleted, etc.)
-		roughVector = static_cast<QVector<double>* >(roughColumn->data());
+		roughColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		roughVector = static_cast<QVector<double>*>(roughColumn->data());
 		q->addChild(roughColumn);
 	}
 
 	// clear the previous result
 	smoothResult = XYSmoothCurve::SmoothResult();
 
-	//determine the data source columns
+	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
+		// spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 	} else {
-		//curve columns as data source
+		// curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
@@ -147,7 +148,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		return;
 	}
 
-	//check column sizes
+	// check column sizes
 	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
 		smoothResult.available = true;
 		smoothResult.valid = false;
@@ -158,7 +159,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the smooth to temporary vectors
+	// copy all valid data point for the smooth to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 
@@ -174,7 +175,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
-	//number of data points to smooth
+	// number of data points to smooth
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
 		smoothResult.available = true;
@@ -190,7 +191,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	double* ydataOriginal = new double[n];
-	memcpy(ydataOriginal, ydata, n*sizeof(double));
+	memcpy(ydataOriginal, ydata, n * sizeof(double));
 
 	// smooth settings
 	const nsl_smooth_type type = smoothData.type;
@@ -210,7 +211,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	DEBUG("	pad mode =	" << nsl_smooth_pad_mode_name[padMode]);
 	DEBUG("	const. values = " << lvalue << ' ' << rvalue);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	int status = 0;
 
 	switch (type) {
@@ -232,17 +233,17 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	xVector->resize((int)n);
 	yVector->resize((int)n);
-	memcpy(xVector->data(), xdata, n*sizeof(double));
-	memcpy(yVector->data(), ydata, n*sizeof(double));
-///////////////////////////////////////////////////////////
+	memcpy(xVector->data(), xdata, n * sizeof(double));
+	memcpy(yVector->data(), ydata, n * sizeof(double));
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	smoothResult.available = true;
 	smoothResult.valid = true;
 	smoothResult.status = QString::number(status);
 	smoothResult.elapsedTime = timer.elapsed();
 
-	//fill rough vector
+	// fill rough vector
 	if (roughVector) {
 		roughVector->resize((int)n);
 		for (int i = 0; i < (int)n; ++i)
@@ -250,9 +251,9 @@ void XYSmoothCurvePrivate::recalculate() {
 		roughColumn->setChanged();
 	}
 
-	delete [] ydataOriginal;
+	delete[] ydataOriginal;
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
 	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
@@ -262,38 +263,38 @@ void XYSmoothCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
+void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYSmoothCurve);
 
 	writer->writeStartElement("xySmoothCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-smooth-curve specific information
-	// smooth data
+	// write xy-smooth-curve specific information
+	//  smooth data
 	writer->writeStartElement("smoothData");
-	writer->writeAttribute( "autoRange", QString::number(d->smoothData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->smoothData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->smoothData.xRange.last()) );
-	writer->writeAttribute( "type", QString::number(d->smoothData.type) );
-	writer->writeAttribute( "points", QString::number(d->smoothData.points) );
-	writer->writeAttribute( "weight", QString::number(d->smoothData.weight) );
-	writer->writeAttribute( "percentile", QString::number(d->smoothData.percentile) );
-	writer->writeAttribute( "order", QString::number(d->smoothData.order) );
-	writer->writeAttribute( "mode", QString::number(d->smoothData.mode) );
-	writer->writeAttribute( "lvalue", QString::number(d->smoothData.lvalue) );
-	writer->writeAttribute( "rvalue", QString::number(d->smoothData.rvalue) );
-	writer->writeEndElement();// smoothData
+	writer->writeAttribute("autoRange", QString::number(d->smoothData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->smoothData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->smoothData.xRange.last()));
+	writer->writeAttribute("type", QString::number(d->smoothData.type));
+	writer->writeAttribute("points", QString::number(d->smoothData.points));
+	writer->writeAttribute("weight", QString::number(d->smoothData.weight));
+	writer->writeAttribute("percentile", QString::number(d->smoothData.percentile));
+	writer->writeAttribute("order", QString::number(d->smoothData.order));
+	writer->writeAttribute("mode", QString::number(d->smoothData.mode));
+	writer->writeAttribute("lvalue", QString::number(d->smoothData.lvalue));
+	writer->writeAttribute("rvalue", QString::number(d->smoothData.rvalue));
+	writer->writeEndElement(); // smoothData
 
 	// smooth results (generated columns)
 	writer->writeStartElement("smoothResult");
-	writer->writeAttribute( "available", QString::number(d->smoothResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->smoothResult.valid) );
-	writer->writeAttribute( "status", d->smoothResult.status );
-	writer->writeAttribute( "time", QString::number(d->smoothResult.elapsedTime) );
+	writer->writeAttribute("available", QString::number(d->smoothResult.available));
+	writer->writeAttribute("valid", QString::number(d->smoothResult.valid));
+	writer->writeAttribute("status", d->smoothResult.status);
+	writer->writeAttribute("time", QString::number(d->smoothResult.elapsedTime));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -324,7 +325,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "smoothData") {
 			attribs = reader->attributes();
@@ -373,8 +374,8 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
@@ -384,7 +385,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 
 	if (d->roughColumn) {
 		addChild(d->roughColumn);
-		d->roughVector = static_cast<QVector<double>* >(d->roughColumn->data());
+		d->roughVector = static_cast<QVector<double>*>(d->roughColumn->data());
 	}
 
 	return true;

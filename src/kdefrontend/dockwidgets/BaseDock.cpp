@@ -3,10 +3,10 @@
 	Project              : LabPlot
 	Description          : Base Dock widget
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BaseDock.h"
@@ -18,13 +18,14 @@ extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
 
-#include <KLocalizedString>
 #include <KConfigGroup>
+#include <KLocalizedString>
 #include <KSharedConfig>
 
 #include <QComboBox>
 
-BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
+BaseDock::BaseDock(QWidget* parent)
+	: QWidget(parent) {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
@@ -35,20 +36,20 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 BaseDock::~BaseDock() = default;
 
 void BaseDock::updatePlotRangeList(QComboBox* cb) {
-	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
+	auto* element{static_cast<WorksheetElement*>(m_aspect)};
 	if (!element) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no worksheet element!")
 		return;
 	}
-	const int cSystemCount{ element->coordinateSystemCount() };
-	const int cSystemIndex{ element->coordinateSystemIndex() };
+	const int cSystemCount{element->coordinateSystemCount()};
+	const int cSystemIndex{element->coordinateSystemIndex()};
 
 	if (cSystemCount == 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot range yet")
 		return;
 	}
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
 
 	if (!cb) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: no plot range combo box")
@@ -58,7 +59,7 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	m_suppressPlotRetransform = true;
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)
-		cb->addItem( QString::number(i+1) + QLatin1String(" : ") + element->coordinateSystemInfo(i) );
+		cb->addItem(QString::number(i + 1) + QLatin1String(" : ") + element->coordinateSystemInfo(i));
 	m_suppressPlotRetransform = false;
 	cb->setCurrentIndex(cSystemIndex);
 	// disable when there is only on plot range
@@ -70,7 +71,7 @@ void BaseDock::plotRangeChanged(int index) {
 		return;
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
-	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
+	auto* element{static_cast<WorksheetElement*>(m_aspect)};
 	const CartesianPlot* plot;
 	if (element->plot()) {
 		plot = element->plot();
@@ -90,8 +91,8 @@ void BaseDock::plotRangeChanged(int index) {
 		element->setCoordinateSystemIndex(index);
 		if (dynamic_cast<Axis*>(element))
 			dynamic_cast<AxisDock*>(this)->updateAutoScale();
-		updateLocale();		// update line edits
-		element->retransform();	// redraw
+		updateLocale(); // update line edits
+		element->retransform(); // redraw
 		element->project()->setChanged(true);
 	}
 }
@@ -128,24 +129,24 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue) {
-    double min, max;
-    if (range.start() > range.end()) {
-        min = range.end();
-        max = range.start();
-    } else {
-        min = range.start();
-        max = range.end();
-    }
+	double min, max;
+	if (range.start() > range.end()) {
+		min = range.end();
+		max = range.start();
+	} else {
+		min = range.start();
+		max = range.end();
+	}
 
-    if (newValue != NAN) {
-        if (newValue < min)
-            min = newValue;
-        if (newValue > max)
-            max = newValue;
-    }
-    spinbox->setMinimum(min);
-    spinbox->setMaximum(max);
-    auto singlestep = abs(min - max)/100;
-    spinbox->setSingleStep(singlestep);
-    spinbox->setDecimals(nsl_math_decimal_places(singlestep));
+	if (newValue != NAN) {
+		if (newValue < min)
+			min = newValue;
+		if (newValue > max)
+			max = newValue;
+	}
+	spinbox->setMinimum(min);
+	spinbox->setMaximum(max);
+	auto singlestep = abs(min - max) / 100;
+	spinbox->setSingleStep(singlestep);
+	spinbox->setDecimals(nsl_math_decimal_places(singlestep));
 }

@@ -1,18 +1,18 @@
 /*
-    File                 : Image.cpp
-    Project              : LabPlot
-    Description          : Worksheet element to draw images
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	File                 : Image.cpp
+	Project              : LabPlot
+	Description          : Worksheet element to draw images
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Image.h"
-#include "Worksheet.h"
 #include "ImagePrivate.h"
-#include "backend/lib/commandtemplates.h"
+#include "Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/plots/PlotArea.h"
 
 #include <QBuffer>
@@ -37,16 +37,13 @@
  * flags (\c HorizontalPosition, \c VerticalPosition).
  */
 
-
 Image::Image(const QString& name)
 	: WorksheetElement(name, new ImagePrivate(this), AspectType::Image) {
-
 	init();
 }
 
-Image::Image(const QString &name, ImagePrivate *dd)
+Image::Image(const QString& name, ImagePrivate* dd)
 	: WorksheetElement(name, dd, AspectType::Image) {
-
 	init();
 }
 
@@ -59,24 +56,24 @@ void Image::init() {
 	d->embedded = group.readEntry("embedded", true);
 	d->opacity = group.readEntry("opacity", d->opacity);
 
-	//geometry
+	// geometry
 	d->position.point.setX(group.readEntry("PositionXValue", 0.));
 	d->position.point.setY(group.readEntry("PositionYValue", 0.));
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition) group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition) group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
+	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition = (WorksheetElement::VerticalPosition)group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
 	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
 
-	//border
+	// border
 	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
 						group.readEntry("BorderWidth", d->borderPen.widthF()),
-						(Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
+						(Qt::PenStyle)group.readEntry("BorderStyle", (int)(d->borderPen.style())));
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 Image::~Image() = default;
 
 QGraphicsItem* Image::graphicsItem() const {
@@ -96,25 +93,25 @@ void Image::retransform() {
 
 void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 	DEBUG(Q_FUNC_INFO);
-// 	Q_D(Image);
+	// 	Q_D(Image);
 
-// 	double ratio = 0;
-// 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-// 		ratio = qMax(horizontalRatio, verticalRatio);
-// 	else
-// 		ratio = qMin(horizontalRatio, verticalRatio);
+	// 	double ratio = 0;
+	// 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
+	// 		ratio = qMax(horizontalRatio, verticalRatio);
+	// 	else
+	// 		ratio = qMin(horizontalRatio, verticalRatio);
 }
 
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon Image::icon() const{
+QIcon Image::icon() const {
 	return QIcon::fromTheme("viewimage");
 }
 
 QMenu* Image::createContextMenu() {
-	QMenu *menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 
 	if (!visibilityAction) {
 		visibilityAction = new QAction(i18n("Visible"), this);
@@ -187,9 +184,9 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-//Border
+// Border
 STD_SETTER_CMD_IMPL_F_S(Image, SetBorderPen, QPen, borderPen, update)
-void Image::setBorderPen(const QPen &pen) {
+void Image::setBorderPen(const QPen& pen) {
 	Q_D(Image);
 	if (pen != d->borderPen)
 		exec(new ImageSetBorderPenCmd(d, pen, ki18n("%1: set border")));
@@ -205,14 +202,16 @@ void Image::setBorderOpacity(qreal opacity) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-ImagePrivate::ImagePrivate(Image* owner) : WorksheetElementPrivate(owner), q(owner) {
+ImagePrivate::ImagePrivate(Image* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 
-	//initial placeholder image
+	// initial placeholder image
 	image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
 	m_image = image;
 }
@@ -226,8 +225,8 @@ void ImagePrivate::retransform() {
 
 	int w = m_image.width();
 	int h = m_image.height();
-	boundingRectangle.setX(-w/2);
-	boundingRectangle.setY(-h/2);
+	boundingRectangle.setX(-w / 2);
+	boundingRectangle.setY(-h / 2);
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
@@ -258,20 +257,20 @@ void ImagePrivate::updateImage() {
 
 void ImagePrivate::scaleImage() {
 	if (m_image.isNull())
-		m_image = image; //initial call from load(), m_image not initialized yet
+		m_image = image; // initial call from load(), m_image not initialized yet
 
 	if (keepRatio) {
 		if (width != m_image.width()) {
-			//width was changed -> rescale the height to keep the ratio
+			// width was changed -> rescale the height to keep the ratio
 			if (m_image.width() != 0)
-				height = m_image.height()*width/m_image.width();
+				height = m_image.height() * width / m_image.width();
 			else
 				height = 0;
 			Q_EMIT q->heightChanged(height);
 		} else if (height != m_image.height()) {
-			//height was changed -> rescale the width to keep the ratio
+			// height was changed -> rescale the width to keep the ratio
 			if (m_image.height() != 0)
-				width = m_image.width()*height/m_image.height();
+				width = m_image.width() * height / m_image.height();
 			else
 				width = 0;
 			Q_EMIT q->widthChanged(width);
@@ -329,13 +328,13 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	painter->save();
 
-	//draw the image
+	// draw the image
 	painter->rotate(-rotationAngle);
 	painter->setOpacity(opacity);
 	painter->drawImage(boundingRectangle.topLeft(), m_image, m_image.rect());
 	painter->restore();
 
-	//draw the border
+	// draw the border
 	if (borderPen.style() != Qt::NoPen) {
 		painter->save();
 		painter->rotate(-rotationAngle);
@@ -388,11 +387,11 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
+	// general
 	writer->writeStartElement("general");
 	if (d->embedded) {
 		QFileInfo fi(d->fileName);
-		writer->writeAttribute("fileName", fi.fileName()); //save the actual file name only and not the whole path
+		writer->writeAttribute("fileName", fi.fileName()); // save the actual file name only and not the whole path
 	} else
 		writer->writeAttribute("fileName", d->fileName);
 
@@ -400,7 +399,7 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("opacity", QString::number(d->opacity));
 	writer->writeEndElement();
 
-	//image data
+	// image data
 	if (d->embedded && !d->image.isNull()) {
 		writer->writeStartElement("data");
 		QByteArray data;
@@ -411,7 +410,7 @@ void Image::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 
-	//geometry
+	// geometry
 	writer->writeStartElement("geometry");
 	WorksheetElement::save(writer);
 	writer->writeAttribute("width", QString::number(d->width));
@@ -419,7 +418,7 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
 	writer->writeEndElement();
 
-	//border
+	// border
 	writer->writeStartElement("border");
 	WRITE_QPEN(d->borderPen);
 	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
@@ -447,7 +446,8 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (!preview && reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 			d->fileName = attribs.value("fileName").toString();
@@ -471,7 +471,8 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

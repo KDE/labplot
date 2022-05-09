@@ -1,14 +1,13 @@
 /*
-    File                 : SpreadsheetModel.h
-    Project              : LabPlot
-    Description          : Model for the access to a Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SpreadsheetModel.h
+	Project              : LabPlot
+	Description          : Model for the access to a Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SPREADSHEETMODEL_H
 #define SPREADSHEETMODEL_H
@@ -29,8 +28,8 @@ public:
 
 	enum class CustomDataRole {
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
-		FormulaRole = Qt::UserRole+1, //!< the cells formula
-		CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
+		FormulaRole = Qt::UserRole + 1, //!< the cells formula
+		CommentRole = Qt::UserRole + 2, //!< the column comment (for headerData())
 	};
 
 	Qt::ItemFlags flags(const QModelIndex&) const override;
@@ -41,7 +40,7 @@ public:
 	bool setData(const QModelIndex&, const QVariant& value, int role) override;
 	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex& child) const override;
-	bool hasChildren (const QModelIndex& parent = QModelIndex() ) const override;
+	bool hasChildren(const QModelIndex& parent = QModelIndex()) const override;
 
 	Column* column(int index);
 

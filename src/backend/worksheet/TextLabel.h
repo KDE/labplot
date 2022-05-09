@@ -1,21 +1,20 @@
 /*
-    File                 : TextLabel.h
-    Project              : LabPlot
-    Description          : Text label supporting reach text and latex formatting
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TextLabel.h
+	Project              : LabPlot
+	Description          : Text label supporting reach text and latex formatting
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
 #include "backend/lib/macros.h"
-#include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "tools/TeXRenderer.h"
 
 #include <QTextEdit>
 
@@ -29,29 +28,45 @@ class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
-	enum class Mode {Text, LaTeX, Markdown};
-	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
-	                        Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle
-	                       };
+	enum class Type { General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel };
+	enum class Mode { Text, LaTeX, Markdown };
+	enum class BorderShape {
+		NoBorder,
+		Rect,
+		Ellipse,
+		RoundSideRect,
+		RoundCornerRect,
+		InwardsRoundCornerRect,
+		DentedBorderRect,
+		Cuboid,
+		UpPointingRectangle,
+		DownPointingRectangle,
+		LeftPointingRectangle,
+		RightPointingRectangle
+	};
 
 	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() = default;
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html): mode(mode) {
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html)
+			: mode(mode) {
 			if (mode == TextLabel::Mode::Text)
 				this->text = createHtml(text, html);
-			else //LaTeX and markdown use plain string
+			else // LaTeX and markdown use plain string
 				this->text = text;
 		}
-		TextWrapper(const QString& text): mode(TextLabel::Mode::Text) {
+		TextWrapper(const QString& text)
+			: mode(TextLabel::Mode::Text) {
 			// assume text is not HTML yet
 			this->text = createHtml(text, false);
 		}
-		TextWrapper(const QString& text, bool html, QString& placeholder): allowPlaceholder(true), textPlaceholder(placeholder) {
+		TextWrapper(const QString& text, bool html, QString& placeholder)
+			: allowPlaceholder(true)
+			, textPlaceholder(placeholder) {
 			this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder): allowPlaceholder(allowPlaceholder) {
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder)
+			: allowPlaceholder(allowPlaceholder) {
 			TextWrapper(text, mode, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
@@ -59,7 +74,7 @@ public:
 				return text;
 
 			QTextEdit te(text);
-			te.setFont(QFont("Arial", 12));	//default font
+			te.setFont(QFont("Arial", 12)); // default font
 			// the html does not contain any colors!
 			return te.toHtml();
 		}
@@ -106,10 +121,13 @@ public:
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))	// we need a default constructor for QVector
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0)) // we need a default constructor for QVector
 		GluePoint() = default;
 #endif
-		GluePoint(QPointF point, QString name) : point(point), name(name) {}
+		GluePoint(QPointF point, QString name)
+			: point(point)
+			, name(name) {
+		}
 		QPointF point;
 		QString name;
 	};

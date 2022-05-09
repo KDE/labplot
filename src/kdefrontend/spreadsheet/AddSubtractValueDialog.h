@@ -1,10 +1,10 @@
 /*
-    File                 : AddSubtractDialog.h
-    Project              : LabPlot
-    Description          : Dialog for adding/subtracting a value from column values
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AddSubtractDialog.h
+	Project              : LabPlot
+	Description          : Dialog for adding/subtracting a value from column values
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ADDSUBTRACTVALUEDIALOG_H
@@ -22,7 +22,7 @@ class AddSubtractValueDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum Operation {Add, Subtract, Multiply, Divide};
+	enum Operation { Add, Subtract, Multiply, Divide };
 
 	explicit AddSubtractValueDialog(Spreadsheet*, Operation, QWidget* parent = nullptr);
 	explicit AddSubtractValueDialog(Matrix*, Operation, QWidget* parent = nullptr);

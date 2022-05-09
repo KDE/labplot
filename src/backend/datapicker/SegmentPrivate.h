@@ -1,11 +1,10 @@
 /*
-    File                 : SegmentPrivate.h
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SegmentPrivate.h
+	Project              : LabPlot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SEGMENTPRIVATE_H
 #define SEGMENTPRIVATE_H
@@ -13,7 +12,7 @@
 #include <QGraphicsItem>
 #include <QPen>
 
-class SegmentPrivate: public QGraphicsItem {
+class SegmentPrivate : public QGraphicsItem {
 public:
 	explicit SegmentPrivate(Segment*);
 
@@ -35,7 +34,7 @@ public:
 private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 };
 
 #endif

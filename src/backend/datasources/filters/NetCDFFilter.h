@@ -1,10 +1,10 @@
 /*
-    File                 : NetCDFFilter.h
-    Project              : LabPlot
-    Description          : NetCDF I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : NetCDFFilter.h
+	Project              : LabPlot
+	Description          : NetCDF I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NETCDFFILTER_H
 #define NETCDFFILTER_H
@@ -26,10 +26,13 @@ public:
 	static QString fileCDLString(const QString&);
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
-	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
+	QVector<QStringList> readCurrentVar(const QString& fileName,
+										AbstractDataSource* = nullptr,
+										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
+										int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;

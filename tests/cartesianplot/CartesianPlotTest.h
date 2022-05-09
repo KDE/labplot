@@ -1,11 +1,11 @@
 /*
-    File                 : CartesianPlotTest.h
-    Project              : LabPlot
-    Description          : Tests for cartesian plots
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CartesianPlotTest.h
+	Project              : LabPlot
+	Description          : Tests for cartesian plots
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef CARTESIANPLOTTEST_H
 #define CARTESIANPLOTTEST_H
@@ -35,6 +35,5 @@ private Q_SLOTS:
 
 	void equationCurveEquationChangedAutoScale();
 	void equationCurveEquationChangedNoAutoScale();
-
 };
 #endif

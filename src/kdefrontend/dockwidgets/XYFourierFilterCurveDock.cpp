@@ -1,11 +1,11 @@
 /*
-    File             : XYFourierFilterCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of Fourier filter curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYFourierFilterCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of Fourier filter curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYFourierFilterCurveDock.h"
@@ -33,7 +33,8 @@
   \ingroup kdefrontend
 */
 
-XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent) : XYCurveDock(parent) {
+XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
@@ -47,7 +48,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -72,8 +73,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -81,9 +82,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::nameChanged );
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFourierFilterCurveDock::commentChanged );
+	// Slots
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::nameChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFourierFilterCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::autoRangeChanged);
@@ -98,7 +99,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbUnit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unitChanged);
 	connect(uiGeneralTab.cbUnit2, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unit2Changed);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierFilterCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::xDataColumnChanged);
@@ -106,7 +107,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 }
 
 void XYFourierFilterCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -125,7 +126,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
+	// show the properties of the first curve
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_filterCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_filterCurve->dataSourceCurve());
@@ -133,8 +134,8 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	cbYDataColumn->setColumn(m_filterCurve->yDataColumn(), m_filterCurve->xDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
 	SET_NUMBER_LOCALE
-	uiGeneralTab.leMin->setText( numberLocale.toString(m_filterData.xRange.first()) );
-	uiGeneralTab.leMax->setText( numberLocale.toString(m_filterData.xRange.last()) );
+	uiGeneralTab.leMin->setText(numberLocale.toString(m_filterData.xRange.first()));
+	uiGeneralTab.leMax->setText(numberLocale.toString(m_filterData.xRange.last()));
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
@@ -152,9 +153,9 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	uiGeneralTab.sbCutoff2->setValue(m_filterData.cutoff2);
 	this->showFilterResult();
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_filterCurve, &XYFourierFilterCurve::aspectDescriptionChanged, this, &XYFourierFilterCurveDock::aspectDescriptionChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::dataSourceTypeChanged, this, &XYFourierFilterCurveDock::curveDataSourceTypeChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::dataSourceCurveChanged, this, &XYFourierFilterCurveDock::curveDataSourceCurveChanged);
@@ -167,8 +168,12 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 }
 
 void XYFourierFilterCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -176,10 +181,16 @@ void XYFourierFilterCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYFitCurve
-	       };
+	list = {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -276,8 +287,8 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -317,8 +328,8 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -326,7 +337,6 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(true);
 		uiGeneralTab.leMax->setEnabled(true);
 	}
-
 }
 void XYFourierFilterCurveDock::xRangeMinChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_filterData.xRange.first(), uiGeneralTab.leMin);
@@ -356,13 +366,13 @@ void XYFourierFilterCurveDock::typeChanged() {
 		uiGeneralTab.sbCutoff2->setVisible(true);
 		uiGeneralTab.cbUnit2->setVisible(true);
 		break;
-//TODO
-/*	case nsl_filter_type_threshold:
-		uiGeneralTab.lCutoff->setText(i18n("Value:"));
-		uiGeneralTab.lCutoff2->setVisible(false);
-		uiGeneralTab.sbCutoff2->setVisible(false);
-		uiGeneralTab.cbUnit2->setVisible(false);
-*/
+		// TODO
+		/*	case nsl_filter_type_threshold:
+				uiGeneralTab.lCutoff->setText(i18n("Value:"));
+				uiGeneralTab.lCutoff2->setVisible(false);
+				uiGeneralTab.sbCutoff2->setVisible(false);
+				uiGeneralTab.cbUnit2->setVisible(false);
+		*/
 	}
 
 	enableRecalculate();
@@ -415,7 +425,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 	if (xDataColumn) {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
-		f = (n-1)/range/2.;
+		f = (n - 1) / range / 2.;
 		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
 
@@ -423,16 +433,16 @@ void XYFourierFilterCurveDock::unitChanged() {
 	case nsl_filter_cutoff_unit_frequency:
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(f);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff->setSingleStep(0.01 * f);
 		uiGeneralTab.sbCutoff->setSuffix(" Hz");
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff->setValue(oldValue*f);
+			uiGeneralTab.sbCutoff->setValue(oldValue * f);
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff->setValue(oldValue*f/n);
+			uiGeneralTab.sbCutoff->setValue(oldValue * f / n);
 			break;
 		}
 		break;
@@ -443,12 +453,12 @@ void XYFourierFilterCurveDock::unitChanged() {
 		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff->setValue(oldValue/f);
+			uiGeneralTab.sbCutoff->setValue(oldValue / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff->setValue(oldValue/n);
+			uiGeneralTab.sbCutoff->setValue(oldValue / n);
 			break;
 		}
 		break;
@@ -459,10 +469,10 @@ void XYFourierFilterCurveDock::unitChanged() {
 		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff->setValue(oldValue*n/f);
+			uiGeneralTab.sbCutoff->setValue(oldValue * n / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff->setValue(oldValue*n);
+			uiGeneralTab.sbCutoff->setValue(oldValue * n);
 			break;
 		case nsl_filter_cutoff_unit_index:
 			break;
@@ -492,7 +502,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	if (xDataColumn) {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
-		f = (n-1)/range/2.;
+		f = (n - 1) / range / 2.;
 		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
 
@@ -500,16 +510,16 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	case nsl_filter_cutoff_unit_frequency:
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01*f);
+		uiGeneralTab.sbCutoff2->setSingleStep(0.01 * f);
 		uiGeneralTab.sbCutoff2->setSuffix(" Hz");
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff2->setValue(oldValue*f);
+			uiGeneralTab.sbCutoff2->setValue(oldValue * f);
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff2->setValue(oldValue*f/n);
+			uiGeneralTab.sbCutoff2->setValue(oldValue * f / n);
 			break;
 		}
 		break;
@@ -520,12 +530,12 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff2->setValue(oldValue/f);
+			uiGeneralTab.sbCutoff2->setValue(oldValue / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff2->setValue(oldValue/n);
+			uiGeneralTab.sbCutoff2->setValue(oldValue / n);
 			break;
 		}
 		break;
@@ -536,10 +546,10 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff2->setValue(oldValue*n/f);
+			uiGeneralTab.sbCutoff2->setValue(oldValue * n / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff2->setValue(oldValue*n);
+			uiGeneralTab.sbCutoff2->setValue(oldValue * n);
 			break;
 		case nsl_filter_cutoff_unit_index:
 			break;
@@ -554,10 +564,10 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 	m_filterData.cutoff = uiGeneralTab.sbCutoff->value();
 	m_filterData.cutoff2 = uiGeneralTab.sbCutoff2->value();
 
-	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject)
-			&& m_filterData.cutoff2 <= m_filterData.cutoff) {
-		KMessageBox::sorry(this, i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
-			                   i18n("band width <= 0") );
+	if ((m_filterData.type == nsl_filter_type_band_pass || m_filterData.type == nsl_filter_type_band_reject) && m_filterData.cutoff2 <= m_filterData.cutoff) {
+		KMessageBox::sorry(this,
+						   i18n("The band width is <= 0 since lower cutoff value is not smaller than upper cutoff value. Please fix this."),
+						   i18n("band width <= 0"));
 		return;
 	}
 
@@ -574,7 +584,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no filtering possible without the x- and y-data
+	// no filtering possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -589,7 +599,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 			cbYDataColumn->setInvalid(false);
 		}
 	} else {
-		 hasSourceData = (m_filterCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_filterCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -609,27 +619,27 @@ void XYFourierFilterCurveDock::showFilterResult() {
 
 	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
 	if (filterResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 
-	//enable the "recalculate"-button if the source data was changed since the last filter
+	// enable the "recalculate"-button if the source data was changed since the last filter
 	uiGeneralTab.pbRecalculate->setEnabled(m_filterCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

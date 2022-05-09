@@ -1,27 +1,29 @@
 /*
-    File                 : VariableParser.h
-    Project              : LabPlot
-    Description          : Variable parser for different CAS backends
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : VariableParser.h
+	Project              : LabPlot
+	Description          : Variable parser for different CAS backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef VARIABLEPARSER_H
 #define VARIABLEPARSER_H
 
 class QString;
-#include <QVector>
 #include <QDateTime>
+#include <QVector>
 
 #include "backend/core/AbstractColumn.h"
 
 class VariableParser {
 public:
 	VariableParser(QString name, QString value);
-	~VariableParser() {clearValues(); m_parsed=false;}
+	~VariableParser() {
+		clearValues();
+		m_parsed = false;
+	}
 	QVector<int>& integers();
 	QVector<qint64>& bigInt();
 	QVector<double>& doublePrecision();
@@ -48,7 +50,9 @@ public:
 		text,
 	};
 
-	AbstractColumn::ColumnMode dataType() {return m_dataType;}
+	AbstractColumn::ColumnMode dataType() {
+		return m_dataType;
+	}
 
 private:
 	QString m_backendName;

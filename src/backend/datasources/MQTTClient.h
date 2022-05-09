@@ -1,24 +1,24 @@
 /*
-    File		: MQTTClient.h
-    Project		: LabPlot
-    Description	: Represents a MQTT Client
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	File		: MQTTClient.h
+	Project		: LabPlot
+	Description	: Represents a MQTT Client
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MQTTCLIENT_H
 #define MQTTCLIENT_H
 
 #include "backend/core/Folder.h"
 
+#include <QMap>
 #include <QVector>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
 #include <QtMqtt/QMqttSubscription>
 #include <QtMqtt/QMqttTopicFilter>
 #include <QtMqtt/QMqttTopicName>
-#include <QMap>
 
 class AsciiFilter;
 class MQTTSubscription;
@@ -31,27 +31,13 @@ class MQTTClient : public Folder {
 	Q_OBJECT
 
 public:
-	enum class UpdateType {
-		TimeInterval = 0,
-		NewData
-	};
+	enum class UpdateType { TimeInterval = 0, NewData };
 
-	enum class ReadingType {
-		ContinuousFixed = 0,
-		FromEnd,
-		TillEnd
-	};
+	enum class ReadingType { ContinuousFixed = 0, FromEnd, TillEnd };
 
-	enum class WillMessageType {
-		OwnMessage = 0,
-		Statistics,
-		LastMessage
-	};
+	enum class WillMessageType { OwnMessage = 0, Statistics, LastMessage };
 
-	enum class WillUpdateType {
-		TimePeriod = 0,
-		OnClick
-	};
+	enum class WillUpdateType { TimePeriod = 0, OnClick };
 
 	enum class WillStatisticsType {
 		NoStatistics = -1,
@@ -83,7 +69,7 @@ public:
 		QString willLastMessage;
 		int willTimeInterval{1000};
 		WillUpdateType willUpdateType{MQTTClient::WillUpdateType::TimePeriod};
-		QVector<bool> willStatistics{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+		QVector<bool> willStatistics{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	};
 
 	explicit MQTTClient(const QString& name);
@@ -125,7 +111,7 @@ public:
 	quint16 clientPort() const;
 	QString clientPassword() const;
 	QString clientUserName() const;
-	QString clientID () const;
+	QString clientID() const;
 
 	void updateNow();
 	void pauseReading();
@@ -173,7 +159,7 @@ public:
 	void startWillTimer() const;
 	void stopWillTimer() const;
 
-	void updateWillMessage() ;
+	void updateWillMessage();
 
 	void setMQTTRetain(bool);
 	bool MQTTRetain() const;

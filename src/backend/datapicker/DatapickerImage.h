@@ -1,12 +1,12 @@
 /*
-    File                 : DatapickerImage.h
-    Project              : LabPlot
-    Description          : Worksheet for Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : DatapickerImage.h
+	Project              : LabPlot
+	Description          : Worksheet for Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERIMAGE_H
@@ -16,8 +16,8 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
-#include <QVector3D>
 #include <QPen>
+#include <QVector3D>
 
 class DatapickerImagePrivate;
 class DatapickerImageView;
@@ -33,10 +33,10 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum class GraphType {Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
-	enum class ColorAttributes {None, Intensity, Foreground, Hue, Saturation, Value};
-	enum class PlotImageType {NoImage, OriginalImage, ProcessedImage};
-	enum class PointsType {AxisPoints, CurvePoints, SegmentPoints};
+	enum class GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary };
+	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
+	enum class PlotImageType { NoImage, OriginalImage, ProcessedImage };
+	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
 		GraphType type{GraphType::Cartesian};
@@ -72,7 +72,7 @@ public:
 
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);
-	QGraphicsScene *scene() const;
+	QGraphicsScene* scene() const;
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
@@ -84,11 +84,11 @@ public:
 	QImage originalPlotImage;
 	QImage processedPlotImage;
 	QColor background;
-	int *foregroundBins;
-	int *hueBins;
-	int *saturationBins;
-	int *valueBins;
-	int *intensityBins;
+	int* foregroundBins;
+	int* hueBins;
+	int* saturationBins;
+	int* valueBins;
+	int* intensityBins;
 
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 

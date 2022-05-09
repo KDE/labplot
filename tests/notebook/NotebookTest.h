@@ -1,11 +1,11 @@
 /*
-    File                 : NotebookTest.h
-    Project              : LabPlot
-    Description          : Tests for the Notebook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	File                 : NotebookTest.h
+	Project              : LabPlot
+	Description          : Tests for the Notebook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef NOTEBOOKTEST_H
@@ -19,11 +19,11 @@ class NotebookTest : public QObject {
 private Q_SLOTS:
 	void initTestCase();
 
-	//Maxima
+	// Maxima
 	void testParserMaxima01();
 	void testParserMaxima02();
 
-    //Python
+	// Python
 	void testParserPython01();
 	void testParserPython02();
 	void testParserPython03();

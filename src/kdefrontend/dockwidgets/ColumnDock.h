@@ -1,12 +1,12 @@
 /*
-    File                 : ColumnDock.h
-    Project              : LabPlot
-    Description          : widget for column properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : ColumnDock.h
+	Project              : LabPlot
+	Description          : widget for column properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef COLUMNDOCK_H
@@ -16,7 +16,8 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_columndock.h"
 
-template <class T> class QList;
+template<class T>
+class QList;
 
 class ColumnDock : public BaseDock {
 	Q_OBJECT
@@ -42,12 +43,12 @@ private Q_SLOTS:
 	void dateTimeFormatChanged(const QString&);
 	void plotDesignationChanged(int);
 
-	//value labels
+	// value labels
 	void addLabel();
 	void removeLabel();
 	void batchEditLabels();
 
-	//SLOTs for changes triggered in Column
+	// SLOTs for changes triggered in Column
 	void columnModeChanged(const AbstractAspect*);
 	void columnFormatChanged();
 	void columnPrecisionChanged();

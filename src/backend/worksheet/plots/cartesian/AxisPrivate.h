@@ -1,13 +1,12 @@
 /*
-    File                 : AxisPrivate.h
-    Project              : LabPlot
-    Description          : Private members of Axis.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AxisPrivate.h
+	Project              : LabPlot
+	Description          : Private members of Axis.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef AXISPRIVATE_H
 #define AXISPRIVATE_H
@@ -15,15 +14,15 @@
 #include "Axis.h"
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
-#include <QPen>
 #include <QFont>
+#include <QPen>
 
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
 class TextLabel;
 
-class AxisPrivate: public WorksheetElementPrivate {
+class AxisPrivate : public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
@@ -46,7 +45,7 @@ public:
 
 	bool isDefault{false};
 
-	//general
+	// general
 	Axis::RangeType rangeType;
 	Axis::Orientation orientation; //!< horizontal or vertical
 	Axis::Position position; //!< left, right, bottom, top or custom (usually not changed after creation)
@@ -59,7 +58,7 @@ public:
 	bool showScaleOffset{true};
 	double logicalPosition{0};
 
-	//line
+	// line
 	QVector<QLineF> lines;
 	QPen linePen;
 	qreal lineOpacity;
@@ -69,8 +68,8 @@ public:
 
 	// Title
 	TextLabel* title{nullptr};
-	qreal titleOffsetX; //distance to the axis line
-	qreal titleOffsetY; //distance to the axis line
+	qreal titleOffsetX; // distance to the axis line
+	qreal titleOffsetY; // distance to the axis line
 
 	// Ticks
 	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
@@ -84,7 +83,7 @@ public:
 	qreal majorTicksOpacity;
 
 	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
-	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
+	Axis::TicksType minorTicksType; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
 	qreal minorTicksIncrement; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
@@ -112,7 +111,7 @@ public:
 	QString labelsPrefix;
 	QString labelsSuffix;
 
-	//Grid
+	// Grid
 	AxisGrid* gridItem{nullptr};
 	QPen majorGridPen;
 	qreal majorGridOpacity;
@@ -127,16 +126,16 @@ public:
 	bool labelsFormatOverruled{false};
 	bool labelsFormatAutoChanged{false};
 
-	QVector<QPointF> majorTickPoints;//!< position of the major ticks  on the axis.
-	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
+	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
+	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.
 	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
 	QVector<double> tickLabelValues; //!< major tick labels values
-	QVector<QString> tickLabelValuesString; //!<major tick labels used when a custom text column is selected
+	QVector<QString> tickLabelValuesString; //!< major tick labels used when a custom text column is selected
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 private:
 	CartesianPlot* plot() const {
-		return q->m_plot;    // convenience method
+		return q->m_plot; // convenience method
 	}
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;

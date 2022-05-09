@@ -1,14 +1,14 @@
 /*
-    File                 : columncommands.cpp
-    Project              : AbstractColumn
-    Description          : Commands to be called by Column to modify ColumnPrivate
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : columncommands.cpp
+	Project              : AbstractColumn
+	Description          : Commands to be called by Column to modify ColumnPrivate
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "columncommands.h"
@@ -80,7 +80,9 @@
  * \brief Ctor
  */
 ColumnSetModeCmd::ColumnSetModeCmd(ColumnPrivate* col, AbstractColumn::ColumnMode mode, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_mode(mode) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_mode(mode) {
 	setText(i18n("%1: change column type", col->name()));
 }
 
@@ -202,7 +204,9 @@ void ColumnSetModeCmd::undo() {
  * \brief Ctor
  */
 ColumnFullCopyCmd::ColumnFullCopyCmd(ColumnPrivate* col, const AbstractColumn* src, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_src(src) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_src(src) {
 	setText(i18n("%1: change cell values", col->name()));
 }
 
@@ -308,7 +312,12 @@ void ColumnFullCopyCmd::undo() {
  * \brief Ctor
  */
 ColumnPartialCopyCmd::ColumnPartialCopyCmd(ColumnPrivate* col, const AbstractColumn* src, int src_start, int dest_start, int num_rows, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_src(src), m_src_start(src_start), m_dest_start(dest_start), m_num_rows(num_rows) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_src(src)
+	, m_src_start(src_start)
+	, m_dest_start(dest_start)
+	, m_num_rows(num_rows) {
 	setText(i18n("%1: change cell values", col->name()));
 }
 
@@ -362,7 +371,10 @@ void ColumnPartialCopyCmd::undo() {
  * \brief Ctor
  */
 ColumnInsertRowsCmd::ColumnInsertRowsCmd(ColumnPrivate* col, int before, int count, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_before(before), m_count(count) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_before(before)
+	, m_count(count) {
 }
 
 /**
@@ -423,7 +435,10 @@ void ColumnInsertRowsCmd::undo() {
  */
 
 ColumnRemoveRowsCmd::ColumnRemoveRowsCmd(ColumnPrivate* col, int first, int count, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_first(first), m_count(count) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_first(first)
+	, m_count(count) {
 }
 
 /**
@@ -489,7 +504,9 @@ void ColumnRemoveRowsCmd::undo() {
  * \brief Ctor
  */
 ColumnSetPlotDesignationCmd::ColumnSetPlotDesignationCmd(ColumnPrivate* col, AbstractColumn::PlotDesignation pd, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_new_pd(pd) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_new_pd(pd) {
 	setText(i18n("%1: set plot designation", col->name()));
 }
 
@@ -537,7 +554,8 @@ void ColumnSetPlotDesignationCmd::undo() {
  * \brief Ctor
  */
 ColumnClearCmd::ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col) {
+	: QUndoCommand(parent)
+	, m_col(col) {
 	setText(i18n("%1: clear column", col->name()));
 }
 
@@ -546,7 +564,8 @@ ColumnClearCmd::ColumnClearCmd(ColumnPrivate* col, QUndoCommand* parent)
  */
 ColumnClearCmd::~ColumnClearCmd() {
 	if (m_undone) {
-		if (!m_empty_data) return;
+		if (!m_empty_data)
+			return;
 		switch (m_col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<double>*>(m_empty_data);
@@ -567,7 +586,8 @@ ColumnClearCmd::~ColumnClearCmd() {
 			break;
 		}
 	} else {
-		if (!m_data) return;
+		if (!m_data)
+			return;
 		switch (m_col->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<double>*>(m_data);
@@ -623,7 +643,7 @@ void ColumnClearCmd::redo() {
 		case AbstractColumn::ColumnMode::Day:
 			m_empty_data = new QVector<QDateTime>();
 			for (int i = 0; i < rowCount; ++i)
-				static_cast< QVector<QDateTime>*>(m_empty_data)->append(QDateTime());
+				static_cast<QVector<QDateTime>*>(m_empty_data)->append(QDateTime());
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			m_empty_data = new QVector<QString>();
@@ -645,27 +665,28 @@ void ColumnClearCmd::undo() {
 	m_undone = true;
 }
 
-
 /** ***************************************************************************
  * \class ColumSetGlobalFormulaCmd
  * \brief Set the formula for the entire column (global formula)
  ** ***************************************************************************/
-ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString formula, QStringList variableNames,
-													 QVector<Column*> variableColumns, bool autoUpdate)
-	: QUndoCommand(),
-	m_col(col),
-	m_newFormula(std::move(formula)),
-	m_newVariableNames(std::move(variableNames)),
-	m_newVariableColumns(std::move(variableColumns)),
-	m_newAutoUpdate(autoUpdate)
-{
+ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col,
+													 QString formula,
+													 QStringList variableNames,
+													 QVector<Column*> variableColumns,
+													 bool autoUpdate)
+	: QUndoCommand()
+	, m_col(col)
+	, m_newFormula(std::move(formula))
+	, m_newVariableNames(std::move(variableNames))
+	, m_newVariableColumns(std::move(variableColumns))
+	, m_newAutoUpdate(autoUpdate) {
 	setText(i18n("%1: set formula", col->name()));
 }
 
 void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
-		for (auto& d: m_col->formulaData()) {
+		for (auto& d : m_col->formulaData()) {
 			m_variableNames << d.variableName();
 			m_variableColumns << d.m_column;
 		}
@@ -686,7 +707,6 @@ void ColumnSetGlobalFormulaCmd::undo() {
 		formulaData << Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i));
 	m_col->setFormula(m_formula, formulaData, m_newAutoUpdate);
 }
-
 
 /** ***************************************************************************
  * \class ColumSetFormulaCmd
@@ -722,10 +742,12 @@ void ColumnSetGlobalFormulaCmd::undo() {
  * \brief Ctor
  */
 ColumnSetFormulaCmd::ColumnSetFormulaCmd(ColumnPrivate* col, const Interval<int>& interval, QString formula, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col), m_interval(interval), m_newFormula(std::move(formula)) {
+	: QUndoCommand(parent)
+	, m_col(col)
+	, m_interval(interval)
+	, m_newFormula(std::move(formula)) {
 	setText(i18n("%1: set cell formula", col->name()));
 }
-
 
 void ColumnSetFormulaCmd::redo() {
 	if (!m_copied) {
@@ -739,7 +761,6 @@ void ColumnSetFormulaCmd::redo() {
 void ColumnSetFormulaCmd::undo() {
 	m_col->replaceFormulas(m_formulas);
 }
-
 
 /** ***************************************************************************
  * \class ColumnClearFormulasCmd
@@ -765,7 +786,8 @@ void ColumnSetFormulaCmd::undo() {
  * \brief Ctor
  */
 ColumnClearFormulasCmd::ColumnClearFormulasCmd(ColumnPrivate* col, QUndoCommand* parent)
-	: QUndoCommand(parent), m_col(col) {
+	: QUndoCommand(parent)
+	, m_col(col) {
 	setText(i18n("%1: clear all formulas", col->name()));
 }
 
@@ -786,4 +808,3 @@ void ColumnClearFormulasCmd::redo() {
 void ColumnClearFormulasCmd::undo() {
 	m_col->replaceFormulas(m_formulas);
 }
-

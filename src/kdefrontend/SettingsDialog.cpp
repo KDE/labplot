@@ -1,17 +1,17 @@
 /*
-    File                 : SettingsDialog.cpp
-    Project              : LabPlot
-    Description          : application settings dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsDialog.cpp
+	Project              : LabPlot
+	Description          : application settings dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsDialog.h"
 
 #include "MainWin.h"
-#include "SettingsGeneralPage.h"
 #include "SettingsDatasetsPage.h"
+#include "SettingsGeneralPage.h"
 // #include "SettingsWelcomePage.h"
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
@@ -20,15 +20,15 @@
 #include "SettingsNotebookPage.h"
 #endif
 
-#include <QPushButton>
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QWindow>
 
-#include <KMessageBox>
 #include <KConfigGroup>
+#include <KI18n/KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <KI18n/KLocalizedString>
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/FeedbackConfigWidget>
@@ -40,7 +40,8 @@
  * Contains the pages for general settings and view settings.
  *
  */
-SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
+SettingsDialog::SettingsDialog(QWidget* parent)
+	: KPageDialog(parent) {
 	setFaceType(List);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
 	setWindowIcon(QIcon::fromTheme("preferences-other"));
@@ -68,7 +69,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 #ifdef HAVE_CANTOR_LIBS
 	m_notebookPage = new SettingsNotebookPage(this);
 	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
-	notebookFrame->setIcon( QIcon::fromTheme(QLatin1String("cantor")));
+	notebookFrame->setIcon(QIcon::fromTheme(QLatin1String("cantor")));
 	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
 #endif
 
@@ -76,10 +77,10 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
 	datasetsFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
 
-// 	m_welcomePage = new SettingsWelcomePage(this);
-// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
-// 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
-// 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
+	// 	m_welcomePage = new SettingsWelcomePage(this);
+	// 	KPageWidgetItem* welcomeFrame = addPage(m_welcomePage, i18n("Welcome Screen"));
+	// 	welcomeFrame->setIcon(QIcon::fromTheme(QLatin1String("database-index")));
+	// 	connect(m_welcomePage, &SettingsWelcomePage::resetWelcomeScreen, this, &SettingsDialog::resetWelcomeScreen);
 
 #ifdef HAVE_KUSERFEEDBACK
 	auto* mainWin = static_cast<MainWin*>(parent);
@@ -91,7 +92,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	userFeedBackFrame->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-locale")));
 #endif
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "SettingsDialog");
 	if (conf.exists()) {

@@ -1,19 +1,19 @@
 /*
-    File                 : OriginProjectParser.h
-    Project              : LabPlot
-    Description          : parser for Origin projects
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : OriginProjectParser.h
+	Project              : LabPlot
+	Description          : parser for Origin projects
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
+#include "3rdparty/liborigin/OriginFile.h"
 #include "backend/datasources/projects/ProjectParser.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "3rdparty/liborigin/OriginFile.h"
 
 class Axis;
 class Column;
@@ -43,7 +43,7 @@ private:
 	void loadColumnNumericFormat(const Origin::SpreadColumn& originColumn, Column* column) const;
 	bool loadMatrixWorkbook(Workbook*, bool preview);
 	bool loadMatrix(Matrix*, bool preview, size_t sheetIndex = 0, const QString& mwbName = QString());
-	bool loadWorksheet(Worksheet*,  bool preview);
+	bool loadWorksheet(Worksheet*, bool preview);
 	void loadAxis(const Origin::GraphAxis&, Axis*, int index, const QString& axisTitle = QString()) const;
 	void loadCurve(const Origin::GraphCurve&, XYCurve*) const;
 	bool loadNote(Note*, bool preview);

@@ -1,13 +1,12 @@
 /*
-    File                 : ImportSQLDatabaseDialog.h
-    Project              : LabPlot
-    Description          : import SQL database dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportSQLDatabaseDialog.h
+	Project              : LabPlot
+	Description          : import SQL database dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTSQLDATABASEDIALOG_H
 #define IMPORTSQLDATABASEDIALOG_H
@@ -35,4 +34,4 @@ protected Q_SLOTS:
 	void checkOkButton() override;
 };
 
-#endif //IMPORTSQLDATABASEDIALOG_H
+#endif // IMPORTSQLDATABASEDIALOG_H

@@ -1,11 +1,11 @@
 /*
-    File                 : HistogramDock.h
-    Project              : LabPlot
-    Description          : widget for histogram plot properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+	File                 : HistogramDock.h
+	Project              : LabPlot
+	Description          : widget for histogram plot properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTOGRAMDOCK_H
@@ -54,9 +54,9 @@ private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
-	//SLOTs for changes triggered in HistogramDock
+	// SLOTs for changes triggered in HistogramDock
 
-	//General-Tab
+	// General-Tab
 	void dataColumnChanged(const QModelIndex&);
 	void visibilityChanged(bool);
 	void typeChanged(int);
@@ -72,14 +72,14 @@ private Q_SLOTS:
 	void binRangesMaxDateTimeChanged(const QDateTime&);
 	void plotRangeChanged(int);
 
-	//Lines-Tab
+	// Lines-Tab
 	void lineTypeChanged(int);
 	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 
-	//Values-Tab
+	// Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
@@ -94,9 +94,9 @@ private Q_SLOTS:
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
 
-	//Filling-tab
+	// Filling-tab
 	void fillingEnabledChanged(bool);
-  	void fillingTypeChanged(int);
+	void fillingTypeChanged(int);
 	void fillingColorStyleChanged(int);
 	void fillingImageStyleChanged(int);
 	void fillingBrushStyleChanged(int);
@@ -110,13 +110,13 @@ private Q_SLOTS:
 	void errorTypeChanged(int) const;
 	void errorBarsTypeChanged(int) const;
 	void errorBarsCapSizeChanged(double) const;
-  	void errorBarsStyleChanged(int) const;
+	void errorBarsStyleChanged(int) const;
 	void errorBarsColorChanged(const QColor&);
 	void errorBarsWidthChanged(double) const;
 	void errorBarsOpacityChanged(int) const;
 
-	//SLOTs for changes triggered in Histogram
-	//General-Tab
+	// SLOTs for changes triggered in Histogram
+	// General-Tab
 	void curveDataColumnChanged(const AbstractColumn*);
 	void curveTypeChanged(Histogram::HistogramType);
 	void curveOrientationChanged(Histogram::HistogramOrientation);
@@ -129,12 +129,12 @@ private Q_SLOTS:
 	void curveBinRangesMaxChanged(double);
 	void curveVisibilityChanged(bool);
 
-	//Line-tab
+	// Line-tab
 	void curveLineTypeChanged(Histogram::LineType);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
 
-	//Values-Tab
+	// Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);
 	void curveValuesColumnChanged(const AbstractColumn*);
 	void curveValuesPositionChanged(Histogram::ValuesPosition);
@@ -149,7 +149,7 @@ private Q_SLOTS:
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
 
-	//Filling-Tab
+	// Filling-Tab
 	void curveFillingEnabledChanged(bool);
 	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
 	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -167,7 +167,7 @@ private Q_SLOTS:
 	void curveErrorBarsCapSizeChanged(qreal);
 	void curveErrorBarsOpacityChanged(qreal);
 
-	//load and save
+	// load and save
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 

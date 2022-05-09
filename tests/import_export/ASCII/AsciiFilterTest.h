@@ -1,12 +1,12 @@
 /*
-    File                 : AsciiFilterTest.h
-    Project              : LabPlot
-    Description          : Tests for the ascii filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : AsciiFilterTest.h
+	Project              : LabPlot
+	Description          : Tests for the ascii filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef ASCIIFILTERTEST_H
 #define ASCIIFILTERTEST_H
@@ -18,7 +18,7 @@ class AsciiFilterTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	//empty and sparse files
+	// empty and sparse files
 	void testEmptyFileAppend();
 	void testEmptyFilePrepend();
 	void testEmptyFileReplace();
@@ -29,7 +29,7 @@ private Q_SLOTS:
 	void testSparseFile02();
 	void testSparseFile03();
 
-	//header handling
+	// header handling
 	void testHeader01();
 	void testHeader02();
 	void testHeader03();
@@ -40,7 +40,7 @@ private Q_SLOTS:
 	void testHeader07a();
 	void testHeader08();
 
-	//read ranges
+	// read ranges
 	void testColumnRange00();
 	void testColumnRange01();
 	void testColumnRange02();
@@ -55,34 +55,34 @@ private Q_SLOTS:
 
 	void testRowColumnRange00();
 
-	//different separators
+	// different separators
 
-	//qouted strings
+	// qouted strings
 	void testQuotedStrings00();
 	void testQuotedStrings01();
 	void testQuotedStrings02();
 	void testQuotedStrings03();
 
-	//different locales
+	// different locales
 
-	//handling of NANs
+	// handling of NANs
 
-	//automatically skip comments
+	// automatically skip comments
 	void testComments00();
 	void testComments01();
 	void testComments02();
 
-	//datetime data
+	// datetime data
 	void testDateTime00();
 	void testDateTimeHex();
 
-// benchmarks
+	// benchmarks
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
-	void benchDoubleImport_cleanup();	// delete data
+	void benchDoubleImport_cleanup(); // delete data
 
 private:
 	QString benchDataFileName;

@@ -1,12 +1,11 @@
 /*
-    File                 : PlotAreaPrivate.h
-    Project              : LabPlot
-    Description          : Private members of PlotArea.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : PlotAreaPrivate.h
+	Project              : LabPlot
+	Description          : Private members of PlotArea.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef PLOTAREAPRIVATE_H
 #define PLOTAREAPRIVATE_H
@@ -17,20 +16,20 @@
 class QBrush;
 class PlotArea;
 
-class PlotAreaPrivate: public WorksheetElementPrivate {
+class PlotAreaPrivate : public WorksheetElementPrivate {
 public:
-	explicit PlotAreaPrivate(PlotArea *owner);
+	explicit PlotAreaPrivate(PlotArea* owner);
 
 	bool toggleClipping(bool on);
 	bool clippingEnabled() const;
 	void setRect(const QRectF&);
-	void retransform() override {};
+	void retransform() override{};
 
-	//QGraphicsItem's virtual functions
+	// QGraphicsItem's virtual functions
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	virtual void recalcShapeAndBoundingRect() override {};
+	virtual void recalcShapeAndBoundingRect() override{};
 
 	QRectF rect;
 	WorksheetElement::BackgroundType backgroundType;

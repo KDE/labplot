@@ -1,11 +1,11 @@
 /*
-    File                 : DifferentiationTest.cpp
-    Project              : LabPlot
-    Description          : Tests for numerical differentiation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : DifferentiationTest.cpp
+	Project              : LabPlot
+	Description          : Tests for numerical differentiation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DifferentiationTest.h"
@@ -16,10 +16,10 @@
 
 void DifferentiationTest::testLinear() {
 	// data
-	QVector<int> xData = {1,2,3,4};
-	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<int> xData = {1, 2, 3, 4};
+	QVector<double> yData = {1., 2., 3., 4.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
@@ -30,15 +30,15 @@ void DifferentiationTest::testLinear() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -59,10 +59,10 @@ void DifferentiationTest::testLinear() {
 
 void DifferentiationTest::testLinearNonEquidistant() {
 	// data
-	QVector<double> xData = {1.,1.5,3.,5.};
-	QVector<double> yData = {1.,1.5,3.,5.};
+	QVector<double> xData = {1., 1.5, 3., 5.};
+	QVector<double> yData = {1., 1.5, 3., 5.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -73,15 +73,15 @@ void DifferentiationTest::testLinearNonEquidistant() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -102,10 +102,10 @@ void DifferentiationTest::testLinearNonEquidistant() {
 
 void DifferentiationTest::testQuadratic() {
 	// data
-	QVector<double> xData = {1.,2.,3.,4.};
-	QVector<double> yData = {1.,4.,9.,16.};
+	QVector<double> xData = {1., 2., 3., 4.};
+	QVector<double> yData = {1., 4., 9., 16.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -116,15 +116,15 @@ void DifferentiationTest::testQuadratic() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -145,10 +145,10 @@ void DifferentiationTest::testQuadratic() {
 
 void DifferentiationTest::testQuadraticNonEquidistant() {
 	// data
-	QVector<double> xData = {1.,1.5,3.,5.};
-	QVector<double> yData = {1.,2.25,9.,25.};
+	QVector<double> xData = {1., 1.5, 3., 5.};
+	QVector<double> yData = {1., 2.25, 9., 25.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -159,15 +159,15 @@ void DifferentiationTest::testQuadraticNonEquidistant() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -188,10 +188,10 @@ void DifferentiationTest::testQuadraticNonEquidistant() {
 
 void DifferentiationTest::testQuadraticSecondOrder() {
 	// data
-	QVector<double> xData = {1.,2.,3.,4.};
-	QVector<double> yData = {1.,4.,9.,16.};
+	QVector<double> xData = {1., 2., 3., 4.};
+	QVector<double> yData = {1., 4., 9., 16.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -202,16 +202,16 @@ void DifferentiationTest::testQuadraticSecondOrder() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationData.derivOrder = nsl_diff_deriv_order_second;
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -232,10 +232,10 @@ void DifferentiationTest::testQuadraticSecondOrder() {
 
 void DifferentiationTest::testCubicSecondOrder() {
 	// data
-	QVector<double> xData = {1.,2.,3.,4.};
-	QVector<double> yData = {1.,8.,27.,64.};
+	QVector<double> xData = {1., 2., 3., 4.};
+	QVector<double> yData = {1., 8., 27., 64.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -246,16 +246,16 @@ void DifferentiationTest::testCubicSecondOrder() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationData.derivOrder = nsl_diff_deriv_order_second;
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -276,10 +276,10 @@ void DifferentiationTest::testCubicSecondOrder() {
 
 void DifferentiationTest::testCubicThirdOrder() {
 	// data
-	QVector<double> xData = {1.,2.,3.,4.,5.};
-	QVector<double> yData = {1.,8.,27.,64.,125.};
+	QVector<double> xData = {1., 2., 3., 4., 5.};
+	QVector<double> yData = {1., 8., 27., 64., 125.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
@@ -290,16 +290,16 @@ void DifferentiationTest::testCubicThirdOrder() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationData.derivOrder = nsl_diff_deriv_order_third;
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 
@@ -321,10 +321,10 @@ void DifferentiationTest::testCubicThirdOrder() {
 
 void DifferentiationTest::testLinearDuplicateX() {
 	// data
-	QVector<int> xData = {1,1,2,2,3,4,4,4,5,5};
-	QVector<double> yData = {1.,2.,3.,4.,5.,6.,7.,8.,9.,10.};
+	QVector<int> xData = {1, 1, 2, 2, 3, 4, 4, 4, 5, 5};
+	QVector<double> yData = {1., 2., 3., 4., 5., 6., 7., 8., 9., 10.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
@@ -335,11 +335,11 @@ void DifferentiationTest::testLinearDuplicateX() {
 	differentiationCurve.setXDataColumn(&xDataColumn);
 	differentiationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the differentiation
+	// prepare the differentiation
 	XYDifferentiationCurve::DifferentiationData differentiationData = differentiationCurve.differentiationData();
 	differentiationCurve.setDifferentiationData(differentiationData);
 
-	//perform the differentiation
+	// perform the differentiation
 	differentiationCurve.recalculate();
 	const XYDifferentiationCurve::DifferentiationResult& differentiationResult = differentiationCurve.differentiationResult();
 
@@ -353,7 +353,7 @@ void DifferentiationTest::testLinearDuplicateX() {
 	QCOMPARE(yDataColumn.valueAt(4), 9.5);
 	*/
 
-	//check the results
+	// check the results
 	QCOMPARE(differentiationResult.available, true);
 	QCOMPARE(differentiationResult.valid, true);
 

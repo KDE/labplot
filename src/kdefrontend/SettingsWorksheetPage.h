@@ -1,12 +1,11 @@
 /*
-    File                 : SettingsWorksheetPage.h
-    Project              : LabPlot
-    Description          : settings page for Worksheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsWorksheetPage.h
+	Project              : LabPlot
+	Description          : settings page for Worksheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SETTINGSWORKSHEETPAGE_H
 #define SETTINGSWORKSHEETPAGE_H

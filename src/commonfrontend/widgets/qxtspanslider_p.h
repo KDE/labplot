@@ -1,14 +1,14 @@
 /*
  * SPDX-FileCopyrightText: 2006-2011 the LibQxt project <http://libqxt.org, foundation@libqxt.org>
  * SPDX-License-Identifier: BSD-3-Clause
-*/
+ */
 
 #ifndef QXTSPANSLIDER_P_H
 #define QXTSPANSLIDER_P_H
 
-#include <QStyle>
-#include <QObject>
 #include "qxtspanslider.h"
+#include <QObject>
+#include <QStyle>
 
 QT_FORWARD_DECLARE_CLASS(QStylePainter)
 QT_FORWARD_DECLARE_CLASS(QStyleOptionSlider)

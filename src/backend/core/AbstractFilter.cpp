@@ -1,10 +1,10 @@
 /*
-    File                 : AbstractFilter.cpp
-    Project              : LabPlot
-    Description          : Base class for all analysis operations.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs*gmx.net (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractFilter.cpp
+	Project              : LabPlot
+	Description          : Base class for all analysis operations.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs*gmx.net (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AbstractFilter.h"
@@ -20,7 +20,7 @@
  * AbstractFilter provides an abstraction for analysis operations. It is modelled on an
  * electronic filtering circuit: From the outside, a filter appears as a black box with
  * a number of input and output ports (obviously, those numbers do not necessarily agree).
- * 
+ *
  * \section using Using AbstractFilter
  * You can connect one AbstractColumn to each input port using
  * input(int port, AbstractColumn* source). Every output(int port) is realized
@@ -97,14 +97,18 @@ int AbstractFilter::highestConnectedInput() const {
  * \sa inputAcceptable(), #m_inputs
  */
 bool AbstractFilter::input(int port, const AbstractColumn* source) {
-//	DEBUG("AbstractFilter::input()");
+	//	DEBUG("AbstractFilter::input()");
 
-	if (port < 0 || (inputCount() >= 0 && port >= inputCount())) return false;
-	if (source && !inputAcceptable(port, source)) return false;
+	if (port < 0 || (inputCount() >= 0 && port >= inputCount()))
+		return false;
+	if (source && !inputAcceptable(port, source))
+		return false;
 
-	if (port >= m_inputs.size()) m_inputs.resize(port+1);
+	if (port >= m_inputs.size())
+		m_inputs.resize(port + 1);
 	const AbstractColumn* old_input = m_inputs.value(port);
-	if (source == old_input) return true;
+	if (source == old_input)
+		return true;
 
 	if (old_input) {
 		disconnect(old_input, nullptr, this, nullptr);
@@ -120,7 +124,7 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		inputAboutToBeDisconnected(old_input);
 	m_inputs[port] = source;
 	if (source) { // we have a new source
-//		DEBUG("	new source");
+		//		DEBUG("	new source");
 		if (old_input && source->columnMode() != old_input->columnMode())
 			inputModeAboutToChange(source);
 		inputDataChanged(source);
@@ -128,9 +132,13 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		inputPlotDesignationChanged(source);
 		inputDescriptionChanged(source);
 		// connect the source's signals
-		connect(source, &AbstractColumn::aspectDescriptionAboutToChange, this,
+		connect(source,
+				&AbstractColumn::aspectDescriptionAboutToChange,
+				this,
 				static_cast<void (AbstractFilter::*)(const AbstractAspect*)>(&AbstractFilter::inputDescriptionAboutToChange));
-		connect(source, &AbstractColumn::aspectDescriptionChanged, this,
+		connect(source,
+				&AbstractColumn::aspectDescriptionChanged,
+				this,
 				static_cast<void (AbstractFilter::*)(const AbstractAspect*)>(&AbstractFilter::inputDescriptionChanged));
 		connect(source, &AbstractColumn::plotDesignationAboutToChange, this, &AbstractFilter::inputPlotDesignationAboutToChange);
 		connect(source, &AbstractColumn::plotDesignationChanged, this, &AbstractFilter::inputPlotDesignationChanged);
@@ -146,12 +154,13 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
 		connect(source, &AbstractColumn::maskingChanged, this, &AbstractFilter::inputMaskingChanged);
 		connect(source, &AbstractColumn::aboutToBeDestroyed, this, &AbstractFilter::inputAboutToBeDestroyed);
 	} else { // source == 0, that is, the input port has been disconnected
-//		DEBUG("	no source");
+		//		DEBUG("	no source");
 		// try to shrink m_inputs
 		int num_connected_inputs = m_inputs.size();
-		while (m_inputs.at(num_connected_inputs-1) == nullptr) {
+		while (m_inputs.at(num_connected_inputs - 1) == nullptr) {
 			num_connected_inputs--;
-			if (!num_connected_inputs) break;
+			if (!num_connected_inputs)
+				break;
 		}
 		m_inputs.resize(num_connected_inputs);
 	}
@@ -166,7 +175,8 @@ bool AbstractFilter::input(int port, const AbstractColumn* source) {
  * Overloaded method provided for convenience.
  */
 bool AbstractFilter::input(const AbstractFilter* sources) {
-	if (!sources) return false;
+	if (!sources)
+		return false;
 	bool result = true;
 	for (int i = 0; i < sources->outputCount(); ++i)
 		if (!input(i, sources->output(i)))
@@ -211,7 +221,8 @@ QString AbstractFilter::inputLabel(int port) const {
  */
 int AbstractFilter::portIndexOf(const AbstractColumn* column) {
 	for (int i = 0; i < m_inputs.size(); ++i)
-		if (m_inputs.at(i) == column) return i;
+		if (m_inputs.at(i) == column)
+			return i;
 	return -1;
 }
 
@@ -244,11 +255,12 @@ void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn* /*source*/
  * \param source is always the this pointer of the column that emitted the signal.
  */
 void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn* /*source*/) {
-} 
+}
 
 void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect* aspect) {
 	const auto* col = qobject_cast<const AbstractColumn*>(aspect);
-	if (col) inputDescriptionAboutToChange(col);
+	if (col)
+		inputDescriptionAboutToChange(col);
 }
 
 /**
@@ -261,7 +273,8 @@ void AbstractFilter::inputDescriptionChanged(const AbstractColumn* /*source*/) {
 
 void AbstractFilter::inputDescriptionChanged(const AbstractAspect* aspect) {
 	const auto* col = qobject_cast<const AbstractColumn*>(aspect);
-	if (col && m_inputs.contains(col)) inputDescriptionChanged(col);
+	if (col && m_inputs.contains(col))
+		inputDescriptionChanged(col);
 }
 
 /**
@@ -301,7 +314,7 @@ void AbstractFilter::inputModeChanged(const AbstractColumn* /*source*/) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDataAboutToChange(const AbstractColumn* /*source*/) { 
+void AbstractFilter::inputDataAboutToChange(const AbstractColumn* /*source*/) {
 }
 
 /**
@@ -320,4 +333,3 @@ void AbstractFilter::inputDataChanged(const AbstractColumn* /*source*/) {
  * \var AbstractFilter::m_inputs
  * \brief The data sources connected to my input ports.
  */
-

@@ -1,12 +1,11 @@
 /*
-    File                 : ImportDialog.h
-    Project              : LabPlot
-    Description          : import data dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportDialog.h
+	Project              : LabPlot
+	Description          : import data dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTDIALOG_H
 #define IMPORTDIALOG_H
@@ -61,4 +60,4 @@ private Q_SLOTS:
 	void newDataContainer(QAction*);
 };
 
-#endif //IMPORTDIALOG_H
+#endif // IMPORTDIALOG_H

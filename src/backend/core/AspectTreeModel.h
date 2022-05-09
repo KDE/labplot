@@ -1,12 +1,12 @@
 /*
-    File       	    : AspectTreeModel.h
-    Project         : LabPlot
-    Description     : Represents a tree of AbstractAspect objects as a Qt item model.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File       	    : AspectTreeModel.h
+	Project         : LabPlot
+	Description     : Represents a tree of AbstractAspect objects as a Qt item model.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASPECT_TREE_MODEL_H
@@ -21,20 +21,20 @@ class AspectTreeModel : public QAbstractItemModel {
 	Q_OBJECT
 
 public:
-	explicit AspectTreeModel(AbstractAspect* root, QObject* parent=nullptr);
+	explicit AspectTreeModel(AbstractAspect* root, QObject* parent = nullptr);
 
-	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-	QModelIndex parent(const QModelIndex &index) const override;
-	int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-	int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
+	QModelIndex parent(const QModelIndex& index) const override;
+	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
 	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
-	Qt::ItemFlags flags(const QModelIndex &index) const override;
+	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+	bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+	Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column=0) const;
-	QModelIndex modelIndexOfAspect(const QString& path, int column=0) const;
+	QModelIndex modelIndexOfAspect(const AbstractAspect*, int column = 0) const;
+	QModelIndex modelIndexOfAspect(const QString& path, int column = 0) const;
 
 	void setSelectableAspects(const QList<AspectType>&);
 	const QList<AspectType>& selectableAspects() const;

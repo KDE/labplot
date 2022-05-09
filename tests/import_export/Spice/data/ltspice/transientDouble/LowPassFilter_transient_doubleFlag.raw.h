@@ -22,10 +22,5 @@ QString refFileInfoString = R"(Title: * Z:\home\martin\GITProjekte\labplot\tests
 const int refDataRowCount = 535;
 const int numberPreviewData = 103;
 
-QStringList columnNames = {	"time, time",
-							"V(n001), voltage",
-                            "V(n002), voltage",
-                            "I(C1), device_current",
-                            "I(R1), device_current",
-							"I(V1), device_current"};
+QStringList columnNames = {"time, time", "V(n001), voltage", "V(n002), voltage", "I(C1), device_current", "I(R1), device_current", "I(V1), device_current"};
 }

@@ -1,23 +1,23 @@
 /*
-    File                 : HistoryDialog.cpp
-    Project              : LabPlot
-    Description          : history dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : HistoryDialog.cpp
+	Project              : LabPlot
+	Description          : history dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HistoryDialog.h"
 
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <QVBoxLayout>
-#include <QWindow>
 #include <QUndoStack>
 #include <QUndoView>
+#include <QVBoxLayout>
+#include <QWindow>
 
-#include <KMessageBox>
 #include <KLocalizedString>
+#include <KMessageBox>
 #include <KSharedConfig>
 #include <KWindowConfig>
 
@@ -27,16 +27,18 @@
 
 	\ingroup kdefrontend
  */
-HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : QDialog(parent),
-	m_undoStack(stack) {
+HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel)
+	: QDialog(parent)
+	, m_undoStack(stack) {
 	auto* undoView = new QUndoView(stack, this);
-	undoView->setCleanIcon( QIcon::fromTheme(QLatin1String("edit-clear-history")) );
+	undoView->setCleanIcon(QIcon::fromTheme(QLatin1String("edit-clear-history")));
 	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
-	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
-	                            "Select an item in the list to navigate to the corresponding step."));
+	undoView->setWhatsThis(
+		i18n("List of all performed steps/actions.\n"
+			 "Select an item in the list to navigate to the corresponding step."));
 
-	setWindowIcon( QIcon::fromTheme(QLatin1String("view-history")) );
+	setWindowIcon(QIcon::fromTheme(QLatin1String("view-history")));
 	setWindowTitle(i18nc("@title:window", "Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -51,7 +53,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 		btnBox->addButton(m_clearUndoStackButton, QDialogButtonBox::ActionRole);
 		m_clearUndoStackButton->setText(i18n("&Clear"));
 		m_clearUndoStackButton->setToolTip(i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-		m_clearUndoStackButton->setIcon( QIcon::fromTheme(QLatin1String("edit-clear")) );
+		m_clearUndoStackButton->setIcon(QIcon::fromTheme(QLatin1String("edit-clear")));
 		connect(m_clearUndoStackButton, &QPushButton::clicked, this, &HistoryDialog::clearUndoStack);
 	}
 
@@ -67,7 +69,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 
 	setLayout(layout);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
 	if (conf.exists()) {
@@ -78,15 +80,12 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 }
 
 HistoryDialog::~HistoryDialog() {
-	//save dialog size
+	// save dialog size
 	KConfigGroup conf(KSharedConfig::openConfig(), "HistoryDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void HistoryDialog::clearUndoStack() {
-	if (KMessageBox::questionYesNo( this,
-	                                i18n("Do you really want to clear the undo history?"),
-	                                i18n("Clear History")
-	                              ) == KMessageBox::Yes)
+	if (KMessageBox::questionYesNo(this, i18n("Do you really want to clear the undo history?"), i18n("Clear History")) == KMessageBox::Yes)
 		m_undoStack->clear();
 }

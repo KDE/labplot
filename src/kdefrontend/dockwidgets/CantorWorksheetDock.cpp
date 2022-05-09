@@ -1,12 +1,12 @@
 /*
-    File                 : CantorWorksheetDock.cpp
-    Project              : LabPlot
-    Description          : widget for CantorWorksheet properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	File                 : CantorWorksheetDock.cpp
+	Project              : LabPlot
+	Description          : widget for CantorWorksheet properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheetDock.h"
@@ -16,15 +16,16 @@
 
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
-// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
+	// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
 
-	//SLOTs
-	//General
+	// SLOTs
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
 	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
@@ -37,11 +38,11 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	m_worksheet = list.first();
 	m_aspect = list.first();
 
-	//remove the available panel plugins first
+	// remove the available panel plugins first
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
 	for (int i : index) {
-		ui.tabWidget->removeTab(i-k);
+		ui.tabWidget->removeTab(i - k);
 		++k;
 	}
 
@@ -49,18 +50,18 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.leName->setToolTip("");
 
 	if (m_cantorworksheetlist.size() == 1) {
-		//show name/comment
+		// show name/comment
 		ui.leName->setText(m_worksheet->name());
 		ui.teComment->setText(m_worksheet->comment());
 
-		//add available panel plugins
+		// add available panel plugins
 		const auto& plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
-			//skip the "File Browser" plugin
-			//in the new code of Cantor the plugin id is set as the object name and we can use it.
-			//for the older version we need to rely on the translated name...
-			//TODO: remove the dependency on the plugin name later.
+			// skip the "File Browser" plugin
+			// in the new code of Cantor the plugin id is set as the object name and we can use it.
+			// for the older version we need to rely on the translated name...
+			// TODO: remove the dependency on the plugin name later.
 			if (plugin->objectName() == QLatin1String("FileBrowserPanel") || plugin->name() == i18n("File Browser"))
 				continue;
 
@@ -74,7 +75,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 				m_documentationPanelIndex = i;
 		}
 	} else {
-		//don't show any name/comment when multiple notebooks were selected
+		// don't show any name/comment when multiple notebooks were selected
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
@@ -89,7 +90,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		ui.bRestart->hide();
 	}
 
-	//SIGNALs/SLOTs
+	// SIGNALs/SLOTs
 	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::aspectDescriptionChanged);
 }
 

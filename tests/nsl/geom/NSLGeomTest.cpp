@@ -1,11 +1,11 @@
 /*
-    File                 : NSLGeomTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for geometric functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLGeomTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for geometric functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLGeomTest.h"
@@ -25,9 +25,9 @@ void NSLGeomTest::initTestCase() {
 //##############################################################################
 
 void NSLGeomTest::testDist() {
-	double dist = nsl_geom_point_point_dist(0, 0, 1 , 1);
+	double dist = nsl_geom_point_point_dist(0, 0, 1, 1);
 	QCOMPARE(dist, M_SQRT2);
-	dist = nsl_geom_point_point_dist(1, 2, 2 , 1);
+	dist = nsl_geom_point_point_dist(1, 2, 2, 1);
 	QCOMPARE(dist, M_SQRT2);
 	dist = nsl_geom_point_point_dist(-1, -2, 2, 2);
 	QCOMPARE(dist, 5.);
@@ -43,13 +43,13 @@ void NSLGeomTest::testDist() {
 	dist = nsl_geom_point_line_dist(0, 0, 1, 1, 1, 0);
 	QCOMPARE(dist, M_SQRT1_2);
 
-	//TODO: nsl_geom_point_line_dist_y
-	//TODO: nsl_geom_three_point_area
+	// TODO: nsl_geom_point_line_dist_y
+	// TODO: nsl_geom_three_point_area
 
 	dist = nsl_geom_point_point_dist3(0, 0, 0, 1, 1, 1);
 	QCOMPARE(dist, M_SQRT3);
 	dist = nsl_geom_point_point_dist3(-1, -1, 1, 1, 1, 1);
-	QCOMPARE(dist, 2.*M_SQRT2);
+	QCOMPARE(dist, 2. * M_SQRT2);
 }
 
 void NSLGeomTest::testLineSim() {
@@ -95,13 +95,13 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < no; ++i)
 		QCOMPARE(index[i], result[i]);
 
-        const size_t np = 2;
+	const size_t np = 2;
 	const size_t result2[] = {0, 2, 4, 6, 8, 9};
-        printf("* N-th point\n");
-        nout = nsl_geom_linesim_nthpoint(n, np, index);
+	printf("* N-th point\n");
+	nout = nsl_geom_linesim_nthpoint(n, np, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
@@ -109,13 +109,13 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
-        const double tol2 = 1.5;
+	const double tol2 = 1.5;
 	const size_t result3[] = {0, 3, 5, 6, 7, 9};
-        printf("* Radial distance (tol = %g)\n", tol2);
-        nout = nsl_geom_linesim_raddist(xdata, ydata, n, tol2, index);
+	printf("* Radial distance (tol = %g)\n", tol2);
+	nout = nsl_geom_linesim_raddist(xdata, ydata, n, tol2, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
@@ -123,14 +123,14 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result3[i]);
 
-        const double tol3 = 0.5;
-        const size_t repeat = 3;
+	const double tol3 = 0.5;
+	const size_t repeat = 3;
 	const size_t result4[] = {0, 2, 4, 6, 7, 9};
-        printf("* Perpendicular distance (repeat = %zu)\n", repeat);
-        nout = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol3, repeat, index);
+	printf("* Perpendicular distance (repeat = %zu)\n", repeat);
+	nout = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol3, repeat, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
@@ -138,12 +138,12 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
 
-        const double tol4 = 0.7;
-        printf("* Y distance (interpolation)\n");
-        nout = nsl_geom_linesim_interp(xdata, ydata, n, tol4, index);
+	const double tol4 = 0.7;
+	printf("* Y distance (interpolation)\n");
+	nout = nsl_geom_linesim_interp(xdata, ydata, n, tol4, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.0378688524590164);
 	QCOMPARE(aerr, 0.25);
@@ -151,12 +151,12 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result[i]);
 
-        const double tol5 = 1.6;
-        printf("* minimum area (Visvalingam-Whyatt)\n");
-        nout = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol5, index);
+	const double tol5 = 1.6;
+	printf("* minimum area (Visvalingam-Whyatt)\n");
+	nout = nsl_geom_linesim_visvalingam_whyatt(xdata, ydata, n, tol5, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
@@ -166,11 +166,11 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result3[i]);
 
 	const size_t result5[] = {0, 2, 3, 5, 6, 7, 9};
-        printf("* Perp. distance (Reumann-Witkam)\n");
-        nout = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol3, index);
+	printf("* Perp. distance (Reumann-Witkam)\n");
+	nout = nsl_geom_linesim_reumann_witkam(xdata, ydata, n, tol3, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 7uL);
 	QCOMPARE(perr, 0.01);
 	QCOMPARE(aerr, 0.05);
@@ -178,13 +178,13 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result5[i]);
 
-        const double mintol = 2.0;
-        const double maxtol = 7.0;
-        printf("* Perp. distance (Opheim)\n");
-        nout = nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
+	const double mintol = 2.0;
+	const double maxtol = 7.0;
+	printf("* Perp. distance (Opheim)\n");
+	nout = nsl_geom_linesim_opheim(xdata, ydata, n, mintol, maxtol, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
@@ -192,12 +192,12 @@ void NSLGeomTest::testLineSim() {
 	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
-        const size_t region = 5;
-        printf("* Simplification (Lang)\n");
-        nout = nsl_geom_linesim_lang(xdata, ydata, n, tol3, region, index);
+	const size_t region = 5;
+	printf("* Simplification (Lang)\n");
+	nout = nsl_geom_linesim_lang(xdata, ydata, n, tol3, region, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
 	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
-        printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
+	printf("pos. error = %.15g, area error = %.15g\n", perr, aerr);
 	QCOMPARE(nout, 6uL);
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
@@ -206,15 +206,16 @@ void NSLGeomTest::testLineSim() {
 		QCOMPARE(index[i], result4[i]);
 }
 
-#ifdef _MSC_VER	// crashes on Windows
-void NSLGeomTest::testLineSimMorse() {}
+#ifdef _MSC_VER // crashes on Windows
+void NSLGeomTest::testLineSimMorse() {
+}
 #else
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
 
 	const QString fileName = m_dataDir + "morse_code.dat";
-	FILE *file;
-	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
+	FILE* file;
+	if ((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
 		return;
 	}
@@ -229,8 +230,8 @@ void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
 	size_t i;
 	for (i = 0; i < N; i++) {
-		int num = fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
-		if (num != 2) {	// failed to read two values
+		int num = fscanf(file, "%lf %lf", &xdata[i], &ydata[i]);
+		if (num != 2) { // failed to read two values
 			printf("ERROR reading data\n");
 			fclose(file);
 			return;
@@ -252,10 +253,10 @@ void NSLGeomTest::testLineSimMorse() {
 
 	double tolout;
 	size_t index[N];
-        QBENCHMARK {
+	QBENCHMARK {
 		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata.data(), ydata.data(), N, NOUT, index);
 		QCOMPARE(tolout, 11.5280857733246);
-        }
+	}
 
 	double perr = nsl_geom_linesim_positional_squared_error(xdata.data(), ydata.data(), N, index);
 	double aerr = nsl_geom_linesim_area_error(xdata.data(), ydata.data(), N, index);

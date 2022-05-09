@@ -1,44 +1,44 @@
 /*
-    File                 : MQTT_test.cpp
-    Project              : LabPlot
-    Description          : Tests for MQTT import.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTT_test.cpp
+	Project              : LabPlot
+	Description          : Tests for MQTT import.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MQTT_test.h"
 #include "ui_MQTT_test.h"
 
 #include <QDateTime>
-#include <QMqttClient>
 #include <QMessageBox>
-#include <QtMath>
+#include <QMqttClient>
 #include <QTimer>
+#include <QtMath>
 
-#include <iostream>
 #include <chrono>
+#include <iostream>
 #include <random>
 
-MainWindow::MainWindow(QWidget *parent) :
-		QMainWindow(parent),
-		ui(new Ui::MainWindow),
-		m_run (false),
-		m_pathes (1),
-		m_itersTotal (100000),
-		m_iters (300),
-		m_iterCount (0),
-		m_delta (0.25),
-		m_dt (0.1),
-		m_interval (1000),
-		m_seed (std::chrono::system_clock::now().time_since_epoch().count()) {
+MainWindow::MainWindow(QWidget* parent)
+	: QMainWindow(parent)
+	, ui(new Ui::MainWindow)
+	, m_run(false)
+	, m_pathes(1)
+	, m_itersTotal(100000)
+	, m_iters(300)
+	, m_iterCount(0)
+	, m_delta(0.25)
+	, m_dt(0.1)
+	, m_interval(1000)
+	, m_seed(std::chrono::system_clock::now().time_since_epoch().count()) {
 	ui->setupUi(this);
 
 	m_timer = new QTimer(this);
 	m_timer->setInterval(m_interval);
 
-	m_generator = new std::default_random_engine (m_seed);
-	m_distribution = new std::normal_distribution<double> (0.0, (qPow(m_delta, 2.0) * m_dt));
+	m_generator = new std::default_random_engine(m_seed);
+	m_distribution = new std::normal_distribution<double>(0.0, (qPow(m_delta, 2.0) * m_dt));
 
 	m_x.fill(0.0, m_pathes);
 
@@ -52,19 +52,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->bPublish, &QPushButton::clicked, this, &MainWindow::onTimeout);
 	connect(m_client, &QMqttClient::connected, this, &MainWindow::onConnect);
 
-	connect(m_client, &QMqttClient::messageReceived, this, [this](const QByteArray &message, const QMqttTopicName &topic) {
-		const QString content = QDateTime::currentDateTime().toString()
-				+ QLatin1String(" Received Topic: ")
-				+ topic.name()
-				+ QLatin1String(" Message:\n")
-				+ message
-				+ QLatin1Char('\n');
+	connect(m_client, &QMqttClient::messageReceived, this, [this](const QByteArray& message, const QMqttTopicName& topic) {
+		const QString content = QDateTime::currentDateTime().toString() + QLatin1String(" Received Topic: ") + topic.name() + QLatin1String(" Message:\n")
+			+ message + QLatin1Char('\n');
 		ui->editLog->insertPlainText(content);
 	});
 
 	connect(ui->lineEditHost, &QLineEdit::textChanged, m_client, &QMqttClient::setHostname);
 	connect(ui->spinBoxPort, QOverload<int>::of(&QSpinBox::valueChanged), this, &MainWindow::setClientPort);
-
 }
 
 MainWindow::~MainWindow() {
@@ -100,36 +95,34 @@ void MainWindow::setClientPort(int p) {
 	m_client->setPort(p);
 }
 
-
 void MainWindow::on_buttonSubscribe_clicked() {
-	if(m_client->state() == QMqttClient::ClientState::Connected) {
+	if (m_client->state() == QMqttClient::ClientState::Connected) {
 		QMqttTopicFilter filterX{"brownian/x"};
 
 		QMqttSubscription* subscription;
-		subscription = m_client->subscribe(filterX , ui->spinQoS->text().toUInt());
+		subscription = m_client->subscribe(filterX, ui->spinQoS->text().toUInt());
 		if (!subscription) {
 			QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Could not subscribe. Is there a valid connection?"));
 			return;
 		}
 		m_qos = subscription->qos();
-		m_brownianX = new QMqttTopicName(subscription->topic().filter()) ;
+		m_brownianX = new QMqttTopicName(subscription->topic().filter());
 
 		for (int i = 0; i < m_pathes; i++) {
-			QMqttTopicFilter filterY{"brownian/y"+QString::number(i)};
-			subscription = m_client->subscribe(filterY , ui->spinQoS->text().toUInt());
+			QMqttTopicFilter filterY{"brownian/y" + QString::number(i)};
+			subscription = m_client->subscribe(filterY, ui->spinQoS->text().toUInt());
 			if (!subscription) {
 				QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Could not subscribe. Is there a valid connection?"));
 				return;
 			}
-			m_brownianTopics.push_back(new QMqttTopicName(subscription->topic().filter())) ;
+			m_brownianTopics.push_back(new QMqttTopicName(subscription->topic().filter()));
 		}
 		m_timer->start();
 	}
 }
 
 void MainWindow::onTimeout() {
-	if(m_client->state() == QMqttClient::ClientState::Connected &&
-			!m_brownianTopics.isEmpty()) {
+	if (m_client->state() == QMqttClient::ClientState::Connected && !m_brownianTopics.isEmpty()) {
 		QString s;
 		QVector<QString> brownianY;
 		brownianY.fill(QString(), m_pathes);
@@ -141,24 +134,18 @@ void MainWindow::onTimeout() {
 
 				s.append(QString::number(m_iterCount * m_dt));
 				for (int j = 0; j < m_pathes; j++) {
-					if(!brownianY[j].isEmpty())
+					if (!brownianY[j].isEmpty())
 						brownianY[j].append("\n");
-					m_x[j] = m_x[j] + m_distribution->operator() (*m_generator);
+					m_x[j] = m_x[j] + m_distribution->operator()(*m_generator);
 					brownianY[j].append(QString::number(m_x[j]));
 				}
 				m_iterCount++;
 			}
 
-		if (m_client->publish(*m_brownianX,
-							  s.toUtf8(),
-							  m_qos,
-							  false) == -1)
+		if (m_client->publish(*m_brownianX, s.toUtf8(), m_qos, false) == -1)
 			QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Could not publish message"));
 		for (int i = 0; i < m_pathes; i++) {
-			if (m_client->publish(*m_brownianTopics[i],
-								  brownianY[i].toUtf8(),
-								  m_qos,
-								  false) == -1)
+			if (m_client->publish(*m_brownianTopics[i], brownianY[i].toUtf8(), m_qos, false) == -1)
 				QMessageBox::critical(this, QLatin1String("Error"), QLatin1String("Could not publish message"));
 		}
 	}
@@ -171,6 +158,6 @@ void MainWindow::intervalChanged(const QString& interval) {
 }
 
 void MainWindow::onConnect() {
-	const QString content = QDateTime::currentDateTime().toString() +"  Successfully connected to broker";
+	const QString content = QDateTime::currentDateTime().toString() + "  Successfully connected to broker";
 	ui->editLog->insertPlainText(content);
 }

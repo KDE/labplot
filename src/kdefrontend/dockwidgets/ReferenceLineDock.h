@@ -1,18 +1,18 @@
 /*
-    File                 : ReferenceLineDock.h
-    Project              : LabPlot
-    Description          : Dock widget for the reference line on the plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ReferenceLineDock.h
+	Project              : LabPlot
+	Description          : Dock widget for the reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINEDOCK_H
 #define REFERENCELINEDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_referencelinedock.h"
 
 class AbstractAspect;
@@ -23,7 +23,7 @@ class ReferenceLineDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit ReferenceLineDock(QWidget *);
+	explicit ReferenceLineDock(QWidget*);
 	void setReferenceLines(QList<ReferenceLine*>);
 	void updateLocale() override;
 
@@ -36,29 +36,29 @@ private:
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in ReferenceLineDock
+	// SLOTs for changes triggered in ReferenceLineDock
 	void visibilityChanged(bool);
 
-	//Position
+	// Position
 	void orientationChanged(int);
 	void positionLogicalChanged(const QString&);
 	void positionLogicalDateTimeChanged(const QDateTime&);
 
-	//Line
+	// Line
 	void styleChanged(int);
 	void colorChanged(const QColor&);
 	void widthChanged(double);
 	void opacityChanged(int);
 
-	//SLOTs for changes triggered in ReferenceLine
+	// SLOTs for changes triggered in ReferenceLine
 	void updatePlotRanges() override;
 	void lineVisibilityChanged(bool);
 
-	//Position
+	// Position
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 
-	//Line
+	// Line
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
 };

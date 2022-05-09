@@ -1,21 +1,21 @@
 /*
-    File                 : ResizeItem.cpp
-    Project              : LabPlot
-    Description          : Item allowing to resize worksheet elements with the mouse
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ResizeItem.cpp
+	Project              : LabPlot
+	Description          : Item allowing to resize worksheet elements with the mouse
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "ResizeItem.h"
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include <QBrush>
 #include <QCursor>
 
-ResizeItem::HandleItem::HandleItem(int position, ResizeItem* parent) : QGraphicsRectItem(-10, -10, 20, 20, parent),
-	m_position(position), m_parent(parent) {
-
+ResizeItem::HandleItem::HandleItem(int position, ResizeItem* parent)
+	: QGraphicsRectItem(-10, -10, 20, 20, parent)
+	, m_position(position)
+	, m_parent(parent) {
 	setBrush(QBrush(Qt::red));
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
@@ -73,14 +73,14 @@ void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
 void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(true);
 
-	//the container has already the current rect set, we just need
-	//to pass the previous rect so the undo-step can be done properly
+	// the container has already the current rect set, we just need
+	// to pass the previous rect so the undo-step can be done properly
 	m_parent->container()->setPrevRect(m_oldRect);
 }
 
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
-	//HACK: make the parent container/plot non-movable otherwise
-	//the move event doesn't reach HandleItem. Better solution?
+	// HACK: make the parent container/plot non-movable otherwise
+	// the move event doesn't reach HandleItem. Better solution?
 	m_parent->container()->graphicsItem()->setFlag(ItemIsMovable, false);
 
 	switch (m_position) {
@@ -139,9 +139,9 @@ QPointF ResizeItem::HandleItem::restrictPosition(const QPointF& pos) {
 	return newPos;
 }
 
-ResizeItem::ResizeItem(WorksheetElementContainer* container) : QGraphicsItem(container->graphicsItem()),
-m_container(container) {
-
+ResizeItem::ResizeItem(WorksheetElementContainer* container)
+	: QGraphicsItem(container->graphicsItem())
+	, m_container(container) {
 	m_handleItems.append(new HandleItem(TopLeft, this));
 	m_handleItems.append(new HandleItem(Top, this));
 	m_handleItems.append(new HandleItem(TopRight, this));
@@ -169,14 +169,13 @@ WorksheetElementContainer* ResizeItem::container() {
 }
 
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
-
 }
 
-#define IMPL_SET_FN(TYPE, POS)                    \
-void ResizeItem::set ## POS (TYPE v) {            \
-	m_rect.set ## POS (v);                        \
-	m_container->setRect(mapRectToScene(m_rect)); \
-}
+#define IMPL_SET_FN(TYPE, POS)                                                                                                                                 \
+	void ResizeItem::set##POS(TYPE v) {                                                                                                                        \
+		m_rect.set##POS(v);                                                                                                                                    \
+		m_container->setRect(mapRectToScene(m_rect));                                                                                                          \
+	}
 
 IMPL_SET_FN(qreal, Top)
 IMPL_SET_FN(qreal, Right)

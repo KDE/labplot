@@ -1,20 +1,20 @@
 /*
-    File                 : TextLabelPrivate.h
-    Project              : LabPlot
-    Description          : Private members of TextLabel
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TextLabelPrivate.h
+	Project              : LabPlot
+	Description          : Private members of TextLabel
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
-#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
-#include <QFutureWatcher>
+#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include <QDesktopWidget>
+#include <QFutureWatcher>
 
 extern "C" {
 #include <gsl/gsl_const_cgs.h>
@@ -32,16 +32,16 @@ public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	double zoomFactor{1.0};
-	//scaling:
-	//we need to scale from the font size specified in points to scene units.
-	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
-	// -> take this into account
+	// scaling:
+	// we need to scale from the font size specified in points to scene units.
+	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
+	//  -> take this into account
 	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
+	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern", 20};	// reasonable default font and size
+	QFont teXFont{"Computer Modern", 20}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
@@ -70,11 +70,11 @@ public:
 	ScaledTextItem* m_textItem{nullptr};
 	bool m_hovered{false};
 
-	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
+	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
 
-	//reimplemented from QGraphicsItem
+	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;

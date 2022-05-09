@@ -1,11 +1,11 @@
 /*
-    File                 : SymbolWidget.cc
-    Project              : LabPlot
-    Description          : label settings widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SymbolWidget.cc
+	Project              : LabPlot
+	Description          : label settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SymbolWidget.h"
@@ -22,24 +22,25 @@
 
 	\ingroup kdefrontend
  */
-SymbolWidget::SymbolWidget(QWidget* parent) : QWidget(parent) {
+SymbolWidget::SymbolWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(this);
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::addSymbolStyles(ui.cbStyle);
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
 
-	connect( ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::styleChanged);
-	connect( ui.sbSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
-	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::rotationChanged);
-	connect( ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::opacityChanged);
+	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::styleChanged);
+	connect(ui.sbSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
+	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::rotationChanged);
+	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::opacityChanged);
 
-	connect( ui.cbFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::fillingStyleChanged);
-	connect( ui.kcbFillingColor, &KColorButton::changed, this, &SymbolWidget::fillingColorChanged);
+	connect(ui.cbFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::fillingStyleChanged);
+	connect(ui.kcbFillingColor, &KColorButton::changed, this, &SymbolWidget::fillingColorChanged);
 
-	connect( ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::borderStyleChanged);
-	connect( ui.kcbBorderColor, &KColorButton::changed, this, &SymbolWidget::borderColorChanged);
-	connect( ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
+	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::borderStyleChanged);
+	connect(ui.kcbBorderColor, &KColorButton::changed, this, &SymbolWidget::borderColorChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
 }
 
 void SymbolWidget::setSymbols(QList<Symbol*> symbols) {
@@ -48,7 +49,7 @@ void SymbolWidget::setSymbols(QList<Symbol*> symbols) {
 
 	load();
 
-	//Symbol-Tab
+	// Symbol-Tab
 	connect(m_symbol, &Symbol::styleChanged, this, &SymbolWidget::symbolStyleChanged);
 	connect(m_symbol, &Symbol::sizeChanged, this, &SymbolWidget::symbolSizeChanged);
 	connect(m_symbol, &Symbol::rotationAngleChanged, this, &SymbolWidget::symbolRotationAngleChanged);
@@ -88,7 +89,7 @@ void SymbolWidget::styleChanged(int index) {
 		ui.sbRotation->setEnabled(true);
 		ui.sbOpacity->setEnabled(true);
 
-		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
+		// enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
 		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
 			ui.cbFillingStyle->setEnabled(true);
 			bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex()) == Qt::NoBrush);
@@ -116,7 +117,7 @@ void SymbolWidget::sizeChanged(double value) {
 		return;
 
 	for (auto* symbol : m_symbols)
-		symbol->setSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		symbol->setSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
 void SymbolWidget::rotationChanged(int value) {
@@ -131,7 +132,7 @@ void SymbolWidget::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (float)value / 100.;
 	for (auto* symbol : m_symbols)
 		symbol->setOpacity(opacity);
 }
@@ -175,7 +176,7 @@ void SymbolWidget::borderStyleChanged(int index) {
 		return;
 
 	const auto penStyle = Qt::PenStyle(index);
-	if ( penStyle == Qt::NoPen ) {
+	if (penStyle == Qt::NoPen) {
 		ui.kcbBorderColor->setEnabled(false);
 		ui.sbBorderWidth->setEnabled(false);
 	} else {
@@ -217,7 +218,7 @@ void SymbolWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* symbol : m_symbols) {
 		pen = symbol->pen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 		symbol->setPen(pen);
 	}
 }
@@ -233,7 +234,7 @@ void SymbolWidget::symbolStyleChanged(Symbol::Style style) {
 
 void SymbolWidget::symbolSizeChanged(qreal size) {
 	const Lock lock(m_initializing);
-	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
+	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void SymbolWidget::symbolRotationAngleChanged(qreal angle) {
@@ -243,22 +244,22 @@ void SymbolWidget::symbolRotationAngleChanged(qreal angle) {
 
 void SymbolWidget::symbolOpacityChanged(qreal opacity) {
 	const Lock lock(m_initializing);
-	ui.sbOpacity->setValue( round(opacity*100.0) );
+	ui.sbOpacity->setValue(round(opacity * 100.0));
 }
 
 void SymbolWidget::symbolBrushChanged(const QBrush& brush) {
 	const Lock lock(m_initializing);
-	ui.cbFillingStyle->setCurrentIndex((int) brush.style());
+	ui.cbFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, brush.color());
 }
 
 void SymbolWidget::symbolPenChanged(const QPen& pen) {
 	const Lock lock(m_initializing);
-	ui.cbBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbBorderColor->setColor( pen.color());
+	ui.cbBorderStyle->setCurrentIndex((int)pen.style());
+	ui.kcbBorderColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, pen.color());
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 }
 
 //**********************************************************
@@ -269,14 +270,14 @@ void SymbolWidget::load() {
 
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(index);
-	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(m_symbol->size(), Worksheet::Unit::Point) );
-	ui.sbRotation->setValue( m_symbol->rotationAngle() );
-	ui.sbOpacity->setValue( round(m_symbol->opacity()*100.0) );
-	ui.cbFillingStyle->setCurrentIndex( (int) m_symbol->brush().style() );
-	ui.kcbFillingColor->setColor(  m_symbol->brush().color() );
-	ui.cbBorderStyle->setCurrentIndex( (int) m_symbol->pen().style() );
-	ui.kcbBorderColor->setColor( m_symbol->pen().color() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_symbol->pen().widthF(), Worksheet::Unit::Point) );
+	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(m_symbol->size(), Worksheet::Unit::Point));
+	ui.sbRotation->setValue(m_symbol->rotationAngle());
+	ui.sbOpacity->setValue(round(m_symbol->opacity() * 100.0));
+	ui.cbFillingStyle->setCurrentIndex((int)m_symbol->brush().style());
+	ui.kcbFillingColor->setColor(m_symbol->brush().color());
+	ui.cbBorderStyle->setCurrentIndex((int)m_symbol->pen().style());
+	ui.kcbBorderColor->setColor(m_symbol->pen().color());
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_symbol->pen().widthF(), Worksheet::Unit::Point));
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -288,14 +289,14 @@ void SymbolWidget::loadConfig(const KConfigGroup& group) {
 
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));
-	ui.sbSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point) );
-	ui.sbRotation->setValue( group.readEntry("SymbolRotation", m_symbol->rotationAngle()) );
-	ui.sbOpacity->setValue( round(group.readEntry("SymbolOpacity", m_symbol->opacity())*100.0) );
-	ui.cbFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_symbol->brush().style()) );
-	ui.kcbFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_symbol->brush().color()) );
-	ui.cbBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_symbol->pen().style()) );
-	ui.kcbBorderColor->setColor( group.readEntry("SymbolBorderColor", m_symbol->pen().color()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_symbol->pen().widthF()), Worksheet::Unit::Point) );
+	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_symbol->size()), Worksheet::Unit::Point));
+	ui.sbRotation->setValue(group.readEntry("SymbolRotation", m_symbol->rotationAngle()));
+	ui.sbOpacity->setValue(round(group.readEntry("SymbolOpacity", m_symbol->opacity()) * 100.0));
+	ui.cbFillingStyle->setCurrentIndex(group.readEntry("SymbolFillingStyle", (int)m_symbol->brush().style()));
+	ui.kcbFillingColor->setColor(group.readEntry("SymbolFillingColor", m_symbol->brush().color()));
+	ui.cbBorderStyle->setCurrentIndex(group.readEntry("SymbolBorderStyle", (int)m_symbol->pen().style()));
+	ui.kcbBorderColor->setColor(group.readEntry("SymbolBorderColor", m_symbol->pen().color()));
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", m_symbol->pen().widthF()), Worksheet::Unit::Point));
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -304,9 +305,9 @@ void SymbolWidget::loadConfig(const KConfigGroup& group) {
 
 void SymbolWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry("SymbolStyle", ui.cbStyle->itemData(ui.cbStyle->currentIndex()));
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSize->value(),Worksheet::Unit::Point));
+	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSize->value(), Worksheet::Unit::Point));
 	group.writeEntry("SymbolRotation", ui.sbRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbOpacity->value()/100.0);
+	group.writeEntry("SymbolOpacity", ui.sbOpacity->value() / 100.0);
 	group.writeEntry("SymbolFillingStyle", ui.cbFillingStyle->currentIndex());
 	group.writeEntry("SymbolFillingColor", ui.kcbFillingColor->color());
 	group.writeEntry("SymbolBorderStyle", ui.cbBorderStyle->currentIndex());

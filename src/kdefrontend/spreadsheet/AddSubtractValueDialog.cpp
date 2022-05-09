@@ -1,19 +1,19 @@
 /*
-    File                 : AddSubtractValueDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog for adding/subtracting a value from column values
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AddSubtractValueDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog for adding/subtracting a value from column values
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AddSubtractValueDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -29,8 +29,10 @@
 	\ingroup kdefrontend
  */
 
-AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, Operation op, QWidget* parent) : QDialog(parent),
-	m_spreadsheet(s), m_operation(op) {
+AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, Operation op, QWidget* parent)
+	: QDialog(parent)
+	, m_spreadsheet(s)
+	, m_operation(op) {
 	Q_ASSERT(s != nullptr);
 
 	init();
@@ -51,8 +53,10 @@ AddSubtractValueDialog::AddSubtractValueDialog(Spreadsheet* s, Operation op, QWi
 	}
 }
 
-AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget* parent) : QDialog(parent),
-	m_matrix(m), m_operation(op) {
+AddSubtractValueDialog::AddSubtractValueDialog(Matrix* m, Operation op, QWidget* parent)
+	: QDialog(parent)
+	, m_matrix(m)
+	, m_operation(op) {
 	Q_ASSERT(m != nullptr);
 
 	init();
@@ -114,9 +118,11 @@ void AddSubtractValueDialog::init() {
 	connect(btnBox, &QDialogButtonBox::accepted, this, &AddSubtractValueDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &AddSubtractValueDialog::reject);
 
-	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {m_okButton->setEnabled(!ui.leValue->text().isEmpty());});
+	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
+		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
+	});
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
 	if (conf.exists()) {
@@ -134,24 +140,24 @@ AddSubtractValueDialog::~AddSubtractValueDialog() {
 void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
-	//depending on the current column mode, activate/deactivate the corresponding widgets
-	//and show the first valid value in the first selected column as the value to add/subtract
+	// depending on the current column mode, activate/deactivate the corresponding widgets
+	// and show the first valid value in the first selected column as the value to add/subtract
 	const Column* column = m_columns.first();
 	const auto mode = column->columnMode();
 	SET_NUMBER_LOCALE
-	//TODO: switch
+	// TODO: switch
 	if (mode == AbstractColumn::ColumnMode::Integer) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(column->integerAt(0)));
-	} else 	if (mode == AbstractColumn::ColumnMode::BigInt) {
+	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
-		//TODO: QLongLongValidator
+		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(column->bigIntAt(0)));
-	} else 	if (mode == AbstractColumn::ColumnMode::Double) {
+	} else if (mode == AbstractColumn::ColumnMode::Double) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
@@ -163,7 +169,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 				break;
 			}
 		}
-	} else 	{ //datetime
+	} else { // datetime
 		ui.lValue->setVisible(false);
 		ui.leValue->setVisible(false);
 		auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
@@ -188,20 +194,20 @@ void AddSubtractValueDialog::setMatrices() {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0,0)));
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0,0)));
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::Double:
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0,0)));
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Day:
@@ -238,9 +244,9 @@ QString AddSubtractValueDialog::getMessage(const QString& name) {
 }
 
 void AddSubtractValueDialog::generate() {
-	if(m_spreadsheet != nullptr)
+	if (m_spreadsheet != nullptr)
 		generateForColumns();
-	else if(m_matrix != nullptr)
+	else if (m_matrix != nullptr)
 		generateForMatrices();
 }
 
@@ -267,10 +273,10 @@ void AddSubtractValueDialog::generateForColumns() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
@@ -279,7 +285,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Multiply:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) * value;
 
@@ -288,7 +294,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Divide:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<int>* >(col->data());
+				auto* data = static_cast<QVector<int>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) / value;
 
@@ -308,10 +314,10 @@ void AddSubtractValueDialog::generateForColumns() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<qint64>* >(col->data());
+				auto* data = static_cast<QVector<qint64>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
@@ -320,7 +326,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Multiply:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<qint64>* >(col->data());
+				auto* data = static_cast<QVector<qint64>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) * value;
 
@@ -329,7 +335,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Divide:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<qint64>* >(col->data());
+				auto* data = static_cast<QVector<qint64>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) / value;
 
@@ -348,10 +354,10 @@ void AddSubtractValueDialog::generateForColumns() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
-			//fall through
+			// fall through
 		case Add:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) + value;
 
@@ -360,7 +366,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Multiply:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) * value;
 
@@ -369,7 +375,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		case Divide:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<double>* >(col->data());
+				auto* data = static_cast<QVector<double>*>(col->data());
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = data->operator[](i) / value;
 
@@ -377,22 +383,22 @@ void AddSubtractValueDialog::generateForColumns() {
 			}
 			break;
 		}
-	} else { //datetime
+	} else { // datetime
 		QVector<QDateTime> new_data(rows);
 		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
-		//QDEBUG(Q_FUNC_INFO << ", DT CHANGE:" << ui.dateTimeEdit->dateTime())
-		//QDEBUG(Q_FUNC_INFO << ", VALUE:" << value)
+		// QDEBUG(Q_FUNC_INFO << ", DT CHANGE:" << ui.dateTimeEdit->dateTime())
+		// QDEBUG(Q_FUNC_INFO << ", VALUE:" << value)
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (auto* col : m_columns) {
-				auto* data = static_cast<QVector<QDateTime>* >(col->data());
-				//QDEBUG(Q_FUNC_INFO << ", DT OLD:" << data->operator[](0))
-				//QDEBUG(Q_FUNC_INFO << ", OLD VALUE:" << data->operator[](0).toMSecsSinceEpoch())
-				//QDEBUG(Q_FUNC_INFO << ", NEW VALUE:" << data->operator[](0).toMSecsSinceEpoch() + value)
-				//QDEBUG(Q_FUNC_INFO << ", DT NEW:" << QDateTime::fromMSecsSinceEpoch(data->operator[](0).toMSecsSinceEpoch() + value, timeSpec))
+				auto* data = static_cast<QVector<QDateTime>*>(col->data());
+				// QDEBUG(Q_FUNC_INFO << ", DT OLD:" << data->operator[](0))
+				// QDEBUG(Q_FUNC_INFO << ", OLD VALUE:" << data->operator[](0).toMSecsSinceEpoch())
+				// QDEBUG(Q_FUNC_INFO << ", NEW VALUE:" << data->operator[](0).toMSecsSinceEpoch() + value)
+				// QDEBUG(Q_FUNC_INFO << ", DT NEW:" << QDateTime::fromMSecsSinceEpoch(data->operator[](0).toMSecsSinceEpoch() + value, timeSpec))
 				for (int i = 0; i < rows; ++i)
 					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, data->operator[](i).timeSpec());
 
@@ -402,7 +408,6 @@ void AddSubtractValueDialog::generateForColumns() {
 		case Divide:
 			break;
 		}
-
 	}
 
 	m_spreadsheet->endMacro();
@@ -435,10 +440,10 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<int>(i, j);
 					new_data += value;
 					m_matrix->setCell(i, j, new_data);
@@ -446,7 +451,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<int>(i, j);
 					new_data *= value;
 					m_matrix->setCell(i, j, new_data);
@@ -454,7 +459,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<int>(i, j);
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
@@ -473,10 +478,10 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<qint64>(i, j);
 					new_data += value;
 					m_matrix->setCell(i, j, new_data);
@@ -484,7 +489,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<qint64>(i, j);
 					new_data *= value;
 					m_matrix->setCell(i, j, new_data);
@@ -492,7 +497,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<qint64>(i, j);
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
@@ -511,10 +516,10 @@ void AddSubtractValueDialog::generateForMatrices() {
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
-			//fall through
+			// fall through
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<double>(i, j);
 					new_data += value;
 					m_matrix->setCell(i, j, new_data);
@@ -522,7 +527,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<double>(i, j);
 					new_data *= value;
 					m_matrix->setCell(i, j, new_data);
@@ -530,23 +535,23 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Divide:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					new_data = m_matrix->cell<double>(i, j);
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;
-	}
-	} else { //datetime
+		}
+	} else { // datetime
 		QDateTime new_data;
 		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
-			//fall through
+			// fall through
 		case Add:
 			for (int i = 0; i < rows; ++i)
-				for(int j = 0; j < cols; ++j) {
+				for (int j = 0; j < cols; ++j) {
 					auto dateTime = m_matrix->cell<QDateTime>(i, j);
 					new_data = QDateTime::fromMSecsSinceEpoch(dateTime.toMSecsSinceEpoch() + value, dateTime.timeSpec());
 					m_matrix->setCell(i, j, new_data);
@@ -561,5 +566,4 @@ void AddSubtractValueDialog::generateForMatrices() {
 	m_matrix->endMacro();
 
 	RESET_CURSOR;
-
 }

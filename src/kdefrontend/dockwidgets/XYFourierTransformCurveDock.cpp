@@ -1,11 +1,11 @@
 /*
-    File             : XYFourierTransformCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of Fourier transform curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYFourierTransformCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of Fourier transform curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYFourierTransformCurveDock.h"
@@ -28,7 +28,8 @@
   \ingroup kdefrontend
 */
 
-XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget *parent) : XYCurveDock(parent) {
+XYFourierTransformCurveDock::XYFourierTransformCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
@@ -42,7 +43,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -58,14 +59,14 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
+	// Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::nameChanged);
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFourierTransformCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
@@ -77,7 +78,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbTwoSided, &QCheckBox::toggled, this, &XYFourierTransformCurveDock::twoSidedChanged);
 	connect(uiGeneralTab.cbShifted, &QCheckBox::toggled, this, &XYFourierTransformCurveDock::shiftedChanged);
 	connect(uiGeneralTab.cbXScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::xScaleChanged);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::plotRangeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierTransformCurveDock::recalculateClicked);
 
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierTransformCurveDock::xDataColumnChanged);
@@ -85,7 +86,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 }
 
 void XYFourierTransformCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -104,13 +105,13 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
+	// show the properties of the first curve
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 	SET_NUMBER_LOCALE
-	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformData.xRange.first()) );
-	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformData.xRange.last()) );
+	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));
+	uiGeneralTab.leMax->setText(numberLocale.toString(m_transformData.xRange.last()));
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbWindowType->setCurrentIndex(m_transformData.windowType);
@@ -118,19 +119,19 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 	uiGeneralTab.cbTwoSided->setChecked(m_transformData.twoSided);
-	this->twoSidedChanged();	// show/hide shifted check box
+	this->twoSidedChanged(); // show/hide shifted check box
 	uiGeneralTab.cbShifted->setChecked(m_transformData.shifted);
 	this->shiftedChanged();
 	uiGeneralTab.cbXScale->setCurrentIndex(m_transformData.xScale);
 	this->xScaleChanged();
 	this->showTransformResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last transform
+	// enable the "recalculate"-button if the source data was changed since the last transform
 	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastRecalc());
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_transformCurve, &XYFourierTransformCurve::aspectDescriptionChanged, this, &XYFourierTransformCurveDock::aspectDescriptionChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::xDataColumnChanged, this, &XYFourierTransformCurveDock::curveXDataColumnChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::yDataColumnChanged, this, &XYFourierTransformCurveDock::curveYDataColumnChanged);
@@ -141,10 +142,17 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 }
 
 void XYFourierTransformCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Workbook,
+						   AspectType::Datapicker,
+						   AspectType::DatapickerCurve,
+						   AspectType::Spreadsheet,
+						   AspectType::LiveDataSource,
+						   AspectType::Column,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYFitCurve,
+						   AspectType::CantorWorksheet};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -194,8 +202,8 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 	}
 
@@ -228,8 +236,8 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(m_transformCurve->xDataColumn()->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(m_transformCurve->xDataColumn()->maximum()));
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -237,7 +245,6 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(true);
 		uiGeneralTab.leMax->setEnabled(true);
 	}
-
 }
 void XYFourierTransformCurveDock::xRangeMinChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_transformData.xRange.first(), uiGeneralTab.leMin);
@@ -290,7 +297,6 @@ void XYFourierTransformCurveDock::xScaleChanged() {
 }
 
 void XYFourierTransformCurveDock::recalculateClicked() {
-
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
@@ -304,7 +310,7 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no transforming possible without the x- and y-data
+	// no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX && aspectY);
@@ -334,16 +340,16 @@ void XYFourierTransformCurveDock::showTransformResult() {
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
 	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 }
@@ -351,7 +357,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());

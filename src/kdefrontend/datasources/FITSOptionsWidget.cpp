@@ -1,12 +1,12 @@
 /*
-    File                 : FITSOptionsWidget.cpp
-    Project              : LabPlot
-    Description          : Widget providing options for the import of FITS data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : FITSOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : Widget providing options for the import of FITS data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "FITSOptionsWidget.h"
@@ -14,7 +14,9 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/lib/macros.h"
 
-FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
 	ui.twExtensions->headerItem()->setText(0, i18n("Content"));
@@ -23,7 +25,7 @@ FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twExtensions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
 
 	connect(ui.twExtensions, &QTreeWidget::itemSelectionChanged, this, &FITSOptionsWidget::fitsTreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -53,7 +55,7 @@ void FITSOptionsWidget::updateContent(FITSFilter* filter, const QString& fileNam
 /*!
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
-//TODO
+// TODO
 void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	DEBUG("fitsTreeWidgetSelectionChanges()");
 	QDEBUG("SELECTED ITEMS =" << ui.twExtensions->selectedItems());
@@ -68,9 +70,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	const QString& itemText = item->text(column);
 	QString selectedExtension;
 	int extType = 0;
-	if (itemText.contains(QLatin1String("IMAGE #")) ||
-	        itemText.contains(QLatin1String("ASCII_TBL #")) ||
-	        itemText.contains(QLatin1String("BINARY_TBL #")))
+	if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
 		extType = 1;
 	else if (!itemText.compare(i18n("Primary header")))
 		extType = 2;
@@ -84,7 +84,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 			if (item->parent()->parent() != nullptr) {
 				bool ok;
 				int hduNum = itemText.rightRef(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
+				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
 			}
 		}
 	} else {
@@ -139,20 +139,18 @@ const QString FITSOptionsWidget::extensionName(bool* ok) {
 		const int currentColumn = ui.twExtensions->currentColumn();
 		QString itemText = item->text(currentColumn);
 		int extType = 0;
-		if (itemText.contains(QLatin1String("IMAGE #")) ||
-		        itemText.contains(QLatin1String("ASCII_TBL #")) ||
-		        itemText.contains(QLatin1String("BINARY_TBL #")))
+		if (itemText.contains(QLatin1String("IMAGE #")) || itemText.contains(QLatin1String("ASCII_TBL #")) || itemText.contains(QLatin1String("BINARY_TBL #")))
 			extType = 1;
 		else if (!itemText.compare(i18n("Primary header")))
 			extType = 2;
 
 		if (extType == 0) {
 			if (item->parent() != nullptr && item->parent()->parent() != nullptr)
-				return item->parent()->parent()->text(0) + QLatin1String("[")+ item->text(currentColumn) + QLatin1String("]");
+				return item->parent()->parent()->text(0) + QLatin1String("[") + item->text(currentColumn) + QLatin1String("]");
 		} else if (extType == 1) {
 			if (item->parent() != nullptr && item->parent()->parent() != nullptr) {
 				int hduNum = itemText.rightRef(1).toInt(ok);
-				return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum-1) + QLatin1String("]");
+				return item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
 			}
 		} else {
 			if (item->parent()->parent() != nullptr)

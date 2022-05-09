@@ -24,12 +24,12 @@ QString refFileInfoString = R"(Title: * C:\users\martin\My Documents\Labplot\lts
 const int refDataRowCount = 899;
 const int numberPreviewData = 89;
 
-QStringList columnNames = {	"time, time",
-							"V(n002), voltage",
-                            "V(n001), voltage",
-                            "V(n003), voltage",
-                            "I(B1), device_current",
-                            "I(R2), device_current",
-                            "I(R1), device_current",
-							"I(V1), device_current"};
+QStringList columnNames = {"time, time",
+						   "V(n002), voltage",
+						   "V(n001), voltage",
+						   "V(n003), voltage",
+						   "I(B1), device_current",
+						   "I(R2), device_current",
+						   "I(R1), device_current",
+						   "I(V1), device_current"};
 }

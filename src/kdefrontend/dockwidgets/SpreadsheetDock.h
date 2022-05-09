@@ -1,12 +1,12 @@
 /*
-    File                 : SpreadsheetDock.h
-    Project              : LabPlot
-    Description          : widget for spreadsheet properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	File                 : SpreadsheetDock.h
+	Project              : LabPlot
+	Description          : widget for spreadsheet properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SPREADSHEETDOCK_H
@@ -34,17 +34,17 @@ private:
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in SpreadsheetDock
+	// SLOTs for changes triggered in SpreadsheetDock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 	void commentsShownChanged(bool);
 
-	//SLOTs for changes triggered in Spreadsheet
+	// SLOTs for changes triggered in Spreadsheet
 	void spreadsheetRowCountChanged(int);
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(bool);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 

@@ -1,11 +1,11 @@
 /*
-    File                 : Symbol.h
-    Project              : LabPlot
-    Description          : Symbol
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Symbol.h
+	Project              : LabPlot
+	Description          : Symbol
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SYMBOL_H
@@ -23,13 +23,69 @@ class Symbol : public AbstractAspect {
 
 public:
 	// order is fixed; append new symbols at the end and add to StyleOrder in Symbol.cpp
-	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
-			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, Heart, Lightning, X, Asterisk, Tri, XPlus, TallPlus,
-			LatinCross, DotPlus, Hash, SquareX, SquarePlus, SquareHalf, SquareDiag, SquareTriangle,
-			CircleHalf, CircleDot, CircleX, CircleTri, Peace, Flower, Flower2, Flower3, Flower5, Flower6,
-			Star, Star3, Star6, Pentagon, Hexagon, Latin, David, Home, Pin, Female, Male, Spade, Club,
-			SquareDot, TriangleDot, TriangleHalf, TriangleLine};
+	enum class Style {
+		NoSymbols,
+		Circle,
+		Square,
+		EquilateralTriangle,
+		RightTriangle,
+		Bar,
+		PeakedBar,
+		SkewedBar,
+		Diamond,
+		Lozenge,
+		Tie,
+		TinyTie,
+		Plus,
+		Boomerang,
+		SmallBoomerang,
+		Star4,
+		Star5,
+		Line,
+		Cross,
+		Heart,
+		Lightning,
+		X,
+		Asterisk,
+		Tri,
+		XPlus,
+		TallPlus,
+		LatinCross,
+		DotPlus,
+		Hash,
+		SquareX,
+		SquarePlus,
+		SquareHalf,
+		SquareDiag,
+		SquareTriangle,
+		CircleHalf,
+		CircleDot,
+		CircleX,
+		CircleTri,
+		Peace,
+		Flower,
+		Flower2,
+		Flower3,
+		Flower5,
+		Flower6,
+		Star,
+		Star3,
+		Star6,
+		Pentagon,
+		Hexagon,
+		Latin,
+		David,
+		Home,
+		Pin,
+		Female,
+		Male,
+		Spade,
+		Club,
+		SquareDot,
+		TriangleDot,
+		TriangleHalf,
+		TriangleLine
+	};
 	Q_ENUM(Style)
 
 	static int stylesCount();
@@ -37,7 +93,7 @@ public:
 	static Symbol::Style indexToStyle(int);
 	static QPainterPath stylePath(Symbol::Style);
 
-	explicit Symbol(const QString &name);
+	explicit Symbol(const QString& name);
 	~Symbol() override;
 	void init(const KConfigGroup&);
 

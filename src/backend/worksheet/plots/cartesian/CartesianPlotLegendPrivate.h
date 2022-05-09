@@ -1,19 +1,19 @@
 /*
-    File                 : CartesianPlotLegendPrivate.h
-    Project              : LabPlot
-    Description          : Private members of CartesianPlotLegend
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
+	File                 : CartesianPlotLegendPrivate.h
+	Project              : LabPlot
+	Description          : Private members of CartesianPlotLegend
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTLEGENDPRIVATE_H
 #define CARTESIANPLOTLEGENDPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
-#include <QPen>
 #include <QFont>
+#include <QPen>
 
 class QBrush;
 class CartesianPlotLegend;
@@ -30,29 +30,29 @@ public:
 	void retransform() override;
 	void updatePosition();
 
-	//QGraphicsItem's virtual functions
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+	// QGraphicsItem's virtual functions
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	virtual void recalcShapeAndBoundingRect() override;
 
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; //list containing all visible curves
+	QList<WorksheetElement*> curvesList; // list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
 	bool labelColumnMajor;
-	float lineSymbolWidth; //the width of line+symbol
-	QList<float> maxColumnTextWidths; //the maximal width of the text within each column
-	int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount
-	int rowCount; //the number of rows in the legend, depends on the number of curves and on columnCount
+	float lineSymbolWidth; // the width of line+symbol
+	QList<float> maxColumnTextWidths; // the maximal width of the text within each column
+	int columnCount; // the actual number of columns, can be smaller then the specified layoutColumnCount
+	int rowCount; // the number of rows in the legend, depends on the number of curves and on columnCount
 
 	const CartesianPlot* plot{nullptr};
 
 	TextLabel* title{nullptr};
 
-	//Background
+	// Background
 	WorksheetElement::BackgroundType backgroundType;
 	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
 	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
@@ -62,12 +62,12 @@ public:
 	QString backgroundFileName;
 	float backgroundOpacity;
 
-	//Border
+	// Border
 	QPen borderPen;
 	qreal borderCornerRadius;
 	qreal borderOpacity;
 
-	//Layout
+	// Layout
 	float layoutTopMargin;
 	float layoutBottomMargin;
 	float layoutLeftMargin;

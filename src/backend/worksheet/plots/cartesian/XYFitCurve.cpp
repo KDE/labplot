@@ -1,12 +1,12 @@
 /*
-    File                 : XYFitCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a fit model
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : XYFitCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a fit model
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 /*!
@@ -20,23 +20,23 @@
 #include "XYFitCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/lib/macros.h"
-#include "backend/gsl/errors.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/gsl/errors.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
 extern "C" {
-#include <gsl/gsl_blas.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_version.h>
-#include <gsl/gsl_cdf.h>
-#include <gsl/gsl_statistics_double.h>
 #include "backend/gsl/parser.h"
 #include "backend/nsl/nsl_sf_stats.h"
 #include "backend/nsl/nsl_stats.h"
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_statistics_double.h>
+#include <gsl/gsl_vector.h>
+#include <gsl/gsl_version.h>
 }
 
 #include <QDateTime>
@@ -52,8 +52,8 @@ XYFitCurve::XYFitCurve(const QString& name, XYFitCurvePrivate* dd)
 	: XYAnalysisCurve(name, dd, AspectType::XYFitCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYFitCurve::~XYFitCurve() = default;
 
 void XYFitCurve::recalculate() {
@@ -95,17 +95,17 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	DEBUG(Q_FUNC_INFO << ", fit model type = " << modelType << ", degree = " << degree);
 
 	QVector<double>& paramStartValues = fitData.paramStartValues;
-	//QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
+	// QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
 
-	//double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
+	// double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
 	double xmin = tmpXDataColumn->minimum();
 	double xmax = tmpXDataColumn->maximum();
-	//double ymin = tmpYDataColumn->minimum();
+	// double ymin = tmpYDataColumn->minimum();
 	double ymax = tmpYDataColumn->maximum();
 	double xrange = xmax - xmin;
-	//double yrange = ymax-ymin;
+	// double yrange = ymax-ymin;
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
-	//DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
+	// DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
 
 	// guess start values for parameter
 	switch (modelCategory) {
@@ -114,7 +114,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_polynomial:
 			// not needed (works anyway)
 			break;
-		//TODO: handle basic models
+		// TODO: handle basic models
 		case nsl_fit_model_power:
 		case nsl_fit_model_exponential:
 		case nsl_fit_model_inverse_exponential:
@@ -130,23 +130,23 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_sech:
 		case nsl_fit_model_logistic:
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[3*d+2] = xmin + (d+1.)*xrange/(degree+1.);	// mu
-				paramStartValues[3*d+1] = xrange/(10.*degree);	// sigma
-				paramStartValues[3*d] = paramStartValues[3*d+1] * ymax;		// A = sigma * ymax
+				paramStartValues[3 * d + 2] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[3 * d + 1] = xrange / (10. * degree); // sigma
+				paramStartValues[3 * d] = paramStartValues[3 * d + 1] * ymax; // A = sigma * ymax
 			}
 			break;
 		case nsl_fit_model_voigt:
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[4*d+1] = xmin + (d+1.)*xrange/(degree+1.);	// mu
-				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
-				paramStartValues[4*d+3] = xrange/(10.*degree);	// gamma
+				paramStartValues[4 * d + 1] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
+				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * d + 3] = xrange / (10. * degree); // gamma
 			}
 			break;
 		case nsl_fit_model_pseudovoigt1:
 			for (int d = 0; d < degree; d++) {
-				paramStartValues[4*d+1] = 0.5;	// eta
-				paramStartValues[4*d+2] = xrange/(10.*degree);	// sigma
-				paramStartValues[4*d+3] = xmin + (d+1.)*xrange/(degree+1.);	// mu
+				paramStartValues[4 * d + 1] = 0.5; // eta
+				paramStartValues[4 * d + 2] = xrange / (10. * degree); // sigma
+				paramStartValues[4 * d + 3] = xmin + (d + 1.) * xrange / (degree + 1.); // mu
 			}
 			break;
 		}
@@ -160,14 +160,14 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_gudermann:
 		case nsl_fit_model_sigmoid:
 			// use (xmax+xmin)/2 as mu and (xmax-xmin)/10 as sigma
-			paramStartValues[1] = (xmax+xmin)/2.;
-			paramStartValues[2] = xrange/10.;
+			paramStartValues[1] = (xmax + xmin) / 2.;
+			paramStartValues[2] = xrange / 10.;
 			break;
 		case nsl_fit_model_hill:
-			paramStartValues[2] = xrange/10.;
+			paramStartValues[2] = xrange / 10.;
 			break;
 		case nsl_fit_model_gompertz:
-			//TODO
+			// TODO
 			break;
 		}
 		break;
@@ -182,13 +182,13 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
 			// mu
-			paramStartValues[2] = (xmin+xmax)/2.;
+			paramStartValues[2] = (xmin + xmax) / 2.;
 			// sigma
-			paramStartValues[1] = xrange/10.;
+			paramStartValues[1] = xrange / 10.;
 			// A = sigma * y_max
 			paramStartValues[0] = paramStartValues[1] * ymax;
 			break;
-		//TODO: other types
+		// TODO: other types
 		default:
 			break;
 		}
@@ -203,60 +203,60 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
  * sets the parameter names for given model category, model type and degree in \c fitData for given action
  */
 void XYFitCurve::initFitData(XYAnalysisCurve::AnalysisAction action) {
-	//TODO: exclude others too?
+	// TODO: exclude others too?
 	if (action == XYAnalysisCurve::AnalysisAction::DataReduction)
 		return;
 
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
 	if (action == XYAnalysisCurve::AnalysisAction::FitLinear) {
-		//Linear
+		// Linear
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_polynomial;
 		fitData.degree = 1;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitPower) {
-		//Power
+		// Power
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_power;
 		fitData.degree = 1;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitExp1) {
-		//Exponential (degree 1)
+		// Exponential (degree 1)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 1;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitExp2) {
-		//Exponential (degree 2)
+		// Exponential (degree 2)
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_exponential;
 		fitData.degree = 2;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitInvExp) {
-		//Inverse exponential
+		// Inverse exponential
 		fitData.modelCategory = nsl_fit_model_basic;
 		fitData.modelType = (int)nsl_fit_model_inverse_exponential;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitGauss) {
-		//Gauss
+		// Gauss
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = (int)nsl_fit_model_gaussian;
 		fitData.degree = 1;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitCauchyLorentz) {
-		//Cauchy-Lorentz
+		// Cauchy-Lorentz
 		fitData.modelCategory = nsl_fit_model_peak;
 		fitData.modelType = (int)nsl_fit_model_lorentz;
 		fitData.degree = 1;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitTan) {
-		//Arc tangent
+		// Arc tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_atan;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitTanh) {
-		//Hyperbolic tangent
+		// Hyperbolic tangent
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_tanh;
 	} else if (action == XYAnalysisCurve::AnalysisAction::FitErrFunc) {
-		//Error function
+		// Error function
 		fitData.modelCategory = nsl_fit_model_growth;
 		fitData.modelType = (int)nsl_fit_model_erf;
 	} else {
-		//Custom
+		// Custom
 		fitData.modelCategory = nsl_fit_model_custom;
 		fitData.modelType = 0;
 	}
@@ -281,7 +281,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 	if (modelCategory != nsl_fit_model_custom) {
 		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = " << nsl_fit_model_category_name[modelCategory] << ", model type = " << modelType
-			<< ", degree = " << degree);
+						  << ", degree = " << degree);
 		paramNames.clear();
 	} else {
 		DEBUG(Q_FUNC_INFO << ", XYFitCurve::initFitData() for model category = nsl_fit_model_custom, model type = " << modelType << ", degree = " << degree);
@@ -289,16 +289,24 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	paramNamesUtf8.clear();
 
 	// 10 indices used in multi degree models
-	QStringList indices = { UTF8_QSTRING("₁"), UTF8_QSTRING("₂"), UTF8_QSTRING("₃"),
-		UTF8_QSTRING("₄"), UTF8_QSTRING("₅"), UTF8_QSTRING("₆"), UTF8_QSTRING("₇"),
-		UTF8_QSTRING("₈"), UTF8_QSTRING("₉"), UTF8_QSTRING("₁₀")};
+	QStringList indices = {UTF8_QSTRING("₁"),
+						   UTF8_QSTRING("₂"),
+						   UTF8_QSTRING("₃"),
+						   UTF8_QSTRING("₄"),
+						   UTF8_QSTRING("₅"),
+						   UTF8_QSTRING("₆"),
+						   UTF8_QSTRING("₇"),
+						   UTF8_QSTRING("₈"),
+						   UTF8_QSTRING("₉"),
+						   UTF8_QSTRING("₁₀")};
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		model = nsl_fit_model_basic_equation[fitData.modelType];
 		switch (modelType) {
 		case nsl_fit_model_polynomial:
-			paramNames << "c0" << "c1";
+			paramNames << "c0"
+					   << "c1";
 			paramNamesUtf8 << UTF8_QSTRING("c₀") << UTF8_QSTRING("c₁");
 			if (degree == 2) {
 				model += " + c2*x^2";
@@ -309,21 +317,25 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					QString numStr = QString::number(i);
 					model += "+c" + numStr + "*x^" + numStr;
 					paramNames << 'c' + numStr;
-					paramNamesUtf8 << 'c' + indices[i-1];
+					paramNamesUtf8 << 'c' + indices[i - 1];
 				}
 			}
 			break;
 		case nsl_fit_model_power:
 			if (degree == 1) {
-				paramNames << "a" << "b";
+				paramNames << "a"
+						   << "b";
 			} else {
-				paramNames << "a" << "b" << "c";
+				paramNames << "a"
+						   << "b"
+						   << "c";
 				model = "a + b*x^c";
 			}
 			break;
 		case nsl_fit_model_exponential:
 			if (degree == 1) {
-				paramNames << "a" << "b";
+				paramNames << "a"
+						   << "b";
 			} else {
 				for (int i = 1; i <= degree; i++) {
 					QString numStr = QString::number(i);
@@ -332,23 +344,27 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 					else
 						model += " + a" + numStr + "*exp(b" + numStr + "*x)";
 					paramNames << 'a' + numStr << 'b' + numStr;
-					paramNamesUtf8 << 'a' + indices[i-1] << 'b' + indices[i-1];
+					paramNamesUtf8 << 'a' + indices[i - 1] << 'b' + indices[i - 1];
 				}
 			}
 			break;
 		case nsl_fit_model_inverse_exponential:
-			paramNames << "a" << "b" << "c";
+			paramNames << "a"
+					   << "b"
+					   << "c";
 			break;
 		case nsl_fit_model_fourier:
-			paramNames << "w" << "a0" << "a1" << "b1";
-			paramNamesUtf8 << UTF8_QSTRING("ω") << UTF8_QSTRING("a₀")
-				<< UTF8_QSTRING("a₁") << UTF8_QSTRING("b₁");
+			paramNames << "w"
+					   << "a0"
+					   << "a1"
+					   << "b1";
+			paramNamesUtf8 << UTF8_QSTRING("ω") << UTF8_QSTRING("a₀") << UTF8_QSTRING("a₁") << UTF8_QSTRING("b₁");
 			if (degree > 1) {
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
 					paramNames << 'a' + numStr << 'b' + numStr;
-					paramNamesUtf8 << 'a' + indices[i-1] << 'b' + indices[i-1];
+					paramNamesUtf8 << 'a' + indices[i - 1] << 'b' + indices[i - 1];
 				}
 			}
 			break;
@@ -360,7 +376,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_gaussian:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "s" << "mu";
+				paramNames << "a"
+						   << "s"
+						   << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -371,7 +389,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
 					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 				model += ')';
 			}
@@ -379,7 +397,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_lorentz:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "g" << "mu";
+				paramNames << "a"
+						   << "g"
+						   << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -390,7 +410,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
 					paramNames << 'a' + numStr << 'g' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("γ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("γ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 				model += ')';
 			}
@@ -398,7 +418,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_sech:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "s" << "mu";
+				paramNames << "a"
+						   << "s"
+						   << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -409,7 +431,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ')';
 					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 				model += ')';
 			}
@@ -417,7 +439,9 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_logistic:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "s" << "mu";
+				paramNames << "a"
+						   << "s"
+						   << "mu";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -428,7 +452,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
 					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 				model += ')';
 			}
@@ -436,7 +460,10 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_voigt:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "mu" << "s" << "g";
+				paramNames << "a"
+						   << "mu"
+						   << "s"
+						   << "g";
 				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
 				break;
 			default:
@@ -447,14 +474,18 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + "*voigt(x-mu" + numStr + ",s" + numStr + ",g" + numStr + ')';
 					paramNames << 'a' + numStr << "mu" + numStr << 's' + numStr << 'g' + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1] << UTF8_QSTRING("σ") + indices[i-1] << UTF8_QSTRING("γ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1]
+								   << UTF8_QSTRING("γ") + indices[i - 1];
 				}
 			}
 			break;
 		case nsl_fit_model_pseudovoigt1:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "et" << "w" << "mu";	// eta already exists as function!
+				paramNames << "a"
+						   << "et"
+						   << "w"
+						   << "mu"; // eta already exists as function!
 				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -465,7 +496,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 						model += " + ";
 					model += 'a' + numStr + "*pseudovoigt1(x-mu" + numStr + ",eta" + numStr + ",w" + numStr + ')';
 					paramNames << 'a' + numStr << "eta" + numStr << 'w' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i-1] << UTF8_QSTRING("η") + indices[i-1] << 'w' + indices[i-1] << UTF8_QSTRING("μ") + indices[i-1];
+					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("η") + indices[i - 1] << 'w' + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 			}
 			break;
@@ -479,19 +510,28 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
-			paramNames << "a" << "mu" << "s";
+			paramNames << "a"
+					   << "mu"
+					   << "s";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_sigmoid:
-			paramNames << "a" << "mu" << "k";
+			paramNames << "a"
+					   << "mu"
+					   << "k";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << "k";
 			break;
 		case nsl_fit_model_hill:
-			paramNames << "a" << "n" << "a";
-			paramNamesUtf8 << "A" << "n" << UTF8_QSTRING("σ");
+			paramNames << "a"
+					   << "n"
+					   << "a";
+			paramNamesUtf8 << "A"
+						   << "n" << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_gompertz:
-			paramNames << "a" << "b" << "c";
+			paramNames << "a"
+					   << "b"
+					   << "c";
 			break;
 		}
 		break;
@@ -504,98 +544,149 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
-			paramNames << "a" << "s" << "mu";
+			paramNames << "a"
+					   << "s"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_gaussian_tail:
-			paramNames << "A" << "s" << "a" << "mu";
+			paramNames << "A"
+					   << "s"
+					   << "a"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << "a" << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_exponential:
-			paramNames << "a" << "l" << "mu";
+			paramNames << "a"
+					   << "l"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_exponential_power:
-			paramNames << "a" << "s" << "b" << "mu";
+			paramNames << "a"
+					   << "s"
+					   << "b"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << "b" << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
-			paramNames << "a" << "g" << "mu";
+			paramNames << "a"
+					   << "g"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_rayleigh:
-			paramNames << "a" << "s";
+			paramNames << "a"
+					   << "s";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ");
 			break;
 		case nsl_sf_stats_landau:
 			paramNames << "a";
 			paramNamesUtf8 << "A";
 			break;
-		case nsl_sf_stats_levy_alpha_stable:	// unused distributions
+		case nsl_sf_stats_levy_alpha_stable: // unused distributions
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_bernoulli:
 			break;
 		case nsl_sf_stats_gamma:
-			paramNames << "a" << "k" << "t";
-			paramNamesUtf8 << "A"<< "k" << UTF8_QSTRING("θ");
+			paramNames << "a"
+					   << "k"
+					   << "t";
+			paramNamesUtf8 << "A"
+						   << "k" << UTF8_QSTRING("θ");
 			break;
 		case nsl_sf_stats_flat:
-			paramNames << "A" << "b" << "a";
+			paramNames << "A"
+					   << "b"
+					   << "a";
 			break;
 		case nsl_sf_stats_chi_squared:
-			paramNames << "a" << "n";
-			paramNamesUtf8 << "A" << "n";
+			paramNames << "a"
+					   << "n";
+			paramNamesUtf8 << "A"
+						   << "n";
 			break;
 		case nsl_sf_stats_fdist:
-			paramNames << "a" << "n1" << "n2";
+			paramNames << "a"
+					   << "n1"
+					   << "n2";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("ν₁") << UTF8_QSTRING("ν₂");
 			break;
 		case nsl_sf_stats_tdist:
-			paramNames << "a" << "n";
+			paramNames << "a"
+					   << "n";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("ν");
 			break;
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto:
-			paramNames << "A" << "a" << "b";
+			paramNames << "A"
+					   << "a"
+					   << "b";
 			break;
 		case nsl_sf_stats_weibull:
-			paramNames << "a" << "k" << "l" << "mu";
-			paramNamesUtf8 << "A" << "k" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
+			paramNames << "a"
+					   << "k"
+					   << "l"
+					   << "mu";
+			paramNamesUtf8 << "A"
+						   << "k" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_gumbel1:
-			paramNames << "a" << "s" << "mu" << "b";
+			paramNames << "a"
+					   << "s"
+					   << "mu"
+					   << "b";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << UTF8_QSTRING("β");
 			break;
 		case nsl_sf_stats_gumbel2:
-			paramNames << "A" << "a" << "b" << "mu";
-			paramNamesUtf8 << "A" << "a" << "b" << UTF8_QSTRING("μ");
+			paramNames << "A"
+					   << "a"
+					   << "b"
+					   << "mu";
+			paramNamesUtf8 << "A"
+						   << "a"
+						   << "b" << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_poisson:
-			paramNames << "a" << "l";
+			paramNames << "a"
+					   << "l";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("λ");
 			break;
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_binomial:
 		case nsl_sf_stats_pascal:
-			paramNames << "a" << "p" << "n";
-			paramNamesUtf8 << "A" << "p" << "n";
+			paramNames << "a"
+					   << "p"
+					   << "n";
+			paramNamesUtf8 << "A"
+						   << "p"
+						   << "n";
 			break;
 		case nsl_sf_stats_geometric:
 		case nsl_sf_stats_logarithmic:
-			paramNames << "a" << "p";
-			paramNamesUtf8 << "A" << "p";
+			paramNames << "a"
+					   << "p";
+			paramNamesUtf8 << "A"
+						   << "p";
 			break;
 		case nsl_sf_stats_hypergeometric:
-			paramNames << "a" << "n1" << "n2" << "t";
+			paramNames << "a"
+					   << "n1"
+					   << "n2"
+					   << "t";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("n₁") << UTF8_QSTRING("n₂") << "t";
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
-			paramNames << "a" << "s";
+			paramNames << "a"
+					   << "s";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("σ");
 			break;
 		case nsl_sf_stats_frechet:
-			paramNames << "a" << "g" << "s" << "mu";
+			paramNames << "a"
+					   << "g"
+					   << "s"
+					   << "mu";
 			paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 			break;
 		}
@@ -609,8 +700,8 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	if (paramNamesUtf8.isEmpty())
 		paramNamesUtf8 << paramNames;
 
-	//resize the vector for the start values and set the elements to 1.0
-	//in case a custom model is used, do nothing, we take over the previous values
+	// resize the vector for the start values and set the elements to 1.0
+	// in case a custom model is used, do nothing, we take over the previous values
 	if (modelCategory != nsl_fit_model_custom) {
 		const int np = paramNames.size();
 		paramStartValues.resize(np);
@@ -633,10 +724,10 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 			else if (modelType == (int)nsl_sf_stats_levy)
 				paramStartValues[2] = 0.0;
 			else if (modelType == (int)nsl_sf_stats_exponential_power || modelType == (int)nsl_sf_stats_weibull || modelType == (int)nsl_sf_stats_gumbel2
-				|| modelType == (int)nsl_sf_stats_frechet)
+					 || modelType == (int)nsl_sf_stats_frechet)
 				paramStartValues[3] = 0.0;
 			else if (modelType == (int)nsl_sf_stats_binomial || modelType == (int)nsl_sf_stats_negative_binomial || modelType == (int)nsl_sf_stats_pascal
-				|| modelType == (int)nsl_sf_stats_geometric || modelType == (int)nsl_sf_stats_logarithmic)
+					 || modelType == (int)nsl_sf_stats_geometric || modelType == (int)nsl_sf_stats_logarithmic)
 				paramStartValues[1] = 0.5;
 		}
 	}
@@ -654,8 +745,14 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
-const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve); return d->xErrorColumnPath; }
-const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve); return d->yErrorColumnPath; }
+const QString& XYFitCurve::xErrorColumnPath() const {
+	Q_D(const XYFitCurve);
+	return d->xErrorColumnPath;
+}
+const QString& XYFitCurve::yErrorColumnPath() const {
+	Q_D(const XYFitCurve);
+	return d->yErrorColumnPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const Histogram*, dataSourceHistogram, dataSourceHistogram)
 const QString& XYFitCurve::dataSourceHistogramPath() const {
@@ -681,7 +778,7 @@ void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
 		handleSourceDataChanged();
 
 		connect(histogram, &Histogram::dataChanged, this, &XYFitCurve::handleSourceDataChanged);
-// 		//TODO: add disconnect in the undo-function
+		// 		//TODO: add disconnect in the undo-function
 	}
 }
 
@@ -692,8 +789,10 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetXErrorColumnCmd(d, column, ki18n("%1: assign x-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ handleSourceDataChanged(); });
-			//TODO disconnect on undo
+			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+				handleSourceDataChanged();
+			});
+			// TODO disconnect on undo
 		}
 	}
 }
@@ -705,14 +804,16 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 		exec(new XYFitCurveSetYErrorColumnCmd(d, column, ki18n("%1: assign y-error")));
 		handleSourceDataChanged();
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, [=](){ handleSourceDataChanged(); });
-			//TODO disconnect on undo
+			connect(column, &AbstractColumn::dataChanged, this, [=]() {
+				handleSourceDataChanged();
+			});
+			// TODO disconnect on undo
 		}
 	}
 }
 
 // do not recalculate (allow preview)
-//STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate)
+// STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData, recalculate)
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetFitData, XYFitCurve::FitData, fitData)
 void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 	Q_D(XYFitCurve);
@@ -722,26 +823,29 @@ void XYFitCurve::setFitData(const XYFitCurve::FitData& fitData) {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {}
+XYFitCurvePrivate::XYFitCurvePrivate(XYFitCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
+}
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYFitCurvePrivate::~XYFitCurvePrivate() = default;
 
 // data structure to pass parameter to fit functions
 struct data {
-	size_t n;	//number of data points
-	double* x;	//pointer to the vector with x-data values
-	double* y;	//pointer to the vector with y-data values
-	double* weight;	//pointer to the vector with weight values
+	size_t n; // number of data points
+	double* x; // pointer to the vector with x-data values
+	double* y; // pointer to the vector with y-data values
+	double* weight; // pointer to the vector with weight values
 	nsl_fit_model_category modelCategory;
 	int modelType;
 	int degree;
-	QString* func;	// string containing the definition of the model/function
+	QString* func; // string containing the definition of the model/function
 	QStringList* paramNames;
-	double* paramMin;	// lower parameter limits
-	double* paramMax;	// upper parameter limits
-	bool* paramFixed;	// parameter fixed?
+	double* paramMin; // lower parameter limits
+	double* paramMax; // upper parameter limits
+	bool* paramFixed; // parameter fixed?
 };
 
 /*!
@@ -750,7 +854,7 @@ struct data {
  * \param f vector with the weighted residuals weight[i]*(Yi - y[i])
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
-	//DEBUG(Q_FUNC_INFO);
+	// DEBUG(Q_FUNC_INFO);
 	size_t n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -758,16 +862,16 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
 	QStringList* paramNames = ((struct data*)params)->paramNames;
-	double *min = ((struct data*)params)->paramMin;
-	double *max = ((struct data*)params)->paramMax;
+	double* min = ((struct data*)params)->paramMin;
+	double* max = ((struct data*)params)->paramMax;
 
 	// set current values of the parameters
 	for (int i = 0; i < paramNames->size(); i++) {
 		double v = gsl_vector_get(paramValues, (size_t)i);
 		// bound values if limits are set
 		assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
-		QDEBUG("Parameter"<<i<<" (' "<<paramNames->at(i)<<"')"<<'['<<min[i]<<','<<max[i]
-			<<"] free/bound:"<<QString::number(v, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
+		QDEBUG("Parameter" << i << " (' " << paramNames->at(i) << "')" << '[' << min[i] << ',' << max[i] << "] free/bound:" << QString::number(v, 'g', 15)
+						   << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
 	SET_NUMBER_LOCALE
@@ -784,16 +888,16 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		}
 
 		assign_symbol("x", x[i]);
-		//DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
+		// DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
 		double Yi = parse(qPrintable(func), qPrintable(numberLocale.name()));
-		if (parse_errors() > 0)	// fallback to default locale
+		if (parse_errors() > 0) // fallback to default locale
 			Yi = parse(qPrintable(func), "en_US");
-		//DEBUG("	f(x["<< i <<"]) = " << Yi);
+		// DEBUG("	f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
-		//DEBUG("	weight["<< i <<"]) = " << weight[i]);
+		// DEBUG("	weight["<< i <<"]) = " << weight[i]);
 		gsl_vector_set(f, i, sqrt(weight[i]) * (Yi - y[i]));
 	}
 
@@ -807,7 +911,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	//DEBUG(Q_FUNC_INFO);
+	// DEBUG(Q_FUNC_INFO);
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
@@ -815,9 +919,9 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	unsigned int modelType = ((struct data*)params)->modelType;
 	unsigned int degree = ((struct data*)params)->degree;
 	QStringList* paramNames = ((struct data*)params)->paramNames;
-	double *min = ((struct data*)params)->paramMin;
-	double *max = ((struct data*)params)->paramMax;
-	bool *fixed = ((struct data*)params)->paramFixed;
+	double* min = ((struct data*)params)->paramMin;
+	double* max = ((struct data*)params)->paramMax;
+	bool* fixed = ((struct data*)params)->paramFixed;
 
 	// calculate the Jacobian matrix:
 	// Jacobian matrix J(i,j) = df_i / dx_j
@@ -828,7 +932,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
-		case nsl_fit_model_polynomial:	// Y(x) = c0 + c1*x + ... + cn*x^n
+		case nsl_fit_model_polynomial: // Y(x) = c0 + c1*x + ... + cn*x^n
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 				for (unsigned int j = 0; j < (unsigned int)paramNames->size(); ++j) {
@@ -839,7 +943,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 			}
 			break;
-		case nsl_fit_model_power:	// Y(x) = a*x^b or Y(x) = a + b*x^c.
+		case nsl_fit_model_power: // Y(x) = a*x^b or Y(x) = a + b*x^c.
 			if (degree == 1) {
 				const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 				const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
@@ -868,14 +972,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 			}
 			break;
-		case nsl_fit_model_exponential:	{ // Y(x) = a*exp(b*x) + c*exp(d*x) + ...
-			double *p = new double[2*degree];
-			for (unsigned int i = 0; i < 2*degree; i++)
+		case nsl_fit_model_exponential: { // Y(x) = a*exp(b*x) + c*exp(d*x) + ...
+			double* p = new double[2 * degree];
+			for (unsigned int i = 0; i < 2 * degree; i++)
 				p[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, i), min[i], max[i]);
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
 
-				for (unsigned int j = 0; j < 2*degree; j++) {
+				for (unsigned int j = 0; j < 2 * degree; j++) {
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 					else
@@ -886,7 +990,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 			break;
 		}
-		case nsl_fit_model_inverse_exponential: {	// Y(x) = a*(1-exp(b*x))+c
+		case nsl_fit_model_inverse_exponential: { // Y(x) = a*(1-exp(b*x))+c
 			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			const double b = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
@@ -901,32 +1005,32 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_fit_model_fourier: {	// Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
-			//parameters: w, a0, a1, b1, ... an, bn
+		case nsl_fit_model_fourier: { // Y(x) = a0 + (a1*cos(w*x) + b1*sin(w*x)) + ... + (an*cos(n*w*x) + bn*sin(n*w*x)
+			// parameters: w, a0, a1, b1, ... an, bn
 			double* a = new double[degree];
 			double* b = new double[degree];
 			double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			a[0] = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			b[0] = 0;
 			for (unsigned int i = 1; i < degree; ++i) {
-				a[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i), min[2*i], max[2*i]);
-				b[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2*i+1), min[2*i+1], max[2*i+1]);
+				a[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2 * i), min[2 * i], max[2 * i]);
+				b[i] = nsl_fit_map_bound(gsl_vector_get(paramValues, 2 * i + 1), min[2 * i + 1], max[2 * i + 1]);
 			}
 			for (size_t i = 0; i < n; i++) {
 				x = xVector[i];
-				double wd = 0; //first derivative with respect to the w parameter
+				double wd = 0; // first derivative with respect to the w parameter
 				for (unsigned int j = 1; j < degree; ++j) {
-					wd += -a[j]*j*x*sin(j*w*x) + b[j]*j*x*cos(j*w*x);
+					wd += -a[j] * j * x * sin(j * w * x) + b[j] * j * x * cos(j * w * x);
 				}
 
-				gsl_matrix_set(J, i, 0, weight[i]*wd);
+				gsl_matrix_set(J, i, 0, weight[i] * wd);
 				gsl_matrix_set(J, i, 1, weight[i]);
 				for (unsigned int j = 1; j <= degree; ++j) {
-					gsl_matrix_set(J, (size_t)i, (size_t)(2*j), nsl_fit_model_fourier_param_deriv(0, j, x, w, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(2*j+1), nsl_fit_model_fourier_param_deriv(1, j, x, w, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(2 * j), nsl_fit_model_fourier_param_deriv(0, j, x, w, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(2 * j + 1), nsl_fit_model_fourier_param_deriv(1, j, x, w, weight[i]));
 				}
 
-				for (unsigned int j = 0; j <= 2*degree+1; j++)
+				for (unsigned int j = 0; j <= 2 * degree + 1; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
@@ -948,35 +1052,35 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				x = xVector[i];
 
 				for (unsigned int j = 0; j < degree; ++j) {
-					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j), min[3*j], max[3*j]);
-					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+1), min[3*j+1], max[3*j+1]);
-					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3*j+2), min[3*j+2], max[3*j+2]);
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 3 * j), min[3 * j], max[3 * j]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 3 * j + 1), min[3 * j + 1], max[3 * j + 1]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 3 * j + 2), min[3 * j + 2], max[3 * j + 2]);
 
 					switch (modelType) {
 					case nsl_fit_model_gaussian:
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j), nsl_fit_model_gaussian_param_deriv(0, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+1), nsl_fit_model_gaussian_param_deriv(1, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+2), nsl_fit_model_gaussian_param_deriv(2, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j), nsl_fit_model_gaussian_param_deriv(0, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 1), nsl_fit_model_gaussian_param_deriv(1, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 2), nsl_fit_model_gaussian_param_deriv(2, x, a, s, mu, weight[i]));
 						break;
-					case nsl_fit_model_lorentz:	// a,s,t
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j), nsl_fit_model_lorentz_param_deriv(0, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+1), nsl_fit_model_lorentz_param_deriv(1, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+2), nsl_fit_model_lorentz_param_deriv(2, x, a, s, mu, weight[i]));
+					case nsl_fit_model_lorentz: // a,s,t
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j), nsl_fit_model_lorentz_param_deriv(0, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 1), nsl_fit_model_lorentz_param_deriv(1, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 2), nsl_fit_model_lorentz_param_deriv(2, x, a, s, mu, weight[i]));
 						break;
 					case nsl_fit_model_sech:
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j), nsl_fit_model_sech_param_deriv(0, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+1), nsl_fit_model_sech_param_deriv(1, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+2), nsl_fit_model_sech_param_deriv(2, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j), nsl_fit_model_sech_param_deriv(0, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 1), nsl_fit_model_sech_param_deriv(1, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 2), nsl_fit_model_sech_param_deriv(2, x, a, s, mu, weight[i]));
 						break;
 					case nsl_fit_model_logistic:
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j), nsl_fit_model_logistic_param_deriv(0, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+1), nsl_fit_model_logistic_param_deriv(1, x, a, s, mu, weight[i]));
-						gsl_matrix_set(J, (size_t)i, (size_t)(3*j+2), nsl_fit_model_logistic_param_deriv(2, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j), nsl_fit_model_logistic_param_deriv(0, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 1), nsl_fit_model_logistic_param_deriv(1, x, a, s, mu, weight[i]));
+						gsl_matrix_set(J, (size_t)i, (size_t)(3 * j + 2), nsl_fit_model_logistic_param_deriv(2, x, a, s, mu, weight[i]));
 						break;
 					}
 				}
 
-				for (unsigned int j = 0; j < 3*degree; j++)
+				for (unsigned int j = 0; j < 3 * degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
@@ -986,17 +1090,17 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				x = xVector[i];
 
 				for (unsigned int j = 0; j < degree; ++j) {
-					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
-					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
-					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
-					const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j), min[4 * j], max[4 * j]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 1), min[4 * j + 1], max[4 * j + 1]);
+					const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 2), min[4 * j + 2], max[4 * j + 2]);
+					const double g = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 3), min[4 * j + 3], max[4 * j + 3]);
 
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, mu, s, g, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, mu, s, g, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, mu, s, g, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j), nsl_fit_model_voigt_param_deriv(0, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 1), nsl_fit_model_voigt_param_deriv(1, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 2), nsl_fit_model_voigt_param_deriv(2, x, a, mu, s, g, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 3), nsl_fit_model_voigt_param_deriv(3, x, a, mu, s, g, weight[i]));
 				}
-				for (unsigned int j = 0; j < 4*degree; j++)
+				for (unsigned int j = 0; j < 4 * degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
@@ -1006,17 +1110,17 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				x = xVector[i];
 
 				for (unsigned int j = 0; j < degree; ++j) {
-					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j), min[4*j], max[4*j]);
-					const double eta = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+1), min[4*j+1], max[4*j+1]);
-					const double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
-					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
+					const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j), min[4 * j], max[4 * j]);
+					const double eta = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 1), min[4 * j + 1], max[4 * j + 1]);
+					const double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 2), min[4 * j + 2], max[4 * j + 2]);
+					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4 * j + 3), min[4 * j + 3], max[4 * j + 3]);
 
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_pseudovoigt1_param_deriv(0, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_pseudovoigt1_param_deriv(1, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_pseudovoigt1_param_deriv(2, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_pseudovoigt1_param_deriv(3, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j), nsl_fit_model_pseudovoigt1_param_deriv(0, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 1), nsl_fit_model_pseudovoigt1_param_deriv(1, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 2), nsl_fit_model_pseudovoigt1_param_deriv(2, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4 * j + 3), nsl_fit_model_pseudovoigt1_param_deriv(3, x, a, eta, w, mu, weight[i]));
 				}
-				for (unsigned int j = 0; j < 4*degree; j++)
+				for (unsigned int j = 0; j < 4 * degree; j++)
 					if (fixed[j])
 						gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
 			}
@@ -1064,8 +1168,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				}
 			}
 		}
-		}
-		break;
+	} break;
 	case nsl_fit_model_distribution:
 		switch (modelType) {
 		case nsl_sf_stats_gaussian:
@@ -1346,7 +1449,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 			}
 			break;
 		}
-		case nsl_sf_stats_maxwell_boltzmann: {	// Y(x) = a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)
+		case nsl_sf_stats_maxwell_boltzmann: { // Y(x) = a*sqrt(2/pi) * x^2/s^3 * exp(-(x/s)^2/2)
 			const double a = nsl_fit_map_bound(gsl_vector_get(paramValues, 0), min[0], max[0]);
 			const double s = nsl_fit_map_bound(gsl_vector_get(paramValues, 1), min[1], max[1]);
 			for (size_t i = 0; i < n; i++) {
@@ -1487,26 +1590,26 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_p = parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (parse_errors() > 0)	// fallback to default locale
+				if (parse_errors() > 0) // fallback to default locale
 					f_p = parse(qPrintable(func), "en_US");
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
-					eps *= std::abs(f_p);	// scale step size with function value
+					eps *= std::abs(f_p); // scale step size with function value
 				value += eps;
 				assign_symbol(qPrintable(paramNames->at(j)), value);
 				double f_pdp = parse(qPrintable(func), qPrintable(numberLocale.name()));
-				if (parse_errors() > 0)	// fallback to default locale
+				if (parse_errors() > 0) // fallback to default locale
 					f_pdp = parse(qPrintable(func), "en_US");
 
-//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
-//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
-//				DEBUG("	deriv = " << STDSTRING(QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15));
+				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
+				//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
+				//				DEBUG("	deriv = " << STDSTRING(QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15));
 
 				if (fixed[j])
 					gsl_matrix_set(J, (size_t)i, (size_t)j, 0.);
-				else	// calculate finite difference
-					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i])*(f_pdp - f_p)/eps);
+				else // calculate finite difference
+					gsl_matrix_set(J, (size_t)i, (size_t)j, sqrt(weight[i]) * (f_pdp - f_p) / eps);
 			}
 		}
 	}
@@ -1515,7 +1618,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
-	//DEBUG(Q_FUNC_INFO);
+	// DEBUG(Q_FUNC_INFO);
 	func_f(x, params, f);
 	func_df(x, params, J);
 
@@ -1524,16 +1627,16 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 
 /* prepare the fit result columns */
 void XYFitCurvePrivate::prepareResultColumns() {
-	//DEBUG(Q_FUNC_INFO)
-	//create fit result columns if not available yet, clear them otherwise
-	if (!xColumn) {	// all columns are treated together
+	// DEBUG(Q_FUNC_INFO)
+	// create fit result columns if not available yet, clear them otherwise
+	if (!xColumn) { // all columns are treated together
 		DEBUG("	Creating columns")
 		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
 		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
 		residualsColumn = new Column("residuals", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
-		residualsVector = static_cast<QVector<double>* >(residualsColumn->data());
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
+		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -1541,7 +1644,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
-		residualsColumn->setFixed(true); //visible in the project explorer but cannot be modified (renamed, deleted, etc.)
+		residualsColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
 
 		q->setUndoAware(false);
@@ -1552,7 +1655,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		DEBUG(Q_FUNC_INFO << ", Clear columns")
 		xVector->clear();
 		yVector->clear();
-		//TODO: residualsVector->clear();
+		// TODO: residualsVector->clear();
 	}
 }
 
@@ -1589,10 +1692,10 @@ void XYFitCurvePrivate::recalculate() {
 
 	prepareResultColumns();
 
-	//fit settings
-	const unsigned int maxIters = fitData.maxIterations;	//maximal number of iterations
-	const double delta = fitData.eps;		//fit tolerance
-	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
+	// fit settings
+	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
+	const double delta = fitData.eps; // fit tolerance
+	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
 	if (np == 0) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
@@ -1614,28 +1717,27 @@ void XYFitCurvePrivate::recalculate() {
 		}
 	}
 
-	//copy all valid data point for the fit to temporary vectors
+	// copy all valid data point for the fit to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
-	if (fitData.autoRange) {	// auto x range of data to fit
+	if (fitData.autoRange) { // auto x range of data to fit
 		fitData.fitRange = xRange;
-	} else { 			// custom x range of data to fit
-		if (!fitData.fitRange.isZero())  // avoid problems with user specified zero range
+	} else { // custom x range of data to fit
+		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
 			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 	}
 	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
 	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
-	//logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
-	//TODO: decide how to deal with non-numerical error columns
+	// logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
+	// TODO: decide how to deal with non-numerical error columns
 	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// omit invalid data
-		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) ||
-				!tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
+		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) || !tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
 			continue;
 
 		double x = qQNaN();
@@ -1649,7 +1751,7 @@ void XYFitCurvePrivate::recalculate() {
 		case AbstractColumn::ColumnMode::BigInt:
 			x = tmpXDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::ColumnMode::Text:	// not valid
+		case AbstractColumn::ColumnMode::Text: // not valid
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Day:
@@ -1668,7 +1770,7 @@ void XYFitCurvePrivate::recalculate() {
 		case AbstractColumn::ColumnMode::BigInt:
 			y = tmpYDataColumn->bigIntAt(row);
 			break;
-		case AbstractColumn::ColumnMode::Text:	// not valid
+		case AbstractColumn::ColumnMode::Text: // not valid
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
 		case AbstractColumn::ColumnMode::Day:
@@ -1676,17 +1778,17 @@ void XYFitCurvePrivate::recalculate() {
 			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		if (x >= xRange.start() && x <= xRange.end()) {	// only when inside given range
-			if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
+		if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
+			if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) { // x-y
 				xdataVector.append(x);
 				ydataVector.append(y);
-			} else if (!xErrorColumn && yErrorColumn) {	// x-y-dy
+			} else if (!xErrorColumn && yErrorColumn) { // x-y-dy
 				if (!std::isnan(yErrorColumn->valueAt(row))) {
 					xdataVector.append(x);
 					ydataVector.append(y);
 					yerrorVector.append(yErrorColumn->valueAt(row));
 				}
-			} else if (xErrorColumn && yErrorColumn) {	// x-y-dx-dy
+			} else if (xErrorColumn && yErrorColumn) { // x-y-dx-dy
 				if (!std::isnan(xErrorColumn->valueAt(row)) && !std::isnan(yErrorColumn->valueAt(row))) {
 					xdataVector.append(x);
 					ydataVector.append(y);
@@ -1697,9 +1799,9 @@ void XYFitCurvePrivate::recalculate() {
 		}
 	}
 
-	//QDEBUG(Q_FUNC_INFO << ", data: " << ydataVector)
+	// QDEBUG(Q_FUNC_INFO << ", data: " << ydataVector)
 
-	//number of data points to fit
+	// number of data points to fit
 	const size_t n = xdataVector.size();
 	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
 	if (n == 0) {
@@ -1731,8 +1833,8 @@ void XYFitCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-	double* xerror = xerrorVector.data();	// size may be 0
-	double* yerror = yerrorVector.data();	// size may be 0
+	double* xerror = xerrorVector.data(); // size may be 0
+	double* yerror = yerrorVector.data(); // size may be 0
 	DEBUG(Q_FUNC_INFO << ", x error vector size: " << xerrorVector.size());
 	DEBUG(Q_FUNC_INFO << ", y error vector size: " << yerrorVector.size());
 	double* weight = new double[n];
@@ -1740,41 +1842,41 @@ void XYFitCurvePrivate::recalculate() {
 	for (size_t i = 0; i < n; i++)
 		weight[i] = 1.;
 
-	const double minError = 1.e-199;	// minimum error for weighting
+	const double minError = 1.e-199; // minimum error for weighting
 
 	switch (fitData.yWeightsType) {
 	case nsl_fit_weight_no:
 	case nsl_fit_weight_statistical_fit:
 	case nsl_fit_weight_relative_fit:
 		break;
-	case nsl_fit_weight_instrumental:	// yerror are sigmas
+	case nsl_fit_weight_instrumental: // yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1./gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), fabs(ydata[i]) * 1.e-15)));
+				weight[i] = 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), fabs(ydata[i]) * 1.e-15)));
 		break;
-	case nsl_fit_weight_direct:		// yerror are weights
+	case nsl_fit_weight_direct: // yerror are weights
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
 				weight[i] = yerror[i];
 		break;
-	case nsl_fit_weight_inverse:		// yerror are inverse weights
+	case nsl_fit_weight_inverse: // yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1./qMax(yerror[i], qMax(minError, fabs(ydata[i]) * 1.e-15));
+				weight[i] = 1. / qMax(yerror[i], qMax(minError, fabs(ydata[i]) * 1.e-15));
 		break;
 	case nsl_fit_weight_statistical:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1./qMax(ydata[i], minError);
+			weight[i] = 1. / qMax(ydata[i], minError);
 		break;
 	case nsl_fit_weight_relative:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1./qMax(gsl_pow_2(ydata[i]), minError);
+			weight[i] = 1. / qMax(gsl_pow_2(ydata[i]), minError);
 		break;
 	}
 
 	/////////////////////// GSL >= 2 has a complete new interface! But the old one is still supported. ///////////////////////////
 	// GSL >= 2 : "the 'fdf' field of gsl_multifit_function_fdf is now deprecated and does not need to be specified for nonlinear least squares problems"
-	unsigned int nf = 0;	// number of fixed parameter
+	unsigned int nf = 0; // number of fixed parameter
 	for (unsigned int i = 0; i < np; i++) {
 		const bool fixed = fitData.paramFixed.data()[i];
 		if (fixed)
@@ -1782,10 +1884,21 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG("	parameter " << i << " fixed: " << fixed);
 	}
 
-	//function to fit
+	// function to fit
 	gsl_multifit_function_fdf f;
 	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(fitData.model));
-	struct data params = {n, xdata, ydata, weight, fitData.modelCategory, fitData.modelType, fitData.degree, &fitData.model, &fitData.paramNames, fitData.paramLowerLimits.data(), fitData.paramUpperLimits.data(), fitData.paramFixed.data()};
+	struct data params = {n,
+						  xdata,
+						  ydata,
+						  weight,
+						  fitData.modelCategory,
+						  fitData.modelType,
+						  fitData.degree,
+						  &fitData.model,
+						  &fitData.paramNames,
+						  fitData.paramLowerLimits.data(),
+						  fitData.paramUpperLimits.data(),
+						  fitData.paramFixed.data()};
 	f.f = &func_f;
 	f.df = &func_df;
 	f.fdf = &func_fdf;
@@ -1823,13 +1936,13 @@ void XYFitCurvePrivate::recalculate() {
 		// update weights for Y-depending weights (using function values from residuals)
 		if (fitData.yWeightsType == nsl_fit_weight_statistical_fit) {
 			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i
+				weight[i] = 1. / (gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i
 		} else if (fitData.yWeightsType == nsl_fit_weight_relative_fit) {
 			for (size_t i = 0; i < n; i++)
-				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i^2
+				weight[i] = 1. / gsl_pow_2(gsl_vector_get(s->f, i) / sqrt(weight[i]) + ydata[i]); // 1/Y_i^2
 		}
 
-		if (nf == np) {	// all fixed parameter
+		if (nf == np) { // all fixed parameter
 			DEBUG(Q_FUNC_INFO << ", all parameter fixed. Stop iteration.")
 			break;
 		}
@@ -1840,7 +1953,7 @@ void XYFitCurvePrivate::recalculate() {
 		writeSolverState(s, chi);
 		if (status) {
 			DEBUG(Q_FUNC_INFO << ",	iter " << iter << ", status = " << gsl_strerror(status));
-			if (status == GSL_ETOLX) 	// change in the position vector falls below machine precision: no progress
+			if (status == GSL_ETOLX) // change in the position vector falls below machine precision: no progress
 				status = GSL_SUCCESS;
 			break;
 		}
@@ -1859,94 +1972,94 @@ void XYFitCurvePrivate::recalculate() {
 
 		unsigned int iter2 = 0;
 		double chi = 0, chiOld = 0;
-		double *fun = new double[n];
+		double* fun = new double[n];
 		do {
 			iter2++;
 			chiOld = chi;
-			//printf("iter2 = %d\n", iter2);
+			// printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
 			for (size_t i = 0; i < n; i++)
-				fun[i] = gsl_vector_get(s->f, i) * 1./sqrt(weight[i]) + ydata[i];
+				fun[i] = gsl_vector_get(s->f, i) * 1. / sqrt(weight[i]) + ydata[i];
 
 			// calculate weight[i]
 			for (size_t i = 0; i < n; i++) {
 				// calculate df[i]
-				size_t index = i-1;
+				size_t index = i - 1;
 				if (i == 0)
 					index = i;
-				if (i == n-1)
-					index = i-2;
-				double df = (fun[index+1] - fun[index])/(xdata[index+1] - xdata[index]);
-				//printf("df = %g\n", df);
+				if (i == n - 1)
+					index = i - 2;
+				double df = (fun[index + 1] - fun[index]) / (xdata[index + 1] - xdata[index]);
+				// printf("df = %g\n", df);
 
 				double sigmasq = 1.;
-				switch (fitData.xWeightsType) {	// x-error type: f'(x)^2*s_x^2 = f'(x)/w_x
+				switch (fitData.xWeightsType) { // x-error type: f'(x)^2*s_x^2 = f'(x)/w_x
 				case nsl_fit_weight_no:
 					break;
-				case nsl_fit_weight_direct:	// xerror = w_x
-					sigmasq = df*df/qMax(xerror[i], minError);
+				case nsl_fit_weight_direct: // xerror = w_x
+					sigmasq = df * df / qMax(xerror[i], minError);
 					break;
-				case nsl_fit_weight_instrumental:	// xerror = s_x
-					sigmasq = df*df*xerror[i]*xerror[i];
+				case nsl_fit_weight_instrumental: // xerror = s_x
+					sigmasq = df * df * xerror[i] * xerror[i];
 					break;
-				case nsl_fit_weight_inverse:	// xerror = 1/w_x = s_x^2
-					sigmasq = df*df*xerror[i];
+				case nsl_fit_weight_inverse: // xerror = 1/w_x = s_x^2
+					sigmasq = df * df * xerror[i];
 					break;
-				case nsl_fit_weight_statistical:	// s_x^2 = 1/w_x = x
+				case nsl_fit_weight_statistical: // s_x^2 = 1/w_x = x
 					sigmasq = xdata[i];
 					break;
-				case nsl_fit_weight_relative:		// s_x^2 = 1/w_x = x^2
-					sigmasq = xdata[i]*xdata[i];
+				case nsl_fit_weight_relative: // s_x^2 = 1/w_x = x^2
+					sigmasq = xdata[i] * xdata[i];
 					break;
-				case nsl_fit_weight_statistical_fit:	// unused
+				case nsl_fit_weight_statistical_fit: // unused
 				case nsl_fit_weight_relative_fit:
 					break;
 				}
 
 				if (yerrorVector.size() > 0) {
-					switch (fitData.yWeightsType) {	// y-error types: s_y^2 = 1/w_y
+					switch (fitData.yWeightsType) { // y-error types: s_y^2 = 1/w_y
 					case nsl_fit_weight_no:
 						break;
-					case nsl_fit_weight_direct:	// yerror = w_y
-						sigmasq += 1./qMax(yerror[i], minError);
+					case nsl_fit_weight_direct: // yerror = w_y
+						sigmasq += 1. / qMax(yerror[i], minError);
 						break;
-					case nsl_fit_weight_instrumental:	// yerror = s_y
-						sigmasq += yerror[i]*yerror[i];
+					case nsl_fit_weight_instrumental: // yerror = s_y
+						sigmasq += yerror[i] * yerror[i];
 						break;
-					case nsl_fit_weight_inverse:	// yerror = 1/w_y
+					case nsl_fit_weight_inverse: // yerror = 1/w_y
 						sigmasq += yerror[i];
 						break;
-					case nsl_fit_weight_statistical:	// unused
+					case nsl_fit_weight_statistical: // unused
 					case nsl_fit_weight_relative:
 						break;
-					case nsl_fit_weight_statistical_fit:	// s_y^2 = 1/w_y = Y_i
+					case nsl_fit_weight_statistical_fit: // s_y^2 = 1/w_y = Y_i
 						sigmasq += fun[i];
 						break;
-					case nsl_fit_weight_relative_fit:	// s_y^2 = 1/w_y = Y_i^2
-						sigmasq += fun[i]*fun[i];
+					case nsl_fit_weight_relative_fit: // s_y^2 = 1/w_y = Y_i^2
+						sigmasq += fun[i] * fun[i];
 						break;
 					}
 				}
 
-				//printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
-				weight[i] = 1./qMax(sigmasq, minError);
+				// printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
+				weight[i] = 1. / qMax(sigmasq, minError);
 			}
 
 			// update weights
 			gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
-			do {	// fit
+			do { // fit
 				iter++;
 				writeSolverState(s);
 				status = gsl_multifit_fdfsolver_iterate(s);
-				//printf ("status = %s\n", gsl_strerror (status));
-				if (nf == np) 	// stop if all parameters fix
+				// printf ("status = %s\n", gsl_strerror (status));
+				if (nf == np) // stop if all parameters fix
 					break;
 
 				if (status) {
 					DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
-					if (status == GSL_ETOLX) 	// change in the position vector falls below machine precision: no progress
+					if (status == GSL_ETOLX) // change in the position vector falls below machine precision: no progress
 						status = GSL_SUCCESS;
 					break;
 				}
@@ -1965,40 +2078,41 @@ void XYFitCurvePrivate::recalculate() {
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_bound(x_init[i], x_min[i], x_max[i]);
 
-	//get the covariance matrix
-	//TODO: scale the Jacobian when limits are used before constructing the covar matrix?
+	// get the covariance matrix
+	// TODO: scale the Jacobian when limits are used before constructing the covar matrix?
 	gsl_matrix* covar = gsl_matrix_alloc(np, np);
 #if GSL_MAJOR_VERSION >= 2
 	// the Jacobian is not part of the solver anymore
-	gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
+	gsl_matrix* J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
 	gsl_multifit_fdfsolver_jac(s, J);
 	gsl_multifit_covar(J, 0.0, covar);
 #else
 	gsl_multifit_covar(s->J, 0.0, covar);
 #endif
 
-	//write the result
+	// write the result
 	fitResult.available = true;
 	fitResult.valid = true;
 	fitResult.status = gslErrorToString(status);
 	fitResult.iterations = iter;
-	fitResult.dof = n - (np - nf);	// samples - (parameter - fixed parameter)
+	fitResult.dof = n - (np - nf); // samples - (parameter - fixed parameter)
 
-	//gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
-	//gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
+	// gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
+	// gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
 
 	if (fitResult.dof != 0) {
-		fitResult.rms = fitResult.sse/fitResult.dof;
+		fitResult.rms = fitResult.sse / fitResult.dof;
 		fitResult.rsd = sqrt(fitResult.rms);
 	}
-	fitResult.mse = fitResult.sse/n;
+	fitResult.mse = fitResult.sse / n;
 	fitResult.rmse = sqrt(fitResult.mse);
-	fitResult.mae = gsl_blas_dasum(s->f)/n;
+	fitResult.mae = gsl_blas_dasum(s->f) / n;
 	// SST needed for coefficient of determination, R-squared and F test
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
 	// for a linear model without intercept R-squared is calculated differently
-	// see https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
+	// see
+	// https://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-does-summary_0028_0029-report-strange-results-for-the-R_005e2-estimate-when-I-fit-a-linear-model-with-no-intercept_003f
 	if (fitData.modelCategory == nsl_fit_model_basic && fitData.modelType == nsl_fit_model_polynomial && fitData.degree == 1 && x_init[0] == 0) {
 		DEBUG("	Using alternative R^2 for linear model without intercept");
 		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
@@ -2017,7 +2131,7 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np, 1);
 	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np, 1);
 
-	//parameter values
+	// parameter values
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);
@@ -2027,7 +2141,7 @@ void XYFitCurvePrivate::recalculate() {
 	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
 	const double cerr = sqrt(fitResult.rms);
 	// CI = 100* (1 - alpha)
-	const double alpha = 1.0 - fitData.confidenceInterval/100.;
+	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
@@ -2041,13 +2155,13 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
 		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 		for (unsigned int j = 0; j <= i; j++)
-			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j)/sqrt(gsl_matrix_get(covar, i, i))/sqrt(gsl_matrix_get(covar, j, j));
+			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
 	residualsVector->resize(tmpXDataColumn->rowCount());
 	DEBUG("	Residual vector size: " << residualsVector->size())
-	if (fitData.autoRange) {	// evaluate full range of residuals
+	if (fitData.autoRange) { // evaluate full range of residuals
 		xVector->resize(tmpXDataColumn->rowCount());
 		auto mode = tmpXDataColumn->columnMode();
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
@@ -2061,8 +2175,7 @@ void XYFitCurvePrivate::recalculate() {
 				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
 		ExpressionParser* parser = ExpressionParser::getInstance();
-		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector,
-							fitData.paramNames, fitResult.paramValues);
+		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
 		if (rc) {
 			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
 				(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
@@ -2070,22 +2183,22 @@ void XYFitCurvePrivate::recalculate() {
 			DEBUG("	ERROR: Failed parsing residuals")
 			residualsVector->clear();
 		}
-	} else {	// only selected range
+	} else { // only selected range
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
 			if (tmpXDataColumn->valueAt(i) >= xRange.start() && tmpXDataColumn->valueAt(i) <= xRange.end())
-				residualsVector->data()[i] = - gsl_vector_get(s->f, j++);
-			else	// outside range
+				residualsVector->data()[i] = -gsl_vector_get(s->f, j++);
+			else // outside range
 				residualsVector->data()[i] = 0;
 		}
 	}
 	residualsColumn->setChanged();
 
-	//free resources
+	// free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
 
-	//calculate the fit function (vectors)
+	// calculate the fit function (vectors)
 	evaluate();
 	fitResult.elapsedTime = timer.elapsed();
 
@@ -2118,8 +2231,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		return;
 	}
 
-	//only needed for preview (else we have all columns)
-	// should not harm even if not in preview now that residuals are not cleared
+	// only needed for preview (else we have all columns)
+	//  should not harm even if not in preview now that residuals are not cleared
 	if (preview)
 		prepareResultColumns();
 
@@ -2138,9 +2251,9 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};	// full data range
-	if (!fitData.autoEvalRange) { 	// use given range for evaluation
-		if (!fitData.evalRange.isZero()) 	// avoid zero range
+	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()}; // full data range
+	if (!fitData.autoEvalRange) { // use given range for evaluation
+		if (!fitData.evalRange.isZero()) // avoid zero range
 			xRange = fitData.evalRange;
 	}
 	DEBUG(Q_FUNC_INFO << ", eval range = " << STDSTRING(xRange.toString()));
@@ -2149,12 +2262,18 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
 
 	QVector<double> paramValues = fitResult.paramValues;
-	if (preview)	// results not available yet
+	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
 	SET_NUMBER_LOCALE
-	bool rc = parser->evaluateCartesian(fitData.model, numberLocale.toString(xRange.start()), numberLocale.toString(xRange.end()), (int)fitData.evaluatedPoints,
-						xVector, yVector, fitData.paramNames, paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model,
+										numberLocale.toString(xRange.start()),
+										numberLocale.toString(xRange.end()),
+										(int)fitData.evaluatedPoints,
+										xVector,
+										yVector,
+										fitData.paramNames,
+										paramValues);
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
@@ -2172,7 +2291,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) {
 	QString state;
 
-	//current parameter values, semicolon separated
+	// current parameter values, semicolon separated
 	double* min = fitData.paramLowerLimits.data();
 	double* max = fitData.paramUpperLimits.data();
 	for (int i = 0; i < fitData.paramNames.size(); ++i) {
@@ -2181,16 +2300,15 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
 	}
 
-	//current value of chi
+	// current value of chi
 	if (std::isnan(chi))
 		chi = gsl_blas_dnrm2(s->f);
-	state += QString::number(chi*chi);
+	state += QString::number(chi * chi);
 	state += ';';
-	DEBUG(Q_FUNC_INFO << ", chi^2 = " << chi*chi);
+	DEBUG(Q_FUNC_INFO << ", chi^2 = " << chi * chi);
 
 	fitResult.solverOutput += state;
 }
-
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -2201,12 +2319,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyFitCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-fit-curve specific information
+	// write xy-fit-curve specific information
 
-	//fit data - only save model expression and parameter names for custom model, otherwise they are set in XYFitCurve::initFitData()
+	// fit data - only save model expression and parameter names for custom model, otherwise they are set in XYFitCurve::initFitData()
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
@@ -2234,36 +2352,36 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
 		writer->writeStartElement("paramNames");
-		foreach (const QString &name, d->fitData.paramNames)
+		foreach (const QString& name, d->fitData.paramNames)
 			writer->writeTextElement("name", name);
 		writer->writeEndElement();
 	}
 
 	writer->writeStartElement("paramStartValues");
-	foreach (const double &value, d->fitData.paramStartValues)
+	foreach (const double& value, d->fitData.paramStartValues)
 		writer->writeTextElement("startValue", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// use 16 digits to handle -DBL_MAX
 	writer->writeStartElement("paramLowerLimits");
-	foreach (const double &limit, d->fitData.paramLowerLimits)
+	foreach (const double& limit, d->fitData.paramLowerLimits)
 		writer->writeTextElement("lowerLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	// use 16 digits to handle DBL_MAX
 	writer->writeStartElement("paramUpperLimits");
-	foreach (const double &limit, d->fitData.paramUpperLimits)
+	foreach (const double& limit, d->fitData.paramUpperLimits)
 		writer->writeTextElement("upperLimit", QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	writer->writeStartElement("paramFixed");
-	foreach (const double &fixed, d->fitData.paramFixed)
+	foreach (const double& fixed, d->fitData.paramFixed)
 		writer->writeTextElement("fixed", QString::number(fixed));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); //"fitData"
 
-	//fit results (generated columns and goodness of the fit)
+	// fit results (generated columns and goodness of the fit)
 	writer->writeStartElement("fitResult");
 	writer->writeAttribute("available", QString::number(d->fitResult.available));
 	writer->writeAttribute("valid", QString::number(d->fitResult.valid));
@@ -2288,36 +2406,36 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
 
 	writer->writeStartElement("paramValues");
-	foreach (const double &value, d->fitResult.paramValues)
+	foreach (const double& value, d->fitResult.paramValues)
 		writer->writeTextElement("value", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("errorValues");
-	foreach (const double &value, d->fitResult.errorValues)
+	foreach (const double& value, d->fitResult.errorValues)
 		writer->writeTextElement("error", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("tdist_tValues");
-	foreach (const double &value, d->fitResult.tdist_tValues)
+	foreach (const double& value, d->fitResult.tdist_tValues)
 		writer->writeTextElement("tdist_t", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("tdist_pValues");
-	foreach (const double &value, d->fitResult.tdist_pValues)
+	foreach (const double& value, d->fitResult.tdist_pValues)
 		writer->writeTextElement("tdist_p", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("tdist_marginValues");
-	foreach (const double &value, d->fitResult.tdist_marginValues)
+	foreach (const double& value, d->fitResult.tdist_marginValues)
 		writer->writeTextElement("tdist_margin", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement("correlationMatrix");
-	foreach (const double &value, d->fitResult.correlationMatrix)
+	foreach (const double& value, d->fitResult.correlationMatrix)
 		writer->writeTextElement("correlation", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -2345,7 +2463,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "fitData") {
 			attribs = reader->attributes();
@@ -2355,8 +2473,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_PATH(dataSourceHistogram);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
-			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.start());	// old name
-			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.end());	// old name
+			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.start()); // old name
+			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.end()); // old name
 			READ_DOUBLE_VALUE("fitRangeMin", fitData.fitRange.start());
 			READ_DOUBLE_VALUE("fitRangeMax", fitData.fitRange.end());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
@@ -2371,9 +2489,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
-			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
+			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t); // old name
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
-			READ_INT_VALUE("evaluateFullRange", fitData.autoEvalRange, bool);	// old name
+			READ_INT_VALUE("evaluateFullRange", fitData.autoEvalRange, bool); // old name
 			READ_INT_VALUE("autoEvalRange", fitData.autoEvalRange, bool);
 			READ_DOUBLE_VALUE("evalRangeMin", fitData.evalRange.start());
 			READ_DOUBLE_VALUE("evalRangeMax", fitData.evalRange.end());
@@ -2382,12 +2500,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 			READ_DOUBLE_VALUE("confidenceInterval", fitData.confidenceInterval);
 
-			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+			// set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
 			XYFitCurve::initFitData(d->fitData);
 			// remove default names and start values (will be read from project later)
 			d->fitData.paramStartValues.clear();
 
-		} else if (!preview && reader->name() == "name") {	// needed for custom model
+		} else if (!preview && reader->name() == "name") { // needed for custom model
 			d->fitData.paramNames << reader->readElementText();
 		} else if (!preview && reader->name() == "startValue") {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
@@ -2396,14 +2514,14 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "lowerLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
-			if (ok)	// -DBL_MAX results in conversion error
+			if (ok) // -DBL_MAX results in conversion error
 				d->fitData.paramLowerLimits << x;
 			else
 				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
 		} else if (!preview && reader->name() == "upperLimit") {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
-			if (ok)	// DBL_MAX results in conversion error
+			if (ok) // DBL_MAX results in conversion error
 				d->fitData.paramUpperLimits << x;
 			else
 				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
@@ -2509,7 +2627,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", model type = " << d->fitData.modelType);
 	DEBUG(Q_FUNC_INFO << ", # params = " << d->fitData.paramNames.size());
 	DEBUG(Q_FUNC_INFO << ", # start values = " << d->fitData.paramStartValues.size());
-	//for (const auto& value : d->fitData.paramStartValues)
+	// for (const auto& value : d->fitData.paramStartValues)
 	//	DEBUG("XYFitCurve::load() # start value = " << value);
 
 	if (preview)
@@ -2527,9 +2645,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 		addChild(d->residualsColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
-		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
+		d->residualsVector = static_cast<QVector<double>*>(d->residualsColumn->data());
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;

@@ -9,13 +9,13 @@
 #ifndef SPICEREADER_H
 #define SPICEREADER_H
 
-#include <QObject>
-#include <QFile>
 #include <QDateTime>
+#include <QFile>
+#include <QObject>
 #include <QTextStream>
 #include <QVector>
 
-class SpiceFileReader: public QObject {
+class SpiceFileReader : public QObject {
 	Q_OBJECT
 public:
 	struct Variable {
@@ -31,16 +31,10 @@ public:
 		log = 0x8, // ?
 	};
 
-	enum class PlotMode {
-		Transient,
-		FFT,
-		AC,
-		DC,
-		Noise,
-		Unknown
-	};
+	enum class PlotMode { Transient, FFT, AC, DC, Noise, Unknown };
 
-	SpiceFileReader(const QString& filename): mFilename(filename){
+	SpiceFileReader(const QString& filename)
+		: mFilename(filename) {
 		mFile.setFileName(mFilename);
 	}
 
@@ -59,20 +53,34 @@ public:
 	QString infoString() {
 		return mInfoString;
 	}
-	bool binary() const {return mBinary;}
-	int flags() const {return mFlags;}
-	bool isReal() const {return (mFlags & Flags::real) > 0;}
-	bool isDouble() const {return (mFlags & Flags::yDouble) > 0;}
-	int numberSimulationPoints() {return mNumberPoints;}
-	const QVector<Variable>& variables() const {return mVariables;}
+	bool binary() const {
+		return mBinary;
+	}
+	int flags() const {
+		return mFlags;
+	}
+	bool isReal() const {
+		return (mFlags & Flags::real) > 0;
+	}
+	bool isDouble() const {
+		return (mFlags & Flags::yDouble) > 0;
+	}
+	int numberSimulationPoints() {
+		return mNumberPoints;
+	}
+	const QVector<Variable>& variables() const {
+		return mVariables;
+	}
 	PlotMode plotNameToPlotMode(const QString& name);
 
-	void setBulkReadLines(const int lines) {mNumberLines = lines;}
+	void setBulkReadLines(const int lines) {
+		mNumberLines = lines;
+	}
 
 Q_SIGNALS:
 	void processed(double percentage);
-private:
 
+private:
 	int parseFlags(const QString&);
 
 	void addInfoStringLine(const QString& line) {
@@ -101,13 +109,12 @@ private:
 	QFile mFile;
 	bool mValid{false}; // True if the file is a valid spice file
 	bool mInitialized{false};
-	bool mNgspice {true}; // ngspice raw file uses utf-8, but ltspice raw files use utf-16
+	bool mNgspice{true}; // ngspice raw file uses utf-8, but ltspice raw files use utf-16
 	const QString mFilename;
 	QString mFirstLine;
 
 	// 10 variables and complex --> 100000 * (8 + 10*8) * 2 = 17.6MB
 	int mNumberLines = 100000; // maximum lines in one (binary only)
-
 };
 
 #endif // SPICEREADER_H

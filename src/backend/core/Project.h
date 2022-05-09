@@ -1,12 +1,12 @@
 /*
-    File                 : Project.h
-    Project              : LabPlot
-    Description          : Represents a LabPlot project.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Project.h
+	Project              : LabPlot
+	Description          : Represents a LabPlot project.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PROJECT_H
@@ -26,11 +26,7 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum class MdiWindowVisibility {
-		folderOnly,
-		folderAndSubfolders,
-		allMdiWindows
-	};
+	enum class MdiWindowVisibility { folderOnly, folderAndSubfolders, allMdiWindows };
 
 public:
 	Project();
@@ -56,7 +52,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
 
-	void setChanged(const bool value=true);
+	void setChanged(const bool value = true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 

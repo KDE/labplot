@@ -1,22 +1,23 @@
 /*
-    File                 : SettingsNotebookPage.cpp
-    Project              : LabPlot
-    Description          : Settings page for Notebook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsNotebookPage.cpp
+	Project              : LabPlot
+	Description          : Settings page for Notebook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SettingsNotebookPage.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfigGroup>
 
 /**
  * \brief Page for Notebook settings of the Labplot settings dialog.
  */
-SettingsNotebookPage::SettingsNotebookPage(QWidget* parent) : SettingsPage(parent) {
+SettingsNotebookPage::SettingsNotebookPage(QWidget* parent)
+	: SettingsPage(parent) {
 	ui.setupUi(this);
 
 	ui.chkSyntaxHighlighting->setToolTip(i18n("Enable syntax highlighting"));
@@ -45,27 +46,27 @@ void SettingsNotebookPage::applySettings() {
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
 
-	//Appearance
+	// Appearance
 	group.writeEntry(QLatin1String("SyntaxHighlighting"), ui.chkSyntaxHighlighting->isChecked());
 	group.writeEntry(QLatin1String("SyntaxCompletion"), ui.chkSyntaxCompletion->isChecked());
 	group.writeEntry(QLatin1String("LineNumbers"), ui.chkLineNumbers->isChecked());
 	group.writeEntry(QLatin1String("LatexTypesetting"), ui.chkLatexTypesetting->isChecked());
 	group.writeEntry(QLatin1String("Animations"), ui.chkAnimations->isChecked());
 
-	//Evaluation
+	// Evaluation
 	group.writeEntry(QLatin1String("ReevaluateEntries"), ui.chkReevaluateEntries->isChecked());
 	group.writeEntry(QLatin1String("AskConfirmation"), ui.chkAskConfirmation->isChecked());
 }
 
 void SettingsNotebookPage::restoreDefaults() {
-	//Appearance
+	// Appearance
 	ui.chkSyntaxHighlighting->setChecked(true);
 	ui.chkSyntaxCompletion->setChecked(true);
 	ui.chkLineNumbers->setChecked(false);
 	ui.chkLatexTypesetting->setChecked(true);
 	ui.chkAnimations->setChecked(true);
 
-	//Evaluation
+	// Evaluation
 	ui.chkReevaluateEntries->setChecked(false);
 	ui.chkAskConfirmation->setChecked(true);
 }
@@ -73,14 +74,14 @@ void SettingsNotebookPage::restoreDefaults() {
 void SettingsNotebookPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
 
-	//Appearance
+	// Appearance
 	ui.chkSyntaxHighlighting->setChecked(group.readEntry(QLatin1String("SyntaxHighlighting"), true));
 	ui.chkSyntaxCompletion->setChecked(group.readEntry(QLatin1String("SyntaxCompletion"), true));
 	ui.chkLineNumbers->setChecked(group.readEntry(QLatin1String("LineNumbers"), false));
 	ui.chkLatexTypesetting->setChecked(group.readEntry(QLatin1String("LatexTypesetting"), true));
 	ui.chkAnimations->setChecked(group.readEntry(QLatin1String("Animations"), true));
 
-	//Evaluation
+	// Evaluation
 	ui.chkReevaluateEntries->setChecked(group.readEntry(QLatin1String("ReevaluateEntries"), false));
 	ui.chkAskConfirmation->setChecked(group.readEntry(QLatin1String("AskConfirmation"), true));
 }

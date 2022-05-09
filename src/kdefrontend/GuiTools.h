@@ -1,12 +1,11 @@
 /*
-    File                 : GuiTools.h
-    Project              : LabPlot
-    Description          :  contains several static functions which are used on frequently throughout the kde frontend.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke*web.de  (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : GuiTools.h
+	Project              : LabPlot
+	Description          :  contains several static functions which are used on frequently throughout the kde frontend.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke*web.de  (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef GUITOOLS_H
 #define GUITOOLS_H

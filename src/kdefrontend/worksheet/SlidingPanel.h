@@ -1,10 +1,10 @@
 /*
-    File                 : SlidingPanel.h
-    Project              : LabPlot
-    Description          : Sliding panel shown in the presenter widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SlidingPanel.h
+	Project              : LabPlot
+	Description          : Sliding panel shown in the presenter widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef SLIDINGPANEL_H
 #define SLIDINGPANEL_H
@@ -20,8 +20,8 @@ public:
 	explicit SlidingPanel(QWidget* parent, const QString& worksheetName);
 	~SlidingPanel() override;
 	QPushButton* quitButton() const;
-private:
 
+private:
 	QLabel* m_worksheetName;
 	QPushButton* m_quitPresentingMode;
 	QSize sizeHint() const override;

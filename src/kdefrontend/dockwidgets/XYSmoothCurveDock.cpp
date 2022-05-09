@@ -1,19 +1,19 @@
 /*
-    File             : XYSmoothCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of smooth curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
+	File             : XYSmoothCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of smooth curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYSmoothCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QStandardItemModel>
@@ -32,7 +32,8 @@
   \ingroup kdefrontend
 */
 
-XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent) : XYCurveDock(parent) {
+XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
@@ -46,7 +47,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -69,8 +70,8 @@ void XYSmoothCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -78,7 +79,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
+	// Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged);
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYSmoothCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
@@ -89,7 +90,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::typeChanged);
-	//TODO: line edits?
+	// TODO: line edits?
 	connect(uiGeneralTab.sbPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::pointsChanged);
 	connect(uiGeneralTab.cbWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::weightChanged);
 	connect(uiGeneralTab.sbPercentile, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::percentileChanged);
@@ -98,7 +99,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbLeftValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.sbRightValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::valueChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYSmoothCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYSmoothCurveDock::xDataColumnChanged);
@@ -108,7 +109,7 @@ void XYSmoothCurveDock::setupGeneral() {
 void XYSmoothCurveDock::initGeneralTab() {
 	DEBUG(Q_FUNC_INFO);
 
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -127,25 +128,25 @@ void XYSmoothCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
-	//data source
+	// show the properties of the first curve
+	// data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_smoothCurve->dataSourceCurve());
 	cbXDataColumn->setColumn(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
 
-	//range widgets
+	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(m_smoothData.xRange.first()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(m_smoothData.xRange.last()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(m_smoothData.xRange.first()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(m_smoothData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.first()) );
-		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()) );
+		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.first()));
+		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()));
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -157,7 +158,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
 
-	//auto range
+	// auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_smoothData.autoRange);
 	this->autoRangeChanged();
 
@@ -165,21 +166,21 @@ void XYSmoothCurveDock::initGeneralTab() {
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
-	typeChanged(uiGeneralTab.cbType->currentIndex());	// needed, when type does not change
+	typeChanged(uiGeneralTab.cbType->currentIndex()); // needed, when type does not change
 	uiGeneralTab.sbPoints->setValue((int)m_smoothData.points);
 	uiGeneralTab.cbWeight->setCurrentIndex(m_smoothData.weight);
 	uiGeneralTab.sbPercentile->setValue(m_smoothData.percentile);
 	uiGeneralTab.sbOrder->setValue((int)m_smoothData.order);
 	uiGeneralTab.cbMode->setCurrentIndex(m_smoothData.mode);
-	modeChanged(uiGeneralTab.cbMode->currentIndex());	// needed, when mode does not change
+	modeChanged(uiGeneralTab.cbMode->currentIndex()); // needed, when mode does not change
 	uiGeneralTab.sbLeftValue->setValue(m_smoothData.lvalue);
 	uiGeneralTab.sbRightValue->setValue(m_smoothData.rvalue);
 	valueChanged();
 	this->showSmoothResult();
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_smoothCurve, &XYSmoothCurve::aspectDescriptionChanged, this, &XYSmoothCurveDock::aspectDescriptionChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceTypeChanged, this, &XYSmoothCurveDock::curveDataSourceTypeChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceCurveChanged, this, &XYSmoothCurveDock::curveDataSourceCurveChanged);
@@ -192,8 +193,12 @@ void XYSmoothCurveDock::initGeneralTab() {
 }
 
 void XYSmoothCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -201,11 +206,17 @@ void XYSmoothCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	        AspectType::XYFitCurve, AspectType::CantorWorksheet
-	       };
+	list = {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve,
+			AspectType::CantorWorksheet};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -243,7 +254,7 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 
 	updatePlotRanges();
 
-	//hide the "skip gaps" option after the curves were set
+	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
 }
@@ -302,8 +313,8 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
 
 		unsigned int n = 0;
@@ -375,8 +386,8 @@ void XYSmoothCurveDock::autoRangeChanged() {
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
 				SET_NUMBER_LOCALE
-				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
-				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
+				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
+				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
 				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
 				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
@@ -419,11 +430,11 @@ void XYSmoothCurveDock::typeChanged(int index) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();
 		// disable interp pad model for MA and MAL
-		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lWeight->hide();
 		uiGeneralTab.cbWeight->hide();
-		pad_interp_item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		pad_interp_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
 
 	if (type == nsl_smooth_type_moving_average_lagged) {
@@ -444,7 +455,7 @@ void XYSmoothCurveDock::typeChanged(int index) {
 		uiGeneralTab.lPercentile->show();
 		uiGeneralTab.sbPercentile->show();
 		// disable interp pad model for MA and MAL
-		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		pad_interp_item->setFlags(pad_interp_item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	} else {
 		uiGeneralTab.lPercentile->hide();
 		uiGeneralTab.sbPercentile->hide();
@@ -527,7 +538,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no smoothing possible without the x- and y-data
+	// no smoothing possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_smoothCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -542,7 +553,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
 			cbYDataColumn->setInvalid(false);
 		}
 	} else {
-		 hasSourceData = (m_smoothCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_smoothCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -558,32 +569,32 @@ void XYSmoothCurveDock::showSmoothResult() {
 		return;
 	}
 
-	//const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
+	// const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
 	QString str = i18n("status: %1", smoothResult.status) + "<br>";
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
-	if (smoothResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime/1000)) + "<br>";
+	if (smoothResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(smoothResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 
-	//enable the "recalculate"-button if the source data was changed since the last smooth
+	// enable the "recalculate"-button if the source data was changed since the last smooth
 	uiGeneralTab.pbRecalculate->setEnabled(m_smoothCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

@@ -1,40 +1,41 @@
 /*
-    File                 : BinaryFilter.cpp
-    Project              : LabPlot
-    Description          : Binary I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BinaryFilter.cpp
+	Project              : LabPlot
+	Description          : Binary I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/datasources/filters/BinaryFilter.h"
-#include "backend/datasources/filters/BinaryFilterPrivate.h"
-#include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
+#include "backend/datasources/AbstractDataSource.h"
+#include "backend/datasources/filters/BinaryFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 
-#include <KLocalizedString>
 #include <KFilterDev>
+#include <KLocalizedString>
 #include <QDataStream>
 #include <QtEndian>
 #include <array>
 
-#define IMPORT_DATA(DATATYPE, TARGETTYPE) { \
-	DATATYPE value; \
-	for (int n = startColumn; n < m_actualCols; ++n) { \
-	for (size_t l = 0; l < qMin(readLines, mNumberLines); l++) { \
-		const size_t lineNumber = l * lineBytes; \
-		const size_t index = lineNumber + (n - startColumn) * typeSize; \
-		if (byteOrder == QDataStream::BigEndian) \
-			value = qFromBigEndian<DATATYPE>(&binary[index]); \
-		else \
-			value = qFromLittleEndian<DATATYPE>(&binary[index]); \
-		/*DEBUG("column = " << n << ", index = " << index << ", value = " << value)*/ \
-		(*static_cast<QVector<TARGETTYPE>*>(dataContainer[n]))[i * mNumberLines + l] = value; \
-	} \
-	} \
-}
+#define IMPORT_DATA(DATATYPE, TARGETTYPE)                                                                                                                      \
+	{                                                                                                                                                          \
+		DATATYPE value;                                                                                                                                        \
+		for (int n = startColumn; n < m_actualCols; ++n) {                                                                                                     \
+			for (size_t l = 0; l < qMin(readLines, mNumberLines); l++) {                                                                                       \
+				const size_t lineNumber = l * lineBytes;                                                                                                       \
+				const size_t index = lineNumber + (n - startColumn) * typeSize;                                                                                \
+				if (byteOrder == QDataStream::BigEndian)                                                                                                       \
+					value = qFromBigEndian<DATATYPE>(&binary[index]);                                                                                          \
+				else                                                                                                                                           \
+					value = qFromLittleEndian<DATATYPE>(&binary[index]);                                                                                       \
+				/*DEBUG("column = " << n << ", index = " << index << ", value = " << value)*/                                                                  \
+				(*static_cast<QVector<TARGETTYPE>*>(dataContainer[n]))[i * mNumberLines + l] = value;                                                          \
+			}                                                                                                                                                  \
+		}                                                                                                                                                      \
+	}
 
 /*!
 \class BinaryFilter
@@ -42,7 +43,10 @@
 
 \ingroup datasources
 */
-BinaryFilter::BinaryFilter():AbstractFileFilter(FileType::Binary), d(new BinaryFilterPrivate(this)) {}
+BinaryFilter::BinaryFilter()
+	: AbstractFileFilter(FileType::Binary)
+	, d(new BinaryFilterPrivate(this)) {
+}
 
 BinaryFilter::~BinaryFilter() = default;
 
@@ -56,7 +60,7 @@ void BinaryFilter::readDataFromFile(const QString& fileName, AbstractDataSource*
 /*!
   reads the content of the device \c device.
 */
-void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode,  int lines) {
+void BinaryFilter::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
 	d->readDataFromDevice(device, dataSource, importMode, lines);
 }
 
@@ -67,34 +71,32 @@ QVector<QStringList> BinaryFilter::preview(const QString& fileName, int lines) {
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
-void BinaryFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
+void BinaryFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
-// 	emit()
+	// 	emit()
 }
 
 /*!
 returns the list of all predefined data formats.
 */
 QStringList BinaryFilter::dataTypes() {
-	return (QStringList()
-		<<"int8 (8 bit signed integer)"
-		<<"int16 (16 bit signed integer)"
-		<<"int32 (32 bit signed integer)"
-		<<"int64 (64 bit signed integer)"
-	        <<"uint8 (8 bit unsigned integer)"
-		<<"uint16 (16 bit unsigned integer)"
-		<<"uint32 (32 bit unsigned integer)"
-		<<"uint64 (64 bit unsigned integer)"
-	        <<"real32 (single precision floats)"
-		<<"real64 (double precision floats)"
-	);
+	return (QStringList() << "int8 (8 bit signed integer)"
+						  << "int16 (16 bit signed integer)"
+						  << "int32 (32 bit signed integer)"
+						  << "int64 (64 bit signed integer)"
+						  << "uint8 (8 bit unsigned integer)"
+						  << "uint16 (16 bit unsigned integer)"
+						  << "uint32 (32 bit unsigned integer)"
+						  << "uint64 (64 bit unsigned integer)"
+						  << "real32 (single precision floats)"
+						  << "real64 (double precision floats)");
 }
 
 /*!
 returns the size of the predefined data types
 */
 int BinaryFilter::dataSize(BinaryFilter::DataType type) {
-	std::array<int, 10> sizes = {1,2,4,8,1,2,4,8,4,8};
+	std::array<int, 10> sizes = {1, 2, 4, 8, 1, 2, 4, 8, 4, 8};
 
 	return sizes[(int)type];
 }
@@ -110,7 +112,7 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, co
 	// size() and bytesAvailable() return 0 and data may be compressed. Need to read the file once
 	size_t rows = 0;
 	while (!device.atEnd()) {
-		if (rows >= maxRows)	// stop when maxRows available
+		if (rows >= maxRows) // stop when maxRows available
 			return rows;
 		// one row
 		device.read(BinaryFilter::dataSize(type) * vectors);
@@ -206,7 +208,7 @@ bool BinaryFilter::isAutoModeEnabled() const {
 QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
 	QString info;
 
-	//TODO
+	// TODO
 	return info;
 }
 
@@ -214,11 +216,13 @@ QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
 //################### Private implementation ##########################
 //#####################################################################
 
-BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner) : q(owner) {}
+BinaryFilterPrivate::BinaryFilterPrivate(BinaryFilter* owner)
+	: q(owner) {
+}
 
 /*!
-    reads the content of the device \c device to the data source \c dataSource or return as string for preview.
-    Uses the settings defined in the data source.
+	reads the content of the device \c device to the data source \c dataSource or return as string for preview.
+	Uses the settings defined in the data source.
 */
 void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	DEBUG(Q_FUNC_INFO);
@@ -226,7 +230,7 @@ void BinaryFilterPrivate::readDataFromFile(const QString& fileName, AbstractData
 	KFilterDev device(fileName);
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType);
 
-	if (! device.open(QIODevice::ReadOnly)) {
+	if (!device.open(QIODevice::ReadOnly)) {
 		DEBUG("	could not open file " << STDSTRING(fileName));
 		return;
 	}
@@ -252,7 +256,7 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 	}
 
 	// skip until start row
-	for (size_t i = 0; i < (startRow-1) * vectors; ++i) {
+	for (size_t i = 0; i < (startRow - 1) * vectors; ++i) {
 		for (int j = 0; j < BinaryFilter::dataSize(dataType); ++j) {
 			qint8 tmp;
 			in >> tmp;
@@ -277,14 +281,14 @@ int BinaryFilterPrivate::prepareStreamToRead(QDataStream& in) {
 }
 
 /*!
-    reads \c lines lines of the device \c device and return as string for preview.
+	reads \c lines lines of the device \c device and return as string for preview.
 */
 QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int lines) {
 	DEBUG(Q_FUNC_INFO << ", fileName = " << STDSTRING(fileName) << ", lines = " << lines);
 	QVector<QStringList> dataStrings;
 
 	KFilterDev device(fileName);
-	if (! device.open(QIODevice::ReadOnly))
+	if (!device.open(QIODevice::ReadOnly))
 		return dataStrings << (QStringList() << i18n("could not open device"));
 
 	numRows = BinaryFilter::rowNumber(fileName, vectors, dataType, lines);
@@ -298,7 +302,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 	// all columns as double is ok for preview
 	columnModes.resize(m_actualCols);
 
-	//TODO: use given names
+	// TODO: use given names
 	QStringList vectorNames;
 	if (createIndexEnabled)
 		vectorNames.prepend(i18n("Index"));
@@ -308,88 +312,88 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 
 	// read data
 	lines = qMin(lines, m_actualRows);
-	DEBUG(Q_FUNC_INFO << ", generating preview for " << lines  << " lines")
+	DEBUG(Q_FUNC_INFO << ", generating preview for " << lines << " lines")
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01 * lines; //update on every 1% only
+	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
 	for (int i = 0; i < lines; ++i) {
 		QStringList lineString;
 
-		//prepend the index if required
+		// prepend the index if required
 		if (createIndexEnabled)
-			lineString << QString::number(i+1);
+			lineString << QString::number(i + 1);
 
 		for (int n = 0; n < m_actualCols; ++n) {
 			switch (dataType) {
 			case BinaryFilter::DataType::INT8: {
-					qint8 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				qint8 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::INT16: {
-					qint16 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				qint16 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::INT32: {
-					qint32 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				qint32 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::INT64: {
-					qint64 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				qint64 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::UINT8: {
-					quint8 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				quint8 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::UINT16: {
-					quint16 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				quint16 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::UINT32: {
-					quint32 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				quint32 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::UINT64: {
-					quint64 value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				quint64 value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::REAL32: {
-					float value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				float value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			case BinaryFilter::DataType::REAL64: {
-					double value;
-					in >> value;
-					lineString << QString::number(value);
-					break;
-				}
+				double value;
+				in >> value;
+				lineString << QString::number(value);
+				break;
+			}
 			}
 		}
 		dataStrings << lineString;
 
-		//ask to update the progress bar only if we have more than 1000 lines
-		//only in 1% steps
+		// ask to update the progress bar only if we have more than 1000 lines
+		// only in 1% steps
 		progressIndex++;
 		if (lines > 1000 && progressIndex > progressInterval) {
-			double value = 100. * i/lines;
+			double value = 100. * i / lines;
 			Q_EMIT q->completed(static_cast<int>(value));
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -417,7 +421,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 	if (createIndexEnabled)
 		m_actualCols++;
 
-	//DEBUG("actual cols = " << m_actualCols)
+	// DEBUG("actual cols = " << m_actualCols)
 	columnModes.resize(m_actualCols);
 	switch (dataType) {
 	case BinaryFilter::DataType::INT8:
@@ -441,7 +445,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		break;
 	}
 
-	//TODO: use given names
+	// TODO: use given names
 	QStringList vectorNames;
 
 	if (createIndexEnabled) {
@@ -461,27 +465,27 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 
 	// read data
 	lines = qMin(lines, m_actualRows);
-	DEBUG(Q_FUNC_INFO << ", Reading " << lines  << " lines");
+	DEBUG(Q_FUNC_INFO << ", Reading " << lines << " lines");
 	int progressIndex = 0;
-	const qreal progressInterval = 0.01 * lines; //update on every 1% only
+	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
-	//prepend the index if required
+	// prepend the index if required
 	if (createIndexEnabled)
 		for (int i = 0; i < lines; ++i)
 			static_cast<QVector<int>*>(dataContainer[0])->operator[](i) = i + 1;
 
 	// chunk to read at once
-	const size_t mNumberLines = 100000;	// see SpiceReader::mNumberLines
+	const size_t mNumberLines = 100000; // see SpiceReader::mNumberLines
 	const int typeSize = BinaryFilter::dataSize(dataType);
 	const int lineBytes = m_actualCols * typeSize;
 
-	//DEBUG("lines/mNumberLines = " << lines << "/" << mNumberLines << " -> " << lines/mNumberLines + 1)
-	for (size_t i = 0; i <= lines/mNumberLines; ++i) {
-		//DEBUG("reading chunk " << i + 1);
+	// DEBUG("lines/mNumberLines = " << lines << "/" << mNumberLines << " -> " << lines/mNumberLines + 1)
+	for (size_t i = 0; i <= lines / mNumberLines; ++i) {
+		// DEBUG("reading chunk " << i + 1);
 		const QByteArray ba = device.read(mNumberLines * lineBytes);
 		const char* binary = ba.data();
-		const size_t readLines = (int)(ba.length()/lineBytes);
-		//DEBUG("Read lines " << readLines)
+		const size_t readLines = (int)(ba.length() / lineBytes);
+		// DEBUG("Read lines " << readLines)
 		switch (dataType) {
 		case BinaryFilter::DataType::INT8:
 			IMPORT_DATA(qint8, int)
@@ -514,11 +518,11 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			IMPORT_DATA(double, double)
 			break;
 		}
-		//ask to update the progress bar only if we have more than 1000 lines
-		//only in 1% steps
+		// ask to update the progress bar only if we have more than 1000 lines
+		// only in 1% steps
 		progressIndex++;
 		if (lines > 1000 && progressIndex > progressInterval) {
-			double value = 100. * i/lines * mNumberLines;
+			double value = 100. * i / lines * mNumberLines;
 			Q_EMIT q->completed(static_cast<int>(value));
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -529,10 +533,10 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 }
 
 /*!
-    writes the content of \c dataSource to the file \c fileName.
+	writes the content of \c dataSource to the file \c fileName.
 */
 void BinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
-	//TODO: writing binary files not supported yet
+	// TODO: writing binary files not supported yet
 }
 
 //##############################################################################
@@ -544,15 +548,15 @@ void BinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource*
  */
 void BinaryFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("binaryFilter");
-	writer->writeAttribute("vectors", QString::number(d->vectors) );
-	writer->writeAttribute("dataType", QString::number(static_cast<int>(d->dataType)) );
-	writer->writeAttribute("byteOrder", QString::number(d->byteOrder) );
-	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled) );
-	writer->writeAttribute("startRow", QString::number(d->startRow) );
-	writer->writeAttribute("endRow", QString::number(d->endRow) );
-	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes) );
-	writer->writeAttribute("skipBytes", QString::number(d->skipBytes) );
-	writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled) );
+	writer->writeAttribute("vectors", QString::number(d->vectors));
+	writer->writeAttribute("dataType", QString::number(static_cast<int>(d->dataType)));
+	writer->writeAttribute("byteOrder", QString::number(d->byteOrder));
+	writer->writeAttribute("autoMode", QString::number(d->autoModeEnabled));
+	writer->writeAttribute("startRow", QString::number(d->startRow));
+	writer->writeAttribute("endRow", QString::number(d->endRow));
+	writer->writeAttribute("skipStartBytes", QString::number(d->skipStartBytes));
+	writer->writeAttribute("skipBytes", QString::number(d->skipBytes));
+	writer->writeAttribute("createIndex", QString::number(d->createIndexEnabled));
 	writer->writeEndElement();
 }
 
@@ -574,13 +578,13 @@ bool BinaryFilter::load(XmlStreamReader* reader) {
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.subs("dataType").toString());
 	else
-		d->dataType = (BinaryFilter::DataType) str.toInt();
+		d->dataType = (BinaryFilter::DataType)str.toInt();
 
 	str = attribs.value("byteOrder").toString();
 	if (str.isEmpty())
 		reader->raiseWarning(attributeWarning.subs("byteOrder").toString());
 	else
-		d->byteOrder = (QDataStream::ByteOrder) str.toInt();
+		d->byteOrder = (QDataStream::ByteOrder)str.toInt();
 
 	str = attribs.value("autoMode").toString();
 	if (str.isEmpty())

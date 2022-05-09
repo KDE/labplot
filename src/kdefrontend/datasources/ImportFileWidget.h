@@ -1,20 +1,20 @@
 /*
-    File                 : ImportFileWidget.h
-    Project              : LabPlot
-    Description          : import file data widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportFileWidget.h
+	Project              : LabPlot
+	Description          : import file data widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMPORTFILEWIDGET_H
 #define IMPORTFILEWIDGET_H
 
-#include "ui_importfilewidget.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "ui_importfilewidget.h"
 #include <memory>
 
 #ifdef HAVE_MQTT
@@ -123,12 +123,12 @@ Q_SIGNALS:
 	void checkedFitsTableToMatrix(const bool enable);
 	void error(const QString&);
 
-	friend class HDF5OptionsWidget;	// to access refreshPreview()
-	friend class MatioOptionsWidget;	// to access refreshPreview() and others
-	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
+	friend class HDF5OptionsWidget; // to access refreshPreview()
+	friend class MatioOptionsWidget; // to access refreshPreview() and others
+	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
-	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
+	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 
 #ifdef HAVE_MQTT
 private:
@@ -162,7 +162,7 @@ private Q_SLOTS:
 	void subscribeTopic(const QString&, uint);
 	void unsubscribeTopic(const QString&, QVector<QTreeWidgetItem*>);
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void mqttSubscriptionMessageReceived(const QMqttMessage& );
+	void mqttSubscriptionMessageReceived(const QMqttMessage&);
 	void onMqttDisconnect();
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void mqttConnectTimeout();

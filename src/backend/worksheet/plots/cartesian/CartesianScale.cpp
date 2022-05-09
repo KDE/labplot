@@ -1,12 +1,12 @@
 /*
-    File                 : CartesianScale.cpp
-    Project              : LabPlot
-    Description          : Cartesian coordinate system for plots.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CartesianScale.cpp
+	Project              : LabPlot
+	Description          : Cartesian coordinate system for plots.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CartesianScale.h"
@@ -19,14 +19,16 @@ extern "C" {
  * \class CartesianScale
  * \brief Base class for cartesian coordinate system scales.
  */
-CartesianScale::CartesianScale(const Range<double> &range, double a, double b, double c)
-	: m_range(range), m_a(a), m_b(b), m_c(c) {
+CartesianScale::CartesianScale(const Range<double>& range, double a, double b, double c)
+	: m_range(range)
+	, m_a(a)
+	, m_b(b)
+	, m_c(c) {
 }
 
 CartesianScale::~CartesianScale() = default;
 
-void CartesianScale::getProperties(Range<double> *range,
-		double *a, double *b, double *c) const {
+void CartesianScale::getProperties(Range<double>* range, double* a, double* b, double* c) const {
 	if (range)
 		*range = m_range;
 	if (a)
@@ -44,19 +46,19 @@ void CartesianScale::getProperties(Range<double> *range,
  */
 class LinearScale : public CartesianScale {
 public:
-	LinearScale(const Range<double> &range, double offset, double gradient)
+	LinearScale(const Range<double>& range, double offset, double gradient)
 		: CartesianScale(range, offset, gradient, 0) {
-			Q_ASSERT(gradient != 0.0);
-		}
+		Q_ASSERT(gradient != 0.0);
+	}
 
 	~LinearScale() override = default;
 
-	bool map(double *value) const override {
+	bool map(double* value) const override {
 		*value = *value * m_b + m_a;
 		return true;
 	}
 
-	bool inverseMap(double *value) const override {
+	bool inverseMap(double* value) const override {
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
@@ -73,23 +75,23 @@ public:
  */
 class LogScale : public CartesianScale {
 public:
-	LogScale(const Range<double> &range, double offset, double scaleFactor, double base)
+	LogScale(const Range<double>& range, double offset, double scaleFactor, double base)
 		: CartesianScale(range, offset, scaleFactor, base) {
-			Q_ASSERT(scaleFactor != 0.0);
-			Q_ASSERT(base > 0.0);
+		Q_ASSERT(scaleFactor != 0.0);
+		Q_ASSERT(base > 0.0);
 	}
 
 	~LogScale() override = default;
 
-	bool map(double *value) const override {
+	bool map(double* value) const override {
 		CHECK(*value > 0)
 
-		*value = log(*value)/log(m_c) * m_b + m_a;
+		*value = log(*value) / log(m_c) * m_b + m_a;
 
 		return true;
 	}
 
-	bool inverseMap(double *value) const override {
+	bool inverseMap(double* value) const override {
 		*value = pow(m_c, (*value - m_a) / m_b);
 		return true;
 	}
@@ -105,20 +107,20 @@ public:
  */
 class SqrtScale : public CartesianScale {
 public:
-	SqrtScale(const Range<double> &range, double offset, double scaleFactor)
+	SqrtScale(const Range<double>& range, double offset, double scaleFactor)
 		: CartesianScale(range, offset, scaleFactor, 0) {
-			Q_ASSERT(scaleFactor != 0.0);
+		Q_ASSERT(scaleFactor != 0.0);
 	}
 
 	~SqrtScale() override = default;
 
-	bool map(double *value) const override {
+	bool map(double* value) const override {
 		CHECK(*value >= 0)
 		*value = sqrt(*value) * m_b + m_a;
 		return true;
 	}
 
-	bool inverseMap(double *value) const override {
+	bool inverseMap(double* value) const override {
 		*value = gsl_pow_2((*value - m_a) / m_b);
 		return true;
 	}
@@ -134,19 +136,19 @@ public:
  */
 class SquareScale : public CartesianScale {
 public:
-	SquareScale(const Range<double> &range, double offset, double scaleFactor)
+	SquareScale(const Range<double>& range, double offset, double scaleFactor)
 		: CartesianScale(range, offset, scaleFactor, 0) {
-			Q_ASSERT(scaleFactor != 0.0);
+		Q_ASSERT(scaleFactor != 0.0);
 	}
 
 	~SquareScale() override = default;
 
-	bool map(double *value) const override {
+	bool map(double* value) const override {
 		*value = gsl_pow_2(*value) * m_b + m_a;
 		return true;
 	}
 
-	bool inverseMap(double *value) const override {
+	bool inverseMap(double* value) const override {
 		*value = sqrt(qAbs((*value - m_a) / m_b));
 		return true;
 	}
@@ -162,24 +164,24 @@ public:
  */
 class InverseScale : public CartesianScale {
 public:
-	InverseScale(const Range<double> &range, double offset, double scaleFactor)
+	InverseScale(const Range<double>& range, double offset, double scaleFactor)
 		: CartesianScale(range, offset, scaleFactor, 0) {
-			Q_ASSERT(scaleFactor != 0.0);
+		Q_ASSERT(scaleFactor != 0.0);
 	}
 
 	~InverseScale() override = default;
 
-	bool map(double *value) const override {
+	bool map(double* value) const override {
 		CHECK(*value != 0)
 
-		*value = m_b/(*value) + m_a;
+		*value = m_b / (*value) + m_a;
 		return true;
 	}
 
-	bool inverseMap(double *value) const override {
+	bool inverseMap(double* value) const override {
 		CHECK(*value != m_a)
 
-		*value = m_b/(*value - m_a);
+		*value = m_b / (*value - m_a);
 		return true;
 	}
 	int direction() const override {
@@ -189,9 +191,7 @@ public:
 
 /***************************************************************/
 
-CartesianScale* CartesianScale::createLinearScale(const Range<double> &range,
-		const Range<double> &sceneRange, const Range<double> &logicalRange) {
-
+CartesianScale* CartesianScale::createLinearScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	if (logicalRange.size() == 0.0)
 		return nullptr;
 
@@ -201,9 +201,8 @@ CartesianScale* CartesianScale::createLinearScale(const Range<double> &range,
 	return new LinearScale(range, a, b);
 }
 
-CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
-		const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale scale) {
-
+CartesianScale*
+CartesianScale::createLogScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange, RangeT::Scale scale) {
 	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0 || logicalRange.isZero()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: invalid range for log scale : " << logicalRange.toStdString())
 		return nullptr;
@@ -214,7 +213,7 @@ CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 		base = 10.0;
 	else if (scale == RangeT::Scale::Log2)
 		base = 2.0;
-	else	// RangeT::Scale::Ln
+	else // RangeT::Scale::Ln
 		base = M_E;
 
 	const double lDiff = (log(logicalRange.end()) - log(logicalRange.start())) / log(base);
@@ -224,9 +223,7 @@ CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 	return new LogScale(range, a, b, base);
 }
 
-CartesianScale* CartesianScale::createSqrtScale(const Range<double> &range,
-		const Range<double> &sceneRange, const Range<double> &logicalRange) {
-
+CartesianScale* CartesianScale::createSqrtScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	if (logicalRange.start() < 0.0 || logicalRange.end() < 0.0 || logicalRange.isZero()) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: invalid range for sqrt scale : " << logicalRange.toStdString())
 		return nullptr;
@@ -239,20 +236,16 @@ CartesianScale* CartesianScale::createSqrtScale(const Range<double> &range,
 	return new SqrtScale(range, a, b);
 }
 
-CartesianScale* CartesianScale::createSquareScale(const Range<double> &range,
-		const Range<double> &sceneRange, const Range<double> &logicalRange) {
-
-	const double lDiff = logicalRange.end()*logicalRange.end() - logicalRange.start()*logicalRange.start();
+CartesianScale* CartesianScale::createSquareScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange) {
+	const double lDiff = logicalRange.end() * logicalRange.end() - logicalRange.start() * logicalRange.start();
 	double b = sceneRange.size() / lDiff;
-	double a = sceneRange.start() - b * logicalRange.start()*logicalRange.start();
+	double a = sceneRange.start() - b * logicalRange.start() * logicalRange.start();
 
 	return new SquareScale(range, a, b);
 }
 
-CartesianScale* CartesianScale::createInverseScale(const Range<double> &range,
-		const Range<double> &sceneRange, const Range<double> &logicalRange) {
-
-	const double lDiff = 1./logicalRange.end() - 1./logicalRange.start();
+CartesianScale* CartesianScale::createInverseScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange) {
+	const double lDiff = 1. / logicalRange.end() - 1. / logicalRange.start();
 	double b = sceneRange.size() / lDiff;
 	double a = sceneRange.start() - b / logicalRange.start();
 

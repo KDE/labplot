@@ -1,33 +1,34 @@
 /*
-    File                 : SpreadsheetDock.cpp
-    Project              : LabPlot
-    Description          : widget for spreadsheet properties
+	File                 : SpreadsheetDock.cpp
+	Project              : LabPlot
+	Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2010-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SpreadsheetDock.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/TemplateHandler.h"
 
-#include <QDir>
-#include <KLocalizedString>
-#include <KConfigGroup>
 #include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <QDir>
 
- /*!
-  \class SpreadsheetDock
-  \brief Provides a widget for editing the properties of the spreadsheets currently selected in the project explorer.
+/*!
+ \class SpreadsheetDock
+ \brief Provides a widget for editing the properties of the spreadsheets currently selected in the project explorer.
 
-  \ingroup kdefrontend
+ \ingroup kdefrontend
 */
 
-SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
+SpreadsheetDock::SpreadsheetDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
@@ -56,8 +57,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	m_spreadsheet = list.first();
 	m_aspect = list.first();
 
-
-	//check whether we have non-editable columns:
+	// check whether we have non-editable columns:
 	bool nonEditable = false;
 	for (auto* s : m_spreadsheetList) {
 		if (dynamic_cast<DatapickerCurve*>(s->parentAspect())) {
@@ -73,7 +73,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setText(m_spreadsheet->name());
 		ui.teComment->setText(m_spreadsheet->comment());
 	} else {
-		//disable the fields "Name" and "Comment" if there are more then one spreadsheet
+		// disable the fields "Name" and "Comment" if there are more then one spreadsheet
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
 
@@ -83,14 +83,14 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
-	//show the properties of the first Spreadsheet in the list
+	// show the properties of the first Spreadsheet in the list
 	this->load();
 
 	// undo functions
 	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::aspectDescriptionChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
-	//TODO: show comments
+	// TODO: show comments
 
 	ui.lDimensions->setVisible(!nonEditable);
 	ui.lRowCount->setVisible(!nonEditable);
@@ -139,13 +139,13 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 //*************************************************************
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
 	m_initializing = true;
-  	ui.sbRowCount->setValue(count);
+	ui.sbRowCount->setValue(count);
 	m_initializing = false;
 }
 
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
 	m_initializing = true;
-  	ui.sbColumnCount->setValue(count);
+	ui.sbColumnCount->setValue(count);
 	m_initializing = false;
 }
 
@@ -167,7 +167,7 @@ void SpreadsheetDock::load() {
 }
 
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
-	//extract the name of the template from the file name
+	// extract the name of the template from the file name
 	QString name;
 	const int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
@@ -190,7 +190,7 @@ void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	loads saved spreadsheet properties from \c config.
  */
 void SpreadsheetDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Spreadsheet" );
+	KConfigGroup group = config.group("Spreadsheet");
 
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_spreadsheet->columnCount()));
 	ui.sbRowCount->setValue(group.readEntry("RowCount", m_spreadsheet->rowCount()));
@@ -203,9 +203,9 @@ void SpreadsheetDock::loadConfig(KConfig& config) {
 	saves spreadsheet properties to \c config.
  */
 void SpreadsheetDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group( "Spreadsheet" );
+	KConfigGroup group = config.group("Spreadsheet");
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 	group.writeEntry("RowCount", ui.sbRowCount->value());
-	group.writeEntry("ShowComments",ui.cbShowComments->isChecked());
+	group.writeEntry("ShowComments", ui.cbShowComments->isChecked());
 	config.sync();
 }

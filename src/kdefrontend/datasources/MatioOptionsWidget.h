@@ -1,10 +1,10 @@
 /*
-    File                 : MatioOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget providing options for the import of Matio data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatioOptionsWidget.h
+	Project              : LabPlot
+	Description          : widget providing options for the import of Matio data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MATIOOPTIONSWIDGET_H
@@ -23,8 +23,12 @@ public:
 	void clear();
 	void updateContent(MatioFilter*, const QString& fileName);
 	const QStringList selectedNames() const;
-	int lines() const { return ui.sbPreviewLines->value(); }
-	QTableWidget* previewWidget() const { return ui.twPreview; }
+	int lines() const {
+		return ui.sbPreviewLines->value();
+	}
+	QTableWidget* previewWidget() const {
+		return ui.twPreview;
+	}
 
 private:
 	Ui::MatioOptionsWidget ui;

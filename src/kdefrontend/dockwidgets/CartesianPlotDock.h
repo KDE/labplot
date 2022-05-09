@@ -1,25 +1,26 @@
 /*
-    File                 : CartesianPlotDock.h
-    Project              : LabPlot
-    Description          : widget for cartesian plot properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CartesianPlotDock.h
+	Project              : LabPlot
+	Description          : widget for cartesian plot properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTDOCK_H
 #define CARTESIANPLOTDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_cartesianplotdock.h"
 
 #include <KConfig>
 
-template <class T> class QList;
+template<class T>
+class QList;
 class LabelWidget;
 class ThemeHandler;
 
@@ -54,7 +55,7 @@ private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
-	//SLOTs for changes triggered in CartesianPlotDock
+	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
 	void visibilityChanged(bool);
 	void geometryChanged();
@@ -70,7 +71,7 @@ private Q_SLOTS:
 	void xRangeChanged(const Range<double>&);
 	void xMinDateTimeChanged(const QDateTime&);
 	void xMaxDateTimeChanged(const QDateTime&);
-	//void xRangeDateTimeChanged(const Range<quint64>&);
+	// void xRangeDateTimeChanged(const Range<quint64>&);
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 	void addXRange();
@@ -88,7 +89,7 @@ private Q_SLOTS:
 	void yRangeChanged(const Range<double>&);
 	void yMinDateTimeChanged(const QDateTime&);
 	void yMaxDateTimeChanged(const QDateTime&);
-	//void yRangeDateTimeChanged(const Range<quint64>&);
+	// void yRangeDateTimeChanged(const Range<quint64>&);
 	void yRangeFormatChanged(int);
 	void yScaleChanged(int);
 
@@ -138,8 +139,8 @@ private Q_SLOTS:
 	void cursorLineColorChanged(const QColor&);
 	void cursorLineStyleChanged(int);
 
-	//SLOTs for changes triggered in CartesianPlot
-	//general
+	// SLOTs for changes triggered in CartesianPlot
+	// general
 	void plotRectChanged(QRectF&);
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
@@ -162,13 +163,13 @@ private Q_SLOTS:
 
 	void plotVisibleChanged(bool);
 
-	//range breaks
+	// range breaks
 	void plotXRangeBreakingEnabledChanged(bool);
 	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void plotYRangeBreakingEnabledChanged(bool);
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
-	//background
+	// background
 	void plotBackgroundTypeChanged(WorksheetElement::BackgroundType);
 	void plotBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
 	void plotBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
@@ -190,11 +191,11 @@ private Q_SLOTS:
 	// Cursor
 	void plotCursorPenChanged(const QPen&);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-	//save/load themes
+	// save/load themes
 	void loadTheme(const QString&);
 	void saveTheme(KConfig&) const;
 

@@ -1,31 +1,31 @@
 /*
-    File                 : CantorWorksheet.cpp
-    Project              : LabPlot
-    Description          : Aspect providing a Cantor Worksheets for Multiple backends
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CantorWorksheet.cpp
+	Project              : LabPlot
+	Description          : Aspect providing a Cantor Worksheets for Multiple backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheet.h"
 #include "VariableParser.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
-#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
-#include <cantor/cantorlibs_version.h>
 #include "3rdparty/cantor/cantor_part.h"
+#include <cantor/cantorlibs_version.h>
 #include <cantor/worksheetaccess.h>
 
 #ifdef HAVE_NEW_CANTOR_LIBS
-#include <cantor/panelpluginhandler.h>
 #include <cantor/panelplugin.h>
+#include <cantor/panelpluginhandler.h>
 #else
-#include "3rdparty/cantor/panelpluginhandler.h"
 #include "3rdparty/cantor/panelplugin.h"
+#include "3rdparty/cantor/panelpluginhandler.h"
 #endif
 
 #include <QAction>
@@ -35,9 +35,9 @@
 #include <KLocalizedString>
 #include <KParts/ReadWritePart>
 
-CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
-	: AbstractPart(name, AspectType::CantorWorksheet), m_backendName(name) {
-
+CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
+	: AbstractPart(name, AspectType::CantorWorksheet)
+	, m_backendName(name) {
 	if (!loading)
 		init();
 }
@@ -48,18 +48,18 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 bool CantorWorksheet::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
 	KPluginLoader loader(QLatin1String("kf5/parts/cantorpart"));
-	KPluginLoader oldLoader(QLatin1String("cantorpart"));	// old path
+	KPluginLoader oldLoader(QLatin1String("cantorpart")); // old path
 	KPluginFactory* factory = loader.factory();
 
-	if (!factory) {	// try old path
+	if (!factory) { // try old path
 		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(loader.fileName()))
 		WARN("Error message: " << STDSTRING(loader.errorString()))
 		factory = oldLoader.factory();
 	}
 
 	if (!factory) {
-		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
-		//return false here, a proper error message will be created in load() and propagated further.
+		// we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
+		// return false here, a proper error message will be created in load() and propagated further.
 		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(oldLoader.fileName()))
 		WARN("Error message: " << STDSTRING(oldLoader.errorString()))
 		m_error = i18n("Couldn't find the dynamic library 'cantorpart'. Please check your installation.");
@@ -75,18 +75,18 @@ bool CantorWorksheet::init(QByteArray* content) {
 		if (!m_worksheetAccess)
 			return false;
 
-		//load worksheet content if available
+		// load worksheet content if available
 		if (content)
 			m_worksheetAccess->loadWorksheetFromByteArray(content);
 
 		connect(m_worksheetAccess, SIGNAL(modified()), this, SLOT(modified()));
 
-		//Cantor's session
+		// Cantor's session
 		m_session = m_worksheetAccess->session();
 		if (m_session) {
 			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
 
-			//variable model
+			// variable model
 			m_variableModel = m_session->variableDataModel();
 			connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
 			connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
@@ -94,11 +94,11 @@ bool CantorWorksheet::init(QByteArray* content) {
 			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 		}
 
-		//default settings
+		// default settings
 		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
 
-		//TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
-		//and we need to go through the actions provided in cantor_part.
+		// TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
+		// and we need to go through the actions provided in cantor_part.
 		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
 		auto* action = m_part->action("enable_highlighting");
 		if (action) {
@@ -130,8 +130,8 @@ bool CantorWorksheet::init(QByteArray* content) {
 			action->setChecked(value);
 		}
 
-		//bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
-		//value = group.readEntry(QLatin1String("AskConfirmation"), true);
+		// bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
+		// value = group.readEntry(QLatin1String("AskConfirmation"), true);
 	}
 
 	return true;
@@ -141,21 +141,21 @@ const QString& CantorWorksheet::error() const {
 	return m_error;
 }
 
-//SLots
+// SLots
 void CantorWorksheet::dataChanged(const QModelIndex& index) {
 	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
 	Column* col = child<Column>(name);
 	if (!col)
 		return;
 
-	QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257); //Cantor::DefaultVariableModel::DataRole == 257
+	QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257); // Cantor::DefaultVariableModel::DataRole == 257
 	if (dataValue.isNull())
 		dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
 
 	const QString& value = dataValue.toString();
 	VariableParser parser(m_backendName, value);
 	if (parser.isParsed()) {
-		switch(parser.dataType()) {
+		switch (parser.dataType()) {
 		case AbstractColumn::ColumnMode::Integer:
 			col->setColumnMode(AbstractColumn::ColumnMode::Integer);
 			col->replaceInteger(0, parser.integers());
@@ -195,8 +195,8 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {
-				switch(parser.dataType()) {
-					case AbstractColumn::ColumnMode::Integer:
+				switch (parser.dataType()) {
+				case AbstractColumn::ColumnMode::Integer:
 					col->setColumnMode(AbstractColumn::ColumnMode::Integer);
 					col->replaceInteger(0, parser.integers());
 					break;
@@ -220,8 +220,8 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 					break;
 				}
 			} else {
-				switch(parser.dataType()) {
-					case AbstractColumn::ColumnMode::Integer:
+				switch (parser.dataType()) {
+				case AbstractColumn::ColumnMode::Integer:
 					col = new Column(name, parser.integers());
 					break;
 				case AbstractColumn::ColumnMode::BigInt:
@@ -243,13 +243,13 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 				col->setFixed(true);
 				addChild(col);
 
-				//TODO: Cantor currently ignores the order of variables in the worksheets
-				//and adds new variables at the last position in the model.
-				//Fix this in Cantor and switch to insertChildBefore here later.
-				//insertChildBefore(col, child<Column>(i));
+				// TODO: Cantor currently ignores the order of variables in the worksheets
+				// and adds new variables at the last position in the model.
+				// Fix this in Cantor and switch to insertChildBefore here later.
+				// insertChildBefore(col, child<Column>(i));
 			}
 		} else {
-			//the already existing variable doesn't contain any numerical values -> remove it
+			// the already existing variable doesn't contain any numerical values -> remove it
 			Column* col = child<Column>(name);
 			if (col)
 				removeChild(col);
@@ -317,7 +317,7 @@ QWidget* CantorWorksheet::view() const {
 		m_partView = m_view;
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
-		//set the current path in the session to the path of the project file
+		// set the current path in the session to the path of the project file
 		if (m_session) {
 			const Project* project = const_cast<CantorWorksheet*>(this)->project();
 			const QString& fileName = project->fileName();
@@ -345,7 +345,7 @@ QString CantorWorksheet::backendName() {
 	return this->m_backendName;
 }
 
-//TODO
+// TODO
 bool CantorWorksheet::exportView() const {
 	return false;
 }
@@ -373,24 +373,24 @@ void CantorWorksheet::restart() {
 //##############################################################################
 
 //! Save as XML
-void CantorWorksheet::save(QXmlStreamWriter* writer) const{
+void CantorWorksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("cantorWorksheet");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
-	writer->writeStartElement( "general" );
-	writer->writeAttribute( "backend_name", m_backendName);
-	//TODO: save worksheet settings
+	// general
+	writer->writeStartElement("general");
+	writer->writeAttribute("backend_name", m_backendName);
+	// TODO: save worksheet settings
 	writer->writeEndElement();
 
-	//save the content of Cantor's worksheet
+	// save the content of Cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
 	writer->writeStartElement("worksheet");
 	writer->writeAttribute("content", content.toBase64());
 	writer->writeEndElement();
 
-	//save columns(variables)
+	// save columns(variables)
 	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
@@ -399,7 +399,7 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
-	//reset the status of the reader differentiating between
+	// reset the status of the reader differentiating between
 	//"failed because of the missing CAS" and "failed because of the broken XML"
 	reader->setFailedCASMissing(false);
 
@@ -439,11 +439,11 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			if (!rc) {
 				reader->raiseMissingCASWarning(m_backendName);
 
-				//failed to load this object because of the missing CAS plugin
-				//and not because of the broken project XML. Set this flag to
-				//handle this case correctly.
-				//TODO: we also can fail in the limit in cases where Cantor's content is broken
-				//and not because of the missing CAS plugin. This also needs to be treated accrodingly...
+				// failed to load this object because of the missing CAS plugin
+				// and not because of the broken project XML. Set this flag to
+				// handle this case correctly.
+				// TODO: we also can fail in the limit in cases where Cantor's content is broken
+				// and not because of the missing CAS plugin. This also needs to be treated accrodingly...
 				reader->setFailedCASMissing(true);
 				return false;
 			}
@@ -458,7 +458,8 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			addChild(column);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

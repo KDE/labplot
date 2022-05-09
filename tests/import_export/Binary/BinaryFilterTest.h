@@ -1,11 +1,11 @@
 /*
-    File                 : BinaryFilterTest.h
-    Project              : LabPlot
-    Description          : Tests for the binary filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : BinaryFilterTest.h
+	Project              : LabPlot
+	Description          : Tests for the binary filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef BINARYFILTERTEST_H
 #define BINARYFILTERTEST_H
@@ -26,20 +26,20 @@ private Q_SLOTS:
 	void importFloatBE();
 	void importDoubleBE();
 	void importDoubleLE();
-	
+
 	void importDoubleMatrixBE();
 
 	void benchIntImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchIntImport();
-	void benchIntImport_cleanup();	// delete data
+	void benchIntImport_cleanup(); // delete data
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
 	// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 	void benchDoubleImport();
-	void benchDoubleImport_cleanup();	// delete data
+	void benchDoubleImport_cleanup(); // delete data
 private:
 	QString benchDataFileName;
 	const size_t lines = 1e6;

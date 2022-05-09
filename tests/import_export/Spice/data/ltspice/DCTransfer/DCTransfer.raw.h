@@ -22,10 +22,5 @@ QString refFileInfoString = R"(Title: * C:\users\martin\My Documents\Labplot\lts
 const int refDataRowCount = 5;
 const int numberPreviewData = 3;
 
-QStringList columnNames = {	"v1, voltage",
-							"V(n001), voltage",
-                            "V(n002), voltage",
-                            "I(R2), device_current",
-                            "I(R1), device_current",
-							"I(V1), device_current"};
+QStringList columnNames = {"v1, voltage", "V(n001), voltage", "V(n002), voltage", "I(R2), device_current", "I(R1), device_current", "I(V1), device_current"};
 }

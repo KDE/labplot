@@ -1,13 +1,12 @@
 /*
-    File                 : XYAnalysisCurve.h
-    Project              : LabPlot
-    Description          : Base class for all analysis curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYAnalysisCurve.h
+	Project              : LabPlot
+	Description          : Base class for all analysis curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYANALYSISCURVE_H
 #define XYANALYSISCURVE_H
@@ -20,17 +19,37 @@ class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum class DataSourceType {Spreadsheet, Curve, Histogram};
-	enum class AnalysisAction {DataReduction,
-		Differentiation, Integration, Interpolation, Smoothing,
-		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
-		FourierFilter};
+	enum class DataSourceType { Spreadsheet, Curve, Histogram };
+	enum class AnalysisAction {
+		DataReduction,
+		Differentiation,
+		Integration,
+		Interpolation,
+		Smoothing,
+		FitLinear,
+		FitPower,
+		FitExp1,
+		FitExp2,
+		FitInvExp,
+		FitGauss,
+		FitCauchyLorentz,
+		FitTan,
+		FitTanh,
+		FitErrFunc,
+		FitCustom,
+		FourierFilter
+	};
 
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;
 
-	static void copyData(QVector<double>& xData, QVector<double>& yData, const AbstractColumn* xDataColumn,
-				const AbstractColumn* yDataColumn, double xMin, double xMax, bool avgUniqueX = false);
+	static void copyData(QVector<double>& xData,
+						 QVector<double>& yData,
+						 const AbstractColumn* xDataColumn,
+						 const AbstractColumn* yDataColumn,
+						 double xMin,
+						 double xMax,
+						 bool avgUniqueX = false);
 
 	virtual void recalculate() = 0;
 	void save(QXmlStreamWriter*) const override;
@@ -42,7 +61,7 @@ public:
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xDataColumn, XDataColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yDataColumn, YDataColumn)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn)	// optional
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, y2DataColumn, Y2DataColumn) // optional
 	CLASS_D_ACCESSOR_DECL(QString, xDataColumnPath, XDataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yDataColumnPath, YDataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, y2DataColumnPath, Y2DataColumnPath)
@@ -69,7 +88,7 @@ private Q_SLOTS:
 	void y2DataColumnNameChanged();
 
 Q_SIGNALS:
-	void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
+	void sourceDataChanged(); // emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);
 	void xDataColumnChanged(const AbstractColumn*);

@@ -1,12 +1,12 @@
 /*
-    File                 : MQTTWillSettingsWidget.cpp
-    Project              : LabPlot
-    Description          : widget for managing MQTT connection's will settings
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2018 Fabian Kristof <fkristofszabolcs@gmail.com>
+	File                 : MQTTWillSettingsWidget.cpp
+	Project              : LabPlot
+	Description          : widget for managing MQTT connection's will settings
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "MQTTWillSettingsWidget.h"
 
@@ -16,7 +16,9 @@
 
 	\ingroup kdefrontend
  */
-MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics) : QWidget(parent), m_will(will) {
+MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient::MQTTWill& will, const QVector<QString>& topics)
+	: QWidget(parent)
+	, m_will(will) {
 	ui.setupUi(this);
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000));
 
@@ -24,14 +26,24 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	connect(ui.cbWillUpdate, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
 	connect(ui.chbEnabled, &QCheckBox::toggled, this, &MQTTWillSettingsWidget::enableWillSettings);
-	connect(ui.chbWillRetain, &QCheckBox::toggled, [this](bool state) { m_will.willRetain = state; });
-	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) { m_will.willOwnMessage = text; });
-	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, [this](const QString& text) { m_will.willTimeInterval = text.toInt(); });
+	connect(ui.chbWillRetain, &QCheckBox::toggled, [this](bool state) {
+		m_will.willRetain = state;
+	});
+	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) {
+		m_will.willOwnMessage = text;
+	});
+	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, [this](const QString& text) {
+		m_will.willTimeInterval = text.toInt();
+	});
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, [this](QListWidgetItem* item) {
 		m_statisticsType = static_cast<MQTTClient::WillStatisticsType>(ui.lwWillStatistics->row(item));
 	});
-	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) { m_will.willQoS = index; });
-	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) { m_will.willTopic = text; });
+	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) {
+		m_will.willQoS = index;
+	});
+	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) {
+		m_will.willTopic = text;
+	});
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);
 
 	loadSettings(will, topics);
@@ -96,7 +108,7 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 	enableWillSettings(will.enabled);
 
 	ui.cbWillTopic->addItems(topics.toList());
-	//Set back the initial value
+	// Set back the initial value
 	if (!will.willTopic.isEmpty())
 		ui.cbWillTopic->setCurrentText(will.willTopic);
 

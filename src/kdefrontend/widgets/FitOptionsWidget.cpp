@@ -1,17 +1,17 @@
 /*
-    File                 : FitOptionsWidget.cc
-    Project              : LabPlot
-    Description          : widget for editing advanced fit options
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FitOptionsWidget.cc
+	Project              : LabPlot
+	Description          : widget for editing advanced fit options
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "FitOptionsWidget.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 /*!
 	\class FitOptionsWidget
@@ -19,21 +19,23 @@
 
 	\ingroup kdefrontend
  */
-FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData, XYFitCurve* fitCurve) : QWidget(parent),
-	m_fitData(fitData), m_fitCurve(fitCurve) {
+FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData, XYFitCurve* fitCurve)
+	: QWidget(parent)
+	, m_fitData(fitData)
+	, m_fitCurve(fitCurve) {
 	ui.setupUi(this);
 	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
 
-	//TODO: show "robust" option when robust fitting is possible
-// 	ui.cbRobust->addItem(i18n("on"));
-// 	ui.cbRobust->addItem(i18n("off"));
+	// TODO: show "robust" option when robust fitting is possible
+	// 	ui.cbRobust->addItem(i18n("on"));
+	// 	ui.cbRobust->addItem(i18n("off"));
 	ui.lRobust->setVisible(false);
 	ui.cbRobust->setVisible(false);
 
-	ui.leMaxIterations->setValidator( new QIntValidator(ui.leMaxIterations) );
-	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
-	ui.leEvaluatedPoints->setValidator( new QIntValidator(ui.leEvaluatedPoints) );
+	ui.leMaxIterations->setValidator(new QIntValidator(ui.leMaxIterations));
+	ui.leEps->setValidator(new QDoubleValidator(ui.leEps));
+	ui.leEvaluatedPoints->setValidator(new QIntValidator(ui.leEvaluatedPoints));
 
 	SET_NUMBER_LOCALE
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
@@ -41,7 +43,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
 	ui.sbConfidenceInterval->setLocale(numberLocale);
 
-	//range widgets
+	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
 	const int xIndex = plot->coordinateSystem(m_fitCurve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
@@ -51,10 +53,10 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 		ui.leEvalMin->setText(numberLocale.toString(m_fitData->evalRange.start()));
 		ui.leEvalMax->setText(numberLocale.toString(m_fitData->evalRange.end()));
 	} else {
-		ui.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.start()) );
-		ui.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.end()) );
-		ui.dateTimeEditEvalMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()) );
-		ui.dateTimeEditEvalMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()) );
+		ui.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.start()));
+		ui.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.end()));
+		ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()));
+		ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()));
 	}
 
 	ui.leMin->setVisible(!m_dateTimeRange);
@@ -70,7 +72,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.dateTimeEditEvalMax->setVisible(m_dateTimeRange);
 	ui.lEvalRangeDateTime->setVisible(m_dateTimeRange);
 
-	//auto range
+	// auto range
 	ui.cbAutoRange->setChecked(m_fitData->autoRange);
 	ui.cbAutoEvalRange->setChecked(m_fitData->autoEvalRange);
 	this->autoRangeChanged();
@@ -81,7 +83,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.cbPreview->setChecked(m_fitData->previewEnabled);
 	ui.sbConfidenceInterval->setValue(m_fitData->confidenceInterval);
 
-	//SLOTS
+	// SLOTS
 	connect(ui.leEps, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leMaxIterations, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);
 	connect(ui.leEvaluatedPoints, &QLineEdit::textChanged, this, &FitOptionsWidget::changed);

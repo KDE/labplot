@@ -1,10 +1,10 @@
 /*
-    File                 : SpreadsheetItemDelegate.cpp
-    Project              : LabPlot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SpreadsheetItemDelegate.cpp
+	Project              : LabPlot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SpreadsheetItemDelegate.h"
@@ -25,13 +25,12 @@ of masked cells used in SpreadsheetView.
 \ingroup commonfrontend
 */
 
-SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent) : QItemDelegate(parent) {
+SpreadsheetItemDelegate::SpreadsheetItemDelegate(QObject* parent)
+	: QItemDelegate(parent) {
 	installEventFilter(this);
 }
 
-void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
-		const QModelIndex& index) const {
-
+void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
 	QItemDelegate::paint(painter, option, index);
 	if (!index.data(static_cast<int>(SpreadsheetModel::CustomDataRole::MaskingRole)).toBool())
 		return;
@@ -41,11 +40,11 @@ void SpreadsheetItemDelegate::paint(QPainter* painter, const QStyleOptionViewIte
 	painter->restore();
 }
 
-void SpreadsheetItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const {
+void SpreadsheetItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
 	model->setData(index, editor->metaObject()->userProperty().read(editor), Qt::EditRole);
 }
 
-void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index ) const {
+void SpreadsheetItemDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const {
 	editor->metaObject()->userProperty().write(editor, index.data(Qt::EditRole));
 }
 

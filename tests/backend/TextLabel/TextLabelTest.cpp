@@ -9,10 +9,10 @@
 */
 
 #include "TextLabelTest.h"
-#include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/TextLabelPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/TextLabelPrivate.h"
 
 void TextLabelTest::addPlot() {
 	Project project;
@@ -24,7 +24,7 @@ void TextLabelTest::addPlot() {
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto *l = new TextLabel("Label");
+	auto* l = new TextLabel("Label");
 	QVERIFY(l != nullptr);
 	l->setText(QString("TextLabelText"));
 	ws->addChild(l);
@@ -38,7 +38,7 @@ void TextLabelTest::addPlot() {
 	QCOMPARE(l->backgroundColor(), Qt::white);
 
 	// add title?
-	
+
 	// add axes?
 	// check axis label
 }

@@ -1,13 +1,12 @@
 /*
-    File                 : XYFourierFilterCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a Fourier filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYFourierFilterCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a Fourier filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYFourierFilterCurve
@@ -20,10 +19,10 @@
 #include "XYFourierFilterCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
+#include "backend/gsl/errors.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/gsl/errors.h"
 
 extern "C" {
 #include <gsl/gsl_sf_pow_int.h>
@@ -34,10 +33,10 @@ extern "C" {
 #include "backend/nsl/nsl_sf_poly.h"
 }
 
+#include <QDebug> // qWarning()
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
-#include <QDebug>	// qWarning()
 
 XYFourierFilterCurve::XYFourierFilterCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFourierFilterCurvePrivate(this), AspectType::XYFourierFilterCurve) {
@@ -47,8 +46,8 @@ XYFourierFilterCurve::XYFourierFilterCurve(const QString& name, XYFourierFilterC
 	: XYAnalysisCurve(name, dd, AspectType::XYFourierFilterCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYFourierFilterCurve::~XYFourierFilterCurve() = default;
 
 void XYFourierFilterCurve::recalculate() {
@@ -85,23 +84,25 @@ void XYFourierFilterCurve::setFilterData(const XYFourierFilterCurve::FilterData&
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
+XYFourierFilterCurvePrivate::XYFourierFilterCurvePrivate(XYFourierFilterCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYFourierFilterCurvePrivate::~XYFourierFilterCurvePrivate() = default;
 
 void XYFourierFilterCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create filter result columns if not available yet, clear them otherwise
+	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
 		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -120,15 +121,15 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	// clear the previous result
 	filterResult = XYFourierFilterCurve::FilterResult();
 
-	//determine the data source columns
+	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
+		// spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 	} else {
-		//curve columns as data source
+		// curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
@@ -140,7 +141,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the differentiation to temporary vectors
+	// copy all valid data point for the differentiation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 
@@ -154,12 +155,11 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xmax = filterData.xRange.last();
 	}
 
-
 	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row))
-			|| tmpXDataColumn->isMasked(row) || tmpYDataColumn->isMasked(row))
+		// only copy those data where _all_ values (for x and y, if given) are valid
+		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+			|| tmpYDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
@@ -167,10 +167,9 @@ void XYFourierFilterCurvePrivate::recalculate() {
 			xdataVector.append(tmpXDataColumn->valueAt(row));
 			ydataVector.append(tmpYDataColumn->valueAt(row));
 		}
-
 	}
 
-	//number of data points to filter
+	// number of data points to filter
 	const size_t n = (size_t)xdataVector.size();
 	if (n == 0) {
 		filterResult.available = true;
@@ -182,9 +181,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		return;
 	}
 
-	//double* xdata = xdataVector.data();
+	// double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
-
 
 	// filter settings
 	const nsl_filter_type type = filterData.type;
@@ -193,38 +191,38 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	const double cutoff = filterData.cutoff, cutoff2 = filterData.cutoff2;
 	const nsl_filter_cutoff_unit unit = filterData.unit, unit2 = filterData.unit2;
 
-	DEBUG("n ="<<n);
-	DEBUG("type:"<<nsl_filter_type_name[type]);
-	DEBUG("form (order "<<order<<") :"<<nsl_filter_form_name[form]);
-	DEBUG("cutoffs ="<<cutoff<<cutoff2);
-	DEBUG("unit :"<<nsl_filter_cutoff_unit_name[unit]<<nsl_filter_cutoff_unit_name[unit2]);
+	DEBUG("n =" << n);
+	DEBUG("type:" << nsl_filter_type_name[type]);
+	DEBUG("form (order " << order << ") :" << nsl_filter_form_name[form]);
+	DEBUG("cutoffs =" << cutoff << cutoff2);
+	DEBUG("unit :" << nsl_filter_cutoff_unit_name[unit] << nsl_filter_cutoff_unit_name[unit2]);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	// calculate index
 	double cutindex = 0, cutindex2 = 0;
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex = cutoff*(xmax-xmin);
+		cutindex = cutoff * (xmax - xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		cutindex = cutoff*(int)n;
+		cutindex = cutoff * (int)n;
 		break;
 	case nsl_filter_cutoff_unit_index:
 		cutindex = cutoff;
 	}
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
-		cutindex2 = cutoff2*(xmax-xmin);
+		cutindex2 = cutoff2 * (xmax - xmin);
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		cutindex2 = cutoff2*n;
+		cutindex2 = cutoff2 * n;
 		break;
 	case nsl_filter_cutoff_unit_index:
 		cutindex2 = cutoff2;
 	}
 	const double bandwidth = (cutindex2 - cutindex);
 	if ((type == nsl_filter_type_band_pass || type == nsl_filter_type_band_reject) && bandwidth <= 0) {
-		qWarning()<<"band width must be > 0. Giving up.";
+		qWarning() << "band width must be > 0. Giving up.";
 		return;
 	}
 
@@ -236,17 +234,17 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	xVector->resize((int)n);
 	yVector->resize((int)n);
-	memcpy(xVector->data(), xdataVector.data(), n*sizeof(double));
-	memcpy(yVector->data(), ydata, n*sizeof(double));
-///////////////////////////////////////////////////////////
+	memcpy(xVector->data(), xdataVector.data(), n * sizeof(double));
+	memcpy(yVector->data(), ydata, n * sizeof(double));
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	filterResult.available = true;
 	filterResult.valid = true;
 	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
 	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
@@ -261,32 +259,32 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyFourierFilterCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-fourier_filter-curve specific information
-	//filter data
+	// write xy-fourier_filter-curve specific information
+	// filter data
 	writer->writeStartElement("filterData");
-	writer->writeAttribute( "autoRange", QString::number(d->filterData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->filterData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->filterData.xRange.last()) );
-	writer->writeAttribute( "type", QString::number(d->filterData.type) );
-	writer->writeAttribute( "form", QString::number(d->filterData.form) );
-	writer->writeAttribute( "order", QString::number(d->filterData.order) );
-	writer->writeAttribute( "cutoff", QString::number(d->filterData.cutoff) );
-	writer->writeAttribute( "unit", QString::number(d->filterData.unit) );
-	writer->writeAttribute( "cutoff2", QString::number(d->filterData.cutoff2) );
-	writer->writeAttribute( "unit2", QString::number(d->filterData.unit2) );
-	writer->writeEndElement();// filterData
+	writer->writeAttribute("autoRange", QString::number(d->filterData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->filterData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->filterData.xRange.last()));
+	writer->writeAttribute("type", QString::number(d->filterData.type));
+	writer->writeAttribute("form", QString::number(d->filterData.form));
+	writer->writeAttribute("order", QString::number(d->filterData.order));
+	writer->writeAttribute("cutoff", QString::number(d->filterData.cutoff));
+	writer->writeAttribute("unit", QString::number(d->filterData.unit));
+	writer->writeAttribute("cutoff2", QString::number(d->filterData.cutoff2));
+	writer->writeAttribute("unit2", QString::number(d->filterData.unit2));
+	writer->writeEndElement(); // filterData
 
-	//filter results (generated columns)
+	// filter results (generated columns)
 	writer->writeStartElement("filterResult");
-	writer->writeAttribute( "available", QString::number(d->filterResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->filterResult.valid) );
-	writer->writeAttribute( "status", d->filterResult.status );
-	writer->writeAttribute( "time", QString::number(d->filterResult.elapsedTime) );
+	writer->writeAttribute("available", QString::number(d->filterResult.available));
+	writer->writeAttribute("valid", QString::number(d->filterResult.valid));
+	writer->writeAttribute("status", d->filterResult.status);
+	writer->writeAttribute("time", QString::number(d->filterResult.elapsedTime));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -312,7 +310,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "filterData") {
 			attribs = reader->attributes();
@@ -359,8 +357,8 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;

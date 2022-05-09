@@ -1,12 +1,12 @@
 /*
-    File                 : CartesianPlot.h
-    Project              : LabPlot
-    Description          : Cartesian plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CartesianPlot.h
+	Project              : LabPlot
+	Description          : Cartesian plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOT_H
@@ -39,19 +39,36 @@ class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlot(const QString &name);
+	explicit CartesianPlot(const QString& name);
 	~CartesianPlot() override;
 
-	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
-	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-				  ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
-	enum class RangeType {Free, Last, First};
+	enum class Type { FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero };
+	enum class MouseMode { Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair };
+	enum class NavigationOperation {
+		ScaleAuto,
+		ScaleAutoX,
+		ScaleAutoY,
+		ZoomIn,
+		ZoomOut,
+		ZoomInX,
+		ZoomOutX,
+		ZoomInY,
+		ZoomOutY,
+		ShiftLeftX,
+		ShiftRightX,
+		ShiftUpY,
+		ShiftDownY
+	};
+	enum class RangeType { Free, Last, First };
 	Q_ENUM(RangeType)
-	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	enum class RangeBreakStyle { Simple, Vertical, Sloped };
 
 	struct RangeBreak {
-		RangeBreak() : range(qQNaN(), qQNaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
+		RangeBreak()
+			: range(qQNaN(), qQNaN())
+			, position(0.5)
+			, style(RangeBreakStyle::Sloped) {
+		}
 		bool isValid() const {
 			return range.valid();
 		}
@@ -60,10 +77,11 @@ public:
 		RangeBreakStyle style;
 	};
 
-	//simple wrapper for QList<RangeBreaking> in order to get our macros working
-	//TODO: same for xRanges, etc.?
+	// simple wrapper for QList<RangeBreaking> in order to get our macros working
+	// TODO: same for xRanges, etc.?
 	struct RangeBreaks {
-		RangeBreaks() : lastChanged(-1) {
+		RangeBreaks()
+			: lastChanged(-1) {
 			RangeBreak b;
 			list << b;
 		}
@@ -131,10 +149,10 @@ public:
 
 	int xRangeCount() const;
 	int yRangeCount() const;
-	const Range<double>& xRange(int index = -1) const;	// get x range of (default) plot range
-	const Range<double>& yRange(int index = -1) const;	// get y range of (default) plot range
-	void setXRange(const Range<double>);		// set x range of default plot range
-	void setYRange(const Range<double>);		// set y range of default plot range
+	const Range<double>& xRange(int index = -1) const; // get x range of (default) plot range
+	const Range<double>& yRange(int index = -1) const; // get y range of (default) plot range
+	void setXRange(const Range<double>); // set x range of default plot range
+	void setYRange(const Range<double>); // set y range of default plot range
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
 	const Range<double>& dataXRange(int index = -1);
@@ -143,24 +161,24 @@ public:
 	bool yRangeDirty(int index);
 	void setXRangeDirty(int index, bool dirty);
 	void setYRangeDirty(int index, bool dirty);
-	void addXRange();				// add new x range
-	void addYRange();				// add new y range
-	void addXRange(const Range<double>&);		// add x range
-	void addYRange(const Range<double>&);		// add y range
-	void removeXRange(int index);			// remove selected x range
-	void removeYRange(int index);			// remove selected y range
+	void addXRange(); // add new x range
+	void addYRange(); // add new y range
+	void addXRange(const Range<double>&); // add x range
+	void addYRange(const Range<double>&); // add y range
+	void removeXRange(int index); // remove selected x range
+	void removeYRange(int index); // remove selected y range
 	// convenience methods
-	void setXMin(int index, double);	// set x min of x range index
-	void setXMax(int index, double);	// set x max of x range index
-	void setYMin(int index, double);	// set y min of y range index
-	void setYMax(int index, double);	// set y max of y range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)	// x range format of default cSystem
+	void setXMin(int index, double); // set x min of x range index
+	void setXMax(int index, double); // set x max of x range index
+	void setYMin(int index, double); // set y min of y range index
+	void setYMax(int index, double); // set y max of y range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat)	// y range format of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale)	// x range scale of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // range scale of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale)	// y range scale of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // range scale of x range index
 
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
@@ -171,12 +189,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
 	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable)
 
-	int coordinateSystemCount() const;	// get number of coordinate systems
-	CartesianCoordinateSystem* coordinateSystem(int) const;	// get coordinate system index
-	CartesianCoordinateSystem* defaultCoordinateSystem() const;	// return default coordinate system
-	void addCoordinateSystem();			// add a new coordinate system
-	void addCoordinateSystem(CartesianCoordinateSystem* cSystem);	// add a coordinate system
-	void removeCoordinateSystem(int index);		// remove coordinate system index
+	int coordinateSystemCount() const; // get number of coordinate systems
+	CartesianCoordinateSystem* coordinateSystem(int) const; // get coordinate system index
+	CartesianCoordinateSystem* defaultCoordinateSystem() const; // return default coordinate system
+	void addCoordinateSystem(); // add a new coordinate system
+	void addCoordinateSystem(CartesianCoordinateSystem* cSystem); // add a coordinate system
+	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
 	QString theme() const;
@@ -234,7 +252,7 @@ private:
 	QAction* addCustomPointAction;
 	QAction* addReferenceLineAction;
 
-	//scaling, zooming, navigation actions
+	// scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;
 	QAction* scaleAutoAction;
@@ -249,7 +267,7 @@ private:
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-	//analysis menu actions
+	// analysis menu actions
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
@@ -336,11 +354,11 @@ private Q_SLOTS:
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
-	//SLOTs for changes triggered via QActions in the context menu
+	// SLOTs for changes triggered via QActions in the context menu
 	void loadTheme(const QString&);
 
 protected:
-	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
+	CartesianPlot(const QString& name, CartesianPlotPrivate* dd);
 
 Q_SIGNALS:
 	void rangeTypeChanged(CartesianPlot::RangeType);

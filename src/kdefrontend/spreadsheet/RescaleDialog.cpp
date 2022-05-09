@@ -1,12 +1,12 @@
 /*
-    File                 : RescaleDialog.h
-    Project              : LabPlot
-    Description          : Dialog to provide the rescale interval
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	File                 : RescaleDialog.h
+	Project              : LabPlot
+	Description          : Dialog to provide the rescale interval
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "RescaleDialog.h"
 #include "backend/core/column/Column.h"
@@ -16,8 +16,8 @@
 #include <QPushButton>
 #include <QWindow>
 
-#include <KWindowConfig>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 	\class RescaleDialog
@@ -25,7 +25,8 @@
 
 	\ingroup kdefrontend
  */
-RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
+RescaleDialog::RescaleDialog(QWidget* parent)
+	: QDialog(parent) {
 	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
 	setWindowTitle(i18nc("@title:window", "Rescale Interval"));
 	setSizeGripEnabled(true);
@@ -44,7 +45,7 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 	connect(ui.leMin, &QLineEdit::textChanged, this, &RescaleDialog::validateOkButton);
 	connect(ui.leMax, &QLineEdit::textChanged, this, &RescaleDialog::validateOkButton);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
 	if (conf.exists()) {
@@ -63,7 +64,7 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 }
 
 RescaleDialog::~RescaleDialog() {
-	//save the current settings
+	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("RescaleDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 

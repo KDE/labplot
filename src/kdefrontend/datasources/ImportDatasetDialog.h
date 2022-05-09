@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : import dataset data dialog
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Ferencz Koovacs <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2019 Ferencz Koovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMPORTDATASETDIALOG_H
@@ -17,7 +17,7 @@ class ImportDatasetWidget;
 class DatasetHandler;
 
 class ImportDatasetDialog : public ImportDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit ImportDatasetDialog(MainWin*);
@@ -32,7 +32,6 @@ private:
 
 protected Q_SLOTS:
 	void checkOkButton() override;
-
 };
 
 #endif // IMPORTDATASETDIALOG_H

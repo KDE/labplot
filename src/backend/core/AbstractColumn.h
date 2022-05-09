@@ -1,21 +1,20 @@
 /*
-    File                 : AbstractColumn.h
-    Project              : LabPlot
-    Description          : Interface definition for data with column logic
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractColumn.h
+	Project              : LabPlot
+	Description          : Interface definition for data with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef ABSTRACTCOLUMN_H
 #define ABSTRACTCOLUMN_H
 
 #include "backend/core/AbstractAspect.h"
-#include <cmath>	// NAN
 #include <QColor>
+#include <cmath> // NAN
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
@@ -24,8 +23,10 @@ class QString;
 class QDateTime;
 class QDate;
 class QTime;
-template<class T> class QVector;
-template<class T> class Interval;
+template<class T>
+class QVector;
+template<class T>
+class Interval;
 
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
@@ -33,19 +34,19 @@ class AbstractColumn : public AbstractAspect {
 	Q_ENUMS(ColumnMode)
 
 public:
-	enum class PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
+	enum class PlotDesignation { NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus };
 	enum class ColumnMode {
 		// BASIC FORMATS
-		Double = 0,	// double
-		Text = 1,	// QString
+		Double = 0, // double
+		Text = 1, // QString
 		// Time = 2 and Date = 3 are skipped to avoid problems with old obsolete values
-		Month = 4,	// month of year: numeric or "Jan", etc.
-		Day = 5,	// day of week: numeric or "Mon", etc.
-		DateTime = 6,	// any date-time format
-//		Bool = 7,	// bool
+		Month = 4, // month of year: numeric or "Jan", etc.
+		Day = 5, // day of week: numeric or "Mon", etc.
+		DateTime = 6, // any date-time format
+		//		Bool = 7,	// bool
 		// FLOATING POINT
 		// 10 = Half precision
-//		Float = 11,	// float
+		//		Float = 11,	// float
 		// 12 = Long double
 		// 13 = Quad precision
 		// 14 = decimal 32
@@ -56,14 +57,14 @@ public:
 		// 18 = complex<double>
 		// 19 = complex<long double>
 		// INTEGER
-//		Int8 = 20,	// qint8 (char)
-//		UInt8 = 21,	// quint8 (unsigned char)
-//		Int16 = 22,	// qint16 (short)
-//		UInt16 = 23,	// quint16 (unsigned short)
-		Integer = 24,	// qint32 (int)
-//		UInt32 = 25,	// quint32 (unsigned int)
-		BigInt = 26,	// qint64 (long)
-//		UInt64 = 27,	// quint64 (unsigned long)
+		//		Int8 = 20,	// qint8 (char)
+		//		UInt8 = 21,	// quint8 (unsigned char)
+		//		Int16 = 22,	// qint16 (short)
+		//		UInt16 = 23,	// quint16 (unsigned short)
+		Integer = 24, // qint32 (int)
+		//		UInt32 = 25,	// quint32 (unsigned int)
+		BigInt = 26, // qint64 (long)
+		//		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
 		// QColor
@@ -74,7 +75,7 @@ public:
 		// QMatrix
 		// etc.
 	};
-	enum class Properties {	// TODO: why bit pattern? Aren't they exclusive?
+	enum class Properties { // TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00, // invalid values or masked values
 		Constant = 0x01,
 		MonotonicIncreasing = 0x02, // prev_value >= value for all values in column
@@ -116,9 +117,9 @@ public:
 	AbstractColumn(const QString& name, AspectType type);
 	~AbstractColumn() override;
 
-	static QStringList dateFormats();	// supported date formats
-	static QStringList timeFormats();	// supported time formats
-	static QStringList dateTimeFormats();	// supported datetime formats
+	static QStringList dateFormats(); // supported date formats
+	static QStringList timeFormats(); // supported time formats
+	static QStringList dateTimeFormats(); // supported datetime formats
 	static QString plotDesignationString(PlotDesignation, bool withBrackets = true);
 	static QString columnModeString(ColumnMode);
 	static QIcon modeIcon(ColumnMode);
@@ -133,8 +134,8 @@ public:
 	bool isNumeric() const;
 	bool isPlottable() const;
 
-	virtual bool copy(const AbstractColumn *source);
-	virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
+	virtual bool copy(const AbstractColumn* source);
+	virtual bool copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows);
 
 	virtual int rowCount() const = 0;
 	virtual int availableRowCount(int max = -1) const = 0;
@@ -153,13 +154,13 @@ public:
 
 	bool isMasked(int row) const;
 	bool isMasked(const Interval<int>& i) const;
-	QVector< Interval<int> > maskedIntervals() const;
+	QVector<Interval<int>> maskedIntervals() const;
 	void clearMasks();
 	void setMasked(const Interval<int>& i, bool mask = true);
 	void setMasked(int row, bool mask = true);
 
 	virtual QString formula(int row) const;
-	virtual QVector< Interval<int> > formulaIntervals() const;
+	virtual QVector<Interval<int>> formulaIntervals() const;
 	virtual void setFormula(const Interval<int>& i, const QString& formula);
 	virtual void setFormula(int row, const QString& formula);
 	virtual void clearFormulas();
@@ -185,8 +186,8 @@ public:
 	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 	virtual Properties properties() const;
 
-	//conditional formatting
-	enum class Formatting {Background, Foreground, Icon};
+	// conditional formatting
+	enum class Formatting { Background, Foreground, Icon };
 
 	struct HeatmapFormat {
 		double min = 0.0;
@@ -216,7 +217,8 @@ Q_SIGNALS:
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
 	void aboutToBeDestroyed(const AbstractColumn* source);
-	void reset(const AbstractColumn* source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
+	void reset(const AbstractColumn*
+				   source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
 
 protected:
 	bool XmlReadMask(XmlStreamReader*);

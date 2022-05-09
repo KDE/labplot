@@ -1,10 +1,10 @@
 /*
-    File                 : GoToDialog.h
-    Project              : LabPlot
-    Description          : Dialog to provide the cell coordinates to navigate to
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : GoToDialog.h
+	Project              : LabPlot
+	Description          : Dialog to provide the cell coordinates to navigate to
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef GOTODIALOG_H

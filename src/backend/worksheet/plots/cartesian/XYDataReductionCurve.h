@@ -1,13 +1,12 @@
 /*
-    File                 : XYDataReductionCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a data reduction
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYDataReductionCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a data reduction
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYDATAREDUCTIONCURVE_H
 #define XYDATAREDUCTIONCURVE_H
@@ -25,19 +24,19 @@ class XYDataReductionCurve : public XYAnalysisCurve {
 
 public:
 	struct DataReductionData {
-		DataReductionData() {};
+		DataReductionData(){};
 
-		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant};	// type of simplification
-		bool autoTolerance{true};	// automatic tolerance
-		double tolerance{0.0};		// tolerance
-		bool autoTolerance2{true};	// automatic tolerance2
-		double tolerance2{0.0};		// tolerance2
-		bool autoRange{true};		// use all data?
-		//TODO: use Range
-		QVector<double> xRange{0., 0.};		// x range for integration
+		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant}; // type of simplification
+		bool autoTolerance{true}; // automatic tolerance
+		double tolerance{0.0}; // tolerance
+		bool autoTolerance2{true}; // automatic tolerance2
+		double tolerance2{0.0}; // tolerance2
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct DataReductionResult {
-		DataReductionResult() {};
+		DataReductionResult(){};
 
 		bool available{false};
 		bool valid{false};

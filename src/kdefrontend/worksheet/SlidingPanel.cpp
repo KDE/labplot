@@ -1,10 +1,10 @@
 /*
-    File                 : SlidingPanel.cpp
-    Project              : LabPlot
-    Description          : Sliding panel shown in the presenter widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SlidingPanel.cpp
+	Project              : LabPlot
+	Description          : Sliding panel shown in the presenter widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "SlidingPanel.h"
 
@@ -17,7 +17,8 @@
 
 #include <KLocalizedString>
 
-SlidingPanel::SlidingPanel(QWidget *parent, const QString &worksheetName) : QFrame(parent) {
+SlidingPanel::SlidingPanel(QWidget* parent, const QString& worksheetName)
+	: QFrame(parent) {
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	m_worksheetName = new QLabel(worksheetName);
@@ -52,7 +53,7 @@ SlidingPanel::~SlidingPanel() {
 }
 
 void SlidingPanel::movePanel(qreal value) {
-	move(0, -height() + static_cast<int>(value * height()) );
+	move(0, -height() + static_cast<int>(value * height()));
 	raise();
 }
 
@@ -64,8 +65,7 @@ QSize SlidingPanel::sizeHint() const {
 	QSize sh;
 	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 	sh.setWidth(screenSize.width());
-	sh.setHeight(m_worksheetName->sizeHint().height()
-				 + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
+	sh.setHeight(m_worksheetName->sizeHint().height() + layout()->contentsMargins().top() + layout()->contentsMargins().bottom());
 
 	return sh;
 }

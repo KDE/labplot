@@ -1,12 +1,12 @@
 /*
-    File                 : ProjectDock.cpp
-    Project              : LabPlot
-    Description          : widget for project properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : ProjectDock.cpp
+	Project              : LabPlot
+	Description          : widget for project properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ProjectDock.h"
@@ -20,14 +20,16 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
+ProjectDock::ProjectDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
-	QString msg = i18n("If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
-	"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
+	QString msg = i18n(
+		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
+		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
 
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
@@ -52,7 +54,7 @@ void ProjectDock::setProject(Project* project) {
 
 	ui.teComment->setText(m_project->comment());
 
-	//resize the height of the comment field to fit the content (word wrap is ignored)
+	// resize the height of the comment field to fit the content (word wrap is ignored)
 	const QFont& font = ui.teComment->document()->defaultFont();
 	QFontMetrics fontMetrics(font);
 	const QSize& textSize = fontMetrics.size(0, m_project->comment());

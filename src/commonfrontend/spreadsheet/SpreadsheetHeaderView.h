@@ -1,13 +1,12 @@
 /*
-    File                 : SpreadsheetHeaderView.h
-    Project              : LabPlot
-    Description          : Horizontal header for SpreadsheetView displaying comments in a second header
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SpreadsheetHeaderView.h
+	Project              : LabPlot
+	Description          : Horizontal header for SpreadsheetView displaying comments in a second header
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SPREADSHEETHEADERVIEW_H
 #define SPREADSHEETHEADERVIEW_H
@@ -33,7 +32,7 @@ public:
 	~SpreadsheetHeaderView() override;
 
 	void setModel(QAbstractItemModel*) override;
-	QSize sizeHint () const override;
+	QSize sizeHint() const override;
 
 	void showComments(bool on = true);
 	bool areCommentsShown() const;

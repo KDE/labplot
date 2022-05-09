@@ -1,25 +1,25 @@
 /*
-    File                 : ImportSQLDatabaseWidget.cpp
-    Project              : LabPlot
-    Description          : SQLDatabase
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	File                 : ImportSQLDatabaseWidget.cpp
+	Project              : LabPlot
+	Description          : SQLDatabase
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMPORTSQLDATABASEWIDGET_H
 #define IMPORTSQLDATABASEWIDGET_H
 
-#include <QSqlDatabase>
 #include "backend/core/AbstractColumn.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "ui_importsqldatabasewidget.h"
+#include <QSqlDatabase>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 

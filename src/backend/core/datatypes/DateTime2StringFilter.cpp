@@ -1,13 +1,12 @@
 /*
-    File                 : DateTime2StringFilter.cpp
-    Project              : LabPlot
-    Description          : Conversion filter QDateTime -> QString.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DateTime2StringFilter.cpp
+	Project              : LabPlot
+	Description          : Conversion filter QDateTime -> QString.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -18,7 +17,7 @@
 
 class DateTime2StringFilterSetFormatCmd : public QUndoCommand {
 public:
-	DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format);
+	DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString& new_format);
 
 	void redo() override;
 	void undo() override;
@@ -40,20 +39,18 @@ QString DateTime2StringFilter::textAt(int row) const {
 	if (!inputValue.isValid())
 		return {};
 
-	//QDEBUG("	: " << inputValue << " -> " << m_format << " -> " << inputValue.toString(m_format));
+	// QDEBUG("	: " << inputValue << " -> " << m_format << " -> " << inputValue.toString(m_format));
 	return inputValue.toString(m_format);
 }
 
-bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
+bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn* source) {
 	auto mode = source->columnMode();
-	return (mode == AbstractColumn::ColumnMode::DateTime)
-		|| (mode == AbstractColumn::ColumnMode::Day)
-		|| (mode == AbstractColumn::ColumnMode::Month);
+	return (mode == AbstractColumn::ColumnMode::DateTime) || (mode == AbstractColumn::ColumnMode::Day) || (mode == AbstractColumn::ColumnMode::Month);
 }
 
-DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)
-	: m_target(target), m_other_format(new_format)
-{
+DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString& new_format)
+	: m_target(target)
+	, m_other_format(new_format) {
 	if (m_target->parentAspect())
 		setText(i18n("%1: set date-time format to %2", m_target->parentAspect()->name(), new_format));
 	else
@@ -71,7 +68,7 @@ void DateTime2StringFilterSetFormatCmd::undo() {
 	redo();
 }
 
-void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
+void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("format", format());
 }
 
@@ -89,4 +86,3 @@ bool DateTime2StringFilter::load(XmlStreamReader* reader, bool preview) {
 
 	return !reader->hasError();
 }
-

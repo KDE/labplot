@@ -1,13 +1,12 @@
 /*
-    File                 : HistogramPrivate.h
-    Project              : LabPlot
-    Description          : Private members of Histogram
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-    SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : HistogramPrivate.h
+	Project              : LabPlot
+	Description          : Private members of Histogram
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+	SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
@@ -57,7 +56,7 @@ public:
 
 	bool m_suppressRecalc{false};
 
-	//General
+	// General
 	const AbstractColumn* dataColumn{nullptr};
 	QString dataColumnPath;
 	Histogram::HistogramType type{Histogram::Ordinary};
@@ -71,15 +70,15 @@ public:
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};
 
-	//line
+	// line
 	Histogram::LineType lineType{Histogram::Bars};
 	QPen linePen;
 	qreal lineOpacity;
 
-	//symbols
+	// symbols
 	Symbol* symbol{nullptr};
 
-	//values
+	// values
 	int value{0};
 	Histogram::ValuesType valuesType{Histogram::NoValues};
 	const AbstractColumn* valuesColumn{nullptr};
@@ -89,14 +88,14 @@ public:
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
 	char valuesNumericFormat{'f'}; // 'f', 'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision{2}; //number of digits for numeric values
+	int valuesPrecision{2}; // number of digits for numeric values
 	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
 	QColor valuesColor;
 
-	//filling
+	// filling
 	bool fillingEnabled{true};
 	WorksheetElement::BackgroundType fillingType;
 	WorksheetElement::BackgroundColorStyle fillingColorStyle;
@@ -107,7 +106,7 @@ public:
 	QString fillingFileName;
 	qreal fillingOpacity;
 
-	//error bars
+	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
 	XYCurve::ErrorBarsType errorBarsType;
 	double errorBarsCapSize{1};
@@ -119,13 +118,13 @@ public:
 	QPainterPath valuesPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
-	//TODO: use Qt container
-	//TODO: add m_
+	// TODO: use Qt container
+	// TODO: add m_
 	QVector<QLineF> lines;
 	QVector<QLineF> linesUnclipped;
-	QVector<QPointF> pointsLogical;	//points in logical coordinates
-	QVector<QPointF> pointsScene;	//points in scene coordinates
-	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	QVector<QPointF> pointsLogical; // points in logical coordinates
+	QVector<QPointF> pointsScene; // points in scene coordinates
+	std::vector<bool> visiblePoints; // vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 	QVector<QPointF> valuesPoints;
 	QVector<QString> valuesStrings;
 	QPolygonF fillPolygon;
@@ -136,7 +135,7 @@ private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
 
-//	bool m_printing{false};
+	//	bool m_printing{false};
 	bool m_hovered{false};
 	bool m_suppressRetransform{false};
 	QPixmap m_pixmap;

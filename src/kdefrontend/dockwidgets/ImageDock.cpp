@@ -1,19 +1,19 @@
 /*
-    File                 : ImageDock.cpp
-    Project              : LabPlot
-    Description          : widget for image properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	File                 : ImageDock.cpp
+	Project              : LabPlot
+	Description          : widget for image properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ImageDock.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
-#include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/ThemeHandler.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -29,19 +29,20 @@
   \ingroup kdefrontend
 */
 
-ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
+ImageDock::ImageDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
-	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
-// 	ui.cbSize->addItem(i18n("Original"));
-// 	ui.cbSize->addItem(i18n("Custom"));
+	// 	ui.cbSize->addItem(i18n("Original"));
+	// 	ui.cbSize->addItem(i18n("Custom"));
 
-	//Positioning and alignment
+	// Positioning and alignment
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
@@ -69,7 +70,7 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
 
-	//border
+	// border
 	ui.cbBorderStyle->addItem(i18n("No line"));
 	ui.cbBorderStyle->addItem(i18n("Solid line"));
 	ui.cbBorderStyle->addItem(i18n("Dash line"));
@@ -79,8 +80,8 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 
 	ImageDock::updateLocale();
 
-	//SLOTs
-	//General
+	// SLOTs
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ImageDock::nameChanged);
 	connect(ui.chbEmbedded, &QCheckBox::clicked, this, &ImageDock::embeddedChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ImageDock::commentChanged);
@@ -89,12 +90,12 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
-	//Size
+	// Size
 	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::widthChanged);
 	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::heightChanged);
 	connect(ui.chbKeepRatio, &QCheckBox::clicked, this, &ImageDock::keepRatioChanged);
 
-	//Position
+	// Position
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
 	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
@@ -105,7 +106,7 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 
 	connect(ui.chbVisible, &QCheckBox::clicked, this, &ImageDock::visibilityChanged);
 
-	//Border
+	// Border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &ImageDock::borderColorChanged);
 	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
@@ -125,7 +126,7 @@ void ImageDock::setImages(QList<Image*> list) {
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
 
-	//if there are more then one image in the list, disable the name and comment field in the tab "general"
+	// if there are more then one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -146,29 +147,29 @@ void ImageDock::setImages(QList<Image*> list) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
-	//show the properties of the first image
+	// show the properties of the first image
 	this->load();
 
-	//init connections
-	//General
+	// init connections
+	// General
 	connect(m_image, &Image::aspectDescriptionChanged, this, &ImageDock::aspectDescriptionChanged);
 	connect(m_image, &Image::fileNameChanged, this, &ImageDock::imageFileNameChanged);
 	connect(m_image, &Image::embeddedChanged, this, &ImageDock::imageEmbeddedChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
 	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
 
-	//Size
+	// Size
 	connect(m_image, &Image::widthChanged, this, &ImageDock::imageWidthChanged);
 	connect(m_image, &Image::heightChanged, this, &ImageDock::imageHeightChanged);
 	connect(m_image, &Image::keepRatioChanged, this, &ImageDock::imageKeepRatioChanged);
 
-	//Position
+	// Position
 	connect(m_image, &Image::positionChanged, this, &ImageDock::imagePositionChanged);
 	connect(m_image, &Image::horizontalAlignmentChanged, this, &ImageDock::imageHorizontalAlignmentChanged);
 	connect(m_image, &Image::verticalAlignmentChanged, this, &ImageDock::imageVerticalAlignmentChanged);
 	connect(m_image, &Image::rotationAngleChanged, this, &ImageDock::imageRotationAngleChanged);
 
-	//Border
+	// Border
 	connect(m_image, &Image::borderPenChanged, this, &ImageDock::imageBorderPenChanged);
 	connect(m_image, &Image::borderOpacityChanged, this, &ImageDock::imageBorderOpacityChanged);
 }
@@ -195,21 +196,21 @@ void ImageDock::updateUnits() {
 	Lock lock(m_initializing);
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric) {
-		//convert from imperial to metric
+		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
 		suffix = QLatin1String(" cm");
-		ui.sbWidth->setValue(ui.sbWidth->value()*2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value()*2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() * 2.54);
 	} else {
-		//convert from metric to imperial
+		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
 		suffix = QLatin1String(" in");
-		ui.sbWidth->setValue(ui.sbWidth->value()/2.54);
-		ui.sbHeight->setValue(ui.sbHeight->value()/2.54);
-		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
-		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
+		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value() / 2.54);
 	}
 
 	ui.sbWidth->setSuffix(suffix);
@@ -231,10 +232,10 @@ void ImageDock::selectFile() {
 
 	ui.leFileName->setText(path);
 
-	//above the path was set in the text field which triggered setting
-	//of it in Image and loading of the image. Call embeddedChanged()
-	//to update the text field and to show the actual file name only
-	//and not the whole path if the image is being embedded.
+	// above the path was set in the text field which triggered setting
+	// of it in Image and loading of the image. Call embeddedChanged()
+	// to update the text field and to show the actual file name only
+	// and not the whole path if the image is being embedded.
 	Lock lock(m_initializing);
 	embeddedChanged(ui.chbEmbedded->checkState());
 }
@@ -273,12 +274,12 @@ void ImageDock::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float opacity = (float)value/100;
+	float opacity = (float)value / 100;
 	for (auto* image : m_imageList)
 		image->setOpacity(opacity);
 }
 
-//Size
+// Size
 void ImageDock::sizeChanged(int /*index*/) {
 }
 
@@ -308,9 +309,9 @@ void ImageDock::keepRatioChanged(int state) {
 		image->setKeepRatio(state);
 }
 
-//Position
+// Position
 /*!
-    called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
+	called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void ImageDock::positionXChanged(int index) {
 	if (m_initializing)
@@ -323,7 +324,7 @@ void ImageDock::positionXChanged(int index) {
 }
 
 /*!
-    called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
+	called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void ImageDock::positionYChanged(int index) {
 	if (m_initializing)
@@ -391,7 +392,7 @@ void ImageDock::visibilityChanged(bool state) {
 		image->setVisible(state);
 }
 
-//border
+// border
 void ImageDock::borderStyleChanged(int index) {
 	if (m_initializing)
 		return;
@@ -428,7 +429,7 @@ void ImageDock::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* image : m_imageList) {
 		pen = image->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 		image->setBorderPen(pen);
 	}
 }
@@ -437,7 +438,7 @@ void ImageDock::borderOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (float)value / 100.;
 	for (auto* image : m_imageList)
 		image->setBorderOpacity(opacity);
 }
@@ -459,20 +460,20 @@ void ImageDock::imageEmbeddedChanged(bool keep) {
 
 void ImageDock::imageOpacityChanged(float opacity) {
 	m_initializing = true;
-	ui.sbOpacity->setValue( qRound(opacity*100.0) );
+	ui.sbOpacity->setValue(qRound(opacity * 100.0));
 	m_initializing = false;
 }
 
-//Size
+// Size
 void ImageDock::imageWidthChanged(int width) {
 	m_initializing = true;
-	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(width, m_worksheetUnit) );
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void ImageDock::imageHeightChanged(int height) {
 	m_initializing = true;
-	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(height, m_worksheetUnit) );
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(height, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -482,13 +483,13 @@ void ImageDock::imageKeepRatioChanged(bool keep) {
 	m_initializing = false;
 }
 
-//Position
+// Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
-	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
-	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 	m_initializing = false;
 }
 
@@ -516,7 +517,7 @@ void ImageDock::imageVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
-//Border
+// Border
 void ImageDock::imageBorderPenChanged(const QPen& pen) {
 	m_initializing = true;
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
@@ -530,7 +531,7 @@ void ImageDock::imageBorderPenChanged(const QPen& pen) {
 
 void ImageDock::imageBorderOpacityChanged(float value) {
 	m_initializing = true;
-	float v = (float)value*100.;
+	float v = (float)value * 100.;
 	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }
@@ -549,27 +550,27 @@ void ImageDock::load() {
 	embeddedChanged(ui.chbEmbedded->checkState());
 	ui.chbVisible->setChecked(m_image->isVisible());
 
-	//Size
-	ui.sbWidth->setValue( Worksheet::convertFromSceneUnits(m_image->width(), m_worksheetUnit) );
-	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(m_image->height(), m_worksheetUnit) );
+	// Size
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_image->width(), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_image->height(), m_worksheetUnit));
 	ui.chbKeepRatio->setChecked(m_image->keepRatio());
 
-	//Position
-	ui.cbPositionX->setCurrentIndex( (int) m_image->position().horizontalPosition );
+	// Position
+	ui.cbPositionX->setCurrentIndex((int)m_image->position().horizontalPosition);
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.x(), m_worksheetUnit) );
-	ui.cbPositionY->setCurrentIndex( (int) m_image->position().verticalPosition );
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.x(), m_worksheetUnit));
+	ui.cbPositionY->setCurrentIndex((int)m_image->position().verticalPosition);
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_image->position().point.y(), m_worksheetUnit) );
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_image->position().point.y(), m_worksheetUnit));
 
-	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_image->horizontalAlignment() );
-	ui.cbVerticalAlignment->setCurrentIndex( (int) m_image->verticalAlignment() );
-	ui.sbRotation->setValue( m_image->rotationAngle() );
+	ui.cbHorizontalAlignment->setCurrentIndex((int)m_image->horizontalAlignment());
+	ui.cbVerticalAlignment->setCurrentIndex((int)m_image->verticalAlignment());
+	ui.sbRotation->setValue(m_image->rotationAngle());
 
-	//Border
-	ui.kcbBorderColor->setColor( m_image->borderPen().color() );
-	ui.cbBorderStyle->setCurrentIndex( (int) m_image->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point) );
-	ui.sbBorderOpacity->setValue( round(m_image->borderOpacity()*100) );
+	// Border
+	ui.kcbBorderColor->setColor(m_image->borderPen().color());
+	ui.cbBorderStyle->setCurrentIndex((int)m_image->borderPen().style());
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point));
+	ui.sbBorderOpacity->setValue(round(m_image->borderOpacity() * 100));
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 }

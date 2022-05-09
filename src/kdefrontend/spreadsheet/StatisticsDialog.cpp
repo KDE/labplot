@@ -1,13 +1,12 @@
 /*
-    File                 : StatisticsDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog showing statistics for column values
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>)
-    SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : StatisticsDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog showing statistics for column values
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>)
+	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "StatisticsDialog.h"
 #include "StatisticsColumnWidget.h"
@@ -22,14 +21,14 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KWindowConfig>
 #include <KSharedConfig>
+#include <KWindowConfig>
 
 #include <cmath>
 
-StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>& columns, QWidget* parent) : QDialog(parent),
-	m_twStatistics(new QTabWidget) {
-
+StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>& columns, QWidget* parent)
+	: QDialog(parent)
+	, m_twStatistics(new QTabWidget) {
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 
 	QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
@@ -50,7 +49,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 
 	m_columns = columns;
 
-	//create tab widgets for every column and show the initial text with the placeholders
+	// create tab widgets for every column and show the initial text with the placeholders
 	for (auto* col : m_columns) {
 		auto* w = new StatisticsColumnWidget(col, this);
 		connect(w, &StatisticsColumnWidget::tabChanged, this, &StatisticsDialog::currentWidgetTabChanged);
@@ -59,7 +58,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 
 	connect(m_twStatistics, &QTabWidget::currentChanged, this, &StatisticsDialog::currentTabChanged);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "StatisticsDialog");
 	if (conf.exists()) {
@@ -76,7 +75,9 @@ StatisticsDialog::~StatisticsDialog() {
 
 void StatisticsDialog::showStatistics() {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
-	QTimer::singleShot(0, this, [=] () {currentTabChanged(0);});
+	QTimer::singleShot(0, this, [=]() {
+		currentTabChanged(0);
+	});
 }
 
 void StatisticsDialog::currentTabChanged(int) {

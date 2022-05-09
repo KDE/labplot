@@ -1,12 +1,12 @@
 /*
-    File                 : Month2IntegerFilter.h
-    Project              : AbstractColumn
-    Description          : Conversion filter QDateTime -> double, translating
-    dates into months (January -> 1).
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : Month2IntegerFilter.h
+	Project              : AbstractColumn
+	Description          : Conversion filter QDateTime -> double, translating
+	dates into months (January -> 1).
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MONTH2INTEGER_FILTER_H
 #define MONTH2INTEGER_FILTER_H
@@ -25,21 +25,24 @@ class Month2IntegerFilter : public AbstractSimpleFilter {
 public:
 	int integerAt(int row) const override {
 		DEBUG("integerAt()");
-		if (!m_inputs.value(0)) return 0;
+		if (!m_inputs.value(0))
+			return 0;
 		QDate inputValue = m_inputs.value(0)->dateAt(row);
-		if (!inputValue.isValid()) return 0;
+		if (!inputValue.isValid())
+			return 0;
 		return int(inputValue.month());
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Integer; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::Integer;
+	}
 
 protected:
 	//! Using typed ports: only date-time inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Month;
 	}
 };
 
 #endif // ifndef MONTH2INTEGER_FILTER_H
-

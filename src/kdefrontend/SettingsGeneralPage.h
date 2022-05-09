@@ -1,12 +1,11 @@
 /*
-    File                 : SettingsGeneralPage.h
-    Project              : LabPlot
-    Description          : general settings page
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsGeneralPage.h
+	Project              : LabPlot
+	Description          : general settings page
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SETTINGSGENERALPAGE_H
 #define SETTINGSGENERALPAGE_H
@@ -18,7 +17,7 @@ class SettingsGeneralPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	enum class DecimalSeparator{Dot, Comma, Arabic, Automatic};
+	enum class DecimalSeparator { Dot, Comma, Arabic, Automatic };
 
 	explicit SettingsGeneralPage(QWidget*);
 

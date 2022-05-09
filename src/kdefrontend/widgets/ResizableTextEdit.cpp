@@ -1,10 +1,10 @@
 /*
-    File                 : ResizableTextEdit.cpp
-    Project              : LabPlot
-    Description          : Extended TextEdit to allow the manual resize by the user
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ResizableTextEdit.cpp
+	Project              : LabPlot
+	Description          : Extended TextEdit to allow the manual resize by the user
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ResizableTextEdit.h"
@@ -15,9 +15,10 @@
 #include <QPainter>
 #include <QStyleOption>
 
-GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(parent),
-	m_parent(parent), m_vertResizeOnly(vertResizeOnly) {
-
+GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly)
+	: QWidget(parent)
+	, m_parent(parent)
+	, m_vertResizeOnly(vertResizeOnly) {
 	resize(20, 10);
 }
 
@@ -28,14 +29,14 @@ QSize GrabBar::sizeHint() const {
 void GrabBar::paintEvent(QPaintEvent*) {
 	QPainter p(this);
 
-	//QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
+	// QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_WIN)
 	// fallback rect
 	p.fillRect(rect(), QColor(Qt::darkGray));
 #endif
 
-	//see qsplitter.cpp
+	// see qsplitter.cpp
 	QStyleOption opt(0);
 	opt.rect = rect();
 	opt.palette = palette();
@@ -71,9 +72,9 @@ void GrabBar::mouseMoveEvent(QMouseEvent* e) {
 	if (m_pressed) {
 		const QPoint delta = e->pos() - m_pos;
 		if (m_vertResizeOnly)
-			m_parent->addSize( QSize( 0, delta.y() ) );
+			m_parent->addSize(QSize(0, delta.y()));
 		else
-			m_parent->addSize( QSize( delta.x(), delta.y() ) );
+			m_parent->addSize(QSize(delta.x(), delta.y()));
 	}
 
 	e->accept();
@@ -104,11 +105,11 @@ void GrabBar::leaveEvent(QEvent* e) {
  *
  * \ingroup frontend/widgets
  */
-ResizableTextEdit::ResizableTextEdit(QWidget* parent, bool vertResizeOnly) : QTextEdit(parent),
-	m_grabBar(new GrabBar(this, vertResizeOnly)),
-	m_size( QTextEdit::sizeHint() ),
-	m_vertResizeOnly(vertResizeOnly) {
-
+ResizableTextEdit::ResizableTextEdit(QWidget* parent, bool vertResizeOnly)
+	: QTextEdit(parent)
+	, m_grabBar(new GrabBar(this, vertResizeOnly))
+	, m_size(QTextEdit::sizeHint())
+	, m_vertResizeOnly(vertResizeOnly) {
 }
 
 void ResizableTextEdit::addSize(QSize size) {
@@ -130,7 +131,7 @@ QString ResizableTextEdit::text() const {
 
 void ResizableTextEdit::resizeEvent(QResizeEvent* e) {
 	if (m_vertResizeOnly)
-		m_grabBar->move(width()/2 - m_grabBar->width()/2, height() - m_grabBar->height());
+		m_grabBar->move(width() / 2 - m_grabBar->width() / 2, height() - m_grabBar->height());
 	else
 		m_grabBar->move(width() - m_grabBar->width(), height() - m_grabBar->height());
 

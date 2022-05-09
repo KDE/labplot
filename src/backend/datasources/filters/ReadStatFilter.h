@@ -1,10 +1,10 @@
 /*
-    File                 : ReadStatFilter.h
-    Project              : LabPlot
-    Description          : ReadStat I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ReadStatFilter.h
+	Project              : LabPlot
+	Description          : ReadStat I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef READSTATFILTER_H
 #define READSTATFILTER_H
@@ -16,7 +16,7 @@
 #include <readstat.h>
 #endif
 
-//class QStringList;
+// class QStringList;
 class ReadStatFilterPrivate;
 
 class ReadStatFilter : public AbstractFileFilter {
@@ -27,15 +27,15 @@ public:
 	~ReadStatFilter() override;
 
 #ifdef HAVE_READSTAT
-	static int getMetaData(readstat_metadata_t *, void *);
+	static int getMetaData(readstat_metadata_t*, void*);
 #endif
 
 	static QString fileInfoString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
@@ -43,7 +43,7 @@ public:
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes() const;
 
-	//TODO: put into base class?
+	// TODO: put into base class?
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);

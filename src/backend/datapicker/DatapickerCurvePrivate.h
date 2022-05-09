@@ -1,11 +1,11 @@
 /*
-    File                 : DatapickerCurvePrivate.h
-    Project              : LabPlot
-    Description          : Graphic Item for coordinate points of Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatapickerCurvePrivate.h
+	Project              : LabPlot
+	Description          : Graphic Item for coordinate points of Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERCURVEPRIVATE_H

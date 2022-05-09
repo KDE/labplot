@@ -3,30 +3,30 @@
 	Project              : LabPlot
 	Description          : Tests for Dataset related features
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatasetsTest.h"
 
+#include "backend/datasources/DatasetHandler.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datasources/DatasetHandler.h"
 #include "kdefrontend/DatasetModel.h"
-#include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/datasources/DatasetMetadataManagerDialog.h"
+#include "kdefrontend/datasources/ImportDatasetWidget.h"
 
-#include <QFile>
-#include <QTextStream>
 #include <QDebug>
-#include <QVector>
-#include <QTimer>
 #include <QEventLoop>
-#include <QTreeWidgetItem>
+#include <QFile>
 #include <QStandardPaths>
+#include <QTextStream>
+#include <QTimer>
+#include <QTreeWidgetItem>
+#include <QVector>
 
-void DatasetsTest::initTestCase() {	
+void DatasetsTest::initTestCase() {
 	const QString currentDir = __FILE__;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 
@@ -35,7 +35,7 @@ void DatasetsTest::initTestCase() {
 	m_jsonDir = baseDir + QDir::separator() + containingDir + QDir::separator();
 
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 
@@ -46,10 +46,10 @@ void DatasetsTest::initTestCase() {
 void DatasetsTest::copyFiles() {
 	const QString baseDir = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first();
 
-	if(!QDir(baseDir).exists())
+	if (!QDir(baseDir).exists())
 		QDir().mkdir(baseDir);
 
-	if(!QDir(m_jsonDir).exists())
+	if (!QDir(m_jsonDir).exists())
 		QDir().mkdir(m_jsonDir);
 
 	QFile::copy(m_dataDir + "Test.json", m_jsonDir + "Test.json");
@@ -69,7 +69,7 @@ void DatasetsTest::removeFiles() {
 	deleteDir.setNameFilters(QStringList() << "*.*");
 	deleteDir.setFilter(QDir::Files);
 
-	for(QString dirFile : deleteDir.entryList())	{
+	for (QString dirFile : deleteDir.entryList()) {
 		deleteDir.remove(dirFile);
 	}
 }
@@ -85,7 +85,7 @@ void DatasetsTest::testCategories() {
 	QCOMPARE(model->categories("Test").contains("Test_Cat_3"), true);
 
 	delete importWidget;
-	delete  model;
+	delete model;
 }
 
 void DatasetsTest::testSubcategories() {
@@ -99,7 +99,7 @@ void DatasetsTest::testSubcategories() {
 	QCOMPARE(model->subcategories("Test", "Test_Cat").contains("Test_Subcat4"), true);
 
 	delete importWidget;
-	delete  model;
+	delete model;
 }
 
 void DatasetsTest::testDatasets() {
@@ -111,7 +111,7 @@ void DatasetsTest::testDatasets() {
 	QCOMPARE(model->allDatasetsList().toStringList().size(), 6);
 
 	delete importWidget;
-	delete  model;
+	delete model;
 }
 
 //##############################################################################
@@ -132,14 +132,14 @@ void DatasetsTest::testProcessDataset() {
 	QTimer timer;
 	timer.setSingleShot(true);
 	QEventLoop loop;
-	connect(datasetHandler,  &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
+	connect(datasetHandler, &DatasetHandler::downloadCompleted, &loop, &QEventLoop::quit);
 	connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 	timer.start(1500);
 	loop.exec();
 
 	bool datasetFound = false;
 
-	if(timer.isActive()){
+	if (timer.isActive()) {
 		timer.stop();
 		datasetFound = true;
 	}
@@ -155,7 +155,7 @@ void DatasetsTest::testProcessDataset() {
 	Column* fourthColumn = spreadsheet->column(3);
 
 	QCOMPARE(firstColumn->valueAt(0), 1);
-	QCOMPARE(secondColumn->textAt(3),"4/86");
+	QCOMPARE(secondColumn->textAt(3), "4/86");
 	QCOMPARE(thirdColumn->valueAt(0), -0.061134);
 	QCOMPARE(fourthColumn->valueAt(0), 0.03016);
 
@@ -269,5 +269,3 @@ void DatasetsTest::testNewDataset() {
 }
 
 QTEST_MAIN(DatasetsTest)
-
-

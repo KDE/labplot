@@ -1,11 +1,11 @@
 /*
-    File                 : NSLDiffTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for numerical differentiation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLDiffTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for numerical differentiation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLDiffTest.h"
@@ -37,7 +37,7 @@ void NSLDiffTest::testFirst_order4() {
 	int status = nsl_diff_first_deriv(xdata, ydata, N, 4);
 	QCOMPARE(status, 0);
 	for (unsigned int i = 0; i < N; i++)
-		QCOMPARE(ydata[i], 3 * xdata[i]*xdata[i]);
+		QCOMPARE(ydata[i], 3 * xdata[i] * xdata[i]);
 }
 
 void NSLDiffTest::testFirst_avg() {
@@ -139,7 +139,7 @@ void NSLDiffTest::testPerformance_first() {
 	QScopedArrayPointer<double> xdata(new double[NN]);
 	QScopedArrayPointer<double> ydata(new double[NN]);
 
-	for (int i = 0;  i < NN; i++)
+	for (int i = 0; i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
 
 	QBENCHMARK {
@@ -153,7 +153,7 @@ void NSLDiffTest::testPerformance_second() {
 	QScopedArrayPointer<double> xdata(new double[NN]);
 	QScopedArrayPointer<double> ydata(new double[NN]);
 
-	for (int i = 0;  i < NN; i++)
+	for (int i = 0; i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
 
 	QBENCHMARK {
@@ -167,9 +167,9 @@ void NSLDiffTest::testPerformance_third() {
 	QScopedArrayPointer<double> xdata(new double[NN]);
 	QScopedArrayPointer<double> ydata(new double[NN]);
 
-	for (int i = 0;  i < NN; i++)
+	for (int i = 0; i < NN; i++)
 		xdata[i] = ydata[i] = (double)i;
-	
+
 	QBENCHMARK {
 		int status = nsl_diff_third_deriv(xdata.data(), ydata.data(), NN, 2);
 		QCOMPARE(status, 0);

@@ -1,19 +1,19 @@
 /*
-    File             : XYFitCurveDock.h
-    Project          : LabPlot
-    Description      : widget for editing properties of equation curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYFitCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of equation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYFITCURVEDOCK_H
 #define XYFITCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "ui_xyfitcurvedockgeneraltab.h"
 
 class AspectTreeModel;
@@ -21,7 +21,7 @@ class TreeViewComboBox;
 class FitParametersWidget;
 class KMessageWidget;
 
-class XYFitCurveDock: public XYCurveDock {
+class XYFitCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
@@ -58,8 +58,8 @@ protected:
 	void setModel() override;
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in XYFitCurveDock
-	//general tab
+	// SLOTs for changes triggered in XYFitCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xWeightChanged(int);
@@ -85,7 +85,7 @@ private Q_SLOTS:
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;
-//	void setPlotXRange();
+	//	void setPlotXRange();
 	void recalculateClicked();
 	void updateModelEquation();
 	void expressionChanged();
@@ -96,8 +96,8 @@ private Q_SLOTS:
 	void resultCopy(bool copyAll = false);
 	void resultCopyAll();
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveDataSourceHistogramChanged(const Histogram*);

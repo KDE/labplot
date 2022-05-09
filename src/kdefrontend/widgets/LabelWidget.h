@@ -1,25 +1,25 @@
 /*
-    File                 : LabelWidget.h
-    Project              : LabPlot
-    Description          : label settings widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : LabelWidget.h
+	Project              : LabPlot
+	Description          : label settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef LABELWIDGET_H
 #define LABELWIDGET_H
 
-#include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_labelwidget.h"
 #include <KConfigGroup>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 #include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 
@@ -67,7 +67,7 @@ Q_SIGNALS:
 	void dataChanged(bool);
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in LabelWidget
+	// SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
 	void modeChanged(int);
@@ -114,7 +114,7 @@ private Q_SLOTS:
 	void bindingChanged(bool checked);
 	void showPlaceholderTextChanged(bool checked);
 
-	//SLOTs for changes triggered in TextLabel
+	// SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
 	void labelTeXImageUpdated(bool);
 	void labelTeXFontChanged(const QFont&);
@@ -138,4 +138,4 @@ private Q_SLOTS:
 	void labelModeChanged(TextLabel::Mode);
 };
 
-#endif //LABELWIDGET_H
+#endif // LABELWIDGET_H

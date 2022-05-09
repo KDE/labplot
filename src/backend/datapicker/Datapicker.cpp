@@ -1,26 +1,26 @@
 /*
-    File                 : Datapicker.cpp
-    Project              : LabPlot
-    Description          : Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	File                 : Datapicker.cpp
+	Project              : LabPlot
+	Description          : Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Datapicker.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/datapicker/DatapickerImage.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "commonfrontend/datapicker/DatapickerView.h"
 #include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datapicker/Transform.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerPoint.h"
+#include "backend/datapicker/Transform.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/spreadsheet/Spreadsheet.h"
+#include "commonfrontend/datapicker/DatapickerView.h"
 
-#include <QGraphicsScene>
 #include "QIcon"
 #include <KLocalizedString>
+#include <QGraphicsScene>
 
 /**
  * \class Datapicker
@@ -28,8 +28,8 @@
  * \ingroup backend
  */
 Datapicker::Datapicker(const QString& name, const bool loading)
-: AbstractPart(name, AspectType::Datapicker), m_transform(new Transform())
-{
+	: AbstractPart(name, AspectType::Datapicker)
+	, m_transform(new Transform()) {
 	connect(this, &Datapicker::aspectAdded, this, &Datapicker::handleAspectAdded);
 	connect(this, &Datapicker::aspectAboutToBeRemoved, this, &Datapicker::handleAspectAboutToBeRemoved);
 
@@ -52,7 +52,7 @@ void Datapicker::init() {
 }
 
 /*!
-    Returns an icon to be used in the project explorer.
+	Returns an icon to be used in the project explorer.
 */
 QIcon Datapicker::icon() const {
 	return QIcon::fromTheme(QLatin1String("color-picker-black"));
@@ -74,7 +74,6 @@ QWidget* Datapicker::view() const {
 	}
 	return m_partView;
 }
-
 
 bool Datapicker::exportView() const {
 	auto* s = currentSpreadsheet();
@@ -110,7 +109,7 @@ Spreadsheet* Datapicker::currentSpreadsheet() const {
 
 	const int index = m_view->currentIndex();
 	if (index > 0) {
-		auto* curve = child<DatapickerCurve>(index-1);
+		auto* curve = child<DatapickerCurve>(index - 1);
 		return curve->child<Spreadsheet>(0);
 	}
 	return nullptr;
@@ -121,9 +120,9 @@ DatapickerImage* Datapicker::image() const {
 }
 
 /*!
-    this slot is called when a datapicker child is selected in the project explorer.
-    emits \c datapickerItemSelected() to forward this event to the \c DatapickerView
-    in order to select the corresponding tab.
+	this slot is called when a datapicker child is selected in the project explorer.
+	emits \c datapickerItemSelected() to forward this event to the \c DatapickerView
+	in order to select the corresponding tab.
  */
 void Datapicker::childSelected(const AbstractAspect* aspect) {
 	Q_ASSERT(aspect);
@@ -131,7 +130,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 
 	int index = -1;
 	if (m_activeCurve) {
-		//if one of the curves is currently selected, select the image with the plot (the very first child)
+		// if one of the curves is currently selected, select the image with the plot (the very first child)
 		index = 0;
 		Q_EMIT statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
 		Q_EMIT requestUpdateActions();
@@ -145,7 +144,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 }
 
 /*!
-    this slot is called when a worksheet element is deselected in the project explorer.
+	this slot is called when a worksheet element is deselected in the project explorer.
  */
 void Datapicker::childDeselected(const AbstractAspect* aspect) {
 	Q_UNUSED(aspect);
@@ -158,14 +157,14 @@ void Datapicker::childDeselected(const AbstractAspect* aspect) {
  *  This function is called in \c DatapickerView when the current tab was changed
  */
 void Datapicker::setChildSelectedInView(int index, bool selected) {
-	//select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
+	// select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
 	if (index == 0) {
 		if (selected)
 			Q_EMIT childAspectSelectedInView(this);
 		else {
 			Q_EMIT childAspectDeselectedInView(this);
 
-			//deselect also all curves (they don't have any tab index in the view) that were potentially selected before
+			// deselect also all curves (they don't have any tab index in the view) that were potentially selected before
 			for (const auto* curve : children<const DatapickerCurve>())
 				Q_EMIT childAspectDeselectedInView(curve);
 		}
@@ -175,19 +174,19 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
-	//select/deselect the data spreadhseets
+	// select/deselect the data spreadhseets
 	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
 		Q_EMIT childAspectSelectedInView(aspect);
 
-		//deselect the datapicker in the project explorer, if a child (spreadsheet or image) was selected.
-		//prevents unwanted multiple selection with datapicker if it was selected before.
+		// deselect the datapicker in the project explorer, if a child (spreadsheet or image) was selected.
+		// prevents unwanted multiple selection with datapicker if it was selected before.
 		Q_EMIT childAspectDeselectedInView(this);
 	} else {
 		Q_EMIT childAspectDeselectedInView(aspect);
 
-		//deselect also all children that were potentially selected before (columns of a spreadsheet)
+		// deselect also all children that were potentially selected before (columns of a spreadsheet)
 		for (const auto* child : aspect->children<const AbstractAspect>())
 			Q_EMIT childAspectDeselectedInView(child);
 	}
@@ -195,7 +194,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 
 /*!
 	Selects or deselects the datapicker or its current active curve in the project explorer.
-    This function is called in \c DatapickerImageView.
+	This function is called in \c DatapickerImageView.
 */
 void Datapicker::setSelectedInView(const bool b) {
 	if (b)
@@ -242,7 +241,7 @@ QVector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
 void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
-		//clear scene
+		// clear scene
 		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
@@ -309,11 +308,11 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 
 //! Save as XML
 void Datapicker::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement( "datapicker" );
+	writer->writeStartElement("datapicker");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//serialize all children
+	// serialize all children
 	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
@@ -355,7 +354,8 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 				addChild(curve);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown datapicker element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

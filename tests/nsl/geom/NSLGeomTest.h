@@ -1,11 +1,11 @@
 /*
-    File                 : NSLGeomTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for geometric functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLGeomTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for geometric functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLGEOMTEST_H
 #define NSLGEOMTEST_H
@@ -22,7 +22,7 @@ private Q_SLOTS:
 	void testLineSim();
 	void testLineSimMorse();
 	// performance
-	//void testPerformance();
+	// void testPerformance();
 private:
 	QString m_dataDir;
 };

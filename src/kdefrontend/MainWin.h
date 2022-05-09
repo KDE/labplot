@@ -1,12 +1,12 @@
 /*
-    File                 : MainWin.h
-    Project              : LabPlot
-    Description          : Main window of the application
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : MainWin.h
+	Project              : LabPlot
+	Description          : Main window of the application
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MAINWIN_H
 #define MAINWIN_H
@@ -95,7 +95,7 @@ class KToggleFullScreenAction;
 #endif
 
 #ifdef HAVE_TOUCHBAR
-	class KDMacTouchBar;
+class KDMacTouchBar;
 #endif
 
 class MainWin : public KXmlGuiWindow {
@@ -110,11 +110,13 @@ public:
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
-	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen};
-	enum class TitleBarMode {ShowFilePath, ShowFileName, ShowProjectName};
+	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
+	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
 
 #ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}
+	KUserFeedback::Provider& userFeedbackProvider() {
+		return m_userFeedbackProvider;
+	}
 #endif
 
 private:
@@ -139,7 +141,7 @@ private:
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	QMdiSubWindow* m_welcomeWindow{nullptr};
 	QQuickWidget* m_welcomeWidget{nullptr};
-// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
+	// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 	QString m_lastOpenFileFilter;
 	const Worksheet* m_lastWorksheet{nullptr};
@@ -147,7 +149,7 @@ private:
 	TitleBarMode m_titleBarMode{TitleBarMode::ShowFilePath};
 
 #ifdef HAVE_KUSERFEEDBACK
-    KUserFeedback::Provider m_userFeedbackProvider;
+	KUserFeedback::Provider m_userFeedbackProvider;
 #endif
 
 #ifdef Q_OS_MAC
@@ -194,25 +196,25 @@ private:
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
 
-	//toggling dock widgets, status bar and full screen
+	// toggling dock widgets, status bar and full screen
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
 	KToggleAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
 	KToggleFullScreenAction* m_toggleFullScreenAction;
 
-	//window visibility
+	// window visibility
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
 
-	//Menus
+	// Menus
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu{nullptr};
 	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
-	//Docks
+	// Docks
 	QStackedWidget* stackedWidget{nullptr};
 	AspectDock* aspectDock{nullptr};
 	AxisDock* axisDock{nullptr};
@@ -255,12 +257,12 @@ private:
 	bool warnModified();
 	void activateSubWindowForAspect(const AbstractAspect*) const;
 	bool save(const QString&);
-// 	void toggleShowWidget(QWidget* widget, bool showToRight);
-// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
+	// 	void toggleShowWidget(QWidget* widget, bool showToRight);
+	// 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
 	Spreadsheet* activeSpreadsheet() const;
 
-	//Cantor
+	// Cantor
 #ifdef HAVE_CANTOR_LIBS
 	CantorWorksheetDock* cantorWorksheetDock{nullptr};
 #endif
@@ -275,8 +277,8 @@ protected:
 
 private Q_SLOTS:
 	void initGUI(const QString&);
-// 	QQuickWidget* createWelcomeScreen();
-// 	void resetWelcomeScreen();
+	// 	QQuickWidget* createWelcomeScreen();
+	// 	void resetWelcomeScreen();
 	void createMdiArea();
 	void updateGUI();
 	void updateGUIOnProjectChanges();
@@ -308,7 +310,7 @@ private Q_SLOTS:
 	void colorSchemeChanged(QAction*);
 	void openDatasetExample();
 
-	//Cantor
+	// Cantor
 #ifdef HAVE_CANTOR_LIBS
 	void newCantorWorksheet(QAction* action);
 	void cantorSettingsDialog();
@@ -321,7 +323,7 @@ private Q_SLOTS:
 	void newWorksheet();
 	void newNotes();
 	void newDatapicker();
-	//TODO: void newScript();
+	// TODO: void newScript();
 	void newLiveDataSource();
 
 	void createContextMenu(QMenu*) const;
@@ -329,7 +331,7 @@ private Q_SLOTS:
 
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void handleAspectRemoved(const AbstractAspect*,const AbstractAspect*,const AbstractAspect*);
+	void handleAspectRemoved(const AbstractAspect*, const AbstractAspect*, const AbstractAspect*);
 	void handleCurrentAspectChanged(AbstractAspect*);
 	void handleCurrentSubWindowChanged(QMdiSubWindow*);
 	void handleShowSubWindowRequested();

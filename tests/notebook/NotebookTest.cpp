@@ -1,11 +1,11 @@
 /*
-    File                 : NotebookTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the Notebook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	File                 : NotebookTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the Notebook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NotebookTest.h"
@@ -25,7 +25,6 @@ void NotebookTest::initTestCase() {
 //**********************************************************
 //************************* Maxima *************************
 //**********************************************************
-
 
 /*!
 	read an array of doubles
@@ -55,8 +54,8 @@ void NotebookTest::testParserMaxima02() {
 
 	const auto values = parser.text();
 	QCOMPARE(values.size(), 2);
-// 	QCOMPARE(values.at(0), "a");
-// 	QCOMPARE(values.at(1), "b");
+	// 	QCOMPARE(values.at(0), "a");
+	// 	QCOMPARE(values.at(1), "b");
 }
 
 //**********************************************************
@@ -110,9 +109,9 @@ void NotebookTest::testParserPython03() {
 	QCOMPARE(values.at(1), 2.0);
 }
 
-//numpy data types
+// numpy data types
 
-//np.ones(2, dtype=np.int16)
+// np.ones(2, dtype=np.int16)
 void NotebookTest::testParserPython04() {
 	QString input = "array([1, 1], dtype=int16)";
 	VariableParser parser("python", input);
@@ -126,7 +125,7 @@ void NotebookTest::testParserPython04() {
 	QCOMPARE(values.at(1), 1);
 }
 
-//np.ones((2,2), dtype=np.int16)
+// np.ones((2,2), dtype=np.int16)
 void NotebookTest::testParserPython05() {
 	QString input = "array([[1, 1], [1, 1]], dtype=int16)";
 	VariableParser parser("python", input);
@@ -188,7 +187,6 @@ void NotebookTest::testParserPython08() {
 	QVERIFY2(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:00.000", qPrintable(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz")));
 }
 
-
 void NotebookTest::testParserPython09() {
 	// Testing hour datetime
 	QString input = "array(['2016-03-26T02', '2017-03-26T02', '2018-03-26T02'], dtype=datetime64[h])";
@@ -223,6 +221,5 @@ void NotebookTest::testParserPython10() {
 	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T00:00:00.000");
 	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T00:00:00.000");
 }
-
 
 QTEST_MAIN(NotebookTest)

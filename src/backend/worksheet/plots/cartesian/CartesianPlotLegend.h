@@ -1,18 +1,18 @@
 /*
-    File                 : CartesianPlotLegend.h
-    Project              : LabPlot
-    Description          : Legend for the cartesian plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : CartesianPlotLegend.h
+	Project              : LabPlot
+	Description          : Legend for the cartesian plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTLEGEND_H
 #define CARTESIANPLOTLEGEND_H
 
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class CartesianPlotLegendPrivate;
 class TextLabel;
@@ -28,7 +28,7 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	explicit CartesianPlotLegend(const QString &name);
+	explicit CartesianPlotLegend(const QString& name);
 	~CartesianPlotLegend() override;
 
 	void finalizeAdd() override;
@@ -83,7 +83,7 @@ private:
 	QAction* visibilityAction{nullptr};
 
 private Q_SLOTS:
-	//SLOTs for changes triggered via QActions in the context menu
+	// SLOTs for changes triggered via QActions in the context menu
 	void visibilityChangedSlot();
 
 Q_SIGNALS:

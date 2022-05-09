@@ -1,13 +1,12 @@
 /*
-    File                 : ReferenceLinePrivate.h
-    Project              : LabPlot
-    Description          : Reference line on the plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	File                 : ReferenceLinePrivate.h
+	Project              : LabPlot
+	Description          : Reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef REFERENCELINEPRIVATE_H
 #define REFERENCELINEPRIVATE_H
@@ -16,7 +15,7 @@
 
 class CartesianCoordinateSystem;
 
-class ReferenceLinePrivate: public WorksheetElementPrivate {
+class ReferenceLinePrivate : public WorksheetElementPrivate {
 public:
 	explicit ReferenceLinePrivate(ReferenceLine*);
 
@@ -25,17 +24,17 @@ public:
 	void updateData();
 
 	bool m_hovered{false};
-	bool m_visible{true}; //point inside the plot (visible) or not
+	bool m_visible{true}; // point inside the plot (visible) or not
 
 	QRectF boundingRectangle;
 	QPainterPath lineShape;
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
-	double length{0.0}; //length of the line in graphic item's coordinates
+	double length{0.0}; // length of the line in graphic item's coordinates
 	QPen pen;
 	qreal opacity{1.0};
 
-	//reimplemented from QGraphicsItem
+	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;

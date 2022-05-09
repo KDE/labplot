@@ -1,10 +1,10 @@
 /*
-    File                 : HDF5Filter.h
-    Project              : LabPlot
-    Description          : HDF5 I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : HDF5Filter.h
+	Project              : LabPlot
+	Description          : HDF5 I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef HDF5FILTER_H
 #define HDF5FILTER_H
@@ -26,9 +26,13 @@ public:
 	static QString fileDDLString(const QString&);
 
 	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool& ok,
-						AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	QVector<QStringList> readCurrentDataSet(const QString& fileName,
+											AbstractDataSource*,
+											bool& ok,
+											AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
+											int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;

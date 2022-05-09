@@ -1,20 +1,19 @@
 /*
-    File                 : WorksheetView.h
-    Project              : LabPlot
-    Description          : Worksheet view
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : WorksheetView.h
+	Project              : LabPlot
+	Description          : Worksheet view
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef WORKSHEETVIEW_H
 #define WORKSHEETVIEW_H
 
-#include <QGraphicsView>
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include <QGraphicsView>
 
 class QPrinter;
 class QMenu;
@@ -36,9 +35,9 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum class ExportFormat {PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM};
-	enum class GridStyle {NoGrid, Line, Dot};
-	enum class ExportArea {BoundingBox, Selection, Worksheet};
+	enum class ExportFormat { PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM };
+	enum class GridStyle { NoGrid, Line, Dot };
+	enum class ExportArea { BoundingBox, Selection, Worksheet };
 
 	struct GridSettings {
 		GridStyle style;
@@ -48,7 +47,7 @@ public:
 		double opacity;
 	};
 
-	enum class MouseMode {Selection, Navigation, ZoomSelection};
+	enum class MouseMode { Selection, Navigation, ZoomSelection };
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const ExportFormat, const ExportArea, const bool, const int);
@@ -80,13 +79,13 @@ private:
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis* a);
-	void handleCartesianPlotSelected(const CartesianPlot *plot);
+	void handleCartesianPlotSelected(const CartesianPlot* plot);
 	void handleXYCurveSelected();
 	void handleReferenceLineSelected();
-	bool eventFilter(QObject *watched, QEvent *event) override;
+	bool eventFilter(QObject* watched, QEvent* event) override;
 	void updateLabelsZoom() const;
 
-	//events
+	// events
 	void resizeEvent(QResizeEvent*) override;
 	void contextMenuEvent(QContextMenuEvent*) override;
 	void wheelEvent(QWheelEvent*) override;
@@ -124,7 +123,7 @@ private:
 	int m_numScheduledScalings{0};
 	bool m_suppressMouseModeChange{false};
 
-	//Menus
+	// Menus
 	QMenu* m_addNewMenu{nullptr};
 	QMenu* m_addNewCartesianPlotMenu{nullptr};
 	QMenu* m_zoomMenu{nullptr};
@@ -148,7 +147,7 @@ private:
 	QAction* currentZoomAction{nullptr};
 	QAction* currentMagnificationAction{nullptr};
 
-	//Actions
+	// Actions
 	QAction* selectAllAction{nullptr};
 	QAction* deleteAction{nullptr};
 	QAction* backspaceAction{nullptr};
@@ -194,7 +193,7 @@ private:
 	QAction* plotsLockedAction{nullptr};
 	QAction* showPresenterMode{nullptr};
 
-	//Actions for cartesian plots
+	// Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction{nullptr};
 	QAction* cartesianPlotApplyToAllAction{nullptr};
 	QAction* cartesianPlotApplyToAllXAction{nullptr};
@@ -300,7 +299,7 @@ private Q_SLOTS:
 	void scalingTime();
 	void animFinished();
 
-	//SLOTs for cartesian plots
+	// SLOTs for cartesian plots
 	void cartesianPlotActionModeChanged(QAction*);
 	void cartesianPlotCursorModeChanged(QAction*);
 	void cartesianPlotNavigationChanged(QAction*);

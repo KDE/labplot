@@ -1,21 +1,20 @@
 /*
-    File                 : ExportWorksheetDialog.h
-    Project              : LabPlot
-    Description          : export worksheet dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExportWorksheetDialog.h
+	Project              : LabPlot
+	Description          : export worksheet dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef EXPORTWORKSHEETDIALOG_H
 #define EXPORTWORKSHEETDIALOG_H
 
-#include <QDialog>
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include <QDialog>
 
 namespace Ui {
-	class ExportWorksheetWidget;
+class ExportWorksheetWidget;
 }
 
 class QPushButton;
@@ -45,7 +44,7 @@ private:
 	QPushButton* m_cancelButton;
 
 private Q_SLOTS:
-	void slotButtonClicked(QAbstractButton *);
+	void slotButtonClicked(QAbstractButton*);
 	void okClicked();
 	void toggleOptions();
 	void selectFile();

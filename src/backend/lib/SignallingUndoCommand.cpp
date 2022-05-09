@@ -1,11 +1,11 @@
 /*
-    File                 : SignallingUndoCommand.cpp
-    Project              : SciDAVis / LabPlot
-    Description          : An undo command calling a method/signal/slot on a
-    QObject on redo/undo.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SignallingUndoCommand.cpp
+	Project              : SciDAVis / LabPlot
+	Description          : An undo command calling a method/signal/slot on a
+	QObject on redo/undo.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SignallingUndoCommand.h"
@@ -57,18 +57,23 @@
  * stack.push(new SignallingUndoCommand(i18n("enable action"), &action, "setEnabled", "setDisabled", Q_ARG(bool, true)));
  * \endcode
  */
-SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *receiver, const char *redoMethod, const char *undoMethod,
-				QGenericArgument val0, QGenericArgument val1,
-				QGenericArgument val2, QGenericArgument val3)
-	: QUndoCommand(text),
-	m_redo(redoMethod),
-	m_undo(undoMethod),
-	m_receiver(receiver)
-{
+SignallingUndoCommand::SignallingUndoCommand(const QString& text,
+											 QObject* receiver,
+											 const char* redoMethod,
+											 const char* undoMethod,
+											 QGenericArgument val0,
+											 QGenericArgument val1,
+											 QGenericArgument val2,
+											 QGenericArgument val3)
+	: QUndoCommand(text)
+	, m_redo(redoMethod)
+	, m_undo(undoMethod)
+	, m_receiver(receiver) {
 	// munge arguments
-	const char *type_names[] = { val0.name(), val1.name(), val2.name(), val3.name() };
-	void *argument_data[] = { val0.data(), val1.data(), val2.data(), val3.data() };
-	for (m_argument_count = 0; qstrlen(type_names[m_argument_count]) > 0; ++m_argument_count);
+	const char* type_names[] = {val0.name(), val1.name(), val2.name(), val3.name()};
+	void* argument_data[] = {val0.data(), val1.data(), val2.data(), val3.data()};
+	for (m_argument_count = 0; qstrlen(type_names[m_argument_count]) > 0; ++m_argument_count)
+		;
 
 	// copy arguments (Q_ARG references will often go out of scope before redo/undo are called)
 	m_argument_types = new int[m_argument_count];
@@ -80,8 +85,10 @@ SignallingUndoCommand::SignallingUndoCommand(const QString &text, QObject *recei
 		if (m_argument_types[i]) // type is known to QMetaType
 			m_argument_data[i] = QMetaType::create(m_argument_types[i], argument_data[i]);
 		else
-			qWarning("SignallingUndoCommand: failed to copy unknown type %s"
-					" (needs to be registered with qRegisterMetaType())!\n", type_names[i]);
+			qWarning(
+				"SignallingUndoCommand: failed to copy unknown type %s"
+				" (needs to be registered with qRegisterMetaType())!\n",
+				type_names[i]);
 	}
 }
 
@@ -101,14 +108,13 @@ QGenericArgument SignallingUndoCommand::arg(int index) {
 }
 
 void SignallingUndoCommand::redo() {
-	const QMetaObject *mo = m_receiver->metaObject();
+	const QMetaObject* mo = m_receiver->metaObject();
 	if (!mo->invokeMethod(m_receiver, m_redo, arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_redo.constData(), mo->className());
 }
 
 void SignallingUndoCommand::undo() {
-	const QMetaObject *mo = m_receiver->metaObject();
+	const QMetaObject* mo = m_receiver->metaObject();
 	if (!mo->invokeMethod(m_receiver, m_undo, arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_undo.constData(), mo->className());
 }
-

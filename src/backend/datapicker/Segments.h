@@ -1,10 +1,10 @@
 /*
-    File                 : Segments.h
-    Project              : LabPlot
-    Description          : Contain Methods to trace curve of image/plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Segments.h
+	Project              : LabPlot
+	Description          : Contain Methods to trace curve of image/plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SEGMENTS_H
@@ -17,7 +17,6 @@ class DatapickerImage;
 class Segment;
 
 class Segments {
-
 public:
 	explicit Segments(DatapickerImage*);
 

@@ -3,27 +3,27 @@
 	Project              : LabPlot
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CustomPoint.h"
 #include "CustomPointPrivate.h"
+#include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "backend/core/Project.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/lib/XmlStreamReader.h"
 
-#include <QPainter>
-#include <QMenu>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
+#include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -39,7 +39,6 @@
 
 CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
-
 	m_plot = plot;
 	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
@@ -48,8 +47,8 @@ CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
 	init();
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 CustomPoint::~CustomPoint() = default;
 
 void CustomPoint::init() {
@@ -63,12 +62,16 @@ void CustomPoint::init() {
 	d->positionLogical = QPointF(x, y);
 	d->updatePosition(); // To update also scene coordinates
 
-	//initialize the symbol
+	// initialize the symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	connect(d->symbol, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->update();});
+	connect(d->symbol, &Symbol::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+		d->update();
+	});
 	KConfig config;
 	d->symbol->init(config.group("CustomPoint"));
 
@@ -82,20 +85,20 @@ void CustomPoint::initActions() {
 }
 
 /*!
-    Returns an icon to be used in the project explorer.
+	Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
 	return QIcon::fromTheme("draw-cross");
 }
 
 QMenu* CustomPoint::createContextMenu() {
-	//no context menu if the custom point is a child of an InfoElement,
-	//everything is controlled by the parent
+	// no context menu if the custom point is a child of an InfoElement,
+	// everything is controlled by the parent
 	if (parentAspect()->type() == AspectType::InfoElement)
 		return nullptr;
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
 	menu->insertSeparator(firstAction);
@@ -129,7 +132,9 @@ void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-CustomPointPrivate::CustomPointPrivate(CustomPoint* owner) : WorksheetElementPrivate(owner), q(owner) {
+CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
@@ -142,7 +147,7 @@ const CartesianPlot* CustomPointPrivate::plot() {
 }
 
 /*!
-    calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
+	calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void CustomPointPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
@@ -154,7 +159,7 @@ void CustomPointPrivate::retransform() {
 }
 
 /*!
-    Returns the shape of this item as a QPainterPath in local coordinates.
+	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath CustomPointPrivate::shape() const {
 	return pointShape;
@@ -208,8 +213,8 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 }
 
 void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//don't move when the parent is a InfoElement, because there
-	//the custompoint position changes by the mouse are not allowed
+	// don't move when the parent is a InfoElement, because there
+	// the custompoint position changes by the mouse are not allowed
 	if (q->parentAspect()->type() == AspectType::InfoElement)
 		return;
 
@@ -247,7 +252,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//geometry
+	// geometry
 	writer->writeStartElement("geometry");
 	WorksheetElement::save(writer);
 	writer->writeEndElement();
@@ -277,7 +282,8 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (!preview && reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
 		} else if (!preview && reader->name() == "geometry") {
 			WorksheetElement::load(reader, preview);
 			if (project()->xmlVersion() < 6) {
@@ -290,7 +296,8 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 	return true;

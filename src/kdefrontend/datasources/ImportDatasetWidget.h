@@ -3,18 +3,17 @@
 	Project              : LabPlot
 	Description          : import online dataset widget
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTDATASETWIDGET_H
 #define IMPORTDATASETWIDGET_H
 
-#include "ui_importdatasetwidget.h"
 #include "QMap"
+#include "ui_importdatasetwidget.h"
 #include <QJsonArray>
 #include <QJsonObject>
 
@@ -24,7 +23,7 @@ class QCompleter;
 class QNetworkAccessManager;
 class QNetworkReply;
 
-typedef QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>> DatasetsMap;
+typedef QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>> DatasetsMap;
 
 class ImportDatasetWidget : public QWidget {
 	Q_OBJECT

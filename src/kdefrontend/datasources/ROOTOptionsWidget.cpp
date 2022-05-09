@@ -1,11 +1,11 @@
 /*
-    File                 : ROOTOptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of ROOT data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	File                 : ROOTOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of ROOT data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ROOTOptionsWidget.h"
@@ -14,7 +14,9 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/lib/macros.h"
 
-ROOTOptionsWidget::ROOTOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+ROOTOptionsWidget::ROOTOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 	histItem = new QTreeWidgetItem(ui.twContent, QStringList(i18n("Histograms")));
 	histItem->setFlags(Qt::ItemIsEnabled);
@@ -31,8 +33,7 @@ void ROOTOptionsWidget::clear() {
 	ui.twPreview->clearContents();
 }
 
-void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir)
-{
+void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 	node->setFlags(Qt::ItemIsEnabled);
 	for (const ROOTFilter::Directory& child : dir.children)
 		fillTree(new QTreeWidgetItem(node, QStringList(child.name)), child);
@@ -40,12 +41,9 @@ void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir)
 		(new QTreeWidgetItem(node, QStringList(content.first)))->setData(0, Qt::UserRole, content.second);
 }
 
-QHash<QStringList, QVector<QStringList> > findLeaves(
-	QTreeWidgetItem* node,
-	ROOTFilter* filter,
-	const QString& fileName, const QStringList& path = QStringList{}
-) {
-	QHash<QStringList, QVector<QStringList> > leaves;
+QHash<QStringList, QVector<QStringList>>
+findLeaves(QTreeWidgetItem* node, ROOTFilter* filter, const QString& fileName, const QStringList& path = QStringList{}) {
+	QHash<QStringList, QVector<QStringList>> leaves;
 	if (node->childCount() > 0) {
 		for (int i = 0; i < node->childCount(); ++i)
 			leaves.unite(findLeaves(node->child(i), filter, fileName, path + QStringList(node->child(i)->text(0))));
@@ -208,8 +206,7 @@ void ROOTOptionsWidget::setNRows(int nrows) {
 	ui.sbFirst->setMaximum(max);
 	ui.sbFirst->setValue(firstval);
 
-	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value()
-	                                          : qMax(max - (histselected ? 1 : 0), 0);
+	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value() : qMax(max - (histselected ? 1 : 0), 0);
 	ui.sbLast->setMaximum(max);
 	ui.sbLast->setValue(lastval);
 }

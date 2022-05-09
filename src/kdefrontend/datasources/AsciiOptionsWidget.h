@@ -1,11 +1,11 @@
 /*
-    File                 : AsciiOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget providing options for the import of ascii data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AsciiOptionsWidget.h
+	Project              : LabPlot
+	Description          : widget providing options for the import of ascii data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASCIIOPTIONSWIDGET_H

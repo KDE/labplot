@@ -1,20 +1,19 @@
 /*
-    File                 : SpreadsheetModel.cpp
-    Project              : LabPlot
-    Description          : Model for the access to a Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SpreadsheetModel.cpp
+	Project              : LabPlot
+	Description          : Model for the access to a Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QBrush>
 #include <QIcon>
@@ -36,12 +35,12 @@
 
 	\ingroup backend
 */
-SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemModel(nullptr),
-	m_spreadsheet(spreadsheet),
-	m_rowCount(spreadsheet->rowCount()),
-	m_verticalHeaderCount(spreadsheet->rowCount()),
-	m_columnCount(spreadsheet->columnCount()) {
-
+SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet)
+	: QAbstractItemModel(nullptr)
+	, m_spreadsheet(spreadsheet)
+	, m_rowCount(spreadsheet->rowCount())
+	, m_verticalHeaderCount(spreadsheet->rowCount())
+	, m_columnCount(spreadsheet->columnCount()) {
 	updateVerticalHeader();
 	updateHorizontalHeader();
 
@@ -61,8 +60,8 @@ SpreadsheetModel::SpreadsheetModel(Spreadsheet* spreadsheet) : QAbstractItemMode
 void SpreadsheetModel::suppressSignals(bool value) {
 	m_suppressSignals = value;
 
-	//update the headers after all the data was added to the model
-	//and we start listening to signals again
+	// update the headers after all the data was added to the model
+	// and we start listening to signals again
 	if (!m_suppressSignals) {
 		m_rowCount = m_spreadsheet->rowCount();
 		m_columnCount = m_spreadsheet->columnCount();
@@ -100,8 +99,8 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
-	if ( !index.isValid() )
-		return  {};
+	if (!index.isValid())
+		return {};
 
 	const int row = index.row();
 	const int col = index.column();
@@ -137,8 +136,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (col_ptr->isValid(row))
 			return {col_ptr->asStringColumn()->textAt(row)};
 
-		//m_formula_mode is not used at the moment
-		//if (m_formula_mode)
+		// m_formula_mode is not used at the moment
+		// if (m_formula_mode)
 		//	return QVariant(col_ptr->formula(row));
 
 		break;
@@ -156,8 +155,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (!col_ptr->isValid(row))
 			return {"-"};
 
-		//m_formula_mode is not used at the moment
-		//if (m_formula_mode)
+		// m_formula_mode is not used at the moment
+		// if (m_formula_mode)
 		//	return QVariant(col_ptr->formula(row));
 
 		return {col_ptr->asStringColumn()->textAt(row)};
@@ -180,16 +179,15 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		return {col_ptr->formula(row)};
 	case Qt::DecorationRole:
 		return color(col_ptr, row, AbstractColumn::Formatting::Icon);
-// 		if (m_formula_mode)
-// 			return QIcon(QPixmap(":/equals.png")); //TODO
+		// 		if (m_formula_mode)
+		// 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
 
 	return {};
 }
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if ( (orientation == Qt::Horizontal && section > m_columnCount-1)
-			|| (orientation == Qt::Vertical && section > m_rowCount-1) )
+	if ((orientation == Qt::Horizontal && section > m_columnCount - 1) || (orientation == Qt::Vertical && section > m_rowCount - 1))
 		return {};
 
 	switch (orientation) {
@@ -232,9 +230,9 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	Column* column = m_spreadsheet->column(index.column());
 
 	SET_NUMBER_LOCALE
-	//DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
+	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
-	//don't do anything if no new value was provided
+	// don't do anything if no new value was provided
 	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
 		double new_value = numberLocale.toDouble(value.toString(), &ok);
@@ -242,7 +240,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 			if (column->valueAt(row) == new_value)
 				return false;
 		} else {
-			//an empty (non-numeric value) was provided
+			// an empty (non-numeric value) was provided
 			if (std::isnan(column->valueAt(row)))
 				return false;
 		}
@@ -283,7 +281,7 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& /*parent*/) const {
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
-	//PERFTRACE(Q_FUNC_INFO);
+	// PERFTRACE(Q_FUNC_INFO);
 
 	const Column* col = dynamic_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != m_spreadsheet)
@@ -362,7 +360,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 	Q_EMIT headerDataChanged(Qt::Horizontal, index, index);
 	handleDataChange(col);
 
-	//output filter was changed after the mode change, update the signal-slot connection
+	// output filter was changed after the mode change, update the signal-slot connection
 	disconnect(nullptr, SIGNAL(digitsChanged()), this, SLOT(handledigitsChange()));
 	connect(static_cast<const Column*>(col)->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 }
@@ -385,7 +383,7 @@ void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {
 
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
-	Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount-1);
+	Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
 }
 
 void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
@@ -393,7 +391,7 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 		return;
 
 	int i = m_spreadsheet->indexOfChild<Column>(col);
-	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
+	Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
 }
 
 void SpreadsheetModel::handleRowCountChanged(const AbstractColumn* col, int /*before*/, int /*count*/) {
@@ -402,7 +400,7 @@ void SpreadsheetModel::handleRowCountChanged(const AbstractColumn* col, int /*be
 
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
-	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
+	Q_EMIT dataChanged(index(0, i), index(m_rowCount - 1, i));
 	updateVerticalHeader();
 	m_spreadsheet->emitRowCountChanged();
 }
@@ -455,11 +453,12 @@ Column* SpreadsheetModel::column(int index) {
 }
 
 void SpreadsheetModel::activateFormulaMode(bool on) {
-	if (m_formula_mode == on) return;
+	if (m_formula_mode == on)
+		return;
 
 	m_formula_mode = on;
 	if (m_rowCount > 0 && m_columnCount > 0)
-		Q_EMIT dataChanged(index(0,0), index(m_rowCount - 1, m_columnCount - 1));
+		Q_EMIT dataChanged(index(0, 0), index(m_rowCount - 1, m_columnCount - 1));
 }
 
 bool SpreadsheetModel::formulaModeActive() const {
@@ -467,9 +466,7 @@ bool SpreadsheetModel::formulaModeActive() const {
 }
 
 QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
-	if (!column->isNumeric()
-		|| !column->isValid(row)
-		|| !column->hasHeatmapFormat())
+	if (!column->isNumeric() || !column->isValid(row) || !column->hasHeatmapFormat())
 		return {};
 
 	const auto& format = column->heatmapFormat();
@@ -477,10 +474,10 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 		return {};
 
 	double value = column->valueAt(row);
-	double range = (format.max - format.min)/format.colors.count();
+	double range = (format.max - format.min) / format.colors.count();
 	int index = 0;
 	for (int i = 0; i < format.colors.count(); ++i) {
-		if (value <=  format.min + (i+1)*range) {
+		if (value <= format.min + (i + 1) * range) {
 			index = i;
 			break;
 		}

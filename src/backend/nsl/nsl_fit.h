@@ -1,29 +1,48 @@
 /*
-    File                 : nsl_fit.h
-    Project              : LabPlot
-    Description          : NSL (non)linear fitting functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_fit.h
+	Project              : LabPlot
+	Description          : NSL (non)linear fitting functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_FIT_H
 #define NSL_FIT_H
 
 #define NSL_FIT_MODEL_CATEGORY_COUNT 5
-typedef enum {nsl_fit_model_basic, nsl_fit_model_peak, nsl_fit_model_growth, nsl_fit_model_distribution, nsl_fit_model_custom=99} nsl_fit_model_category;
+typedef enum { nsl_fit_model_basic, nsl_fit_model_peak, nsl_fit_model_growth, nsl_fit_model_distribution, nsl_fit_model_custom = 99 } nsl_fit_model_category;
 
 #define NSL_FIT_MODEL_BASIC_COUNT 5
-typedef enum {nsl_fit_model_polynomial, nsl_fit_model_power, nsl_fit_model_exponential, nsl_fit_model_inverse_exponential,
-	nsl_fit_model_fourier} nsl_fit_model_type_basic;
+typedef enum {
+	nsl_fit_model_polynomial,
+	nsl_fit_model_power,
+	nsl_fit_model_exponential,
+	nsl_fit_model_inverse_exponential,
+	nsl_fit_model_fourier
+} nsl_fit_model_type_basic;
 extern const char* nsl_fit_model_basic_pic_name[];
 #define NSL_FIT_MODEL_PEAK_COUNT 6
-typedef enum {nsl_fit_model_gaussian, nsl_fit_model_lorentz, nsl_fit_model_sech, nsl_fit_model_logistic, nsl_fit_model_voigt, nsl_fit_model_pseudovoigt1} nsl_fit_model_type_peak;
+typedef enum {
+	nsl_fit_model_gaussian,
+	nsl_fit_model_lorentz,
+	nsl_fit_model_sech,
+	nsl_fit_model_logistic,
+	nsl_fit_model_voigt,
+	nsl_fit_model_pseudovoigt1
+} nsl_fit_model_type_peak;
 extern const char* nsl_fit_model_peak_pic_name[];
 #define NSL_FIT_MODEL_GROWTH_COUNT 8
-typedef enum {nsl_fit_model_atan, nsl_fit_model_tanh, nsl_fit_model_algebraic_sigmoid, nsl_fit_model_sigmoid, nsl_fit_model_erf, 
-	nsl_fit_model_hill, nsl_fit_model_gompertz, nsl_fit_model_gudermann} nsl_fit_model_type_growth;
+typedef enum {
+	nsl_fit_model_atan,
+	nsl_fit_model_tanh,
+	nsl_fit_model_algebraic_sigmoid,
+	nsl_fit_model_sigmoid,
+	nsl_fit_model_erf,
+	nsl_fit_model_hill,
+	nsl_fit_model_gompertz,
+	nsl_fit_model_gudermann
+} nsl_fit_model_type_growth;
 extern const char* nsl_fit_model_growth_pic_name[];
 
 extern const char* nsl_fit_model_category_name[];
@@ -35,14 +54,15 @@ extern const char* nsl_fit_model_peak_equation[];
 extern const char* nsl_fit_model_growth_equation[];
 
 #define NSL_FIT_WEIGHT_TYPE_COUNT 8
-typedef enum {nsl_fit_weight_no,		/* w = 1 */
-              nsl_fit_weight_instrumental,	/* w = 1/c^2    (Gaussian, Given errors): default */
-              nsl_fit_weight_direct,		/* w = c */
-              nsl_fit_weight_inverse,		/* w = 1/c */
-              nsl_fit_weight_statistical,	/* w = 1/y      (Poisson) */
-              nsl_fit_weight_statistical_fit,	/* w = 1/Y      (Poisson) */
-              nsl_fit_weight_relative,		/* w = 1/y^2    (Variance) */
-              nsl_fit_weight_relative_fit,	/* w = 1/Y^2    (Variance) */
+typedef enum {
+	nsl_fit_weight_no, /* w = 1 */
+	nsl_fit_weight_instrumental, /* w = 1/c^2    (Gaussian, Given errors): default */
+	nsl_fit_weight_direct, /* w = c */
+	nsl_fit_weight_inverse, /* w = 1/c */
+	nsl_fit_weight_statistical, /* w = 1/y      (Poisson) */
+	nsl_fit_weight_statistical_fit, /* w = 1/Y      (Poisson) */
+	nsl_fit_weight_relative, /* w = 1/y^2    (Variance) */
+	nsl_fit_weight_relative_fit, /* w = 1/Y^2    (Variance) */
 } nsl_fit_weight_type;
 extern const char* nsl_fit_weight_type_name[];
 
@@ -56,7 +76,7 @@ double nsl_fit_map_unbound(double x, double min, double max);
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight);
 double nsl_fit_model_power1_param_deriv(unsigned int param, double x, double a, double b, double weight);
 double nsl_fit_model_power2_param_deriv(unsigned int param, double x, double b, double c, double weight);
-double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, double *p, double weight);
+double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, double* p, double weight);
 double nsl_fit_model_inverse_exponential_param_deriv(unsigned int param, double x, double a, double b, double weight);
 double nsl_fit_model_fourier_param_deriv(unsigned int param, unsigned int degree, double x, double w, double weight);
 /* peak */

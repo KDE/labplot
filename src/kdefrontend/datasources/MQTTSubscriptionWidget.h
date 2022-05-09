@@ -1,10 +1,10 @@
 /*
-    File                 : MQTTSubscriptionWidget.h
-    Project              : LabPlot
-    Description          : manage topics and subscribing
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTTSubscriptionWidget.h
+	Project              : LabPlot
+	Description          : manage topics and subscribing
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MQTTSUBSCRIPTIONWIDGET_H
@@ -19,10 +19,7 @@ class MQTTSubscriptionWidget : public QWidget {
 public:
 	explicit MQTTSubscriptionWidget(QWidget* parent = nullptr);
 	~MQTTSubscriptionWidget() override;
-	enum class MQTTParentWidget {
-		ImportFileWidget,
-		LiveDataDock
-	};
+	enum class MQTTParentWidget { ImportFileWidget, LiveDataDock };
 
 	void setTopicList(const QStringList& topicList);
 	QStringList getTopicList();
@@ -64,7 +61,7 @@ private:
 	void updateSubscriptionCompleter();
 
 	static void addSubscriptionChildren(QTreeWidgetItem*, QTreeWidgetItem*);
-	static void restoreSubscriptionChildren(QTreeWidgetItem * topic, QTreeWidgetItem * subscription, const QStringList& list, int level);
+	static void restoreSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription, const QStringList& list, int level);
 	static int checkCommonChildCount(int levelIdx, int level, QStringList& namelist, QTreeWidgetItem* currentItem);
 	static int commonLevelIndex(const QString& first, const QString& second);
 	static QString checkCommonLevel(const QString&, const QString&);

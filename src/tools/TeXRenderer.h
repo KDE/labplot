@@ -1,10 +1,10 @@
 /*
-    File                 : TeXRenderer.h
-    Project              : LabPlot
-    Description          : TeX renderer class
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TeXRenderer.h
+	Project              : LabPlot
+	Description          : TeX renderer class
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef TEXRENDERER_H

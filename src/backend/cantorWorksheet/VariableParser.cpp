@@ -1,29 +1,28 @@
 /*
-    File                 : VariableParser.h
-    Project              : LabPlot
-    Description          : Variable parser for different CAS backends
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : VariableParser.h
+	Project              : LabPlot
+	Description          : Variable parser for different CAS backends
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "VariableParser.h"
-#include <QStringList>
-#include <QRegularExpressionMatch>
 #include "backend/lib/trace.h"
-#include <cmath>	// NAN
+#include <QRegularExpressionMatch>
+#include <QStringList>
+#include <cmath> // NAN
 
 VariableParser::VariableParser(QString name, QString value)
-	: m_backendName(std::move(name)), m_string(std::move(value)) {
-
+	: m_backendName(std::move(name))
+	, m_string(std::move(value)) {
 	PERFTRACE("parsing variable");
 	if (m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
-	else if ( (m_backendName.compare(QStringLiteral("Python"), Qt::CaseInsensitive) == 0)
-			|| (m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
-			|| (m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0) )
+	else if ((m_backendName.compare(QStringLiteral("Python"), Qt::CaseInsensitive) == 0)
+			 || (m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
+			 || (m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0))
 		parsePythonValues();
 	else if (m_backendName.compare(QStringLiteral("Sage"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
@@ -60,7 +59,7 @@ void VariableParser::parseMaximaValues() {
 		return;
 
 	Datatype dataType = Datatype::float64;
-	if (m_string.startsWith(QLatin1String("[\""))) //Maxime uses " to quote string values in the output
+	if (m_string.startsWith(QLatin1String("[\""))) // Maxime uses " to quote string values in the output
 		dataType = Datatype::text;
 
 	m_string = m_string.replace(QStringLiteral("["), QString());
@@ -83,11 +82,11 @@ void VariableParser::parsePythonValues() {
 	QString dataType = "float64";
 	m_string = m_string.trimmed();
 	if (m_string.startsWith(QStringLiteral("array"))) {
-		//parse numpy arrays, string representation like array([1,2,3,4,5]) or
-		// array([1, 2,3], dtype=uint32)
+		// parse numpy arrays, string representation like array([1,2,3,4,5]) or
+		//  array([1, 2,3], dtype=uint32)
 
-		//we don't handle array of arrays, e.g. the output of 'np.ones((2,2), dtype=np.int16)'
-		//which is 'array([[1, 1], [1, 1]], dtype=int16)'
+		// we don't handle array of arrays, e.g. the output of 'np.ones((2,2), dtype=np.int16)'
+		// which is 'array([[1, 1], [1, 1]], dtype=int16)'
 		if (m_string.count(QStringLiteral("[")) > 2)
 			return;
 
@@ -100,19 +99,19 @@ void VariableParser::parsePythonValues() {
 		m_string = m_string.replace(QRegExp(numpyDatatypeRegex), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
-		//parse python's lists
-		if (m_string.startsWith(QLatin1String("['"))) //python uses ' to quote string values in the output
+		// parse python's lists
+		if (m_string.startsWith(QLatin1String("['"))) // python uses ' to quote string values in the output
 			dataType = "text";
 		m_string = m_string.replace(QStringLiteral("["), QString());
 		m_string = m_string.replace(QStringLiteral("]"), QString());
 	} else if (m_string.startsWith(QStringLiteral("("))) {
-		//parse python's tuples
+		// parse python's tuples
 		if (m_string.startsWith(QLatin1String("('")))
 			dataType = "text";
 		m_string = m_string.replace(QStringLiteral("("), QString());
 		m_string = m_string.replace(QStringLiteral(")"), QString());
 	} else if (m_string.startsWith(QStringLiteral("{"))) {
-		//parse python's sets
+		// parse python's sets
 		if (m_string.startsWith(QLatin1String("{'")))
 			dataType = "text";
 		m_string = m_string.replace(QStringLiteral("{"), QString());
@@ -143,8 +142,8 @@ void VariableParser::parseOctaveValues() {
 	QStringList valueStringList;
 	const QStringList tempStringList = m_string.split(QLatin1Char('\n'));
 	for (const QString& values : tempStringList) {
-		//TODO: in newer version of Cantor the rows with "Columns..." were removed already.
-		//we can stop looking for this substring in some point in time later.
+		// TODO: in newer version of Cantor the rows with "Columns..." were removed already.
+		// we can stop looking for this substring in some point in time later.
 		if (!values.isEmpty() && !values.trimmed().startsWith(QStringLiteral("Columns")))
 			valueStringList << values.split(QLatin1Char(' '));
 	}
@@ -158,24 +157,24 @@ bool VariableParser::isParsed() {
 }
 
 void VariableParser::clearValues() {
-	switch(m_dataType) {
-		case AbstractColumn::ColumnMode::Integer:
-			delete static_cast<QVector<int>*>(m_values);
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			delete static_cast<QVector<qlonglong>*>(m_values);
-			break;
-		case AbstractColumn::ColumnMode::Double:
-			delete static_cast<QVector<qreal>*>(m_values);
-			break;
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::DateTime:
-			delete static_cast<QVector<QDateTime>*>(m_values);
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			delete static_cast<QVector<QString>*>(m_values);
-			break;
+	switch (m_dataType) {
+	case AbstractColumn::ColumnMode::Integer:
+		delete static_cast<QVector<int>*>(m_values);
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		delete static_cast<QVector<qlonglong>*>(m_values);
+		break;
+	case AbstractColumn::ColumnMode::Double:
+		delete static_cast<QVector<qreal>*>(m_values);
+		break;
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::DateTime:
+		delete static_cast<QVector<QDateTime>*>(m_values);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		delete static_cast<QVector<QString>*>(m_values);
+		break;
 	}
 }
 
@@ -217,42 +216,42 @@ VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) 
 
 void VariableParser::parseValues(const QStringList& values, VariableParser::Datatype dataType) {
 	PERFTRACE("parsing variable values string list");
-	switch(dataType) {
-		case Datatype::uint8:
-		case Datatype::int8:
-		case Datatype::uint16:
-		case Datatype::int16:
-		case Datatype::int32:
-			m_values = new QVector<int>(values.size());
-			m_dataType = AbstractColumn::ColumnMode::Integer;
-			break;
-		case Datatype::uint32:
-		case Datatype::int64:
-			m_values = new QVector<qint64>(values.size());
-			m_dataType = AbstractColumn::ColumnMode::BigInt;
-			break;
-		case Datatype::uint64: // larger than qint64!
-		case Datatype::float32:
-		case Datatype::float64:
-			m_values = new QVector<double>(values.size());
-			m_dataType = AbstractColumn::ColumnMode::Double;
-			break;
-		case Datatype::datetime64_D:
-		case Datatype::datetime64_h:
-		case Datatype::datetime64_m:
-		case Datatype::datetime64_s:
-		case Datatype::datetime64_ms:
-			m_values = new QVector<QDateTime>(values.size());
-			m_dataType = AbstractColumn::ColumnMode::DateTime;
-			break;
-		case Datatype::text:
-			m_values = new QVector<QString>(values.size());
-			m_dataType = AbstractColumn::ColumnMode::Text;
+	switch (dataType) {
+	case Datatype::uint8:
+	case Datatype::int8:
+	case Datatype::uint16:
+	case Datatype::int16:
+	case Datatype::int32:
+		m_values = new QVector<int>(values.size());
+		m_dataType = AbstractColumn::ColumnMode::Integer;
+		break;
+	case Datatype::uint32:
+	case Datatype::int64:
+		m_values = new QVector<qint64>(values.size());
+		m_dataType = AbstractColumn::ColumnMode::BigInt;
+		break;
+	case Datatype::uint64: // larger than qint64!
+	case Datatype::float32:
+	case Datatype::float64:
+		m_values = new QVector<double>(values.size());
+		m_dataType = AbstractColumn::ColumnMode::Double;
+		break;
+	case Datatype::datetime64_D:
+	case Datatype::datetime64_h:
+	case Datatype::datetime64_m:
+	case Datatype::datetime64_s:
+	case Datatype::datetime64_ms:
+		m_values = new QVector<QDateTime>(values.size());
+		m_dataType = AbstractColumn::ColumnMode::DateTime;
+		break;
+	case Datatype::text:
+		m_values = new QVector<QString>(values.size());
+		m_dataType = AbstractColumn::ColumnMode::Text;
 	}
 
 	int i = 0;
 	bool isNumber = false;
-	switch(dataType) {
+	switch (dataType) {
 	case Datatype::uint8:
 	case Datatype::int8:
 	case Datatype::uint16:
@@ -261,7 +260,7 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 		for (const auto& v : values) {
 			int value = v.trimmed().toUInt(&isNumber);
 
-			//accept the variable only if there is at least one numerical value in the array.
+			// accept the variable only if there is at least one numerical value in the array.
 			if (isNumber) {
 				if (!m_parsed)
 					m_parsed = true;
@@ -291,13 +290,13 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 	case Datatype::uint64:
 	case Datatype::float32:
 	case Datatype::float64: {
-		//use the first value in the vector to check whether we need to consider
-		//the locale specific representation of floats (for example, R's output is locale specific)
+		// use the first value in the vector to check whether we need to consider
+		// the locale specific representation of floats (for example, R's output is locale specific)
 		bool useLocale = false;
 		if (!values.isEmpty()) {
 			values.constFirst().trimmed().toDouble(&isNumber);
 			if (!isNumber)
-				useLocale = true; //direct conversion has failed, use QLocale to parse the strings further below
+				useLocale = true; // direct conversion has failed, use QLocale to parse the strings further below
 		}
 
 		if (!useLocale) {
@@ -380,4 +379,3 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 		break;
 	}
 }
-

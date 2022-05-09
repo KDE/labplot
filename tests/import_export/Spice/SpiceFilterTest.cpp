@@ -1,28 +1,28 @@
 /*
-    File                 : AsciiFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the ascii filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	File                 : AsciiFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the ascii filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SpiceFilterTest.h"
-#include <qglobal.h>
 #include "src/backend/datasources/filters/SpiceFilter.h"
 #include "src/backend/spreadsheet/Spreadsheet.h"
+#include <qglobal.h>
 
-#include <data/ngspice/dc_ascii.raw.h>
-#include <data/ngspice/dc_binary.raw.h>
-#include <data/ngspice/ac_ascii.raw.h>
-#include <data/ngspice/ac_binary.raw.h>
 #include <data/ltspice/AC/LowPassFilter_AC.raw.h>
-#include <data/ltspice/transient/LowPassFilter.raw.h>
-#include <data/ltspice/transientDouble/LowPassFilter_transient_doubleFlag.raw.h>
-#include <data/ltspice/Windows/Wakeup.raw.h>
 #include <data/ltspice/DCTransfer/DCTransfer.raw.h>
 #include <data/ltspice/FFT/FFT.raw.h>
+#include <data/ltspice/Windows/Wakeup.raw.h>
+#include <data/ltspice/transient/LowPassFilter.raw.h>
+#include <data/ltspice/transientDouble/LowPassFilter_transient_doubleFlag.raw.h>
+#include <data/ngspice/ac_ascii.raw.h>
+#include <data/ngspice/ac_binary.raw.h>
+#include <data/ngspice/dc_ascii.raw.h>
+#include <data/ngspice/dc_binary.raw.h>
 
 #include <QFile>
 
@@ -34,60 +34,62 @@ const QString ltspicePath = "data/ltspice"; // relative path
 #define NGSpiceRefDataFile QFINDTESTDATA(ngspicePath + "/" + filename + ".refdata") // filename comes from the namespace
 #define LTSpiceRefDataFile QFINDTESTDATA(ltspicePath + "/" + filename + ".refdata") // filename comes from the namespace
 
-
-#define READ_REFDATA(filename) \
-	auto filepath = QFINDTESTDATA(filename); \
-	QFile f(filepath); \
-	QCOMPARE(f.open(QIODevice::ReadOnly), true); \
-	QVector<QStringList> refData; \
-	while (!f.atEnd()) { \
-		QString line = f.readLine().simplified(); \
-		refData.append(line.split(",")); \
-	} \
+#define READ_REFDATA(filename)                                                                                                                                 \
+	auto filepath = QFINDTESTDATA(filename);                                                                                                                   \
+	QFile f(filepath);                                                                                                                                         \
+	QCOMPARE(f.open(QIODevice::ReadOnly), true);                                                                                                               \
+	QVector<QStringList> refData;                                                                                                                              \
+	while (!f.atEnd()) {                                                                                                                                       \
+		QString line = f.readLine().simplified();                                                                                                              \
+		refData.append(line.split(","));                                                                                                                       \
+	}                                                                                                                                                          \
 	QVERIFY(refData.count() > 0);
 
 // Compare that the columns in the spreadsheet have the correct name and columnMode
-#define COMPARE_COLUMN_NAMES_MODE(spreadsheet, columnNames, refColumnCount) \
-	QCOMPARE(spreadsheet.columnCount(), refColumnCount); \
-	for (int i=0; i < refColumnCount; i++) { \
-		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double); \
-		QCOMPARE(spreadsheet.column(i)->name(), columnNames.at(i)); \
+#define COMPARE_COLUMN_NAMES_MODE(spreadsheet, columnNames, refColumnCount)                                                                                    \
+	QCOMPARE(spreadsheet.columnCount(), refColumnCount);                                                                                                       \
+	for (int i = 0; i < refColumnCount; i++) {                                                                                                                 \
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);                                                                     \
+		QCOMPARE(spreadsheet.column(i)->name(), columnNames.at(i));                                                                                            \
 	}
 
 // Compare all data in the spreadsheet with the reference data
-#define COMPARE_ROW_VALUES_START_END_ROW(spreadsheet, refData, refDataRowCount, refColumnCount, startRow, endRow); \
-	QCOMPARE(spreadsheet.columnCount(), refColumnCount); \
-	QCOMPARE(spreadsheet.rowCount(), endRow - startRow + 1); \
-	for (int row = startRow - 1; row < endRow; row++) { \
-		for (int col = 0; col < refColumnCount; col++) { \
-			QCOMPARE(spreadsheet.column(col)->valueAt(row - startRow + 1), refData.at(row).at(col).toDouble()); \
-		} \
+#define COMPARE_ROW_VALUES_START_END_ROW(spreadsheet, refData, refDataRowCount, refColumnCount, startRow, endRow)                                              \
+	;                                                                                                                                                          \
+	QCOMPARE(spreadsheet.columnCount(), refColumnCount);                                                                                                       \
+	QCOMPARE(spreadsheet.rowCount(), endRow - startRow + 1);                                                                                                   \
+	for (int row = startRow - 1; row < endRow; row++) {                                                                                                        \
+		for (int col = 0; col < refColumnCount; col++) {                                                                                                       \
+			QCOMPARE(spreadsheet.column(col)->valueAt(row - startRow + 1), refData.at(row).at(col).toDouble());                                                \
+		}                                                                                                                                                      \
 	}
 
 // Compare all data in the spreadsheet with the reference data
-#define COMPARE_ROW_VALUES(spreadsheet, refData, refDataRowCount, refColumnCount); \
-	QCOMPARE(spreadsheet.columnCount(), refColumnCount); \
-	QCOMPARE(spreadsheet.rowCount(), refDataRowCount); \
-	for (int row = 0; row < refData.count(); row++) { \
-		for (int col = 0; col < refColumnCount; col++) { \
-			QCOMPARE(spreadsheet.column(col)->valueAt(row), refData.at(row).at(col).toDouble()); \
-		} \
+#define COMPARE_ROW_VALUES(spreadsheet, refData, refDataRowCount, refColumnCount)                                                                              \
+	;                                                                                                                                                          \
+	QCOMPARE(spreadsheet.columnCount(), refColumnCount);                                                                                                       \
+	QCOMPARE(spreadsheet.rowCount(), refDataRowCount);                                                                                                         \
+	for (int row = 0; row < refData.count(); row++) {                                                                                                          \
+		for (int col = 0; col < refColumnCount; col++) {                                                                                                       \
+			QCOMPARE(spreadsheet.column(col)->valueAt(row), refData.at(row).at(col).toDouble());                                                               \
+		}                                                                                                                                                      \
 	}
 
 // Float version
 // Compare all data in the spreadsheet with the reference data
-#define COMPARE_ROW_VALUES_FLOAT(spreadsheet, refData, refDataRowCount, refColumnCount); \
-	QCOMPARE(spreadsheet.columnCount(), refColumnCount); \
-	QCOMPARE(spreadsheet.rowCount(), refDataRowCount); \
-	for (int row = 0; row < refData.count(); row++) { \
-		for (int col = 0; col < refColumnCount; col++) { \
-			QVERIFY(qFuzzyCompare(static_cast<float>(spreadsheet.column(col)->valueAt(row)), refData.at(row).at(col).toFloat())); \
-		} \
+#define COMPARE_ROW_VALUES_FLOAT(spreadsheet, refData, refDataRowCount, refColumnCount)                                                                        \
+	;                                                                                                                                                          \
+	QCOMPARE(spreadsheet.columnCount(), refColumnCount);                                                                                                       \
+	QCOMPARE(spreadsheet.rowCount(), refDataRowCount);                                                                                                         \
+	for (int row = 0; row < refData.count(); row++) {                                                                                                          \
+		for (int col = 0; col < refColumnCount; col++) {                                                                                                       \
+			QVERIFY(qFuzzyCompare(static_cast<float>(spreadsheet.column(col)->valueAt(row)), refData.at(row).at(col).toFloat()));                              \
+		}                                                                                                                                                      \
 	}
 
 void SpiceFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
@@ -385,7 +387,7 @@ void SpiceFilterTest::NgSpiceDCBinaryBulkReadNumberLines() {
 	auto res = filter.preview(ngFile, numberPreviewData);
 
 	QCOMPARE(res.length(), numberPreviewData);
-	for (int i= startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
+	for (int i = startRow - 1; i < startRow - 1 + numberPreviewData; i++) {
 		QCOMPARE(res.at(i - startRow + 1), refData.at(i));
 	}
 
@@ -552,11 +554,11 @@ void SpiceFilterTest::LtSpiceWakeup() {
 	}
 
 	QString resFileInfoString = filter.fileInfoString(file);
-//	// For debugging purpose
-//	for (int i=0; i < resFileInfoString.length(); i++) {
-//		qDebug() << i << resFileInfoString.at(i) << refFileInfoString.at(i);
-//		QCOMPARE(resFileInfoString.at(i), refFileInfoString.at(i));
-//	}
+	//	// For debugging purpose
+	//	for (int i=0; i < resFileInfoString.length(); i++) {
+	//		qDebug() << i << resFileInfoString.at(i) << refFileInfoString.at(i);
+	//		QCOMPARE(resFileInfoString.at(i), refFileInfoString.at(i));
+	//	}
 	QCOMPARE(resFileInfoString, refFileInfoString);
 
 	Spreadsheet sheet("Test", false);
@@ -627,8 +629,8 @@ void SpiceFilterTest::FFT_From_TransientAnalysis() {
 	}
 
 	QString resFileInfoString = filter.fileInfoString(file);
-//	// For debugging purpose
-	for (int i=0; i < resFileInfoString.length(); i++) {
+	//	// For debugging purpose
+	for (int i = 0; i < resFileInfoString.length(); i++) {
 		qDebug() << i << resFileInfoString.at(i) << refFileInfoString.at(i);
 		QCOMPARE(resFileInfoString.at(i), refFileInfoString.at(i));
 	}

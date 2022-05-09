@@ -3,10 +3,9 @@
 	Project              : LabPlot
 	Description          : import dataset data dialog
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Ferencz Koovacs <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2019 Ferencz Koovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "ImportDatasetDialog.h"
 #include "ImportDatasetWidget.h"
@@ -30,21 +29,21 @@
 
 	\ingroup kdefrontend
  */
-ImportDatasetDialog::ImportDatasetDialog(MainWin* parent) : ImportDialog(parent),
-	m_importDatasetWidget(new ImportDatasetWidget(this)){
-
+ImportDatasetDialog::ImportDatasetDialog(MainWin* parent)
+	: ImportDialog(parent)
+	, m_importDatasetWidget(new ImportDatasetWidget(this)) {
 	vLayout->addWidget(m_importDatasetWidget);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetSelected, this, &ImportDatasetDialog::checkOkButton);
 	connect(m_importDatasetWidget, &ImportDatasetWidget::datasetDoubleClicked, [this]() {
 		checkOkButton();
-		if(okButton->isEnabled())
+		if (okButton->isEnabled())
 			accept();
 	});
 
-	//dialog buttons
-	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |QDialogButtonBox::Cancel);
+	// dialog buttons
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	okButton = buttonBox->button(QDialogButtonBox::Ok);
-	okButton->setEnabled(false); //ok is only available if a valid container was selected
+	okButton->setEnabled(false); // ok is only available if a valid container was selected
 	vLayout->addWidget(buttonBox);
 
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -71,7 +70,7 @@ ImportDatasetDialog::~ImportDatasetDialog() {
 }
 
 QString ImportDatasetDialog::selectedObject() const {
-	//TODO?
+	// TODO?
 	return {};
 }
 
@@ -79,7 +78,7 @@ QString ImportDatasetDialog::selectedObject() const {
   triggers the import of a dataset's data
 */
 void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatusBar* statusBar) const {
-	//show a progress bar in the status bar
+	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();
 	progressBar->setRange(0, 100);
 	connect(datasetHandler, &DatasetHandler::downloadProgress, progressBar, &QProgressBar::setValue);
@@ -95,7 +94,7 @@ void ImportDatasetDialog::importToDataset(DatasetHandler* datasetHandler, QStatu
 
 	m_importDatasetWidget->import(datasetHandler);
 
-	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed())/1000));
+	statusBar->showMessage(i18n("Dataset imported in %1 seconds.", static_cast<float>(timer.elapsed()) / 1000));
 	RESET_CURSOR;
 	statusBar->removeWidget(progressBar);
 }

@@ -1,11 +1,11 @@
 /*
-    File                 : CustomPointDock.cpp
-    Project              : LabPlot
-    Description          : widget for CustomPoint properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CustomPointDock.cpp
+	Project              : LabPlot
+	Description          : widget for CustomPoint properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CustomPointDock.h"
@@ -15,10 +15,11 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
-#include <KLocalizedString>
 #include <KConfig>
+#include <KLocalizedString>
 
-CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
+CustomPointDock::CustomPointDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
@@ -28,27 +29,27 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	hboxLayout->addWidget(symbolWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
 	hboxLayout->setSpacing(2);
 
-	//Validators
-	ui.lePositionXLogical->setValidator( new QDoubleValidator(ui.lePositionXLogical) );
-	ui.lePositionYLogical->setValidator( new QDoubleValidator(ui.lePositionYLogical) );
+	// Validators
+	ui.lePositionXLogical->setValidator(new QDoubleValidator(ui.lePositionXLogical));
+	ui.lePositionYLogical->setValidator(new QDoubleValidator(ui.lePositionYLogical));
 
-	//adjust layouts in the tabs
+	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
 
 	CustomPointDock::updateLocale();
 
-	//Positioning and alignment
+	// Positioning and alignment
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
@@ -57,14 +58,14 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
 
-	//SLOTS
-	//General
+	// SLOTS
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
 
-	//positioning
+	// positioning
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
@@ -75,7 +76,7 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &CustomPointDock::positionYLogicalChanged);
 	connect(ui.dtePositionYLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
-	//Template handler
+	// Template handler
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
@@ -96,7 +97,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 	symbolWidget->setSymbols(symbols);
 
-	//if there is more than one point in the list, disable the comment and name widgets in "general"
+	// if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (m_points.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -115,13 +116,13 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
-	//show the properties of the first custom point
+	// show the properties of the first custom point
 	this->load();
 	initConnections();
-	updatePlotRanges();	// needed when loading project
+	updatePlotRanges(); // needed when loading project
 
-	//for custom points being children of an InfoElement, the position is changed
-	//via the parent settings -> disable the positioning here.
+	// for custom points being children of an InfoElement, the position is changed
+	// via the parent settings -> disable the positioning here.
 	bool enabled = (m_point->parentAspect()->type() != AspectType::InfoElement);
 	ui.chbBindLogicalPos->setEnabled(enabled);
 	ui.lePositionXLogical->setEnabled(enabled);
@@ -131,8 +132,8 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 }
 
 void CustomPointDock::initConnections() const {
-	//SIGNALs/SLOTs
-	// general
+	// SIGNALs/SLOTs
+	//  general
 	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::aspectDescriptionChanged);
 	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
 	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
@@ -215,7 +216,7 @@ void CustomPointDock::customPositionYChanged(double value) {
 	}
 }
 
-//positioning using logical plot coordinates
+// positioning using logical plot coordinates
 void CustomPointDock::positionXLogicalChanged(const QString& value) {
 	if (m_initializing)
 		return;
@@ -288,7 +289,7 @@ void CustomPointDock::visibilityChanged(bool state) {
 void CustomPointDock::bindingChanged(bool checked) {
 	ui.chbBindLogicalPos->setChecked(checked);
 
-	//widgets for positioning using absolute plot distances
+	// widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
 	ui.sbPositionX->setVisible(!checked);
@@ -297,10 +298,10 @@ void CustomPointDock::bindingChanged(bool checked) {
 	ui.cbPositionY->setVisible(!checked);
 	ui.sbPositionY->setVisible(!checked);
 
-	//widgets for positioning using logical plot coordinates
+	// widgets for positioning using logical plot coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
 	if (plot) {
-		//x
+		// x
 		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
 		if (numeric) {
 			ui.lPositionXLogical->setVisible(checked);
@@ -310,7 +311,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 			ui.dtePositionXLogical->setVisible(checked);
 		}
 
-		//y
+		// y
 		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
 		if (numeric) {
 			ui.lPositionYLogical->setVisible(checked);
@@ -321,7 +322,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 		}
 	}
 
-	if(m_initializing)
+	if (m_initializing)
 		return;
 
 	for (auto* point : m_points)
@@ -332,12 +333,12 @@ void CustomPointDock::bindingChanged(bool checked) {
 //**** SLOTs for changes triggered in CustomPoint *********
 //*********************************************************
 //"General"-tab
-void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper &position) {
+void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper& position) {
 	const Lock lock(m_initializing);
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
-	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
-	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
 }
 
 void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
@@ -367,15 +368,15 @@ void CustomPointDock::load() {
 		return;
 
 	// Geometry
-	//widgets for positioning using absolute plot distances
-	ui.cbPositionX->setCurrentIndex( (int)m_point->position().horizontalPosition );
+	// widgets for positioning using absolute plot distances
+	ui.cbPositionX->setCurrentIndex((int)m_point->position().horizontalPosition);
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_point->position().point.x(), m_worksheetUnit) );
-	ui.cbPositionY->setCurrentIndex( (int)m_point->position().verticalPosition );
+	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.x(), m_worksheetUnit));
+	ui.cbPositionY->setCurrentIndex((int)m_point->position().verticalPosition);
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_point->position().point.y(), m_worksheetUnit) );
+	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.y(), m_worksheetUnit));
 
-	//widgets for positioning using logical plot coordinates
+	// widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_point->plot() != nullptr);
 	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
@@ -384,7 +385,7 @@ void CustomPointDock::load() {
 	if (allowLogicalCoordinates) {
 		const auto* plot = static_cast<const CartesianPlot*>(m_point->plot());
 
-		//x
+		// x
 		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
 		ui.lPositionXLogical->setVisible(numeric);
 		ui.lePositionXLogical->setVisible(numeric);
@@ -397,7 +398,7 @@ void CustomPointDock::load() {
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().x()));
 		}
 
-		//y
+		// y
 		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
 		ui.lPositionYLogical->setVisible(numeric);
 		ui.lePositionYLogical->setVisible(numeric);
@@ -421,11 +422,11 @@ void CustomPointDock::load() {
 		ui.lPositionYLogicalDateTime->hide();
 		ui.dtePositionYLogical->hide();
 	}
-	ui.chkVisible->setChecked( m_point->isVisible() );
+	ui.chkVisible->setChecked(m_point->isVisible());
 }
 
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
-	//extract the name of the template from the file name
+	// extract the name of the template from the file name
 	QString name;
 	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)

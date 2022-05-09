@@ -1,6 +1,6 @@
 namespace dc_ascii {
-	const QString filename = "dc_ascii.raw";
-	QString refFileInfoString = R"(Title: * simulation de rc2
+const QString filename = "dc_ascii.raw";
+QString refFileInfoString = R"(Title: * simulation de rc2
 <br>Date: Sat Jun 16 23:11:45  2018
 <br>Plotname: DC transfer characteristic
 <br>Flags: real
@@ -17,9 +17,9 @@ namespace dc_ascii {
 <br>	7	i(v1)	current
 )"; // last \n is important
 
-	const int refDataRowCount = 501;
-	const int numberPreviewData = 3;
-		
-	QStringList columnNames = {"v-sweep, voltage", "n0, voltage", "n1, voltage", "n2, voltage", "n3, voltage", "n4, voltage", "n5, voltage", "i(v1), current"};
+const int refDataRowCount = 501;
+const int numberPreviewData = 3;
+
+QStringList columnNames = {"v-sweep, voltage", "n0, voltage", "n1, voltage", "n2, voltage", "n3, voltage", "n4, voltage", "n5, voltage", "i(v1), current"};
 
 } // namespace dc_ascii

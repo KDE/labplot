@@ -1,11 +1,11 @@
 /*
-    File                 : BinaryFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the binary filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : BinaryFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the binary filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BinaryFilterTest.h"
@@ -22,10 +22,10 @@ void BinaryFilterTest::importInt8() {
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int8.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT8);
-	//filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
+	// filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
 
@@ -56,7 +56,7 @@ void BinaryFilterTest::importInt16BE() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
 
@@ -86,7 +86,7 @@ void BinaryFilterTest::importInt32LE() {
 	filter.setDataType(BinaryFilter::DataType::INT32);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 700);
 
@@ -117,7 +117,7 @@ void BinaryFilterTest::importInt32BE() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
 
@@ -148,7 +148,7 @@ void BinaryFilterTest::importInt64BE() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
 
@@ -179,15 +179,15 @@ void BinaryFilterTest::importFloatBE() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
 
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(999))
-	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(1)->valueAt(999))
+	// DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(999))
+	// DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(1)->valueAt(999))
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.100100100040436);
@@ -212,13 +212,13 @@ void BinaryFilterTest::importDoubleBE() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 1000);
-	
+
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
-	
+
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.1001001001001);
@@ -242,13 +242,13 @@ void BinaryFilterTest::importDoubleLE() {
 	filter.setDataType(BinaryFilter::DataType::REAL64);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 700);
-	
+
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
-	
+
 	for (int i = 0; i < 700; i++)
 		QCOMPARE(spreadsheet.column(0)->valueAt(i), i * 0.01);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0);
@@ -269,13 +269,13 @@ void BinaryFilterTest::importDoubleMatrixBE() {
 	filter.setVectors(40);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(spreadsheet.columnCount(), 40);
 	QCOMPARE(spreadsheet.rowCount(), 40);
-	
+
 	for (int i = 0; i < 40; i++)
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
-	
+
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0256381904333);
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0.0512595256828);
@@ -310,9 +310,9 @@ void BinaryFilterTest::benchIntImport_data() {
 	QDataStream out(&file);
 
 	QTest::newRow("3 int cols");
-	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 	for (size_t i = 0; i < lines; i++)
-		out << static_cast<int>(i) << static_cast<int>(100*sin(i/100.)) << static_cast<int>(100*cos(i/100));
+		out << static_cast<int>(i) << static_cast<int>(100 * sin(i / 100.)) << static_cast<int>(100 * cos(i / 100));
 	file.close();
 }
 
@@ -362,11 +362,11 @@ void BinaryFilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 	QTest::newRow(testName.toLatin1()) << lines;
-	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	const double delta = 0.25;
 	const int dt = 1;
-	const double sigma = delta*delta * dt;
+	const double sigma = delta * delta * dt;
 	double path[paths] = {0.0};
 	for (size_t i = 0; i < lines; i++) {
 		for (int p = 0; p < paths; p++) {
@@ -386,7 +386,7 @@ void BinaryFilterTest::benchDoubleImport() {
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
 	filter.setVectors(paths);
 
-	const int p = paths;	// need local variable
+	const int p = paths; // need local variable
 	QBENCHMARK {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
@@ -403,7 +403,6 @@ void BinaryFilterTest::benchDoubleImport_cleanup() {
 	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
 	QFile::remove(benchDataFileName);
 }
-
 
 ///////////////////////////////////////////////////////
 

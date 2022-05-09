@@ -3,16 +3,16 @@
 	Project              : LabPlot
 	Description          : Wrapper class for the collections of datasets
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef DATASETMODEL_H
 #define DATASETMODEL_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QVariant>
 
 class DatasetModel : public QObject {
@@ -42,7 +42,7 @@ private:
 	QMap<QString, QMap<QString, QStringList>> m_allDatasets;
 	QMap<QString, QStringList> m_categories;
 	QMap<QString, QMap<QString, QStringList>> m_subcategories;
-	QMap<QString,QMap<QString, QMap<QString, QStringList>>> m_datasets;
+	QMap<QString, QMap<QString, QMap<QString, QStringList>>> m_datasets;
 	QStringList m_datasetList;
 
 	void initCollections(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
@@ -51,4 +51,4 @@ private:
 	void initDatasets(const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap);
 };
 
-#endif //DATASETMODEL_H
+#endif // DATASETMODEL_H

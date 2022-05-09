@@ -1,10 +1,10 @@
 /*
-    File                 : JSONFilterTest.h
-    Project              : LabPlot
-    Description          : Tests for the JSON I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : JSONFilterTest.h
+	Project              : LabPlot
+	Description          : Tests for the JSON I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef JSONFILTERTEST_H
@@ -24,6 +24,5 @@ private Q_SLOTS:
 	void testObjectImport03();
 	void testObjectImport04();
 };
-
 
 #endif

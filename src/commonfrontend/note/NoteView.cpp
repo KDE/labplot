@@ -1,13 +1,12 @@
 /*
-    File                 : NotesView.cpp
-    Project              : LabPlot
-    Description          : Notes View for taking notes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2016 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : NotesView.cpp
+	Project              : LabPlot
+	Description          : Notes View for taking notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2016 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "NoteView.h"
 #include "backend/note/Note.h"
@@ -16,7 +15,8 @@
 #include <QPrinter>
 #include <QTextEdit>
 
-NoteView::NoteView(Note* notes) : m_notes(notes) {
+NoteView::NoteView(Note* notes)
+	: m_notes(notes) {
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 

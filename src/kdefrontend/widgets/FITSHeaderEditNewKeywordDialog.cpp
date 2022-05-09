@@ -1,11 +1,11 @@
 /*
-    File                 : FITSHeaderEditNewKeywordDialog.cpp
-    Project              : LabPlot
-    Description          : Widget for adding new keyword in the FITS edit widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSHeaderEditNewKeywordDialog.cpp
+	Project              : LabPlot
+	Description          : Widget for adding new keyword in the FITS edit widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2016-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "FITSHeaderEditNewKeywordDialog.h"
 
@@ -19,16 +19,17 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 
-#define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
-#define FLEN_VALUE     71  /* max length of a keyword value string */
-#define FLEN_COMMENT   73  /* max length of a keyword comment string */
+#define FLEN_KEYWORD 75 /* max length of a keyword (HIERARCH convention) */
+#define FLEN_VALUE 71 /* max length of a keyword value string */
+#define FLEN_COMMENT 73 /* max length of a keyword comment string */
 
 /*! \class FITSHeaderEditNewKeywordDialog
  * \brief Dialog class for adding new keywords to the FITSHeaderEditDialog's table.
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : QDialog(parent) {
+FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
+	: QDialog(parent) {
 	ui.setupUi(this);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -56,8 +57,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	ui.leValue->setMaxLength(FLEN_VALUE);
 	ui.leComment->setMaxLength(FLEN_COMMENT);
 
-
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
 	if (conf.exists()) {
@@ -81,8 +81,8 @@ int FITSHeaderEditNewKeywordDialog::okClicked() {
 		m_newKeyword = FITSFilter::Keyword(ui.leKey->text(), ui.leValue->text(), ui.leComment->text());
 		return QMessageBox::Ok;
 	} else {
-		const int yesNo = KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"),
-		                  i18n("Cannot add empty key"));
+		const int yesNo =
+			KMessageBox::warningYesNo(this, i18n("Cannot add new keyword without key, would you like to try again?"), i18n("Cannot add empty key"));
 		if (yesNo == KMessageBox::No)
 			return QMessageBox::Cancel;
 		return yesNo;

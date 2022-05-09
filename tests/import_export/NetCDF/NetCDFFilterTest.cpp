@@ -1,11 +1,11 @@
 /*
-    File                 : NetCDFFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the NetCDF filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NetCDFFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the NetCDF filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NetCDFFilterTest.h"
@@ -19,7 +19,11 @@ extern "C" {
 }
 
 #define ERRCODE -1
-#define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
+#define ERR(e)                                                                                                                                                 \
+	{                                                                                                                                                          \
+		printf("Error: %s\n", nc_strerror(e));                                                                                                                 \
+		exit(ERRCODE);                                                                                                                                         \
+	}
 
 void NetCDFFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/madis-hydro.nc"));
@@ -115,9 +119,9 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	// can't transfer file name since needed in clean up
 
 	QTemporaryFile file;
-	if (!file.open())	// needed to generate file name
+	if (!file.open()) // needed to generate file name
 		return;
-	file.close();	// only file name is used
+	file.close(); // only file name is used
 
 	benchDataFileName = file.fileName();
 	benchDataFileName.append(".nc4");
@@ -125,13 +129,13 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
 	QTest::newRow(testName.toLatin1()) << lines;
-	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
 	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
 	gsl_rng_set(r, 12345);
 
-	// define parameter 
+	// define parameter
 	int status, ncid;
 	if ((status = nc_create(benchDataFileName.toLatin1(), NC_NETCDF4, &ncid)))
 		ERR(status);
@@ -150,7 +154,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 		ERR(status);
 	// compress data (~10-20% smaller, but 3x-5x slower)
 	// (ncid, varid, shuffle, deflate, deflatelevel)
-	//if ((status = nc_def_var_deflate(ncid, varid, 1, 1, 9)))
+	// if ((status = nc_def_var_deflate(ncid, varid, 1, 1, 9)))
 	//	ERR(status);
 
 	if ((status = nc_enddef(ncid)))
@@ -158,17 +162,17 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 
 	// create data
 	double path[paths] = {0.0};
-	double *data = new double[paths*lines];
+	double* data = new double[paths * lines];
 
 	const double delta = 0.25;
 	const int dt = 1;
-	const double sigma = delta*delta * dt;
+	const double sigma = delta * delta * dt;
 	for (size_t i = 0; i < lines; ++i) {
-		//std::cout << "line " << i+1 << std::endl;
+		// std::cout << "line " << i+1 << std::endl;
 
 		for (int p = 0; p < paths; ++p) {
 			path[p] += gsl_ran_gaussian_ziggurat(r, sigma);
-			data[p + i*paths] = path[p];
+			data[p + i * paths] = path[p];
 		}
 	}
 
@@ -187,7 +191,7 @@ void NetCDFFilterTest::benchDoubleImport() {
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("paths"));
 
-	const int p = paths;	// need local variable
+	const int p = paths; // need local variable
 	QBENCHMARK {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 

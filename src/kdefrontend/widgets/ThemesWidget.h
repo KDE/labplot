@@ -1,11 +1,11 @@
 /*
-    File                 : ThemesWidget.h
-    Project              : LabPlot
-    Description          : widget for selecting themes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ThemesWidget.h
+	Project              : LabPlot
+	Description          : widget for selecting themes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef THEMESWIDGET_H
@@ -26,7 +26,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	void applyClicked(const QModelIndex&);
-// 	void downloadThemes();
+	// 	void downloadThemes();
 };
 
-#endif //THEMESWIDGET_H
+#endif // THEMESWIDGET_H

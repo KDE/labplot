@@ -1,10 +1,10 @@
 namespace dc_binary {
-    const QString filename = "dc_binary.raw";
-    
-    const int refDataRowCount = 501;
-	const int numberPreviewData = 100;
+const QString filename = "dc_binary.raw";
 
-	QString refFileInfoString = R"(Title: * simulation de rc2
+const int refDataRowCount = 501;
+const int numberPreviewData = 100;
+
+QString refFileInfoString = R"(Title: * simulation de rc2
 <br>Date: Sat Jun 16 23:11:45  2018
 <br>Plotname: DC transfer characteristic
 <br>Flags: real
@@ -21,5 +21,5 @@ namespace dc_binary {
 <br>	7	i(v1)	current
 )"; // last \n is important
 
-	QStringList columnNames = {"v-sweep, voltage", "n0, voltage", "n1, voltage", "n2, voltage", "n3, voltage", "n4, voltage", "n5, voltage", "i(v1), current"};
+QStringList columnNames = {"v-sweep, voltage", "n0, voltage", "n1, voltage", "n2, voltage", "n3, voltage", "n4, voltage", "n5, voltage", "i(v1), current"};
 } // namespace dc_binary

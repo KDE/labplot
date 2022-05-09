@@ -1,8 +1,8 @@
 /*
-    SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: MIT
+	SPDX-License-Identifier: MIT
 */
 
 #include "QJsonModel.h"
@@ -14,7 +14,9 @@
 
 #include <KLocalizedString>
 
-QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {}
+QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent)
+	: mParent(parent) {
+}
 
 QJsonTreeItem::~QJsonTreeItem() {
 	qDeleteAll(mChildren);
@@ -81,18 +83,18 @@ int QJsonTreeItem::size() const {
 
 QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* parent) {
 	auto* rootItem = new QJsonTreeItem(parent);
-// 	rootItem->setKey("root");
+	// 	rootItem->setKey("root");
 
 	if (value.isObject()) {
 		const auto& object = value.toObject();
 
-		//determine the size
+		// determine the size
 		rootItem->setSize(QJsonDocument(object).toJson(QJsonDocument::Compact).size());
 
-		//read all children
+		// read all children
 		for (const QString& key : object.keys()) {
 			const QJsonValue& v = object.value(key);
-			QJsonTreeItem* child = load(v,rootItem);
+			QJsonTreeItem* child = load(v, rootItem);
 			child->setKey(key);
 			child->setType(v.type());
 			rootItem->appendChild(child);
@@ -122,16 +124,16 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 
 //=========================================================================
 
-QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
-	mHeadItem(new QJsonTreeItem),
-	mRootItem(new QJsonTreeItem(mHeadItem)) {
-
+QJsonModel::QJsonModel(QObject* parent)
+	: QAbstractItemModel(parent)
+	, mHeadItem(new QJsonTreeItem)
+	, mRootItem(new QJsonTreeItem(mHeadItem)) {
 	mHeadItem->appendChild(mRootItem);
 	mHeaders.append(i18n("Key"));
 	mHeaders.append(i18n("Value"));
 	mHeaders.append(i18n("Size in Bytes"));
 
-	//icons
+	// icons
 	QPainter painter;
 	QPixmap pix(64, 64);
 
@@ -141,7 +143,7 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	const QColor& color = qApp->palette().color(QPalette::Text);
 	painter.setPen(QPen(color));
 
-	//draw the icon for JSON array
+	// draw the icon for JSON array
 	pix.fill(QColor(Qt::transparent));
 	painter.begin(&pix);
 	painter.setFont(font);
@@ -149,7 +151,7 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	painter.end();
 	mArrayIcon = QIcon(pix);
 
-	//draw the icon for JSON object
+	// draw the icon for JSON object
 	pix.fill(QColor(Qt::transparent));
 	painter.begin(&pix);
 	painter.setFont(font);
@@ -159,7 +161,7 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 }
 
 QJsonModel::~QJsonModel() {
-	//delete mRootItem;
+	// delete mRootItem;
 	delete mHeadItem;
 }
 
@@ -195,11 +197,9 @@ bool QJsonModel::loadJson(const QByteArray& json) {
 	if (error.error == QJsonParseError::NoError)
 		return loadJson(doc);
 	else {
-		QMessageBox::critical(nullptr, i18n("Failed to load JSON document"),
-							  i18n("Failed to load JSON document. Error: %1.", error.errorString()));
+		QMessageBox::critical(nullptr, i18n("Failed to load JSON document"), i18n("Failed to load JSON document. Error: %1.", error.errorString()));
 		return false;
 	}
-
 }
 
 bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
@@ -212,8 +212,8 @@ bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
 
 		if (jdoc.isArray()) {
 			{
-			PERFTRACE("load json tree items");
-			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()), mHeadItem);
+				PERFTRACE("load json tree items");
+				mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()), mHeadItem);
 			}
 			mRootItem->setType(QJsonValue::Array);
 
@@ -241,9 +241,9 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 		if (index.column() == 0)
 			return item->key();
 		else if (index.column() == 1) {
-			//in case the value is very long, cut it so the preview tree tree view doesn't explode
+			// in case the value is very long, cut it so the preview tree tree view doesn't explode
 			if (item->value().length() > 200)
-				return QString( item->value().left(200) + QLatin1String(" ...") );
+				return QString(item->value().left(200) + QLatin1String(" ..."));
 			else
 				return item->value();
 		} else {
@@ -365,7 +365,7 @@ QJsonValue QJsonModel::genJson(QJsonTreeItem* item) const {
 			auto key = ch->key();
 			jo.insert(key, genJson(ch));
 		}
-		return  jo;
+		return jo;
 	} else if (QJsonValue::Array == type) {
 		QJsonArray arr;
 		for (int i = 0; i < nchild; ++i) {
@@ -377,7 +377,6 @@ QJsonValue QJsonModel::genJson(QJsonTreeItem* item) const {
 		QJsonValue va(item->value());
 		return va;
 	}
-
 }
 
 QJsonDocument QJsonModel::genJsonByIndex(const QModelIndex& index) const {

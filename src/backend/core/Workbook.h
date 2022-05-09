@@ -1,11 +1,11 @@
 /*
-    File                 : Workbook.h
-    Project              : LabPlot
-    Description          : Aspect providing a container for storing data
+	File                 : Workbook.h
+	Project              : LabPlot
+	Description          : Aspect providing a container for storing data
 				in form of spreadsheets and matrices
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef WORKBOOK_H

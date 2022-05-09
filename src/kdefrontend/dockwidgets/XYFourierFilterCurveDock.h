@@ -1,27 +1,27 @@
 /*
-    File             : XYFourierFilterCurveDock.h
-    Project          : LabPlot
-    Description      : widget for editing properties of Fourier filter curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYFourierFilterCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of Fourier filter curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYFOURIERFILTERCURVEDOCK_H
 #define XYFOURIERFILTERCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "ui_xyfourierfiltercurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYFourierFilterCurveDock: public XYCurveDock {
+class XYFourierFilterCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYFourierFilterCurveDock(QWidget *parent);
+	explicit XYFourierFilterCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
@@ -42,8 +42,8 @@ protected:
 	void setModel() override;
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in XYFourierFilterCurveDock
-	//general tab
+	// SLOTs for changes triggered in XYFourierFilterCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
@@ -60,8 +60,8 @@ private Q_SLOTS:
 	void recalculateClicked();
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

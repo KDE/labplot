@@ -1,14 +1,13 @@
 /*
-    File                 : Column.h
-    Project              : LabPlot
-    Description          : Aspect that manages a column
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Column.h
+	Project              : LabPlot
+	Description          : Aspect that manages a column
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef COLUMN_H
 #define COLUMN_H
@@ -37,10 +36,10 @@ public:
 	// Templating does not work, because then ColumnPrivate.h must be included into this header,
 	// But Column.h is already included in ColumnPrivate.h
 	Column(const QString& name, const QVector<double>& data);
-	Column(const QString& name, const QVector<int> &data);
+	Column(const QString& name, const QVector<int>& data);
 	Column(const QString& name, const QVector<qint64>& data);
 	Column(const QString& name, const QVector<QString>& data);
-	Column(const QString& name, const QVector<QDateTime> &data, ColumnMode);
+	Column(const QString& name, const QVector<QDateTime>& data, ColumnMode);
 	void init();
 	~Column() override;
 
@@ -74,16 +73,24 @@ public:
 	AbstractSimpleFilter* outputFilter() const;
 	ColumnStringIO* asStringColumn() const;
 
-	void setFormula(const QString& formula, const QStringList& variableNames,
-					const QVector<Column*>& columns, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
 	struct FormulaData {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))	// required to use in QVector
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0)) // required to use in QVector
 		FormulaData() = default;
 #endif
-		FormulaData(const QString& variableName, const QString& columnPath): m_variableName(variableName), m_columnPath(columnPath) {}
-		FormulaData(const QString& variableName, Column* column): m_column(column), m_variableName(variableName), m_columnPath(column->path()) {}
-		QString columnName() const {return (m_column ? m_column->path() : m_columnPath);}
+		FormulaData(const QString& variableName, const QString& columnPath)
+			: m_variableName(variableName)
+			, m_columnPath(columnPath) {
+		}
+		FormulaData(const QString& variableName, Column* column)
+			: m_column(column)
+			, m_variableName(variableName)
+			, m_columnPath(column->path()) {
+		}
+		QString columnName() const {
+			return (m_column ? m_column->path() : m_columnPath);
+		}
 		bool setColumnPath(const QString& path) {
 			if (m_column && m_column->path() != path)
 				return false;
@@ -97,8 +104,13 @@ public:
 				m_columnPath = c->path(); // do not clear path
 		}
 		// column can be changed only with setColumn
-		const Column* column() const {return m_column;}
-		const QString& variableName() const {return m_variableName;}
+		const Column* column() const {
+			return m_column;
+		}
+		const QString& variableName() const {
+			return m_variableName;
+		}
+
 	private:
 		// Should be only accessible by the columnName() function
 		Column* m_column{nullptr};
@@ -113,8 +125,8 @@ public:
 	void setFormulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;
 
-	QString formula(int) const  override;
-	QVector< Interval<int> > formulaIntervals() const override;
+	QString formula(int) const override;
+	QVector<Interval<int>> formulaIntervals() const override;
 	void setFormula(const Interval<int>&, const QString&) override;
 	void setFormula(int, const QString&) override;
 	void clearFormulas() override;
@@ -175,7 +187,7 @@ public:
 	double minimum(int startIndex, int endIndex) const override;
 	static int calculateMaxSteps(unsigned int value);
 	static int indexForValue(double x, QVector<double>& column, Properties properties = Properties::No);
-	static int indexForValue(const double x, const QVector<QPointF> &column, Properties properties = Properties::No);
+	static int indexForValue(const double x, const QVector<QPointF>& column, Properties properties = Properties::No);
 	static int indexForValue(double x, QVector<QLineF>& lines, Properties properties = Properties::No);
 	int indexForValue(double x) const override;
 	bool indicesMinMax(double v1, double v2, int& start, int& end) const override;
@@ -223,6 +235,5 @@ private Q_SLOTS:
 	friend class ColumnPrivate;
 	friend class ColumnStringIO;
 };
-
 
 #endif

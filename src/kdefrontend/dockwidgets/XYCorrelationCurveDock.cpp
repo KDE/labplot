@@ -1,11 +1,11 @@
 /*
-    File             : XYCorrelationCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of correlation curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYCorrelationCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of correlation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYCorrelationCurveDock.h"
@@ -18,8 +18,8 @@
 #include <KSharedConfig>
 
 #include <QMenu>
-#include <QWidgetAction>
 #include <QStandardItemModel>
+#include <QWidgetAction>
 
 extern "C" {
 #include "backend/nsl/nsl_corr.h"
@@ -39,7 +39,8 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent) : XYCurveDock(parent) {
+XYCorrelationCurveDock::XYCorrelationCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
@@ -53,7 +54,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -69,8 +70,8 @@ void XYCorrelationCurveDock::setupGeneral() {
 	cbY2DataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbY2DataColumn, 9, 2, 1, 3);
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	for (int i = 0; i < NSL_CORR_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_corr_type_name[i]));
@@ -86,9 +87,9 @@ void XYCorrelationCurveDock::setupGeneral() {
 
 	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
 
-	//Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged );
-	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged );
+	// Slots
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
@@ -98,7 +99,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::typeChanged);
 	connect(uiGeneralTab.cbNorm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::normChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYCorrelationCurveDock::recalculateClicked);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::plotRangeChanged);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::xDataColumnChanged);
@@ -108,7 +109,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 
 void XYCorrelationCurveDock::initGeneralTab() {
 	DEBUG("XYCorrelationCurveDock::initGeneralTab()");
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -127,8 +128,8 @@ void XYCorrelationCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
-	// hide x-Range per default
+	// show the properties of the first curve
+	//  hide x-Range per default
 	uiGeneralTab.lXRange->setEnabled(false);
 	uiGeneralTab.cbAutoRange->setEnabled(false);
 
@@ -142,21 +143,21 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
 
 	SET_NUMBER_LOCALE
-	uiGeneralTab.leMin->setText( numberLocale.toString(m_correlationData.xRange.first()) );
-	uiGeneralTab.leMax->setText( numberLocale.toString(m_correlationData.xRange.last()) );
+	uiGeneralTab.leMin->setText(numberLocale.toString(m_correlationData.xRange.first()));
+	uiGeneralTab.leMax->setText(numberLocale.toString(m_correlationData.xRange.last()));
 	this->autoRangeChanged();
 	y2DataColumnChanged(cbY2DataColumn->currentModelIndex());
 
 	// settings
 	uiGeneralTab.cbType->setCurrentIndex(m_correlationData.type);
-	//m_correlationData.method not used
+	// m_correlationData.method not used
 	uiGeneralTab.cbNorm->setCurrentIndex(m_correlationData.normalize);
 
 	this->showCorrelationResult();
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_correlationCurve, &XYCorrelationCurve::aspectDescriptionChanged, this, &XYCorrelationCurveDock::aspectDescriptionChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceTypeChanged, this, &XYCorrelationCurveDock::curveDataSourceTypeChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceCurveChanged, this, &XYCorrelationCurveDock::curveDataSourceCurveChanged);
@@ -171,8 +172,12 @@ void XYCorrelationCurveDock::initGeneralTab() {
 
 void XYCorrelationCurveDock::setModel() {
 	DEBUG("XYCorrelationCurveDock::setModel()");
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-	                       AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -180,10 +185,16 @@ void XYCorrelationCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker, AspectType::DatapickerCurve,
-	        AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
-	        AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYCorrelationCurve
-	       };
+	list = {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYCorrelationCurve};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);
@@ -220,7 +231,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 
 	updatePlotRanges();
 
-	//hide the "skip gaps" option after the curves were set
+	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
 }
@@ -289,8 +300,8 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -324,7 +335,7 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::samplingIntervalChanged() {
-	double samplingInterval =  uiGeneralTab.sbSamplingInterval->value();
+	double samplingInterval = uiGeneralTab.sbSamplingInterval->value();
 	m_correlationData.samplingInterval = samplingInterval;
 
 	enableRecalculate();
@@ -350,8 +361,8 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -359,7 +370,6 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(true);
 		uiGeneralTab.leMax->setEnabled(true);
 	}
-
 }
 void XYCorrelationCurveDock::xRangeMinChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_correlationData.xRange.first(), uiGeneralTab.leMin);
@@ -370,14 +380,14 @@ void XYCorrelationCurveDock::xRangeMaxChanged() {
 }
 
 void XYCorrelationCurveDock::typeChanged() {
-	auto type = (nsl_corr_type_type) uiGeneralTab.cbType->currentIndex();
+	auto type = (nsl_corr_type_type)uiGeneralTab.cbType->currentIndex();
 	m_correlationData.type = type;
 
 	enableRecalculate();
 }
 
 void XYCorrelationCurveDock::normChanged() {
-	auto norm = (nsl_corr_norm_type) uiGeneralTab.cbNorm->currentIndex();
+	auto norm = (nsl_corr_norm_type)uiGeneralTab.cbNorm->currentIndex();
 	m_correlationData.normalize = norm;
 
 	enableRecalculate();
@@ -400,7 +410,7 @@ void XYCorrelationCurveDock::enableRecalculate() const {
 		return;
 
 	bool hasSourceData = false;
-	//no correlation possible without y-data and y2-data
+	// no correlation possible without y-data and y2-data
 	if (m_correlationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY2 = static_cast<AbstractAspect*>(cbY2DataColumn->currentModelIndex().internalPointer());
@@ -414,7 +424,7 @@ void XYCorrelationCurveDock::enableRecalculate() const {
 			cbY2DataColumn->setInvalid(false);
 		}
 	} else {
-		 hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_correlationCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -434,27 +444,27 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 
 	if (!correlationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
 	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 
-	//enable the "recalculate"-button if the source data was changed since the last correlation
+	// enable the "recalculate"-button if the source data was changed since the last correlation
 	uiGeneralTab.pbRecalculate->setEnabled(m_correlationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

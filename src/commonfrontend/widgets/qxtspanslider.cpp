@@ -1,17 +1,17 @@
 /*
  * SPDX-FileCopyrightText: 2006-2011 the LibQxt project <http://libqxt.org, foundation@libqxt.org>
  * SPDX-License-Identifier: BSD-3-Clause
-*/
+ */
 
 #include "qxtspanslider.h"
 
 #include "qxtspanslider_p.h"
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QMouseEvent>
-#include <QStylePainter>
-#include <QStyleOptionSlider>
-#include <QHBoxLayout>
 #include <QSpinBox>
+#include <QStyleOptionSlider>
+#include <QStylePainter>
 
 // Copied from BaseDock
 struct Lock {
@@ -27,8 +27,8 @@ private:
 	bool& variable;
 };
 
-SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent): QWidget(parent) {
-
+SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent)
+	: QWidget(parent) {
 	sbMin = new QSpinBox(this);
 	sbMax = new QSpinBox(this);
 	spanslider = new QxtSpanSlider(this);
@@ -153,8 +153,7 @@ int QxtSpanSliderPrivate::pixelPosToRangeValue(int pos) const {
 		sliderMin = gr.y();
 		sliderMax = gr.bottom() - sliderLength + 1;
 	}
-	return QStyle::sliderValueFromPosition(p->minimum(), p->maximum(), pos - sliderMin,
-	                                       sliderMax - sliderMin, opt.upsideDown);
+	return QStyle::sliderValueFromPosition(p->minimum(), p->maximum(), pos - sliderMin, sliderMax - sliderMin, opt.upsideDown);
 }
 
 void QxtSpanSliderPrivate::handleMousePress(QPoint pos, QStyle::SubControl& control, int value, QxtSpanSlider::SpanHandle handle) {
@@ -274,7 +273,7 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
 	}
 
 	if (update) {
-		if ( isUpperHandle ) {
+		if (isUpperHandle) {
 			if (movement == QxtSpanSlider::NoCrossing)
 				value = qMin(value, upper);
 			else if (movement == QxtSpanSlider::NoOverlapping)
@@ -336,135 +335,137 @@ void QxtSpanSliderPrivate::movePressedHandle() {
 }
 
 /*!
-    \class QxtSpanSlider
-    \inmodule QxtWidgets
-    \brief The QxtSpanSlider widget is a QSlider with two handles.
+	\class QxtSpanSlider
+	\inmodule QxtWidgets
+	\brief The QxtSpanSlider widget is a QSlider with two handles.
 
-    QxtSpanSlider is a slider with two handles. QxtSpanSlider is
-    handy for letting user to choose an span between min/max.
+	QxtSpanSlider is a slider with two handles. QxtSpanSlider is
+	handy for letting user to choose an span between min/max.
 
-    The span color is calculated based on QPalette::Highlight.
+	The span color is calculated based on QPalette::Highlight.
 
-    The keys are bound according to the following table:
-    <table>
-    <tr><th>Orientation     <th>Key            <th>Handle
-    <tr><td>Qt::Horizontal  <td>Qt::Key_Left   <td>lower
-    <tr><td>Qt::Horizontal  <td>Qt::Key_Right  <td>lower
-    <tr><td>Qt::Horizontal  <td>Qt::Key_Up     <td>upper
-    <tr><td>Qt::Horizontal  <td>Qt::Key_Down   <td>upper
-    <tr><td>Qt::Vertical    <td>Qt::Key_Up     <td>lower
-    <tr><td>Qt::Vertical    <td>Qt::Key_Down   <td>lower
-    <tr><td>Qt::Vertical    <td>Qt::Key_Left   <td>upper
-    <tr><td>Qt::Vertical    <td>Qt::Key_Right  <td>upper
-    </table>
+	The keys are bound according to the following table:
+	<table>
+	<tr><th>Orientation     <th>Key            <th>Handle
+	<tr><td>Qt::Horizontal  <td>Qt::Key_Left   <td>lower
+	<tr><td>Qt::Horizontal  <td>Qt::Key_Right  <td>lower
+	<tr><td>Qt::Horizontal  <td>Qt::Key_Up     <td>upper
+	<tr><td>Qt::Horizontal  <td>Qt::Key_Down   <td>upper
+	<tr><td>Qt::Vertical    <td>Qt::Key_Up     <td>lower
+	<tr><td>Qt::Vertical    <td>Qt::Key_Down   <td>lower
+	<tr><td>Qt::Vertical    <td>Qt::Key_Left   <td>upper
+	<tr><td>Qt::Vertical    <td>Qt::Key_Right  <td>upper
+	</table>
 
-    Keys are bound by the time the slider is created. A key is bound
-    to same handle for the lifetime of the slider. So even if the handle
-    representation might change from lower to upper, the same key binding
-    remains.
+	Keys are bound by the time the slider is created. A key is bound
+	to same handle for the lifetime of the slider. So even if the handle
+	representation might change from lower to upper, the same key binding
+	remains.
 
-    \image qxtspanslider.png "QxtSpanSlider in Plastique style."
+	\image qxtspanslider.png "QxtSpanSlider in Plastique style."
 
-    <b>Note:</b> QxtSpanSlider inherits QSlider for implementation specific
-    reasons. Adjusting any single handle specific properties like
-    -# QAbstractSlider::sliderPosition
-    -# QAbstractSlider::value
-    has no effect. However, all slider specific properties like
-    -# QAbstractSlider::invertedAppearance
-    -# QAbstractSlider::invertedControls
-    -# QAbstractSlider::minimum
-    -# QAbstractSlider::maximum
-    -# QAbstractSlider::orientation
-    -# QAbstractSlider::pageStep
-    -# QAbstractSlider::singleStep
-    -# QSlider::tickInterval
-    -# QSlider::tickPosition
-    are taken into consideration.
+	<b>Note:</b> QxtSpanSlider inherits QSlider for implementation specific
+	reasons. Adjusting any single handle specific properties like
+	-# QAbstractSlider::sliderPosition
+	-# QAbstractSlider::value
+	has no effect. However, all slider specific properties like
+	-# QAbstractSlider::invertedAppearance
+	-# QAbstractSlider::invertedControls
+	-# QAbstractSlider::minimum
+	-# QAbstractSlider::maximum
+	-# QAbstractSlider::orientation
+	-# QAbstractSlider::pageStep
+	-# QAbstractSlider::singleStep
+	-# QSlider::tickInterval
+	-# QSlider::tickPosition
+	are taken into consideration.
  */
 
 /*!
-    \enum QxtSpanSlider::HandleMovementMode
+	\enum QxtSpanSlider::HandleMovementMode
 
-    This enum describes the available handle movement modes.
+	This enum describes the available handle movement modes.
 
-    \value FreeMovement The handles can be moved freely.
-    \value NoCrossing The handles cannot cross, but they can still overlap each other. The lower and upper values can be the same.
-    \value NoOverlapping The handles cannot overlap each other. The lower and upper values cannot be the same.
+	\value FreeMovement The handles can be moved freely.
+	\value NoCrossing The handles cannot cross, but they can still overlap each other. The lower and upper values can be the same.
+	\value NoOverlapping The handles cannot overlap each other. The lower and upper values cannot be the same.
  */
 
 /*!
-    \enum QxtSpanSlider::SpanHandle
+	\enum QxtSpanSlider::SpanHandle
 
-    This enum describes the available span handles.
+	This enum describes the available span handles.
 
-    \omitvalue NoHandle \omit Internal only (for now). \endomit
-    \var LowerHandle The lower boundary handle.
-    \var UpperHandle The upper boundary handle.
+	\omitvalue NoHandle \omit Internal only (for now). \endomit
+	\var LowerHandle The lower boundary handle.
+	\var UpperHandle The upper boundary handle.
  */
 
 /*!
-    \fn QxtSpanSlider::lowerValueChanged(int lower)
+	\fn QxtSpanSlider::lowerValueChanged(int lower)
 
-    This signal is emitted whenever the \a lower value has changed.
+	This signal is emitted whenever the \a lower value has changed.
  */
 
 /*!
-    \fn QxtSpanSlider::upperValueChanged(int upper)
+	\fn QxtSpanSlider::upperValueChanged(int upper)
 
-    This signal is emitted whenever the \a upper value has changed.
+	This signal is emitted whenever the \a upper value has changed.
  */
 
 /*!
-    \fn QxtSpanSlider::spanChanged(int lower, int upper)
+	\fn QxtSpanSlider::spanChanged(int lower, int upper)
 
-    This signal is emitted whenever both the \a lower and the \a upper
-    values have changed ie. the span has changed.
+	This signal is emitted whenever both the \a lower and the \a upper
+	values have changed ie. the span has changed.
  */
 
 /*!
-    \fn QxtSpanSlider::lowerPositionChanged(int lower)
+	\fn QxtSpanSlider::lowerPositionChanged(int lower)
 
-    This signal is emitted whenever the \a lower position has changed.
+	This signal is emitted whenever the \a lower position has changed.
  */
 
 /*!
-    \fn QxtSpanSlider::upperPositionChanged(int upper)
+	\fn QxtSpanSlider::upperPositionChanged(int upper)
 
-    This signal is emitted whenever the \a upper position has changed.
+	This signal is emitted whenever the \a upper position has changed.
  */
 
 /*!
-    \fn QxtSpanSlider::sliderPressed(SpanHandle handle)
+	\fn QxtSpanSlider::sliderPressed(SpanHandle handle)
 
-    This signal is emitted whenever the \a handle has been pressed.
+	This signal is emitted whenever the \a handle has been pressed.
  */
 
 /*!
-    Constructs a new QxtSpanSlider with \a parent.
+	Constructs a new QxtSpanSlider with \a parent.
  */
-QxtSpanSlider::QxtSpanSlider(QWidget* parent) : QSlider(parent) {
+QxtSpanSlider::QxtSpanSlider(QWidget* parent)
+	: QSlider(parent) {
 	QXT_INIT_PRIVATE(QxtSpanSlider);
-	connect(this, SIGNAL(rangeChanged(int,int)), &qxt_d(), SLOT(updateRange(int,int)));
+	connect(this, SIGNAL(rangeChanged(int, int)), &qxt_d(), SLOT(updateRange(int, int)));
 	connect(this, SIGNAL(sliderReleased()), &qxt_d(), SLOT(movePressedHandle()));
 }
 
 /*!
-    Constructs a new QxtSpanSlider with \a orientation and \a parent.
+	Constructs a new QxtSpanSlider with \a orientation and \a parent.
  */
-QxtSpanSlider::QxtSpanSlider(Qt::Orientation orientation, QWidget* parent) : QSlider(orientation, parent) {
+QxtSpanSlider::QxtSpanSlider(Qt::Orientation orientation, QWidget* parent)
+	: QSlider(orientation, parent) {
 	QXT_INIT_PRIVATE(QxtSpanSlider);
-	connect(this, SIGNAL(rangeChanged(int,int)), &qxt_d(), SLOT(updateRange(int,int)));
+	connect(this, SIGNAL(rangeChanged(int, int)), &qxt_d(), SLOT(updateRange(int, int)));
 	connect(this, SIGNAL(sliderReleased()), &qxt_d(), SLOT(movePressedHandle()));
 }
 
 /*!
-    Destructs the span slider.
+	Destructs the span slider.
  */
 QxtSpanSlider::~QxtSpanSlider() = default;
 
 /*!
-    \property QxtSpanSlider::handleMovementMode
-    \brief the handle movement mode
+	\property QxtSpanSlider::handleMovementMode
+	\brief the handle movement mode
  */
 QxtSpanSlider::HandleMovementMode QxtSpanSlider::handleMovementMode() const {
 	return qxt_d().movement;
@@ -475,8 +476,8 @@ void QxtSpanSlider::setHandleMovementMode(QxtSpanSlider::HandleMovementMode mode
 }
 
 /*!
-    \property QxtSpanSlider::lowerValue
-    \brief the lower value of the span
+	\property QxtSpanSlider::lowerValue
+	\brief the lower value of the span
  */
 int QxtSpanSlider::lowerValue() const {
 	return qMin(qxt_d().lower, qxt_d().upper);
@@ -487,8 +488,8 @@ void QxtSpanSlider::setLowerValue(int lower) {
 }
 
 /*!
-    \property QxtSpanSlider::upperValue
-    \brief the upper value of the span
+	\property QxtSpanSlider::upperValue
+	\brief the upper value of the span
  */
 int QxtSpanSlider::upperValue() const {
 	return qMax(qxt_d().lower, qxt_d().upper);
@@ -499,7 +500,7 @@ void QxtSpanSlider::setUpperValue(int upper) {
 }
 
 /*!
-    Sets the span from \a lower to \a upper.
+	Sets the span from \a lower to \a upper.
  */
 void QxtSpanSlider::setSpan(int lower, int upper) {
 	const int low = qBound(minimum(), qMin(lower, upper), maximum());
@@ -521,8 +522,8 @@ void QxtSpanSlider::setSpan(int lower, int upper) {
 }
 
 /*!
-    \property QxtSpanSlider::lowerPosition
-    \brief the lower position of the span
+	\property QxtSpanSlider::lowerPosition
+	\brief the lower position of the span
  */
 int QxtSpanSlider::lowerPosition() const {
 	return qxt_d().lowerPos;
@@ -543,8 +544,8 @@ void QxtSpanSlider::setLowerPosition(int lower) {
 }
 
 /*!
-    \property QxtSpanSlider::upperPosition
-    \brief the upper position of the span
+	\property QxtSpanSlider::upperPosition
+	\brief the upper position of the span
  */
 int QxtSpanSlider::upperPosition() const {
 	return qxt_d().upperPos;
@@ -565,7 +566,7 @@ void QxtSpanSlider::setUpperPosition(int upper) {
 }
 
 /*!
-    \reimp
+	\reimp
  */
 void QxtSpanSlider::keyPressEvent(QKeyEvent* event) {
 	QSlider::keyPressEvent(event);
@@ -574,27 +575,27 @@ void QxtSpanSlider::keyPressEvent(QKeyEvent* event) {
 	SliderAction action = SliderNoAction;
 	switch (event->key()) {
 	case Qt::Key_Left:
-		main   = (orientation() == Qt::Horizontal);
+		main = (orientation() == Qt::Horizontal);
 		action = !invertedAppearance() ? SliderSingleStepSub : SliderSingleStepAdd;
 		break;
 	case Qt::Key_Right:
-		main   = (orientation() == Qt::Horizontal);
+		main = (orientation() == Qt::Horizontal);
 		action = !invertedAppearance() ? SliderSingleStepAdd : SliderSingleStepSub;
 		break;
 	case Qt::Key_Up:
-		main   = (orientation() == Qt::Vertical);
+		main = (orientation() == Qt::Vertical);
 		action = invertedControls() ? SliderSingleStepSub : SliderSingleStepAdd;
 		break;
 	case Qt::Key_Down:
-		main   = (orientation() == Qt::Vertical);
+		main = (orientation() == Qt::Vertical);
 		action = invertedControls() ? SliderSingleStepAdd : SliderSingleStepSub;
 		break;
 	case Qt::Key_Home:
-		main   = (qxt_d().mainControl == QxtSpanSlider::LowerHandle);
+		main = (qxt_d().mainControl == QxtSpanSlider::LowerHandle);
 		action = SliderToMinimum;
 		break;
 	case Qt::Key_End:
-		main   = (qxt_d().mainControl == QxtSpanSlider::UpperHandle);
+		main = (qxt_d().mainControl == QxtSpanSlider::UpperHandle);
 		action = SliderToMaximum;
 		break;
 	default:
@@ -607,7 +608,7 @@ void QxtSpanSlider::keyPressEvent(QKeyEvent* event) {
 }
 
 /*!
-    \reimp
+	\reimp
  */
 void QxtSpanSlider::mousePressEvent(QMouseEvent* event) {
 	if (minimum() == maximum() || (event->buttons() ^ event->button())) {
@@ -624,7 +625,7 @@ void QxtSpanSlider::mousePressEvent(QMouseEvent* event) {
 }
 
 /*!
-    \reimp
+	\reimp
  */
 void QxtSpanSlider::mouseMoveEvent(QMouseEvent* event) {
 	if (qxt_d().lowerPressed != QStyle::SC_SliderHandle && qxt_d().upperPressed != QStyle::SC_SliderHandle) {
@@ -680,7 +681,7 @@ void QxtSpanSlider::mouseMoveEvent(QMouseEvent* event) {
 }
 
 /*!
-    \reimp
+	\reimp
  */
 void QxtSpanSlider::mouseReleaseEvent(QMouseEvent* event) {
 	QSlider::mouseReleaseEvent(event);
@@ -691,7 +692,7 @@ void QxtSpanSlider::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 /*!
-    \reimp
+	\reimp
  */
 void QxtSpanSlider::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
@@ -707,10 +708,10 @@ void QxtSpanSlider::paintEvent(QPaintEvent*) {
 	// handle rects
 	opt.sliderPosition = qxt_d().lowerPos;
 	const QRect lr = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
-	const int lrv  = qxt_d().pick(lr.center());
+	const int lrv = qxt_d().pick(lr.center());
 	opt.sliderPosition = qxt_d().upperPos;
 	const QRect ur = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
-	const int urv  = qxt_d().pick(ur.center());
+	const int urv = qxt_d().pick(ur.center());
 
 	// span
 	const int minv = qMin(lrv, urv);

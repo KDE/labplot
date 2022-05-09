@@ -1,11 +1,11 @@
 /*
-    File                 : DatapickerImageView.h
-    Project              : LabPlot
-    Description          : DatapickerImage view for datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	File                 : DatapickerImageView.h
+	Project              : LabPlot
+	Description          : DatapickerImage view for datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERIMAGEVIEW_H
@@ -36,8 +36,7 @@ public:
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum class MouseMode {Navigation, ZoomSelection,
-		ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry};
+	enum class MouseMode { Navigation, ZoomSelection, ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry };
 
 	void initActions();
 	void initMenus();
@@ -46,7 +45,7 @@ private:
 	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect);
 	void updateMagnificationWindow();
 
-	//events
+	// events
 	void contextMenuEvent(QContextMenuEvent*) override;
 	void wheelEvent(QWheelEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;
@@ -64,7 +63,7 @@ private:
 	float m_rotationAngle{0.0};
 	int m_numScheduledScalings{0};
 
-	//Menus
+	// Menus
 	QMenu* m_zoomMenu;
 	QMenu* m_viewMouseModeMenu;
 	QMenu* m_viewImageMenu;
@@ -77,7 +76,7 @@ private:
 	QAction* currentMagnificationAction{nullptr};
 	QAction* currentPlotPointsTypeAction{nullptr};
 
-	//Actions
+	// Actions
 	QAction* zoomInViewAction;
 	QAction* zoomOutViewAction;
 	QAction* zoomOriginAction;

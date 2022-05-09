@@ -1,13 +1,12 @@
 /*
-    File                 : XYFourierTransformCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a Fourier transform
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYFourierTransformCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a Fourier transform
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYFOURIERTRANSFORMCURVE_H
 #define XYFOURIERTRANSFORMCURVE_H
@@ -25,19 +24,19 @@ class XYFourierTransformCurve : public XYAnalysisCurve {
 
 public:
 	struct TransformData {
-		TransformData() {};
+		TransformData(){};
 
 		nsl_dft_result_type type{nsl_dft_result_magnitude};
 		bool twoSided{false};
 		bool shifted{false};
 		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
 		nsl_sf_window_type windowType{nsl_sf_window_uniform};
-		bool autoRange{true};		// use all data?
-		//TODO: use Range
-		QVector<double> xRange{0, 0};	// x range for transform
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0, 0}; // x range for transform
 	};
 	struct TransformResult {
-		TransformResult() {};
+		TransformResult(){};
 
 		bool available{false};
 		bool valid{false};

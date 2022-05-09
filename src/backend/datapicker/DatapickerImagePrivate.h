@@ -1,12 +1,12 @@
 /*
-    File                 : DatapickerImagePrivate.h
-    Project              : LabPlot
-    Description          : Worksheet for Datapicker, private class
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : DatapickerImagePrivate.h
+	Project              : LabPlot
+	Description          : Worksheet for Datapicker, private class
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef DATAPICKERIMAGEPRIVATE_H
 #define DATAPICKERIMAGEPRIVATE_H
@@ -32,7 +32,7 @@ public:
 	int pointSeparation{30};
 	int minSegmentLength{30};
 
-	//symbols
+	// symbols
 	Symbol* symbol{nullptr};
 	bool pointVisibility{true};
 

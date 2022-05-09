@@ -1,11 +1,11 @@
 /*
-    File                 : MatioFilterPrivate.h
-    Project              : LabPlot
-    Description          : Private implementation class for MatioFilter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : MatioFilterPrivate.h
+	Project              : LabPlot
+	Description          : Private implementation class for MatioFilter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MATIOFILTERPRIVATE_H
 #define MATIOFILTERPRIVATE_H
@@ -17,18 +17,18 @@
 class AbstractDataSource;
 
 class MatioFilterPrivate {
-
 public:
 	explicit MatioFilterPrivate(MatioFilter*);
 
-	void parse(const QString & fileName);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, size_t lines = 0);
+	void parse(const QString& fileName);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
+	QVector<QStringList> readCurrentVar(const QString& fileName,
+										AbstractDataSource* = nullptr,
+										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
+										size_t lines = 0);
 	void write(const QString& fileName, AbstractDataSource*);
 
-//helper functions
+// helper functions
 #ifdef HAVE_MATIO
 	static QString className(matio_classes classType);
 	static QString typeName(matio_types dataType);

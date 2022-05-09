@@ -1,13 +1,12 @@
 /*
-    File                 : ImportFileDialog.h
-    Project              : LabPlot
-    Description          : import data dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportFileDialog.h
+	Project              : LabPlot
+	Description          : import data dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTFILEDIALOG_H
 #define IMPORTFILEDIALOG_H
@@ -55,4 +54,4 @@ private Q_SLOTS:
 	void showErrorMessage(const QString&);
 };
 
-#endif //IMPORTFILEDIALOG_H
+#endif // IMPORTFILEDIALOG_H

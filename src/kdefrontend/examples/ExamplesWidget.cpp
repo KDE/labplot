@@ -1,15 +1,15 @@
 /*
-    File                 : ExamplesWidget.h
-    Project              : LabPlot
-    Description          : widget showing the available color maps
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExamplesWidget.h
+	Project              : LabPlot
+	Description          : widget showing the available color maps
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "kdefrontend/examples/ExamplesWidget.h"
-#include "kdefrontend/examples/ExamplesManager.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/examples/ExamplesManager.h"
 
 #include <QCompleter>
 #include <QMessageBox>
@@ -25,7 +25,8 @@
 
 	\ingroup kdefrontend
  */
-ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
+ExamplesWidget::ExamplesWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInfo->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
 	ui.bViewMode->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
@@ -44,7 +45,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	ui.lPreview->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
 	const int size = ui.leSearch->height();
-	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
+	ui.lSearch->setPixmap(QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size));
 
 	QString info = i18n("Enter the keyword you want to search for");
 	ui.lSearch->setToolTip(info);
@@ -55,14 +56,13 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	m_manager = ExamplesManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
 
-	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &ExamplesWidget::collectionChanged);
+	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExamplesWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ExamplesWidget::showInfo);
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ExamplesWidget::toggleIconView);
 	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ExamplesWidget::viewModeChanged);
 	connect(ui.lwExamples, &QListWidget::itemSelectionChanged, this, &ExamplesWidget::exampleChanged);
 
-	//select the last used collection
+	// select the last used collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
@@ -87,7 +87,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 }
 
 ExamplesWidget::~ExamplesWidget() {
-	//save the selected collection
+	// save the selected collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
@@ -101,7 +101,7 @@ ExamplesWidget::~ExamplesWidget() {
 void ExamplesWidget::collectionChanged(int) {
 	const QString& collection = ui.cbCollections->currentText();
 
-	//populate the list view for the icon mode
+	// populate the list view for the icon mode
 	if (m_model)
 		delete m_model;
 
@@ -117,20 +117,20 @@ void ExamplesWidget::collectionChanged(int) {
 
 	ui.lvExamples->setModel(m_model);
 
-	//populate the list widget for the list mode
+	// populate the list widget for the list mode
 	ui.lwExamples->clear();
 	ui.lwExamples->addItems(exampleNames);
 
-	//select the first example in the current collection
+	// select the first example in the current collection
 	ui.lvExamples->setCurrentIndex(ui.lvExamples->model()->index(0, 0));
 	ui.lwExamples->setCurrentRow(0);
 
-	//update the completer
+	// update the completer
 	if (m_completer)
 		delete m_completer;
 
 	m_completer = new QCompleter(exampleNames, this);
-	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ExamplesWidget::activated);
+	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExamplesWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseSensitive);
 	ui.leSearch->setCompleter(m_completer);
@@ -156,13 +156,13 @@ void ExamplesWidget::toggleIconView() {
 
 void ExamplesWidget::viewModeChanged(int index) {
 	if (index == 0) {
-		//switching form list to icon view mode
+		// switching form list to icon view mode
 		if (ui.lwExamples->currentItem()) {
 			const auto& name = ui.lwExamples->currentItem()->text();
 			activateIconViewItem(name);
 		}
 	} else {
-		//switching form icon to list view mode
+		// switching form icon to list view mode
 		if (ui.lvExamples->currentIndex().isValid()) {
 			const auto& name = ui.lvExamples->currentIndex().data(Qt::DisplayRole).toString();
 			activateListViewItem(name);
@@ -173,7 +173,7 @@ void ExamplesWidget::viewModeChanged(int index) {
 void ExamplesWidget::activated(const QString& name) {
 	if (ui.bViewMode->isChecked())
 		activateIconViewItem(name);
-	 else
+	else
 		activateListViewItem(name);
 }
 

@@ -1,9 +1,9 @@
 namespace ac_binary {
-    const QString filename = "ac_binary.raw";
-    const int refDataRowCount = 201;
-	const int numberPreviewData = 100;
+const QString filename = "ac_binary.raw";
+const int refDataRowCount = 201;
+const int numberPreviewData = 100;
 
-	QString refFileInfoString = R"(Title: * simulation de rc2
+QString refFileInfoString = R"(Title: * simulation de rc2
 <br>Date: Sat Jun 16 23:11:45  2018
 <br>Plotname: AC Analysis
 <br>Flags: complex
@@ -20,12 +20,20 @@ namespace ac_binary {
 <br>	7	i(v1)	current
 )"; // last \n is important
 
-	QStringList columnNames = {"frequency, frequency grid=3 REAL", "frequency, frequency grid=3 IMAGINARY",
-							   "n0, voltage REAL", "n0, voltage IMAGINARY",
-							   "n1, voltage REAL", "n1, voltage IMAGINARY",
-							   "n2, voltage REAL", "n2, voltage IMAGINARY",
-							   "n3, voltage REAL", "n3, voltage IMAGINARY",
-							   "n4, voltage REAL", "n4, voltage IMAGINARY",
-							   "n5, voltage REAL", "n5, voltage IMAGINARY",
-							   "i(v1), current REAL", "i(v1), current IMAGINARY"};
+QStringList columnNames = {"frequency, frequency grid=3 REAL",
+						   "frequency, frequency grid=3 IMAGINARY",
+						   "n0, voltage REAL",
+						   "n0, voltage IMAGINARY",
+						   "n1, voltage REAL",
+						   "n1, voltage IMAGINARY",
+						   "n2, voltage REAL",
+						   "n2, voltage IMAGINARY",
+						   "n3, voltage REAL",
+						   "n3, voltage IMAGINARY",
+						   "n4, voltage REAL",
+						   "n4, voltage IMAGINARY",
+						   "n5, voltage REAL",
+						   "n5, voltage IMAGINARY",
+						   "i(v1), current REAL",
+						   "i(v1), current IMAGINARY"};
 } // namespace ac_binary

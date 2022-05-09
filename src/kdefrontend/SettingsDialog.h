@@ -1,10 +1,10 @@
 /*
-    File                 : SettingsDialog.h
-    Project              : LabPlot
-    Description          : application settings dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsDialog.h
+	Project              : LabPlot
+	Description          : application settings dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSDIALOG_H
@@ -22,7 +22,7 @@ class SettingsDatasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
 namespace KUserFeedback {
-	class FeedbackConfigWidget;
+class FeedbackConfigWidget;
 }
 #endif
 
@@ -45,7 +45,7 @@ private:
 #ifdef HAVE_CANTOR_LIBS
 	SettingsNotebookPage* m_notebookPage;
 #endif
-// 	SettingsWelcomePage* m_welcomePage;
+	// 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK

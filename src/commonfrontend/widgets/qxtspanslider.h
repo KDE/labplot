@@ -1,29 +1,28 @@
 /*
  * SPDX-FileCopyrightText: 2006-2011 the LibQxt project <http://libqxt.org, foundation@libqxt.org>
  * SPDX-License-Identifier: BSD-3-Clause
-*/
+ */
 
 #ifndef QXTSPANSLIDER_H
 #define QXTSPANSLIDER_H
 
-#include <QSlider>
-#include "qxtnamespace.h"
 #include "qxtglobal.h"
+#include "qxtnamespace.h"
+#include <QSlider>
 
 class QxtSpanSliderPrivate;
 class QxtSpanSlider;
 class QSpinBox;
-
 
 /*!
  * \brief The SpanSlider class
  * Spanslider widget which consists of a spanslider and two spinboxes
  * to show minimum and maximum
  */
-class SpanSlider: public QWidget {
+class SpanSlider : public QWidget {
 	Q_OBJECT
 public:
-	SpanSlider(Qt::Orientation, QWidget* parent=nullptr);
+	SpanSlider(Qt::Orientation, QWidget* parent = nullptr);
 
 	void setToolTip(const QString&);
 	void setRange(int, int);
@@ -59,8 +58,8 @@ public:
 	explicit QxtSpanSlider(Qt::Orientation orientation, QWidget* parent = nullptr);
 	~QxtSpanSlider() override;
 
-	enum HandleMovementMode {FreeMovement, NoCrossing, NoOverlapping};
-	enum SpanHandle {NoHandle, LowerHandle, UpperHandle};
+	enum HandleMovementMode { FreeMovement, NoCrossing, NoOverlapping };
+	enum SpanHandle { NoHandle, LowerHandle, UpperHandle };
 
 	HandleMovementMode handleMovementMode() const;
 	void setHandleMovementMode(HandleMovementMode);

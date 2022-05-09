@@ -1,19 +1,18 @@
 /*
-    File                 : MatrixView.cpp
-    Project              : LabPlot
-    Description          : View class for Matrix
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatrixView.cpp
+	Project              : LabPlot
+	Description          : View class for Matrix
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef MATRIXVIEW_H
 #define MATRIXVIEW_H
 
-#include <QWidget>
 #include <QLocale>
+#include <QWidget>
 
 class Matrix;
 class MatrixModel;
@@ -26,7 +25,7 @@ class QStackedWidget;
 class QTableView;
 
 class MatrixView : public QWidget {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit MatrixView(Matrix*);
@@ -50,9 +49,13 @@ public:
 	void resizeHeaders();
 	void adjustHeaders();
 	void exportToFile(const QString& path, const QString& separator, QLocale::Language) const;
-	void exportToLaTeX(const QString&, const bool verticalHeaders, const bool horizontalHeaders,
-                           const bool latexHeaders, const bool gridLines,
-                           const bool entire, const bool captions) const;
+	void exportToLaTeX(const QString&,
+					   const bool verticalHeaders,
+					   const bool horizontalHeaders,
+					   const bool latexHeaders,
+					   const bool gridLines,
+					   const bool entire,
+					   const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
 
 public Q_SLOTS:
@@ -77,7 +80,7 @@ private:
 	QImage m_image;
 	bool m_imageIsDirty{true};
 
-	//Actions
+	// Actions
 	QAction* action_cut_selection;
 	QAction* action_copy_selection;
 	QAction* action_paste_into_selection;
@@ -119,7 +122,7 @@ private:
 	QAction* action_fill_function;
 	QAction* action_fill_const;
 
-	//Menus
+	// Menus
 	QMenu* m_selectionMenu{nullptr};
 	QMenu* m_columnMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};

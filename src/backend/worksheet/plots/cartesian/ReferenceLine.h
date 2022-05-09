@@ -1,10 +1,10 @@
 /*
-    File                 : ReferenceLine.h
-    Project              : LabPlot
-    Description          : Reference line on the plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ReferenceLine.h
+	Project              : LabPlot
+	Description          : Reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
@@ -65,7 +65,7 @@ private:
 	QMenu* lineColorMenu{nullptr};
 
 private Q_SLOTS:
-	//SLOTs for changes triggered via QActions in the context menu
+	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);

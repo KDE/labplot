@@ -1,11 +1,11 @@
 /*
-    File                 : DatapickerPoint.h
-    Project              : LabPlot
-    Description          : Graphic Item for coordinate points of Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatapickerPoint.h
+	Project              : LabPlot
+	Description          : Graphic Item for coordinate points of Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERPOINT_H
@@ -16,12 +16,12 @@
 
 #include <QGraphicsItem>
 
-//TODO: own file
+// TODO: own file
 class ErrorBarItem : public QObject, public QGraphicsRectItem {
 	Q_OBJECT
 
 public:
-	enum class ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
+	enum class ErrorBarType { PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY };
 
 	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = ErrorBarType::PlusDeltaX);
 	void setRectSize(const qreal);
@@ -33,7 +33,7 @@ private:
 	void initRect();
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
-	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
+	QVariant itemChange(GraphicsItemChange, const QVariant& value) override;
 
 	QGraphicsLineItem* barLineItem;
 	QRectF m_rect;
@@ -75,7 +75,7 @@ public Q_SLOTS:
 
 protected:
 	DatapickerPointPrivate* const d_ptr;
-	DatapickerPoint(const QString &name, DatapickerPointPrivate *dd);
+	DatapickerPoint(const QString& name, DatapickerPointPrivate* dd);
 	static QPen selectedPen;
 	static float selectedOpacity;
 

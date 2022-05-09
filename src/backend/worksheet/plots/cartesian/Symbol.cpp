@@ -1,13 +1,12 @@
 /*
-    File                 : Symbol.cpp
-    Project              : LabPlot
-    Description          : Symbol
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Symbol.cpp
+	Project              : LabPlot
+	Description          : Symbol
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class Symbol
@@ -18,8 +17,8 @@
 
 #include "Symbol.h"
 #include "SymbolPrivate.h"
-#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
@@ -31,26 +30,71 @@ extern "C" {
 }
 
 // order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
-static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols, Symbol::Style::Circle, Symbol::Style::Square,
-		Symbol::Style::EquilateralTriangle, Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::Tri,
-		Symbol::Style::X, Symbol::Style::Asterisk, Symbol::Style::XPlus, Symbol::Style::TallPlus,
-		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Pin, Symbol::Style::Hash,
-		Symbol::Style::SquareX, Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDot,
-		Symbol::Style::SquareDiag, Symbol::Style::SquareTriangle,
-		Symbol::Style::CircleHalf, Symbol::Style::CircleDot, Symbol::Style::CircleX, Symbol::Style::CircleTri,
-		Symbol::Style::Peace, Symbol::Style::TriangleDot, Symbol::Style::TriangleLine, Symbol::Style::TriangleHalf,
-		Symbol::Style::RightTriangle,
-		Symbol::Style::Bar, Symbol::Style::PeakedBar, Symbol::Style::SkewedBar,
-		Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
-		Symbol::Style::Boomerang, Symbol::Style::SmallBoomerang, Symbol::Style::Star, Symbol::Style::Star3,
-		Symbol::Style::Star4, Symbol::Style::Star5, Symbol::Style::Star6,
-		Symbol::Style::Plus, Symbol::Style::Latin, Symbol::Style::David, Symbol::Style::Home, Symbol::Style::Pentagon,
-		Symbol::Style::Hexagon, Symbol::Style::Female, Symbol::Style::Male,
-		Symbol::Style::Flower, Symbol::Style::Flower2, Symbol::Style::Flower3, Symbol::Style::Flower5, Symbol::Style::Flower6,
-		Symbol::Style::Heart, Symbol::Style::Spade, Symbol::Style::Club, Symbol::Style::Lightning};
+static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols,
+											Symbol::Style::Circle,
+											Symbol::Style::Square,
+											Symbol::Style::EquilateralTriangle,
+											Symbol::Style::Line,
+											Symbol::Style::Cross,
+											Symbol::Style::Tri,
+											Symbol::Style::X,
+											Symbol::Style::Asterisk,
+											Symbol::Style::XPlus,
+											Symbol::Style::TallPlus,
+											Symbol::Style::LatinCross,
+											Symbol::Style::DotPlus,
+											Symbol::Style::Pin,
+											Symbol::Style::Hash,
+											Symbol::Style::SquareX,
+											Symbol::Style::SquarePlus,
+											Symbol::Style::SquareHalf,
+											Symbol::Style::SquareDot,
+											Symbol::Style::SquareDiag,
+											Symbol::Style::SquareTriangle,
+											Symbol::Style::CircleHalf,
+											Symbol::Style::CircleDot,
+											Symbol::Style::CircleX,
+											Symbol::Style::CircleTri,
+											Symbol::Style::Peace,
+											Symbol::Style::TriangleDot,
+											Symbol::Style::TriangleLine,
+											Symbol::Style::TriangleHalf,
+											Symbol::Style::RightTriangle,
+											Symbol::Style::Bar,
+											Symbol::Style::PeakedBar,
+											Symbol::Style::SkewedBar,
+											Symbol::Style::Diamond,
+											Symbol::Style::Lozenge,
+											Symbol::Style::Tie,
+											Symbol::Style::TinyTie,
+											Symbol::Style::Boomerang,
+											Symbol::Style::SmallBoomerang,
+											Symbol::Style::Star,
+											Symbol::Style::Star3,
+											Symbol::Style::Star4,
+											Symbol::Style::Star5,
+											Symbol::Style::Star6,
+											Symbol::Style::Plus,
+											Symbol::Style::Latin,
+											Symbol::Style::David,
+											Symbol::Style::Home,
+											Symbol::Style::Pentagon,
+											Symbol::Style::Hexagon,
+											Symbol::Style::Female,
+											Symbol::Style::Male,
+											Symbol::Style::Flower,
+											Symbol::Style::Flower2,
+											Symbol::Style::Flower3,
+											Symbol::Style::Flower5,
+											Symbol::Style::Flower6,
+											Symbol::Style::Heart,
+											Symbol::Style::Spade,
+											Symbol::Style::Club,
+											Symbol::Style::Lightning};
 
-Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
-	d_ptr(new SymbolPrivate(this)) {
+Symbol::Symbol(const QString& name)
+	: AbstractAspect(name, AspectType::AbstractAspect)
+	, d_ptr(new SymbolPrivate(this)) {
 }
 
 Symbol::~Symbol() {
@@ -79,11 +123,11 @@ void Symbol::init(const KConfigGroup& group) {
 	d->size = group.readEntry("SymbolSize", defaultSize);
 	d->rotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->opacity = group.readEntry("SymbolOpacity", 1.0);
-	d->brush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
-	d->brush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
-	d->pen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->pen.setColor( group.readEntry("SymbolBorderColor", defaultBorderColor) );
-	d->pen.setWidthF( group.readEntry("SymbolBorderWidth", defaultBorderWidth) );
+	d->brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
+	d->brush.setColor(group.readEntry("SymbolFillingColor", QColor(Qt::red)));
+	d->pen.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
+	d->pen.setColor(group.readEntry("SymbolBorderColor", defaultBorderColor));
+	d->pen.setWidthF(group.readEntry("SymbolBorderWidth", defaultBorderWidth));
 }
 
 //##############################################################################
@@ -121,14 +165,14 @@ void Symbol::setRotationAngle(qreal angle) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetBrush, QBrush, brush, updatePixmap)
-void Symbol::setBrush(const QBrush &brush) {
+void Symbol::setBrush(const QBrush& brush) {
 	Q_D(Symbol);
 	if (brush != d->brush)
 		exec(new SymbolSetBrushCmd(d, brush, ki18n("%1: set symbol filling")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetPen, QPen, pen, updateSymbols)
-void Symbol::setPen(const QPen &pen) {
+void Symbol::setPen(const QPen& pen) {
 	Q_D(Symbol);
 	if (pen != d->pen)
 		exec(new SymbolSetPenCmd(d, pen, ki18n("%1: set symbol outline style")));
@@ -144,8 +188,8 @@ void Symbol::setOpacity(qreal opacity) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-SymbolPrivate::SymbolPrivate(Symbol* owner) : q(owner) {
-
+SymbolPrivate::SymbolPrivate(Symbol* owner)
+	: q(owner) {
 }
 
 QString SymbolPrivate::name() const {
@@ -170,9 +214,9 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 	if (parentAspect()->type() == AspectType::CustomPoint)
 		writer->writeStartElement("symbol");
 	else if (parentAspect()->type() == AspectType::BoxPlot)
-		writer->writeStartElement(name()); //BoxPlot has multiple symbols, differentiated by their names
+		writer->writeStartElement(name()); // BoxPlot has multiple symbols, differentiated by their names
 	else
-		writer->writeStartElement("symbols"); //keep the backward compatibility for "symbols" used in XYCurve and Histogram
+		writer->writeStartElement("symbols"); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
 
 	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->style)));
 	writer->writeAttribute("opacity", QString::number(d->opacity));
@@ -180,7 +224,7 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("size", QString::number(d->size));
 	WRITE_QBRUSH(d->brush);
 	WRITE_QPEN(d->pen);
-	writer->writeEndElement(); //close "Symbol" section
+	writer->writeEndElement(); // close "Symbol" section
 }
 
 //! Load from XML
@@ -220,8 +264,8 @@ void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor
 }
 
 void Symbol::saveThemeConfig(const KConfigGroup& /*group*/) const {
-	//TODO:
-// 	group.writeEntry("SymbolOpacity", opacity());
+	// TODO:
+	// 	group.writeEntry("SymbolOpacity", opacity());
 }
 
 //*************************************************************
@@ -376,67 +420,66 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
 		break;
 	case Style::Square:
-		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
+		path.addRect(QRectF(-0.5, -0.5, 1.0, 1.0));
 		break;
 	case Style::EquilateralTriangle:
-		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
+		polygon << QPointF(-0.5, 0.5) << QPointF(0, -0.5) << QPointF(0.5, 0.5) << QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::RightTriangle:
-		polygon << QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
+		polygon << QPointF(-0.5, -0.5) << QPointF(0.5, 0.5) << QPointF(-0.5, 0.5) << QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Bar:
-		path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
+		path.addRect(QRectF(-0.5, -0.2, 1.0, 0.4));
 		break;
 	case Style::PeakedBar:
-		polygon << QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
-				<<QPointF(0.3, 0.2)<<QPointF(-0.3, 0.2)<<QPointF(-0.5, 0);
+		polygon << QPointF(-0.5, 0) << QPointF(-0.3, -0.2) << QPointF(0.3, -0.2) << QPointF(0.5, 0) << QPointF(0.3, 0.2) << QPointF(-0.3, 0.2)
+				<< QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::SkewedBar:
-		polygon << QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
+		polygon << QPointF(-0.5, 0.2) << QPointF(-0.2, -0.2) << QPointF(0.5, -0.2) << QPointF(0.2, 0.2) << QPointF(-0.5, 0.2);
 		path.addPolygon(polygon);
 		break;
 	case Style::Diamond:
-		polygon << QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
+		polygon << QPointF(-0.5, 0) << QPointF(0, -0.5) << QPointF(0.5, 0) << QPointF(0, 0.5) << QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Lozenge:
-		polygon << QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
+		polygon << QPointF(-0.25, 0) << QPointF(0, -0.5) << QPointF(0.25, 0) << QPointF(0, 0.5) << QPointF(-0.25, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Tie:
-		polygon << QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
+		polygon << QPointF(-0.5, -0.5) << QPointF(0.5, -0.5) << QPointF(-0.5, 0.5) << QPointF(0.5, 0.5) << QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::TinyTie:
-		polygon << QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
+		polygon << QPointF(-0.2, -0.5) << QPointF(0.2, -0.5) << QPointF(-0.2, 0.5) << QPointF(0.2, 0.5) << QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Plus:
-		polygon << QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
-				<<QPointF(0.2, 0.2)<<QPointF(0.2, 0.5)<<QPointF(-0.2, 0.5)<<QPointF(-0.2, 0.2)<<QPointF(-0.5, 0.2)
-				<<QPointF(-0.5, -0.2)<<QPointF(-0.2, -0.2)<<QPointF(-0.2, -0.5);
+		polygon << QPointF(-0.2, -0.5) << QPointF(0.2, -0.5) << QPointF(0.2, -0.2) << QPointF(0.5, -0.2) << QPointF(0.5, 0.2) << QPointF(0.2, 0.2)
+				<< QPointF(0.2, 0.5) << QPointF(-0.2, 0.5) << QPointF(-0.2, 0.2) << QPointF(-0.5, 0.2) << QPointF(-0.5, -0.2) << QPointF(-0.2, -0.2)
+				<< QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Boomerang:
-		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
+		polygon << QPointF(-0.5, 0.5) << QPointF(0, -0.5) << QPointF(0.5, 0.5) << QPointF(0, 0) << QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::SmallBoomerang:
-		polygon << QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
+		polygon << QPointF(-0.3, 0.5) << QPointF(0, -0.5) << QPointF(0.3, 0.5) << QPointF(0, 0) << QPointF(-0.3, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Star4:
-		polygon << QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
-				<<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
+		polygon << QPointF(-0.5, 0) << QPointF(-0.1, -0.1) << QPointF(0, -0.5) << QPointF(0.1, -0.1) << QPointF(0.5, 0) << QPointF(0.1, 0.1) << QPointF(0, 0.5)
+				<< QPointF(-0.1, 0.1) << QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Star5:
-		polygon << QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
-				<<QPointF(0.1, 0.1)<<QPointF(0.5, 0.5)<<QPointF(0, 0.2)<<QPointF(-0.5, 0.5)
-				<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
+		polygon << QPointF(-0.5, 0) << QPointF(-0.1, -0.1) << QPointF(0, -0.5) << QPointF(0.1, -0.1) << QPointF(0.5, 0) << QPointF(0.1, 0.1)
+				<< QPointF(0.5, 0.5) << QPointF(0, 0.2) << QPointF(-0.5, 0.5) << QPointF(-0.1, 0.1) << QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Line:
@@ -450,31 +493,26 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(0.5, 0);
 		break;
 	case Style::Heart: {
-		//https://mathworld.wolfram.com/HeartCurve.html with additional
-		//normalization to fit into a 1.0x1.0 rectangular
+		// https://mathworld.wolfram.com/HeartCurve.html with additional
+		// normalization to fit into a 1.0x1.0 rectangular
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range + M_PI/2;
+			double t = i * range + M_PI / 2;
 			double x = gsl_pow_3(sin(t));
-			double y = -(13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t))/17;
-			polygon << QPointF(x/2, y/2);
+			double y = -(13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t)) / 17;
+			polygon << QPointF(x / 2, y / 2);
 		}
-		double t = M_PI/2.;
+		double t = M_PI / 2.;
 		double x = gsl_pow_3(sin(t));
-		double y = -(13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t))/17;
-		polygon << QPointF(x/2, y/2);
+		double y = -(13 * cos(t) - 5 * cos(2 * t) - 2 * cos(3 * t) - cos(4 * t)) / 17;
+		polygon << QPointF(x / 2, y / 2);
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Lightning:
-		polygon << QPointF(0, 0.5)
-			<< QPointF(0.4, -0.03)
-			<< QPointF(0, -0.03)
-			<< QPointF(0.2, -0.5)
-			<< QPointF(-0.4, 0.1)
-			<< QPointF(0.06, 0.1)
-			<< QPointF(0, 0.5);
+		polygon << QPointF(0, 0.5) << QPointF(0.4, -0.03) << QPointF(0, -0.03) << QPointF(0.2, -0.5) << QPointF(-0.4, 0.1) << QPointF(0.06, 0.1)
+				<< QPointF(0, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::X:
@@ -495,19 +533,19 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path = QPainterPath(QPointF(0., 0.));
 		path.lineTo(0., -1.);
 		path.moveTo(0., 0.);
-		path.lineTo(-M_SQRT3/2., 1./2.);
+		path.lineTo(-M_SQRT3 / 2., 1. / 2.);
 		path.moveTo(0., 0.);
-		path.lineTo(M_SQRT3/2., 1./2.);
+		path.lineTo(M_SQRT3 / 2., 1. / 2.);
 		break;
 	case Style::XPlus:
 		path = QPainterPath(QPointF(.5, 0.));
 		path.lineTo(-.5, 0.);
 		path.moveTo(0., .5);
 		path.lineTo(0., -.5);
-		path.moveTo(.5/M_SQRT2, .5/M_SQRT2);
-		path.lineTo(-.5/M_SQRT2, -.5/M_SQRT2);
-		path.moveTo(.5/M_SQRT2, -.5/M_SQRT2);
-		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		path.moveTo(.5 / M_SQRT2, .5 / M_SQRT2);
+		path.lineTo(-.5 / M_SQRT2, -.5 / M_SQRT2);
+		path.moveTo(.5 / M_SQRT2, -.5 / M_SQRT2);
+		path.lineTo(-.5 / M_SQRT2, .5 / M_SQRT2);
 		break;
 	case Style::TallPlus:
 		path = QPainterPath(QPointF(.25, 0.));
@@ -518,8 +556,8 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	case Style::LatinCross:
 		path = QPainterPath(QPointF(0., .5));
 		path.lineTo(0., -.5);
-		path.moveTo(-1./3., -1./6.);
-		path.lineTo(1./3., -1./6.);
+		path.moveTo(-1. / 3., -1. / 6.);
+		path.lineTo(1. / 3., -1. / 6.);
 		break;
 	case Style::DotPlus:
 		path = QPainterPath(QPointF(0., .5));
@@ -585,7 +623,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		break;
 	case Style::SquareDot:
 		path.addEllipse(-.1, -.1, .2, .2);
-		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
+		path.addRect(QRectF(-0.5, -0.5, 1.0, 1.0));
 		break;
 	case Style::SquareDiag:
 		path = QPainterPath(QPointF(-.5, .5));
@@ -620,10 +658,10 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
 		break;
 	case Style::CircleX:
-		path = QPainterPath(QPointF(.5/M_SQRT2, .5/M_SQRT2));
-		path.lineTo(-.5/M_SQRT2, -.5/M_SQRT2);
+		path = QPainterPath(QPointF(.5 / M_SQRT2, .5 / M_SQRT2));
+		path.lineTo(-.5 / M_SQRT2, -.5 / M_SQRT2);
 		path.arcTo(-.5, -.5, 1., 1., -45., 90.);
-		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		path.lineTo(-.5 / M_SQRT2, .5 / M_SQRT2);
 		path.arcTo(-.5, -.5, 1., 1., 225., -90.);
 		path.closeSubpath();
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
@@ -633,23 +671,23 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.moveTo(0., 0.);
 		path.lineTo(0., -.5);
 		path.moveTo(0., 0.);
-		path.lineTo(-M_SQRT3/4., 1./4.);
+		path.lineTo(-M_SQRT3 / 4., 1. / 4.);
 		path.moveTo(0., 0.);
-		path.lineTo(M_SQRT3/4., 1./4.);
+		path.lineTo(M_SQRT3 / 4., 1. / 4.);
 		break;
 	case Style::Peace:
 		path = QPainterPath(QPointF(0, .5));
 		path.lineTo(0, -.5);
 		path.moveTo(0., 0.);
-		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		path.lineTo(-.5 / M_SQRT2, .5 / M_SQRT2);
 		path.moveTo(0., 0.);
-		path.lineTo(.5/M_SQRT2, .5/M_SQRT2);
+		path.lineTo(.5 / M_SQRT2, .5 / M_SQRT2);
 		path.closeSubpath();
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
 		break;
 	case Style::TriangleDot:
 		path.addEllipse(-.1, -.1, .2, .2);
-		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
+		polygon << QPointF(-0.5, 0.5) << QPointF(0, -0.5) << QPointF(0.5, 0.5) << QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::TriangleHalf:
@@ -676,99 +714,99 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		break;
 	case Style::Flower: {
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range;
-			double r = sin(2*t) * sin(2*t);
+			double t = i * range;
+			double r = sin(2 * t) * sin(2 * t);
 			double x = r * sin(t);
 			double y = r * cos(t);
-			polygon << QPointF(x/2, y/2);
+			polygon << QPointF(x / 2, y / 2);
 		}
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Flower2: {
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range;
+			double t = i * range;
 			double r = sin(t) * sin(t);
 			double x = r * sin(t);
 			double y = r * cos(t);
-			polygon << QPointF(x/2, y/2);
+			polygon << QPointF(x / 2, y / 2);
 		}
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Flower3: {
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range;
-			double r = sin(3.*t/2.) * sin(3.*t/2.);
+			double t = i * range;
+			double r = sin(3. * t / 2.) * sin(3. * t / 2.);
 			double x = r * sin(t);
 			double y = r * cos(t);
-			polygon << QPointF(x/2, y/2);
+			polygon << QPointF(x / 2, y / 2);
 		}
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Flower5: {
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range;
-			double r = sin(5.*t/2.) * sin(5.*t/2.);
+			double t = i * range;
+			double r = sin(5. * t / 2.) * sin(5. * t / 2.);
 			double x = r * sin(t);
 			double y = r * cos(t);
-			polygon << QPointF(x/2, y/2);
+			polygon << QPointF(x / 2, y / 2);
 		}
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Flower6: {
 		int steps = 100;
-		double range = 2.*M_PI/(steps - 1);
+		double range = 2. * M_PI / (steps - 1);
 		for (int i = 0; i < steps; ++i) {
-			double t = i*range;
-			double r = sin(3.*t) * sin(3.*t);
+			double t = i * range;
+			double r = sin(3. * t) * sin(3. * t);
 			double x = r * sin(t);
 			double y = r * cos(t);
-			polygon << QPointF(x/2, y/2);
+			polygon << QPointF(x / 2, y / 2);
 		}
 		path.addPolygon(polygon);
 		break;
 	}
 	case Style::Star:
 		for (int i = 0; i < 5; i++) {
-			double angle = 2.*M_PI*i/5. - M_PI/10.;
+			double angle = 2. * M_PI * i / 5. - M_PI / 10.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
-			polygon << QPointF(.2 * cos(angle + M_PI/5.), .2 * sin(angle + M_PI/5.));
+			polygon << QPointF(.2 * cos(angle + M_PI / 5.), .2 * sin(angle + M_PI / 5.));
 		}
 		path.addPolygon(polygon);
 		path.closeSubpath();
 		break;
 	case Style::Star3:
 		for (int i = 0; i < 3; i++) {
-			double angle = 2.*M_PI*i/3. + M_PI/6.;
+			double angle = 2. * M_PI * i / 3. + M_PI / 6.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
-			polygon << QPointF(.1 * cos(angle + M_PI/3.), .1 * sin(angle + M_PI/3.));
+			polygon << QPointF(.1 * cos(angle + M_PI / 3.), .1 * sin(angle + M_PI / 3.));
 		}
 		path.addPolygon(polygon);
 		path.closeSubpath();
 		break;
 	case Style::Star6:
 		for (int i = 0; i < 6; i++) {
-			double angle = 2.*M_PI*i/6.;
+			double angle = 2. * M_PI * i / 6.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
-			polygon << QPointF(.1 * cos(angle + M_PI/6.), .1 * sin(angle + M_PI/6.));
+			polygon << QPointF(.1 * cos(angle + M_PI / 6.), .1 * sin(angle + M_PI / 6.));
 		}
 		path.addPolygon(polygon);
 		path.closeSubpath();
 		break;
 	case Style::Pentagon:
 		for (int i = 0; i < 5; i++) {
-			double angle = 2.*M_PI*i/5. - M_PI/10.;
+			double angle = 2. * M_PI * i / 5. - M_PI / 10.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
 		}
 		path.addPolygon(polygon);
@@ -776,28 +814,28 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		break;
 	case Style::Hexagon:
 		for (int i = 0; i < 6; i++) {
-			double angle = 2.*M_PI*i/6.;
+			double angle = 2. * M_PI * i / 6.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
 		}
 		path.addPolygon(polygon);
 		path.closeSubpath();
 		break;
 	case Style::Latin:
-		polygon<<QPointF(-0.1, -0.5)<<QPointF(0.1, -0.5)<<QPointF(0.1, -0.3)<<QPointF(0.5, -0.3)<<QPointF(0.5, -0.1)
-				<<QPointF(0.1, -0.1)<<QPointF(0.1, 0.5)<<QPointF(-0.1, 0.5)<<QPointF(-0.1, -0.1)<<QPointF(-0.5, -0.1)
-				<<QPointF(-0.5, -0.3)<<QPointF(-0.1, -0.3)<<QPointF(-0.1, -0.5);
+		polygon << QPointF(-0.1, -0.5) << QPointF(0.1, -0.5) << QPointF(0.1, -0.3) << QPointF(0.5, -0.3) << QPointF(0.5, -0.1) << QPointF(0.1, -0.1)
+				<< QPointF(0.1, 0.5) << QPointF(-0.1, 0.5) << QPointF(-0.1, -0.1) << QPointF(-0.5, -0.1) << QPointF(-0.5, -0.3) << QPointF(-0.1, -0.3)
+				<< QPointF(-0.1, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::David:
 		for (int i = 0; i < 4; i++) {
-			double angle = 2.*M_PI*i/3. + M_PI/6.;
+			double angle = 2. * M_PI * i / 3. + M_PI / 6.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
 		}
 		path.setFillRule(Qt::FillRule::WindingFill);
 		path.addPolygon(polygon);
 		polygon.clear();
 		for (int i = 0; i < 4; i++) {
-			double angle = 2.*M_PI*i/3. - M_PI/6.;
+			double angle = 2. * M_PI * i / 3. - M_PI / 6.;
 			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
 		}
 
@@ -828,7 +866,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	case Style::Male:
 		path.addEllipse(QPointF(0., 0.), .3, .3);
 		path.closeSubpath();
-		path.moveTo(.3/M_SQRT2, -.3/M_SQRT2);
+		path.moveTo(.3 / M_SQRT2, -.3 / M_SQRT2);
 		path.lineTo(.5, -.5);
 		path.moveTo(.5, -.5);
 		path.lineTo(.35, -.5);

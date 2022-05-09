@@ -1,12 +1,12 @@
 /*
-    File                 : ImageWidget.cpp
-    Project              : LabPlot
-    Description          : widget for datapicker properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+	File                 : ImageWidget.cpp
+	Project              : LabPlot
+	Description          : widget for datapicker properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerCurveWidget.h"
@@ -21,7 +21,8 @@
 
 #include <cmath>
 
-DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent) {
+DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
@@ -35,8 +36,9 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	ui.cbYErrorType->addItem(i18n("Symmetric"));
 	ui.cbYErrorType->addItem(i18n("Asymmetric"));
 
-	QString info = i18n("Specify whether the data points have errors and of which type.\n"
-						"Note, changing this type is not possible once at least one point was read.");
+	QString info = i18n(
+		"Specify whether the data points have errors and of which type.\n"
+		"Note, changing this type is not possible once at least one point was read.");
 	ui.lXErrorType->setToolTip(info);
 	ui.cbXErrorType->setToolTip(info);
 	ui.lYErrorType->setToolTip(info);
@@ -46,20 +48,20 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	hboxLayout->addWidget(symbolWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
 	hboxLayout->setSpacing(2);
 
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, Qt::black);
 	DatapickerCurveWidget::updateLocale();
 
-	//General
+	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
 	connect(ui.cbXErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::xErrorTypeChanged);
 	connect(ui.cbYErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::yErrorTypeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &DatapickerCurveWidget::visibilityChanged);
 
-	//error bar
+	// error bar
 	connect(ui.cbErrorBarFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
 	connect(ui.kcbErrorBarFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::errorBarFillingColorChanged);
 	connect(ui.sbErrorBarSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
@@ -102,8 +104,8 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 
 	symbolWidget->setSymbols(symbols);
 
-	connect(m_curve, &AbstractAspect::aspectDescriptionChanged,this, &DatapickerCurveWidget::aspectDescriptionChanged);
-	connect(m_curve, &AbstractAspect::aspectRemoved,this, &DatapickerCurveWidget::updateSymbolWidgets);
+	connect(m_curve, &AbstractAspect::aspectDescriptionChanged, this, &DatapickerCurveWidget::aspectDescriptionChanged);
+	connect(m_curve, &AbstractAspect::aspectRemoved, this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &AbstractAspect::aspectAdded, this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &DatapickerCurve::curveErrorTypesChanged, this, &DatapickerCurveWidget::curveErrorsChanged);
 	connect(m_curve, &DatapickerCurve::pointVisibilityChanged, this, &DatapickerCurveWidget::symbolVisibleChanged);
@@ -130,8 +132,7 @@ void DatapickerCurveWidget::updateLocale() {
 //*************************************************************
 //"General"-tab
 void DatapickerCurveWidget::xErrorTypeChanged(int index) {
-	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError
-		|| m_curve->curveErrorTypes().y != DatapickerCurve::ErrorType::NoError )
+	if (DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError || m_curve->curveErrorTypes().y != DatapickerCurve::ErrorType::NoError)
 		hideErrorBarWidgets(false);
 	else
 		hideErrorBarWidgets(true);
@@ -147,8 +148,7 @@ void DatapickerCurveWidget::xErrorTypeChanged(int index) {
 }
 
 void DatapickerCurveWidget::yErrorTypeChanged(int index) {
-	if ( DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError
-		|| m_curve->curveErrorTypes().x != DatapickerCurve::ErrorType::NoError )
+	if (DatapickerCurve::ErrorType(index) != DatapickerCurve::ErrorType::NoError || m_curve->curveErrorTypes().x != DatapickerCurve::ErrorType::NoError)
 		hideErrorBarWidgets(false);
 	else
 		hideErrorBarWidgets(true);
@@ -168,7 +168,7 @@ void DatapickerCurveWidget::errorBarSizeChanged(double value) {
 		return;
 
 	for (auto* curve : m_curveList)
-		curve->setPointErrorBarSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		curve->setPointErrorBarSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
 void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
@@ -198,7 +198,7 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 	}
 
 	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color );
+	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color);
 	m_initializing = false;
 }
 
@@ -228,20 +228,20 @@ void DatapickerCurveWidget::updateSymbolWidgets() {
 //*************************************************************
 void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors) {
 	m_initializing = true;
-	ui.cbXErrorType->setCurrentIndex((int) errors.x);
-	ui.cbYErrorType->setCurrentIndex((int) errors.y);
+	ui.cbXErrorType->setCurrentIndex((int)errors.x);
+	ui.cbYErrorType->setCurrentIndex((int)errors.y);
 	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
+	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarBrushChanged(const QBrush& brush) {
 	m_initializing = true;
-	ui.cbErrorBarFillingStyle->setCurrentIndex((int) brush.style());
+	ui.cbErrorBarFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, brush.color());
 	m_initializing = false;
@@ -261,11 +261,11 @@ void DatapickerCurveWidget::load() {
 		return;
 
 	m_initializing = true;
-	ui.cbXErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().x);
-	ui.cbYErrorType->setCurrentIndex((int) m_curve->curveErrorTypes().y);
-	ui.chkVisible->setChecked( m_curve->pointVisibility() );
-	ui.cbErrorBarFillingStyle->setCurrentIndex( (int) m_curve->pointErrorBarBrush().style() );
-	ui.kcbErrorBarFillingColor->setColor(  m_curve->pointErrorBarBrush().color() );
-	ui.sbErrorBarSize->setValue( Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Unit::Point) );
+	ui.cbXErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().x);
+	ui.cbYErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().y);
+	ui.chkVisible->setChecked(m_curve->pointVisibility());
+	ui.cbErrorBarFillingStyle->setCurrentIndex((int)m_curve->pointErrorBarBrush().style());
+	ui.kcbErrorBarFillingColor->setColor(m_curve->pointErrorBarBrush().color());
+	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Unit::Point));
 	m_initializing = false;
 }

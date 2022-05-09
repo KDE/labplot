@@ -1,10 +1,10 @@
 /*
-    File                 : ProjectParser.h
-    Project              : LabPlot
-    Description          : base class for project parsers
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ProjectParser.h
+	Project              : LabPlot
+	Description          : base class for project parsers
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PROJECTPARSER_H
@@ -32,14 +32,14 @@ public:
 	QAbstractItemModel* model();
 	void importTo(Folder*, const QStringList&);
 
-	QList<AspectType> topLevelClasses() const ;
+	QList<AspectType> topLevelClasses() const;
 
 protected:
 	virtual bool load(Project*, bool preview) = 0;
 
 	QString m_projectFileName;
 	Project* m_project{nullptr};
-	QList<AspectType>  m_topLevelClasses;
+	QList<AspectType> m_topLevelClasses;
 
 private:
 	void moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const;

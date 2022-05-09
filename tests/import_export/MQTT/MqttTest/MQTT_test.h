@@ -1,10 +1,10 @@
 /*
-    File                 : MQTT_test.h
-    Project              : LabPlot
-    Description          : Tests for MQTT import.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTT_test.h
+	Project              : LabPlot
+	Description          : Tests for MQTT import.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MQTT_TEST_H
@@ -18,14 +18,14 @@
 #include <random>
 
 namespace Ui {
-	class MainWindow;
+class MainWindow;
 }
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QWidget* parent = 0);
 	~MainWindow();
 
 public Q_SLOTS:
@@ -41,8 +41,8 @@ private Q_SLOTS:
 	void onConnect();
 
 private:
-	Ui::MainWindow *ui;
-	QMqttClient *m_client;
+	Ui::MainWindow* ui;
+	QMqttClient* m_client;
 	bool m_run;
 	QMqttTopicName* m_brownianX;
 	quint8 m_qos;

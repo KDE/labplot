@@ -1,23 +1,22 @@
 /*
-    File                 : functions.h
-    Project              : LabPlot
-    Description          : definition of functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : functions.h
+	Project              : LabPlot
+	Description          : definition of functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <gsl/gsl_version.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_sf.h>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_cdf.h>
 #include "backend/nsl/nsl_sf_basic.h"
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_sf.h>
+#include <gsl/gsl_version.h>
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
@@ -69,7 +68,7 @@ struct funs _functions[] = {
 	{"Aids", (func_t)nsl_sf_airy_Aids, 1},
 	{"Bids", (func_t)nsl_sf_airy_Bids, 1},
 	{"Ai0", (func_t)nsl_sf_airy_0_Ai, 1},
-	{"Bi0", (func_t)nsl_sf_airy_0_Bi, 1 },
+	{"Bi0", (func_t)nsl_sf_airy_0_Bi, 1},
 	{"Aid0", (func_t)nsl_sf_airy_0_Aid, 1},
 	{"Bid0", (func_t)nsl_sf_airy_0_Bid, 1},
 	/* Bessel Functions */
@@ -269,7 +268,7 @@ struct funs _functions[] = {
 	{"logabs", (func_t)gsl_sf_log_abs, 1},
 	{"logp", (func_t)gsl_sf_log_1plusx, 1},
 	{"logpm", (func_t)gsl_sf_log_1plusx_mx, 1},
-	/* Mathieu Functions */
+/* Mathieu Functions */
 #if (GSL_MAJOR_VERSION >= 2)
 	{"an", (func_t)nsl_sf_mathieu_a, 2},
 	{"bn", (func_t)nsl_sf_mathieu_b, 2},
@@ -499,7 +498,6 @@ struct funs _functions[] = {
 	{"hypergeometricQ", (func_t)gsl_cdf_hypergeometric_Q, 4},
 	/* Logarithmic Distribution */
 	{"logarithmic", (func_t)nsl_sf_logarithmic, 2},
-	{0, (func_t)0, 0}
-};
+	{0, (func_t)0, 0}};
 
 #endif /*FUNCTIONS_H*/

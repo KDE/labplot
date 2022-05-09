@@ -1,11 +1,11 @@
 /*
-    File                 : TeXRenderer.cc
-    Project              : LabPlot
-    Description          : TeX renderer class
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TeXRenderer.cc
+	Project              : LabPlot
+	Description          : TeX renderer class
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "TeXRenderer.h"
@@ -42,10 +42,10 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 	const QString& fontFamily = format.fontFamily;
 	const int dpi = format.dpi;
 
-	//determine the temp directory where the produced files are going to be created
+	// determine the temp directory where the produced files are going to be created
 	QString tempPath;
 #ifdef Q_OS_LINUX
-	//on linux try to use shared memory device first if available
+	// on linux try to use shared memory device first if available
 	static bool useShm = QDir("/dev/shm/").exists();
 	if (useShm)
 		tempPath = "/dev/shm/";
@@ -62,12 +62,11 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 			WARN("Couldn't find preview.sty.");
 			*success = false;
 			return {};
-		}
-		else
+		} else
 			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
 	}
 
-	//create a temporary file
+	// create a temporary file
 	QTemporaryFile file(tempPath + QLatin1String("/") + "labplot_XXXXXX.tex");
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
@@ -79,7 +78,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 		return {};
 	}
 
-	//determine latex engine to be used
+	// determine latex engine to be used
 	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	const auto& engine = group.readEntry("LaTeXEngine", "pdflatex");
 
@@ -88,20 +87,20 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 	int headerIndex = teXString.indexOf("\\begin{document}");
 	QString body;
 	if (headerIndex != -1) {
-		//user provided a complete latex document -> extract the document header and body
+		// user provided a complete latex document -> extract the document header and body
 		QString header = teXString.left(headerIndex);
 		int footerIndex = teXString.indexOf("\\end{document}");
 		body = teXString.mid(headerIndex + 16, footerIndex - headerIndex - 16);
 		out << header;
 	} else {
-		//user simply provided a document body (assume it's a math. expression) -> add a minimal header
+		// user simply provided a document body (assume it's a math. expression) -> add a minimal header
 		out << "\\documentclass{minimal}";
 		if (teXString.indexOf('$') == -1)
 			body = '$' + teXString + '$';
 		else
 			body = teXString;
 
-		//replace line breaks with tex command for a line break '\\'
+		// replace line breaks with tex command for a line break '\\'
 		body = body.replace(QLatin1String("\n"), QLatin1String("\\\\"));
 	}
 
@@ -116,7 +115,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
 	out << "\\setlength\\PreviewBorder{0pt}";
 	// TODO: this fails with pdflatex
-	//out << "\\usepackage{mathtools}";
+	// out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
 	out << "\\setlength{\\fboxsep}{0.2pt}";
@@ -138,7 +137,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 // TEX -> PDF -> QImage
 QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
 	Q_UNUSED(dpi)
-	//DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
+	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
@@ -168,7 +167,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	QFile::remove(baseName + ".aux");
 	QFile::remove(baseName + ".log");
 
-	//read PDF file
+	// read PDF file
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
 		QFile::remove(baseName + ".pdf");
@@ -176,7 +175,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	}
 
 	QByteArray ba = pdfFile.readAll();
- 	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + ".pdf");
 	*success = true;
 
 	return ba;
@@ -187,7 +186,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	//latex: produce the DVI file
+	// latex: produce the DVI file
 	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
 	if (latexFullPath.isEmpty()) {
 		WARN("latex not found");
@@ -253,7 +252,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFile::remove(baseName + ".dvi");
 	QFile::remove(baseName + ".ps");
 
-	//read PDF file
+	// read PDF file
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
 		QFile::remove(baseName + ".pdf");
@@ -261,7 +260,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	}
 
 	QByteArray ba = pdfFile.readAll();
- 	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + ".pdf");
 	*success = true;
 
 	return ba;
@@ -271,7 +270,7 @@ bool TeXRenderer::enabled() {
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 	QString engine = group.readEntry("LaTeXEngine", "");
 	if (engine.isEmpty()) {
-		//empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
 		engine = QLatin1String("xelatex");
 		if (!executableExists(engine)) {
@@ -284,7 +283,7 @@ bool TeXRenderer::enabled() {
 		}
 
 		if (!engine.isEmpty()) {
-			//one of the tex engines was found -> automatically save it in the settings without any user action
+			// one of the tex engines was found -> automatically save it in the settings without any user action
 			group.writeEntry(QLatin1String("LaTeXEngine"), engine);
 			group.sync();
 		}
@@ -293,8 +292,7 @@ bool TeXRenderer::enabled() {
 		return false;
 	}
 
-
-	//Tools needed to convert generated  DVI files to PS and PDF
+	// Tools needed to convert generated  DVI files to PS and PDF
 	if (engine == "latex") {
 		if (!executableExists(QLatin1String("convert"))) {
 			WARN("program \"convert\" does not exist");

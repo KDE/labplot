@@ -1,16 +1,16 @@
 /*
-    File                 : MatioFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the Matio I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatioFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the Matio I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MatioFilterTest.h"
 #include "backend/datasources/filters/MatioFilter.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
@@ -28,22 +28,21 @@ void MatioFilterTest::testImportDouble() {
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
-	
-	//for (int i = 0; i < spreadsheet.rowCount(); i++)
+
+	// for (int i = 0; i < spreadsheet.rowCount(); i++)
 	//	DEBUG(std::setprecision(15) << spreadsheet.column(0)->valueAt(i))
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(0)->valueAt(1), M_PI/4.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(2), M_PI/2.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(3), 3.*M_PI/4.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), M_PI / 4.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), M_PI / 2.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 3. * M_PI / 4.);
 	QCOMPARE(spreadsheet.column(0)->valueAt(4), M_PI);
-	QCOMPARE(spreadsheet.column(0)->valueAt(5), 5.*M_PI/4.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(6), 3.*M_PI/2.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(7), 7.*M_PI/4.);
-	QCOMPARE(spreadsheet.column(0)->valueAt(8), 2.*M_PI);
+	QCOMPARE(spreadsheet.column(0)->valueAt(5), 5. * M_PI / 4.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(6), 3. * M_PI / 2.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(7), 7. * M_PI / 4.);
+	QCOMPARE(spreadsheet.column(0)->valueAt(8), 2. * M_PI);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(0))
-
+	// DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(0))
 }
 
 void MatioFilterTest::testImportSpreadsheet() {
@@ -91,7 +90,7 @@ void MatioFilterTest::testImportSpreadsheet() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 0);
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+	// DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 }
 
 // same test but with start/end row/col
@@ -125,7 +124,7 @@ void MatioFilterTest::testImportSpreadsheetPortion() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+	// DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 }
 
 void MatioFilterTest::testImportMatrix() {
@@ -139,13 +138,13 @@ void MatioFilterTest::testImportMatrix() {
 
 	QCOMPARE(matrix.columnCount(), 5);
 	QCOMPARE(matrix.rowCount(), 3);
-	//QCOMPARE(matrix.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
-	//QCOMPARE(matrix.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
-	//QCOMPARE(matrix.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	// QCOMPARE(matrix.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	// QCOMPARE(matrix.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	// QCOMPARE(matrix.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//QCOMPARE(matrix.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
-	//QCOMPARE(matrix.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	//QCOMPARE(matrix.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	// QCOMPARE(matrix.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	// QCOMPARE(matrix.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	// QCOMPARE(matrix.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(matrix.cell<double>(0, 0), 1);
 	QCOMPARE(matrix.cell<double>(1, 0), 2);
@@ -209,7 +208,7 @@ void MatioFilterTest::testImportSparse() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(1), 0);
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+	// DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 }
 
 void MatioFilterTest::testImportLogicalSparse() {
@@ -513,10 +512,10 @@ void MatioFilterTest::testImportMultipleVars() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 4);
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 5);
 	QCOMPARE(spreadsheet.column(5)->valueAt(0), 0);
-	QCOMPARE(spreadsheet.column(5)->valueAt(2), M_PI/2.);
+	QCOMPARE(spreadsheet.column(5)->valueAt(2), M_PI / 2.);
 	QCOMPARE(spreadsheet.column(5)->valueAt(4), M_PI);
-	QCOMPARE(spreadsheet.column(5)->valueAt(6), 3./2. * M_PI);
-	QCOMPARE(spreadsheet.column(5)->valueAt(8), 2.*M_PI);
+	QCOMPARE(spreadsheet.column(5)->valueAt(6), 3. / 2. * M_PI);
+	QCOMPARE(spreadsheet.column(5)->valueAt(8), 2. * M_PI);
 }
 
 QTEST_MAIN(MatioFilterTest)

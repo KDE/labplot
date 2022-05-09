@@ -4,11 +4,10 @@
 	Description          : Marker which can highlight points of curves and
 						   show their values
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef INFOELEMENT_H
 #define INFOELEMENT_H
@@ -36,8 +35,12 @@ public:
 
 	struct MarkerPoints_T {
 		MarkerPoints_T() = default;
-		MarkerPoints_T(CustomPoint* custompoint, QString customPointPath, const XYCurve* curve, QString curvePath):
-			customPoint(custompoint), customPointPath(customPointPath), curve(curve), curvePath(curvePath) {}
+		MarkerPoints_T(CustomPoint* custompoint, QString customPointPath, const XYCurve* curve, QString curvePath)
+			: customPoint(custompoint)
+			, customPointPath(customPointPath)
+			, curve(curve)
+			, curvePath(curvePath) {
+		}
 		CustomPoint* customPoint{nullptr};
 		QString customPointPath;
 		const XYCurve* curve{nullptr};
@@ -63,7 +66,7 @@ public:
 
 	bool isTextLabel() const;
 	double setMarkerpointPosition(double x);
-	int currentIndex(double new_x, double* found_x=nullptr);
+	int currentIndex(double new_x, double* found_x = nullptr);
 
 	QGraphicsItem* graphicsItem() const override;
 
@@ -86,7 +89,7 @@ public:
 public Q_SLOTS:
 	void labelPositionChanged(TextLabel::PositionWrapper);
 	void labelVisibleChanged(bool);
-	void pointPositionChanged(const PositionWrapper &);
+	void pointPositionChanged(const PositionWrapper&);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childAdded(const AbstractAspect*);
 	void labelBorderShapeChanged();
@@ -100,15 +103,15 @@ private:
 	Q_DECLARE_PRIVATE(InfoElement)
 	TextLabel* m_title{nullptr};
 	QVector<struct MarkerPoints_T> markerpoints;
-	bool m_menusInitialized {false};
-	bool m_suppressChildRemoved {false};
-	bool m_suppressChildPositionChanged {false};
+	bool m_menusInitialized{false};
+	bool m_suppressChildRemoved{false};
+	bool m_suppressChildPositionChanged{false};
 	bool m_setTextLabelText{false};
 	/*!
-		* This variable is set when a curve is moved in the order, because there
-		* the curve is removed and readded and we would like to ignore this remove and
-		* add. Because of single thread it makes no problems.
-		*/
+	 * This variable is set when a curve is moved in the order, because there
+	 * the curve is removed and readded and we would like to ignore this remove and
+	 * add. Because of single thread it makes no problems.
+	 */
 	bool m_curveGetsMoved{false};
 
 	// Actions

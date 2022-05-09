@@ -1,16 +1,16 @@
 /*
-    File                 : HDF5FilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the HDF5 I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : HDF5FilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the HDF5 I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HDF5FilterTest.h"
 #include "backend/datasources/filters/HDF5Filter.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
@@ -32,7 +32,7 @@ void HDF5FilterTest::testImportDouble() {
 	QCOMPARE(spreadsheet.rowCount(), 100);
 	for (int i = 0; i < spreadsheet.columnCount(); i++) {
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
-		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i+1));
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i + 1));
 	}
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -40,8 +40,8 @@ void HDF5FilterTest::testImportDouble() {
 		QCOMPARE(spreadsheet.column(i)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	for (int i = 0; i < 4; i++)
-	for (int j = 0; j < 4; j++)
-		DEBUG(std::setprecision(15) << spreadsheet.column(j)->valueAt(i))
+		for (int j = 0; j < 4; j++)
+			DEBUG(std::setprecision(15) << spreadsheet.column(j)->valueAt(i))
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.000123456804431044);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.001234499970451);
@@ -78,15 +78,15 @@ void HDF5FilterTest::testImportDoublePortion() {
 	QCOMPARE(spreadsheet.rowCount(), 2);
 	for (int i = 0; i < 2; i++) {
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
-		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i+1));
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i + 1));
 	}
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	for (int i = 0; i < 2; i++)
-	for (int j = 0; j < 2; j++)
-		DEBUG(std::setprecision(15) << spreadsheet.column(j)->valueAt(i))
+		for (int j = 0; j < 2; j++)
+			DEBUG(std::setprecision(15) << spreadsheet.column(j)->valueAt(i))
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0.899999976158142);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1.70000004768372);
@@ -106,7 +106,7 @@ void HDF5FilterTest::testImportInt() {
 	QCOMPARE(spreadsheet.rowCount(), 100);
 	for (int i = 0; i < spreadsheet.columnCount(); i++) {
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Integer);
-		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D int array_") + QString::number(i+1));
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D int array_") + QString::number(i + 1));
 	}
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -148,7 +148,7 @@ void HDF5FilterTest::testImportIntPortion() {
 	QCOMPARE(spreadsheet.rowCount(), 2);
 	for (int i = 0; i < 2; i++) {
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Integer);
-		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D int array_") + QString::number(i+1));
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D int array_") + QString::number(i + 1));
 	}
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -167,9 +167,9 @@ void HDF5FilterTest::benchDoubleImport_data() {
 	// can't transfer file name since needed in clean up
 
 	QTemporaryFile file;
-	if (!file.open())	// needed to generate file name
+	if (!file.open()) // needed to generate file name
 		return;
-	file.close();	// only file name is used
+	file.close(); // only file name is used
 
 	benchDataFileName = file.fileName();
 	benchDataFileName.append(".h5");
@@ -177,47 +177,47 @@ void HDF5FilterTest::benchDoubleImport_data() {
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
 	QTest::newRow(testName.toLatin1()) << lines;
-	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) <<  ", lines = " << lines)
+	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
 	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
 	gsl_rng_set(r, 12345);
 
 	// create file
-        // see https://support.hdfgroup.org/HDF5/Tutor/introductory.html
-        hid_t file_id = H5Fcreate(benchDataFileName.toLatin1(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+	// see https://support.hdfgroup.org/HDF5/Tutor/introductory.html
+	hid_t file_id = H5Fcreate(benchDataFileName.toLatin1(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
-        /* Create the data space for the dataset. */
-        hsize_t dims[2];
-        dims[0] = lines;
-        dims[1] = paths;
-        hid_t dataspace_id = H5Screate_simple(2, dims, nullptr);
+	/* Create the data space for the dataset. */
+	hsize_t dims[2];
+	dims[0] = lines;
+	dims[1] = paths;
+	hid_t dataspace_id = H5Screate_simple(2, dims, nullptr);
 
-        /* Create the dataset. */
-        hid_t dataset_id = H5Dcreate(file_id, "/data", H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+	/* Create the dataset. */
+	hid_t dataset_id = H5Dcreate(file_id, "/data", H5T_NATIVE_DOUBLE, dataspace_id, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
 	// create data
 	double path[paths] = {0.0};
-	double *data = new double[paths*lines];
+	double* data = new double[paths * lines];
 
 	const double delta = 0.25;
 	const int dt = 1;
-	const double sigma = delta*delta * dt;
+	const double sigma = delta * delta * dt;
 	for (size_t i = 0; i < lines; ++i) {
-		//std::cout << "line " << i+1 << std::endl;
+		// std::cout << "line " << i+1 << std::endl;
 
 		for (int p = 0; p < paths; ++p) {
 			path[p] += gsl_ran_gaussian_ziggurat(r, sigma);
-			data[p + i*paths] = path[p];
+			data[p + i * paths] = path[p];
 		}
 	}
 
 	herr_t status = H5Dwrite(dataset_id, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	if (status < 0)
 		WARN(Q_FUNC_INFO << ", ERROR writing data")
-        status = H5Dclose(dataset_id);
-        status = H5Sclose(dataspace_id);
-        status = H5Fclose(file_id);
+	status = H5Dclose(dataset_id);
+	status = H5Sclose(dataspace_id);
+	status = H5Fclose(file_id);
 
 	delete[] data;
 
@@ -229,7 +229,7 @@ void HDF5FilterTest::benchDoubleImport() {
 	HDF5Filter filter;
 	filter.setCurrentDataSetName(QLatin1String("/data"));
 
-	const int p = paths;	// need local variable
+	const int p = paths; // need local variable
 	QBENCHMARK {
 		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 

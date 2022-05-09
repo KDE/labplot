@@ -1,12 +1,12 @@
 /*
-    File                 : AbstractAspect.h
-    Project              : LabPlot
-    Description          : Base class for all objects in a Project.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractAspect.h
+	Project              : LabPlot
+	Description          : Base class for all objects in a Project.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ABSTRACT_ASPECT_H
@@ -41,57 +41,57 @@ enum class AspectType : quint64 {
 	DatapickerPoint = 0x0100004,
 
 	WorksheetElement = 0x0200000,
-		Axis = 0x0210001,
-		CartesianPlotLegend = 0x0210002,
-		CustomPoint = 0x0210004,
-		Histogram = 0x0210008,
-		PlotArea = 0x0210010,
-		TextLabel = 0x0210020,
-		Image = 0x0210030,
-		ReferenceLine = 0x0210040,
-		InfoElement = 0x0210080,
-		BoxPlot = 0x0210100,
-		WorksheetElementContainer = 0x0220000,
-			AbstractPlot = 0x0221000,
-				CartesianPlot = 0x0221001,
-			WorksheetElementGroup = 0x0222000,
-		XYCurve = 0x0240000,
-			XYEquationCurve = 0x0240001,
-		XYAnalysisCurve = 0x0280000,
-			XYConvolutionCurve = 0x0280001,
-			XYCorrelationCurve = 0x0280002,
-			XYDataReductionCurve = 0x0280004,
-			XYDifferentiationCurve = 0x0280008,
-			XYFitCurve = 0x0280010,
-			XYFourierFilterCurve = 0x0280020,
-			XYFourierTransformCurve = 0x0280040,
-			XYInterpolationCurve = 0x0280080,
-			XYIntegrationCurve = 0x0280100,
-			XYSmoothCurve = 0x0280200,
-			XYHilbertTransformCurve = 0x0280400,
+	Axis = 0x0210001,
+	CartesianPlotLegend = 0x0210002,
+	CustomPoint = 0x0210004,
+	Histogram = 0x0210008,
+	PlotArea = 0x0210010,
+	TextLabel = 0x0210020,
+	Image = 0x0210030,
+	ReferenceLine = 0x0210040,
+	InfoElement = 0x0210080,
+	BoxPlot = 0x0210100,
+	WorksheetElementContainer = 0x0220000,
+	AbstractPlot = 0x0221000,
+	CartesianPlot = 0x0221001,
+	WorksheetElementGroup = 0x0222000,
+	XYCurve = 0x0240000,
+	XYEquationCurve = 0x0240001,
+	XYAnalysisCurve = 0x0280000,
+	XYConvolutionCurve = 0x0280001,
+	XYCorrelationCurve = 0x0280002,
+	XYDataReductionCurve = 0x0280004,
+	XYDifferentiationCurve = 0x0280008,
+	XYFitCurve = 0x0280010,
+	XYFourierFilterCurve = 0x0280020,
+	XYFourierTransformCurve = 0x0280040,
+	XYInterpolationCurve = 0x0280080,
+	XYIntegrationCurve = 0x0280100,
+	XYSmoothCurve = 0x0280200,
+	XYHilbertTransformCurve = 0x0280400,
 
 	AbstractPart = 0x0400000,
-		AbstractDataSource = 0x0410000,
-			Matrix = 0x0411000,
-			Spreadsheet = 0x0412000,
-				LiveDataSource = 0x0412001,
-				MQTTTopic = 0x0412002,
-		CantorWorksheet = 0x0420001,
-		Datapicker = 0x0420002,
-		DatapickerImage = 0x0420004,
-		Note = 0x0420008,
-		Workbook = 0x0420010,
-		Worksheet = 0x0420020,
+	AbstractDataSource = 0x0410000,
+	Matrix = 0x0411000,
+	Spreadsheet = 0x0412000,
+	LiveDataSource = 0x0412001,
+	MQTTTopic = 0x0412002,
+	CantorWorksheet = 0x0420001,
+	Datapicker = 0x0420002,
+	DatapickerImage = 0x0420004,
+	Note = 0x0420008,
+	Workbook = 0x0420010,
+	Worksheet = 0x0420020,
 
 	AbstractColumn = 0x1000000,
-		Column = 0x1000001,
-		SimpleFilterColumn = 0x1000002,
-		ColumnStringIO = 0x1000004,
+	Column = 0x1000001,
+	SimpleFilterColumn = 0x1000002,
+	ColumnStringIO = 0x1000004,
 
 	Folder = 0x2000000,
-		Project = 0x2000001,
-		MQTTClient = 0x2000002,
-		MQTTSubscription = 0x2000004,
+	Project = 0x2000001,
+	MQTTClient = 0x2000002,
+	MQTTSubscription = 0x2000004,
 };
 
 #ifdef SDK
@@ -103,11 +103,7 @@ class AbstractAspect : public QObject {
 	Q_OBJECT
 
 public:
-	enum class ChildIndexFlag {
-		IncludeHidden = 0x01,
-		Recursive = 0x02,
-		Compress = 0x04
-	};
+	enum class ChildIndexFlag { IncludeHidden = 0x01, Recursive = 0x02, Compress = 0x04 };
 
 	Q_DECLARE_FLAGS(ChildIndexFlags, ChildIndexFlag)
 
@@ -120,7 +116,7 @@ public:
 
 	// type name for internal use (no translation)
 	static QString typeName(AspectType type) {
-		switch(type) {
+		switch (type) {
 		case AspectType::AbstractAspect:
 			return QStringLiteral("AbstractAspect");
 		case AspectType::AbstractFilter:
@@ -253,7 +249,7 @@ public:
 	AspectType type() const;
 	bool inherits(AspectType type) const;
 
-	//functions related to the handling of the tree-like project structure
+	// functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;
 	AbstractAspect* parent(AspectType type) const;
 	void setParentAspect(AbstractAspect*);
@@ -261,7 +257,7 @@ public:
 	bool isDescendantOf(AbstractAspect* other);
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
-	virtual void finalizeAdd() {};
+	virtual void finalizeAdd(){};
 	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
@@ -273,9 +269,10 @@ public:
 	virtual QVector<AspectType> pasteTypes() const;
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
-	virtual void processDropEvent(const QVector<quintptr>&) {};
+	virtual void processDropEvent(const QVector<quintptr>&){};
 
-	template <class T> T* ancestor() const {
+	template<class T>
+	T* ancestor() const {
 		AbstractAspect* parent = parentAspect();
 		while (parent) {
 			T* ancestorAspect = dynamic_cast<T*>(parent);
@@ -286,9 +283,10 @@ public:
 		return nullptr;
 	}
 
-	template <class T> QVector<T*> children(ChildIndexFlags flags = {}) const {
+	template<class T>
+	QVector<T*> children(ChildIndexFlags flags = {}) const {
 		QVector<T*> result;
-		for (auto* child: children()) {
+		for (auto* child : children()) {
 			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
 				T* i = dynamic_cast<T*>(child);
 				if (i)
@@ -301,9 +299,10 @@ public:
 		return result;
 	}
 
-	template <class T> T* child(int index, ChildIndexFlags flags = {}) const {
+	template<class T>
+	T* child(int index, ChildIndexFlags flags = {}) const {
 		int i = 0;
-		for (auto* child: children()) {
+		for (auto* child : children()) {
 			T* c = dynamic_cast<T*>(child);
 			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
 				return c;
@@ -311,8 +310,9 @@ public:
 		return nullptr;
 	}
 
-	template <class T> T* child(const QString& name) const {
-		for (auto* child: children()) {
+	template<class T>
+	T* child(const QString& name) const {
+		for (auto* child : children()) {
 			T* c = dynamic_cast<T*>(child);
 			if (c && child->name() == name)
 				return c;
@@ -320,9 +320,10 @@ public:
 		return nullptr;
 	}
 
-	template <class T> int childCount(ChildIndexFlags flags = {}) const {
+	template<class T>
+	int childCount(ChildIndexFlags flags = {}) const {
 		int result = 0;
-		for (auto* child: children()) {
+		for (auto* child : children()) {
 			T* i = dynamic_cast<T*>(child);
 			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
 				result++;
@@ -330,10 +331,12 @@ public:
 		return result;
 	}
 
-	template <class T> int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = {}) const {
+	template<class T>
+	int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = {}) const {
 		int index = 0;
-		for (auto* c:	 children()) {
-			if (child == c) return index;
+		for (auto* c : children()) {
+			if (child == c)
+				return index;
 			T* i = dynamic_cast<T*>(c);
 			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
 				index++;
@@ -341,17 +344,21 @@ public:
 		return -1;
 	}
 
-	//undo/redo related functions
+	// undo/redo related functions
 	void setUndoAware(bool);
 	virtual QUndoStack* undoStack() const;
 	void exec(QUndoCommand*);
-	void exec(QUndoCommand* command, const char* preChangeSignal, const char* postChangeSignal,
-		QGenericArgument val0 = QGenericArgument(), QGenericArgument val1 = QGenericArgument(),
-		QGenericArgument val2 = QGenericArgument(), QGenericArgument val3 = QGenericArgument());
+	void exec(QUndoCommand* command,
+			  const char* preChangeSignal,
+			  const char* postChangeSignal,
+			  QGenericArgument val0 = QGenericArgument(),
+			  QGenericArgument val1 = QGenericArgument(),
+			  QGenericArgument val2 = QGenericArgument(),
+			  QGenericArgument val3 = QGenericArgument());
 	void beginMacro(const QString& text);
 	void endMacro();
 
-	//save/load
+	// save/load
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
 	void setPasted(bool);
@@ -360,9 +367,11 @@ public:
 	static AspectType clipboardAspectType(QString&);
 
 protected:
-	void info(const QString& text) { emit statusInfo(text); }
+	void info(const QString& text) {
+		emit statusInfo(text);
+	}
 
-	//serialization/deserialization
+	// serialization/deserialization
 	bool readBasicAttributes(XmlStreamReader*);
 	void writeBasicAttributes(QXmlStreamWriter*) const;
 	void writeCommentElement(QXmlStreamWriter*) const;
@@ -405,11 +414,11 @@ Q_SIGNALS:
 	void statusInfo(const QString&);
 	void renameRequested();
 
-	//selection/deselection in model (project explorer)
+	// selection/deselection in model (project explorer)
 	void selected(const AbstractAspect*);
 	void deselected(const AbstractAspect*);
 
-	//selection/deselection in view
+	// selection/deselection in view
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
 };

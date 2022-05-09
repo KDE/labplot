@@ -1,11 +1,11 @@
 /*
-    File                 : FITSFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the FITS filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : FITSFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the FITS filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "FITSFilterTest.h"
@@ -13,13 +13,17 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
+#include <fitsio.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
-#include <fitsio.h>
 }
 
 #define ERRCODE -1
-#define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
+#define ERR(e)                                                                                                                                                 \
+	{                                                                                                                                                          \
+		printf("Error: %s\n", nc_strerror(e));                                                                                                                 \
+		exit(ERRCODE);                                                                                                                                         \
+	}
 
 void FITSFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2ASSNu5780205bx.fits"));

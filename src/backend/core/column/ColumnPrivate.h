@@ -1,21 +1,20 @@
 /*
-    File                 : ColumnPrivate.h
-    Project              : LabPlot
-    Description          : Private data class of Column
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ColumnPrivate.h
+	Project              : LabPlot
+	Description          : Private data class of Column
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
 #include "backend/core/AbstractColumn.h"
-#include "backend/lib/IntervalAttribute.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/IntervalAttribute.h"
 
 class Column;
 class ColumnSetGlobalFormulaCmd;
@@ -38,7 +37,7 @@ public:
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
 	int rowCount() const;
-	int availableRowCount(int max = -1) const;	// valid rows (stops when max rows found)
+	int availableRowCount(int max = -1) const; // valid rows (stops when max rows found)
 	void resizeTo(int);
 
 	void insertRows(int before, int count);
@@ -59,27 +58,26 @@ public:
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
 
-	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter *in, AbstractSimpleFilter *out);
+	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter* in, AbstractSimpleFilter* out);
 	void replaceData(void*);
 
 	IntervalAttribute<QString> formulaAttribute() const;
 	void replaceFormulas(const IntervalAttribute<QString>& formulas);
 
-	//global formula defined for the whole column
+	// global formula defined for the whole column
 	QString formula() const;
 	const QVector<Column::FormulaData>& formulaData() const;
 	void setFormulVariableColumnsPath(int index, const QString& path);
-	void setFormulVariableColumn(int index, Column *column);
+	void setFormulVariableColumn(int index, Column* column);
 	void setFormulVariableColumn(Column*);
 	bool formulaAutoUpdate() const;
 	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
-	void setFormula(const QString& formula, const QStringList& variableNames,
-					const QStringList& variableColumnPaths, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate);
 	void updateFormula();
 
-	//cell formulas
+	// cell formulas
 	QString formula(int row) const;
-	QVector< Interval<int> > formulaIntervals() const;
+	QVector<Interval<int>> formulaIntervals() const;
 	void setFormula(const Interval<int>& i, const QString& formula);
 	void setFormula(int row, const QString& formula);
 	void clearFormulas();
@@ -138,34 +136,35 @@ public:
 			hasValues = false;
 			properties = false;
 		}
-		bool statistics{false}; //is 'statistics' already available or needs to be (re-)calculated?
+		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
 		// are minMax already calculated or needs to be (re-)calculated?
 		// It is separated from statistics, because these are important values
 		// which are quite often needed, but if the curve is monoton a faster algorithm is
 		// used to recalculate the values
 		bool min{false};
 		bool max{false};
-		bool hasValues{false}; //is 'hasValues' already available or needs to be (re-)calculated?
-		bool properties{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
+		bool hasValues{false}; // is 'hasValues' already available or needs to be (re-)calculated?
+		bool properties{false}; // is 'properties' already available (true) or needs to be (re-)calculated (false)?
 	};
 
 	CachedValuesAvailable available;
 	AbstractColumn::ColumnStatistics statistics;
 	bool hasValues{false};
-	AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
+	AbstractColumn::Properties properties{
+		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 private:
-	AbstractColumn::ColumnMode m_columnMode;	// type of column data
-	void* m_data{nullptr};	//pointer to the data container (QVector<T>)
-	void* m_labels{nullptr};	//pointer to the container for the value labels(QMap<T, QString>)
-	AbstractSimpleFilter* m_inputFilter{nullptr};	//input filter for string -> data type conversion
-	AbstractSimpleFilter* m_outputFilter{nullptr};	//output filter for data type -> string conversion
+	AbstractColumn::ColumnMode m_columnMode; // type of column data
+	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
+	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
+	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
 	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
-	int m_width{0}; //column width in the view
+	int m_width{0}; // column width in the view
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 

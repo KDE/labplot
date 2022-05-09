@@ -1,26 +1,26 @@
 /*
-    File                 : FITSHeaderEditWidget.h
-    Project              : LabPlot
-    Description          : Widget for listing/editing FITS header keywords
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSHeaderEditWidget.h
+	Project              : LabPlot
+	Description          : Widget for listing/editing FITS header keywords
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSHEADEREDITWIDGET_H
 #define FITSHEADEREDITWIDGET_H
 
-#include <QWidget>
 #include "backend/datasources/filters/FITSFilter.h"
+#include <QWidget>
 
 namespace Ui {
-	class FITSHeaderEditWidget;
+class FITSHeaderEditWidget;
 }
 
 class FITSHeaderEditWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit FITSHeaderEditWidget(QWidget *parent = nullptr);
+	explicit FITSHeaderEditWidget(QWidget* parent = nullptr);
 	~FITSHeaderEditWidget() override;
 
 private:
@@ -73,7 +73,7 @@ private Q_SLOTS:
 	void addKeyword();
 	void addModifyKeywordUnit();
 	void closeFile();
-	void enableButtonCloseFile(QTreeWidgetItem *, int);
+	void enableButtonCloseFile(QTreeWidgetItem*, int);
 	void enableButtonAddUnit();
 Q_SIGNALS:
 	void changed(bool);

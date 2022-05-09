@@ -17,7 +17,10 @@
 
 const QString SpiceFilter::xmlElementName = QStringLiteral("SpiceFilter");
 
-SpiceFilter::SpiceFilter() : AbstractFileFilter(FileType::Spice), d(new SpiceFilterPrivate(this)) {}
+SpiceFilter::SpiceFilter()
+	: AbstractFileFilter(FileType::Spice)
+	, d(new SpiceFilterPrivate(this)) {
+}
 
 SpiceFilter::~SpiceFilter() = default;
 
@@ -36,7 +39,6 @@ bool SpiceFilter::isSpiceFile(const QString& fileName, bool* binary) {
 }
 
 QString SpiceFilter::fileInfoString(const QString& fileName) {
-
 	SpiceFileReader reader(fileName);
 	if (!reader.open())
 		return {};
@@ -102,15 +104,16 @@ QVector<AbstractColumn::ColumnMode> SpiceFilter::columnModes() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-SpiceFilterPrivate::SpiceFilterPrivate(SpiceFilter* owner) : q(owner) {
+SpiceFilterPrivate::SpiceFilterPrivate(SpiceFilter* owner)
+	: q(owner) {
 }
 
 void SpiceFilterPrivate::generateVectorNamesColumnModes(const SpiceFileReader& reader) {
-	//add names of the variables
+	// add names of the variables
 	vectorNames.clear();
 	columnModes.clear();
-	for (const auto& variable: reader.variables()) {
-		if(!reader.isReal()) {
+	for (const auto& variable : reader.variables()) {
+		if (!reader.isReal()) {
 			vectorNames << variable.variableName + ", " + variable.type + QLatin1String(" REAL");
 			vectorNames << variable.variableName + ", " + variable.type + QLatin1String(" IMAGINARY");
 			columnModes << AbstractColumn::ColumnMode::Double;
@@ -138,10 +141,10 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 
 	generateVectorNamesColumnModes(reader);
 
-	//prepare the data container
+	// prepare the data container
 	const int numberVariables = reader.variables().count();
 
-	//skip data lines, if required
+	// skip data lines, if required
 	const int skip = startRow - 1;
 
 	// create new datacontainer to store the preview
@@ -165,7 +168,7 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	// delete all element of the datacontainer again
-	for (uint i=0; i < dataContainer.size(); i++)
+	for (uint i = 0; i < dataContainer.size(); i++)
 		delete static_cast<QVector<double>*>(dataContainer[i]);
 
 	return dataStrings;
@@ -175,8 +178,8 @@ QVector<QStringList> SpiceFilterPrivate::preview(const QString& fileName, int li
 	reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
-		  << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
+	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = " << dataSource
+					  << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	SpiceFileReader reader(fileName);
 #ifdef SPICEFILTERTEST_EN
@@ -185,11 +188,13 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	if (!reader.open() || !reader.validSpiceFile())
 		return;
 
-	q->connect(&reader, &SpiceFileReader::processed, [=] (double processed) {Q_EMIT q->completed(processed);});
+	q->connect(&reader, &SpiceFileReader::processed, [=](double processed) {
+		Q_EMIT q->completed(processed);
+	});
 
 	generateVectorNamesColumnModes(reader);
 
-	//prepare the data container
+	// prepare the data container
 	const int numberVariables = reader.variables().count();
 	const int actualEndRow = (endRow == -1 || endRow > reader.numberSimulationPoints()) ? reader.numberSimulationPoints() : endRow;
 	const int actualRows = actualEndRow - startRow + 1;
@@ -197,7 +202,7 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	// resize dataContainer
 	const int columnOffset = dataSource->prepareImport(m_dataContainer, importMode, actualRows, actualCols, vectorNames, columnModes);
 
-	//skip data lines, if required
+	// skip data lines, if required
 	const int skip = startRow - 1;
 	reader.readData(m_dataContainer, skip, actualRows);
 
@@ -208,7 +213,7 @@ void SpiceFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	writes the content of \c dataSource to the file \c fileName.
 */
 void SpiceFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
-	//TODO: not implemented yet
+	// TODO: not implemented yet
 }
 
 //##############################################################################

@@ -1,11 +1,11 @@
 /*
-    File                 : CommonTest.cpp
-    Project              : LabPlot
-    Description          : General test class
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CommonTest.cpp
+	Project              : LabPlot
+	Description          : General test class
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CommonTest.h"
@@ -23,8 +23,7 @@ void CommonTest::initTestCase() {
 #endif
 
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
+	// TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
-

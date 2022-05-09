@@ -1,11 +1,11 @@
 /*
-    File             : XYHilbertTransformCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of Hilbert transform curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYHilbertTransformCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of Hilbert transform curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYHilbertTransformCurveDock.h"
@@ -28,7 +28,8 @@
   \ingroup kdefrontend
 */
 
-XYHilbertTransformCurveDock::XYHilbertTransformCurveDock(QWidget *parent) : XYCurveDock(parent) {
+XYHilbertTransformCurveDock::XYHilbertTransformCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
@@ -42,7 +43,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -54,14 +55,14 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_HILBERT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_hilbert_result_type_name[i]));
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
+	// Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::nameChanged);
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
@@ -69,7 +70,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::typeChanged);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::plotRangeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYHilbertTransformCurveDock::recalculateClicked);
 
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYHilbertTransformCurveDock::xDataColumnChanged);
@@ -77,7 +78,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 }
 
 void XYHilbertTransformCurveDock::initGeneralTab() {
-	//if there are more then one curve in the list, disable the tab "general"
+	// if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -96,26 +97,26 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
+	// show the properties of the first curve
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 
 	SET_NUMBER_LOCALE
-	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformData.xRange.first()) );
-	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformData.xRange.last()) );
+	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));
+	uiGeneralTab.leMax->setText(numberLocale.toString(m_transformData.xRange.last()));
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 	this->showTransformResult();
 
-	//enable the "recalculate"-button if the source data was changed since the last transform
+	// enable the "recalculate"-button if the source data was changed since the last transform
 	uiGeneralTab.pbRecalculate->setEnabled(m_transformCurve->isSourceDataChangedSinceLastRecalc());
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_transformCurve, &XYHilbertTransformCurve::aspectDescriptionChanged, this, &XYHilbertTransformCurveDock::aspectDescriptionChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::xDataColumnChanged, this, &XYHilbertTransformCurveDock::curveXDataColumnChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::yDataColumnChanged, this, &XYHilbertTransformCurveDock::curveYDataColumnChanged);
@@ -126,10 +127,17 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 }
 
 void XYHilbertTransformCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	                       AspectType::XYFitCurve, AspectType::CantorWorksheet};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Workbook,
+						   AspectType::Datapicker,
+						   AspectType::DatapickerCurve,
+						   AspectType::Spreadsheet,
+						   AspectType::LiveDataSource,
+						   AspectType::Column,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYFitCurve,
+						   AspectType::CantorWorksheet};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -178,8 +186,8 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -211,8 +219,8 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 		m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
 			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
+			uiGeneralTab.leMin->setText(numberLocale.toString(m_transformCurve->xDataColumn()->minimum()));
+			uiGeneralTab.leMax->setText(numberLocale.toString(m_transformCurve->xDataColumn()->maximum()));
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
@@ -220,7 +228,6 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.lMax->setEnabled(true);
 		uiGeneralTab.leMax->setEnabled(true);
 	}
-
 }
 void XYHilbertTransformCurveDock::xRangeMinChanged() {
 	SET_DOUBLE_FROM_LE_REC(m_transformData.xRange.first(), uiGeneralTab.leMin);
@@ -238,7 +245,6 @@ void XYHilbertTransformCurveDock::typeChanged() {
 }
 
 void XYHilbertTransformCurveDock::recalculateClicked() {
-
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
@@ -252,7 +258,7 @@ void XYHilbertTransformCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no transforming possible without the x- and y-data
+	// no transforming possible without the x- and y-data
 	auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX && aspectY);
@@ -282,16 +288,16 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
 	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 }
@@ -299,7 +305,7 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 //*************************************************************
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());

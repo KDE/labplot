@@ -1,16 +1,16 @@
 /*
-    File                 : DatasetHandler.cpp
-    Project              : LabPlot
-    Description          : Processes a dataset's metadata file
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	File                 : DatasetHandler.cpp
+	Project              : LabPlot
+	Description          : Processes a dataset's metadata file
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/DatasetHandler.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QDir>
@@ -32,9 +32,10 @@
 
   \ingroup datasources
 */
-DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet) : m_spreadsheet(spreadsheet),
-	m_filter(new AsciiFilter),
-	m_downloadManager(new QNetworkAccessManager) {
+DatasetHandler::DatasetHandler(Spreadsheet* spreadsheet)
+	: m_spreadsheet(spreadsheet)
+	, m_filter(new AsciiFilter)
+	, m_downloadManager(new QNetworkAccessManager) {
 	connect(m_downloadManager, &QNetworkAccessManager::finished, this, &DatasetHandler::downloadFinished);
 	connect(this, &DatasetHandler::downloadCompleted, this, &DatasetHandler::processDataset);
 }
@@ -71,13 +72,13 @@ void DatasetHandler::markMetadataAsInvalid() {
  * @brief Configures the filter, that will be used later, based on the metadata file.
  */
 void DatasetHandler::configureFilter() {
-	//set some default values common to many datasets
+	// set some default values common to many datasets
 	m_filter->setNumberFormat(QLocale::C);
 	m_filter->setSkipEmptyParts(true);
 	m_filter->setHeaderEnabled(false);
 	m_filter->setRemoveQuotesEnabled(true);
 
-	//read properties specified in the dataset description
+	// read properties specified in the dataset description
 	if (!m_object->isEmpty()) {
 		if (m_object->contains("separator"))
 			m_filter->setSeparatingCharacter(m_object->value("separator").toString());
@@ -127,12 +128,12 @@ void DatasetHandler::configureSpreadsheet(const QString& description) {
 	DEBUG("Start preparing spreadsheet");
 	if (!m_object->isEmpty()) {
 		if (m_object->contains("name"))
-			m_spreadsheet->setName( m_object->value("name").toString());
+			m_spreadsheet->setName(m_object->value("name").toString());
 		else
 			markMetadataAsInvalid();
 
 		if (description.startsWith(QLatin1String("<!DOCTYPE html"))) {
-			//remove html-formatting
+			// remove html-formatting
 			QTextEdit te;
 			te.setHtml(description);
 			m_spreadsheet->setComment(te.toPlainText());
@@ -149,10 +150,9 @@ void DatasetHandler::prepareForDataset() {
 	DEBUG("Start downloading dataset");
 	if (!m_object->isEmpty()) {
 		if (m_object->contains("url")) {
-			const QString& url =  m_object->value("url").toString();
+			const QString& url = m_object->value("url").toString();
 			doDownload(QUrl(url));
-		}
-		else {
+		} else {
 			QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("There is no download URL present in the metadata file!"));
 		}
 	} else
@@ -167,7 +167,7 @@ void DatasetHandler::doDownload(const QUrl& url) {
 	DEBUG("Download request");
 	QNetworkRequest request(url);
 	m_currentDownload = m_downloadManager->get(request);
-	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this] (qint64 bytesReceived, qint64 bytesTotal) {
+	connect(m_currentDownload, &QNetworkReply::downloadProgress, [this](qint64 bytesReceived, qint64 bytesTotal) {
 		double progress;
 		if (bytesTotal == -1)
 			progress = 0;
@@ -185,17 +185,14 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 	DEBUG("Download finished");
 	const QUrl& url = reply->url();
 	if (reply->error()) {
-		qDebug("Download of %s failed: %s\n",
-			   url.toEncoded().constData(),
-			   qPrintable(reply->errorString()));
+		qDebug("Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
 	} else {
 		if (isHttpRedirect(reply)) {
 			qDebug("Request was redirected.\n");
 		} else {
 			QString filename = saveFileName(url);
 			if (saveToDisk(filename, reply)) {
-				qDebug("Download of %s succeeded (saved to %s)\n",
-					   url.toEncoded().constData(), qPrintable(filename));
+				qDebug("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
 				m_fileName = filename;
 				Q_EMIT downloadCompleted();
 			}
@@ -212,8 +209,7 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
 	const int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 	// TODO enum/defines for status codes ?
-	return statusCode == 301 || statusCode == 302 || statusCode == 303
-			|| statusCode == 305 || statusCode == 307 || statusCode == 308;
+	return statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 305 || statusCode == 307 || statusCode == 308;
 }
 
 /**
@@ -223,10 +219,10 @@ bool DatasetHandler::isHttpRedirect(QNetworkReply* reply) {
 QString DatasetHandler::saveFileName(const QUrl& url) {
 	const QString path = url.path();
 
-	//get the extension of the downloaded file
+	// get the extension of the downloaded file
 	const QString downloadFileName = QFileInfo(path).fileName();
 	int lastIndex = downloadFileName.lastIndexOf(".");
-	const QString fileExtension = lastIndex >= 0 ?  downloadFileName.right(downloadFileName.length() - lastIndex) : "";
+	const QString fileExtension = lastIndex >= 0 ? downloadFileName.right(downloadFileName.length() - lastIndex) : "";
 
 	QString basename = m_object->value("filename").toString() + fileExtension;
 
@@ -236,16 +232,16 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (!downloadDir.exists()) {
 		if (!downloadDir.mkpath(downloadDir.path())) {
-			qDebug()<<"Failed to create the directory " << downloadDir.path();
+			qDebug() << "Failed to create the directory " << downloadDir.path();
 			return {};
 		}
 	}
 
 	QString fileName = downloadDir.path() + QLatin1Char('/') + basename;
-	QFileInfo fileInfo (fileName);
+	QFileInfo fileInfo(fileName);
 	if (QFile::exists(fileName)) {
-		if (fileInfo.lastModified().addDays(1) < QDateTime::currentDateTime()){
-			QFile removeFile (fileName);
+		if (fileInfo.lastModified().addDays(1) < QDateTime::currentDateTime()) {
+			QFile removeFile(fileName);
 			removeFile.remove();
 		} else {
 			qDebug() << "Dataset file already exists, no need to download it again";
@@ -260,9 +256,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 	QFile file(filename);
 	if (!file.open(QIODevice::WriteOnly)) {
-		qDebug("Could not open %s for writing: %s\n",
-			   qPrintable(filename),
-			   qPrintable(file.errorString()));
+		qDebug("Could not open %s for writing: %s\n", qPrintable(filename), qPrintable(file.errorString()));
 		return false;
 	}
 
@@ -278,14 +272,14 @@ bool DatasetHandler::saveToDisk(const QString& filename, QIODevice* data) {
 void DatasetHandler::processDataset() {
 	m_filter->readDataFromFile(m_fileName, m_spreadsheet);
 
-	//set column comments/descriptions, if available
-	//TODO:
-// 	if (!m_object->isEmpty()) {
-// 		int index = 0;
-// 		const int columnsCount = m_spreadsheet->columnCount();
-// 		while(m_object->contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
-// 			m_spreadsheet->column(index)->setComment(m_object->value(i18n("column_description_%1", index)).toString());
-// 			++index;
-// 		}
-// 	}
+	// set column comments/descriptions, if available
+	// TODO:
+	// 	if (!m_object->isEmpty()) {
+	// 		int index = 0;
+	// 		const int columnsCount = m_spreadsheet->columnCount();
+	// 		while(m_object->contains(i18n("column_description_%1", index)) && (index < columnsCount)) {
+	// 			m_spreadsheet->column(index)->setComment(m_object->value(i18n("column_description_%1", index)).toString());
+	// 			++index;
+	// 		}
+	// 	}
 }

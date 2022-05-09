@@ -1,20 +1,19 @@
 /*
-    File                 : WorkbookView.cpp
-    Project              : LabPlot
-    Description          : View class for Workbook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : WorkbookView.cpp
+	Project              : LabPlot
+	Description          : View class for Workbook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "WorkbookView.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QHBoxLayout>
 #include <QMenu>
@@ -29,33 +28,33 @@
 
 	\ingroup commonfrontend
  */
-WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
-	m_tabWidget(new QTabWidget(this)),
-	m_workbook(workbook) {
-
+WorkbookView::WorkbookView(Workbook* workbook)
+	: QWidget()
+	, m_tabWidget(new QTabWidget(this))
+	, m_workbook(workbook) {
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
-// 	m_tabWidget->setMovable(true);
+	// 	m_tabWidget->setMovable(true);
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	m_tabWidget->setMinimumSize(200, 200);
 
 	auto* layout = new QHBoxLayout(this);
-	layout->setContentsMargins(0,0,0,0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(m_tabWidget);
 
-	//add tab for each children view
+	// add tab for each children view
 	m_initializing = true;
 	for (const auto* aspect : m_workbook->children<AbstractAspect>())
 		handleAspectAdded(aspect);
 	m_initializing = false;
 
-	//Actions
+	// Actions
 	action_add_spreadsheet = new QAction(QIcon::fromTheme("labplot-spreadsheet"), i18n("Spreadsheet"), this);
 	action_add_matrix = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Matrix"), this);
 	connect(action_add_spreadsheet, &QAction::triggered, this, &WorkbookView::addSpreadsheet);
 	connect(action_add_matrix, &QAction::triggered, this, &WorkbookView::addMatrix);
 
-	//SIGNALs/SLOTs
+	// SIGNALs/SLOTs
 	connect(m_workbook, &Workbook::aspectDescriptionChanged, this, &WorkbookView::handleDescriptionChanged);
 	connect(m_workbook, &Workbook::aspectAdded, this, &WorkbookView::handleAspectAdded);
 	connect(m_workbook, &Workbook::aspectAboutToBeRemoved, this, &WorkbookView::handleAspectAboutToBeRemoved);
@@ -64,14 +63,14 @@ WorkbookView::WorkbookView(Workbook* workbook) : QWidget(),
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &WorkbookView::tabChanged);
 	connect(m_tabWidget, &QTabWidget::customContextMenuRequested, this, &WorkbookView::showTabContextMenu);
-// 	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &WorkbookView::tabMoved);
+	// 	connect(m_tabWidget->tabBar(), &QTabBar::tabMoved, this, &WorkbookView::tabMoved);
 }
 
 WorkbookView::~WorkbookView() {
-	//no need to react on currentChanged() in TabWidget when views are deleted
+	// no need to react on currentChanged() in TabWidget when views are deleted
 	disconnect(m_tabWidget, nullptr, nullptr, nullptr);
 
-	//delete all children views here, its own view will be deleted in ~AbstractPart()
+	// delete all children views here, its own view will be deleted in ~AbstractPart()
 	for (const auto* part : m_workbook->children<AbstractPart>())
 		part->deleteView();
 }
@@ -100,17 +99,17 @@ void WorkbookView::tabChanged(int index) {
 }
 
 void WorkbookView::tabMoved(int /*from*/, int /*to*/) {
-	//TODO:
-// 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(to);
-// 	if (aspect) {
-// 		m_tabMoving = true;
-// 		AbstractAspect* sibling = m_workbook->child<AbstractAspect>(from);
-// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
-// 		aspect->remove();
-// 		m_workbook->insertChildBefore(aspect, sibling);
-// 		qDebug()<<"inserted";
-// 		m_tabMoving = false;
-// 	}
+	// TODO:
+	// 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(to);
+	// 	if (aspect) {
+	// 		m_tabMoving = true;
+	// 		AbstractAspect* sibling = m_workbook->child<AbstractAspect>(from);
+	// 		qDebug()<<"insert: " << to << "  " <<  aspect->name() << ",  " << from << "  " << sibling->name();
+	// 		aspect->remove();
+	// 		m_workbook->insertChildBefore(aspect, sibling);
+	// 		qDebug()<<"inserted";
+	// 		m_tabMoving = false;
+	// 	}
 }
 
 void WorkbookView::itemSelected(int index) {
@@ -129,8 +128,8 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 
 	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
-	//there're already actions available there. Skip the first title-action
-	//and insert the action at the beginning of the menu.
+	// there're already actions available there. Skip the first title-action
+	// and insert the action at the beginning of the menu.
 	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
@@ -170,7 +169,7 @@ void WorkbookView::addSpreadsheet() {
 
 void WorkbookView::handleDescriptionChanged(const AbstractAspect* aspect) {
 	int index = m_workbook->indexOfChild<AbstractAspect>(aspect);
-	if (index != -1 && index<m_tabWidget->count())
+	if (index != -1 && index < m_tabWidget->count())
 		m_tabWidget->setTabText(index, aspect->name());
 }
 

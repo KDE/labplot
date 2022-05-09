@@ -1,10 +1,10 @@
 /*
-    File                 : DatasetMetadataManagerDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog for managing a metadata file of a dataset
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatasetMetadataManagerDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog for managing a metadata file of a dataset
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
@@ -15,8 +15,8 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 #include <QDialogButtonBox>
-#include <QWindow>
 #include <QPushButton>
+#include <QWindow>
 
 /*!
 	\class DatasetMetadataManagerDialog
@@ -24,10 +24,11 @@
 
 	\ingroup kdefrontend
  */
-DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap) : QDialog(parent),
-	m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap)),
-	m_buttonBox(nullptr),
-	m_okButton(nullptr) {
+DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>& datasetMap)
+	: QDialog(parent)
+	, m_mainWidget(new DatasetMetadataManagerWidget(this, datasetMap))
+	, m_buttonBox(nullptr)
+	, m_okButton(nullptr) {
 	connect(m_mainWidget, &DatasetMetadataManagerWidget::checkOk, this, &DatasetMetadataManagerDialog::checkOkButton);
 
 	setWindowTitle(i18nc("@title:window", "Dataset metadata manager"));
@@ -43,7 +44,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 	connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
 	if (conf.exists()) {
@@ -57,7 +58,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 }
 
 DatasetMetadataManagerDialog::~DatasetMetadataManagerDialog() {
-	//save current settings
+	// save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }

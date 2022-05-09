@@ -1,17 +1,17 @@
 /*
-    File                 : BoxPlotDock.h
-    Project              : LabPlot
-    Description          : Dock widget for the box plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BoxPlotDock.h
+	Project              : LabPlot
+	Description          : Dock widget for the box plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef BOXPLOTDOCK_H
 #define BOXPLOTDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_boxplotdock.h"
 
 class AbstractAspect;
@@ -25,7 +25,7 @@ class BoxPlotDock : public BaseDock {
 	Q_OBJECT
 
 public:
-	explicit BoxPlotDock(QWidget *);
+	explicit BoxPlotDock(QWidget*);
 	void setBoxPlots(QList<BoxPlot*>);
 	void updateLocale() override;
 
@@ -48,7 +48,7 @@ private:
 	void updateSymbolWidgets();
 
 private Q_SLOTS:
-	//SLOTs for changes triggered in BoxPlotDock
+	// SLOTs for changes triggered in BoxPlotDock
 
 	//"General"-tab
 	void addDataColumn();
@@ -63,7 +63,7 @@ private Q_SLOTS:
 	//"Box"-tab
 	void widthFactorChanged(int) const;
 
-	//box filling
+	// box filling
 	void fillingEnabledChanged(bool) const;
 	void fillingTypeChanged(int) const;
 	void fillingColorStyleChanged(int) const;
@@ -75,23 +75,23 @@ private Q_SLOTS:
 	void fileNameChanged() const;
 	void fillingOpacityChanged(int) const;
 
-	//box border
+	// box border
 	void borderStyleChanged(int) const;
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double) const;
 	void borderOpacityChanged(int) const;
 
-	//median line
+	// median line
 	void medianLineStyleChanged(int) const;
 	void medianLineColorChanged(const QColor&);
 	void medianLineWidthChanged(double) const;
 	void medianLineOpacityChanged(int) const;
 
-	//symbols
+	// symbols
 	void symbolCategoryChanged();
 	void jitteringEnabledChanged(bool) const;
 
-	//whiskers
+	// whiskers
 	void whiskersTypeChanged(int) const;
 	void whiskersRangeParameterChanged(const QString&) const;
 	void whiskersStyleChanged(int) const;
@@ -104,8 +104,8 @@ private Q_SLOTS:
 	void whiskersCapWidthChanged(double) const;
 	void whiskersCapOpacityChanged(int) const;
 
-	//SLOTs for changes triggered in BoxPlot
-	//general
+	// SLOTs for changes triggered in BoxPlot
+	// general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrderingChanged(BoxPlot::Ordering);
@@ -115,7 +115,7 @@ private Q_SLOTS:
 	void plotNotchesEnabledChanged(bool);
 	void plotVisibilityChanged(bool);
 
-	//box filling
+	// box filling
 	void plotFillingEnabledChanged(bool);
 	void plotFillingTypeChanged(WorksheetElement::BackgroundType);
 	void plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -126,18 +126,18 @@ private Q_SLOTS:
 	void plotFillingFileNameChanged(QString&);
 	void plotFillingOpacityChanged(double);
 
-	//box border
+	// box border
 	void plotBorderPenChanged(QPen&);
 	void plotBorderOpacityChanged(float);
 
-	//median line
+	// median line
 	void plotMedianLinePenChanged(QPen&);
 	void plotMedianLineOpacityChanged(float);
 
-	//symbols
+	// symbols
 	void plotJitteringEnabledChanged(bool);
 
-	//whiskers
+	// whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersRangeParameterChanged(double);
 	void plotWhiskersPenChanged(QPen&);
@@ -146,7 +146,7 @@ private Q_SLOTS:
 	void plotWhiskersCapPenChanged(QPen&);
 	void plotWhiskersCapOpacityChanged(float);
 
-	//load and save
+	// load and save
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 

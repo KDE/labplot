@@ -1,10 +1,10 @@
 /*
-    File                 : GoToDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog to provide the cell coordinates to navigate to
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : GoToDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog to provide the cell coordinates to navigate to
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "GoToDialog.h"
@@ -29,12 +29,13 @@
 
 	\ingroup kdefrontend
  */
-GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
+GoToDialog::GoToDialog(QWidget* parent)
+	: QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Go to Cell"));
 
 	auto* layout = new QGridLayout(this);
 
-	//row
+	// row
 	auto* label = new QLabel(i18n("Row:"));
 	layout->addWidget(label, 0, 0);
 
@@ -43,7 +44,7 @@ GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
 	leRow->setText("1");
 	layout->addWidget(leRow, 0, 1);
 
-	//column
+	// column
 	label = new QLabel(i18n("Column:"));
 	layout->addWidget(label, 1, 0);
 
@@ -57,7 +58,7 @@ GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
 	connect(btnBox, &QDialogButtonBox::rejected, this, &GoToDialog::reject);
 	layout->addWidget(btnBox, 2, 1);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
 
 	create(); // ensure there's a window created
@@ -69,7 +70,7 @@ GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
 }
 
 GoToDialog::~GoToDialog() {
-	//save the current settings
+	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("GoToDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
@@ -81,7 +82,6 @@ int GoToDialog::row() {
 
 	return ok ? row : 0;
 }
-
 
 int GoToDialog::column() {
 	SET_NUMBER_LOCALE

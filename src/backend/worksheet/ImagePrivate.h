@@ -1,22 +1,21 @@
 /*
-    File                 : ImagePrivate.h
-    Project              : LabPlot
-    Description          : Worksheet element to draw images
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImagePrivate.h
+	Project              : LabPlot
+	Description          : Worksheet element to draw images
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMAGEPRIVATE_H
 #define IMAGEPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/WorksheetElementPrivate.h"
 
 class QGraphicsSceneHoverEvent;
 
-class ImagePrivate: public WorksheetElementPrivate {
+class ImagePrivate : public WorksheetElementPrivate {
 public:
 	explicit ImagePrivate(Image*);
 
@@ -26,9 +25,9 @@ public:
 	qreal opacity{1.0};
 	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter);
 	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Centimeter);
-	bool keepRatio{true}; //keep aspect ratio when scaling the image
+	bool keepRatio{true}; // keep aspect ratio when scaling the image
 
-	//border
+	// border
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
@@ -40,12 +39,12 @@ public:
 
 	bool m_hovered{false};
 
-	QRectF boundingRectangle; //bounding rectangle of the text
-	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
+	QRectF boundingRectangle; // bounding rectangle of the text
+	QRectF transformedBoundingRectangle; // bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath imageShape;
 
-	//reimplemented from QGraphicsItem
+	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
@@ -57,7 +56,7 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-	QImage m_image; //scaled and the actual version of the original image that is used for drawing
+	QImage m_image; // scaled and the actual version of the original image that is used for drawing
 };
 
 #endif

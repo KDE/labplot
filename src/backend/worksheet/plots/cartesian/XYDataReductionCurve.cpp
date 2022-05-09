@@ -1,13 +1,12 @@
 /*
-    File                 : XYDataReductionCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a data reduction
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYDataReductionCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a data reduction
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYDataReductionCurve
@@ -17,16 +16,16 @@
 */
 
 #include "XYDataReductionCurve.h"
-#include "XYDataReductionCurvePrivate.h"
 #include "CartesianCoordinateSystem.h"
+#include "XYDataReductionCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
-#include <QIcon>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 XYDataReductionCurve::XYDataReductionCurve(const QString& name)
@@ -37,8 +36,8 @@ XYDataReductionCurve::XYDataReductionCurve(const QString& name, XYDataReductionC
 	: XYAnalysisCurve(name, dd, AspectType::XYDataReductionCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYDataReductionCurve::~XYDataReductionCurve() = default;
 
 void XYDataReductionCurve::recalculate() {
@@ -75,23 +74,25 @@ void XYDataReductionCurve::setDataReductionData(const XYDataReductionCurve::Data
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner)  {
+XYDataReductionCurvePrivate::XYDataReductionCurvePrivate(XYDataReductionCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYDataReductionCurvePrivate::~XYDataReductionCurvePrivate() = default;
 
 void XYDataReductionCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create dataReduction result columns if not available yet, clear them otherwise
+	// create dataReduction result columns if not available yet, clear them otherwise
 	if (!xColumn) {
 		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
 		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -110,15 +111,15 @@ void XYDataReductionCurvePrivate::recalculate() {
 	// clear the previous result
 	dataReductionResult = XYDataReductionCurve::DataReductionResult();
 
-	//determine the data source columns
+	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
+		// spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 	} else {
-		//curve columns as data source
+		// curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
@@ -130,7 +131,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 		return;
 	}
 
-	//copy all valid data point for the data reduction to temporary vectors
+	// copy all valid data point for the data reduction to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 
@@ -146,7 +147,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
-	//number of data points to use
+	// number of data points to use
 	const size_t n = (size_t)xdataVector.size();
 	if (n < 2) {
 		dataReductionResult.available = true;
@@ -171,27 +172,27 @@ void XYDataReductionCurvePrivate::recalculate() {
 	DEBUG("tolerance/step:" << tol);
 	DEBUG("tolerance2/repeat/maxtol/region:" << tol2);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	Q_EMIT q->completed(10);
 
 	size_t npoints = 0;
-	double calcTolerance = 0;	// calculated tolerance from Douglas-Peucker variant
-	size_t *index = (size_t *) malloc(n*sizeof(size_t));
+	double calcTolerance = 0; // calculated tolerance from Douglas-Peucker variant
+	size_t* index = (size_t*)malloc(n * sizeof(size_t));
 	switch (type) {
-	case nsl_geom_linesim_type_douglas_peucker_variant:	// tol used as number of points
+	case nsl_geom_linesim_type_douglas_peucker_variant: // tol used as number of points
 		npoints = tol;
 		calcTolerance = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, npoints, index);
 		break;
 	case nsl_geom_linesim_type_douglas_peucker:
 		npoints = nsl_geom_linesim_douglas_peucker(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_nthpoint:	// tol used as step
+	case nsl_geom_linesim_type_nthpoint: // tol used as step
 		npoints = nsl_geom_linesim_nthpoint(n, (int)tol, index);
 		break;
 	case nsl_geom_linesim_type_raddist:
 		npoints = nsl_geom_linesim_raddist(xdata, ydata, n, tol, index);
 		break;
-	case nsl_geom_linesim_type_perpdist:	// tol2 used as repeat
+	case nsl_geom_linesim_type_perpdist: // tol2 used as repeat
 		npoints = nsl_geom_linesim_perpdist_repeat(xdata, ydata, n, tol, tol2, index);
 		break;
 	case nsl_geom_linesim_type_interp:
@@ -206,7 +207,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	case nsl_geom_linesim_type_opheim:
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
-	case nsl_geom_linesim_type_lang:	// tol2 used as region
+	case nsl_geom_linesim_type_lang: // tol2 used as region
 		npoints = nsl_geom_linesim_opheim(xdata, ydata, n, tol, tol2, index);
 		break;
 	}
@@ -233,9 +234,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	free(index);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	dataReductionResult.available = true;
 	dataReductionResult.valid = true;
 	if (npoints > 0)
@@ -247,7 +248,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 	dataReductionResult.posError = posError;
 	dataReductionResult.areaError = areaError;
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
 	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
@@ -259,38 +260,38 @@ void XYDataReductionCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYDataReductionCurve::save(QXmlStreamWriter* writer) const{
+void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDataReductionCurve);
 
 	writer->writeStartElement("xyDataReductionCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-dataReduction-curve specific information
-	// dataReduction data
+	// write xy-dataReduction-curve specific information
+	//  dataReduction data
 	writer->writeStartElement("dataReductionData");
-	writer->writeAttribute( "autoRange", QString::number(d->dataReductionData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->dataReductionData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->dataReductionData.xRange.last()) );
-	writer->writeAttribute( "type", QString::number(d->dataReductionData.type) );
-	writer->writeAttribute( "autoTolerance", QString::number(d->dataReductionData.autoTolerance) );
-	writer->writeAttribute( "tolerance", QString::number(d->dataReductionData.tolerance) );
-	writer->writeAttribute( "autoTolerance2", QString::number(d->dataReductionData.autoTolerance2) );
-	writer->writeAttribute( "tolerance2", QString::number(d->dataReductionData.tolerance2) );
-	writer->writeEndElement();// dataReductionData
+	writer->writeAttribute("autoRange", QString::number(d->dataReductionData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->dataReductionData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->dataReductionData.xRange.last()));
+	writer->writeAttribute("type", QString::number(d->dataReductionData.type));
+	writer->writeAttribute("autoTolerance", QString::number(d->dataReductionData.autoTolerance));
+	writer->writeAttribute("tolerance", QString::number(d->dataReductionData.tolerance));
+	writer->writeAttribute("autoTolerance2", QString::number(d->dataReductionData.autoTolerance2));
+	writer->writeAttribute("tolerance2", QString::number(d->dataReductionData.tolerance2));
+	writer->writeEndElement(); // dataReductionData
 
 	// dataReduction results (generated columns)
 	writer->writeStartElement("dataReductionResult");
-	writer->writeAttribute( "available", QString::number(d->dataReductionResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->dataReductionResult.valid) );
-	writer->writeAttribute( "status", d->dataReductionResult.status );
-	writer->writeAttribute( "time", QString::number(d->dataReductionResult.elapsedTime) );
-	writer->writeAttribute( "npoints", QString::number(d->dataReductionResult.npoints) );
-	writer->writeAttribute( "posError", QString::number(d->dataReductionResult.posError) );
-	writer->writeAttribute( "areaError", QString::number(d->dataReductionResult.areaError) );
+	writer->writeAttribute("available", QString::number(d->dataReductionResult.available));
+	writer->writeAttribute("valid", QString::number(d->dataReductionResult.valid));
+	writer->writeAttribute("status", d->dataReductionResult.status);
+	writer->writeAttribute("time", QString::number(d->dataReductionResult.elapsedTime));
+	writer->writeAttribute("npoints", QString::number(d->dataReductionResult.npoints));
+	writer->writeAttribute("posError", QString::number(d->dataReductionResult.posError));
+	writer->writeAttribute("areaError", QString::number(d->dataReductionResult.areaError));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -317,7 +318,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "dataReductionData") {
 			attribs = reader->attributes();
@@ -364,8 +365,8 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
 		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
 		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
