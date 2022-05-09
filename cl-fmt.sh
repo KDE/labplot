@@ -22,7 +22,8 @@ if [ -z "$FMT" ]; then
 fi
 
 function format() {
-    for f in $(find $@ -name '*.h' -or -name '*.m' -or -name '*.mm' -or -name '*.c' -or -name '*.cpp'); do
+	# ignore getRSS.h file
+    for f in $(find $@ -name '*.h' ! -iname 'getRSS.h' -or -name '*.m' -or -name '*.mm' -or -name '*.c' -or -name '*.cpp'); do
         echo "format ${f}";
         ${FMT} -i ${f};
     done
