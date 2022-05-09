@@ -13,7 +13,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
-#include <cfitsio/fitsio.h>
+#include "fitsio.h"
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 }
