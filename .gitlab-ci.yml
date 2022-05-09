@@ -6,3 +6,33 @@ include:
 #  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux-qt6.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
+
+# copied from okular
+clang_format:
+  stage: build
+  image: debian:testing
+  only:
+    - merge_requests
+    - master
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends git clang-format-13
+  script: |
+    FOLDERS=("src/backend" "src/commonfrontend" "src/kdefrontend" "src/tools" "tests")
+    FMT="clang-format-13"
+    function format() {
+        for f in $(find $@ -name '*.h' -or -name '*.c' -or -name '*.cpp'); do
+            echo "format ${f}";
+            ${FMT} -i ${f};
+        done
+
+        echo "~~~ $@ Done ~~~";
+    }
+    for dir in ${FOLDERS[@]}; do
+        if [ ! -d "${dir}" ]; then
+            echo "${dir} is not a directory";
+        else
+            format ${dir};
+        fi
+    done
+    git diff --exit-code
