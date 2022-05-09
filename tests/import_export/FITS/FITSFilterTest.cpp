@@ -13,17 +13,10 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
-#include <fitsio.h>
+#include <cfitsio/fitsio.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_rng.h>
 }
-
-#define ERRCODE -1
-#define ERR(e)                                                                                                                                                 \
-	{                                                                                                                                                          \
-		printf("Error: %s\n", nc_strerror(e));                                                                                                                 \
-		exit(ERRCODE);                                                                                                                                         \
-	}
 
 void FITSFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2ASSNu5780205bx.fits"));
@@ -49,8 +42,8 @@ void FITSFilterTest::importFile1() {
 
 // BENCHMARKS
 
-/*void FITSFilterTest::benchDoubleImport_data() {
-	QTest::addColumn<size_t>("lineCount");
+void FITSFilterTest::benchDoubleImport_data() {
+	QTest::addColumn<long>("lineCount");
 	// can't transfer file name since needed in clean up
 
 	QTemporaryFile file;
@@ -59,7 +52,7 @@ void FITSFilterTest::importFile1() {
 	file.close();	// only file name is used
 
 	benchDataFileName = file.fileName();
-	benchDataFileName.append(".nc4");
+	benchDataFileName.append(".fits");
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
@@ -70,8 +63,15 @@ void FITSFilterTest::importFile1() {
 	gsl_rng* r = gsl_rng_alloc(gsl_rng_default);
 	gsl_rng_set(r, 12345);
 
-	// crate file
-	// TODO
+	// create file
+	int status = 0;
+
+	fitsfile *fptr;
+	fits_create_file(&fptr, benchDataFileName.toLatin1(), &status);
+
+	long naxis = 2;
+	long naxes[2] = {paths, lines};
+	fits_create_img(fptr, DOUBLE_IMG, naxis, naxes, &status);
 
 	// create data
 	double path[paths] = {0.0};
@@ -80,7 +80,7 @@ void FITSFilterTest::importFile1() {
 	const double delta = 0.25;
 	const int dt = 1;
 	const double sigma = delta*delta * dt;
-	for (size_t i = 0; i < lines; ++i) {
+	for (long i = 0; i < lines; ++i) {
 		//std::cout << "line " << i+1 << std::endl;
 
 		for (int p = 0; p < paths; ++p) {
@@ -88,6 +88,13 @@ void FITSFilterTest::importFile1() {
 			data[p + i*paths] = path[p];
 		}
 	}
+
+	long fpixel = 1, nelements = naxes[0] * naxes[1];
+	// write data and close file
+	fits_write_img(fptr, TDOUBLE, fpixel, nelements, data, &status);
+
+	fits_close_file(fptr, &status);
+	fits_report_error(stderr, status);
 
 	delete[] data;
 
@@ -97,7 +104,6 @@ void FITSFilterTest::importFile1() {
 void FITSFilterTest::benchDoubleImport() {
 	Spreadsheet spreadsheet("test", false);
 	FITSFilter filter;
-	filter.setCurrentVarName(QLatin1String("paths"));
 
 	const int p = paths;	// need local variable
 	QBENCHMARK {
@@ -115,6 +121,6 @@ void FITSFilterTest::benchDoubleImport() {
 void FITSFilterTest::benchDoubleImport_cleanup() {
 	DEBUG("REMOVE DATA FILE " << STDSTRING(benchDataFileName))
 	QFile::remove(benchDataFileName);
-}*/
+}
 
 QTEST_MAIN(FITSFilterTest)
