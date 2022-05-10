@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -275,8 +276,6 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 	int actualCols;
 	int columnOffset = 0;
 
-	bool noDataSource = (dataSource == nullptr);
-
 	if (chduType == IMAGE_HDU) {
 		DEBUG("IMAGE_HDU");
 		int maxdim = 2;
@@ -302,12 +301,12 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		}
 
 		if (endRow != -1) {
-			if (!noDataSource)
+			if (dataSource)
 				lines = endRow;
 		}
 		if (endColumn != -1)
 			actualCols = endColumn;
-		if (noDataSource)
+		if (!dataSource)
 			dataStrings.reserve(lines);
 
 		int i = 0;
@@ -326,7 +325,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 
 		DEBUG("lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
 		std::vector<void*> dataContainer;
-		if (!noDataSource) {
+		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
 		}
@@ -339,6 +338,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			return dataStrings;
 		}
 
+		// TODO: other types
 		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, nullptr, data, nullptr, &status)) {
 			printError(status);
 			return dataStrings << (QStringList() << QString("Error"));
@@ -351,12 +351,12 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 			QStringList line;
 			line.reserve(actualCols - j);
 			for (; j < actualCols; ++j) {
-				if (noDataSource)
-					line << QString::number(data[i * naxes[0] + j]);
-				else
+				if (dataSource)
 					static_cast<QVector<double>*>(dataContainer[jj++])->operator[](ii) = data[i * naxes[0] + j];
+				else
+					line << QString::number(data[i * naxes[0] + j]);
 			}
-			if (noDataSource)
+			if (!dataSource)
 				dataStrings << line;
 			j = jstart;
 			ii++;
@@ -477,9 +477,9 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				matrixNumericColumnIndices.append(c);
 		}
 
-		if (noDataSource)
+		if (!dataSource)
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
-		if (!noDataSource) {
+		else {
 			DEBUG("HAS DataSource");
 			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if (spreadsheet) {
@@ -557,7 +557,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 				}
 				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, tmpArr, nullptr, &status))
 					printError(status);
-				if (!noDataSource) {
+				if (dataSource) {
 					QString str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
 						if (columnNumericTypes.at(col - 1))
@@ -581,11 +581,11 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 						line << tmpColstr;
 				}
 			}
-			if (noDataSource)
+			if (!dataSource)
 				dataStrings << line;
 		}
 
-		if (!noDataSource)
+		if (dataSource)
 			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
@@ -1044,7 +1044,7 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 	return extensions;
 #else
 	Q_UNUSED(fileName)
-	return QMultiMap<QString, QString>();
+	return {};
 #endif
 }
 

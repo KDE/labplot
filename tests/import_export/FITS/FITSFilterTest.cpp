@@ -23,7 +23,7 @@ void FITSFilterTest::importFile1() {
 
 	Spreadsheet spreadsheet("test", false);
 	FITSFilter filter;
-	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+	filter.readDataFromFile(fileName, &spreadsheet);
 
 	QCOMPARE(spreadsheet.columnCount(), 100);
 	QCOMPARE(spreadsheet.rowCount(), 100);
@@ -38,6 +38,47 @@ void FITSFilterTest::importFile1() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.476544350385666);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.369004756212234);
 	QCOMPARE(spreadsheet.column(99)->valueAt(99), 0.487100154161453);
+}
+
+void FITSFilterTest::importFile2() {
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2u5780205r_c0fx.fits"));
+
+	Spreadsheet spreadsheet("test", false);
+	FITSFilter filter;
+	filter.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 200);
+	QCOMPARE(spreadsheet.rowCount(), 200);
+
+	WARN(spreadsheet.column(0)->valueAt(0))
+	WARN(spreadsheet.column(1)->valueAt(0))
+	WARN(spreadsheet.column(0)->valueAt(1))
+	WARN(spreadsheet.column(1)->valueAt(1))
+	WARN(spreadsheet.column(99)->valueAt(99))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -1.54429864883423);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.91693103313446);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), -0.882439613342285);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), -1.09242105484009);
+	QCOMPARE(spreadsheet.column(99)->valueAt(99), -0.387779891490936);
+
+	// read table
+	const QString& tableName = fileName + QLatin1String("[u5780205r_cvt.c0h.tab]");
+	FITSFilter filter2;
+	filter2.readDataFromFile(tableName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 49);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+
+	WARN(spreadsheet.column(0)->valueAt(0))
+	WARN(spreadsheet.column(1)->valueAt(0))
+	WARN(spreadsheet.column(0)->valueAt(1))
+	WARN(spreadsheet.column(1)->valueAt(1))
+	WARN(spreadsheet.column(48)->valueAt(3))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 182.6311886308);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 39.39633673411);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 182.6255233634);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 39.41214313815);
+	QCOMPARE(spreadsheet.column(48)->valueAt(3), 0.3466465);
 }
 
 // BENCHMARKS
@@ -107,7 +148,7 @@ void FITSFilterTest::benchDoubleImport() {
 
 	const int p = paths; // need local variable
 	QBENCHMARK {
-		filter.readDataFromFile(benchDataFileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+		filter.readDataFromFile(benchDataFileName, &spreadsheet);
 
 		QCOMPARE(spreadsheet.columnCount(), p);
 		QCOMPARE(spreadsheet.rowCount(), lines);

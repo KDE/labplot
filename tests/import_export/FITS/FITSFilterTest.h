@@ -18,6 +18,7 @@ class FITSFilterTest : public CommonTest {
 
 private Q_SLOTS:
 	void importFile1();
+	void importFile2();
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)

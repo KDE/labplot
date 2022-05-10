@@ -12,8 +12,9 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <KI18n/KLocalizedString>
+
 #include <QTableWidget>
-#include <QTreeWidgetItem>
+#include <QTreeWidget>
 
 class QStringList;
 class QXmlStreamReader;
