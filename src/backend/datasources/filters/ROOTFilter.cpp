@@ -9,8 +9,8 @@
 */
 
 #include "backend/datasources/filters/ROOTFilter.h"
-#include "backend/datasources/filters/ROOTFilterPrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/filters/ROOTFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
