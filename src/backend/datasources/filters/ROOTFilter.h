@@ -4,6 +4,7 @@
 	Description          : ROOT(CERN) I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,9 +13,6 @@
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
-#include <QVector>
-
-class QStringList;
 class ROOTFilterPrivate;
 class QStringList;
 class QIODevice;
@@ -36,7 +34,7 @@ public:
 	 *
 	 * The ROOT file is kept open until the file name is changed
 	 */
-	void readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) override;
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*) override;
 

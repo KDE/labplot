@@ -3,6 +3,7 @@ add_subdirectory(Binary)
 add_subdirectory(JSON)
 add_subdirectory(MQTT)
 add_subdirectory(Project)
+add_subdirectory(ROOT)
 add_subdirectory(Spice)
 
 IF (READSTAT_FOUND OR NOT WIN32)

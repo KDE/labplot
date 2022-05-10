@@ -4,35 +4,28 @@
 	Description          : ROOT(CERN) I/O-filter
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
-	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/datasources/filters/ROOTFilter.h"
-#include "backend/core/column/Column.h"
 #include "backend/datasources/filters/ROOTFilterPrivate.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
-#include <QDebug>
 #include <QFileInfo>
-#include <QSet>
 #include <QStack>
+
+#include <fstream>
 
 #ifdef HAVE_ZIP
 #include <lz4.h>
 #include <zlib.h>
 #endif
-
-#include <cmath>
-#include <fstream>
-#include <limits>
-#include <map>
-#include <string>
-#include <vector>
 
 ROOTFilter::ROOTFilter()
 	: AbstractFileFilter(FileType::ROOT)
@@ -1038,7 +1031,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 					size_t elements = read<int>(buf);
 					int bytes = read<int>(buf);
 					if ((static_cast<int>(leafType(clname.back())) & 0xF) != bytes)
-						qDebug() << "ROOTData: type " << clname.back() << " does not match its size!";
+						DEBUG("ROOTData: type " << clname.back() << " does not match its size!")
 					buf += 5;
 					leaves.emplace_back(LeafInfo{branch, leafname, leafType(clname.back()), !read<char>(buf), elements});
 				}
@@ -1149,7 +1142,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 			}
 
 			if (static_cast<int>(element) * leafsize >= leafcontent) {
-				qDebug() << "ROOTData: " << leafname.c_str() << " only contains " << leafcontent / leafsize << " elements.";
+				DEBUG("ROOTData: " << leafname.c_str() << " only contains " << leafcontent / leafsize << " elements.");
 				break;
 			}
 
@@ -1183,7 +1176,7 @@ ROOTData::listEntries(long int pos, const std::string& branchname, const std::st
 						}
 					}
 				} else {
-					qDebug() << "ROOTData: fBasketSeek(" << i << "): " << pos << " (not available)";
+					DEBUG("ROOTData: fBasketSeek(" << i << "): " << pos << " (not available)")
 				}
 			}
 		}
