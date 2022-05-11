@@ -68,45 +68,32 @@ void ROOTFilterTest::importFile1() {
 }
 
 void ROOTFilterTest::importFile2() {
-	// const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2u5780205r_c0fx.fits"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_lz4.root"));
 
 	Spreadsheet spreadsheet("test", false);
 	ROOTFilter filter;
-	// filter.readDataFromFile(fileName, &spreadsheet);
+	filter.setStartRow(1);
+	//filter.setEndRow(100);
+	filter.setCurrentObject("Hist:doubleHist;1");
+	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
+	filter.setColumns(columns);
+	filter.readDataFromFile(fileName, &spreadsheet);
 
-	/*	QCOMPARE(spreadsheet.columnCount(), 200);
-		QCOMPARE(spreadsheet.rowCount(), 200);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 101);
 
-		WARN(spreadsheet.column(0)->valueAt(0))
-		WARN(spreadsheet.column(1)->valueAt(0))
-		WARN(spreadsheet.column(0)->valueAt(1))
-		WARN(spreadsheet.column(1)->valueAt(1))
-		WARN(spreadsheet.column(99)->valueAt(99))
-		QCOMPARE(spreadsheet.column(0)->valueAt(0), -1.54429864883423);
-		QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.91693103313446);
-		QCOMPARE(spreadsheet.column(0)->valueAt(1), -0.882439613342285);
-		QCOMPARE(spreadsheet.column(1)->valueAt(1), -1.09242105484009);
-		QCOMPARE(spreadsheet.column(99)->valueAt(99), -0.387779891490936);
-
-		// read table
-		const QString& tableName = fileName + QLatin1String("[u5780205r_cvt.c0h.tab]");
-		ROOTFilter filter2;
-		filter2.readDataFromFile(tableName, &spreadsheet);
-
-		QCOMPARE(spreadsheet.columnCount(), 49);
-		QCOMPARE(spreadsheet.rowCount(), 4);
-
-		WARN(spreadsheet.column(0)->valueAt(0))
-		WARN(spreadsheet.column(1)->valueAt(0))
-		WARN(spreadsheet.column(0)->valueAt(1))
-		WARN(spreadsheet.column(1)->valueAt(1))
-		WARN(spreadsheet.column(48)->valueAt(3))
-		QCOMPARE(spreadsheet.column(0)->valueAt(0), 182.6311886308);
-		QCOMPARE(spreadsheet.column(1)->valueAt(0), 39.39633673411);
-		QCOMPARE(spreadsheet.column(0)->valueAt(1), 182.6255233634);
-		QCOMPARE(spreadsheet.column(1)->valueAt(1), 39.41214313815);
-		QCOMPARE(spreadsheet.column(48)->valueAt(3), 0.3466465);
-	*/
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -4.95);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), -4.85);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(99), 4.95);
+	QCOMPARE(spreadsheet.column(1)->valueAt(99), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(99), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(100), qInf());
+	QCOMPARE(spreadsheet.column(1)->valueAt(100), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(100), 0);
 }
 
 // BENCHMARKS
@@ -134,14 +121,6 @@ void ROOTFilterTest::benchDoubleImport_data() {
 	gsl_rng_set(r, 12345);
 
 	// create file
-	int status = 0;
-
-	fitsfile* fptr;
-	fits_create_file(&fptr, benchDataFileName.toLatin1(), &status);
-
-	long naxis = 2;
-	long naxes[2] = {paths, lines};
-	fits_create_img(fptr, DOUBLE_IMG, naxis, naxes, &status);
 
 	// create data
 	double path[paths] = {0.0};
@@ -159,12 +138,7 @@ void ROOTFilterTest::benchDoubleImport_data() {
 		}
 	}
 
-	long fpixel = 1, nelements = naxes[0] * naxes[1];
-	// write data and close file
-	fits_write_img(fptr, TDOUBLE, fpixel, nelements, data, &status);
-
-	fits_close_file(fptr, &status);
-	fits_report_error(stderr, status);
+	// write data and clean up
 
 	delete[] data;
 

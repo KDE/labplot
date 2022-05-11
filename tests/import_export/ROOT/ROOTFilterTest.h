@@ -20,7 +20,8 @@ private Q_SLOTS:
 	void importFile1();
 	void importFile2();
 
-	/*	void benchDoubleImport_data();
+	/*	TODO:
+	 *	void benchDoubleImport_data();
 		// this is called multiple times (warm-up of BENCHMARK)
 		// see https://stackoverflow.com/questions/36916962/qtest-executes-test-case-twic
 		void benchDoubleImport();
