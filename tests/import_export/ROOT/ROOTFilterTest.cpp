@@ -23,7 +23,7 @@ void ROOTFilterTest::importFile1() {
 	Spreadsheet spreadsheet("test", false);
 	ROOTFilter filter;
 	filter.setStartRow(1);
-	//filter.setEndRow(100);
+	// filter.setEndRow(100);
 	filter.setCurrentObject("Hist:variableBinHist;2");
 	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
 	filter.setColumns(columns);
@@ -32,7 +32,7 @@ void ROOTFilterTest::importFile1() {
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 101);
 
-//	WARN(spreadsheet.column(0)->valueAt(0))
+	//	WARN(spreadsheet.column(0)->valueAt(0))
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), -4.95495);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
@@ -48,7 +48,7 @@ void ROOTFilterTest::importFile1() {
 
 	ROOTFilter filter2;
 	filter2.setStartRow(0);
-	filter2.setEndRow(9);	//TODO: automatic?
+	filter2.setEndRow(9); // TODO: automatic?
 	filter2.setCurrentObject("Tree:tree");
 	QVector<QStringList> columns2{{"doubleTest"}, {"structTest", "double"}};
 	filter2.setColumns(columns2);
@@ -73,7 +73,7 @@ void ROOTFilterTest::importFile2() {
 	Spreadsheet spreadsheet("test", false);
 	ROOTFilter filter;
 	filter.setStartRow(1);
-	//filter.setEndRow(100);
+	// filter.setEndRow(100);
 	filter.setCurrentObject("Hist:doubleHist;1");
 	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
 	filter.setColumns(columns);

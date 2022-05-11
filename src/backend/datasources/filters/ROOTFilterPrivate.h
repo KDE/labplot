@@ -134,8 +134,7 @@ public:
 	 * @param[in] nentries Maximum number of entries to be read
 	 */
 	template<typename T>
-	std::vector<T>
-	listEntries(long int pos, const std::string& branchname, size_t element = 0, size_t nentries = std::numeric_limits<size_t>::max()) const {
+	std::vector<T> listEntries(long int pos, const std::string& branchname, size_t element = 0, size_t nentries = std::numeric_limits<size_t>::max()) const {
 		return listEntries<T>(pos, branchname, branchname, element, nentries);
 	}
 
