@@ -5,7 +5,7 @@ add_subdirectory(MQTT)
 add_subdirectory(Project)
 add_subdirectory(Spice)
 
-IF (NOT WIN32)
+IF (ZLIB_FOUND AND LZ4_FOUND)
 	add_subdirectory(ROOT)
 ENDIF ()
 
