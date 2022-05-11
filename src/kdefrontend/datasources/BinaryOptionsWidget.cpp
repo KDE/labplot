@@ -1,18 +1,18 @@
 /*
-    File                 : BinaryOptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of binary data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2009 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BinaryOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of binary data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2009 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "BinaryOptionsWidget.h"
 #include "backend/datasources/filters/BinaryFilter.h"
 
-#include <KSharedConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 /*!
 	\class BinaryOptionsWidget
@@ -21,7 +21,8 @@
 	\ingroup kdefrontend
 */
 
-BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
+BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(parent);
 
 	ui.cbDataType->addItems(BinaryFilter::dataTypes());
@@ -36,11 +37,11 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbDataType->setWhatsThis(textDataTypeShort);
 
 	const QString textByteOrderShort = i18n("This option determines the byte order of the imported data when converting to numbers.");
-	const QString textByteOrder = textByteOrderShort + "<br><br>" + i18n(
-	"<table>"
-	"<tr><td>little endian</td><td>typical byte order (endianness) on Intel x86 processors.</td></tr>"
-	"<tr><td>big endian</td><td>typical byte order on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr>"
-	"</table>");
+	const QString textByteOrder = textByteOrderShort + "<br><br>"
+		+ i18n("<table>"
+			   "<tr><td>little endian</td><td>typical byte order (endianness) on Intel x86 processors.</td></tr>"
+			   "<tr><td>big endian</td><td>typical byte order on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr>"
+			   "</table>");
 
 	ui.lByteOrder->setToolTip(textByteOrderShort);
 	ui.lByteOrder->setWhatsThis(textByteOrder);
@@ -51,12 +52,12 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent) : QWidget(parent) {
 void BinaryOptionsWidget::applyFilterSettings(BinaryFilter* filter) const {
 	Q_ASSERT(filter);
 
-	filter->setVectors( ui.niVectors->value() );
-	filter->setDataType( (BinaryFilter::DataType)ui.cbDataType->currentIndex() );
+	filter->setVectors(ui.niVectors->value());
+	filter->setDataType((BinaryFilter::DataType)ui.cbDataType->currentIndex());
 	filter->setByteOrder(static_cast<QDataStream::ByteOrder>(ui.cbByteOrder->currentData().toInt()));
 	filter->setSkipBytes(ui.sbSkipBytes->value());
 	filter->setSkipStartBytes(ui.sbSkipStartBytes->value());
-	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
+	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
 }
 
 void BinaryOptionsWidget::loadSettings() const {

@@ -1,11 +1,11 @@
 /*
-    File                 : NSLDiffTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for smoothing
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLDiffTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for smoothing
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLSMOOTHTEST_H
 #define NSLSMOOTHTEST_H
@@ -15,7 +15,7 @@
 class NSLSmoothTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// moving average tests
 	void testMA_padnone();
 	void testMA_padmirror();
@@ -56,6 +56,7 @@ private slots:
 	void testPerformance_nearest();
 	void testPerformance_constant();
 	void testPerformance_periodic();
+
 private:
 	QString m_dataDir;
 };

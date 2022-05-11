@@ -1,12 +1,12 @@
 /*
-    File                 : Month2BigIntFilter.h
-    Project              : AbstractColumn
-    Description          : Conversion filter QDateTime -> bigint, translating
-    dates into months (January -> 1).
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : Month2BigIntFilter.h
+	Project              : AbstractColumn
+	Description          : Conversion filter QDateTime -> bigint, translating
+	dates into months (January -> 1).
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MONTH2BIGINT_FILTER_H
 #define MONTH2BIGINT_FILTER_H
@@ -25,21 +25,24 @@ class Month2BigIntFilter : public AbstractSimpleFilter {
 public:
 	qint64 bigIntAt(int row) const override {
 		DEBUG("bigIntAt()");
-		if (!m_inputs.value(0)) return 0;
+		if (!m_inputs.value(0))
+			return 0;
 		QDate inputValue = m_inputs.value(0)->dateAt(row);
-		if (!inputValue.isValid()) return 0;
+		if (!inputValue.isValid())
+			return 0;
 		return qint64(inputValue.month());
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::BigInt; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::BigInt;
+	}
 
 protected:
 	//! Using typed ports: only date-time inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Month;
 	}
 };
 
 #endif // ifndef MONTH2BIGINT_FILTER_H
-

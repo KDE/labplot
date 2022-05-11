@@ -13,7 +13,7 @@
                             "url": "http://jse.amstat.org/datasets/babyboom.dat.txt",
                             "filename": "babyboom",
                             "name": "Time of Birth, Sex, and Birth Weight of 44 Babies",
-                            "separator": "TAB",
+                            "separator": "SPACE",
                             "columns": ["Time of birth recorded on the 24-hour clock", "Sex of the child (1 = girl, 2 = boy)", "Birth weight in grams", "Number of minutes after midnight of each birth"]
                         },
                         {

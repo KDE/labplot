@@ -236,7 +236,7 @@ public:
 
 - (void)dealloc
 {
-    widget->w->setParent(0);
+    widget->w->setParent(nullptr);
     [super dealloc];
 }
 

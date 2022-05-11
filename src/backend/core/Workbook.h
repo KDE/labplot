@@ -1,11 +1,11 @@
 /*
-    File                 : Workbook.h
-    Project              : LabPlot
-    Description          : Aspect providing a container for storing data
+	File                 : Workbook.h
+	Project              : LabPlot
+	Description          : Aspect providing a container for storing data
 				in form of spreadsheets and matrices
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef WORKBOOK_H
@@ -43,16 +43,16 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
 	mutable WorkbookView* m_view{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void workbookItemSelected(int);
 };

@@ -3,9 +3,9 @@
 	Project              : LabPlot
 	Description          : Dock widget for InfoElemnt
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef INFOELEMENTDOCK_H
@@ -28,15 +28,15 @@ public:
 	~InfoElementDock();
 	void setInfoElements(QList<InfoElement*>);
 
-public slots:
+public Q_SLOTS:
 	void elementCurveRemoved(const QString&);
 
-private slots:
+private Q_SLOTS:
 	void gluePointChanged(int index);
 	void curveChanged();
 	void positionChanged(const QString&);
 	void positionDateTimeChanged(const QDateTime&);
-	void curveSelectionChanged(int);
+	void curveSelectionChanged(bool);
 	void visibilityChanged(bool);
 	void verticalLineStyleChanged(int);
 	void verticalLineWidthChanged(double);
@@ -57,7 +57,7 @@ private slots:
 	void elementVerticalLineOpacityChanged(qreal);
 	void elementConnectionLinePenChanged(const QPen&);
 	void elementConnectionLineOpacityChanged(qreal);
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 
 private:
 	Ui::InfoElementDock* ui;

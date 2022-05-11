@@ -1,11 +1,11 @@
 /*
-    File                 : NSLFilterTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLFilterTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLFilterTest.h"
@@ -23,15 +23,14 @@ void NSLFilterTest::initTestCase() {
 //#################  form test
 //##############################################################################
 
-
 void NSLFilterTest::testForm() {
 	const int N = 1000;
-	double data[N+2];
+	double data[N + 2];
 
 	int i;
-	for (i = 0; i < N+2; i++)
+	for (i = 0; i < N + 2; i++)
 		data[i] = 1.0;
-	
+
 	/*Bessel gain*/
 	int n = 3;
 	double x = 1.;
@@ -49,7 +48,7 @@ void NSLFilterTest::testForm() {
 	nsl_filter_apply(data, N, nsl_filter_type_band_pass, nsl_filter_form_bessel, 2, 100, 100);
 	nsl_filter_apply(data, N, nsl_filter_type_band_reject, nsl_filter_form_bessel, 2, 100, 100);
 
-	//for(i=0; i < N/2; i++)
+	// for(i=0; i < N/2; i++)
 	//	printf("%d %g\n", i, data[2*i]);
 
 	/* all pass order,cut,bw */

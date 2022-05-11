@@ -1,25 +1,26 @@
 /*
-    File                 : SettingsWorksheetPage.cpp
-    Project              : LabPlot
-    Description          : settings page for Worksheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsWorksheetPage.cpp
+	Project              : LabPlot
+	Description          : settings page for Worksheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "SettingsWorksheetPage.h"
-#include "tools/TeXRenderer.h"
 #include "kdefrontend/widgets/ThemesComboBox.h"
+#include "tools/TeXRenderer.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfigGroup>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(parent) {
+SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent)
+	: SettingsPage(parent) {
 	ui.setupUi(this);
 
 	m_cbThemes = new ThemesComboBox();
@@ -29,9 +30,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	m_cbThemes->setToolTip(info);
 
 	const int size = ui.cbTexEngine->height();
-	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
+	ui.lLatexWarning->setPixmap(QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size));
 
-	//add available TeX typesetting engines
+	// add available TeX typesetting engines
 	if (TeXRenderer::executableExists(QLatin1String("lualatex")))
 		ui.cbTexEngine->addItem(QLatin1String("LuaLaTeX"), QLatin1String("lualatex"));
 
@@ -45,8 +46,8 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
-	connect(ui.chkPresenterModeInteractive, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
-	connect(ui.chkDoubleBuffering, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkPresenterModeInteractive, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkDoubleBuffering, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
 	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
 	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::checkTeX);
 
@@ -68,7 +69,7 @@ void SettingsWorksheetPage::applySettings() {
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
-	m_cbThemes->setItemText(0, i18n("Default")); //default theme
+	m_cbThemes->setItemText(0, i18n("Default")); // default theme
 	ui.chkPresenterModeInteractive->setChecked(false);
 	ui.chkDoubleBuffering->setChecked(true);
 
@@ -93,7 +94,7 @@ void SettingsWorksheetPage::loadSettings() {
 	QString engine = group.readEntry(QLatin1String("LaTeXEngine"), "");
 	int index = -1;
 	if (engine.isEmpty()) {
-		//empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
+		// empty string was found in the settings (either the settings never saved or no tex engine was available during the last save)
 		//->check whether the latex environment was installed in the meantime
 		index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
 		if (index == -1) {
@@ -106,12 +107,11 @@ void SettingsWorksheetPage::loadSettings() {
 		}
 
 		if (index != -1) {
-			//one of the tex engines was found -> automatically save it in the settings without any user action
+			// one of the tex engines was found -> automatically save it in the settings without any user action
 			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 			group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(index));
 		}
-	}
-	else
+	} else
 		index = ui.cbTexEngine->findData(engine);
 
 	ui.cbTexEngine->setCurrentIndex(index);
@@ -120,7 +120,7 @@ void SettingsWorksheetPage::loadSettings() {
 
 void SettingsWorksheetPage::changed() {
 	m_changed = true;
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }
 
 /*!
@@ -134,37 +134,36 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 		return;
 	}
 
-	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
-	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
-		return;
-	}
-
 	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
+
 	if (engine == "latex") {
-		//to convert the generated PS files to DVI we need 'dvips'
+		// need convert to convert to PNG
+		if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
+			return;
+		}
+		// to convert the generated PS files to DVI we need 'dvips'
 		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
 			ui.lLatexWarning->show();
 			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
 			return;
 		}
-	}
 
 #if defined(_WIN64)
-	if (!TeXRenderer::executableExists(QLatin1String("gswin64c"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
+		if (!TeXRenderer::executableExists(QLatin1String("gswin64c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
 #elif defined(HAVE_WINDOWS)
-	if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
+		if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
 #endif
+	}
 
 	ui.lLatexWarning->hide();
 }

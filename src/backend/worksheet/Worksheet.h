@@ -1,12 +1,12 @@
 /*
-    File                 : Worksheet.h
-    Project              : LabPlot
-    Description          : Worksheet (2D visualization) part
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : Worksheet.h
+	Project              : LabPlot
+	Description          : Worksheet (2D visualization) part
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef WORKSHEET_H
@@ -36,9 +36,9 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum class Unit {Millimeter, Centimeter, Inch, Point};
-	enum class Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
-	enum class CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY};
+	enum class Unit { Millimeter, Centimeter, Inch, Point };
+	enum class Layout { NoLayout, VerticalLayout, HorizontalLayout, GridLayout };
+	enum class CartesianPlotActionMode { ApplyActionToSelection, ApplyActionToAll, ApplyActionToAllX, ApplyActionToAllY };
 
 	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
 	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
@@ -118,7 +118,7 @@ public:
 
 	typedef WorksheetPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void setTheme(const QString&);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
@@ -147,7 +147,7 @@ private:
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
-private slots:
+private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -155,7 +155,7 @@ private slots:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);

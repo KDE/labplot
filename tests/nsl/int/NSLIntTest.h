@@ -1,11 +1,11 @@
 /*
-    File                 : NSLIntTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for numerical integration
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLIntTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for numerical integration
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLINTTEST_H
 #define NSLINTTEST_H
@@ -15,7 +15,7 @@
 class NSLIntTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// rules integral/area
 	void testRectangle_integral();
 	void testRectangle_area();
@@ -28,6 +28,7 @@ private slots:
 	void testPerformanceTrapezoid();
 	void testPerformance3Point();
 	void testPerformance4Point();
+
 private:
 	QString m_dataDir;
 };

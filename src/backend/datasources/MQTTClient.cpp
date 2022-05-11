@@ -1,18 +1,18 @@
 /*
-    File		: MQTTClient.cpp
-    Project		: LabPlot
-    Description	: Represents a MQTT Client
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	File		: MQTTClient.cpp
+	Project		: LabPlot
+	Description	: Represents a MQTT Client
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
-#include "kdefrontend/datasources/MQTTErrorWidget.h"
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "kdefrontend/datasources/MQTTErrorWidget.h"
 
 #include <QTimer>
 
@@ -23,12 +23,12 @@ It manages the MQTTSubscriptions, and the MQTTTopics.
 
   \ingroup datasources
 */
-MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClient),
-	m_updateTimer(new QTimer(this)),
-	m_client(new QMqttClient(this)),
-	m_willTimer(new QTimer(this)) {
-
-	//stop reading from the source before removing the child from the project
+MQTTClient::MQTTClient(const QString& name)
+	: Folder(name, AspectType::MQTTClient)
+	, m_updateTimer(new QTimer(this))
+	, m_client(new QMqttClient(this))
+	, m_willTimer(new QTimer(this)) {
+	// stop reading from the source before removing the child from the project
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
 
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
@@ -38,8 +38,8 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClien
 }
 
 MQTTClient::~MQTTClient() {
-	emit clientAboutToBeDeleted(m_client->hostname(), m_client->port());
-	//stop reading before deleting the objects
+	Q_EMIT clientAboutToBeDeleted(m_client->hostname(), m_client->port());
+	// stop reading before deleting the objects
 	pauseReading();
 
 	delete m_filter;
@@ -297,7 +297,7 @@ void MQTTClient::setMQTTClientId(const QString& clientId) {
 /*!
  * \brief Returns the ID of the client
  */
-QString MQTTClient::clientID () const {
+QString MQTTClient::clientID() const {
 	return m_client->clientId();
 }
 
@@ -349,13 +349,13 @@ QVector<QString> MQTTClient::MQTTSubscriptions() const {
  * \param QoS
  */
 void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
-	//Check whether the subscription already exists, if it doesn't, we can add it
+	// Check whether the subscription already exists, if it doesn't, we can add it
 	if (!m_subscriptions.contains(topicName)) {
-		const QMqttTopicFilter filter {topicName};
+		const QMqttTopicFilter filter{topicName};
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 
 		if (temp) {
-// 			qDebug()<<"Subscribe to: "<< temp->topic() << "  " << temp->qos();
+			// 			qDebug()<<"Subscribe to: "<< temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
@@ -365,35 +365,33 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
-			//Search for inferior subscriptions, that the new subscription contains
+			// Search for inferior subscriptions, that the new subscription contains
 			bool found = false;
 			QVector<MQTTSubscription*> inferiorSubscriptions;
 			for (auto* subscription : m_MQTTSubscriptions) {
-				if (checkTopicContains(topicName, subscription->subscriptionName())
-				        && topicName != subscription->subscriptionName()) {
+				if (checkTopicContains(topicName, subscription->subscriptionName()) && topicName != subscription->subscriptionName()) {
 					found = true;
 					inferiorSubscriptions.push_back(subscription);
 				}
 			}
 
-			//If there are some inferior subscriptions, we have to deal with them
+			// If there are some inferior subscriptions, we have to deal with them
 			if (found) {
 				for (auto* inferiorSubscription : inferiorSubscriptions) {
-// 					qDebug()<<"Reparent topics of inferior subscription: "<< inferiorSubscription->subscriptionName();
+					// 					qDebug()<<"Reparent topics of inferior subscription: "<< inferiorSubscription->subscriptionName();
 
-					//We have to reparent every topic of the inferior subscription, so no data is lost
+					// We have to reparent every topic of the inferior subscription, so no data is lost
 					QVector<MQTTTopic*> topics = inferiorSubscription->topics();
 					for (auto* topic : topics) {
 						topic->reparent(newSubscription);
 					}
 
-					//Then remove the subscription and every connected information
-					QMqttTopicFilter unsubscribeFilter {inferiorSubscription->subscriptionName()};
+					// Then remove the subscription and every connected information
+					QMqttTopicFilter unsubscribeFilter{inferiorSubscription->subscriptionName()};
 					m_client->unsubscribe(unsubscribeFilter);
 
 					for (int j = 0; j < m_MQTTSubscriptions.size(); ++j) {
-						if (m_MQTTSubscriptions[j]->subscriptionName() ==
-						        inferiorSubscription->subscriptionName()) {
+						if (m_MQTTSubscriptions[j]->subscriptionName() == inferiorSubscription->subscriptionName()) {
 							m_MQTTSubscriptions.remove(j);
 						}
 					}
@@ -406,7 +404,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }
@@ -417,26 +415,26 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
  * \param name, the name of the subscription to remove
  */
 void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
-	//We can only remove the subscription if it exists
+	// We can only remove the subscription if it exists
 	if (m_subscriptions.contains(subscriptionName)) {
-		//unsubscribe from the topic
+		// unsubscribe from the topic
 		const QMqttTopicFilter filter{subscriptionName};
 		m_client->unsubscribe(filter);
-// 		qDebug()<<"Unsubscribe from: " << subscriptionName;
+		// 		qDebug()<<"Unsubscribe from: " << subscriptionName;
 
-		//Remove every connected information
+		// Remove every connected information
 		m_subscriptions.removeAll(subscriptionName);
 
 		for (int i = 0; i < m_MQTTSubscriptions.size(); ++i) {
 			if (m_MQTTSubscriptions[i]->subscriptionName() == subscriptionName) {
 				MQTTSubscription* removeSubscription = m_MQTTSubscriptions[i];
 				m_MQTTSubscriptions.remove(i);
-				//Remove every topic of the subscription as well
+				// Remove every topic of the subscription as well
 				QVector<MQTTTopic*> topics = removeSubscription->topics();
 				for (const auto& topic : topics)
 					m_topicNames.removeAll(topic->topicName());
 
-				//Remove the MQTTSubscription
+				// Remove the MQTTSubscription
 				removeChild(removeSubscription);
 				break;
 			}
@@ -450,7 +448,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
-		emit MQTTTopicsChanged();
+		Q_EMIT MQTTTopicsChanged();
 	}
 }
 
@@ -462,14 +460,14 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
  * \param QoS
  */
 void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 QoS) {
-	//We can't add the subscription if it already exists
+	// We can't add the subscription if it already exists
 	if (!m_subscriptions.contains(topicName)) {
-		//Subscribe to the topic
-		QMqttTopicFilter filter {topicName};
+		// Subscribe to the topic
+		QMqttTopicFilter filter{topicName};
 		QMqttSubscription* temp = m_client->subscribe(filter, QoS);
 		if (temp) {
-			//Add the MQTTSubscription and other connected data
-// 			qDebug()<<"Add subscription before remove: " << temp->topic() << "  " << temp->qos();
+			// Add the MQTTSubscription and other connected data
+			// 			qDebug()<<"Add subscription before remove: " << temp->topic() << "  " << temp->qos();
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
@@ -479,12 +477,11 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			addChildFast(newSubscription);
 			m_MQTTSubscriptions.push_back(newSubscription);
 
-			//Search for the subscription the topic belonged to
+			// Search for the subscription the topic belonged to
 			bool found = false;
 			MQTTSubscription* superiorSubscription = nullptr;
 			for (auto* subscription : m_MQTTSubscriptions) {
-				if (checkTopicContains(subscription->subscriptionName(), topicName)
-				        && topicName != subscription->subscriptionName()) {
+				if (checkTopicContains(subscription->subscriptionName(), topicName) && topicName != subscription->subscriptionName()) {
 					found = true;
 					superiorSubscription = subscription;
 					break;
@@ -492,10 +489,10 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			}
 
 			if (found) {
-				//Search for topics belonging to the superior(old) subscription
-				//which are also contained by the new subscription
+				// Search for topics belonging to the superior(old) subscription
+				// which are also contained by the new subscription
 				QVector<MQTTTopic*> topics = superiorSubscription->topics();
-// 				qDebug()<< topics.size();
+				// 				qDebug()<< topics.size();
 
 				QVector<MQTTTopic*> inferiorTopics;
 				for (auto* topic : topics) {
@@ -504,7 +501,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 					}
 				}
 
-				//Reparent these topics, in order to avoid data loss
+				// Reparent these topics, in order to avoid data loss
 				for (auto* inferiorTopic : inferiorTopics) {
 					inferiorTopic->reparent(newSubscription);
 				}
@@ -521,10 +518,10 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
  * \param parent, the name of the MQTTSubscription
  */
 void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTopicName) {
-	//We can only reparent if the parent contained the topic
+	// We can only reparent if the parent contained the topic
 	if (m_subscriptions.contains(parentTopicName) && m_topicNames.contains(topicName)) {
-// 		qDebug() << "Reparent " << topicName << " to " << parentTopicName;
-		//search for the parent MQTTSubscription
+		// 		qDebug() << "Reparent " << topicName << " to " << parentTopicName;
+		// search for the parent MQTTSubscription
 		bool found = false;
 		MQTTSubscription* superiorSubscription = nullptr;
 		for (auto* subscription : m_MQTTSubscriptions) {
@@ -536,12 +533,12 @@ void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTo
 		}
 
 		if (found) {
-			//get every topic of the MQTTClient
+			// get every topic of the MQTTClient
 			QVector<MQTTTopic*> topics = children<MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
-			//Search for the given topic among the MQTTTopics
+			// Search for the given topic among the MQTTTopics
 			for (auto* topic : topics) {
 				if (topicName == topic->topicName()) {
-					//if found, it is reparented to the parent MQTTSubscription
+					// if found, it is reparented to the parent MQTTSubscription
 					topic->reparent(superiorSubscription);
 					break;
 				}
@@ -571,23 +568,22 @@ bool MQTTClient::checkTopicContains(const QString& superior, const QString& infe
 			QStringList inferiorList = inferior.split('/', QString::SkipEmptyParts);
 #endif
 
-			//a longer topic can't contain a shorter one
+			// a longer topic can't contain a shorter one
 			if (superiorList.size() > inferiorList.size())
 				return false;
 
 			bool ok = true;
 			for (int i = 0; i < superiorList.size(); ++i) {
 				if (superiorList.at(i) != inferiorList.at(i)) {
-					if ((superiorList.at(i) != '+') &&
-					        !(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
-						//if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
-						//then superior can't contain inferior
+					if ((superiorList.at(i) != '+') && !(superiorList.at(i) == '#' && i == superiorList.size() - 1)) {
+						// if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
+						// then superior can't contain inferior
 						ok = false;
 						break;
-					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == '#') ) {
-						//if the two topics differ at the last level
-						//and the superior's current level is + while the inferior's is #(which can be only in the last position)
-						//then superior can't contain inferior
+					} else if (i == superiorList.size() - 1 && (superiorList.at(i) == '+' && inferiorList.at(i) == '#')) {
+						// if the two topics differ at the last level
+						// and the superior's current level is + while the inferior's is #(which can be only in the last position)
+						// then superior can't contain inferior
 						ok = false;
 						break;
 					}
@@ -617,10 +613,9 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 	QString commonTopic;
 
 	if (!firstList.isEmpty()) {
-		//the two topics have to be the same size and can't be identic
+		// the two topics have to be the same size and can't be identic
 		if ((firstList.size() == secondtList.size()) && (first != second)) {
-
-			//the index where they differ
+			// the index where they differ
 			int differIndex = -1;
 			for (int i = 0; i < firstList.size(); ++i) {
 				if (firstList.at(i) != secondtList.at(i)) {
@@ -629,17 +624,16 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 				}
 			}
 
-			//they can differ at only one level and that can't be the first
+			// they can differ at only one level and that can't be the first
 			bool differ = false;
 			if (differIndex > 0) {
-				for (int j = differIndex +1; j < firstList.size(); ++j) {
+				for (int j = differIndex + 1; j < firstList.size(); ++j) {
 					if (firstList.at(j) != secondtList.at(j)) {
 						differ = true;
 						break;
 					}
 				}
-			}
-			else
+			} else
 				differ = true;
 
 			if (!differ) {
@@ -647,7 +641,7 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 					if (i != differIndex) {
 						commonTopic.append(firstList.at(i));
 					} else {
-						//we put '+' wildcard at the level where they differ
+						// we put '+' wildcard at the level where they differ
 						commonTopic.append('+');
 					}
 
@@ -657,7 +651,7 @@ QString MQTTClient::checkCommonLevel(const QString& first, const QString& second
 			}
 		}
 	}
-// 	qDebug() << first << " " << second << " common topic: "<<commonTopic;
+	// 	qDebug() << first << " " << second << " common topic: "<<commonTopic;
 	return commonTopic;
 }
 
@@ -692,8 +686,8 @@ bool MQTTClient::MQTTWillUse() const {
  *
  * \param topic
  */
-void  MQTTClient::setWillTopic(const QString& topic) {
-// 	qDebug() << "Set will topic:" << topic;
+void MQTTClient::setWillTopic(const QString& topic) {
+	// 	qDebug() << "Set will topic:" << topic;
 	m_MQTTWill.willTopic = topic;
 }
 
@@ -775,7 +769,7 @@ void MQTTClient::updateWillMessage() {
 	QVector<const MQTTTopic*> topics = children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 	const MQTTTopic* willTopic = nullptr;
 
-	//Search for the will topic
+	// Search for the will topic
 	for (const auto* topic : topics) {
 		if (topic->topicName() == m_MQTTWill.willTopic) {
 			willTopic = topic;
@@ -783,55 +777,55 @@ void MQTTClient::updateWillMessage() {
 		}
 	}
 
-	//if the will topic is found we can update the will message
+	// if the will topic is found we can update the will message
 	if (willTopic != nullptr) {
-		//To update the will message we have to disconnect first, then after setting everything connect again
-		if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Connected) ) {
-			//Disconnect only once (disconnecting may take a while)
+		// To update the will message we have to disconnect first, then after setting everything connect again
+		if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Connected)) {
+			// Disconnect only once (disconnecting may take a while)
 			if (!m_disconnectForWill) {
-// 				qDebug() << "Disconnecting from host in order to update will message";
+				// 				qDebug() << "Disconnecting from host in order to update will message";
 				m_client->disconnectFromHost();
 				m_disconnectForWill = true;
 			}
-			//Try to update again
+			// Try to update again
 			updateWillMessage();
 		}
-		//If client is disconnected we can update the settings
+		// If client is disconnected we can update the settings
 		else if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
 			m_client->setWillQoS(m_MQTTWill.willQoS);
 			m_client->setWillRetain(m_MQTTWill.willRetain);
 			m_client->setWillTopic(m_MQTTWill.willTopic);
 
-			//Set the will message according to m_willMessageType
+			// Set the will message according to m_willMessageType
 			switch (m_MQTTWill.willMessageType) {
 			case WillMessageType::OwnMessage:
 				m_client->setWillMessage(m_MQTTWill.willOwnMessage.toUtf8());
-// 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
+				// 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
 				break;
 			case WillMessageType::Statistics: {
-				//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
-				//check the column mode of the last column in the topic for this.
-				//TODO: check this logic again - why last column only?
+				// Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
+				// check the column mode of the last column in the topic for this.
+				// TODO: check this logic again - why last column only?
 				const auto* col = willTopic->child<Column>(willTopic->childCount<Column>() - 1);
 				auto mode = col->columnMode();
-				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Numeric)
+				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Double)
 					m_client->setWillMessage(this->statistics(willTopic).toUtf8());
 				else
-					m_client->setWillMessage(QByteArray()); //empty message
-// 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
+					m_client->setWillMessage(QByteArray()); // empty message
+				// 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
 				break;
 			}
 			case WillMessageType::LastMessage:
 				m_client->setWillMessage(m_MQTTWill.willLastMessage.toUtf8());
-// 				qDebug()<<"Will last message:\n" << m_MQTTWill.willLastMessage;
+				// 				qDebug()<<"Will last message:\n" << m_MQTTWill.willLastMessage;
 				break;
 			default:
 				break;
 			}
 			m_disconnectForWill = false;
-			//Reconnect with the updated message
+			// Reconnect with the updated message
 			m_client->connectToHost();
-// 			qDebug()<< "Reconnect to host after updating will message";
+			// 			qDebug()<< "Reconnect to host after updating will message";
 		}
 	}
 }
@@ -845,10 +839,10 @@ QString MQTTClient::statistics(const MQTTTopic* topic) const {
 	QString statistics;
 
 	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
-	//Add every statistical data to the string, the flag of which is set true
+	// Add every statistical data to the string, the flag of which is set true
 	for (int i = 0; i <= willStatistics.size(); i++) {
 		if (willStatistics[i]) {
-			switch (static_cast<MQTTClient::WillStatisticsType>(i) ) {
+			switch (static_cast<MQTTClient::WillStatisticsType>(i)) {
 			case MQTTClient::WillStatisticsType::ArithmeticMean:
 				statistics += QLatin1String("Arithmetic mean: ") + QString::number(col->statistics().arithmeticMean) + "\n";
 				break;
@@ -998,16 +992,16 @@ void MQTTClient::read() {
 		return;
 
 	if (!m_prepared) {
-// 		qDebug()<<"Connect";
-		//connect to the broker
+		// 		qDebug()<<"Connect";
+		// connect to the broker
 		m_client->connectToHost();
 		m_prepared = true;
 	}
 
 	if ((m_client->state() == QMqttClient::ClientState::Connected) && m_MQTTFirstConnectEstablished) {
-// 		qDebug()<<"Read";
-		//Signal for every MQTTTopic that they can read
-		emit readFromTopics();
+		// 		qDebug()<<"Read";
+		// Signal for every MQTTTopic that they can read
+		Q_EMIT readFromTopics();
 	}
 }
 
@@ -1016,18 +1010,18 @@ void MQTTClient::read() {
  */
 void MQTTClient::onMQTTConnect() {
 	if (m_client->error() == QMqttClient::NoError) {
-		//if this is the first connection (after setting the options in ImportFileWidget or loading saved project)
+		// if this is the first connection (after setting the options in ImportFileWidget or loading saved project)
 		if (!m_MQTTFirstConnectEstablished) {
-// 			qDebug()<<"connection made in MQTTClient";
+			// 			qDebug()<<"connection made in MQTTClient";
 
-			//Subscribe to initial or loaded topics
+			// Subscribe to initial or loaded topics
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while (i.hasNext()) {
 				i.next();
-// 				qDebug()<<i.key();
-				QMqttSubscription *temp = m_client->subscribe(i.key(), i.value());
+				// 				qDebug()<<i.key();
+				QMqttSubscription* temp = m_client->subscribe(i.key(), i.value());
 				if (temp) {
-					//If we didn't load the MQTTClient from xml we have to add the MQTTSubscriptions
+					// If we didn't load the MQTTClient from xml we have to add the MQTTSubscriptions
 					if (!m_loaded) {
 						m_subscriptions.push_back(temp->topic().filter());
 
@@ -1043,23 +1037,23 @@ void MQTTClient::onMQTTConnect() {
 				}
 			}
 			m_MQTTFirstConnectEstablished = true;
-			//Signal that the initial subscriptions were made
-			emit MQTTSubscribed();
+			// Signal that the initial subscriptions were made
+			Q_EMIT MQTTSubscribed();
 		}
-		//if there was already a connection made(happens after updating will message)
+		// if there was already a connection made(happens after updating will message)
 		else {
-// 			qDebug() << "Start resubscribing after will message update";
-			//Only the client has to make the subscriptions again, every other connected data is still available
+			// 			qDebug() << "Start resubscribing after will message update";
+			// Only the client has to make the subscriptions again, every other connected data is still available
 			QMapIterator<QMqttTopicFilter, quint8> i(m_subscribedTopicNameQoS);
 			while (i.hasNext()) {
 				i.next();
 				QMqttSubscription* temp = m_client->subscribe(i.key(), i.value());
 				if (temp) {
-// 					qDebug()<<temp->topic()<<"  "<<temp->qos();
+					// 					qDebug()<<temp->topic()<<"  "<<temp->qos();
 					connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 				}
-// 				else
-// 					qDebug()<<"Couldn't subscribe after will update";
+				// 				else
+				// 					qDebug()<<"Couldn't subscribe after will update";
 			}
 		}
 	}
@@ -1070,13 +1064,13 @@ void MQTTClient::onMQTTConnect() {
  * It passes the message to the appropriate MQTTSubscription which will pass it to the appropriate MQTTTopic
  */
 void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
-	//Decide to interpret retain message or not
+	// Decide to interpret retain message or not
 	if (!msg.retain() || m_MQTTRetain) {
-		//If this is the first message from the topic, save its name
+		// If this is the first message from the topic, save its name
 		if (!m_topicNames.contains(msg.topic().name()))
 			m_topicNames.push_back(msg.topic().name());
 
-		//Pass the message and the topic name to the MQTTSubscription which contains the topic
+		// Pass the message and the topic name to the MQTTSubscription which contains the topic
 		for (auto* subscription : m_MQTTSubscriptions) {
 			if (checkTopicContains(subscription->subscriptionName(), msg.topic().name())) {
 				subscription->messageArrived(msg.payload(), msg.topic().name());
@@ -1084,11 +1078,11 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 			}
 		}
 
-		//if the message was received by the will topic, update the last message received by it
+		// if the message was received by the will topic, update the last message received by it
 		if (msg.topic().name() == m_MQTTWill.willTopic) {
 			m_MQTTWill.willLastMessage = QString(msg.payload());
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }
@@ -1110,16 +1104,16 @@ void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
  *
  * \param name, the name of the subscription
  */
-void MQTTClient::subscriptionLoaded(const QString &name) {
+void MQTTClient::subscriptionLoaded(const QString& name) {
 	if (!name.isEmpty()) {
-// 		qDebug() << "Finished loading: " << name;
-		//Save information about the subscription
+		// 		qDebug() << "Finished loading: " << name;
+		// Save information about the subscription
 		m_subscriptionsLoaded++;
 		m_subscriptions.push_back(name);
-		QMqttTopicFilter filter {name};
+		QMqttTopicFilter filter{name};
 		m_subscribedTopicNameQoS[filter] = 0;
 
-		//Save the topics belonging to the subscription
+		// Save the topics belonging to the subscription
 		for (const auto* subscription : m_MQTTSubscriptions) {
 			if (subscription->subscriptionName() == name) {
 				const auto& topics = subscription->topics();
@@ -1130,9 +1124,9 @@ void MQTTClient::subscriptionLoaded(const QString &name) {
 			}
 		}
 
-		//Check whether every subscription was loaded or not
+		// Check whether every subscription was loaded or not
 		if (m_subscriptionsLoaded == m_subscriptionCountToLoad) {
-			//if everything was loaded we can start reading
+			// if everything was loaded we can start reading
 			m_loaded = true;
 			read();
 		}
@@ -1150,7 +1144,7 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//general
+	// general
 	writer->writeStartElement("general");
 	writer->writeAttribute("subscriptionCount", QString::number(m_MQTTSubscriptions.size()));
 	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
@@ -1179,16 +1173,16 @@ void MQTTClient::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("willTimeInterval", QString::number(m_MQTTWill.willTimeInterval));
 
 	for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i)
-		writer->writeAttribute("willStatistics"+QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
+		writer->writeAttribute("willStatistics" + QString::number(i), QString::number(m_MQTTWill.willStatistics[i]));
 	writer->writeAttribute("useID", QString::number(m_MQTTUseID));
 	writer->writeAttribute("useAuthentication", QString::number(m_MQTTUseAuthentication));
 
 	writer->writeEndElement();
 
-	//filter
+	// filter
 	m_filter->save(writer);
 
-	//MQTTSubscription
+	// MQTTSubscription
 	for (auto* sub : children<MQTTSubscription>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		sub->save(writer);
 
@@ -1224,25 +1218,25 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'subscriptionCount'"));
 			else
-				m_subscriptionCountToLoad =  str.toInt();
+				m_subscriptionCountToLoad = str.toInt();
 
 			str = attribs.value("keepValues").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'keepValues'"));
 			else
-				m_keepNValues =  str.toInt();
+				m_keepNValues = str.toInt();
 
 			str = attribs.value("updateType").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'updateType'"));
 			else
-				m_updateType =  static_cast<UpdateType>(str.toInt());
+				m_updateType = static_cast<UpdateType>(str.toInt());
 
 			str = attribs.value("readingType").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.arg("'readingType'"));
 			else
-				m_readingType =  static_cast<ReadingType>(str.toInt());
+				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
 				str = attribs.value("updateInterval").toString();
@@ -1356,7 +1350,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 					m_MQTTWill.willTimeInterval = str.toInt();
 
 				for (int i = 0; i < m_MQTTWill.willStatistics.count(); ++i) {
-					str = attribs.value("willStatistics"+QString::number(i)).toString();
+					str = attribs.value("willStatistics" + QString::number(i)).toString();
 					if (str.isEmpty())
 						reader->raiseWarning(attributeWarning.arg("'willTimeInterval'"));
 					else
@@ -1377,9 +1371,10 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 			addChildFast(subscription);
-		} else {// unknown element
+		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
 

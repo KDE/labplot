@@ -1,11 +1,11 @@
 /*
-    File                 : Integer2StringFilter.h
-    Project              : AbstractColumn
-    Description          : Locale-aware conversion filter int -> QString.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : Integer2StringFilter.h
+	Project              : AbstractColumn
+	Description          : Locale-aware conversion filter int -> QString.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef INTEGER2STRING_FILTER_H
 #define INTEGER2STRING_FILTER_H
@@ -18,15 +18,20 @@ class Integer2StringFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	explicit Integer2StringFilter() {}
+	explicit Integer2StringFilter() {
+	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::Text;
+	}
 
 public:
 	QString textAt(int row) const override {
-		if (!m_inputs.value(0)) return QString();
-		if (m_inputs.value(0)->rowCount() <= row) return QString();
+		if (!m_inputs.value(0))
+			return QString();
+		if (m_inputs.value(0)->rowCount() <= row)
+			return QString();
 
 		int inputValue = m_inputs.value(0)->integerAt(row);
 
@@ -38,10 +43,9 @@ public:
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
 };
 
 #endif // INTEGER2STRING_FILTER_H
-

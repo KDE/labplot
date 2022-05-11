@@ -1,10 +1,10 @@
 /*
-    File                 : ImageEditor.h
-    Project              : LabPlot
-    Description          : Edit Image on the basis of input color attributes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImageEditor.h
+	Project              : LabPlot
+	Description          : Edit Image on the basis of input color attributes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMAGEEDITOR_H
@@ -18,7 +18,7 @@ class QColor;
 
 class ImageEditor {
 public:
-	static void discretize(QImage*, QImage*, const DatapickerImage::EditorSettings&, QColor);
+	static void discretize(QImage*, const QImage*, const DatapickerImage::EditorSettings&, QColor);
 	static bool processedPixelIsOn(const QImage&, int, int);
 	static QRgb findBackgroundColor(const QImage*);
 	static int colorAttributeMax(DatapickerImage::ColorAttributes);

@@ -1,11 +1,11 @@
 /*
-    File                 : FitOptionsWidget.h
-    Project              : LabPlot
-    Description          : widget for editing advanced fit parameters
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FitOptionsWidget.h
+	Project              : LabPlot
+	Description          : widget for editing advanced fit parameters
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef FITOPTIONSWIDGET_H
@@ -14,7 +14,7 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_fitoptionswidget.h"
 
-class FitOptionsWidget: public QWidget {
+class FitOptionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -28,11 +28,11 @@ private:
 	bool m_dateTimeRange{false};
 	const QLocale locale;
 
-signals:
+Q_SIGNALS:
 	void finished();
 	void optionsChanged();
 
-private slots:
+private Q_SLOTS:
 	void autoRangeChanged();
 	void autoEvalRangeChanged();
 	void fitRangeMinChanged();
@@ -47,4 +47,4 @@ private slots:
 	void changed();
 };
 
-#endif //FITOPTIONSWIDGET_H
+#endif // FITOPTIONSWIDGET_H

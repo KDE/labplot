@@ -1,11 +1,11 @@
 /*
-    File                 : AbstractPart.cpp
-    Project              : LabPlot
-    Description          : Base class of Aspects with MDI windows as views.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractPart.cpp
+	Project              : LabPlot
+	Description          : Base class of Aspects with MDI windows as views.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/core/AbstractPart.h"
@@ -51,7 +51,6 @@ PartMdiView* AbstractPart::mdiSubWindow() const {
 		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
 #endif
 	return m_mdiWindow;
-
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
@@ -63,8 +62,8 @@ bool AbstractPart::hasMdiSubWindow() const {
  * is closed (=deleted) in MainWindow. Makes sure that the view also gets deleted.
  */
 void AbstractPart::deleteView() const {
-	//if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
-	//here just set the pointer to 0.
+	// if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
+	// here just set the pointer to 0.
 	auto* parent = parentAspect();
 	auto type = parent->type();
 	if (type == AspectType::Workbook || type == AspectType::Datapicker
@@ -88,23 +87,23 @@ QMenu* AbstractPart::createContextMenu() {
 	menu->addSeparator();
 	auto type = this->type();
 
-	//import actions for spreadsheet and matrix
-	if ( (type == AspectType::Spreadsheet || type == AspectType::Matrix)
-		&& type != AspectType::LiveDataSource && type != AspectType::MQTTTopic ) {
+	// import actions for spreadsheet and matrix
+	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
 		QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, &AbstractPart::importFromFileRequested);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, &AbstractPart::importFromSQLDatabaseRequested);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File..."), this, &AbstractPart::importFromFileRequested);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database..."), this, &AbstractPart::importFromSQLDatabaseRequested);
 		menu->addMenu(subMenu);
 		menu->addSeparator();
 	}
 
-	//export/print actions
-	menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
+	// export/print actions
+	if (type != AspectType::CantorWorksheet)
+		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
 	menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, &AbstractPart::printRequested);
 	menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();
 
-	//window state related actions
+	// window state related actions
 	if (m_mdiWindow) {
 		const QStyle* style = m_mdiWindow->style();
 		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
@@ -122,13 +121,13 @@ QMenu* AbstractPart::createContextMenu() {
 			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}
 	} else {
-		//if the mdi window was closed, add the "Show" action.
-		//Don't add it for:
+		// if the mdi window was closed, add the "Show" action.
+		// Don't add it for:
 		//* children of a workbook, cannot be hidden/minimized
 		//* data spreadsheets in datapicker curves
 		auto parentType = parentAspect()->type();
-		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook) ||
-							(type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
+		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook)
+			|| (type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
 		if (!disableShow)
 			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
 	}
@@ -137,9 +136,8 @@ QMenu* AbstractPart::createContextMenu() {
 }
 
 bool AbstractPart::isDraggable() const {
-	//TODO: moving workbook children doesn't work at the moment, don't allow to move it for now
-	if ((type() == AspectType::Spreadsheet || type() == AspectType::Matrix)
-		&& parentAspect()->type() == AspectType::Workbook)
+	// TODO: moving workbook children doesn't work at the moment, don't allow to move it for now
+	if ((type() == AspectType::Spreadsheet || type() == AspectType::Matrix) && parentAspect()->type() == AspectType::Workbook)
 		return false;
 	else
 		return true;

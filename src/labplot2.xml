@@ -3,6 +3,7 @@
   <mime-type type="application/x-labplot2">
     <sub-class-of type="application/gzip"/>
     <comment>LabPlot2 Project File</comment>
+    <comment xml:lang="ar">ملف مشروع معمل رسم٢</comment>
     <comment xml:lang="ca">Fitxer de projecte LabPlot2</comment>
     <comment xml:lang="ca@valencia">Fitxer de projecte LabPlot2</comment>
     <comment xml:lang="cs">Soubor projektu LabPlot2</comment>
@@ -13,6 +14,7 @@
     <comment xml:lang="fi">LabPlot2-projektitiedosto</comment>
     <comment xml:lang="fr">Fichier de projet pour « LabPlot2 »</comment>
     <comment xml:lang="it">File di progetto LabPlot2</comment>
+    <comment xml:lang="ko">LabPlot2 프로젝트 파일</comment>
     <comment xml:lang="lt">LabPlot2 projekto failas</comment>
     <comment xml:lang="nl">Projectbestand LabPlot</comment>
     <comment xml:lang="nn">LabPlot2-prosjektfil</comment>

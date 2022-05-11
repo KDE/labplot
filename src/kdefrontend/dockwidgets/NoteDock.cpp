@@ -1,26 +1,27 @@
 /*
-    File                 : NotesDock.cpp
-    Project              : LabPlot
-    Description          : Dock for configuring notes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
+	File                 : NotesDock.cpp
+	Project              : LabPlot
+	Description          : Dock for configuring notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NoteDock.h"
 #include "kdefrontend/TemplateHandler.h"
 
-#include <QDir>
+#include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KConfig>
+#include <QDir>
 
-NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
+NoteDock::NoteDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &NoteDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &NoteDock::commentChanged);
@@ -36,7 +37,7 @@ NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &NoteDock::saveConfigAsTemplate);
 }
 
-void NoteDock::setNotesList(QList< Note* > list) {
+void NoteDock::setNotesList(QList<Note*> list) {
 	m_notesList = list;
 	m_notes = list.first();
 	m_aspect = list.first();

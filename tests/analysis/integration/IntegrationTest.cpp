@@ -1,11 +1,11 @@
 /*
-    File                 : IntegrationTest.cpp
-    Project              : LabPlot
-    Description          : Tests for numerical integration
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : IntegrationTest.cpp
+	Project              : LabPlot
+	Description          : Tests for numerical integration
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "IntegrationTest.h"
@@ -16,29 +16,29 @@
 
 void IntegrationTest::testLinear() {
 	// data
-	QVector<int> xData = {1,2,3,4};
-	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<int> xData = {1, 2, 3, 4};
+	QVector<double> yData = {1., 2., 3., 4.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYIntegrationCurve integrationCurve("integration");
 	integrationCurve.setXDataColumn(&xDataColumn);
 	integrationCurve.setYDataColumn(&yDataColumn);
 
-	//prepare the integration
+	// prepare the integration
 	XYIntegrationCurve::IntegrationData integrationData = integrationCurve.integrationData();
 	integrationCurve.setIntegrationData(integrationData);
 
-	//perform the integration
+	// perform the integration
 	integrationCurve.recalculate();
 	const XYIntegrationCurve::IntegrationResult& integrationResult = integrationCurve.integrationResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(integrationResult.available, true);
 	QCOMPARE(integrationResult.valid, true);
 

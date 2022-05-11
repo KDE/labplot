@@ -1,10 +1,10 @@
 /*
-    File                 : ExamplesDialog.cpp
-    Project              : LabPlot
-    Description          : dialog showing the available example projects
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExamplesDialog.cpp
+	Project              : LabPlot
+	Description          : dialog showing the available example projects
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ExamplesDialog.h"
@@ -23,16 +23,16 @@
 
 	\ingroup kdefrontend
  */
-ExamplesDialog::ExamplesDialog(QWidget* parent) : QDialog(parent),
-	m_examplesWidget(new ExamplesWidget(this)) {
-
+ExamplesDialog::ExamplesDialog(QWidget* parent)
+	: QDialog(parent)
+	, m_examplesWidget(new ExamplesWidget(this)) {
 	connect(m_examplesWidget, &ExamplesWidget::doubleClicked, this, &QDialog::accept);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_examplesWidget);
 
-	//dialog buttons
-	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |QDialogButtonBox::Cancel);
+	// dialog buttons
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	layout->addWidget(buttonBox);
 
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

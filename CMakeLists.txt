@@ -1,7 +1,6 @@
 project(labplot2)
 
-# minimum may be 3.16.0 for FindIcoTool.cmake and FindSharedMimeInfo.cmake
-cmake_minimum_required (VERSION 3.2.0 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.16.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
@@ -11,11 +10,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(QT_MINIMUM_VERSION 5.6.0)
 set(KF5_MIN_VERSION "5.16.0")
-
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+
+include(ECMInstallIcons)
+include(ECMSetupVersion)
+include(ECMAddAppIcon)
+#include(KDEClangFormat)
+#include(GenerateExportHeader)
+include(FeatureSummary)
+
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
@@ -82,19 +92,12 @@ ENDIF ()
 
 find_package(BISON REQUIRED)
 
-include(FeatureSummary)
-include(ECMAddAppIcon)
-include(ECMInstallIcons)
-include(KDEInstallDirs)
-include(KDECompilerSettings)
-include(KDECMakeSettings)
-
 ### compiler flags ######################################
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default")
+set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
-set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions")
+set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C compiler detected, adding compile flags")
@@ -111,7 +114,11 @@ elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "PGI")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -W3")
+	if(CMAKE_BUILD_TYPE STREQUAL Debug)
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od -W3")
+	else()
+		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -W3")
+	endif()
 	set(MSVC_FOUND TRUE)
 else ()
 	message(STATUS "UNKNOWN C compiler, adding compile flags")
@@ -120,22 +127,27 @@ endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
 	message(STATUS "GNU C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
 	message(STATUS "Clang C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
 	message(STATUS "Intel C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE -std=c++11 ${GENERIC_CXX_FLAGS}")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS}")
 	#-std=c++0x comes with cmake's general flags, deprecated in icc, remove it
 	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 	message(STATUS "PGI C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE -O3 -std=c++11 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -Minform=inform -Mbounds -Mchkstk")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE -O3 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -Minform=inform -Mbounds -Mchkstk")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_CXX_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C++ compiler detected, adding compile flags")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1")
+	# -D_ALLOW_KEYWORD_MACROS for "#define private public" in MultiRangeTest.cpp
+	if(CMAKE_BUILD_TYPE STREQUAL Debug)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Od -W3 -DPSAPI_VERSION=1")
+	else()
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -W3 -DPSAPI_VERSION=1")
+	endif()
 	set(MSVC_FOUND TRUE)
 else ()
 	message(STATUS "UNKNOWN C++ compiler, adding compile flags")
@@ -144,13 +156,31 @@ endif ()
 
 ##########################################################
 
-add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions(
+    -DQT_NO_CAST_TO_ASCII
+# TODO: enable and fix problems
+#    -DQT_NO_CAST_FROM_ASCII
+#    -DQT_NO_CAST_FROM_BYTEARRAY
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_USE_QSTRINGBUILDER
+    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
+    -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
+)
+if (NOT WIN32)
+    # Strict iterators can't be used on Windows, they lead to a link error
+    # when application code iterates over a QVector<QPoint> for instance, unless
+    # Qt itself was also built with strict iterators.
+    # See example at https://bugreports.qt.io/browse/AUTOSUITE-946
+    add_definitions(-DQT_STRICT_ITERATORS)
+endif()
+
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION=\"2.9.0\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
-add_definitions (-DQT_NO_URL_CAST_FROM_STRING)
 set(BUILD_SHARED_LIBS true)
 
 #cmake_policy(SET CMP0002 OLD)
@@ -205,6 +235,9 @@ option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
+IF (APPLE)
+	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+ENDIF ()
 
 ### OS macros ####################################
 IF (WIN32)
@@ -215,6 +248,13 @@ ENDIF ()
 
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
+
+FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt5)
+IF (Poppler_FOUND)
+	include_directories(${Poppler_INCLUDE_DIRS})
+	# MESSAGE (STATUS "Poppler libraries: ${Poppler_LIBRARIES}")
+	add_definitions (-DHAVE_POPPLER)
+ENDIF ()
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
@@ -235,28 +275,25 @@ ENDIF ()
 
 ### Cantorlibs (optional) ###############################
 IF (ENABLE_CANTOR)
-FIND_PACKAGE (Cantor)
-SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
-	URL "https://edu.kde.org/cantor/"
-)
-IF (Cantor_FOUND)
-	MESSAGE (STATUS "Found Cantor Library ${Cantor_VERSION}")
+	FIND_PACKAGE (Cantor)
 
-	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
-		add_definitions (-DHAVE_CANTOR_LIBS)
-		set(RECENT_CANTOR TRUE)
-		FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
+	IF (Cantor_FOUND)
+		MESSAGE (STATUS "Found Cantor Library ${Cantor_VERSION}")
+
+		IF (${Cantor_VERSION} VERSION_GREATER "19.11")
+			add_definitions (-DHAVE_CANTOR_LIBS)
+			set(RECENT_CANTOR TRUE)
+		ELSE ()
+			MESSAGE (STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
+		ENDIF ()
+		IF (${Cantor_VERSION} VERSION_GREATER "20.08.9")
+			add_definitions (-DHAVE_NEW_CANTOR_LIBS)
+		ENDIF ()
 	ELSE ()
-		MESSAGE (STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
+		MESSAGE (STATUS "Cantor Library NOT FOUND")
 	ENDIF ()
-	IF (${Cantor_VERSION} VERSION_GREATER "20.08.9")
-		add_definitions (-DHAVE_NEW_CANTOR_LIBS)
-	ENDIF ()
-ELSE ()
-	MESSAGE (STATUS "Cantor Library NOT FOUND")
-ENDIF ()
-ELSE ()
-	MESSAGE (STATUS "Cantor Library DISABLED")
+	ELSE ()
+		MESSAGE (STATUS "Cantor Library DISABLED")
 ENDIF ()
 
 ### FFTW (optional) #####################################
@@ -377,6 +414,7 @@ IF (ENABLE_LIBCERF)
 	FIND_PACKAGE (LIBCERF)
 	IF (LIBCERF_FOUND)
 		add_definitions (-DHAVE_LIBCERF)
+		include_directories (${LIBCERF_INCLUDE_DIR})
 	ELSE ()
 		MESSAGE (STATUS "libcerf library NOT FOUND")
 	ENDIF ()
@@ -384,13 +422,19 @@ ELSE ()
 	MESSAGE (STATUS "libcerf library DISABLED")
 ENDIF ()
 
+### ZLIB for ROOT and READSTAT #################
+
+FIND_PACKAGE(ZLIB)
+SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+	DESCRIPTION "General purpose compression library"
+	URL "https://www.zlib.net/"
+)
+IF (NOT ZLIB_FOUND)
+	SET(ZLIB_LIBRARIES "")
+ENDIF ()
+
 ### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-	FIND_PACKAGE(ZLIB)
-	SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
-		DESCRIPTION "General purpose compression library"
-		URL "https://www.zlib.net/"
-	)
 	FIND_PACKAGE(LZ4)
 	IF (ZLIB_FOUND AND LZ4_FOUND)
 		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
@@ -478,6 +522,11 @@ ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
 ENDIF ()
 
+### Touch bar on macOS (optional) #############################
+IF (APPLE AND ENABLE_TOUCHBAR)
+	add_definitions (-DHAVE_TOUCHBAR)
+ENDIF ()
+
 #################################################
 IF (ENABLE_REPRODUCIBLE)
 	add_definitions (-DREPRODUCIBLE_BUILD)
@@ -519,7 +568,12 @@ if (ENABLE_TESTS)
 endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-feature_summary(WHAT ALL)
+
+# clang format
+#file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+#kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 find_package(KF5I18n CONFIG REQUIRED)
 ki18n_install(po)

@@ -1,11 +1,11 @@
 /*
-    File                 : CopyThroughFilter.h
-    Project              : SciDAVis
-    Description          : Filter which copies all provided inputs unaltered
-    to an equal number of outputs.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CopyThroughFilter.h
+	Project              : SciDAVis
+	Description          : Filter which copies all provided inputs unaltered
+	to an equal number of outputs.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef COPY_THROUGH_FILTER_H
@@ -21,4 +21,3 @@ public:
 };
 
 #endif // ifndef COPY_THROUGH_FILTER_H
-

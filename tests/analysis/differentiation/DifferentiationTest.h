@@ -1,11 +1,11 @@
 /*
-    File                 : DifferentiationTest.h
-    Project              : LabPlot
-    Description          : Tests for numerical differentiation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : DifferentiationTest.h
+	Project              : LabPlot
+	Description          : Tests for numerical differentiation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef DIFFERENTIATIONTEST_H
 #define DIFFERENTIATIONTEST_H
@@ -15,7 +15,7 @@
 class DifferentiationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testLinear();
 	void testLinearNonEquidistant();
 	void testQuadratic();
@@ -26,6 +26,8 @@ private slots:
 	void testCubicSecondOrder();
 	void testCubicThirdOrder();
 
-//	void testPerformance();
+	// duplicate X
+	void testLinearDuplicateX();
+	//	void testPerformance();
 };
 #endif

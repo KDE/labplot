@@ -1,12 +1,11 @@
 /*
-    File                 : DatabaseManagerDialog.h
-    Project              : LabPlot
-    Description          : dialog for managing database connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatabaseManagerDialog.h
+	Project              : LabPlot
+	Description          : dialog for managing database connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef DATABASEMANAGERDIALOG_H
 #define DATABASEMANAGERDIALOG_H
@@ -28,7 +27,7 @@ private:
 	DatabaseManagerWidget* mainWidget;
 	bool m_changed{false};
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void save();
 };

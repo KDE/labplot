@@ -1,17 +1,17 @@
 /*
-    File                 : Segment.h
-    Project              : LabPlot
-    Description          : Graphics-item for curve of Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Segment.h
+	Project              : LabPlot
+	Description          : Graphics-item for curve of Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include <QVector>
 #include "backend/lib/macros.h"
+#include <QVector>
 
 class QGraphicsItem;
 class QLine;
@@ -27,7 +27,7 @@ public:
 	int yLast{0};
 	int length{0};
 
-	QGraphicsItem *graphicsItem() const;
+	QGraphicsItem* graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
 
 	bool isVisible() const;

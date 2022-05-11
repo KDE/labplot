@@ -1,10 +1,10 @@
 /*
-    File                 : ReferenceLine.h
-    Project              : LabPlot
-    Description          : Reference line on the plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ReferenceLine.h
+	Project              : LabPlot
+	Description          : Reference line on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
@@ -34,13 +34,9 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	BASIC_D_ACCESSOR_DECL(double, position, Position)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -48,7 +44,6 @@ public:
 	typedef ReferenceLinePrivate Private;
 
 protected:
-	ReferenceLinePrivate* const d_ptr;
 	ReferenceLine(const QString& name, ReferenceLinePrivate* dd);
 
 private:
@@ -69,20 +64,18 @@ private:
 	QMenu* lineStyleMenu{nullptr};
 	QMenu* lineColorMenu{nullptr};
 
-private slots:
-	//SLOTs for changes triggered via QActions in the context menu
+private Q_SLOTS:
+	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
-	void positionChanged(double);
 	void penChanged(const QPen&);
 	void opacityChanged(qreal);
-	void visibleChanged(bool);
 };
 
 #endif

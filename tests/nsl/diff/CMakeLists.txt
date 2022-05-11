@@ -1,7 +1,5 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (nsldifftest NSLDiffTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLDiffTest NSLDiffTest.cpp)
 
-target_link_libraries(nsldifftest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-target_link_libraries(nsldifftest labplot2lib)
+target_link_libraries(NSLDiffTest labplot2lib Qt5::Test labplot2test)
 
-add_test(NAME nsldifftest COMMAND nsldifftest)
+add_test(NAME NSLDiffTest COMMAND NSLDiffTest)

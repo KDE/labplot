@@ -1,12 +1,11 @@
 /*
-    File                 : nsl_stats.h
-    Project              : LabPlot
-    Description          : NSL statistics functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_stats.h
+	Project              : LabPlot
+	Description          : NSL statistics functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_STATS_H
 #define NSL_STATS_H
@@ -16,22 +15,30 @@
 /* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile,
  * https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.mquantiles.html) */
 #define NSL_STATS_QUANTILE_TYPE_COUNT 9
-typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_quantile_type3, nsl_stats_quantile_type4, 
-		nsl_stats_quantile_type5, nsl_stats_quantile_type6, nsl_stats_quantile_type7, nsl_stats_quantile_type8,
-		nsl_stats_quantile_type9} nsl_stats_quantile_type;
+typedef enum {
+	nsl_stats_quantile_type1 = 1,
+	nsl_stats_quantile_type2,
+	nsl_stats_quantile_type3,
+	nsl_stats_quantile_type4,
+	nsl_stats_quantile_type5,
+	nsl_stats_quantile_type6,
+	nsl_stats_quantile_type7,
+	nsl_stats_quantile_type8,
+	nsl_stats_quantile_type9
+} nsl_stats_quantile_type;
 
-/* minimum value of data array 
+/* minimum value of data array
 	data - data array
 	n - size of data array
 	index - index of minimum value	(not used if NULL)
 */
-double nsl_stats_minimum(const double data[], const size_t n, size_t *index);
-/* maximum value of data array 
+double nsl_stats_minimum(const double data[], const size_t n, size_t* index);
+/* maximum value of data array
 	data - data array
 	n - size of data array
 	index - index of maximum value (not used if NULL)
 */
-double nsl_stats_maximum(const double data[], const size_t n, size_t *index);
+double nsl_stats_maximum(const double data[], const size_t n, size_t* index);
 
 /* median from unsorted data. data will be sorted! */
 double nsl_stats_median(double data[], size_t stride, size_t n, nsl_stats_quantile_type type);

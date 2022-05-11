@@ -1,13 +1,12 @@
 /*
-    File                 : Notes.h
-    Project              : LabPlot
-    Description          : Widget for taking notes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Notes.h
+	Project              : LabPlot
+	Description          : Widget for taking notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NOTE_H
 #define NOTE_H
@@ -34,7 +33,9 @@ public:
 	bool printPreview() const override;
 
 	void setNote(const QString&);
-	void setText(const QString& s) {this->setNote(s);}
+	void setText(const QString& s) {
+		this->setNote(s);
+	}
 	const QString& note() const;
 
 	void setBackgroundColor(const QColor&);
@@ -49,7 +50,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-signals:
+Q_SIGNALS:
 	void backgroundColorChanged(QColor);
 	void textColorChanged(QColor);
 	void textFontChanged(QFont);

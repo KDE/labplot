@@ -1,12 +1,12 @@
 /*
-    File                 : AspectPrivate.h
-    Project              : LabPlot
-    Description          : Private data managed by AbstractAspect.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
-    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AspectPrivate.h
+	Project              : LabPlot
+	Description          : Private data managed by AbstractAspect.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
+	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASPECT_PRIVATE_H
@@ -32,10 +32,13 @@ public:
 	QString m_comment;
 	QDateTime m_creation_time;
 	bool m_hidden{false};
+	bool m_fixed{false};
+	bool m_moved{false};
 	AbstractAspect* const q;
 	AbstractAspect* m_parent{nullptr};
 	bool m_undoAware{true};
 	bool m_isLoading{false};
+	bool m_pasted{false};
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

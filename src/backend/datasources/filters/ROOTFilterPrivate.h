@@ -1,11 +1,11 @@
 /*
-    File                 : ROOTFilterPrivate.h
-    Project              : LabPlot
-    Description          : Private implementation class for ROOTFilter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	File                 : ROOTFilterPrivate.h
+	Project              : LabPlot
+	Description          : Private implementation class for ROOTFilter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ROOTFILTERPRIVATE_H
@@ -17,7 +17,6 @@
 #include <QVector>
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -41,7 +40,7 @@ public:
 	 *
 	 * @param[in] filename ROOT file to be read
 	 */
-	explicit ROOTData (const std::string& filename);
+	explicit ROOTData(const std::string& filename);
 
 	/// Parameters to describe a bin
 	struct BinPars {
@@ -56,11 +55,21 @@ public:
 	 * Histograms are identified by their bin type. The lowest byte indicates the size
 	 * of the numeric types for cross checks during the import.
 	 */
-	enum class ContentType {Invalid = 0, Tree = 0x10, NTuple = 0x11, Basket = 0x20,
-	                  Streamer = 0x30,
-	                  Double = 0x48, Float = 0x54,
-	                  Long = 0x68, Int = 0x74, Short = 0x82, Byte = 0x91,
-	                  Bool = 0xA1, CString = 0xB0};
+	enum class ContentType {
+		Invalid = 0,
+		Tree = 0x10,
+		NTuple = 0x11,
+		Basket = 0x20,
+		Streamer = 0x30,
+		Double = 0x48,
+		Float = 0x54,
+		Long = 0x68,
+		Int = 0x74,
+		Short = 0x82,
+		Byte = 0x91,
+		Bool = 0xA1,
+		CString = 0xB0
+	};
 
 	/// Information about leaf contents
 	struct LeafInfo {
@@ -73,22 +82,25 @@ public:
 
 	/// Directory structure in a ROOT file where seek positions to the objects inside the file are stored
 	struct Directory {
-		Directory() : parent(0) {}
-		Directory(const std::string& name, long int parent) : name(name), parent(parent) {}
+		Directory()
+			: parent(0) {
+		}
+		Directory(const std::string& name, long int parent)
+			: name(name)
+			, parent(parent) {
+		}
 		std::string name;
 		long int parent;
 		std::vector<long int> content;
 	};
 
 	/// Return directory structure of file content with Histograms
-	const std::map<long int, Directory>& listHistograms() const
-	{
+	const std::map<long int, Directory>& listHistograms() const {
 		return histdirs;
 	}
 
 	/// Return directory structure of file content with Trees
-	const std::map<long int, Directory>& listTrees() const
-	{
+	const std::map<long int, Directory>& listTrees() const {
 		return treedirs;
 	}
 
@@ -109,8 +121,11 @@ public:
 	 * @param[in] nentries Maximum number of entries to be read
 	 */
 	template<typename T>
-	std::vector<T> listEntries(long int pos, const std::string& branchname, const std::string& leafname,
-	                           const size_t element = 0, const size_t nentries = std::numeric_limits<size_t>::max()) const;
+	std::vector<T> listEntries(long int pos,
+							   const std::string& branchname,
+							   const std::string& leafname,
+							   size_t element = 0,
+							   size_t nentries = std::numeric_limits<size_t>::max()) const;
 	/**
 	 * @brief Get entries of a leaf with the same name as its branch
 	 *
@@ -119,9 +134,7 @@ public:
 	 * @param[in] nentries Maximum number of entries to be read
 	 */
 	template<typename T>
-	std::vector<T> listEntries(long int pos, const std::string& branchname,
-	                           const size_t element = 0, const size_t nentries = std::numeric_limits<size_t>::max()) const
-	{
+	std::vector<T> listEntries(long int pos, const std::string& branchname, size_t element = 0, size_t nentries = std::numeric_limits<size_t>::max()) const {
 		return listEntries<T>(pos, branchname, branchname, element, nentries);
 	}
 
@@ -170,6 +183,7 @@ public:
 	 * @param[in] pos Position of the tree inside the file
 	 */
 	int treeEntries(long int pos);
+
 private:
 	struct KeyBuffer {
 		ContentType type;
@@ -184,8 +198,7 @@ private:
 		int nrows;
 	};
 
-	struct StreamerInfo
-	{
+	struct StreamerInfo {
 		std::string name;
 		size_t size;
 		std::string counter;
@@ -194,12 +207,13 @@ private:
 	};
 
 	/// Get data type from histogram identifier
-	static ContentType histType(const char type);
+	static ContentType histType(char type);
 	/// Get data type from leaf identifier
-	static ContentType leafType(const char type);
+	static ContentType leafType(char type);
 	/// Get function to read a buffer of the specified type
 	template<class T>
-	T (*readType(ContentType type, bool sign = true) const)(char*&);
+	T (*readType(ContentType type, bool sign = true) const)
+	(char*&);
 
 	/// Get the number of bins contained in a histogram
 	void readNBins(KeyBuffer& buffer);
@@ -222,14 +236,18 @@ private:
 	 * @param[in] target The name of the object to be advanced to
 	 * @param[in] counts A list of the number of entries in objects of dynamic length; updated while reading
 	 */
-	static bool advanceTo(char*& buf, const std::vector<StreamerInfo>& objects, const std::string& current, const std::string& target, std::map<std::string, size_t>& counts);
+	static bool advanceTo(char*& buf,
+						  const std::vector<StreamerInfo>& objects,
+						  const std::string& current,
+						  const std::string& target,
+						  std::map<std::string, size_t>& counts);
 
 	std::string filename;
 	std::map<long int, Directory> histdirs, treedirs;
 	std::map<long int, KeyBuffer> histkeys, treekeys;
 	std::map<long int, KeyBuffer> basketkeys;
 
-	std::map<std::string, std::vector<StreamerInfo> > streamerInfo;
+	std::map<std::string, std::vector<StreamerInfo>> streamerInfo;
 };
 
 class ROOTFilterPrivate {
@@ -240,8 +258,7 @@ public:
 	 *
 	 * The ROOT file is kept open until the file name is changed
 	 */
-	void readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-	                      AbstractFileFilter::ImportMode importMode);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode);
 	/// Currently writing to ROOT files is not supported
 	void write(const QString& fileName, AbstractDataSource*);
 
@@ -253,13 +270,12 @@ public:
 	QVector<QStringList> listLeaves(const QString& fileName, quint64 pos);
 
 	/// Get preview data of the currently set histogram
-	QVector<QStringList> previewCurrentObject(const QString& fileName,
-	                                             int first, int last);
+	QVector<QStringList> previewCurrentObject(const QString& fileName, int first, int last);
 
 	/// Get the number of bins in the current histogram
 	int rowsInCurrentObject(const QString& fileName);
 
-	//TODO: needs to be public?
+	// TODO: needs to be public?
 	/// Identifier of the current histogram
 	QString currentObject;
 	/// First row to read (can be -1, skips the underflow bin 0)
@@ -268,8 +284,9 @@ public:
 	int endRow = -1;
 	/// Columns to read
 	QVector<QStringList> columns;
+
 private:
-	enum class FileType {Invalid = 0, Hist, Tree};
+	enum class FileType { Invalid = 0, Hist, Tree };
 	/**
 	 * @brief Parse currentObject to find the corresponding position in the file
 	 *
@@ -296,11 +313,11 @@ private:
 	std::vector<double> readTree(quint64 pos, const QString& branchName, const QString& leafName, int element, int last);
 
 	/// Information about currently set ROOT file
-    struct {
-        QString name;
-        QDateTime modified;
-        qint64 size;
-    } currentFile;
+	struct {
+		QString name;
+		QDateTime modified;
+		qint64 size;
+	} currentFile;
 	/// ROOTData instance kept alive while currentFile does not change
 	std::unique_ptr<ROOTData> currentROOTData;
 };

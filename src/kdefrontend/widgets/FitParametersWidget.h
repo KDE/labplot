@@ -1,11 +1,11 @@
 /*
-    File                 : FitParametersWidget.h
-    Project              : LabPlot
-    Description          : widget for editing the fit parameters
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FitParametersWidget.h
+	Project              : LabPlot
+	Description          : widget for editing the fit parameters
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef FITPARAMETERSWIDGET_H
@@ -37,11 +37,11 @@ private:
 	void highlightInvalid(int row, int col, bool invalid);
 	void updateTableSize();
 
-signals:
+Q_SIGNALS:
 	void parametersChanged(bool);
 	void parametersValid(bool);
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void apply();
 	void startValueChanged();
@@ -49,4 +49,4 @@ private slots:
 	void upperLimitChanged();
 };
 
-#endif //FITPARAMETERSWIDGET_H
+#endif // FITPARAMETERSWIDGET_H

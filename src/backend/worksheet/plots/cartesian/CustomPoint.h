@@ -1,11 +1,11 @@
 /*
-    File                 : CustomPoint.h
-    Project              : LabPlot
-    Description          : Custom user-defined point on the plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CustomPoint.h
+	Project              : LabPlot
+	Description          : Custom user-defined point on the plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CUSTOMPOINT_H
@@ -35,11 +35,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
 	Symbol* symbol() const;
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;
@@ -47,11 +43,7 @@ public:
 
 	typedef CustomPointPrivate Private;
 
-private slots:
-	void visibilityChanged();
-
 protected:
-	CustomPointPrivate* const d_ptr;
 	CustomPoint(const QString& name, CustomPointPrivate* dd);
 
 private:
@@ -61,11 +53,8 @@ private:
 
 	QAction* visibilityAction;
 
-signals:
+Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;
-	void positionChanged(const QPointF&);
-	void visibleChanged(bool);
-	void changed();
 };
 
 #endif

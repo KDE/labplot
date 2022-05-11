@@ -1,11 +1,11 @@
 /*
-    File                 : RangeTest.cpp
-    Project              : LabPlot
-    Description          : Tests for Range
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : RangeTest.cpp
+	Project              : LabPlot
+	Description          : Tests for Range
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "RangeTest.h"
@@ -16,40 +16,62 @@
 //**********************************************************
 
 void RangeTest::testNiceExtend() {
-	QVector< QPair<Range<double>, Range<double>> > tests{
-		{{0.,.95},{0.,1.}}, {{0,.91},{0.,1.}}, {{0,.9},{0.,.9}},
-		{{0.,.85},{0.,.9}}, {{0,.81},{0.,.9}}, {{0,.71},{0.,.8}},
-		{{0,.46},{0.,.5}}, {{0.,.41},{0.,.45}}, {{0,.36},{0.,.4}},
-		{{0,.21},{0.,.25}}, {{0,.19},{0.,.2}}, {{0.,.17},{0.,.18}},
-		{{0,.15},{0.,.16}}, {{0.,.13},{0.,.14}}, {{0,995.},{0, 1000.}}
-	};
-	QVector< QPair<Range<double>, Range<double>> > tests2{	// QCOMPARE is too strict
-		{{0.,.61},{0.,.7}}, {{0,.51},{0.,.6}}, {{0,.31},{0.,.35}}, {{0.,.26},{0.,.3}}
-	};
+	QVector<QPair<Range<double>, Range<double>>> tests{{{0., .95}, {0., 1.}},
+													   {{0, .91}, {0., 1.}},
+													   {{0, .9}, {0., .9}},
+													   {{0., .85}, {0., .9}},
+													   {{0, .81}, {0., .9}},
+													   {{0, .71}, {0., .8}},
+													   {{0, .46}, {0., .5}},
+													   {{0., .41}, {0., .45}},
+													   {{0, .36}, {0., .4}},
+													   {{0, .19}, {0., .2}},
+													   {{0., .17}, {0., .2}},
+													   {{0, 995.}, {0, 1000.}},
+													   {{0.75, 2.25}, {0.5, 2.5}},
+													   {{0, .21}, {0., .25}}};
+	QVector<QPair<Range<double>, Range<double>>> tests2{// QCOMPARE is too strict
+														{{0., .13}, {0., .15}},
+														{{0, .15}, {0., .15}},
+														{{0., .61}, {0., .7}},
+														{{0, .51}, {0., .6}},
+														{{0, .31}, {0., .35}},
+														{{0., .26}, {0., .3}}};
 
 	for (auto& test : tests) {
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
-		//DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
-		//DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
 	}
 	for (auto& test : tests2) {
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
+		// WARN(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		// WARN(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
 	}
 }
 
-
 void RangeTest::testTickCount() {
-
 	const QVector<QPair<Range<double>, int>> tests{
-		{{0., 1.}, 6}, {{0., 0.01}, 6}, {{0., 100.}, 6},
-		{{0., 2.}, 5}, {{0., 3.}, 4}, {{0., 4.}, 5}, {{0., 5.}, 6},
-		{{0., 6.}, 4}, {{0., 7.}, 8}, {{0., 8.}, 5}, {{0., 9.}, 4},
-		{{1.6, 2.2}, 4}, {{1.3, 2.7}, 8}, {{0., 3.2}, 5}, {{0.4, 2.}, 5},
+		{{0., 1.}, 6},
+		{{0., 0.01}, 6},
+		{{0., 100.}, 6},
+		{{0., 2.}, 5},
+		{{0., 3.}, 4},
+		{{0., 4.}, 5},
+		{{0., 5.}, 6},
+		{{0., 6.}, 4},
+		{{0., 7.}, 8},
+		{{0., 8.}, 5},
+		{{0., 9.}, 4},
+		{{1.6, 2.2}, 4},
+		{{1.3, 2.7}, 8},
+		{{0., 3.2}, 5},
+		{{0.4, 2.}, 5},
 		{{0.5, 2.5}, 5}
 		// size=29,41 should not happen when nice extended
 	};
@@ -64,7 +86,7 @@ void RangeTest::testTickCount() {
 /*
 void ParserTest::testPerformance1() {
 	const int N = 1e5;
-	
+
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
 			const double x = i/100.;
@@ -76,7 +98,7 @@ void ParserTest::testPerformance1() {
 
 void ParserTest::testPerformance2() {
 	const int N = 1e5;
-	
+
 	QBENCHMARK {
 		for (int i = 0; i < N; i++) {
 			assign_symbol("alpha", i/100.);

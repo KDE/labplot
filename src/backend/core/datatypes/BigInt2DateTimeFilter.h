@@ -1,12 +1,12 @@
 /*
-    File                 : BigInt2DateTimeFilter.h
-    Project              : AbstractColumn
-    Description          : Conversion filter int -> QDateTime, interpreting
-    the input numbers as Julian days.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs@gmx.net (use @ for *)>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BigInt2DateTimeFilter.h
+	Project              : AbstractColumn
+	Description          : Conversion filter int -> QDateTime, interpreting
+	the input numbers as Julian days.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs@gmx.net (use @ for *)>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef BIGINT2DATE_TIME_FILTER_H
@@ -21,7 +21,8 @@ class BigInt2DateTimeFilter : public AbstractSimpleFilter {
 
 public:
 	QDate dateAt(int row) const override {
-		if (!m_inputs.value(0)) return QDate();
+		if (!m_inputs.value(0))
+			return QDate();
 		qint64 inputValue = m_inputs.value(0)->bigIntAt(row);
 		return QDate(1900, 1, 1 + inputValue);
 	}
@@ -30,14 +31,15 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::DateTime; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::DateTime;
+	}
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
+	bool inputAcceptable(int, const AbstractColumn* source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::BigInt;
 	}
 };
 
 #endif // ifndef BIGINT2DATE_TIME_FILTER_H
-

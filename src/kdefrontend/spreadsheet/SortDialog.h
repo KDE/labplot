@@ -1,17 +1,17 @@
 /*
-    File                 : SortDialog.h
-    Project              : LabPlot
-    Description          : Sorting options dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SortDialog.h
+	Project              : LabPlot
+	Description          : Sorting options dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SORTDIALOG_H
 #define SORTDIALOG_H
 
-#include <ui_sortdialogwidget.h>
 #include <QDialog>
+#include <ui_sortdialogwidget.h>
 class Column;
 
 class SortDialog : public QDialog {
@@ -23,13 +23,13 @@ public:
 
 	void setColumns(const QVector<Column*>&);
 
-	enum {Separately = 0, Together = 1};
+	enum { Separately = 0, Together = 1 };
 
-private slots:
+private Q_SLOTS:
 	void sortColumns();
 	void changeType(int index);
 
-signals:
+Q_SIGNALS:
 	void sort(Column*, QVector<Column*>, bool ascending);
 
 private:

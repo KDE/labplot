@@ -1,13 +1,12 @@
 /*
-    File                 : XYIntegrationCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by an integration
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYIntegrationCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by an integration
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYINTEGRATIONCURVE_H
 #define XYINTEGRATIONCURVE_H
@@ -24,22 +23,22 @@ class XYIntegrationCurve : public XYAnalysisCurve {
 
 public:
 	struct IntegrationData {
-		IntegrationData() {};
+		IntegrationData(){};
 
-		nsl_int_method_type method{nsl_int_method_trapezoid};	// method for integration
-		bool absolute{false};		// absolute area?
-		bool autoRange{true};		// use all data?
-		//TODO: use Range
-		QVector<double> xRange{0, 0};	// x range for integration
+		nsl_int_method_type method{nsl_int_method_trapezoid}; // method for integration
+		bool absolute{false}; // absolute area?
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0, 0}; // x range for integration
 	};
 	struct IntegrationResult {
-		IntegrationResult() {};
+		IntegrationResult(){};
 
 		bool available{false};
 		bool valid{false};
 		QString status;
 		qint64 elapsedTime{0};
-		double value{0.0};	// final result of integration
+		double value{0.0}; // final result of integration
 	};
 
 	explicit XYIntegrationCurve(const QString& name);
@@ -61,7 +60,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYIntegrationCurve)
 
-signals:
+Q_SIGNALS:
 	void integrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 };
 

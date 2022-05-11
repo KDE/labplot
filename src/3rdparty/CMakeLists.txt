@@ -1,4 +1,4 @@
-IF (APPLE)
+IF (APPLE AND ENABLE_TOUCHBAR)
 	add_subdirectory(kdmactouchbar)
 ENDIF ()
 

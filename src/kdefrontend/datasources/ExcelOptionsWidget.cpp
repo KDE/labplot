@@ -26,9 +26,7 @@ Copyright            : (C) 2021 by Fabian Kristof (fkristofszabolcs@gmail.com)
 ***************************************************************************/
 
 #include "ExcelOptionsWidget.h"
-
-#include <QVector>
-
+#include "backend/lib/macros.h"
 #include "src/backend/datasources/filters/ExcelFilter.h"
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
@@ -36,6 +34,7 @@ Copyright            : (C) 2021 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellrange.h"
 #endif
 
+#include <QVector>
 #include <QTreeWidgetItem>
 #include <QHeaderView>
 #include <QIcon>

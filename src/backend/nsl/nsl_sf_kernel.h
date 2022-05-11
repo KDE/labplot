@@ -1,12 +1,11 @@
 /*
-    File                 : nsl_sf_kernel.h
-    Project              : LabPlot
-    Description          : NSL special kernel functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_sf_kernel.h
+	Project              : LabPlot
+	Description          : NSL special kernel functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_SF_KERNEL_H
 #define NSL_SF_KERNEL_H

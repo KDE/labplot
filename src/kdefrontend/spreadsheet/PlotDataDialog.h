@@ -1,10 +1,10 @@
 /*
-    File                 : PlotDataDialog.h
-    Project              : LabPlot
-    Description          : Dialog for generating plots for the spreadsheet data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : PlotDataDialog.h
+	Project              : LabPlot
+	Description          : Dialog for generating plots for the spreadsheet data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PLOTDATADIALOG_H
@@ -13,7 +13,7 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 namespace Ui {
-	class PlotDataWidget;
+class PlotDataWidget;
 }
 
 #include <QDialog>
@@ -32,7 +32,7 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class PlotType {XYCurve, Histogram, BoxPlot};
+	enum class PlotType { XYCurve, Histogram, BoxPlot };
 
 	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
@@ -66,7 +66,7 @@ private:
 	void adjustWorksheetSize(Worksheet*) const;
 	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
 
-private slots:
+private Q_SLOTS:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();

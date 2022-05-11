@@ -1,12 +1,11 @@
 /*
-    File                 : ExportSpreadsheetDialog.h
-    Project              : LabPlot
-    Description          : export spreadsheet dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExportSpreadsheetDialog.h
+	Project              : LabPlot
+	Description          : export spreadsheet dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef EXPORTSPREADSHEETDIALOG_H
 #define EXPORTSPREADSHEETDIALOG_H
@@ -15,7 +14,7 @@
 #include <QLocale>
 
 namespace Ui {
-	class ExportSpreadsheetWidget;
+class ExportSpreadsheetWidget;
 }
 
 class QPushButton;
@@ -48,14 +47,10 @@ public:
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
 
-	enum class Format {
-		ASCII,
-		LaTeX,
-		FITS,
-		SQLite
-	};
+	enum class Format { ASCII, LaTeX, FITS, SQLite };
 
 	Format format() const;
+
 private:
 	Ui::ExportSpreadsheetWidget* ui;
 	bool m_showOptions{true};
@@ -66,7 +61,7 @@ private:
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
 
-private slots:
+private Q_SLOTS:
 	void setFormat(ExportSpreadsheetDialog::Format);
 	void slotButtonClicked(QAbstractButton*);
 	void okClicked();

@@ -1,12 +1,11 @@
 /*
-    File                 : SettingsDatasetsPage.cpp
-    Project              : LabPlot
-    Description          : settings page for Datasets
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsDatasetsPage.cpp
+	Project              : LabPlot
+	Description          : settings page for Datasets
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "SettingsDatasetsPage.h"
 #include "backend/lib/macros.h"
@@ -20,7 +19,8 @@
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
  */
-SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent) : SettingsPage(parent) {
+SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent)
+	: SettingsPage(parent) {
 	ui.setupUi(this);
 
 	ui.bClearCache->setIcon(QIcon::fromTheme(QLatin1String("edit-clear")));
@@ -33,7 +33,6 @@ SettingsDatasetsPage::SettingsDatasetsPage(QWidget* parent) : SettingsPage(paren
 }
 
 void SettingsDatasetsPage::applySettings() {
-
 }
 
 void SettingsDatasetsPage::restoreDefaults() {
@@ -42,13 +41,13 @@ void SettingsDatasetsPage::restoreDefaults() {
 void SettingsDatasetsPage::loadSettings() {
 	QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
 	if (dir.exists()) {
-		int count = dir.count() - 2; //subtract 2 for . and ..
+		int count = dir.count() - 2; // subtract 2 for . and ..
 		ui.lFiles->setText(i18n("Files - %1", count));
 
 		if (count > 0) {
 			ui.bClearCache->setEnabled(true);
 
-			//calculate the size
+			// calculate the size
 			int size = 0;
 			for (auto file : dir.entryList()) {
 				if (file == QLatin1Char('.') || file == QLatin1String(".."))
@@ -59,10 +58,10 @@ void SettingsDatasetsPage::loadSettings() {
 
 			SET_NUMBER_LOCALE
 			QString sizeStr;
-			if (size > 1024*1024)
-				sizeStr = numberLocale.toString(size/1024/1024) + QLatin1String("MB");
+			if (size > 1024 * 1024)
+				sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
 			if (size > 1024)
-				sizeStr = numberLocale.toString(size/1024) + QLatin1String("kB");
+				sizeStr = numberLocale.toString(size / 1024) + QLatin1String("kB");
 			else
 				sizeStr = numberLocale.toString(size) + QLatin1String("B");
 

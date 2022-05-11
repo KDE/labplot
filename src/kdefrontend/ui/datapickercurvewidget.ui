@@ -41,14 +41,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="ResizableTextEdit" name="teComment"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">

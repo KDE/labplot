@@ -1,18 +1,18 @@
 /*
-    SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
+	SPDX-FileCopyrightText: 2011 SCHUTZ Sacha
 
-    SPDX-License-Identifier: MIT
+	SPDX-License-Identifier: MIT
 */
 
 #ifndef QJSONMODEL_H
 #define QJSONMODEL_H
 
 #include <QAbstractItemModel>
-#include <QJsonDocument>
-#include <QJsonValue>
-#include <QJsonArray>
-#include <QJsonObject>
 #include <QIcon>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 
 class QJsonModel;
 class QJsonItem;
@@ -47,7 +47,6 @@ private:
 	QJsonTreeItem* mParent;
 };
 
-
 class QJsonModel : public QAbstractItemModel {
 	Q_OBJECT
 
@@ -62,13 +61,13 @@ public:
 	QVariant data(const QModelIndex&, int role) const override;
 	bool setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole) override;
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-	QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const override;
+	QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 	QModelIndex parent(const QModelIndex&) const override;
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 	Qt::ItemFlags flags(const QModelIndex&) const override;
 
-// 	QJsonDocument json() const;
+	// 	QJsonDocument json() const;
 	QJsonDocument genJsonByIndex(const QModelIndex&) const;
 
 private:

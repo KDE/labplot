@@ -3,26 +3,27 @@
 	Project              : LabPlot
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CustomPoint.h"
 #include "CustomPointPrivate.h"
+#include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
-#include "backend/lib/commandtemplates.h"
-#include "backend/lib/XmlStreamReader.h"
 
-#include <QPainter>
-#include <QMenu>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
+#include <QPainter>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -37,8 +38,7 @@
  */
 
 CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
-	: WorksheetElement(name, AspectType::CustomPoint), d_ptr(new CustomPointPrivate(this)) {
-
+	: WorksheetElement(name, new CustomPointPrivate(this), AspectType::CustomPoint) {
 	m_plot = plot;
 	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
@@ -47,8 +47,8 @@ CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
 	init();
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 CustomPoint::~CustomPoint() = default;
 
 void CustomPoint::init() {
@@ -56,15 +56,22 @@ void CustomPoint::init() {
 
 	// default position
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	d->position.setX(m_plot->xRange(cs->xIndex()).center());
-	d->position.setY(m_plot->yRange(cs->yIndex()).center());
+	const auto x = m_plot->xRange(cs->xIndex()).center();
+	const auto y = m_plot->yRange(cs->yIndex()).center();
+	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+	d->positionLogical = QPointF(x, y);
+	d->updatePosition(); // To update also scene coordinates
 
-	//initialize the symbol
+	// initialize the symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
-	connect(d->symbol, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->update();});
+	connect(d->symbol, &Symbol::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
+		d->update();
+	});
 	KConfig config;
 	d->symbol->init(config.group("CustomPoint"));
 
@@ -74,24 +81,24 @@ void CustomPoint::init() {
 void CustomPoint::initActions() {
 	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::changeVisibility);
 }
 
 /*!
-    Returns an icon to be used in the project explorer.
+	Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
 	return QIcon::fromTheme("draw-cross");
 }
 
 QMenu* CustomPoint::createContextMenu() {
-	//no context menu if the custom point is a child of an InfoElement,
-	//everything is controlled by the parent
+	// no context menu if the custom point is a child of an InfoElement,
+	// everything is controlled by the parent
 	if (parentAspect()->type() == AspectType::InfoElement)
 		return nullptr;
 
 	QMenu* menu = WorksheetElement::createContextMenu();
-	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
 	menu->insertSeparator(firstAction);
@@ -109,65 +116,30 @@ void CustomPoint::retransform() {
 	d->retransform();
 }
 
-void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio)
-	Q_UNUSED(verticalRatio)
-	Q_UNUSED(pageResize)
+void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
-
-/* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(CustomPoint, QPointF, position, position)
 
 Symbol* CustomPoint::symbol() const {
 	Q_D(const CustomPoint);
 	return d->symbol;
 }
 
-/* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform)
-void CustomPoint::setPosition(QPointF position) {
-	Q_D(CustomPoint);
-	if (position != d->position)
-		exec(new CustomPointSetPositionCmd(d, position, ki18n("%1: set position")));
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, update);
-void CustomPoint::setVisible(bool on) {
-	Q_D(CustomPoint);
-	exec(new CustomPointSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool CustomPoint::isVisible() const {
-	Q_D(const CustomPoint);
-	return d->isVisible();
-}
-
 void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(CustomPoint);
 	d->setParentItem(item);
-	//d->updatePosition();
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void CustomPoint::visibilityChanged() {
-	Q_D(const CustomPoint);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-CustomPointPrivate::CustomPointPrivate(CustomPoint* owner) : q(owner) {
+CustomPointPrivate::CustomPointPrivate(CustomPoint* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
-}
-
-QString CustomPointPrivate::name() const {
-	return q->name();
 }
 
 const CartesianPlot* CustomPointPrivate::plot() {
@@ -175,56 +147,19 @@ const CartesianPlot* CustomPointPrivate::plot() {
 }
 
 /*!
-    calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
+	calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void CustomPointPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform || !parentItem())
+	if (suppressRetransform || q->isLoading())
 		return;
 
-	//calculate the point in the scene coordinates
-	const auto& listScene = q->cSystem->mapLogicalToScene(QVector<QPointF>{position});
-	if (!listScene.isEmpty()) {
-		m_visible = true;
-		positionScene = listScene.constFirst();
-		QPointF inParentCoords = mapPlotAreaToParent(positionScene);
-		suppressItemChangeEvent = true;
-		setPos(inParentCoords);
-		suppressItemChangeEvent = false;
-	} else
-		m_visible = false;
-
+	updatePosition();
 	recalcShapeAndBoundingRect();
 }
 
-bool CustomPointPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	if (worksheet) {
-		worksheet->suppressSelectionChangedEvent(true);
-		setVisible(on);
-		worksheet->suppressSelectionChangedEvent(false);
-	} else
-		setVisible(on);
-
-	emit q->changed();
-	emit q->visibleChanged(on);
-	return oldValue;
-}
-
 /*!
-    Returns the outer bounds of the item as a rectangle.
- */
-QRectF CustomPointPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
-}
-
-/*!
-    Returns the shape of this item as a QPainterPath in local coordinates.
+	Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath CustomPointPrivate::shape() const {
 	return pointShape;
@@ -238,7 +173,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 
 	pointShape = QPainterPath();
 	if (m_visible && symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbol->style());
+		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
@@ -251,14 +186,11 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		transformedBoundingRectangle = pointShape.boundingRect();
+		boundingRectangle = pointShape.boundingRect();
 	}
 }
 
-void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!m_visible)
 		return;
 
@@ -280,36 +212,13 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 	}
 }
 
-QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	if (change == QGraphicsItem::ItemPositionChange) {
-		//emit the signals in order to notify the UI.
-		QPointF scenePos = mapParentToPlotArea(value.toPointF());
-		QPointF logicalPos = q->cSystem->mapSceneToLogical(scenePos); // map parent to scene
-		//q->setPosition(logicalPos);
-
-		// not needed, because positionChanged trigger the widget, which sets the position
-		//position = logicalPos; // don't use setPosition, because this will call retransform and then again this function
-		emit q->positionChanged(logicalPos);
-	}
-
-	return QGraphicsItem::itemChange(change, value);
-}
-
 void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//don't move when the parent is a InfoElement, because there
-	//the custompoint position changes by the mouse are not allowed
+	// don't move when the parent is a InfoElement, because there
+	// the custompoint position changes by the mouse are not allowed
 	if (q->parentAspect()->type() == AspectType::InfoElement)
 		return;
 
-	//position was changed -> set the position member variables
-	suppressRetransform = true;
-	q->setPosition(q->cSystem->mapSceneToLogical(pos()));
-	suppressRetransform = false;
-
-	QGraphicsItem::mouseReleaseEvent(event);
+	WorksheetElementPrivate::mouseReleaseEvent(event);
 }
 
 void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -319,7 +228,7 @@ void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -327,46 +236,9 @@ void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
-}
-
-/*!
- * \brief CustomPointPrivate::mapPlotAreaToParent
- * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
- * coordinates of this item
- * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
- * IMPORTANT: function is also used in Textlabel, so when changing anything, change it also there
- * \param point point in plotArea coordinates
- * \return point in parent coordinates
- */
-QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
-	if (plot()) {
-		// first mapping to item coordinates and from there back to parent
-		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
-		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
-		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
-		return mapToParent(mapFromItem(plotArea->graphicsItem(), point));
-	}
-	return QPointF(0, 0);
-}
-
-/*!
- * \brief CustomPointPrivate::mapParentToPlotArea
- * Mapping a point from parent coordinates to plotArea coordinates
- * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
- * IMPORTANT: function is also used in Textlabel, so when changing anything, change it also there
- * \param point point in parent coordinates
- * \return point in PlotArea coordinates
- */
-QPointF CustomPointPrivate::mapParentToPlotArea(QPointF point) {
-	if (plot()) {
-		// mapping from parent to item coordinates and them to plot area
-		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
-		return mapToItem(plotArea->graphicsItem(), mapFromParent(point));
-	}
-	return QPointF(0, 0);
 }
 
 //##############################################################################
@@ -380,12 +252,9 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//geometry
+	// geometry
 	writer->writeStartElement("geometry");
-	writer->writeAttribute( "x", QString::number(d->position.x()) );
-	writer->writeAttribute( "y", QString::number(d->position.y()) );
-	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
-	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
+	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
 	d->symbol->save(writer);
@@ -413,37 +282,23 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (!preview && reader->name() == "comment") {
-			if (!readCommentElement(reader)) return false;
+			if (!readCommentElement(reader))
+				return false;
 		} else if (!preview && reader->name() == "geometry") {
-			attribs = reader->attributes();
-
-			str = attribs.value("x").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->position.setX(str.toDouble());
-
-			str = attribs.value("y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
-			else
-				d->position.setY(str.toDouble());
-
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
-
-			str = attribs.value("visible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
-			else
-				d->setVisible(str.toInt());
+			WorksheetElement::load(reader, preview);
+			if (project()->xmlVersion() < 6) {
+				// Before version 6 the position in the file was always a logical position
+				d->positionLogical = d->position.point;
+				d->position.point = QPointF(0, 0);
+				d->coordinateBindingEnabled = true;
+			}
 		} else if (!preview && reader->name() == "symbol") {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
-			if (!reader->skipToEndElement()) return false;
+			if (!reader->skipToEndElement())
+				return false;
 		}
 	}
-
-	retransform();
 	return true;
 }

@@ -1,13 +1,12 @@
 /*
-    File                 : XYDifferentiationCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYDifferentiationCurve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYDifferentiationCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYDifferentiationCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYDIFFERENTIATIONCURVEPRIVATE_H
 #define XYDIFFERENTIATIONCURVEPRIVATE_H

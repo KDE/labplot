@@ -1,10 +1,10 @@
 /*
-    File                 : FITSHeaderEditDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog for listing/editing FITS header keywords
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSHeaderEditDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog for listing/editing FITS header keywords
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSHEADEREDITDIALOG_H
 #define FITSHEADEREDITDIALOG_H
@@ -27,7 +27,7 @@ private:
 	bool m_saved{false};
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void save();
 	void headersChanged(bool);
 };

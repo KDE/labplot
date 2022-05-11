@@ -1,11 +1,11 @@
 /*
-    File                 : AspectDock.h
-    Project              : LabPlot
-    Description          : widget for aspect properties showing name and comments only
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	File                 : AspectDock.h
+	Project              : LabPlot
+	Description          : widget for aspect properties showing name and comments only
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AspectDock.h"
@@ -19,11 +19,12 @@
   \ingroup kdefrontend
 */
 
-AspectDock::AspectDock(QWidget* parent) : BaseDock(parent) {
+AspectDock::AspectDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	ui.teComment->setFixedHeight(ui.leName->height());
+	ui.teComment->setFixedHeight(1.2 * ui.leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &AspectDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &AspectDock::commentChanged);

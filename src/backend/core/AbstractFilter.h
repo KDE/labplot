@@ -1,11 +1,11 @@
 /*
-    File                 : AbstractFilter.h
-    Project              : SciDAVis
-    Description          : Base class for all analysis operations.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractFilter.h
+	Project              : SciDAVis
+	Description          : Base class for all analysis operations.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ABSTRACT_FILTER_H
@@ -20,7 +20,9 @@ class AbstractFilter : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	explicit AbstractFilter(const QString& name) : AbstractAspect(name, AspectType::AbstractFilter) {}
+	explicit AbstractFilter(const QString& name)
+		: AbstractAspect(name, AspectType::AbstractFilter) {
+	}
 	~AbstractFilter() override = default;
 
 	virtual int inputCount() const = 0;
@@ -39,7 +41,7 @@ protected:
 	virtual bool inputAcceptable(int port, const AbstractColumn* source);
 	virtual void inputAboutToBeDisconnected(const AbstractColumn* source);
 
-protected slots:
+protected Q_SLOTS:
 	virtual void inputDescriptionAboutToChange(const AbstractColumn* source);
 	void inputDescriptionAboutToChange(const AbstractAspect* aspect);
 	virtual void inputDescriptionChanged(const AbstractColumn* source);
@@ -53,16 +55,24 @@ protected slots:
 	virtual void inputDataChanged(const AbstractColumn* source);
 
 	virtual void inputRowsAboutToBeInserted(const AbstractColumn* source, int before, int count) {
-		Q_UNUSED(source); Q_UNUSED(before); Q_UNUSED(count);
+		Q_UNUSED(source);
+		Q_UNUSED(before);
+		Q_UNUSED(count);
 	}
 	virtual void inputRowsInserted(const AbstractColumn* source, int before, int count) {
-		Q_UNUSED(source); Q_UNUSED(before); Q_UNUSED(count);
+		Q_UNUSED(source);
+		Q_UNUSED(before);
+		Q_UNUSED(count);
 	}
 	virtual void inputRowsAboutToBeRemoved(const AbstractColumn* source, int first, int count) {
-		Q_UNUSED(source); Q_UNUSED(first); Q_UNUSED(count);
+		Q_UNUSED(source);
+		Q_UNUSED(first);
+		Q_UNUSED(count);
 	}
 	virtual void inputRowsRemoved(const AbstractColumn* source, int first, int count) {
-		Q_UNUSED(source); Q_UNUSED(first); Q_UNUSED(count);
+		Q_UNUSED(source);
+		Q_UNUSED(first);
+		Q_UNUSED(count);
 	}
 	virtual void inputMaskingAboutToChange(const AbstractColumn* source) {
 		Q_UNUSED(source);
@@ -79,4 +89,3 @@ protected:
 };
 
 #endif // ifndef ABSTRACT_FILTER_H
-

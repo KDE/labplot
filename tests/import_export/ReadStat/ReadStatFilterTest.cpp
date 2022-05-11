@@ -1,10 +1,10 @@
 /*
-    File                 : ReadStatFilterTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the ReadStat I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ReadStatFilterTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the ReadStat I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ReadStatFilterTest.h"
@@ -23,10 +23,10 @@ void ReadStatFilterTest::testDTAImport() {
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 150);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Text);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -41,25 +41,24 @@ void ReadStatFilterTest::testDTAImport() {
 	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("petalwidth"));
 	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("species"));
 
-	FuzzyCompare(spreadsheet.column(0)->valueAt(0), 5.1, 1.e-6);	// 5.09999990463
-	FuzzyCompare(spreadsheet.column(0)->valueAt(1), 4.9, 1.e-7);	// 4.90000009537
-	FuzzyCompare(spreadsheet.column(0)->valueAt(2), 4.7, 1.e-7);	// 4.69999980927
+	FuzzyCompare(spreadsheet.column(0)->valueAt(0), 5.1, 1.e-6); // 5.09999990463
+	FuzzyCompare(spreadsheet.column(0)->valueAt(1), 4.9, 1.e-7); // 4.90000009537
+	FuzzyCompare(spreadsheet.column(0)->valueAt(2), 4.7, 1.e-7); // 4.69999980927
 
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 3.5);
-	FuzzyCompare(spreadsheet.column(2)->valueAt(0), 1.4, 1.e-7);	// 1.39999997616
-	FuzzyCompare(spreadsheet.column(3)->valueAt(0), 0.2, 1.e-7);	// 0.20000000298
+	FuzzyCompare(spreadsheet.column(2)->valueAt(0), 1.4, 1.e-7); // 1.39999997616
+	FuzzyCompare(spreadsheet.column(3)->valueAt(0), 0.2, 1.e-7); // 0.20000000298
 	QCOMPARE(spreadsheet.column(4)->textAt(0), QLatin1String("setosa"));
 
 	DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(0)->valueAt(149))
 	DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(2)->valueAt(149))
 	DEBUG(Q_FUNC_INFO << ", value = " << spreadsheet.column(3)->valueAt(149))
 
-	FuzzyCompare(spreadsheet.column(0)->valueAt(149), 5.9, 1.e-7);	// 5.90000009536743
+	FuzzyCompare(spreadsheet.column(0)->valueAt(149), 5.9, 1.e-7); // 5.90000009536743
 	QCOMPARE(spreadsheet.column(1)->valueAt(149), 3.);
-	FuzzyCompare(spreadsheet.column(2)->valueAt(149), 5.1, 1.e-7);	// 5.09999990463257
-	FuzzyCompare(spreadsheet.column(3)->valueAt(149), 1.8, 1.e-7);	// 1.79999995231628
+	FuzzyCompare(spreadsheet.column(2)->valueAt(149), 5.1, 1.e-7); // 5.09999990463257
+	FuzzyCompare(spreadsheet.column(3)->valueAt(149), 1.8, 1.e-7); // 1.79999995231628
 	QCOMPARE(spreadsheet.column(4)->textAt(149), QLatin1String("virginica"));
-
 }
 
 void ReadStatFilterTest::testSASImport() {
@@ -72,10 +71,10 @@ void ReadStatFilterTest::testSASImport() {
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 150);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Text);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -104,7 +103,6 @@ void ReadStatFilterTest::testSASImport() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(149), 5.1);
 	QCOMPARE(spreadsheet.column(3)->valueAt(149), 1.8);
 	QCOMPARE(spreadsheet.column(4)->textAt(149), QLatin1String("virgin"));
-
 }
 
 void ReadStatFilterTest::testSAVImport() {
@@ -117,11 +115,11 @@ void ReadStatFilterTest::testSAVImport() {
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 150);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
@@ -150,11 +148,10 @@ void ReadStatFilterTest::testSAVImport() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(149), 1.8);
 	QCOMPARE(spreadsheet.column(4)->valueAt(149), 3);
 
-	//check value label
+	// check value label
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("setosa"));
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("versicolor"));
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(3), QLatin1String("virginica"));
-
 }
 
 void ReadStatFilterTest::testPORImport() {
@@ -168,12 +165,12 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.columnCount(), 7);
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(6)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(6)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
@@ -233,7 +230,7 @@ void ReadStatFilterTest::testPORImport() {
 	QCOMPARE(spreadsheet.column(6)->valueAt(3), 58210);
 	QCOMPARE(spreadsheet.column(6)->valueAt(4), qQNaN());
 
-	//check value label
+	// check value label
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(1), QLatin1String("Male"));
 	QCOMPARE(spreadsheet.column(4)->valueLabels().value(2), QLatin1String("Female"));
 	QCOMPARE(spreadsheet.column(5)->valueLabels().value(1), QLatin1String("low"));
@@ -252,12 +249,12 @@ void ReadStatFilterTest::testXPTImport() {
 	QCOMPARE(spreadsheet.columnCount(), 7);
 	QCOMPARE(spreadsheet.rowCount(), 5);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(6)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(6)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);

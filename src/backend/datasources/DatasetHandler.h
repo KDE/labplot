@@ -1,17 +1,17 @@
 /*
-    File		: DatasetHandler.h
-    Project		: LabPlot
-    Description	: Processes a dataset's metadata file
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
+	File		: DatasetHandler.h
+	Project		: LabPlot
+	Description	: Processes a dataset's metadata file
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Kovacs Ferencz <kferike98@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef DATASETHANDLER_H
 #define DATASETHANDLER_H
 
-#include <QString>
 #include "backend/spreadsheet/Spreadsheet.h"
+#include <QString>
 
 class QJsonObject;
 class AsciiFilter;
@@ -19,7 +19,7 @@ class QIODevice;
 class QNetworkAccessManager;
 class QNetworkReply;
 
-class DatasetHandler : public QObject{
+class DatasetHandler : public QObject {
 	Q_OBJECT
 
 public:
@@ -48,10 +48,10 @@ private:
 	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
 
-private slots:
+private Q_SLOTS:
 	void downloadFinished(QNetworkReply*);
 
-signals:
+Q_SIGNALS:
 	void downloadCompleted();
 	void downloadProgress(int progress);
 };

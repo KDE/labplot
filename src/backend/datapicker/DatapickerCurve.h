@@ -1,20 +1,20 @@
 /*
-    File                 : DatapickerCurve.h
-    Project              : LabPlot
-    Description          : container for Curve-Point and Datasheet/Spreadsheet
-    of datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatapickerCurve.h
+	Project              : LabPlot
+	Description          : container for Curve-Point and Datasheet/Spreadsheet
+	of datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKERCURVE_H
 #define DATAPICKERCURVE_H
 
 #include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerImage.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 
 class DatapickerPoint;
@@ -24,14 +24,14 @@ class Column;
 class Spreadsheet;
 class AbstractColumn;
 
-class DatapickerCurve: public AbstractAspect {
+class DatapickerCurve : public AbstractAspect {
 	Q_OBJECT
 
 public:
 	explicit DatapickerCurve(const QString&);
 	~DatapickerCurve() override;
 
-	enum class ErrorType {NoError, SymmetricError, AsymmetricError};
+	enum class ErrorType { NoError, SymmetricError, AsymmetricError };
 	struct Errors {
 		ErrorType x;
 		ErrorType y;
@@ -83,7 +83,7 @@ private:
 
 	Spreadsheet* m_datasheet{nullptr};
 
-signals:
+Q_SIGNALS:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);
 	void posXColumnChanged(const AbstractColumn*);
 	void posYColumnChanged(const AbstractColumn*);

@@ -1,12 +1,11 @@
 /*
-    File                 : WorksheetPrivate.h
-    Project              : LabPlot
-    Description          : Private members of Worksheet.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : WorksheetPrivate.h
+	Project              : LabPlot
+	Description          : Private members of Worksheet.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef WORKSHEETPRIVATE_H
 #define WORKSHEETPRIVATE_H
@@ -38,12 +37,12 @@ public:
 	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
+	WorksheetElement::BackgroundType backgroundType{WorksheetElement::BackgroundType::Color};
+	WorksheetElement::BackgroundColorStyle backgroundColorStyle{WorksheetElement::BackgroundColorStyle::SingleColor};
+	WorksheetElement::BackgroundImageStyle backgroundImageStyle{WorksheetElement::BackgroundImageStyle::Scaled};
+	Qt::BrushStyle backgroundBrushStyle{Qt::SolidPattern};
+	QColor backgroundFirstColor{Qt::white};
+	QColor backgroundSecondColor{Qt::black};
 	QString backgroundFileName;
 	double backgroundOpacity{1.0};
 
@@ -64,13 +63,7 @@ public:
 	Worksheet::CartesianPlotActionMode cartesianPlotActionMode{Worksheet::CartesianPlotActionMode::ApplyActionToSelection};
 	Worksheet::CartesianPlotActionMode cartesianPlotCursorMode{Worksheet::CartesianPlotActionMode::ApplyActionToAll};
 
-	enum class TreeModelColumn {
-		PLOTNAME = 0,
-		SIGNALNAME = 0,
-		CURSOR0,
-		CURSOR1,
-		CURSORDIFF
-	};
+	enum class TreeModelColumn { PLOTNAME = 0, SIGNALNAME = 0, CURSOR0, CURSOR1, CURSORDIFF };
 
 	TreeModel* cursorData{nullptr};
 };

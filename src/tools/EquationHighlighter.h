@@ -1,10 +1,10 @@
 /*
-    File             : EquationHighlighter.h
-    Project          : LabPlot
-    Description      : syntax highligher for mathematical equations
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File             : EquationHighlighter.h
+	Project          : LabPlot
+	Description      : syntax highligher for mathematical equations
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef EQUATIONHIGHLIGHTER_H
@@ -20,15 +20,15 @@ class EquationHighlighter : public QSyntaxHighlighter {
 public:
 	explicit EquationHighlighter(KTextEdit* parent);
 	void setVariables(const QStringList&);
-// 	void setErrorPosition(int position);
+	// 	void setErrorPosition(int position);
 
-public slots:
+public Q_SLOTS:
 	void rehighlight();
 
 protected:
 	void highlightBlock(const QString& text) override;
 
-//	int m_errorPosition;
+	//	int m_errorPosition;
 	KTextEdit* m_parent;
 	QStringList m_variables;
 };

@@ -1,68 +1,81 @@
 /*
-    File                 : TextLabel.h
-    Project              : LabPlot
-    Description          : Text label supporting reach text and latex formatting
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TextLabel.h
+	Project              : LabPlot
+	Description          : Text label supporting reach text and latex formatting
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
 #include "backend/lib/macros.h"
-#include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "tools/TeXRenderer.h"
 
-#include <QPen>
 #include <QTextEdit>
 
 class QBrush;
 class QFont;
 class TextLabelPrivate;
 class CartesianPlot;
+class QPen;
 
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
-	enum class Mode {Text, LaTeX, Markdown};
-	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
-	                        Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle
-	                       };
+	enum class Type { General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel };
+	enum class Mode { Text, LaTeX, Markdown };
+	enum class BorderShape {
+		NoBorder,
+		Rect,
+		Ellipse,
+		RoundSideRect,
+		RoundCornerRect,
+		InwardsRoundCornerRect,
+		DentedBorderRect,
+		Cuboid,
+		UpPointingRectangle,
+		DownPointingRectangle,
+		LeftPointingRectangle,
+		RightPointingRectangle
+	};
 
 	// The text is always in HMTL format
 	struct TextWrapper {
-		TextWrapper() {}
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html): mode(mode) {
-			if (mode != TextLabel::Mode::Text) {
-				this->text = text; //LaTeX and markdown use plain string
-				return;
-			}
+		TextWrapper() = default;
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html)
+			: mode(mode) {
+			if (mode == TextLabel::Mode::Text)
+				this->text = createHtml(text, html);
+			else // LaTeX and markdown use plain string
+				this->text = text;
+		}
+		TextWrapper(const QString& text)
+			: mode(TextLabel::Mode::Text) {
+			// assume text is not HTML yet
+			this->text = createHtml(text, false);
+		}
+		TextWrapper(const QString& text, bool html, QString& placeholder)
+			: allowPlaceholder(true)
+			, textPlaceholder(placeholder) {
 			this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& text, bool html = false) {
-			this->text = createHtml(text, html);
-		}
-		TextWrapper(const QString& text, bool html, QString& placeholder): allowPlaceholder(true), textPlaceholder(placeholder) {
-			this->text = createHtml(text, html);
-		}
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder): mode(mode), allowPlaceholder(allowPlaceholder) {
-			if (mode != TextLabel::Mode::Text) {
-				this->text = text; //LaTeX and markdown use plain string
-				return;
-			}
-			this->text = createHtml(text, html);
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder)
+			: allowPlaceholder(allowPlaceholder) {
+			TextWrapper(text, mode, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
-			if (isHtml)
+			if (isHtml || text.isEmpty())
 				return text;
 
 			QTextEdit te(text);
+			te.setFont(QFont("Arial", 12)); // default font
+			// the html does not contain any colors!
 			return te.toHtml();
 		}
 
@@ -73,11 +86,11 @@ public:
 		 * the text and the placeholder text can be switched
 		 */
 		bool allowPlaceholder{false};
-		QString textPlaceholder{""}; // text with placeholders
+		QString textPlaceholder{QLatin1String("")}; // text with placeholders
 	};
 
-	explicit TextLabel(const QString& name, Type type = Type::General);
-	TextLabel(const QString& name, CartesianPlot*, Type type = Type::General);
+	explicit TextLabel(const QString& name, Type = Type::General);
+	TextLabel(const QString& name, CartesianPlot*, Type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -98,31 +111,23 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
-// 	BASIC_D_ACCESSOR_DELC(bool, coordinateBindingEnabled, CoordinateBindingEnabled)
-	void setCoordinateBindingEnabled(bool);
-	bool coordinateBindingEnabled() const;
-	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
-	void setPosition(QPointF);
-	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
-	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
+	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
+	void setZoomFactor(double);
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))	// we need a default constructor for QVector
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0)) // we need a default constructor for QVector
 		GluePoint() = default;
 #endif
-		GluePoint(QPointF point, QString name) : point(point), name(name) {}
+		GluePoint(QPointF point, QString name)
+			: point(point)
+			, name(name) {
+		}
 		QPointF point;
 		QString name;
 	};
@@ -134,15 +139,11 @@ public:
 
 	typedef TextLabelPrivate Private;
 
-private slots:
+private Q_SLOTS:
 	void updateTeXImage();
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
-
 protected:
-	TextLabelPrivate* const d_ptr;
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = Type::General);
+	TextLabel(const QString& name, TextLabelPrivate*, Type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)
@@ -151,26 +152,18 @@ private:
 	Type m_type;
 	QAction* visibilityAction{nullptr};
 
-signals:
+Q_SIGNALS:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
 	void teXFontSizeChanged(const int);
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
 
-	void positionChanged(const WorksheetElement::PositionWrapper&);
-	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
-	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
-	void coordinateBindingEnabledChanged(bool);
-	void positionLogicalChanged(QPointF);
-	void rotationAngleChanged(qreal);
-	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
 
 	void teXImageUpdated(bool);
-	void changed();
 };
 
 #endif

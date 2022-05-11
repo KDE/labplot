@@ -1,17 +1,17 @@
 /*
-    File                 : RandomValuesDialog.h
-    Project              : LabPlot
-    Description          : Dialog for generating uniformly and non-uniformly distributed random numbers
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : RandomValuesDialog.h
+	Project              : LabPlot
+	Description          : Dialog for generating uniformly and non-uniformly distributed random numbers
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef RANDOMVALUESDIALOG_H
 #define RANDOMVALUESDIALOG_H
 
-#include <QDialog>
 #include "ui_randomvalueswidget.h"
+#include <QDialog>
 
 class Column;
 class Spreadsheet;
@@ -31,9 +31,9 @@ private:
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();
-	void distributionChanged(int index);
+	void distributionChanged(int index = 0);
 	void checkValues();
 };
 

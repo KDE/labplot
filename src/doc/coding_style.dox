@@ -117,11 +117,11 @@ Very short classes can be bundled in one file which then is named using all lowe
 * Use DEBUG() macro for debugging code when possible and QDEBUG() only for special Qt data types. DEBUG() works on all supported systems.
 @code
 	QString string;
-	DEBUG(" string : " << string.toStdString())
+	DEBUG(" string : " << STDSTRING(string))
 @endcode
 * Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
 * Numeric limits should be using Qt +/-qInf() and qQNaN() for floating point types and C++ +/-std::numeric_limits<T>::min() & +/-std::numeric_limits<T>::max() for all types
-* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ or Qt constructs (fabs() -> qAbs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound()). Example:
+* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ or Qt constructs (fabs() -> qAbs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound(), max() -> qMax()). Example:
 @code
     extern "C" {
     #include <gsl/gsl_version.h>
@@ -131,6 +131,7 @@ Very short classes can be bundled in one file which then is named using all lowe
         ...
     }
 @endcode
+* Use QOverload<int>::of instead of (for instance) static_cast<void (QComboBox::*)(int)> in connect()
 \section links Links
 
 Apart from that, the following links are recommended as guidelines for the coding style:

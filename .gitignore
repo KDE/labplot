@@ -10,3 +10,4 @@ CMakeLists.txt.user*
 .cache
 .clangd
 .directory
+.vscode

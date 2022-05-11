@@ -1,3 +1,8 @@
+0. Prepare release
+* Update splash screen src/kdefrontend/splash.png
+* add release in org.kde.labplot2.appdata.xml
+
+
 1. Tag the release
 * git tag "2.8.0" -a -m "Tagging 2.8.0"
 * git push --tags
@@ -12,12 +17,13 @@ tarme.rb will also calculate the checksums.
 
 
 3. Windows Installer
-* release build on binary-factory.kde.org/
+* update blueprint @ https://invent.kde.org/packaging/craft-blueprints-kde/-/tree/master/kde/applications/labplot/labplot.py
+* use release build on binary-factory.kde.org
 * calculate SHA-256 and SHA-1 checksums
 
 
 4. macOS dmg-image
-* create the dmg image
+* create the dmg image from blueprint using admin/create-dmg-craft.sh
 * calculate SHA-256 and SHA-1 checksums
 
 
@@ -53,5 +59,12 @@ d2594f62ecdd33c177d7673c550a8e830d47a3c1  labplot-2.8.0.dmg
 ```
 ################
 
+7. Update Flatpak @ https://github.com/flathub/org.kde.labplot2/blob/master/org.kde.labplot2.json
 
-7. Publish the release announcement on labplot.kde.org
+8. Upload packages to https://sourceforge.net/projects/labplot/
+
+9. Update Package in MS Partner Center for Windows App Store https://partner.microsoft.com/en-us/dashboard
+
+10. Ping Jonathan Riddell to update Snap and chtof tp update Chocolatey package
+
+11. Publish the release announcement on labplot.kde.org

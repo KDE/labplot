@@ -71,7 +71,7 @@
       <item>
        <widget class="QLabel" name="lFolder">
         <property name="text">
-         <string>Folder</string>
+         <string>Folder:</string>
         </property>
        </widget>
       </item>

@@ -1,23 +1,22 @@
 /*
-    File                 : functions.h
-    Project              : LabPlot
-    Description          : definition of functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : functions.h
+	Project              : LabPlot
+	Description          : definition of functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <gsl/gsl_version.h>
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_sf.h>
-#include <gsl/gsl_randist.h>
-#include <gsl/gsl_cdf.h>
 #include "backend/nsl/nsl_sf_basic.h"
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_sf.h>
+#include <gsl/gsl_version.h>
 
 #ifdef _MSC_VER
 /* avoid intrinsics */
@@ -69,7 +68,7 @@ struct funs _functions[] = {
 	{"Aids", (func_t)nsl_sf_airy_Aids, 1},
 	{"Bids", (func_t)nsl_sf_airy_Bids, 1},
 	{"Ai0", (func_t)nsl_sf_airy_0_Ai, 1},
-	{"Bi0", (func_t)nsl_sf_airy_0_Bi, 1 },
+	{"Bi0", (func_t)nsl_sf_airy_0_Bi, 1},
 	{"Aid0", (func_t)nsl_sf_airy_0_Aid, 1},
 	{"Bid0", (func_t)nsl_sf_airy_0_Bid, 1},
 	/* Bessel Functions */
@@ -269,7 +268,7 @@ struct funs _functions[] = {
 	{"logabs", (func_t)gsl_sf_log_abs, 1},
 	{"logp", (func_t)gsl_sf_log_1plusx, 1},
 	{"logpm", (func_t)gsl_sf_log_1plusx_mx, 1},
-	/* Mathieu Functions */
+/* Mathieu Functions */
 #if (GSL_MAJOR_VERSION >= 2)
 	{"an", (func_t)nsl_sf_mathieu_a, 2},
 	{"bn", (func_t)nsl_sf_mathieu_b, 2},
@@ -336,6 +335,24 @@ struct funs _functions[] = {
 	{"hzeta", (func_t)gsl_sf_hzeta, 2},
 	{"etaint", (func_t)nsl_sf_etaint, 1},
 	{"eta", (func_t)gsl_sf_eta, 1},
+
+	/* GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html */
+	{"randgaussian", (func_t)nsl_sf_ran_gaussian, 1},
+	{"randexponential", (func_t)nsl_sf_ran_exponential, 1},
+	{"randlaplace", (func_t)nsl_sf_ran_laplace, 1},
+	{"randcauchy", (func_t)nsl_sf_ran_cauchy, 1},
+	{"randrayleigh", (func_t)nsl_sf_ran_rayleigh, 1},
+	{"randlandau", (func_t)nsl_sf_ran_landau, 0},
+	{"randlevy", (func_t)nsl_sf_ran_levy, 2},
+	{"randgamma", (func_t)nsl_sf_ran_gamma, 2},
+	{"randflat", (func_t)nsl_sf_ran_flat, 2},
+	{"randlognormal", (func_t)nsl_sf_ran_lognormal, 2},
+	{"randchisq", (func_t)nsl_sf_ran_chisq, 1},
+	{"randtdist", (func_t)nsl_sf_ran_tdist, 1},
+	{"randlogistic", (func_t)nsl_sf_ran_logistic, 1},
+	{"randpoisson", (func_t)nsl_sf_ran_poisson, 1},
+	{"randbernoulli", (func_t)nsl_sf_ran_bernoulli, 1},
+	{"randbinomial", (func_t)nsl_sf_ran_binomial, 2},
 
 	/* GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html */
 	/* Gaussian Distribution */
@@ -481,7 +498,6 @@ struct funs _functions[] = {
 	{"hypergeometricQ", (func_t)gsl_cdf_hypergeometric_Q, 4},
 	/* Logarithmic Distribution */
 	{"logarithmic", (func_t)nsl_sf_logarithmic, 2},
-	{0, (func_t)0, 0}
-};
+	{0, (func_t)0, 0}};
 
 #endif /*FUNCTIONS_H*/

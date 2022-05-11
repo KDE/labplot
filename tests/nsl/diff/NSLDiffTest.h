@@ -1,11 +1,11 @@
 /*
-    File                 : NSLDiffTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for numerical differentiation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLDiffTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for numerical differentiation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLDIFFTEST_H
 #define NSLDIFFTEST_H
@@ -15,7 +15,7 @@
 class NSLDiffTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// first derivative
 	void testFirst_order2();
 	void testFirst_order4();
@@ -34,6 +34,7 @@ private slots:
 	void testPerformance_first();
 	void testPerformance_second();
 	void testPerformance_third();
+
 private:
 	QString m_dataDir;
 };

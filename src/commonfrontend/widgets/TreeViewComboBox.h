@@ -1,12 +1,11 @@
 /*
-    File                 : TreeViewComboBox.h
-    Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TreeViewComboBox.h
+	Project              : LabPlot
+	Description          : Provides a QTreeView in a QComboBox
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
@@ -52,7 +51,7 @@ private:
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
-	QString m_lineEditText{""};
+	QString m_lineEditText{QLatin1String("")};
 	bool m_useCurrentIndexText{true};
 
 	QList<AspectType> m_topLevelClasses;
@@ -67,11 +66,11 @@ private:
 
 	void paintEvent(QPaintEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void treeViewIndexActivated(const QModelIndex&);
 	void filterChanged(const QString&);
 
-signals:
+Q_SIGNALS:
 	void currentModelIndexChanged(const QModelIndex&);
 };
 

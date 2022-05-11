@@ -1,12 +1,11 @@
 /*
-    File                 : XYConvolutionCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYConvolutionCurve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYConvolutionCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYConvolutionCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYCONVOLUTIONCURVEPRIVATE_H
 #define XYCONVOLUTIONCURVEPRIVATE_H

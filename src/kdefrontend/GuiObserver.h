@@ -1,10 +1,10 @@
 /*
-    File                 : GuiObserver.h
-    Project              : LabPlot
-    Description          : GUI observer
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : GuiObserver.h
+	Project              : LabPlot
+	Description          : GUI observer
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef GUIOBSERVER_H
@@ -24,7 +24,7 @@ public:
 private:
 	MainWin* m_mainWindow;
 
-private slots:
+private Q_SLOTS:
 	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
 	void hiddenAspectSelected(const AbstractAspect*) const;
 };

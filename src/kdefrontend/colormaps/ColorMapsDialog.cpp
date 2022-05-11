@@ -3,10 +3,9 @@
 	Project              : LabPlot
 	Description          : dialog showing the available color maps
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "ColorMapsDialog.h"
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
@@ -24,16 +23,16 @@
 
 	\ingroup kdefrontend
  */
-ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
-	m_colorMapsWidget(new ColorMapsWidget(this)) {
-
+ColorMapsDialog::ColorMapsDialog(QWidget* parent)
+	: QDialog(parent)
+	, m_colorMapsWidget(new ColorMapsWidget(this)) {
 	connect(m_colorMapsWidget, &ColorMapsWidget::doubleClicked, this, &QDialog::accept);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_colorMapsWidget);
 
-	//dialog buttons
-	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |QDialogButtonBox::Cancel);
+	// dialog buttons
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	layout->addWidget(buttonBox);
 
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

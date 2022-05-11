@@ -1,13 +1,12 @@
 /*
-    File             : ExpressionParser.h
-    Project          : LabPlot
-    Description      : c++ wrapper for the bison generated parser.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File             : ExpressionParser.h
+	Project          : LabPlot
+	Description      : c++ wrapper for the bison generated parser.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
@@ -19,7 +18,6 @@
 class QStringList;
 
 class ExpressionParser {
-
 public:
 	static ExpressionParser* getInstance();
 	static int functionArgumentCount(const QString& functionName);
@@ -27,19 +25,30 @@ public:
 
 	bool isValid(const QString& expr, const QStringList& vars);
 	QStringList getParameter(const QString& expr, const QStringList& vars);
-	bool evaluateCartesian( const QString& expr, const QString& min, const QString& max,
-					int count, QVector<double>* xVector, QVector<double>* yVector,
-					const QStringList& paramNames, const QVector<double>& paramValues);
-	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-					int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool evaluateCartesian(const QString& expr,
+						   const QString& min,
+						   const QString& max,
+						   int count,
+						   QVector<double>* xVector,
+						   QVector<double>* yVector,
+						   const QStringList& paramNames,
+						   const QVector<double>& paramValues);
+	bool evaluateCartesian(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
 	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
-					const QStringList& paramNames, const QVector<double>& paramValues);
+	bool evaluateCartesian(const QString& expr,
+						   QVector<double>* xVector,
+						   QVector<double>* yVector,
+						   const QStringList& paramNames,
+						   const QVector<double>& paramValues);
 	bool evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector);
-	bool evaluatePolar(const QString& expr, const QString& min, const QString& max,
-					int count, QVector<double>* xVector, QVector<double>* yVector);
-	bool evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
-					int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool evaluatePolar(const QString& expr, const QString& min, const QString& max, int count, QVector<double>* xVector, QVector<double>* yVector);
+	bool evaluateParametric(const QString& expr1,
+							const QString& expr2,
+							const QString& min,
+							const QString& max,
+							int count,
+							QVector<double>* xVector,
+							QVector<double>* yVector);
 
 	const QStringList& functions();
 	const QStringList& functionsGroups();

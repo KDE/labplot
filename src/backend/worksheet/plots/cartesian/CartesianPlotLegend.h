@@ -1,18 +1,18 @@
 /*
-    File                 : CartesianPlotLegend.h
-    Project              : LabPlot
-    Description          : Legend for the cartesian plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : CartesianPlotLegend.h
+	Project              : LabPlot
+	Description          : Legend for the cartesian plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTLEGEND_H
 #define CARTESIANPLOTLEGEND_H
 
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/WorksheetElement.h"
 
 class CartesianPlotLegendPrivate;
 class TextLabel;
@@ -28,7 +28,7 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	CartesianPlotLegend(const QString &name);
+	explicit CartesianPlotLegend(const QString& name);
 	~CartesianPlotLegend() override;
 
 	void finalizeAdd() override;
@@ -39,16 +39,11 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig& config) override;
 
-	void setVisible(bool) override;
-	bool isVisible() const override;
-
 	TextLabel* title();
 
 	CLASS_D_ACCESSOR_DECL(QFont, labelFont, LabelFont)
 	CLASS_D_ACCESSOR_DECL(QColor, labelColor, LabelColor)
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
-	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
@@ -80,7 +75,6 @@ public:
 
 protected:
 	CartesianPlotLegend(const QString& name, CartesianPlotLegendPrivate* dd);
-	CartesianPlotLegendPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(CartesianPlotLegend)
@@ -88,17 +82,15 @@ private:
 	void initActions();
 	QAction* visibilityAction{nullptr};
 
-private slots:
-	//SLOTs for changes triggered via QActions in the context menu
+private Q_SLOTS:
+	// SLOTs for changes triggered via QActions in the context menu
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	void labelFontChanged(QFont&);
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);
-	void positionChanged(const CartesianPlotLegend::PositionWrapper&);
-	void rotationAngleChanged(qreal);
 	void backgroundTypeChanged(WorksheetElement::BackgroundType);
 	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
 	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
@@ -117,9 +109,6 @@ signals:
 	void layoutVerticalSpacingChanged(float);
 	void layoutHorizontalSpacingChanged(float);
 	void layoutColumnCountChanged(int);
-
-	void positionChanged(QPointF&);
-	void visibilityChanged(bool);
 };
 
 #endif

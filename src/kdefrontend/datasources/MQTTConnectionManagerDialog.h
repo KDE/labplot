@@ -1,10 +1,10 @@
 /*
-    File                 : MQTTConnectionManagerDialog.h
-    Project              : LabPlot
-    Description          : dialog for managing MQTT connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTTConnectionManagerDialog.h
+	Project              : LabPlot
+	Description          : dialog for managing MQTT connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MQTTCONNECTIONMANAGERDIALOG_H
@@ -32,9 +32,9 @@ private:
 	bool m_initialConnectionChanged;
 	QString m_initialConnection;
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void save();
 };
 
-#endif	// MQTTCONNECTIONMANAGERDIALOG_H
+#endif // MQTTCONNECTIONMANAGERDIALOG_H

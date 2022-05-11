@@ -460,7 +460,7 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 
         for (int n = 0; n < colCount; ++n) {
             if (columnNumericTypes.at(n)) {
-                spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Numeric);
+                spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Double);
                 auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
                 numericDataPointers.push_back(datap);
                 if (importMode == AbstractFileFilter::ImportMode::Replace)

@@ -1,20 +1,20 @@
 /*
-    File             : XYCurveDock.h
-    Project          : LabPlot
-    Description      : widget for curve properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYCurveDock.h
+	Project          : LabPlot
+	Description      : widget for curve properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYCURVEDOCK_H
 #define XYCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
@@ -38,7 +38,7 @@ public:
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -64,19 +64,19 @@ protected:
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void visibilityChanged(bool);
 
-private slots:
+private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
-	//SLOTs for changes triggered in XYCurveDock
+	// SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
 	void legendVisibleChanged(bool);
 
-	//Line-Tab
+	// Line-Tab
 	void lineTypeChanged(int);
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
@@ -92,7 +92,7 @@ private slots:
 	void dropLineWidthChanged(double);
 	void dropLineOpacityChanged(int);
 
-	//Values-Tab
+	// Values-Tab
 	void valuesTypeChanged(int);
 	void valuesColumnChanged(const QModelIndex&);
 	void valuesPositionChanged(int);
@@ -107,7 +107,7 @@ private slots:
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
 
-	//Filling-tab
+	// Filling-tab
 	void fillingPositionChanged(int);
 	void fillingTypeChanged(int);
 	void fillingColorStyleChanged(int);
@@ -134,21 +134,21 @@ private slots:
 	void errorBarsOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(int) const;
+	void rugEnabledChanged(bool) const;
 	void rugOrientationChanged(int) const;
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;
 	void rugOffsetChanged(double) const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
 	void curveLegendVisibleChanged(bool);
 	void curveVisibilityChanged(bool);
 
-	//Line-Tab
+	// Line-Tab
 	void curveLineTypeChanged(XYCurve::LineType);
 	void curveLineSkipGapsChanged(bool);
 	void curveLineIncreasingXOnlyChanged(bool);
@@ -159,7 +159,7 @@ private slots:
 	void curveDropLinePenChanged(const QPen&);
 	void curveDropLineOpacityChanged(qreal);
 
-	//Values-Tab
+	// Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);
 	void curveValuesColumnChanged(const AbstractColumn*);
 	void curveValuesPositionChanged(XYCurve::ValuesPosition);
@@ -174,7 +174,7 @@ private slots:
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
 
-	//Filling-Tab
+	// Filling-Tab
 	void curveFillingPositionChanged(XYCurve::FillingPosition);
 	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
 	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -204,11 +204,11 @@ private slots:
 	void curveRugWidthChanged(double);
 	void curveRugOffsetChanged(double);
 
-	//load and save
+	// load and save
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

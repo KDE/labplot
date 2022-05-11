@@ -1,17 +1,17 @@
 /*
-    File                 : SpreadsheetTest.cpp
-    Project              : LabPlot
-    Description          : Tests for the Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	File                 : SpreadsheetTest.cpp
+	Project              : LabPlot
+	Description          : Tests for the Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SpreadsheetTest.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/Project.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <QApplication>
@@ -52,15 +52,15 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 2);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	// column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	QCOMPARE(sheet.column(0)->valueAt(0), 10.0);
 	QCOMPARE(sheet.column(1)->valueAt(0), 100.0);
 	QCOMPARE(sheet.column(0)->valueAt(1), 20.0);
@@ -68,30 +68,29 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 }
 
 /*!
-   insert one column with integer values and one column with float numbers into an empty spreadsheet.
-   the first column has to be converted to integer column.
+   insert one column with integer and one column with big integer values into an empty spreadsheet.
+   the first column has to be converted to integer column, the second to big integer.
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "10 " + QString::number(std::numeric_limits<long long>::min())
-						+ "\n20 " + QString::number(std::numeric_limits<long long>::max());
+	const QString str = "10 " + QString::number(std::numeric_limits<long long>::min()) + "\n20 " + QString::number(std::numeric_limits<long long>::max());
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 2);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::BigInt);
 
-	//values
+	// values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
 	QCOMPARE(sheet.column(1)->bigIntAt(0), std::numeric_limits<long long>::min());
 	QCOMPARE(sheet.column(0)->integerAt(1), 20);
@@ -99,8 +98,8 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 }
 
 /*!
-   insert one column with integer and one column with big integer values into an empty spreadsheet.
-   the first column has to be converted to integer column, the second to big integer.
+   insert one column with integer values and one column with float numbers into an empty spreadsheet.
+   the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
 	Spreadsheet sheet("test", false);
@@ -113,21 +112,20 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 2);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
 	QCOMPARE(sheet.column(1)->valueAt(0), 100.0);
 	QCOMPARE(sheet.column(0)->integerAt(1), 20);
 	QCOMPARE(sheet.column(1)->valueAt(1), 200.0);
 }
-
 
 /*!
    Properly handle empty values in the tab separated data.
@@ -137,29 +135,30 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "1000		1000		1000\n"
-						"985		985		985\n"
-						"970	-7.06562	970		970\n"
-						"955	-5.93881	955		955\n"
-						"940	-4.97594	940	-4.97594	940";
+	const QString str =
+		"1000		1000		1000\n"
+		"985		985		985\n"
+		"970	-7.06562	970		970\n"
+		"955	-5.93881	955		955\n"
+		"940	-4.97594	940	-4.97594	940";
 
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 5);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(sheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
-	//values
+	// values
 	QCOMPARE(sheet.column(0)->integerAt(0), 1000);
 	QCOMPARE((bool)std::isnan(sheet.column(1)->valueAt(0)), true);
 	QCOMPARE(sheet.column(2)->integerAt(0), 1000);
@@ -199,23 +198,24 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "2020-09-20 11:21:40:849	7.7\n"
-						"2020-09-20 11:21:41:830	4.2";
+	const QString str =
+		"2020-09-20 11:21:40:849	7.7\n"
+		"2020-09-20 11:21:41:830	4.2";
 
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 2);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
 	const QString& format = filter->format();
 
@@ -234,23 +234,24 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "11:21:40	7.7\n"
-						"11:21:41	4.2";
+	const QString str =
+		"11:21:40	7.7\n"
+		"11:21:41	4.2";
 
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 2);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
 	const QString& format = filter->format();
 
@@ -274,29 +275,29 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	sheet->setColumnCount(2);
 	sheet->setRowCount(100);
 
-	const QString str = "0\n"
-						"10 20\n"
-						"11 21 31\n"
-						"12 22 32 42\n"
-						"13 23\n"
-						"14";
+	const QString str =
+		"0\n"
+		"10 20\n"
+		"11 21 31\n"
+		"12 22 32 42\n"
+		"13 23\n"
+		"14";
 	QApplication::clipboard()->setText(str);
-
 
 	SpreadsheetView view(sheet, false);
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet->columnCount(), 4);
 	QCOMPARE(sheet->rowCount(), 100);
 
-	//column modes
+	// column modes
 	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(sheet->column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
 	QCOMPARE(sheet->column(3)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
-	//values
+	// values
 	QCOMPARE(sheet->column(0)->integerAt(0), 0);
 	QCOMPARE(sheet->column(1)->integerAt(0), 0);
 	QCOMPARE(sheet->column(2)->integerAt(0), 0);
@@ -327,19 +328,18 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE(sheet->column(2)->integerAt(5), 0);
 	QCOMPARE(sheet->column(3)->integerAt(5), 0);
 
-
-	//undo the changes and check the results again
+	// undo the changes and check the results again
 	project.undoStack()->undo();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet->columnCount(), 2);
 	QCOMPARE(sheet->rowCount(), 100);
 
-	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	// column modes
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(0)), true);
 	QCOMPARE((bool)std::isnan(sheet->column(1)->valueAt(0)), true);
 
@@ -368,24 +368,25 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "1.1 2.2\n"
-						"3.3 4.4";
+	const QString str =
+		"1.1 2.2\n"
+		"3.3 4.4";
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
-	view.goToCell(1, 1); //havigate to the edge of the spreadsheet
+	view.goToCell(1, 1); // havigate to the edge of the spreadsheet
 	view.pasteIntoSelection();
 
-	//spreadsheet size
+	// spreadsheet size
 	QCOMPARE(sheet.columnCount(), 3);
 	QCOMPARE(sheet.rowCount(), 100);
 
-	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	// column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
 
-	//values
+	// values
 	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(0)), true);
 	QCOMPARE((bool)std::isnan(sheet.column(1)->valueAt(0)), true);
 	QCOMPARE((bool)std::isnan(sheet.column(2)->valueAt(0)), true);
@@ -417,7 +418,7 @@ void SpreadsheetTest::testSortSingleNumeric1() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, true);
 
-	//values
+	// values
 	QCOMPARE(col->valueAt(0), -1.0);
 	QCOMPARE(col->valueAt(1), -0.2);
 	QCOMPARE(col->valueAt(2), 0.5);
@@ -439,7 +440,7 @@ void SpreadsheetTest::testSortSingleNumeric2() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, false);
 
-	//values
+	// values
 	QCOMPARE(col->valueAt(0), 2.0);
 	QCOMPARE(col->valueAt(1), 0.5);
 	QCOMPARE(col->valueAt(2), -0.2);
@@ -464,7 +465,7 @@ void SpreadsheetTest::testSortSingleInteger1() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, true);
 
-	//values
+	// values
 	QCOMPARE(col->integerAt(0), -1);
 	QCOMPARE(col->integerAt(1), 0);
 	QCOMPARE(col->integerAt(2), 2);
@@ -492,7 +493,7 @@ void SpreadsheetTest::testSortSingleInteger2() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, false);
 
-	//values
+	// values
 	QCOMPARE(col->integerAt(6), -1);
 	QCOMPARE(col->integerAt(5), 0);
 	QCOMPARE(col->integerAt(4), 2);
@@ -520,7 +521,7 @@ void SpreadsheetTest::testSortSingleBigInt1() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, true);
 
-	//values
+	// values
 	QCOMPARE(col->bigIntAt(0), -10000000000ll);
 	QCOMPARE(col->bigIntAt(1), 0);
 	QCOMPARE(col->bigIntAt(2), 20000000000ll);
@@ -548,7 +549,7 @@ void SpreadsheetTest::testSortSingleBigInt2() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, false);
 
-	//values
+	// values
 	QCOMPARE(col->bigIntAt(6), -10000000000ll);
 	QCOMPARE(col->bigIntAt(5), 0);
 	QCOMPARE(col->bigIntAt(4), 20000000000ll);
@@ -574,7 +575,7 @@ void SpreadsheetTest::testSortSingleText1() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, true);
 
-	//values
+	// values
 	QCOMPARE(col->textAt(0), QLatin1String("amy"));
 	QCOMPARE(col->textAt(1), QLatin1String("ben"));
 	QCOMPARE(col->textAt(2), QLatin1String("carl"));
@@ -600,7 +601,7 @@ void SpreadsheetTest::testSortSingleText2() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, false);
 
-	//values
+	// values
 	QCOMPARE(col->textAt(0), QLatin1String("eddy"));
 	QCOMPARE(col->textAt(1), QLatin1String("dan"));
 	QCOMPARE(col->textAt(2), QLatin1String("carl"));
@@ -618,10 +619,10 @@ void SpreadsheetTest::testSortSingleDateTime1() {
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
 		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
-		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)), // invalid
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
-		};
+	};
 
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(1);
@@ -633,7 +634,7 @@ void SpreadsheetTest::testSortSingleDateTime1() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, true);
 
-	//values
+	// values
 	QCOMPARE(col->dateTimeAt(0), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col->dateTimeAt(1), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
@@ -645,15 +646,14 @@ void SpreadsheetTest::testSortSingleDateTime1() {
  * check sorting single column of datetimes with invalid entries descending
  */
 void SpreadsheetTest::testSortSingleDateTime2() {
-
 	const QVector<QDateTime> xData{
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
 		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
-		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)), // invalid
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
-		};
+	};
 
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(1);
@@ -665,7 +665,7 @@ void SpreadsheetTest::testSortSingleDateTime2() {
 	// sort
 	sheet.sortColumns(nullptr, {col}, false);
 
-	//values
+	// values
 	QCOMPARE(col->dateTimeAt(4), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col->dateTimeAt(3), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
@@ -693,12 +693,12 @@ void SpreadsheetTest::testSortNumeric1() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, true);
 
-	//values
+	// values
 	QCOMPARE(col0->valueAt(0), -1.0);
 	QCOMPARE(col0->valueAt(1), -0.2);
 	QCOMPARE(col0->valueAt(2), 0.5);
 	QCOMPARE(col0->valueAt(3), 2.0);
-	//QCOMPARE(col0->valueAt(4), GSL_NAN);
+	// QCOMPARE(col0->valueAt(4), GSL_NAN);
 	QCOMPARE(col1->integerAt(0), 5);
 	QCOMPARE(col1->integerAt(1), 2);
 	QCOMPARE(col1->integerAt(2), 1);
@@ -726,7 +726,7 @@ void SpreadsheetTest::testSortNumeric2() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, false);
 
-	//values
+	// values
 	QCOMPARE(col0->valueAt(0), 2.0);
 	QCOMPARE(col0->valueAt(1), 0.5);
 	QCOMPARE(col0->valueAt(2), -0.2);
@@ -762,7 +762,7 @@ void SpreadsheetTest::testSortInteger1() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, true);
 
-	//values
+	// values
 	QCOMPARE(col0->integerAt(0), -1);
 	QCOMPARE(col0->integerAt(1), 0);
 	QCOMPARE(col0->integerAt(2), 2);
@@ -801,7 +801,7 @@ void SpreadsheetTest::testSortInteger2() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, false);
 
-	//values
+	// values
 	QCOMPARE(col0->integerAt(6), -1);
 	QCOMPARE(col0->integerAt(5), 0);
 	QCOMPARE(col0->integerAt(4), 2);
@@ -841,7 +841,7 @@ void SpreadsheetTest::testSortBigInt1() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, true);
 
-	//values
+	// values
 	QCOMPARE(col0->bigIntAt(0), -10000000000ll);
 	QCOMPARE(col0->bigIntAt(1), 0);
 	QCOMPARE(col0->bigIntAt(2), 20000000000ll);
@@ -881,7 +881,7 @@ void SpreadsheetTest::testSortBigInt2() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, false);
 
-	//values
+	// values
 	QCOMPARE(col0->bigIntAt(6), -10000000000ll);
 	QCOMPARE(col0->bigIntAt(5), 0);
 	QCOMPARE(col0->bigIntAt(4), 20000000000ll);
@@ -919,7 +919,7 @@ void SpreadsheetTest::testSortText1() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, true);
 
-	//values
+	// values
 	QCOMPARE(col0->textAt(0), QLatin1String("amy"));
 	QCOMPARE(col0->textAt(1), QLatin1String("ben"));
 	QCOMPARE(col0->textAt(2), QLatin1String("carl"));
@@ -957,7 +957,7 @@ void SpreadsheetTest::testSortText2() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, false);
 
-	//values
+	// values
 	QCOMPARE(col0->textAt(4), QLatin1String("amy"));
 	QCOMPARE(col0->textAt(3), QLatin1String("ben"));
 	QCOMPARE(col0->textAt(2), QLatin1String("carl"));
@@ -986,10 +986,10 @@ void SpreadsheetTest::testSortDateTime1() {
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
 		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
-		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)), // invalid
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
-		};
+	};
 	QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
 
 	auto* col0{sheet.column(0)};
@@ -1002,7 +1002,7 @@ void SpreadsheetTest::testSortDateTime1() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, true);
 
-	//values
+	// values
 	QCOMPARE(col0->dateTimeAt(0), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col0->dateTimeAt(1), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col0->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
@@ -1025,10 +1025,10 @@ void SpreadsheetTest::testSortDateTime2() {
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 12)),
 		QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)),
 		QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)),
-		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)),	// invalid
+		QDateTime(QDate(2019, 02, 29), QTime(12, 12, 12)), // invalid
 		QDateTime(QDate(2020, 02, 29), QTime(12, 12, 13)),
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
-		};
+	};
 	const QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
 
 	Spreadsheet sheet("test", false);
@@ -1044,7 +1044,7 @@ void SpreadsheetTest::testSortDateTime2() {
 	// sort
 	sheet.sortColumns(col0, {col0, col1}, false);
 
-	//values
+	// values
 	QCOMPARE(col0->dateTimeAt(4), QDateTime(QDate(2019, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col0->dateTimeAt(3), QDateTime(QDate(2020, 02, 28), QTime(12, 12, 12)));
 	QCOMPARE(col0->dateTimeAt(2), QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)));
@@ -1070,20 +1070,19 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 	sheet.setRowCount(10000);
 
 	QVector<double> xData;
+	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++)
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
 #else
-		xData << (double)(qrand())/RAND_MAX;
+		xData << (double)(qrand()) / RAND_MAX;
 #endif
 
 	auto* col = sheet.column(0);
 	col->replaceValues(0, xData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(nullptr, {col}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(nullptr, {col}, true); }
 }
 
 /*
@@ -1096,15 +1095,15 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 
 	QVector<double> xData;
 	QVector<int> yData;
+	WARN("CREATE DATA")
 	for (int i = 0; i < sheet.rowCount(); i++) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
 #else
-		xData << (double)(qrand())/RAND_MAX;
+		xData << (double)(qrand()) / RAND_MAX;
 #endif
 		yData << i + 1;
 	}
-
 
 	auto* col0{sheet.column(0)};
 	auto* col1{sheet.column(1)};
@@ -1113,9 +1112,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	col1->replaceInteger(0, yData);
 
 	// sort
-	QBENCHMARK {
-		sheet.sortColumns(col0, {col0, col1}, true);
-	}
+	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
 }
 
 QTEST_MAIN(SpreadsheetTest)

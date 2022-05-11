@@ -1,10 +1,10 @@
 /*
-    File                 : AddValueLabelDialog.cpp
-    Project              : LabPlot
-    Description          : Dialog to add a new the value label
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AddValueLabelDialog.cpp
+	Project              : LabPlot
+	Description          : Dialog to add a new the value label
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AddValueLabelDialog.h"
@@ -29,29 +29,26 @@
 
 	\ingroup kdefrontend
  */
-AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::ColumnMode mode) : QDialog(parent) {
+AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::ColumnMode mode)
+	: QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Add Value Label"));
 
 	auto* layout = new QGridLayout(this);
 
-	//value
+	// value
 	auto* label = new QLabel(i18n("Value:"));
 	layout->addWidget(label, 0, 0);
 
-	if (mode == AbstractColumn::ColumnMode::Numeric
-		|| mode == AbstractColumn::ColumnMode::Integer
-		|| mode == AbstractColumn::ColumnMode::BigInt) {
-
+	if (mode == AbstractColumn::ColumnMode::Double || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) {
 		leValue = new QLineEdit(this);
 		leValue->setFocus();
 		layout->addWidget(leValue, 0, 1);
 
-		if (mode == AbstractColumn::ColumnMode::Numeric) {
+		if (mode == AbstractColumn::ColumnMode::Double) {
 			SET_NUMBER_LOCALE
 			leValue->setLocale(numberLocale);
 			leValue->setValidator(new QDoubleValidator(leValue));
-		} else if (mode == AbstractColumn::ColumnMode::Integer
-			|| mode == AbstractColumn::ColumnMode::BigInt)
+		} else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 			leValue->setValidator(new QIntValidator(leValue));
 	} else {
 		dateTimeEdit = new QDateTimeEdit(this);
@@ -59,7 +56,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 		layout->addWidget(dateTimeEdit, 0, 1);
 	}
 
-	//label
+	// label
 	label = new QLabel(i18n("Label:"));
 	layout->addWidget(label, 1, 0);
 
@@ -71,7 +68,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 	connect(btnBox, &QDialogButtonBox::rejected, this, &AddValueLabelDialog::reject);
 	layout->addWidget(btnBox, 2, 1);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
 
 	create(); // ensure there's a window created
@@ -83,7 +80,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 }
 
 AddValueLabelDialog::~AddValueLabelDialog() {
-	//save the current settings
+	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }

@@ -1,13 +1,12 @@
 /*
-    File                 : NotesView.cpp
-    Project              : LabPlot
-    Description          : Notes View for taking notes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : NotesView.cpp
+	Project              : LabPlot
+	Description          : Notes View for taking notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NOTEVIEW_H
 #define NOTEVIEW_H
@@ -24,10 +23,10 @@ class NoteView : public QWidget {
 public:
 	explicit NoteView(Note* notes);
 
-public slots:
+public Q_SLOTS:
 	void print(QPrinter*) const;
 
-private slots:
+private Q_SLOTS:
 	void backgroundColorChanged(QColor);
 	void textColorChanged(QColor);
 	void textFontChanged(const QFont&);

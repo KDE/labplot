@@ -1,10 +1,10 @@
 /*
-    File                 : ImageTools.cpp
-    Project              : LabPlot
-    Description          : Collection of different image processing algorithms
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImageTools.cpp
+	Project              : LabPlot
+	Description          : Collection of different image processing algorithms
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ImageTools.h"
@@ -15,8 +15,8 @@
 	\ingroup tools
 */
 QImage ImageTools::blurred(const QImage& image, QRect rect, int radius, bool alphaOnly) {
-	int tab[] = { 14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2 };
-	int alpha = (radius < 1)  ? 16 : (radius > 17) ? 1 : tab[radius-1];
+	int tab[] = {14, 10, 8, 6, 5, 5, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2};
+	int alpha = (radius < 1) ? 16 : (radius > 17) ? 1 : tab[radius - 1];
 
 	QImage result = image.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 	int r1 = rect.top();
@@ -32,7 +32,7 @@ QImage ImageTools::blurred(const QImage& image, QRect rect, int radius, bool alp
 	int i2 = 3;
 
 	if (alphaOnly)
-		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian)*3;
+		i1 = i2 = (QSysInfo::ByteOrder == QSysInfo::LittleEndian) * 3;
 
 	for (int col = c1; col <= c2; col++) {
 		p = result.scanLine(r1) + col * 4;

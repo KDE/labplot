@@ -1,28 +1,27 @@
 /*
-    File             : ExpressionParser.cpp
-    Project          : LabPlot
-    Description      : C++ wrapper for the bison generated parser.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File             : ExpressionParser.cpp
+	Project          : LabPlot
+	Description      : C++ wrapper for the bison generated parser.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include <QRegularExpression>
 
-#include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/lib/macros.h"
 
 #include <klocalizedstring.h>
 
 extern "C" {
 #include "backend/gsl/parser.h"
-#include <gsl/gsl_version.h>
-#include <gsl/gsl_errno.h>
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_version.h>
 }
 
 ExpressionParser* ExpressionParser::m_instance{nullptr};
@@ -33,22 +32,22 @@ ExpressionParser::ExpressionParser() {
 	initConstants();
 }
 
-// initialize function list	(sync with functions.h!)
+// initialize function list	(sync with functions.h and FunctionsWidget.cpp!)
 void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << _functions[i].name;
 
 	m_functionsGroups << i18n("Standard Mathematical functions");
-	//https://www.gnu.org/software/gsl/doc/html/specfunc.html
+	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	m_functionsGroups << i18n("Airy Functions and Derivatives");
 	m_functionsGroups << i18n("Bessel Functions");
 	m_functionsGroups << i18n("Clausen Functions");
 	m_functionsGroups << i18n("Coulomb Functions");
-// 	m_functionsGroups << i18n("Coupling Coefficients");
+	// 	m_functionsGroups << i18n("Coupling Coefficients");
 	m_functionsGroups << i18n("Dawson Function");
 	m_functionsGroups << i18n("Debye Functions");
 	m_functionsGroups << i18n("Dilogarithm");
-//	m_functionsGroups << i18n("Elementary Operations");
+	//	m_functionsGroups << i18n("Elementary Operations");
 	m_functionsGroups << i18n("Elliptic Integrals");
 //	m_functionsGroups << i18n("Elliptic Functions (Jacobi)");
 #ifndef _MSC_VER
@@ -78,6 +77,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Transport Functions");
 	m_functionsGroups << i18n("Trigonometric Functions");
 	m_functionsGroups << i18n("Zeta Functions");
+	// GSL random numbers
+	m_functionsGroups << i18n("Random number generator");
 	// GSL random distribution functions
 	m_functionsGroups << i18n("Gaussian Distribution");
 	m_functionsGroups << i18n("Exponential Distribution");
@@ -146,6 +147,8 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
+
+	index++; // separator
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -467,7 +470,7 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << index;
 
-	//Mathieu Functions
+		// Mathieu Functions
 #if (GSL_MAJOR_VERSION >= 2)
 	m_functionsNames << i18n("Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)");
 	m_functionsNames << i18n("Characteristic values b_n(q) of the Mathieu functions se_n(q,x)");
@@ -566,6 +569,33 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
+
+	index++; // separator
+
+	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
+	m_functionsNames << i18n("Gaussian random numbers");
+	m_functionsNames << i18n("Exponential random numbers");
+	m_functionsNames << i18n("Laplacian random numbers");
+	m_functionsNames << i18n("Cauchy/Lorentz random numbers");
+	m_functionsNames << i18n("Rayleigh random numbers");
+	m_functionsNames << i18n("Landau random numbers");
+	m_functionsNames << i18n("Levy alpha-stable random numbers");
+	m_functionsNames << i18n("Gamma random numbers");
+	m_functionsNames << i18n("Flat random numbers");
+	m_functionsNames << i18n("Lognormal random numbers");
+
+	m_functionsNames << i18n("Chi-squared random numbers");
+	m_functionsNames << i18n("t-distributed random numbers");
+	m_functionsNames << i18n("Logistic random numbers");
+	m_functionsNames << i18n("Poisson random numbers");
+	m_functionsNames << i18n("Bernoulli random numbers");
+	m_functionsNames << i18n("Binomial random numbers");
+
+	index++;
+	for (int i = 0; i < 16; i++)
+		m_functionsGroupIndex << index;
+
+	index++; // separator
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Gaussian Distribution
@@ -832,12 +862,12 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroupIndex << index;
 }
 
-//TODO: decide whether we want to have i18n here in the backend part of the code
+// TODO: decide whether we want to have i18n here in the backend part of the code
 void ExpressionParser::initConstants() {
 	for (int i = 0; _constants[i].name != nullptr; i++)
 		m_constants << _constants[i].name;
 
-	//groups
+	// groups
 	m_constantsGroups << i18n("Mathematical constants");
 	m_constantsGroups << i18n("Fundamental constants");
 	m_constantsGroups << i18n("Astronomy and Astrophysics");
@@ -855,56 +885,56 @@ void ExpressionParser::initConstants() {
 	m_constantsGroups << i18n("Radioactivity");
 	m_constantsGroups << i18n("Force and Energy");
 
-	//Mathematical constants
+	// Mathematical constants
 	m_constantsNames << i18n("Base of exponentials");
-	m_constantsValues << QString::number(M_E,'g',15);
+	m_constantsValues << QString::number(M_E, 'g', 15);
 	m_constantsUnits << QString();
 	m_constantsNames << i18n("Pi");
-	m_constantsValues << QString::number(M_PI,'g',15);
+	m_constantsValues << QString::number(M_PI, 'g', 15);
 	m_constantsUnits << QString();
 	m_constantsNames << i18n("Euler's constant");
-	m_constantsValues << QString::number(M_EULER,'g',15);
+	m_constantsValues << QString::number(M_EULER, 'g', 15);
 	m_constantsUnits << QString();
 
 	for (int i = 0; i < 3; i++)
 		m_constantsGroupIndex << 0;
 
-	//Fundamental constants
+	// Fundamental constants
 	m_constantsNames << i18n("Speed of light");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_SPEED_OF_LIGHT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_SPEED_OF_LIGHT, 'g', 15);
 	m_constantsUnits << "m / s";
 	m_constantsNames << i18n("Vacuum permeability");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY, 'g', 15);
 	m_constantsUnits << "kg m / A^2 s^2";
 	m_constantsNames << i18n("Vacuum permittivity");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY, 'g', 15);
 	m_constantsUnits << "A^2 s^4 / kg m^3";
 	m_constantsNames << i18n("Planck constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H, 'g', 15);
 	m_constantsUnits << "kg m^2 / s";
 	m_constantsNames << i18n("Reduced Planck constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR, 'g', 15);
 	m_constantsUnits << "kg m^2 / s";
 	m_constantsNames << i18n("Avogadro constant");
-	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO, 'g', 15);
 	m_constantsUnits << "1 / mol";
 	m_constantsNames << i18n("Faraday");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_FARADAY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FARADAY, 'g', 15);
 	m_constantsUnits << "A s / mol";
 	m_constantsNames << i18n("Boltzmann constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BOLTZMANN,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOLTZMANN, 'g', 15);
 	m_constantsUnits << "kg m^2 / K s^2";
 	m_constantsNames << i18n("Molar gas");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MOLAR_GAS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MOLAR_GAS, 'g', 15);
 	m_constantsUnits << "kg m^2 / K mol s^2";
 	m_constantsNames << i18n("Standard gas volume");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_STANDARD_GAS_VOLUME,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STANDARD_GAS_VOLUME, 'g', 15);
 	m_constantsUnits << "m^3 / mol";
 	m_constantsNames << i18n("Stefan-Boltzmann constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT, 'g', 15);
 	m_constantsUnits << "kg / K^4 s^3";
 	m_constantsNames << i18n("Gauss");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS, 'g', 15);
 	m_constantsUnits << "kg / A s^2";
 
 	for (int i = 0; i < 12; i++)
@@ -912,22 +942,22 @@ void ExpressionParser::initConstants() {
 
 	// Astronomy and Astrophysics
 	m_constantsNames << i18n("Astronomical unit");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ASTRONOMICAL_UNIT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ASTRONOMICAL_UNIT, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Gravitational constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT, 'g', 15);
 	m_constantsUnits << "m^3 / kg s^2";
 	m_constantsNames << i18n("Light year");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_LIGHT_YEAR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LIGHT_YEAR, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Parsec");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PARSEC,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PARSEC, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Gravitational acceleration");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAV_ACCEL,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAV_ACCEL, 'g', 15);
 	m_constantsUnits << "m / s^2";
 	m_constantsNames << i18n("Solar mass");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_SOLAR_MASS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_SOLAR_MASS, 'g', 15);
 	m_constantsUnits << "kg";
 
 	for (int i = 0; i < 6; i++)
@@ -935,58 +965,58 @@ void ExpressionParser::initConstants() {
 
 	// Atomic and Nuclear Physics;
 	m_constantsNames << i18n("Charge of the electron");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_CHARGE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_CHARGE, 'g', 15);
 	m_constantsUnits << "A s";
 	m_constantsNames << i18n("Energy of 1 electron volt");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_VOLT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_VOLT, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Unified atomic mass");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of the electron");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_ELECTRON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_ELECTRON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of the muon");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_MUON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_MUON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of the proton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_PROTON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_PROTON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of the neutron");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_NEUTRON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_NEUTRON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Electromagnetic fine structure constant");
-	m_constantsValues << QString::number(GSL_CONST_NUM_FINE_STRUCTURE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_NUM_FINE_STRUCTURE, 'g', 15);
 	m_constantsUnits << QString();
 	m_constantsNames << i18n("Rydberg constant");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_RYDBERG,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_RYDBERG, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Bohr radius");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_RADIUS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_RADIUS, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1 angstrom");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ANGSTROM,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ANGSTROM, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Area of 1 barn");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BARN,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BARN, 'g', 15);
 	m_constantsUnits << "m^2";
 	m_constantsNames << i18n("Bohr Magneton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_MAGNETON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_MAGNETON, 'g', 15);
 	m_constantsUnits << "A m^2";
 	m_constantsNames << i18n("Nuclear Magneton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_NUCLEAR_MAGNETON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NUCLEAR_MAGNETON, 'g', 15);
 	m_constantsUnits << "A m^2";
 	m_constantsNames << i18n("Magnetic moment of the electron [absolute value]");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_MAGNETIC_MOMENT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_MAGNETIC_MOMENT, 'g', 15);
 	m_constantsUnits << "A m^2";
 	m_constantsNames << i18n("Magnetic moment of the proton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PROTON_MAGNETIC_MOMENT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PROTON_MAGNETIC_MOMENT, 'g', 15);
 	m_constantsUnits << "A m^2";
 	m_constantsNames << i18n("Thomson cross section");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_THOMSON_CROSS_SECTION,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_THOMSON_CROSS_SECTION, 'g', 15);
 	m_constantsUnits << "m^2";
 	m_constantsNames << i18n("Electric dipole moment of 1 Debye");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_DEBYE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DEBYE, 'g', 15);
 	m_constantsUnits << "A s^2 / m^2";
 
 	for (int i = 0; i < 18; i++)
@@ -994,16 +1024,16 @@ void ExpressionParser::initConstants() {
 
 	// Measurement of Time
 	m_constantsNames << i18n("Number of seconds in 1 minute");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MINUTE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MINUTE, 'g', 15);
 	m_constantsUnits << "s";
 	m_constantsNames << i18n("Number of seconds in 1 hour");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_HOUR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HOUR, 'g', 15);
 	m_constantsUnits << "s";
 	m_constantsNames << i18n("Number of seconds in 1 day");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_DAY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DAY, 'g', 15);
 	m_constantsUnits << "s";
 	m_constantsNames << i18n("Number of seconds in 1 week");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_WEEK,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_WEEK, 'g', 15);
 	m_constantsUnits << "s";
 
 	for (int i = 0; i < 4; i++)
@@ -1011,19 +1041,19 @@ void ExpressionParser::initConstants() {
 
 	// Imperial Units
 	m_constantsNames << i18n("Length of 1 inch");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1 foot");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOT, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1 yard");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_YARD,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_YARD, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1 mile");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MILE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MILE, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1/1000th of an inch");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MIL,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MIL, 'g', 15);
 	m_constantsUnits << "m";
 
 	for (int i = 0; i < 5; i++)
@@ -1031,19 +1061,19 @@ void ExpressionParser::initConstants() {
 
 	// Speed and Nautical Units
 	m_constantsNames << i18n("Speed of 1 kilometer per hour");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOMETERS_PER_HOUR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOMETERS_PER_HOUR, 'g', 15);
 	m_constantsUnits << "m / s";
 	m_constantsNames << i18n("Speed of 1 mile per hour");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MILES_PER_HOUR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MILES_PER_HOUR, 'g', 15);
 	m_constantsUnits << "m / s";
 	m_constantsNames << i18n("Length of 1 nautical mile");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_NAUTICAL_MILE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NAUTICAL_MILE, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Length of 1 fathom");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_FATHOM,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FATHOM, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Speed of 1 knot");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_KNOT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KNOT, 'g', 15);
 	m_constantsUnits << "m / s";
 
 	for (int i = 0; i < 5; i++)
@@ -1051,10 +1081,10 @@ void ExpressionParser::initConstants() {
 
 	// Printers Units
 	m_constantsNames << i18n("length of 1 printer's point [1/72 inch]");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_POINT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POINT, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("length of 1 TeX point [1/72.27 inch]");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT, 'g', 15);
 	m_constantsUnits << "m";
 
 	for (int i = 0; i < 2; i++)
@@ -1062,31 +1092,31 @@ void ExpressionParser::initConstants() {
 
 	// Volume, Area and Length
 	m_constantsNames << i18n("Length of 1 micron");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_MICRON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_MICRON, 'g', 15);
 	m_constantsUnits << "m";
 	m_constantsNames << i18n("Area of 1 hectare");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_HECTARE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HECTARE, 'g', 15);
 	m_constantsUnits << "m^2";
 	m_constantsNames << i18n("Area of 1 acre");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ACRE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ACRE, 'g', 15);
 	m_constantsUnits << "m^2";
 	m_constantsNames << i18n("Volume of 1 liter");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_LITER,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LITER, 'g', 15);
 	m_constantsUnits << "m^3";
 	m_constantsNames << i18n("Volume of 1 US gallon");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_US_GALLON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_US_GALLON, 'g', 15);
 	m_constantsUnits << "m^3";
 	m_constantsNames << i18n("Volume of 1 Canadian gallon");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_CANADIAN_GALLON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CANADIAN_GALLON, 'g', 15);
 	m_constantsUnits << "m^3";
 	m_constantsNames << i18n("Volume of 1 UK gallon");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_GALLON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_GALLON, 'g', 15);
 	m_constantsUnits << "m^3";
 	m_constantsNames << i18n("Volume of 1 quart");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_QUART,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_QUART, 'g', 15);
 	m_constantsUnits << "m^3";
 	m_constantsNames << i18n("Volume of 1 pint");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PINT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PINT, 'g', 15);
 	m_constantsUnits << "m^3";
 
 	for (int i = 0; i < 9; i++)
@@ -1094,37 +1124,37 @@ void ExpressionParser::initConstants() {
 
 	// Mass and Weight
 	m_constantsNames << i18n("Mass of 1 pound");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_MASS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_MASS, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 ounce");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_OUNCE_MASS,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_OUNCE_MASS, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 ton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_TON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 metric ton [1000 kg]");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_METRIC_TON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_METRIC_TON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 UK ton");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_TON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_TON, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 troy ounce");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_TROY_OUNCE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TROY_OUNCE, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Mass of 1 carat");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_CARAT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CARAT, 'g', 15);
 	m_constantsUnits << "kg";
 	m_constantsNames << i18n("Force of 1 gram weight");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAM_FORCE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAM_FORCE, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 	m_constantsNames << i18n("Force of 1 pound weight");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_FORCE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_FORCE, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 	m_constantsNames << i18n("Force of 1 kilopound weight");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOPOUND_FORCE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOPOUND_FORCE, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 	m_constantsNames << i18n("Force of 1 poundal");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_POUNDAL,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POUNDAL, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 
 	for (int i = 0; i < 11; i++)
@@ -1132,16 +1162,16 @@ void ExpressionParser::initConstants() {
 
 	// Thermal Energy and Power
 	m_constantsNames << i18n("Energy of 1 calorie");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_CALORIE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CALORIE, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Energy of 1 British Thermal Unit");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BTU,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BTU, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Energy of 1 Therm");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_THERM,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_THERM, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Power of 1 horsepower");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_HORSEPOWER,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_HORSEPOWER, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^3";
 
 	for (int i = 0; i < 4; i++)
@@ -1149,25 +1179,25 @@ void ExpressionParser::initConstants() {
 
 	// Pressure
 	m_constantsNames << i18n("Pressure of 1 bar");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_BAR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_BAR, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 standard atmosphere");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_STD_ATMOSPHERE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STD_ATMOSPHERE, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 torr");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_TORR,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_TORR, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 meter of mercury");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_METER_OF_MERCURY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_METER_OF_MERCURY, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 inch of mercury");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_MERCURY,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_MERCURY, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 inch of water");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_WATER,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_WATER, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 	m_constantsNames << i18n("Pressure of 1 pound per square inch");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PSI,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PSI, 'g', 15);
 	m_constantsUnits << "kg / m s^2";
 
 	for (int i = 0; i < 7; i++)
@@ -1175,10 +1205,10 @@ void ExpressionParser::initConstants() {
 
 	// Viscosity
 	m_constantsNames << i18n("Dynamic viscosity of 1 poise");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_POISE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_POISE, 'g', 15);
 	m_constantsUnits << "kg / m s";
 	m_constantsNames << i18n("Kinematic viscosity of 1 stokes");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_STOKES,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STOKES, 'g', 15);
 	m_constantsUnits << "m^2 / s";
 
 	for (int i = 0; i < 2; i++)
@@ -1186,25 +1216,25 @@ void ExpressionParser::initConstants() {
 
 	// Light and Illumination
 	m_constantsNames << i18n("Luminance of 1 stilb");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_STILB,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_STILB, 'g', 15);
 	m_constantsUnits << "cd / m^2";
 	m_constantsNames << i18n("Luminous flux of 1 lumen");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_LUMEN,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LUMEN, 'g', 15);
 	m_constantsUnits << "cd sr";
 	m_constantsNames << i18n("Illuminance of 1 lux");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_LUX,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LUX, 'g', 15);
 	m_constantsUnits << "cd sr / m^2";
 	m_constantsNames << i18n("Illuminance of 1 phot");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_PHOT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_PHOT, 'g', 15);
 	m_constantsUnits << "cd sr / m^2";
 	m_constantsNames << i18n("Illuminance of 1 footcandle");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTCANDLE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTCANDLE, 'g', 15);
 	m_constantsUnits << "cd sr / m^2";
 	m_constantsNames << i18n("Luminance of 1 lambert");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_LAMBERT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_LAMBERT, 'g', 15);
 	m_constantsUnits << "cd sr / m^2";
 	m_constantsNames << i18n("Luminance of 1 footlambert");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTLAMBERT,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTLAMBERT, 'g', 15);
 	m_constantsUnits << "cd sr / m^2";
 
 	for (int i = 0; i < 7; i++)
@@ -1212,13 +1242,13 @@ void ExpressionParser::initConstants() {
 
 	// Radioactivity
 	m_constantsNames << i18n("Activity of 1 curie");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_CURIE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_CURIE, 'g', 15);
 	m_constantsUnits << "1 / s";
 	m_constantsNames << i18n("Exposure of 1 roentgen");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ROENTGEN,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ROENTGEN, 'g', 15);
 	m_constantsUnits << "A s / kg";
 	m_constantsNames << i18n("Absorbed dose of 1 rad");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_RAD,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_RAD, 'g', 15);
 	m_constantsUnits << "m^2 / s^2";
 
 	for (int i = 0; i < 3; i++)
@@ -1226,16 +1256,16 @@ void ExpressionParser::initConstants() {
 
 	// Force and Energy
 	m_constantsNames << i18n("SI unit of force");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_NEWTON,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_NEWTON, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 	m_constantsNames << i18n("Force of 1 Dyne");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_DYNE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_DYNE, 'g', 15);
 	m_constantsUnits << "kg m / s^2";
 	m_constantsNames << i18n("SI unit of energy");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_JOULE,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_JOULE, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 	m_constantsNames << i18n("Energy 1 erg");
-	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG,'g',15);
+	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG, 'g', 15);
 	m_constantsUnits << "kg m^2 / s^2";
 
 	for (int i = 0; i < 4; i++)
@@ -1288,62 +1318,62 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
 	switch (functionArgumentCount(functionName)) {
 	case 0:
-		return QString("()");
+		return {"()"};
 	case 1:
-		switch(type) {
+		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x)");
+			return {"(x)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(phi)");
+			return {"(phi)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(t)");
+			return {"(t)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x)");
+			return {"(x)"};
 		}
 		break;
 	case 2:
-		switch(type) {
+		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x, y)");
+			return {"(x, y)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(phi, theta)");
+			return {"(phi, theta)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(u, v)");
+			return {"(u, v)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x, y)");
+			return {"(x, y)"};
 		}
 		break;
 	case 3:
-		switch(type) {
+		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x, y, z)");
+			return {"(x, y, z)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(alpha, beta, gamma)");
+			return {"(alpha, beta, gamma)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(u, v, w)");
+			return {"(u, v, w)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x, y, z)");
+			return {"(x, y, z)"};
 		}
 		break;
 	case 4:
-		switch(type) {
+		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(alpha, beta, gamma, delta)");
+			return {"(alpha, beta, gamma, delta)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		}
 		break;
 	}
 
-	return QString("(...)");
+	return {"(...)"};
 }
 
 const QStringList& ExpressionParser::constants() {
@@ -1374,14 +1404,24 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
 	gsl_set_error_handler_off();
 
-	for (const auto& var: vars)
+	for (const auto& var : vars)
 		assign_symbol(qPrintable(var), 0);
 
 	SET_NUMBER_LOCALE
+	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
 	parse(qPrintable(expr), qPrintable(numberLocale.name()));
 
+	// if parsing with number locale fails, try default locale
+	if (parse_errors() > 0) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing expr \"" << STDSTRING(expr) << "\" with locale " << numberLocale.name().toStdString()
+						  << ", errors = " << parse_errors())
+		parse(qPrintable(expr), "en_US");
+		if (parse_errors() > 0)
+			DEBUG(Q_FUNC_INFO << ", ERROR: parsing FAILED, errors = " << parse_errors())
+	}
+
 	/* remove temporarily defined symbols */
-	for (const auto& var: vars)
+	for (const auto& var : vars)
 		remove_symbol(qPrintable(var));
 
 	return !(parse_errors() > 0);
@@ -1401,14 +1441,13 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
 #else
-	const QRegularExpression re("\\A(?:" +  QStringLiteral("[0-9]*") + ")\\z");
+	const QRegularExpression re("\\A(?:" + QStringLiteral("[0-9]*") + ")\\z");
 #endif
-	for (const QString& string: strings) {
-		QDEBUG(string << ':' << constants().indexOf(string) << ' ' << functions().indexOf(string) << ' '
-			       << vars.indexOf(string) << ' ' << re.match(string).hasMatch());
+	for (const QString& string : strings) {
+		QDEBUG(string << ':' << constants().indexOf(string) << ' ' << functions().indexOf(string) << ' ' << vars.indexOf(string) << ' '
+					  << re.match(string).hasMatch());
 		// check if token is not a known constant/function/variable or number
-		if (constants().indexOf(string) == -1 && functions().indexOf(string) == -1
-		    && vars.indexOf(string) == -1 && re.match(string).hasMatch() == false)
+		if (constants().indexOf(string) == -1 && functions().indexOf(string) == -1 && vars.indexOf(string) == -1 && re.match(string).hasMatch() == false)
 			parameters << string;
 	}
 	parameters.removeDuplicates();
@@ -1420,10 +1459,15 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 /*
  * Evaluate cartesian expression returning true on success and false if parsing fails
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-		int count, QVector<double>* xVector, QVector<double>* yVector,
-		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG(Q_FUNC_INFO << ", v1: range = " << min.toStdString() << " .. " << max.toStdString())
+bool ExpressionParser::evaluateCartesian(const QString& expr,
+										 const QString& min,
+										 const QString& max,
+										 int count,
+										 QVector<double>* xVector,
+										 QVector<double>* yVector,
+										 const QStringList& paramNames,
+										 const QVector<double>& paramValues) {
+	DEBUG(Q_FUNC_INFO << ", v1: range = " << STDSTRING(min) << " .. " << STDSTRING(max))
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
@@ -1435,12 +1479,17 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		const double x{ range.start() + step * i };
+		const double x{range.start() + step * i};
 		assign_symbol("x", x);
 
-		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
 
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;
@@ -1449,8 +1498,12 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	return true;
 }
 
-bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-		int count, QVector<double>* xVector, QVector<double>* yVector) {
+bool ExpressionParser::evaluateCartesian(const QString& expr,
+										 const QString& min,
+										 const QString& max,
+										 int count,
+										 QVector<double>* xVector,
+										 QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v2")
 	gsl_set_error_handler_off();
 
@@ -1459,12 +1512,19 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		const double x{ range.start() + step * i };
+		const double x{range.start() + step * i};
 		assign_symbol("x", x);
 
-		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) { // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
+			// DEBUG(Q_FUNC_INFO << ", WARNING: PARSER failed, trying default locale: y = " << y)
+		}
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
 
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;
@@ -1480,10 +1540,14 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
 
 		(*yVector)[i] = y;
 	}
@@ -1491,8 +1555,11 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	return true;
 }
 
-bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
-		const QStringList& paramNames, const QVector<double>& paramValues) {
+bool ExpressionParser::evaluateCartesian(const QString& expr,
+										 QVector<double>* xVector,
+										 QVector<double>* yVector,
+										 const QStringList& paramNames,
+										 const QVector<double>& paramValues) {
 	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
@@ -1503,9 +1570,14 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
 
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
 
 		(*yVector)[i] = y;
 	}
@@ -1523,7 +1595,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	Q_ASSERT(vars.size() == xVectors.size());
 	gsl_set_error_handler_off();
 
-	//determine the minimal size of involved vectors
+	// determine the minimal size of involved vectors
 	int minSize{std::numeric_limits<int>::max()};
 	for (auto* xVector : xVectors) {
 		if (xVector->size() < minSize)
@@ -1538,22 +1610,31 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		for (int n = 0; n < vars.size(); ++n)
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated to NAN")
 
 		(*yVector)[i] = y;
 	}
 
-	//if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
+	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	for (int i = minSize; i < yVector->size(); ++i)
 		(*yVector)[i] = std::numeric_limits<double>::quiet_NaN();
 
 	return true;
 }
 
-bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, const QString& max,
-		int count, QVector<double>* xVector, QVector<double>* yVector) {
+bool ExpressionParser::evaluatePolar(const QString& expr,
+									 const QString& min,
+									 const QString& max,
+									 int count,
+									 QVector<double>* xVector,
+									 QVector<double>* yVector) {
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
@@ -1564,19 +1645,29 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 		const double phi = range.start() + step * i;
 		assign_symbol("phi", phi);
 
-		const double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			r = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
-		(*xVector)[i] = r*cos(phi);
-		(*yVector)[i] = r*sin(phi);
+		if (std::isnan(r))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << phi << " is NAN")
+
+		(*xVector)[i] = r * cos(phi);
+		(*yVector)[i] = r * sin(phi);
 	}
 
 	return true;
 }
 
-bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& yexpr, const QString& min, const QString& max,
-		int count, QVector<double>* xVector, QVector<double>* yVector) {
+bool ExpressionParser::evaluateParametric(const QString& xexpr,
+										  const QString& yexpr,
+										  const QString& min,
+										  const QString& max,
+										  int count,
+										  QVector<double>* xVector,
+										  QVector<double>* yVector) {
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
@@ -1586,13 +1677,22 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& y
 	for (int i = 0; i < count; i++) {
 		assign_symbol("t", range.start() + step * i);
 
-		const double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			x = parse(qPrintable(xexpr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
-		const double y = parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0) // try default locale if failing
+			y = parse(qPrintable(yexpr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(x))
+			WARN(Q_FUNC_INFO << ", WARNING: X expression " << STDSTRING(xexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: Y expression " << STDSTRING(yexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
 
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;

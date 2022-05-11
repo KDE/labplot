@@ -1,22 +1,23 @@
 /*
-    File                 : ColumnPrivate.h
-    Project              : LabPlot
-    Description          : Private data class of Column
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ColumnPrivate.h
+	Project              : LabPlot
+	Description          : Private data class of Column
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H
 
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
 class Column;
+class ColumnSetGlobalFormulaCmd;
 
 class ColumnPrivate : public QObject {
 	Q_OBJECT
@@ -25,6 +26,7 @@ public:
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
+	void init();
 
 	AbstractColumn::ColumnMode columnMode() const;
 	void setColumnMode(AbstractColumn::ColumnMode);
@@ -35,7 +37,7 @@ public:
 	bool copy(const ColumnPrivate*, int source_start, int dest_start, int num_rows);
 
 	int rowCount() const;
-	int availableRowCount() const;
+	int availableRowCount(int max = -1) const; // valid rows (stops when max rows found)
 	void resizeTo(int);
 
 	void insertRows(int before, int count);
@@ -56,35 +58,34 @@ public:
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
 
-	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter *in, AbstractSimpleFilter *out);
+	void replaceModeData(AbstractColumn::ColumnMode, void* data, AbstractSimpleFilter* in, AbstractSimpleFilter* out);
 	void replaceData(void*);
 
 	IntervalAttribute<QString> formulaAttribute() const;
 	void replaceFormulas(const IntervalAttribute<QString>& formulas);
 
-	//global formula defined for the whole column
+	// global formula defined for the whole column
 	QString formula() const;
-	const QStringList& formulaVariableNames() const;
-	const QVector<Column*>& formulaVariableColumns() const;
-	const QStringList& formulaVariableColumnPaths() const;
-	void setformulVariableColumnsPath(int index, const QString& path);
-	void setformulVariableColumn(int index, Column *column);
+	const QVector<Column::FormulaData>& formulaData() const;
+	void setFormulVariableColumnsPath(int index, const QString& path);
+	void setFormulVariableColumn(int index, Column* column);
+	void setFormulVariableColumn(Column*);
 	bool formulaAutoUpdate() const;
-	void setFormula(const QString& formula, const QStringList& variableNames,
-					const QVector<Column*>& variableColumns, bool autoUpdate);
-	void setFormula(const QString& formula, const QStringList& variableNames,
-					const QStringList& variableColumnPaths, bool autoUpdate);
+	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
+	void setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate);
 	void updateFormula();
 
-	//cell formulas
+	// cell formulas
 	QString formula(int row) const;
-	QVector< Interval<int> > formulaIntervals() const;
+	QVector<Interval<int>> formulaIntervals() const;
 	void setFormula(const Interval<int>& i, const QString& formula);
 	void setFormula(int row, const QString& formula);
 	void clearFormulas();
 
 	QString textAt(int row) const;
+	void setValueAt(int row, QString new_value);
 	void setTextAt(int row, const QString&);
+	void replaceValues(int first, const QVector<QString>&);
 	void replaceTexts(int first, const QVector<QString>&);
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
@@ -94,7 +95,9 @@ public:
 	QTime timeAt(int row) const;
 	void setTimeAt(int row, QTime);
 	QDateTime dateTimeAt(int row) const;
+	void setValueAt(int row, QDateTime new_value);
 	void setDateTimeAt(int row, const QDateTime&);
+	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
 	void addValueLabel(const QDateTime&, const QString&);
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
@@ -106,13 +109,17 @@ public:
 	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int row) const;
+	void setValueAt(int row, int new_value);
 	void setIntegerAt(int row, int new_value);
+	void replaceValues(int first, const QVector<int>&);
 	void replaceInteger(int first, const QVector<int>&);
 	void addValueLabel(int, const QString&);
 	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int row) const;
+	void setValueAt(int row, qint64 new_value);
 	void setBigIntAt(int row, qint64 new_value);
+	void replaceValues(int first, const QVector<qint64>&);
 	void replaceBigInt(int first, const QVector<qint64>&);
 	void addValueLabel(qint64, const QString&);
 	const QMap<qint64, QString>& bigIntValueLabels();
@@ -121,41 +128,54 @@ public:
 	void invalidate();
 	void finalizeLoad();
 
-	mutable AbstractColumn::ColumnStatistics statistics;
-	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
+	struct CachedValuesAvailable {
+		void setUnavailable() {
+			statistics = false;
+			min = false;
+			max = false;
+			hasValues = false;
+			properties = false;
+		}
+		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
+		// are minMax already calculated or needs to be (re-)calculated?
+		// It is separated from statistics, because these are important values
+		// which are quite often needed, but if the curve is monoton a faster algorithm is
+		// used to recalculate the values
+		bool min{false};
+		bool max{false};
+		bool hasValues{false}; // is 'hasValues' already available or needs to be (re-)calculated?
+		bool properties{false}; // is 'properties' already available (true) or needs to be (re-)calculated (false)?
+	};
 
+	CachedValuesAvailable available;
+	AbstractColumn::ColumnStatistics statistics;
 	bool hasValues{false};
-	bool hasValuesAvailable{false}; //is 'hasValues' already available or needs to be (re-)calculated?
-
-	mutable bool propertiesAvailable{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
-	mutable AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
+	AbstractColumn::Properties properties{
+		AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 private:
-	//TODO: rename to m_columnMode
-	AbstractColumn::ColumnMode m_column_mode;	// type of column data
-	void* m_data{nullptr};	//pointer to the data container (QVector<T>)
-	void* m_labels{nullptr};	//pointer to the container for the value labels(QMap<T, QString>)
-	// TODO: rename to m_InputFilter, m_OutputFilter
-	AbstractSimpleFilter* m_input_filter{nullptr};	//input filter for string -> data type conversion
-	AbstractSimpleFilter* m_output_filter{nullptr};	//output filter for data type -> string conversion
+	AbstractColumn::ColumnMode m_columnMode; // type of column data
+	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
+	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
+	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
+	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
 	QString m_formula;
-	QStringList m_formulaVariableNames;
-	QVector<Column*> m_formulaVariableColumns;
-	QStringList m_formulaVariableColumnPaths;
+	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
-	//TODO: rename to m_plotDesignation
-	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::PlotDesignation::NoDesignation};
-	int m_width{0}; //column width in the view
+	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
+	int m_width{0}; // column width in the view
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 	void initLabels();
 	void connectFormulaColumn(const AbstractColumn* column);
 
-private slots:
+private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);
+
+	friend ColumnSetGlobalFormulaCmd;
 };
 
 #endif

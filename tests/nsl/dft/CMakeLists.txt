@@ -1,7 +1,5 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (nsldfttest NSLDFTTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLDFTTest NSLDFTTest.cpp)
 
-target_link_libraries(nsldfttest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES} ${FFTW3_LIBRARIES})
-target_link_libraries(nsldfttest labplot2lib)
+target_link_libraries(NSLDFTTest labplot2lib Qt5::Test labplot2test)
 
-add_test(NAME nsldfttest COMMAND nsldfttest)
+add_test(NAME NSLDFTTest COMMAND NSLDFTTest)

@@ -1,18 +1,17 @@
 /*
-    File                 : ImportProjectDialog.h
-    Project              : LabPlot
-    Description          : import project dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportProjectDialog.h
+	Project              : LabPlot
+	Description          : import project dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTPROJECTDIALOG_H
 #define IMPORTPROJECTDIALOG_H
 
-#include <QDialog>
 #include "ui_importprojectwidget.h"
+#include <QDialog>
 
 class AbstractAspect;
 class AspectTreeModel;
@@ -28,7 +27,7 @@ class ImportProjectDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum class ProjectType {LabPlot, Origin};
+	enum class ProjectType { LabPlot, Origin };
 
 	explicit ImportProjectDialog(MainWin*, ProjectType);
 	~ImportProjectDialog() override;
@@ -50,7 +49,7 @@ private:
 	void showTopLevelOnly(const QModelIndex&);
 	bool isTopLevel(const AbstractAspect*) const;
 
-private slots:
+private Q_SLOTS:
 	void fileNameChanged(const QString&);
 	void refreshPreview();
 	void selectionChanged(const QItemSelection&, const QItemSelection&);
@@ -58,4 +57,4 @@ private slots:
 	void newFolder();
 };
 
-#endif //IMPORTPROJECTDIALOG_H
+#endif // IMPORTPROJECTDIALOG_H

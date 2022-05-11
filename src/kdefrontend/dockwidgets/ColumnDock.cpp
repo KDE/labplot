@@ -1,22 +1,22 @@
 /*
-    File                 : ColumnDock.cpp
-    Project              : LabPlot
-    Description          : widget for column properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : ColumnDock.cpp
+	Project              : LabPlot
+	Description          : widget for column properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ColumnDock.h"
 
 #include "backend/core/AbstractFilter.h"
-#include "backend/core/datatypes/SimpleCopyThroughFilter.h"
-#include "backend/core/datatypes/Double2StringFilter.h"
-#include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
+#include "backend/core/datatypes/String2DoubleFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/spreadsheet/AddValueLabelDialog.h"
 #include "kdefrontend/spreadsheet/BatchEditValueLabelsDialog.h"
@@ -30,20 +30,21 @@
   \ingroup kdefrontend
 */
 
-ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
+ColumnDock::ColumnDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
 
-	//add formats for numeric values
+	// add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbNumericFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
 	ui.cbNumericFormat->addItem(i18n("Scientific (E)"), QVariant('E'));
 	ui.cbNumericFormat->addItem(i18n("Automatic (e)"), QVariant('g'));
 	ui.cbNumericFormat->addItem(i18n("Automatic (E)"), QVariant('G'));
 
-	//add format for date, time and datetime values
+	// add format for date, time and datetime values
 	for (const auto& s : AbstractColumn::dateTimeFormats())
 		ui.cbDateTimeFormat->addItem(s, QVariant(s));
 
@@ -72,10 +73,10 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_column = list.first();
 	m_aspect = list.first();
 
-	//check whether we have non-editable columns:
-	//1. columns in a LiveDataSource
-	//2. columns in the spreadsheet of a datapicker curve
-	//3. columns for residuals calculated in XYFitCurve)
+	// check whether we have non-editable columns:
+	// 1. columns in a LiveDataSource
+	// 2. columns in the spreadsheet of a datapicker curve
+	// 3. columns for residuals calculated in XYFitCurve)
 	bool nonEditable = false;
 	for (auto* col : m_columnsList) {
 		auto* s = dynamic_cast<Spreadsheet*>(col->parentAspect());
@@ -90,11 +91,11 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		}
 	}
 
-	//if columns of different modes are selected, change of the mode is not possible
+	// if columns of different modes are selected, change of the mode is not possible
 	bool sameMode = true;
 
 	if (list.size() == 1) {
-		//names and comments of non-editable columns in a file data source can be changed.
+		// names and comments of non-editable columns in a file data source can be changed.
 		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
 			ui.teComment->setEnabled(false);
@@ -136,11 +137,11 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
-	//show the properties of the first column
+	// show the properties of the first column
 	updateTypeWidgets(m_column->columnMode());
-	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
+	ui.cbPlotDesignation->setCurrentIndex(int(m_column->plotDesignation()));
 
-	//show value labels of the first column if all selected columns have the same mode
+	// show value labels of the first column if all selected columns have the same mode
 	if (sameMode)
 		showValueLabels();
 	else {
@@ -155,7 +156,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
 	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
 
-	//don't allow to change the column type at least one non-editable column
+	// don't allow to change the column type at least one non-editable column
 	if (sameMode)
 		ui.cbType->setEnabled(!nonEditable);
 
@@ -171,28 +172,28 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(mode)));
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric: {
-			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-			ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
-			ui.sbPrecision->setValue(filter->numDigits());
-			break;
-		}
+	case AbstractColumn::ColumnMode::Double: {
+		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
+		ui.sbPrecision->setValue(filter->numDigits());
+		break;
+	}
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime: {
-			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
-			ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
-			break;
-		}
-	case AbstractColumn::ColumnMode::Integer:	// nothing to set
+		auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+		// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
+		ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: // nothing to set
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Text:
 		break;
 	}
 
-	//hide all the format related widgets first and
-	//then show only what is required depending of the column mode(s)
+	// hide all the format related widgets first and
+	// then show only what is required depending of the column mode(s)
 	ui.lNumericFormat->hide();
 	ui.cbNumericFormat->hide();
 	ui.lPrecision->hide();
@@ -200,13 +201,9 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	ui.lDateTimeFormat->hide();
 	ui.cbDateTimeFormat->hide();
 
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
+	if (mode == AbstractColumn::ColumnMode::Double) {
 		ui.lNumericFormat->show();
 		ui.cbNumericFormat->show();
-	}
-
-	//precision is only available for Numeric
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lPrecision->show();
 		ui.sbPrecision->show();
 	}
@@ -226,7 +223,7 @@ void ColumnDock::showValueLabels() {
 		int i = 0;
 
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto labels = m_column->valueLabels();
 			ui.twLabels->setRowCount(labels.size());
 			auto it = labels.constBegin();
@@ -300,25 +297,26 @@ void ColumnDock::retranslateUi() {
 	const Lock lock(m_initializing);
 
 	ui.cbType->clear();
-	ui.cbType->addItem(i18n("Numeric"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Numeric)));
-	ui.cbType->addItem(i18n("Integer"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
-	ui.cbType->addItem(i18n("Big Integer"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
-	ui.cbType->addItem(i18n("Text"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
-	ui.cbType->addItem(i18n("Month Names"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
-	ui.cbType->addItem(i18n("Day Names"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
-	ui.cbType->addItem(i18n("Date and Time"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
+	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime),
+					   QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
 	ui.cbPlotDesignation->clear();
-	ui.cbPlotDesignation->addItem(i18n("None"));
-	ui.cbPlotDesignation->addItem(i18n("X"));
-	ui.cbPlotDesignation->addItem(i18n("Y"));
-	ui.cbPlotDesignation->addItem(i18n("Z"));
-	ui.cbPlotDesignation->addItem(i18n("X-error"));
-	ui.cbPlotDesignation->addItem(i18n("X-error -"));
-	ui.cbPlotDesignation->addItem(i18n("X-error +"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error -"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error +"));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::X, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Y, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Z, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XError, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorPlus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YError, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorPlus, false));
 
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
@@ -337,18 +335,18 @@ void ColumnDock::typeChanged(int index) {
 	const auto& columns = m_columnsList;
 
 	switch (columnMode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 		int digits = ui.sbPrecision->value();
 		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 
-			//TODO: using
-			//char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
-			//outside of the for-loop and
-			//filter->setNumericFormat(format);
-			//inside the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
+			// TODO: using
+			// char format = ui.cbFormat->itemData(ui.cbFormat->currentIndex()).toChar().toLatin1();
+			// outside of the for-loop and
+			// filter->setNumericFormat(format);
+			// inside the loop leads to wrong results when converting from integer to numeric -> 'f' is set instead of 'e'
 			filter->setNumericFormat(ui.cbNumericFormat->itemData(ui.cbNumericFormat->currentIndex()).toChar().toLatin1());
 			filter->setNumDigits(digits);
 			col->endMacro();
@@ -425,18 +423,16 @@ void ColumnDock::plotDesignationChanged(int index) {
 		return;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
-	for (auto* col :qAsConst(m_columnsList))
+	for (auto* col : qAsConst(m_columnsList))
 		col->setPlotDesignation(pd);
 }
 
-//value labels
+// value labels
 void ColumnDock::addLabel() {
 	auto mode = m_column->columnMode();
 	auto* dlg = new AddValueLabelDialog(this, mode);
 
-	if (mode == AbstractColumn::ColumnMode::Month
-		|| mode == AbstractColumn::ColumnMode::Day
-		|| mode == AbstractColumn::ColumnMode::DateTime)
+	if (mode == AbstractColumn::ColumnMode::Month || mode == AbstractColumn::ColumnMode::Day || mode == AbstractColumn::ColumnMode::DateTime)
 		dlg->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 
 	if (dlg->exec() == QDialog::Accepted) {
@@ -444,7 +440,7 @@ void ColumnDock::addLabel() {
 		const auto& columns = m_columnsList;
 		QString valueStr;
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			double value = dlg->value();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
@@ -486,7 +482,6 @@ void ColumnDock::addLabel() {
 		ui.twLabels->insertRow(count);
 		ui.twLabels->setItem(count, 0, new QTableWidgetItem(valueStr));
 		ui.twLabels->setItem(count, 1, new QTableWidgetItem(label));
-
 	}
 	delete dlg;
 }
@@ -508,7 +503,7 @@ void ColumnDock::batchEditLabels() {
 	auto* dlg = new BatchEditValueLabelsDialog(this);
 	dlg->setColumns(m_columnsList);
 	if (dlg->exec() == QDialog::Accepted)
-		showValueLabels(); //new value labels were saved in the dialog, show them here
+		showValueLabels(); // new value labels were saved in the dialog, show them here
 
 	delete dlg;
 }
@@ -528,7 +523,7 @@ void ColumnDock::columnFormatChanged() {
 	const Lock lock(m_initializing);
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
 		break;

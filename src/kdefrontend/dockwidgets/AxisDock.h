@@ -1,18 +1,18 @@
 /*
-    File                 : AxisDock.h
-    Project              : LabPlot
-    Description          : axes widget class
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	File                 : AxisDock.h
+	Project              : LabPlot
+	Description          : axes widget class
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef AXISDOCK_H
 #define AXISDOCK_H
 
-#include "ui_axisdock.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_axisdock.h"
 
 class AbstractAspect;
 class LabelWidget;
@@ -47,7 +47,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -55,13 +55,13 @@ private:
 	void setOffset(double);
 
 	// own created widgets
-	DateTimeSpinBox* dtsbMajorTicksIncrement {nullptr};
-	DateTimeSpinBox* dtsbMinorTicksIncrement {nullptr};
+	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
+	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void init();
 
-	//SLOTs for changes triggered in AxisDock
+	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void visibilityChanged(bool);
 	void orientationChanged(int);
@@ -75,15 +75,15 @@ private slots:
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
-	void showScaleOffsetChanged();
+	void scalingFactorChanged();
+	void showScaleOffsetChanged(bool);
 	void setLeftOffset();
 	void setCenterOffset();
 	void setRightOffset();
-	void scalingFactorChanged();
 	void setUnityScale();
 	void setUnityRange();
 
-	//Line-Tab
+	// Line-Tab
 	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
@@ -98,6 +98,11 @@ private slots:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
+	void majorTickStartOffsetChanged();
+	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
+	void setTickOffsetAuto() {
+		setTickOffsetData(true);
+	}
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
 	void majorTicksWidthChanged(double);
@@ -121,7 +126,7 @@ private slots:
 	//"Tick labels"-tab
 	void labelsFormatChanged(int);
 	void labelsPrecisionChanged(int);
-	void labelsAutoPrecisionChanged(int);
+	void labelsAutoPrecisionChanged(bool);
 	void labelsDateTimeFormatChanged();
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
@@ -147,8 +152,8 @@ private slots:
 	void minorGridWidthChanged(double);
 	void minorGridOpacityChanged(int);
 
-	//SLOTs for changes triggered in Axis
-	//General-Tab
+	// SLOTs for changes triggered in Axis
+	// General-Tab
 	void axisOrientationChanged(Axis::Orientation);
 	void axisPositionChanged(Axis::Position);
 	void axisPositionChanged(double);
@@ -157,22 +162,23 @@ private slots:
 	void axisRangeTypeChanged(Axis::RangeType);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
+	void axisScalingFactorChanged(qreal);
 	void axisZeroOffsetChanged(qreal);
 	void axisShowScaleOffsetChanged(bool);
-	void axisScalingFactorChanged(qreal);
 
-	//line
+	// line
 	void axisLinePenChanged(const QPen&);
 	void axisLineOpacityChanged(qreal);
 	void axisArrowTypeChanged(Axis::ArrowType);
 	void axisArrowPositionChanged(Axis::ArrowPosition);
 	void axisArrowSizeChanged(qreal);
 
-	//ticks
+	// ticks
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksSpacingChanged(qreal);
+	void axisMajorTickStartOffsetChanged(qreal);
 	void axisMajorTicksColumnChanged(const AbstractColumn*);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
@@ -186,7 +192,7 @@ private slots:
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);
 
-	//labels
+	// labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);
 	void axisLabelsAutoPrecisionChanged(bool);
 	void axisLabelsPrecisionChanged(int);
@@ -204,7 +210,7 @@ private slots:
 	void axisLabelsSuffixChanged(const QString&);
 	void axisLabelsOpacityChanged(qreal);
 
-	//grids
+	// grids
 	void axisMajorGridPenChanged(const QPen&);
 	void axisMajorGridOpacityChanged(qreal);
 	void axisMinorGridPenChanged(const QPen&);
@@ -212,11 +218,11 @@ private slots:
 
 	void axisVisibilityChanged(bool);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

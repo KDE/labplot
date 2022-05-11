@@ -1,33 +1,33 @@
 /*
-    File                 : GuiObserver.cpp
-    Project              : LabPlot
-    Description 	     : GUI observer
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
+	File                 : GuiObserver.cpp
+	Project              : LabPlot
+	Description 	     : GUI observer
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "kdefrontend/GuiObserver.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/AspectTreeModel.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
@@ -38,53 +38,53 @@
 #endif
 #include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datapicker/DatapickerImage.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AspectDock.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
-#include "kdefrontend/dockwidgets/InfoElementDock.h"
-#include "kdefrontend/dockwidgets/NoteDock.h"
-#include "kdefrontend/dockwidgets/CursorDock.h"
+#include "kdefrontend/dockwidgets/BoxPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
 #include "kdefrontend/dockwidgets/ColumnDock.h"
+#include "kdefrontend/dockwidgets/CursorDock.h"
+#include "kdefrontend/dockwidgets/CustomPointDock.h"
+#include "kdefrontend/dockwidgets/HistogramDock.h"
 #include "kdefrontend/dockwidgets/ImageDock.h"
+#include "kdefrontend/dockwidgets/InfoElementDock.h"
 #include "kdefrontend/dockwidgets/LiveDataDock.h"
 #include "kdefrontend/dockwidgets/MatrixDock.h"
+#include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
+#include "kdefrontend/dockwidgets/WorksheetDock.h"
+#include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
+#include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "kdefrontend/dockwidgets/HistogramDock.h"
-#include "kdefrontend/dockwidgets/BoxPlotDock.h"
-#include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
-#include "kdefrontend/dockwidgets/XYIntegrationCurveDock.h"
-#include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
-#include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
+#include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
 #include "kdefrontend/dockwidgets/XYHilbertTransformCurveDock.h"
-#include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
-#include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
-#include "kdefrontend/dockwidgets/CustomPointDock.h"
-#include "kdefrontend/dockwidgets/ReferenceLineDock.h"
-#include "kdefrontend/dockwidgets/WorksheetDock.h"
+#include "kdefrontend/dockwidgets/XYIntegrationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYInterpolationCurveDock.h"
+#include "kdefrontend/dockwidgets/XYSmoothCurveDock.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "kdefrontend/dockwidgets/CantorWorksheetDock.h"
 #endif
-#include "kdefrontend/widgets/LabelWidget.h"
-#include "kdefrontend/widgets/DatapickerImageWidget.h"
 #include "kdefrontend/widgets/DatapickerCurveWidget.h"
+#include "kdefrontend/widgets/DatapickerImageWidget.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 
+#include <KI18n/KLocalizedString>
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QToolBar>
-#include <KI18n/KLocalizedString>
 
 /*!
   \class GuiObserver
@@ -126,14 +126,18 @@ bool raiseDock(T*& dock, QStackedWidget* parent) {
 template<class T>
 void raiseDockConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent) {
 	if (raiseDock(dock, parent))
-		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
+		QObject::connect(dock, &T::info, [=](const QString& text) {
+			statusBar->showMessage(text);
+		});
 }
 
 template<class T>
 void raiseDockSetupConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent) {
 	if (raiseDock(dock, parent)) {
 		dock->setupGeneral();
-		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
+		QObject::connect(dock, &T::info, [=](const QString& text) {
+			statusBar->showMessage(text);
+		});
 	}
 }
 
@@ -161,6 +165,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) const {
+	DEBUG(Q_FUNC_INFO)
 	auto clearDock = [&]() {
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
@@ -168,23 +173,23 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 	};
 
-	if (selectedAspects.isEmpty()) {
+	if (selectedAspects.isEmpty() || selectedAspects.front() == nullptr) {
 		clearDock();
 		return;
 	}
 
-	const AspectType type{ selectedAspects.front()->type() };
-	DEBUG(Q_FUNC_INFO << ", type: " << AbstractAspect::typeName(type).toStdString())
+	const AspectType type{selectedAspects.front()->type()};
+	DEBUG(Q_FUNC_INFO << ", type: " << STDSTRING(AbstractAspect::typeName(type)))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
 		if (type == AspectType::Worksheet) {
-			Worksheet* worksheet = static_cast<Worksheet*>(selectedAspects.front());
+			auto* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		} else {
 			auto* parent = selectedAspects.front()->parent(AspectType::Worksheet);
 			if (parent) {
-				Worksheet* worksheet = static_cast<Worksheet*>(parent);
+				auto* worksheet = static_cast<Worksheet*>(parent);
 				m_mainWindow->cursorWidget->setWorksheet(worksheet);
 			}
 		}
@@ -209,7 +214,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 #ifdef HAVE_CANTOR_LIBS
 		auto* casParent = dynamic_cast<CantorWorksheet*>(selectedAspects.first()->parentAspect());
 		if (casParent) {
-			//a column from a CAS-worksheets was selected, show the dock widget for the CAS worksheet
+			// a column from a CAS-worksheets was selected, show the dock widget for the CAS worksheet
 			raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", casParent->backendName()));
 			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(QList<CantorWorksheet*>{casParent});
@@ -237,12 +242,14 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDockConnect(m_mainWindow->worksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->worksheetDock->setWorksheets(castList<Worksheet>(selectedAspects));
 		break;
-	} case AspectType::CartesianPlot: {
+	}
+	case AspectType::CartesianPlot: {
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
 		raiseDockConnect(m_mainWindow->cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
 		break;
-	} case AspectType::CartesianPlotLegend:
+	}
+	case AspectType::CartesianPlotLegend:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Legend"));
 		raiseDockConnect(m_mainWindow->cartesianPlotLegendDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotLegendDock->setLegends(castList<CartesianPlotLegend>(selectedAspects));
@@ -268,8 +275,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		if (!m_mainWindow->xyDataReductionCurveDock) {
 			m_mainWindow->xyDataReductionCurveDock = new XYDataReductionCurveDock(m_mainWindow->stackedWidget, m_mainWindow->statusBar());
 			m_mainWindow->xyDataReductionCurveDock->setupGeneral();
-			connect(m_mainWindow->xyDataReductionCurveDock, &XYDataReductionCurveDock::info,
-			        [&](const QString& text){ m_mainWindow->statusBar()->showMessage(text); });
+			connect(m_mainWindow->xyDataReductionCurveDock, &XYDataReductionCurveDock::info, [&](const QString& text) {
+				m_mainWindow->statusBar()->showMessage(text);
+			});
 			m_mainWindow->stackedWidget->addWidget(m_mainWindow->xyDataReductionCurveDock);
 		}
 
@@ -363,7 +371,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->datapickerCurveDock->setCurves(castList<DatapickerCurve>(selectedAspects));
 		break;
 	case AspectType::Datapicker:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Extractor"));
 		raiseDock(m_mainWindow->datapickerImageDock, m_mainWindow->stackedWidget);
 		{
 			QList<DatapickerImage*> list;
@@ -383,9 +391,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		{
 			auto list = castList<CantorWorksheet>(selectedAspects);
 			if (list.size() == 1)
-				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", list.first()->backendName()));
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
-				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notebook"));
 			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 		}
 #endif
@@ -396,11 +404,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->notesDock->setNotesList(castList<Note>(selectedAspects));
 		break;
 	case AspectType::InfoElement: {
-			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));
-			raiseDock(m_mainWindow->infoElementDock, m_mainWindow->stackedWidget);
-			m_mainWindow->infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects));
-			break;
-		}
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));
+		raiseDock(m_mainWindow->infoElementDock, m_mainWindow->stackedWidget);
+		m_mainWindow->infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects));
+		break;
+	}
 	case AspectType::MQTTClient:
 #ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));
@@ -469,7 +477,7 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) const {
 	if (!parent)
 		return;
 
-	switch (static_cast<quint64>(parent->type())) {  // cast the enum to turn off warnings about unhandled cases
+	switch (static_cast<quint64>(parent->type())) { // cast the enum to turn off warnings about unhandled cases
 	case static_cast<quint64>(AspectType::Axis):
 		if (!m_mainWindow->axisDock) {
 			m_mainWindow->axisDock = new AxisDock(m_mainWindow->stackedWidget);

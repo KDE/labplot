@@ -1,10 +1,10 @@
 /*
-    File                 : MatrixFunctionDialog.h
-    Project              : LabPlot
-    Description          : Dialog for generating matrix values from a mathematical function
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatrixFunctionDialog.h
+	Project              : LabPlot
+	Description          : Dialog for generating matrix values from a mathematical function
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MATRIXFUNCTIONDIALOG_H
@@ -28,7 +28,7 @@ private:
 	Matrix* m_matrix;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();
 	void checkValues();
 	void showConstants();

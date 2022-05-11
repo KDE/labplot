@@ -1,12 +1,11 @@
 /*
-    File                 : XYCorrelationCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a correlation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYCorrelationCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a correlation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYCorrelationCurve
@@ -18,13 +17,13 @@
 #include "XYCorrelationCurve.h"
 #include "XYCorrelationCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
-#include <QIcon>
 #include <QElapsedTimer>
+#include <QIcon>
 #include <QThreadPool>
 
 extern "C" {
@@ -39,8 +38,8 @@ XYCorrelationCurve::XYCorrelationCurve(const QString& name, XYCorrelationCurvePr
 	: XYAnalysisCurve(name, dd, AspectType::XYCorrelationCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYCorrelationCurve::~XYCorrelationCurve() = default;
 
 void XYCorrelationCurve::recalculate() {
@@ -52,7 +51,7 @@ void XYCorrelationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCorrelationCurve::icon() const {
-// 	return QIcon::fromTheme("labplot-xy-correlation-curve"); //not available yet
+	// 	return QIcon::fromTheme("labplot-xy-correlation-curve"); //not available yet
 	return QIcon::fromTheme("labplot-xy-curve");
 }
 
@@ -69,7 +68,7 @@ const XYCorrelationCurve::CorrelationResult& XYCorrelationCurve::correlationResu
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYCorrelationCurve, SetCorrelationData, XYCorrelationCurve::CorrelationData, correlationData, recalculate);
+STD_SETTER_CMD_IMPL_F_S(XYCorrelationCurve, SetCorrelationData, XYCorrelationCurve::CorrelationData, correlationData, recalculate)
 void XYCorrelationCurve::setCorrelationData(const XYCorrelationCurve::CorrelationData& correlationData) {
 	Q_D(XYCorrelationCurve);
 	exec(new XYCorrelationCurveSetCorrelationDataCmd(d, correlationData, ki18n("%1: set options and perform the correlation")));
@@ -78,11 +77,13 @@ void XYCorrelationCurve::setCorrelationData(const XYCorrelationCurve::Correlatio
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
+XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
 void XYCorrelationCurvePrivate::recalculate() {
@@ -90,12 +91,12 @@ void XYCorrelationCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create correlation result columns if not available yet, clear them otherwise
+	// create correlation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -111,20 +112,20 @@ void XYCorrelationCurvePrivate::recalculate() {
 		yVector->clear();
 	}
 
-	//clear the previous result
+	// clear the previous result
 	correlationResult = XYCorrelationCurve::CorrelationResult();
 
-	//determine the data source columns
+	// determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
+		// spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 		tmpY2DataColumn = y2DataColumn;
 	} else {
-		//curve columns as data source (autocorrelation)
+		// curve columns as data source (autocorrelation)
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 		tmpY2DataColumn = dataSourceCurve->yColumn();
@@ -132,12 +133,12 @@ void XYCorrelationCurvePrivate::recalculate() {
 
 	if (tmpYDataColumn == nullptr || tmpY2DataColumn == nullptr) {
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
-	//copy all valid data point for the correlation to temporary vectors
+	// copy all valid data point for the correlation to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	QVector<double> y2dataVector;
@@ -151,18 +152,17 @@ void XYCorrelationCurvePrivate::recalculate() {
 		xmax = correlationData.xRange.last();
 	}
 
-	//only copy those data where values are valid and in range
-	if (tmpXDataColumn != nullptr) {	// x-axis present (with possible range)
+	// only copy those data where values are valid and in range
+	if (tmpXDataColumn != nullptr) { // x-axis present (with possible range)
 		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row)
-				&& tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
+			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row) && tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
 				if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
 				}
 			}
 		}
-	} else {	// no x-axis: take all valid values
+	} else { // no x-axis: take all valid values
 		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
 			if (tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row))
 				ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -174,14 +174,14 @@ void XYCorrelationCurvePrivate::recalculate() {
 				y2dataVector.append(tmpY2DataColumn->valueAt(row));
 	}
 
-	const size_t n = (size_t)ydataVector.size();	// number of points for signal
-	const size_t m = (size_t)y2dataVector.size();	// number of points for response
+	const size_t n = (size_t)ydataVector.size(); // number of points for signal
+	const size_t m = (size_t)y2dataVector.size(); // number of points for response
 	if (n < 1 || m < 1) {
 		correlationResult.available = true;
 		correlationResult.valid = false;
 		correlationResult.status = i18n("Not enough data points available.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -200,7 +200,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	DEBUG("type = " << nsl_corr_type_name[type]);
 	DEBUG("norm = " << nsl_corr_norm_name[norm]);
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	size_t np = GSL_MAX(n, m);
 	if (type == nsl_corr_type_linear)
 		np = 2 * np - 1;
@@ -214,14 +214,14 @@ void XYCorrelationCurvePrivate::recalculate() {
 	if (tmpXDataColumn != nullptr) {
 		int size = GSL_MIN(xdataVector.size(), (int)np);
 		memcpy(xVector->data(), xdata, size * sizeof(double));
-		double sampleInterval = (xVector->data()[size-1] - xVector->data()[0])/(xdataVector.size()-1);
+		double sampleInterval = (xVector->data()[size - 1] - xVector->data()[0]) / (xdataVector.size() - 1);
 		DEBUG("xdata size = " << xdataVector.size() << ", np = " << np << ", sample interval = " << sampleInterval);
-		for (int i = size; i < (int)np; i++)	// fill missing values
-			xVector->data()[i] = xVector->data()[size-1] + (i-size+1) * sampleInterval;
-	} else {	// fill with index (starting with 0)
+		for (int i = size; i < (int)np; i++) // fill missing values
+			xVector->data()[i] = xVector->data()[size - 1] + (i - size + 1) * sampleInterval;
+	} else { // fill with index (starting with 0)
 		if (type == nsl_corr_type_linear)
 			for (size_t i = 0; i < np; i++)
-				xVector->data()[i] = (int)(i-np/2) * samplingInterval;
+				xVector->data()[i] = (int)(i - np / 2) * samplingInterval;
 		else
 			for (size_t i = 0; i < np; i++)
 				xVector->data()[i] = (int)i * samplingInterval;
@@ -229,17 +229,17 @@ void XYCorrelationCurvePrivate::recalculate() {
 
 	memcpy(yVector->data(), out, np * sizeof(double));
 	free(out);
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	correlationResult.available = true;
 	correlationResult.valid = true;
 	correlationResult.status = QString::number(status);
 	correlationResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 
@@ -247,33 +247,33 @@ void XYCorrelationCurvePrivate::recalculate() {
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void XYCorrelationCurve::save(QXmlStreamWriter* writer) const{
+void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCorrelationCurve);
 
 	writer->writeStartElement("xyCorrelationCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-correlation-curve specific information
-	// correlation data
+	// write xy-correlation-curve specific information
+	//  correlation data
 	writer->writeStartElement("correlationData");
-	writer->writeAttribute( "samplingInterval", QString::number(d->correlationData.samplingInterval) );
-	writer->writeAttribute( "autoRange", QString::number(d->correlationData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->correlationData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->correlationData.xRange.last()) );
-	writer->writeAttribute( "type", QString::number(d->correlationData.type) );
-	writer->writeAttribute( "normalize", QString::number(d->correlationData.normalize) );
-	writer->writeEndElement();// correlationData
+	writer->writeAttribute("samplingInterval", QString::number(d->correlationData.samplingInterval));
+	writer->writeAttribute("autoRange", QString::number(d->correlationData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->correlationData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->correlationData.xRange.last()));
+	writer->writeAttribute("type", QString::number(d->correlationData.type));
+	writer->writeAttribute("normalize", QString::number(d->correlationData.normalize));
+	writer->writeEndElement(); // correlationData
 
 	// correlation results (generated columns)
 	writer->writeStartElement("correlationResult");
-	writer->writeAttribute( "available", QString::number(d->correlationResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->correlationResult.valid) );
-	writer->writeAttribute( "status", d->correlationResult.status );
-	writer->writeAttribute( "time", QString::number(d->correlationResult.elapsedTime) );
+	writer->writeAttribute("available", QString::number(d->correlationResult.available));
+	writer->writeAttribute("valid", QString::number(d->correlationResult.valid));
+	writer->writeAttribute("status", d->correlationResult.status);
+	writer->writeAttribute("time", QString::number(d->correlationResult.elapsedTime));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -301,7 +301,7 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "correlationData") {
 			attribs = reader->attributes();
@@ -318,7 +318,7 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", correlationResult.status);
 			READ_INT_VALUE("time", correlationResult.elapsedTime, int);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
@@ -343,11 +343,11 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
-		XYCurve::d_ptr->xColumn = d->xColumn;
-		XYCurve::d_ptr->yColumn = d->yColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
 	}

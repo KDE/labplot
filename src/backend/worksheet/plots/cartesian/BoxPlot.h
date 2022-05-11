@@ -1,18 +1,18 @@
 /*
-    File                 : BoxPlot.h
-    Project              : LabPlot
-    Description          : Box Plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BoxPlot.h
+	Project              : LabPlot
+	Description          : Box Plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef BOXPLOT_H
 #define BOXPLOT_H
 
-#include "backend/worksheet/plots/cartesian/Curve.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Curve.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;
@@ -27,13 +27,14 @@ class BoxPlot : public WorksheetElement, Curve {
 	Q_OBJECT
 
 public:
-	enum class Ordering {None, MedianAscending, MedianDescending, MeanAscending, MeanDescending};
-	enum class WhiskersType {MinMax, IQR, SD, SD_3, MAD, MAD_3, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99};
+	enum class Ordering { None, MedianAscending, MedianDescending, MeanAscending, MeanDescending };
+	enum class WhiskersType { MinMax, IQR, SD, MAD, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99 };
 
 	explicit BoxPlot(const QString&);
 	~BoxPlot() override;
 
 	QIcon icon() const override;
+	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
 
@@ -41,11 +42,11 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	//reimplemented from Curve
+	// reimplemented from Curve
 	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
-	//general
+	// general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
 	BASIC_D_ACCESSOR_DECL(BoxPlot::Ordering, ordering, Ordering)
@@ -54,7 +55,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
-	//box filling
+	// box filling
 	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
@@ -65,15 +66,15 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
 	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
 
-	//box border
+	// box border
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
-	//median line
+	// median line
 	CLASS_D_ACCESSOR_DECL(QPen, medianLinePen, MedianLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
 
-	//symbols
+	// symbols
 	Symbol* symbolMean() const;
 	Symbol* symbolMedian() const;
 	Symbol* symbolOutlier() const;
@@ -81,14 +82,14 @@ public:
 	Symbol* symbolData() const;
 	BASIC_D_ACCESSOR_DECL(bool, jitteringEnabled, JitteringEnabled)
 
-	//whiskers
+	// whiskers
 	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
+	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
+	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
+	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -101,7 +102,6 @@ public:
 	typedef BoxPlotPrivate Private;
 
 protected:
-	BoxPlotPrivate* const d_ptr;
 	BoxPlot(const QString& name, BoxPlotPrivate* dd);
 
 private:
@@ -115,28 +115,27 @@ private:
 	QAction* visibilityAction{nullptr};
 	QMenu* orientationMenu{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void recalc();
 
-private slots:
-	//SLOTs for changes triggered via QActions in the context menu
+private Q_SLOTS:
+	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void visibilityChangedSlot();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
-signals:
-	//General-Tab
+Q_SIGNALS:
+	// General-Tab
 	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
 	void widthFactorChanged(double);
-	void visibilityChanged(bool);
 	void notchesEnabledChanged(bool);
 
-	//box filling
+	// box filling
 	void fillingEnabledChanged(bool);
 	void fillingTypeChanged(WorksheetElement::BackgroundType);
 	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -147,22 +146,25 @@ signals:
 	void fillingFileNameChanged(QString&);
 	void fillingOpacityChanged(float);
 
-	//box border
+	// box border
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
 
-	//median line
+	// median line
 	void medianLinePenChanged(QPen&);
 	void medianLineOpacityChanged(float);
 
-	//symbols
+	// symbols
 	void jitteringEnabledChanged(bool);
 
-	//whiskers
+	// whiskers
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
+	void whiskersRangeParameterChanged(double);
 	void whiskersPenChanged(QPen&);
 	void whiskersOpacityChanged(float);
 	void whiskersCapSizeChanged(double);
+	void whiskersCapPenChanged(QPen&);
+	void whiskersCapOpacityChanged(float);
 };
 
 #endif

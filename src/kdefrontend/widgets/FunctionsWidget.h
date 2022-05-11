@@ -1,10 +1,10 @@
 /*
-    File                 : FunctionsWidget.h
-    Project              : LabPlot
-    Description          : widget for selecting functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FunctionsWidget.h
+	Project              : LabPlot
+	Description          : widget for selecting functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef FUNCTIONSWIDGET_H
@@ -16,7 +16,7 @@
 
 class ExpressionParser;
 
-class FunctionsWidget: public QWidget {
+class FunctionsWidget : public QWidget {
 	Q_OBJECT
 
 public:
@@ -26,14 +26,14 @@ private:
 	Ui::FunctionsWidget ui;
 	ExpressionParser* m_expressionParser;
 
-signals:
+Q_SIGNALS:
 	void functionSelected(const QString&);
 	void canceled();
 
-private slots:
+private Q_SLOTS:
 	void groupChanged(int);
 	void filterChanged(const QString&);
 	void insertClicked();
 };
 
-#endif //FUNCTIONSWIDGET_H
+#endif // FUNCTIONSWIDGET_H

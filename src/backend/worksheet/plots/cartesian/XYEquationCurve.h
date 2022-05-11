@@ -1,10 +1,10 @@
 /*
-    File                 : XYEquationCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a mathematical equation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYEquationCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a mathematical equation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYEQUATIONCURVE_H
@@ -23,10 +23,12 @@ class XYEquationCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum class EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
+	enum class EquationType { Cartesian, Polar, Parametric, Implicit, Neutral };
 
 	struct EquationData {
-		EquationData() : min("0"), max("1") {};
+		EquationData()
+			: min(QLatin1String("0"))
+			, max(QLatin1String("1")){};
 
 		EquationType type{EquationType::Cartesian};
 		QString expression1;
@@ -55,7 +57,7 @@ private:
 	Q_DECLARE_PRIVATE(XYEquationCurve)
 	void init();
 
-signals:
+Q_SIGNALS:
 	void equationDataChanged(const XYEquationCurve::EquationData&);
 };
 

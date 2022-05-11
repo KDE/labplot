@@ -1,17 +1,17 @@
 /*
-    File                 : RescaleDialog.h
-    Project              : LabPlot
-    Description          : Dialog to provide the rescale interval
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : RescaleDialog.h
+	Project              : LabPlot
+	Description          : Dialog to provide the rescale interval
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef RESCALEDIALOG_H
 #define RESCALEDIALOG_H
 
-#include <ui_rescalewidget.h>
 #include <QDialog>
+#include <ui_rescalewidget.h>
 class Column;
 
 class RescaleDialog : public QDialog {
@@ -28,7 +28,7 @@ public:
 private:
 	Ui::RescaleWidget ui;
 
-private slots:
+private Q_SLOTS:
 	void validateOkButton();
 };
 

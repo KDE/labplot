@@ -1,18 +1,18 @@
 /*
-    File                 : DatapickerImageWidget.cpp
-    Project              : LabPlot
-    Description          : widget for datapicker properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : DatapickerImageWidget.cpp
+	Project              : LabPlot
+	Description          : widget for datapicker properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2016 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerImageWidget.h"
 #include "backend/datapicker/DatapickerPoint.h"
-#include "commonfrontend/widgets/qxtspanslider.h"
 #include "backend/datapicker/ImageEditor.h"
+#include "commonfrontend/widgets/qxtspanslider.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
@@ -28,12 +28,12 @@
 
 #include <cmath>
 
-HistogramView::HistogramView(QWidget* parent, int range) : QGraphicsView(parent),
-	m_scene(new QGraphicsScene()),
-	m_range(range) {
-
+HistogramView::HistogramView(QWidget* parent, int range)
+	: QGraphicsView(parent)
+	, m_scene(new QGraphicsScene())
+	, m_range(range) {
 	setTransform(QTransform());
-	QRectF pageRect( 0, 0, 1000, 100 );
+	QRectF pageRect(0, 0, 1000, 100);
 	m_scene->setSceneRect(pageRect);
 	setScene(m_scene);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -55,21 +55,21 @@ HistogramView::HistogramView(QWidget* parent, int range) : QGraphicsView(parent)
 void HistogramView::setScalePixmap(const QString& file) {
 	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
 	// and lower 1000*20 is for histogram scale
-	auto* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), nullptr);
+	auto* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled(1000, 20, Qt::IgnoreAspectRatio), nullptr);
 	pixmap->setZValue(-1);
 	pixmap->setPos(0, 90);
 	m_scene->addItem(pixmap);
 }
 
 void HistogramView::setSpan(int l, int h) {
-	l = l*1000/m_range;
-	h = h*1000/m_range;
+	l = l * 1000 / m_range;
+	h = h * 1000 / m_range;
 	m_lowerSlider->setPos(QPointF(l - 1000, 0));
 	m_upperSlider->setPos(QPointF(h, 0));
 	invalidateScene(sceneRect(), QGraphicsScene::BackgroundLayer);
 }
 
-void HistogramView::resizeEvent(QResizeEvent *event) {
+void HistogramView::resizeEvent(QResizeEvent* event) {
 	fitInView(m_scene->sceneRect(), Qt::IgnoreAspectRatio);
 	QGraphicsView::resizeEvent(event);
 }
@@ -82,18 +82,18 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->setRenderHint(QPainter::Antialiasing, true);
 	int max = 1;
 	for (int i = 0; i <= m_range; i++)
-		if (bins [i] > max)
-			max = bins [i];
+		if (bins[i] > max)
+			max = bins[i];
 
 	// convert y-scale count to log scale so small counts are still visible
 	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
 	// and lower 1000*20 is for histogram scale
-	QPainterPath path(QPointF(0, (log(bins[0])*100/log(max))));
+	QPainterPath path(QPointF(0, (log(bins[0]) * 100 / log(max))));
 	for (int i = 1; i <= m_range; i++) {
-		int x = i*1000/m_range;
+		int x = i * 1000 / m_range;
 		int y = 80;
-		if ( bins[i] > 1 )
-			y = 80 - (log(bins[i])*80/log(max));
+		if (bins[i] > 1)
+			y = 80 - (log(bins[i]) * 80 / log(max));
 
 		path.lineTo(QPointF(x, y));
 	}
@@ -103,14 +103,17 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 	painter->restore();
 }
 
-DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent), m_image(nullptr) {
+DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
+	: BaseDock(parent)
+	, m_image(nullptr) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
-	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//"Symbol"-tab
@@ -121,32 +124,33 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 
 	//"Edit Image"-tab
 	auto* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
-	editTabLayout->setContentsMargins(2,2,2,2);
+	editTabLayout->setContentsMargins(2, 2, 2, 2);
 	editTabLayout->setHorizontalSpacing(2);
 	editTabLayout->setVerticalSpacing(4);
 
-	ssHue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssHue = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));
 	ssHue->setRange(0, 360);
 	editTabLayout->addWidget(ssHue, 3, 2);
 
-	ssSaturation = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssSaturation = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssSaturation->setToolTip(i18n("Select the range for the saturation.\nEverything outside of this range will be set to white."));
-	ssSaturation->setRange(0,100);
+	ssSaturation->setRange(0, 100);
 	editTabLayout->addWidget(ssSaturation, 5, 2);
 
-	ssValue = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssValue = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
-	ssValue->setRange(0,100);
+	ssValue->setRange(0, 100);
 	editTabLayout->addWidget(ssValue, 7, 2);
 
-	ssIntensity = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
+	ssIntensity = new SpanSlider(Qt::Horizontal, ui.tEdit);
 	ssIntensity->setToolTip(i18n("Select the range for the intensity.\nEverything outside of this range will be set to white."));
 	ssIntensity->setRange(0, 100);
 	editTabLayout->addWidget(ssIntensity, 9, 2);
 
-	ssForeground = new QxtSpanSlider(Qt::Horizontal, ui.tEdit);
-	ssForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	ssForeground = new SpanSlider(Qt::Horizontal, ui.tEdit);
+	ssForeground->setToolTip(
+		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	ssForeground->setRange(0, 100);
 	editTabLayout->addWidget(ssForeground, 11, 2);
 
@@ -186,7 +190,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 
 	gvValue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Value));
 	gvValue->setToolTip(i18n("Select the range for the value, the degree of lightness of the color.\nEverything outside of this range will be set to white."));
-	editTabLayout->addWidget(gvValue, 6,2);
+	editTabLayout->addWidget(gvValue, 6, 2);
 	gvValue->setScalePixmap(valueFile);
 
 	gvIntensity = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Intensity));
@@ -195,14 +199,15 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	gvIntensity->setScalePixmap(valueFile);
 
 	gvForeground = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Foreground));
-	gvForeground->setToolTip(i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
+	gvForeground->setToolTip(
+		i18n("Select the range for the colors that are not part of the background color.\nEverything outside of this range will be set to white."));
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
 	DatapickerImageWidget::updateLocale();
 
-	//SLOTS
-	//general
+	// SLOTS
+	// general
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
@@ -210,48 +215,33 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
 
 	// edit image
-	connect(ui.cbPlotImageType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerImageWidget::plotImageTypeChanged);
-	connect(ui.sbRotation, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::rotationChanged);
-	connect(ssIntensity, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
-	connect(ssIntensity, &QxtSpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
-	connect(ssForeground, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
-	connect(ssForeground, &QxtSpanSlider::spanChanged, gvForeground, &HistogramView::setSpan );
-	connect(ssHue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::hueSpanChanged);
-	connect(ssHue, &QxtSpanSlider::spanChanged, gvHue, &HistogramView::setSpan );
-	connect(ssSaturation, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::saturationSpanChanged);
-	connect(ssSaturation, &QxtSpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan );
-	connect(ssValue, &QxtSpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
-	connect(ssValue, &QxtSpanSlider::spanChanged, gvValue, &HistogramView::setSpan );
-	connect(ui.sbMinSegmentLength, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &DatapickerImageWidget::minSegmentLengthChanged);
-	connect(ui.sbPointSeparation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &DatapickerImageWidget::pointSeparationChanged);
+	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
+	connect(ui.sbRotation, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
+	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
+	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
+	connect(ssForeground, &SpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
+	connect(ssForeground, &SpanSlider::spanChanged, gvForeground, &HistogramView::setSpan);
+	connect(ssHue, &SpanSlider::spanChanged, this, &DatapickerImageWidget::hueSpanChanged);
+	connect(ssHue, &SpanSlider::spanChanged, gvHue, &HistogramView::setSpan);
+	connect(ssSaturation, &SpanSlider::spanChanged, this, &DatapickerImageWidget::saturationSpanChanged);
+	connect(ssSaturation, &SpanSlider::spanChanged, gvSaturation, &HistogramView::setSpan);
+	connect(ssValue, &SpanSlider::spanChanged, this, &DatapickerImageWidget::valueSpanChanged);
+	connect(ssValue, &SpanSlider::spanChanged, gvValue, &HistogramView::setSpan);
+	connect(ui.sbMinSegmentLength, QOverload<int>::of(&QSpinBox::valueChanged), this, &DatapickerImageWidget::minSegmentLengthChanged);
+	connect(ui.sbPointSeparation, QOverload<int>::of(&QSpinBox::valueChanged), this, &DatapickerImageWidget::pointSeparationChanged);
 
-	//axis point
-	connect(ui.cbGraphType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerImageWidget::graphTypeChanged);
-	connect(ui.sbTernaryScale, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::ternaryScaleChanged);
-	connect(ui.sbPositionX1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ1, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ2, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::logicalPositionChanged);
+	// axis point
+	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::graphTypeChanged);
+	connect(ui.sbTernaryScale, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
+	connect(ui.sbPositionX1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
 
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }
@@ -302,7 +292,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
-	QString fileName =  ui.leFileName->text().trimmed();
+	QString fileName = ui.leFileName->text().trimmed();
 	bool b = !fileName.isEmpty();
 	ui.tEdit->setEnabled(b);
 	ui.cbGraphType->setEnabled(b);
@@ -317,7 +307,7 @@ void DatapickerImageWidget::handleWidgetActions() {
 	ui.sbPointSeparation->setEnabled(b);
 
 	if (b) {
-		//upload histogram to view
+		// upload histogram to view
 		gvIntensity->bins = m_image->intensityBins;
 		gvForeground->bins = m_image->foregroundBins;
 		gvHue->bins = m_image->hueBins;
@@ -542,10 +532,11 @@ void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	if (m_initializing)return;
+	if (m_initializing)
+		return;
 	const Lock lock(m_initializing);
 	m_initializing = true;
-	ui.cbGraphType->setCurrentIndex((int) axisPoints.type);
+	ui.cbGraphType->setCurrentIndex((int)axisPoints.type);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
 	ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
 	ui.sbPositionY1->setValue(axisPoints.logicalPos[0].y());
@@ -602,14 +593,14 @@ void DatapickerImageWidget::load() {
 		return;
 
 	m_initializing = true;
-	ui.leFileName->setText( m_image->fileName() );
+	ui.leFileName->setText(m_image->fileName());
 
-	//highlight the text field for the background image red if an image is used and cannot be found
+	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_image->fileName();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
 
-	ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
+	ui.cbGraphType->setCurrentIndex((int)m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
 	ui.sbPositionX1->setValue(m_image->axisPoints().logicalPos[0].x());
 	ui.sbPositionY1->setValue(m_image->axisPoints().logicalPos[0].y());
@@ -620,7 +611,7 @@ void DatapickerImageWidget::load() {
 	ui.sbPositionZ1->setValue(m_image->axisPoints().logicalPos[0].z());
 	ui.sbPositionZ2->setValue(m_image->axisPoints().logicalPos[1].z());
 	ui.sbPositionZ3->setValue(m_image->axisPoints().logicalPos[2].z());
-	ui.cbPlotImageType->setCurrentIndex((int) m_image->plotImageType());
+	ui.cbPlotImageType->setCurrentIndex((int)m_image->plotImageType());
 	ssIntensity->setSpan(m_image->settings().intensityThresholdLow, m_image->settings().intensityThresholdHigh);
 	ssForeground->setSpan(m_image->settings().foregroundThresholdLow, m_image->settings().foregroundThresholdHigh);
 	ssHue->setSpan(m_image->settings().hueThresholdLow, m_image->settings().hueThresholdHigh);
@@ -633,6 +624,6 @@ void DatapickerImageWidget::load() {
 	gvValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
-	ui.chbSymbolVisible->setChecked( m_image->pointVisibility() );
+	ui.chbSymbolVisible->setChecked(m_image->pointVisibility());
 	m_initializing = false;
 }

@@ -1,21 +1,20 @@
 /*
-    File                 : ImportDialog.cc
-    Project              : LabPlot
-    Description          : import file data dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportDialog.cc
+	Project              : LabPlot
+	Description          : import file data dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "ImportDialog.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
 #include "backend/core/Workbook.h"
 #include "backend/lib/macros.h"
+#include "backend/matrix/Matrix.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/MainWin.h"
 
@@ -40,16 +39,16 @@
 
 	\ingroup kdefrontend
  */
-ImportDialog::ImportDialog(MainWin* parent) : QDialog(parent),
-	vLayout(new QVBoxLayout(this)),
-	m_mainWin(parent),
-	m_aspectTreeModel(new AspectTreeModel(parent->project())) {
-
-	//menu for new data container
+ImportDialog::ImportDialog(MainWin* parent)
+	: QDialog(parent)
+	, vLayout(new QVBoxLayout(this))
+	, m_mainWin(parent)
+	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
+	// menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-workbook-new"), i18n("New Workbook") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-spreadsheet-new"), i18n("New Spreadsheet") );
-	m_newDataContainerMenu->addAction( QIcon::fromTheme("labplot-matrix-new"), i18n("New Matrix") );
+	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-workbook-new"), i18n("New Workbook"));
+	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("New Spreadsheet"));
+	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-matrix-new"), i18n("New Matrix"));
 	connect(m_newDataContainerMenu, &QMenu::triggered, this, &ImportDialog::newDataContainer);
 }
 
@@ -57,7 +56,7 @@ ImportDialog::~ImportDialog() {
 	if (m_aspectTreeModel)
 		delete m_aspectTreeModel;
 
-	//save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
+	// save the last used import position for file imports, no need to do this for live data source (cbPosition=0)
 	if (cbPosition) {
 		KConfigGroup conf(KSharedConfig::openConfig(), "ImportDialog");
 		conf.writeEntry("Position", cbPosition->currentIndex());
@@ -68,11 +67,11 @@ ImportDialog::~ImportDialog() {
 	creates widgets for the frame "Import-To" and sets the current model in the "Add to"-combobox.
  */
 void ImportDialog::setModel() {
-	//Frame for the "Import To"-Stuff
+	// Frame for the "Import To"-Stuff
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import to"));
 
-	auto* label = new QLabel(i18n("Data container"));
+	auto* label = new QLabel(i18n("Data container:"));
 	label->setToolTip(i18n("Data container where the data has to be imported into"));
 
 	auto* grid = new QGridLayout(frameAddTo);
@@ -83,8 +82,7 @@ void ImportDialog::setModel() {
 	cbAddTo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	grid->addWidget(cbAddTo, 0, 1);
 
-	QList<AspectType> list{AspectType::Folder, AspectType::Spreadsheet,
-	                AspectType::Matrix, AspectType::Workbook};
+	QList<AspectType> list{AspectType::Folder, AspectType::Spreadsheet, AspectType::Matrix, AspectType::Workbook};
 	cbAddTo->setTopLevelClasses(list);
 
 	list.removeFirst(); // do not allow selection of Folders
@@ -97,9 +95,9 @@ void ImportDialog::setModel() {
 	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
 	tbNewDataContainer->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	tbNewDataContainer->setToolTip(i18n("Add new data container to the project"));
-	grid->addWidget( tbNewDataContainer, 0, 2);
+	grid->addWidget(tbNewDataContainer, 0, 2);
 
-	lPosition = new QLabel(i18n("Position"), frameAddTo);
+	lPosition = new QLabel(i18n("Position:"), frameAddTo);
 	lPosition->setEnabled(false);
 	grid->addWidget(lPosition, 1, 0);
 
@@ -114,7 +112,7 @@ void ImportDialog::setModel() {
 	cbPosition->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 	grid->addWidget(cbPosition, 1, 1);
 
-	//add the "Import to"-frame to the layout after the first main widget
+	// add the "Import to"-frame to the layout after the first main widget
 	vLayout->insertWidget(1, frameAddTo);
 
 	connect(tbNewDataContainer, &QToolButton::clicked, this, &ImportDialog::newDataContainerMenu);
@@ -155,7 +153,7 @@ void ImportDialog::newDataContainer(QAction* action) {
 		cbAddTo->setCurrentModelIndex(m_mainWin->model()->modelIndexOfAspect(aspect));
 		checkOkButton();
 
-		//select "Replace" since this is the most common case when importing into a newly created container
+		// select "Replace" since this is the most common case when importing into a newly created container
 		cbPosition->setCurrentIndex(2);
 	}
 
@@ -163,5 +161,5 @@ void ImportDialog::newDataContainer(QAction* action) {
 }
 
 void ImportDialog::newDataContainerMenu() {
-	m_newDataContainerMenu->exec( tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
+	m_newDataContainerMenu->exec(tbNewDataContainer->mapToGlobal(tbNewDataContainer->rect().bottomLeft()));
 }

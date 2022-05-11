@@ -1,11 +1,11 @@
 /*
-    File                 : NSLDFTTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for DFT
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLDFTTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for DFT
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLDFTTEST_H
 #define NSLDFTTEST_H
@@ -15,7 +15,7 @@
 class NSLDFTTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// one sided
 	void testOnesided_real();
 	void testOnesided_imag();
@@ -41,6 +41,7 @@ private slots:
 	// performance
 	void testPerformance_onesided();
 	void testPerformance_twosided();
+
 private:
 	QString m_dataDir;
 };

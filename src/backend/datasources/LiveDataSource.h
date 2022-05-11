@@ -1,24 +1,23 @@
 /*
-    File                 : LiveDataSource.h
-    Project              : LabPlot
-    Description          : File data source
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : LiveDataSource.h
+	Project              : LabPlot
+	Description          : File data source
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef LIVEDATASOURCE_H
 #define LIVEDATASOURCE_H
 
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/matrix/Matrix.h"
 
 #include <QLocalSocket>
+#include <QMap>
 #include <QTimer>
 #include <QVector>
-#include <QMap>
 #ifdef HAVE_QTSERIALPORT
 #include <QSerialPort>
 #endif
@@ -38,24 +37,24 @@ class LiveDataSource : public Spreadsheet {
 
 public:
 	enum class SourceType {
-		FileOrPipe = 0,		// regular file or pipe
-		NetworkTcpSocket,	// TCP socket
-		NetworkUdpSocket,	// UDP socket
-		LocalSocket,		// local socket
-		SerialPort,		// serial port
+		FileOrPipe = 0, // regular file or pipe
+		NetworkTcpSocket, // TCP socket
+		NetworkUdpSocket, // UDP socket
+		LocalSocket, // local socket
+		SerialPort, // serial port
 		MQTT
 	};
 
 	enum class UpdateType {
-		TimeInterval = 0,	// update periodically using given interval
-		NewData			// update when new data is available
+		TimeInterval = 0, // update periodically using given interval
+		NewData // update when new data is available
 	};
 
 	enum class ReadingType {
-		ContinuousFixed = 0,	// read continuously sampleSize number of samples (lines)
-		FromEnd,		// read sampleSize number of samples (lines) from end
-		TillEnd,		// read until the end
-		WholeFile		// reread whole file
+		ContinuousFixed = 0, // read continuously sampleSize number of samples (lines)
+		FromEnd, // read sampleSize number of samples (lines) from end
+		TillEnd, // read until the end
+		WholeFile // reread whole file
 	};
 
 	explicit LiveDataSource(const QString& name, bool loading = false);
@@ -87,7 +86,7 @@ public:
 
 	bool isPaused() const;
 
-	void setSerialPort(const QString& name);
+	void setSerialPort(const QString&);
 	QString serialPortName() const;
 
 	QString host() const;
@@ -133,8 +132,6 @@ public:
 	void finalizeLoad();
 
 private:
-	void initActions();
-
 	QString m_fileName;
 	QString m_dirName;
 	QString m_serialPortName;
@@ -155,7 +152,7 @@ private:
 	bool m_pending{false};
 
 	int m_sampleSize{1};
-	int m_keepNValues{0};	// number of values to keep (0 - all)
+	int m_keepNValues{0}; // number of values to keep (0 - all)
 	int m_updateInterval{1000};
 	quint16 m_port{1027};
 	int m_baudRate{9600};
@@ -177,11 +174,11 @@ private:
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void read();
 	void readOnUpdate();
 
-private slots:
+private Q_SLOTS:
 	void plotData();
 	void readyRead();
 

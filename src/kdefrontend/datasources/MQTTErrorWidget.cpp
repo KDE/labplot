@@ -1,26 +1,26 @@
 /*
-    File                 : MQTTErrorWidget.cpp
-    Project              : LabPlot
-    Description          : Widget for informing about an MQTT error, and for trying to solve it
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTTErrorWidget.cpp
+	Project              : LabPlot
+	Description          : Widget for informing about an MQTT error, and for trying to solve it
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "src/kdefrontend/datasources/MQTTErrorWidget.h"
 
 #include "backend/datasources/MQTTClient.h"
+#include <QMqttMessage>
 #include <QMqttSubscription>
 #include <QMqttTopicFilter>
-#include <QMqttMessage>
 
-MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget *parent) : QWidget(parent),
-	m_error(error),
-	m_client(client) {
-
+MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* client, QWidget* parent)
+	: QWidget(parent)
+	, m_error(error)
+	, m_client(client) {
 	ui.setupUi(this);
 	bool close = false;
-	//showing the appropriate options according to the error type
+	// showing the appropriate options according to the error type
 	switch (m_error) {
 	case QMqttClient::ClientError::IdRejected:
 		ui.lePassword->hide();

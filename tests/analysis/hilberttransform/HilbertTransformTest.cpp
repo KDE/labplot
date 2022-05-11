@@ -1,11 +1,11 @@
 /*
-    File                 : HilbertTransformTest.cpp
-    Project              : LabPlot
-    Description          : Tests for Hilbert transform
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : HilbertTransformTest.cpp
+	Project              : LabPlot
+	Description          : Tests for Hilbert transform
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "HilbertTransformTest.h"
@@ -16,28 +16,28 @@
 
 void HilbertTransformTest::test1() {
 	// data
-	QVector<int> xData = {1,2,3,4};
-	QVector<double> yData = {1.,2.,3.,4.};
+	QVector<int> xData = {1, 2, 3, 4};
+	QVector<double> yData = {1., 2., 3., 4.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYHilbertTransformCurve curve("Hilbert Trafo");
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
-	//prepare the transform
+	// prepare the transform
 	XYHilbertTransformCurve::TransformData data = curve.transformData();
 	curve.setTransformData(data);
 
-	//perform the transform
+	// perform the transform
 	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);
 
@@ -60,28 +60,28 @@ void HilbertTransformTest::test1() {
 
 void HilbertTransformTest::test2() {
 	// data
-	QVector<int> xData = {1,2,3,4,5,6,7};
-	QVector<double> yData = {1.,2.,3.,4.,3.,2.,1.};
+	QVector<int> xData = {1, 2, 3, 4, 5, 6, 7};
+	QVector<double> yData = {1., 2., 3., 4., 3., 2., 1.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYHilbertTransformCurve curve("Hilbert Trafo");
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
-	//prepare the transform
+	// prepare the transform
 	XYHilbertTransformCurve::TransformData data = curve.transformData();
 	curve.setTransformData(data);
 
-	//perform the transform
+	// perform the transform
 	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);
 
@@ -107,29 +107,29 @@ void HilbertTransformTest::test2() {
 
 void HilbertTransformTest::test3() {
 	// data
-	QVector<int> xData = {1,2,3,4,5,6,7,8};
-	QVector<double> yData = {1,2,3,4,5,6,7,8};
+	QVector<int> xData = {1, 2, 3, 4, 5, 6, 7, 8};
+	QVector<double> yData = {1, 2, 3, 4, 5, 6, 7, 8};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYHilbertTransformCurve curve("Hilbert trafo");
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
-	//prepare the transform
+	// prepare the transform
 	XYHilbertTransformCurve::TransformData data = curve.transformData();
 
-	//perform the transform
+	// perform the transform
 	curve.setTransformData(data);
 
 	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);
 
@@ -156,29 +156,29 @@ void HilbertTransformTest::test3() {
 
 void HilbertTransformTest::test4() {
 	// data
-	QVector<int> xData = {1,2,3,4,5,6,7,8,9};
-	QVector<double> yData = {1.,-1.,2.,-2.,3.,-3.,4.,-4.,5.};
+	QVector<int> xData = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	QVector<double> yData = {1., -1., 2., -2., 3., -3., 4., -4., 5.};
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYHilbertTransformCurve curve("Hilbert trafo");
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
-	//prepare the transform
+	// prepare the transform
 	XYHilbertTransformCurve::TransformData data = curve.transformData();
 
-	//perform the transform
+	// perform the transform
 	curve.setTransformData(data);
 
 	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
 
-	//check the results
+	// check the results
 	QCOMPARE(result.available, true);
 	QCOMPARE(result.valid, true);
 
@@ -205,39 +205,38 @@ void HilbertTransformTest::test4() {
 }
 
 void HilbertTransformTest::testPerformance() {
-
 	// data
 	QVector<int> xData;
 	QVector<double> yData;
 #ifdef HAVE_FFTW3
 	const int N = 1e6;
-#else	// GSL is much slower
+#else // GSL is much slower
 	const int N = 2e5;
 #endif
-	for (int i = 0;  i < N; i++) {
+	for (int i = 0; i < N; i++) {
 		xData.append(i);
 		yData.append(i % 100);
 	}
 
-	//data source columns
+	// data source columns
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYHilbertTransformCurve curve("Hilbert trafo");
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
-	//prepare and perform the convolution
+	// prepare and perform the convolution
 	XYHilbertTransformCurve::TransformData data = curve.transformData();
 	QBENCHMARK {
 		// triggers recalculate()
 		curve.setTransformData(data);
 	}
 
-	//check the results
+	// check the results
 	const XYHilbertTransformCurve::TransformResult& result = curve.transformResult();
 
 	QCOMPARE(result.available, true);

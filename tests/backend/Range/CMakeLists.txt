@@ -1,6 +1,5 @@
-INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (rangetest RangeTest.cpp ../../CommonTest.cpp)
+add_executable (RangeTest RangeTest.cpp)
 
-target_link_libraries(rangetest Qt5::Test labplot2lib)
+target_link_libraries(RangeTest Qt5::Test labplot2lib labplot2test)
 
-add_test(NAME rangetest COMMAND rangetest)
+add_test(NAME RangeTest COMMAND RangeTest)

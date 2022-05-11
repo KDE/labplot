@@ -1,12 +1,12 @@
 /*
-    File                 : Project.h
-    Project              : LabPlot
-    Description          : Represents a LabPlot project.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Project.h
+	Project              : LabPlot
+	Description          : Represents a LabPlot project.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PROJECT_H
@@ -26,11 +26,7 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum class MdiWindowVisibility {
-		folderOnly,
-		folderAndSubfolders,
-		allMdiWindows
-	};
+	enum class MdiWindowVisibility { folderOnly, folderAndSubfolders, allMdiWindows };
 
 public:
 	Project();
@@ -56,7 +52,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
 
-	void setChanged(const bool value=true);
+	void setChanged(const bool value = true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
 
@@ -67,6 +63,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 	static void restorePointers(AbstractAspect*, bool preview = false);
+	static void retransformElements(AbstractAspect*);
 
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
@@ -77,11 +74,11 @@ public:
 
 	class Private;
 
-public slots:
+public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
 	void aspectAddedSlot(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	void authorChanged(const QString&);
 	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;
@@ -91,7 +88,6 @@ signals:
 	void mdiWindowVisibilityChanged();
 	void changed();
 	void requestNavigateTo(const QString& path);
-	void loaded();
 	void closeRequested();
 
 private:

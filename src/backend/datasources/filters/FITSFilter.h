@@ -1,10 +1,10 @@
 /*
-    File                 : FITSFilter.h
-    Project              : LabPlot
-    Description          : FITS I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSFilter.h
+	Project              : LabPlot
+	Description          : FITS I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSFILTER_H
 #define FITSFILTER_H
@@ -12,8 +12,9 @@
 #include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <KI18n/KLocalizedString>
+
 #include <QTableWidget>
-#include <QTreeWidgetItem>
+#include <QTreeWidget>
 
 class QStringList;
 class QXmlStreamReader;
@@ -27,15 +28,20 @@ public:
 	FITSFilter();
 	~FITSFilter() override;
 
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-	QVector<QStringList> readChdu(const QString& fileName, bool *okToMatrix = nullptr, int lines = -1);
+	QVector<QStringList> readChdu(const QString& fileName, bool* okToMatrix = nullptr, int lines = -1);
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 
 	struct KeywordUpdate {
-		KeywordUpdate() : keyUpdated(false), valueUpdated(false),
-			commentUpdated(false), unitUpdated(false) {}
+		KeywordUpdate()
+			: keyUpdated(false)
+			, valueUpdated(false)
+			, commentUpdated(false)
+			, unitUpdated(false) {
+		}
 		bool keyUpdated;
 		bool valueUpdated;
 		bool commentUpdated;
@@ -43,17 +49,19 @@ public:
 	};
 
 	struct Keyword {
-		Keyword(const QString& key, const QString& value, const QString& comment): key(key), value(value),
-			comment(comment) {}
-		Keyword() {}
+		Keyword(const QString& key, const QString& value, const QString& comment)
+			: key(key)
+			, value(value)
+			, comment(comment) {
+		}
+		Keyword() {
+		}
 		QString key;
 		QString value;
 		QString comment;
 		QString unit;
 		bool operator==(const Keyword& other) const {
-			return other.key == key &&
-			       other.value == value &&
-			       other.comment == comment;
+			return other.key == key && other.value == value && other.comment == comment;
 		}
 		bool isEmpty() const {
 			return key.isEmpty() && value.isEmpty() && comment.isEmpty();
@@ -68,11 +76,9 @@ public:
 	void addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords);
 	void deleteKeyword(const QString& fileName, const QList<Keyword>& keywords);
 	void removeExtensions(const QStringList& extensions);
-	void parseHeader(const QString &fileName, QTableWidget* headerEditTable,
-	                 bool readKeys = true,
-	                 const QList<Keyword> &keys = QList<Keyword>());
+	void parseHeader(const QString& fileName, QTableWidget* headerEditTable, bool readKeys = true, const QList<Keyword>& keys = QList<Keyword>());
 	void parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary = false);
-	QList<Keyword> chduKeywords(const QString &fileName);
+	QList<Keyword> chduKeywords(const QString& fileName);
 
 	static QStringList standardKeywords();
 	static QStringList mandatoryImageExtensionKeywords();
@@ -92,6 +98,7 @@ public:
 	int endColumn() const;
 	void setCommentsAsUnits(const bool);
 	void setExportTo(const int);
+
 private:
 	std::unique_ptr<FITSFilterPrivate> const d;
 	friend class FITSFilterPrivate;

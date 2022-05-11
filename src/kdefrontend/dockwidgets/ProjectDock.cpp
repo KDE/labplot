@@ -1,12 +1,12 @@
 /*
-    File                 : ProjectDock.cpp
-    Project              : LabPlot
-    Description          : widget for project properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : ProjectDock.cpp
+	Project              : LabPlot
+	Description          : widget for project properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "ProjectDock.h"
@@ -20,14 +20,16 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
+ProjectDock::ProjectDock(QWidget* parent)
+	: BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
-	QString msg = i18n("If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
-	"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
+	QString msg = i18n(
+		"If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
+		"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
 
 	ui.lSaveCalculations->setToolTip(msg);
 	ui.chkSaveCalculations->setToolTip(msg);
@@ -36,7 +38,7 @@ ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
-	connect(ui.chkSaveCalculations, &QCheckBox::stateChanged, this, &ProjectDock::saveCalculationsChanged);
+	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
 }
 
 void ProjectDock::setProject(Project* project) {
@@ -49,7 +51,17 @@ void ProjectDock::setProject(Project* project) {
 	ui.leName->setToolTip("");
 	ui.leName->setText(m_project->name());
 	ui.leAuthor->setText(m_project->author());
+
 	ui.teComment->setText(m_project->comment());
+
+	// resize the height of the comment field to fit the content (word wrap is ignored)
+	const QFont& font = ui.teComment->document()->defaultFont();
+	QFontMetrics fontMetrics(font);
+	const QSize& textSize = fontMetrics.size(0, m_project->comment());
+	double height = textSize.height() + 50;
+	ui.teComment->setMinimumSize(0, height);
+	ui.teComment->resize(ui.teComment->width(), height);
+
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
@@ -76,11 +88,11 @@ void ProjectDock::authorChanged() {
 	m_project->setAuthor(ui.leAuthor->text());
 }
 
-void ProjectDock::saveCalculationsChanged() {
+void ProjectDock::saveCalculationsChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	m_project->setSaveCalculations(ui.chkSaveCalculations->isChecked());
+	m_project->setSaveCalculations(state);
 }
 
 //*************************************************************

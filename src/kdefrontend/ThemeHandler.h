@@ -1,14 +1,13 @@
 /*
-    File                 : ThemeHandler.h
-    Project              : LabPlot
-    Description          : Widget for handling saving and loading of themes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ThemeHandler.h
+	Project              : LabPlot
+	Description          : Widget for handling saving and loading of themes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj <p_bhardwaj14@informatik.uni-kl.de>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef THEMEHANDLER_H
 #define THEMEHANDLER_H
@@ -27,7 +26,7 @@ public:
 	static QStringList themes();
 	static const QString themeFilePath(const QString&);
 
-public  slots:
+public Q_SLOTS:
 	void setCurrentTheme(const QString&);
 
 private:
@@ -36,18 +35,18 @@ private:
 	QString m_currentTheme;
 	QString m_currentLocalTheme;
 
-        QPushButton* m_pbLoadTheme;
-//      QPushButton* m_pbSaveTheme;
-// 	QPushButton* pbPublishTheme;
+	QPushButton* m_pbLoadTheme;
+	// QPushButton* m_pbSaveTheme;
+	// 	QPushButton* pbPublishTheme;
 
-private slots:
+private Q_SLOTS:
 	void loadSelected(const QString&);
 	void showPanel();
-// 	void saveMenu();
-// 	void saveNewSelected(const QString&);
-// 	void publishThemes();
+	// 	void saveMenu();
+	// 	void saveNewSelected(const QString&);
+	// 	void publishThemes();
 
-signals:
+Q_SIGNALS:
 	void loadThemeRequested(const QString&);
 	void saveThemeRequested(KConfig&);
 	void info(const QString&);

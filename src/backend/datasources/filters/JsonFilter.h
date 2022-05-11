@@ -1,19 +1,18 @@
 /*
-    File                 : JsonFilter.h
-    Project              : LabPlot
-    Description          : JSON I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
-    SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : JsonFilter.h
+	Project              : LabPlot
+	Description          : JSON I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef JSONFILTER_H
 #define JSONFILTER_H
 
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 #include <QJsonValue>
 
@@ -27,7 +26,7 @@ class JsonFilter : public AbstractFileFilter {
 	Q_OBJECT
 
 public:
-	enum class DataContainerType {Array, Object};
+	enum class DataContainerType { Array, Object };
 
 	JsonFilter();
 	~JsonFilter() override;
@@ -39,7 +38,8 @@ public:
 	// read data from any device
 	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	// overloaded function to read from file
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);

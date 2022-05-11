@@ -1,12 +1,11 @@
 /*
-    File                 : nsl_corr.h
-    Project              : LabPlot
-    Description          : NSL discrete correlation functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_corr.h
+	Project              : LabPlot
+	Description          : NSL discrete correlation functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_CORR_H
 #define NSL_CORR_H
@@ -15,7 +14,7 @@
 
 #define NSL_CORR_TYPE_COUNT 2
 /* linear (zero-padded), circular */
-typedef enum {nsl_corr_type_linear, nsl_corr_type_circular} nsl_corr_type_type;
+typedef enum { nsl_corr_type_linear, nsl_corr_type_circular } nsl_corr_type_type;
 extern const char* nsl_corr_type_name[];
 
 #define NSL_CORR_NORM_COUNT 4
@@ -24,9 +23,8 @@ extern const char* nsl_corr_type_name[];
  * unbiased - 1/(N-|m|)
  * coeff - 1/sqrt(R_xx(0) R_yy(0)) = 1/sqrt(sum x_i^2 sum y_i^2) [used in Origin]
  * */
-typedef enum {nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff} nsl_corr_norm_type;
+typedef enum { nsl_corr_norm_none, nsl_corr_norm_biased, nsl_corr_norm_unbiased, nsl_corr_norm_coeff } nsl_corr_norm_type;
 extern const char* nsl_corr_norm_name[];
-
 
 int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_type_type, nsl_corr_norm_type normalize, double out[]);
 

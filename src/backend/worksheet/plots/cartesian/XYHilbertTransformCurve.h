@@ -1,12 +1,11 @@
 /*
-    File                 : XYHilbertTransformCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a Hilbert transform
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYHilbertTransformCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a Hilbert transform
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYHILBERTTRANSFORMCURVE_H
 #define XYHILBERTTRANSFORMCURVE_H
@@ -23,15 +22,15 @@ class XYHilbertTransformCurve : public XYAnalysisCurve {
 
 public:
 	struct TransformData {
-		TransformData() {};
+		TransformData(){};
 
 		nsl_hilbert_result_type type{nsl_hilbert_result_imag};
-		bool autoRange{true};		// use all data?
-		//TODO: use Range
-		QVector<double> xRange{0, 0};	// x range for transform
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0, 0}; // x range for transform
 	};
 	struct TransformResult {
-		TransformResult() {};
+		TransformResult(){};
 
 		bool available{false};
 		bool valid{false};
@@ -58,7 +57,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYHilbertTransformCurve)
 
-signals:
+Q_SIGNALS:
 	void transformDataChanged(const XYHilbertTransformCurve::TransformData&);
 };
 

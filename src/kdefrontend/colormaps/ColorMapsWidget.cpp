@@ -3,10 +3,9 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
 #include "backend/lib/macros.h"
@@ -27,8 +26,8 @@
 
 	\ingroup kdefrontend
  */
-ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
-
+ColorMapsWidget::ColorMapsWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInfo->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
 	ui.bViewMode->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
@@ -44,7 +43,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.lvColorMaps, &QAbstractItemView::doubleClicked, this, &ColorMapsWidget::doubleClicked);
 
 	const int size = ui.leSearch->height();
-	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
+	ui.lSearch->setPixmap(QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size));
 
 	QString info = i18n("Enter the keyword you want to search for");
 	ui.lSearch->setToolTip(info);
@@ -55,14 +54,13 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	m_manager = ColorMapsManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
 
-	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &ColorMapsWidget::collectionChanged);
+	connect(ui.cbCollections, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColorMapsWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ColorMapsWidget::showInfo);
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ColorMapsWidget::toggleIconView);
 	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ColorMapsWidget::viewModeChanged);
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
 
-	//select the last used collection
+	// select the last used collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
@@ -87,7 +85,7 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 }
 
 ColorMapsWidget::~ColorMapsWidget() {
-	//save the selected collection
+	// save the selected collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
@@ -101,13 +99,13 @@ ColorMapsWidget::~ColorMapsWidget() {
 void ColorMapsWidget::collectionChanged(int) {
 	const QString& collection = ui.cbCollections->currentText();
 
-	//populate the list view for the icon mode
+	// populate the list view for the icon mode
 	if (m_model)
 		delete m_model;
 
 	m_model = new QStandardItemModel(this);
 	const auto& colorMapNames = m_manager->colorMapNames(collection);
-	for (const auto& name :colorMapNames) {
+	for (const auto& name : colorMapNames) {
 		auto* item = new QStandardItem();
 		QPixmap pixmap;
 		m_manager->render(pixmap, name);
@@ -118,20 +116,20 @@ void ColorMapsWidget::collectionChanged(int) {
 
 	ui.lvColorMaps->setModel(m_model);
 
-	//populate the list widget for the list mode
+	// populate the list widget for the list mode
 	ui.lwColorMaps->clear();
 	ui.lwColorMaps->addItems(colorMapNames);
 
-	//select the first color map in the current collection
+	// select the first color map in the current collection
 	ui.lvColorMaps->setCurrentIndex(ui.lvColorMaps->model()->index(0, 0));
 	ui.lwColorMaps->setCurrentRow(0);
 
-	//update the completer
+	// update the completer
 	if (m_completer)
 		delete m_completer;
 
 	m_completer = new QCompleter(colorMapNames, this);
-	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
+	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseSensitive);
 	ui.leSearch->setCompleter(m_completer);
@@ -158,13 +156,13 @@ void ColorMapsWidget::toggleIconView() {
 
 void ColorMapsWidget::viewModeChanged(int index) {
 	if (index == 0) {
-		//switching form list to icon view mode
+		// switching form list to icon view mode
 		if (ui.lwColorMaps->currentItem()) {
 			const auto& name = ui.lwColorMaps->currentItem()->text();
 			activateIconViewItem(name);
 		}
 	} else {
-		//switching form icon to list view mode
+		// switching form icon to list view mode
 		if (ui.lvColorMaps->currentIndex().isValid()) {
 			const auto& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
 			activateListViewItem(name);
@@ -174,8 +172,8 @@ void ColorMapsWidget::viewModeChanged(int index) {
 
 void ColorMapsWidget::activated(const QString& name) {
 	if (ui.bViewMode->isChecked())
-		activateListViewItem(name);
-	 else
+		activateIconViewItem(name);
+	else
 		activateListViewItem(name);
 }
 
@@ -217,7 +215,7 @@ QString ColorMapsWidget::name() const {
 			return ui.lwColorMaps->currentItem()->text();
 	}
 
-	return QString();
+	return {};
 }
 
 /*!

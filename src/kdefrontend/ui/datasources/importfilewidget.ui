@@ -411,7 +411,7 @@
           </sizepolicy>
          </property>
          <attribute name="title">
-          <string>Data format</string>
+          <string>Data Format</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
@@ -537,7 +537,7 @@
           </sizepolicy>
          </property>
          <attribute name="title">
-          <string>Data portion to read</string>
+          <string>Data Portion to Read</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">

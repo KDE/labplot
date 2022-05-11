@@ -1,10 +1,10 @@
 /*
-    File                 : DropValuesDialog.h
-    Project              : LabPlot
-    Description          : Dialog for droping and masking values in columns
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DropValuesDialog.h
+	Project              : LabPlot
+	Description          : Dialog for droping and masking values in columns
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DROPVALUESDIALOG_H
@@ -35,7 +35,7 @@ private:
 	void maskValues() const;
 
 	QPushButton* m_okButton;
-private slots:
+private Q_SLOTS:
 	void operatorChanged(int) const;
 	void okClicked() const;
 };

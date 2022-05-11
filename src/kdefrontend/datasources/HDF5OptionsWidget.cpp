@@ -1,24 +1,26 @@
 /*
-    File                 : HDF5OptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of HDF5 data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : HDF5OptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of HDF5 data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "HDF5OptionsWidget.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/filters/HDF5Filter.h"
 #include "backend/lib/macros.h"
 
- /*!
-	\class HDF5OptionsWidget
-	\brief Widget providing options for the import of HDF5 data
+/*!
+   \class HDF5OptionsWidget
+   \brief Widget providing options for the import of HDF5 data
 
-	\ingroup kdefrontend
- */
-HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget) : QWidget(parent), m_fileWidget(fileWidget) {
+   \ingroup kdefrontend
+*/
+HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
 	QStringList hdf5headers;
@@ -32,7 +34,7 @@ HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
 
 	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -45,7 +47,7 @@ void HDF5OptionsWidget::clear() {
 
 void HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileName) {
 	ui.twContent->clear();
-	QTreeWidgetItem *rootItem = ui.twContent->invisibleRootItem();
+	QTreeWidgetItem* rootItem = ui.twContent->invisibleRootItem();
 	filter->parse(fileName, rootItem);
 
 	ui.twContent->insertTopLevelItem(0, rootItem);

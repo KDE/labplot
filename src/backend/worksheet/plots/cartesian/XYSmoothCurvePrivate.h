@@ -1,13 +1,12 @@
 /*
-    File                 : XYSmoothCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYSmoothCurve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYSmoothCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYSmoothCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYSMOOTHCURVEPRIVATE_H
 #define XYSMOOTHCURVEPRIVATE_H

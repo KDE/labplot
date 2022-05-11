@@ -1,11 +1,11 @@
 /*
-    File                 : MatrixDock.h
-    Project              : LabPlot
-    Description          : widget for matrix properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	File                 : MatrixDock.h
+	Project              : LabPlot
+	Description          : widget for matrix properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MATRIXDOCK_H
@@ -33,8 +33,8 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
-	//SLOTs for changes triggered in MatrixDock
+private Q_SLOTS:
+	// SLOTs for changes triggered in MatrixDock
 
 	void rowCountChanged(int);
 	void columnCountChanged(int);
@@ -48,7 +48,7 @@ private slots:
 	void precisionChanged(int);
 	void headerFormatChanged(int);
 
-	//SLOTs for changes triggered in Matrix
+	// SLOTs for changes triggered in Matrix
 	void matrixXStartChanged(double);
 	void matrixXEndChanged(double);
 	void matrixYStartChanged(double);
@@ -61,11 +61,11 @@ private slots:
 	void matrixPrecisionChanged(int);
 	void matrixHeaderFormatChanged(Matrix::HeaderFormat);
 
-	//save/load template
+	// save/load template
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

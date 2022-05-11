@@ -1,25 +1,25 @@
 /*
-    File                 : LabelWidget.h
-    Project              : LabPlot
-    Description          : label settings widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : LabelWidget.h
+	Project              : LabPlot
+	Description          : label settings widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef LABELWIDGET_H
 #define LABELWIDGET_H
 
-#include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "ui_labelwidget.h"
 #include <KConfigGroup>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-#include <repository.h>
+#include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 
@@ -51,8 +51,8 @@ private:
 	TextLabel* m_label{nullptr};
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
-	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
+	bool m_initializing{false};
 	bool m_teXEnabled{false};
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
@@ -63,14 +63,15 @@ private:
 
 	void initConnections() const;
 
-signals:
+Q_SIGNALS:
 	void dataChanged(bool);
 
-private slots:
-	//SLOTs for changes triggered in LabelWidget
+private Q_SLOTS:
+	// SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
 	void modeChanged(int);
+	void updateMode(TextLabel::Mode mode);
 	void fontColorChanged(const QColor&);
 	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);
@@ -113,18 +114,19 @@ private slots:
 	void bindingChanged(bool checked);
 	void showPlaceholderTextChanged(bool checked);
 
-	//SLOTs for changes triggered in TextLabel
+	// SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
 	void labelTeXImageUpdated(bool);
 	void labelTeXFontChanged(const QFont&);
-	void labelFontColorChanged(const QColor);
-	void labelBackgroundColorChanged(const QColor);
+	void labelFontColorChanged(const QColor&);
+	void labelBackgroundColorChanged(const QColor&);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
-	void labelHorizontalAlignmentChanged(const TextLabel::HorizontalAlignment);
-	void labelVerticalAlignmentChanged(const TextLabel::VerticalAlignment);
+	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
+	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
 	void labelPositionLogicalChanged(QPointF);
-	void labelOffsetxChanged(qreal);
-	void labelOffsetyChanged(qreal);
+	void labelCoordinateBindingEnabledChanged(bool);
+	void labelOffsetXChanged(qreal);
+	void labelOffsetYChanged(qreal);
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
@@ -133,6 +135,7 @@ private slots:
 
 	void labelVisibleChanged(bool);
 	void labelCartesianPlotParent(bool on);
+	void labelModeChanged(TextLabel::Mode);
 };
 
-#endif //LABELWIDGET_H
+#endif // LABELWIDGET_H

@@ -1,10 +1,10 @@
 /*
-    File                 : DatasetMetadataManagerDialog.h
-    Project              : LabPlot
-    Description          : Dialog for managing a metadata file of a dataset
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatasetMetadataManagerDialog.h
+	Project              : LabPlot
+	Description          : Dialog for managing a metadata file of a dataset
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATASETMETADATAMANAGERDIALOG_H
@@ -16,13 +16,13 @@ class QDialogButtonBox;
 class DatasetMetadataManagerWidget;
 
 class DatasetMetadataManagerDialog : public QDialog {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-	explicit DatasetMetadataManagerDialog(QWidget*, const QMap< QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
-    virtual ~DatasetMetadataManagerDialog() override;
+	explicit DatasetMetadataManagerDialog(QWidget*, const QMap<QString, QMap<QString, QMap<QString, QVector<QString>>>>&);
+	virtual ~DatasetMetadataManagerDialog() override;
 	void updateDocument(const QString& fileName);
-    QString getMetadataFilePath() const;
+	QString getMetadataFilePath() const;
 
 	void setCollection(const QString&);
 	void setCategory(const QString&);
@@ -33,12 +33,11 @@ public:
 	void setURL(const QString&);
 
 private:
-    DatasetMetadataManagerWidget* m_mainWidget;
-    QDialogButtonBox* m_buttonBox;
-    QPushButton* m_okButton;
+	DatasetMetadataManagerWidget* m_mainWidget;
+	QDialogButtonBox* m_buttonBox;
+	QPushButton* m_okButton;
 
-protected  slots:
-    void checkOkButton();
-
+protected Q_SLOTS:
+	void checkOkButton();
 };
 #endif // DATASETMETADATAMANAGERDIALOG_H

@@ -1,12 +1,11 @@
 /*
-    File                 : XYHilbertTransformCurve.cpp
-    Project              : LabPlot
-    Description          : A xy-curve defined by a Hilbert transform
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYHilbertTransformCurve.cpp
+	Project              : LabPlot
+	Description          : A xy-curve defined by a Hilbert transform
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class XYHilbertTransformCurve
@@ -19,20 +18,20 @@
 #include "XYHilbertTransformCurvePrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
+#include "backend/gsl/errors.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/gsl/errors.h"
 
 extern "C" {
 //#include "backend/nsl/nsl_sf_poly.h"
 }
 
 #include <KLocalizedString>
+#include <QDebug> // qWarning()
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
-#include <QDebug>	// qWarning()
 
 XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYHilbertTransformCurvePrivate(this), AspectType::XYHilbertTransformCurve) {
@@ -42,8 +41,8 @@ XYHilbertTransformCurve::XYHilbertTransformCurve(const QString& name, XYHilbertT
 	: XYAnalysisCurve(name, dd, AspectType::XYHilbertTransformCurve) {
 }
 
-//no need to delete the d-pointer here - it inherits from QGraphicsItem
-//and is deleted during the cleanup in QGraphicsScene
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
 XYHilbertTransformCurve::~XYHilbertTransformCurve() = default;
 
 void XYHilbertTransformCurve::recalculate() {
@@ -71,7 +70,7 @@ const XYHilbertTransformCurve::TransformResult& XYHilbertTransformCurve::transfo
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYHilbertTransformCurve, SetTransformData, XYHilbertTransformCurve::TransformData, transformData, recalculate);
+STD_SETTER_CMD_IMPL_F_S(XYHilbertTransformCurve, SetTransformData, XYHilbertTransformCurve::TransformData, transformData, recalculate)
 void XYHilbertTransformCurve::setTransformData(const XYHilbertTransformCurve::TransformData& transformData) {
 	Q_D(XYHilbertTransformCurve);
 	exec(new XYHilbertTransformCurveSetTransformDataCmd(d, transformData, ki18n("%1: set transform options and perform the Hilbert transform")));
@@ -80,11 +79,13 @@ void XYHilbertTransformCurve::setTransformData(const XYHilbertTransformCurve::Tr
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransformCurve* owner) : XYAnalysisCurvePrivate(owner), q(owner) {
+XYHilbertTransformCurvePrivate::XYHilbertTransformCurvePrivate(XYHilbertTransformCurve* owner)
+	: XYAnalysisCurvePrivate(owner)
+	, q(owner) {
 }
 
-//no need to delete xColumn and yColumn, they are deleted
-//when the parent aspect is removed
+// no need to delete xColumn and yColumn, they are deleted
+// when the parent aspect is removed
 XYHilbertTransformCurvePrivate::~XYHilbertTransformCurvePrivate() = default;
 
 void XYHilbertTransformCurvePrivate::recalculate() {
@@ -92,12 +93,12 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
-	//create transform result columns if not available yet, clear them otherwise
+	// create transform result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
-		xVector = static_cast<QVector<double>* >(xColumn->data());
-		yVector = static_cast<QVector<double>* >(yColumn->data());
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xVector = static_cast<QVector<double>*>(xColumn->data());
+		yVector = static_cast<QVector<double>*>(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
@@ -118,13 +119,13 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 
 	if (!xDataColumn || !yDataColumn) {
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data columns!")
 		return;
 	}
 
-	//copy all valid data point for the transform to temporary vectors
+	// copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	double xmin, xmax;
@@ -141,8 +142,7 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << xmin << '/' << xmax)
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row))
-				|| xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
 			continue;
 
 		// only when inside given range
@@ -152,14 +152,14 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 		}
 	}
 
-	//number of data points to transform
+	// number of data points to transform
 	unsigned int n = (unsigned int)ydataVector.size();
 	if (n == 0) {
 		transformResult.available = true;
 		transformResult.valid = false;
 		transformResult.status = i18n("No data points available.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		DEBUG(Q_FUNC_INFO << "no data (n = 0)!")
 		return;
@@ -179,9 +179,9 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 //		out<<ydata[i];
 #endif
 
-///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
 	// transform with window
-//	TODO: type 
+	//	TODO: type
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;
@@ -193,19 +193,19 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 
 	xVector->resize((int)N);
 	yVector->resize((int)N);
-	memcpy(xVector->data(), xdata, N*sizeof(double));
-	memcpy(yVector->data(), ydata, N*sizeof(double));
-///////////////////////////////////////////////////////////
+	memcpy(xVector->data(), xdata, N * sizeof(double));
+	memcpy(yVector->data(), ydata, N * sizeof(double));
+	///////////////////////////////////////////////////////////
 
-	//write the result
+	// write the result
 	transformResult.available = true;
 	transformResult.valid = true;
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 
-	//redraw the curve
+	// redraw the curve
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 
@@ -218,26 +218,26 @@ void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("xyHilbertTransformCurve");
 
-	//write the base class
+	// write the base class
 	XYAnalysisCurve::save(writer);
 
-	//write xy-fourier_transform-curve specific information
-	//transform data
+	// write xy-fourier_transform-curve specific information
+	// transform data
 	writer->writeStartElement("transformData");
-	writer->writeAttribute( "autoRange", QString::number(d->transformData.autoRange) );
-	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.first()) );
-	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.last()) );
-	writer->writeAttribute( "type", QString::number(d->transformData.type) );
-	writer->writeEndElement();// transformData
+	writer->writeAttribute("autoRange", QString::number(d->transformData.autoRange));
+	writer->writeAttribute("xRangeMin", QString::number(d->transformData.xRange.first()));
+	writer->writeAttribute("xRangeMax", QString::number(d->transformData.xRange.last()));
+	writer->writeAttribute("type", QString::number(d->transformData.type));
+	writer->writeEndElement(); // transformData
 
-	//transform results (generated columns)
+	// transform results (generated columns)
 	writer->writeStartElement("transformResult");
-	writer->writeAttribute( "available", QString::number(d->transformResult.available) );
-	writer->writeAttribute( "valid", QString::number(d->transformResult.valid) );
-	writer->writeAttribute( "status", d->transformResult.status );
-	writer->writeAttribute( "time", QString::number(d->transformResult.elapsedTime) );
+	writer->writeAttribute("available", QString::number(d->transformResult.available));
+	writer->writeAttribute("valid", QString::number(d->transformResult.valid));
+	writer->writeAttribute("status", d->transformResult.status);
+	writer->writeAttribute("time", QString::number(d->transformResult.elapsedTime));
 
-	//save calculated columns if available
+	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
@@ -263,7 +263,7 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			continue;
 
 		if (reader->name() == "xyAnalysisCurve") {
-			if ( !XYAnalysisCurve::load(reader, preview) )
+			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
 		} else if (!preview && reader->name() == "transformData") {
 			attribs = reader->attributes();
@@ -278,7 +278,7 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", transformResult.status);
 			READ_INT_VALUE("time", transformResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
@@ -304,11 +304,11 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yColumn->setHidden(true);
 		addChild(d->yColumn);
 
-		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
-		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
+		d->xVector = static_cast<QVector<double>*>(d->xColumn->data());
+		d->yVector = static_cast<QVector<double>*>(d->yColumn->data());
 
-		XYCurve::d_ptr->xColumn = d->xColumn;
-		XYCurve::d_ptr->yColumn = d->yColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
 	}

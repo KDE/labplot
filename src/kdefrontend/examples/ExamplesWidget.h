@@ -1,10 +1,10 @@
 /*
-    File                 : ExamplesWidget.h
-    Project              : LabPlot
-    Description          : widget showing the available example projects
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExamplesWidget.h
+	Project              : LabPlot
+	Description          : widget showing the available example projects
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef EXAMPLESWIDGET_H
@@ -35,15 +35,15 @@ private:
 	void activateIconViewItem(const QString& name);
 	void activateListViewItem(const QString& name);
 
-private slots:
+private Q_SLOTS:
 	void collectionChanged(int);
-	void colorMapChanged();
+	void exampleChanged();
 	void showInfo();
 	void toggleIconView();
 	void viewModeChanged(int);
 	void activated(const QString&);
 
-signals:
+Q_SIGNALS:
 	void doubleClicked();
 };
 

@@ -20,10 +20,12 @@ GCP=/opt/local/libexec/gnubin/cp
 #########################################
 
 mkdir -pv $INPREFIX/share/{appdata,applications}
+mkdir -pv $INPREFIX/Resources/kxmlgui5/labplot2
 
 echo "Running macdeployqt ..."
 # -verbose=3
-macdeployqt $PREFIX/$NAME.app -verbose=2
+LIBPATH=/Users/user/kde/lib
+macdeployqt $PREFIX/$NAME.app -verbose=2 -libpath=$LIBPATH
 
 #########################################
 
@@ -42,6 +44,10 @@ cp -vr kde/share/$NAME/pics $INPREFIX/Resources/
 cp -vr kde/share/$NAME/color-schemes $INPREFIX/Resources/color-schemes
 #datasets
 cp -vr kde/share/$NAME/datasets $INPREFIX/Resources/datasets
+#color maps
+cp -vr kde/share/$NAME/colormaps $INPREFIX/Resources/colormaps
+#examples
+cp -vr kde/share/$NAME/examples $INPREFIX/Resources/examples
 # appdata
 cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
 cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
@@ -49,10 +55,12 @@ cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 # cantor
 cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
 cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
+cp -v kde/Applications/cantor_pythonserver.app/Contents/MacOS/cantor_pythonserver $INPREFIX/MacOS
 cp -vr kde/plugins/cantor $INPREFIX/PlugIns
 cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-# not available in cantor master
-#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
+# libcantorlibs.XX.dylib pulled in by macdeployqt may be broken
+#$GCP -Pv kde/lib/libcantorlibs* $INPREFIX/Frameworks/
+cp -v kde/share/kxmlgui5/cantor/*.rc $INPREFIX/Resources/kxmlgui5/labplot2/
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
@@ -62,7 +70,7 @@ mkdir -p $INPREFIX/Resources/kf5/kcharselect
 cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
-cp -v labplot/admin/Info.plist $INPREFIX
+cp -v Info.plist $INPREFIX
 
 # translation (locale)
 cd kde/share

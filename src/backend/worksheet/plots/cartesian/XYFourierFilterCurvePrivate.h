@@ -1,13 +1,12 @@
 /*
-    File                 : XYFourierFilterCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYFourierFilterCurve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYFourierFilterCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYFourierFilterCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYFOURIERFILTERCURVEPRIVATE_H
 #define XYFOURIERFILTERCURVEPRIVATE_H
@@ -18,7 +17,7 @@
 class XYFourierFilterCurve;
 class Column;
 
-class XYFourierFilterCurvePrivate: public XYAnalysisCurvePrivate {
+class XYFourierFilterCurvePrivate : public XYAnalysisCurvePrivate {
 public:
 	explicit XYFourierFilterCurvePrivate(XYFourierFilterCurve*);
 	~XYFourierFilterCurvePrivate() override;

@@ -1,19 +1,18 @@
 /*
-    File                 : nsl_sf_basic.h
-    Project              : LabPlot
-    Description          : NSL special basic functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2019 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : nsl_sf_basic.h
+	Project              : LabPlot
+	Description          : NSL special basic functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef NSL_SF_BASIC_H
 #define NSL_SF_BASIC_H
 
-#include <stdint.h>	/* fixed size int types */
-#include <gsl/gsl_version.h>
 #include "nsl_complex.h"
+#include <gsl/gsl_version.h>
+#include <stdint.h> /* fixed size int types */
 
 /* random functions */
 double nsl_sf_rand(void);
@@ -24,6 +23,28 @@ double nsl_sf_drand(void);
 double nsl_sf_sgn(double x);
 /* Heavyside theta function */
 double nsl_sf_theta(double x);
+
+/* non-standard function */
+double nsl_sf_exp10(double x);
+
+/* non-uniform random number generation */
+double nsl_sf_ran_gaussian(double sigma);
+double nsl_sf_ran_exponential(double mu);
+double nsl_sf_ran_laplace(double a);
+double nsl_sf_ran_cauchy(double a);
+double nsl_sf_ran_rayleigh(double sigma);
+double nsl_sf_ran_landau(void);
+double nsl_sf_ran_levy(double c, double alpha);
+double nsl_sf_ran_gamma(double a, double b);
+double nsl_sf_ran_flat(double a, double b);
+double nsl_sf_ran_lognormal(double zeta, double sigma);
+double nsl_sf_ran_chisq(double nu);
+double nsl_sf_ran_tdist(double nu);
+double nsl_sf_ran_logistic(double a);
+
+double nsl_sf_ran_poisson(double mu);
+double nsl_sf_ran_bernoulli(double p);
+double nsl_sf_ran_binomial(double p, double n);
 
 /* log2(x) for integer value x */
 int nsl_sf_log2_int(unsigned int x);
@@ -144,7 +165,7 @@ double nsl_sf_legendre_Plm(double l, double m, double x);
 double nsl_sf_legendre_sphPlm(double l, double m, double x);
 double nsl_sf_conicalP_sphreg(double l, double L, double x);
 double nsl_sf_conicalP_cylreg(double m, double l, double x);
-double nsl_sf_legendre_H3d(double l,  double L, double e);
+double nsl_sf_legendre_H3d(double l, double L, double e);
 
 #if (GSL_MAJOR_VERSION >= 2)
 double nsl_sf_mathieu_a(double n, double q);
@@ -157,7 +178,7 @@ double nsl_sf_mathieu_Ms(double j, double n, double q, double x);
 
 double nsl_sf_psiint(double n);
 double nsl_sf_psi1int(double n);
-double nsl_sf_psin(double n,  double x);
+double nsl_sf_psin(double n, double x);
 
 double nsl_sf_zetaint(double n);
 double nsl_sf_zetam1int(double n);

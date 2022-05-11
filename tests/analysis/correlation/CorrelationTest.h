@@ -1,11 +1,11 @@
 /*
-    File                 : CorrelationTest.h
-    Project              : LabPlot
-    Description          : Tests for data correlation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CorrelationTest.h
+	Project              : LabPlot
+	Description          : Tests for data correlation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef CORRELATIONTEST_H
 #define CORRELATIONTEST_H
@@ -15,7 +15,7 @@
 class CorrelationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// linear tests
 	void testLinear();
 	void testLinear2();

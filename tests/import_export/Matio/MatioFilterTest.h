@@ -1,10 +1,10 @@
 /*
-    File                 : MatioFilterTest.h
-    Project              : LabPlot
-    Description          : Tests for the Matio I/O-filter.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatioFilterTest.h
+	Project              : LabPlot
+	Description          : Tests for the Matio I/O-filter.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MATIOFILTERTEST_H
@@ -16,7 +16,7 @@
 class MatioFilterTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testImportDouble();
 	void testImportSpreadsheet();
 	void testImportSpreadsheetPortion();
@@ -31,7 +31,8 @@ private slots:
 	void testImportCell();
 	void testImportCellPortion();
 	void testImportEmptyCell();
-};
 
+	void testImportMultipleVars();
+};
 
 #endif

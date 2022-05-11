@@ -1,17 +1,17 @@
 /*
-    File                 : AsciiFilter.h
-    Project              : LabPlot
-    Description          : ASCII I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AsciiFilter.h
+	Project              : LabPlot
+	Description          : ASCII I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef ASCIIFILTER_H
 #define ASCIIFILTER_H
 
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/datasources/filters/AbstractFileFilter.h"
 
 class Spreadsheet;
 class QStringList;
@@ -35,17 +35,16 @@ public:
 
 	static QString fileInfoString(const QString&);
 	static int columnNumber(const QString& fileName, const QString& separator = QString());
-	static size_t lineNumber(const QString& fileName);
-	size_t lineNumber(QIODevice&) const;	// calculate number of lines if device supports it
+	static size_t lineNumber(const QString& fileName, size_t maxLines = std::numeric_limits<std::size_t>::max());
+	size_t lineNumber(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max()) const; // calculate number of lines if device supports it
 
 	// read data from any device
-	void readDataFromDevice(QIODevice& device, AbstractDataSource*,
-	                        AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*dataSource);
+	void readDataFromDevice(QIODevice& device, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource* dataSource);
 	qint64 readFromLiveDevice(QIODevice& device, AbstractDataSource*, qint64 from = -1);
 	// overloaded function to read from file
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-	                      AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
@@ -73,6 +72,7 @@ public:
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 	void setHeaderEnabled(const bool);
+	void setHeaderLine(int);
 	bool isHeaderEnabled() const;
 	void setSkipEmptyParts(const bool);
 	bool skipEmptyParts() const;

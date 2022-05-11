@@ -1,10 +1,10 @@
 /*
-    File                 : SettingsDialog.h
-    Project              : LabPlot
-    Description          : application settings dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsDialog.h
+	Project              : LabPlot
+	Description          : application settings dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SETTINGSDIALOG_H
@@ -16,12 +16,13 @@ class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsSpreadsheetPage;
 class SettingsWorksheetPage;
+class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
 namespace KUserFeedback {
-	class FeedbackConfigWidget;
+class FeedbackConfigWidget;
 }
 #endif
 
@@ -32,7 +33,7 @@ public:
 	explicit SettingsDialog(QWidget*);
 	~SettingsDialog() override;
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void slotButtonClicked(QAbstractButton*);
 
@@ -41,7 +42,10 @@ private:
 	SettingsGeneralPage* m_generalPage;
 	SettingsWorksheetPage* m_worksheetPage;
 	SettingsSpreadsheetPage* m_spreadsheetPage;
-// 	SettingsWelcomePage* m_welcomePage;
+#ifdef HAVE_CANTOR_LIBS
+	SettingsNotebookPage* m_notebookPage;
+#endif
+	// 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -51,7 +55,7 @@ private:
 	void applySettings();
 	void restoreDefaults();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 	void resetWelcomeScreen();
 };

@@ -1,11 +1,11 @@
 /*
-    File                 : PartMdiView.cpp
-    Project              : LabPlot
-    Description          : QMdiSubWindow wrapper for aspect views.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : PartMdiView.cpp
+	Project              : LabPlot
+	Description          : QMdiSubWindow wrapper for aspect views.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "commonfrontend/core/PartMdiView.h"
@@ -24,13 +24,15 @@
  * this class automatically updates the window title when AbstractAspect::caption() is changed
  * and holds the connection to the actual data visualized in this window via the pointer to \c AbstractPart.
  */
-PartMdiView::PartMdiView(AbstractPart* part) : QMdiSubWindow(nullptr), m_part(part) {
+PartMdiView::PartMdiView(AbstractPart* part)
+	: QMdiSubWindow(nullptr)
+	, m_part(part) {
 	setWindowIcon(m_part->icon());
 	setWidget(m_part->view());
 	setAttribute(Qt::WA_DeleteOnClose);
 	handleAspectDescriptionChanged(m_part);
 
-	//resize the MDI sub window to fit the content of the view
+	// resize the MDI sub window to fit the content of the view
 	resize(m_part->view()->size());
 
 	connect(m_part, &AbstractPart::aspectDescriptionChanged, this, &PartMdiView::handleAspectDescriptionChanged);
@@ -60,14 +62,12 @@ void PartMdiView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	close();
 }
 
-void PartMdiView::closeEvent(QCloseEvent *event) {
+void PartMdiView::closeEvent(QCloseEvent* event) {
 	m_part->deleteView();
 	event->accept();
 }
 
-void PartMdiView::slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
-	Q_UNUSED(oldState);
-
+void PartMdiView::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {
 	if (m_closing)
 		return;
 

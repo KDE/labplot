@@ -1,10 +1,10 @@
 /*
-    File                 : AddValueLabelDialog.h
-    Project              : LabPlot
-    Description          : Dialog to add a new the value label
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AddValueLabelDialog.h
+	Project              : LabPlot
+	Description          : Dialog to add a new the value label
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ADDVALUELABELDIALOG_H
@@ -20,7 +20,7 @@ class AddValueLabelDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
+	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
 	~AddValueLabelDialog() override;
 
 	void setDateTimeFormat(const QString&);
@@ -34,10 +34,9 @@ public:
 	QString label() const;
 
 private:
-	QLineEdit* leValue;
-	QLineEdit* leLabel;
-	QDateTimeEdit* dateTimeEdit;
-	AbstractColumn::ColumnMode m_mode;
+	QLineEdit* leValue{nullptr};
+	QLineEdit* leLabel{nullptr};
+	QDateTimeEdit* dateTimeEdit{nullptr};
 };
 
 #endif

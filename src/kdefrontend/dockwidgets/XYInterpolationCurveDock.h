@@ -1,35 +1,35 @@
 /*
-    File             : XYInterpolationCurveDock.h
-    Project          : LabPlot
-    Description      : widget for editing properties of interpolation curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File             : XYInterpolationCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of interpolation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYINTERPOLATIONCURVEDOCK_H
 #define XYINTERPOLATIONCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "ui_xyinterpolationcurvedockgeneraltab.h"
 
 class TreeViewComboBox;
 
-class XYInterpolationCurveDock: public XYCurveDock {
+class XYInterpolationCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYInterpolationCurveDock(QWidget *parent);
+	explicit XYInterpolationCurveDock(QWidget* parent);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
 private:
 	void initGeneralTab() override;
 	void updateSettings(const AbstractColumn*);
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
@@ -39,15 +39,15 @@ private:
 
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
-	unsigned int dataPoints{0};	// number of data points in selected column
+	unsigned int dataPoints{0}; // number of data points in selected column
 	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
 
-private slots:
-	//SLOTs for changes triggered in XYInterpolationCurveDock
-	//general tab
+private Q_SLOTS:
+	// SLOTs for changes triggered in XYInterpolationCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
@@ -69,8 +69,8 @@ private slots:
 	void recalculateClicked();
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

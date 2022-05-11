@@ -1,45 +1,40 @@
 /*
-    File                 : ROOTFilter.cpp
-    Project              : LabPlot
-    Description          : ROOT(CERN) I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ROOTFilter.cpp
+	Project              : LabPlot
+	Description          : ROOT(CERN) I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/datasources/filters/ROOTFilter.h"
-#include "backend/datasources/filters/ROOTFilterPrivate.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
-#include "backend/lib/macros.h"
+#include "backend/datasources/filters/ROOTFilterPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
-#include <QDebug>
 #include <QFileInfo>
-#include <QSet>
 #include <QStack>
+
+#include <fstream>
 
 #ifdef HAVE_ZIP
 #include <lz4.h>
 #include <zlib.h>
 #endif
 
-#include <cmath>
-#include <fstream>
-#include <limits>
-#include <map>
-#include <string>
-#include <vector>
-
-ROOTFilter::ROOTFilter():AbstractFileFilter(FileType::ROOT), d(new ROOTFilterPrivate) {}
+ROOTFilter::ROOTFilter()
+	: AbstractFileFilter(FileType::ROOT)
+	, d(new ROOTFilterPrivate) {
+}
 
 ROOTFilter::~ROOTFilter() = default;
 
-void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-			AbstractFileFilter::ImportMode importMode) {
+void ROOTFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
@@ -47,12 +42,10 @@ void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void ROOTFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void ROOTFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
-void ROOTFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void ROOTFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void ROOTFilter::setCurrentObject(const QString& object) {
@@ -112,9 +105,9 @@ void ROOTFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("object", d->currentObject);
 	writer->writeAttribute("startRow", QString::number(d->startRow));
 	writer->writeAttribute("endRow", QString::number(d->endRow));
-	for (const auto & c : d->columns) {
+	for (const auto& c : d->columns) {
 		writer->writeStartElement("column");
-		for (const auto & s : c)
+		for (const auto& s : c)
 			writer->writeTextElement("id", s);
 		writer->writeEndElement();
 	}
@@ -167,8 +160,7 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 
 ROOTFilterPrivate::ROOTFilterPrivate() = default;
 
-ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos)
-{
+ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
 	QStringList typeobject = currentObject.split(':');
 	if (typeobject.size() < 2)
 		return FileType::Invalid;
@@ -207,14 +199,15 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 	return type;
 }
 
-void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
-		AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO);
+void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO << ", object: " << STDSTRING(currentObject));
 
 	long int pos = 0;
-	auto type = currentObjectPosition(fileName, pos);
-	if (pos == 0)
+	const auto type = currentObjectPosition(fileName, pos);
+	if (pos == 0) // is not changed???
 		return;
+
+	DEBUG("start/end row = " << startRow << " " << endRow)
 
 	if (type == FileType::Hist) {
 		auto bins = readHistogram(pos);
@@ -224,20 +217,26 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = qMax(qAbs(startRow), 0);
 		int last = endRow < 0 ? nbins - 1 : qMax(first - 1, qMin(endRow, nbins - 1));
 
+		DEBUG("first/last = " << first << " " << last)
+
 		QStringList headers;
 		for (const auto& l : columns) {
 			headers << l.last();
 		}
 
 		std::vector<void*> dataContainer;
-		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
-			headers, QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Numeric));
+		const int columnOffset = dataSource->prepareImport(dataContainer,
+														   importMode,
+														   last - first + 1,
+														   columns.size(),
+														   headers,
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
 
 		// read data
-		DEBUG("	reading " << first - last + 1 << " lines");
+		DEBUG("	reading " << last - first + 1 << " lines");
 
 		int c = 0;
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 
 		for (const auto& l : columns) {
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
@@ -246,8 +245,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 				for (int i = first; i <= last; ++i)
 					container[i - first] = (i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
-					                                                : i == 0 ? bins.front().lowedge   // -infinity
-					                                                         : -bins.front().lowedge; // +infinity
+						: i == 0									? bins.front().lowedge // -infinity
+																	: -bins.front().lowedge; // +infinity
 			} else if (l.first() == QStringLiteral("low")) {
 				if (spreadsheet)
 					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::X);
@@ -274,6 +273,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = qMax(qAbs(startRow), 0);
 		int last = qMax(first - 1, qMin(endRow, nentries - 1));
 
+		DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
+
 		QStringList headers;
 		for (const auto& l : columns) {
 			QString lastelement = l.back();
@@ -288,11 +289,16 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		}
 
 		std::vector<void*> dataContainer;
-		const int columnOffset = dataSource->prepareImport(dataContainer, importMode, last - first + 1, columns.size(),
-			headers, QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Numeric));
+		const int columnOffset = dataSource->prepareImport(dataContainer,
+														   importMode,
+														   last - first + 1,
+														   columns.size(),
+														   headers,
+														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
 
 		int c = 0;
 		for (const auto& l : columns) {
+			// DEBUG("column " << c)
 			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
@@ -307,6 +313,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
 			auto data = readTree(pos, l.first(), leaf, (int)element, last);
+			// QDEBUG("DATA = " << data)
 			for (int i = first; i <= last; ++i)
 				container[i - first] = data[i];
 		}
@@ -315,13 +322,10 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	}
 }
 
-void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void ROOTFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 }
 
-ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, ROOTData::Directory>& dataContent, std::string (ROOTData::*nameFunc)(long int))
-{
+ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, ROOTData::Directory>& dataContent, std::string (ROOTData::*nameFunc)(long int)) {
 	ROOTFilter::Directory dirs;
 	QHash<const std::remove_reference<decltype(dataContent)>::type::value_type*, ROOTFilter::Directory*> filledDirs;
 	for (const auto& path : dataContent) {
@@ -393,12 +397,12 @@ QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quin
 }
 
 QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& fileName, int first, int last) {
-	DEBUG("ROOTFilterPrivate::previewCurrentObject()");
+	DEBUG(Q_FUNC_INFO);
 
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);
 	if (pos == 0)
-		return QVector<QStringList>(1, QStringList());
+		return {1, QStringList()};
 
 	if (type == FileType::Hist) {
 		auto bins = readHistogram(pos);
@@ -418,10 +422,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		for (const auto& l : columns) {
 			if (l.first() == QStringLiteral("center")) {
 				for (int i = first; i <= last; ++i)
-					preview[i - first] << QString::number(
-						(i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
-						                         : i == 0 ? bins.front().lowedge    // -infinity
-						                                  : -bins.front().lowedge); // +infinity
+					preview[i - first] << QString::number((i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
+															  : i == 0			   ? bins.front().lowedge // -infinity
+																				   : -bins.front().lowedge); // +infinity
 			} else if (l.first() == QStringLiteral("low")) {
 				for (int i = first; i <= last; ++i)
 					preview[i - first] << QString::number(bins[i].lowedge);
@@ -465,8 +468,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		}
 
 		return preview;
-	} else
-		return QVector<QStringList>(1, QStringList());
+	}
+
+	return {1, QStringList()};
 }
 
 int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
@@ -476,13 +480,13 @@ int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
 		return 0;
 
 	switch (type) {
-		case FileType::Hist:
-			return currentROOTData->histogramBins(pos);
-		case FileType::Tree:
-			return currentROOTData->treeEntries(pos);
-		case FileType::Invalid:
-		default:
-			return 0;
+	case FileType::Hist:
+		return currentROOTData->histogramBins(pos);
+	case FileType::Tree:
+		return currentROOTData->treeEntries(pos);
+	case FileType::Invalid:
+	default:
+		return 0;
 	}
 }
 
@@ -497,9 +501,7 @@ bool ROOTFilterPrivate::setFile(const QString& fileName) {
 
 	QDateTime modified = file.lastModified();
 	qint64 size = file.size();
-	if (!currentROOTData || fileName != currentFile.name
-	                     || modified != currentFile.modified
-	                     || size != currentFile.size) {
+	if (!currentROOTData || fileName != currentFile.name || modified != currentFile.modified || size != currentFile.size) {
 		currentFile.name = fileName;
 		currentFile.modified = modified;
 		currentFile.size = size;
@@ -513,9 +515,9 @@ std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(quint64 pos) {
 }
 
 std::vector<double> ROOTFilterPrivate::readTree(quint64 pos, const QString& branchName, const QString& leafName, int element, int last) {
+	// QDEBUG("branch/leaf name =" << branchName << " " << leafName << ", element/last =" << element << " " << last)
 	return currentROOTData->listEntries<double>(pos, branchName.toStdString(), leafName.toStdString(), element, last + 1);
 }
-
 
 /******************** ROOTData implementation ************************/
 
@@ -588,12 +590,12 @@ std::string String(char*& buffer) {
 	// root/io/io/src/TBufferFile.cxx -> ReadTString
 	size_t s = *(buffer++);
 	if (s == 0)
-		return std::string();
+		return {};
 	else {
 		if (s == 0xFF)
 			s = read<int>(buffer);
 		buffer += s;
-		return std::string(buffer - s, buffer);
+		return {buffer - s, buffer};
 	}
 }
 
@@ -619,7 +621,8 @@ std::string readObject(char*& buf, char* const buf0, std::map<size_t, std::strin
 
 using namespace ROOTDataHelpers;
 
-ROOTData::ROOTData(const std::string& filename) : filename(filename) {
+ROOTData::ROOTData(const std::string& filename)
+	: filename(filename) {
 	// The file structure is described in root/io/io/src/TFile.cxx
 	std::ifstream is(filename, std::ifstream::binary);
 	std::string root(4, 0);
@@ -703,13 +706,10 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 				// do not rely on this, but read the header
 				std::string lib(2, 0);
 				is.read(&lib[0], 2);
-				complib = lib == "ZL" ? 1 :
-				          lib == "XZ" ? 2 :
-				          lib == "CS" ? 3 :
-				          lib == "L4" ? 4 : 0;
+				complib = lib == "ZL" ? 1 : lib == "XZ" ? 2 : lib == "CS" ? 3 : lib == "L4" ? 4 : 0;
 			}
 			if (complib > 0) {
-#			ifdef HAVE_ZIP
+#ifdef HAVE_ZIP
 				// see root/core/zip/src/RZip.cxx -> R__unzip
 				const int method = is.get();
 				size_t chcdata = is.get();
@@ -721,54 +721,60 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 
 				if (chcdata == lcdata - lkey - 9 && chdata == ldata) {
 					if (complib == 1 && method == Z_DEFLATED) {
-						buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::zlib,
-						                   pos + lkey + 9, chcdata, chdata, 0};
+						buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::zlib, pos + lkey + 9, chcdata, chdata, 0};
 					} else if (complib == 4 && method == LZ4_versionNumber() / 10000) {
-						buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::lz4,
-						                   pos + lkey + 9 + 8, chcdata - 8, chdata, 0};
+						buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::lz4, pos + lkey + 9 + 8, chcdata - 8, chdata, 0};
 					}
 				}
-#			endif
+#endif
 			} else {
-				buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::none,
-				                   pos + lkey, ldata, ldata, 0};
+				buffer = KeyBuffer{type, name, title, cycle, lkey, KeyBuffer::CompressionType::none, pos + lkey, ldata, ldata, 0};
 			}
 			switch (buffer.type) {
-				case ContentType::Basket:
-					basketkeys.emplace(pos, buffer);
-					break;
-				case ContentType::Tree:
-				case ContentType::NTuple: {
-					auto it = treedirs.find(pseek);
-					if (it == treedirs.end())
-						it = treedirs.begin();
-					bool keyreplaced = false;
-					for (auto & tpos : it->second.content) {
-						auto jt = treekeys.find(tpos);
-						if (jt != treekeys.end() && jt->second.name == buffer.name && jt->second.cycle < buffer.cycle) {
-							// override key with lower cylce number
-							tpos = pos;
-							treekeys.erase(jt);
-							keyreplaced = true;
-							break;
-						}
+			case ContentType::Basket:
+				basketkeys.emplace(pos, buffer);
+				break;
+			case ContentType::Tree:
+			case ContentType::NTuple: {
+				auto it = treedirs.find(pseek);
+				if (it == treedirs.end())
+					it = treedirs.begin();
+				bool keyreplaced = false;
+				for (auto& tpos : it->second.content) {
+					auto jt = treekeys.find(tpos);
+					if (jt != treekeys.end() && jt->second.name == buffer.name && jt->second.cycle < buffer.cycle) {
+						// override key with lower cylce number
+						tpos = pos;
+						treekeys.erase(jt);
+						keyreplaced = true;
+						break;
 					}
-					if (!keyreplaced)
-						it->second.content.push_back(pos);
-					treekeys.emplace(pos, buffer);
-					break;
-				} case ContentType::Streamer:
-					readStreamerInfo(buffer);
-					break;
-				case ContentType::Double: case ContentType::Float: case ContentType::Int: case ContentType::Short: case ContentType::Byte: {
-					auto it = histdirs.find(pseek);
-					if (it == histdirs.end())
-						it = histdirs.begin();
+				}
+				if (!keyreplaced)
 					it->second.content.push_back(pos);
-					histkeys.emplace(pos, buffer);
-					break;
-				} case ContentType::Invalid: case ContentType::Long: case ContentType::Bool: case ContentType::CString:
-					break;
+				treekeys.emplace(pos, buffer);
+				break;
+			}
+			case ContentType::Streamer:
+				readStreamerInfo(buffer);
+				break;
+			case ContentType::Double:
+			case ContentType::Float:
+			case ContentType::Int:
+			case ContentType::Short:
+			case ContentType::Byte: {
+				auto it = histdirs.find(pseek);
+				if (it == histdirs.end())
+					it = histdirs.begin();
+				it->second.content.push_back(pos);
+				histkeys.emplace(pos, buffer);
+				break;
+			}
+			case ContentType::Invalid:
+			case ContentType::Long:
+			case ContentType::Bool:
+			case ContentType::CString:
+				break;
 			}
 		}
 		pos += lcdata;
@@ -790,49 +796,55 @@ ROOTData::ROOTData(const std::string& filename) : filename(filename) {
 	static const StreamerInfo dummyobject{"Object", 0, std::string(), false, false};
 	if (!treekeys.empty()) {
 		if (!streamerInfo.count("TTree")) {
-			streamerInfo["TTree"] = {dummyobject, dummyobject, dummyobject, dummyobject,
-			                         StreamerInfo{"fEntries", 8, std::string(), false, false},
-			                         StreamerInfo{std::string(), 5 * 8 + 4 * 4, std::string(), false, false},
-			                         StreamerInfo{"fNClusterRange", 4, std::string(), true, false},
-			                         StreamerInfo{std::string(), 6 * 8, std::string(), false, false},
-			                         StreamerInfo{"fNClusterRangeEnd", 8, "fNClusterRange", false, true},
-			                         StreamerInfo{"fNClusterSize", 8, "fNClusterRange", false, true},
-			                         StreamerInfo{"fBranches", 0, std::string(), false, false}
-			};
+			streamerInfo["TTree"] = {dummyobject,
+									 dummyobject,
+									 dummyobject,
+									 dummyobject,
+									 StreamerInfo{"fEntries", 8, std::string(), false, false},
+									 StreamerInfo{std::string(), 5 * 8 + 4 * 4, std::string(), false, false},
+									 StreamerInfo{"fNClusterRange", 4, std::string(), true, false},
+									 StreamerInfo{std::string(), 6 * 8, std::string(), false, false},
+									 StreamerInfo{"fNClusterRangeEnd", 8, "fNClusterRange", false, true},
+									 StreamerInfo{"fNClusterSize", 8, "fNClusterRange", false, true},
+									 StreamerInfo{"fBranches", 0, std::string(), false, false}};
 		}
 		if (!streamerInfo.count("TBranch")) {
-			streamerInfo["TBranch"] = {StreamerInfo{"TNamed", 0, std::string(), false, false}, dummyobject,
-			                           StreamerInfo{std::string(), 3 * 4, std::string(), false, false},
-			                           StreamerInfo{"fWriteBasket", 4, std::string(), false, false},
-			                           StreamerInfo{std::string(), 8 + 4, std::string(), false, false},
-			                           StreamerInfo{"fMaxBaskets", 4, std::string(), true, false},
-			                           StreamerInfo{std::string(), 4 + 4 * 8, std::string(), false, false},
-			                           StreamerInfo{"fBranches", 0, std::string(), false, false},
-			                           StreamerInfo{"fLeaves", 0, std::string(), false, false},
-			                           StreamerInfo{"fBaskets", 0, std::string(), false, false},
-			                           StreamerInfo{"fBasketBytes", 4, "fMaxBaskets", false, true},
-			                           StreamerInfo{"fBasketEntry", 8, "fMaxBaskets", false, true},
-			                           StreamerInfo{"fBasketSeek", 8, "fMaxBaskets", false, true}
-			};
+			streamerInfo["TBranch"] = {StreamerInfo{"TNamed", 0, std::string(), false, false},
+									   dummyobject,
+									   StreamerInfo{std::string(), 3 * 4, std::string(), false, false},
+									   StreamerInfo{"fWriteBasket", 4, std::string(), false, false},
+									   StreamerInfo{std::string(), 8 + 4, std::string(), false, false},
+									   StreamerInfo{"fMaxBaskets", 4, std::string(), true, false},
+									   StreamerInfo{std::string(), 4 + 4 * 8, std::string(), false, false},
+									   StreamerInfo{"fBranches", 0, std::string(), false, false},
+									   StreamerInfo{"fLeaves", 0, std::string(), false, false},
+									   StreamerInfo{"fBaskets", 0, std::string(), false, false},
+									   StreamerInfo{"fBasketBytes", 4, "fMaxBaskets", false, true},
+									   StreamerInfo{"fBasketEntry", 8, "fMaxBaskets", false, true},
+									   StreamerInfo{"fBasketSeek", 8, "fMaxBaskets", false, true}};
 		}
 	}
 	if (!histkeys.empty()) {
 		if (!streamerInfo.count("TH1")) {
-			streamerInfo["TH1"] = {dummyobject, dummyobject, dummyobject, dummyobject,
-			                       StreamerInfo{"fNcells", 4, std::string(), false, false},
-			                       StreamerInfo{"fXaxis", 0, std::string(), false, false},
-			                       StreamerInfo{"fYaxis", 0, std::string(), false, false},
-			                       StreamerInfo{"fZaxis", 0, std::string(), false, false},
-			                       StreamerInfo{std::string(), 2 * 2 + 8 * 8, std::string(), false, false},
-			                       dummyobject,
-			                       StreamerInfo{"fSumw2", 0, std::string(), false, false}};
+			streamerInfo["TH1"] = {dummyobject,
+								   dummyobject,
+								   dummyobject,
+								   dummyobject,
+								   StreamerInfo{"fNcells", 4, std::string(), false, false},
+								   StreamerInfo{"fXaxis", 0, std::string(), false, false},
+								   StreamerInfo{"fYaxis", 0, std::string(), false, false},
+								   StreamerInfo{"fZaxis", 0, std::string(), false, false},
+								   StreamerInfo{std::string(), 2 * 2 + 8 * 8, std::string(), false, false},
+								   dummyobject,
+								   StreamerInfo{"fSumw2", 0, std::string(), false, false}};
 		}
 		if (!streamerInfo.count("TAxis")) {
-			streamerInfo["TAxis"] = {dummyobject, dummyobject,
-			                         StreamerInfo{"fNbins", 4, std::string(), false, false},
-			                         StreamerInfo{"fXmin", 8, std::string(), false, false},
-			                         StreamerInfo{"fXmax", 8, std::string(), false, false},
-			                         StreamerInfo{"fXbins", 0, std::string(), false, false}};
+			streamerInfo["TAxis"] = {dummyobject,
+									 dummyobject,
+									 StreamerInfo{"fNbins", 4, std::string(), false, false},
+									 StreamerInfo{"fXmin", 8, std::string(), false, false},
+									 StreamerInfo{"fXmax", 8, std::string(), false, false},
+									 StreamerInfo{"fXbins", 0, std::string(), false, false}};
 		}
 	}
 
@@ -854,16 +866,14 @@ void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::string ROOTData::histogramName(long int pos)
-{
+std::string ROOTData::histogramName(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it != histkeys.end())
 		return it->second.name + ';' + std::to_string(it->second.cycle);
-	return std::string();
+	return {};
 }
 
-int ROOTData::histogramBins(long int pos)
-{
+int ROOTData::histogramBins(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it != histkeys.end())
 		return it->second.nrows;
@@ -873,7 +883,7 @@ int ROOTData::histogramBins(long int pos)
 std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it == histkeys.end())
-		return std::vector<ROOTData::BinPars>();
+		return {};
 
 	std::string buffer = data(it->second);
 	if (!buffer.empty()) {
@@ -890,7 +900,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 
 		std::vector<BinPars> r(read<int>(buf)); // fNcells
 		if (r.size() < 3)
-			return std::vector<BinPars>();
+			return {};
 
 		r.front().lowedge = -std::numeric_limits<double>::infinity();
 
@@ -912,7 +922,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 				r[i + 1].lowedge = read<double>(buf);
 			}
 		} else {
-			//UNUSED: buf += sizeof(double) * nbins;
+			// UNUSED: buf += sizeof(double) * nbins;
 			const double scale = (xmax - xmin) / static_cast<double>(nbins);
 			for (size_t i = 0; i < r.size() - 1; ++i) {
 				r[i + 1].lowedge = static_cast<double>(i) * scale + xmin;
@@ -935,7 +945,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 
 		return r;
 	} else
-		return std::vector<BinPars>();
+		return {};
 }
 
 void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
@@ -951,16 +961,14 @@ void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::string ROOTData::treeName(long int pos)
-{
+std::string ROOTData::treeName(long int pos) {
 	auto it = treekeys.find(pos);
 	if (it != treekeys.end())
 		return it->second.name;
-	return std::string();
+	return {};
 }
 
-int ROOTData::treeEntries(long int pos)
-{
+int ROOTData::treeEntries(long int pos) {
 	auto it = treekeys.find(pos);
 	if (it != treekeys.end())
 		return it->second.nrows;
@@ -1033,7 +1041,7 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 					size_t elements = read<int>(buf);
 					int bytes = read<int>(buf);
 					if ((static_cast<int>(leafType(clname.back())) & 0xF) != bytes)
-						qDebug() << "ROOTData: type " << clname.back() << " does not match its size!";
+						DEBUG("ROOTData: type " << clname.back() << " does not match its size!")
 					buf += 5;
 					leaves.emplace_back(LeafInfo{branch, leafname, leafType(clname.back()), !read<char>(buf), elements});
 				}
@@ -1048,7 +1056,8 @@ std::vector<ROOTData::LeafInfo> ROOTData::listLeaves(long int pos) const {
 }
 
 template<class T>
-std::vector<T> ROOTData::listEntries(long int pos, const std::string& branchname, const std::string& leafname, const size_t element, const size_t nentries) const {
+std::vector<T>
+ROOTData::listEntries(long int pos, const std::string& branchname, const std::string& leafname, const size_t element, const size_t nentries) const {
 	std::vector<T> entries;
 
 	auto it = treekeys.find(pos);
@@ -1143,7 +1152,7 @@ std::vector<T> ROOTData::listEntries(long int pos, const std::string& branchname
 			}
 
 			if (static_cast<int>(element) * leafsize >= leafcontent) {
-				qDebug() << "ROOTData: " << leafname.c_str() << " only contains " << leafcontent / leafsize << " elements.";
+				DEBUG("ROOTData: " << leafname.c_str() << " only contains " << leafcontent / leafsize << " elements.");
 				break;
 			}
 
@@ -1177,7 +1186,7 @@ std::vector<T> ROOTData::listEntries(long int pos, const std::string& branchname
 						}
 					}
 				} else {
-					qDebug() << "ROOTData: fBasketSeek(" << i << "): " << pos << " (not available)";
+					DEBUG("ROOTData: fBasketSeek(" << i << "): " << pos << " (not available)")
 				}
 			}
 		}
@@ -1229,7 +1238,8 @@ ROOTData::ContentType ROOTData::leafType(const char type) {
 }
 
 template<class T>
-T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)(char*&) {
+T (*ROOTData::readType(ROOTData::ContentType type, bool sign) const)
+(char*&) {
 	switch (type) {
 	case ContentType::Double:
 		return readcast<double, T>;
@@ -1272,17 +1282,18 @@ std::string ROOTData::data(const ROOTData::KeyBuffer& buffer, std::ifstream& is)
 		std::string cdata(buffer.compressed_count, 0);
 		is.read(&cdata[0], buffer.compressed_count);
 		uLongf luncomp = (uLongf)buffer.count;
-		if (uncompress((Bytef *)data.data(), &luncomp, (Bytef *)cdata.data(), (uLong)cdata.size()) == Z_OK && data.size() == luncomp)
+		if (uncompress((Bytef*)data.data(), &luncomp, (Bytef*)cdata.data(), (uLong)cdata.size()) == Z_OK && data.size() == luncomp)
 			return data;
 	} else {
 		std::string cdata(buffer.compressed_count, 0);
 		is.read(&cdata[0], buffer.compressed_count);
-		if (LZ4_decompress_safe(cdata.data(), const_cast<char*>(data.data()), (int)buffer.compressed_count, (int)buffer.count) == static_cast<int>(buffer.count))
+		if (LZ4_decompress_safe(cdata.data(), const_cast<char*>(data.data()), (int)buffer.compressed_count, (int)buffer.count)
+			== static_cast<int>(buffer.count))
 			return data;
 #endif
 	}
 
-	return std::string();
+	return {};
 }
 
 void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
@@ -1327,14 +1338,8 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 					const bool isbasicpointer = clname == "TStreamerBasicPointer";
 					const bool ispointer = isbasicpointer || clname == "TStreamerObjectPointer";
 					if (i >= lowb) {
-						if (ispointer ||
-						    clname == "TStreamerBase" ||
-						    clname == "TStreamerBasicType" ||
-						    clname == "TStreamerObject" ||
-						    clname == "TStreamerObjectAny" ||
-						    clname == "TStreamerString" ||
-						    clname == "TStreamerSTL")
-						{
+						if (ispointer || clname == "TStreamerBase" || clname == "TStreamerBasicType" || clname == "TStreamerObject"
+							|| clname == "TStreamerObjectAny" || clname == "TStreamerString" || clname == "TStreamerSTL") {
 							Version(buf); // TStreamerXXX
 							Version(buf); // TStreamerElement
 							SkipObject(buf);
@@ -1357,28 +1362,28 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 								if (isbasicpointer) {
 									// see root/io/io/inc/TStreamerInfo.h -> TStreamerInfo::EReadWrite
 									switch (type - 40) {
-										case 1:  // char
-										case 11: // unsigned char
-											size = 1;
-											break;
-										case 2:  // short
-										case 12: // unsigned short
-										case 19: // float16
-											size = 2;
-											break;
-										case 3:  // int
-										case 5:  // float
-										case 9:  // double32
-										case 13: // unsigned int
-											size = 4;
-											break;
-										case 4:  // long
-										case 8:  // double
-										case 14: // unsigned long
-										case 16: // long
-										case 17: // unsigned long
-											size = 8;
-											break;
+									case 1: // char
+									case 11: // unsigned char
+										size = 1;
+										break;
+									case 2: // short
+									case 12: // unsigned short
+									case 19: // float16
+										size = 2;
+										break;
+									case 3: // int
+									case 5: // float
+									case 9: // double32
+									case 13: // unsigned int
+										size = 4;
+										break;
+									case 4: // long
+									case 8: // double
+									case 14: // unsigned long
+									case 16: // long
+									case 17: // unsigned long
+										size = 8;
+										break;
 									}
 								}
 							} else if (clname == "TStreamerBasicType") {
@@ -1397,7 +1402,11 @@ void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {
 		DEBUG("ROOTData: Inflation failed!")
 }
 
-bool ROOTData::advanceTo(char*& buf, const std::vector<ROOTData::StreamerInfo>& objects, const std::string& current, const std::string& target, std::map<std::string, size_t>& counts) {
+bool ROOTData::advanceTo(char*& buf,
+						 const std::vector<ROOTData::StreamerInfo>& objects,
+						 const std::string& current,
+						 const std::string& target,
+						 std::map<std::string, size_t>& counts) {
 	// The object structure can be retrieved from TFile::GetStreamerInfoList().
 	// Every ROOT object contains a version number which may include the byte count
 	// for the object. The latter is currently assumed to be present to skip unused
@@ -1478,8 +1487,6 @@ QString ROOTFilter::fileInfoString(const QString& fileName) {
 	int infoBytes = read<int>(is);
 	info += i18n("Size of TStreamerInfo record: %1 bytes", QString::number(infoBytes));
 	info += QLatin1String("<br>");
-
-	Q_UNUSED(fileName);
 
 	return info;
 }

@@ -1,10 +1,10 @@
 /*
 	File                 : StatisticsColumnWidget.h
-    Project              : LabPlot
+	Project              : LabPlot
 	Description          : Widget showing statistics for column values
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef STATISTICSCOLUMNWIDGET_H
@@ -23,9 +23,9 @@ class StatisticsColumnWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit StatisticsColumnWidget(const Column*, QWidget *parent = nullptr);
+	explicit StatisticsColumnWidget(const Column*, QWidget* parent = nullptr);
 	~StatisticsColumnWidget() override;
-	void showStatistics();
+	void setCurrentTab(int);
 
 private:
 	void showOverview();
@@ -56,8 +56,11 @@ private:
 	bool m_qqPlotInitialized{false};
 	bool m_boxPlotInitialized{false};
 
-private slots:
+private Q_SLOTS:
 	void currentTabChanged(int);
+
+Q_SIGNALS:
+	void tabChanged(int);
 };
 
 #endif

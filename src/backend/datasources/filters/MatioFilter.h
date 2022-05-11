@@ -1,10 +1,10 @@
 /*
-    File                 : MatioFilter.h
-    Project              : LabPlot
-    Description          : Matio I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatioFilter.h
+	Project              : LabPlot
+	Description          : Matio I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MATIOFILTER_H
 #define MATIOFILTER_H
@@ -31,9 +31,12 @@ public:
 	static QString fileInfoString(const QString&);
 
 	void parse(const QString& fileName);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void
+	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
+	QVector<QStringList> readCurrentVar(const QString& fileName,
+										AbstractDataSource* = nullptr,
+										AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
+										int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;
@@ -45,7 +48,7 @@ public:
 	size_t varCount() const;
 	QVector<QStringList> varsInfo() const;
 
-	//TODO: -> AbstractFileFilter?
+	// TODO: -> AbstractFileFilter?
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);

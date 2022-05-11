@@ -1,26 +1,27 @@
 /*
 	File                 : StatisticsColumnWidget.cpp
-    Project              : LabPlot
+	Project              : LabPlot
 	Description          : Widget showing statistics for column values
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "StatisticsColumnWidget.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/lib/macros.h"
 
 #include <QTabWidget>
 #include <QTextEdit>
@@ -29,22 +30,21 @@
 
 #include <KLocalizedString>
 
-#include <cmath>
 #include <algorithm> //for min_element and max_element
+#include <cmath>
 
 extern "C" {
+#include "backend/nsl/nsl_kde.h"
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
-#include "backend/nsl/nsl_kde.h"
 }
 
-StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* parent) : QWidget(parent),
-	m_column(column),
-	m_project(new Project),
-	m_tabWidget(new QTabWidget)
-{
-
+StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* parent)
+	: QWidget(parent)
+	, m_column(column)
+	, m_project(new Project)
+	, m_tabWidget(new QTabWidget) {
 	auto* layout = new QVBoxLayout;
 	layout->addWidget(m_tabWidget);
 	setLayout(layout);
@@ -53,7 +53,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Location measures")+
+	                     + i18n("Location Measures")+
 	                     "</big><b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
@@ -132,7 +132,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Dispersion measures")+
+	                     + i18n("Dispersion Measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
@@ -175,7 +175,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Shape measures")+
+	                     + i18n("Shape Measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
@@ -199,14 +199,29 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	                     "</tr>"
 	                     "</table>");
 
-	//create tab widgets for every column and show the initial text with the placeholders
+	// create tab widgets for every column and show the initial text with the placeholders
 	m_teOverview = new QTextEdit(this);
 	m_teOverview->setReadOnly(true);
-	m_teOverview->setHtml(m_htmlText.arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"),
-									QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")).
-									arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"),
-										QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")).
-									arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+	m_teOverview->setHtml(m_htmlText
+							  .arg(QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"))
+							  .arg(QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"),
+								   QLatin1String("-"))
+							  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
 
 	m_tabWidget->addTab(m_teOverview, i18n("Overview"));
 	m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
@@ -218,15 +233,15 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 }
 
 StatisticsColumnWidget::~StatisticsColumnWidget() {
-	disconnect(m_tabWidget, 0, this, 0); //don't react on currentChanged signal
+	disconnect(m_tabWidget, nullptr, this, nullptr); // don't react on currentChanged signal
 	delete m_project;
 }
 
-void StatisticsColumnWidget::showStatistics() {
-	if (!m_overviewInitialized) {
-		QApplication::processEvents(QEventLoop::AllEvents, 0);
-		QTimer::singleShot(0, this, [=] () {currentTabChanged(0);});
-	}
+void StatisticsColumnWidget::setCurrentTab(int index) {
+	if (index == m_tabWidget->currentIndex())
+		currentTabChanged(index); // manually call the slot so we get the data shown
+	else
+		m_tabWidget->setCurrentIndex(index);
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
@@ -240,33 +255,34 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 		showQQPlot();
 	else if (index == 4 && !m_boxPlotInitialized)
 		showBoxPlot();
+
+	Q_EMIT tabChanged(index);
 }
 
 void StatisticsColumnWidget::showOverview() {
 	WAIT_CURSOR;
 	const Column::ColumnStatistics& statistics = m_column->statistics();
 
-	m_teOverview->setHtml(m_htmlText.arg(QString::number(statistics.size),
-									isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
-									isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
-									isNanValue(statistics.arithmeticMean),
-									isNanValue(statistics.geometricMean),
-									isNanValue(statistics.harmonicMean),
-									isNanValue(statistics.contraharmonicMean),
-									modeValue(m_column, statistics.mode),
-									isNanValue(statistics.firstQuartile)).
-						arg(isNanValue(statistics.median),
-							isNanValue(statistics.thirdQuartile),
-							isNanValue(statistics.trimean),
-							isNanValue(statistics.variance),
-							isNanValue(statistics.standardDeviation),
-							isNanValue(statistics.meanDeviation),
-							isNanValue(statistics.meanDeviationAroundMedian),
-							isNanValue(statistics.medianDeviation),
-							isNanValue(statistics.iqr)).
-						arg(isNanValue(statistics.skewness),
-							isNanValue(statistics.kurtosis),
-							isNanValue(statistics.entropy)));
+	m_teOverview->setHtml(m_htmlText
+							  .arg(QString::number(statistics.size),
+								   isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
+								   isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
+								   isNanValue(statistics.arithmeticMean),
+								   isNanValue(statistics.geometricMean),
+								   isNanValue(statistics.harmonicMean),
+								   isNanValue(statistics.contraharmonicMean),
+								   modeValue(m_column, statistics.mode),
+								   isNanValue(statistics.firstQuartile))
+							  .arg(isNanValue(statistics.median),
+								   isNanValue(statistics.thirdQuartile),
+								   isNanValue(statistics.trimean),
+								   isNanValue(statistics.variance),
+								   isNanValue(statistics.standardDeviation),
+								   isNanValue(statistics.meanDeviation),
+								   isNanValue(statistics.meanDeviationAroundMedian),
+								   isNanValue(statistics.medianDeviation),
+								   isNanValue(statistics.iqr))
+							  .arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
 	RESET_CURSOR;
 
 	m_overviewInitialized = true;
@@ -275,8 +291,8 @@ void StatisticsColumnWidget::showOverview() {
 void StatisticsColumnWidget::showHistogram() {
 	WAIT_CURSOR;
 
-	//add plot
-	CartesianPlot* plot = addPlot(&m_histogramWidget);
+	// add plot
+	auto* plot = addPlot(&m_histogramWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -290,7 +306,7 @@ void StatisticsColumnWidget::showHistogram() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	Histogram* histogram = new Histogram(QString());
+	auto* histogram = new Histogram(QString());
 	plot->addChild(histogram);
 	histogram->setDataColumn(m_column);
 
@@ -302,10 +318,10 @@ void StatisticsColumnWidget::showHistogram() {
 void StatisticsColumnWidget::showKDEPlot() {
 	WAIT_CURSOR;
 
-	//add plot
-	CartesianPlot* plot = addPlot(&m_kdePlotWidget);
+	// add plot
+	auto* plot = addPlot(&m_kdePlotWidget);
 
-	//set the axes lables
+	// set the axes lables
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal)
@@ -318,17 +334,17 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	//add normalized histogram
-	Histogram* histogram = new Histogram(QString());
+	// add normalized histogram
+	auto* histogram = new Histogram(QString());
 	plot->addChild(histogram);
 	histogram->setNormalization(Histogram::ProbabilityDensity);
 	histogram->setDataColumn(m_column);
 
-	//copy the non-nan and not masked values
+	// copy the non-nan and not masked values
 	QVector<double> data;
 	copyValidData(data);
 
-	//calculate 200 points to plot
+	// calculate 200 points to plot
 	int count = 200;
 	QVector<double> xData;
 	QVector<double> yData;
@@ -336,11 +352,11 @@ void StatisticsColumnWidget::showKDEPlot() {
 	yData.resize(count);
 	double min = *std::min_element(data.constBegin(), data.constEnd());
 	double max = *std::max_element(data.constBegin(), data.constEnd());
-	double step = (max - min)/count;
+	double step = (max - min) / count;
 	int n = data.count();
-	double h = GSL_MAX(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+	double h = qMax(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
 	for (int i = 0; i < count; ++i) {
-		double x = min + i*step;
+		double x = min + i * step;
 		xData[i] = x;
 		yData[i] = nsl_kde(data.data(), x, h, n);
 	}
@@ -351,8 +367,8 @@ void StatisticsColumnWidget::showKDEPlot() {
 	auto* yColumn = new Column("y");
 	yColumn->replaceValues(0, yData);
 
-	//add KDE curve
-	XYCurve* curve = new XYCurve("");
+	// add KDE curve
+	auto* curve = new XYCurve("");
 	curve->suppressRetransform(false);
 	plot->addChild(curve);
 	QPen pen = curve->linePen();
@@ -372,8 +388,8 @@ void StatisticsColumnWidget::showKDEPlot() {
 void StatisticsColumnWidget::showQQPlot() {
 	WAIT_CURSOR;
 
-	//add plot
-	CartesianPlot* plot = addPlot(&m_qqPlotWidget);
+	// add plot
+	auto* plot = addPlot(&m_qqPlotWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -386,34 +402,34 @@ void StatisticsColumnWidget::showQQPlot() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	//copy the non-nan and not masked values into a new vector
+	// copy the non-nan and not masked values into a new vector
 	QVector<double> rawData;
 	copyValidData(rawData);
 	size_t n = rawData.count();
 
-	//sort the data to calculate the percentiles
+	// sort the data to calculate the percentiles
 	std::sort(rawData.begin(), rawData.end());
 
-	//calculate y-values - the percentiles for the column data
+	// calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");
 	m_project->addChildFast(yColumn);
 	QVector<double> yData;
 	for (int i = 1; i < 100; ++i)
-		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i)/100.);
+		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
 
 	yColumn->replaceValues(0, yData);
 
-	//calculate x-values - the percentiles for the standard normal distribution
+	// calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column("x");
 	m_project->addChildFast(xColumn);
 	QVector<double> xData;
 	for (int i = 1; i < 100; ++i)
-		xData << gsl_cdf_gaussian_Pinv(double(i)/100., 1.0);
+		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
 
 	xColumn->replaceValues(0, xData);
 
-	//add curve with the quantiles
-	XYCurve* curve = new XYCurve("");
+	// add curve with the quantiles
+	auto* curve = new XYCurve("");
 	curve->suppressRetransform(true);
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
@@ -422,20 +438,20 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
-	//add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
+	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
 	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
 	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
 	double x1 = -0.6745;
 	double x2 = 0.6745;
 
-	//we only want do show the line starting from x = PInv(0.01) = -2.32635
-	//and going to x = PInv(0.99) = 2.32635;
-	double k = (y2 - y1)/(x2 - x1);
-	double b = y1 - k*x1;
+	// we only want do show the line starting from x = PInv(0.01) = -2.32635
+	// and going to x = PInv(0.99) = 2.32635;
+	double k = (y2 - y1) / (x2 - x1);
+	double b = y1 - k * x1;
 	double x1New = -2.32635;
 	double x2New = 2.32635;
-	double y1New = k*x1New + b;
-	double y2New = k*x2New + b;
+	double y1New = k * x1New + b;
+	double y2New = k * x2New + b;
 
 	Column* xColumn2 = new Column("x2");
 	m_project->addChildFast(xColumn2);
@@ -447,7 +463,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	yColumn2->setValueAt(0, y1New);
 	yColumn2->setValueAt(1, y2New);
 
-	XYCurve* curve2 = new XYCurve("2");
+	auto* curve2 = new XYCurve("2");
 	curve2->suppressRetransform(true);
 	plot->addChild(curve2);
 	QPen pen = curve2->linePen();
@@ -468,8 +484,8 @@ void StatisticsColumnWidget::showQQPlot() {
 void StatisticsColumnWidget::showBoxPlot() {
 	WAIT_CURSOR;
 
-	//add plot
-	CartesianPlot* plot = addPlot(&m_boxPlotWidget);
+	// add plot
+	auto* plot = addPlot(&m_boxPlotWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -486,7 +502,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	BoxPlot* boxPlot = new BoxPlot(QString());
+	auto* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	boxPlot->setWhiskersType(BoxPlot::WhiskersType::IQR);
 	plot->addChild(boxPlot);
@@ -501,36 +517,42 @@ void StatisticsColumnWidget::showBoxPlot() {
 }
 
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
-	Worksheet* worksheet = new Worksheet(QString());
-	worksheet->setUseViewSize(true);
-	worksheet->setLayoutTopMargin(0.);
-	worksheet->setLayoutBottomMargin(0.);
-	worksheet->setLayoutLeftMargin(0.);
-	worksheet->setLayoutRightMargin(0.);
-	m_project->addChild(worksheet);
+	auto* ws = new Worksheet(QString());
+	ws->setUseViewSize(true);
+	ws->setLayoutTopMargin(0.);
+	ws->setLayoutBottomMargin(0.);
+	ws->setLayoutLeftMargin(0.);
+	ws->setLayoutRightMargin(0.);
+	m_project->addChild(ws);
 
-	CartesianPlot* plot = new CartesianPlot(QString());
+	auto* plot = new CartesianPlot(QString());
+	plot->setSuppressRetransform(true);
 	plot->setType(CartesianPlot::Type::TwoAxes);
 	plot->setSymmetricPadding(false);
-	double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
+	const double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
 
-	worksheet->addChild(plot);
+	QPen pen = plot->plotArea()->borderPen();
+	pen.setStyle(Qt::NoPen);
+	plot->plotArea()->setBorderPen(pen);
+
+	ws->addChild(plot);
+	plot->setSuppressRetransform(false);
 
 	auto* layout = new QVBoxLayout(widget);
 	layout->setSpacing(0);
-	layout->addWidget(worksheet->view());
-	worksheet->setInteractive(false);
+	layout->addWidget(ws->view());
+	ws->setInteractive(false);
 	widget->setLayout(layout);
 
 	return plot;
 }
 
-//helpers
+// helpers
 const QString StatisticsColumnWidget::isNanValue(const double value) const {
 	SET_NUMBER_LOCALE
-	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value,'f'));
+	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value, 'f'));
 }
 
 QString StatisticsColumnWidget::modeValue(const Column* column, double value) const {
@@ -544,18 +566,18 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
 	case AbstractColumn::ColumnMode::BigInt:
 		return numberLocale.toString((qint64)value);
 	case AbstractColumn::ColumnMode::Text:
-		//TODO
+		// TODO
 	case AbstractColumn::ColumnMode::DateTime:
-		//TODO
+		// TODO
 	case AbstractColumn::ColumnMode::Day:
-		//TODO
+		// TODO
 	case AbstractColumn::ColumnMode::Month:
-		//TODO
-	case AbstractColumn::ColumnMode::Numeric:
+		// TODO
+	case AbstractColumn::ColumnMode::Double:
 		return numberLocale.toString(value, 'f');
 	}
 
-	return QString();
+	return {};
 }
 
 /*!
@@ -563,10 +585,10 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
  * into the vector \c data.
  */
 void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
-	int rowCount = m_column->rowCount();
+	const int rowCount = m_column->rowCount();
 	data.reserve(rowCount);
 	double val;
-	if (m_column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+	if (m_column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
 		for (int row = 0; row < rowCount; ++row) {
 			val = rowValues->value(row);

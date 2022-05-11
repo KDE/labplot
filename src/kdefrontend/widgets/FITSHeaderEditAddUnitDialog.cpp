@@ -1,24 +1,25 @@
 /*
-    File                 : FITSHeaderEditAddUnitDialog.cpp
-    Project              : LabPlot
-    Description          : Widget for adding or modifying FITS header keyword units
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSHeaderEditAddUnitDialog.cpp
+	Project              : LabPlot
+	Description          : Widget for adding or modifying FITS header keyword units
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "FITSHeaderEditAddUnitDialog.h"
 #include "backend/datasources/filters/FITSFilter.h"
 
-#include <QDialogButtonBox>
 #include <QCompleter>
+#include <QDialogButtonBox>
 #include <QPushButton>
-#include <QWindow>
 #include <QVBoxLayout>
+#include <QWindow>
 
 #include <KSharedConfig>
 #include <KWindowConfig>
 
-FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent) : QDialog(parent) {
+FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QWidget* parent)
+	: QDialog(parent) {
 	ui.setupUi(this);
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
@@ -30,7 +31,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	setWindowIcon(QIcon::fromTheme("document-new"));
 	m_okButton->setEnabled(false);
 
-	QCompleter* keyCompleter = new QCompleter(FITSFilter::units(), this);
+	auto* keyCompleter = new QCompleter(FITSFilter::units(), this);
 	ui.leUnit->setCompleter(keyCompleter);
 	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 
@@ -42,7 +43,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 
 	ui.leUnit->setText(unit);
 
-	//restore saved settings if available
+	// restore saved settings if available
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditAddUnitDialog");
 	if (conf.exists()) {
@@ -60,7 +61,7 @@ FITSHeaderEditAddUnitDialog::~FITSHeaderEditAddUnitDialog() {
 QString FITSHeaderEditAddUnitDialog::unit() const {
 	QString unit = ui.leUnit->text();
 	if (unit.contains(QLatin1Char('(')))
-		unit = unit.left(unit.indexOf(QLatin1Char('('))-1);
+		unit = unit.left(unit.indexOf(QLatin1Char('(')) - 1);
 
 	return unit;
 }

@@ -1,11 +1,11 @@
 /*
-    File                 : MQTTConnectionManagerWidget.h
-    Project              : LabPlot
-    Description          : widget for managing MQTT connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTTConnectionManagerWidget.h
+	Project              : LabPlot
+	Description          : widget for managing MQTT connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MQTTCONNECTIONMANAGERWIDGET_H
@@ -25,14 +25,14 @@ public:
 
 	struct MQTTConnection {
 		QString name;
-		int port;
+		int port{1883};
 		QString hostName;
-		bool useAuthentication;
+		bool useAuthentication{false};
 		QString userName;
 		QString password;
-		bool useID;
+		bool useID{false};
 		QString clientID;
-		bool retain;
+		bool retain{false};
 	};
 
 	QString connection() const;
@@ -55,7 +55,7 @@ private:
 	void loadConnection();
 	void dataChanged();
 
-private slots:
+private Q_SLOTS:
 	void testConnection();
 	void loadConnections();
 	void addConnection();
@@ -67,15 +67,15 @@ private slots:
 	void userNameChanged(const QString&);
 	void passwordChanged(const QString&);
 	void clientIdChanged(const QString&);
-	void authenticationChecked(int);
-	void idChecked(int);
-	void retainChecked(int);
+	void authenticationChecked(bool);
+	void idChecked(bool);
+	void retainChecked(bool);
 	void onConnect();
 	void onDisconnect();
 	void testTimeout();
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 
-#endif	// MQTTCONNECTIONMANAGERWIDGET_H
+#endif // MQTTCONNECTIONMANAGERWIDGET_H

@@ -1,18 +1,18 @@
 /*
-    File                 : XYCurvePrivate.h
-    Project              : LabPlot
-    Description          : Private members of XYCurve
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : XYCurvePrivate.h
+	Project              : LabPlot
+	Description          : Private members of XYCurve
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <vector>
 
 class CartesianPlot;
@@ -20,37 +20,50 @@ class CartesianCoordinateSystem;
 class Symbol;
 class XYCurve;
 
-class XYCurvePrivate : public QGraphicsItem {
+class XYCurvePrivate : public WorksheetElementPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	QString name() const;
-	void retransform();
+	void retransform() override;
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX, double minLogicalDiffX, double minLogicalDiffY); // for any x scale
-	void addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, double minLogicalDiffY, qint64& pixelDiff);	// optimized for linear x scale
-	void addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff);	// finally add line if unique (no overlay)
+	void addLine(QPointF p,
+				 double& x,
+				 double& minY,
+				 double& maxY,
+				 QPointF& lastPoint,
+				 int& pixelDiff,
+				 int numberOfPixelX,
+				 double minDiffX,
+				 RangeT::Scale scale,
+				 bool& prevPixelDiffZero); // for any x scale
+	static void addUniqueLine(QPointF p,
+							  double& minY,
+							  double& maxY,
+							  QPointF& lastPoint,
+							  int& pixelDiff,
+							  QVector<QLineF>& lines,
+							  bool& prevPixelDiffZero); // finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateRug();
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
-	bool swapVisible(bool);
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 	void suppressRetransform(bool);
 
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
-	bool pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
+	bool
+	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
 
-	//data source
+	// data source
 	const AbstractColumn* xColumn{nullptr};
 	const AbstractColumn* yColumn{nullptr};
 	QString dataSourceCurvePath;
@@ -60,7 +73,7 @@ public:
 
 	bool legendVisible;
 
-	//line
+	// line
 	XYCurve::LineType lineType;
 	bool lineSkipGaps;
 	bool lineIncreasingXOnly;
@@ -68,15 +81,15 @@ public:
 	QPen linePen;
 	qreal lineOpacity;
 
-	//drop lines
+	// drop lines
 	XYCurve::DropLineType dropLineType;
 	QPen dropLinePen;
 	qreal dropLineOpacity;
 
-	//symbols
+	// symbols
 	Symbol* symbol{nullptr};
 
-	//rug
+	// rug
 	bool rugEnabled{false};
 	WorksheetElement::Orientation rugOrientation{WorksheetElement::Orientation::Vertical};
 	double rugOffset;
@@ -84,7 +97,7 @@ public:
 	double rugWidth;
 	QPainterPath rugPath;
 
-	//values
+	// values
 	XYCurve::ValuesType valuesType;
 	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
@@ -93,14 +106,14 @@ public:
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
 	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision; //number of digits for numeric values
+	int valuesPrecision; // number of digits for numeric values
 	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
 	QColor valuesColor;
 
-	//filling
+	// filling
 	XYCurve::FillingPosition fillingPosition;
 	WorksheetElement::BackgroundType fillingType;
 	WorksheetElement::BackgroundColorStyle fillingColorStyle;
@@ -111,7 +124,7 @@ public:
 	QString fillingFileName;
 	qreal fillingOpacity;
 
-	//error bars
+	// error bars
 	XYCurve::ErrorType xErrorType;
 	const AbstractColumn* xErrorPlusColumn{nullptr};
 	QString xErrorPlusColumnPath;
@@ -132,14 +145,16 @@ public:
 	XYCurve* const q;
 	friend class XYCurve;
 
-//	CartesianPlot* plot{nullptr};
-//	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
+	//	CartesianPlot* plot{nullptr};
+	//	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
 private:
-	CartesianPlot* plot() const { return q->m_plot; }	// convenience method
+	CartesianPlot* plot() const {
+		return q->m_plot;
+	} // convenience method
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant & value) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void drawSymbols(QPainter*);
@@ -147,24 +162,26 @@ private:
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 
-	//TODO: add m_
+	// TODO: add m_
 	QPainterPath linePath;
 	QPainterPath dropLinePath;
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
 	QPainterPath symbolsPath;
-	QRectF boundingRectangle;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
-	QVector<QPointF> m_scenePoints;		//points in scene coordinates
-	QVector<bool> m_pointVisible;		//if point is currently visible in plot (size of m_logicalPoints)
-	QVector<QPointF> m_valuePoints;		//points for showing value
-	QVector<QString> m_valueStrings;	//strings for showing value
-	QVector<QPolygonF> m_fillPolygons;	//polygons for filling
-	//TODO: QVector, rename, usage
-	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
-	std::vector<bool> connectedPointsLogical;  	//true for points connected with the consecutive point (size of m_logicalPoints)
+#ifdef XYCurveTest_EN
+	QVector<QLineF> m_lines_test;
+#endif
+	QVector<QPointF> m_logicalPoints; // points in logical coordinates
+	QVector<QPointF> m_scenePoints; // points in scene coordinates
+	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)
+	QVector<QPointF> m_valuePoints; // points for showing value
+	QVector<QString> m_valueStrings; // strings for showing value
+	QVector<QPolygonF> m_fillPolygons; // polygons for filling
+	// TODO: QVector, rename, usage
+	std::vector<int> validPointsIndicesLogical; // original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
+	std::vector<bool> connectedPointsLogical; // true for points connected with the consecutive point (size of m_logicalPoints)
 
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

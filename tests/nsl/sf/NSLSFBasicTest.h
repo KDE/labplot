@@ -1,11 +1,11 @@
 /*
-    File                 : NSLSFBasicTest.h
-    Project              : LabPlot
-    Description          : NSL Tests for the basic special functions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLSFBasicTest.h
+	Project              : LabPlot
+	Description          : NSL Tests for the basic special functions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NSLSFBASICTEST_H
 #define NSLSFBASICTEST_H
@@ -15,7 +15,7 @@
 class NSLSFBasicTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// log2
 	void testlog2_int_C99();
 	void testlog2_int();
@@ -23,6 +23,7 @@ private slots:
 	void testlog2_int2();
 	void testlog2_int3();
 	void testlog2p1_int();
+
 private:
 	QString m_dataDir;
 };

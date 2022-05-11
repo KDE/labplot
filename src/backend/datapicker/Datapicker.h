@@ -1,12 +1,12 @@
 /*
-    File                 : Datapicker.h
-    Project              : LabPlot
-    Description          : Datapicker
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2017 Alexander Semke <alexander.semke@web.de>
+	File                 : Datapicker.h
+	Project              : LabPlot
+	Description          : Datapicker
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
+	SPDX-FileCopyrightText: 2015-2017 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATAPICKER_H
@@ -54,7 +54,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
@@ -62,16 +62,17 @@ private:
 	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
 	DatapickerImage* m_image{nullptr};
+
 	void init();
 	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleChildAspectAdded(const AbstractAspect*);
 
-private slots:
+private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	void datapickerItemSelected(int);
 	void requestUpdateActions();
 };

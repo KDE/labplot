@@ -3,10 +3,9 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "tools/ColorMapsManager.h"
 #include "backend/lib/macros.h"
@@ -36,9 +35,7 @@ ColorMapsManager::ColorMapsManager() {
 	loadCollections();
 }
 
-ColorMapsManager::~ColorMapsManager() {
-
-}
+ColorMapsManager::~ColorMapsManager() = default;
 
 ColorMapsManager* ColorMapsManager::instance() {
 	if (!m_instance)
@@ -59,23 +56,23 @@ QString ColorMapsManager::collectionInfo(const QString& name) const {
  * \brief returns the list of the color map names for the collection \c collecitonName
  */
 QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
-	//load the collection if not done yet
+	// load the collection if not done yet
 	if (!m_colorMaps.contains(collectionName)) {
-		//color maps of the currently selected collection not loaded yet -> load them
+		// color maps of the currently selected collection not loaded yet -> load them
 		QString path = m_jsonDir + QLatin1Char('/') + collectionName + ".json";
 		QFile collectionFile(path);
 		if (collectionFile.open(QIODevice::ReadOnly)) {
 			QJsonDocument doc = QJsonDocument::fromJson(collectionFile.readAll());
 			if (!doc.isObject()) {
 				QDEBUG("Invalid definition of " + path)
-				return QStringList();
+				return {};
 			}
 
 			const QJsonObject& colorMaps = doc.object();
 			const auto& keys = colorMaps.keys();
 			m_colorMaps[collectionName] = keys;
 
-			//load colors
+			// load colors
 			for (const auto& key : keys) {
 				if (m_colors.find(key) == m_colors.end()) {
 					QStringList colors;
@@ -104,7 +101,7 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 			colorMapNames(name);
 	}
 
-	//convert from the string RGB represetation to QColor
+	// convert from the string RGB represetation to QColor
 	m_colormap.clear();
 	for (auto& rgb : m_colors[name]) {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
@@ -114,7 +111,7 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 			m_colormap << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
 	}
 
-	//render the preview pixmap
+	// render the preview pixmap
 	int height = 80;
 	int width = 200;
 	int count = m_colormap.count();
@@ -124,7 +121,7 @@ void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 	for (auto& color : m_colormap) {
 		p.setPen(color);
 		p.setBrush(color);
-		p.drawRect(i*width/count, 0, width/count, height);
+		p.drawRect(i * width / count, 0, width / count, height);
 		++i;
 	}
 }
@@ -151,6 +148,7 @@ void ColorMapsManager::loadCollections() {
 			m_collections[name] = desc;
 		}
 	} else
-		QMessageBox::critical(nullptr, i18n("File not found"),
-							i18n("Couldn't open the color map collections file %1. Please check your installation.", fileName));
+		QMessageBox::critical(nullptr,
+							  i18n("File not found"),
+							  i18n("Couldn't open the color map collections file %1. Please check your installation.", fileName));
 }

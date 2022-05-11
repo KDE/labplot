@@ -1,6 +1,6 @@
 /*
-    SPDX-FileCopyrightText: 2012 Massachusetts Institute of Technology
-    SPDX-License-Identifier: MIT
+	SPDX-FileCopyrightText: 2012 Massachusetts Institute of Technology
+	SPDX-License-Identifier: MIT
 */
 
 /* Available at: http://ab-initio.mit.edu/Faddeeva
@@ -14,12 +14,11 @@
 #include <complex.h>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif /* __cplusplus */
 
 // compute w(z) = exp(-z^2) erfc(-iz) [ Faddeeva / scaled complex error func ]
-extern double complex Faddeeva_w(double complex z,double relerr);
+extern double complex Faddeeva_w(double complex z, double relerr);
 extern double Faddeeva_w_im(double x); // special-case code for Im[w(x)] of real x
 
 // Various functions that we can compute with the help of w(z)

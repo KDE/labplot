@@ -1,16 +1,17 @@
 /*
-    File                 : BinaryFilter.h
-    Project              : LabPlot
-    Description          : Binary I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : BinaryFilter.h
+	Project              : LabPlot
+	Description          : Binary I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef BINARYFILTER_H
 #define BINARYFILTER_H
 
-#include <QDataStream>
 #include "backend/datasources/filters/AbstractFileFilter.h"
+#include <QDataStream>
+#include <limits>
 
 class BinaryFilterPrivate;
 class QStringList;
@@ -21,20 +22,20 @@ class BinaryFilter : public AbstractFileFilter {
 	Q_ENUMS(DataType)
 
 public:
-	//TODO; use ColumnMode when it supports all these types
-	enum class DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
+	// TODO; use ColumnMode when it supports all these types
+	enum class DataType { INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64 };
 
 	BinaryFilter();
 	~BinaryFilter() override;
 
 	static QStringList dataTypes();
 	static int dataSize(BinaryFilter::DataType);
-	static size_t rowNumber(const QString& fileName, const size_t vectors, const BinaryFilter::DataType);
+	static size_t rowNumber(const QString& fileName, size_t vectors, BinaryFilter::DataType, size_t maxRows = std::numeric_limits<std::size_t>::max());
 	static QString fileInfoString(const QString&);
 
 	// read data from any device
-	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void
+	readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);

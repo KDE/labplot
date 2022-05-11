@@ -1,10 +1,10 @@
 /*
-    File                 : ExamplesManager.h
-    Project              : LabPlot
-    Description          : widget showing the available color maps
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ExamplesManager.h
+	Project              : LabPlot
+	Description          : widget showing the available color maps
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "kdefrontend/examples/ExamplesManager.h"
@@ -39,9 +39,7 @@ ExamplesManager::ExamplesManager() {
 	loadCollections();
 }
 
-ExamplesManager::~ExamplesManager() {
-
-}
+ExamplesManager::~ExamplesManager() = default;
 
 ExamplesManager* ExamplesManager::instance() {
 	if (!m_instance)
@@ -62,33 +60,47 @@ QString ExamplesManager::collectionInfo(const QString& name) const {
  * \brief returns the list of names of the example projects for the collection \c collecitonName
  */
 QStringList ExamplesManager::exampleNames(const QString& collectionName) {
-	//load the collection if not done yet
+	// load the collection if not done yet
 	if (!m_examples.contains(collectionName)) {
-		//example projects of the currently selected collection not loaded yet -> load them
+		// example projects of the currently selected collection not loaded yet -> load them
 		QStringList names;
-		QDirIterator it(m_jsonDir + QLatin1Char('/') + collectionName,
-						QStringList() << "*.lml" << "*.lml.xz",
-						QDir::Files,
-						QDirIterator::Subdirectories);
+		QDirIterator it(m_jsonDir + QLatin1Char('/') + collectionName, QStringList() << "*.lml", QDir::Files, QDirIterator::Subdirectories);
 		while (it.hasNext()) {
 			const auto& fileName = it.next();
 			const auto& name = QFileInfo(fileName).baseName();
 			names << name;
 			m_paths[name] = fileName;
 
-			//parse the XML and read the description and the preview pixmap of the project file
-			QIODevice* file;
-			// first try gzip compression, because projects can be gzipped and end with .lml
-			if (fileName.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
-				file = new KCompressionDevice(fileName, KFilterDev::compressionTypeForMimeType("application/x-gzip"));
-			else	// opens filename using file ending
-				file = new KFilterDev(fileName);
+			// check compression, s.a. Project::load()
+			QIODevice* file = new QFile(fileName);
+			if (!file->open(QIODevice::ReadOnly)) {
+				delete file;
+				continue;
+			}
 
-			if (!file->open(QIODevice::ReadOnly))
+			QDataStream in(file);
+			quint16 magic;
+			in >> magic;
+			file->close();
+			delete file;
+
+			if (!magic) // empty file
 				continue;
 
-			//parse XML
+			if (magic == 0xfd37) // XZ compressed data
+				file = new KCompressionDevice(fileName, KCompressionDevice::Xz);
+			else // gzip or not compressed data
+				file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
+
+			if (!file->open(QIODevice::ReadOnly)) {
+				file->close();
+				delete file;
+				continue;
+			}
+
+			// parse the XML and read the description and the preview pixmap of the project file
 			QXmlStreamReader reader(file);
+			reader.readNext();
 			while (!reader.atEnd()) {
 				reader.readNext();
 
@@ -102,7 +114,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 						QPixmap pixmap;
 						pixmap.loadFromData(ba);
 						m_pixmaps[name] = pixmap;
-					} else if (reader.name() == "comment"){
+					} else if (reader.name() == "comment") {
 						m_descriptions[name] = reader.readElementText();
 						break;
 					}
@@ -124,7 +136,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
  */
 QPixmap ExamplesManager::pixmap(const QString& name) const {
 	if (name.isEmpty())
-		return QPixmap();
+		return {};
 
 	return m_pixmaps[name];
 }
@@ -159,6 +171,7 @@ void ExamplesManager::loadCollections() {
 			m_collections[name] = desc;
 		}
 	} else
-		QMessageBox::critical(nullptr, i18n("File not found"),
-							i18n("Couldn't open the examples collections file %1. Please check your installation.", fileName));
+		QMessageBox::critical(nullptr,
+							  i18n("File not found"),
+							  i18n("Couldn't open the examples collections file %1. Please check your installation.", fileName));
 }

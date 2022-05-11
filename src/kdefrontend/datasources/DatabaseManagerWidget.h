@@ -1,10 +1,10 @@
 /*
-    File                 : DatabaseManagerWidget.h
-    Project              : LabPlot
-    Description          : widget for managing database connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : DatabaseManagerWidget.h
+	Project              : LabPlot
+	Description          : widget for managing database connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DATABASEMANAGERWIDGET_H
@@ -13,9 +13,9 @@
 #include "ui_databasemanagerwidget.h"
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-#include <repository.h>
+#include <KSyntaxHighlighting/repository.h>
 namespace KSyntaxHighlighting {
-	class SyntaxHighlighter;
+class SyntaxHighlighter;
 }
 #endif
 
@@ -26,7 +26,7 @@ public:
 	explicit DatabaseManagerWidget(QWidget*, QString);
 
 	struct SQLConnection {
-		int port;
+		int port{0};
 		QString name;
 		QString driver;
 		QString hostName;
@@ -60,7 +60,7 @@ private:
 	int defaultPort(const QString&) const;
 	void dataChanged();
 
-private slots:
+private Q_SLOTS:
 	void loadConnections();
 	void addConnection();
 	void deleteConnection();
@@ -73,12 +73,12 @@ private slots:
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
-	void customConnectionEnabledChanged(int);
+	void customConnectionEnabledChanged(bool);
 	void customConnectionChanged();
 	void userNameChanged();
 	void passwordChanged();
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 

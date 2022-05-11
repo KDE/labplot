@@ -20,6 +20,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsNotebookPage.cpp
 	${KDEFRONTEND_DIR}/SettingsSpreadsheetPage.cpp
 	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
 # 	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
@@ -149,6 +150,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/symbolwidget.ui
+	${KDEFRONTEND_DIR}/ui/settingsnotebookpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsspreadsheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
@@ -302,8 +304,8 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
-	${BACKEND_DIR}/datasources/filters/NgspiceRawAsciiFilter.cpp
-	${BACKEND_DIR}/datasources/filters/NgspiceRawBinaryFilter.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
+	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp
 	${BACKEND_DIR}/datasources/filters/FITSFilter.cpp
 	${BACKEND_DIR}/datasources/filters/QJsonModel.cpp
 	${BACKEND_DIR}/datasources/filters/ReadStatFilter.cpp
@@ -487,7 +489,17 @@ target_link_libraries( labplot2lib
 # 	Qt5::Quick
 # 	Qt5::QuickWidgets
 	${GSL_LIBRARIES}
-	${GSL_CBLAS_LIBRARIES} )
+	${GSL_CBLAS_LIBRARIES}
+	${Poppler_LIBRARIES}
+	${HDF5_LIBRARIES}
+	${FFTW3_LIBRARIES}
+	${netCDF_LIBRARIES}
+	${CFITSIO_LIBRARIES}
+	${LIBCERF_LIBRARIES}
+	${LZ4_LIBRARIES}
+	${MATIO_LIBRARIES}
+	${ZLIB_LIBRARIES}
+	)
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )
@@ -508,17 +520,8 @@ ENDIF ()
 
 IF (RECENT_CANTOR)
 	# KF5::Service, KF5::Parts is optional but probably required by Cantor
-	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts Poppler::Qt5 )
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts )
 ENDIF ()
-
-target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
-target_link_libraries( labplot2lib ${FFTW3_LIBRARIES} )
-target_link_libraries( labplot2lib ${netCDF_LIBRARIES} )
-target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
-target_link_libraries( labplot2lib ${LIBCERF_LIBRARIES} )
-target_link_libraries( labplot2lib ${LZ4_LIBRARIES} )
-target_link_libraries( labplot2lib ${MATIO_LIBRARIES} )
-target_link_libraries( labplot2lib ${ZLIB_LIBRARIES} )
 
 IF (ENABLE_READSTAT)
 	# build before using
@@ -528,9 +531,9 @@ IF (ENABLE_READSTAT)
 	# link system readstat with iconv
 	IF (READSTAT_FOUND AND (WIN32 OR APPLE))
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
-		target_link_libraries (labplot2lib ${ICONV_LIBRARIES} )
+		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
 	ENDIF ()
-        target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+        target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
 
 IF (ENABLE_EXCEL)
@@ -551,6 +554,10 @@ ENDIF ()
 IF (WIN32)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
+
+IF (APPLE AND ENABLE_TOUCHBAR)
+	target_link_libraries( labplot2lib KDMacTouchBar )
+ENDIF()
 
 # icons for the executable and project files on Windows and Mac OS X
 
@@ -592,11 +599,8 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
-target_link_libraries(labplot2 labplot2lib)
-IF (APPLE)
-	target_link_libraries(labplot2 KDMacTouchBar)
-ENDIF()
+add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
+target_link_libraries( labplot2 labplot2lib )
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )

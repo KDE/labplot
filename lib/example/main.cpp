@@ -62,8 +62,33 @@ int main(int argc, char **argv) {
 	//add legend
 	plot->addLegend();
 
-	layout->addWidget(worksheet->view());
+	//create another plot
+	auto* plot2 = new CartesianPlot("plot 2");
+	plot2->setType(CartesianPlot::Type::FourAxes);
+	worksheet->addChild(plot2);
 
+	//create some random data and plot a histogram for them
+	auto* hist = new Histogram("histogram");
+	auto* random_data = new Column("x");
+
+	for (int i = 0; i < 1000; ++i)
+		random_data->setValueAt(i, double(100*qrand())/double(RAND_MAX));
+
+	hist->setDataColumn(random_data);
+	plot2->addChild(hist);
+
+	//create one more plot
+	auto* plot3 = new CartesianPlot("plot 3");
+	plot3->setType(CartesianPlot::Type::FourAxes);
+	worksheet->addChild(plot3);
+
+	//add box plot
+	auto* boxPlot = new BoxPlot("boxplot");
+	QVector<const AbstractColumn*> columns{random_data};
+	boxPlot->setDataColumns(columns);
+	plot3->addChild(boxPlot);
+
+	layout->addWidget(worksheet->view());
 	mainWidget->show();
 
 	return app.exec();

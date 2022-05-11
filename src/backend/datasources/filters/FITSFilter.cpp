@@ -1,11 +1,12 @@
 /*
-    File                 : FITSFilter.cpp
-    Project              : LabPlot
-    Description          : FITS I/O-filter
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : FITSFilter.cpp
+	Project              : LabPlot
+	Description          : FITS I/O-filter
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "FITSFilter.h"
@@ -13,75 +14,76 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
-#include "backend/matrix/MatrixModel.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/matrix/Matrix.h"
+#include "backend/matrix/MatrixModel.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/matrix/MatrixView.h"
 
-#include <QMultiMap>
-#include <QFile>
 #include <QDebug>
+#include <QFile>
+#include <QMultiMap>
 
 /*! \class FITSFilter
  * \brief Manages the import/export of data from/to a FITS file.
  * \since 2.2.0
  * \ingroup datasources
  */
-FITSFilter::FITSFilter():AbstractFileFilter(FileType::FITS), d(new FITSFilterPrivate(this)) {}
+FITSFilter::FITSFilter()
+	: AbstractFileFilter(FileType::FITS)
+	, d(new FITSFilterPrivate(this)) {
+}
 
 FITSFilter::~FITSFilter() = default;
 
-void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *dataSource, AbstractFileFilter::ImportMode importMode) {
+void FITSFilter::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
 	d->readCHDU(fileName, dataSource, importMode);
 }
 
-QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
+QVector<QStringList> FITSFilter::readChdu(const QString& fileName, bool* okToMatrix, int lines) {
 	return d->readCHDU(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, okToMatrix, lines);
 }
 
-void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
+void FITSFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->writeCHDU(fileName, dataSource);
 }
 
-void FITSFilter::addNewKeyword(const QString &filename, const QList<Keyword> &keywords) {
+void FITSFilter::addNewKeyword(const QString& filename, const QList<Keyword>& keywords) {
 	d->addNewKeyword(filename, keywords);
 }
 
-void FITSFilter::updateKeywords(const QString &fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates) {
+void FITSFilter::updateKeywords(const QString& fileName, const QList<Keyword>& originals, const QVector<Keyword>& updates) {
 	d->updateKeywords(fileName, originals, updates);
 }
 
-void FITSFilter::deleteKeyword(const QString &fileName, const QList<Keyword>& keywords) {
+void FITSFilter::deleteKeyword(const QString& fileName, const QList<Keyword>& keywords) {
 	d->deleteKeyword(fileName, keywords);
 }
 
-void FITSFilter::addKeywordUnit(const QString &fileName, const QList<Keyword> &keywords) {
+void FITSFilter::addKeywordUnit(const QString& fileName, const QList<Keyword>& keywords) {
 	d->addKeywordUnit(fileName, keywords);
 }
 
-void FITSFilter::removeExtensions(const QStringList &extensions) {
+void FITSFilter::removeExtensions(const QStringList& extensions) {
 	d->removeExtensions(extensions);
 }
 
-void FITSFilter::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<Keyword> &keys) {
+void FITSFilter::parseHeader(const QString& fileName, QTableWidget* headerEditTable, bool readKeys, const QList<Keyword>& keys) {
 	d->parseHeader(fileName, headerEditTable, readKeys, keys);
 }
 
-void FITSFilter::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
+void FITSFilter::parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary) {
 	d->parseExtensions(fileName, tw, checkPrimary);
 }
 
-QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString &fileName) {
+QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString& fileName) {
 	return d->chduKeywords(fileName);
 }
 
-void FITSFilter::loadFilterSettings(const QString& fileName) {
-	Q_UNUSED(fileName)
+void FITSFilter::loadFilterSettings(const QString& /*fileName*/) {
 }
 
-void FITSFilter::saveFilterSettings(const QString& fileName) const {
-	Q_UNUSED(fileName)
+void FITSFilter::saveFilterSettings(const QString& /*fileName*/) const {
 }
 
 /*!
@@ -89,16 +91,16 @@ void FITSFilter::saveFilterSettings(const QString& fileName) const {
  * \return A list of keywords
  */
 QStringList FITSFilter::standardKeywords() {
-	return QStringList() << QLatin1String("(blank)") << QLatin1String("CROTA") << QLatin1String("EQUINOX") << QLatin1String("NAXIS") << QLatin1String("TBCOL") << QLatin1String("TUNIT")
-	       << QLatin1String("AUTHOR")  << QLatin1String("CRPIX")   << QLatin1String("EXTEND")   << QLatin1String("OBJECT")   << QLatin1String("TDIM")  << QLatin1String("TZERO")
-	       << QLatin1String("BITPIX")  << QLatin1String("CRVAL")   << QLatin1String("EXTLEVEL") << QLatin1String("OBSERVER") << QLatin1String("TDISP") << QLatin1String("XTENSION")
-	       << QLatin1String("BLANK")   << QLatin1String("CTYPE")   << QLatin1String("EXTNAME")  << QLatin1String("ORIGIN")   << QLatin1String("TELESCOP")
-	       << QLatin1String("BLOCKED") << QLatin1String("DATAMAX")  << QLatin1String("EXTVER")
-	       << QLatin1String("BSCALE")  << QLatin1String("DATAMIN")  << QLatin1String("PSCAL")  << QLatin1String("TFORM")
-	       << QLatin1String("BUNIT")   << QLatin1String("DATE")     << QLatin1String("GROUPS")   << QLatin1String("PTYPE")   << QLatin1String("THEAP")
-	       << QLatin1String("BZERO")   << QLatin1String("DATE-OBS") << QLatin1String("HISTORY")  << QLatin1String("PZERO")   << QLatin1String("TNULL")
-	       << QLatin1String("CDELT")  << QLatin1String("INSTRUME") << QLatin1String("REFERENC") << QLatin1String("TSCAL")
-	       << QLatin1String("COMMENT") << QLatin1String("EPOCH")    << QLatin1String("NAXIS")    << QLatin1String("SIMPLE")   << QLatin1String("TTYPE");
+	return QStringList() << QLatin1String("(blank)") << QLatin1String("CROTA") << QLatin1String("EQUINOX") << QLatin1String("NAXIS") << QLatin1String("TBCOL")
+						 << QLatin1String("TUNIT") << QLatin1String("AUTHOR") << QLatin1String("CRPIX") << QLatin1String("EXTEND") << QLatin1String("OBJECT")
+						 << QLatin1String("TDIM") << QLatin1String("TZERO") << QLatin1String("BITPIX") << QLatin1String("CRVAL") << QLatin1String("EXTLEVEL")
+						 << QLatin1String("OBSERVER") << QLatin1String("TDISP") << QLatin1String("XTENSION") << QLatin1String("BLANK") << QLatin1String("CTYPE")
+						 << QLatin1String("EXTNAME") << QLatin1String("ORIGIN") << QLatin1String("TELESCOP") << QLatin1String("BLOCKED")
+						 << QLatin1String("DATAMAX") << QLatin1String("EXTVER") << QLatin1String("BSCALE") << QLatin1String("DATAMIN") << QLatin1String("PSCAL")
+						 << QLatin1String("TFORM") << QLatin1String("BUNIT") << QLatin1String("DATE") << QLatin1String("GROUPS") << QLatin1String("PTYPE")
+						 << QLatin1String("THEAP") << QLatin1String("BZERO") << QLatin1String("DATE-OBS") << QLatin1String("HISTORY") << QLatin1String("PZERO")
+						 << QLatin1String("TNULL") << QLatin1String("CDELT") << QLatin1String("INSTRUME") << QLatin1String("REFERENC") << QLatin1String("TSCAL")
+						 << QLatin1String("COMMENT") << QLatin1String("EPOCH") << QLatin1String("NAXIS") << QLatin1String("SIMPLE") << QLatin1String("TTYPE");
 }
 
 /*!
@@ -109,9 +111,8 @@ QStringList FITSFilter::standardKeywords() {
  */
 
 QStringList FITSFilter::mandatoryImageExtensionKeywords() {
-	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
-		<< QLatin1String("NAXIS") << QLatin1String("PCOUNT")
-		<< QLatin1String("GCOUNT") << QLatin1String("END");
+	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("PCOUNT") << QLatin1String("GCOUNT")
+						 << QLatin1String("END");
 }
 
 /*!
@@ -123,11 +124,8 @@ QStringList FITSFilter::mandatoryImageExtensionKeywords() {
  * \return A list of keywords
  */
 QStringList FITSFilter::mandatoryTableExtensionKeywords() {
-	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX")
-		<< QLatin1String("NAXIS") << QLatin1String("NAXIS1")
-		<< QLatin1String("NAXIS2") << QLatin1String("PCOUNT")
-		<< QLatin1String("GCOUNT") << QLatin1String("TFIELDS")
-		<< QLatin1String("END");
+	return QStringList() << QLatin1String("XTENSION") << QLatin1String("BITPIX") << QLatin1String("NAXIS") << QLatin1String("NAXIS1") << QLatin1String("NAXIS2")
+						 << QLatin1String("PCOUNT") << QLatin1String("GCOUNT") << QLatin1String("TFIELDS") << QLatin1String("END");
 }
 
 /*!
@@ -136,10 +134,9 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
  * \return A list of strings that represent units
  */
 QStringList FITSFilter::units() {
-	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)")
-		<< QString("M☉ (Solar mass)") << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)")
-		<< QLatin1String("km (Kilometres") << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)")
-		<< QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
+	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)") << QString("M☉ (Solar mass)")
+						 << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)") << QLatin1String("km (Kilometres")
+						 << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)") << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }
 
 /*!
@@ -244,7 +241,9 @@ QString FITSFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
+FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner)
+	: q(owner) {
+}
 
 /*!
  * \brief Read the current header data unit from file \a filename in data source \a dataSource in \a importMode import mode
@@ -252,15 +251,16 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
  * \param dataSource the data source to be filled
  * \param importMode
  */
-QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU() file name = " << STDSTRING(fileName));
+QVector<QStringList>
+FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		DEBUG("	ERROR opening file " << STDSTRING(fileName));
+		DEBUG(Q_FUNC_INFO << ", ERROR opening file " << STDSTRING(fileName));
 		printError(status);
 		return dataStrings;
 	}
@@ -275,8 +275,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 	long actualRows;
 	int actualCols;
 	int columnOffset = 0;
-
-	bool noDataSource = (dataSource == nullptr);
 
 	if (chduType == IMAGE_HDU) {
 		DEBUG("IMAGE_HDU");
@@ -294,6 +292,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			return dataStrings;
 		actualRows = naxes[1];
 		actualCols = naxes[0];
+		DEBUG("rows/cols = " << actualRows << " " << actualCols)
 		if (lines == -1)
 			lines = actualRows;
 		else {
@@ -302,12 +301,12 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		if (endRow != -1) {
-			if (!noDataSource)
+			if (dataSource)
 				lines = endRow;
 		}
 		if (endColumn != -1)
 			actualCols = endColumn;
-		if (noDataSource)
+		if (!dataSource)
 			dataStrings.reserve(lines);
 
 		int i = 0;
@@ -319,13 +318,14 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		const int jstart = j;
 
-		//TODO: support other modes
+		// TODO: support other modes
 		QVector<AbstractColumn::ColumnMode> columnModes;
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
+		DEBUG("lines/cols = " << lines << " " << actualCols << ", i/j = " << i << " " << j)
 		std::vector<void*> dataContainer;
-		if (!noDataSource) {
+		if (dataSource) {
 			dataContainer.reserve(actualCols - j);
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
 		}
@@ -334,10 +334,11 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		double* data = new double[pixelCount];
 
 		if (!data) {
-			qDebug() << "Not enough memory for data";
+			DEBUG(Q_FUNC_INFO << ", Not enough memory for data");
 			return dataStrings;
 		}
 
+		// TODO: other types
 		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, nullptr, data, nullptr, &status)) {
 			printError(status);
 			return dataStrings << (QStringList() << QString("Error"));
@@ -350,12 +351,13 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			QStringList line;
 			line.reserve(actualCols - j);
 			for (; j < actualCols; ++j) {
-				if (noDataSource)
-					line << QString::number(data[i*naxes[0] +j]);
+				if (dataSource)
+					static_cast<QVector<double>*>(dataContainer[jj++])->operator[](ii) = data[i * naxes[0] + j];
 				else
-					static_cast<QVector<double>*>(dataContainer[jj++])->operator[](ii) = data[i* naxes[0] + j];
+					line << QString::number(data[i * naxes[0] + j]);
 			}
-			dataStrings << line;
+			if (!dataSource)
+				dataStrings << line;
 			j = jstart;
 			ii++;
 		}
@@ -417,7 +419,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		if (endRow != -1)
 			lines = endRow;
-		QVector<QStringList*> stringDataPointers;
+		QVector<QVector<QString>*> stringDataPointers;
 		std::vector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
@@ -475,9 +477,9 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				matrixNumericColumnIndices.append(c);
 		}
 
-		if (noDataSource)
+		if (!dataSource)
 			*okToMatrix = matrixNumericColumnIndices.isEmpty() ? false : true;
-		if (!noDataSource) {
+		else {
 			DEBUG("HAS DataSource");
 			auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 			if (spreadsheet) {
@@ -497,14 +499,14 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				DEBUG("Reading columns ...");
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
-						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Numeric);
-						auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
+						spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Double);
+						auto* datap = static_cast<QVector<double>*>(spreadsheet->column(columnOffset + n)->data());
 						numericDataPointers.push_back(datap);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							datap->clear();
 					} else {
-						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Text);
-						auto* list = static_cast<QStringList*>(spreadsheet->column(columnOffset+n)->data());
+						spreadsheet->column(columnOffset + n)->setColumnMode(AbstractColumn::ColumnMode::Text);
+						auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset + n)->data());
 						stringDataPointers.push_back(list);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							list->clear();
@@ -547,7 +549,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			int numericixd = 0;
 			int stringidx = 0;
 			QStringList line;
-			line.reserve(actualCols-coll);
+			line.reserve(actualCols - coll);
 			for (int col = coll; col <= actualCols; ++col) {
 				if (isMatrix) {
 					if (!matrixNumericColumnIndices.contains(col))
@@ -555,7 +557,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				}
 				if (fits_read_col_str(m_fitsFile, col, row, 1, 1, nullptr, tmpArr, nullptr, &status))
 					printError(status);
-				if (!noDataSource) {
+				if (dataSource) {
 					QString str = QString::fromLatin1(array);
 					if (str.isEmpty()) {
 						if (columnNumericTypes.at(col - 1))
@@ -569,7 +571,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 							if (!stringDataPointers.isEmpty())
 								stringDataPointers[stringidx++]->operator<<(str.simplified());
 						}
-
 					}
 				} else {
 					QString tmpColstr = QString::fromLatin1(array);
@@ -580,16 +581,17 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 						line << tmpColstr;
 				}
 			}
-			dataStrings << line;
+			if (!dataSource)
+				dataStrings << line;
 		}
 
-		if (!noDataSource)
+		if (dataSource)
 			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;
 	} else
-		qDebug() << "Incorrect header type";
+		DEBUG(Q_FUNC_INFO << ", Incorrect header type");
 
 	fits_close_file(m_fitsFile, &status);
 
@@ -609,7 +611,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
  * \param dataSource the datasource whose data is exported
  */
 
-void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *dataSource) {
+void FITSFilterPrivate::writeCHDU(const QString& fileName, AbstractDataSource* dataSource) {
 #ifdef HAVE_FITS
 	if (!fileName.endsWith(QLatin1String(".fits")))
 		return;
@@ -622,7 +624,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			return;
 		}
 	} else {
-		if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+		if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status)) {
 			printError(status);
 			return;
 		} else
@@ -631,9 +633,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 	Matrix* const matrix = dynamic_cast<Matrix*>(dataSource);
 	if (matrix) {
-		//FITS image
+		// FITS image
 		if (exportTo == 0) {
-			long naxes[2] = { matrix->columnCount(), matrix->rowCount() };
+			long naxes[2] = {matrix->columnCount(), matrix->rowCount()};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
 				status = 0;
@@ -642,20 +644,20 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			}
 			const long nelem = naxes[0] * naxes[1];
 			double* const array = new double[nelem];
-			const QVector<QVector<double> >* const data = static_cast<QVector<QVector<double>>*>(matrix->data());
+			const QVector<QVector<double>>* const data = static_cast<QVector<QVector<double>>*>(matrix->data());
 
 			for (int col = 0; col < naxes[0]; ++col)
 				for (int row = 0; row < naxes[1]; ++row)
 					array[row * naxes[0] + col] = data->at(row).at(col);
 
-			if (fits_write_img(m_fitsFile, TDOUBLE, 1, nelem, array, &status )) {
+			if (fits_write_img(m_fitsFile, TDOUBLE, 1, nelem, array, &status)) {
 				printError(status);
 				status = 0;
 			}
 
 			fits_close_file(m_fitsFile, &status);
 			delete[] array;
-			//FITS table
+			// FITS table
 		} else {
 			const int nrows = matrix->rowCount();
 			const int tfields = matrix->columnCount();
@@ -665,7 +667,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			QVector<char*> tform;
 			tform.resize(tfields);
 			tform.squeeze();
-			//TODO: mode
+			// TODO: mode
 			const QVector<QVector<double>>* const matrixData = static_cast<QVector<QVector<double>>*>(matrix->data());
 			const MatrixModel* matrixModel = static_cast<MatrixView*>(matrix->view())->model();
 			const int precision = matrix->precision();
@@ -680,16 +682,23 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				}
 				QString tformn;
 				if (precision > 0) {
-					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") + QString::number(precision);
+					tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".") + QString::number(precision);
 				} else
-					tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
+					tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".0");
 				tform[i] = new char[tformn.size() + 1];
 				strcpy(tform[i], tformn.toLatin1().constData());
 			}
-			//TODO extension name containing[] ?
+			// TODO extension name containing[] ?
 
-			int r = fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), nullptr,
-			            matrix->name().toLatin1().constData(), &status);
+			int r = fits_create_tbl(m_fitsFile,
+									ASCII_TBL,
+									nrows,
+									tfields,
+									columnNames.data(),
+									tform.data(),
+									nullptr,
+									matrix->name().toLatin1().constData(),
+									&status);
 			for (int i = 0; i < tfields; ++i) {
 				delete[] tform[i];
 				delete[] columnNames[i];
@@ -707,7 +716,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
-				const QVector<double>& column = matrixData->at(col-1);
+				const QVector<double>& column = matrixData->at(col - 1);
 				for (int r = 0; r < column.size(); ++r)
 					columnNumeric[r] = column.at(r);
 
@@ -733,11 +742,11 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 	auto* const spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
-		//FITS image
+		// FITS image
 		if (exportTo == 0) {
 			int maxRowIdx = -1;
-			//don't export lots of empty lines if all of those contain nans
-			// TODO: option?
+			// don't export lots of empty lines if all of those contain nans
+			//  TODO: option?
 			for (int c = 0; c < spreadsheet->columnCount(); ++c) {
 				const Column* const col = spreadsheet->column(c);
 				int currMaxRoxIdx = -1;
@@ -752,7 +761,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					maxRowIdx = currMaxRoxIdx;
 				}
 			}
-			long naxes[2] = { spreadsheet->columnCount(), maxRowIdx + 1};
+			long naxes[2] = {spreadsheet->columnCount(), maxRowIdx + 1};
 			if (fits_create_img(m_fitsFile, FLOAT_IMG, 2, naxes, &status)) {
 				printError(status);
 				status = 0;
@@ -771,7 +780,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					array[row * naxes[0] + col] = spreadsheet->column(col)->valueAt(row);
 			}
 
-			if (fits_write_img(m_fitsFile, TDOUBLE, 1, nelem, array, &status )) {
+			if (fits_write_img(m_fitsFile, TDOUBLE, 1, nelem, array, &status)) {
 				printError(status);
 				status = 0;
 				fits_close_file(m_fitsFile, &status);
@@ -799,7 +808,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			tunit.squeeze();
 
 			for (int i = 0; i < tfields; ++i) {
-				const Column* const column =  spreadsheet->column(i);
+				const Column* const column = spreadsheet->column(i);
 
 				columnNames[i] = new char[column->name().size() + 1];
 				strcpy(columnNames[i], column->name().toLatin1().constData());
@@ -811,52 +820,52 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					tunit[i][0] = '\0';
 				}
 				switch (column->columnMode()) {
-				case AbstractColumn::ColumnMode::Numeric: {
-						int maxSize = -1;
-						for (int row = 0; row < nrows; ++row) {
-							if (QString::number(column->valueAt(row)).size() > maxSize)
-								maxSize = QString::number(column->valueAt(row)).size();
-						}
+				case AbstractColumn::ColumnMode::Double: {
+					int maxSize = -1;
+					for (int row = 0; row < nrows; ++row) {
+						if (QString::number(column->valueAt(row)).size() > maxSize)
+							maxSize = QString::number(column->valueAt(row)).size();
+					}
 
-						const Double2StringFilter* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
-						bool decimals = false;
-						for (int ii = 0; ii < nrows; ++ii) {
-							bool ok;
-							QString cell = column->asStringColumn()->textAt(ii);
-							double val = cell.toDouble(&ok);
-							if (cell.size() > QString::number(val).size() + 1) {
-								decimals = true;
-								break;
-							}
+					const Double2StringFilter* const filter = static_cast<Double2StringFilter*>(column->outputFilter());
+					bool decimals = false;
+					for (int ii = 0; ii < nrows; ++ii) {
+						bool ok;
+						QString cell = column->asStringColumn()->textAt(ii);
+						double val = cell.toDouble(&ok);
+						if (cell.size() > QString::number(val).size() + 1) {
+							decimals = true;
+							break;
 						}
-						QString tformn;
-						if (decimals) {
-							int maxStringSize = -1;
-							for (int row = 0; row < nrows; ++row) {
-								if (column->asStringColumn()->textAt(row).size() > maxStringSize)
-									maxStringSize = column->asStringColumn()->textAt(row).size();
-							}
-							const int diff = abs(maxSize - maxStringSize);
-							maxSize+= diff;
-							tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".") + QString::number(filter->numDigits());
-						} else
-							tformn = QLatin1String("F")+ QString::number(maxSize) + QLatin1String(".0");
-						tform[i] = new char[tformn.size()];
-						strcpy(tform[i], tformn.toLatin1().data());
-						break;
 					}
-				case AbstractColumn::ColumnMode::Text: {
-						int maxSize = -1;
+					QString tformn;
+					if (decimals) {
+						int maxStringSize = -1;
 						for (int row = 0; row < nrows; ++row) {
-							if (column->textAt(row).size() > maxSize)
-								maxSize = column->textAt(row).size();
+							if (column->asStringColumn()->textAt(row).size() > maxStringSize)
+								maxStringSize = column->asStringColumn()->textAt(row).size();
 						}
-						const QString& tformn = QLatin1String("A") + QString::number(maxSize);
-						tform[i] = new char[tformn.size()];
-						strcpy(tform[i], tformn.toLatin1().data());
-						break;
+						const int diff = abs(maxSize - maxStringSize);
+						maxSize += diff;
+						tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".") + QString::number(filter->numDigits());
+					} else
+						tformn = QLatin1String("F") + QString::number(maxSize) + QLatin1String(".0");
+					tform[i] = new char[tformn.size()];
+					strcpy(tform[i], tformn.toLatin1().data());
+					break;
+				}
+				case AbstractColumn::ColumnMode::Text: {
+					int maxSize = -1;
+					for (int row = 0; row < nrows; ++row) {
+						if (column->textAt(row).size() > maxSize)
+							maxSize = column->textAt(row).size();
 					}
-				case AbstractColumn::ColumnMode::Integer:	//TODO
+					const QString& tformn = QLatin1String("A") + QString::number(maxSize);
+					tform[i] = new char[tformn.size()];
+					strcpy(tform[i], tformn.toLatin1().data());
+					break;
+				}
+				case AbstractColumn::ColumnMode::Integer: // TODO
 				case AbstractColumn::ColumnMode::BigInt:
 				case AbstractColumn::ColumnMode::DateTime:
 				case AbstractColumn::ColumnMode::Day:
@@ -864,10 +873,17 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					break;
 				}
 			}
-			//TODO extension name containing[] ?
+			// TODO extension name containing[] ?
 
-			int r = fits_create_tbl(m_fitsFile, ASCII_TBL, nrows, tfields, columnNames.data(), tform.data(), tunit.data(),
-			            spreadsheet->name().toLatin1().constData(), &status);
+			int r = fits_create_tbl(m_fitsFile,
+									ASCII_TBL,
+									nrows,
+									tfields,
+									columnNames.data(),
+									tform.data(),
+									tunit.data(),
+									spreadsheet->name().toLatin1().constData(),
+									&status);
 			for (int i = 0; i < tfields; ++i) {
 				delete[] tform[i];
 				delete[] tunit[i];
@@ -890,10 +906,10 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
-				const Column* c =  spreadsheet->column(col-1);
+				const Column* c = spreadsheet->column(col - 1);
 				auto columnMode = c->columnMode();
 
-				if (columnMode == AbstractColumn::ColumnMode::Numeric) {
+				if (columnMode == AbstractColumn::ColumnMode::Double) {
 					for (int row = 0; row < nrows; ++row)
 						columnNumeric[row] = c->valueAt(row);
 
@@ -946,17 +962,17 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
-	DEBUG("FITSFilterPrivate::extensionNames() file name = " << STDSTRING(fileName));
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
 	fitsfile* fitsFile = nullptr;
-	if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status ))
-		return QMultiMap<QString, QString>();
+	if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status))
+		return {};
 	int hduCount;
 
 	if (fits_get_num_hdus(fitsFile, &hduCount, &status))
-		return QMultiMap<QString, QString>();
+		return {};
 	int imageCount = 0;
 	int asciiTableCount = 0;
 	int binaryTableCount = 0;
@@ -978,14 +994,14 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 		}
 		char* keyVal = new char[FLEN_VALUE];
 		QString extName;
-		if (!fits_read_keyword(fitsFile,"EXTNAME", keyVal, nullptr, &status)) {
+		if (!fits_read_keyword(fitsFile, "EXTNAME", keyVal, nullptr, &status)) {
 			extName = QLatin1String(keyVal);
-			extName = extName.mid(1, extName.length() -2).simplified();
+			extName = extName.mid(1, extName.length() - 2).simplified();
 		} else {
 			status = 0;
-			if (!fits_read_keyword(fitsFile,"HDUNAME", keyVal, nullptr, &status)) {
+			if (!fits_read_keyword(fitsFile, "HDUNAME", keyVal, nullptr, &status)) {
 				extName = QLatin1String(keyVal);
-				extName = extName.mid(1, extName.length() -2).simplified();
+				extName = extName.mid(1, extName.length() - 2).simplified();
 			} else {
 				status = 0;
 				switch (hduType) {
@@ -1028,7 +1044,7 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 	return extensions;
 #else
 	Q_UNUSED(fileName)
-	return QMultiMap<QString, QString>();
+	return {};
 #endif
 }
 
@@ -1040,7 +1056,7 @@ void FITSFilterPrivate::printError(int status) const {
 #ifdef HAVE_FITS
 	if (status) {
 		char errorText[FLEN_ERRMSG];
-		fits_get_errstatus(status, errorText );
+		fits_get_errstatus(status, errorText);
 		qDebug() << QLatin1String(errorText);
 	}
 #else
@@ -1057,11 +1073,11 @@ void FITSFilterPrivate::printError(int status) const {
 void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status)) {
 		printError(status);
 		return;
 	}
-	for (const FITSFilter::Keyword& keyword: keywords) {
+	for (const FITSFilter::Keyword& keyword : keywords) {
 		status = 0;
 		if (!keyword.key.compare(QLatin1String("COMMENT"))) {
 			if (fits_write_comment(m_fitsFile, keyword.value.toLatin1(), &status))
@@ -1086,28 +1102,23 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
 				bool ok;
 				double val = keyword.value.toDouble(&ok);
 				if (ok) {
-					if (fits_write_key(m_fitsFile,
-					                   TDOUBLE,
-					                   keyword.key.toLatin1().data(),
-					                   &val,
-					                   keyword.comment.toLatin1().data(),
-					                   &status))
+					if (fits_write_key(m_fitsFile, TDOUBLE, keyword.key.toLatin1().data(), &val, keyword.comment.toLatin1().data(), &status))
 						printError(status);
 				} else {
 					if (fits_write_key(m_fitsFile,
-					                   TSTRING,
-					                   keyword.key.toLatin1().data(),
-					                   keyword.value.toLatin1().data(),
-					                   keyword.comment.toLatin1().data(),
-					                   &status))
+									   TSTRING,
+									   keyword.key.toLatin1().data(),
+									   keyword.value.toLatin1().data(),
+									   keyword.comment.toLatin1().data(),
+									   &status))
 						printError(status);
 				}
-			} else if ( ok == 2) {
-				//comment too long
-			} else if ( ok == 1) {
-				//value too long
+			} else if (ok == 2) {
+				// comment too long
+			} else if (ok == 1) {
+				// value too long
 			} else {
-				//keyword too long
+				// keyword too long
 			}
 		}
 	}
@@ -1125,12 +1136,10 @@ void FITSFilterPrivate::addNewKeyword(const QString& fileName, const QList<FITSF
  * \param originals The original keywords of the FITS file (extension)
  * \param updates The keywords that contain the updated values
  */
-void FITSFilterPrivate::updateKeywords(const QString& fileName,
-                                       const QList<FITSFilter::Keyword>& originals,
-                                       const QVector<FITSFilter::Keyword>& updates) {
+void FITSFilterPrivate::updateKeywords(const QString& fileName, const QList<FITSFilter::Keyword>& originals, const QVector<FITSFilter::Keyword>& updates) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status)) {
 		printError(status);
 		return;
 	}
@@ -1142,9 +1151,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 		updatedKeyword = updates.at(i);
 		originalKeyword = originals.at(i);
 		keywordUpdate = originals.at(i).updates;
-		if (keywordUpdate.keyUpdated &&
-		        keywordUpdate.valueUpdated &&
-		        keywordUpdate.commentUpdated) {
+		if (keywordUpdate.keyUpdated && keywordUpdate.valueUpdated && keywordUpdate.commentUpdated) {
 			if (updatedKeyword.isEmpty()) {
 				if (fits_delete_key(m_fitsFile, originalKeyword.key.toLatin1(), &status)) {
 					printError(status);
@@ -1154,7 +1161,7 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 			}
 		}
 		if (!updatedKeyword.key.isEmpty()) {
-			if (fits_modify_name(m_fitsFile, originalKeyword.key.toLatin1(), updatedKeyword.key.toLatin1(), &status )) {
+			if (fits_modify_name(m_fitsFile, originalKeyword.key.toLatin1(), updatedKeyword.key.toLatin1(), &status)) {
 				printError(status);
 				status = 0;
 			}
@@ -1168,10 +1175,12 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 
 			doubleValue = updatedKeyword.value.toDouble(&ok);
 			if (ok) {
-				if (fits_update_key(m_fitsFile,TDOUBLE,
-				                    keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                    &doubleValue,
-				                    nullptr, &status))
+				if (fits_update_key(m_fitsFile,
+									TDOUBLE,
+									keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+									&doubleValue,
+									nullptr,
+									&status))
 					printError(status);
 				else
 					updated = true;
@@ -1179,27 +1188,32 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 			if (!updated) {
 				intValue = updatedKeyword.value.toInt(&ok);
 				if (ok) {
-					if (fits_update_key(m_fitsFile,TINT,
-					                    keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-					                    &intValue,
-					                    nullptr, &status))
+					if (fits_update_key(m_fitsFile,
+										TINT,
+										keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+										&intValue,
+										nullptr,
+										&status))
 						printError(status);
 					else
 						updated = true;
 				}
 			}
 			if (!updated) {
-				if (fits_update_key(m_fitsFile,TSTRING,
-				                    keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                    updatedKeyword.value.toLatin1().data(),
-				                    nullptr, &status))
+				if (fits_update_key(m_fitsFile,
+									TSTRING,
+									keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+									updatedKeyword.value.toLatin1().data(),
+									nullptr,
+									&status))
 					printError(status);
 			}
 		} else {
 			if (keywordUpdate.valueUpdated) {
 				if (fits_update_key_null(m_fitsFile,
-				                         keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                         nullptr, &status)) {
+										 keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+										 nullptr,
+										 &status)) {
 					printError(status);
 					status = 0;
 				}
@@ -1207,16 +1221,19 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
 		}
 
 		if (!updatedKeyword.comment.isEmpty()) {
-			if (fits_modify_comment(m_fitsFile, keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-			                        updatedKeyword.comment.toLatin1().data(), &status)) {
+			if (fits_modify_comment(m_fitsFile,
+									keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+									updatedKeyword.comment.toLatin1().data(),
+									&status)) {
 				printError(status);
 				status = 0;
 			}
 		} else {
 			if (keywordUpdate.commentUpdated) {
 				if (fits_modify_comment(m_fitsFile,
-				                        keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
-				                        QByteArray().constData(), &status)) {
+										keywordUpdate.keyUpdated ? updatedKeyword.key.toLatin1() : originalKeyword.key.toLatin1(),
+										QByteArray().constData(),
+										&status)) {
 					printError(status);
 					status = 0;
 				}
@@ -1238,10 +1255,10 @@ void FITSFilterPrivate::updateKeywords(const QString& fileName,
  * \param keywords the keywords to deleted
  */
 
-void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword> &keywords) {
+void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSFilter::Keyword>& keywords) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status)) {
 		printError(status);
 		return;
 	}
@@ -1266,10 +1283,10 @@ void FITSFilterPrivate::deleteKeyword(const QString& fileName, const QList<FITSF
  * \param keywords the keywords whose units were modified/added
  */
 
-void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITSFilter::Keyword> &keywords) {
+void FITSFilterPrivate::addKeywordUnit(const QString& fileName, const QList<FITSFilter::Keyword>& keywords) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READWRITE, &status)) {
 		printError(status);
 		return;
 	}
@@ -1294,12 +1311,12 @@ void FITSFilterPrivate::addKeywordUnit(const QString &fileName, const QList<FITS
  * \brief Remove extensions from a FITS file
  * \param extensions The extensions to be removed from the FITS file
  */
-void FITSFilterPrivate::removeExtensions(const QStringList &extensions) {
+void FITSFilterPrivate::removeExtensions(const QStringList& extensions) {
 #ifdef HAVE_FITS
 	int status = 0;
 	for (const auto& ext : extensions) {
 		status = 0;
-		if (fits_open_file(&m_fitsFile, ext.toLatin1(), READWRITE, &status )) {
+		if (fits_open_file(&m_fitsFile, ext.toLatin1(), READWRITE, &status)) {
 			printError(status);
 			continue;
 		}
@@ -1324,14 +1341,14 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 #ifdef HAVE_FITS
 	int status = 0;
 
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		printError(status);
-		return QList<FITSFilter::Keyword> ();
+		return {};
 	}
 	int numberOfKeys;
 	if (fits_get_hdrspace(m_fitsFile, &numberOfKeys, nullptr, &status)) {
 		printError(status);
-		return QList<FITSFilter::Keyword> ();
+		return {};
 	}
 
 	QList<FITSFilter::Keyword> keywords;
@@ -1383,7 +1400,8 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
  * file \a fileName
  * \param keys The keywords that are provided if the keywords were read already.
  */
-void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *headerEditTable, bool readKeys, const QList<FITSFilter::Keyword>& keys) {
+void FITSFilterPrivate::parseHeader(const QString& fileName, QTableWidget* headerEditTable, bool readKeys, const QList<FITSFilter::Keyword>& keys) {
+	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_FITS
 	QList<FITSFilter::Keyword> keywords;
 	if (readKeys)
@@ -1395,37 +1413,32 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 	QTableWidgetItem* item;
 	for (int i = 0; i < keywords.size(); ++i) {
 		const FITSFilter::Keyword& keyword = keywords.at(i);
-		const bool mandatory = FITSFilter::mandatoryImageExtensionKeywords().contains(keyword.key) ||
-					FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
+		const bool mandatory =
+			FITSFilter::mandatoryImageExtensionKeywords().contains(keyword.key) || FITSFilter::mandatoryTableExtensionKeywords().contains(keyword.key);
 		item = new QTableWidgetItem(keyword.key);
 		const QString& itemText = item->text();
-		const bool notEditableKey = mandatory || itemText.contains(QLatin1String("TFORM")) ||
-						itemText.contains(QLatin1String("TTYPE")) ||
-						itemText.contains(QLatin1String("TUNIT"))  ||
-						itemText.contains(QLatin1String("TDISP")) ||
-						itemText.contains(QLatin1String("TBCOL")) ||
-						itemText.contains(QLatin1String("TZERO"));
-		const bool notEditableValue = mandatory || itemText.contains(QLatin1String("TFORM")) ||
-						itemText.contains(QLatin1String("TDISP")) ||
-						itemText.contains(QLatin1String("TBCOL")) ||
-						itemText.contains(QLatin1String("TZERO"));
+		const bool notEditableKey = mandatory || itemText.contains(QLatin1String("TFORM")) || itemText.contains(QLatin1String("TTYPE"))
+			|| itemText.contains(QLatin1String("TUNIT")) || itemText.contains(QLatin1String("TDISP")) || itemText.contains(QLatin1String("TBCOL"))
+			|| itemText.contains(QLatin1String("TZERO"));
+		const bool notEditableValue = mandatory || itemText.contains(QLatin1String("TFORM")) || itemText.contains(QLatin1String("TDISP"))
+			|| itemText.contains(QLatin1String("TBCOL")) || itemText.contains(QLatin1String("TZERO"));
 
 		if (notEditableKey)
 			item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 		else
 			item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 0, item );
+		headerEditTable->setItem(i, 0, item);
 
 		item = new QTableWidgetItem(keyword.value);
 		if (notEditableValue)
 			item->setFlags(item->flags() & ~Qt::ItemIsEditable);
 		else
 			item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 1, item );
+		headerEditTable->setItem(i, 1, item);
 		QString commentFieldText;
 		if (!keyword.unit.isEmpty()) {
 			if (keyword.updates.unitUpdated) {
-				const QString& comment = keyword.comment.right(keyword.comment.size() - keyword.comment.indexOf(QChar(']'))-1);
+				const QString& comment = keyword.comment.right(keyword.comment.size() - keyword.comment.indexOf(QChar(']')) - 1);
 				commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + comment;
 			} else {
 				if (keyword.comment.at(0) == QLatin1Char('['))
@@ -1438,7 +1451,7 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
 		item = new QTableWidgetItem(commentFieldText);
 
 		item->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		headerEditTable->setItem(i, 2, item );
+		headerEditTable->setItem(i, 2, item);
 	}
 
 	headerEditTable->resizeColumnsToContents();
@@ -1456,12 +1469,12 @@ void FITSFilterPrivate::parseHeader(const QString &fileName, QTableWidget *heade
  * \param key The key of the keyword whose value it's returned
  * \return The value of the keyword as a string
  */
-const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *key) {
+const QString FITSFilterPrivate::valueOf(const QString& fileName, const char* key) {
 #ifdef HAVE_FITS
 	int status = 0;
-	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status )) {
+	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
 		printError(status);
-		return QString ();
+		return {};
 	}
 
 	char* keyVal = new char[FLEN_VALUE];
@@ -1473,7 +1486,7 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
 		printError(status);
 		delete[] keyVal;
 		fits_close_file(m_fitsFile, &status);
-		return QString();
+		return {};
 	}
 
 	delete[] keyVal;
@@ -1483,7 +1496,7 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(key)
-	return QString();
+	return {};
 #endif
 }
 
@@ -1494,21 +1507,21 @@ const QString FITSFilterPrivate::valueOf(const QString& fileName, const char *ke
  * \param checkPrimary Used to determine whether the tree will be used for import or the header edit,
  * if it's \c true and if the primary array it's empty, then the item won't be added to the tree
  */
-void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw, bool checkPrimary) {
-	DEBUG("FITSFilterPrivate::parseExtensions()");
+void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw, bool checkPrimary) {
+	DEBUG(Q_FUNC_INFO);
 #ifdef HAVE_FITS
 	const QMultiMap<QString, QString>& extensions = extensionNames(fileName);
 	const QStringList& imageExtensions = extensions.values(QLatin1String("IMAGES"));
 	const QStringList& tableExtensions = extensions.values(QLatin1String("TABLES"));
 
 	QTreeWidgetItem* root = tw->invisibleRootItem();
-	//TODO: fileName may contain any data type: check if it's a FITS file
+	// TODO: fileName may contain any data type: check if it's a FITS file
 	auto* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << fileName);
 	root->addChild(treeNameItem);
 	treeNameItem->setExpanded(true);
 
 	auto* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Images"));
-	imageExtensionItem->setFlags(imageExtensionItem->flags() & ~Qt::ItemIsSelectable );
+	imageExtensionItem->setFlags(imageExtensionItem->flags() & ~Qt::ItemIsSelectable);
 	QString primaryHeaderNaxis = valueOf(fileName, "NAXIS");
 	const int naxis = primaryHeaderNaxis.toInt();
 	bool noImage = false;
@@ -1524,7 +1537,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	}
 	if (imageExtensionItem->childCount() > 0) {
 		treeNameItem->addChild(imageExtensionItem);
-		imageExtensionItem->setIcon(0,QIcon::fromTheme("view-preview"));
+		imageExtensionItem->setIcon(0, QIcon::fromTheme("view-preview"));
 		imageExtensionItem->setExpanded(true);
 		imageExtensionItem->child(0)->setSelected(true);
 
@@ -1534,7 +1547,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 
 	if (tableExtensions.size() > 0) {
 		auto* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Tables"));
-		tableExtensionItem->setFlags(tableExtensionItem->flags() & ~Qt::ItemIsSelectable );
+		tableExtensionItem->setFlags(tableExtensionItem->flags() & ~Qt::ItemIsSelectable);
 
 		for (const QString& ext : tableExtensions) {
 			auto* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
@@ -1542,7 +1555,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 		}
 		if (tableExtensionItem->childCount() > 0) {
 			treeNameItem->addChild(tableExtensionItem);
-			tableExtensionItem->setIcon(0,QIcon::fromTheme("x-office-spreadsheet"));
+			tableExtensionItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 			tableExtensionItem->setExpanded(true);
 			if (noImage) {
 				tableExtensionItem->child(0)->setSelected(true);
@@ -1555,7 +1568,7 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	Q_UNUSED(tw)
 	Q_UNUSED(checkPrimary)
 #endif
-	DEBUG("FITSFilterPrivate::parseExtensions() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 /*!
@@ -1572,15 +1585,13 @@ FITSFilterPrivate::~FITSFilterPrivate() = default;
   Saves as XML.
 */
 
-void FITSFilter::save(QXmlStreamWriter * writer) const {
-	Q_UNUSED(writer)
+void FITSFilter::save(QXmlStreamWriter*) const {
 }
 
 /*!
   Loads from XML.
 */
 
-bool FITSFilter::load(XmlStreamReader * loader) {
-	Q_UNUSED(loader)
+bool FITSFilter::load(XmlStreamReader*) {
 	return false;
 }

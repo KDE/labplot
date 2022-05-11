@@ -3,11 +3,9 @@
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-
 
 #ifndef COLORMAPSWIDGET_H
 #define COLORMAPSWIDGET_H
@@ -41,7 +39,7 @@ private:
 	void activateIconViewItem(const QString& name);
 	void activateListViewItem(const QString& name);
 
-private slots:
+private Q_SLOTS:
 	void collectionChanged(int);
 	void colorMapChanged();
 	void showInfo();
@@ -49,7 +47,7 @@ private slots:
 	void viewModeChanged(int);
 	void activated(const QString&);
 
-signals:
+Q_SIGNALS:
 	void doubleClicked();
 };
 

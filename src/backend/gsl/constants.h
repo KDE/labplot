@@ -1,20 +1,19 @@
 /*
-    File                 : constants.h
-    Project              : LabPlot
-    Description          : definition of mathematical and physical constants
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : constants.h
+	Project              : LabPlot
+	Description          : definition of mathematical and physical constants
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef GSL_CONSTANTS_H
 #define GSL_CONSTANTS_H
 
-#include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
+#include <gsl/gsl_math.h>
 
 #include "parser.h"
 
@@ -159,7 +158,6 @@ struct cons _constants[] = {
 
 	/* ignore '...' */
 	{"...", 0},
-	{0, 0}
-};
+	{0, 0}};
 
 #endif /* CONSTANTS_H */

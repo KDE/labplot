@@ -1,0 +1,27 @@
+Dependencies:
+- 'on': ['@all']
+  'require':
+    'frameworks/extra-cmake-modules': '@stable'
+    'frameworks/kcrash': '@stable'
+    'frameworks/kguiaddons': '@stable'
+    'frameworks/ki18n': '@stable'
+    'frameworks/kparts': '@stable'
+    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kdoctools': '@stable'
+    'frameworks/karchive': '@stable'
+    'frameworks/kconfig': '@stable'
+    'frameworks/kcoreaddons': '@stable'
+    'frameworks/kitemviews': '@stable'
+    'frameworks/ktexteditor': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'frameworks/knewstuff': '@stable'
+    'libraries/kuserfeedback': '@stable'
+    'edu/cantor': '@stable'
+    'qtproject/qt/qtmqtt': '@stable'
+
+Environment:
+  KDECI_BUILD: "TRUE"
+
+Options:
+  setup-dbus-session: False
+  require-passing-tests-on: ['@all']

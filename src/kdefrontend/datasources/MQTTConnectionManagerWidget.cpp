@@ -1,11 +1,11 @@
 /*
-    File                 : MQTTConnectionManagerWidget.cpp
-    Project              : LabPlot
-    Description          : widget for managing MQTT connections
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-    SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MQTTConnectionManagerWidget.cpp
+	Project              : LabPlot
+	Description          : widget for managing MQTT connections
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "MQTTConnectionManagerWidget.h"
@@ -18,9 +18,9 @@
 #include <KMessageBox>
 #include <KSharedConfig>
 
+#include <QListWidgetItem>
 #include <QTimer>
 #include <QtMqtt>
-#include <QListWidgetItem>
 
 /*!
    \class MQTTConnectionManagerWidget
@@ -28,9 +28,9 @@
 
    \ingroup kdefrontend
 */
-MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn) : QWidget(parent),
-	m_initConnName(conn) {
-
+MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const QString& conn)
+	: QWidget(parent)
+	, m_initConnName(conn) {
 	ui.setupUi(this);
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("MQTT_connections");
@@ -42,7 +42,7 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	ui.bRemove->setToolTip(i18n("Remove selected MQTT connection"));
 	ui.bTest->setIcon(QIcon::fromTheme(QStringLiteral("network-connect")));
 
-	//SIGNALs/SLOTs
+	// SIGNALs/SLOTs
 	connect(ui.leName, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::nameChanged);
 	connect(ui.lwConnections, &QListWidget::currentRowChanged, this, &MQTTConnectionManagerWidget::connectionChanged);
 	connect(ui.bAdd, &QPushButton::clicked, this, &MQTTConnectionManagerWidget::addConnection);
@@ -52,9 +52,9 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	connect(ui.leUserName, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::userNameChanged);
 	connect(ui.lePassword, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::passwordChanged);
 	connect(ui.leID, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::clientIdChanged);
-	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::authenticationChecked);
-	connect(ui.chbID, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::idChecked);
-	connect(ui.chbRetain, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::retainChecked);
+	connect(ui.chbAuthentication, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::authenticationChecked);
+	connect(ui.chbID, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::idChecked);
+	connect(ui.chbRetain, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::retainChecked);
 	connect(ui.bTest, &QPushButton::clicked, this, &MQTTConnectionManagerWidget::testConnection);
 
 	ui.lePassword->hide();
@@ -82,8 +82,8 @@ MQTTConnectionManagerWidget::~MQTTConnectionManagerWidget() {
 QString MQTTConnectionManagerWidget::connection() const {
 	if (ui.lwConnections->currentItem())
 		return ui.lwConnections->currentItem()->text();
-	else
-		return QString();
+
+	return {};
 }
 
 /*!
@@ -102,7 +102,7 @@ void MQTTConnectionManagerWidget::connectionChanged(int index) {
 	m_initializing = true;
 	m_currentConnection = &m_connections[index];
 
-	//show the settings for the selected connection
+	// show the settings for the selected connection
 	ui.leName->setText(m_currentConnection->name);
 	ui.leHost->setText(m_currentConnection->hostName);
 	ui.lePort->setText(QString::number(m_currentConnection->port));
@@ -129,12 +129,12 @@ void MQTTConnectionManagerWidget::connectionChanged(int index) {
  * \brief Called when the name is changed
  * Sets the name for the current connection
  */
-void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
+void MQTTConnectionManagerWidget::nameChanged(const QString& name) {
 	if (name.isEmpty()) {
-		ui.leName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leName)
 		ui.leHost->setToolTip(i18n("Please set a valid name."));
 	} else {
-		//check uniqueness of the provided name
+		// check uniqueness of the provided name
 		bool unique = true;
 		for (int i = 0; i < ui.lwConnections->count(); ++i) {
 			if (ui.lwConnections->currentRow() == i)
@@ -153,10 +153,10 @@ void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
 
 			if (!m_initializing) {
 				m_currentConnection->name = name;
-				emit changed();
+				Q_EMIT changed();
 			}
 		} else {
-			ui.leName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leName)
 			ui.leHost->setToolTip(i18n("Please provide a unique name."));
 		}
 	}
@@ -168,13 +168,13 @@ void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
  */
 void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 	if (hostName.isEmpty()) {
-		ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leHost)
 		ui.leHost->setToolTip(i18n("Please set a valid host name."));
 	} else {
 		m_currentConnection->hostName = hostName;
-		//check uniqueness of the provided host name
+		// check uniqueness of the provided host name
 		bool unique = true;
-		for (auto & c : m_connections) {
+		for (auto& c : m_connections) {
 			if (m_currentConnection == &c)
 				continue;
 
@@ -185,18 +185,18 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 		}
 
 		if (!unique) {
-			ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leHost)
+			SET_WARNING_STYLE(ui.lePort)
 			ui.leHost->setToolTip(i18n("Host name and port must be unique."));
-			ui.lePort->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
 			ui.lePort->setToolTip(i18n("Host name and port must be unique."));
 		} else {
 			ui.leHost->setStyleSheet(QString());
-			ui.leHost->setToolTip(QString());
 			ui.lePort->setStyleSheet(QString());
+			ui.leHost->setToolTip(QString());
 			ui.lePort->setToolTip(QString());
 
 			if (!m_initializing)
-				emit changed();
+				Q_EMIT changed();
 		}
 	}
 }
@@ -207,13 +207,13 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
  */
 void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 	if (portString.isEmpty()) {
-		ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leHost)
 		ui.leHost->setToolTip(i18n("Please set a valid port."));
 	} else {
 		m_currentConnection->port = portString.simplified().toInt();
-		//check uniqueness of the provided host name
+		// check uniqueness of the provided host name
 		bool unique = true;
-		for (auto & c : m_connections) {
+		for (auto& c : m_connections) {
 			if (m_currentConnection == &c)
 				continue;
 
@@ -224,9 +224,9 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 		}
 
 		if (!unique) {
-			ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leHost)
+			SET_WARNING_STYLE(ui.lePort)
 			ui.leHost->setToolTip(i18n("Host name and port must be unique."));
-			ui.lePort->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
 			ui.lePort->setToolTip(i18n("Host name and port must be unique."));
 		} else {
 			ui.leHost->setStyleSheet(QString());
@@ -235,10 +235,9 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 			ui.lePort->setToolTip(QString());
 
 			if (!m_initializing)
-				emit changed();
+				Q_EMIT changed();
 		}
 	}
-
 }
 
 /*!
@@ -247,8 +246,8 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
  *
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::authenticationChecked(int state) {
-	if (state == Qt::CheckState::Checked) {
+void MQTTConnectionManagerWidget::authenticationChecked(bool state) {
+	if (state) {
 		ui.lPassword->show();
 		ui.lePassword->show();
 		ui.lUsername->show();
@@ -261,7 +260,7 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 				m_currentConnection->useAuthentication = true;
 		}
 
-	} else if (state == Qt::CheckState::Unchecked) {
+	} else {
 		ui.lPassword->hide();
 		ui.lePassword->hide();
 		ui.lePassword->clear();
@@ -275,15 +274,15 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 	}
 
 	if (!m_initializing)
-		emit changed();
+		Q_EMIT changed();
 }
 
 /*!
  *\brief called when ID checkbox's state is changed, if checked a lineEdit is shown so the user can set the ID
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::idChecked(int state) {
-	if (state == Qt::CheckState::Checked) {
+void MQTTConnectionManagerWidget::idChecked(bool state) {
+	if (state) {
 		ui.lID->show();
 		ui.leID->show();
 
@@ -293,7 +292,7 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 				m_currentConnection->useID = true;
 		}
 
-	} else if (state == Qt::CheckState::Unchecked) {
+	} else {
 		ui.lID->hide();
 		ui.leID->hide();
 		ui.leID->clear();
@@ -304,25 +303,24 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 	}
 
 	if (!m_initializing)
-		emit changed();
+		Q_EMIT changed();
 }
 
 /*!
  * \brief called when retain checkbox's state is changed
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::retainChecked(int state) {
+void MQTTConnectionManagerWidget::retainChecked(bool state) {
 	if (m_initializing)
 		return;
 
 	if (m_currentConnection) {
-		if (state == Qt::CheckState::Checked) {
+		if (state)
 			m_currentConnection->retain = true;
-		} else if (state == Qt::CheckState::Unchecked) {
+		else
 			m_currentConnection->retain = false;
-		}
 	}
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -331,7 +329,7 @@ void MQTTConnectionManagerWidget::retainChecked(int state) {
  */
 void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
 	if (userName.isEmpty()) {
-		ui.leUserName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leUserName)
 		ui.leUserName->setToolTip(i18n("Please set a username."));
 	} else {
 		ui.leUserName->setStyleSheet(QString());
@@ -343,7 +341,7 @@ void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
 
 	if (m_currentConnection)
 		m_currentConnection->userName = userName;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -352,7 +350,7 @@ void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
  */
 void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
 	if (password.isEmpty()) {
-		ui.lePassword->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.lePassword)
 		ui.lePassword->setToolTip(i18n("Please set a password."));
 	} else {
 		ui.lePassword->setStyleSheet(QString());
@@ -364,7 +362,7 @@ void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
 
 	if (m_currentConnection)
 		m_currentConnection->password = password;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -373,7 +371,7 @@ void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
  */
 void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 	if (clientID.isEmpty()) {
-		ui.leID->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leID)
 		ui.leID->setToolTip(i18n("Please set a client ID."));
 	} else {
 		ui.leID->setStyleSheet(QString());
@@ -385,7 +383,7 @@ void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 
 	if (m_currentConnection)
 		m_currentConnection->clientID = clientID;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -396,16 +394,13 @@ void MQTTConnectionManagerWidget::addConnection() {
 	MQTTConnection conn;
 	conn.name = uniqueName();
 	conn.hostName = QStringLiteral("localhost");
-	conn.port = 1883;
-	conn.useAuthentication = false;
-	conn.useID = false;
 
 	m_connections.append(conn);
 	m_currentConnection = &m_connections.back();
 	ui.lwConnections->addItem(conn.hostName);
 	ui.lwConnections->setCurrentRow(m_connections.size() - 1);
 
-	//we have now more than one connection, enable widgets
+	// we have now more than one connection, enable widgets
 	ui.bRemove->setEnabled(true);
 	ui.leHost->setEnabled(true);
 	ui.lePort->setEnabled(true);
@@ -413,7 +408,7 @@ void MQTTConnectionManagerWidget::addConnection() {
 	ui.lePassword->setEnabled(true);
 	ui.leID->setEnabled(true);
 	ui.leName->setEnabled(true);
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -426,16 +421,16 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 	if (ret != KMessageBox::Yes)
 		return;
 
-	//remove the current selected connection
+	// remove the current selected connection
 	m_connections.removeAt(ui.lwConnections->currentRow());
 	m_initializing = true;
 	delete ui.lwConnections->takeItem(ui.lwConnections->currentRow());
 	m_initializing = false;
 
-	//show the connection for the item that was automatically selected after the deletion
+	// show the connection for the item that was automatically selected after the deletion
 	connectionChanged(ui.lwConnections->currentRow());
 
-	//disable widgets if there are no connections anymore
+	// disable widgets if there are no connections anymore
 	if (!m_currentConnection) {
 		m_initializing = true;
 		ui.leName->clear();
@@ -453,7 +448,7 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 		ui.leID->setEnabled(false);
 		m_initializing = false;
 	}
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -488,7 +483,7 @@ void MQTTConnectionManagerWidget::loadConnections() {
 		ui.lwConnections->addItem(conn.name);
 	}
 
-	//show the first connection if available, create a new connection otherwise
+	// show the first connection if available, create a new connection otherwise
 	if (!m_connections.empty()) {
 		if (!m_initConnName.isEmpty()) {
 			auto items = ui.lwConnections->findItems(m_initConnName, Qt::MatchExactly);
@@ -505,7 +500,7 @@ void MQTTConnectionManagerWidget::loadConnections() {
 
 	m_initializing = false;
 
-	//show the settings of the current connection
+	// show the settings of the current connection
 	connectionChanged(ui.lwConnections->currentRow());
 }
 
@@ -514,12 +509,12 @@ void MQTTConnectionManagerWidget::loadConnections() {
  */
 void MQTTConnectionManagerWidget::saveConnections() {
 	qDebug() << "Saving connections to " << m_configPath;
-	//delete saved connections
+	// delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& group : config.groupList())
 		config.deleteGroup(group);
 
-	//save connections
+	// save connections
 	for (const auto& conn : m_connections) {
 		KConfigGroup group = config.group(conn.name);
 		group.writeEntry("Host", conn.hostName);
@@ -545,7 +540,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 	bool connectionsOk = true;
 
 	for (int i = 0; i < m_connections.size(); ++i) {
-		auto & c1 = m_connections[i];
+		auto& c1 = m_connections[i];
 		QList<QListWidgetItem*> equalNames = ui.lwConnections->findItems(c1.name, Qt::MatchExactly);
 		bool nameOK = (!c1.name.isEmpty()) && (equalNames.size() == 1);
 
@@ -560,7 +555,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 		for (int j = 0; j < m_connections.size(); ++j) {
 			if (i == j)
 				continue;
-			auto & c2 = m_connections[j];
+			auto& c2 = m_connections[j];
 
 			if (c2.hostName == c1.hostName && c2.port == c1.port) {
 				uniqueHost = false;
@@ -572,7 +567,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 
 		if (!allOk) {
 			connectionsOk = false;
-			ui.lwConnections->item(i)->setBackground(QBrush(Qt::red));
+			SET_WARNING_BACKGROUND(ui.lwConnections->item(i))
 		} else
 			ui.lwConnections->item(i)->setBackground(QBrush());
 	}
@@ -595,11 +590,10 @@ QString MQTTConnectionManagerWidget::uniqueName() {
 
 	QString base = name;
 	int lastNonDigit;
-	for (lastNonDigit = base.size()-1; lastNonDigit >= 0 &&
-		 base[lastNonDigit].category() == QChar::Number_DecimalDigit; --lastNonDigit)
+	for (lastNonDigit = base.size() - 1; lastNonDigit >= 0 && base[lastNonDigit].category() == QChar::Number_DecimalDigit; --lastNonDigit)
 		base.chop(1);
 
-	if (lastNonDigit >=0 && base[lastNonDigit].category() != QChar::Separator_Space)
+	if (lastNonDigit >= 0 && base[lastNonDigit].category() != QChar::Separator_Space)
 		base.append(' ');
 
 	int newNr = name.rightRef(name.size() - base.size()).toInt();
@@ -653,9 +647,9 @@ void MQTTConnectionManagerWidget::onConnect() {
 	RESET_CURSOR;
 	m_testTimer->stop();
 
-	KMessageBox::information(this, i18n("Connection to the broker '%1:%2' was successful.",
-	                               m_currentConnection->hostName, m_currentConnection->port),
-	                         i18n("Connection Successful"));
+	KMessageBox::information(this,
+							 i18n("Connection to the broker '%1:%2' was successful.", m_currentConnection->hostName, m_currentConnection->port),
+							 i18n("Connection Successful"));
 
 	m_client->disconnectFromHost();
 }
@@ -667,9 +661,9 @@ void MQTTConnectionManagerWidget::testTimeout() {
 	RESET_CURSOR;
 	m_testTimer->stop();
 
-	KMessageBox::error(this, i18n("Failed to connect to the broker '%1:%2'.",
-	                         m_currentConnection->hostName, m_currentConnection->port),
-	                   i18n("Connection Failed"));
+	KMessageBox::error(this,
+					   i18n("Failed to connect to the broker '%1:%2'.", m_currentConnection->hostName, m_currentConnection->port),
+					   i18n("Connection Failed"));
 
 	m_client->disconnectFromHost();
 }
@@ -680,9 +674,10 @@ void MQTTConnectionManagerWidget::testTimeout() {
 void MQTTConnectionManagerWidget::onDisconnect() {
 	RESET_CURSOR;
 	if (m_testTimer->isActive()) {
-		KMessageBox::error(this, i18n("Disconnected from the broker '%1:%2' before the connection was successful.",
-		                         m_currentConnection->hostName, m_currentConnection->port),
-		                   i18n("Connection Failed"));
+		KMessageBox::error(
+			this,
+			i18n("Disconnected from the broker '%1:%2' before the connection was successful.", m_currentConnection->hostName, m_currentConnection->port),
+			i18n("Connection Failed"));
 		m_testTimer->stop();
 	}
 }

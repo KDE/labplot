@@ -1,11 +1,11 @@
 /*
-    File                 : AspectDock.h
-    Project              : LabPlot
-    Description          : widget for aspect properties showing name and comments only
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	File                 : AspectDock.h
+	Project              : LabPlot
+	Description          : widget for aspect properties showing name and comments only
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ASPECTDOCK_H
@@ -15,7 +15,8 @@
 #include "ui_aspectdock.h"
 
 class AbstractAspect;
-template <class T> class QList;
+template<class T>
+class QList;
 
 class AspectDock : public BaseDock {
 	Q_OBJECT
@@ -27,7 +28,7 @@ public:
 private:
 	Ui::AspectDock ui;
 
-private slots:
+private Q_SLOTS:
 	void aspectDescriptionChanged(const AbstractAspect*);
 };
 

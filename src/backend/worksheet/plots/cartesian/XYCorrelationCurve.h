@@ -1,12 +1,11 @@
 /*
-    File                 : XYCorrelationCurve.h
-    Project              : LabPlot
-    Description          : A xy-curve defined by a correlation
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : XYCorrelationCurve.h
+	Project              : LabPlot
+	Description          : A xy-curve defined by a correlation
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef XYCORRELATIONCURVE_H
 #define XYCORRELATIONCURVE_H
@@ -24,17 +23,17 @@ class XYCorrelationCurve : public XYAnalysisCurve {
 
 public:
 	struct CorrelationData {
-		CorrelationData() {};
+		CorrelationData(){};
 
-		double samplingInterval{1.};			// sampling interval used when no x-axis is present
-		nsl_corr_type_type type{nsl_corr_type_linear};	// linear or circular
-		nsl_corr_norm_type normalize{nsl_corr_norm_none};	// normalization
-		bool autoRange{true};				// use all data?
-		//TODO: use Range
-		QVector<double> xRange{0., 0.};			// x range for correlation
+		double samplingInterval{1.}; // sampling interval used when no x-axis is present
+		nsl_corr_type_type type{nsl_corr_type_linear}; // linear or circular
+		nsl_corr_norm_type normalize{nsl_corr_norm_none}; // normalization
+		bool autoRange{true}; // use all data?
+		// TODO: use Range
+		QVector<double> xRange{0., 0.}; // x range for correlation
 	};
 	struct CorrelationResult {
-		CorrelationResult() {};
+		CorrelationResult(){};
 
 		bool available{false};
 		bool valid{false};
@@ -61,7 +60,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYCorrelationCurve)
 
-signals:
+Q_SIGNALS:
 	void correlationDataChanged(const XYCorrelationCurve::CorrelationData&);
 };
 

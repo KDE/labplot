@@ -1,11 +1,11 @@
 /*
-    File                 : SpreadsheetTest.h
-    Project              : LabPlot
-    Description          : Tests for the Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	File                 : SpreadsheetTest.h
+	Project              : LabPlot
+	Description          : Tests for the Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SPREADSHEETTEST_H
@@ -16,12 +16,12 @@
 class SpreadsheetTest : public QObject {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void initTestCase();
 
-	//copy and paste
+	// copy and paste
 
-	//handling of different column modes
+	// handling of different column modes
 	void testCopyPasteColumnMode00();
 	void testCopyPasteColumnMode01();
 	void testCopyPasteColumnMode02();
@@ -29,7 +29,7 @@ private slots:
 	void testCopyPasteColumnMode04();
 	void testCopyPasteColumnMode05();
 
-	//handling of spreadsheet size changes
+	// handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();
 	void testCopyPasteSizeChange01();
 

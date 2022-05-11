@@ -1,21 +1,20 @@
 /*
-    File                 : CartesianPlotPrivate.h
-    Project              : LabPlot
-    Description          : Private members of CartesianPlot.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CartesianPlotPrivate.h
+	Project              : LabPlot
+	Description          : Private members of CartesianPlot.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef CARTESIANPLOTPRIVATE_H
 #define CARTESIANPLOTPRIVATE_H
 
-#include "CartesianPlot.h"
-#include "CartesianCoordinateSystem.h"
-#include "backend/worksheet/Worksheet.h"
 #include "../AbstractPlotPrivate.h"
+#include "CartesianCoordinateSystem.h"
+#include "CartesianPlot.h"
+#include "backend/worksheet/Worksheet.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPen>
@@ -31,12 +30,13 @@ public:
 	void retransformXScale(int index);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
+	void niceExtendChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
-	bool mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform=false);
+	void mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform = false);
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
 	void mousePressZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
@@ -51,33 +51,25 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-//	const Range<double> xRange() const {
-//		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
-//	}
-//	const Range<double> yRange() const {
-//		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
-//	}
-	Range<double>& xRange() {
-		return xRanges[defaultCoordinateSystem()->xIndex()].range;
+	Range<double>& xRange(int index = -1) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->xIndex();
+		return xRanges[index].range;
 	}
-	Range<double>& yRange() {
-		return yRanges[defaultCoordinateSystem()->yIndex()].range;
+	Range<double>& yRange(int index = -1) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->yIndex();
+		return yRanges[index].range;
 	}
-	Range<double>& xRange(int index) {
-		if (index >= 0)
-			return xRanges[index].range;
-		return xRange();
+	Range<double>& dataXRange(int index = -1) { // get x range of data
+		if (index == -1)
+			index = defaultCoordinateSystem()->xIndex();
+		return xRanges[index].dataRange;
 	}
-	Range<double>& yRange(int index) {
-		if (index >= 0)
-			return yRanges[index].range;
-		return yRange();
-	}
-	Range<double>& xRangeAutoScale(int index) {
-		return xRanges[index].autoScaleRange;
-	}
-	Range<double>& yRangeAutoScale(int index) {
-		return yRanges[index].autoScaleRange;
+	Range<double>& dataYRange(int index = -1) { // get y range of data
+		if (index == -1)
+			index = defaultCoordinateSystem()->yIndex();
+		return yRanges[index].dataRange;
 	}
 
 	bool autoScaleX(int index = -1) {
@@ -98,49 +90,55 @@ public:
 		}
 		return yRanges[index].range.autoScale();
 	}
-	void setAutoScaleX(int index = -1, bool b = true) {
+	void enableAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
 			for (int i = 0; i < q->xRangeCount(); i++)
-				setAutoScaleX(i, b);
+				enableAutoScaleX(i, b);
 			return;
 		}
 		xRanges[index].range.setAutoScale(b);
 	}
-	void setAutoScaleY(int index = -1, bool b = true) {
+	void enableAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
 			for (int i = 0; i < q->yRangeCount(); i++)
-				setAutoScaleY(i, b);
+				enableAutoScaleY(i, b);
 			return;
 		}
 		yRanges[index].range.setAutoScale(b);
 	}
+	void checkXRange(int index);
+	void checkYRange(int index);
+	Range<double> checkRange(const Range<double>&);
 
-	//the following factor determines the size of the offset between the min/max points of the curves
-	//and the coordinate system ranges, when doing auto scaling
-	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	//TODO: make this factor optional.
-	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
+	// the following factor determines the size of the offset between the min/max points of the curves
+	// and the coordinate system ranges, when doing auto scaling
+	// Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
+	// TODO: make this factor optional.
+	// Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	double autoScaleOffsetFactor{0.0};
-	//TODO: move to Range?
+	// TODO: move to Range?
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 
-	//cached values of minimum and maximum for all visible curves
-	//Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
+	// cached values of minimum and maximum for all visible curves
+	// Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
 
 	struct RichRange {
-		RichRange(const Range<double>& r = Range<double>(), const bool d = false): range(r), dirty(d) {}
+		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
+			: range(r)
+			, dirty(d) {
+		}
 		Range<double> range; // current range
 		Range<double> prev;
-		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
+		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
 		bool dirty{false};
 	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
-
+	bool niceExtend{true};
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {
@@ -148,12 +146,11 @@ public:
 	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
-	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
-	QPointF scenePos; //current position under the mouse cursor in scene coordinates
-	QPointF logicalPos; //current position under the mouse cursor in plot coordinates
-	bool calledFromContextMenu{false}; //we set the current position under the cursor when "add new" is called via the context menu
+	QPointF scenePos; // current position under the mouse cursor in scene coordinates
+	QPointF logicalPos; // current position under the mouse cursor in plot coordinates
+	bool calledFromContextMenu{false}; // we set the current position under the cursor when "add new" is called via the context menu
 
 	// Cursor
 	bool cursor0Enable{false};
@@ -163,16 +160,16 @@ public:
 	QPointF cursor1Pos{QPointF(qQNaN(), qQNaN())};
 	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 
-	//other mouse cursor modes
+	// other mouse cursor modes
 	QPen zoomSelectPen{Qt::black, 3, Qt::SolidLine};
 	QPen crossHairPen{Qt::black, 2, Qt::DotLine};
 
-signals:
+Q_SIGNALS:
 	void mousePressZoomSelectionModeSignal(QPointF logicalPos);
 	void mousePressCursorModeSignal(QPointF logicalPos);
 
 private:
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
@@ -184,10 +181,9 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
-	void checkXRange(int index);
-	void checkYRange(int index);
-	CartesianScale* createScale(RangeT::Scale,
-		const Range<double> &sceneRange, const Range<double> &logicalRange);
+	CartesianScale* createScale(RangeT::Scale, const Range<double>& sceneRange, const Range<double>& logicalRange);
+
+	void navigateNextPrevCurve(bool next = true) const;
 
 	bool m_insideDataRect{false};
 	bool m_selectionBandIsShown{false};
@@ -195,7 +191,7 @@ private:
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;
 	QPointF m_panningStart;
-	QPointF m_crosshairPos; //current position of the mouse cursor in scene coordinates
+	QPointF m_crosshairPos; // current position of the mouse cursor in scene coordinates
 
 	QStaticText m_cursor0Text{"1"};
 	QStaticText m_cursor1Text{"2"};

@@ -1,12 +1,11 @@
 /*
-    File                 : ImportDialog.h
-    Project              : LabPlot
-    Description          : import data dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportDialog.h
+	Project              : LabPlot
+	Description          : import data dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef IMPORTDIALOG_H
 #define IMPORTDIALOG_H
@@ -53,12 +52,12 @@ protected:
 	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
 
-protected slots:
+protected Q_SLOTS:
 	virtual void checkOkButton() = 0;
 
-private slots:
+private Q_SLOTS:
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
 };
 
-#endif //IMPORTDIALOG_H
+#endif // IMPORTDIALOG_H

@@ -1,19 +1,19 @@
 /*
-    File             : XYDataReductionCurveDock.h
-    Project          : LabPlot
-    Description      : widget for editing properties of data reduction curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	File             : XYDataReductionCurveDock.h
+	Project          : LabPlot
+	Description      : widget for editing properties of data reduction curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef XYDATAREDUCTIONCURVEDOCK_H
 #define XYDATAREDUCTIONCURVEDOCK_H
 
-#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "ui_xydatareductioncurvedockgeneraltab.h"
 
 class XYAnalysisCurve;
@@ -24,19 +24,19 @@ class XYDataReductionCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYDataReductionCurveDock(QWidget *parent, QStatusBar *sb);
+	explicit XYDataReductionCurveDock(QWidget* parent, QStatusBar* sb);
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void updateTolerance();
 	void updateTolerance2();
 	void showDataReductionResult();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
-	QStatusBar* statusBar;	// main status bar to display progress
+	QStatusBar* statusBar; // main status bar to display progress
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
 	TreeViewComboBox* cbXDataColumn{nullptr};
 	TreeViewComboBox* cbYDataColumn{nullptr};
@@ -48,9 +48,9 @@ private:
 protected:
 	void setModel() override;
 
-private slots:
-	//SLOTs for changes triggered in XYDataReductionCurveDock
-	//general tab
+private Q_SLOTS:
+	// SLOTs for changes triggered in XYDataReductionCurveDock
+	// general tab
 	void dataSourceTypeChanged(int);
 	void dataSourceCurveChanged(const QModelIndex&);
 	void xDataColumnChanged(const QModelIndex&);
@@ -69,8 +69,8 @@ private slots:
 	void recalculateClicked();
 	void enableRecalculate() const;
 
-	//SLOTs for changes triggered in XYCurve
-	//General-Tab
+	// SLOTs for changes triggered in XYCurve
+	// General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

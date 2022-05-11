@@ -1,12 +1,11 @@
 /*
-    File                 : WorkbookView.h
-    Project              : LabPlot
-    Description          : View class for Workbook
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : WorkbookView.h
+	Project              : LabPlot
+	Description          : View class for Workbook
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef WORKBOOKVIEW_H
 #define WORKBOOKVIEW_H
@@ -35,11 +34,11 @@ private:
 	int lastSelectedIndex{0};
 	bool m_initializing;
 
-	//actions
+	// actions
 	QAction* action_add_spreadsheet;
 	QAction* action_add_matrix;
 
-private  slots:
+private Q_SLOTS:
 	void createContextMenu(QMenu*) const;
 	void showTabContextMenu(QPoint);
 	void addSpreadsheet();

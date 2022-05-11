@@ -1,19 +1,19 @@
 /*
-    File             : XYDifferentiationCurveDock.cpp
-    Project          : LabPlot
-    Description      : widget for editing properties of differentiation curves
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+	File             : XYDifferentiationCurveDock.cpp
+	Project          : LabPlot
+	Description      : widget for editing properties of differentiation curves
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "XYDifferentiationCurveDock.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QStandardItemModel>
@@ -36,18 +36,19 @@ extern "C" {
   \ingroup kdefrontend
 */
 
-XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent) : XYCurveDock(parent) {
+XYDifferentiationCurveDock::XYDifferentiationCurveDock(QWidget* parent)
+	: XYCurveDock(parent) {
 }
 
 /*!
  * 	// Tab "General"
  */
 void XYDifferentiationCurveDock::setupGeneral() {
-	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -67,16 +68,16 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_DIFF_DERIV_ORDER_COUNT; ++i)
 		uiGeneralTab.cbDerivOrder->addItem(i18n(nsl_diff_deriv_order_name[i]));
 
-	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
-	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
+	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
+	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon( QIcon::fromTheme("run-build") );
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	//Slots
+	// Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYDifferentiationCurveDock::nameChanged);
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYDifferentiationCurveDock::commentChanged);
 
@@ -89,7 +90,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYDifferentiationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbDerivOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::derivOrderChanged);
 	connect(uiGeneralTab.sbAccOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYDifferentiationCurveDock::accOrderChanged);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDifferentiationCurveDock::plotRangeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYDifferentiationCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYDifferentiationCurveDock::dataSourceCurveChanged);
@@ -98,7 +99,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 }
 
 void XYDifferentiationCurveDock::initGeneralTab() {
-	//if there are more than one curve in the list, disable the tab "general"
+	// if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -117,25 +118,25 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 		uiGeneralTab.teComment->setText(QString());
 	}
 
-	//show the properties of the first curve
-	//data source
+	// show the properties of the first curve
+	// data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_differentiationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	cbDataSourceCurve->setAspect(m_differentiationCurve->dataSourceCurve());
 	cbXDataColumn->setColumn(m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
 
-	//range widgets
+	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_differentiationCurve->parentAspect());
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(m_differentiationData.xRange.first()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(m_differentiationData.xRange.last()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(m_differentiationData.xRange.first()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(m_differentiationData.xRange.last()));
 	} else {
-		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.first()) );
-		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.last()) );
+		uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.first()));
+		uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_differentiationData.xRange.last()));
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
@@ -147,7 +148,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
 
-	//auto range
+	// auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_differentiationData.autoRange);
 	this->autoRangeChanged();
 
@@ -162,9 +163,9 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	this->showDifferentiationResult();
 
-	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
-	//Slots
+	// Slots
 	connect(m_differentiationCurve, &XYDifferentiationCurve::aspectDescriptionChanged, this, &XYDifferentiationCurveDock::aspectDescriptionChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::dataSourceTypeChanged, this, &XYDifferentiationCurveDock::curveDataSourceTypeChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::dataSourceCurveChanged, this, &XYDifferentiationCurveDock::curveDataSourceCurveChanged);
@@ -173,12 +174,16 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	connect(m_differentiationCurve, &XYDifferentiationCurve::differentiationDataChanged, this, &XYDifferentiationCurveDock::curveDifferentiationDataChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::sourceDataChanged, this, &XYDifferentiationCurveDock::enableRecalculate);
 	connect(m_differentiationCurve, &WorksheetElement::plotRangeListChanged, this, &XYDifferentiationCurveDock::updatePlotRanges);
-	connect(m_differentiationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYDifferentiationCurveDock::curveVisibilityChanged);
+	connect(m_differentiationCurve, &XYCurve::visibleChanged, this, &XYDifferentiationCurveDock::curveVisibilityChanged);
 }
 
 void XYDifferentiationCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
+	QList<AspectType> list{AspectType::Folder,
+						   AspectType::Datapicker,
+						   AspectType::Worksheet,
+						   AspectType::CartesianPlot,
+						   AspectType::XYCurve,
+						   AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -186,10 +191,16 @@ void XYDifferentiationCurveDock::setModel() {
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	        AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	        AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYFitCurve
-	       };
+	list = {AspectType::Folder,
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
@@ -220,12 +231,12 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 
 	updatePlotRanges();
 
-	//hide the "skip gaps" option after the curves were set
+	// hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYDifferentiationCurveDock::updatePlotRanges() const {
+void XYDifferentiationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
@@ -254,12 +265,11 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -268,15 +278,14 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
@@ -285,7 +294,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
 	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
@@ -295,11 +304,10 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -314,8 +322,8 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
-		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
+		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
+		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
 
 	size_t n = 0;
@@ -326,21 +334,20 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
 	QStandardItem* item = model->item(nsl_diff_deriv_order_first);
 	if (n < 3)
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else {
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		if (n < 5)
 			uiGeneralTab.sbAccOrder->setMinimum(2);
 	}
 
 	item = model->item(nsl_diff_deriv_order_second);
 	if (n < 3) {
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_second)
-				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-	}
-	else {
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	} else {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		if (n < 4)
 			uiGeneralTab.sbAccOrder->setMinimum(1);
 		else if (n < 5)
@@ -349,42 +356,38 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 
 	item = model->item(nsl_diff_deriv_order_third);
 	if (n < 5) {
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_third)
-				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-	}
-	else
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	} else
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	item = model->item(nsl_diff_deriv_order_fourth);
 	if (n < 5) {
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fourth)
-				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-	}
-	else {
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	} else {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		if (n < 7)
 			uiGeneralTab.sbAccOrder->setMinimum(1);
 	}
 
 	item = model->item(nsl_diff_deriv_order_fifth);
 	if (n < 7) {
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_fifth)
-				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-	}
-	else
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	} else
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
 	item = model->item(nsl_diff_deriv_order_sixth);
 	if (n < 7) {
-		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsEnabled));
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbDerivOrder->currentIndex() == nsl_diff_deriv_order_sixth)
-				uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
-	}
-	else
-		item->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled);
+			uiGeneralTab.cbDerivOrder->setCurrentIndex(nsl_diff_deriv_order_first);
+	} else
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
 void XYDifferentiationCurveDock::autoRangeChanged() {
@@ -412,8 +415,8 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
 				SET_NUMBER_LOCALE
-				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
-				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
+				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
+				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
 				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
 				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
@@ -496,11 +499,10 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		if (curve)
-			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
+		static_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Differentiation status: %1", m_differentiationCurve->differentiationResult().status));
+	Q_EMIT info(i18n("Differentiation status: %1", m_differentiationCurve->differentiationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 
@@ -508,7 +510,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//no differentiation possible without the x- and y-data
+	// no differentiation possible without the x- and y-data
 	bool hasSourceData = false;
 	if (m_differentiationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -523,7 +525,7 @@ void XYDifferentiationCurveDock::enableRecalculate() const {
 			cbYDataColumn->setInvalid(false);
 		}
 	} else {
-		 hasSourceData = (m_differentiationCurve->dataSourceCurve() != nullptr);
+		hasSourceData = (m_differentiationCurve->dataSourceCurve() != nullptr);
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData);
@@ -543,27 +545,27 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 
 	if (!differentiationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
-		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
+		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
 	SET_NUMBER_LOCALE
 	if (differentiationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(differentiationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(differentiationResult.elapsedTime / 1000)) + "<br>";
 	else
 		str += i18n("calculation time: %1 ms", numberLocale.toString(differentiationResult.elapsedTime)) + "<br>";
 
- 	str += "<br><br>";
+	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);
 
-	//enable the "recalculate"-button if the source data was changed since the last differentiation
+	// enable the "recalculate"-button if the source data was changed since the last differentiation
 	uiGeneralTab.pbRecalculate->setEnabled(m_differentiationCurve->isSourceDataChangedSinceLastRecalc());
 }
 
 //*************************************************************
 //*** SLOTs for changes triggered in XYDifferentiationCurve ***
 //*************************************************************
-//General-Tab
+// General-Tab
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

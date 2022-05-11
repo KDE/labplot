@@ -1,26 +1,28 @@
 /*
-    File                 : CursorDock.cpp
-    Project              : LabPlot
-    Description 	     : This dock represents the data from the cursors in the cartesian plots
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-    SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : CursorDock.cpp
+	Project              : LabPlot
+	Description 	     : This dock represents the data from the cursors in the cartesian plots
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CursorDock.h"
-#include "ui_cursordock.h"
+#include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/TreeModel.h"
+#include "ui_cursordock.h"
 
+#include <QClipboard>
 #include <QKeyEvent>
 #include <QMenu>
-#include <QClipboard>
 
-CursorDock::CursorDock(QWidget* parent) : QWidget(parent), ui(new Ui::CursorDock) {
+CursorDock::CursorDock(QWidget* parent)
+	: QWidget(parent)
+	, ui(new Ui::CursorDock) {
 	ui->setupUi(this);
 	ui->tvCursorData->setModel(nullptr);
 
@@ -35,13 +37,12 @@ CursorDock::CursorDock(QWidget* parent) : QWidget(parent), ui(new Ui::CursorDock
 	connect(ui->cbCursor0en, &QCheckBox::clicked, this, &CursorDock::cursor0EnableChanged);
 	connect(ui->cbCursor1en, &QCheckBox::clicked, this, &CursorDock::cursor1EnableChanged);
 
-	//CTRL+C copies only the last cell in the selection, we want to copy the whole selection.
-	//install event filters to handle CTRL+C key events.
+	// CTRL+C copies only the last cell in the selection, we want to copy the whole selection.
+	// install event filters to handle CTRL+C key events.
 	ui->tvCursorData->installEventFilter(this);
 
 	ui->tvCursorData->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(ui->tvCursorData, &QTreeView::customContextMenuRequested,
-			this, &CursorDock::contextMenuRequested);
+	connect(ui->tvCursorData, &QTreeView::customContextMenuRequested, this, &CursorDock::contextMenuRequested);
 }
 
 void CursorDock::setWorksheet(Worksheet* worksheet) {
@@ -70,7 +71,7 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 	ui->tvCursorData->expandAll();
 
 	// connect all plots as a workaround to not be able to know which plot is selected
-	for (auto connection: selectedPlotsConnection)
+	for (auto connection : selectedPlotsConnection)
 		disconnect(connection);
 	for (auto* plot : m_plotList) {
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
@@ -187,7 +188,7 @@ void CursorDock::resultCopyAll() {
 
 		str += QLatin1Char('\n');
 
-		//iterate over all children of the current row
+		// iterate over all children of the current row
 		auto index = model->index(row, 0);
 		for (int row = 0; row < model->rowCount(index); ++row) {
 			for (int col = 0; col < model->columnCount(); ++col) {

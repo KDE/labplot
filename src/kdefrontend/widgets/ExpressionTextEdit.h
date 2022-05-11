@@ -1,13 +1,13 @@
 /*
-    File             : ExpressionTextEdit.h
-    Project          : LabPlot
-    Description      : widget for defining mathematical expressions
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
-    modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
-    SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies) <http://www.qt-project.org/legal>
+	File             : ExpressionTextEdit.h
+	Project          : LabPlot
+	Description      : widget for defining mathematical expressions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
+	SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies) <http://www.qt-project.org/legal>
 
-    SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
+	SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
 */
 
 #ifndef EXPRESSIONTEXTEDIT_H
@@ -23,7 +23,7 @@ class ExpressionTextEdit : public KTextEdit {
 	Q_OBJECT
 
 public:
-	explicit ExpressionTextEdit(QWidget *parent = nullptr);
+	explicit ExpressionTextEdit(QWidget* parent = nullptr);
 	EquationHighlighter* highlighter();
 	void setExpressionType(XYEquationCurve::EquationType);
 	void setVariables(const QStringList&);
@@ -35,7 +35,7 @@ protected:
 	void focusOutEvent(QFocusEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void insertCompletion(const QString&);
 	void validateExpression(bool force = false);
 
@@ -47,7 +47,7 @@ private:
 	bool m_isValid{false};
 	QString m_currentExpression;
 
-signals:
+Q_SIGNALS:
 	void expressionChanged();
 };
 

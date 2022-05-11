@@ -1,13 +1,12 @@
 /*
-    File                 : AbstractCoordinateSystem.h
-    Project              : LabPlot
-    Description          : Base class of all worksheet coordinate systems.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractCoordinateSystem.h
+	Project              : LabPlot
+	Description          : Base class of all worksheet coordinate systems.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef ABSTRACTCOORDINATESYSTEM_H
 #define ABSTRACTCOORDINATESYSTEM_H
@@ -38,7 +37,9 @@ public:
 	virtual Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
-	virtual QString info() const { return QString(); };
+	virtual QString info() const {
+		return QString();
+	};
 
 	class LineClipResult {
 	public:
@@ -59,8 +60,8 @@ public:
 		bool yClippedBottom[2];
 	};
 
-	//static members
-	static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
+	// static members
+	static bool clipLineToRect(QLineF* line, const QRectF& rect, LineClipResult* clipResult = nullptr);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

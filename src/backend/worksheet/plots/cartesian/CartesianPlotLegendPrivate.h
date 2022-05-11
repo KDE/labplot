@@ -1,19 +1,19 @@
 /*
-    File                 : CartesianPlotLegendPrivate.h
-    Project              : LabPlot
-    Description          : Private members of CartesianPlotLegend
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
+	File                 : CartesianPlotLegendPrivate.h
+	Project              : LabPlot
+	Description          : Private members of CartesianPlotLegend
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOTLEGENDPRIVATE_H
 #define CARTESIANPLOTLEGENDPRIVATE_H
 
-#include <QGraphicsItem>
-#include <QPen>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
+#include <QPen>
 
 class QBrush;
 class CartesianPlotLegend;
@@ -21,44 +21,38 @@ class XYCurve;
 class QGraphicsSceneContextMenuEvent;
 class QKeyEvent;
 
-class CartesianPlotLegendPrivate : public QGraphicsItem {
+class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
 	explicit CartesianPlotLegendPrivate(CartesianPlotLegend* owner);
 
 	CartesianPlotLegend* const q;
 
-	QString name() const;
-	bool swapVisible(bool on);
-	void retransform();
+	void retransform() override;
 	void updatePosition();
 
-	//QGraphicsItem's virtual functions
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+	// QGraphicsItem's virtual functions
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	virtual void recalcShapeAndBoundingRect() override;
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; //list containing all visible curves
+	QList<WorksheetElement*> curvesList; // list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
 	bool labelColumnMajor;
-	WorksheetElement::PositionWrapper position; //position in parent's coordinate system
-	qreal rotationAngle;
-	float lineSymbolWidth; //the width of line+symbol
-	QList<float> maxColumnTextWidths; //the maximal width of the text within each column
-	int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount
-	int rowCount; //the number of rows in the legend, depends on the number of curves and on columnCount
+	float lineSymbolWidth; // the width of line+symbol
+	QList<float> maxColumnTextWidths; // the maximal width of the text within each column
+	int columnCount; // the actual number of columns, can be smaller then the specified layoutColumnCount
+	int rowCount; // the number of rows in the legend, depends on the number of curves and on columnCount
 
 	const CartesianPlot* plot{nullptr};
 
 	TextLabel* title{nullptr};
 
-	//Background
+	// Background
 	WorksheetElement::BackgroundType backgroundType;
 	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
 	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
@@ -68,12 +62,12 @@ public:
 	QString backgroundFileName;
 	float backgroundOpacity;
 
-	//Border
+	// Border
 	QPen borderPen;
 	qreal borderCornerRadius;
 	qreal borderOpacity;
 
-	//Layout
+	// Layout
 	float layoutTopMargin;
 	float layoutBottomMargin;
 	float layoutLeftMargin;
@@ -86,8 +80,6 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
 };
 
 #endif

@@ -1,11 +1,11 @@
 /*
-    File                 : PresenterWidget.cpp
-    Project              : LabPlot
-    Description          : Widget for static presenting of worksheets
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : PresenterWidget.cpp
+	Project              : LabPlot
+	Description          : Widget for static presenting of worksheets
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "PresenterWidget.h"
 #include "SlidingPanel.h"
@@ -17,9 +17,10 @@
 #include <QScreen>
 #include <QTimeLine>
 
-PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheetName, QWidget *parent) : QWidget(parent),
-	m_imageLabel(new QLabel(this)), m_timeLine(new QTimeLine(600)) {
-
+PresenterWidget::PresenterWidget(const QPixmap& pixmap, const QString& worksheetName, QWidget* parent)
+	: QWidget(parent)
+	, m_imageLabel(new QLabel(this))
+	, m_timeLine(new QTimeLine(600)) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	m_imageLabel->setPixmap(pixmap);
 	m_imageLabel->adjustSize();
@@ -33,7 +34,9 @@ PresenterWidget::PresenterWidget(const QPixmap &pixmap, const QString& worksheet
 	m_panel = new SlidingPanel(this, worksheetName);
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {close();});
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {
+		close();
+	});
 }
 
 PresenterWidget::~PresenterWidget() {
@@ -41,8 +44,7 @@ PresenterWidget::~PresenterWidget() {
 	delete m_timeLine;
 }
 
-bool PresenterWidget::eventFilter(QObject* watched, QEvent* event) {
-	Q_UNUSED(watched);
+bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();
@@ -53,7 +55,7 @@ bool PresenterWidget::eventFilter(QObject* watched, QEvent* event) {
 	return false;
 }
 
-void PresenterWidget::keyPressEvent(QKeyEvent *event) {
+void PresenterWidget::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape)
 		close();
 }

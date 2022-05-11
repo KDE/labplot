@@ -1,11 +1,11 @@
 /*
-    File                 : Histogram.h
-    Project              : LabPlot
-    Description          : Histogram
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-    SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Histogram.h
+	Project              : LabPlot
+	Description          : Histogram
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+	SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTOGRAM_H
@@ -26,16 +26,16 @@ class Histogram : public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
-	enum HistogramType {Ordinary,Cumulative, AvgShift};
-	enum HistogramOrientation {Vertical, Horizontal};
-	enum HistogramNormalization {Count, Probability, CountDensity, ProbabilityDensity};
-	enum BinningMethod {ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott};
-	enum LineType {NoLine, Bars, Envelope, DropLines, HalfBars};
-	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
-	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
-	enum ErrorType {NoError};
+	enum HistogramType { Ordinary, Cumulative, AvgShift };
+	enum HistogramOrientation { Vertical, Horizontal };
+	enum HistogramNormalization { Count, Probability, CountDensity, ProbabilityDensity };
+	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
+	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
+	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
+	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
+	enum ErrorType { NoError };
 
-	explicit Histogram(const QString &name);
+	explicit Histogram(const QString& name);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -103,8 +103,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void suppressRetransform(bool);
 
 	double xMinimum() const;
@@ -112,25 +110,24 @@ public:
 	double yMinimum() const;
 	double yMaximum() const;
 
+	const AbstractColumn* bins() const;
+	const AbstractColumn* binValues() const;
+
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void retransform() override;
 	void recalcHistogram();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-private slots:
+private Q_SLOTS:
 	void updateValues();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChangedSlot();
-
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
-	HistogramPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)
@@ -138,11 +135,10 @@ private:
 	void initActions();
 	QAction* visibilityAction{nullptr};
 
-signals:
-	//General-Tab
+Q_SIGNALS:
+	// General-Tab
 	void dataChanged();
 	void dataColumnChanged(const AbstractColumn*);
-	void visibilityChanged(bool);
 
 	void typeChanged(Histogram::HistogramType);
 	void orientationChanged(Histogram::HistogramOrientation);
@@ -154,12 +150,12 @@ signals:
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
 
-	//Line-Tab
+	// Line-Tab
 	void lineTypeChanged(Histogram::LineType);
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
 
-	//Values-Tab
+	// Values-Tab
 	void valuesTypeChanged(Histogram::ValuesType);
 	void valuesColumnChanged(const AbstractColumn*);
 	void valuesPositionChanged(Histogram::ValuesPosition);
@@ -174,7 +170,7 @@ signals:
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
 
-	//Filling
+	// Filling
 	void fillingEnabledChanged(bool);
 	void fillingTypeChanged(WorksheetElement::BackgroundType);
 	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
@@ -185,7 +181,7 @@ signals:
 	void fillingFileNameChanged(QString&);
 	void fillingOpacityChanged(float);
 
-	//Error bars
+	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsPenChanged(QPen);

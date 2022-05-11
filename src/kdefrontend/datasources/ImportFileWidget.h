@@ -1,20 +1,20 @@
 /*
-    File                 : ImportFileWidget.h
-    Project              : LabPlot
-    Description          : import file data widget
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
-    SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : ImportFileWidget.h
+	Project              : LabPlot
+	Description          : import file data widget
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
+	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef IMPORTFILEWIDGET_H
 #define IMPORTFILEWIDGET_H
 
-#include "ui_importfilewidget.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "ui_importfilewidget.h"
 #include <memory>
 
 #ifdef HAVE_MQTT
@@ -60,18 +60,18 @@ public:
 	QString fileName() const;
 	QString selectedObject() const;
 	bool isFileEmpty() const;
-    bool excelUseFirstRowAsColNames() const;
+	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
-    const QStringList selectedExcelRegionNames() const;
+	const QStringList selectedExcelRegionNames() const;
 
 	void showAsciiHeaderOptions(bool);
-    void showExcelFirstRowAsColumnOption(bool);
+	void showExcelFirstRowAsColumnOption(bool);
 	void showJsonModel(bool);
-    void enableExcelFirstRowAsColNames(bool enable);
+	void enableExcelFirstRowAsColNames(bool enable);
 
 	QString host() const;
 	QString port() const;
@@ -90,7 +90,7 @@ private:
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
-    std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
+	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
@@ -106,14 +106,22 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 
-private slots:
+Q_SIGNALS:
+	void enableImportToMatrix(bool enable);
+	void fileNameChanged();
+	void sourceTypeChanged();
+	void hostChanged();
+	void portChanged();
+	void error(const QString&);
+
+private Q_SLOTS:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int = 0);
 
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
-    void excelFirstRowAsColNamesChanged(bool checked);
+	void excelFirstRowAsColNamesChanged(bool checked);
 
 	void saveFilter();
 	void manageFilters();
@@ -121,23 +129,18 @@ private slots:
 	void selectFile();
 	void showFileInfo();
 	void refreshPreview();
+	void updateStartRow(int);
 
-    void enableDataPortionSelection(bool);
-signals:
-	void fileNameChanged();
-	void sourceTypeChanged();
-	void hostChanged();
-	void portChanged();
-    void enableImportToMatrix(const bool enable);
-	void error(const QString&);
+	void enableDataPortionSelection(bool);
 
-	friend class HDF5OptionsWidget;	// to access refreshPreview()
-	friend class MatioOptionsWidget;	// to access refreshPreview() and others
-	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
+	friend class HDF5OptionsWidget; // to access refreshPreview()
+	friend class MatioOptionsWidget; // to access refreshPreview() and others
+	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
-    friend class ExcelOptionsWidget; // to access refreshPreview()
+	friend class ExcelOptionsWidget; // to access refreshPreview()
+
 #ifdef HAVE_MQTT
 private:
 	QMqttClient* m_client{nullptr};
@@ -157,20 +160,20 @@ public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
 
-signals:
+Q_SIGNALS:
 	void newTopic(const QString&);
 	void subscriptionsChanged();
 	void checkFileType();
 	void updateSubscriptionTree(const QVector<QString>&);
 	void MQTTClearTopics();
 
-private slots:
+private Q_SLOTS:
 	void mqttConnectionChanged();
 	void onMqttConnect();
 	void subscribeTopic(const QString&, uint);
 	void unsubscribeTopic(const QString&, QVector<QTreeWidgetItem*>);
 	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
-	void mqttSubscriptionMessageReceived(const QMqttMessage& );
+	void mqttSubscriptionMessageReceived(const QMqttMessage&);
 	void onMqttDisconnect();
 	void mqttErrorChanged(QMqttClient::ClientError);
 	void mqttConnectTimeout();

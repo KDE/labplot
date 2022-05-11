@@ -1,29 +1,31 @@
 /*
-    File                 : Spreadsheet.h
-    Project              : LabPlot
-    Description          : Aspect providing a spreadsheet table with column logic
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Spreadsheet.h
+	Project              : LabPlot
+	Description          : Aspect providing a spreadsheet table with column logic
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2006-2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef SPREADSHEET_H
 #define SPREADSHEET_H
 
-#include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/ColumnStringIO.h"
+#include "backend/datasources/AbstractDataSource.h"
 
 class AbstractFileFilter;
 class SpreadsheetView;
 class SpreadsheetModel;
-template <class T> class QVector;
+template<class T>
+class QVector;
 
 class Spreadsheet : public AbstractDataSource {
 	Q_OBJECT
 
 public:
 	explicit Spreadsheet(const QString& name, bool loading = false, AspectType type = AspectType::Spreadsheet);
+	~Spreadsheet() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -34,7 +36,7 @@ public:
 	bool printPreview() const override;
 
 	void setModel(SpreadsheetModel*);
-	SpreadsheetModel* model();
+	SpreadsheetModel* model() const;
 
 	QVector<AspectType> pasteTypes() const override;
 	QVector<AspectType> dropableOn() const override;
@@ -46,7 +48,7 @@ public:
 	int columnCount(AbstractColumn::PlotDesignation) const;
 	Column* column(int index) const;
 	Column* column(const QString&) const;
-	int rowCount() const;
+	int rowCount() const; // TODO: should be size_t?
 
 	void removeRows(int first, int count);
 	void insertRows(int before, int count);
@@ -65,17 +67,24 @@ public:
 	void setColumnSelectedInView(int index, bool selected);
 
 	// used from model to inform dock
-	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
-	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
+	void emitRowCountChanged() {
+		emit rowCountChanged(rowCount());
+	}
+	void emitColumnCountChanged() {
+		emit columnCountChanged(columnCount());
+	}
 
-	//data import
-	int prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode,
-		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	void finalizeImport(size_t columnOffset, size_t startColumn , size_t endColumn,
-		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
+	// data import
+	int prepareImport(std::vector<void*>& dataContainer,
+					  AbstractFileFilter::ImportMode,
+					  int rows,
+					  int cols,
+					  QStringList colNameList,
+					  QVector<AbstractColumn::ColumnMode>) override;
+	void finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
-public slots:
+public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
 	void appendColumns(int);
@@ -98,11 +107,11 @@ private:
 protected:
 	mutable SpreadsheetView* m_view{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void columnSelected(int);
 	void columnDeselected(int);

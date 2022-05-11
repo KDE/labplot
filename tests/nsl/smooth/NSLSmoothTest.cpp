@@ -1,11 +1,11 @@
 /*
-    File                 : NSLSmoothTest.cpp
-    Project              : LabPlot
-    Description          : NSL Tests for smoothing
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : NSLSmoothTest.cpp
+	Project              : LabPlot
+	Description          : NSL Tests for smoothing
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "NSLSmoothTest.h"
@@ -24,11 +24,11 @@ const nsl_smooth_weight_type weight = nsl_smooth_weight_uniform;
 
 void NSLSmoothTest::testMA_padnone() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 3, 2.4, 2, 1.8, 1.6, 3, 14/3., 9};
+	double result[] = {2, 3, 2.4, 2, 1.8, 1.6, 3, 14 / 3., 9};
 
 	int status = nsl_smooth_moving_average(data, N, points, weight, nsl_smooth_pad_none);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -38,7 +38,7 @@ void NSLSmoothTest::testMA_padmirror() {
 
 	int status = nsl_smooth_moving_average(data, N, points, weight, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -48,7 +48,7 @@ void NSLSmoothTest::testMA_padnearest() {
 
 	int status = nsl_smooth_moving_average(data, N, points, weight, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -58,7 +58,7 @@ void NSLSmoothTest::testMA_padconstant() {
 
 	int status = nsl_smooth_moving_average(data, N, points, weight, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -68,7 +68,7 @@ void NSLSmoothTest::testMA_padperiodic() {
 
 	int status = nsl_smooth_moving_average(data, N, points, weight, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -82,7 +82,7 @@ void NSLSmoothTest::testMAL_padnone() {
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_none);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -92,7 +92,7 @@ void NSLSmoothTest::testMAL_padmirror() {
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -102,7 +102,7 @@ void NSLSmoothTest::testMAL_padnearest() {
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -112,7 +112,7 @@ void NSLSmoothTest::testMAL_padconstant() {
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -122,7 +122,7 @@ void NSLSmoothTest::testMAL_padperiodic() {
 
 	int status = nsl_smooth_moving_average_lagged(data, N, points, weight, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -138,7 +138,7 @@ void NSLSmoothTest::testPercentile_padnone() {
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_none);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -148,7 +148,7 @@ void NSLSmoothTest::testPercentile_padmirror() {
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -158,7 +158,7 @@ void NSLSmoothTest::testPercentile_padnearest() {
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -168,7 +168,7 @@ void NSLSmoothTest::testPercentile_padconstant() {
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -178,7 +178,7 @@ void NSLSmoothTest::testPercentile_padperiodic() {
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < N; i++)
+	for (int i = 0; i < N; i++)
 		QCOMPARE(data[i], result[i]);
 }
 
@@ -188,67 +188,67 @@ void NSLSmoothTest::testPercentile_padperiodic() {
 
 void NSLSmoothTest::testSG_coeff31() {
 	int points = 3, order = 1;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {1, 1, 1};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < points; i++)
-		QCOMPARE(points * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++)
+		QCOMPARE(points * gsl_matrix_get(h, (points - 1) / 2, i), result[i]);
 
 	gsl_matrix_free(h);
 }
 
 void NSLSmoothTest::testSG_coeff51() {
 	int points = 5, order = 1;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {1, 1, 1, 1, 1};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < points; i++)
-		QCOMPARE(points * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++)
+		QCOMPARE(points * gsl_matrix_get(h, (points - 1) / 2, i), result[i]);
 
 	gsl_matrix_free(h);
 }
 
 void NSLSmoothTest::testSG_coeff53() {
 	int points = 5, order = 3;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {-3, 12, 17, 12, -3};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < points; i++)
-		QCOMPARE(35 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++)
+		QCOMPARE(35 * gsl_matrix_get(h, (points - 1) / 2, i), result[i]);
 
 	gsl_matrix_free(h);
 }
 
 void NSLSmoothTest::testSG_coeff73() {
 	int points = 7, order = 3;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {-2, 3, 6, 7, 6, 3, -2};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
-	for(int i = 0; i < points; i++)
-		QCOMPARE(21 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++)
+		QCOMPARE(21 * gsl_matrix_get(h, (points - 1) / 2, i), result[i]);
 
 	gsl_matrix_free(h);
 }
 
 void NSLSmoothTest::testSG_coeff74() {
 	int points = 7, order = 4;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {5, -30, 75, 131, 75, -30, 5};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < points; i++) {
-		FuzzyCompare(result[i], 231 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
-		//QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++) {
+		FuzzyCompare(result[i], 231 * gsl_matrix_get(h, (points - 1) / 2, i), 1.e-10);
+		// QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
 	}
 
 	gsl_matrix_free(h);
@@ -256,15 +256,15 @@ void NSLSmoothTest::testSG_coeff74() {
 
 void NSLSmoothTest::testSG_coeff92() {
 	int points = 9, order = 2;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {-21, 14, 39, 54, 59, 54, 39, 14, -21};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < points; i++) {
-		//FuzzyCompare(result[i], 231 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
-		QCOMPARE(231 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++) {
+		// FuzzyCompare(result[i], 231 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
+		QCOMPARE(231 * gsl_matrix_get(h, (points - 1) / 2, i), result[i]);
 	}
 
 	gsl_matrix_free(h);
@@ -272,15 +272,15 @@ void NSLSmoothTest::testSG_coeff92() {
 
 void NSLSmoothTest::testSG_coeff94() {
 	int points = 9, order = 4;
-	gsl_matrix *h = gsl_matrix_alloc(points, points);
+	gsl_matrix* h = gsl_matrix_alloc(points, points);
 	double result[] = {15, -55, 30, 135, 179, 135, 30, -55, 15};
 
 	int status = nsl_smooth_savgol_coeff(points, order, h);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < points; i++) {
-		FuzzyCompare(result[i], 429 * gsl_matrix_get(h,(points-1)/2, i), 1.e-10);
-		//QCOMPARE(429 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
+	for (int i = 0; i < points; i++) {
+		FuzzyCompare(result[i], 429 * gsl_matrix_get(h, (points - 1) / 2, i), 1.e-10);
+		// QCOMPARE(429 * gsl_matrix_get(h,(points-1)/2, i), result[i]);
 	}
 
 	gsl_matrix_free(h);
@@ -299,21 +299,22 @@ void NSLSmoothTest::testSG_mode_interp() {
 	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_interp);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 		QCOMPARE(data[i], result[i]);
-		//FuzzyCompare(data[i], result[i], 1.e-11);
+	// FuzzyCompare(data[i], result[i], 1.e-11);
 }
 
 void NSLSmoothTest::testSG_mode_mirror() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {1.48571428571430, 3.02857142857143, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 5.02857142857142, 6.94285714285713};
+	double result[] =
+		{1.48571428571430, 3.02857142857143, 3.542857142857, 2.857142857143, 0.657142857143, 0.171428571429, 1., 5.02857142857142, 6.94285714285713};
 
 	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 		FuzzyCompare(data[i], result[i], 1.e-11);
-		//QCOMPARE(data[i], result[i]);
+	// QCOMPARE(data[i], result[i]);
 }
 
 void NSLSmoothTest::testSG_mode_nearest() {
@@ -323,9 +324,9 @@ void NSLSmoothTest::testSG_mode_nearest() {
 	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 		FuzzyCompare(data[i], result[i], 1.e-11);
-		//QCOMPARE(data[i], result[i]);
+	// QCOMPARE(data[i], result[i]);
 }
 
 void NSLSmoothTest::testSG_mode_constant() {
@@ -335,9 +336,9 @@ void NSLSmoothTest::testSG_mode_constant() {
 	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 		FuzzyCompare(data[i], result[i], 1.e-11);
-		//QCOMPARE(data[i], result[i]);
+	// QCOMPARE(data[i], result[i]);
 }
 
 void NSLSmoothTest::testSG_mode_periodic() {
@@ -347,9 +348,9 @@ void NSLSmoothTest::testSG_mode_periodic() {
 	int status = nsl_smooth_savgol(data, n, m, order, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
 
-	for(int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 		FuzzyCompare(data[i], result[i], 1.e-11);
-		//QCOMPARE(data[i], result[i]);
+	// QCOMPARE(data[i], result[i]);
 }
 
 //##############################################################################
@@ -362,7 +363,7 @@ void NSLSmoothTest::testPerformance_interp() {
 	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
-		for (int i = 0;  i < nn; i++)
+		for (int i = 0; i < nn; i++)
 			data[i] = i;
 		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_interp);
 		QCOMPARE(status, 0);
@@ -373,7 +374,7 @@ void NSLSmoothTest::testPerformance_mirror() {
 	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
-		for (int i = 0;  i < nn; i++)
+		for (int i = 0; i < nn; i++)
 			data[i] = i;
 		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_mirror);
 		QCOMPARE(status, 0);
@@ -384,7 +385,7 @@ void NSLSmoothTest::testPerformance_nearest() {
 	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
-		for (int i = 0;  i < nn; i++)
+		for (int i = 0; i < nn; i++)
 			data[i] = i;
 		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_nearest);
 		QCOMPARE(status, 0);
@@ -395,7 +396,7 @@ void NSLSmoothTest::testPerformance_constant() {
 	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
-		for (int i = 0;  i < nn; i++)
+		for (int i = 0; i < nn; i++)
 			data[i] = i;
 		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_constant);
 		QCOMPARE(status, 0);
@@ -406,7 +407,7 @@ void NSLSmoothTest::testPerformance_periodic() {
 	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
-		for (int i = 0;  i < nn; i++)
+		for (int i = 0; i < nn; i++)
 			data[i] = i;
 		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_periodic);
 		QCOMPARE(status, 0);

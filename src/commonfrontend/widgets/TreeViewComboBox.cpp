@@ -1,43 +1,42 @@
 /*
-    File                 : TreeViewComboBox.cpp
-    Project              : LabPlot
-    Description          : Provides a QTreeView in a QComboBox
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : TreeViewComboBox.cpp
+	Project              : LabPlot
+	Description          : Provides a QTreeView in a QComboBox
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/AbstractAspect.h"
-#include "backend/core/AspectTreeModel.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/AspectTreeModel.h"
 #include "backend/lib/macros.h"
 
 #include <QEvent>
 #include <QGroupBox>
 #include <QHeaderView>
 #include <QLineEdit>
+#include <QStylePainter>
 #include <QTreeView>
 #include <QVBoxLayout>
-#include <QStylePainter>
 
 #include <KLocalizedString>
 
-#include <cstring>	// strcmp()
+#include <cstring> // strcmp()
 
 /*!
-    \class TreeViewComboBox
-    \brief Provides a QTreeView in a QComboBox.
+	\class TreeViewComboBox
+	\brief Provides a QTreeView in a QComboBox.
 
-    \ingroup backend/widgets
+	\ingroup backend/widgets
 */
-TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
-	m_treeView(new QTreeView),
-	m_groupBox(new QGroupBox),
-	m_lineEdit(new QLineEdit) {
-
+TreeViewComboBox::TreeViewComboBox(QWidget* parent)
+	: QComboBox(parent)
+	, m_treeView(new QTreeView)
+	, m_groupBox(new QGroupBox)
+	, m_lineEdit(new QLineEdit) {
 	auto* layout = new QVBoxLayout;
 	layout->setContentsMargins(0, 0, 0, 0);
 	layout->setSpacing(0);
@@ -82,11 +81,11 @@ void TreeViewComboBox::setModel(AspectTreeModel* model) {
 	m_model = model;
 	m_treeView->setModel(model);
 
-	//show only the first column in the combo box
+	// show only the first column in the combo box
 	for (int i = 1; i < model->columnCount(); i++)
 		m_treeView->hideColumn(i);
 
-	//Expand the complete tree in order to see everything in the first popup.
+	// Expand the complete tree in order to see everything in the first popup.
 	m_treeView->expandAll();
 
 	setEditText(m_lineEditText);
@@ -117,14 +116,14 @@ void TreeViewComboBox::showPopup() {
 	if (!m_treeView->model() || !m_treeView->model()->hasChildren())
 		return;
 
-	QModelIndex root = m_treeView->model()->index(0,0);
+	QModelIndex root = m_treeView->model()->index(0, 0);
 	showTopLevelOnly(root);
 	m_groupBox->show();
 	m_groupBox->resize(this->width(), 250);
-	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
+	m_groupBox->move(mapToGlobal(this->rect().topLeft()));
 
 	setEditText(m_lineEditText);
-	m_lineEdit->setText(""); //delete the previous search string
+	m_lineEdit->setText(""); // delete the previous search string
 	m_lineEdit->setFocus();
 }
 
@@ -148,7 +147,6 @@ void TreeViewComboBox::paintEvent(QPaintEvent*) {
 void TreeViewComboBox::hidePopup() {
 	m_groupBox->hide();
 }
-
 
 void TreeViewComboBox::useCurrentIndexText(const bool set) {
 	m_useCurrentIndexText = set;
@@ -174,8 +172,8 @@ QString TreeViewComboBox::currentText() const {
 		return itemText(currentIndex());
 	else if (!m_useCurrentIndexText)
 		return m_lineEditText;
-	else
-		return QString();
+
+	return {};
 }
 
 void TreeViewComboBox::setText(const QString& text) {
@@ -184,9 +182,7 @@ void TreeViewComboBox::setText(const QString& text) {
 
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
-		QPalette pal = palette();
-		pal.setColor(QPalette::Text, Qt::red);
-		setPalette(pal);
+		SET_WARNING_PALETTE
 
 		setToolTip(tooltip);
 	} else {
@@ -198,7 +194,7 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 /*!
 	Hides the non-toplevel items of the model used in the tree view.
 */
-void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index) {
+void TreeViewComboBox::showTopLevelOnly(const QModelIndex& index) {
 	int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
 		QModelIndex child = index.model()->index(i, 0, index);
@@ -212,7 +208,7 @@ void TreeViewComboBox::showTopLevelOnly(const QModelIndex & index) {
 	catches the MouseButtonPress-event and hides the tree view on mouse clicking.
 */
 bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
-	if ( (object == m_groupBox) && event->type() == QEvent::MouseButtonPress ) {
+	if ((object == m_groupBox) && event->type() == QEvent::MouseButtonPress) {
 		m_groupBox->hide();
 		this->setFocus();
 		return true;
@@ -220,12 +216,12 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 	return QComboBox::eventFilter(object, event);
 }
 
-//SLOTs
+// SLOTs
 void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	if (index.internalPointer()) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
-		emit currentModelIndexChanged(index);
+		Q_EMIT currentModelIndexChanged(index);
 		m_groupBox->hide();
 		return;
 	}
@@ -233,12 +229,12 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, QString());
-	emit currentModelIndexChanged(QModelIndex());
+	Q_EMIT currentModelIndexChanged(QModelIndex());
 	m_groupBox->hide();
 }
 
 void TreeViewComboBox::filterChanged(const QString& text) {
-	QModelIndex root = m_treeView->model()->index(0,0);
+	QModelIndex root = m_treeView->model()->index(0, 0);
 	filter(root, text);
 }
 
@@ -255,7 +251,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 		bool visible = aspect->name().contains(text, Qt::CaseInsensitive);
 
 		if (visible) {
-			//current item is visible -> make all its children (allowed top level types only and not hidden) visible without applying the filter
+			// current item is visible -> make all its children (allowed top level types only and not hidden) visible without applying the filter
 			for (int j = 0; j < child.model()->rowCount(child); ++j) {
 				AbstractAspect* aspect = static_cast<AbstractAspect*>((child.model()->index(j, 0, child)).internalPointer());
 				m_treeView->setRowHidden(j, child, !(isTopLevel(aspect) && !isHidden(aspect)));
@@ -263,7 +259,7 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 
 			childVisible = true;
 		} else {
-			//check children items. if one of the children is visible, make the parent (current) item visible too.
+			// check children items. if one of the children is visible, make the parent (current) item visible too.
 			visible = filter(child, text);
 			if (visible)
 				childVisible = true;
@@ -283,15 +279,15 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 	const auto& selectableTypes = m_model->selectableAspects();
 	for (AspectType type : m_topLevelClasses) {
 		if (aspect->type() == type) {
-			//curent aspect is a top level aspect,
-			//check whether its selectable
+			// curent aspect is a top level aspect,
+			// check whether its selectable
 			if (selectableTypes.indexOf(type) != -1)
 				return true;
 
-			//check whether the current aspect has selectable children
+			// check whether the current aspect has selectable children
 			bool hasSelectableAspects = false;
 			for (auto selectableType : selectableTypes) {
-				const auto&  children = aspect->children(selectableType, AbstractAspect::ChildIndexFlag::Recursive);
+				const auto& children = aspect->children(selectableType, AbstractAspect::ChildIndexFlag::Recursive);
 				if (!children.isEmpty()) {
 					hasSelectableAspects = true;
 					break;
@@ -324,9 +320,10 @@ AbstractAspect* TreeViewComboBox::currentAspect() const {
 }
 
 void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+	DEBUG(Q_FUNC_INFO)
 	setAspect(column);
 
-	// don't make the comboboxe red for initially created curves
+	// don't make the combobox red for initially created curves
 	if (!column && path.isEmpty()) {
 		setText("");
 		setInvalid(false);
@@ -334,7 +331,6 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 	}
 
 	if (column) {
-		// current index text should be used
 		useCurrentIndexText(true);
 		setInvalid(false);
 	} else {

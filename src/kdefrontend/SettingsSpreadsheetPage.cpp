@@ -1,26 +1,26 @@
 /*
-    File                 : SettingsSpreadsheetPage.cpp
-    Project              : LabPlot
-    Description          : settings page for Spreadsheet
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsSpreadsheetPage.cpp
+	Project              : LabPlot
+	Description          : settings page for Spreadsheet
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "SettingsSpreadsheetPage.h"
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KSharedConfig>
-#include <KConfigGroup>
 
 /**
  * \brief Page for Spreadsheet settings of the Labplot settings dialog.
  */
-SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent) : SettingsPage(parent) {
+SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent)
+	: SettingsPage(parent) {
 	ui.setupUi(this);
-	connect(ui.chkShowColumnType, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
-	connect(ui.chkShowPlotDesignation, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
+	connect(ui.chkShowColumnType, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
+	connect(ui.chkShowPlotDesignation, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
 	loadSettings();
 }
 
@@ -46,5 +46,5 @@ void SettingsSpreadsheetPage::loadSettings() {
 
 void SettingsSpreadsheetPage::changed() {
 	m_changed = true;
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }

@@ -1,12 +1,12 @@
 /*
-    File                 : WorksheetDock.h
-    Project              : LabPlot
-    Description          : widget for worksheet properties
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	File                 : WorksheetDock.h
+	Project              : LabPlot
+	Description          : widget for worksheet properties
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef WORKSHEETDOCK_H
@@ -40,10 +40,10 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	void retranslateUi();
 
-	//SLOTs for changes triggered in WorksheetDock
+	// SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void scaleContentChanged(bool);
 	void sizeTypeChanged(int);
@@ -73,7 +73,7 @@ private slots:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 
-	//SLOTs for changes triggered in Worksheet
+	// SLOTs for changes triggered in Worksheet
 	void worksheetDescriptionChanged(const AbstractAspect*);
 	void worksheetScaleContentChanged(bool);
 	void worksheetUseViewSizeChanged(bool);
@@ -97,12 +97,12 @@ private slots:
 	void worksheetLayoutRowCountChanged(int);
 	void worksheetLayoutColumnCountChanged(int);
 
-	//save/load templates and themes
+	// save/load templates and themes
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 	void loadTheme(const QString&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

@@ -1,10 +1,10 @@
 /*
-    File                 : Double2IntegerFilter.h
-    Project              : AbstractColumn
-    Description          : conversion filter double -> int.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Double2IntegerFilter.h
+	Project              : AbstractColumn
+	Description          : conversion filter double -> int.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef DOUBLE2INTEGER_FILTER_H
@@ -18,7 +18,8 @@ class Double2IntegerFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	Double2IntegerFilter() {}
+	Double2IntegerFilter() {
+	}
 
 	int integerAt(int row) const override {
 		if (!m_inputs.value(0))
@@ -29,18 +30,20 @@ public:
 		int result{0};
 		if (!std::isnan(value))
 			result = (int)round(value);
-		//DEBUG("Double2Integer::integerAt() " << value << " -> " << result);
+		// DEBUG("Double2Integer::integerAt() " << value << " -> " << result);
 
 		return result;
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Integer; }
+	AbstractColumn::ColumnMode columnMode() const override {
+		return AbstractColumn::ColumnMode::Integer;
+	}
 
 protected:
 	//! Using typed ports: only double inputs are accepted.
-	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::ColumnMode::Numeric;
+	bool inputAcceptable(int, const AbstractColumn* source) override {
+		return source->columnMode() == AbstractColumn::ColumnMode::Double;
 	}
 };
 

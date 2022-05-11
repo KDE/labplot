@@ -1,21 +1,20 @@
 /*
-    File                 : AbstractPlot.cpp
-    Project              : LabPlot
-    Description          : Base class for plots of different types
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : AbstractPlot.cpp
+	Project              : LabPlot
+	Description          : Base class for plots of different types
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+	SPDX-FileCopyrightText: 2011-2017 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
+#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
-#include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/lib/commandtemplates.h"
 
 #include <KLocalizedString>
 
@@ -27,15 +26,13 @@
  *
  */
 
-AbstractPlot::AbstractPlot(const QString &name, AspectType type)
+AbstractPlot::AbstractPlot(const QString& name, AspectType type)
 	: WorksheetElementContainer(name, new AbstractPlotPrivate(this), type) {
-
 	init();
 }
 
-AbstractPlot::AbstractPlot(const QString &name, AbstractPlotPrivate *dd, AspectType type)
+AbstractPlot::AbstractPlot(const QString& name, AbstractPlotPrivate* dd, AspectType type)
 	: WorksheetElementContainer(name, dd, type) {
-
 	init();
 }
 
@@ -64,30 +61,29 @@ TextLabel* AbstractPlot::title() {
 	return m_title;
 }
 
-void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(pageResize)
+void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
 	if (isLoading())
 		return;
-	DEBUG("AbstractPlot::handleResize()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(AbstractPlot);
 
-// 	qDebug()<<name() << ": ratios - " << horizontalRatio << "  " << verticalRatio;
+	// 	qDebug()<<name() << ": ratios - " << horizontalRatio << "  " << verticalRatio;
 
 	if (horizontalRatio < 1 && horizontalRatio > 0.2) {
-// 		qDebug()<<name() << ": old hor padding - " << d->horizontalPadding;
+		// 		qDebug()<<name() << ": old hor padding - " << d->horizontalPadding;
 		d->horizontalPadding *= horizontalRatio;
-// 		qDebug()<<name() << ": new hor padding - " << d->horizontalPadding;
-		emit horizontalPaddingChanged(d->horizontalPadding);
+		// 		qDebug()<<name() << ": new hor padding - " << d->horizontalPadding;
+		Q_EMIT horizontalPaddingChanged(d->horizontalPadding);
 	}
 
 	if (verticalRatio < 1 && verticalRatio > 0.2) {
-// 		qDebug()<<name() << ": old ver padding - " << d->verticalPadding;
+		// 		qDebug()<<name() << ": old ver padding - " << d->verticalPadding;
 		d->verticalPadding *= verticalRatio;
-// 		qDebug()<<name() << ": new ver padding - " << d->verticalPadding;
-		emit verticalPaddingChanged(d->verticalPadding);
+		// 		qDebug()<<name() << ": new ver padding - " << d->verticalPadding;
+		Q_EMIT verticalPaddingChanged(d->verticalPadding);
 	}
 
-// 	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);
+	// 	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, horizontalPadding, horizontalPadding)
@@ -135,10 +131,6 @@ void AbstractPlot::setSymmetricPadding(bool symmetric) {
 //################################################################
 //################### Private implementation #####################
 //################################################################
-AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot *owner)
+AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot* owner)
 	: WorksheetElementContainerPrivate(owner) {
-}
-
-QString AbstractPlotPrivate::name() const {
-	return q->name();
 }

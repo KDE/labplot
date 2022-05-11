@@ -1,10 +1,10 @@
 /*
-    File                 : MatioOptionsWidget.cpp
-    Project              : LabPlot
-    Description          : widget providing options for the import of Matio data
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : MatioOptionsWidget.cpp
+	Project              : LabPlot
+	Description          : widget providing options for the import of Matio data
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "MatioOptionsWidget.h"
 #include "ImportFileWidget.h"
@@ -13,14 +13,15 @@
 
 #include <KUrlComboBox>
 
- /*!
-	\class MatioOptionsWidget
-	\brief Widget providing options for the import of Matio data
+/*!
+   \class MatioOptionsWidget
+   \brief Widget providing options for the import of Matio data
 
-	\ingroup kdefrontend
- */
+   \ingroup kdefrontend
+*/
 MatioOptionsWidget::MatioOptionsWidget(QWidget* parent, ImportFileWidget* fileWidget)
-		: QWidget(parent), m_fileWidget(fileWidget) {
+	: QWidget(parent)
+	, m_fileWidget(fileWidget) {
 	ui.setupUi(parent);
 
 	ui.twContent->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -28,7 +29,7 @@ MatioOptionsWidget::MatioOptionsWidget(QWidget* parent, ImportFileWidget* fileWi
 	ui.twContent->setAlternatingRowColors(true);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
 
 	connect(ui.twContent, &QTableWidget::itemSelectionChanged, this, &MatioOptionsWidget::selectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -38,7 +39,7 @@ void MatioOptionsWidget::clear() {
 	ui.twPreview->clear();
 }
 
-void MatioOptionsWidget::updateContent(MatioFilter *filter, const QString& fileName) {
+void MatioOptionsWidget::updateContent(MatioFilter* filter, const QString& fileName) {
 	// update variable info
 	filter->parse(fileName);
 
@@ -48,8 +49,8 @@ void MatioOptionsWidget::updateContent(MatioFilter *filter, const QString& fileN
 	const int nrCols = 7;
 	for (int j = 0; j < nrCols; j++) {
 		for (int i = 0; i < n; i++) {
-			QTableWidgetItem *item = new QTableWidgetItem(varsInfo.at(i).at(j));
-			item->setFlags(item->flags() ^ Qt::ItemIsEditable);	// readonly
+			auto* item = new QTableWidgetItem(varsInfo.at(i).at(j));
+			item->setFlags(item->flags() ^ Qt::ItemIsEditable); // readonly
 			ui.twContent->setItem(i, j, item);
 		}
 		ui.twContent->resizeColumnToContents(j);
@@ -61,7 +62,7 @@ void MatioOptionsWidget::updateContent(MatioFilter *filter, const QString& fileN
 */
 void MatioOptionsWidget::selectionChanged() {
 	DEBUG(Q_FUNC_INFO);
-	//QDEBUG(Q_FUNC_INFO << ", SELECTED ITEMS =" << ui.twContent->selectedItems());
+	// QDEBUG(Q_FUNC_INFO << ", SELECTED ITEMS =" << ui.twContent->selectedItems());
 
 	if (ui.twContent->selectedItems().isEmpty())
 		return;
@@ -83,7 +84,7 @@ const QStringList MatioOptionsWidget::selectedNames() const {
 	for (auto* item : ui.twContent->selectedItems())
 		if (item->column() == 0)
 			names << item->text();
-	//QDEBUG(Q_FUNC_INFO << ", selected vars: " << names);
+	// QDEBUG(Q_FUNC_INFO << ", selected vars: " << names);
 
 	return names;
 }

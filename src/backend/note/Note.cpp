@@ -1,30 +1,30 @@
 /*
-    File                 : Notes.cpp
-    Project              : LabPlot
-    Description          : Notes Widget for taking notes
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : Notes.cpp
+	Project              : LabPlot
+	Description          : Notes Widget for taking notes
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2009-2015 Garvit Khatri <garvitdelhi@gmail.com>
+	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "Note.h"
-#include "commonfrontend/note/NoteView.h"
+#include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
-#include "backend/core/Project.h"
+#include "commonfrontend/note/NoteView.h"
 
 #include <QPalette>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QPrinter>
 
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-Note::Note(const QString& name) : AbstractPart(name, AspectType::Note) {
+Note::Note(const QString& name)
+	: AbstractPart(name, AspectType::Note) {
 	KConfig config;
 	KConfigGroup group = config.group("Notes");
 
@@ -42,7 +42,7 @@ bool Note::printView() {
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
 	bool ret;
-	if ( (ret = (dlg->exec() == QDialog::Accepted)) )
+	if ((ret = (dlg->exec() == QDialog::Accepted)))
 		m_view->print(&printer);
 
 	delete dlg;
@@ -70,7 +70,7 @@ const QString& Note::note() const {
 
 void Note::setBackgroundColor(const QColor& color) {
 	m_backgroundColor = color;
-	emit backgroundColorChanged(color);
+	Q_EMIT backgroundColorChanged(color);
 }
 
 const QColor& Note::backgroundColor() const {
@@ -79,16 +79,16 @@ const QColor& Note::backgroundColor() const {
 
 void Note::setTextColor(const QColor& color) {
 	m_textColor = color;
-	emit textColorChanged(color);
+	Q_EMIT textColorChanged(color);
 }
 
-const QColor& Note::textColor() const{
+const QColor& Note::textColor() const {
 	return m_textColor;
 }
 
 void Note::setTextFont(const QFont& font) {
 	m_textFont = font;
-	emit textFontChanged(font);
+	Q_EMIT textFontChanged(font);
 }
 
 const QFont& Note::textFont() const {

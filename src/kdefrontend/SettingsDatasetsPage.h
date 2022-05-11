@@ -1,12 +1,11 @@
 /*
-    File                 : SettingsDatasetsPage.h
-    Project              : LabPlot
-    Description          : settings page for Datasets
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File                 : SettingsDatasetsPage.h
+	Project              : LabPlot
+	Description          : settings page for Datasets
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef SETTINGDATASETSPAGE_H
 #define SETTINGDATASETSPAGE_H
@@ -27,7 +26,7 @@ private:
 	Ui::SettingsDatasetsPage ui;
 	void loadSettings();
 
-private slots:
+private Q_SLOTS:
 	void clearCache();
 };
 

@@ -1,25 +1,25 @@
 /*
-    File             : EquationHighlighter.h
-    Project          : LabPlot
-    Description      : syntax highligher for mathematical equations
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2006 David Saxton <david@bluehaze.org>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File             : EquationHighlighter.h
+	Project          : LabPlot
+	Description      : syntax highligher for mathematical equations
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2006 David Saxton <david@bluehaze.org>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "EquationHighlighter.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <QPalette>
 #include <KTextEdit>
+#include <QPalette>
 
 EquationHighlighter::EquationHighlighter(KTextEdit* parent)
-	: QSyntaxHighlighter(parent),
-	  m_parent(parent)
+	: QSyntaxHighlighter(parent)
+	, m_parent(parent)
 // 	m_errorPosition = -1
-{}
+{
+}
 
 void EquationHighlighter::setVariables(const QStringList& variables) {
 	m_variables = variables;
@@ -27,7 +27,7 @@ void EquationHighlighter::setVariables(const QStringList& variables) {
 }
 
 void EquationHighlighter::highlightBlock(const QString& text) {
-	//TODO: m_parent->checkTextValidity();
+	// TODO: m_parent->checkTextValidity();
 
 	if (text.isEmpty())
 		return;
@@ -39,14 +39,14 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	QTextCharFormat matchedParenthesis;
 
 	QPalette palette;
-	if (qGray(palette.color(QPalette::Base).rgb()) > 160) {
+	if (qGray(palette.color(QPalette::Base).rgb()) > 160) { // light
 		number.setForeground(QColor(0, 0, 127));
 		function.setForeground(QColor(85, 0, 0));
 		function.setFontWeight(QFont::Bold);
 		variable.setForeground(QColor(0, 85, 0));
 		constant.setForeground(QColor(85, 0, 0));
 		matchedParenthesis.setBackground(QColor(255, 255, 183));
-	} else {
+	} else { // dark
 		number.setForeground(QColor(160, 160, 255));
 		function.setForeground(QColor(255, 160, 160));
 		function.setFontWeight(QFont::Bold);
@@ -64,12 +64,11 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		QString remaining = text.right(text.length() - i);
 		bool found = false;
 
-		//variables
-		for (const QString& var: m_variables) {
+		// variables
+		for (const QString& var : m_variables) {
 			if (remaining.startsWith(var)) {
 				QString nextChar = remaining.mid(var.length(), 1);
-				if (nextChar == " " || nextChar == ")" || nextChar == "+" || nextChar == "-"
-					|| nextChar == "*" || nextChar == "/" || nextChar == "^") {
+				if (nextChar == " " || nextChar == ")" || nextChar == "+" || nextChar == "-" || nextChar == "*" || nextChar == "/" || nextChar == "^") {
 					setFormat(i, var.length(), variable);
 					i += var.length() - 1;
 					found = true;
@@ -80,8 +79,8 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		if (found)
 			continue;
 
-		//functions
-		for (const QString& f: functions) {
+		// functions
+		for (const QString& f : functions) {
 			if (remaining.startsWith(f)) {
 				setFormat(i, f.length(), function);
 				i += f.length() - 1;
@@ -92,8 +91,8 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		if (found)
 			continue;
 
-		//constants
-		for (const QString& f: constants) {
+		// constants
+		for (const QString& f : constants) {
 			if (remaining.startsWith(f)) {
 				setFormat(i, f.length(), function);
 				i += f.length() - 1;
@@ -104,7 +103,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		if (found)
 			continue;
 
-		//TODO
+		// TODO
 		/*
 		ushort u = text[i].unicode();
 		bool isFraction = (u >= 0xbc && u <= 0xbe) || (u >= 0x2153 && u <= 0x215e);
@@ -120,7 +119,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		*/
 	}
 
-	//highlight matched brackets
+	// highlight matched brackets
 	int cursorPos = m_parent->textCursor().position();
 	if (cursorPos < 0)
 		cursorPos = 0;
@@ -128,10 +127,10 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	// Adjust cursorpos to allow for a bracket before the cursor position
 	if (cursorPos >= text.size())
 		cursorPos = text.size() - 1;
-	else if (cursorPos > 0 && (text[cursorPos-1] == '(' || text[cursorPos-1] == ')'))
+	else if (cursorPos > 0 && (text[cursorPos - 1] == '(' || text[cursorPos - 1] == ')'))
 		cursorPos--;
 
-	bool haveOpen =  text[cursorPos] == '(';
+	bool haveOpen = text[cursorPos] == '(';
 	bool haveClose = text[cursorPos] == ')';
 
 	if ((haveOpen || haveClose) && m_parent->hasFocus()) {
@@ -155,13 +154,13 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		}
 	}
 
-	//TODO: highlight the position of the error
-// 	if (m_errorPosition != -1) {
-// 		QTextCharFormat error;
-// 		error.setForeground(Qt::red);
-//
-// 		setFormat(m_errorPosition, 1, error);
-// 	}
+	// TODO: highlight the position of the error
+	// 	if (m_errorPosition != -1) {
+	// 		QTextCharFormat error;
+	// 		error.setForeground(Qt::red);
+	//
+	// 		setFormat(m_errorPosition, 1, error);
+	// 	}
 }
 
 void EquationHighlighter::rehighlight() {
@@ -170,9 +169,9 @@ void EquationHighlighter::rehighlight() {
 }
 
 /**
-* This is used to indicate the position where the error occurred.
-* If \p position is negative, then no error will be shown.
-*/
+ * This is used to indicate the position where the error occurred.
+ * If \p position is negative, then no error will be shown.
+ */
 // void EquationHighlighter::setErrorPosition(int position) {
 // 	m_errorPosition = position;
 // }

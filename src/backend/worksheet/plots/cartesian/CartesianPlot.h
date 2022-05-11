@@ -1,12 +1,12 @@
 /*
-    File                 : CartesianPlot.h
-    Project              : LabPlot
-    Description          : Cartesian plot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	File                 : CartesianPlot.h
+	Project              : LabPlot
+	Description          : Cartesian plot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef CARTESIANPLOT_H
@@ -16,11 +16,16 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
+extern "C" {
+#include "backend/nsl/nsl_sf_stats.h"
+}
+
 class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class CartesianCoordinateSystem;
 class CartesianPlotDock;
+class Histogram;
 class InfoElementDialog;
 class XYCurve;
 class KConfig;
@@ -34,18 +39,36 @@ class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
 
 public:
-	explicit CartesianPlot(const QString &name);
+	explicit CartesianPlot(const QString& name);
 	~CartesianPlot() override;
 
-	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
-	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-				  ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
-	enum class RangeType {Free, Last, First};
-	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	enum class Type { FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero };
+	enum class MouseMode { Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair };
+	enum class NavigationOperation {
+		ScaleAuto,
+		ScaleAutoX,
+		ScaleAutoY,
+		ZoomIn,
+		ZoomOut,
+		ZoomInX,
+		ZoomOutX,
+		ZoomInY,
+		ZoomOutY,
+		ShiftLeftX,
+		ShiftRightX,
+		ShiftUpY,
+		ShiftDownY
+	};
+	enum class RangeType { Free, Last, First };
+	Q_ENUM(RangeType)
+	enum class RangeBreakStyle { Simple, Vertical, Sloped };
 
 	struct RangeBreak {
-		RangeBreak() : range(qQNaN(), qQNaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
+		RangeBreak()
+			: range(qQNaN(), qQNaN())
+			, position(0.5)
+			, style(RangeBreakStyle::Sloped) {
+		}
 		bool isValid() const {
 			return range.valid();
 		}
@@ -54,10 +77,11 @@ public:
 		RangeBreakStyle style;
 	};
 
-	//simple wrapper for QList<RangeBreaking> in order to get our macros working
-	//TODO: same for xRanges, etc.?
+	// simple wrapper for QList<RangeBreaking> in order to get our macros working
+	// TODO: same for xRanges, etc.?
 	struct RangeBreaks {
-		RangeBreaks() : lastChanged(-1) {
+		RangeBreaks()
+			: lastChanged(-1) {
 			RangeBreak b;
 			list << b;
 		}
@@ -75,13 +99,15 @@ public:
 	QVector<AspectType> pasteTypes() const override;
 
 	void setRect(const QRectF&) override;
+	void setPrevRect(const QRectF&) override;
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
 	void navigate(int cSystemIndex, NavigationOperation);
-	void setSuppressDataChangedSignal(bool);
+	void setSuppressRetransform(bool);
 	const QList<QColor>& themeColorPalette() const;
+	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
 	bool isHovered() const;
@@ -112,76 +138,72 @@ public:
 	const QString yRangeDateTimeFormat() const;
 	const QString yRangeDateTimeFormat(int index) const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
+	BASIC_D_ACCESSOR_DECL(bool, niceExtend, NiceExtend)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
-	void setAutoScaleX(int index = -1, bool = true);	// auto scale x range index
-	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
-	void setAutoScaleY(int index = -1, bool = true);	// auto scale y range index
+	bool autoScaleX(int index = -1) const;
+	void enableAutoScaleX(int index = -1, bool enable = true, bool suppressRetransform = true, bool fullRange = false);
+	bool autoScaleY(int index = -1) const;
+	void enableAutoScaleY(int index = -1, bool enable = true, bool suppressRetransform = true, bool fullRange = false);
 
 	int xRangeCount() const;
 	int yRangeCount() const;
-	const Range<double>& xRange() const;		// get x range of default plot range
-	const Range<double>& yRange() const;		// get y range of default plot range
-	void setXRange(const Range<double>);		// set x range of default plot range
-	void setYRange(const Range<double>);		// set y range of default plot range
-	const Range<double>& xRangeFromIndex(int index) const;
-	const Range<double>& yRangeFromIndex(int index) const;
-	Range<double>& xRangeFromIndex(int index);
-	Range<double>& yRangeFromIndex(int index);
-	const Range<double>& xRange(int index) const;
-	const Range<double>& yRange(int index) const;
-	void setXRange(int index, const Range<double>& value);
-	void setYRange(int index, const Range<double>& value);
-	const Range<double>& xRangeAutoScale(int index);
-	const Range<double>& yRangeAutoScale(int index);
+	const Range<double>& xRange(int index = -1) const; // get x range of (default) plot range
+	const Range<double>& yRange(int index = -1) const; // get y range of (default) plot range
+	void setXRange(const Range<double>); // set x range of default plot range
+	void setYRange(const Range<double>); // set y range of default plot range
+	void setXRange(int index, const Range<double>&);
+	void setYRange(int index, const Range<double>&);
+	const Range<double>& dataXRange(int index = -1);
+	const Range<double>& dataYRange(int index = -1);
 	bool xRangeDirty(int index);
 	bool yRangeDirty(int index);
 	void setXRangeDirty(int index, bool dirty);
 	void setYRangeDirty(int index, bool dirty);
-	void addXRange();				// add new x range
-	void addYRange();				// add new y range
-	void addXRange(const Range<double>&);		// add x range
-	void addYRange(const Range<double>&);		// add y range
-	void removeXRange(int index);			// remove selected x range
-	void removeYRange(int index);			// remove selected y range
+	void addXRange(); // add new x range
+	void addYRange(); // add new y range
+	void addXRange(const Range<double>&); // add x range
+	void addYRange(const Range<double>&); // add y range
+	void removeXRange(int index); // remove selected x range
+	void removeYRange(int index); // remove selected y range
 	// convenience methods
-	void setXMin(int index, double value);	// set x min of x range index
-	void setXMax(int index, double value);	// set x max of x range index
-	void setYMin(int index, double value);	// set y min of y range index
-	void setYMax(int index, double value);	// set y max of y range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)	// x range format of default cSystem
+	void setXMin(int index, double); // set x min of x range index
+	void setXMax(int index, double); // set x max of x range index
+	void setYMin(int index, double); // set y min of y range index
+	void setYMax(int index, double); // set y max of y range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat)	// y range format of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale)	// x range scale of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // range scale of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale)	// y range scale of default cSystem
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // range scale of x range index
 
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
-	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen);
-	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable);
-	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable);
+	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen)
+	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
+	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable)
 
-	int coordinateSystemCount() const;	// get number of coordinate systems
-	CartesianCoordinateSystem* coordinateSystem(int) const;	// get coordinate system index
-	CartesianCoordinateSystem* defaultCoordinateSystem() const;	// return default coordinate system
-	void addCoordinateSystem();			// add a new coordinate system
-	void addCoordinateSystem(CartesianCoordinateSystem* cSystem);	// add a coordinate system
-	void removeCoordinateSystem(int index);		// remove coordinate system index
+	int coordinateSystemCount() const; // get number of coordinate systems
+	CartesianCoordinateSystem* coordinateSystem(int) const; // get coordinate system index
+	CartesianCoordinateSystem* defaultCoordinateSystem() const; // return default coordinate system
+	void addCoordinateSystem(); // add a new coordinate system
+	void addCoordinateSystem(CartesianCoordinateSystem* cSystem); // add a coordinate system
+	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void setTheme(const QString&);
+	void retransformAll();
 
 private:
 	void init();
@@ -192,8 +214,8 @@ private:
 	void shift(int index, bool x, bool leftOrDown);
 	void zoom(int index, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	Range<double> calculateCurvesXMinMax(int index, bool completeRange = true);
-	void calculateCurvesYMinMax(int index, bool completeRange = true);
+	void calculateDataXRange(int index, bool completeRange = true);
+	void calculateDataYRange(int index, bool completeRange = true);
 	void retransformScales();
 	int curveTotalCount() const;
 
@@ -230,7 +252,7 @@ private:
 	QAction* addCustomPointAction;
 	QAction* addReferenceLineAction;
 
-	//scaling, zooming, navigation actions
+	// scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
 	QAction* scaleAutoYAction;
 	QAction* scaleAutoAction;
@@ -245,7 +267,7 @@ private:
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
 
-	//analysis menu actions
+	// analysis menu actions
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
@@ -272,11 +294,12 @@ private:
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
-public slots:
+public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
 	void addCurve();
 	void addHistogram();
+	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
 	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();
@@ -299,9 +322,9 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int xIndex, int yIndex, bool fullRange = true);
-	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
-	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true);
+	bool scaleAutoX(int index = -1, bool fullRange = true);
+	bool scaleAutoY(int index = -1, bool fullRange = true);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
@@ -317,30 +340,29 @@ public slots:
 
 	void cursor();
 
-	bool autoScale(int xIndex = -1, int yIndex = -1, bool fullRange = true);
-	void dataChanged(int xIndex, int yIndex);
+	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
-private slots:
+private Q_SLOTS:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChanged(int index);
-	void yDataChanged(int index);
+	void xDataChanged(XYCurve*);
+	void yDataChanged(XYCurve*);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
+	// SLOTs for changes triggered via QActions in the context menu
 	void loadTheme(const QString&);
 
 protected:
-	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
+	CartesianPlot(const QString& name, CartesianPlotPrivate* dd);
 
-signals:
+Q_SIGNALS:
 	void rangeTypeChanged(CartesianPlot::RangeType);
+	void niceExtendChanged(bool);
 	void xRangeFormatChanged(int xRangeIndex, RangeT::Format);
 	void yRangeFormatChanged(int yRangeIndex, RangeT::Format);
 	void rangeLastValuesChanged(int);

@@ -1,11 +1,11 @@
 /*
-    File                 : HistoryDialog.h
-    Project              : LabPlot
-    Description          : history dialog
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
+	File                 : HistoryDialog.h
+	Project              : LabPlot
+	Description          : history dialog
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTORYDIALOG_H
@@ -16,7 +16,7 @@
 class QUndoStack;
 class QPushButton;
 
-class HistoryDialog: public QDialog {
+class HistoryDialog : public QDialog {
 	Q_OBJECT
 
 public:
@@ -28,7 +28,7 @@ private:
 	QPushButton* m_okButton;
 	QPushButton* m_clearUndoStackButton{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void clearUndoStack();
 };
 
