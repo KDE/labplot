@@ -168,7 +168,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
-		DEBUG("ERROR in importTo(): No aspect available");
+		DEBUG(Q_FUNC_INFO << ", ERROR: No aspect available");
 		DEBUG("	cbAddTo->currentModelIndex().isValid() = " << cbAddTo->currentModelIndex().isValid());
 		DEBUG("	cbAddTo->currentModelIndex() row/column = " << cbAddTo->currentModelIndex().row() << ' ' << cbAddTo->currentModelIndex().column());
 		return;
@@ -220,10 +220,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedHDF5Names();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
+			else if (fileType == AbstractFileFilter::FileType::ROOT)
+				names = m_importFileWidget->selectedROOTNames();
 			else if (fileType == AbstractFileFilter::FileType::MATIO)
 				names = m_importFileWidget->selectedMatioNames();
-			else
-				names = m_importFileWidget->selectedROOTNames();
 
 			int nrNames = names.size(), offset = sheets.size();
 			// QDEBUG(Q_FUNC_INFO << ", selected names: " << names)

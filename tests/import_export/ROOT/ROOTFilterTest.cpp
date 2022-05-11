@@ -18,26 +18,53 @@ extern "C" {
 }
 
 void ROOTFilterTest::importFile1() {
-	// const QString& fileName = QFINDTESTDATA(QLatin1String("data/WFPC2ASSNu5780205bx.fits"));
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/advanced_zlib.root"));
 
 	Spreadsheet spreadsheet("test", false);
 	ROOTFilter filter;
-	// filter.readDataFromFile(fileName, &spreadsheet);
+	filter.setStartRow(1);
+	//filter.setEndRow(100);
+	filter.setCurrentObject("Hist:variableBinHist;2");
+	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
+	filter.setColumns(columns);
+	filter.readDataFromFile(fileName, &spreadsheet);
 
-	/*	QCOMPARE(spreadsheet.columnCount(), 100);
-		QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 101);
 
-		WARN(spreadsheet.column(0)->valueAt(0))
-		WARN(spreadsheet.column(1)->valueAt(0))
-		WARN(spreadsheet.column(0)->valueAt(1))
-		WARN(spreadsheet.column(1)->valueAt(1))
-		WARN(spreadsheet.column(99)->valueAt(99))
-		QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.0315774679184);
-		QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.08554399013519);
-		QCOMPARE(spreadsheet.column(0)->valueAt(1), 0.476544350385666);
-		QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.369004756212234);
-		QCOMPARE(spreadsheet.column(99)->valueAt(99), 0.487100154161453);
-	*/
+//	WARN(spreadsheet.column(0)->valueAt(0))
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), -4.95495);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), -4.86475);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(99), 4.94505);
+	QCOMPARE(spreadsheet.column(1)->valueAt(99), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(99), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(100), qInf());
+	QCOMPARE(spreadsheet.column(1)->valueAt(100), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(100), 0);
+
+	ROOTFilter filter2;
+	filter2.setStartRow(0);
+	filter2.setEndRow(9);	//TODO: automatic?
+	filter2.setCurrentObject("Tree:tree");
+	QVector<QStringList> columns2{{"doubleTest"}, {"structTest", "double"}};
+	filter2.setColumns(columns2);
+	filter2.readDataFromFile(fileName, &spreadsheet);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 10);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 81);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 64);
+	QCOMPARE(spreadsheet.column(0)->valueAt(8), 8);
+	QCOMPARE(spreadsheet.column(1)->valueAt(8), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(9), 9);
+	QCOMPARE(spreadsheet.column(1)->valueAt(9), 0);
 }
 
 void ROOTFilterTest::importFile2() {

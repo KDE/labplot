@@ -200,12 +200,14 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 }
 
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", object: " << STDSTRING(currentObject));
 
 	long int pos = 0;
-	auto type = currentObjectPosition(fileName, pos);
-	if (pos == 0)
+	const auto type = currentObjectPosition(fileName, pos);
+	if (pos == 0)	// is not changed???
 		return;
+
+	DEBUG("start/end row = " << startRow << " " << endRow)
 
 	if (type == FileType::Hist) {
 		auto bins = readHistogram(pos);
@@ -215,6 +217,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = qMax(qAbs(startRow), 0);
 		int last = endRow < 0 ? nbins - 1 : qMax(first - 1, qMin(endRow, nbins - 1));
 
+		DEBUG("first/last = " << first << " " << last)
+
 		QStringList headers;
 		for (const auto& l : columns) {
 			headers << l.last();
@@ -222,14 +226,14 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
-														   importMode,
-														   last - first + 1,
-														   columns.size(),
-														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+							importMode,
+							last - first + 1,
+							columns.size(),
+							headers,
+							QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
 
 		// read data
-		DEBUG("	reading " << first - last + 1 << " lines");
+		DEBUG("	reading " << last - first + 1 << " lines");
 
 		int c = 0;
 		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
@@ -269,6 +273,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		int first = qMax(qAbs(startRow), 0);
 		int last = qMax(first - 1, qMin(endRow, nentries - 1));
 
+		DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
+
 		QStringList headers;
 		for (const auto& l : columns) {
 			QString lastelement = l.back();
@@ -284,14 +290,15 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 		std::vector<void*> dataContainer;
 		const int columnOffset = dataSource->prepareImport(dataContainer,
-														   importMode,
-														   last - first + 1,
-														   columns.size(),
-														   headers,
-														   QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
+						importMode,
+						last - first + 1,
+						columns.size(),
+						headers,
+						QVector<AbstractColumn::ColumnMode>(columns.size(), AbstractColumn::ColumnMode::Double));
 
 		int c = 0;
 		for (const auto& l : columns) {
+			//DEBUG("column " << c)
 			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
@@ -306,6 +313,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c++]);
 			auto data = readTree(pos, l.first(), leaf, (int)element, last);
+			//QDEBUG("DATA = " << data)
 			for (int i = first; i <= last; ++i)
 				container[i - first] = data[i];
 		}
@@ -389,7 +397,7 @@ QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quin
 }
 
 QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& fileName, int first, int last) {
-	DEBUG("ROOTFilterPrivate::previewCurrentObject()");
+	DEBUG(Q_FUNC_INFO);
 
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);
@@ -415,8 +423,8 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			if (l.first() == QStringLiteral("center")) {
 				for (int i = first; i <= last; ++i)
 					preview[i - first] << QString::number((i > 0 && i < nbins - 1) ? 0.5 * (bins[i].lowedge + bins[i + 1].lowedge)
-															  : i == 0			   ? bins.front().lowedge // -infinity
-																				   : -bins.front().lowedge); // +infinity
+															  : i == 0 ? bins.front().lowedge // -infinity
+																: -bins.front().lowedge); // +infinity
 			} else if (l.first() == QStringLiteral("low")) {
 				for (int i = first; i <= last; ++i)
 					preview[i - first] << QString::number(bins[i].lowedge);
@@ -460,8 +468,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		}
 
 		return preview;
-	} else
-		return {1, QStringList()};
+	}
+
+	return {1, QStringList()};
 }
 
 int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
@@ -506,6 +515,7 @@ std::vector<ROOTData::BinPars> ROOTFilterPrivate::readHistogram(quint64 pos) {
 }
 
 std::vector<double> ROOTFilterPrivate::readTree(quint64 pos, const QString& branchName, const QString& leafName, int element, int last) {
+	//QDEBUG("branch/leaf name =" << branchName << " " << leafName << ", element/last =" << element << " " << last)
 	return currentROOTData->listEntries<double>(pos, branchName.toStdString(), leafName.toStdString(), element, last + 1);
 }
 

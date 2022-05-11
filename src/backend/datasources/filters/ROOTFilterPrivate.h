@@ -124,8 +124,8 @@ public:
 	std::vector<T> listEntries(long int pos,
 							   const std::string& branchname,
 							   const std::string& leafname,
-							   const size_t element = 0,
-							   const size_t nentries = std::numeric_limits<size_t>::max()) const;
+							   size_t element = 0,
+							   size_t nentries = std::numeric_limits<size_t>::max()) const;
 	/**
 	 * @brief Get entries of a leaf with the same name as its branch
 	 *
@@ -135,7 +135,7 @@ public:
 	 */
 	template<typename T>
 	std::vector<T>
-	listEntries(long int pos, const std::string& branchname, const size_t element = 0, const size_t nentries = std::numeric_limits<size_t>::max()) const {
+	listEntries(long int pos, const std::string& branchname, size_t element = 0, size_t nentries = std::numeric_limits<size_t>::max()) const {
 		return listEntries<T>(pos, branchname, branchname, element, nentries);
 	}
 
@@ -208,9 +208,9 @@ private:
 	};
 
 	/// Get data type from histogram identifier
-	static ContentType histType(const char type);
+	static ContentType histType(char type);
 	/// Get data type from leaf identifier
-	static ContentType leafType(const char type);
+	static ContentType leafType(char type);
 	/// Get function to read a buffer of the specified type
 	template<class T>
 	T (*readType(ContentType type, bool sign = true) const)
