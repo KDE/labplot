@@ -57,8 +57,8 @@ IF (BUILD_EXCEL)
         set(ext_insource ON)
         set(install_dir ${build_dir}/install)
         if(WIN32)
-        set(qxlsx_library QXlsx.lib)
-        ExternalProject_Add(3rdparty_QXlsx
+            set(qxlsx_library QXlsx.lib)
+            ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
@@ -67,8 +67,8 @@ IF (BUILD_EXCEL)
 		#INSTALL_COMMAND "")
 		INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR)
         else()
-        set(qxlsx_library QXlsx.a)
-        ExternalProject_Add(3rdparty_QXlsx
+            set(qxlsx_library QXlsx.a)
+            ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
@@ -78,7 +78,7 @@ IF (BUILD_EXCEL)
                 #INSTALL_COMMAND  cp -av ./${qxlsx_library} ${install_dir}/lib && cp  ./header/* ${install_dir}/include )
         endif()
 
-        include_directories(${install_dir}/include )
+        include_directories(${install_dir}/include)
 ENDIF ()
 
 # preview.sty

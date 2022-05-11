@@ -537,7 +537,7 @@ IF (ENABLE_READSTAT)
 ENDIF ()
 
 IF (ENABLE_EXCEL)
-        # build before using
+        # build before use
         IF (BUILD_EXCEL)
                 add_dependencies( labplot2lib 3rdparty_QXlsx )
         ENDIF ()
