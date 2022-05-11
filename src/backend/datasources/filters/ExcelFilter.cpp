@@ -476,7 +476,7 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 
         for (int row = regionToRead.firstRow(); row <= regionToRead.lastRow(); ++row) {
             int j = 0;
-            int numericixd = 0;
+            unsigned int numericixd = 0;
             int stringidx = 0;
             for (int col = regionToRead.firstColumn(); col <= regionToRead.lastColumn(); ++col) {
                 if (columnNumericTypes.at(j)) {
@@ -492,7 +492,7 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
                 ++j;
             }
         }
-    } else if (auto* matrix = dynamic_cast<Matrix*>(dataSource)){
+    } else if (dynamic_cast<Matrix*>(dataSource)) {
         QVector<AbstractColumn::ColumnMode> columnModes;
         QStringList vectorNames;
 

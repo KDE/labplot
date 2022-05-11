@@ -395,6 +395,7 @@ QIcon LiveDataSource::icon() const {
 	// TODO: missing icons
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
+	case AbstractFileFilter::FileType::Excel:
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		icon = QIcon::fromTheme("kstars_fitsviewer");
@@ -589,6 +590,7 @@ void LiveDataSource::read() {
 			m_filter->readDataFromFile(m_fileName, this);
 			break;
 		// TODO: other types not implemented yet
+		case AbstractFileFilter::FileType::Excel:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::HDF5:
 		case AbstractFileFilter::FileType::NETCDF:
