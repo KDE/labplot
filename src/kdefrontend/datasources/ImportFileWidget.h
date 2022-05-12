@@ -138,7 +138,7 @@ private Q_SLOTS:
 	friend class NetCDFOptionsWidget; // to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
-	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
+	friend class ROOTOptionsWidget; // to access refreshPreview() and others
 	friend class ExcelOptionsWidget; // to access refreshPreview()
 
 #ifdef HAVE_MQTT

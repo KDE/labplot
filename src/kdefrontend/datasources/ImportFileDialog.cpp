@@ -288,15 +288,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-                else if (fileType == AbstractFileFilter::FileType::Excel){
-                    const auto& nameSplit = names[i].split(QLatin1Char('!'));
-                    const auto& sheet = nameSplit[0];
-                    const auto& range = nameSplit[1];
-                    static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
-                    static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
-                }
-                else
-                    static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
+				else if (fileType == AbstractFileFilter::FileType::Excel) {
+					const auto& nameSplit = names[i].split(QLatin1Char('!'));
+					const auto& sheet = nameSplit[0];
+					const auto& range = nameSplit[1];
+					static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
+					static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
+				} else
+					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
 				int index = i + offset;
 				filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets.at(index)));
@@ -372,7 +371,7 @@ void ImportFileDialog::checkOkButton() {
 			// to name the columns since the column names are fixed in a matrix
 			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
 			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
-            m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
+			m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
 		}
 	}
 

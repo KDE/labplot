@@ -50,7 +50,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
 	void toggleOptions();
-    void enableImportToMatrix(const bool enable);
+	void enableImportToMatrix(const bool enable);
 	void showErrorMessage(const QString&);
 };
 
