@@ -50,7 +50,9 @@ public:
 	static QStringList sheets(const QString& fileName, bool* ok = nullptr);
 	static bool isValidCellReference(const QString& cellRefString);
 
+#ifdef HAVE_EXCEL
 	QVector<QStringList> previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines);
+#endif
 	QVector<QStringList> previewForCurrentDataRegion(int lines, bool* okToMatrix);
 	QStringList sheets() const;
 
@@ -66,9 +68,8 @@ public:
 #ifdef HAVE_EXCEL
 	QVector<QXlsx::CellRange> dataRegions(const QString& fileName, const QString& sheetName);
 	QXlsx::CellRange dimension() const;
-
-	void setCurrentRange(const QString& range);
 #endif
+	void setCurrentRange(const QString& range);
 
 	void setCurrentSheet(const QString& sheet);
 	virtual void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, ImportMode = ImportMode::Replace) override;

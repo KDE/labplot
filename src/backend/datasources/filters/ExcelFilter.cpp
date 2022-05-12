@@ -84,12 +84,12 @@ QStringList ExcelFilter::sheets() const {
 QStringList ExcelFilter::sheets(const QString& fileName, bool* ok) {
 #ifdef HAVE_EXCEL
 	QXlsx::Document doc{fileName};
-	if (ok) {
+	if (ok)
 		*ok = doc.isLoadPackage();
-	}
 	return doc.sheetNames();
 #else
 	Q_UNUSED(fileName)
+	Q_UNUSED(ok)
 #endif
 	return {};
 }
@@ -112,12 +112,20 @@ void ExcelFilter::write(const QString& fileName, AbstractDataSource* dataSource)
 	d->write(fileName, dataSource);
 }
 
+#ifdef HAVE_EXCEL
 QVector<QStringList> ExcelFilter::previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
 	return d->previewForDataRegion(sheet, region, okToMatrix, lines);
 }
+#endif
 
 QVector<QStringList> ExcelFilter::previewForCurrentDataRegion(int lines, bool* okToMatrix) {
+#ifdef HAVE_EXCEL
 	return d->previewForDataRegion(d->currentSheet, d->currentRange, okToMatrix, lines);
+#else
+	Q_UNUSED(lines)
+	Q_UNUSED(okToMatrix)
+	return {};
+#endif
 }
 
 void ExcelFilter::setExportAsNewSheet(const bool exportAsNewSheet) {
@@ -137,24 +145,32 @@ void ExcelFilter::setFirstRowAsColumnNames(const bool firstRowAsColumnNames) {
 }
 
 void ExcelFilter::setDataExportStartPos(const QString& dataStartPos) {
+#ifdef HAVE_EXCEL
 	const auto cell = QXlsx::CellReference(dataStartPos);
 	if (cell.isValid()) {
 		d->dataExportStartCell.setColumn(cell.column());
 		d->dataExportStartCell.setRow(cell.row());
 	}
+#else
+	Q_UNUSED(dataStartPos)
+#endif
 }
 
+#ifdef HAVE_EXCEL
 QVector<QXlsx::CellRange> ExcelFilter::dataRegions(const QString& fileName, const QString& sheetName) {
 	return d->dataRegions(fileName, sheetName);
 }
+#endif
 
 void ExcelFilter::parse(const QString& fileName, QTreeWidgetItem* root) {
 	d->parse(fileName, root);
 }
 
+#ifdef HAVE_EXCEL
 QXlsx::CellRange ExcelFilter::dimension() const {
 	return d->dimension();
 }
+#endif
 
 /*!
  * \brief Sets the startColumn to \a column
@@ -221,7 +237,11 @@ int ExcelFilter::endRow() const {
 }
 
 void ExcelFilter::setCurrentRange(const QString& range) {
+#ifdef HAVE_EXCEL
 	d->currentRange = {range};
+#else
+	Q_UNUSED(range)
+#endif
 }
 
 void ExcelFilter::setCurrentSheet(const QString& sheet) {
@@ -698,6 +718,8 @@ bool ExcelFilterPrivate::dataRangeCanBeExportedToMatrix(const QXlsx::CellRange& 
 QStringList ExcelFilterPrivate::sheets() const {
 #ifdef HAVE_EXCEL
 	return m_document ? m_document->sheetNames() : QStringList();
+#else
+	return {};
 #endif
 }
 
