@@ -16,8 +16,8 @@ Dependencies:
     'frameworks/kxmlgui': '@stable'
     'frameworks/knewstuff': '@stable'
     'libraries/kuserfeedback': '@stable'
-    'edu/cantor': '@stable'
-    'qtproject/qt/qtmqtt': '@stable'
+    'education/cantor': '@stable'
+    'qt/qt/qtmqtt': '@stable'
 
 Environment:
   KDECI_BUILD: "TRUE"
