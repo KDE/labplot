@@ -19,7 +19,7 @@ IF (BUILD_READSTAT)
 	# curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest | grep 'browser_download_url.*.tar.gz' | cut -d\" -f4
 	# curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest | jq --raw-output '.assets[0] | .browser_download_url'
 	# execute_process(COMMAND "curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest |   jq --raw-output '.assets[0] | .browser_download_url'" OUTPUT_VARIABLE ext_url)
-	set(ext_version "1.1.7")
+	set(ext_version "1.1.8")
 	set(ext_url https://github.com/WizardMac/ReadStat/releases/download/v${ext_version}/readstat-${ext_version}.tar.gz)
 #if(WIN32)	# not used (own version on Windows)
 #        set(ext_url http://sourceforge.net/projects/kst/files/3rdparty/zlib-develop-mingw-fixed.zip)
