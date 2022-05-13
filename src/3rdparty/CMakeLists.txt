@@ -15,7 +15,12 @@ IF (BUILD_READSTAT)
 	file(MAKE_DIRECTORY ${install_dir}/include)
 
 	set(ext_src ${build_dir}/readstat/src/readstat)
-	set(ext_version "1.1.6")
+	# TODO: find easy (and portable) way to get latest version
+	# curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest | grep 'browser_download_url.*.tar.gz' | cut -d\" -f4
+	# curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest | jq --raw-output '.assets[0] | .browser_download_url'
+	# execute_process(COMMAND "curl -s https://api.github.com/repos/WizardMac/ReadStat/releases/latest |   jq --raw-output '.assets[0] | .browser_download_url'" OUTPUT_VARIABLE ext_url)
+	set(ext_version "1.1.8")
+        set(ext_url https://github.com/WizardMac/ReadStat/releases/download/v${ext_version}/readstat-${ext_version}.tar.gz)
 #if(WIN32)	# not used (own version on Windows)
 #        set(ext_url http://sourceforge.net/projects/kst/files/3rdparty/zlib-develop-mingw-fixed.zip)
 #        set(ext_configure cmake ${ext_src} ${generator} -DBUILD_SHARED_LIBS=0 ${rc_compiler} ${install_prefix} ${build_type})
@@ -24,7 +29,6 @@ IF (BUILD_READSTAT)
 #                set(zlib_library libzlibstatic.a)
 #        set(ext_make ${kst_make_program})
 #else()
-        set(ext_url https://github.com/WizardMac/ReadStat/releases/download/v${ext_version}/readstat-${ext_version}.tar.gz)
 	# --prefix=${install_dir} does not work with spaces
         set(ext_configure ${ext_src}/configure --enable-static --disable-shared)
 	set(ext_insource ON)
