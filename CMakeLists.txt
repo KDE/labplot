@@ -485,6 +485,7 @@ IF (ENABLE_EXCEL)
 			set(BUILD_EXCEL TRUE)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
+			add_definitions (-DHAVE_EXCEL)
 			IF (WIN32)
 				set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx.lib)
 			ELSE ()

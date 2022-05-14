@@ -31,6 +31,6 @@ mark_as_advanced(QXLSX_LIBRARIES QXLSX_INCLUDE_DIR)
 
 include(FeatureSummary)
 set_package_properties(QXlsx PROPERTIES
-    DESCRIPTION "QXlsx is excel file(*.xlsx) reader/writer library."
+    DESCRIPTION "QXlsx is excel file(*.xlsx) reader/writer library"
     URL "https://github.com/QtExcel/QXlsx"
 )

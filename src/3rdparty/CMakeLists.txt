@@ -69,8 +69,10 @@ IF (BUILD_EXCEL)
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
-		#INSTALL_COMMAND "")
-		INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR)
+		CMAKE_ARGS
+		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		INSTALL_COMMAND "")
+		#INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR)
         else()
             set(qxlsx_library QXlsx.a)
             ExternalProject_Add(3rdparty_QXlsx
@@ -79,6 +81,8 @@ IF (BUILD_EXCEL)
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
+		CMAKE_ARGS
+		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                 INSTALL_COMMAND "")
                 #INSTALL_COMMAND  cp -av ./${qxlsx_library} ${install_dir}/lib && cp  ./header/* ${install_dir}/include )
         endif()
