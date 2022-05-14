@@ -72,6 +72,8 @@ IF (BUILD_EXCEL)
 		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 		#INSTALL_COMMAND "")
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${qxlsx_library} ${install_dir}/lib && ${CMAKE_COMMAND} -E copy_directory header ${install_dir}/include
+		# see https://stackoverflow.com/questions/54866067/cmake-and-ninja-missing-and-no-known-rule-to-make-it
+		BUILD_BYPRODUCTS ${install_dir}/lib/${qxlsx_library}
 	)
 
         include_directories(${install_dir}/include)
