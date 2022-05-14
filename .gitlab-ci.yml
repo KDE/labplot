@@ -7,6 +7,18 @@ include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
+build_fedora_34:
+  stage: build
+  image: fedora:34
+  only:
+    - merge_requests
+  before_script:
+    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make cmake ninja-build qt5-qtbase-devel
+  script:
+    - mkdir -p build && cd build
+    - cmake -G Ninja ..
+    - ninja
+
 # copied from okular
 clang_format:
   stage: build
