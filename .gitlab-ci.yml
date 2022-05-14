@@ -7,6 +7,19 @@ include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
+build_fedora_36:
+  stage: build
+  image: fedora:36
+  only:
+    - merge_requests
+    - master
+  before_script:
+    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build gsl-devel qt5-qtbase-devel qt5-qtsvg-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel
+  script:
+    - mkdir -p build && cd build
+    - cmake -G Ninja ..
+    - ninja
+
 # copied from okular
 clang_format:
   stage: build
