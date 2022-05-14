@@ -12,6 +12,7 @@ build_fedora_34:
   image: fedora:34
   only:
     - merge_requests
+    - master
   before_script:
     - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make cmake ninja-build qt5-qtbase-devel
   script:
