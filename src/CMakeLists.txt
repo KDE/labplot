@@ -541,7 +541,8 @@ IF (ENABLE_EXCEL)
         IF (BUILD_EXCEL)
                 add_dependencies( labplot2lib 3rdparty_QXlsx )
         ENDIF ()
-        target_link_libraries( labplot2lib ${QXLSX_LIBRARIES} )
+
+	target_link_libraries( labplot2lib ${QXLSX_LIBRARIES} )
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)

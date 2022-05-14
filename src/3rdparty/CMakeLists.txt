@@ -58,34 +58,21 @@ IF (BUILD_EXCEL)
         file(MAKE_DIRECTORY ${install_dir}/lib)
         file(MAKE_DIRECTORY ${install_dir}/include)
 
+	set(ext_url https://github.com/QtExcel/QXlsx.git)
         set(ext_src ${build_dir}/QXlsx/src/QXlsx)
         set(ext_insource ON)
-        set(install_dir ${build_dir}/install)
-        if(WIN32)
-            set(qxlsx_library QXlsx.lib)
-            ExternalProject_Add(3rdparty_QXlsx
-                GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
+        set(qxlsx_library ${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
+        ExternalProject_Add(3rdparty_QXlsx
+                GIT_REPOSITORY ${ext_url}
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
 		CMAKE_ARGS
 		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-		INSTALL_COMMAND "")
-		#INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR)
-        else()
-            set(qxlsx_library QXlsx.a)
-            ExternalProject_Add(3rdparty_QXlsx
-                GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
-                PREFIX ${build_dir}/QXlsx
-		SOURCE_DIR ${ext_src}
-		SOURCE_SUBDIR QXlsx
-                BUILD_IN_SOURCE ${ext_insource}
-		CMAKE_ARGS
-		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                INSTALL_COMMAND "")
-                #INSTALL_COMMAND  cp -av ./${qxlsx_library} ${install_dir}/lib && cp  ./header/* ${install_dir}/include )
-        endif()
+		#INSTALL_COMMAND "")
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${qxlsx_library} ${install_dir}/lib && ${CMAKE_COMMAND} -E copy_directory header ${install_dir}/include
+	)
 
         include_directories(${install_dir}/include)
 ENDIF ()
