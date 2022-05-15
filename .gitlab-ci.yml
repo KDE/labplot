@@ -19,7 +19,7 @@ fedora_36_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
     - ninja
-    - ninja test
+    - ctest -V
 
 fedora_36_full:
   stage: build
