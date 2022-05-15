@@ -7,7 +7,7 @@ include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
-build_fedora_36:
+fedora_36_min:
   stage: build
   image: fedora:36
   only:
@@ -19,6 +19,7 @@ build_fedora_36:
     - mkdir -p build && cd build
     - cmake -G Ninja ..
     - ninja
+    - ninja test
 
 # copied from okular
 clang_format:
