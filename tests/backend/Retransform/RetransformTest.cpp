@@ -138,23 +138,23 @@ void RetransformTest::TestLoadProject() {
 
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
-	QStringList list = {
-		"Project/Worksheet/xy-plot",
-		"Project/Worksheet/xy-plot/x",
-		"Project/Worksheet/xy-plot/y",
-		"Project/Worksheet/xy-plot/sin",
-		"Project/Worksheet/xy-plot/cos",
-		"Project/Worksheet/xy-plot/tan",
-		"Project/Worksheet/xy-plot/y-axis",
-		"Project/Worksheet/xy-plot/legend"
+	QHash<QString, int> h = {
+		{"Project/Worksheet/xy-plot", 2},
+		{"Project/Worksheet/xy-plot/x", 1},
+		{"Project/Worksheet/xy-plot/y", 1},
+		{"Project/Worksheet/xy-plot/sin", 1},
+		{"Project/Worksheet/xy-plot/cos", 1},
+		{"Project/Worksheet/xy-plot/tan", 1},
+		{"Project/Worksheet/xy-plot/y-axis", 1},
+		{"Project/Worksheet/xy-plot/legend", 1},
 	};
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto& child: children) {
-		bool expectedCallCount = 0;
+		int expectedCallCount = 0;
 		const QString& path = child->path();
-		if (list.contains(path))
-			expectedCallCount = 1;
+		if (h.contains(path))
+			expectedCallCount = h.value(path);
 		COMPARE(callCount(child, false), expectedCallCount, path);
 	}
 }
