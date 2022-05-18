@@ -915,7 +915,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-#if RETRANSFORMTEST_EN
+#ifdef RETRANSFORMTEST_EN
 	retransformCalled(!isVisible() || q->isLoading());
 #endif
 	if (!isVisible() || q->isLoading())

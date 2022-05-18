@@ -220,6 +220,9 @@ ImagePrivate::ImagePrivate(Image* owner)
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void ImagePrivate::retransform() {
+#ifdef RETRANSFORMTEST_EN
+	retransformCalled(suppressRetransform || q->isLoading());
+#endif
 	if (suppressRetransform || q->isLoading())
 		return;
 

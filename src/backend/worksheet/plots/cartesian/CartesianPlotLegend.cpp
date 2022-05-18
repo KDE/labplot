@@ -367,7 +367,7 @@ void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
-#if RETRANSFORMTEST_EN
+#ifdef RETRANSFORMTEST_EN
 	retransformCalled(suppressRetransform || !plot || q->isLoading());
 #endif
 

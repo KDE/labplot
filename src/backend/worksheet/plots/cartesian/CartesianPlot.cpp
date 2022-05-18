@@ -3636,7 +3636,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-#if RETRANSFORMTEST_EN
+#ifdef RETRANSFORMTEST_EN
 	retransformCalled(suppressRetransform || q->isLoading());
 #endif
 	for (int i = 0; i < xRanges.count(); i++)
