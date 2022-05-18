@@ -13,45 +13,9 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
-//#include "backend/lib/trace.h"
 #include "kdefrontend/MainWin.h"
 
 #include <QAction>
-
-//#define GET_CURVE_PRIVATE(plot, child_index, column_name, curve_variable_name)                                                                                 \
-//	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
-//	QVERIFY(curve_variable_name != nullptr);                                                                                                                   \
-//	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name));                                                                                         \
-//	QCOMPARE(curve_variable_name->type(), AspectType::XYCurve);                                                                                                \
-//	auto* curve_variable_name##Private = curve_variable_name->d_func();                                                                                        \
-//	Q_UNUSED(curve_variable_name##Private)
-
-//#define LOAD_PROJECT
-//	Project project;
-//	connect(this, &Project::aspectAdded, this, &Project::aspectAddedSlot);
-//#define LOAD_PROJECT                                                                                                                                           \
-//	Project project;                                                                                                                                           \
-//	project.load(QFINDTESTDATA(QLatin1String("data/TestUpdateLines.lml")));                                                                                    \
-//	auto* spreadsheet = project.child<AbstractAspect>(0);                                                                                                      \
-//	QVERIFY(spreadsheet != nullptr);                                                                                                                           \
-//	QCOMPARE(spreadsheet->name(), QLatin1String("lastValueInvalid"));                                                                                          \
-//	QCOMPARE(spreadsheet->type(), AspectType::Spreadsheet);                                                                                                    \
-//                                                                                                                                                               \
-//	auto* worksheet = project.child<AbstractAspect>(1);                                                                                                        \
-//	QVERIFY(worksheet != nullptr);                                                                                                                             \
-//	QCOMPARE(worksheet->name(), QLatin1String("Worksheet"));                                                                                                   \
-//	QCOMPARE(worksheet->type(), AspectType::Worksheet);                                                                                                        \
-//                                                                                                                                                               \
-//	auto* plot = worksheet->child<CartesianPlot>(0);                                                                                                           \
-//	QVERIFY(plot != nullptr);                                                                                                                                  \
-//	QCOMPARE(plot->name(), QLatin1String("plot"));                                                                                                             \
-//	/* enable once implemented correctly */                                                                                                                    \
-//	/* QCOMPARE(plot->type(), AspectType::CartesianPlot); */                                                                                                   \
-//                                                                                                                                                               \
-//	GET_CURVE_PRIVATE(plot, 0, "lastValueInvalid", lastValueInvalidCurve)                                                                                      \
-//	GET_CURVE_PRIVATE(plot, 1, "lastVertical", lastVerticalCurve)                                                                                              \
-//	GET_CURVE_PRIVATE(plot, 2, "withGap", withGapCurve)                                                                                                        \
-//	GET_CURVE_PRIVATE(plot, 3, "withGap2", withGapCurve2)
 
 #define COMPARE(actual, expected, message) \
 do {\
@@ -139,7 +103,7 @@ void RetransformTest::TestLoadProject() {
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
 	QHash<QString, int> h = {
-		{"Project/Worksheet/xy-plot", 2},
+		{"Project/Worksheet/xy-plot", 1},
 		{"Project/Worksheet/xy-plot/x", 1},
 		{"Project/Worksheet/xy-plot/y", 1},
 		{"Project/Worksheet/xy-plot/sin", 1},
@@ -147,6 +111,10 @@ void RetransformTest::TestLoadProject() {
 		{"Project/Worksheet/xy-plot/tan", 1},
 		{"Project/Worksheet/xy-plot/y-axis", 1},
 		{"Project/Worksheet/xy-plot/legend", 1},
+		{"Project/Worksheet/xy-plot/plotImage", 1},
+		{"Project/Worksheet/xy-plot/plotText", 1},
+		{"Project/Worksheet/Text Label", 1},
+		{"Project/Worksheet/Image", 1},
 	};
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
@@ -193,7 +161,11 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	// XYCurve "tan"
 	// Axis "y-axis"
 	// Legend "legend"
-	QCOMPARE(children.length(), 14);
+	// TextLabel "plotText"
+	// Image "plotImage"
+	// TextLabel "Text Label"
+	// Image "Image"
+	QCOMPARE(children.length(), 18);
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
@@ -220,14 +192,25 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
-	 QStringList list = {"Project/Worksheet/xy-plot/x",
+	 QStringList list = {
+	 "Project/Worksheet/xy-plot",
+	 "Project/Worksheet/xy-plot/x",
 	 "Project/Worksheet/xy-plot/y",
 	 "Project/Worksheet/xy-plot/sin",
 	 "Project/Worksheet/xy-plot/cos",
 	 "Project/Worksheet/xy-plot/tan",
 	 "Project/Worksheet/xy-plot/y-axis",
-	 "Project/Worksheet/xy-plot/legend"};
-	QCOMPARE(elementLogCount(false), 7);
+	 "Project/Worksheet/xy-plot/legend",
+	 "Project/Worksheet/xy-plot/plotText",
+	 "Project/Worksheet/xy-plot/plotImage"};
+	QCOMPARE(elementLogCount(false), list.count());
+	for (auto& s: list)
+		QCOMPARE(callCount(s, false), 1);
+
+	resetRetransformCount();
+	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
+
+	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
 }
