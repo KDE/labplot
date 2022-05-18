@@ -323,7 +323,7 @@ void CartesianPlot::setType(Type type) {
 
 	const auto* worksheet = static_cast<const Worksheet*>(parentAspect());
 	if (worksheet && worksheet->layout() != Worksheet::Layout::NoLayout)
-		finalizeLoad();
+		retransform();
 }
 
 CartesianPlot::Type CartesianPlot::type() const {
@@ -765,7 +765,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				else
 					scaleAutoY(cSystem->yIndex(), true);
 			}
-			retransform();
+			WorksheetElementContainer::retransform();
 		} else {
 			auto xDirty = xRangeDirty(xIndex);
 			auto yDirty = yRangeDirty(yIndex);
@@ -783,7 +783,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				enableAutoScaleY(cSystem->yIndex(), true, true);
 			else
 				scaleAutoY(cSystem->yIndex(), true);
-			retransform();
+			WorksheetElementContainer::retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = xRangeDirty(xIndex);
@@ -798,7 +798,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				if ((cSystemIndex == -1 || xIndex == cs->xIndex()) && autoScaleY(cs->yIndex()))
 					scaleAutoY(cs->yIndex(), false);
 			}
-			retransform();
+			WorksheetElementContainer::retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
 		bool update = yRangeDirty(yIndex);
@@ -813,7 +813,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				if ((cSystemIndex == -1 || yIndex == cs->yIndex()) && autoScaleX(cs->xIndex()))
 					scaleAutoX(cs->xIndex(), false);
 			}
-			retransform();
+			WorksheetElementContainer::retransform();
 		}
 	} else if (op == NavigationOperation::ZoomIn)
 		zoomIn(xIndex, yIndex);
@@ -988,9 +988,7 @@ public:
 		qSwap(m_private->rect, m_rect);
 
 		// 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->retransform(); // update the datarect
-		m_private->q->retransformScales(); // update the scales
-		m_private->q->retransform(); // retransform all childs
+		m_private->retransform();
 		Q_EMIT m_private->q->rectChanged(m_private->rect);
 	}
 
@@ -1020,7 +1018,7 @@ public:
 	void redo() override {
 		if (m_initilized) {
 			qSwap(m_private->rect, m_rect);
-			m_private->q->retransform();
+			m_private->retransform();
 			Q_EMIT m_private->q->rectChanged(m_private->rect);
 		} else {
 			// this function is called for the first time,
@@ -1398,7 +1396,7 @@ CartesianPlotSetRangeIndexCmd(x, X) void CartesianPlot::setXRange(const int inde
 					d->retransformYScale(yIndex);
 			}
 		}
-		retransform();
+		WorksheetElementContainer::retransform();
 	}
 }
 CartesianPlotSetRangeIndexCmd(y, Y) void CartesianPlot::setYRange(const int index, const Range<double>& range) {
@@ -1418,7 +1416,7 @@ CartesianPlotSetRangeIndexCmd(y, Y) void CartesianPlot::setYRange(const int inde
 					d->retransformXScale(xIndex);
 			}
 		}
-		retransform();
+		WorksheetElementContainer::retransform();
 	}
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
@@ -1725,7 +1723,7 @@ void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->xRangeBreakingEnabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformXScale() with the corresponding index!
-		retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
 	}
 }
 
@@ -1734,7 +1732,7 @@ void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformXScale() with the corresponding index!
-	retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
 }
 
 STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled)
@@ -1743,7 +1741,7 @@ void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	if (enabled != d->yRangeBreakingEnabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 		retransformScales(); // TODO: replace by retransformYScale() with the corresponding index!
-		retransform(); // retransformScales does not contain any retransfrom() anymore
+		WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
 	}
 }
 
@@ -1752,7 +1750,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
 	retransformScales(); // TODO: replace by retransformYScale() with the corresponding index!
-	retransform(); // retransformScales does not contain any retransfrom() anymore
+	WorksheetElementContainer::retransform(); // retransformScales does not contain any retransfrom() anymore
 }
 
 // cursor
@@ -2402,7 +2400,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			rangeChanged = scaleAutoY(yIndex);
 
 		if (rangeChanged)
-			retransform();
+			WorksheetElementContainer::retransform();
 	}
 
 	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
@@ -2535,7 +2533,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
 				rangeChanged = scaleAutoY(yIndex);
 
 			if (rangeChanged)
-				retransform();
+				WorksheetElementContainer::retransform();
 		}
 	}
 }
@@ -2610,7 +2608,7 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 			}
 		}
 	} else if (updated)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 /*!
@@ -2651,7 +2649,7 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (updated)
-		retransform();
+		WorksheetElementContainer::retransform();
 	else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
@@ -2711,7 +2709,7 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (updated)
-		retransform();
+		WorksheetElementContainer::retransform();
 	else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
@@ -2746,7 +2744,7 @@ void CartesianPlot::curveVisibilityChanged() {
 	else if (autoScaleY(yIndex))
 		this->scaleAutoY(yIndex, false);
 
-	retransform();
+	WorksheetElementContainer::retransform();
 
 	Q_EMIT curveVisibilityChangedSignal();
 }
@@ -2814,7 +2812,7 @@ void CartesianPlot::scaleAutoTriggered() {
 		updated = scaleAutoY();
 
 	if (updated)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
@@ -3195,7 +3193,7 @@ void CartesianPlot::zoomIn(int xIndex, int yIndex) {
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
-	retransform();
+	WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex) {
@@ -3210,7 +3208,7 @@ void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
-	retransform();
+	WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::zoomInX(int index) {
@@ -3233,7 +3231,7 @@ void CartesianPlot::zoomInX(int index) {
 	Q_D(CartesianPlot);
 	if (retrans) {
 		d->retransformScales(index, -1);
-		retransform();
+		WorksheetElementContainer::retransform();
 	}
 }
 
@@ -3257,7 +3255,7 @@ void CartesianPlot::zoomOutX(int index) {
 	Q_D(CartesianPlot);
 	if (retrans) {
 		d->retransformScales(index, -1);
-		retransform();
+		WorksheetElementContainer::retransform();
 	}
 }
 
@@ -3281,7 +3279,7 @@ void CartesianPlot::zoomInY(int index) {
 	Q_D(CartesianPlot);
 	if (retrans) {
 		d->retransformScales(-1, index);
-		retransform();
+		WorksheetElementContainer::retransform();
 	}
 }
 
@@ -3503,7 +3501,7 @@ void CartesianPlot::shiftLeftX(int index) {
 	}
 
 	if (retrans)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftRightX(int index) {
@@ -3525,7 +3523,7 @@ void CartesianPlot::shiftRightX(int index) {
 	}
 
 	if (retrans)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftUpY(int index) {
@@ -3547,7 +3545,7 @@ void CartesianPlot::shiftUpY(int index) {
 	}
 
 	if (retrans)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftDownY(int index) {
@@ -3569,7 +3567,7 @@ void CartesianPlot::shiftDownY(int index) {
 	}
 
 	if (retrans)
-		retransform();
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::cursor() {
@@ -3627,7 +3625,17 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 
 CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 
-void CartesianPlotPrivate::updatePlotArea() {
+/*!
+	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
+	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
+	and which can pose the parent item for several sub-items (like TextLabel).
+	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
+	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
+ */
+void CartesianPlotPrivate::retransform() {
+#ifdef RETRANSFORMTEST_EN
+	retransformCalled(suppressRetransform || q->isLoading());
+#endif
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG(Q_FUNC_INFO << ", x range " << i + 1 << " : " << xRanges.at(i).range.toStdString()
 						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()));
@@ -3644,20 +3652,9 @@ void CartesianPlotPrivate::updatePlotArea() {
 	q->plotArea()->setRect(rect);
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
-}
 
-/*!
-	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
-	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
-	and which can pose the parent item for several sub-items (like TextLabel).
-	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
-	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
- */
-void CartesianPlotPrivate::retransform() {
-#ifdef RETRANSFORMTEST_EN
-	retransformCalled(suppressRetransform || q->isLoading());
-#endif
-	updatePlotArea();
+	retransformScales(-1, -1);
+
 	q->WorksheetElementContainer::retransform();
 }
 
@@ -3944,7 +3941,7 @@ void CartesianPlotPrivate::rangeChanged() {
 		else if (autoScaleY(yIndex))
 			q->scaleAutoY(yIndex, false);
 	}
-	q->retransform();
+	q->WorksheetElementContainer::retransform();
 }
 
 void CartesianPlotPrivate::niceExtendChanged() {
@@ -3962,7 +3959,7 @@ void CartesianPlotPrivate::niceExtendChanged() {
 		else if (autoScaleY(yIndex))
 			q->scaleAutoY(yIndex, false);
 	}
-	q->retransform();
+	q->WorksheetElementContainer::retransform();
 }
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
@@ -4453,7 +4450,7 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 	}
 
 	if (translated)
-		q->retransform();
+		q->WorksheetElementContainer::retransform();
 }
 
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
@@ -4623,7 +4620,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 
 	if (!suppressRetransform) {
 		retransformScales(xIndex, yIndex);
-		q->retransform();
+		q->WorksheetElementContainer::retransform();
 	}
 }
 
@@ -5148,13 +5145,6 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		elem->save(writer);
 
 	writer->writeEndElement(); // cartesianPlot
-}
-
-void CartesianPlot::finalizeLoad() {
-	Q_D(CartesianPlot);
-	d->updatePlotArea(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
-	retransformScales();
-	WorksheetElementContainer::retransform(); // important to retransform all childs
 }
 
 //! Load from XML

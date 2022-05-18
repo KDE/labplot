@@ -99,7 +99,7 @@ void RetransformTest::TestLoadProject() {
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
 	QHash<QString, int> h = {
-		{"Project/Worksheet/xy-plot", 0}, // not explicit called, only finalizeLoad
+		{"Project/Worksheet/xy-plot", 1},
 		{"Project/Worksheet/xy-plot/x", 1},
 		{"Project/Worksheet/xy-plot/y", 1},
 		{"Project/Worksheet/xy-plot/sin", 1},
@@ -279,6 +279,8 @@ void RetransformTest::TestPadding() {
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
+
+	// TODO: check that retransformScales gets also called!!!!
 }
 
 // Test add new curve autoscale

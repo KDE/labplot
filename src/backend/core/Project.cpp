@@ -743,23 +743,15 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	// call retransform() to every element
 	if (hasChildren && aspect->type() == AspectType::Worksheet) {
 		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-		for (auto* e : elements) {
-			if (e->type() == AspectType::CartesianPlot)
-				static_cast<CartesianPlot*>(e)->finalizeLoad();
-			else
-				e->retransform();
-		}
+		for (auto* e : elements)
+			e->retransform();
 	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
 		for (const auto* w : aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 			// retransform all elements in the worksheet (labels, images, plots)
 			// the plots will then recursive retransform the childs of them
 			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
-			for (auto* e : elements) {
-				if (e->type() == AspectType::CartesianPlot)
-					static_cast<CartesianPlot*>(e)->finalizeLoad();
-				else
-					e->retransform();
-			}
+			for (auto* e : elements)
+				e->retransform();
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
@@ -769,7 +761,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
 		for (auto* plot : plots) {
-			plot->finalizeLoad();
+			plot->retransform();
 		}
 	}
 
