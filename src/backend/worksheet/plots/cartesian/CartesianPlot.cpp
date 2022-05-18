@@ -3665,6 +3665,9 @@ void CartesianPlotPrivate::retransform() {
  */
 void CartesianPlotPrivate::retransformXScale(int index) {
 	DEBUG(Q_FUNC_INFO)
+#ifdef RETRANSFORMTEST_EN
+	emit q->retransformXScaleCalled(q, index);
+#endif
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3763,6 +3766,9 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 }
 
 void CartesianPlotPrivate::retransformYScale(int index) {
+#ifdef RETRANSFORMTEST_EN
+	emit q->retransformYScaleCalled(q, index);
+#endif
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
 	Range<double> sceneRange, logicalRange;

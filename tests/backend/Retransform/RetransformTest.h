@@ -18,25 +18,34 @@ class RetransformTest : public CommonTest {
 
 private:
 	void resetRetransformCount();
-	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
 	QHash<QString, int> statistic(bool includeSuppressed);
 	int elementLogCount(bool includeSuppressed);
 	struct Retransformed {
-		Retransformed(const AbstractAspect* aspect, bool suppressed): aspect(aspect), suppressed(suppressed) {}
 		const AbstractAspect* aspect;
 		bool suppressed;
 	};
+
+	struct ScaleRetransformed {
+		const CartesianPlot* plot;
+		int index;
+	};
+
 	bool calledExact(int requiredCallCount, bool includeSuppressed);
 	int callCount(const QString& path, bool includeSuppressed);
 	int callCount(const AbstractAspect *aspect, bool includeSuppressed);
 
-	QVector<Retransformed> logs;
+	QVector<Retransformed> logsRetransformed;
+	QVector<ScaleRetransformed> logsXScaleRetransformed;
+	QVector<ScaleRetransformed> logsYScaleRetransformed;
 
 
 
 // helper functions
 private Q_SLOTS:
 	void aspectAdded(const AbstractAspect* aspect);
+	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
+	void retransformXScaleCalled(const CartesianPlot* plot, int index);
+	void retransformYScaleCalled(const CartesianPlot* plot, int index);
 
 private Q_SLOTS:
 	void TestLoadProject();

@@ -409,6 +409,12 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
+#ifdef RETRANSFORMTEST_EN
+Q_SIGNALS:
+	void retransformXScaleCalled(const CartesianPlot* plot, int index);
+	void retransformYScaleCalled(const CartesianPlot* plot, int index);
+#endif
+
 	friend CartesianPlotDock;
 };
 

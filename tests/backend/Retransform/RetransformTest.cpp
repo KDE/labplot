@@ -12,6 +12,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/MainWin.h"
 
@@ -27,7 +28,7 @@ do {\
 
 QHash<QString, int> RetransformTest::statistic(bool includeSuppressed) {
 	QHash<QString, int> result;
-	for (auto& log: logs) {
+	for (auto& log: logsRetransformed) {
 		const auto& path = log.aspect->path();
 		if (!includeSuppressed && log.suppressed)
 			continue;
@@ -76,12 +77,22 @@ int RetransformTest::callCount(const AbstractAspect* aspect, bool includeSuppres
 }
 
 void RetransformTest::resetRetransformCount() {
-	logs.clear();
+	logsRetransformed.clear();
+	logsXScaleRetransformed.clear();
+	logsYScaleRetransformed.clear();
 }
 
 void RetransformTest::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
 
-	logs.append(Retransformed(sender, suppressed));
+	logsRetransformed.append({sender, suppressed});
+}
+
+void RetransformTest::retransformXScaleCalled(const CartesianPlot* plot, int index) {
+	logsXScaleRetransformed.append({plot, index});
+}
+
+void RetransformTest::retransformYScaleCalled(const CartesianPlot* plot, int index) {
+	logsYScaleRetransformed.append({plot, index});
 }
 
 
@@ -191,7 +202,6 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
 	 QStringList list = {
-	 "Project/Worksheet/xy-plot",
 	 "Project/Worksheet/xy-plot/x",
 	 "Project/Worksheet/xy-plot/y",
 	 "Project/Worksheet/xy-plot/sin",
@@ -242,6 +252,11 @@ void RetransformTest::TestPadding() {
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
+	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+	}
+
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
 
@@ -252,35 +267,59 @@ void RetransformTest::TestPadding() {
 	QVERIFY(plot);
 	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
 
-	double hPad = plot->horizontalPadding();
-
-	plot->setHorizontalPadding(hPad + 10);
-
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
 	 QStringList list = {
-	 "Project/Worksheet/xy-plot",
-	 "Project/Worksheet/xy-plot/x",
-	 "Project/Worksheet/xy-plot/y",
-	 "Project/Worksheet/xy-plot/sin",
-	 "Project/Worksheet/xy-plot/cos",
-	 "Project/Worksheet/xy-plot/tan",
-	 "Project/Worksheet/xy-plot/y-axis",
-	 "Project/Worksheet/xy-plot/legend",
-	 "Project/Worksheet/xy-plot/plotText",
-	 "Project/Worksheet/xy-plot/plotImage"};
+		 "Project/Worksheet/xy-plot", // datarect changed, so plot must also be retransformed
+		 "Project/Worksheet/xy-plot/x",
+		 "Project/Worksheet/xy-plot/y",
+		 "Project/Worksheet/xy-plot/sin",
+		 "Project/Worksheet/xy-plot/cos",
+		 "Project/Worksheet/xy-plot/tan",
+		 "Project/Worksheet/xy-plot/y-axis",
+		 "Project/Worksheet/xy-plot/legend",
+		 "Project/Worksheet/xy-plot/plotText",
+		 "Project/Worksheet/xy-plot/plotImage"};
+	double hPad = plot->horizontalPadding();
+	plot->setHorizontalPadding(hPad + 10);
+
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
 
+	// x and y are called only once
+	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
+
 	resetRetransformCount();
+
+	list = QStringList({
+		 // data rect of the plot does not change, so retransforming the
+		 // plot is not needed
+		 "Project/Worksheet/xy-plot/x",
+		 "Project/Worksheet/xy-plot/y",
+		 "Project/Worksheet/xy-plot/sin",
+		 "Project/Worksheet/xy-plot/cos",
+		 "Project/Worksheet/xy-plot/tan",
+		 "Project/Worksheet/xy-plot/y-axis",
+		 "Project/Worksheet/xy-plot/legend",
+		 "Project/Worksheet/xy-plot/plotText",
+		 "Project/Worksheet/xy-plot/plotImage"});
 	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
 
-	// TODO: check that retransformScales gets also called!!!!
+	// x and y are already scaled due to the change of padding
+	QCOMPARE(logsXScaleRetransformed.count(), 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 0);
 }
 
 // Test add new curve autoscale
