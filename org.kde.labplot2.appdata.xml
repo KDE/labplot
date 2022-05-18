@@ -37,8 +37,11 @@
   <summary>Interactive Data Visualization and Analysis</summary>
   <summary xml:lang="ca">Visualització i anàlisi de dades interactius</summary>
   <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
+  <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
+  <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
+  <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
   <summary xml:lang="sv">Interaktiv datavisualisering och analys</summary>
   <summary xml:lang="uk">Інтерактивна візуалізація та аналіз даних</summary>
   <summary xml:lang="x-test">xxInteractive Data Visualization and Analysisxx</summary>
@@ -48,8 +51,11 @@
     </p>
     <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="ca-valencia">LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
+    <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
+    <p xml:lang="nl">LabPlot is VRIJE open source software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
+    <p xml:lang="sl">LabPlot je PROSTA, odprto-kodna in večplatformska programska oprema za vizualizacijo in analizo podatkov, ki je dostopna vsem.</p>
     <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
     <p xml:lang="uk">LabPlot є вільним, доступним для будь-кого програмним забезпеченням з відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та аналіз даних.</p>
     <p xml:lang="x-test">xxLabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.xx</p>
@@ -91,8 +97,11 @@
       <caption>Basic visualization of data</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <caption xml:lang="x-test">xxBasic visualization of dataxx</caption>
@@ -102,8 +111,11 @@
       <caption>Basic visualization of data</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="de">Einfache Visualisierung von Daten</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
+      <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="uk">Базова візуалізація даних</caption>
       <caption xml:lang="x-test">xxBasic visualization of dataxx</caption>
@@ -113,8 +125,11 @@
       <caption>Advanced layouting of plots and images</caption>
       <caption xml:lang="ca">Disposició avançada de grafs i imatges</caption>
       <caption xml:lang="ca-valencia">Disposició avançada de grafs i imatges</caption>
+      <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
+      <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
+      <caption xml:lang="sl">Napredna postavitev risb in slik</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
       <caption xml:lang="uk">Розширені можливості з компонування креслень та зображень</caption>
       <caption xml:lang="x-test">xxAdvanced layouting of plots and imagesxx</caption>
@@ -124,8 +139,11 @@
       <caption>Theming</caption>
       <caption xml:lang="ca">Permet temes</caption>
       <caption xml:lang="ca-valencia">Permet temes</caption>
+      <caption xml:lang="de">Farbmotive</caption>
       <caption xml:lang="es">Temas</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
+      <caption xml:lang="nl">Thema's</caption>
+      <caption xml:lang="sl">Oblikovanje s temami</caption>
       <caption xml:lang="sv">Teman</caption>
       <caption xml:lang="uk">Теми</caption>
       <caption xml:lang="x-test">xxThemingxx</caption>
@@ -135,8 +153,11 @@
       <caption>Visualization of mathematical functions</caption>
       <caption xml:lang="ca">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
+      <caption xml:lang="de">Visualisierung von mathematischen Funktionen</caption>
       <caption xml:lang="es">Visualización de funciones matemáticas</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
+      <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
+      <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
       <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
       <caption xml:lang="uk">Візуалізація математичних функцій</caption>
       <caption xml:lang="x-test">xxVisualization of mathematical functionsxx</caption>
@@ -146,8 +167,11 @@
       <caption>Fit pre-defined or custom models to the data</caption>
       <caption xml:lang="ca">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
+      <caption xml:lang="de">Anpassung von Daten mit vordefinierten oder eigenen Modellen</caption>
       <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
+      <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
+      <caption xml:lang="sl">Podatkom prilagodite vnaprej določene modele ali modele po meri</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
       <caption xml:lang="uk">Апроксимація попередньо визначеними або нетиповими моделями даних</caption>
       <caption xml:lang="x-test">xxFit pre-defined or custom models to the dataxx</caption>
@@ -157,8 +181,11 @@
       <caption>Smooth the data with the help of various smoothing methods</caption>
       <caption xml:lang="ca">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
+      <caption xml:lang="de">Glättung von Daten mithilfe verschiedener Glättungsmethoden</caption>
       <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
+      <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
+      <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
       <caption xml:lang="uk">Згладжування даних за допомогою різноманітних способів згладжування</caption>
       <caption xml:lang="x-test">xxSmooth the data with the help of various smoothing methodsxx</caption>
@@ -168,8 +195,11 @@
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
       <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="de">Notebookschnittstelle zu interaktiven Sitzungen in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua, itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="uk">Інтерфейс нотатника для інтерактивних сеансів Maxima, Octave, R, Sage, Scilab, Python, Julia тощо</caption>
       <caption xml:lang="x-test">xxNotebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia, etcxx</caption>
@@ -179,8 +209,11 @@
       <caption>Signal analysis</caption>
       <caption xml:lang="ca">Anàlisi de senyals</caption>
       <caption xml:lang="ca-valencia">Anàlisi de senyals</caption>
+      <caption xml:lang="de">Signalanalyse</caption>
       <caption xml:lang="es">Análisis de señales</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
+      <caption xml:lang="nl">Signaalanalyse</caption>
+      <caption xml:lang="sl">Analiza signala</caption>
       <caption xml:lang="sv">Signalanalys</caption>
       <caption xml:lang="uk">Аналіз сигналів</caption>
       <caption xml:lang="x-test">xxSignal analysisxx</caption>
@@ -190,8 +223,11 @@
       <caption>Herzsprung-Russel diagram in LabPlot</caption>
       <caption xml:lang="ca">Diagrama Herzsprung-Russel en el LabPlot</caption>
       <caption xml:lang="ca-valencia">Diagrama Herzsprung-Russel en LabPlot</caption>
+      <caption xml:lang="de">Herzsprung-Russel-Diagramm in LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
+      <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
+      <caption xml:lang="sl">Herzsprung-Russelov diagram v LabPlot</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i LabPlot</caption>
       <caption xml:lang="uk">Діаграма Герцшпрунга-Рассела у LabPlot</caption>
       <caption xml:lang="x-test">xxHerzsprung-Russel diagram in LabPlotxx</caption>
@@ -201,8 +237,11 @@
       <caption>Visualization of data calculated in an interactive Maxima session</caption>
       <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva de Maxima</caption>
+      <caption xml:lang="de">Visualisierung von Daten, die interaktiv in einer Maxima-Sitzung berechnet werden</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
+      <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
+      <caption xml:lang="sl">Vizualizacija podatkov, izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
       <caption xml:lang="uk">Візуалізація даних, які обчислено у інтерактивному сеансі Maxima</caption>
       <caption xml:lang="x-test">xxVisualization of data calculated in an interactive Maxima sessionxx</caption>
