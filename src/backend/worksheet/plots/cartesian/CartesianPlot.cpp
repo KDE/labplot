@@ -756,12 +756,12 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 					setYRangeDirty(cSystem->yIndex(), true);
 				}
 				if (!autoScaleX(cSystem->xIndex()))
-					enableAutoScaleX(cSystem->xIndex(), true, true, true);
+					enableAutoScaleX(cSystem->xIndex(), true, true);
 				else // if already autoscale set, scaleAutoX will not be called anymore, so force it to do
 					scaleAutoX(cSystem->xIndex(), true);
 
 				if (!autoScaleY(cSystem->yIndex()))
-					enableAutoScaleY(cSystem->yIndex(), true, true, true);
+					enableAutoScaleY(cSystem->yIndex(), true, true);
 				else
 					scaleAutoY(cSystem->yIndex(), true);
 			}
@@ -775,12 +775,12 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				setYRangeDirty(yIndex, true);
 			}
 			if (!autoScaleX(cSystem->xIndex()))
-				enableAutoScaleX(cSystem->xIndex(), true, true, true);
+				enableAutoScaleX(cSystem->xIndex(), true, true);
 			else
 				scaleAutoX(cSystem->xIndex(), true);
 
 			if (!autoScaleY(cSystem->yIndex()))
-				enableAutoScaleY(cSystem->yIndex(), true, true, true);
+				enableAutoScaleY(cSystem->yIndex(), true, true);
 			else
 				scaleAutoY(cSystem->yIndex(), true);
 			retransform();
@@ -788,7 +788,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	} else if (op == NavigationOperation::ScaleAutoX) {
 		bool update = xRangeDirty(xIndex);
 		if (!autoScaleX(xIndex)) {
-			enableAutoScaleX(xIndex, true, true, true);
+			enableAutoScaleX(xIndex, true, true);
 			update = true;
 		} else
 			update |= scaleAutoX(xIndex, true);
@@ -803,7 +803,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	} else if (op == NavigationOperation::ScaleAutoY) {
 		bool update = yRangeDirty(yIndex);
 		if (!autoScaleY(yIndex)) {
-			enableAutoScaleY(yIndex, true, true, true);
+			enableAutoScaleY(yIndex, true, true);
 			update = true;
 		} else
 			update |= scaleAutoY(yIndex, true);
@@ -1287,14 +1287,12 @@ private:
 };
 
 // set auto scale for x range index (index == -1: all ranges)
-void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppressRetransform, bool fullRange) {
+void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool fullRange) {
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all x ranges
 		for (int i = 0; i < xRangeCount(); i++)
-			enableAutoScaleX(i, enable, true, fullRange);
-		if (!suppressRetransform)
-			retransform();
+			enableAutoScaleX(i, enable, fullRange);
 		return;
 	}
 
@@ -1302,29 +1300,23 @@ void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppress
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleXIndexCmd(d, enable, index, fullRange));
-		if (!suppressRetransform)
-			retransform();
 		if (project())
 			project()->setChanged(true);
 	}
 }
 // set auto scale for y range index (index == -1: all ranges)
-void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool suppressRetransform, bool fullRange) {
+void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool fullRange) {
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all y axes
 		for (int i = 0; i < yRangeCount(); i++)
-			enableAutoScaleY(i, enable, true, fullRange);
-		if (!suppressRetransform)
-			retransform();
+			enableAutoScaleY(i, enable, fullRange);
 		return;
 	}
 
 	if (enable != yRange(index).autoScale()) {
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleYIndexCmd(d, enable, index, fullRange));
-		if (!suppressRetransform)
-			retransform();
 		if (project())
 			project()->setChanged(true);
 	}
@@ -3194,8 +3186,8 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 void CartesianPlot::zoomIn(int xIndex, int yIndex) {
 	setUndoAware(false);
-	enableAutoScaleX(xIndex, false, true);
-	enableAutoScaleY(yIndex, false, true);
+	enableAutoScaleX(xIndex, false);
+	enableAutoScaleY(yIndex, false);
 	setUndoAware(true);
 	setXRangeDirty(xIndex, true);
 	setYRangeDirty(yIndex, true);
@@ -3209,8 +3201,8 @@ void CartesianPlot::zoomIn(int xIndex, int yIndex) {
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 	setUndoAware(false);
-	enableAutoScaleX(xIndex, false, true);
-	enableAutoScaleY(yIndex, false, true);
+	enableAutoScaleX(xIndex, false);
+	enableAutoScaleY(yIndex, false);
 	setUndoAware(true);
 	setXRangeDirty(xIndex, true);
 	setYRangeDirty(yIndex, true);
@@ -3224,7 +3216,7 @@ void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 
 void CartesianPlot::zoomInX(int index) {
 	setUndoAware(false);
-	enableAutoScaleX(index, false, true);
+	enableAutoScaleX(index, false);
 	setUndoAware(true);
 	setYRangeDirty(index, true);
 	zoom(index, true, true); // zoom in x
@@ -3248,7 +3240,7 @@ void CartesianPlot::zoomInX(int index) {
 
 void CartesianPlot::zoomOutX(int index) {
 	setUndoAware(false);
-	enableAutoScaleX(index, false, true);
+	enableAutoScaleX(index, false);
 	setUndoAware(true);
 	setYRangeDirty(index, true);
 	zoom(index, true, false); // zoom out x
@@ -3272,7 +3264,7 @@ void CartesianPlot::zoomOutX(int index) {
 
 void CartesianPlot::zoomInY(int index) {
 	setUndoAware(false);
-	enableAutoScaleY(index, false, true);
+	enableAutoScaleY(index, false);
 	setUndoAware(true);
 	setXRangeDirty(index, true);
 	zoom(index, false, true); // zoom in y
@@ -3296,7 +3288,7 @@ void CartesianPlot::zoomInY(int index) {
 
 void CartesianPlot::zoomOutY(int index) {
 	setUndoAware(false);
-	enableAutoScaleY(index, false, true);
+	enableAutoScaleY(index, false);
 	setUndoAware(true);
 	setXRangeDirty(index, true);
 	zoom(index, false, false); // zoom out y
@@ -3495,7 +3487,7 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 
 void CartesianPlot::shiftLeftX(int index) {
 	setUndoAware(false);
-	enableAutoScaleX(index, false, true);
+	enableAutoScaleX(index, false);
 	setUndoAware(true);
 	shift(index, true, true);
 
@@ -3517,7 +3509,7 @@ void CartesianPlot::shiftLeftX(int index) {
 
 void CartesianPlot::shiftRightX(int index) {
 	setUndoAware(false);
-	enableAutoScaleX(index, false, true);
+	enableAutoScaleX(index, false);
 	setUndoAware(true);
 	shift(index, true, false);
 
@@ -3539,7 +3531,7 @@ void CartesianPlot::shiftRightX(int index) {
 
 void CartesianPlot::shiftUpY(int index) {
 	setUndoAware(false);
-	enableAutoScaleY(index, false, true);
+	enableAutoScaleY(index, false);
 	setUndoAware(true);
 	shift(index, false, false);
 
@@ -3561,7 +3553,7 @@ void CartesianPlot::shiftUpY(int index) {
 
 void CartesianPlot::shiftDownY(int index) {
 	setUndoAware(false);
-	enableAutoScaleY(index, false, true);
+	enableAutoScaleY(index, false);
 	setUndoAware(true);
 	shift(index, false, true);
 
@@ -4390,11 +4382,11 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 
 	q->setUndoAware(false);
 	if (translationX) {
-		q->enableAutoScaleX(xIndex, false, true);
+		q->enableAutoScaleX(xIndex, false);
 		retransformXScale(xIndex);
 	}
 	if (translationY) {
-		q->enableAutoScaleY(yIndex, false, true);
+		q->enableAutoScaleY(yIndex, false);
 		retransformYScale(yIndex);
 	}
 	q->setUndoAware(true);
@@ -4610,16 +4602,16 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setXRangeDirty(xIndex, true);
 			q->setYRangeDirty(yIndex, true);
-			q->enableAutoScaleX(xIndex, false, true);
-			q->enableAutoScaleY(yIndex, false, true);
+			q->enableAutoScaleX(xIndex, false);
+			q->enableAutoScaleY(yIndex, false);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			q->setYRangeDirty(yIndex, true);
-			q->enableAutoScaleX(xIndex, false, true);
+			q->enableAutoScaleX(xIndex, false);
 			if (q->autoScaleY(yIndex))
 				q->scaleAutoY(yIndex, false);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setXRangeDirty(xIndex, true);
-			q->enableAutoScaleY(yIndex, false, true);
+			q->enableAutoScaleY(yIndex, false);
 			if (q->autoScaleX(xIndex))
 				q->scaleAutoX(xIndex, false);
 		}
