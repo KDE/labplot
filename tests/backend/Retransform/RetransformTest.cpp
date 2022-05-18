@@ -79,11 +79,6 @@ void RetransformTest::resetRetransformCount() {
 	logs.clear();
 }
 
-void RetransformTest::initTestCase() {
-	// Called before every test
-	resetRetransformCount();
-}
-
 void RetransformTest::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
 
 	logs.append(Retransformed(sender, suppressed));
@@ -95,6 +90,7 @@ void RetransformTest::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void RetransformTest::TestLoadProject() {
+	resetRetransformCount(); // Must be called before every test
 	Project project;
 
 	// Does not work during load.
@@ -103,7 +99,7 @@ void RetransformTest::TestLoadProject() {
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
 	QHash<QString, int> h = {
-		{"Project/Worksheet/xy-plot", 1},
+		{"Project/Worksheet/xy-plot", 0}, // not explicit called, only finalizeLoad
 		{"Project/Worksheet/xy-plot/x", 1},
 		{"Project/Worksheet/xy-plot/y", 1},
 		{"Project/Worksheet/xy-plot/sin", 1},
@@ -128,6 +124,7 @@ void RetransformTest::TestLoadProject() {
 }
 
 void RetransformTest::TestResizeWindows() {
+	resetRetransformCount(); // Must be called before every test
 	MainWin mainWin;
 	mainWin.resize(100, 100);
 	mainWin.openProject(QFINDTESTDATA(QLatin1String("data/p1.lml")));
@@ -142,6 +139,7 @@ void RetransformTest::TestResizeWindows() {
 }
 
 void RetransformTest::TestZoomSelectionAutoscale() {
+	resetRetransformCount(); // Must be called before every test
 	Project project;
 
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
@@ -189,6 +187,74 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
 	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	plot->mouseReleaseZoomSelectionMode(-1);
+
+	// TODO: set to 6. legend should not retransform
+	// plot it self does not change so retransform is not called on cartesianplotPrivate
+	 QStringList list = {
+	 "Project/Worksheet/xy-plot",
+	 "Project/Worksheet/xy-plot/x",
+	 "Project/Worksheet/xy-plot/y",
+	 "Project/Worksheet/xy-plot/sin",
+	 "Project/Worksheet/xy-plot/cos",
+	 "Project/Worksheet/xy-plot/tan",
+	 "Project/Worksheet/xy-plot/y-axis",
+	 "Project/Worksheet/xy-plot/legend",
+	 "Project/Worksheet/xy-plot/plotText",
+	 "Project/Worksheet/xy-plot/plotImage"};
+	QCOMPARE(elementLogCount(false), list.count());
+	for (auto& s: list)
+		QCOMPARE(callCount(s, false), 1);
+
+	resetRetransformCount();
+	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
+
+	QCOMPARE(elementLogCount(false), list.count());
+	for (auto& s: list)
+		QCOMPARE(callCount(s, false), 1);
+}
+
+void RetransformTest::TestPadding() {
+	resetRetransformCount(); // Must be called before every test
+	Project project;
+
+	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "x"
+	// Column "sin"
+	// Column "cos"
+	// Column "tan"
+	// Worksheet "Worksheet"
+	// CartesianPlot "xy-plot"
+	// Axis "x"
+	// Axis "y"
+	// XYCurve "sin"
+	// XYCurve "cos"
+	// XYCurve "tan"
+	// Axis "y-axis"
+	// Legend "legend"
+	// TextLabel "plotText"
+	// Image "plotImage"
+	// TextLabel "Text Label"
+	// Image "Image"
+	QCOMPARE(children.length(), 18);
+	for (const auto& child: children)
+		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+
+	auto* worksheet = project.child<Worksheet>(0);
+	QVERIFY(worksheet);
+
+	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view);
+
+	auto* plot = worksheet->child<CartesianPlot>(0);
+	QVERIFY(plot);
+	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
+
+	double hPad = plot->horizontalPadding();
+
+	plot->setHorizontalPadding(hPad + 10);
 
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate

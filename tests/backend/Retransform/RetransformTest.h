@@ -39,11 +39,10 @@ private Q_SLOTS:
 	void aspectAdded(const AbstractAspect* aspect);
 
 private Q_SLOTS:
-	void initTestCase();
-
 	void TestLoadProject();
 	void TestResizeWindows();
 	void TestZoomSelectionAutoscale();
+	void TestPadding();
 	
 };
 

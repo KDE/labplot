@@ -26,6 +26,7 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
+	void updatePlotArea();
 	void retransformYScale(int index);
 	void retransformXScale(int index);
 	void retransformScales(int xIndex, int yIndex);

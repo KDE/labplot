@@ -1807,7 +1807,6 @@ void CartesianPlot::setTheme(const QString& theme) {
 void CartesianPlot::retransform() {
 	Q_D(CartesianPlot);
 	d->retransform();
-	WorksheetElementContainer::retransform();
 }
 
 //################################################################
@@ -3628,17 +3627,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot)
 
 CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 
-/*!
-	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
-	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
-	and which can pose the parent item for several sub-items (like TextLabel).
-	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
-	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
- */
-void CartesianPlotPrivate::retransform() {
-#ifdef RETRANSFORMTEST_EN
-	retransformCalled(suppressRetransform || q->isLoading());
-#endif
+void CartesianPlotPrivate::updatePlotArea() {
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG(Q_FUNC_INFO << ", x range " << i + 1 << " : " << xRanges.at(i).range.toStdString()
 						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()));
@@ -3655,6 +3644,21 @@ void CartesianPlotPrivate::retransform() {
 	q->plotArea()->setRect(rect);
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
+}
+
+/*!
+	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
+	The size of the plot corresponds to the size of the plot area, the area which is filled with the background color etc.
+	and which can pose the parent item for several sub-items (like TextLabel).
+	Note, the size of the area used to define the coordinate system doesn't need to be equal to this plot area.
+	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
+ */
+void CartesianPlotPrivate::retransform() {
+#ifdef RETRANSFORMTEST_EN
+	retransformCalled(suppressRetransform || q->isLoading());
+#endif
+	updatePlotArea();
+	q->WorksheetElementContainer::retransform();
 }
 
 /*!
@@ -5148,7 +5152,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 
 void CartesianPlot::finalizeLoad() {
 	Q_D(CartesianPlot);
-	d->retransform(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
+	d->updatePlotArea(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
 	retransformScales();
 	WorksheetElementContainer::retransform(); // important to retransform all childs
 }
