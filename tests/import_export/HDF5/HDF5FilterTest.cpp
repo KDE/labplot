@@ -160,6 +160,41 @@ void HDF5FilterTest::testImportIntPortion() {
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1202);
 }
 
+void HDF5FilterTest::testImportVLEN() {
+	Spreadsheet spreadsheet("test", false);
+	HDF5Filter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/h5ex_t_vlen.h5"));
+	filter.setCurrentDataSetName(QLatin1String("/DS1"));
+	// set start/end row/col
+	//filter.setStartRow(2);
+	//filter.setEndRow(3);
+	//filter.setStartColumn(2);
+	//filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 12);
+	for (int i = 0; i < 2; i++) {
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Integer);
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("DS1_") + QString::number(i + 1));
+	}
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(11), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(11), 144);
+}
+
 // BENCHMARKS
 
 void HDF5FilterTest::benchDoubleImport_data() {

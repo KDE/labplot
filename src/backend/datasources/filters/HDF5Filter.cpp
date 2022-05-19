@@ -1743,7 +1743,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			handleError(members, "H5Tget_nmembers");
 			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
 			columnModes.resize(members);
-			if (dataSource) // create data pointer
+			if (dataSource) // create data pointer here
 				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes);
 			else
 				dataStrings << readHDF5Compound(dtype);
@@ -1775,7 +1775,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
 			DEBUG("actual rows/cols = " << actualRows << " " << actualCols << ", size = " << size)
-			if (dataSource) { // create data pointer
+			if (dataSource) { // create data pointer here
 				if (size > 1) {	// set vectorNames
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();

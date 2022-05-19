@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the HDF5 I/O-filter.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,6 +21,7 @@ private Q_SLOTS:
 	void testImportDoublePortion();
 	void testImportInt();
 	void testImportIntPortion();
+	void testImportVLEN();
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
