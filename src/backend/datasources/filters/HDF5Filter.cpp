@@ -44,12 +44,12 @@
 			if (dataSource) \
 				(*static_cast<QVector<ctype>*>(dataContainer[c]))[i - startRow + 1] = data[i]; \
 			else /* for preview */ \
-				dataStrings[i] << QString::number(static_cast<type>(data[i])); \
+				dataStrings[i - startRow + 1] << QString::number(static_cast<type>(data[i])); \
 		} \
 		/* fill columns until maxLength */ \
 		if (!dataSource) \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows); i++) \
-				dataStrings[i] << QString(); \
+			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows + startRow - 1); i++) \
+				dataStrings[i - startRow + 1] << QString(); \
 	}
 
 // type - data type
