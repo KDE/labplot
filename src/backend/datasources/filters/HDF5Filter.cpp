@@ -1631,7 +1631,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1)};
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
-		if (dataSource)
+		if (dataSource && dclass != H5T_VLEN && dclass != H5T_COMPOUND)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
 		QStringList dataString; // data saved in a list
@@ -1743,10 +1743,9 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			handleError(members, "H5Tget_nmembers");
 			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
 			columnModes.resize(members);
-			if (dataSource) { // re-create data pointer
-				dataContainer.clear();
+			if (dataSource) // create data pointer
 				dataSource->prepareImport(dataContainer, mode, actualRows, members, vectorNames, columnModes);
-			} else
+			else
 				dataStrings << readHDF5Compound(dtype);
 			dataString = readHDF5CompoundData1D(dataset, dtype, rows, lines, dataContainer);
 			break;
@@ -1776,8 +1775,13 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
 			DEBUG("actual rows/cols = " << actualRows << " " << actualCols << ", size = " << size)
-			if (dataSource) { // re-create data pointer
-				dataContainer.clear();
+			if (dataSource) { // create data pointer
+				if (size > 1) {	// set vectorNames
+					const QString datasetName = vectorNames.at(0);
+					vectorNames.clear();
+					for (size_t i = 0 ; i < size ; i++)
+						vectorNames << datasetName + "_" + QString::number(i+1);
+				}
 				dataSource->prepareImport(dataContainer, mode, actualRows, size, vectorNames, columnModes);
 			}
 
