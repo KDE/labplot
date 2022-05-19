@@ -140,17 +140,46 @@ void RetransformTest::TestLoadProject() {
 
 void RetransformTest::TestResizeWindows() {
 	resetRetransformCount(); // Must be called before every test
-	MainWin mainWin;
-	mainWin.resize(100, 100);
-	mainWin.openProject(QFINDTESTDATA(QLatin1String("data/p1.lml")));
+	Project project;
+	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
-	auto* project = mainWin.project();
-	for (const auto& child: project->children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive))
+	const auto& worksheets = project.children(AspectType::Worksheet);
+	QCOMPARE(worksheets.count(), 1);
+	auto worksheet = static_cast<Worksheet*>(worksheets.at(0));
+	auto* view = static_cast<WorksheetView*>(worksheet->view());
+
+	view->resize(100, 100);
+	view->processResize();
+
+	for (const auto& child: project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive))
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
-	mainWin.resize(1000, 1000);
-	QCOMPARE(elementLogCount(false), 14);
-	QVERIFY(calledExact(1, false));  // only called once!
+	view->resize(1000, 1000);
+	view->processResize();
+
+	QHash<QString, int> h = {
+		{"Project/Worksheet/xy-plot", 1},
+		{"Project/Worksheet/xy-plot/x", 1},
+		{"Project/Worksheet/xy-plot/y", 1},
+		{"Project/Worksheet/xy-plot/sin", 1},
+		{"Project/Worksheet/xy-plot/cos", 1},
+		{"Project/Worksheet/xy-plot/tan", 1},
+		{"Project/Worksheet/xy-plot/y-axis", 1},
+		{"Project/Worksheet/xy-plot/legend", 1},
+		{"Project/Worksheet/xy-plot/plotImage", 1},
+		{"Project/Worksheet/xy-plot/plotText", 1},
+		{"Project/Worksheet/Text Label", 1},
+		{"Project/Worksheet/Image", 1},
+		{"Project/Worksheet/plot2", 1},
+		{"Project/Worksheet/plot2/x", 1},
+		{"Project/Worksheet/plot2/y", 1},
+		{"Project/Worksheet/plot2/xy-curve", 1}
+	};
+
+	QCOMPARE(elementLogCount(false), h.count());
+	QHash<QString, int>::const_iterator i;
+	for (i = h.constBegin(); i != h.constEnd(); ++i)
+		QCOMPARE(callCount(i.key(), false), 1);
 }
 
 /*!
