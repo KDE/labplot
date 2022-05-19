@@ -2816,19 +2816,22 @@ void CartesianPlot::scaleAutoTriggered() {
 }
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
-bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
+bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransformScale) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << ", full range = " << fullRange)
 	PERFTRACE(Q_FUNC_INFO);
+	Q_D(CartesianPlot);
 	if (index == -1) { // all ranges
 		bool updated = false;
 		for (int i = 0; i < xRangeCount(); i++) {
-			if (autoScaleX(i) && scaleAutoX(i, fullRange))
+			if (autoScaleX(i) && scaleAutoX(i, fullRange, true))
 				updated = true; // at least one was updated
 		}
+
+		if (updated && !suppressRetransformScale)
+			d->retransformXScale(index);
 		return updated;
 	}
 
-	Q_D(CartesianPlot);
 	auto& xRange{d->xRange(index)};
 	DEBUG(Q_FUNC_INFO << ", x range dirty = " << xRangeDirty(index))
 	if (xRangeDirty(index)) {
@@ -2872,7 +2875,8 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		} else
 			xRange.extend(xRange.size() * d->autoScaleOffsetFactor);
 
-		d->retransformXScale(index);
+		if (!suppressRetransformScale)
+			d->retransformXScale(index);
 	}
 
 	return update;
@@ -2880,18 +2884,21 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 
 // TODO: copy paste code?
 // auto scale y axis 'index' when auto scale is enabled (index == -1: all y axes)
-bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
+bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransformScale) {
 	PERFTRACE(Q_FUNC_INFO);
+	Q_D(CartesianPlot);
 	if (index == -1) {
 		bool updated = false;
 		for (int i = 0; i < yRangeCount(); i++) {
-			if (autoScaleY(i) && scaleAutoY(i, fullRange))
+			if (autoScaleY(i) && scaleAutoY(i, fullRange, true))
 				updated = true; // at least one was updated
 		}
+
+		if (updated && !suppressRetransformScale)
+			d->retransformXScale(index);
 		return updated;
 	}
 
-	Q_D(CartesianPlot);
 	auto& yRange{d->yRange(index)};
 
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
@@ -2934,18 +2941,19 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		} else
 			yRange.extend(yRange.size() * d->autoScaleOffsetFactor);
 
-		d->retransformYScale(index);
+		if (!suppressRetransformScale)
+			d->retransformYScale(index);
 	}
 
 	return update;
 }
 
 // auto scale all x axis xIndex and y axis yIndex when auto scale is enabled (index == -1: all x/y axes)
-bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
+bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange, bool suppressRetransformScale) {
 	DEBUG(Q_FUNC_INFO << " x/y index = " << xIndex << " / " << yIndex)
 	PERFTRACE(Q_FUNC_INFO);
-	bool updateX = scaleAutoX(xIndex, fullRange);
-	bool updateY = scaleAutoY(yIndex, fullRange);
+	bool updateX = scaleAutoX(xIndex, fullRange, suppressRetransformScale);
+	bool updateY = scaleAutoY(yIndex, fullRange, suppressRetransformScale);
 	DEBUG(Q_FUNC_INFO << ", update X/Y = " << updateX << "/" << updateY)
 
 	// x range is dirty, because scaleAutoY sets it to dirty.
@@ -4615,12 +4623,12 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 			q->setYRangeDirty(yIndex, true);
 			q->enableAutoScaleX(xIndex, false);
 			if (q->autoScaleY(yIndex))
-				q->scaleAutoY(yIndex, false);
+				q->scaleAutoY(yIndex, false, true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setXRangeDirty(xIndex, true);
 			q->enableAutoScaleY(yIndex, false);
 			if (q->autoScaleX(xIndex))
-				q->scaleAutoX(xIndex, false);
+				q->scaleAutoX(xIndex, false, true);
 		}
 	}
 

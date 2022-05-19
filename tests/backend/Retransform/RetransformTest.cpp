@@ -153,6 +153,11 @@ void RetransformTest::TestResizeWindows() {
 	QVERIFY(calledExact(1, false));  // only called once!
 }
 
+/*!
+ * \brief RetransformTest::TestZoomSelectionAutoscale
+ * Check that retransform and retransform scale is called correctly during zoom and autoscale. Check
+ * also the number of calls of the retransforms
+ */
 void RetransformTest::TestZoomSelectionAutoscale() {
 	resetRetransformCount(); // Must be called before every test
 	Project project;
@@ -242,13 +247,19 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	 "Project/Worksheet/xy-plot/y-axis",
 	 "Project/Worksheet/xy-plot/legend",
 	 "Project/Worksheet/xy-plot/plotText",
-	 "Project/Worksheet/xy-plot/plotImage"};
+	 "Project/Worksheet/xy-plot/plotImage",
+	 /* second plot starting */
+	 "Project/Worksheet/plot2/x",
+	 "Project/Worksheet/plot2/y",
+	 "Project/Worksheet/plot2/xy-curve",};
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
 
 	resetRetransformCount();
-	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
+	view->selectItem(plot->graphicsItem());
+	a.setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
+	view->cartesianPlotNavigationChanged(&a);
 
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
@@ -269,6 +280,10 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
 }
 
+/*!
+ * \brief RetransformTest::TestPadding
+ * Check that during a padding change retransform and retransform scale is called
+ */
 void RetransformTest::TestPadding() {
 	resetRetransformCount(); // Must be called before every test
 	Project project;

@@ -25,6 +25,8 @@ class QTimeLine;
 class AbstractAspect;
 class WorksheetElement;
 
+class RetransformTest;
+
 #ifdef HAVE_TOUCHBAR
 class KDMacTouchBar;
 #endif
@@ -310,6 +312,8 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void statusInfo(const QString&);
 	void propertiesExplorerRequested();
+
+	friend RetransformTest;
 };
 
 #endif
