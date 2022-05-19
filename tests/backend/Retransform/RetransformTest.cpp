@@ -178,6 +178,11 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
+	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+	}
+
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
 
@@ -198,6 +203,16 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
 	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	plot->mouseReleaseZoomSelectionMode(-1);
+
+	// x and y are called only once
+	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
 
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
@@ -221,6 +236,16 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(elementLogCount(false), list.count());
 	for (auto& s: list)
 		QCOMPARE(callCount(s, false), 1);
+
+	// x and y are called only once
+	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
 }
 
 void RetransformTest::TestPadding() {
