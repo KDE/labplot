@@ -122,6 +122,10 @@ void RetransformTest::TestLoadProject() {
 		{"Project/Worksheet/xy-plot/plotText", 1},
 		{"Project/Worksheet/Text Label", 1},
 		{"Project/Worksheet/Image", 1},
+		{"Project/Worksheet/plot2", 1},
+		{"Project/Worksheet/plot2/x", 1},
+		{"Project/Worksheet/plot2/y", 1},
+		{"Project/Worksheet/plot2/xy-curve", 1}
 	};
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
@@ -174,7 +178,12 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	// Image "plotImage"
 	// TextLabel "Text Label"
 	// Image "Image"
-	QCOMPARE(children.length(), 18);
+	// --- Second plot
+	// CartesianPlot "plot2"
+	// Axis "x"
+	// Axis "y"
+	// XYCurve "xy-curve"
+	QCOMPARE(children.length(), 22);
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
@@ -193,6 +202,10 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QVERIFY(plot);
 	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
 
+	auto* plot2 = worksheet->child<CartesianPlot>(1);
+	QVERIFY(plot2);
+	QCOMPARE(plot2->name(), QLatin1String("plot2"));
+
 	QAction a(nullptr);                                                                                                                                        \
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));                                                                                                                         \
 	view->cartesianPlotMouseModeChanged(&a);
@@ -200,19 +213,23 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(elementLogCount(false), 0);
 	QVERIFY(calledExact(0, false));
 
-	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
-	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
-	plot->mouseReleaseZoomSelectionMode(-1);
+	emit plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
+	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
+	emit plot->mouseReleaseZoomSelectionModeSignal();
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.count(), 2);
 	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(logsXScaleRetransformed.at(1).plot, plot2);
+	QCOMPARE(logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range)
 	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
 	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
 	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
+	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
 
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
@@ -238,14 +255,18 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		QCOMPARE(callCount(s, false), 1);
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.count(), 2);
 	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(logsXScaleRetransformed.at(1).plot, plot2);
+	QCOMPARE(logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range)
 	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
 	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
 	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
+	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
 }
 
 void RetransformTest::TestPadding() {
@@ -273,7 +294,12 @@ void RetransformTest::TestPadding() {
 	// Image "plotImage"
 	// TextLabel "Text Label"
 	// Image "Image"
-	QCOMPARE(children.length(), 18);
+	// --- Second plot
+	// CartesianPlot "plot2"
+	// Axis "x"
+	// Axis "y"
+	// XYCurve "xy-curve"
+	QCOMPARE(children.length(), 22);
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
 
