@@ -425,7 +425,7 @@ Q_SIGNALS:
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
 
-#if RETRANSFORMTEST_EN
+#ifdef RETRANSFORMTEST_EN
 Q_SIGNALS:
 	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
 public:
