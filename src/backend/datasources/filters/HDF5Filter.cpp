@@ -31,7 +31,7 @@
 	{ \
 		for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) { \
 			if (dataContainer) \
-				static_cast<QVector<type>*>(dataContainer)->operator[](i - startRow + 1) = data[i]; \
+				(*static_cast<QVector<type>*>(dataContainer))[i - startRow + 1] = data[i]; \
 			else /* for preview */ \
 				dataString << QString::number(static_cast<type>(data[i])); \
 		} \
@@ -60,7 +60,7 @@
 			line.reserve(endColumn - startColumn + 1);                                                                                                         \
 			for (int j = startColumn - 1; j < endColumn; ++j) {                                                                                                \
 				if (dataPointer[0])                                                                                                                            \
-					static_cast<QVector<type>*>(dataPointer[j - startColumn + 1])->operator[](i - startRow + 1) = data[i][j];                                  \
+					(*static_cast<QVector<type>*>(dataPointer[j - startColumn + 1]))[i - startRow + 1] = data[i][j];                                  \
 				else                                                                                                                                           \
 					line << QString::number(static_cast<type>(data[i][j]));                                                                                    \
 			}                                                                                                                                                  \
