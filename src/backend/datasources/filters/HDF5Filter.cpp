@@ -27,29 +27,29 @@
 
 ///////////// macros ///////////////////////////////////////////////
 // type - data type
-#define HDF5_READ_1D(type) \
-	{ \
-		for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) { \
-			if (dataContainer) \
-				(*static_cast<QVector<type>*>(dataContainer))[i - startRow + 1] = data[i]; \
-			else /* for preview */ \
-				dataString << QString::number(static_cast<type>(data[i])); \
-		} \
+#define HDF5_READ_1D(type)                                                                                                                                     \
+	{                                                                                                                                                          \
+		for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {                                                                              \
+			if (dataContainer)                                                                                                                                 \
+				(*static_cast<QVector<type>*>(dataContainer))[i - startRow + 1] = data[i];                                                                     \
+			else /* for preview */                                                                                                                             \
+				dataString << QString::number(static_cast<type>(data[i]));                                                                                     \
+		}                                                                                                                                                      \
 	}
 // type - data type, ctype - container type
-#define HDF5_READ_VLEN_1D(type, ctype) \
-	{ \
-		auto* data = (type*)rdata[c].p; \
-		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) { \
-			if (dataSource) \
-				(*static_cast<QVector<ctype>*>(dataContainer[c]))[i - startRow + 1] = data[i]; \
-			else /* for preview */ \
-				dataStrings[i - startRow + 1] << QString::number(static_cast<type>(data[i])); \
-		} \
-		/* fill columns until maxLength */ \
-		if (!dataSource) \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows + startRow - 1); i++) \
-				dataStrings[i - startRow + 1] << QString(); \
+#define HDF5_READ_VLEN_1D(type, ctype)                                                                                                                         \
+	{                                                                                                                                                          \
+		auto* data = (type*)rdata[c].p;                                                                                                                        \
+		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {                                                                              \
+			if (dataSource)                                                                                                                                    \
+				(*static_cast<QVector<ctype>*>(dataContainer[c]))[i - startRow + 1] = data[i];                                                                 \
+			else /* for preview */                                                                                                                             \
+				dataStrings[i - startRow + 1] << QString::number(static_cast<type>(data[i]));                                                                  \
+		}                                                                                                                                                      \
+		/* fill columns until maxLength */                                                                                                                     \
+		if (!dataSource)                                                                                                                                       \
+			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows + startRow - 1); i++)                                                  \
+				dataStrings[i - startRow + 1] << QString();                                                                                                    \
 	}
 
 // type - data type
@@ -60,7 +60,7 @@
 			line.reserve(endColumn - startColumn + 1);                                                                                                         \
 			for (int j = startColumn - 1; j < endColumn; ++j) {                                                                                                \
 				if (dataPointer[0])                                                                                                                            \
-					(*static_cast<QVector<type>*>(dataPointer[j - startColumn + 1]))[i - startRow + 1] = data[i][j];                                  \
+					(*static_cast<QVector<type>*>(dataPointer[j - startColumn + 1]))[i - startRow + 1] = data[i][j];                                           \
 				else                                                                                                                                           \
 					line << QString::number(static_cast<type>(data[i][j]));                                                                                    \
 			}                                                                                                                                                  \
@@ -512,8 +512,8 @@ QString HDF5FilterPrivate::translateHDF5Class(H5T_class_t c) {
 }
 
 AbstractColumn::ColumnMode HDF5FilterPrivate::translateHDF5TypeToMode(hid_t t) {
-	if (H5Tequal(t, H5T_STD_U32LE) || H5Tequal(t, H5T_STD_U32BE) || H5Tequal(t, H5T_NATIVE_LONG) || H5Tequal(t, H5T_NATIVE_ULONG)
-		|| H5Tequal(t, H5T_STD_I64LE) || H5Tequal(t, H5T_STD_I64BE) || H5Tequal(t, H5T_STD_U64LE) || H5Tequal(t, H5T_STD_U64BE) )
+	if (H5Tequal(t, H5T_STD_U32LE) || H5Tequal(t, H5T_STD_U32BE) || H5Tequal(t, H5T_NATIVE_LONG) || H5Tequal(t, H5T_NATIVE_ULONG) || H5Tequal(t, H5T_STD_I64LE)
+		|| H5Tequal(t, H5T_STD_I64BE) || H5Tequal(t, H5T_STD_U64LE) || H5Tequal(t, H5T_STD_U64BE))
 		return AbstractColumn::ColumnMode::BigInt;
 
 	if (H5Tequal(t, H5T_IEEE_F32LE) || H5Tequal(t, H5T_IEEE_F32BE) || H5Tequal(t, H5T_IEEE_F64LE) || H5Tequal(t, H5T_IEEE_F64BE)
@@ -1531,10 +1531,10 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	// Get datatype and dataspace
 	hid_t dtype = H5Dget_type(dataset);
 	handleError((int)dtype, "H5Dget_type");
-	DEBUG(Q_FUNC_INFO << ", type = " << STDSTRING(translateHDF5Type(dtype)) )
+	DEBUG(Q_FUNC_INFO << ", type = " << STDSTRING(translateHDF5Type(dtype)))
 	H5T_class_t dclass = H5Tget_class(dtype);
 	handleError((int)dclass, "H5Dget_class");
-	DEBUG(Q_FUNC_INFO << ", class = " << STDSTRING(translateHDF5Class(dclass)) )
+	DEBUG(Q_FUNC_INFO << ", class = " << STDSTRING(translateHDF5Class(dclass)))
 	size_t typeSize = H5Tget_size(dtype);
 	handleError((int)(typeSize - 1), "H5Dget_size");
 
@@ -1752,7 +1752,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		}
 		case H5T_VLEN: {
 			DEBUG("H5T_VLEN")
-			DEBUG("size = " << size <<  ", rows/lines = " << rows << "/" << lines)
+			DEBUG("size = " << size << ", rows/lines = " << rows << "/" << lines)
 
 			// set column mode
 			hid_t base_type = H5Tget_super(dtype);
@@ -1760,12 +1760,12 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			for (auto& mode : columnModes)
 				mode = HDF5FilterPrivate::translateHDF5TypeToMode(base_type);
 
-			hvl_t* rdata = (hvl_t *) malloc(size * sizeof (hvl_t));
+			hvl_t* rdata = (hvl_t*)malloc(size * sizeof(hvl_t));
 			hid_t memtype = H5Tvlen_create(base_type);
 			m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, rdata);
 
 			size_t maxLength = 0;
-			for (hsize_t c = 0; c < size; c++)	// columns
+			for (hsize_t c = 0; c < size; c++) // columns
 				maxLength = qMax(maxLength, rdata[c].len);
 			endRow = maxLength;
 			if (lines == -1)
@@ -1776,16 +1776,16 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
 			DEBUG("actual rows/cols = " << actualRows << " " << actualCols << ", size = " << size)
 			if (dataSource) { // create data pointer here
-				if (size > 1) {	// set vectorNames
+				if (size > 1) { // set vectorNames
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();
-					for (size_t i = 0 ; i < size ; i++)
-						vectorNames << datasetName + "_" + QString::number(i+1);
+					for (size_t i = 0; i < size; i++)
+						vectorNames << datasetName + "_" + QString::number(i + 1);
 				}
 				dataSource->prepareImport(dataContainer, mode, actualRows, size, vectorNames, columnModes);
 			}
 
-			for (hsize_t c = 0; c < size; c++) {	// columns
+			for (hsize_t c = 0; c < size; c++) { // columns
 				int length = rdata[c].len;
 				/*for (hsize_t j = 0; j < length; j++) {
 					printf (" %d", data[j]);
@@ -1849,7 +1849,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				else if (H5Tequal(base_type, H5T_IEEE_F64LE) || H5Tequal(base_type, H5T_IEEE_F64BE))
 					HDF5_READ_VLEN_1D(double, double)
 				else if (H5Tequal(base_type, H5T_NATIVE_LDOUBLE))
-					HDF5_READ_VLEN_1D(double, double)	// long double not supported from QString::number
+					HDF5_READ_VLEN_1D(double, double) // long double not supported from QString::number
 				else {
 					dataString = (QStringList() << i18n("unsupported integer type for rank 1"));
 					QDEBUG(dataString);

@@ -167,10 +167,10 @@ void HDF5FilterTest::testImportVLEN() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/h5ex_t_vlen.h5"));
 	filter.setCurrentDataSetName(QLatin1String("/DS1"));
 	// set start/end row/col
-	//filter.setStartRow(2);
-	//filter.setEndRow(3);
-	//filter.setStartColumn(2);
-	//filter.setEndColumn(3);
+	// filter.setStartRow(2);
+	// filter.setEndRow(3);
+	// filter.setStartColumn(2);
+	// filter.setEndColumn(3);
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
 
 	QCOMPARE(spreadsheet.columnCount(), 2);
