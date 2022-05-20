@@ -54,6 +54,7 @@ private:
 	QString translateHDF5Order(H5T_order_t);
 	QString translateHDF5Type(hid_t);
 	QString translateHDF5Class(H5T_class_t);
+	AbstractColumn::ColumnMode translateHDF5TypeToMode(hid_t);
 	QStringList readHDF5Compound(hid_t tid);
 	template<typename T>
 	QStringList readHDF5Data1D(hid_t dataset, hid_t type, int rows, int lines, void* dataPointer = nullptr);
