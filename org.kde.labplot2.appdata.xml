@@ -63,7 +63,7 @@
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
     </p>
     <p xml:lang="bs">Grafikov LabPlot pruža jednostavan način za stvaranje, upravljanje i uređivanje crtanja dijagrama. On vam omogućava da proizvede crteže na osnovu podataka iz tabele ili podataka uvezenih iz eksternih fajlova. Crteži se mogu izvoziti u nekoliko pixmap i vektor grafičkih formata.</p>
-    <p xml:lang="ca">El LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
+    <p xml:lang="ca">El LabPlot proporciona una manera fàcil de crear, gestionar i editar diagrames. Permet produir diagrames a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els diagrames es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="ca-valencia">LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="de">LabPlot erlaubt es auf einfache Weise Grafiken zu erzeugen, zu verwalten und zu bearbeiten.Grafiken können aus externen Daten oder aus einer Tabelle erzeugt werden.Der Export der Grafiken in verschiedene Pixmap- und Vektorformate ist möglich.</p>
     <p xml:lang="el">Το LabPlot παρέχει έναν εύκολο τρόπο δημιουργίας, διαχείρισης και επεξεργασίας γραφικών παραστάσεων. Σας επιτρέπει να δημιουργείτε γραφικές παρασασεις με βάση δεδομένα από φύλλα εργασίας ή εισηγμένα από εξωτερικά αρχεία. Οι γραφικές παραστάσεις μπορούν να εξαχθούν σε διάφορους τύπους αποθήκευσης χρωματικής περίπλεξης ή διανυσματικών γραφικών.</p>
@@ -123,7 +123,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Advanced layouting of plots and images</caption>
-      <caption xml:lang="ca">Disposició avançada de grafs i imatges</caption>
+      <caption xml:lang="ca">Disposició avançada de diagrames i imatges</caption>
       <caption xml:lang="ca-valencia">Disposició avançada de grafs i imatges</caption>
       <caption xml:lang="de">Fortgeschrittenes Layout von Plots und Bildern</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
