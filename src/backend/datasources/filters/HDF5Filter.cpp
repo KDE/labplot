@@ -1768,9 +1768,9 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, rdata);
 
 			size_t maxLength = 0;
-			for (hsize_t c = startColumn - 1; c < endColumn; c++) // columns
+			for (int c = startColumn - 1; c < endColumn; c++) // columns
 				maxLength = qMax(maxLength, rdata[c].len);
-			if (endRow == -1 || endRow > maxLength)
+			if (endRow == -1 || endRow > (int)maxLength)
 				endRow = maxLength;
 			actualRows = endRow - startRow + 1;
 			if (lines == -1 || lines > actualRows)
@@ -1784,14 +1784,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 				if (size > 1) { // set vectorNames
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();
-					for (size_t i = startColumn; i <= endColumn; i++)
+					for (int i = startColumn; i <= endColumn; i++)
 						vectorNames << datasetName + "_" + QString::number(i);
 				}
 				// create data pointer here
 				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 			}
 
-			for (hsize_t c = startColumn - 1; c < endColumn; c++) { // columns
+			for (int c = startColumn - 1; c < endColumn; c++) { // columns
 				int length = rdata[c].len;
 				//DEBUG("length = " << length)
 				/*for (hsize_t j = 0; j < length; j++) {
