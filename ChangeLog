@@ -1,3 +1,6 @@
+-----2.10.0 () -----
+	* [import]
+		* HDF5: support VLEN data import
 -----2.9.0 (03.05.2022) -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer
