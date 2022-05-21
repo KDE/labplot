@@ -40,7 +40,7 @@
 #define HDF5_READ_VLEN_1D(type, ctype)                                                                                                                         \
 	{                                                                                                                                                          \
 		auto* data = (type*)rdata[c].p;                                                                                                                        \
-		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {                                                                              \
+		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {       \
 			if (dataSource)                                                                                                                                    \
 				(*static_cast<QVector<ctype>*>(dataContainer[c]))[i - startRow + 1] = data[i];                                                                 \
 			else /* for preview */                                                                                                                             \
@@ -48,8 +48,8 @@
 		}                                                                                                                                                      \
 		/* fill columns until maxLength */                                                                                                                     \
 		if (!dataSource)                                                                                                                                       \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows + startRow - 1); i++)                                                  \
-				dataStrings[i - startRow + 1] << QString();                                                                                                    \
+			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines + startRow - 1, endRow); i++)  { \
+				dataStrings[i - startRow + 1] << QString();  }                                                                                                  \
 	}
 
 // type - data type
@@ -1598,12 +1598,12 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		m_status = H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
 		handleError(m_status, "H5Sget_simple_extent_dims");
 		int rows = size;
-		if (endRow == -1)
+		if (endRow == -1 && dclass != H5T_VLEN)
 			endRow = rows;
 		if (lines == -1 && dclass != H5T_VLEN)
 			lines = endRow;
 		actualRows = endRow - startRow + 1;
-		actualCols = 1;
+		actualCols = 1;	// data is only one column (if not VLEN)
 #ifndef NDEBUG
 		H5T_order_t order = H5Tget_order(dtype);
 		handleError((int)order, "H5Sget_order");
@@ -1767,26 +1767,29 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			size_t maxLength = 0;
 			for (hsize_t c = 0; c < size; c++) // columns
 				maxLength = qMax(maxLength, rdata[c].len);
-			endRow = maxLength;
-			if (lines == -1)
-				lines = endRow;
+			if (endRow == -1)
+				endRow = maxLength;
 			actualRows = endRow - startRow + 1;
+			if (lines == -1 || lines > actualRows)
+				lines = actualRows;
 			dataStrings.resize(qMin(lines, actualRows));
 
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
 			DEBUG("actual rows/cols = " << actualRows << " " << actualCols << ", size = " << size)
-			if (dataSource) { // create data pointer here
+			if (dataSource) {
 				if (size > 1) { // set vectorNames
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();
 					for (size_t i = 0; i < size; i++)
 						vectorNames << datasetName + "_" + QString::number(i + 1);
 				}
+				// create data pointer here
 				dataSource->prepareImport(dataContainer, mode, actualRows, size, vectorNames, columnModes);
 			}
 
 			for (hsize_t c = 0; c < size; c++) { // columns
 				int length = rdata[c].len;
+				//DEBUG("length = " << length)
 				/*for (hsize_t j = 0; j < length; j++) {
 					printf (" %d", data[j]);
 					if ((j+1) < length)
