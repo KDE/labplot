@@ -40,16 +40,17 @@
 #define HDF5_READ_VLEN_1D(type, ctype)                                                                                                                         \
 	{                                                                                                                                                          \
 		auto* data = (type*)rdata[c].p;                                                                                                                        \
-		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {       \
+		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {                                                                              \
 			if (dataSource)                                                                                                                                    \
-				(*static_cast<QVector<ctype>*>(dataContainer[c - startColumn + 1]))[i - startRow + 1] = data[i];                                                                 \
+				(*static_cast<QVector<ctype>*>(dataContainer[c - startColumn + 1]))[i - startRow + 1] = data[i];                                               \
 			else /* for preview */                                                                                                                             \
 				dataStrings[i - startRow + 1] << QString::number(static_cast<type>(data[i]));                                                                  \
 		}                                                                                                                                                      \
 		/* fill columns until maxLength */                                                                                                                     \
-		if (!dataSource)                                                                                                                                   \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(endRow, lines + startRow - 1); i++)  { \
-				dataStrings[i - startRow + 1] << QString();  }                                                                                                  \
+		if (!dataSource)                                                                                                                                       \
+			for (int i = qMin(length, lines + startRow - 1); i < qMin(endRow, lines + startRow - 1); i++) {                                                    \
+				dataStrings[i - startRow + 1] << QString();                                                                                                    \
+			}                                                                                                                                                  \
 	}
 
 // type - data type
@@ -1603,7 +1604,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		if (lines == -1 && dclass != H5T_VLEN)
 			lines = endRow;
 		actualRows = endRow - startRow + 1;
-		actualCols = 1;	// data is only one column (if not VLEN)
+		actualCols = 1; // data is only one column (if not VLEN)
 #ifndef NDEBUG
 		H5T_order_t order = H5Tget_order(dtype);
 		handleError((int)order, "H5Sget_order");
@@ -1793,7 +1794,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 			for (int c = startColumn - 1; c < endColumn; c++) { // columns
 				int length = rdata[c].len;
-				//DEBUG("length = " << length)
+				// DEBUG("length = " << length)
 				/*for (hsize_t j = 0; j < length; j++) {
 					printf (" %d", data[j]);
 					if ((j+1) < length)
