@@ -42,14 +42,15 @@
 		auto* data = (type*)rdata[c].p;                                                                                                                        \
 		for (int i = startRow - 1; i < qMin(length, lines + startRow - 1); ++i) {                                                                              \
 			if (dataSource)                                                                                                                                    \
-				(*static_cast<QVector<ctype>*>(dataContainer[c]))[i - startRow + 1] = data[i];                                                                 \
+				(*static_cast<QVector<ctype>*>(dataContainer[c - startColumn + 1]))[i - startRow + 1] = data[i];                                               \
 			else /* for preview */                                                                                                                             \
 				dataStrings[i - startRow + 1] << QString::number(static_cast<type>(data[i]));                                                                  \
 		}                                                                                                                                                      \
 		/* fill columns until maxLength */                                                                                                                     \
 		if (!dataSource)                                                                                                                                       \
-			for (int i = qMin(length, lines + startRow - 1); i < qMin(lines, actualRows + startRow - 1); i++)                                                  \
+			for (int i = qMin(length, lines + startRow - 1); i < qMin(endRow, lines + startRow - 1); i++) {                                                    \
 				dataStrings[i - startRow + 1] << QString();                                                                                                    \
+			}                                                                                                                                                  \
 	}
 
 // type - data type
@@ -1598,12 +1599,12 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		m_status = H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
 		handleError(m_status, "H5Sget_simple_extent_dims");
 		int rows = size;
-		if (endRow == -1)
+		if (endRow == -1 && dclass != H5T_VLEN)
 			endRow = rows;
 		if (lines == -1 && dclass != H5T_VLEN)
 			lines = endRow;
 		actualRows = endRow - startRow + 1;
-		actualCols = 1;
+		actualCols = 1; // data is only one column (if not VLEN)
 #ifndef NDEBUG
 		H5T_order_t order = H5Tget_order(dtype);
 		handleError((int)order, "H5Sget_order");
@@ -1752,11 +1753,14 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		}
 		case H5T_VLEN: {
 			DEBUG("H5T_VLEN")
-			DEBUG("size = " << size << ", rows/lines = " << rows << "/" << lines)
+			if (endColumn == -1)
+				endColumn = size;
+			actualCols = endColumn - startColumn + 1;
+			DEBUG("size = " << size << ", actual cols = " << actualCols << ", rows/lines = " << rows << "/" << lines)
 
 			// set column mode
 			hid_t base_type = H5Tget_super(dtype);
-			columnModes.resize(size);
+			columnModes.resize(actualCols);
 			for (auto& mode : columnModes)
 				mode = HDF5FilterPrivate::translateHDF5TypeToMode(base_type);
 
@@ -1765,28 +1769,32 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 			m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, rdata);
 
 			size_t maxLength = 0;
-			for (hsize_t c = 0; c < size; c++) // columns
+			for (int c = startColumn - 1; c < endColumn; c++) // columns
 				maxLength = qMax(maxLength, rdata[c].len);
-			endRow = maxLength;
-			if (lines == -1)
-				lines = endRow;
+			if (endRow == -1 || endRow > (int)maxLength)
+				endRow = maxLength;
 			actualRows = endRow - startRow + 1;
+			if (lines == -1 || lines > actualRows)
+				lines = actualRows;
 			dataStrings.resize(qMin(lines, actualRows));
 
 			DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines << ", max length = " << maxLength)
-			DEBUG("actual rows/cols = " << actualRows << " " << actualCols << ", size = " << size)
-			if (dataSource) { // create data pointer here
+			DEBUG("start/end col = " << startColumn << "/" << endColumn)
+			DEBUG("actual rows/cols = " << actualRows << " " << actualCols)
+			if (dataSource) {
 				if (size > 1) { // set vectorNames
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();
-					for (size_t i = 0; i < size; i++)
-						vectorNames << datasetName + "_" + QString::number(i + 1);
+					for (int i = startColumn; i <= endColumn; i++)
+						vectorNames << datasetName + "_" + QString::number(i);
 				}
-				dataSource->prepareImport(dataContainer, mode, actualRows, size, vectorNames, columnModes);
+				// create data pointer here
+				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 			}
 
-			for (hsize_t c = 0; c < size; c++) { // columns
+			for (int c = startColumn - 1; c < endColumn; c++) { // columns
 				int length = rdata[c].len;
+				// DEBUG("length = " << length)
 				/*for (hsize_t j = 0; j < length; j++) {
 					printf (" %d", data[j]);
 					if ((j+1) < length)

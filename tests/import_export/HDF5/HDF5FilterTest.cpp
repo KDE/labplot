@@ -194,6 +194,74 @@ void HDF5FilterTest::testImportVLEN() {
 	QCOMPARE(spreadsheet.column(0)->valueAt(11), 0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(11), 144);
 }
+void HDF5FilterTest::testImportVLENPortion() {
+	Spreadsheet spreadsheet("test", false);
+	HDF5Filter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/h5ex_t_vlen.h5"));
+	filter.setCurrentDataSetName(QLatin1String("/DS1"));
+	// set start/end row/col
+	filter.setStartRow(2);
+	filter.setEndRow(5);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+	for (int i = 0; i < 2; i++) {
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Integer);
+		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("DS1_") + QString::number(i + 1));
+	}
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(3), 5);
+
+	// first column
+	HDF5Filter filter2;
+	filter2.setCurrentDataSetName(QLatin1String("/DS1"));
+	filter2.setStartRow(2);
+	filter2.setEndRow(5);
+	filter2.setEndColumn(1);
+	filter2.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("DS1_1"));
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 1);
+
+	// second column
+	HDF5Filter filter3;
+	filter3.setCurrentDataSetName(QLatin1String("/DS1"));
+	filter3.setStartRow(2);
+	filter3.setEndRow(5);
+	filter3.setStartColumn(2);
+	filter3.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 4);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("DS1_2"));
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), 5);
+}
 
 // BENCHMARKS
 

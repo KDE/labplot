@@ -22,6 +22,7 @@ private Q_SLOTS:
 	void testImportInt();
 	void testImportIntPortion();
 	void testImportVLEN();
+	void testImportVLENPortion();
 
 	void benchDoubleImport_data();
 	// this is called multiple times (warm-up of BENCHMARK)
