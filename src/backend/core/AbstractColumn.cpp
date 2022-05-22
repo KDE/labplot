@@ -88,10 +88,9 @@ QStringList AbstractColumn::timeFormats() {
 }
 
 QStringList AbstractColumn::dateTimeFormats() {
-	// any combination of date and times
 	QStringList dateTimes = dateFormats();
-	for (const auto& t : timeFormats())
-		dateTimes << t;
+	dateTimes << timeFormats();
+	// any combination of date and times
 	for (const auto& d : dateFormats())
 		for (const auto& t : timeFormats())
 			dateTimes << d + ' ' + t;

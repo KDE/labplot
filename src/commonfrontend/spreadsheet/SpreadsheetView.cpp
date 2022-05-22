@@ -1636,7 +1636,8 @@ void SpreadsheetView::pasteIntoSelection() {
 	for (int i = 0; i < input_row_count; i++) {
 		if (hasTabs)
 			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
-		else if (numberLocale.groupSeparator().isSpace() && !(numberOptions & QLocale::OmitGroupSeparator)) 	// locale with ' ' as group seperator && omit group seperator not set
+		else if (numberLocale.groupSeparator().isSpace()
+				 && !(numberOptions & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1));	// split with two spaces
 #else
@@ -1649,7 +1650,34 @@ void SpreadsheetView::pasteIntoSelection() {
 			input_col_count = cellTexts.at(i).count();
 	}
 
-// 	bool localeDetermined = false;
+	// when pasting DateTime data in the format 'yyyy-MM-dd hh:mm:ss' and similar, it get's split above because of the space separator.
+	// here we check whether we have such a situation and merge the first two columns to get the proper value,
+	// for example "2018-03-21 10:00:00" and not "2018-03-21" and "10:00:00"
+	if (!cellTexts.isEmpty() && cellTexts.constFirst().size() > 1) {
+		const auto& firstCell = cellTexts.constFirst().at(0);
+		const auto& secondCell = cellTexts.constFirst().at(1);
+		QString dateTimeFormat; // empty string, we'll auto-detect the format of the data
+		const auto firstMode = AbstractFileFilter::columnMode(firstCell, dateTimeFormat, numberLocale);
+		dateTimeFormat.clear();
+		const auto secondMode = AbstractFileFilter::columnMode(secondCell, dateTimeFormat, numberLocale);
+
+		// if both first columns are DateTime, check whether the combination of them is also DateTime
+		if (firstMode == AbstractColumn::ColumnMode::DateTime && secondMode == AbstractColumn::ColumnMode::DateTime) {
+			dateTimeFormat.clear();
+			const auto& newCell = firstCell + QLatin1Char(' ') +  secondCell;
+			const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
+			if (newMode == AbstractColumn::ColumnMode::DateTime) {
+				//merge the first two colums
+				for (auto& row : cellTexts) {
+					row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
+					row.takeFirst();
+				}
+				--input_col_count;
+			}
+		}
+	}
+
+	// 	bool localeDetermined = false;
 
 	//expand the current selection to the needed size if
 	//1. there is no selection

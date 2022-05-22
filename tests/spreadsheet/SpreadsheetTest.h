@@ -28,6 +28,7 @@ private Q_SLOTS:
 	void testCopyPasteColumnMode03();
 	void testCopyPasteColumnMode04();
 	void testCopyPasteColumnMode05();
+	void testCopyPasteColumnMode06();
 
 	//handling of spreadsheet size changes
 	void testCopyPasteSizeChange00();

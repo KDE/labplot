@@ -261,6 +261,42 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	QCOMPARE(sheet.column(1)->valueAt(1), 4.2);
 }
 
+/*!
+	automatically detect the proper format for the datetime columns having the format "yyyy-MM-dd hh:mm:ss"
+ */
+void SpreadsheetTest::testCopyPasteColumnMode06() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str =
+		"2018-03-21 10:00:00 1\n"
+		"2018-03-21 10:30:00 2";
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	// spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	// column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
+
+	// values
+	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
+	const QString& format = filter->format();
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(0).toString(format), QLatin1String("2018-03-21 10:00:00"));
+	QCOMPARE(sheet.column(1)->integerAt(0), 1);
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(1).toString(format), QLatin1String("2018-03-21 10:30:00"));
+	QCOMPARE(sheet.column(1)->integerAt(1), 2);
+}
+
 //**********************************************************
 //********* Handling of spreadsheet size changes ***********
 //**********************************************************
