@@ -1682,10 +1682,10 @@ void SpreadsheetView::pasteIntoSelection() {
 		// if both first columns are DateTime, check whether the combination of them is also DateTime
 		if (firstMode == AbstractColumn::ColumnMode::DateTime && secondMode == AbstractColumn::ColumnMode::DateTime) {
 			dateTimeFormat.clear();
-			const auto& newCell = firstCell + QLatin1Char(' ') +  secondCell;
+			const auto& newCell = firstCell + QLatin1Char(' ') + secondCell;
 			const auto newMode = AbstractFileFilter::columnMode(newCell, dateTimeFormat, numberLocale);
 			if (newMode == AbstractColumn::ColumnMode::DateTime) {
-				//merge the first two colums
+				// merge the first two colums
 				for (auto& row : cellTexts) {
 					row[1] = row.at(0) + QLatin1Char(' ') + row.at(1);
 					row.takeFirst();
