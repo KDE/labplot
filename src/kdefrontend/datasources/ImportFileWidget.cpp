@@ -93,7 +93,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 		ui.cbFileType->addItem(i18n("Image"), static_cast<int>(AbstractFileFilter::FileType::Image));
 #ifdef HAVE_EXCEL
-		ui.cbFileType->addItem(i18n("Excel file"), static_cast<int>(AbstractFileFilter::FileType::Excel));
+		ui.cbFileType->addItem(i18n("Excel 2007+ (XSLX)"), static_cast<int>(AbstractFileFilter::FileType::Excel));
 #endif
 #ifdef HAVE_HDF5
 		ui.cbFileType->addItem(i18n("Hierarchical Data Format 5 (HDF5)"), static_cast<int>(AbstractFileFilter::FileType::HDF5));
@@ -660,7 +660,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::Excel: {
-		DEBUG("Excel");
+		DEBUG(Q_FUNC_INFO << ", Excel");
 
 		if (!m_currentFilter) {
 			m_currentFilter.reset(new ExcelFilter);

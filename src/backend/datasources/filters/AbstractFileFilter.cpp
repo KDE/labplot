@@ -110,15 +110,14 @@ QStringList AbstractFileFilter::numberFormats() {
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO)
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	// check, if we can guess the file type by content
 	const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
-		proc.start(fileFullPath,
-				   QStringList() << "-b"
-								 << "-z" << fileName);
+		proc.start(fileFullPath, QStringList() << "-b" << "-z" << fileName);
 		if (!proc.waitForFinished(1000)) {
 			proc.kill();
 			DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
@@ -138,24 +137,24 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("har"), Qt::CaseInsensitive)) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = FileType::JSON;
-	} else if (SpiceFilter::isSpiceFile(fileName)) {
+	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-	} else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
+#ifdef HAVE_EXCEL	// before ASCII, because XML is ASCII
+	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive)))
+		fileType = FileType::Excel;
+#endif
+	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 			   || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
 			   || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
 		if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
 			fileType = FileType::READSTAT;
 		else // probably ascii data
 			fileType = FileType::Ascii;
+		DEBUG("1:" << STDSTRING(fileInfo) << " " << STDSTRING(fileName))
 	}
 #ifdef HAVE_MATIO // before HDF5 to prefer this filter for MAT 7.4 files
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
 		fileType = FileType::MATIO;
-#endif
-#ifdef HAVE_EXCEL
-	else if (fileInfo.contains("Microsoft Excel Worksheet (.xlsx)") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive))) {
-		fileType = FileType::Excel;
-	}
 #endif
 #ifdef HAVE_HDF5 // before NETCDF to treat NetCDF 4 files with .nc ending as HDF5 when fileInfo detects it
 	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
