@@ -24,7 +24,7 @@ void ExcelFilterTest::importFile1() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 5);
 
-	//WARN(spreadsheet.column(0)->valueAt(0))
+	// WARN(spreadsheet.column(0)->valueAt(0))
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
@@ -49,7 +49,7 @@ void ExcelFilterTest::importFile2() {
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 5);
 
-	//WARN(spreadsheet.column(0)->valueAt(0))
+	// WARN(spreadsheet.column(0)->valueAt(0))
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1.1);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2.2);
 	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3.3);

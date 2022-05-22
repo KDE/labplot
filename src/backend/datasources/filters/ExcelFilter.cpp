@@ -424,7 +424,8 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 #ifdef HAVE_EXCEL
 void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. " << region.lastRow())
+	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. "
+					  << region.lastRow())
 
 	int columnOffset = 0;
 	const auto rowCount = currentRange.rowCount();
