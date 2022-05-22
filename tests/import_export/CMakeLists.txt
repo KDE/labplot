@@ -25,5 +25,8 @@ ENDIF ()
 IF (NETCDF_FOUND)
 	add_subdirectory(NetCDF)
 ENDIF ()
+IF (QXLSX_LIBRARIES)
+	add_subdirectory(XLSX)
+ENDIF ()
 
 # add_subdirectory(DATASETS)

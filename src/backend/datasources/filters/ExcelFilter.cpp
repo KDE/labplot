@@ -45,6 +45,7 @@ ExcelFilter::ExcelFilter()
 
 ExcelFilter::~ExcelFilter() {
 }
+
 QString ExcelFilter::fileInfoString(const QString& fileName) {
 #ifdef HAVE_EXCEL
 	QXlsx::Document doc{fileName};
@@ -387,6 +388,7 @@ void ExcelFilterPrivate::write(const QString& fileName, AbstractDataSource* data
 }
 
 void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
+	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_EXCEL
 	if (!m_document || fileName.compare(m_fileName)) {
 		delete m_document;
@@ -425,6 +427,7 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 		readDataRegion(currentRange, dataSource, importMode);
 	} else {
+		DEBUG(Q_FUNC_INFO << ", INVALID sheet")
 		// invalid sheet
 	}
 
@@ -437,7 +440,7 @@ void ExcelFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 
 #ifdef HAVE_EXCEL
 void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("HAS DataSource");
+	DEBUG(Q_FUNC_INFO << ", col/row range = " << region.firstColumn() << " .. " << region.lastColumn() << ", " << region.firstRow() << " .. " << region.lastRow())
 
 	int columnOffset = 0;
 	const auto rowCount = currentRange.rowCount();
@@ -537,6 +540,7 @@ void ExcelFilterPrivate::readDataRegion(const QXlsx::CellRange& region, Abstract
 
 #ifdef HAVE_EXCEL
 QVector<QXlsx::CellRange> ExcelFilterPrivate::dataRegions(const QString& fileName, const QString& sheetName) {
+	DEBUG(Q_FUNC_INFO << ", sheet = " << STDSTRING(sheetName))
 	QVector<QXlsx::CellRange> regions;
 
 	if (!m_document || fileName.compare(m_fileName)) {
@@ -619,6 +623,7 @@ QVector<QXlsx::CellRange> ExcelFilterPrivate::dataRegions(const QString& fileNam
 
 #ifdef HAVE_EXCEL
 QVector<QStringList> ExcelFilterPrivate::previewForDataRegion(const QString& sheet, const QXlsx::CellRange& region, bool* okToMatrix, int lines) {
+	DEBUG(Q_FUNC_INFO << ", sheet = " << STDSTRING(sheet))
 	QVector<QStringList> infoString;
 
 	if (!m_document) {
@@ -664,6 +669,7 @@ QXlsx::CellRange ExcelFilterPrivate::cellContainedInRegions(const QXlsx::CellRef
 #endif
 
 void ExcelFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentItem) {
+	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_EXCEL
 	m_document = new QXlsx::Document(fileName);
 	m_fileName = fileName;
