@@ -18,5 +18,6 @@ class ExcelFilterTest : public CommonTest {
 
 private Q_SLOTS:
 	void importFile1();
+	void importFile2();
 };
 #endif
