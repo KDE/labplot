@@ -372,11 +372,11 @@ void CartesianPlotTest::undoInfoElement() {
 
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
 
-	//undo the last step
+	// undo the last step
 	project->undoStack()->undo();
 	QCOMPARE(plot->childCount<InfoElement>(), 0);
 
-	//redo
+	// redo
 	project->undoStack()->redo();
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
 }
