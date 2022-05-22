@@ -117,7 +117,9 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
 	if (!fileFullPath.isEmpty()) {
 		QProcess proc;
-		proc.start(fileFullPath, QStringList() << "-b" << "-z" << fileName);
+		proc.start(fileFullPath,
+				   QStringList() << "-b"
+								 << "-z" << fileName);
 		if (!proc.waitForFinished(1000)) {
 			proc.kill();
 			DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
@@ -139,13 +141,13 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-#ifdef HAVE_EXCEL	// before ASCII, because XML is ASCII
+#ifdef HAVE_EXCEL // before ASCII, because XML is ASCII
 	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive)))
 		fileType = FileType::Excel;
 #endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
-			   || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
-			   || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
+			 || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
+			 || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
 		if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
 			fileType = FileType::READSTAT;
 		else // probably ascii data
