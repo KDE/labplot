@@ -2,6 +2,8 @@
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
+Bug fixes:
+	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 -----2.9.0 (03.05.2022) -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer
