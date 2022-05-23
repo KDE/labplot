@@ -60,15 +60,30 @@ ExcelOptionsWidget::~ExcelOptionsWidget() {
 }
 
 void ExcelOptionsWidget::updateContent(ExcelFilter* filter, const QString& fileName) {
+	DEBUG(Q_FUNC_INFO)
 	ui.twDataRegions->clear();
 	auto* rootItem = ui.twDataRegions->invisibleRootItem();
 	filter->parse(fileName, rootItem);
 
 	ui.twDataRegions->insertTopLevelItem(0, rootItem);
 	ui.twDataRegions->expandAll();
+
+	// select first data range
+	auto items = ui.twDataRegions->selectedItems();
+	if (items.size() == 0) {
+		const auto* tli = ui.twDataRegions->topLevelItem(0);
+		for (int i = 0; i < tli->childCount(); i++) {	// sheets
+			const auto* sheet = tli->child(i);
+			if (sheet->childCount() > 0) {	// select first range
+				ui.twDataRegions->setCurrentItem(sheet->child(0));
+				return;
+			}
+		}
+	}
 }
 
 void ExcelOptionsWidget::dataRegionSelectionChanged() {
+	DEBUG(Q_FUNC_INFO)
 #ifdef HAVE_EXCEL
 	WAIT_CURSOR;
 
@@ -168,12 +183,14 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 }
 
 QStringList ExcelOptionsWidget::selectedExcelRegionNames() const {
-	QStringList names;
 	const auto& items = ui.twDataRegions->selectedItems();
+	DEBUG(Q_FUNC_INFO << ", selected items = " << items.size())
 
+	QStringList names;
 	for (const auto* item : items) {
-		if (item->parent()) {
+		if (item->parent()) {	// child of sheet
 			const auto sheetName = item->parent()->text(0);
+			//DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(sheetName))
 			names.push_back({sheetName + QLatin1Char('!') + item->text(0)});
 		}
 	}
