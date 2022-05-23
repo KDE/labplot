@@ -141,8 +141,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-#ifdef HAVE_EXCEL // before ASCII, because XML is ASCII
-	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive)))
+#ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
+	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
 		fileType = FileType::Excel;
 #endif
 	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
@@ -152,7 +152,6 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 			fileType = FileType::READSTAT;
 		else // probably ascii data
 			fileType = FileType::Ascii;
-		DEBUG("1:" << STDSTRING(fileInfo) << " " << STDSTRING(fileName))
 	}
 #ifdef HAVE_MATIO // before HDF5 to prefer this filter for MAT 7.4 files
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
