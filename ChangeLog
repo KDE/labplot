@@ -1,6 +1,6 @@
 -----2.10.0 () -----
 	* [import]
-		* Import data from Excel .xslx files using QXslx library
+		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
 -----2.9.0 (03.05.2022) -----
 	* [general]

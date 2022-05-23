@@ -23,7 +23,7 @@ optional packages
 	* ReadStat for importing serveral statistical data formats (will be build if not available)
 	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
-	* QXslx for importing Excel xslx files (will be build if not available)
+	* QXlsx for importing Excel xlsx files (will be build if not available)
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
