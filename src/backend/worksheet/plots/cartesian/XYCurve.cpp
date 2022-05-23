@@ -1184,7 +1184,7 @@ void XYCurvePrivate::addLine(QPointF p,
 							 bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
 		pixelDiff = llabs(qRound64(p.x() / minDiffX) - qRound64(x / minDiffX)) > 0; // only relevant if greater zero or not
-		if (isnan(x)) {
+		if (std::isnan(x)) {
 			x = p.x();
 			lastPoint = p;
 			minY = p.y();
@@ -1203,7 +1203,7 @@ void XYCurvePrivate::addLine(QPointF p,
 		if (!visible)
 			return;
 
-		if (isnan(x)) {
+		if (std::isnan(x)) {
 			x = pScene.x();
 			lastPoint = p;
 		} else {
@@ -1251,7 +1251,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 			if (maxY != minY)
 				lines.append(QLineF(lastPoint.x(), minY, lastPoint.x(), maxY));
 			lines.append(QLineF(lastPoint, p));
-		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
+		} else if (!std::isnan(lastPoint.x()) && !std::isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, p));
 		prevPixelDiffZero = false;
 		minY = p.y();
