@@ -14,6 +14,7 @@
 #include "backend/core/Workbook.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -22,6 +23,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 
 #include <QAction>
+#include <QUndoStack>
 
 void CartesianPlotTest::initTestCase() {
 	//	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
@@ -352,6 +354,31 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	CHECK_RANGE(plot, curve2, y, 0, 1);
 
 	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+}
+
+void CartesianPlotTest::undoInfoElement() {
+	auto* project = new Project();
+	auto* worksheet = new Worksheet("ws");
+	project->addChild(worksheet);
+
+	auto* plot = new CartesianPlot("plot");
+	worksheet->addChild(plot);
+
+	auto* curve = new XYCurve("curve");
+	plot->addChild(curve);
+
+	auto* info = new InfoElement("info", plot, curve, 0.);
+	plot->addChild(info);
+
+	QCOMPARE(plot->childCount<InfoElement>(), 1);
+
+	// undo the last step
+	project->undoStack()->undo();
+	QCOMPARE(plot->childCount<InfoElement>(), 0);
+
+	// redo
+	project->undoStack()->redo();
+	QCOMPARE(plot->childCount<InfoElement>(), 1);
 }
 
 QTEST_MAIN(CartesianPlotTest)
