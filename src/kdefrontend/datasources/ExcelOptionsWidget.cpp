@@ -158,7 +158,6 @@ void ExcelOptionsWidget::dataRegionSelectionChanged() {
 			}
 		}
 		ui.twPreview->resizeColumnsToContents();
-		m_fileWidget->refreshPreview();
 	}
 
 	RESET_CURSOR;

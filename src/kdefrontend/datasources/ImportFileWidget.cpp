@@ -1370,6 +1370,7 @@ void ImportFileWidget::filterChanged(int index) {
 }
 
 void ImportFileWidget::refreshPreview() {
+	DEBUG(Q_FUNC_INFO)
 	// don't generate any preview if it was explicitly suppressed
 	// or if the options box together with the preview widget is not visible
 	if (m_suppressRefresh || !ui.gbOptions->isVisible())
@@ -1648,23 +1649,23 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
+			const int rows = qMax(importedStrings.size(), 1);
+			const int maxColumns = 300;
+			tmpTableWidget->setRowCount(rows);
+
+			for (int i = 0; i < rows; ++i) {
+				const int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();
+				if (cols > tmpTableWidget->columnCount())
+					tmpTableWidget->setColumnCount(cols);
+
+				for (int j = 0; j < cols; ++j) {
+					auto* item = new QTableWidgetItem(importedStrings[i][j]);
+					tmpTableWidget->setItem(i, j, item);
+				}
+			}
+
 			// Excel has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::Excel) {
-				const int rows = qMax(importedStrings.size(), 1);
-				const int maxColumns = 300;
-				tmpTableWidget->setRowCount(rows);
-
-				for (int i = 0; i < rows; ++i) {
-					const int cols = importedStrings[i].size() > maxColumns ? maxColumns : importedStrings[i].size();
-					if (cols > tmpTableWidget->columnCount())
-						tmpTableWidget->setColumnCount(cols);
-
-					for (int j = 0; j < cols; ++j) {
-						auto* item = new QTableWidgetItem(importedStrings[i][j]);
-						tmpTableWidget->setItem(i, j, item);
-					}
-				}
-
 				// set header if columnMode available
 				for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);
