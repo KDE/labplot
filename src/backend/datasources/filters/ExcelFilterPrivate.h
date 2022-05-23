@@ -1,5 +1,5 @@
 /*
-	File                 : ExcelFilter.h
+	File                 : ExcelFilterPrivate.h
 	Project              : LabPlot
 	Description          : Excel I/O-filter
 	--------------------------------------------------------------------
