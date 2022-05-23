@@ -30,6 +30,7 @@ class BinaryOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class MatioOptionsWidget;
+class ExcelOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
 class JsonOptionsWidget;
@@ -59,13 +60,18 @@ public:
 	QString fileName() const;
 	QString selectedObject() const;
 	bool isFileEmpty() const;
+	bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
+	const QStringList selectedExcelRegionNames() const;
+
 	void showAsciiHeaderOptions(bool);
+	void showExcelFirstRowAsColumnOption(bool);
 	void showJsonModel(bool);
+	void enableExcelFirstRowAsColNames(bool enable);
 
 	QString host() const;
 	QString port() const;
@@ -84,6 +90,7 @@ private:
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
+	std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
@@ -99,6 +106,14 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 
+Q_SIGNALS:
+	void enableImportToMatrix(bool enable);
+	void fileNameChanged();
+	void sourceTypeChanged();
+	void hostChanged();
+	void portChanged();
+	void error(const QString&);
+
 private Q_SLOTS:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int = 0);
@@ -106,6 +121,7 @@ private Q_SLOTS:
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
+	void excelFirstRowAsColNamesChanged(bool checked);
 
 	void saveFilter();
 	void manageFilters();
@@ -115,13 +131,7 @@ private Q_SLOTS:
 	void refreshPreview();
 	void updateStartRow(int);
 
-Q_SIGNALS:
-	void fileNameChanged();
-	void sourceTypeChanged();
-	void hostChanged();
-	void portChanged();
-	void checkedFitsTableToMatrix(const bool enable);
-	void error(const QString&);
+	void enableDataPortionSelection(bool);
 
 	friend class HDF5OptionsWidget; // to access refreshPreview()
 	friend class MatioOptionsWidget; // to access refreshPreview() and others
@@ -129,6 +139,7 @@ Q_SIGNALS:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class ROOTOptionsWidget; // to access refreshPreview() and others
+	friend class ExcelOptionsWidget; // to access refreshPreview()
 
 #ifdef HAVE_MQTT
 private:

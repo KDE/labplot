@@ -110,6 +110,7 @@ QStringList AbstractFileFilter::numberFormats() {
 }
 
 AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileName) {
+	DEBUG(Q_FUNC_INFO)
 	QString fileInfo;
 #ifndef HAVE_WINDOWS
 	// check, if we can guess the file type by content
@@ -138,15 +139,20 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("har"), Qt::CaseInsensitive)) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = FileType::JSON;
-	} else if (SpiceFilter::isSpiceFile(fileName)) {
+	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
-	} else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
-			   || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
-			   || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
+#ifdef HAVE_EXCEL // before ASCII, because XML is ASCII
+	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive)))
+		fileType = FileType::Excel;
+#endif
+	else if (fileInfo.contains(QLatin1String("ASCII")) || fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
+			 || fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
+			 || fileInfo.contains(QLatin1String("compressed data")) /* for gzipped ascii data */) {
 		if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
 			fileType = FileType::READSTAT;
 		else // probably ascii data
 			fileType = FileType::Ascii;
+		DEBUG("1:" << STDSTRING(fileInfo) << " " << STDSTRING(fileName))
 	}
 #ifdef HAVE_MATIO // before HDF5 to prefer this filter for MAT 7.4 files
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
@@ -193,7 +199,7 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
   returns the list of all supported data file formats
 */
 QStringList AbstractFileFilter::fileTypes() {
-	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Hierarchical Data Format 5 (HDF5)")
+	return (QStringList() << i18n("ASCII Data") << i18n("Binary Data") << i18n("Image") << i18n("Excel") << i18n("Hierarchical Data Format 5 (HDF5)")
 						  << i18n("Network Common Data Format (NetCDF)") << i18n("Flexible Image Transport System Data Format (FITS)") << i18n("JSON Data")
 						  << i18n("ROOT (CERN) Histograms") << i18n("Spice") << i18n("SAS, Stata or SPSS"));
 }
