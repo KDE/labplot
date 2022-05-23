@@ -55,9 +55,9 @@ void ExcelOptionsWidget::updateContent(ExcelFilter* filter, const QString& fileN
 	auto items = ui.twDataRegions->selectedItems();
 	if (items.size() == 0) {
 		const auto* tli = ui.twDataRegions->topLevelItem(0);
-		for (int i = 0; i < tli->childCount(); i++) {	// sheets
+		for (int i = 0; i < tli->childCount(); i++) { // sheets
 			const auto* sheet = tli->child(i);
-			if (sheet->childCount() > 0) {	// select first range
+			if (sheet->childCount() > 0) { // select first range
 				ui.twDataRegions->setCurrentItem(sheet->child(0));
 				return;
 			}
@@ -170,9 +170,9 @@ QStringList ExcelOptionsWidget::selectedExcelRegionNames() const {
 
 	QStringList names;
 	for (const auto* item : items) {
-		if (item->parent()) {	// child of sheet
+		if (item->parent()) { // child of sheet
 			const auto sheetName = item->parent()->text(0);
-			//DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(sheetName))
+			// DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(sheetName))
 			names.push_back({sheetName + QLatin1Char('!') + item->text(0)});
 		}
 	}
