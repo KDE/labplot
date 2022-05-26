@@ -2199,6 +2199,8 @@ void CartesianPlot::addCustomPoint() {
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
+	beginMacro(i18n("%1: add %2", name(), point->name()));
+
 	// must be before setting the position
 	this->addChild(point);
 
@@ -2213,6 +2215,7 @@ void CartesianPlot::addCustomPoint() {
 		point->setCoordinateBindingEnabled(true);
 	}
 
+	endMacro();
 	point->retransform();
 }
 
