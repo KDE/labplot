@@ -7,6 +7,21 @@ include:
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml
   - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/windows.yml
 
+ubuntu_22.04_min:
+  stage: build
+  image: ubuntu:22.04
+  only:
+    - merge_requests
+    - master
+  before_script:
+    - apt update
+    - apt install --yes locales-all ninja-build git cmake g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev
+  script:
+    - mkdir -p build && cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja
+    - ctest -V
+
 fedora_35_min:
   stage: build
   image: fedora:35
