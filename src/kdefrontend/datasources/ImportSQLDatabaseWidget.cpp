@@ -457,10 +457,10 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> dataContainer;
-	int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
+	const int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
 
 	// number and DateTime formatting
-	QString dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	const auto& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 
 	// TODO: use general setting for decimal separator?
 	QLocale::Language lang;
@@ -476,7 +476,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	int row = 0;
 	while (q.next()) {
 		for (int col = 0; col < m_cols; ++col) {
-			const QString valueString = q.value(col).toString();
+			const auto& valueString = q.value(col).toString();
 
 			// set the value depending on the data type
 			switch (m_columnModes.at(col)) {
