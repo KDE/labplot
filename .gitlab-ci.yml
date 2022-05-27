@@ -22,14 +22,15 @@ ubuntu_22.04_min:
     - ninja
 #    - ctest -V
 
-fedora_35_min:
+ubuntu_22.04_full:
   stage: build
-  image: fedora:35
+  image: ubuntu:22.04
   only:
     - merge_requests
     - master
   before_script:
-    - dnf -y --setopt=install_weak_deps=False install git gcc-c++ make bison shared-mime-info cmake ninja-build wayland-devel gsl-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtwayland-devel extra-cmake-modules kf5-ki18n-devel kf5-kio-devel kf5-knewstuff-devel kf5-karchive-devel kf5-kcrash-devel kf5-kdoctools-devel kf5-kiconthemes-devel kf5-ktextwidgets-devel kuserfeedback-devel
+    - apt update
+    - apt install --yes locales-all ninja-build git cmake g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev libkf5parts-dev libkf5syntaxhighlighting-dev cantor libcantor-dev libpoppler-qt5-dev libfftw3-dev libreadstat-dev liborigin2-dev libhdf5-dev libnetcdf-dev libqt5serialport5-dev libcfitsio-dev libcerf-dev liblz4-dev libmatio-dev libmarkdown2-dev libspectre-dev
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
@@ -48,7 +49,6 @@ fedora_36_min:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
     - ninja
-# tests currently fail due to gcc 12?
 #    - ctest -V
 
 fedora_36_full:
