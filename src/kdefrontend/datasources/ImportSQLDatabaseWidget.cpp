@@ -350,7 +350,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 		// value and type
 		const QString valueString = q.record().value(i).toString();
-		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, lang);
+		auto mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, lang);
 		m_columnModes << mode;
 		if (mode != AbstractColumn::ColumnMode::Double)
 			numeric = false;
@@ -413,9 +413,18 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		return;
 
 	WAIT_CURSOR;
+
+	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+
 	// execute the current query (select on a table or a custom query)
 	QSqlQuery q;
-	// 	q.setForwardOnly(true); //TODO: crashes most probably because of q.last() and q.first() below
+
+	// when reading from a table, the total number of rows to be read is determined below
+	// via a SELECT COUNT(*) statement and we don't need to navigate back and forth in the resultset.
+	// So, in this case we can use QSqlQuery::setForwardOnly() to reduce the memory consumption
+	if (!customQuery)
+		q.setForwardOnly(true);
+
 	q.prepare(currentQuery());
 	if (!q.exec() || !q.isActive()) {
 		RESET_CURSOR;
@@ -427,9 +436,23 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	}
 
 	// determine the number of rows/records to read
-	q.last();
-	const int rows = q.at() + 1;
-	q.first();
+	int rows = 0;
+	if (!customQuery) {
+		const QString& tableName = ui.lwTables->currentItem()->text();
+		QSqlQuery countQuery(QLatin1String("SELECT COUNT(*) FROM ") + tableName);
+		while (countQuery.next())
+			rows = countQuery.value(0).toInt();
+	} else {
+		q.last();
+		rows = q.at() + 1;
+		q.first();
+	}
+
+	if (rows == 0) {
+		DEBUG("	0 records");
+		RESET_CURSOR;
+		return;
+	}
 
 	// pointers to the actual data containers
 	// columnOffset indexes the "start column" in the datasource. Data will be imported starting from this column.
@@ -448,13 +471,15 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	const QLocale numberFormat = QLocale(lang);
 
 	// read the data
+	int progressIndex = 0;
+	const qreal progressInterval = 0.01 * rows; // update on every 1% only
 	int row = 0;
-	do {
+	while (q.next()) {
 		for (int col = 0; col < m_cols; ++col) {
-			const QString valueString = q.record().value(col).toString();
+			const QString valueString = q.value(col).toString();
 
-			// set value depending on data type
-			switch (m_columnModes[col]) {
+			// set the value depending on the data type
+			switch (m_columnModes.at(col)) {
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
@@ -488,8 +513,16 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		}
 
 		row++;
-		Q_EMIT completed(100 * row / rows);
-	} while (q.next());
+
+		// ask to update the progress bar only if we have more than 1000 lines and only in 1% steps
+		progressIndex++;
+		if (rows > 1000 && progressIndex > progressInterval) {
+			double value = 100. * row / rows;
+			Q_EMIT completed(static_cast<int>(value));
+			progressIndex = 0;
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
+	};
 	DEBUG("	Read " << row << " rows");
 
 	dataSource->finalizeImport(columnOffset, 1, m_cols, dateTimeFormat, importMode);
