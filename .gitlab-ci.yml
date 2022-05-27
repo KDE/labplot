@@ -15,7 +15,7 @@ ubuntu_22.04_min:
     - master
   before_script:
     - apt update
-    - apt install --yes locales-all git cmake g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev
+    - apt install --yes locales-all ninja-build git cmake g++ extra-cmake-modules libqt5svg5-dev libkf5kio-dev libkf5archive-dev libkf5crash-dev libkf5newstuff-dev libkf5doctools-dev libkf5textwidgets-dev kuserfeedback-dev bison libgsl-dev
   script:
     - mkdir -p build && cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
