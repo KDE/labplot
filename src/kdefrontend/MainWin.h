@@ -39,6 +39,7 @@ class BoxPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
+class ReferenceRangeDock;
 class ColumnDock;
 class LiveDataDock;
 class MatrixDock;
@@ -249,6 +250,7 @@ private:
 	ImageDock* imageDock{nullptr};
 	CustomPointDock* customPointDock{nullptr};
 	ReferenceLineDock* referenceLineDock{nullptr};
+	ReferenceRangeDock* referenceRangeDock{nullptr};
 	DatapickerImageWidget* datapickerImageDock{nullptr};
 	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 

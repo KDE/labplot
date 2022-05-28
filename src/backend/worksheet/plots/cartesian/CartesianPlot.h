@@ -251,6 +251,7 @@ private:
 	QAction* addInfoElementAction;
 	QAction* addCustomPointAction;
 	QAction* addReferenceLineAction;
+	QAction* addReferenceRangeAction;
 
 	// scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
@@ -319,6 +320,7 @@ public Q_SLOTS:
 	void addImage();
 	void addCustomPoint();
 	void addReferenceLine();
+	void addReferenceRange();
 	void addInfoElement();
 
 	void scaleAutoTriggered();

@@ -42,6 +42,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceRange.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
@@ -361,6 +362,7 @@ void CartesianPlot::initActions() {
 	addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
+	addReferenceRangeAction = new QAction(QIcon::fromTheme("draw-rectangle"), i18n("Reference Range"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
@@ -386,6 +388,7 @@ void CartesianPlot::initActions() {
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
+	connect(addReferenceRangeAction, &QAction::triggered, this, &CartesianPlot::addReferenceRange);
 
 	// Analysis menu actions
 	// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -555,6 +558,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
+	addNewMenu->addAction(addReferenceRangeAction);
 
 	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
 	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -2231,6 +2235,20 @@ void CartesianPlot::addReferenceLine() {
 
 	this->addChild(line);
 	line->retransform();
+}
+
+void CartesianPlot::addReferenceRange() {
+	Q_D(CartesianPlot);
+	auto* range = new ReferenceRange(this, "reference range");
+	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	// 	if (d->calledFromContextMenu) {
+	// 		range->setPositionLogical(d->logicalPos);
+	// 		d->calledFromContextMenu = false;
+	// 	}
+
+	this->addChild(range);
+	range->retransform();
 }
 
 int CartesianPlot::curveCount() {

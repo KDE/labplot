@@ -73,6 +73,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ReferenceRangeDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
@@ -189,6 +190,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/referencerangedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
@@ -344,6 +346,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
