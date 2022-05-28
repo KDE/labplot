@@ -60,6 +60,7 @@
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
+#include "kdefrontend/dockwidgets/ReferenceRangeDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
@@ -371,6 +372,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Reference Line"));
 		raiseDock(m_mainWindow->referenceLineDock, m_mainWindow->stackedWidget);
 		m_mainWindow->referenceLineDock->setReferenceLines(castList<ReferenceLine>(selectedAspects));
+		break;
+	case AspectType::ReferenceRange:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Reference Range"));
+		raiseDock(m_mainWindow->referenceRangeDock, m_mainWindow->stackedWidget);
+		m_mainWindow->referenceRangeDock->setReferenceRanges(castList<ReferenceRange>(selectedAspects));
 		break;
 	case AspectType::DatapickerCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker Curve"));
