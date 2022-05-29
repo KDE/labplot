@@ -213,7 +213,7 @@ void ReferenceRangeDock::orientationChanged(int index) {
 
 	// call these slots to show the start and end values depending on the new orientation
 	rangePositionLogicalStartChanged(m_range->positionLogicalStart());
-	rangePositionLogicalStartChanged(m_range->positionLogicalEnd());
+	rangePositionLogicalEndChanged(m_range->positionLogicalEnd());
 }
 
 void ReferenceRangeDock::positionLogicalStartChanged(const QString& value) {
