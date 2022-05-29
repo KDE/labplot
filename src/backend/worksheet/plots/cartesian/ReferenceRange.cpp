@@ -80,6 +80,8 @@ void ReferenceRange::init() {
 						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
+
+	connect(this, &WorksheetElement::positionLogicalChanged, this, &ReferenceRange::updateStartEndPositions);
 }
 
 /*!
@@ -374,6 +376,8 @@ void ReferenceRangePrivate::retransform() {
 	}
 	updatePosition(); // To update position.point
 
+	prevPositionLogical = positionLogical;
+
 // 	qDebug() << "logical rect " << rect;
 
 	// position.point contains already the scene position, but here it will be determined,
@@ -435,6 +439,27 @@ void ReferenceRangePrivate::retransform() {
 // 	qDebug() << "scene rect " << rect;
 
 	recalcShapeAndBoundingRect();
+}
+
+/*!
+ * called when the user moves the graphics item with the mouse and the logical position of the item is changed.
+ * Here we update the logical coordinates for the start and end points and notify the dock widget.
+ */
+// TODO: make this undo/redo-able
+void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
+	Q_D(ReferenceRange);
+	if (d->orientation == WorksheetElement::Orientation::Horizontal) {
+		double delta = newPosition.y() - d->prevPositionLogical.y();
+		d->positionLogicalStart.setY(d->positionLogicalStart.y() + delta);
+		d->positionLogicalEnd.setY(d->positionLogicalEnd.y() + delta);
+	} else {
+		double delta = newPosition.x() - d->prevPositionLogical.x();
+		d->positionLogicalStart.setX(d->positionLogicalStart.x() + delta);
+		d->positionLogicalEnd.setX(d->positionLogicalEnd.x() + delta);
+	}
+	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
+	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
+	d->retransform();
 }
 
 /*!
@@ -779,13 +804,35 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void ReferenceRange::loadThemeConfig(const KConfig& config) {
-	// for the properties of the line read the properties of the axis line
-	// 	const KConfigGroup& group = config.group("Axis");
-	// 	QPen p;
-	// 	this->setOpacity(group.readEntry("LineOpacity", 1.0));
-	// 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	// 	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	// 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	// 	this->setPen(p);
+void ReferenceRange::loadThemeConfig(const KConfig&) {
+	// determine the index of the current range in the list of all range children
+	// and apply the theme color for this index
+	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	if (!plot)
+		return;
+	int index = 0;
+	const auto& children = plot->children<WorksheetElement>();
+	for (auto* child : children) {
+		if (child == this)
+			break;
+
+		if (child->inherits(AspectType::ReferenceRange))
+			++index;
+	}
+	const QColor themeColor = plot->themeColorPalette(index);
+
+	// background
+	setBackgroundType(WorksheetElement::BackgroundType::Color);
+	setBackgroundColorStyle(WorksheetElement::BackgroundColorStyle::SingleColor);
+	setBackgroundBrushStyle(Qt::SolidPattern);
+	setBackgroundFirstColor(themeColor);
+	setBackgroundOpacity(0.8);
+
+	// border
+	QPen p;
+	p.setStyle(Qt::NoPen);
+	p.setColor(themeColor);
+	p.setWidthF(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
+	setBorderPen(p);
+	setBorderOpacity(1.0);
 }
