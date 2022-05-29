@@ -120,8 +120,7 @@ void ImportDialog::setModel() {
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
-	DEBUG("ImportFileDialog::setCurrentIndex()");
-	QDEBUG(" index =" << index);
+	QDEBUG(Q_FUNC_INFO << ", index =" << index);
 	cbAddTo->setCurrentModelIndex(index);
 	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	checkOkButton();
