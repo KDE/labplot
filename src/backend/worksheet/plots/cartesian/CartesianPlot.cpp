@@ -3676,13 +3676,14 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		} else {
+			DEBUG("HAVE BREAKS")
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = xRange.start();
 			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
 				if (!rb.isValid())
 					break;
 
-				// current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+				// current range runs from the end of the previous one (or from the plot beginning) to curBreak.start
 				sceneRange.start() = sceneEndLast;
 				if (&rb == &xRangeBreaks.list.first())
 					sceneRange.start() += breakGap;
@@ -3696,7 +3697,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 				logicalEndLast = rb.range.end();
 			}
 
-			// add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
+			// add the last range from the last available range break to the end of the plot (=end of the x-data range)
 			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
 			logicalRange.setRange(logicalEndLast, xRange.end());
 

@@ -220,9 +220,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 	ui.verticalLayout->addWidget(frame);
 
-	// TODO: activate the tab again once the functionality is implemented
-	ui.tabWidget->removeTab(2);
-
 	init();
 }
 
@@ -305,7 +302,7 @@ void CartesianPlotDock::init() {
 	ui.tbBorderTypeBottom->setIcon(pm);
 
 	/*
-	 //TODO: activate later once range breaking is implemented
+	//TODO: activate later once range breaking is implemented
 	//create icons for the different styles for scale breaking
 	QPainter pa;
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
@@ -1587,7 +1584,7 @@ void CartesianPlotDock::toggleXBreak(bool b) {
 void CartesianPlotDock::addXBreak() {
 	ui.bRemoveXBreak->setVisible(true);
 
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	CartesianPlot::RangeBreak b;
 	breaks.list << b;
 	breaks.lastChanged = breaks.list.size() - 1;
@@ -1601,7 +1598,7 @@ void CartesianPlotDock::addXBreak() {
 void CartesianPlotDock::removeXBreak() {
 	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size() > 1);
 	int index = ui.cbXBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	breaks.list.takeAt(index);
 	breaks.lastChanged = -1;
 	for (auto* plot : m_plotList)
@@ -1620,15 +1617,12 @@ void CartesianPlotDock::removeXBreak() {
 }
 
 void CartesianPlotDock::currentXBreakChanged(int index) {
-	if (m_initializing)
-		return;
-
-	if (index == -1)
+	if (m_initializing || index == -1)
 		return;
 
 	m_initializing = true;
 	SET_NUMBER_LOCALE
-	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
+	const auto rangeBreak = m_plot->xRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
@@ -1643,7 +1637,7 @@ void CartesianPlotDock::xBreakStartChanged() {
 		return;
 
 	int index = ui.cbXBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	breaks.list[index].range.start() = ui.leXBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
@@ -1656,7 +1650,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 		return;
 
 	int index = ui.cbXBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	breaks.list[index].range.end() = ui.leXBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
@@ -1669,7 +1663,7 @@ void CartesianPlotDock::xBreakPositionChanged(int value) {
 		return;
 
 	int index = ui.cbXBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	breaks.list[index].position = (double)value / 100.;
 	breaks.lastChanged = index;
 
@@ -1683,7 +1677,7 @@ void CartesianPlotDock::xBreakStyleChanged(int styleIndex) {
 
 	int index = ui.cbXBreak->currentIndex();
 	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
-	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
+	auto breaks = m_plot->xRangeBreaks();
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
 
@@ -1709,7 +1703,7 @@ void CartesianPlotDock::toggleYBreak(bool b) {
 void CartesianPlotDock::addYBreak() {
 	ui.bRemoveYBreak->setVisible(true);
 
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
+	auto breaks = m_plot->yRangeBreaks();
 	CartesianPlot::RangeBreak b;
 	breaks.list << b;
 	breaks.lastChanged = breaks.list.size() - 1;
@@ -1723,7 +1717,7 @@ void CartesianPlotDock::addYBreak() {
 void CartesianPlotDock::removeYBreak() {
 	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size() > 1);
 	int index = ui.cbYBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
+	auto breaks = m_plot->yRangeBreaks();
 	breaks.list.takeAt(index);
 	breaks.lastChanged = -1;
 	for (auto* plot : m_plotList)
@@ -1742,15 +1736,12 @@ void CartesianPlotDock::removeYBreak() {
 }
 
 void CartesianPlotDock::currentYBreakChanged(int index) {
-	if (m_initializing)
-		return;
-
-	if (index == -1)
+	if (m_initializing || index == -1)
 		return;
 
 	m_initializing = true;
 	SET_NUMBER_LOCALE
-	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
+	const auto rangeBreak = m_plot->yRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
@@ -1765,7 +1756,7 @@ void CartesianPlotDock::yBreakStartChanged() {
 		return;
 
 	int index = ui.cbYBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
+	auto breaks = m_plot->yRangeBreaks();
 	breaks.list[index].range.start() = ui.leYBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
@@ -1778,7 +1769,7 @@ void CartesianPlotDock::yBreakEndChanged() {
 		return;
 
 	int index = ui.cbYBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
+	auto breaks = m_plot->yRangeBreaks();
 	breaks.list[index].range.end() = ui.leYBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
@@ -1791,8 +1782,8 @@ void CartesianPlotDock::yBreakPositionChanged(int value) {
 		return;
 
 	int index = ui.cbYBreak->currentIndex();
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
-	breaks.list[index].position = (float)value / 100.;
+	auto breaks = m_plot->yRangeBreaks();
+	breaks.list[index].position = (double)value / 100.;
 	breaks.lastChanged = index;
 
 	for (auto* plot : m_plotList)
@@ -1805,7 +1796,7 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 
 	int index = ui.cbYBreak->currentIndex();
 	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
-	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
+	auto breaks = m_plot->yRangeBreaks();
 	breaks.list[index].style = style;
 	breaks.lastChanged = index;
 
