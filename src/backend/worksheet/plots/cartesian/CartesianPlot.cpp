@@ -5137,6 +5137,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete line;
 				return false;
 			}
+		} else if (!preview && reader->name() == "referenceRange") {
+			auto* range = new ReferenceRange(this, QString());
+			range->setIsLoading(true);
+			if (range->load(reader, preview))
+				addChildFast(range);
+			else {
+				delete range;
+				return false;
+			}
 		} else if (reader->name() == QLatin1String("boxPlot")) {
 			auto* boxPlot = new BoxPlot(QStringLiteral("BoxPlot"));
 			boxPlot->setIsLoading(true);
