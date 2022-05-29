@@ -362,6 +362,25 @@ void CartesianPlot::initActions() {
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
 
+	// inset plot action, use the proper icon for the current plot type
+	QIcon icon;
+	Q_D(CartesianPlot);
+	switch (d->type) {
+	case Type::FourAxes:
+		icon = QIcon::fromTheme("labplot-xy-plot-four-axes");
+		break;
+	case Type::TwoAxes:
+		icon = QIcon::fromTheme("labplot-xy-plot-two-axes");
+		break;
+	case Type::TwoAxesCentered:
+		icon = QIcon::fromTheme("labplot-xy-plot-two-axes-centered");
+		break;
+	case Type::TwoAxesCenteredZero:
+		icon = QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin");
+		break;
+	}
+	addInsetPlotAction = new QAction(icon, i18n("Inset Plot"), this);
+
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
 	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
@@ -386,6 +405,7 @@ void CartesianPlot::initActions() {
 	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
+	connect(addInsetPlotAction, &QAction::triggered, this, &CartesianPlot::addInsetPlot);
 
 	// Analysis menu actions
 	// 	addDataOperationAction = new QAction(i18n("Data Operation"), this);
@@ -555,6 +575,8 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
+	addNewMenu->addSeparator();
+	addNewMenu->addAction(addInsetPlotAction);
 
 	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
 	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -2231,6 +2253,28 @@ void CartesianPlot::addReferenceLine() {
 
 	this->addChild(line);
 	line->retransform();
+}
+
+void CartesianPlot::addInsetPlot() {
+	beginMacro(i18n("%1: add inset plot", name()));
+
+	// add a copy of the current plot as a child
+	copy();
+	paste(true);
+
+	// rename the new child plot and resize it to 30% of the current size,
+	// allow to resize it with the mouse (not controlled by worksheet's layout)
+	const auto& plots = children<CartesianPlot>();
+	auto* insetPlot = plots.last();
+	insetPlot->setName(i18n("Inset Plot"));
+
+	auto insetRect = rect();
+	insetRect.setWidth(insetRect.width() * 0.3);
+	insetRect.setHeight(insetRect.height() * 0.3);
+	insetPlot->setRect(insetRect);
+	insetPlot->setResizeEnabled(true);
+
+	endMacro();
 }
 
 int CartesianPlot::curveCount() {

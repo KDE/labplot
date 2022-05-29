@@ -410,6 +410,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.sbWidth->setEnabled(b);
 		ui.sbHeight->setEnabled(b);
 		connect(w, &Worksheet::layoutChanged, this, &CartesianPlotDock::layoutChanged);
+	} else {
+		ui.sbTop->setEnabled(true);
+		ui.sbLeft->setEnabled(true);
+		ui.sbWidth->setEnabled(true);
+		ui.sbHeight->setEnabled(true);
 	}
 
 	// SIGNALs/SLOTs
