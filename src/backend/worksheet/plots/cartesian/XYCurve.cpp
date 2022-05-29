@@ -1223,7 +1223,6 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		maxY = qMax(p.y(), maxY);
 		minY = qMin(p.y(), minY);
 		prevPixelDiffZero = true;
-		lastPoint = p;
 	} else {
 		if (prevPixelDiffZero) {
 			// If previously more than one point lied on the same pixel
@@ -1247,8 +1246,8 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		// TODO: needed?
 		//			if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 		//				return;
-		lastPoint = p;
 	}
+	lastPoint = p;
 }
 
 /*!
