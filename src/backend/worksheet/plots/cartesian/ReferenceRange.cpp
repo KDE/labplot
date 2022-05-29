@@ -52,22 +52,16 @@ void ReferenceRange::init() {
 
 	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	if (d->orientation == Orientation::Horizontal)
-		d->position.positionLimit = PositionLimit::Y;
-	else if (d->orientation == Orientation::Vertical)
-		d->position.positionLimit = PositionLimit::X;
-	else
-		d->position.positionLimit = PositionLimit::None;
 
-	// default position - 20% of the plot width/height positioned around the center
+	// default position - 10% of the plot width/height positioned around the center
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
 	const auto x = m_plot->xRange(cs->xIndex()).center();
 	const auto y = m_plot->yRange(cs->yIndex()).center();
-	const auto w = m_plot->yRange(cs->yIndex()).length() * 0.2;
-	const auto h = m_plot->yRange(cs->yIndex()).length() * 0.2;
+	const auto w = m_plot->xRange(cs->xIndex()).length() * 0.1;
+	const auto h = m_plot->yRange(cs->yIndex()).length() * 0.1;
 	d->positionLogical = QPointF(x, y);
-	d->positionLogicalStart = QPointF(x - w / 2, y + h / 2);
-	d->positionLogicalEnd = QPointF(x + w / 2, y - h / 2);
+	d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
+	d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
 	d->updatePosition(); // to update also scene coordinates
 
 	// background
@@ -206,20 +200,8 @@ BASIC_SHARED_D_READER_IMPL(ReferenceRange, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(ReferenceRange, SetOrientation, ReferenceRange::Orientation, orientation, retransform)
 void ReferenceRange::setOrientation(Orientation orientation) {
 	Q_D(ReferenceRange);
-	if (orientation != d->orientation) {
+	if (orientation != d->orientation)
 		exec(new ReferenceRangeSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
-		switch (orientation) {
-		case ReferenceRange::Orientation::Horizontal:
-			d->position.positionLimit = PositionLimit::Y;
-			break;
-		case ReferenceRange::Orientation::Vertical:
-			d->position.positionLimit = PositionLimit::X;
-			break;
-		case ReferenceRange::Orientation::Both:
-			d->position.positionLimit = PositionLimit::None;
-			break;
-		}
-	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(ReferenceRange, SetPositionLogicalStart, QPointF, positionLogicalStart, retransform)
@@ -357,6 +339,21 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
+	// it should be enough to set the position limits in init() and in setOrientation() only
+	// but since we don't do it during undo/redo of setOrientation(), we end up having wrong
+	// limits after undo/redo. So, we set it here in retransform again.
+	switch (orientation) {
+	case ReferenceRange::Orientation::Horizontal:
+		position.positionLimit = WorksheetElement::PositionLimit::Y;
+		break;
+	case ReferenceRange::Orientation::Vertical:
+		position.positionLimit = WorksheetElement::PositionLimit::X;
+		break;
+	case ReferenceRange::Orientation::Both:
+		position.positionLimit = WorksheetElement::PositionLimit::None;
+		break;
+	}
+
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto xRange{q->m_plot->xRange(cs->xIndex())};
 	const auto yRange{q->m_plot->yRange(cs->yIndex())};
@@ -377,7 +374,7 @@ void ReferenceRangePrivate::retransform() {
 	}
 	updatePosition(); // To update position.point
 
-	qDebug() << "logical rect " << rect;
+// 	qDebug() << "logical rect " << rect;
 
 	// position.point contains already the scene position, but here it will be determined,
 	// if the point lies outside of the datarect or not
@@ -391,9 +388,9 @@ void ReferenceRangePrivate::retransform() {
 	lines << QLineF(rect.topRight(), rect.bottomRight());
 	lines << QLineF(rect.bottomRight(), rect.bottomLeft());
 	lines << QLineF(rect.bottomLeft(), rect.topLeft());
-	qDebug() << "logical lines " << lines;
+// 	qDebug() << "logical lines " << lines;
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	qDebug() << "scene lines " << unclippedLines;
+// 	qDebug() << "scene lines " << unclippedLines;
 
 	QPolygonF polygon;
 	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
@@ -435,7 +432,7 @@ void ReferenceRangePrivate::retransform() {
 	}
 
 	rect = polygon.boundingRect();
-	qDebug() << "scene rect " << rect;
+// 	qDebug() << "scene rect " << rect;
 
 	recalcShapeAndBoundingRect();
 }
