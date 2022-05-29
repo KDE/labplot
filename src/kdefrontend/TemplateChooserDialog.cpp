@@ -53,6 +53,8 @@ TemplateChooserDialog::TemplateChooserDialog(QWidget* parent)
 	mTemplateListModel = new TemplateListModel(defaultTemplateInstallPath(), this);
 	ui->lvInstalledTemplates->setModel(mTemplateListModel);
 
+	ui->lInstalledTemplates->setToolTip(tr("Path: ") + defaultTemplateInstallPath());
+
 	connect(ui->pbBrowse, &QPushButton::pressed, this, &TemplateChooserDialog::chooseTemplate);
 	connect(ui->leTemplatePath, &QLineEdit::textChanged, this, &TemplateChooserDialog::customTemplatePathChanged);
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &TemplateChooserDialog::listViewTemplateChanged);

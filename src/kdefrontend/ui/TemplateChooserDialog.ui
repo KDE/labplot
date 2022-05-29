@@ -28,7 +28,7 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="lInstalledTemplates">
          <property name="text">
           <string>Installed Templates:</string>
          </property>
