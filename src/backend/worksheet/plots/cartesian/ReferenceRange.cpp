@@ -199,7 +199,7 @@ BASIC_SHARED_D_READER_IMPL(ReferenceRange, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(ReferenceRange, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(ReferenceRange, SetOrientation, ReferenceRange::Orientation, orientation, retransform)
+STD_SETTER_CMD_IMPL_F_S(ReferenceRange, SetOrientation, ReferenceRange::Orientation, orientation, updateOrientation)
 void ReferenceRange::setOrientation(Orientation orientation) {
 	Q_D(ReferenceRange);
 	if (orientation != d->orientation)
@@ -341,21 +341,6 @@ void ReferenceRangePrivate::retransform() {
 	if (suppressRetransform || !q->cSystem || q->isLoading())
 		return;
 
-	// it should be enough to set the position limits in init() and in setOrientation() only
-	// but since we don't do it during undo/redo of setOrientation(), we end up having wrong
-	// limits after undo/redo. So, we set it here in retransform again.
-	switch (orientation) {
-	case ReferenceRange::Orientation::Horizontal:
-		position.positionLimit = WorksheetElement::PositionLimit::Y;
-		break;
-	case ReferenceRange::Orientation::Vertical:
-		position.positionLimit = WorksheetElement::PositionLimit::X;
-		break;
-	case ReferenceRange::Orientation::Both:
-		position.positionLimit = WorksheetElement::PositionLimit::None;
-		break;
-	}
-
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto xRange{q->m_plot->xRange(cs->xIndex())};
 	const auto yRange{q->m_plot->yRange(cs->yIndex())};
@@ -439,6 +424,21 @@ void ReferenceRangePrivate::retransform() {
 // 	qDebug() << "scene rect " << rect;
 
 	recalcShapeAndBoundingRect();
+}
+
+void ReferenceRangePrivate::updateOrientation() {
+	switch (orientation) {
+	case WorksheetElement::Orientation::Horizontal:
+		position.positionLimit = WorksheetElement::PositionLimit::Y;
+		break;
+	case WorksheetElement::Orientation::Vertical:
+		position.positionLimit = WorksheetElement::PositionLimit::X;
+		break;
+	case WorksheetElement::Orientation::Both:
+		position.positionLimit = WorksheetElement::PositionLimit::None;
+		break;
+	}
+	retransform();
 }
 
 /*!
