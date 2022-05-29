@@ -25,7 +25,7 @@
 	auto* curve_variable_name = plot->child<XYCurve>(child_index);                                                                                             \
 	QVERIFY(curve_variable_name != nullptr);                                                                                                                   \
 	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name));                                                                                         \
-	QCOMPARE(curve_variable_name->type(), AspectType::XYCurve);                                                                                                \
+	QCOMPARE(curve_variable_name->inherits(AspectType::XYCurve), true);                                                                                                \
 	auto* curve_variable_name##Private = curve_variable_name->d_func();                                                                                        \
 	Q_UNUSED(curve_variable_name##Private)
 
@@ -51,7 +51,17 @@
 	GET_CURVE_PRIVATE(plot, 0, "lastValueInvalid", lastValueInvalidCurve)                                                                                      \
 	GET_CURVE_PRIVATE(plot, 1, "lastVertical", lastVerticalCurve)                                                                                              \
 	GET_CURVE_PRIVATE(plot, 2, "withGap", withGapCurve)                                                                                                        \
-	GET_CURVE_PRIVATE(plot, 3, "withGap2", withGapCurve2)
+	GET_CURVE_PRIVATE(plot, 3, "withGap2", withGapCurve2)                                                                                                      \
+                                                                                                                                                               \
+	auto* nonlinearWorksheet = project.child<AbstractAspect>(4);                                                                                               \
+	QVERIFY(nonlinearWorksheet != nullptr);                                                                                                                    \
+	QCOMPARE(nonlinearWorksheet->name(), QLatin1String("Nonlinear"));                                                                                          \
+	QCOMPARE(nonlinearWorksheet->type(), AspectType::Worksheet);                                                                                               \
+                                                                                                                                                               \
+	auto* nonlinearPlot = nonlinearWorksheet->child<CartesianPlot>(0);                                                                                         \
+	QVERIFY(nonlinearPlot != nullptr);                                                                                                                         \
+	QCOMPARE(nonlinearPlot->name(), QLatin1String("xy-plot"));                                                                                                 \
+	GET_CURVE_PRIVATE(nonlinearPlot, 0, "f(x)=x", linear)
 
 #define LOAD_HOVER_PROJECT                                                                                                                                     \
 	Project project;                                                                                                                                           \
@@ -1721,6 +1731,32 @@ void XYCurveTest::updateLinesWithGapSegments3() {
 	};
 	withGapCurve2->setLineSkipGaps(false);
 	auto test_lines = withGapCurve2Private->m_lines_test;
+	QCOMPARE(refLines.size(), test_lines.size());
+	for (int i = 0; i < test_lines.size(); i++) {
+		COMPARE_LINES(test_lines.at(i), refLines.at(i));
+	}
+}
+
+/*!
+ * \brief XYCurveTest::updateLinesLog10
+ * Testing curve with nonlinear x range
+ */
+void XYCurveTest::updateLinesLog10() {
+	LOAD_PROJECT
+
+	QVector<QLineF> refLines{
+		QLineF(QPointF(0.1, 0.1), QPointF(1.2, 1.2)),
+		QLineF(QPointF(1.2, 1.2), QPointF(2.3, 2.3)),
+		QLineF(QPointF(2.3, 2.3), QPointF(3.4, 3.4)),
+		QLineF(QPointF(3.4, 3.4), QPointF(4.5, 4.5)),
+		QLineF(QPointF(4.5, 4.5), QPointF(5.6, 5.6)),
+		QLineF(QPointF(5.6, 5.6), QPointF(6.7, 6.7)),
+		QLineF(QPointF(6.7, 6.7), QPointF(7.8, 7.8)),
+		QLineF(QPointF(7.8, 7.8), QPointF(8.9, 8.9)),
+		QLineF(QPointF(8.9, 8.9), QPointF(10, 10)),
+	};
+	QCOMPARE(linearPrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+	auto test_lines = linearPrivate->m_lines_test;
 	QCOMPARE(refLines.size(), test_lines.size());
 	for (int i = 0; i < test_lines.size(); i++) {
 		COMPARE_LINES(test_lines.at(i), refLines.at(i));

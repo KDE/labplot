@@ -1189,7 +1189,7 @@ void XYCurvePrivate::addLine(QPointF p,
 			x = qRound64(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
-		static const double preCalc = (double)plot()->dataRect().width() * numberOfPixelX;
+		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
 		bool visible;
 		QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 
