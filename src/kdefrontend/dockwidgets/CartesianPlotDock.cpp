@@ -14,10 +14,10 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/TemplateChooserDialog.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
-#include "kdefrontend/TemplateChooserDialog.h"
 
 #include <KMessageBox>
 
@@ -26,13 +26,13 @@
 #include <QDebug>
 #include <QDir>
 #include <QDirModel>
+#include <QFile>
+#include <QFileDialog>
 #include <QIntValidator>
 #include <QPainter>
 #include <QRadioButton>
 #include <QWheelEvent>
 #include <QXmlStreamWriter>
-#include <QFile>
-#include <QFileDialog>
 
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
@@ -2178,11 +2178,13 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 }
 
 void CartesianPlotDock::exportPlotTemplate() {
-
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("PlotTemplate"));
 	const QString dir = group.readEntry(QLatin1String("ExportPath"), TemplateChooserDialog::defaultTemplateInstallPath());
-	QString path = QFileDialog::getSaveFileName(nullptr, i18nc("@title:window", "Choose Template Save File"), dir, i18n("Labplot Plot Templates (*%1)", TemplateChooserDialog::format));
+	QString path = QFileDialog::getSaveFileName(nullptr,
+												i18nc("@title:window", "Choose Template Save File"),
+												dir,
+												i18n("Labplot Plot Templates (*%1)", TemplateChooserDialog::format));
 
 	if (path.split(TemplateChooserDialog::format).count() < 2)
 		path.append(TemplateChooserDialog::format); // Sometimes the format is not added to the file. Don't know why

@@ -141,8 +141,8 @@ private Q_SLOTS:
 
 	void exportPlotTemplate();
 
-	//SLOTs for changes triggered in CartesianPlot
-	//general
+	// SLOTs for changes triggered in CartesianPlot
+	// general
 	void plotRectChanged(QRectF&);
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);

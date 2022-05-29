@@ -9,8 +9,10 @@
 */
 
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
@@ -19,15 +21,11 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "commonfrontend/core/PartMdiView.h"
+#include "kdefrontend/TemplateChooserDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
-#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
-#include "backend/lib/trace.h"
-#include "kdefrontend/TemplateChooserDialog.h"
-#include "backend/lib/XmlStreamReader.h"
-#include "backend/core/AbstractAspect.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -195,7 +193,8 @@ void WorksheetView::initActions() {
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme("labplot-xy-plot-four-axes"), i18n("Four Axes"), addNewActionGroup);
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
-	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlot4Action =
+		new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("labplot-template-plot"), i18n("Load plot from template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);

@@ -1,42 +1,41 @@
 #include "TemplateChooserDialog.h"
 #include "ui_TemplateChooserDialog.h"
 
-#include "klocalizedstring.h"
 #include "kconfiggroup.h"
+#include "klocalizedstring.h"
 #include "ksharedconfig.h"
 
 #include "backend/core/Project.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/Worksheet.h"
 
-#include <QFileDialog>
 #include <QDirIterator>
+#include <QFileDialog>
 #include <QFileInfo>
 
 namespace {
-	const QLatin1String lastDirConfigEntry = QLatin1String("LastPlotTemplateDir");
+const QLatin1String lastDirConfigEntry = QLatin1String("LastPlotTemplateDir");
 
-	// Copied from BaseDock
-	struct Lock {
-		inline explicit Lock(bool& variable)
-			: variable(variable = true) {
-		}
+// Copied from BaseDock
+struct Lock {
+	inline explicit Lock(bool& variable)
+		: variable(variable = true) {
+	}
 
-		inline ~Lock() {
-			variable = false;
-		}
+	inline ~Lock() {
+		variable = false;
+	}
 
-	private:
-		bool& variable;
-	};
+private:
+	bool& variable;
+};
 }
 
 const QString TemplateChooserDialog::format = QLatin1String(".labplot_template");
 
-TemplateChooserDialog::TemplateChooserDialog(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::TemplateChooserDialog)
-{
+TemplateChooserDialog::TemplateChooserDialog(QWidget* parent)
+	: QDialog(parent)
+	, ui(new Ui::TemplateChooserDialog) {
 	ui->setupUi(this);
 
 	m_project = new Project;
@@ -61,8 +60,7 @@ TemplateChooserDialog::TemplateChooserDialog(QWidget *parent) :
 	updateErrorMessage("No template selected.");
 }
 
-TemplateChooserDialog::~TemplateChooserDialog()
-{
+TemplateChooserDialog::~TemplateChooserDialog() {
 	delete ui;
 	delete m_project;
 }
@@ -79,10 +77,10 @@ void TemplateChooserDialog::customTemplatePathChanged(const QString& filename) {
 }
 
 QString TemplateChooserDialog::defaultTemplateInstallPath() {
-	//folder where config files will be stored in object specific sub-folders:
-	//Linux    - ~/.local/share/labplot2/plot_templates/
-	//Mac      - //TODO
-	//Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/plot_templates/
+	// folder where config files will be stored in object specific sub-folders:
+	// Linux    - ~/.local/share/labplot2/plot_templates/
+	// Mac      - //TODO
+	// Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/plot_templates/
 	return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/plot_templates/");
 }
 
@@ -91,7 +89,8 @@ void TemplateChooserDialog::chooseTemplate() {
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("TemplateChooserDialog"));
 	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
-	const QString& path = QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Labplot Plot Templates (*%1)", format));
+	const QString& path =
+		QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Labplot Plot Templates (*%1)", format));
 	ui->leTemplatePath->setText(path);
 
 	if (!path.isEmpty()) {
@@ -153,7 +152,7 @@ CartesianPlot* TemplateChooserDialog::generatePlot() {
 }
 
 void TemplateChooserDialog::showPreview() {
-	for (auto* plot: m_worksheet->children<CartesianPlot>())
+	for (auto* plot : m_worksheet->children<CartesianPlot>())
 		m_worksheet->removeChild(plot);
 
 	auto* plot = generatePlot();
@@ -185,7 +184,7 @@ QString TemplateChooserDialog::templatePath() const {
 	return mCurrentTemplateFilePath;
 }
 
-void TemplateChooserDialog::listViewTemplateChanged(const QModelIndex &current, const QModelIndex &previous) {
+void TemplateChooserDialog::listViewTemplateChanged(const QModelIndex& current, const QModelIndex& previous) {
 	Q_UNUSED(previous);
 	if (mLoading)
 		return;
@@ -213,16 +212,13 @@ void TemplateChooserDialog::changePreviewSource(bool custom) {
 //##########################################################################################################
 // Listmodel
 //##########################################################################################################
-TemplateListModel::TemplateListModel(const QString& searchPath, QObject* parent): QAbstractListModel(parent) {
-
+TemplateListModel::TemplateListModel(const QString& searchPath, QObject* parent)
+	: QAbstractListModel(parent) {
 	QStringList filter("*" + TemplateChooserDialog::format);
 	QDirIterator it(searchPath, filter, QDir::AllEntries | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 	while (it.hasNext()) {
 		QFileInfo f(it.next());
-		File file {
-			f.absoluteFilePath(),
-			f.fileName().split(TemplateChooserDialog::format)[0]
-		};
+		File file{f.absoluteFilePath(), f.fileName().split(TemplateChooserDialog::format)[0]};
 		mFiles << file;
 	}
 }
@@ -237,11 +233,11 @@ QVariant TemplateListModel::data(const QModelIndex& index, int role) const {
 		return QVariant();
 
 	switch (role) {
-		case FilenameRole: // fall through
-		case Qt::ItemDataRole::DisplayRole:
-			return mFiles.at(row).filename;
-		case FilePathRole:
-			return mFiles.at(row).path;
+	case FilenameRole: // fall through
+	case Qt::ItemDataRole::DisplayRole:
+		return mFiles.at(row).filename;
+	case FilePathRole:
+		return mFiles.at(row).path;
 	}
 
 	return QVariant();
