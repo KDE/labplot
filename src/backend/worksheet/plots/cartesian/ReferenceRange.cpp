@@ -52,6 +52,7 @@ void ReferenceRange::init() {
 
 	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
+	d->updateOrientation();
 
 	// default position - 10% of the plot width/height positioned around the center
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
@@ -63,6 +64,7 @@ void ReferenceRange::init() {
 	d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
 	d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
 	d->updatePosition(); // to update also scene coordinates
+// 	qDebug()<<"start/end " << d->positionLogicalStart << "  " << d->positionLogicalEnd;
 
 	// background
 	d->backgroundType = (WorksheetElement::BackgroundType)group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));
@@ -354,7 +356,7 @@ void ReferenceRangePrivate::retransform() {
 		rect.setHeight(yRange.length());
 	} else {
 		positionLogical = QPointF(xRange.center(), positionLogical.y());
-		rect.setX(yRange.start());
+		rect.setX(xRange.start());
 		rect.setY(positionLogicalStart.y());
 		rect.setWidth(xRange.length());
 		rect.setHeight(positionLogicalEnd.y() - positionLogicalStart.y());
@@ -365,21 +367,13 @@ void ReferenceRangePrivate::retransform() {
 
 // 	qDebug() << "logical rect " << rect;
 
-	// position.point contains already the scene position, but here it will be determined,
-	// if the point lies outside of the datarect or not
-	// 	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(Points() << positionLogical);
-	// 	QDEBUG(Q_FUNC_INFO << ", scene list = " << listScene)
-
-	// 	rect = q->cSystem->mapLogicalToScene(rect, &m_visible);
-
+	//TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
 	lines << QLineF(rect.topLeft(), rect.topRight());
 	lines << QLineF(rect.topRight(), rect.bottomRight());
 	lines << QLineF(rect.bottomRight(), rect.bottomLeft());
 	lines << QLineF(rect.bottomLeft(), rect.topLeft());
-// 	qDebug() << "logical lines " << lines;
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-// 	qDebug() << "scene lines " << unclippedLines;
 
 	QPolygonF polygon;
 	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
@@ -421,7 +415,6 @@ void ReferenceRangePrivate::retransform() {
 	}
 
 	rect = polygon.boundingRect();
-// 	qDebug() << "scene rect " << rect;
 
 	recalcShapeAndBoundingRect();
 }

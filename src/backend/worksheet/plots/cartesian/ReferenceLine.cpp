@@ -56,12 +56,7 @@ void ReferenceLine::init() {
 
 	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	if (d->orientation == Orientation::Horizontal)
-		d->position.positionLimit = PositionLimit::Y;
-	else if (d->orientation == Orientation::Vertical)
-		d->position.positionLimit = PositionLimit::X;
-	else
-		d->position.positionLimit = PositionLimit::None;
+	d->updateOrientation();
 
 	// default position
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
