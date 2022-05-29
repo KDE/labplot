@@ -19,6 +19,9 @@ class TextLabelTest : public CommonTest {
 private Q_SLOTS:
 
 	void addPlot();
+	void multiLabelEditColorChange();
+	void multiLabelEditTextChange();
+	void multiLabelEditColorChangeSelection();
 };
 
 #endif
