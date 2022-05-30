@@ -3676,7 +3676,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		} else {
-			DEBUG("HAVE BREAKS")
+			DEBUG("X BREAKS")
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = xRange.start();
 			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
@@ -3773,6 +3773,7 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 			if (sceneRange.length() > 0)
 				scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 		} else {
+			DEBUG("Y BREAKS")
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = yRange.start();
 			for (const auto& rb : qAsConst(yRangeBreaks.list)) {

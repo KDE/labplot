@@ -97,6 +97,7 @@ private Q_SLOTS:
 	void toggleXBreak(bool);
 	void addXBreak();
 	void removeXBreak();
+	void xBreakUpdateUi(int);
 	void currentXBreakChanged(int);
 	void xBreakStartChanged();
 	void xBreakEndChanged();
@@ -106,6 +107,7 @@ private Q_SLOTS:
 	void toggleYBreak(bool);
 	void addYBreak();
 	void removeYBreak();
+	void yBreakUpdateUi(int);
 	void currentYBreakChanged(int);
 	void yBreakStartChanged();
 	void yBreakEndChanged();

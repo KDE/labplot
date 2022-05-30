@@ -1564,7 +1564,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	m_plot->dataChanged(-1, index); // update plot
 }
 
-// "Range Breaks"-tab
+/////// "Range Breaks"-tab ///////////////////////////
 
 // x-range breaks
 void CartesianPlotDock::toggleXBreak(bool b) {
@@ -1616,19 +1616,23 @@ void CartesianPlotDock::removeXBreak() {
 	ui.bRemoveXBreak->setVisible(ui.cbXBreak->count() != 1);
 }
 
-void CartesianPlotDock::currentXBreakChanged(int index) {
-	if (m_initializing || index == -1)
-		return;
-
-	m_initializing = true;
+void CartesianPlotDock::xBreakUpdateUi(int index) {
 	SET_NUMBER_LOCALE
 	const auto rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
+	QString str = std::isnan(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
+}
+
+void CartesianPlotDock::currentXBreakChanged(int index) {
+	if (m_initializing || index == -1)
+		return;
+
+	m_initializing = true;
+	xBreakUpdateUi(index);
 	m_initializing = false;
 }
 
@@ -1735,19 +1739,23 @@ void CartesianPlotDock::removeYBreak() {
 	ui.bRemoveYBreak->setVisible(ui.cbYBreak->count() != 1);
 }
 
-void CartesianPlotDock::currentYBreakChanged(int index) {
-	if (m_initializing || index == -1)
-		return;
-
-	m_initializing = true;
+void CartesianPlotDock::yBreakUpdateUi(int index) {
 	SET_NUMBER_LOCALE
 	const auto rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
+	QString str = std::isnan(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
+}
+
+void CartesianPlotDock::currentYBreakChanged(int index) {
+	if (m_initializing || index == -1)
+		return;
+
+	m_initializing = true;
+	yBreakUpdateUi(index);
 	m_initializing = false;
 }
 
@@ -1804,7 +1812,8 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 		plot->setYRangeBreaks(breaks);
 }
 
-// "Plot area"-tab
+///// "Plot area"-tab ///////////////////////////////////
+
 void CartesianPlotDock::backgroundTypeChanged(int index) {
 	auto type = (WorksheetElement::BackgroundType)index;
 
@@ -2510,11 +2519,15 @@ void CartesianPlotDock::load() {
 	// x-range breaks, show the first break
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
-	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size() > 1);
+	const auto xRangeBreaksList =  m_plot->xRangeBreaks().list;
+	ui.bRemoveXBreak->setVisible(xRangeBreaksList.size() > 1);	// TODO: why not remove first one?
 	ui.cbXBreak->clear();
-	if (!m_plot->xRangeBreaks().list.isEmpty()) {
-		for (int i = 1; i <= m_plot->xRangeBreaks().list.size(); ++i)
+	if (!xRangeBreaksList.isEmpty()) {
+		DEBUG("Found X breaks. Count = " << xRangeBreaksList.size())
+		for (int i = 1; i <= xRangeBreaksList.size(); ++i)
 			ui.cbXBreak->addItem(QString::number(i));
+		// fill values for first break
+		xBreakUpdateUi(0);
 	} else
 		ui.cbXBreak->addItem("1");
 	ui.cbXBreak->setCurrentIndex(0);
@@ -2522,11 +2535,14 @@ void CartesianPlotDock::load() {
 	// y-range breaks, show the first break
 	ui.chkYBreak->setChecked(m_plot->yRangeBreakingEnabled());
 	this->toggleYBreak(m_plot->yRangeBreakingEnabled());
-	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size() > 1);
+	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size() > 1);	// TODO: why not remove first one?
 	ui.cbYBreak->clear();
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
 		for (int i = 1; i <= m_plot->yRangeBreaks().list.size(); ++i)
 			ui.cbYBreak->addItem(QString::number(i));
+		// fill values for first break
+		yBreakUpdateUi(0);
+
 	} else
 		ui.cbYBreak->addItem("1");
 	ui.cbYBreak->setCurrentIndex(0);
