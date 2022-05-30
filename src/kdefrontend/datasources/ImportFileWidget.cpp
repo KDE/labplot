@@ -213,7 +213,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.lKeepLastValues->setToolTip(info);
 	ui.sbKeepNValues->setToolTip(info);
 
-	info = i18n("Select if the values first row of the selected data region should be used as the column names of the spreadsheet.");
+	info = i18n("Enable to use the first row of the selected data region for the column names of the spreadsheet.");
 	ui.lExcelFirstRowAsColNames->setToolTip(info);
 	ui.chbExcelFirstRowAsColName->setToolTip(info);
 #ifdef HAVE_MQTT

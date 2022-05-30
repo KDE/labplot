@@ -42,7 +42,7 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 	}
 
 	const QStringList& sheetNames = doc.sheetNames();
-	QString info(i18n("Sheets count: %1", QString::number(sheetNames.size())));
+	QString info(i18n("Sheet count: %1", QString::number(sheetNames.size())));
 	info += QLatin1String("<br>");
 	info += i18n("Sheets: ");
 	info += QLatin1String("<br>");

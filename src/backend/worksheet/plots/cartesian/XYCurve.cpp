@@ -1183,19 +1183,13 @@ void XYCurvePrivate::addLine(QPointF p,
 							 RangeT::Scale scale,
 							 bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = llabs(qRound64(p.x() / minDiffX) - qRound64(x / minDiffX)) > 0; // only relevant if greater zero or not
-		if (std::isnan(x)) {
-			x = p.x();
-			lastPoint = p;
-			minY = p.y();
-			maxY = p.y();
-		} else {
-			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
-			if (pixelDiff > 0) // set x to next pixel
-				x = p.x();
-		}
+		pixelDiff = (qRound64(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
+		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+		if (pixelDiff > 0) // set x to next pixel
+			x = qRound64(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
+		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
 		bool visible;
 		QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 
@@ -1203,21 +1197,15 @@ void XYCurvePrivate::addLine(QPointF p,
 		if (!visible)
 			return;
 
-		if (std::isnan(x)) {
-			x = pScene.x();
-			lastPoint = p;
-		} else {
-			// using only the difference between the points is not sufficient, because p0 is updated always
-			// independent if new line added or not
-			int xPixel = qRound((x - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
-			int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
-			pixelDiff = p1Pixel - xPixel;
+		// using only the difference between the points is not sufficient, because
+		// p0 is updated always independent if new line added or not
+		const int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+		pixelDiff = p1Pixel - x;
 
-			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
-			if (pixelDiff > 0) // set x to next pixel
-				x = pScene.x();
-		}
+		if (pixelDiff > 0) // set x to next pixel
+			x = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
 	}
 }
 
@@ -1235,7 +1223,6 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		maxY = qMax(p.y(), maxY);
 		minY = qMin(p.y(), minY);
 		prevPixelDiffZero = true;
-		lastPoint = p;
 	} else {
 		if (prevPixelDiffZero) {
 			// If previously more than one point lied on the same pixel
@@ -1259,8 +1246,8 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		// TODO: needed?
 		//			if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 		//				return;
-		lastPoint = p;
 	}
+	lastPoint = p;
 }
 
 /*!
@@ -1369,8 +1356,21 @@ void XYCurvePrivate::updateLines() {
 				startIndex = i + 1;
 
 				if (lineType != XYCurve::LineType::SplineCubicNatural && lineType != XYCurve::LineType::SplineCubicPeriodic
-					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic)
-					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic) {
+					if (scale == RangeT::Scale::Linear) {
+						xPos = qRound64(p0.x() / minDiffX);
+						lastPoint = p0;
+						minY = p0.y();
+						maxY = p0.y();
+					} else {
+						bool visible;
+						QPointF pScene = q->cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+						if (!visible)
+							continue;
+						xPos = qRound((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
+						lastPoint = p0;
+					}
+				}
 				break;
 			}
 
