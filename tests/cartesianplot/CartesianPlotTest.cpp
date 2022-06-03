@@ -282,7 +282,7 @@ void CartesianPlotTest::deleteCurveAutoscale() {
 void CartesianPlotTest::deleteCurveNoAutoscale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+	plot->enableAutoScaleY(cs->yIndex(), false, false);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
@@ -308,7 +308,7 @@ void CartesianPlotTest::invisibleCurveAutoscale() {
 void CartesianPlotTest::invisibleCurveNoAutoscale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+	plot->enableAutoScaleY(cs->yIndex(), false, false);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
@@ -341,7 +341,7 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+	plot->enableAutoScaleY(cs->yIndex(), false, false);
 
 	QCOMPARE(curve2->type(), AspectType::XYEquationCurve);
 	auto eqc = static_cast<XYEquationCurve*>(curve2);
