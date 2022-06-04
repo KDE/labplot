@@ -2291,10 +2291,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
 
-	auto type = child->type();
 	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
-	if (elem && (type == AspectType::XYCurve || type == AspectType::Histogram
-		|| type == AspectType::BoxPlot || type == AspectType::BarPlot)) {
+	// TODO: why is child->type() == AspectType::XYCurve, etc. not working here?
+	if (elem && (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram
+			|| child->type() == AspectType::BarPlot || child->type() == AspectType::BoxPlot)) {
 		auto* elem = static_cast<const WorksheetElement*>(child);
 		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
