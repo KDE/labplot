@@ -470,7 +470,11 @@ void BarPlotPrivate::retransform() {
 
 	recalcShapeAndBoundingRect();
 }
-
+/*!
+ * called when the data columns or their values were changed
+ * calculates the min and max values for x and y and calls dataChanged()
+ * to trigger the retransform in the parent plot
+ */
 void BarPlotPrivate::recalc() {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
@@ -504,6 +508,7 @@ void BarPlotPrivate::recalc() {
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
 	if (orientation == BarPlot::Orientation::Vertical) {
+		// min/max for x
 		if (xColumn) {
 			xMin = xColumn->minimum() - 0.5;
 			xMax = xColumn->maximum() + 0.5;
@@ -511,11 +516,26 @@ void BarPlotPrivate::recalc() {
 			xMin = 0.5;
 			xMax = count + 0.5;
 		}
-		yMin = INFINITY;
+
+		// min/max for y
+		yMin = 0;
 		yMax = -INFINITY;
+		for (auto* column : dataColumns) {
+			double max = column->maximum();
+			if (max > yMax)
+				yMax = max;
+		}
 	} else { // horizontal
-		xMin = INFINITY;
+		// min/max for x
+		xMin = 0;
 		xMax = -INFINITY;
+		for (auto* column : dataColumns) {
+			double max = column->maximum();
+			if (max > xMax)
+				xMax = max;
+		}
+
+		// min/max for y
 		if (xColumn) {
 			yMin = xColumn->minimum() - 0.5;
 			yMax = xColumn->maximum() + 0.5;
@@ -525,8 +545,8 @@ void BarPlotPrivate::recalc() {
 		}
 	}
 
-	// the size of the boxplot changed because of the actual
-	// data changes or because of new boxplot settings.
+	// the size of the bar plots changed because of the actual
+	// data changes or because of new bar plot settings.
 	// Q_EMIT dataChanged() in order to recalculate everything
 	// in the parent plot with the new size/shape of the boxplot
 	Q_EMIT q->dataChanged();
@@ -541,7 +561,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one value in scene coordinates
 	for (int i = 0; i < column->rowCount(); ++i) {
-		if (column->isValid(i) || xColumn->isMasked(i))
+		if (!column->isValid(i) || column->isMasked(i))
 			continue;
 
 		double value = column->valueAt(i);
@@ -556,7 +576,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		lines << QLineF(x - width/2, value, x + width/2, value);
 		lines << QLineF(x + width/2, value, x + width/2, 0);
 		lines << QLineF(x + width/2, 0, x - width/2, 0);
-		lines << QLineF(x - width/2, 0, x + width/2, value);
+		lines << QLineF(x - width/2, 0, x - width/2, value);
 
 		barLines << q->cSystem->mapLogicalToScene(lines);
 		updateFillingRect(columnIndex, barIndex, lines);
