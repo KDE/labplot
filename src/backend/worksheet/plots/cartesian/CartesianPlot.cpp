@@ -38,6 +38,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -335,6 +336,7 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
+	addBarPlotAction = new QAction(QIcon::fromTheme("office-chart-bar"), i18n("Bar Plot"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a Formula"), this);
 	// no icons yet
@@ -364,6 +366,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
 	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
@@ -521,6 +524,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addBoxPlotAction);
+	addNewMenu->addAction(addBarPlotAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 
@@ -705,6 +709,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 QVector<AspectType> CartesianPlot::pasteTypes() const {
 	QVector<AspectType> types{AspectType::XYCurve,
 							  AspectType::Histogram,
+							  AspectType::BarPlot,
 							  AspectType::BoxPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
@@ -1917,6 +1922,10 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	endMacro();
 }
 
+void CartesianPlot::addBarPlot() {
+	addChild(new BarPlot("Bar Plot"));
+}
+
 void CartesianPlot::addBoxPlot() {
 	addChild(new BoxPlot("Box Plot"));
 }
@@ -2241,6 +2250,7 @@ int CartesianPlot::curveTotalCount() const {
 	int count = children<XYCurve>().size();
 	count += children<Histogram>().size();
 	count += children<BoxPlot>().size();
+	count += children<BarPlot>().size();
 	return count;
 }
 
@@ -2265,7 +2275,8 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		if (child == curve)
 			break;
 
-		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BoxPlot
+		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram
+			|| child->type() == AspectType::BarPlot || child->type() == AspectType::BoxPlot
 			|| child->inherits(AspectType::XYAnalysisCurve))
 			++index;
 	}

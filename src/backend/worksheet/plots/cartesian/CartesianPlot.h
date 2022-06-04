@@ -230,6 +230,7 @@ private:
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
 	QAction* addHistogramAction;
+	QAction* addBarPlotAction;
 	QAction* addBoxPlotAction;
 	QAction* addDataReductionCurveAction;
 	QAction* addDifferentiationCurveAction;
@@ -300,6 +301,7 @@ public Q_SLOTS:
 	void addCurve();
 	void addHistogram();
 	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
+	void addBarPlot();
 	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();
