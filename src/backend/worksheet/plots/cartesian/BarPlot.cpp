@@ -73,7 +73,7 @@ void BarPlot::init() {
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
-	d->fillingOpacity = group.readEntry("FillingOpacity", 0.5);
+	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
 
 	// box border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
@@ -86,34 +86,11 @@ void BarPlot::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon BarPlot::icon() const {
-	// 	return QIcon::fromTheme(QLatin1String("draw-line"));
-	return BarPlot::staticIcon();
-}
-
-QIcon BarPlot::staticIcon() {
-	QPainter pa;
-	pa.setRenderHint(QPainter::Antialiasing);
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-
-	QPen pen(Qt::SolidLine);
-	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	pen.setColor(color);
-	pen.setWidthF(0.0);
-
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setPen(pen);
-	pa.drawRect(6, 6, 8, 8); // box
-	pa.drawLine(10, 6, 10, 0); // upper whisker
-	pa.drawLine(10, 14, 10, 20); // lower whisker
-	pa.end();
-
-	return {pm};
+	return QIcon::fromTheme(QLatin1String("office-chart-bar"));
 }
 
 void BarPlot::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &BarPlot::visibilityChangedSlot);
 
@@ -122,10 +99,10 @@ void BarPlot::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &BarPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -134,7 +111,7 @@ void BarPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -146,16 +123,18 @@ QMenu* BarPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 
-	// Orientation
-	// 	if (d->orientation == Orientation::Horizontal)
-	// 		orientationHorizontalAction->setChecked(true);
-	// 	else
-	// 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-
 	// Visibility
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	// Orientation
+	Q_D(const BarPlot);
+	if (d->orientation == Orientation::Horizontal)
+		orientationHorizontalAction->setChecked(true);
+	else
+		orientationVerticalAction->setChecked(true);
+	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -470,6 +449,7 @@ void BarPlotPrivate::retransform() {
 
 	recalcShapeAndBoundingRect();
 }
+
 /*!
  * called when the data columns or their values were changed
  * calculates the min and max values for x and y and calls dataChanged()
@@ -705,14 +685,16 @@ void BarPlotPrivate::updatePixmap() {
 void BarPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
+	int columnIndex = 0;
+	int barIndex = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
 		for (const auto& barLines : columnBarLines) { // loop over the bars for every data column
-// 			// draw the box filling
-// 			if (fillingEnabled) {
-// 				painter->setOpacity(fillingOpacity);
-// 				painter->setPen(Qt::SolidLine);
-// 				drawFilling(painter, i);
-// 			}
+			// draw the box filling
+			if (fillingEnabled) {
+				painter->setOpacity(fillingOpacity);
+				painter->setPen(Qt::SolidLine);
+				drawFilling(painter, columnIndex, barIndex);
+			}
 
 			// draw the border
 			if (borderPen.style() != Qt::NoPen) {
@@ -722,14 +704,17 @@ void BarPlotPrivate::draw(QPainter* painter) {
 				for (const auto& line : barLines) // loop over the four lines for every bar
 					painter->drawLine(line);
 			}
+
+			++barIndex;
 		}
+		++columnIndex;
 	}
 }
 
-void BarPlotPrivate::drawFilling(QPainter* painter, int index) {
+void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int barIndex) {
 	PERFTRACE(name() + Q_FUNC_INFO);
-/*
-	const QPolygonF& polygon = m_fillPolygon.at(index);
+
+	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(barIndex);
 	const QRectF& rect = polygon.boundingRect();
 
 	if (fillingType == WorksheetElement::BackgroundType::Color) {
@@ -815,7 +800,6 @@ void BarPlotPrivate::drawFilling(QPainter* painter, int index) {
 		painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
 
 	painter->drawPolygon(polygon);
-	*/
 }
 
 void BarPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -1073,7 +1057,7 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
 	setFillingColorStyle(
 		(WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
-	setFillingOpacity(group.readEntry("FillingOpacity", 0.5));
+	setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
 	setFillingFirstColor(themeColor);
 	setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
 	setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
