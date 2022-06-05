@@ -4,7 +4,7 @@
 	Description          : Cartesian coordinate system for plots.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -25,7 +25,7 @@ public:
 	static CartesianScale* createSquareScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange);
 	static CartesianScale* createInverseScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange);
 
-	virtual void getProperties(Range<double>* = nullptr, double* a = nullptr, double* b = nullptr, double* c = nullptr) const;
+	virtual void getParameter(Range<double>* = nullptr, double* a = nullptr, double* b = nullptr, double* c = nullptr) const;
 
 	inline double start() const {
 		return m_range.start();
@@ -46,7 +46,7 @@ public:
 
 protected:
 	CartesianScale(const Range<double>& range, double a, double b, double c);
-	Range<double> m_range;
+	Range<double> m_range;	// range of scale
 	// scale parameter
 	double m_a;
 	double m_b;

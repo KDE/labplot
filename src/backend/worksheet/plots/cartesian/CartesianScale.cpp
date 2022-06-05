@@ -28,7 +28,7 @@ CartesianScale::CartesianScale(const Range<double>& range, double a, double b, d
 
 CartesianScale::~CartesianScale() = default;
 
-void CartesianScale::getProperties(Range<double>* range, double* a, double* b, double* c) const {
+void CartesianScale::getParameter(Range<double>* range, double* a, double* b, double* c) const {
 	if (range)
 		*range = m_range;
 	if (a)

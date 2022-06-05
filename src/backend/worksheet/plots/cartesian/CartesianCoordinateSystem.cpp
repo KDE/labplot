@@ -318,7 +318,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 			if (!nextXScale)
 				continue;
 			Range<double> nextXRange;
-			nextXScale->getProperties(&nextXRange);
+			nextXScale->getParameter(&nextXRange);
 
 			double x1 = xScale->end();
 			double x2 = nextXScale->start();
@@ -392,8 +392,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				//				QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
 				result.append(mappedLine);
 
+				// gap marker
 				if (flags & MappingFlag::MarkGaps) {
-					// mark the end of the gap
+					// end of x gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
 							QLineF gapMarker(x1 + xGapBefore / 4., y1 - xGapBefore / 2., x1 - xGapBefore / 4., y1 + xGapBefore / 2.);
@@ -407,7 +408,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 						}
 					}
 
-					// mark the beginning of the gap
+					// start of x gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
 							QLineF gapMarker(x1 + xGapAfter / 4., y1 - xGapAfter / 2., x1 - xGapAfter / 4., y1 + xGapAfter / 2.);
@@ -421,6 +422,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 						}
 					}
 
+					// end of y gap
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
 							QLineF gapMarker(x1 + yGapBefore / 2., y1 - yGapBefore / 4., x1 - yGapBefore / 2., y1 + yGapBefore / 4.);
@@ -434,20 +436,20 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 						}
 					}
 
+					// start of y gap
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
-							QLineF gapMarker(QPointF(x1 + yGapAfter / 2., y1 - yGapAfter / 4.), QPointF(x1 - yGapAfter / 2., y1 + yGapAfter / 4.));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x1 + yGapAfter / 2., y1 - yGapAfter / 4., x1 - yGapAfter / 2., y1 + yGapAfter / 4.);
+							//if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedBottom[1]) {
-							QLineF gapMarker(QPointF(x2 + yGapAfter / 2., y2 - yGapAfter / 4.), QPointF(x2 - yGapAfter / 2., y2 + yGapAfter / 4.));
-							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							QLineF gapMarker(x2 + yGapAfter / 2., y2 - yGapAfter / 4., x2 - yGapAfter / 2., y2 + yGapAfter / 4.);
+							//if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 					}
 				}
-
 
 			}
 		}
