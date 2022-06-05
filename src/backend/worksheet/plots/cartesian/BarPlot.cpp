@@ -508,7 +508,16 @@ void BarPlotPrivate::recalc() {
 				double max = column->maximum();
 				if (max > yMax)
 					yMax = max;
+
+				double min = column->minimum();
+				if (min < yMin)
+					yMin = min;
 			}
+
+			// if there are no negative values, we plot
+			// in the positive y-direction only and we start at y=0
+			if (yMin > 0)
+				yMin = 0;
 		} else { // stacked bar plots
 			// TODO
 		}
@@ -521,7 +530,16 @@ void BarPlotPrivate::recalc() {
 				double max = column->maximum();
 				if (max > xMax)
 					xMax = max;
+
+				double min = column->minimum();
+				if (min < xMin)
+					xMin = min;
 			}
+
+			// if there are no negative values, we plot
+			// in the positive x-direction only and we start at x=0
+			if (xMin > 0)
+				xMin = 0;
 		} else { // stacked bar plots
 			// TODO
 		}
@@ -551,10 +569,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
 	if (type == BarPlot::Type::Grouped) {
-		double barGap = 0.1; // gap between two bars within a group
-		double groupGap = 0.15; // gap around a group - the gap between two neighbour groups is 2*groupGap
+		double barGap = 0.1*widthFactor; // gap between two bars within a group
+		double groupGap = 0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*groupGap
 		int count = dataColumns.size();
-		double width = (1 - 2 * groupGap - (count - 1) * barGap) / count; // bar width
+		double width = (1*widthFactor - 2 * groupGap - (count - 1) * barGap) / count; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -567,7 +585,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + 1.0 - 0.5 + groupGap +  (width + barGap)*columnIndex;
+				x = valueIndex + 1.0 - 0.5*widthFactor + groupGap + (width + barGap)*columnIndex;
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
