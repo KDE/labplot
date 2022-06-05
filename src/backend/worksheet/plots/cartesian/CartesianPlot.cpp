@@ -3690,6 +3690,8 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
+				DEBUG("break scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
+
 				if (sceneRange.length() > 0)
 					scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 
@@ -3701,9 +3703,15 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
 			logicalRange.setRange(logicalEndLast, xRange.end());
 
+			DEBUG("last scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
+
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		}
+		for (int s = 0; s < scales.size(); s++) {
+			DEBUG("SCALE " << s+1 << ": " << scales.at(s)->range().toStdString())
+		}
+
 		cs->setXScales(scales);
 	}
 
@@ -3955,7 +3963,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 }
 
 /*
- * calculates the rectangular of the are showing the actual data (plot's rect minus padding),
+ * calculates the rectangular of the area showing the actual data (plot's rect minus padding),
  * in plot's coordinates.
  */
 void CartesianPlotPrivate::updateDataRect() {
@@ -4119,7 +4127,10 @@ void CartesianPlotPrivate::checkYRange(int index) {
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	DEBUG(Q_FUNC_INFO << ", scene range : " << sceneRange.toStdString() << ", logical range : " << logicalRange.toStdString());
 
-	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+	// TODO: log scales and axis offset need this!
+//	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+	// range breaks need logical range
+	Range<double> range = logicalRange;
 
 	switch (scale) {
 	case RangeT::Scale::Linear:

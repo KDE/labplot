@@ -42,13 +42,13 @@ void CartesianScale::getProperties(Range<double>* range, double* a, double* b, d
 /**
  * \class CartesianCoordinateSystem::LinearScale
  * \brief implementation of a linear scale for cartesian coordinate systems
- * y =  b * x + a. a - offset, b - gradient
+ * y =  a + b * x. a - offset, b - gradient
  */
 class LinearScale : public CartesianScale {
 public:
-	LinearScale(const Range<double>& range, double offset, double gradient)
-		: CartesianScale(range, offset, gradient, 0) {
-		Q_ASSERT(gradient != 0.0);
+	LinearScale(const Range<double>& range, double offset, double slope)
+		: CartesianScale(range, offset, slope, 0) {
+		Q_ASSERT(slope != 0.0);
 	}
 
 	~LinearScale() override = default;
@@ -59,6 +59,7 @@ public:
 	}
 
 	bool inverseMap(double* value) const override {
+		DEBUG("value = " << *value << ", a/b = " << m_a << " / " << m_b)
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
@@ -198,6 +199,7 @@ CartesianScale* CartesianScale::createLinearScale(const Range<double>& range, co
 	double b = sceneRange.size() / logicalRange.size();
 	double a = sceneRange.start() - b * logicalRange.start();
 
+	DEBUG("a = " << a << ", b = " << b)
 	return new LinearScale(range, a, b);
 }
 
@@ -220,6 +222,7 @@ CartesianScale::createLogScale(const Range<double>& range, const Range<double>& 
 	double b = sceneRange.size() / lDiff;
 	double a = sceneRange.start() - b * log(logicalRange.start()) / log(base);
 
+	DEBUG("a = " << a << ", b = " << b)
 	return new LogScale(range, a, b, base);
 }
 

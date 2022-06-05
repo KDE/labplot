@@ -412,12 +412,12 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 	if (position.horizontalPosition == HorizontalPosition::Left)
 		parentPos.setX(parentRect.x() + position.point.x());
 	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
-		parentPos.setX(parentRect.x() + parentRect.width() / 2 + position.point.x());
+		parentPos.setX(parentRect.x() + parentRect.width() / 2. + position.point.x());
 	else // position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
 		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x());
 
 	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
-		parentPos.setY(parentRect.y() + parentRect.height() / 2 - position.point.y());
+		parentPos.setY(parentRect.y() + parentRect.height() / 2. - position.point.y());
 	else if (position.verticalPosition == VerticalPosition::Bottom)
 		parentPos.setY(parentRect.y() + parentRect.height() - position.point.y());
 	else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default

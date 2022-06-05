@@ -25,7 +25,7 @@ public:
 	static CartesianScale* createSquareScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange);
 	static CartesianScale* createInverseScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange);
 
-	virtual void getProperties(Range<double>* range = nullptr, double* a = nullptr, double* b = nullptr, double* c = nullptr) const;
+	virtual void getProperties(Range<double>* = nullptr, double* a = nullptr, double* b = nullptr, double* c = nullptr) const;
 
 	inline double start() const {
 		return m_range.start();
@@ -47,7 +47,7 @@ public:
 protected:
 	CartesianScale(const Range<double>& range, double a, double b, double c);
 	Range<double> m_range;
-	// TODO: what are these?
+	// scale parameter
 	double m_a;
 	double m_b;
 	double m_c;

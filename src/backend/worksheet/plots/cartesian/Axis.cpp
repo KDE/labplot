@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2011-2018 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2013-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -1050,7 +1050,6 @@ void AxisPrivate::retransformLine() {
 	if (suppressRetransform)
 		return;
 
-	linePath = QPainterPath();
 	lines.clear();
 
 	QPointF startPoint, endPoint;
@@ -1059,34 +1058,46 @@ void AxisPrivate::retransformLine() {
 			startPoint = QPointF(range.start(), logicalPosition);
 			endPoint = QPointF(range.end(), logicalPosition);
 			lines.append(QLineF(startPoint, endPoint));
-			// QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
 			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
+/* OLD method: not working correctly
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Top)
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Top;
 			else if (position == Axis::Position::Centered)
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Center;
-			else // (position == Axis::Position::Bottom) // default
+			else // default
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(wrapper);
+			QDEBUG("(WRONG) POS:" << pos << ", offset = " << offset)
+*/
+			// y location of x axis
+			double yValue = 1.;
+			if (position == Axis::Position::Bottom)
+				yValue = q->cSystem->yScales().first()->start();
+			else if (position == Axis::Position::Top)
+				yValue = q->cSystem->yScales().last()->end();
+			else // Center
+				yValue = (q->cSystem->yScales().first()->start() + q->cSystem->yScales().last()->end())/2.;
 
-			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
-			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
-			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
+			//TODO: offset
+			//yValue += ;
 
-			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(qMax(sceneRange.at(0).x1(), rect.x()), pos.y());
-				endPoint = QPointF(qMin(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
+			// map axis incl. all scales
+			Lines logicalLines{QLineF(QPointF(range.start(), yValue), QPointF(range.end(), yValue))};
+			QDEBUG("LOGICAL LINES:" << logicalLines)
+			const auto sceneLines = q->cSystem->mapLogicalToScene(logicalLines, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping | AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			QDEBUG("SCENE LINES:" << sceneLines)
 
-				lines.append(QLineF(startPoint, endPoint));
-				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
+			if (sceneLines.size() > 0) {
+				//	DEBUG(" number of x scales = " << q->cSystem->xScales().size())
+				// axis line + gap marker
+				for (int s = 0; s < 2*q->cSystem->xScales().size(); s++)
+					lines.append(sceneLines.at(s));
 			}
+			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
 	} else { // vertical
 		if (position == Axis::Position::Logical) {
@@ -1096,6 +1107,7 @@ void AxisPrivate::retransformLine() {
 			// QDEBUG(Q_FUNC_INFO << ", LOGICAL LINES = " << lines)
 			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
+/* OLD method: not working correctly
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Left)
 				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
@@ -1106,23 +1118,36 @@ void AxisPrivate::retransformLine() {
 
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(wrapper);
+*/
+			// x location of y axis
+			double xValue = 1.;
+			if (position == Axis::Position::Left)
+				xValue = q->cSystem->xScales().first()->start();
+			else if (position == Axis::Position::Right)
+				xValue = q->cSystem->xScales().last()->end();
+			else // Center
+				xValue = (q->cSystem->xScales().first()->start() + q->cSystem->xScales().last()->end())/2.;
 
-			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
-			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
-			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
-			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
-				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(pos.x(), qMin(sceneRange.at(0).y1(), rect.y() + rect.height()));
-				endPoint = QPointF(pos.x(), qMax(sceneRange.at(0).y2(), rect.y()));
+			//TODO: offset
+			//xValue += ;
 
-				lines.append(QLineF(startPoint, endPoint));
-				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+			// map axis incl. all scales
+			Lines logicalLines{QLineF(QPointF(xValue, range.start()), QPointF(xValue, range.end()))};
+			QDEBUG("LOGICAL LINES:" << logicalLines)
+			const auto sceneLines = q->cSystem->mapLogicalToScene(logicalLines, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping | AbstractCoordinateSystem::MappingFlag::MarkGaps);
+			QDEBUG("SCENE LINES:" << sceneLines)
+
+			if (sceneLines.size() > 0) {
+				//	DEBUG(" number of x scales = " << q->cSystem->xScales().size())
+				// axis line + gap marker
+				for (int s = 0; s < 2*q->cSystem->yScales().size(); s++)
+					lines.append(sceneLines.at(s));
 			}
+			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
 	}
 
+	linePath = QPainterPath();
 	for (const auto& line : qAsConst(lines)) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
