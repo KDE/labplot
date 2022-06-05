@@ -230,11 +230,12 @@ void BarPlot::setXColumn(const AbstractColumn* column) {
 		exec(new BarPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
 
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
 
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
+
+			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
 			// TODO: add disconnect in the undo-function
 		}
 	}
@@ -250,12 +251,12 @@ void BarPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			if (!column)
 				continue;
 
-			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
-
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
 			// TODO: add disconnect in the undo-function
+
+			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::dataChanged);
 		}
 	}
 }
@@ -475,6 +476,8 @@ void BarPlotPrivate::recalc() {
 		m_fillPolygons[columnIndex].resize(size);
 		if (size > count)
 			count = size;
+
+		++columnIndex;
 	}
 
 	// if an x-column was provided and it has less values than the count determined
@@ -493,35 +496,43 @@ void BarPlotPrivate::recalc() {
 			xMin = xColumn->minimum() - 0.5;
 			xMax = xColumn->maximum() + 0.5;
 		} else {
-			xMin = 0.5;
-			xMax = count + 0.5;
+			xMin = 0.0;
+			xMax = count + 1.0;
 		}
 
 		// min/max for y
 		yMin = 0;
 		yMax = -INFINITY;
-		for (auto* column : dataColumns) {
-			double max = column->maximum();
-			if (max > yMax)
-				yMax = max;
+		if (type == BarPlot::Type::Grouped) {
+			for (auto* column : dataColumns) {
+				double max = column->maximum();
+				if (max > yMax)
+					yMax = max;
+			}
+		} else { // stacked bar plots
+			// TODO
 		}
 	} else { // horizontal
 		// min/max for x
 		xMin = 0;
 		xMax = -INFINITY;
-		for (auto* column : dataColumns) {
-			double max = column->maximum();
-			if (max > xMax)
-				xMax = max;
+		if (type == BarPlot::Type::Grouped) {
+			for (auto* column : dataColumns) {
+				double max = column->maximum();
+				if (max > xMax)
+					xMax = max;
+			}
+		} else { // stacked bar plots
+			// TODO
 		}
 
 		// min/max for y
 		if (xColumn) {
-			yMin = xColumn->minimum() - 0.5;
-			yMax = xColumn->maximum() + 0.5;
+			yMin = xColumn->minimum() - 1.0;
+			yMax = xColumn->maximum() + 1.0;
 		} else {
-			yMin = 0.5;
-			yMax = count + 0.5;
+			yMin = 0.0;
+			yMax = count + 1.0;
 		}
 	}
 
@@ -535,32 +546,42 @@ void BarPlotPrivate::recalc() {
 void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
-	auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
-	int barIndex = 0;
-	double width = 0.5;
+	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
-	QVector<QVector<QLineF>> barLines; // lines for all bars for one value in scene coordinates
-	for (int i = 0; i < column->rowCount(); ++i) {
-		if (!column->isValid(i) || column->isMasked(i))
-			continue;
+	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
-		double value = column->valueAt(i);
+	if (type == BarPlot::Type::Grouped) {
+		double barGap = 0.1; // gap between two bars within a group
+		double groupGap = 0.15; // gap around a group - the gap between two neighbour groups is 2*groupGap
+		int count = dataColumns.size();
+		double width = (1 - 2 * groupGap - (count - 1) * barGap) / count; // bar width
 
-		double x;
-		if (xColumn)
-			x = xColumn->valueAt(i);
-		else
-			x = barIndex + 1.0;
+		int valueIndex = 0;
+		for (int i = 0; i < column->rowCount(); ++i) {
+			if (!column->isValid(i) || column->isMasked(i))
+				continue;
 
-		// first line starting at the top left corner of the box
-		lines << QLineF(x - width/2, value, x + width/2, value);
-		lines << QLineF(x + width/2, value, x + width/2, 0);
-		lines << QLineF(x + width/2, 0, x - width/2, 0);
-		lines << QLineF(x - width/2, 0, x - width/2, value);
+			double value = column->valueAt(i);
+			double x;
 
-		barLines << q->cSystem->mapLogicalToScene(lines);
-		updateFillingRect(columnIndex, barIndex, lines);
-		++barIndex;
+			if (xColumn)
+				x = xColumn->valueAt(i);
+			else
+				x = valueIndex + 1.0 - 0.5 + groupGap +  (width + barGap)*columnIndex;
+
+			lines.clear();
+			lines << QLineF(x, value, x + width, value);
+			lines << QLineF(x + width, value, x + width, 0);
+			lines << QLineF(x + width, 0, x, 0);
+			lines << QLineF(x, 0, x, value);
+
+			barLines << q->cSystem->mapLogicalToScene(lines);
+			updateFillingRect(columnIndex, valueIndex, lines);
+
+			++valueIndex;
+		}
+	} else { // stacked bar plot
+		// TODO
 	}
 
 	m_barLines[columnIndex] = barLines;
@@ -570,11 +591,11 @@ void BarPlotPrivate::horizontalBarPlot(int index) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 }
 
-void BarPlotPrivate::updateFillingRect(int columnIndex, int barIndex, const QVector<QLineF>& lines) {
+void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>& lines) {
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
-		m_fillPolygons[columnIndex][barIndex]  = QPolygonF();
+		m_fillPolygons[columnIndex][valueIndex]  = QPolygonF();
 		return;
 	}
 
@@ -620,7 +641,7 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int barIndex, const QVec
 		++i;
 	}
 
-	m_fillPolygons[columnIndex][barIndex] = polygon;
+	m_fillPolygons[columnIndex][valueIndex] = polygon;
 }
 
 /*!
@@ -686,14 +707,14 @@ void BarPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
 	int columnIndex = 0;
-	int barIndex = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
+		int valueIndex = 0;
 		for (const auto& barLines : columnBarLines) { // loop over the bars for every data column
 			// draw the box filling
 			if (fillingEnabled) {
 				painter->setOpacity(fillingOpacity);
 				painter->setPen(Qt::SolidLine);
-				drawFilling(painter, columnIndex, barIndex);
+				drawFilling(painter, columnIndex, valueIndex);
 			}
 
 			// draw the border
@@ -705,17 +726,21 @@ void BarPlotPrivate::draw(QPainter* painter) {
 					painter->drawLine(line);
 			}
 
-			++barIndex;
+			++valueIndex;
 		}
 		++columnIndex;
 	}
 }
 
-void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int barIndex) {
+void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int valueIndex) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
-	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(barIndex);
+	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
 	const QRectF& rect = polygon.boundingRect();
+
+	// TODO
+	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+	fillingFirstColor = plot->themeColorPalette(columnIndex);
 
 	if (fillingType == WorksheetElement::BackgroundType::Color) {
 		switch (fillingColorStyle) {
@@ -875,7 +900,7 @@ void BarPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void BarPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BarPlot);
 
-	writer->writeStartElement("boxPlot");
+	writer->writeStartElement("barPlot");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -935,7 +960,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "boxPlot")
+		if (reader->isEndElement() && reader->name() == "barPlot")
 			break;
 
 		if (!reader->isStartElement())

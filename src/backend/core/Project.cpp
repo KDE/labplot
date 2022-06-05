@@ -19,6 +19,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -941,6 +942,39 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		}
 
 		boxPlot->setDataColumns(dataColumns);
+	}
+
+	// bar plots
+	QVector<BarPlot*> barPlots;
+	if (hasChildren)
+		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		barPlots << static_cast<BarPlot*>(aspect);
+
+	for (auto* barPlot : barPlots) {
+		if (!barPlot)
+			continue;
+
+		// initialize the array for the column pointers
+		int count = barPlot->dataColumnPaths().count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = barPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		barPlot->setDataColumns(dataColumns);
 	}
 
 	// data picker curves
