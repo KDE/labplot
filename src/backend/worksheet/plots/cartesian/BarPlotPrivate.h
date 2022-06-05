@@ -77,10 +77,10 @@ private:
 	void recalc(int);
 	void verticalBarPlot(int);
 	void horizontalBarPlot(int);
-	void updateFillingRect(int columnIndex, int barIndex, const QVector<QLineF>&);
+	void updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>&);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*, int columnIndex, int barIndex);
+	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
 	bool m_hovered{false};
 	bool m_suppressRetransform{false};
