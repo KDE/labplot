@@ -8,8 +8,8 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef REFERENCELINEPRIVATE_H
-#define REFERENCELINEPRIVATE_H
+#ifndef BOXPLOTPRIVATE_H
+#define BOXPLOTPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>

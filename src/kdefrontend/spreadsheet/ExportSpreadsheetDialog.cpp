@@ -40,14 +40,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->gbOptions->hide();
 
-	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_showOptionsButton = new QPushButton;
-
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	connect(btnBox, &QDialogButtonBox::clicked, this, &ExportSpreadsheetDialog::slotButtonClicked);
-
-	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
 	ui->verticalLayout->addWidget(btnBox);
 
+	m_showOptionsButton = btnBox->button(QDialogButtonBox::Reset);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
@@ -515,7 +512,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	if (!enable) {
 		const auto* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
-		QStandardItem* item = areaToExportModel->item(1);
+		auto* item = areaToExportModel->item(1);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 }

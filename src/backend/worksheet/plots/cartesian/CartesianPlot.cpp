@@ -2356,7 +2356,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				this->dataChanged(-1, -1, const_cast<Histogram*>(hist));
 			});
 			connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-			connect(hist, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+			connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
 			cSystemIndex = hist->coordinateSystemIndex();
