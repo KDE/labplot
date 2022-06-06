@@ -1291,6 +1291,7 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QVector<QPointF> points;
 	points.append(*anchorPoint);
 	points = q->cSystem->mapLogicalToScene(points);
+	//QDEBUG(Q_FUNC_INFO << ", POINTS =" << points)
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
@@ -1448,14 +1449,14 @@ void AxisPrivate::retransformTicks() {
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
-		//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
+		//DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		qreal majorTickPos = 0.0;
 		qreal nextMajorTickPos = 0.0;
 		// calculate major tick's position
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
 			case RangeT::Scale::Linear:
-				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+				//DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
@@ -1512,8 +1513,10 @@ void AxisPrivate::retransformTicks() {
 				auto startY = q->plot()->yRange(cs->yIndex()).start();
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(startY); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+				//QDEBUG("anchor = " << anchorPoint)
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setY(yAnchorPoint);
+				//DEBUG("valid = " << valid)
 				if (valid) {
 					// for yDirection == -1 start is above end
 					if (anchorPoint.y() >= center.y()) { // below
@@ -1550,6 +1553,7 @@ void AxisPrivate::retransformTicks() {
 				valid = false;
 
 			// add major tick's line to the painter path
+			//QDEBUG("valid = " << valid << ", start/end point: " << startPoint << " / " << endPoint)
 			if (valid) {
 				if (majorTicksPen.style() != Qt::NoPen) {
 					majorTicksPath.moveTo(startPoint);

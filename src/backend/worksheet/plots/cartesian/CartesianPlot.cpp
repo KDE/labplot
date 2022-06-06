@@ -4127,14 +4127,14 @@ void CartesianPlotPrivate::checkYRange(int index) {
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	DEBUG(Q_FUNC_INFO << ", scene range : " << sceneRange.toStdString() << ", logical range : " << logicalRange.toStdString());
 
-	// TODO: log scales and axis offset need this!
-//	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
-	// range breaks need logical range
-	Range<double> range = logicalRange;
+	// -Inf .. Inf
+	//TODO: not necessary?
+	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 
+	// TODO: non-linear scales
 	switch (scale) {
 	case RangeT::Scale::Linear:
-		return CartesianScale::createLinearScale(range, sceneRange, logicalRange);
+		return CartesianScale::createLinearScale(sceneRange, logicalRange);
 	case RangeT::Scale::Log10:
 	case RangeT::Scale::Log2:
 	case RangeT::Scale::Ln:

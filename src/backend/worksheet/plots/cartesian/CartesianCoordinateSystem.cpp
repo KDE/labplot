@@ -263,7 +263,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 			if (!yScale)
 				continue;
 
-			if (!xScale->contains(x) || !yScale->contains(y)) {
+			if (!xScale->valid(x) || !yScale->valid(y)) {
 				//DEBUG("FAIL contains. y = " << y << ", y scale = " << yScale->range().toStdString())
 				continue;
 			}
@@ -512,12 +512,12 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 					}
 					//DEBUG("y = " << y)
 
-					if (!xScale->contains(x)) {
+					if (!xScale->valid(x)) {
 						x = point.x();
 						continue;
 					}
 
-					if (!yScale->contains(y)) {
+					if (!yScale->valid(y)) {
 						y = point.y();
 						continue;
 					}
@@ -567,7 +567,7 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 				if (!xScale->inverseMap(&x) || !yScale->inverseMap(&y))
 					continue;
 
-				if (!xScale->contains(x) || !yScale->contains(y))
+				if (!xScale->valid(x) || !yScale->valid(y))
 					continue;
 
 				result.setX(x);

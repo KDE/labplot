@@ -4,7 +4,7 @@
 	Description          : Cartesian coordinate system for plots.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,8 +19,9 @@ extern "C" {
  * \class CartesianScale
  * \brief Base class for cartesian coordinate system scales.
  */
-CartesianScale::CartesianScale(const Range<double>& range, double a, double b, double c)
+CartesianScale::CartesianScale(const Range<double>& clipRange, double a, double b, double c, const Range<double>& range)
 	: m_range(range)
+	, m_clipRange(clipRange)
 	, m_a(a)
 	, m_b(b)
 	, m_c(c) {
@@ -46,8 +47,8 @@ void CartesianScale::getParameter(Range<double>* range, double* a, double* b, do
  */
 class LinearScale : public CartesianScale {
 public:
-	LinearScale(const Range<double>& range, double offset, double slope)
-		: CartesianScale(range, offset, slope, 0) {
+	LinearScale(const Range<double>& clipRange, double offset, double slope)
+		: CartesianScale(clipRange, offset, slope, 0) {
 		Q_ASSERT(slope != 0.0);
 	}
 
@@ -190,9 +191,10 @@ public:
 	}
 };
 
-/***************************************************************/
+////////////////////////////////////////////////////////////////
 
-CartesianScale* CartesianScale::createLinearScale(const Range<double>& range, const Range<double>& sceneRange, const Range<double>& logicalRange) {
+// create linear scale with range = -Inf .. Inf and clipRange = logicalRange
+CartesianScale* CartesianScale::createLinearScale(const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	if (logicalRange.size() == 0.0)
 		return nullptr;
 
@@ -200,7 +202,7 @@ CartesianScale* CartesianScale::createLinearScale(const Range<double>& range, co
 	double a = sceneRange.start() - b * logicalRange.start();
 
 	DEBUG("a = " << a << ", b = " << b)
-	return new LinearScale(range, a, b);
+	return new LinearScale(logicalRange, a, b);
 }
 
 CartesianScale*
