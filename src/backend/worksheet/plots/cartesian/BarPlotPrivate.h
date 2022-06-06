@@ -90,7 +90,8 @@ private:
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)
-	QVector<double> m_stackedBarOffsets; // offsets for the y-positions for stacked bar plots
+	QVector<double> m_stackedBarPositiveOffsets; // offsets for the y-positions for stacked bar plots, positive direction
+	QVector<double> m_stackedBarNegativeOffsets; // offsets for the y-positions for stacked bar plots, negative direction
 	double m_widthScaleFactor{1.0};
 
 	QPixmap m_pixmap;

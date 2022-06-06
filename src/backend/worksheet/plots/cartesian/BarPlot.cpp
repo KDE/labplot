@@ -434,7 +434,8 @@ void BarPlotPrivate::retransform() {
 		return;
 	}
 
-	m_stackedBarOffsets.fill(0);
+	m_stackedBarPositiveOffsets.fill(0);
+	m_stackedBarNegativeOffsets.fill(0);
 
 	if (count) {
 		if (orientation == BarPlot::Orientation::Vertical) {
@@ -482,7 +483,8 @@ void BarPlotPrivate::recalc() {
 		++columnIndex;
 	}
 
-	m_stackedBarOffsets.resize(barsCount);
+	m_stackedBarPositiveOffsets.resize(barsCount);
+	m_stackedBarNegativeOffsets.resize(barsCount);
 
 	// if an x-column was provided and it has less values than the count determined
 	// above, we limit the number of bars to the number of values in the x-column
@@ -539,7 +541,7 @@ void BarPlotPrivate::recalc() {
 			}
 		} else { // stacked bar plots
 			yMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
-			yMin = *std::max_element(barMins.constBegin(), barMins.constEnd());
+			yMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
 		}
 
 		// if there are no negative values, we plot
@@ -563,7 +565,7 @@ void BarPlotPrivate::recalc() {
 
 		} else { // stacked bar plots
 			xMax = *std::max_element(barMaxs.constBegin(), barMaxs.constEnd());
-			xMin = *std::max_element(barMins.constBegin(), barMins.constEnd());
+			xMin = *std::min_element(barMins.constBegin(), barMins.constEnd());
 		}
 
 		// if there are no negative values, we plot
@@ -633,7 +635,12 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				continue;
 
 			const double value = column->valueAt(i);
-			const double offset = m_stackedBarOffsets[valueIndex];
+			double offset;
+			if (value > 0)
+				offset = m_stackedBarPositiveOffsets[valueIndex];
+			else
+				offset = m_stackedBarNegativeOffsets[valueIndex];
+
 			double x;
 
 			if (xColumn)
@@ -647,7 +654,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			lines << QLineF(x + width, offset, x, offset);
 			lines << QLineF(x, offset, x, value + offset);
 
-			m_stackedBarOffsets[valueIndex] += value;
+			if (value > 0)
+				m_stackedBarPositiveOffsets[valueIndex] += value;
+			else
+				m_stackedBarNegativeOffsets[valueIndex] += value;
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
