@@ -1075,12 +1075,15 @@ void AxisPrivate::retransformLine() {
 */
 			// y location of x axis
 			double yValue = 1.;
-			if (position == Axis::Position::Bottom)
-				yValue = q->cSystem->yScales().first()->start();
-			else if (position == Axis::Position::Top)
-				yValue = q->cSystem->yScales().last()->end();
-			else // Center
-				yValue = (q->cSystem->yScales().first()->start() + q->cSystem->yScales().last()->end())/2.;
+			const auto yScales = q->cSystem->yScales();
+			if (yScales.size() > 0) {
+				if (position == Axis::Position::Bottom)
+					yValue = yScales.first()->start();
+				else if (position == Axis::Position::Top)
+					yValue = yScales.last()->end();
+				else // Center
+					yValue = (yScales.first()->start() + yScales.last()->end())/2.;
+			}
 
 			//TODO: offset
 			//yValue += ;
@@ -1122,12 +1125,15 @@ void AxisPrivate::retransformLine() {
 */
 			// x location of y axis
 			double xValue = 1.;
-			if (position == Axis::Position::Left)
-				xValue = q->cSystem->xScales().first()->start();
-			else if (position == Axis::Position::Right)
-				xValue = q->cSystem->xScales().last()->end();
-			else // Center
-				xValue = (q->cSystem->xScales().first()->start() + q->cSystem->xScales().last()->end())/2.;
+			const auto xScales = q->cSystem->xScales();
+			if (xScales.size() > 0) {
+				if (position == Axis::Position::Left)
+					xValue = xScales.first()->start();
+				else if (position == Axis::Position::Right)
+					xValue = xScales.last()->end();
+				else // Center
+					xValue = (xScales.first()->start() + xScales.last()->end())/2.;
+			}
 
 			//TODO: offset
 			//xValue += ;
