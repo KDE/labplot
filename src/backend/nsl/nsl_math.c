@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL math functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -126,6 +126,18 @@ double nsl_math_places(double value, int n, int method) {
 }
 
 double nsl_math_round_precision(double value, unsigned int p) {
+	return nsl_math_precision(value, p, 0);
+}
+double nsl_math_floor_precision(double value, unsigned int p) {
+	return nsl_math_precision(value, p, 1);
+}
+double nsl_math_ceil_precision(double value, unsigned int p) {
+	return nsl_math_precision(value, p, 2);
+}
+double nsl_math_trunc_precision(double value, unsigned int p) {
+	return nsl_math_precision(value, p, 3);
+}
+double nsl_math_precision(double value, unsigned int p, int method) {
 	/*	printf("nsl_math_round_precision(%g, %d)\n", value, p); */
 
 	// no need to round
@@ -149,10 +161,22 @@ double nsl_math_round_precision(double value, unsigned int p) {
 
 	double scale = gsl_pow_uint(10., p);
 	double scaled_value = value * scale;
-	/*
-		printf("nsl_math_round_precision(): scale = %g, scaled_value = %g, e = %d, return: %g\n", scale, scaled_value, e, round(scaled_value)/scale *
-	   gsl_pow_int(10., e));
-	*/
 
-	return round(scaled_value) / scale * order_of_magnitude;
+	printf("nsl_math_precision(): scale = %.18g, scaled_value = %.18g, e = %d, return: %.18g\n",
+		scale, scaled_value, e, trunc(scaled_value)/scale * gsl_pow_int(10., e));
+
+	double eps = 1.e-15;
+	switch(method) {
+	case 0:
+		return round(scaled_value) / scale * order_of_magnitude;
+	case 1:
+		return floor(scaled_value) / scale * order_of_magnitude;
+	case 2:
+		return ceil(scaled_value) / scale * order_of_magnitude;
+	case 3:
+		return trunc(scaled_value) / scale * order_of_magnitude;
+	default:
+		printf("ERROR: unknown rounding method %d\n", method);
+		return value;
+	}
 }
