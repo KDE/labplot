@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -68,32 +68,34 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  *
  * \param line The line to clip.
  * \param rect The rect to clip to.
- * \param clipResult Pointer to an object describing which parts where clipped (may be NULL).
+ * \param clipResult Pointer to an object describing which parts where clipped (may be nullptr).
  *
  * \return false if line is completely outside, otherwise true
  */
 
 bool AbstractCoordinateSystem::clipLineToRect(QLineF* line, const QRectF& rect, LineClipResult* clipResult) {
-	//	QDEBUG(Q_FUNC_INFO << ", line = " << *line << ", rect = " << rect)
-	// we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
-	// this prevents some subtle float rounding artifacts that lead to disappearance
-	// of lines along the boundaries of the rect. (e.g. axis lines).
-	qreal x1 = nsl_math_trunc_places(line->x1(), 1);
-	qreal x2 = nsl_math_trunc_places(line->x2(), 1);
-	qreal y1 = nsl_math_trunc_places(line->y1(), 1);
-	qreal y2 = nsl_math_trunc_places(line->y2(), 1);
-	//	DEBUG(Q_FUNC_INFO << "x1/x2 y1/y2 = " << x1 << "/" << x2 << " " << y1 << "/" << y2)
+	//QDEBUG("clip line = " << *line << ", rect = " << rect)
+	qreal x1 = line->x1();
+	qreal x2 = line->x2();
+	qreal y1 = line->y1();
+	qreal y2 = line->y2();
+	//DEBUG(Q_FUNC_INFO << ", x1/x2 y1/y2 = " << std::setprecision(18) << x1 << "/" << x2 << " " << y1 << "/" << y2)
 
-	qreal left;
-	qreal right;
-	qreal top;
-	qreal bottom;
+	qreal left, right, top, bottom;
 	rect.getCoords(&left, &top, &right, &bottom);
+
+	// don't be too strict with clipping rect (avoid problems with floating point comparison)
+	const double eps = 1.e-15;
+	bottom *= (1. + eps);
+	left *= (1. - eps);
+	top *= (1. - eps);
+	right *= (1. + eps);
+	//DEBUG(Q_FUNC_INFO << ", bottom/top left/right = " << std::setprecision(18) << bottom << "/" << top << " " << left << "/" << right)
 
 	if (clipResult)
 		clipResult->reset();
 
-	enum { Left, Right, Top, Bottom };
+	enum {Left, Right, Top, Bottom};
 	// clip the lines, after cohen-sutherland, see e.g. http://www.nondot.org/~sabre/graphpro/line6.html
 	int p1 = ((x1 < left) << Left) | ((x1 > right) << Right) | ((y1 < top) << Top) | ((y1 > bottom) << Bottom);
 	int p2 = ((x2 < left) << Left) | ((x2 > right) << Right) | ((y2 < top) << Top) | ((y2 > bottom) << Bottom);
