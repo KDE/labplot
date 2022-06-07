@@ -1095,7 +1095,8 @@ void AxisPrivate::retransformLine() {
 				//	DEBUG(" number of x scales = " << q->cSystem->xScales().size())
 				// axis line + gap marker
 				for (int s = 0; s < 2*q->cSystem->xScales().size(); s++)
-					lines.append(sceneLines.at(s));
+					if (sceneLines.size() > s)
+						lines.append(sceneLines.at(s));
 			}
 			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
@@ -1141,7 +1142,8 @@ void AxisPrivate::retransformLine() {
 				//	DEBUG(" number of x scales = " << q->cSystem->xScales().size())
 				// axis line + gap marker
 				for (int s = 0; s < 2*q->cSystem->yScales().size(); s++)
-					lines.append(sceneLines.at(s));
+					if (sceneLines.size() > s)
+						lines.append(sceneLines.at(s));
 			}
 			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
@@ -2376,7 +2378,9 @@ void AxisPrivate::retransformMinorGrid() {
 	// minor tick points are already in scene coordinates, convert them back to logical...
 	// TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	// Currently, grid lines disappear sometimes without this flag
+//	QDEBUG("minor tick points:" << minorTickPoints)
 	QVector<QPointF> logicalMinorTickPoints = q->cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+//	QDEBUG("logical minor tick points:" << logicalMinorTickPoints)
 
 	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)

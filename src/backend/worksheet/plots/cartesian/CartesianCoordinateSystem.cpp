@@ -359,7 +359,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				yGapAfter = qQNaN();
 
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(), xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
+			//QDEBUG("SCALE RECT:" << scaleRect)
 
+			//QDEBUG("LINES:" << lines)
 			for (auto line : lines) {
 				// QDEBUG(Q_FUNC_INFO << ", LINE " << line)
 				LineClipResult clipResult;
@@ -389,7 +391,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 						continue;
 					}
 				}
-				//				QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
+				//QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
 				result.append(mappedLine);
 
 				// gap marker
@@ -512,12 +514,12 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 					}
 					//DEBUG("y = " << y)
 
-					if (!xScale->valid(x)) {
+					if (!xScale->contains(x)) {
 						x = point.x();
 						continue;
 					}
 
-					if (!yScale->valid(y)) {
+					if (!yScale->contains(y)) {
 						y = point.y();
 						continue;
 					}
@@ -558,9 +560,11 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 		// DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
+			//DEBUG("XSCALE: " << xScale->clipRange().toStdString())
 			if (!xScale)
 				continue;
 			for (const auto* yScale : d->yScales) {
+				//DEBUG("YSCALE: " << yScale->clipRange().toStdString())
 				if (!yScale)
 					continue;
 
