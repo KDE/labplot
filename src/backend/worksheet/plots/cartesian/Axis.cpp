@@ -1073,6 +1073,7 @@ void AxisPrivate::retransformLine() {
 			const auto pos = q->relativePosToParentPos(wrapper);
 			QDEBUG("(WRONG) POS:" << pos << ", offset = " << offset)
 */
+
 			// y location of x axis
 			double yValue = 1.;
 			const auto yScales = q->cSystem->yScales();
@@ -1085,9 +1086,6 @@ void AxisPrivate::retransformLine() {
 					yValue = (yScales.first()->start() + yScales.last()->end())/2.;
 			}
 
-			//TODO: offset
-			//yValue += ;
-
 			// map axis incl. all scales
 			Lines logicalLines{QLineF(QPointF(range.start(), yValue), QPointF(range.end(), yValue))};
 			QDEBUG("LOGICAL LINES:" << logicalLines)
@@ -1096,10 +1094,22 @@ void AxisPrivate::retransformLine() {
 
 			if (sceneLines.size() > 0) {
 				//	DEBUG(" number of x scales = " << q->cSystem->xScales().size())
+				/* OLD method:
+				for (int s = 0; s < q->cSystem->xScales().size(); s++) {
+					// qMax/qMin: stay inside rect()
+					QRectF rect = q->m_plot->dataRect();
+					startPoint = QPointF(qMax(sceneLines.at(2*s).x1(), rect.x()), pos.y());
+					endPoint = QPointF(qMin(sceneLines.at(2*s).x2(), rect.x() + rect.width()), pos.y());
+
+					lines.append(QLineF(startPoint, endPoint));
+					// gap marker
+					lines.append(sceneLines.at(2*s+1));
+				}*/
+
 				// axis line + gap marker
 				for (int s = 0; s < 2*q->cSystem->xScales().size(); s++)
 					if (sceneLines.size() > s)
-						lines.append(sceneLines.at(s));
+						lines.append(sceneLines.at(s).translated(QPointF(0, offset)));
 			}
 			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
@@ -1135,9 +1145,6 @@ void AxisPrivate::retransformLine() {
 					xValue = (xScales.first()->start() + xScales.last()->end())/2.;
 			}
 
-			//TODO: offset
-			//xValue += ;
-
 			// map axis incl. all scales
 			Lines logicalLines{QLineF(QPointF(xValue, range.start()), QPointF(xValue, range.end()))};
 			QDEBUG("LOGICAL LINES:" << logicalLines)
@@ -1149,7 +1156,7 @@ void AxisPrivate::retransformLine() {
 				// axis line + gap marker
 				for (int s = 0; s < 2*q->cSystem->yScales().size(); s++)
 					if (sceneLines.size() > s)
-						lines.append(sceneLines.at(s));
+						lines.append(sceneLines.at(s).translated(QPointF(offset, 0)));
 			}
 			QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 		}
