@@ -67,7 +67,7 @@ IF (BUILD_EXCEL)
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY ${ext_url}
 		# TODO: use fixed tag until issue with 1b0a2792 (breaks building on Windows) is fixed
-		GIT_TAG 9ae0d17a
+		GIT_TAG 0461eac8	# v1.4.3
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
