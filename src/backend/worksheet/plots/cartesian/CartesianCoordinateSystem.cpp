@@ -293,6 +293,14 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 	return QPointF{};
 }
 
+QLineF CartesianCoordinateSystem::gapMarker(qreal x, qreal y, qreal gap, bool xGap) const {
+	//TODO: more styles
+	if (xGap)
+		return QLineF(x + gap / 4., y - gap / 2., x - gap / 4., y + gap / 2.);
+	else	// y gap
+		return QLineF(x + gap / 2., y - gap / 4., x - gap / 2., y + gap / 4.);
+}
+
 Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFlags flags) const {
 	DEBUG(Q_FUNC_INFO << ", FLAGS = " << (int)flags)
 	QRectF pageRect = d->plot->dataRect();
@@ -399,56 +407,48 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 					// end of x gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
-							QLineF gapMarker(x1 + xGapBefore / 4., y1 - xGapBefore / 2., x1 - xGapBefore / 4., y1 + xGapBefore / 2.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x1, y1, xGapBefore, 1));
 						}
 						if (clipResult.xClippedLeft[1]) {
-							QLineF gapMarker(x2 + xGapBefore / 4., y2 - xGapBefore / 2., x2 - xGapBefore / 4., y2 + xGapBefore / 2.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x2, y2, xGapBefore, 1));
 						}
 					}
 
 					// start of x gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
-							QLineF gapMarker(x1 + xGapAfter / 4., y1 - xGapAfter / 2., x1 - xGapAfter / 4., y1 + xGapAfter / 2.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x1, y1, xGapAfter, 1));
 						}
 						if (clipResult.xClippedRight[1]) {
-							QLineF gapMarker(x2 + xGapAfter / 4., y2 - xGapAfter / 2., x2 - xGapAfter / 4., y2 + xGapAfter / 2.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x2, y2, xGapAfter, 1));
 						}
 					}
 
 					// end of y gap
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
-							QLineF gapMarker(x1 + yGapBefore / 2., y1 - yGapBefore / 4., x1 - yGapBefore / 2., y1 + yGapBefore / 4.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x1, y1, yGapBefore, 0));
 						}
 						if (clipResult.yClippedTop[1]) {
-							QLineF gapMarker(x2 + yGapBefore / 2., y2 - yGapBefore / 4., x2 - yGapBefore / 2., y2 + yGapBefore / 4.);
-							// 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x2, y2,yGapBefore, 0));
 						}
 					}
 
 					// start of y gap
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
-							QLineF gapMarker(x1 + yGapAfter / 2., y1 - yGapAfter / 4., x1 - yGapAfter / 2., y1 + yGapAfter / 4.);
-							//if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x1, y1,yGapAfter, 0));
 						}
 						if (clipResult.yClippedBottom[1]) {
-							QLineF gapMarker(x2 + yGapAfter / 2., y2 - yGapAfter / 4., x2 - yGapAfter / 2., y2 + yGapAfter / 4.);
-							//if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-								result.append(gapMarker);
+							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
+							result.append(gapMarker(x2, y2, yGapAfter, 0));
 						}
 					}
 				}
