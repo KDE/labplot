@@ -3918,9 +3918,6 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
 			// 			}
-
-			// update axis
-			axis->retransform();
 		}
 	}
 
@@ -3962,17 +3959,13 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
 			// 			}
-
-			// update axis
-			axis->retransform();
 		}
 	}
 
-	// update curves
-	const auto& curves = q->children<XYCurve>();
-	for (auto* curve : curves)
-		curve->retransform();
-	//TODO update any other elements?
+	// update all visible elements	(needed when axis breaks changes)
+	const auto& elements = q->children<WorksheetElement>();
+	for (auto* elem : elements)
+		elem->retransform();
 }
 
 /*
