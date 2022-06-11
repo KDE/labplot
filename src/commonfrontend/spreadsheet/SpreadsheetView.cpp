@@ -427,6 +427,8 @@ void SpreadsheetView::initActions() {
 	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
 	action_plot_data_boxplot = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	action_plot_data_boxplot->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
+	action_plot_data_barplot = new QAction(QIcon::fromTheme(QLatin1String("office-chart-bar")), i18n("Bar Plot"), this);
+	action_plot_data_barplot->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
 
 	// Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
@@ -528,6 +530,7 @@ void SpreadsheetView::initMenus() {
 	m_plotDataMenu->addAction(action_plot_data_xycurve);
 	m_plotDataMenu->addAction(action_plot_data_histogram);
 	m_plotDataMenu->addAction(action_plot_data_boxplot);
+	m_plotDataMenu->addAction(action_plot_data_barplot);
 
 	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
 	m_formattingMenu->addAction(action_formatting_heatmap);
@@ -833,6 +836,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_plot_data_xycurve, &QAction::triggered, this, &SpreadsheetView::plotData);
 	connect(action_plot_data_histogram, &QAction::triggered, this, &SpreadsheetView::plotData);
 	connect(action_plot_data_boxplot, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(action_plot_data_barplot, &QAction::triggered, this, &SpreadsheetView::plotData);
 	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
