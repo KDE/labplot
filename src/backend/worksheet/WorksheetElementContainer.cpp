@@ -119,7 +119,7 @@ void WorksheetElementContainer::retransform() {
 	if (isLoading())
 		return;
 
-	PERFTRACE("WorksheetElementContainer::retransform()");
+	PERFTRACE(Q_FUNC_INFO);
 	Q_D(WorksheetElementContainer);
 
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);

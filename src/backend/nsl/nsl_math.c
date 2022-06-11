@@ -162,9 +162,9 @@ double nsl_math_precision(double value, unsigned int p, int method) {
 	double scale = gsl_pow_uint(10., p);
 	double scaled_value = value * scale;
 
-	printf("nsl_math_precision(): scale = %.18g, scaled_value = %.18g, e = %d, return: %.18g\n",
+	/*printf("nsl_math_precision(): scale = %.18g, scaled_value = %.18g, e = %d, return: %.18g\n",
 		scale, scaled_value, e, trunc(scaled_value)/scale * gsl_pow_int(10., e));
-
+	*/
 	switch(method) {
 	case 0:
 		return round(scaled_value) / scale * order_of_magnitude;

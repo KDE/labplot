@@ -301,12 +301,8 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.tbBorderTypeBottom->setIcon(pm);
 
-	/*
-	//TODO: activate later once range breaking is implemented
-	//create icons for the different styles for scale breaking
-	QPainter pa;
+	//create icons for the different styles of scale breaking
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
-	QPixmap pm(20, 20);
 	ui.cbXBreakStyle->setIconSize( QSize(20,20) );
 	ui.cbYBreakStyle->setIconSize( QSize(20,20) );
 
@@ -346,7 +342,6 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.cbXBreakStyle->setItemIcon(2, pm);
 	ui.cbYBreakStyle->setItemIcon(2, pm);
-	*/
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
@@ -1568,6 +1563,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 
 // x-range breaks
 void CartesianPlotDock::toggleXBreak(bool b) {
+	DEBUG(Q_FUNC_INFO)
 	ui.frameXBreakEdit->setEnabled(b);
 	ui.leXBreakStart->setEnabled(b);
 	ui.leXBreakEnd->setEnabled(b);
@@ -1617,6 +1613,7 @@ void CartesianPlotDock::removeXBreak() {
 }
 
 void CartesianPlotDock::xBreakUpdateUi(int index) {
+	DEBUG(Q_FUNC_INFO)
 	SET_NUMBER_LOCALE
 	const auto rangeBreak = m_plot->xRangeBreaks().list.at(index);
 	QString str = std::isnan(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
@@ -1628,6 +1625,7 @@ void CartesianPlotDock::xBreakUpdateUi(int index) {
 }
 
 void CartesianPlotDock::currentXBreakChanged(int index) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing || index == -1)
 		return;
 

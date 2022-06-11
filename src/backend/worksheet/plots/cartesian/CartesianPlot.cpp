@@ -1744,6 +1744,7 @@ STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot,
 								  bool,
 								  xRangeBreakingEnabled,
 								  retransformScales(-1, -1)) void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
+									  DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
@@ -1753,9 +1754,9 @@ STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot,
 								  SetXRangeBreaks,
 								  CartesianPlot::RangeBreaks,
 								  xRangeBreaks,
-								  retransformScales(-1, -1)) void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
+								  retransformScales(-1, -1)) void CartesianPlot::setXRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
-	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
+	exec(new CartesianPlotSetXRangeBreaksCmd(d, breaks, ki18n("%1: x-range breaks changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot,
@@ -3917,6 +3918,9 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
 			// 			}
+
+			// update axis
+			axis->retransform();
 		}
 	}
 
@@ -3958,8 +3962,17 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 			// 				axis->setOffset(axis->offset() + deltaYMin, false);
 			// 			}
+
+			// update axis
+			axis->retransform();
 		}
 	}
+
+	// update curves
+	const auto& curves = q->children<XYCurve>();
+	for (auto* curve : curves)
+		curve->retransform();
+	//TODO update any other elements?
 }
 
 /*

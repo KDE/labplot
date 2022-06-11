@@ -60,7 +60,7 @@ public:
 	}
 
 	bool inverseMap(double* value) const override {
-		DEBUG("value = " << *value << ", a/b = " << m_a << " / " << m_b)
+		//DEBUG("value = " << *value << ", a/b = " << m_a << " / " << m_b)
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
@@ -201,7 +201,7 @@ CartesianScale* CartesianScale::createLinearScale(const Range<double>& sceneRang
 	double b = sceneRange.size() / logicalRange.size();
 	double a = sceneRange.start() - b * logicalRange.start();
 
-	DEBUG("a = " << a << ", b = " << b)
+	//DEBUG("a = " << a << ", b = " << b)
 	return new LinearScale(logicalRange, a, b);
 }
 
