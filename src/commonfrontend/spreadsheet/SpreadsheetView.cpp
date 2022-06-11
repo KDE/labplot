@@ -4111,43 +4111,58 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 		return;
 	}
 
-	// create bulk insert statement
+	// create bulk insert statement in batches of 10k rows
 	{
-		PERFTRACE("Create the bulk insert statement");
+		PERFTRACE("Insert the data");
 		q.exec(QLatin1String("BEGIN TRANSACTION;"));
-		query = "INSERT INTO '" + m_spreadsheet->name() + "' (";
+
+		// create the first part of the INSERT-statement without the values
+		QString insertQuery = "INSERT INTO '" + m_spreadsheet->name() + "' (";
 		for (int i = 0; i < cols; ++i) {
 			if (i != 0)
-				query += QLatin1String(", ");
-			query += QLatin1Char('\'') + m_spreadsheet->column(i)->name() + QLatin1Char('\'');
+				insertQuery += QLatin1String(", ");
+			insertQuery += QLatin1Char('\'') + m_spreadsheet->column(i)->name() + QLatin1Char('\'');
 		}
-		query += QLatin1String(") VALUES ");
+		insertQuery += QLatin1String(") VALUES ");
 
-		for (int i = 0; i <= maxRow; ++i) {
-			if (i != 0)
-				query += QLatin1String(",");
+		// add values in chunks of 10k row
+		int chunkSize = 10000;
+		int chunks = std::ceil((double)maxRow / chunkSize);
+		for (int chunk = 0; chunk < chunks; ++chunk) {
+			query = insertQuery;
+			for (int i = 0; i < chunkSize; ++i) {
+				int row = chunk * chunkSize + i;
+				if (row > maxRow)
+					break;
 
-			query += QLatin1Char('(');
-			for (int j = 0; j < cols; ++j) {
-				Column* col = m_spreadsheet->column(j);
-				if (j != 0)
-					query += QLatin1String(", ");
+				if (i != 0)
+					query += QLatin1String(",");
 
-				query += QLatin1Char('\'') + col->asStringColumn()->textAt(i) + QLatin1Char('\'');
+				query += QLatin1Char('(');
+				for (int j = 0; j < cols; ++j) {
+					auto* col = m_spreadsheet->column(j);
+					if (j != 0)
+						query += QLatin1String(", ");
+
+					query += QLatin1Char('\'') + col->asStringColumn()->textAt(row) + QLatin1Char('\'');
+				}
+				query += QLatin1String(")");
 			}
-			query += QLatin1String(")");
+			query += QLatin1Char(';');
+
+			// insert values for the current chunk of data
+			if (!q.exec(query)) {
+				RESET_CURSOR;
+				KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
+				QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
+				db.close();
+				return;
+			}
 		}
-		query += QLatin1Char(';');
-	}
 
-	// insert values
-	if (!q.exec(query)) {
-		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
-		QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
-	} else
-		q.exec(QLatin1String("COMMIT TRANSACTION;"));
+	} // end of perf-trace scope
 
-	// close the database
+	// commit the transaction and close the database
+	q.exec(QLatin1String("COMMIT TRANSACTION;"));
 	db.close();
 }

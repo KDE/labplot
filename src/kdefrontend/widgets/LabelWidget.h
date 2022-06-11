@@ -27,6 +27,8 @@ class Label;
 class Axis;
 class QMenu;
 
+class TextLabelTest;
+
 class LabelWidget : public QWidget {
 	Q_OBJECT
 
@@ -61,7 +63,9 @@ private:
 	KSyntaxHighlighting::Repository m_repository;
 #endif
 
-	void initConnections() const;
+	QVector<QMetaObject::Connection> m_connections;
+
+	void initConnections();
 
 Q_SIGNALS:
 	void dataChanged(bool);
@@ -136,6 +140,8 @@ private Q_SLOTS:
 	void labelVisibleChanged(bool);
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
+
+	friend TextLabelTest;
 };
 
 #endif // LABELWIDGET_H
