@@ -975,6 +975,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		}
 
 		barPlot->setDataColumns(dataColumns);
+
+		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
 	}
 
 	// data picker curves

@@ -177,6 +177,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
+	cbXColumn->setColumn(m_barPlot->xColumn(), m_barPlot->xColumnPath());
 	loadDataColumns();
 
 	// set the current locale

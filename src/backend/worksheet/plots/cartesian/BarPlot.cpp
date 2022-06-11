@@ -596,12 +596,16 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
-	const double groupGap = 0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*groupGap
+	double groupWidth = 1.0;
+	if (xColumn && dataColumns.size() != 0)
+		groupWidth = (xColumn->maximum() - xColumn->minimum())/dataColumns.size();
+
+	const double groupGap = groupWidth*0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*groupGap
 
 	if (type == BarPlot::Type::Grouped) {
-		const double barGap = 0.1*widthFactor; // gap between two bars within a group
+		const double barGap = groupWidth*0.1*widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (1*widthFactor - 2*groupGap - (barCount - 1)*barGap) / barCount; // bar width
+		const double width = (groupWidth*widthFactor - 2*groupGap - (barCount - 1)*barGap) / barCount; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -614,7 +618,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + 1.0 - 0.5*widthFactor + groupGap + (width + barGap)*columnIndex;
+				x = valueIndex + groupWidth;
+
+			x +=  -groupWidth*0.5*widthFactor + groupGap + (width + barGap)*columnIndex;
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -996,6 +1002,10 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("xMax", QString::number(d->xMax));
 	writer->writeAttribute("yMin", QString::number(d->yMin));
 	writer->writeAttribute("yMax", QString::number(d->yMax));
+
+	if (d->xColumn)
+		writer->writeAttribute("xColumn", d->xColumn->path());
+
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement("column");
 		writer->writeAttribute("path", column->path());
@@ -1063,6 +1073,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
+			READ_COLUMN(xColumn);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
 
