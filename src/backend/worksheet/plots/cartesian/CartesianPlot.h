@@ -59,9 +59,10 @@ public:
 		ShiftUpY,
 		ShiftDownY
 	};
-	enum class RangeType { Free, Last, First };
+	enum class RangeType {Free, Last, First};
 	Q_ENUM(RangeType)
-	enum class RangeBreakStyle { Simple, Vertical, Sloped };
+	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	Q_ENUM(RangeBreakStyle)
 
 	struct RangeBreak {
 		RangeBreak()
@@ -77,7 +78,7 @@ public:
 		RangeBreakStyle style;
 	};
 
-	// simple wrapper for QList<RangeBreaking> in order to get our macros working
+	// simple wrapper for QList<RangeBreaks> in order to get our macros working
 	// TODO: same for xRanges, etc.?
 	struct RangeBreaks {
 		RangeBreaks()

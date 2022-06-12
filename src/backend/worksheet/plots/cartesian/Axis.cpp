@@ -1082,7 +1082,7 @@ void AxisPrivate::retransformLine() {
 					yValue = yScales.first()->start();
 				else if (position == Axis::Position::Top)
 					yValue = yScales.last()->end();
-				else // Center
+				else // center
 					yValue = (yScales.first()->start() + yScales.last()->end())/2.;
 			}
 
@@ -1141,7 +1141,7 @@ void AxisPrivate::retransformLine() {
 					xValue = xScales.first()->start();
 				else if (position == Axis::Position::Right)
 					xValue = xScales.last()->end();
-				else // Center
+				else // center
 					xValue = (xScales.first()->start() + xScales.last()->end())/2.;
 			}
 

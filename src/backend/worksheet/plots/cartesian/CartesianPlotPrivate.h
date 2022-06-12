@@ -116,7 +116,7 @@ public:
 	// TODO: make this factor optional.
 	// Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	double autoScaleOffsetFactor{0.0};
-	// TODO: move to Range?
+	// range breaks
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 
@@ -127,7 +127,7 @@ public:
 	int defaultCoordinateSystemIndex{0};
 
 	struct RichRange {
-		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
+		RichRange(const Range<double>& r = {}, const bool d = false)
 			: range(r)
 			, dirty(d) {
 		}

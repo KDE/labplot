@@ -294,11 +294,33 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 }
 
 QLineF CartesianCoordinateSystem::gapMarker(qreal x, qreal y, qreal gap, bool xGap) const {
-	//TODO: more styles
-	if (xGap)
-		return QLineF(x + gap / 4., y - gap / 2., x - gap / 4., y + gap / 2.);
-	else	// y gap
-		return QLineF(x + gap / 2., y - gap / 4., x - gap / 2., y + gap / 4.);
+	if (xGap) {
+		const auto xBreaks = d->plot->xRangeBreaks();
+		const auto style = xBreaks.list.at(0).style;	// first break style
+		QDEBUG(Q_FUNC_INFO << ", x gap style = " << style)
+		switch (style) {
+		case CartesianPlot::RangeBreakStyle::Vertical:
+			return QLineF(x, y - gap / 2., x, y + gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Sloped:
+			return QLineF(x + gap / 4., y - gap / 2., x - gap / 4., y + gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Simple:
+		default:
+			return {};
+		}
+	} else { // y gap
+		const auto yBreaks = d->plot->yRangeBreaks();
+		const auto style = yBreaks.list.at(0).style;	// first break style
+		QDEBUG(Q_FUNC_INFO << ", y gap style = " << style)
+		switch (style) {
+		case CartesianPlot::RangeBreakStyle::Vertical:
+			return QLineF(x + gap / 2., y, x - gap / 2., y);
+		case CartesianPlot::RangeBreakStyle::Sloped:
+			return QLineF(x + gap / 2., y - gap / 4., x - gap / 2., y + gap / 4.);
+		case CartesianPlot::RangeBreakStyle::Simple:
+		default:
+			return {};
+		}
+	}
 }
 
 Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFlags flags) const {
