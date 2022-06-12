@@ -275,14 +275,12 @@ void BarPlot::setOrientation(BarPlot::Orientation orientation) {
 		exec(new BarPlotSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
 }
 
-
 STD_SETTER_CMD_IMPL_F_S(BarPlot, SetWidthFactor, double, widthFactor, recalc)
 void BarPlot::setWidthFactor(double widthFactor) {
 	Q_D(BarPlot);
 	if (widthFactor != d->widthFactor)
 		exec(new BarPlotSetWidthFactorCmd(d, widthFactor, ki18n("%1: width factor changed")));
 }
-
 
 // Filling
 STD_SETTER_CMD_IMPL_F_S(BarPlot, SetFillingEnabled, bool, fillingEnabled, updatePixmap)
@@ -381,8 +379,11 @@ void BarPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void BarPlot::orientationChangedSlot(QAction*) {
-	// TODO
+void BarPlot::orientationChangedSlot(QAction* action) {
+	if (action == orientationHorizontalAction)
+		this->setOrientation(Axis::Orientation::Horizontal);
+	else
+		this->setOrientation(Axis::Orientation::Vertical);
 }
 
 void BarPlot::visibilityChangedSlot() {
@@ -468,36 +469,35 @@ void BarPlotPrivate::recalc() {
 	m_fillPolygons.clear();
 	m_fillPolygons.resize(dataColumns.size());
 
-	// determine the number of bars that we need to draw.
+	// determine the number of bar groups that we need to draw.
 	// this number is equal to the max number of non-empty
 	// values in the provided datasets
-	int barsCount = 0;
+	int barGroupsCount = 0;
 	int columnIndex = 0;
 	for (auto* column : dataColumns) {
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_fillPolygons[columnIndex].resize(size);
-		if (size > barsCount)
-			barsCount = size;
+		if (size > barGroupsCount)
+			barGroupsCount = size;
 
 		++columnIndex;
 	}
 
-	m_stackedBarPositiveOffsets.resize(barsCount);
-	m_stackedBarNegativeOffsets.resize(barsCount);
+	m_stackedBarPositiveOffsets.resize(barGroupsCount);
+	m_stackedBarNegativeOffsets.resize(barGroupsCount);
 
 	// if an x-column was provided and it has less values than the count determined
 	// above, we limit the number of bars to the number of values in the x-column
 	if (xColumn) {
 		int size = static_cast<const Column*>(xColumn)->statistics().size;
-		if (size < barsCount)
-			barsCount = size;
+		if (size < barGroupsCount)
+			barGroupsCount = size;
 	}
 
-	// calculate the new min and max values of the box plot
-	// for the current sizes of the box and of the whiskers
-	QVector<double> barMins(barsCount);
-	QVector<double> barMaxs(barsCount);
+	// calculate the new min and max values of the bar plot
+	QVector<double> barMins(barGroupsCount);
+	QVector<double> barMaxs(barGroupsCount);
 	if (type == BarPlot::Type::Stacked) {
 		for (auto* column : dataColumns) {
 			int valueIndex = 0;
@@ -523,7 +523,7 @@ void BarPlotPrivate::recalc() {
 			xMax = xColumn->maximum() + 0.5;
 		} else {
 			xMin = 0.0;
-			xMax = barsCount + 1.0;
+			xMax = barGroupsCount + 1.0;
 		}
 
 		// min/max for y
@@ -579,9 +579,16 @@ void BarPlotPrivate::recalc() {
 			yMax = xColumn->maximum() + 1.0;
 		} else {
 			yMin = 0.0;
-			yMax = barsCount + 1.0;
+			yMax = barGroupsCount + 1.0;
 		}
 	}
+
+	// determine the width of a group and of the gaps around a group
+	m_groupWidth = 1.0;
+	if (xColumn && dataColumns.size() != 0)
+		m_groupWidth = (xColumn->maximum() - xColumn->minimum())/dataColumns.size();
+
+	m_groupGap = m_groupWidth*0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
 	// the size of the bar plots changed because of the actual
 	// data changes or because of new bar plot settings.
@@ -596,16 +603,11 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
-	double groupWidth = 1.0;
-	if (xColumn && dataColumns.size() != 0)
-		groupWidth = (xColumn->maximum() - xColumn->minimum())/dataColumns.size();
-
-	const double groupGap = groupWidth*0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*groupGap
 
 	if (type == BarPlot::Type::Grouped) {
-		const double barGap = groupWidth*0.1*widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth*0.1*widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (groupWidth*widthFactor - 2*groupGap - (barCount - 1)*barGap) / barCount; // bar width
+		const double width = (m_groupWidth*widthFactor - 2*m_groupGap - (barCount - 1)*barGap) / barCount; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -618,9 +620,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + groupWidth;
+				x = valueIndex + m_groupWidth;
 
-			x +=  -groupWidth*0.5*widthFactor + groupGap + (width + barGap)*columnIndex;
+			x += -m_groupWidth*0.5*widthFactor + m_groupGap + (width + barGap)*columnIndex;
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -634,7 +636,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			++valueIndex;
 		}
 	} else { // stacked bar plot
-		const double width = 1*widthFactor - 2*groupGap; // bar width
+		const double width = 1*widthFactor - 2*m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -652,7 +654,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + 1.0 - 0.5*widthFactor + groupGap;
+				x = valueIndex + m_groupWidth;
+
+			x += -0.5*widthFactor + m_groupGap;
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -675,8 +679,86 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	m_barLines[columnIndex] = barLines;
 }
 
-void BarPlotPrivate::horizontalBarPlot(int index) {
+void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	PERFTRACE(name() + Q_FUNC_INFO);
+
+	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
+	QVector<QLineF> lines; // four lines for one bar in logical coordinates
+	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
+
+	if (type == BarPlot::Type::Grouped) {
+		const double barGap = m_groupWidth*0.1*widthFactor; // gap between two bars within a group
+		const int barCount = dataColumns.size(); // number of bars within a group
+		const double width = (m_groupWidth*widthFactor - 2*m_groupGap - (barCount - 1)*barGap) / barCount; // bar width
+
+		int valueIndex = 0;
+		for (int i = 0; i < column->rowCount(); ++i) {
+			if (!column->isValid(i) || column->isMasked(i))
+				continue;
+
+			const double value = column->valueAt(i);
+			double y;
+
+			if (xColumn)
+				y = xColumn->valueAt(i);
+			else
+				y = valueIndex + m_groupWidth;
+
+			y += -m_groupWidth*0.5*widthFactor + m_groupGap + (width + barGap)*columnIndex;
+
+			lines.clear();
+			lines << QLineF(value, y, value, y + width);
+			lines << QLineF(value, y + width, 0, y + width);
+			lines << QLineF(0, y + width, 0, y);
+			lines << QLineF(0, y, value, y);
+
+			barLines << q->cSystem->mapLogicalToScene(lines);
+			updateFillingRect(columnIndex, valueIndex, lines);
+
+			++valueIndex;
+		}
+	} else { // stacked bar plot
+		const double width = 1*widthFactor - 2*m_groupGap; // bar width
+		int valueIndex = 0;
+		for (int i = 0; i < column->rowCount(); ++i) {
+			if (!column->isValid(i) || column->isMasked(i))
+				continue;
+
+			const double value = column->valueAt(i);
+			double offset;
+			if (value > 0)
+				offset = m_stackedBarPositiveOffsets[valueIndex];
+			else
+				offset = m_stackedBarNegativeOffsets[valueIndex];
+
+			double y;
+
+			if (xColumn)
+				y = xColumn->valueAt(i);
+			else
+				y = valueIndex + m_groupWidth;
+
+			y += -0.5*widthFactor + m_groupGap;
+
+			lines.clear();
+			lines << QLineF(value + offset, y, value + offset, y + width);
+			lines << QLineF(value + offset, y + width, offset, y + width);
+			lines << QLineF(offset, y + width, offset, y);
+			lines << QLineF(offset, y, value + offset, y);
+
+			if (value > 0)
+				m_stackedBarPositiveOffsets[valueIndex] += value;
+			else
+				m_stackedBarNegativeOffsets[valueIndex] += value;
+
+			barLines << q->cSystem->mapLogicalToScene(lines);
+			updateFillingRect(columnIndex, valueIndex, lines);
+
+			++valueIndex;
+		}
+	}
+
+	m_barLines[columnIndex] = barLines;
 }
 
 void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QVector<QLineF>& lines) {
