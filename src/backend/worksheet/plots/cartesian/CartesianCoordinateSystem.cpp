@@ -557,53 +557,68 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 	return result;
 }
 
-QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, MappingFlags flags) const {
-	DEBUG(Q_FUNC_INFO << ",, WARNING: probably wrong!")
+QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags flags) const {
+	QDEBUG(Q_FUNC_INFO << ", point =" << point)
 	QRectF pageRect = d->plot->dataRect();
-	QPointF result;
+	QDEBUG(Q_FUNC_INFO << ", page rect =" << pageRect)
 	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	bool limit = flags & MappingFlag::Limit;
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 
 	if (limit) {
-		// set to max/min if passed over
-		logicalPoint.setX(qBound(pageRect.x(), logicalPoint.x(), pageRect.x() + pageRect.width()));
-		logicalPoint.setY(qBound(pageRect.y(), logicalPoint.y(), pageRect.y() + pageRect.height()));
+		// set to max/min if out of limit
+		point.setX(qBound(pageRect.x(), point.x(), pageRect.x() + pageRect.width()));
+		point.setY(qBound(pageRect.y(), point.y(), pageRect.y() + pageRect.height()));
 	}
 
 	if (noPageClippingY)
-		logicalPoint.setY(pageRect.y() + pageRect.height() / 2.);
+		point.setY(pageRect.y() + pageRect.height() / 2.);
 
 	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
-	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
-		double x = logicalPoint.x();
-		double y = logicalPoint.y();
-		// DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
+	if (noPageClipping || limit || pageRect.contains(point)) {
+
+		double x = point.x();
+		double y = point.y();
+		DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
-			//DEBUG("XSCALE: " << xScale->clipRange().toStdString())
+			DEBUG(Q_FUNC_INFO << ", x scale " << xScale->clipRange().toStdString())
 			if (!xScale)
 				continue;
 			for (const auto* yScale : d->yScales) {
-				//DEBUG("YSCALE: " << yScale->clipRange().toStdString())
+
+				DEBUG(Q_FUNC_INFO << ", y scale " << yScale->clipRange().toStdString())
 				if (!yScale)
 					continue;
 
-				if (!xScale->inverseMap(&x) || !yScale->inverseMap(&y))
+				if (!xScale->inverseMap(&x)) {
+					x = point.x();
 					continue;
-
-				if (!xScale->valid(x) || !yScale->valid(y))
+				}
+				if (!yScale->inverseMap(&y)) {
+					y = point.y();
 					continue;
+				}
 
-				result.setX(x);
-				result.setY(y);
-				return result;
+				if (!xScale->contains(x)) {
+					x = point.x();
+					continue;
+				}
+				if (!yScale->contains(y)) {
+					y = point.y();
+					continue;
+				}
+				//DEBUG(Q_FUNC_INFO << ", x/y = " << x << " / " << y << " NOT in scales!")
+
+				DEBUG(Q_FUNC_INFO << ", FOUND in " << xScale->clipRange().toStdString() << " / " << yScale->clipRange().toStdString())
+				DEBUG(Q_FUNC_INFO << ", RETURN " << x << " / " << y)
+				return {x, y};
 			}
 		}
 	}
 
-	return result;
+	return {};
 }
 
 /**************************************************************************************/
