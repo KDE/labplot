@@ -553,25 +553,20 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 						x = point.x();
 						continue;
 					}
-					//DEBUG("x = " << x)
 
 					if (!yScale->inverseMap(&y)) {
 						y = point.y();
 						continue;
 					}
-					//DEBUG("y = " << y)
+					//DEBUG(Q_FUNC_INFO << ", x / y = " << x << " / " << y)
 
-					if (!xScale->contains(x)) {
+					if (!xScale->contains(x) || !yScale->contains(y)) {
 						x = point.x();
-						continue;
-					}
-
-					if (!yScale->contains(y)) {
 						y = point.y();
 						continue;
 					}
 
-					//DEBUG("APPEND x/y")
+					//DEBUG("Found " << x << " / " << y)
 					result.append(QPointF(x, y));
 					found = true;
 				}
@@ -626,18 +621,15 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags
 					continue;
 				}
 
-				if (!xScale->contains(x)) {
+				if (!xScale->contains(x) || !yScale->contains(y)) {
 					x = point.x();
-					continue;
-				}
-				if (!yScale->contains(y)) {
 					y = point.y();
 					continue;
 				}
 				//DEBUG(Q_FUNC_INFO << ", x/y = " << x << " / " << y << " NOT in scales!")
 
-				DEBUG(Q_FUNC_INFO << ", FOUND in " << xScale->clipRange().toStdString() << " / " << yScale->clipRange().toStdString())
-				DEBUG(Q_FUNC_INFO << ", RETURN " << x << " / " << y)
+				//DEBUG(Q_FUNC_INFO << ", FOUND in " << xScale->clipRange().toStdString() << " / " << yScale->clipRange().toStdString())
+				//DEBUG(Q_FUNC_INFO << ", RETURN " << x << " / " << y)
 				return {x, y};
 			}
 		}
