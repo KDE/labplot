@@ -35,7 +35,7 @@ public:
 						   std::vector<bool>& visiblePoints,
 						   MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	QLineF gapMarker(qreal x, qreal y, qreal gap, bool xGap) const;	// construct gap marker
+	QVector<QLineF> gapMarker(qreal x, qreal y, qreal gap, bool xGap, bool first = true) const;	// construct gap marker
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;

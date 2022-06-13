@@ -293,16 +293,29 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 	return QPointF{};
 }
 
-QLineF CartesianCoordinateSystem::gapMarker(qreal x, qreal y, qreal gap, bool xGap) const {
+QVector<QLineF> CartesianCoordinateSystem::gapMarker(qreal x, qreal y, qreal gap, bool xGap, bool first) const {
+	QVector<QLineF> lines;
 	if (xGap) {
 		const auto xBreaks = d->plot->xRangeBreaks();
 		const auto style = xBreaks.list.at(0).style;	// first break style
 		QDEBUG(Q_FUNC_INFO << ", x gap style = " << style)
 		switch (style) {
 		case CartesianPlot::RangeBreakStyle::Vertical:
-			return QLineF(x, y - gap / 2., x, y + gap / 2.);
-		case CartesianPlot::RangeBreakStyle::Sloped:
-			return QLineF(x + gap / 4., y - gap / 2., x - gap / 4., y + gap / 2.);
+			return lines << QLineF(x, y - gap / 2., x, y + gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Slope:
+			return lines << QLineF(x + gap / 4., y - gap / 2., x - gap / 4., y + gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Slope_Flipped:
+			return lines << QLineF(x + gap / 4., y + gap / 2., x - gap / 4., y - gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Peak:
+			if (first)
+				return lines << QLineF(x, y, x + gap / 2., y - gap);
+			else
+				return lines << QLineF(x, y, x - gap / 2., y - gap);
+		case CartesianPlot::RangeBreakStyle::Peak_Flipped:
+			if (first)
+				return lines << QLineF(x, y, x + gap / 2., y + gap);
+			else
+				return lines << QLineF(x, y, x - gap / 2., y + gap);
 		case CartesianPlot::RangeBreakStyle::Simple:
 		default:
 			return {};
@@ -313,9 +326,21 @@ QLineF CartesianCoordinateSystem::gapMarker(qreal x, qreal y, qreal gap, bool xG
 		QDEBUG(Q_FUNC_INFO << ", y gap style = " << style)
 		switch (style) {
 		case CartesianPlot::RangeBreakStyle::Vertical:
-			return QLineF(x + gap / 2., y, x - gap / 2., y);
-		case CartesianPlot::RangeBreakStyle::Sloped:
-			return QLineF(x + gap / 2., y - gap / 4., x - gap / 2., y + gap / 4.);
+			return lines << QLineF(x + gap / 2., y, x - gap / 2., y);
+		case CartesianPlot::RangeBreakStyle::Slope:
+			return lines << QLineF(x + gap / 2., y - gap / 4., x - gap / 2., y + gap / 4.);
+		case CartesianPlot::RangeBreakStyle::Slope_Flipped:
+			return lines << QLineF(x + gap / 2., y + gap / 4., x - gap / 2., y - gap / 4.);
+		case CartesianPlot::RangeBreakStyle::Peak:
+			if (first)
+				return lines << QLineF(x, y, x + gap, y + gap / 2.);
+			else
+				return lines << QLineF(x, y, x + gap, y - gap / 2.);
+		case CartesianPlot::RangeBreakStyle::Peak_Flipped:
+			if (first)
+				return lines << QLineF(x, y, x - gap, y + gap / 2.);
+			else
+				return lines << QLineF(x, y, x - gap, y - gap / 2.);
 		case CartesianPlot::RangeBreakStyle::Simple:
 		default:
 			return {};
@@ -430,11 +455,11 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x1, y1, xGapBefore, 1));
+							result.append(gapMarker(x1, y1, xGapBefore, true, false));
 						}
 						if (clipResult.xClippedLeft[1]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x2, y2, xGapBefore, 1));
+							result.append(gapMarker(x2, y2, xGapBefore, true, false));
 						}
 					}
 
@@ -442,11 +467,11 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x1, y1, xGapAfter, 1));
+							result.append(gapMarker(x1, y1, xGapAfter, true));
 						}
 						if (clipResult.xClippedRight[1]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x2, y2, xGapAfter, 1));
+							result.append(gapMarker(x2, y2, xGapAfter, true));
 						}
 					}
 
@@ -454,11 +479,11 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x1, y1, yGapBefore, 0));
+							result.append(gapMarker(x1, y1, yGapBefore, false, false));
 						}
 						if (clipResult.yClippedTop[1]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x2, y2,yGapBefore, 0));
+							result.append(gapMarker(x2, y2, yGapBefore, false, false));
 						}
 					}
 
@@ -466,11 +491,11 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x1, y1,yGapAfter, 0));
+							result.append(gapMarker(x1, y1, yGapAfter, false, true));
 						}
 						if (clipResult.yClippedBottom[1]) {
 							// if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
-							result.append(gapMarker(x2, y2, yGapAfter, 0));
+							result.append(gapMarker(x2, y2, yGapAfter, false, true));
 						}
 					}
 				}

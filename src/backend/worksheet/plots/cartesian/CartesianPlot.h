@@ -61,14 +61,14 @@ public:
 	};
 	enum class RangeType {Free, Last, First};
 	Q_ENUM(RangeType)
-	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	enum class RangeBreakStyle {Simple, Vertical, Slope, Slope_Flipped, Peak, Peak_Flipped};
 	Q_ENUM(RangeBreakStyle)
 
 	struct RangeBreak {
 		RangeBreak()
 			: range(qQNaN(), qQNaN())
 			, position(0.5)
-			, style(RangeBreakStyle::Sloped) {
+			, style(RangeBreakStyle::Slope) {
 		}
 		bool isValid() const {
 			return range.valid();

@@ -301,14 +301,14 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.tbBorderTypeBottom->setIcon(pm);
 
-	//create icons for the different styles of scale breaking
+	//create icons for the different scale break styles
 	pa.setPen( QPen(Qt::SolidPattern, 0) );
 	ui.cbXBreakStyle->setIconSize( QSize(20,20) );
 	ui.cbYBreakStyle->setIconSize( QSize(20,20) );
 
 	//simple
 	pm.fill(Qt::transparent);
-	pa.begin( &pm );
+	pa.begin(&pm);
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3,10,8,10);
@@ -319,7 +319,7 @@ void CartesianPlotDock::init() {
 
 	//vertical
 	pm.fill(Qt::transparent);
-	pa.begin( &pm );
+	pa.begin(&pm);
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3,10,8,10);
@@ -332,7 +332,7 @@ void CartesianPlotDock::init() {
 
 	//sloped
 	pm.fill(Qt::transparent);
-	pa.begin( &pm );
+	pa.begin(&pm);
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3,10,8,10);
@@ -342,6 +342,45 @@ void CartesianPlotDock::init() {
 	pa.end();
 	ui.cbXBreakStyle->setItemIcon(2, pm);
 	ui.cbYBreakStyle->setItemIcon(2, pm);
+
+	//sloped_flip
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.drawLine(6,6,10,14);
+	pa.drawLine(10,6,14,14);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(3, pm);
+	ui.cbYBreakStyle->setItemIcon(3, pm);
+
+	//peak
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.drawLine(8,10,10,2);
+	pa.drawLine(10,2,12,10);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(4, pm);
+	ui.cbYBreakStyle->setItemIcon(4, pm);
+
+	//peak flipped
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setBrush(Qt::SolidPattern);
+	pa.drawLine(3,10,8,10);
+	pa.drawLine(12,10,17,10);
+	pa.drawLine(8,10,10,18);
+	pa.drawLine(10,18,12,10);
+	pa.end();
+	ui.cbXBreakStyle->setItemIcon(5, pm);
+	ui.cbYBreakStyle->setItemIcon(5, pm);
 }
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
@@ -903,13 +942,11 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbNiceExtend->setToolTip(msg);
 
 	// scale breakings
-	ui.cbXBreakStyle->addItem(i18n("Simple"));
-	ui.cbXBreakStyle->addItem(i18n("Vertical"));
-	ui.cbXBreakStyle->addItem(i18n("Sloped"));
-
-	ui.cbYBreakStyle->addItem(i18n("Simple"));
-	ui.cbYBreakStyle->addItem(i18n("Vertical"));
-	ui.cbYBreakStyle->addItem(i18n("Sloped"));
+	const QStringList styles{i18n("Simple"), i18n("Vertical"), i18n("Slope"), i18n("Slope Flipped"), i18n("Peak"), i18n("Peak Flipped")};
+	for (int i = 0; i < ENUM_COUNT(CartesianPlot, RangeBreakStyle); i++) {
+		ui.cbXBreakStyle->addItem(styles.at(i));
+		ui.cbYBreakStyle->addItem(styles.at(i));
+	}
 
 	// plot area
 	ui.cbBackgroundType->addItem(i18n("Color"));
