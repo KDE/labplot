@@ -1249,7 +1249,10 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	// box border
 	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
+	if (plot->theme() != QLatin1String("Tufte"))
+		p.setColor(themeColor);
+	else
+		p.setColor(Qt::white); // white color for bar borders in Tufte's theme
 	setBorderPen(p);
 	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
 
@@ -1261,15 +1264,6 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	setFillingFirstColor(themeColor);
 	setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
 	setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
-
-	// Tufte's theme goes beyond what we can implement when using the theme properties of XYCurve.
-	// So, instead of introducing a dedicated section for BarPlot, which would be a big overkill
-	// for all other themes, we add here a special handling for "Tufte".
-	if (plot->theme() == QLatin1String("Tufte")) {
-		p.setStyle(Qt::NoPen);
-		setBorderPen(p);
-		setFillingEnabled(false);
-	}
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

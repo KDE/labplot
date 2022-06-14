@@ -315,7 +315,7 @@ void BarPlotDock::xColumnChanged(const QModelIndex& index) {
 }
 
 void BarPlotDock::removeXColumn() {
-	cbXColumn->setCurrentModelIndex(QModelIndex());
+	cbXColumn->setAspect(nullptr);
 	ui.bRemoveXColumn->setEnabled(false);
 	for (auto* barPlot : m_barPlots)
 		barPlot->setXColumn(nullptr);
