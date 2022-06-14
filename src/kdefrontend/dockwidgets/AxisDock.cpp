@@ -148,6 +148,7 @@ AxisDock::AxisDock(QWidget* parent)
 	//"Major ticks"-tab
 	connect(ui.cbMajorTicksDirection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksDirectionChanged);
 	connect(ui.cbMajorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksTypeChanged);
+	connect(ui.cbMajorTicksAutoNumber, &QCheckBox::stateChanged, this, &AxisDock::majorTicksAutoNumberChanged);
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorTicksNumberChanged);
 	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
@@ -164,6 +165,7 @@ AxisDock::AxisDock(QWidget* parent)
 	//"Minor ticks"-tab
 	connect(ui.cbMinorTicksDirection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorTicksDirectionChanged);
 	connect(ui.cbMinorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorTicksTypeChanged);
+	connect(ui.cbMinorTicksAutoNumber, &QCheckBox::stateChanged, this, &AxisDock::minorTicksAutoNumberChanged);
 	connect(ui.sbMinorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorTicksNumberChanged);
 	connect(ui.sbMinorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::minorTicksSpacingChanged);
 	connect(dtsbMinorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::minorTicksSpacingChanged);
@@ -465,71 +467,82 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	this->load();
 
 	updatePlotRanges();
+	initConnections();
+}
+
+void AxisDock::initConnections() {
+	while (!m_connections.isEmpty())
+		disconnect(m_connections.takeFirst());
 
 	// general
-	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::aspectDescriptionChanged);
-	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
-	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged), this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
-	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
-	connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
-	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
-	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
-	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
-	connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
-	connect(m_axis, &Axis::showScaleOffsetChanged, this, &AxisDock::axisShowScaleOffsetChanged);
-	connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
+	m_connections << connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::aspectDescriptionChanged);
+	m_connections << connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
+	m_connections << connect(m_axis,
+							 QOverload<Axis::Position>::of(&Axis::positionChanged),
+							 this,
+							 QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
+	m_connections << connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
+	m_connections << connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
+	m_connections << connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
+	m_connections << connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
+	m_connections << connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
+	m_connections << connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
+	m_connections << connect(m_axis, &Axis::showScaleOffsetChanged, this, &AxisDock::axisShowScaleOffsetChanged);
+	m_connections << connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
-	connect(m_axis, &Axis::linePenChanged, this, &AxisDock::axisLinePenChanged);
-	connect(m_axis, &Axis::lineOpacityChanged, this, &AxisDock::axisLineOpacityChanged);
-	connect(m_axis, &Axis::arrowTypeChanged, this, &AxisDock::axisArrowTypeChanged);
-	connect(m_axis, &Axis::arrowPositionChanged, this, &AxisDock::axisArrowPositionChanged);
-	connect(m_axis, &Axis::arrowSizeChanged, this, &AxisDock::axisArrowSizeChanged);
+	m_connections << connect(m_axis, &Axis::linePenChanged, this, &AxisDock::axisLinePenChanged);
+	m_connections << connect(m_axis, &Axis::lineOpacityChanged, this, &AxisDock::axisLineOpacityChanged);
+	m_connections << connect(m_axis, &Axis::arrowTypeChanged, this, &AxisDock::axisArrowTypeChanged);
+	m_connections << connect(m_axis, &Axis::arrowPositionChanged, this, &AxisDock::axisArrowPositionChanged);
+	m_connections << connect(m_axis, &Axis::arrowSizeChanged, this, &AxisDock::axisArrowSizeChanged);
 
 	// ticks
-	connect(m_axis, &Axis::majorTicksDirectionChanged, this, &AxisDock::axisMajorTicksDirectionChanged);
-	connect(m_axis, &Axis::majorTicksTypeChanged, this, &AxisDock::axisMajorTicksTypeChanged);
-	connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
-	connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
-	connect(m_axis, &Axis::majorTickStartOffsetChanged, this, &AxisDock::axisMajorTickStartOffsetChanged);
-	connect(m_axis, &Axis::majorTicksColumnChanged, this, &AxisDock::axisMajorTicksColumnChanged);
-	connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
-	connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
-	connect(m_axis, &Axis::majorTicksOpacityChanged, this, &AxisDock::axisMajorTicksOpacityChanged);
-	connect(m_axis, &Axis::minorTicksDirectionChanged, this, &AxisDock::axisMinorTicksDirectionChanged);
-	connect(m_axis, &Axis::minorTicksTypeChanged, this, &AxisDock::axisMinorTicksTypeChanged);
-	connect(m_axis, &Axis::minorTicksNumberChanged, this, &AxisDock::axisMinorTicksNumberChanged);
-	connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksSpacingChanged);
-	connect(m_axis, &Axis::minorTicksColumnChanged, this, &AxisDock::axisMinorTicksColumnChanged);
-	connect(m_axis, &Axis::minorTicksPenChanged, this, &AxisDock::axisMinorTicksPenChanged);
-	connect(m_axis, &Axis::minorTicksLengthChanged, this, &AxisDock::axisMinorTicksLengthChanged);
-	connect(m_axis, &Axis::minorTicksOpacityChanged, this, &AxisDock::axisMinorTicksOpacityChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksDirectionChanged, this, &AxisDock::axisMajorTicksDirectionChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksTypeChanged, this, &AxisDock::axisMajorTicksTypeChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksAutoNumberChanged, this, &AxisDock::axisMajorTicksAutoNumberChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
+	m_connections << connect(m_axis, &Axis::majorTickStartOffsetChanged, this, &AxisDock::axisMajorTickStartOffsetChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksColumnChanged, this, &AxisDock::axisMajorTicksColumnChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksOpacityChanged, this, &AxisDock::axisMajorTicksOpacityChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksDirectionChanged, this, &AxisDock::axisMinorTicksDirectionChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksTypeChanged, this, &AxisDock::axisMinorTicksTypeChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksAutoNumberChanged, this, &AxisDock::axisMinorTicksAutoNumberChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksNumberChanged, this, &AxisDock::axisMinorTicksNumberChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksSpacingChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksColumnChanged, this, &AxisDock::axisMinorTicksColumnChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksPenChanged, this, &AxisDock::axisMinorTicksPenChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksLengthChanged, this, &AxisDock::axisMinorTicksLengthChanged);
+	m_connections << connect(m_axis, &Axis::minorTicksOpacityChanged, this, &AxisDock::axisMinorTicksOpacityChanged);
 
 	// labels
-	connect(m_axis, &Axis::labelsFormatChanged, this, &AxisDock::axisLabelsFormatChanged);
-	connect(m_axis, &Axis::labelsAutoPrecisionChanged, this, &AxisDock::axisLabelsAutoPrecisionChanged);
-	connect(m_axis, &Axis::labelsPrecisionChanged, this, &AxisDock::axisLabelsPrecisionChanged);
-	connect(m_axis, &Axis::labelsDateTimeFormatChanged, this, &AxisDock::axisLabelsDateTimeFormatChanged);
-	connect(m_axis, &Axis::labelsPositionChanged, this, &AxisDock::axisLabelsPositionChanged);
-	connect(m_axis, &Axis::labelsOffsetChanged, this, &AxisDock::axisLabelsOffsetChanged);
-	connect(m_axis, &Axis::labelsRotationAngleChanged, this, &AxisDock::axisLabelsRotationAngleChanged);
-	connect(m_axis, &Axis::labelsTextTypeChanged, this, &AxisDock::axisLabelsTextTypeChanged);
-	connect(m_axis, &Axis::labelsTextColumnChanged, this, &AxisDock::axisLabelsTextColumnChanged);
-	connect(m_axis, &Axis::labelsFontChanged, this, &AxisDock::axisLabelsFontChanged);
-	connect(m_axis, &Axis::labelsColorChanged, this, &AxisDock::axisLabelsFontColorChanged);
-	connect(m_axis, &Axis::labelsBackgroundTypeChanged, this, &AxisDock::axisLabelsBackgroundTypeChanged);
-	connect(m_axis, &Axis::labelsBackgroundColorChanged, this, &AxisDock::axisLabelsBackgroundColorChanged);
-	connect(m_axis, &Axis::labelsPrefixChanged, this, &AxisDock::axisLabelsPrefixChanged);
-	connect(m_axis, &Axis::labelsSuffixChanged, this, &AxisDock::axisLabelsSuffixChanged);
-	connect(m_axis, &Axis::labelsOpacityChanged, this, &AxisDock::axisLabelsOpacityChanged);
+	m_connections << connect(m_axis, &Axis::labelsFormatChanged, this, &AxisDock::axisLabelsFormatChanged);
+	m_connections << connect(m_axis, &Axis::labelsAutoPrecisionChanged, this, &AxisDock::axisLabelsAutoPrecisionChanged);
+	m_connections << connect(m_axis, &Axis::labelsPrecisionChanged, this, &AxisDock::axisLabelsPrecisionChanged);
+	m_connections << connect(m_axis, &Axis::labelsDateTimeFormatChanged, this, &AxisDock::axisLabelsDateTimeFormatChanged);
+	m_connections << connect(m_axis, &Axis::labelsPositionChanged, this, &AxisDock::axisLabelsPositionChanged);
+	m_connections << connect(m_axis, &Axis::labelsOffsetChanged, this, &AxisDock::axisLabelsOffsetChanged);
+	m_connections << connect(m_axis, &Axis::labelsRotationAngleChanged, this, &AxisDock::axisLabelsRotationAngleChanged);
+	m_connections << connect(m_axis, &Axis::labelsTextTypeChanged, this, &AxisDock::axisLabelsTextTypeChanged);
+	m_connections << connect(m_axis, &Axis::labelsTextColumnChanged, this, &AxisDock::axisLabelsTextColumnChanged);
+	m_connections << connect(m_axis, &Axis::labelsFontChanged, this, &AxisDock::axisLabelsFontChanged);
+	m_connections << connect(m_axis, &Axis::labelsColorChanged, this, &AxisDock::axisLabelsFontColorChanged);
+	m_connections << connect(m_axis, &Axis::labelsBackgroundTypeChanged, this, &AxisDock::axisLabelsBackgroundTypeChanged);
+	m_connections << connect(m_axis, &Axis::labelsBackgroundColorChanged, this, &AxisDock::axisLabelsBackgroundColorChanged);
+	m_connections << connect(m_axis, &Axis::labelsPrefixChanged, this, &AxisDock::axisLabelsPrefixChanged);
+	m_connections << connect(m_axis, &Axis::labelsSuffixChanged, this, &AxisDock::axisLabelsSuffixChanged);
+	m_connections << connect(m_axis, &Axis::labelsOpacityChanged, this, &AxisDock::axisLabelsOpacityChanged);
 
 	// grids
-	connect(m_axis, &Axis::majorGridPenChanged, this, &AxisDock::axisMajorGridPenChanged);
-	connect(m_axis, &Axis::majorGridOpacityChanged, this, &AxisDock::axisMajorGridOpacityChanged);
-	connect(m_axis, &Axis::minorGridPenChanged, this, &AxisDock::axisMinorGridPenChanged);
-	connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
+	m_connections << connect(m_axis, &Axis::majorGridPenChanged, this, &AxisDock::axisMajorGridPenChanged);
+	m_connections << connect(m_axis, &Axis::majorGridOpacityChanged, this, &AxisDock::axisMajorGridOpacityChanged);
+	m_connections << connect(m_axis, &Axis::minorGridPenChanged, this, &AxisDock::axisMinorGridPenChanged);
+	m_connections << connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
 
-	connect(m_axis, &Axis::visibleChanged, this, &AxisDock::axisVisibilityChanged);
+	m_connections << connect(m_axis, &Axis::visibleChanged, this, &AxisDock::axisVisibilityChanged);
 }
 
 /*
@@ -1114,6 +1127,14 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		axis->setMajorTicksType(type);
 }
 
+void AxisDock::majorTicksAutoNumberChanged(int value) {
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setMajorTicksAutoNumber(value);
+}
+
 void AxisDock::majorTicksNumberChanged(int value) {
 	DEBUG(Q_FUNC_INFO << ", number = " << value)
 	if (m_initializing)
@@ -1373,6 +1394,14 @@ void AxisDock::minorTicksTypeChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksType(type);
+}
+
+void AxisDock::minorTicksAutoNumberChanged(int value) {
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setMinorTicksAutoNumber(value);
 }
 
 void AxisDock::minorTicksNumberChanged(int value) {
@@ -2025,6 +2054,12 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	ui.cbMajorTicksType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
+void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
+	m_initializing = true;
+	ui.cbMajorTicksAutoNumber->setChecked(automatic);
+	ui.sbMajorTicksNumber->setEnabled(!automatic);
+	m_initializing = false;
+}
 void AxisDock::axisMajorTicksNumberChanged(int number) {
 	m_initializing = true;
 	ui.sbMajorTicksNumber->setValue(number);
@@ -2075,6 +2110,12 @@ void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = true;
 	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
+	m_initializing = false;
+}
+void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
+	m_initializing = true;
+	ui.cbMinorTicksAutoNumber->setChecked(automatic);
+	ui.sbMinorTicksNumber->setEnabled(!automatic);
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
@@ -2341,6 +2382,9 @@ void AxisDock::load() {
 	// Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
 	ui.cbMajorTicksType->setCurrentIndex((int)m_axis->majorTicksType());
+	ui.cbMajorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
+	ui.sbMajorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
+
 	ui.sbMajorTicksNumber->setValue(m_axis->majorTicksNumber());
 	auto value{m_axis->majorTicksSpacing()};
 	if (numeric) {
@@ -2359,6 +2403,8 @@ void AxisDock::load() {
 	// Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex((int)m_axis->minorTicksDirection());
 	ui.cbMinorTicksType->setCurrentIndex((int)m_axis->minorTicksType());
+	ui.cbMinorTicksAutoNumber->setChecked(m_axis->majorTicksAutoNumber());
+	ui.sbMinorTicksNumber->setEnabled(!m_axis->majorTicksAutoNumber());
 	ui.sbMinorTicksNumber->setValue(m_axis->minorTicksNumber());
 	ui.cbMinorTicksLineStyle->setCurrentIndex((int)m_axis->minorTicksPen().style());
 	ui.kcbMinorTicksColor->setColor(m_axis->minorTicksPen().color());

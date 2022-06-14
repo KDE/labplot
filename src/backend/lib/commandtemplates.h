@@ -20,8 +20,13 @@
 template<class target_class, typename value_type>
 class StandardSetterCmd : public QUndoCommand {
 public:
-	StandardSetterCmd(target_class* target, value_type target_class::*field, value_type newValue, const KLocalizedString& description) // use ki18n("%1: ...")
-		: m_target(target)
+	StandardSetterCmd(target_class* target,
+					  value_type target_class::*field,
+					  value_type newValue,
+					  const KLocalizedString& description,
+					  QUndoCommand* parent = nullptr) // use ki18n("%1: ...")
+		: QUndoCommand(parent)
+		, m_target(target)
 		, m_field(field)
 		, m_otherValue(newValue) {
 		setText(description.subs(m_target->name()).toString());
@@ -37,6 +42,9 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
+		// Implementation as in the default QUndoCommand
+		for (int i = 0; i < childCount(); ++i)
+			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
 		finalize();
 	}
 
@@ -76,6 +84,9 @@ public:
 		value_type tmp = (*m_target.*m_field).at(m_index);
 		(*m_target.*m_field)[m_index] = m_otherValue;
 		m_otherValue = tmp;
+		// Implementation as in the default QUndoCommand
+		for (int i = 0; i < childCount(); ++i)
+			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
 		finalize();
 	}
 
@@ -115,6 +126,9 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
+		// Implementation as in the default QUndoCommand
+		for (int i = 0; i < childCount(); ++i)
+			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
 		finalize();
 	}
 
@@ -126,6 +140,9 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
+		// Implementation as in the default QUndoCommand
+		for (int i = childCount() - 1; i >= 0; --i)
+			const_cast<QUndoCommand*>(child(i))->undo(); // TODO: don't like this const_cast
 		finalizeUndo();
 	}
 
@@ -156,6 +173,8 @@ public:
 	void redo() override {
 		initialize();
 		m_otherValue = (*m_target.*m_method)(m_otherValue);
+		for (int i = 0; i < childCount(); ++i)
+			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
 		finalize();
 	}
 
