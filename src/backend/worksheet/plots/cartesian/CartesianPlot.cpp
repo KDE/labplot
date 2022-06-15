@@ -2838,10 +2838,14 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 		calculateDataXRange(index, fullRange);
 		setXRangeDirty(index, false);
 
-		for (int i = 0; i < m_coordinateSystems.count(); i++) {
-			auto cs = coordinateSystem(i);
-			if (cs->xIndex() == index)
-				setYRangeDirty(cs->yIndex(), true);
+		if (fullRange) {
+			// If not fullrange the x range will be used. So that means
+			// the xrange would not change and therefore it must not be dirty
+			for (int i = 0; i < m_coordinateSystems.count(); i++) {
+				auto cs = coordinateSystem(i);
+				if (cs->xIndex() == index)
+					setYRangeDirty(cs->yIndex(), true);
+			}
 		}
 	}
 
@@ -2906,11 +2910,15 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		calculateDataYRange(index, fullRange);
 		setYRangeDirty(index, false);
 
-		for (int i = 0; i < m_coordinateSystems.count(); i++) {
-			// All x ranges with this yIndex must be dirty
-			auto cs = coordinateSystem(i);
-			if (cs->yIndex() == index)
-				setXRangeDirty(cs->xIndex(), true);
+		if (fullRange) {
+			// If not fullrange the x range will be used. So that means
+			// the xrange would not change and therefore it must not be dirty
+			for (int i = 0; i < m_coordinateSystems.count(); i++) {
+				// All x ranges with this yIndex must be dirty
+				auto cs = coordinateSystem(i);
+				if (cs->yIndex() == index)
+					setXRangeDirty(cs->xIndex(), true);
+			}
 		}
 	}
 
