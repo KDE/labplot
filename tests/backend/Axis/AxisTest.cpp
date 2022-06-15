@@ -25,10 +25,10 @@
 #define CHECK_AXIS_LABELS(expectedTickValues)                                                                                                                  \
 	{                                                                                                                                                          \
 		/* To check if retransform ticks was called at the correct time */                                                                                     \
-		auto tickLabelValues = xAxis->tickLabelValues();                                                                                            \
-		QCOMPARE(tickLabelValues.length(), expectedTickValues.length());                                                                                      \
-		for (int i = 0; i < expectedTickValues.length(); i++)                                                                                                    \
-			QCOMPARE(tickLabelValues.at(i), expectedTickValues.at(i));                                                                                        \
+		auto tickLabelValues = xAxis->tickLabelValues();                                                                                                       \
+		QCOMPARE(tickLabelValues.length(), expectedTickValues.length());                                                                                       \
+		for (int i = 0; i < expectedTickValues.length(); i++)                                                                                                  \
+			QCOMPARE(tickLabelValues.at(i), expectedTickValues.at(i));                                                                                         \
 	}
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
