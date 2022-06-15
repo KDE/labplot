@@ -3650,7 +3650,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformXScale(int index) {
-	DEBUG(Q_FUNC_INFO)
+	QDEBUG(Q_FUNC_INFO << ", data rect =" << dataRect)
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3662,7 +3662,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 
 		const auto xRange{xRanges.at(index).range};
 		// DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
-		DEBUG(Q_FUNC_INFO << ", x range : " << xRange.toStdString())
+		//DEBUG(Q_FUNC_INFO << ", x range : " << xRange.toStdString())
 
 		QVector<CartesianScale*> scales;
 
@@ -3677,7 +3677,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		} else {
-			DEBUG("X BREAKS")
+			DEBUG(Q_FUNC_INFO << ", X BREAKS")
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = xRange.start();
 			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
@@ -3689,7 +3689,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
-				DEBUG("break scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
+				//DEBUG("break scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
 
 				if (sceneRange.length() > 0)
 					scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
@@ -3702,7 +3702,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
 			logicalRange.setRange(logicalEndLast, xRange.end());
 
-			DEBUG("last scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
+			//DEBUG("last scene/logical range = " << sceneRange.toStdString() << " / " << logicalRange.toStdString())
 
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
@@ -3992,6 +3992,7 @@ void CartesianPlotPrivate::updateDataRect() {
 	if (newWidth < 0)
 		newWidth = 0;
 	dataRect.setWidth(newWidth);
+	//QDEBUG(Q_FUNC_INFO << ", data rect = " << dataRect)
 }
 
 CartesianCoordinateSystem* CartesianPlotPrivate::coordinateSystem(const int index) const {

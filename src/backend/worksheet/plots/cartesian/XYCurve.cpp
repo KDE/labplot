@@ -1054,8 +1054,12 @@ void XYCurvePrivate::retransform() {
 					DEBUG(Q_FUNC_INFO << ", column monotonic")
 					double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
 					double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
-					DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
-
+					//DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
+					//Points v, v2;
+					//QDEBUG("left 1:" << q->cSystem->mapSceneToLogical(dataRect.topLeft()))
+					//QDEBUG("left 2:" << q->cSystem->mapSceneToLogical(v << dataRect.topLeft(), CartesianCoordinateSystem::MappingFlag::SuppressPageClipping))
+					//QDEBUG("right 1:" << q->cSystem->mapSceneToLogical(dataRect.bottomRight()))
+					//QDEBUG("right 2:" << q->cSystem->mapSceneToLogical(v2 << dataRect.bottomRight(), CartesianCoordinateSystem::MappingFlag::SuppressPageClipping))
 					startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
 					endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
 

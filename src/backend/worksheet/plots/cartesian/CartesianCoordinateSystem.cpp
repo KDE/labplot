@@ -192,14 +192,18 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 
 	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
+	//QDEBUG("LOGICAL POINTS =" << logicalPoints)
 	for (const auto* xScale : d->xScales) {
+		//DEBUG("XSCALE " << xScale->clipRange().toStdString())
 		if (!xScale)
 			continue;
 
 		for (const auto* yScale : d->yScales) {
+			//DEBUG("YSCALE " << xScale->clipRange().toStdString())
 			if (!yScale)
 				continue;
 
+			//DEBUG("start/end index = " << startIndex << " / " << endIndex)
 			for (int i = startIndex; i <= endIndex; i++) {
 				const QPointF& point = logicalPoints.at(i);
 
@@ -219,7 +223,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 					y = yPage + h / 2.;
 
 				const QPointF mappedPoint(x, y);
-				// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
+				//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					// TODO: check
 					const int indexX = qRound((x - xPage) / minLogicalDiffX);
@@ -229,7 +233,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 
 					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
-					// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
+					//DEBUG("POINT appended")
 					visiblePoints[i] = true;
 				} else
 					visiblePoints[i] = false;
@@ -359,7 +363,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	double yGapBefore;
 	double yGapAfter = qQNaN();
 
-	DEBUG(Q_FUNC_INFO << ", number of x/y scales: " << d->xScales.size() << " / " << d->yScales.size())
+	//DEBUG(Q_FUNC_INFO << ", number of x/y scales: " << d->xScales.size() << " / " << d->yScales.size())
 
 	QVectorIterator<CartesianScale*> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -511,7 +515,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 //######################### scene to logical mappers ###########################
 //##############################################################################
 Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, MappingFlags flags) const {
-	DEBUG(Q_FUNC_INFO)
+	QDEBUG(Q_FUNC_INFO << ", points =" << points)
 	QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool limit = flags & MappingFlag::Limit;
@@ -538,12 +542,14 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 			bool found = false;
 
 			for (const auto* xScale : d->xScales) {
+				//DEBUG(Q_FUNC_INFO << ", x scale " << xScale->clipRange().toStdString())
 				if (found)
 					break;
 				if (!xScale)
 					continue;
 
 				for (const auto* yScale : d->yScales) {
+					//DEBUG(Q_FUNC_INFO << ", y scale " << yScale->clipRange().toStdString())
 					if (found)
 						break;
 					if (!yScale)
@@ -580,7 +586,6 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags flags) const {
 	QDEBUG(Q_FUNC_INFO << ", point =" << point)
 	QRectF pageRect = d->plot->dataRect();
-	QDEBUG(Q_FUNC_INFO << ", page rect =" << pageRect)
 	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	bool limit = flags & MappingFlag::Limit;
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
@@ -600,15 +605,15 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags
 
 		double x = point.x();
 		double y = point.y();
-		DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
+		//DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
-			DEBUG(Q_FUNC_INFO << ", x scale " << xScale->clipRange().toStdString())
+			//DEBUG(Q_FUNC_INFO << ", x scale " << xScale->clipRange().toStdString())
 			if (!xScale)
 				continue;
 			for (const auto* yScale : d->yScales) {
 
-				DEBUG(Q_FUNC_INFO << ", y scale " << yScale->clipRange().toStdString())
+				//DEBUG(Q_FUNC_INFO << ", y scale " << yScale->clipRange().toStdString())
 				if (!yScale)
 					continue;
 
