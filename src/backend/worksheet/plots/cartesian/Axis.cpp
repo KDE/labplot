@@ -631,19 +631,19 @@ void Axis::setMajorTicksType(TicksType majorTicksType) {
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, ki18n("%1: set major ticks type")));
 }
 
-STD_SETTER_CMD_IMPL_S(Axis, SetMajorTicksNumber2, int, majorTicksNumber) // no retransformTicks called
+STD_SETTER_CMD_IMPL_S(Axis, SetMajorTicksNumberNoFinalize, int, majorTicksNumber) // no retransformTicks called
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksAutoNumber, bool, majorTicksAutoNumber, retransformTicks)
 void Axis::setMajorTicksAutoNumber(bool automatic) {
 	Q_D(Axis);
 	if (automatic != d->majorTicksAutoNumber) {
 		auto* parent = new AxisSetMajorTicksAutoNumberCmd(d, automatic, ki18n("%1: enable/disable major automatic tick numbers"));
 		if (automatic && d->range.autoTickCount() != d->majorTicksNumber)
-			new AxisSetMajorTicksNumber2Cmd(d, d->range.autoTickCount(), ki18n("%1: set the total number of the major ticks"), parent);
+			new AxisSetMajorTicksNumberNoFinalizeCmd(d, d->range.autoTickCount(), ki18n("%1: set the total number of the major ticks"), parent);
 		exec(parent);
 	}
 }
 
-STD_SETTER_CMD_IMPL_S(Axis, SetMajorTicksAutoNumber2, bool, majorTicksAutoNumber) // no retransformTicks called
+STD_SETTER_CMD_IMPL_S(Axis, SetMajorTicksAutoNumberNoFinalize, bool, majorTicksAutoNumber) // no retransformTicks called
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks)
 void Axis::setMajorTicksNumber(int number, bool automatic) {
 	DEBUG(Q_FUNC_INFO << ", number = " << number)
@@ -651,7 +651,7 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 	if (number != d->majorTicksNumber) {
 		auto* parent = new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks"));
 		if (!automatic)
-			new AxisSetMajorTicksAutoNumber2Cmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
+			new AxisSetMajorTicksAutoNumberNoFinalizeCmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
 		exec(parent);
 	}
 }
@@ -713,7 +713,7 @@ void Axis::setMinorTicksType(TicksType minorTicksType) {
 		exec(new AxisSetMinorTicksTypeCmd(d, minorTicksType, ki18n("%1: set minor ticks type")));
 }
 
-STD_SETTER_CMD_IMPL_S(Axis, SetMinorTicksNumber2, int, minorTicksNumber)
+STD_SETTER_CMD_IMPL_S(Axis, SetMinorTicksNumberNoFinalize, int, minorTicksNumber)
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksAutoNumber, bool, minorTicksAutoNumber, retransformTicks)
 void Axis::setMinorTicksAutoNumber(bool automatic) {
 	Q_D(Axis);
@@ -721,19 +721,19 @@ void Axis::setMinorTicksAutoNumber(bool automatic) {
 		auto* parent = new AxisSetMinorTicksAutoNumberCmd(d, automatic, ki18n("%1: enable/disable minor automatic tick numbers"));
 		// TODO: for automatic it is always 1. Is that ok?
 		if (automatic && 1 != d->minorTicksNumber)
-			new AxisSetMinorTicksNumber2Cmd(d, 1, ki18n("%1: set the total number of the minor ticks"), parent);
+			new AxisSetMinorTicksNumberNoFinalizeCmd(d, 1, ki18n("%1: set the total number of the minor ticks"), parent);
 		exec(parent);
 	}
 }
 
-STD_SETTER_CMD_IMPL_S(Axis, SetMinorTicksAutoNumber2, bool, minorTicksAutoNumber) // no retransformTicks called
+STD_SETTER_CMD_IMPL_S(Axis, SetMinorTicksAutoNumberNoFinalize, bool, minorTicksAutoNumber) // no retransformTicks called
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksNumber, int, minorTicksNumber, retransformTicks)
 void Axis::setMinorTicksNumber(int minorTicksNumber) {
 	DEBUG(Q_FUNC_INFO << ", number = " << minorTicksNumber)
 	Q_D(Axis);
 	if (minorTicksNumber != d->minorTicksNumber) {
 		auto* parent = new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, ki18n("%1: set the total number of the minor ticks"));
-		new AxisSetMinorTicksAutoNumber2Cmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
+		new AxisSetMinorTicksAutoNumberNoFinalizeCmd(d, false, ki18n("%1: disable major automatic tick numbers"), parent);
 		exec(parent);
 	}
 }
