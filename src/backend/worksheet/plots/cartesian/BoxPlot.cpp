@@ -196,7 +196,7 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
 
@@ -205,10 +205,10 @@ void BoxPlot::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &BoxPlot::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QLatin1String("transform-move-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 }
 
@@ -217,7 +217,7 @@ void BoxPlot::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("labplot-axis-horizontal")));
+	orientationMenu->setIcon(QIcon::fromTheme(QLatin1String("draw-cross")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 }
@@ -229,16 +229,18 @@ QMenu* BoxPlot::createContextMenu() {
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
 
-	// Orientation
-	// 	if (d->orientation == Orientation::Horizontal)
-	// 		orientationHorizontalAction->setChecked(true);
-	// 	else
-	// 		orientationVerticalAction->setChecked(true);
-	menu->insertMenu(firstAction, orientationMenu);
-
 	// Visibility
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	// Orientation
+	Q_D(const BoxPlot);
+	if (d->orientation == Orientation::Horizontal)
+		orientationHorizontalAction->setChecked(true);
+	else
+		orientationVerticalAction->setChecked(true);
+	menu->insertMenu(firstAction, orientationMenu);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -589,8 +591,11 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void BoxPlot::orientationChangedSlot(QAction*) {
-	// TODO
+void BoxPlot::orientationChangedSlot(QAction* action) {
+	if (action == orientationHorizontalAction)
+		this->setOrientation(Axis::Orientation::Horizontal);
+	else
+		this->setOrientation(Axis::Orientation::Vertical);
 }
 
 void BoxPlot::visibilityChangedSlot() {
