@@ -31,11 +31,11 @@ public:
 			, max(QLatin1String("1")){};
 
 		EquationType type{EquationType::Cartesian};
-		QString expression1;
-		QString expression2;
+		QString expression1; // Used for Cartesian, Polar, ...
+		QString expression2; // For parametric expression1 and expression2 is used
 		QString min; // localized strings to support expressions
 		QString max;
-		int count{1000};
+		int count{1000}; // number of points of the curve
 	};
 
 	explicit XYEquationCurve(const QString& name);
