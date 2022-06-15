@@ -48,6 +48,7 @@ private:
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 	void updatePlotRanges() override;
+	void initConnections();
 
 	void load();
 	void loadConfig(KConfig&);
@@ -57,6 +58,8 @@ private:
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement{nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement{nullptr};
+
+	QVector<QMetaObject::Connection> m_connections;
 
 private Q_SLOTS:
 	void init();
@@ -95,6 +98,7 @@ private Q_SLOTS:
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
+	void majorTicksAutoNumberChanged(int);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
@@ -112,6 +116,7 @@ private Q_SLOTS:
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
+	void minorTicksAutoNumberChanged(int);
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
@@ -176,6 +181,7 @@ private Q_SLOTS:
 	// ticks
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMajorTicksTypeChanged(Axis::TicksType);
+	void axisMajorTicksAutoNumberChanged(bool);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksSpacingChanged(qreal);
 	void axisMajorTickStartOffsetChanged(qreal);
@@ -185,6 +191,7 @@ private Q_SLOTS:
 	void axisMajorTicksOpacityChanged(qreal);
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
+	void axisMinorTicksAutoNumberChanged(bool);
 	void axisMinorTicksNumberChanged(int);
 	void axisMinorTicksSpacingChanged(qreal);
 	void axisMinorTicksColumnChanged(const AbstractColumn*);
