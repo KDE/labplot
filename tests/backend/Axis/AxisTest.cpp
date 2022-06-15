@@ -8,11 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include <QUndoStack>
-
-#define private public
-#define protected public
-// includes CommonTest which includes CartesianCoordinateSystem which includes CartesianPlot which includes axis
 #include "AxisTest.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
@@ -20,17 +15,20 @@
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
+
+#include <QUndoStack>
+
+#define private public
 #include "src/kdefrontend/dockwidgets/AxisDock.h" // to be able to access the ui elements
-#undef protected
 #undef private
 
-#define CHECK_AXIS_LABELS(expectedTickLabels)                                                                                                                  \
+#define CHECK_AXIS_LABELS(expectedTickValues)                                                                                                                  \
 	{                                                                                                                                                          \
 		/* To check if retransform ticks was called at the correct time */                                                                                     \
-		auto& tickLabelStrings = xAxis->d_func()->tickLabelStrings;                                                                                            \
-		QCOMPARE(tickLabelStrings.length(), expectedTickLabels.length());                                                                                      \
-		for (int i = 0; i < tickLabelStrings.length(); i++)                                                                                                    \
-			QCOMPARE(tickLabelStrings.at(i), expectedTickLabels.at(i));                                                                                        \
+		auto tickLabelValues = xAxis->tickLabelValues();                                                                                            \
+		QCOMPARE(tickLabelValues.length(), expectedTickValues.length());                                                                                      \
+		for (int i = 0; i < expectedTickValues.length(); i++)                                                                                                    \
+			QCOMPARE(tickLabelValues.at(i), expectedTickValues.at(i));                                                                                        \
 	}
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
@@ -56,8 +54,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 
 	{
-		QStringList expectedTickLabels = {"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	// To check also if the dock shows the correct values
@@ -73,8 +71,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
 
 	{
-		QStringList expectedTickLabels = {"0.00", "0.25", "0.50", "0.75", "1.00"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), false);
@@ -87,8 +85,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 
 	{
-		QStringList expectedTickLabels = {"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
@@ -100,8 +98,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
 
 	{
-		QStringList expectedTickLabels = {"0.00", "0.25", "0.50", "0.75", "1.00"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	xAxis->setMajorTicksAutoNumber(true);
@@ -109,8 +107,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 
 	{
-		QStringList expectedTickLabels = {"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	// Check that undo/redo works for setting autonumber enable/disable
@@ -119,8 +117,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), false);
 
 	{
-		QStringList expectedTickLabels = {"0.00", "0.25", "0.50", "0.75", "1.00"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
 	project.undoStack()->redo();
@@ -128,8 +126,8 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 	QCOMPARE(xAxis->majorTicksAutoNumber(), true);
 
 	{
-		QStringList expectedTickLabels = {"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
-		CHECK_AXIS_LABELS(expectedTickLabels);
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 }
 
