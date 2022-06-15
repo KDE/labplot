@@ -47,11 +47,13 @@ private Q_SLOTS:
 	void retransformXScaleCalled(const CartesianPlot* plot, int index);
 	void retransformYScaleCalled(const CartesianPlot* plot, int index);
 
+// Tests
 private Q_SLOTS:
 	void TestLoadProject();
 	void TestResizeWindows();
 	void TestZoomSelectionAutoscale();
 	void TestPadding();
+	void TestCopyPastePlot();
 	
 };
 

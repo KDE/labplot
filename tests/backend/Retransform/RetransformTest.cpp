@@ -417,6 +417,33 @@ void RetransformTest::TestPadding() {
 	QCOMPARE(logsYScaleRetransformed.count(), 0);
 }
 
+void RetransformTest::TestCopyPastePlot() {
+	Project project;
+	auto* ws = new Worksheet("Worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* ws2 = new Worksheet("Worksheet2");
+	QVERIFY(ws2 != nullptr);
+	project.addChild(ws2);
+
+	resetRetransformCount();
+
+	p->copy();
+	ws2->paste(true);
+
+	auto plots = ws2->children(AspectType::CartesianPlot);
+	QCOMPARE(plots.count(), 1);
+
+	// Check that the plot was retransformed after pasting
+	QCOMPARE(callCount(plots.at(0), false), 1);
+}
+
 // Test add new curve autoscale
 // Test change data
 
