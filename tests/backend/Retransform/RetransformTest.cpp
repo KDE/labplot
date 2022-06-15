@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/MainWin.h"
 
@@ -265,7 +266,6 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
 	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
 
-	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
 	 QStringList list = {
 	 "Project/Worksheet/xy-plot/x",
@@ -274,6 +274,8 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	 "Project/Worksheet/xy-plot/cos",
 	 "Project/Worksheet/xy-plot/tan",
 	 "Project/Worksheet/xy-plot/y-axis",
+	 // not neccesary to retransform legend, but is difficult to
+	 // distinguish so let it in, because it does not cost that much performance
 	 "Project/Worksheet/xy-plot/legend",
 	 "Project/Worksheet/xy-plot/plotText",
 	 "Project/Worksheet/xy-plot/plotImage",
@@ -444,7 +446,71 @@ void RetransformTest::TestCopyPastePlot() {
 	QCOMPARE(callCount(plots.at(0), false), 1);
 }
 
-// Test add new curve autoscale
+void RetransformTest::TestAddCurve() {
+	Project project;
+	auto* ws = new Worksheet("Worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	resetRetransformCount();
+
+	p->addEquationCurve();
+
+	// check that plot will be recalculated if a curve will be added
+	QCOMPARE(callCount(p, false), 1);
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Project/Worksheet
+	// Project/Worksheet/plot
+	// Project/Worksheet/plot/x
+	// Project/Worksheet/plot/y
+	// Project/Worksheet/plot/f(x) // equation curve
+	QCOMPARE(children.length(), 5);
+	for (const auto& child: children)
+		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+
+	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+	}
+
+	resetRetransformCount();
+
+	auto equationCurves = p->children(AspectType::XYEquationCurve);
+	QCOMPARE(equationCurves.count(), 1);
+	auto* equationCurve = static_cast<XYEquationCurve*>(equationCurves.at(0));
+	XYEquationCurve::EquationData data;
+	data.count = 100;
+	data.expression1 = "x";
+	data.expression2 = "";
+	data.min = "0";
+	data.max = "10";
+	data.type = XYEquationCurve::EquationType::Cartesian;
+	equationCurve->setEquationData(data);
+
+	auto list = QStringList({
+			   "Project/Worksheet/plot/x",
+			   "Project/Worksheet/plot/y",
+			   "Project/Worksheet/plot/f(x)"});
+	QCOMPARE(elementLogCount(false), list.count());
+	for (auto& s: list)
+		QCOMPARE(callCount(s, false), 1);
+
+	// x and y are called only once
+	QCOMPARE(logsXScaleRetransformed.count(), 1);
+	QCOMPARE(logsXScaleRetransformed.at(0).plot, p);
+	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(logsYScaleRetransformed.count(), 1);
+	QCOMPARE(logsYScaleRetransformed.at(0).plot, p);
+	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
+}
+
 // Test change data
 
 QTEST_MAIN(RetransformTest)

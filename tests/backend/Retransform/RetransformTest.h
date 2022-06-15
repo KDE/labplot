@@ -54,6 +54,7 @@ private Q_SLOTS:
 	void TestZoomSelectionAutoscale();
 	void TestPadding();
 	void TestCopyPastePlot();
+	void TestAddCurve();
 	
 };
 
