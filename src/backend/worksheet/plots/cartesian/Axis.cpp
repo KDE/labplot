@@ -2915,7 +2915,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("direction", majorTicksDirection, Axis::TicksDirection);
 			READ_INT_VALUE("type", majorTicksType, Axis::TicksType);
-            READ_INT_VALUE("numberAuto", majorTicksAutoNumber, bool);
+			READ_INT_VALUE("numberAuto", majorTicksAutoNumber, bool);
 			READ_INT_VALUE("number", majorTicksNumber, int);
 			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
 			READ_COLUMN(majorTicksColumn);
@@ -2927,7 +2927,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("direction", minorTicksDirection, Axis::TicksDirection);
 			READ_INT_VALUE("type", minorTicksType, Axis::TicksType);
-            READ_INT_VALUE("numberAuto", minorTicksAutoNumber, bool);
+			READ_INT_VALUE("numberAuto", minorTicksAutoNumber, bool);
 			READ_INT_VALUE("number", minorTicksNumber, int);
 			READ_DOUBLE_VALUE("increment", minorTicksIncrement);
 			READ_COLUMN(minorTicksColumn);
