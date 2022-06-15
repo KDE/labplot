@@ -42,9 +42,7 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
-		// Implementation as in the default QUndoCommand
-		for (int i = 0; i < childCount(); ++i)
-			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
+		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}
 
@@ -84,9 +82,7 @@ public:
 		value_type tmp = (*m_target.*m_field).at(m_index);
 		(*m_target.*m_field)[m_index] = m_otherValue;
 		m_otherValue = tmp;
-		// Implementation as in the default QUndoCommand
-		for (int i = 0; i < childCount(); ++i)
-			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
+		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}
 
@@ -126,9 +122,7 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
-		// Implementation as in the default QUndoCommand
-		for (int i = 0; i < childCount(); ++i)
-			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
+		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}
 
@@ -140,9 +134,7 @@ public:
 		value_type tmp = *m_target.*m_field;
 		*m_target.*m_field = m_otherValue;
 		m_otherValue = tmp;
-		// Implementation as in the default QUndoCommand
-		for (int i = childCount() - 1; i >= 0; --i)
-			const_cast<QUndoCommand*>(child(i))->undo(); // TODO: don't like this const_cast
+		QUndoCommand::undo(); // undo all childs
 		finalizeUndo();
 	}
 
@@ -173,8 +165,7 @@ public:
 	void redo() override {
 		initialize();
 		m_otherValue = (*m_target.*m_method)(m_otherValue);
-		for (int i = 0; i < childCount(); ++i)
-			const_cast<QUndoCommand*>(child(i))->redo(); // TODO: don't like this const_cast
+		QUndoCommand::redo(); // redo all childs
 		finalize();
 	}
 
