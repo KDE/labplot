@@ -3708,7 +3708,8 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		}
 		for (int s = 0; s < scales.size(); s++) {
-			DEBUG("SCALE " << s+1 << ": " << scales.at(s)->clipRange().toStdString())
+			if (scales.at(s))
+				DEBUG("SCALE " << s+1 << ": " << scales.at(s)->clipRange().toStdString())
 		}
 
 		cs->setXScales(scales);

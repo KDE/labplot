@@ -1116,7 +1116,7 @@ void AxisPrivate::retransformLine() {
 			// y location of x axis
 			double yValue = 1.;
 			const auto yScales = q->cSystem->yScales();
-			if (yScales.size() > 0) {
+			if (yScales.size() > 0 && yScales.first()) {
 				if (position == Axis::Position::Bottom)
 					yValue = yScales.first()->start();
 				else if (position == Axis::Position::Top)
@@ -1175,7 +1175,7 @@ void AxisPrivate::retransformLine() {
 			// x location of y axis
 			double xValue = 1.;
 			const auto xScales = q->cSystem->xScales();
-			if (xScales.size() > 0) {
+			if (xScales.size() > 0 && xScales.first()) {
 				if (position == Axis::Position::Left)
 					xValue = xScales.first()->start();
 				else if (position == Axis::Position::Right)
