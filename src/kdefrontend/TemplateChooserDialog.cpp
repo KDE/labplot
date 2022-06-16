@@ -8,6 +8,7 @@
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
 #include <QDirIterator>
 #include <QFileDialog>
@@ -149,6 +150,10 @@ CartesianPlot* TemplateChooserDialog::generatePlot() {
 	plot->setIsLoading(false);
 	for (auto* child : plot->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
+
+
+	for (auto* equationCurve : plot->children<XYEquationCurve>())
+		static_cast<XYEquationCurve*>(equationCurve)->recalculate();
 	plot->retransformAll();
 	return plot;
 }
