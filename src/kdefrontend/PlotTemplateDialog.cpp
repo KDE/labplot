@@ -63,6 +63,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	m_worksheet->setLayoutLeftMargin(0.);
 	m_worksheet->setLayoutRightMargin(0.);
 	m_worksheetView = m_worksheet->view();
+	m_worksheetView->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu); // preventing that a context menu will be created to add elements to the plot
 	m_project->addChild(m_worksheet);
 	ui->lPreview->addWidget(m_worksheetView);
 	m_worksheetView->hide();
