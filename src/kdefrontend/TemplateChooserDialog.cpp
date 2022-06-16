@@ -1,3 +1,13 @@
+/*
+	File                 : TemplateChooserDialog.cpp
+	Project              : LabPlot
+	Description          : dialog to load user-defined plot definitions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
 #include "TemplateChooserDialog.h"
 #include "ui_TemplateChooserDialog.h"
 
@@ -13,6 +23,10 @@
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QWindow>
+
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 namespace {
 const QLatin1String lastDirConfigEntry = QLatin1String("LastPlotTemplateDir");
@@ -38,6 +52,7 @@ TemplateChooserDialog::TemplateChooserDialog(QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::TemplateChooserDialog) {
 	ui->setupUi(this);
+	setWindowTitle(i18nc("@title:window", "Plot Templates"));
 
 	m_project = new Project;
 
@@ -54,18 +69,31 @@ TemplateChooserDialog::TemplateChooserDialog(QWidget* parent)
 	mTemplateListModel = new TemplateListModel(defaultTemplateInstallPath(), this);
 	ui->lvInstalledTemplates->setModel(mTemplateListModel);
 
-	ui->lInstalledTemplates->setToolTip(tr("Path: ") + defaultTemplateInstallPath());
+	ui->lInstalledTemplates->setToolTip(i18n("Path: %1", defaultTemplateInstallPath()));
 
 	connect(ui->pbBrowse, &QPushButton::pressed, this, &TemplateChooserDialog::chooseTemplate);
 	connect(ui->leTemplatePath, &QLineEdit::textChanged, this, &TemplateChooserDialog::customTemplatePathChanged);
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &TemplateChooserDialog::listViewTemplateChanged);
 	connect(ui->cbCustomTemplatePreview, &QCheckBox::clicked, this, &TemplateChooserDialog::changePreviewSource);
 	updateErrorMessage("No template selected.");
+
+	// restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), "TemplateChooserDialog");
+	create(); // ensure there's a window created
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
 TemplateChooserDialog::~TemplateChooserDialog() {
 	delete ui;
 	delete m_project;
+
+	// save current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), "TemplateChooserDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 void TemplateChooserDialog::customTemplatePathChanged(const QString& filename) {
@@ -93,7 +121,7 @@ void TemplateChooserDialog::chooseTemplate() {
 	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
 	const QString& path =
-		QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Labplot Plot Templates (*%1)", format));
+		QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Plot Templates (*%1)", format));
 	ui->leTemplatePath->setText(path);
 
 	if (!path.isEmpty()) {

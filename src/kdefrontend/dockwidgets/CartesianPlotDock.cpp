@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -19,6 +19,7 @@
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
+#include <KIconLoader>
 #include <KMessageBox>
 
 #include <QButtonGroup>
@@ -206,23 +207,33 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.kcbCursorLineColor, &KColorButton::changed, this, &CartesianPlotDock::cursorLineColorChanged);
 	connect(ui.cbCursorLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::cursorLineStyleChanged);
 
-	connect(ui.pbExportTemplate, &QPushButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
-
 	// theme and template handlers
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
+	// themes
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &CartesianPlotDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
+
+	// templates for plot properties
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &CartesianPlotDock::info);
+
+	// templates for plot definitions
+	auto* tbExportTemplate = new QToolButton;
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+	tbExportTemplate->setIconSize(QSize(size, size));
+	tbExportTemplate->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
+	tbExportTemplate->setToolTip(i18n("Save current plot definition as template"));
+	connect(tbExportTemplate, &QToolButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
+	layout->addWidget(tbExportTemplate);
 
 	ui.verticalLayout->addWidget(frame);
 

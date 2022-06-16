@@ -1,9 +1,19 @@
+/*
+	File                 : TemplateChooserDialog.cpp
+	Project              : LabPlot
+	Description          : dialog to load user-defined plot definitions
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+
 #ifndef TEMPLATECHOOSERDIALOG_H
 #define TEMPLATECHOOSERDIALOG_H
 
 #include <QAbstractListModel>
 #include <QDialog>
-#include <QDir>
 
 class Project;
 class Worksheet;
@@ -19,7 +29,7 @@ class TemplateChooserDialog : public QDialog {
 
 public:
 	explicit TemplateChooserDialog(QWidget* parent = nullptr);
-	void updateErrorMessage(const QString& message);
+	void updateErrorMessage(const QString&);
 	~TemplateChooserDialog();
 
 	QString templatePath() const;

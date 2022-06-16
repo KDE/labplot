@@ -195,7 +195,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
-	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("labplot-template-plot"), i18n("Load plot from template"), addNewActionGroup);
+	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("document-new-from-template"), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
@@ -443,6 +443,7 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
+	m_addNewCartesianPlotMenu->addSeparator();
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlotTemplateAction);
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
