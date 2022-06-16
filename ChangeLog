@@ -1,7 +1,7 @@
 -----2.10.0 () -----
 Bug fixes:
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
->>>>>>> eb21763f9 (GIT_SILENT changelog)
+	* [xy-curve] fix using custom value label with invalid data points (BUG 455214)
 -----2.9.0 (03.05.2022) -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer
