@@ -75,7 +75,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	connect(ui->pbBrowse, &QPushButton::pressed, this, &PlotTemplateDialog::chooseTemplate);
 	connect(ui->leTemplatePath, &QLineEdit::textChanged, this, &PlotTemplateDialog::customTemplatePathChanged);
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PlotTemplateDialog::listViewTemplateChanged);
-	connect(ui->cbCustomTemplatePreview, &QCheckBox::clicked, this, &PlotTemplateDialog::changePreviewSource);
+	connect(ui->cbCustomTemplatePreview, &QCheckBox::stateChanged, this, &PlotTemplateDialog::changePreviewSource);
 	updateErrorMessage("No template selected.");
 
 	// restore saved settings if available
@@ -117,23 +117,24 @@ QString PlotTemplateDialog::defaultTemplateInstallPath() {
 }
 
 void PlotTemplateDialog::chooseTemplate() {
-	Lock lock(mLoading);
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
-	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+	{
+		Lock lock(mLoading);
+		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
+		const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
-	const QString& path =
-		QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Plot Templates (*%1)", format));
-	ui->leTemplatePath->setText(path);
+		const QString& path =
+			QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Plot Templates (*%1)", format));
+		ui->leTemplatePath->setText(path);
 
-	if (!path.isEmpty()) {
-		int pos = path.lastIndexOf(QLatin1String("/"));
-		if (pos != -1) {
-			QString newDir = path.left(pos);
-			if (newDir != dir)
-				conf.writeEntry(lastDirConfigEntry, newDir);
+		if (!path.isEmpty()) {
+			int pos = path.lastIndexOf(QLatin1String("/"));
+			if (pos != -1) {
+				QString newDir = path.left(pos);
+				if (newDir != dir)
+					conf.writeEntry(lastDirConfigEntry, newDir);
+			}
 		}
 	}
-
 	ui->cbCustomTemplatePreview->setChecked(true);
 }
 
@@ -249,11 +250,11 @@ void PlotTemplateDialog::listViewTemplateChanged(const QModelIndex& current, con
 	showPreview();
 }
 
-void PlotTemplateDialog::changePreviewSource(bool custom) {
+void PlotTemplateDialog::changePreviewSource(int checkState) {
 	if (mLoading)
 		return;
 
-	if (custom)
+	if (checkState == Qt::CheckState::Checked)
 		mCurrentTemplateFilePath = ui->leTemplatePath->text();
 	else {
 		const QModelIndex& current = ui->lvInstalledTemplates->selectionModel()->currentIndex();

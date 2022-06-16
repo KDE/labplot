@@ -41,7 +41,7 @@ public:
 private:
 	void chooseTemplate();
 	void listViewTemplateChanged(const QModelIndex& current, const QModelIndex& previous);
-	void changePreviewSource(bool custom);
+	void changePreviewSource(int checkState);
 	void customTemplatePathChanged(const QString& filename);
 
 private:
