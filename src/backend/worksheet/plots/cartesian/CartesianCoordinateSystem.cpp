@@ -566,7 +566,8 @@ Points CartesianCoordinateSystem::mapSceneToLogical(const Points& points, Mappin
 					}
 					//DEBUG(Q_FUNC_INFO << ", x / y = " << x << " / " << y)
 
-					if (!xScale->contains(x) || !yScale->contains(y)) {
+					//TODO: contains or valid?
+					if (!xScale->valid(x) || !yScale->valid(y)) {
 						x = point.x();
 						y = point.y();
 						continue;
@@ -602,7 +603,6 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags
 	// DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	if (noPageClipping || limit || pageRect.contains(point)) {
-
 		double x = point.x();
 		double y = point.y();
 		//DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
@@ -626,7 +626,8 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF point, MappingFlags
 					continue;
 				}
 
-				if (!xScale->contains(x) || !yScale->contains(y)) {
+				// TODO: contains or valid?
+				if (!xScale->valid(x) || !yScale->valid(y)) {
 					x = point.x();
 					y = point.y();
 					continue;
