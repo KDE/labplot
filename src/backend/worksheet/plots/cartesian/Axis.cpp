@@ -2858,8 +2858,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 				return false;
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
-
-			if (project()->xmlVersion() < 5) {
+			if (Project::xmlVersion() < 5) {
 				bool autoScale = attribs.value("autoScale").toInt();
 				if (autoScale)
 					d->rangeType = Axis::RangeType::Auto;

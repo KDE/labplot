@@ -149,23 +149,41 @@ CartesianPlot* TemplateChooserDialog::generatePlot() {
 	}
 
 	XmlStreamReader reader(&file);
-	while (!(reader.isStartDocument() || reader.atEnd()))
+
+	while(!(reader.isStartDocument() || reader.atEnd()))
 		reader.readNext();
 
-	if (!(reader.atEnd())) {
-		if (!reader.skipToNextTag()) {
-			updateErrorMessage(i18n("XML error."));
-			return nullptr;
-		}
-		if (!reader.isStartElement()) {
-			updateErrorMessage(i18n("No XML Startelement found."));
-			return nullptr;
-		}
+	if (reader.atEnd()) {
+		updateErrorMessage(i18n("XML error: No start document token found"));
+		return nullptr;
+	}
 
-		if (reader.name() != "cartesianPlot") {
-			updateErrorMessage(i18n("XML: no cartesian plot found."));
-			return nullptr;
-		}
+	reader.readNext();
+	if (!reader.isDTD()){
+		updateErrorMessage(i18n("XML error: No DTD token found"));
+		return nullptr;
+	}
+	reader.readNext();
+	if (!reader.isStartElement() || reader.name() != "PlotTemplate"){
+		updateErrorMessage(i18n("XML error: No PlotTemplate found"));
+		return nullptr;
+	}
+
+	bool ok;
+	int xmlVersion = reader.readAttributeInt("xmlVersion", &ok);
+	if (!ok){
+		updateErrorMessage(i18n("XML error: xmlVersion found"));
+		return nullptr;
+	}
+	Project::setXmlVersion(xmlVersion);
+	reader.readNext();
+
+	while (!((reader.isStartElement() && reader.name() == "cartesianPlot") || reader.atEnd()))
+		reader.readNext();
+
+	if (reader.atEnd()) {
+		updateErrorMessage(i18n("XML error: No cartesianPlot found"));
+		return nullptr;
 	}
 
 	auto* plot = new CartesianPlot(i18n("xy-plot"));

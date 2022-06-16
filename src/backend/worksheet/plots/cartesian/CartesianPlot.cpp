@@ -5378,7 +5378,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			m_coordinateSystems.clear();
 
-			if (project()->xmlVersion() < 7) {
+			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
 				str = attribs.value("niceExtend").toString();

@@ -12,6 +12,7 @@
 #include "CartesianPlotDock.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/core/Project.h"
 
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateChooserDialog.h"
@@ -2208,7 +2209,10 @@ void CartesianPlotDock::exportPlotTemplate() {
 	writer.setAutoFormatting(true);
 	writer.writeStartDocument();
 	writer.writeDTD("<!DOCTYPE LabPlotXML>");
+	writer.writeStartElement("PlotTemplate");
+	writer.writeAttribute("xmlVersion", QString::number(Project::currentBuildXmlVersion()));
 	m_plot->save(&writer);
+	writer.writeEndElement();
 	writer.writeEndDocument();
 }
 
