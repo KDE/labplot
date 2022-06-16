@@ -1960,7 +1960,7 @@ void XYCurvePrivate::updateValues() {
 
 		const int endRow{qMin(qMin(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
 		auto xColMode{valuesColumn->columnMode()};
-		int index = 0;	// index of valid points (logicalPoints)
+		int index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
 			// ignore value labels for invalid data points
 			// otherwise the assignment to the data points get lost
@@ -3025,7 +3025,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawValues(QPainter* painter) {
-	//QDEBUG(Q_FUNC_INFO << ", value strings = " << m_valueStrings)
+	// QDEBUG(Q_FUNC_INFO << ", value strings = " << m_valueStrings)
 	int i = 0;
 	for (const auto& point : qAsConst(m_valuePoints)) {
 		painter->translate(point);
