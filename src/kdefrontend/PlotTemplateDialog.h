@@ -9,8 +9,8 @@
 */
 
 
-#ifndef TEMPLATECHOOSERDIALOG_H
-#define TEMPLATECHOOSERDIALOG_H
+#ifndef PLOTTEMPLATEDIALOG_H
+#define PLOTTEMPLATEDIALOG_H
 
 #include <QAbstractListModel>
 #include <QDialog>
@@ -21,16 +21,16 @@ class TemplateListModel;
 class CartesianPlot;
 
 namespace Ui {
-class TemplateChooserDialog;
+class PlotTemplateDialog;
 }
 
-class TemplateChooserDialog : public QDialog {
+class PlotTemplateDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit TemplateChooserDialog(QWidget* parent = nullptr);
+	explicit PlotTemplateDialog(QWidget* parent = nullptr);
 	void updateErrorMessage(const QString&);
-	~TemplateChooserDialog();
+	~PlotTemplateDialog();
 
 	QString templatePath() const;
 	void showPreview();
@@ -45,7 +45,7 @@ private:
 	void customTemplatePathChanged(const QString& filename);
 
 private:
-	Ui::TemplateChooserDialog* ui;
+	Ui::PlotTemplateDialog* ui;
 	Project* m_project; // TODO: use smart pointer!
 	Worksheet* m_worksheet;
 	QWidget* m_worksheetView;
@@ -74,4 +74,4 @@ private:
 	QVector<File> mFiles;
 };
 
-#endif // TEMPLATECHOOSERDIALOG_H
+#endif // PLOTTEMPLATEDIALOG_H

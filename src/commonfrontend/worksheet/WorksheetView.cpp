@@ -21,7 +21,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "commonfrontend/core/PartMdiView.h"
-#include "kdefrontend/TemplateChooserDialog.h"
+#include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
@@ -1439,7 +1439,7 @@ void WorksheetView::addNew(QAction* action) {
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	} else if (action == addCartesianPlotTemplateAction) {
 		// open dialog
-		TemplateChooserDialog d;
+		PlotTemplateDialog d;
 		if (d.exec() != QDialog::Accepted)
 			return;
 

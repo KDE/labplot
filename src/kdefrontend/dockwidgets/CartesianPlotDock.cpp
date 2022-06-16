@@ -15,7 +15,7 @@
 #include "backend/core/Project.h"
 
 #include "kdefrontend/GuiTools.h"
-#include "kdefrontend/TemplateChooserDialog.h"
+#include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
@@ -2192,14 +2192,14 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 void CartesianPlotDock::exportPlotTemplate() {
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("PlotTemplate"));
-	const QString dir = group.readEntry(QLatin1String("ExportPath"), TemplateChooserDialog::defaultTemplateInstallPath());
+	const QString dir = group.readEntry(QLatin1String("ExportPath"), PlotTemplateDialog::defaultTemplateInstallPath());
 	QString path = QFileDialog::getSaveFileName(nullptr,
 												i18nc("@title:window", "Choose Template Save File"),
 												dir,
-												i18n("Labplot Plot Templates (*%1)", TemplateChooserDialog::format));
+												i18n("Labplot Plot Templates (*%1)", PlotTemplateDialog::format));
 
-	if (path.split(TemplateChooserDialog::format).count() < 2)
-		path.append(TemplateChooserDialog::format); // Sometimes the format is not added to the file. Don't know why
+	if (path.split(PlotTemplateDialog::format).count() < 2)
+		path.append(PlotTemplateDialog::format); // Sometimes the format is not added to the file. Don't know why
 	QFile file(path);
 	if (!file.open(QIODevice::OpenModeFlag::WriteOnly)) {
 		// TODO: show error message
