@@ -1946,14 +1946,10 @@ void XYCurvePrivate::updateValues() {
 		auto xColMode{valuesColumn->columnMode()};
 		int index = 0;	// index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
-<<<<<<< HEAD
-			if (!m_pointVisible.at(i)) continue;
-=======
 			// ignore value labels for invalid data points
 			// otherwise the assignment to the data points get lost
 			if (!xColumn->isValid(i) || xColumn->isMasked(i) || !yColumn->isValid(i) || yColumn->isMasked(i) || !m_pointVisible.at(index++))
 				continue;
->>>>>>> ab14cc89b (Fix custom value label with invalid data points)
 
 			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) ) {
 				m_valueStrings << QString();
