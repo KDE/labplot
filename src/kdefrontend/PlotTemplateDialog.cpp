@@ -52,18 +52,24 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	: QDialog(parent)
 	, ui(new Ui::PlotTemplateDialog) {
 	ui->setupUi(this);
+
 	setWindowTitle(i18nc("@title:window", "Plot Templates"));
+	setWindowIcon(QIcon::fromTheme("document-import-database"));
+
+	ui->cbTemplateLocation->addItem(i18n("Default"));
+	ui->cbTemplateLocation->addItem(i18n("Custom Folder"));
+	ui->pbCustomFolder->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
 
 	m_project = new Project;
 
 	m_worksheet = new Worksheet(QString());
+	m_worksheet->setInteractive(false);
 	m_worksheet->setUseViewSize(true);
 	m_worksheet->setLayoutTopMargin(0.);
 	m_worksheet->setLayoutBottomMargin(0.);
 	m_worksheet->setLayoutLeftMargin(0.);
 	m_worksheet->setLayoutRightMargin(0.);
 	m_worksheetView = m_worksheet->view();
-	m_worksheetView->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu); // preventing that a context menu will be created to add elements to the plot
 	m_project->addChild(m_worksheet);
 	ui->lPreview->addWidget(m_worksheetView);
 	m_worksheetView->hide();
