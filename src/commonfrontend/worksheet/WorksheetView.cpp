@@ -1408,6 +1408,7 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
+	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		auto* plot = new CartesianPlot(i18n("xy-plot"));
@@ -1447,6 +1448,7 @@ void WorksheetView::addNew(QAction* action) {
 		if (!plot)
 			return;
 
+		restorePointers = true;
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
@@ -1462,6 +1464,11 @@ void WorksheetView::addNew(QAction* action) {
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	if (restorePointers) {
+		m_worksheet->project()->restorePointers(m_worksheet);
+		m_worksheet->project()->retransformElements(m_worksheet);
+	}
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent
