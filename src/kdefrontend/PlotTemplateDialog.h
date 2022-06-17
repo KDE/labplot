@@ -39,26 +39,28 @@ public:
 	CartesianPlot* generatePlot();
 
 private:
-	void chooseTemplate();
+	void chooseTemplateSearchPath();
 	void listViewTemplateChanged(const QModelIndex& current, const QModelIndex& previous);
-	void changePreviewSource(int checkState);
-	void customTemplatePathChanged(const QString& filename);
+	void changePreviewSource(int row);
+	void customTemplatePathChanged(const QString&);
 
 private:
 	Ui::PlotTemplateDialog* ui;
 	Project* m_project; // TODO: use smart pointer!
 	Worksheet* m_worksheet;
 	QWidget* m_worksheetView;
-	TemplateListModel* mTemplateListModel;
+	TemplateListModel* mTemplateListModelDefault;
+	TemplateListModel* mTemplateListModelCustom;
 	bool mLoading{false};
-	QString mCurrentTemplateFilePath;
 };
 
 class TemplateListModel : public QAbstractListModel {
 public:
 	TemplateListModel(const QString& searchPath, QObject* parent = nullptr);
+	void setSearchPath(const QString& searchPath);
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+	QString searchPath() { return mSearchPath;}
 
 	enum Roles {
 		FilenameRole = Qt::ItemDataRole::UserRole + 1,
@@ -66,12 +68,13 @@ public:
 	};
 
 	struct File {
-		QString path; // path with name and extension
-		QString filename;
+		QString path; // path with filename name and extension. Used to create plot
+		QString filename; // filename only without extension. Visible part in the view
 	};
 
 private:
 	QVector<File> mFiles;
+	QString mSearchPath;
 };
 
 #endif // PLOTTEMPLATEDIALOG_H
