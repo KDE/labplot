@@ -296,9 +296,10 @@ void TemplateListModel::setSearchPath(const QString& searchPath) {
 	mFiles.clear();
 	QStringList filter("*" + PlotTemplateDialog::format);
 	QDirIterator it(searchPath, filter, QDir::AllEntries | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+	QDir sPath(searchPath);
 	while (it.hasNext()) {
 		QFileInfo f(it.next());
-		File file{f.absoluteFilePath(), f.fileName().split(PlotTemplateDialog::format)[0]};
+		File file{f.absoluteFilePath(), sPath.relativeFilePath(f.absoluteFilePath()).split(PlotTemplateDialog::format)[0]};
 		mFiles << file;
 	}
 	endResetModel();
