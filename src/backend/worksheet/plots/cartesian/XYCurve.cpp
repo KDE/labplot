@@ -1959,8 +1959,14 @@ void XYCurvePrivate::updateValues() {
 		}
 
 		const int endRow{qMin(qMin(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
-		auto xColMode{valuesColumn->columnMode()};
-		int index = 0; // index of valid points (logicalPoints)
+		auto xColMode{xColumn->columnMode()};
+		auto vColMode{valuesColumn->columnMode()};
+
+		// need to check x range
+		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		auto xRange = plot()->xRange(cs->xIndex());
+
+		size_t index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
 			// ignore value labels for invalid data points
 			// otherwise the assignment to the data points get lost
@@ -1972,7 +1978,26 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			}
 
+			// check if inside x range
 			switch (xColMode) {
+			case AbstractColumn::ColumnMode::Double:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				if (!xRange.contains(xColumn->valueAt(i)))
+					continue;
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start())
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end()))
+					continue;
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				break;
+			}
+
+			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
 				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
@@ -2002,6 +2027,9 @@ void XYCurvePrivate::updateValues() {
 
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
+		// catch case with more label strings than scene points (should not happen even with custom column)
+		if (i >= m_scenePoints.size())
+			break;
 		const int w{fm.boundingRect(string).width()};
 		const double x{m_scenePoints.at(i).x()};
 		const double y{m_scenePoints.at(i).y()};
