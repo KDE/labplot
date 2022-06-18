@@ -222,6 +222,36 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 			// toolTip += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
 			toolTip += QLatin1String("<br>") + i18n("Type: %1", col->columnModeString());
 			toolTip += QLatin1String("<br>") + i18n("Plot Designation: %1", col->plotDesignationString());
+
+			// in case it's a calculated column, add additional information
+			// about the formula and parameters
+			if (!col->formula().isEmpty()) {
+				toolTip += QLatin1String("<br><br>") + i18n("Formula:");
+				QString f("f(");
+				QString parameters;
+				for (int i = 0; i < col->formulaData().size(); ++i) {
+					auto& data = col->formulaData().at(i);
+
+					// string for the function definition like f(x,y), etc.
+					f += data.variableName();
+					if (i != col->formulaData().size() -1)
+						f += QLatin1String(", ");
+
+					// string for the parameters and the references to the used columns for them
+					if (!parameters.isEmpty())
+						parameters += QLatin1String("<br>");
+					parameters += data.variableName();
+					if (data.column())
+						parameters += " = " + data.column()->path();
+				}
+
+				toolTip += QLatin1String("<br>") + f +  QLatin1String(") = ") + col->formula();
+				toolTip += QLatin1String("<br>") + parameters;
+				if (col->formulaAutoUpdate())
+					toolTip += QLatin1String("<br>") + i18n("auto update: true");
+				else
+					toolTip += QLatin1String("<br>") + i18n("auto update: false");
+			}
 		}
 
 		return toolTip;
