@@ -226,6 +226,7 @@ private:
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
+	void formulaChanged(const AbstractColumn*);
 
 private Q_SLOTS:
 	void navigateTo(QAction*);

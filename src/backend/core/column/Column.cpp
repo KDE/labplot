@@ -565,6 +565,7 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
 void Column::updateFormula() {
 	invalidateProperties();
 	d->updateFormula();
+	Q_EMIT formulaChanged(this);
 }
 
 /**
@@ -1208,7 +1209,10 @@ const QMap<qint64, QString>& Column::bigIntValueLabels() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	return modeIcon(columnMode());
+	if (formula().isEmpty())
+		return modeIcon(columnMode());
+	else
+		return QIcon::fromTheme(QLatin1String("mathmode"));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
