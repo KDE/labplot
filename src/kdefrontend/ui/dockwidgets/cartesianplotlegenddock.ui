@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>807</height>
+    <width>367</width>
+    <height>845</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -19,7 +19,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab0">
+     <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
        <string>General</string>
       </attribute>
@@ -415,13 +415,26 @@
        <string>Title</string>
       </attribute>
      </widget>
-     <widget class="QWidget" name="tab2">
+     <widget class="QWidget" name="tabBackground">
       <attribute name="title">
        <string>Background</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lBackground">
+       <item row="8" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>24</width>
+           <height>238</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -429,18 +442,18 @@
           </font>
          </property>
          <property name="text">
-          <string>Background</string>
+          <string>Border</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lBackgroundType">
+       <item row="5" column="0">
+        <widget class="QLabel" name="lBorderWidth">
          <property name="text">
-          <string>Type:</string>
+          <string>Width:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="3" column="1">
         <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -456,208 +469,7 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="2">
-        <widget class="KComboBox" name="cbBackgroundType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lBackgroundFileName">
-         <property name="text">
-          <string>File name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="leBackgroundFileName">
-         <property name="toolTip">
-          <string>Specify the name of the image file.</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="bOpen">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string> Select the file to import</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lBackgroundColorStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="KComboBox" name="cbBackgroundColorStyle"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lBackgroundImageStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="KComboBox" name="cbBackgroundImageStyle"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lBackgroundBrushStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="KComboBox" name="cbBackgroundBrushStyle"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lBackgroundFirstColor">
-         <property name="text">
-          <string>First color:</string>
-         </property>
-        </widget>
-       </item>
        <item row="6" column="2">
-        <widget class="KColorButton" name="kcbBackgroundFirstColor"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lBackgroundSecondColor">
-         <property name="text">
-          <string>Second color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="KColorButton" name="kcbBackgroundSecondColor"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lBackgroundOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QSpinBox" name="sbBackgroundOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lBorder">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Border</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lBorderStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="2">
-        <widget class="KComboBox" name="cbBorderStyle"/>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lBorderColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="2">
-        <widget class="KColorButton" name="kcbBorderColor"/>
-       </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lBorderWidth">
-         <property name="text">
-          <string>Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="2">
-        <widget class="QDoubleSpinBox" name="sbBorderWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="value">
-          <double>1.000000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lBorderCornerRadius">
-         <property name="text">
-          <string>Corner radius:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="2">
         <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
          <property name="suffix">
           <string> cm</string>
@@ -667,14 +479,34 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lBorderOpacity">
+       <item row="6" column="0">
+        <widget class="QLabel" name="lBorderCornerRadius">
          <property name="text">
-          <string>Opacity:</string>
+          <string>Corner radius:</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="2">
+       <item row="4" column="0">
+        <widget class="QLabel" name="lBorderColor">
+         <property name="text">
+          <string>Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lBackground">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Background</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
         <widget class="QSpinBox" name="sbBorderOpacity">
          <property name="suffix">
           <string> %</string>
@@ -690,22 +522,62 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="0">
-        <spacer name="verticalSpacer_2">
+       <item row="3" column="2">
+        <widget class="KComboBox" name="cbBorderStyle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="KColorButton" name="kcbBorderColor"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="QDoubleSpinBox" name="sbBorderWidth">
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>24</width>
-           <height>238</height>
+           <width>20</width>
+           <height>13</height>
           </size>
          </property>
         </spacer>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lBorderStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lBorderOpacity">
+         <property name="text">
+          <string>Opacity:</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab3">
+     <widget class="QWidget" name="tabLayout">
       <attribute name="title">
        <string>Layout</string>
       </attribute>
@@ -956,15 +828,6 @@
   <tabstop>cbHorizontalAlignment</tabstop>
   <tabstop>cbVerticalAlignment</tabstop>
   <tabstop>chkVisible</tabstop>
-  <tabstop>cbBackgroundType</tabstop>
-  <tabstop>leBackgroundFileName</tabstop>
-  <tabstop>bOpen</tabstop>
-  <tabstop>cbBackgroundColorStyle</tabstop>
-  <tabstop>cbBackgroundImageStyle</tabstop>
-  <tabstop>cbBackgroundBrushStyle</tabstop>
-  <tabstop>kcbBackgroundFirstColor</tabstop>
-  <tabstop>kcbBackgroundSecondColor</tabstop>
-  <tabstop>sbBackgroundOpacity</tabstop>
   <tabstop>cbBorderStyle</tabstop>
   <tabstop>kcbBorderColor</tabstop>
   <tabstop>sbBorderWidth</tabstop>

@@ -1252,11 +1252,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// background color, determine it with the help of the border type
 				if (originLegend.borderType == Origin::BorderType::DarkMarble)
-					legend->setBackgroundFirstColor(Qt::darkGray);
+					legend->background()->setFirstColor(Qt::darkGray);
 				else if (originLegend.borderType == Origin::BorderType::BlackOut)
-					legend->setBackgroundFirstColor(Qt::black);
+					legend->background()->setFirstColor(Qt::black);
 				else
-					legend->setBackgroundFirstColor(Qt::white);
+					legend->background()->setFirstColor(Qt::white);
 			}
 
 			// texts

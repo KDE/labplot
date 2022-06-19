@@ -334,7 +334,7 @@ void LabelWidget::updateBackground() const {
 		else if (type == AspectType::CartesianPlot)
 			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
 		else if (type == AspectType::CartesianPlotLegend)
-			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
 		else if (type == AspectType::InfoElement || type == AspectType::Axis)
 			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
 		else

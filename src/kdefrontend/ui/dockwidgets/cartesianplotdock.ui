@@ -970,7 +970,7 @@
        <string>Plot Area</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="14" column="1">
+       <item row="14" column="2">
         <widget class="QDoubleSpinBox" name="sbPaddingVertical">
          <property name="prefix">
           <string/>
@@ -1042,7 +1042,7 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="4" column="2">
         <widget class="QComboBox" name="cbBorderStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1052,7 +1052,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="6" column="2">
         <widget class="QDoubleSpinBox" name="sbBorderWidth">
          <property name="suffix">
           <string> pt</string>
@@ -1062,7 +1062,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="1">
+       <item row="7" column="2">
         <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
          <property name="suffix">
           <string> cm</string>
@@ -1072,7 +1072,7 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1">
+       <item row="8" column="2">
         <widget class="QSpinBox" name="sbBorderOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1103,7 +1103,7 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="1">
+       <item row="12" column="2">
         <widget class="QCheckBox" name="cbPaddingSymmetric">
          <property name="text">
           <string/>
@@ -1117,7 +1117,7 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="1">
+       <item row="16" column="2">
         <widget class="QDoubleSpinBox" name="sbPaddingBottom">
          <property name="suffix">
           <string> cm</string>
@@ -1130,7 +1130,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
+       <item row="5" column="2">
         <widget class="KColorButton" name="kcbBorderColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1208,7 +1208,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="2">
         <widget class="QFrame" name="frameBorderType">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -1288,7 +1288,7 @@
          </layout>
         </widget>
        </item>
-       <item row="13" column="1">
+       <item row="13" column="2">
         <widget class="QDoubleSpinBox" name="sbPaddingHorizontal">
          <property name="prefix">
           <string/>
@@ -1334,7 +1334,7 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="1">
+       <item row="15" column="2">
         <widget class="QDoubleSpinBox" name="sbPaddingRight">
          <property name="suffix">
           <string> cm</string>
@@ -1346,6 +1346,22 @@
           <double>0.100000000000000</double>
          </property>
         </widget>
+       </item>
+       <item row="3" column="1">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

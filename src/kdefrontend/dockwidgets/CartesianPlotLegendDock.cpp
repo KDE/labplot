@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot legend properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,11 +13,8 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LabelWidget.h"
-
-#include <QCompleter>
-#include <QDir>
-#include <QDirModel>
 
 #include <KLocalizedString>
 
@@ -44,8 +41,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	hboxLayout->setSpacing(2);
 
 	//"Background"-tab
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
-	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBackground->layout());
+	backgroundWidget = new BackgroundWidget(ui.tabBackground);
+	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -80,18 +78,6 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::rotationChanged);
-
-	// Background
-	connect(ui.cbBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::backgroundTypeChanged);
-	connect(ui.cbBackgroundColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::backgroundColorStyleChanged);
-	connect(ui.cbBackgroundImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::backgroundImageStyleChanged);
-	connect(ui.cbBackgroundBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::backgroundBrushStyleChanged);
-	connect(ui.bOpen, &QPushButton::clicked, this, &CartesianPlotLegendDock::selectFile);
-	connect(ui.leBackgroundFileName, &QLineEdit::returnPressed, this, &CartesianPlotLegendDock::fileNameChanged);
-	connect(ui.leBackgroundFileName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::fileNameChanged);
-	connect(ui.kcbBackgroundFirstColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundFirstColorChanged);
-	connect(ui.kcbBackgroundSecondColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundSecondColorChanged);
-	connect(ui.sbBackgroundOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::backgroundOpacityChanged);
 
 	// Border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::borderStyleChanged);
@@ -165,16 +151,6 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	ui.lOrder->setVisible(m_legend->layoutColumnCount() != 1);
 	ui.cbOrder->setVisible(m_legend->layoutColumnCount() != 1);
 
-	// legend title
-	QList<TextLabel*> labels;
-	for (auto* legend : list)
-		labels.append(legend->title());
-
-	labelWidget->setLabels(labels);
-
-	// update active widgets
-	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
-
 	// SIGNALs/SLOTs
 	// General
 	connect(m_legend, &AbstractAspect::aspectDescriptionChanged, this, &CartesianPlotLegendDock::aspectDescriptionChanged);
@@ -188,19 +164,6 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
 	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
 	connect(m_legend, &CartesianPlotLegend::visibleChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
-
-	// background
-	connect(m_legend, &CartesianPlotLegend::backgroundTypeChanged, this, &CartesianPlotLegendDock::legendBackgroundTypeChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundColorStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundColorStyleChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundImageStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundImageStyleChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundBrushStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundBrushStyleChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &CartesianPlotLegendDock::legendBackgroundFirstColorChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundSecondColorChanged, this, &CartesianPlotLegendDock::legendBackgroundSecondColorChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundFileNameChanged, this, &CartesianPlotLegendDock::legendBackgroundFileNameChanged);
-	connect(m_legend, &CartesianPlotLegend::backgroundOpacityChanged, this, &CartesianPlotLegendDock::legendBackgroundOpacityChanged);
-	connect(m_legend, &CartesianPlotLegend::borderPenChanged, this, &CartesianPlotLegendDock::legendBorderPenChanged);
-	connect(m_legend, &CartesianPlotLegend::borderCornerRadiusChanged, this, &CartesianPlotLegendDock::legendBorderCornerRadiusChanged);
-	connect(m_legend, &CartesianPlotLegend::borderOpacityChanged, this, &CartesianPlotLegendDock::legendBorderOpacityChanged);
 
 	// layout
 	connect(m_legend, &CartesianPlotLegend::layoutTopMarginChanged, this, &CartesianPlotLegendDock::legendLayoutTopMarginChanged);
@@ -293,46 +256,7 @@ void CartesianPlotLegendDock::updateUnits() {
 void CartesianPlotLegendDock::retranslateUi() {
 	Lock lock(m_initializing);
 
-	ui.cbBackgroundType->addItem(i18n("Color"));
-	ui.cbBackgroundType->addItem(i18n("Image"));
-	ui.cbBackgroundType->addItem(i18n("Pattern"));
-
-	ui.cbBackgroundColorStyle->addItem(i18n("Single Color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Horizontal Gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Vertical Gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Radial Gradient"));
-
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled and Cropped"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled, Keep Proportions"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Centered"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
-
-	ui.cbOrder->addItem(i18n("Column Major"));
-	ui.cbOrder->addItem(i18n("Row Major"));
-
-	// Positioning and alignment
-	ui.cbPositionX->addItem(i18n("Left"));
-	ui.cbPositionX->addItem(i18n("Center"));
-	ui.cbPositionX->addItem(i18n("Right"));
-
-	ui.cbPositionY->addItem(i18n("Top"));
-	ui.cbPositionY->addItem(i18n("Center"));
-	ui.cbPositionY->addItem(i18n("Bottom"));
-
-	ui.cbHorizontalAlignment->addItem(i18n("Left"));
-	ui.cbHorizontalAlignment->addItem(i18n("Center"));
-	ui.cbHorizontalAlignment->addItem(i18n("Right"));
-
-	ui.cbVerticalAlignment->addItem(i18n("Top"));
-	ui.cbVerticalAlignment->addItem(i18n("Center"));
-	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
-
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
-	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	QString suffix;
 	if (m_units == Units::Metric)
@@ -506,163 +430,6 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 
 	for (auto* legend : m_legendList)
 		legend->setCoordinateBindingEnabled(checked);
-}
-
-// "Background"-tab
-void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
-	const auto type = (WorksheetElement::BackgroundType)index;
-
-	if (type == WorksheetElement::BackgroundType::Color) {
-		ui.lBackgroundColorStyle->show();
-		ui.cbBackgroundColorStyle->show();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-
-		ui.lBackgroundFileName->hide();
-		ui.leBackgroundFileName->hide();
-		ui.bOpen->hide();
-
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
-
-		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbBackgroundColorStyle->currentIndex();
-		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-			ui.lBackgroundFirstColor->setText(i18n("Color:"));
-			ui.lBackgroundSecondColor->hide();
-			ui.kcbBackgroundSecondColor->hide();
-		} else {
-			ui.lBackgroundFirstColor->setText(i18n("First color:"));
-			ui.lBackgroundSecondColor->show();
-			ui.kcbBackgroundSecondColor->show();
-		}
-	} else if (type == WorksheetElement::BackgroundType::Image) {
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->show();
-		ui.cbBackgroundImageStyle->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-		ui.lBackgroundFileName->show();
-		ui.leBackgroundFileName->show();
-		ui.bOpen->show();
-
-		ui.lBackgroundFirstColor->hide();
-		ui.kcbBackgroundFirstColor->hide();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	} else if (type == WorksheetElement::BackgroundType::Pattern) {
-		ui.lBackgroundFirstColor->setText(i18n("Color:"));
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
-		ui.lBackgroundFileName->hide();
-		ui.leBackgroundFileName->hide();
-		ui.bOpen->hide();
-
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundType(type);
-}
-
-void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
-	auto style = (WorksheetElement::BackgroundColorStyle)index;
-
-	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-		ui.lBackgroundFirstColor->setText(i18n("Color:"));
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	} else {
-		ui.lBackgroundFirstColor->setText(i18n("First color:"));
-		ui.lBackgroundSecondColor->show();
-		ui.kcbBackgroundSecondColor->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundColorStyle(style);
-}
-
-void CartesianPlotLegendDock::backgroundImageStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto style = (WorksheetElement::BackgroundImageStyle)index;
-	for (auto* legend : m_legendList)
-		legend->setBackgroundImageStyle(style);
-}
-
-void CartesianPlotLegendDock::backgroundBrushStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto style = (Qt::BrushStyle)index;
-	for (auto* legend : m_legendList)
-		legend->setBackgroundBrushStyle(style);
-}
-
-void CartesianPlotLegendDock::backgroundFirstColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundFirstColor(c);
-}
-
-void CartesianPlotLegendDock::backgroundSecondColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundSecondColor(c);
-}
-
-/*!
-	opens a file dialog and lets the user select the image file.
-*/
-void CartesianPlotLegendDock::selectFile() {
-	const QString& path = GuiTools::openImageFile(QLatin1String("CartesianPlotLegendDock"));
-	if (path.isEmpty())
-		return;
-
-	ui.leBackgroundFileName->setText(path);
-}
-
-void CartesianPlotLegendDock::fileNameChanged() {
-	if (m_initializing)
-		return;
-
-	const QString& fileName = ui.leBackgroundFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leBackgroundFileName, invalid);
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundFileName(fileName);
-}
-
-void CartesianPlotLegendDock::backgroundOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	float opacity = (float)value / 100.;
-	for (auto* legend : m_legendList)
-		legend->setBackgroundOpacity(opacity);
 }
 
 // "Border"-tab
@@ -849,47 +616,6 @@ void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 	ui.chkVisible->setChecked(on);
 }
 
-// Background
-void CartesianPlotLegendDock::legendBackgroundTypeChanged(WorksheetElement::BackgroundType type) {
-	const Lock lock(m_initializing);
-	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
-}
-
-void CartesianPlotLegendDock::legendBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
-	const Lock lock(m_initializing);
-	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
-}
-
-void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
-	const Lock lock(m_initializing);
-	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
-}
-
-void CartesianPlotLegendDock::legendBackgroundBrushStyleChanged(Qt::BrushStyle style) {
-	const Lock lock(m_initializing);
-	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
-}
-
-void CartesianPlotLegendDock::legendBackgroundFirstColorChanged(QColor& color) {
-	const Lock lock(m_initializing);
-	ui.kcbBackgroundFirstColor->setColor(color);
-}
-
-void CartesianPlotLegendDock::legendBackgroundSecondColorChanged(QColor& color) {
-	const Lock lock(m_initializing);
-	ui.kcbBackgroundSecondColor->setColor(color);
-}
-
-void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename) {
-	const Lock lock(m_initializing);
-	ui.leBackgroundFileName->setText(filename);
-}
-
-void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float opacity) {
-	const Lock lock(m_initializing);
-	ui.sbBackgroundOpacity->setValue(qRound(opacity * 100.0));
-}
-
 // Border
 void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	if (m_initializing)
@@ -1024,20 +750,19 @@ void CartesianPlotLegendDock::load() {
 
 	ui.chkVisible->setChecked(m_legend->isVisible());
 
-	// Background-tab
-	ui.cbBackgroundType->setCurrentIndex((int)m_legend->backgroundType());
-	ui.cbBackgroundColorStyle->setCurrentIndex((int)m_legend->backgroundColorStyle());
-	ui.cbBackgroundImageStyle->setCurrentIndex((int)m_legend->backgroundImageStyle());
-	ui.cbBackgroundBrushStyle->setCurrentIndex((int)m_legend->backgroundBrushStyle());
-	ui.leBackgroundFileName->setText(m_legend->backgroundFileName());
-	ui.kcbBackgroundFirstColor->setColor(m_legend->backgroundFirstColor());
-	ui.kcbBackgroundSecondColor->setColor(m_legend->backgroundSecondColor());
-	ui.sbBackgroundOpacity->setValue(qRound(m_legend->backgroundOpacity() * 100.0));
+	// legend title
+	QList<TextLabel*> labels;
+	for (auto* legend : m_legendList)
+		labels.append(legend->title());
 
-	// highlight the text field for the background image red if an image is used and cannot be found
-	const QString& fileName = m_legend->backgroundFileName();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leBackgroundFileName, invalid);
+	labelWidget->setLabels(labels);
+
+	// Background-tab
+	QList<Background*> backgrounds;
+		for (auto* legend : m_legendList)
+		backgrounds << legend->background();
+
+	backgroundWidget->setBackgrounds(backgrounds);
 
 	// Border
 	ui.kcbBorderColor->setColor(m_legend->borderPen().color());
@@ -1111,14 +836,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	ui.chkVisible->setChecked(group.readEntry("Visible", m_legend->isVisible()));
 
 	// Background-tab
-	ui.cbBackgroundType->setCurrentIndex(group.readEntry("BackgroundType", (int)m_legend->backgroundType()));
-	ui.cbBackgroundColorStyle->setCurrentIndex(group.readEntry("BackgroundColorStyle", (int)m_legend->backgroundColorStyle()));
-	ui.cbBackgroundImageStyle->setCurrentIndex(group.readEntry("BackgroundImageStyle", (int)m_legend->backgroundImageStyle()));
-	ui.cbBackgroundBrushStyle->setCurrentIndex(group.readEntry("BackgroundBrushStyle", (int)m_legend->backgroundBrushStyle()));
-	ui.leBackgroundFileName->setText(group.readEntry("BackgroundFileName", m_legend->backgroundFileName()));
-	ui.kcbBackgroundFirstColor->setColor(group.readEntry("BackgroundFirstColor", m_legend->backgroundFirstColor()));
-	ui.kcbBackgroundSecondColor->setColor(group.readEntry("BackgroundSecondColor", m_legend->backgroundSecondColor()));
-	ui.sbBackgroundOpacity->setValue(qRound(group.readEntry("BackgroundOpacity", m_legend->backgroundOpacity()) * 100.0));
+	backgroundWidget->loadConfig(group);
 
 	// Border
 	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", m_legend->borderPen().color()));
@@ -1168,14 +886,7 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
 
 	// Background
-	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
-	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
-	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
-	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.leBackgroundFileName->text());
-	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
-	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
-	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value() / 100.0);
+	backgroundWidget->saveConfig(group);
 
 	// Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());

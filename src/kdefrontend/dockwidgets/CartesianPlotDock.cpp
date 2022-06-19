@@ -22,10 +22,6 @@
 #include <KMessageBox>
 
 #include <QButtonGroup>
-#include <QCompleter>
-#include <QDebug>
-#include <QDir>
-#include <QDirModel>
 #include <QIntValidator>
 #include <QPainter>
 #include <QRadioButton>
@@ -2306,7 +2302,6 @@ void CartesianPlotDock::load() {
 
 	backgroundWidget->setBackgrounds(backgrounds);
 
-
 	// Padding
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(m_plot->verticalPadding(), m_worksheetUnit));
@@ -2350,7 +2345,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// TODO
 
 	// Background-tab
-	backgroundWidget->saveConfig(group);
+	backgroundWidget->loadConfig(group);
 
 	// Layout-tab
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
