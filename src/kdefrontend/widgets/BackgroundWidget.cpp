@@ -11,6 +11,8 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <QCompleter>
+#include <QDirModel>
 #include <QFile>
 
 /*!
@@ -25,6 +27,9 @@
 BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
+	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
+
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::typeChanged);
 	connect(ui.cbColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::colorStyleChanged);
 	connect(ui.cbImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::imageStyleChanged);
@@ -35,6 +40,8 @@ BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.kcbFirstColor, &KColorButton::changed, this, &BackgroundWidget::firstColorChanged);
 	connect(ui.kcbSecondColor, &KColorButton::changed, this, &BackgroundWidget::secondColorChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BackgroundWidget::opacityChanged);
+
+	retranslateUi();
 }
 
 void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
@@ -51,6 +58,32 @@ void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
 	connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
+}
+
+void BackgroundWidget::retranslateUi() {
+	Lock lock(m_initializing);
+
+	ui.cbType->clear();
+	ui.cbType->addItem(i18n("Color"));
+	ui.cbType->addItem(i18n("Image"));
+	ui.cbType->addItem(i18n("Pattern"));
+
+	ui.cbColorStyle->clear();
+	ui.cbColorStyle->addItem(i18n("Single Color"));
+	ui.cbColorStyle->addItem(i18n("Horizontal Gradient"));
+	ui.cbColorStyle->addItem(i18n("Vertical Gradient"));
+	ui.cbColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
+	ui.cbColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
+	ui.cbColorStyle->addItem(i18n("Radial Gradient"));
+
+	ui.cbImageStyle->clear();
+	ui.cbImageStyle->addItem(i18n("Scaled and Cropped"));
+	ui.cbImageStyle->addItem(i18n("Scaled"));
+	ui.cbImageStyle->addItem(i18n("Scaled, Keep Proportions"));
+	ui.cbImageStyle->addItem(i18n("Centered"));
+	ui.cbImageStyle->addItem(i18n("Tiled"));
+	ui.cbImageStyle->addItem(i18n("Center Tiled"));
+	GuiTools::updateBrushStyles(ui.cbBrushStyle, Qt::SolidPattern);
 }
 
 //*************************************************************
@@ -278,6 +311,11 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 //**********************************************************
 void BackgroundWidget::load() {
 	const Lock lock(m_initializing);
+
+	// highlight the text field for the background image red if an image is used and cannot be found
+	const QString& fileName = m_background->fileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());

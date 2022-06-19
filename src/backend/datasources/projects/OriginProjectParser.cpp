@@ -21,6 +21,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -1024,15 +1025,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
 	const Origin::Color bckgBaseColor = graph.windowBackgroundColorBase;
 	const Origin::Color bckgEndColor = graph.windowBackgroundColorEnd;
-	worksheet->setBackgroundColorStyle(backgroundColorStyle(bckgColorGradient));
+	worksheet->background()->setColorStyle(backgroundColorStyle(bckgColorGradient));
 	switch (bckgColorGradient) {
 	case Origin::ColorGradientDirection::NoGradient:
 	case Origin::ColorGradientDirection::TopLeft:
 	case Origin::ColorGradientDirection::Left:
 	case Origin::ColorGradientDirection::BottomLeft:
 	case Origin::ColorGradientDirection::Top:
-		worksheet->setBackgroundFirstColor(color(bckgEndColor));
-		worksheet->setBackgroundSecondColor(color(bckgBaseColor));
+		worksheet->background()->setFirstColor(color(bckgEndColor));
+		worksheet->background()->setSecondColor(color(bckgBaseColor));
 		break;
 	case Origin::ColorGradientDirection::Center:
 		break;
@@ -1040,8 +1041,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	case Origin::ColorGradientDirection::TopRight:
 	case Origin::ColorGradientDirection::Right:
 	case Origin::ColorGradientDirection::BottomRight:
-		worksheet->setBackgroundFirstColor(color(bckgBaseColor));
-		worksheet->setBackgroundSecondColor(color(bckgEndColor));
+		worksheet->background()->setFirstColor(color(bckgBaseColor));
+		worksheet->background()->setSecondColor(color(bckgEndColor));
 	}
 
 	// TODO: do we need changes on the worksheet layout?
@@ -2198,31 +2199,31 @@ QColor OriginProjectParser::color(Origin::Color color) const {
 	return Qt::white;
 }
 
-WorksheetElement::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
+Background::ColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
 	switch (colorGradient) {
 	case Origin::ColorGradientDirection::NoGradient:
-		return WorksheetElement::BackgroundColorStyle::SingleColor;
+		return Background::ColorStyle::SingleColor;
 	case Origin::ColorGradientDirection::TopLeft:
-		return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+		return Background::ColorStyle::TopLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Left:
-		return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
+		return Background::ColorStyle::HorizontalLinearGradient;
 	case Origin::ColorGradientDirection::BottomLeft:
-		return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		return Background::ColorStyle::BottomLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Top:
-		return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
+		return Background::ColorStyle::VerticalLinearGradient;
 	case Origin::ColorGradientDirection::Center:
-		return WorksheetElement::BackgroundColorStyle::RadialGradient;
+		return Background::ColorStyle::RadialGradient;
 	case Origin::ColorGradientDirection::Bottom:
-		return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
+		return Background::ColorStyle::VerticalLinearGradient;
 	case Origin::ColorGradientDirection::TopRight:
-		return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		return Background::ColorStyle::BottomLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Right:
-		return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
+		return Background::ColorStyle::HorizontalLinearGradient;
 	case Origin::ColorGradientDirection::BottomRight:
-		return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+		return Background::ColorStyle::TopLeftDiagonalLinearGradient;
 	}
 
-	return WorksheetElement::BackgroundColorStyle::SingleColor;
+	return Background::ColorStyle::SingleColor;
 }
 
 QString strreverse(const QString& str) { // QString reversing

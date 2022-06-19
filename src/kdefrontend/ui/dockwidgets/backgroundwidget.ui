@@ -14,54 +14,10 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="2">
-    <widget class="QLineEdit" name="leFileName">
-     <property name="toolTip">
-      <string>Specify the name of the image file.</string>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="lOpacity">
-     <property name="text">
-      <string>Opacity:</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lEnabled">
      <property name="text">
       <string>Enabled:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lFileName">
-     <property name="text">
-      <string>File name:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lType">
-     <property name="text">
-      <string>Type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2">
-    <widget class="KComboBox" name="cbColorStyle"/>
-   </item>
-   <item row="1" column="2">
-    <widget class="KComboBox" name="cbType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -81,6 +37,96 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lType">
+     <property name="text">
+      <string>Type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="KComboBox" name="cbType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lFileName">
+     <property name="text">
+      <string>File name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLineEdit" name="leFileName">
+     <property name="toolTip">
+      <string>Specify the name of the image file.</string>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="bOpen">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string> Select the file to import</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lColorStyle">
+     <property name="text">
+      <string>Style:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="KComboBox" name="cbColorStyle"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lImageStyle">
+     <property name="text">
+      <string>Style:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="KComboBox" name="cbImageStyle"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lBrushStyle">
+     <property name="text">
+      <string>Style:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="KComboBox" name="cbBrushStyle"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lFirstColor">
+     <property name="text">
+      <string>First color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="KColorButton" name="kcbFirstColor"/>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lSecondColor">
      <property name="text">
@@ -88,10 +134,13 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lBrushStyle">
+   <item row="7" column="2">
+    <widget class="KColorButton" name="kcbSecondColor"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lOpacity">
      <property name="text">
-      <string>Style:</string>
+      <string>Opacity:</string>
      </property>
     </widget>
    </item>
@@ -123,52 +172,10 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
-    <widget class="QPushButton" name="bOpen">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="toolTip">
-      <string> Select the file to import</string>
-     </property>
+   <item row="0" column="2">
+    <widget class="QCheckBox" name="chkEnabled">
      <property name="text">
       <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="KComboBox" name="cbImageStyle"/>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lImageStyle">
-     <property name="text">
-      <string>Style:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="2">
-    <widget class="KColorButton" name="kcbSecondColor"/>
-   </item>
-   <item row="6" column="2">
-    <widget class="KColorButton" name="kcbFirstColor"/>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lFirstColor">
-     <property name="text">
-      <string>First color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="KComboBox" name="cbBrushStyle"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lColorStyle">
-     <property name="text">
-      <string>Style:</string>
      </property>
     </widget>
    </item>

@@ -12,6 +12,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -821,45 +822,46 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 
 void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
-	painter->setOpacity(m_worksheet->backgroundOpacity());
-	if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Color) {
-		switch (m_worksheet->backgroundColorStyle()) {
-		case WorksheetElement::BackgroundColorStyle::SingleColor: {
-			painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+	const auto* background = m_worksheet->background();
+	painter->setOpacity(background->opacity());
+	if (background->type() == Background::Type::Color) {
+		switch (background->colorStyle()) {
+			case Background::ColorStyle::SingleColor: {
+			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
+			case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
+		case Background::ColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
+		case Background::ColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(scene_rect.center(), scene_rect.width() / 2);
-			radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			radialGrad.setColorAt(0, background->firstColor());
+			radialGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(radialGrad));
 			break;
 		}
@@ -867,38 +869,38 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	} else if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Image) { // background image
-		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
+	} else if (background->type() == Background::Type::Image) { // background image
+		const QString& backgroundFileName = background->fileName().trimmed();
 		if (!backgroundFileName.isEmpty()) {
 			QPixmap pix(backgroundFileName);
-			switch (m_worksheet->backgroundImageStyle()) {
-			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
+			switch (background->imageStyle()) {
+			case Background::ImageStyle::ScaledCropped:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Scaled:
+			case Background::ImageStyle::Scaled:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
+			case Background::ImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Centered:
+			case Background::ImageStyle::Centered:
 				painter->drawPixmap(QPointF(scene_rect.center().x() - pix.size().width() / 2, scene_rect.center().y() - pix.size().height() / 2), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Tiled:
+			case Background::ImageStyle::Tiled:
 				painter->drawTiledPixmap(scene_rect, pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::CenterTiled:
+			case Background::ImageStyle::CenterTiled:
 				painter->drawTiledPixmap(scene_rect, pix, QPoint(scene_rect.size().width() / 2, scene_rect.size().height() / 2));
 				break;
 				// default:
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	} else if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Pattern) { // background pattern
-		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(), m_worksheet->backgroundBrushStyle()));
+	} else if (background->type() == Background::Type::Pattern) { // background pattern
+		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 		painter->drawRect(scene_rect);
 	}
 

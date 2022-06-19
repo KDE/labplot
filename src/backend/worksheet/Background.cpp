@@ -216,8 +216,14 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void Background::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
-	//TODO
+void Background::loadThemeConfig(const KConfigGroup& group) {
+	setType((Type)group.readEntry("BackgroundType", static_cast<int>(Type::Color)));
+	setColorStyle((ColorStyle)group.readEntry("BackgroundColorStyle", static_cast<int>(ColorStyle::SingleColor)));
+	setImageStyle((ImageStyle)group.readEntry("BackgroundImageStyle", static_cast<int>(ImageStyle::Scaled)));
+	setBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
+	setFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
+	setSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
+	setOpacity(group.readEntry("BackgroundOpacity", 1.0));
 }
 
 void Background::saveThemeConfig(const KConfigGroup& /*group*/) const {

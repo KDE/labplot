@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of Worksheet.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,11 +14,13 @@
 
 #include <QColor>
 
-class QBrush;
+class Background;
+class TreeModel;
 class Worksheet;
 class WorksheetElementContainer;
+
+class QBrush;
 class QGraphicsScene;
-class TreeModel;
 
 class WorksheetPrivate {
 public:
@@ -37,15 +39,7 @@ public:
 	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
-	WorksheetElement::BackgroundType backgroundType{WorksheetElement::BackgroundType::Color};
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle{WorksheetElement::BackgroundColorStyle::SingleColor};
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle{WorksheetElement::BackgroundImageStyle::Scaled};
-	Qt::BrushStyle backgroundBrushStyle{Qt::SolidPattern};
-	QColor backgroundFirstColor{Qt::white};
-	QColor backgroundSecondColor{Qt::black};
-	QString backgroundFileName;
-	double backgroundOpacity{1.0};
-
+	Background* background;
 	Worksheet::Layout layout{Worksheet::Layout::VerticalLayout};
 	bool suppressLayoutUpdate{false};
 	bool suppressCursorPosChanged{false};

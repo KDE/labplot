@@ -4,7 +4,7 @@
 	Description          : Worksheet (2D visualization) part
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,7 @@ class QGraphicsItem;
 class QGraphicsScene;
 class QRectF;
 
+class Background;
 class WorksheetPrivate;
 class WorksheetView;
 class TreeModel;
@@ -85,15 +86,7 @@ public:
 	void cursorModelPlotAdded(const QString& name);
 	void cursorModelPlotRemoved(const QString& name);
 
-	BASIC_D_ACCESSOR_DECL(double, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-
+	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
@@ -164,15 +157,6 @@ Q_SIGNALS:
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
-
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void backgroundFileNameChanged(const QString&);
-	void backgroundOpacityChanged(float);
 
 	void scaleContentChanged(bool);
 	void useViewSizeChanged(bool);

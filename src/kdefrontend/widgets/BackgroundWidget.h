@@ -32,6 +32,8 @@ private:
 	QList<Background*> m_backgrounds;
 	bool m_initializing{false};
 
+	void retranslateUi();
+
 Q_SIGNALS:
 	void dataChanged(bool);
 
