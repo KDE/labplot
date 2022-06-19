@@ -39,7 +39,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfigGroup&);
-	void saveThemeConfig(const KConfigGroup&) const;
+	void saveThemeConfig(KConfigGroup&) const;
 
 	BASIC_D_ACCESSOR_DECL(bool, showEnabled, ShowEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, enabled, Enabled)

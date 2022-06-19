@@ -228,7 +228,13 @@ void Background::loadThemeConfig(const KConfigGroup& group) {
 	setOpacity(group.readEntry("BackgroundOpacity", 1.0));
 }
 
-void Background::saveThemeConfig(const KConfigGroup& /*group*/) const {
-	// TODO:
-	// 	group.writeEntry("BackgroundOpacity", opacity());
+void Background::saveThemeConfig(KConfigGroup& group) const {
+	Q_D(const Background);
+	group.writeEntry("BackgroundType", static_cast<int>(d->type));
+	group.writeEntry("BackgroundColorStyle", static_cast<int>(d->colorStyle));
+	group.writeEntry("BackgroundBrushStyle", static_cast<int>(d->brushStyle));
+	group.writeEntry("BackgroundImageStyle", static_cast<int>(d->imageStyle));
+	group.writeEntry("BackgroundFirstColor", d->firstColor);
+	group.writeEntry("BackgroundSecondColor", d->secondColor);
+	group.writeEntry("BackgroundOpacity", d->opacity);
 }

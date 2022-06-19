@@ -1064,9 +1064,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			// background color
 			const Origin::Color& regColor = layer.backgroundColor;
 			if (regColor.type == Origin::Color::None)
-				plot->plotArea()->setBackgroundOpacity(0);
+				plot->plotArea()->background()->setOpacity(0);
 			else
-				plot->plotArea()->setBackgroundFirstColor(color(regColor));
+				plot->plotArea()->background()->setFirstColor(color(regColor));
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)

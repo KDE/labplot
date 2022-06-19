@@ -656,6 +656,9 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	else
 		updatePaperSize();
 
+	// Background
+	backgroundWidget->loadConfig(group);
+
 	// Layout
 	ui.cbLayout->setCurrentIndex(group.readEntry("Layout", (int)m_worksheet->layout()));
 	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), m_worksheetUnit));
@@ -680,6 +683,9 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("UseViewSize", ui.cbSizeType->currentIndex() == 0);
 	group.writeEntry("Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit));
 	group.writeEntry("Height", Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit));
+
+	// Background
+	backgroundWidget->saveConfig(group);
 
 	// Layout
 	group.writeEntry("Layout", ui.cbLayout->currentIndex());

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Plot area (for background filling and clipping).
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+class Background;
 class CartesianPlot;
 class PlotAreaPrivate;
 
@@ -34,15 +35,7 @@ public:
 	bool isHovered() const;
 	bool isSelected() const;
 
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
-
+	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(PlotArea::BorderType, borderType, BorderType)
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
@@ -67,14 +60,6 @@ private:
 	void init();
 
 Q_SIGNALS:
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(QColor&);
-	void backgroundSecondColorChanged(QColor&);
-	void backgroundFileNameChanged(QString&);
-	void backgroundOpacityChanged(float);
 	void borderTypeChanged(PlotArea::BorderType);
 	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
