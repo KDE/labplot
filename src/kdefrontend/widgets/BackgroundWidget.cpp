@@ -312,6 +312,10 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 void BackgroundWidget::load() {
 	const Lock lock(m_initializing);
 
+	bool enabled = m_background->showEnabled();
+	ui.lEnabled->setVisible(enabled);
+	ui.chkEnabled->setVisible(enabled);
+
 	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_background->fileName();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));

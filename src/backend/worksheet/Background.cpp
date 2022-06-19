@@ -47,6 +47,8 @@ void Background::init(const KConfigGroup& group) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+BASIC_SHARED_D_READER_IMPL(Background, bool, showEnabled, showEnabled)
+BASIC_SHARED_D_READER_IMPL(Background, bool, enabled, enabled)
 BASIC_SHARED_D_READER_IMPL(Background, Background::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Background, Background::ColorStyle, colorStyle, colorStyle)
 BASIC_SHARED_D_READER_IMPL(Background, Background::ImageStyle, imageStyle, imageStyle)

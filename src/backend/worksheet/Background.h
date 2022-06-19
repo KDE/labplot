@@ -41,6 +41,8 @@ public:
 	void loadThemeConfig(const KConfigGroup&);
 	void saveThemeConfig(const KConfigGroup&) const;
 
+	BASIC_D_ACCESSOR_DECL(bool, showEnabled, ShowEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, enabled, Enabled)
     BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(Background::Type, type, Type)
 	BASIC_D_ACCESSOR_DECL(Background::ColorStyle, colorStyle, ColorStyle)
@@ -59,6 +61,7 @@ private:
 	Q_DECLARE_PRIVATE(Background)
 
 Q_SIGNALS:
+	void enabledChanged(bool);
 	void typeChanged(Background::Type);
 	void colorStyleChanged(Background::ColorStyle);
 	void imageStyleChanged(Background::ImageStyle);

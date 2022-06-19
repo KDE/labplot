@@ -21,6 +21,8 @@ public:
 	QString name() const;
 	void update();
 
+	bool showEnabled{false};
+	bool enabled{false};
 	Background::Type type{Background::Type::Color};
 	Background::ColorStyle colorStyle{Background::ColorStyle::SingleColor};
 	Background::ImageStyle imageStyle{Background::ImageStyle::Scaled};
