@@ -109,6 +109,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
+	${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
@@ -175,6 +176,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -322,6 +324,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
