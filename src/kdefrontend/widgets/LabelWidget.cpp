@@ -34,6 +34,7 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+#include <KMessageWidget>
 
 /*!
  * Setting label property without changing the content. This is needed,
@@ -212,8 +213,14 @@ LabelWidget::LabelWidget(QWidget* parent)
 																				: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
-	// SLOTS
-	//  text properties
+	m_messageWidget = new KMessageWidget(this);
+	m_messageWidget->setMessageType(KMessageWidget::Error);
+	m_messageWidget->setWordWrap(true);
+	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
+	gridLayout->addWidget(m_messageWidget, 1, 4);
+
+	//SLOTS
+	// text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
 	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
 	connect(ui.teLabel, &ResizableTextEdit::currentCharFormatChanged, this, &LabelWidget::charFormatChanged);
@@ -1197,12 +1204,18 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * \brief Highlights the text field if wrong latex syntax was used (null image was produced)
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
-void LabelWidget::labelTeXImageUpdated(bool valid) {
-	if (!valid) {
-		if (ui.teLabel->styleSheet().isEmpty())
+void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result &result) {
+	if (!result.successful) {
+		if (ui.teLabel->styleSheet().isEmpty()) {
 			SET_WARNING_STYLE(ui.teLabel)
-	} else
+			m_messageWidget->setText(result.errorMessage);
+			m_messageWidget->setMaximumWidth(ui.teLabel->width());
+		}
+	} else {
 		ui.teLabel->setStyleSheet(QString());
+	}
+	m_messageWidget->setVisible(!result.successful);
+	ui.lError->setVisible(!result.successful);
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {
@@ -1511,10 +1524,13 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 
 	updateBackground();
 
-	// when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
-	// in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-	if (mode != TextLabel::Mode::LaTeX)
+	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
+	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+	if (mode != TextLabel::Mode::LaTeX) {
 		ui.teLabel->setStyleSheet(QString());
+		ui.lError->setVisible(false);
+		m_messageWidget->setVisible(false);
+	}
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {

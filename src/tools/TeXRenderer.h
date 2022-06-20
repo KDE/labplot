@@ -26,9 +26,15 @@ public:
 		int dpi;
 	};
 
-	static QByteArray renderImageLaTeX(const QString&, bool* success, const TeXRenderer::Formatting&);
-	static QByteArray imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine, bool* success);
-	static QByteArray imageFromDVI(const QTemporaryFile&, const int dpi, bool* success);
+	typedef struct Result {
+		Result(): successful(false) {}
+		bool successful;
+		QString errorMessage;
+	};
+
+	static QByteArray renderImageLaTeX(const QString&, Result* success, const TeXRenderer::Formatting&);
+	static QByteArray imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine, Result*);
+	static QByteArray imageFromDVI(const QTemporaryFile&, const int dpi, Result*);
 	static bool enabled();
 	static bool executableExists(const QString&);
 };
