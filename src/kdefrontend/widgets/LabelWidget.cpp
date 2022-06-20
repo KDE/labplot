@@ -217,7 +217,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_messageWidget->setMessageType(KMessageWidget::Error);
 	m_messageWidget->setWordWrap(true);
 	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
-	gridLayout->addWidget(m_messageWidget, 1, 4);
+	gridLayout->addWidget(m_messageWidget, 2, 3);
 
 	// SLOTS
 	//  text properties
