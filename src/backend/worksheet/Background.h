@@ -20,6 +20,7 @@ class Background : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	enum class Position { No, Above, Below, ZeroBaseline, Left, Right };
 	enum class Type { Color, Image, Pattern };
 	enum class ColorStyle {
 		SingleColor,
@@ -34,6 +35,7 @@ public:
 	explicit Background(const QString& name);
 	~Background() override;
 
+	void setPrefix(const QString&);
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;
@@ -41,16 +43,19 @@ public:
 	void loadThemeConfig(const KConfigGroup&);
 	void saveThemeConfig(KConfigGroup&) const;
 
-	BASIC_D_ACCESSOR_DECL(bool, showEnabled, ShowEnabled)
+	BASIC_D_ACCESSOR_DECL(bool, enabledAvailable, EnabledAvailable)
+	BASIC_D_ACCESSOR_DECL(bool, positionAvailable, PositionAvailable)
+
 	BASIC_D_ACCESSOR_DECL(bool, enabled, Enabled)
-    BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
-	BASIC_D_ACCESSOR_DECL(Background::Type, type, Type)
-	BASIC_D_ACCESSOR_DECL(Background::ColorStyle, colorStyle, ColorStyle)
-	BASIC_D_ACCESSOR_DECL(Background::ImageStyle, imageStyle, ImageStyle)
+	BASIC_D_ACCESSOR_DECL(Position, position, Position)
+	BASIC_D_ACCESSOR_DECL(Type, type, Type)
+	BASIC_D_ACCESSOR_DECL(ColorStyle, colorStyle, ColorStyle)
+	BASIC_D_ACCESSOR_DECL(ImageStyle, imageStyle, ImageStyle)
 	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, brushStyle, BrushStyle)
 	CLASS_D_ACCESSOR_DECL(QColor, firstColor, FirstColor)
 	CLASS_D_ACCESSOR_DECL(QColor, secondColor, SecondColor)
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 
 	typedef BackgroundPrivate Private;
 
@@ -62,15 +67,17 @@ private:
 
 Q_SIGNALS:
 	void enabledChanged(bool);
-	void typeChanged(Background::Type);
-	void colorStyleChanged(Background::ColorStyle);
-	void imageStyleChanged(Background::ImageStyle);
+	void positionChanged(Position);
+	void typeChanged(Type);
+	void colorStyleChanged(ColorStyle);
+	void imageStyleChanged(ImageStyle);
 	void brushStyleChanged(Qt::BrushStyle);
 	void firstColorChanged(const QColor&);
 	void secondColorChanged(const QColor&);
 	void fileNameChanged(const QString&);
 	void opacityChanged(float);
 
+	void updatePositionRequested();
 	void updateRequested();
 };
 

@@ -20,9 +20,14 @@ public:
 
 	QString name() const;
 	void update();
+	void updatePosition();
 
-	bool showEnabled{false};
+	QString prefix{QLatin1String("Background")};
+	bool enabledAvailable{false};
+	bool positionAvailable{false};
+
 	bool enabled{false};
+	Background::Position position;
 	Background::Type type{Background::Type::Color};
 	Background::ColorStyle colorStyle{Background::ColorStyle::SingleColor};
 	Background::ImageStyle imageStyle{Background::ImageStyle::Scaled};

@@ -22,6 +22,7 @@
 #include <KMessageBox>
 
 #include <QButtonGroup>
+#include <QDebug>
 #include <QIntValidator>
 #include <QPainter>
 #include <QRadioButton>
@@ -100,7 +101,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	//"Background"-tab
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabPlotArea->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabPlotArea);
-	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 2);
+	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);

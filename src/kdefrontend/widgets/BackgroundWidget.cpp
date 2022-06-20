@@ -27,9 +27,11 @@
 BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 
+	ui.cbColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
+	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::positionChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::typeChanged);
 	connect(ui.cbColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::colorStyleChanged);
 	connect(ui.cbImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::imageStyleChanged);
@@ -60,8 +62,33 @@ void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
 }
 
+void BackgroundWidget::setPrefix(const QString& prefix) {
+	m_prefix = prefix;
+}
+
+void BackgroundWidget::setEnabled(bool enabled) {
+	ui.chkEnabled->setEnabled(enabled);
+	ui.cbType->setEnabled(enabled);
+	ui.leFileName->setEnabled(enabled);
+	ui.bOpen->setEnabled(enabled);
+	ui.cbColorStyle->setEnabled(enabled);
+	ui.cbImageStyle->setEnabled(enabled);
+	ui.cbBrushStyle->setEnabled(enabled);
+	ui.kcbFirstColor->setEnabled(enabled);
+	ui.kcbSecondColor->setEnabled(enabled);
+	ui.sbOpacity->setEnabled(enabled);
+}
+
 void BackgroundWidget::retranslateUi() {
 	Lock lock(m_initializing);
+
+	ui.cbPosition->clear();
+	ui.cbPosition->addItem(i18n("None"));
+	ui.cbPosition->addItem(i18n("Above"));
+	ui.cbPosition->addItem(i18n("Below"));
+	ui.cbPosition->addItem(i18n("Zero Baseline"));
+	ui.cbPosition->addItem(i18n("Left"));
+	ui.cbPosition->addItem(i18n("Right"));
 
 	ui.cbType->clear();
 	ui.cbType->addItem(i18n("Color"));
@@ -87,8 +114,21 @@ void BackgroundWidget::retranslateUi() {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in BackgroundWidget ********
+//******** SLOTs for changes triggered in BackgroundWidget ****
 //*************************************************************
+void BackgroundWidget::positionChanged(int index) {
+	const auto position{Background::Position(index)};
+
+	bool b = (position != Background::Position::No);
+	setEnabled(b);
+
+	if (m_initializing)
+		return;
+
+	for (auto* background : m_backgrounds)
+		background->setPosition(position);
+}
+
 void BackgroundWidget::typeChanged(int index) {
 	if (index == -1)
 		return;
@@ -258,6 +298,12 @@ void BackgroundWidget::fileNameChanged() {
 //*************************************************************
 //********* SLOTs for changes triggered in Background *********
 //*************************************************************
+void BackgroundWidget::backgroundPositionChanged(Background::Position position) {
+	m_initializing = true;
+	ui.cbPosition->setCurrentIndex((int)position);
+	m_initializing = false;
+}
+
 void BackgroundWidget::backgroundTypeChanged(Background::Type type) {
 	m_initializing = true;
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
@@ -312,15 +358,20 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 void BackgroundWidget::load() {
 	const Lock lock(m_initializing);
 
-	bool enabled = m_background->showEnabled();
-	ui.lEnabled->setVisible(enabled);
-	ui.chkEnabled->setVisible(enabled);
+	bool visible = m_background->enabledAvailable();
+	ui.lEnabled->setVisible(visible);
+	ui.chkEnabled->setVisible(visible);
+
+	visible = m_background->positionAvailable();
+	ui.lPosition->setVisible(visible);
+	ui.cbPosition->setVisible(visible);
 
 	// highlight the text field for the background image red if an image is used and cannot be found
 	const QString& fileName = m_background->fileName();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
 
+	ui.cbPosition->setCurrentIndex((int)m_background->position());
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());
 	ui.cbImageStyle->setCurrentIndex((int)m_background->imageStyle());
@@ -333,24 +384,25 @@ void BackgroundWidget::load() {
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
-
-	ui.cbType->setCurrentIndex(group.readEntry("BackgroundType", (int)m_background->type()));
-	ui.cbColorStyle->setCurrentIndex(group.readEntry("BackgroundColorStyle", (int)m_background->colorStyle()));
-	ui.cbImageStyle->setCurrentIndex(group.readEntry("BackgroundImageStyle", (int)m_background->imageStyle()));
-	ui.cbBrushStyle->setCurrentIndex(group.readEntry("BackgroundBrushStyle", (int)m_background->brushStyle()));
-	ui.leFileName->setText(group.readEntry("BackgroundFileName", m_background->fileName()));
-	ui.kcbFirstColor->setColor(group.readEntry("BackgroundFirstColor", m_background->firstColor()));
-	ui.kcbSecondColor->setColor(group.readEntry("BackgroundSecondColor", m_background->secondColor()));
-	ui.sbOpacity->setValue(qRound(group.readEntry("BackgroundOpacity", m_background->opacity()) * 100));
+	ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + "Position", (int)m_background->position()));
+	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", (int)m_background->type()));
+	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + "ColorStyle", (int)m_background->colorStyle()));
+	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + "ImageStyle", (int)m_background->imageStyle()));
+	ui.cbBrushStyle->setCurrentIndex(group.readEntry(m_prefix + "BrushStyle", (int)m_background->brushStyle()));
+	ui.leFileName->setText(group.readEntry(m_prefix + "FileName", m_background->fileName()));
+	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + "FirstColor", m_background->firstColor()));
+	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + "SecondColor", m_background->secondColor()));
+	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + "Opacity", m_background->opacity()) * 100));
 }
 
 void BackgroundWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry("BackgroundType", ui.cbType->currentIndex());
-	group.writeEntry("BackgroundColorStyle", ui.cbColorStyle->currentIndex());
-	group.writeEntry("BackgroundImageStyle", ui.cbImageStyle->currentIndex());
-	group.writeEntry("BackgroundBrushStyle", ui.cbBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.leFileName->text());
-	group.writeEntry("BackgroundFirstColor", ui.kcbFirstColor->color());
-	group.writeEntry("BackgroundSecondColor", ui.kcbSecondColor->color());
-	group.writeEntry("BackgroundOpacity", ui.sbOpacity->value() / 100.0);;
+	group.writeEntry(m_prefix + "Position", ui.cbPosition->currentIndex());
+	group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
+	group.writeEntry(m_prefix + "ColorStyle", ui.cbColorStyle->currentIndex());
+	group.writeEntry(m_prefix + "ImageStyle", ui.cbImageStyle->currentIndex());
+	group.writeEntry(m_prefix + "BrushStyle", ui.cbBrushStyle->currentIndex());
+	group.writeEntry(m_prefix + "FileName", ui.leFileName->text());
+	group.writeEntry(m_prefix + "FirstColor", ui.kcbFirstColor->color());
+	group.writeEntry(m_prefix + "SecondColor", ui.kcbSecondColor->color());
+	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);;
 }

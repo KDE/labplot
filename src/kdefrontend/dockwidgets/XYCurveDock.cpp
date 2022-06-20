@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for XYCurve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -20,11 +20,9 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
-#include <QCompleter>
-#include <QDir>
-#include <QDirModel>
 #include <QPainter>
 
 #include <KConfig>
@@ -70,10 +68,9 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	ui.cbValuesDateTimeFormat->setEditable(true);
 
 	// Tab "Filling"
-	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	ui.bFillingOpen->setIcon(QIcon::fromTheme("document-open"));
-
-	ui.leFillingFileName->setCompleter(new QCompleter(new QDirModel, this));
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabAreaFilling->layout());
+	backgroundWidget = new BackgroundWidget(ui.tabAreaFilling);
+	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error bars"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
@@ -141,19 +138,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)));
 	connect(ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)));
 
-	// Filling
-	connect(ui.cbFillingPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingPositionChanged(int)));
-	connect(ui.cbFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingTypeChanged(int)));
-	connect(ui.cbFillingColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingColorStyleChanged(int)));
-	connect(ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)));
-	connect(ui.cbFillingBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingBrushStyleChanged(int)));
-	connect(ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect(ui.leFillingFileName, &QLineEdit::textChanged, this, &XYCurveDock::fileNameChanged);
-	connect(ui.leFillingFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()));
-	connect(ui.kcbFillingFirstColor, SIGNAL(changed(QColor)), this, SLOT(fillingFirstColorChanged(QColor)));
-	connect(ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)));
-	connect(ui.sbFillingOpacity, SIGNAL(valueChanged(int)), this, SLOT(fillingOpacityChanged(int)));
-
 	// Error bars
 	connect(ui.cbXErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(xErrorTypeChanged(int)));
 	connect(cbXErrorPlusColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xErrorPlusColumnChanged(QModelIndex)));
@@ -177,8 +161,8 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// template handler
 	auto* frame = new QFrame(this);
-	auto* layout = new QHBoxLayout(frame);
-	layout->setContentsMargins(0, 11, 0, 11);
+	hboxLayout = new QHBoxLayout(frame);
+	hboxLayout->setContentsMargins(0, 11, 0, 11);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::XYCurve);
 	layout->addWidget(templateHandler);
@@ -393,37 +377,6 @@ void XYCurveDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Left"));
 	ui.cbValuesPosition->addItem(i18n("Right"));
 
-	// Filling
-	ui.cbFillingPosition->clear();
-	ui.cbFillingPosition->addItem(i18n("None"));
-	ui.cbFillingPosition->addItem(i18n("Above"));
-	ui.cbFillingPosition->addItem(i18n("Below"));
-	ui.cbFillingPosition->addItem(i18n("Zero Baseline"));
-	ui.cbFillingPosition->addItem(i18n("Left"));
-	ui.cbFillingPosition->addItem(i18n("Right"));
-
-	ui.cbFillingType->clear();
-	ui.cbFillingType->addItem(i18n("Color"));
-	ui.cbFillingType->addItem(i18n("Image"));
-	ui.cbFillingType->addItem(i18n("Pattern"));
-
-	ui.cbFillingColorStyle->clear();
-	ui.cbFillingColorStyle->addItem(i18n("Single Color"));
-	ui.cbFillingColorStyle->addItem(i18n("Horizontal Gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("Vertical Gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
-	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
-	ui.cbFillingColorStyle->addItem(i18n("Radial Gradient"));
-
-	ui.cbFillingImageStyle->clear();
-	ui.cbFillingImageStyle->addItem(i18n("Scaled and Cropped"));
-	ui.cbFillingImageStyle->addItem(i18n("Scaled"));
-	ui.cbFillingImageStyle->addItem(i18n("Scaled, Keep Proportions"));
-	ui.cbFillingImageStyle->addItem(i18n("Centered"));
-	ui.cbFillingImageStyle->addItem(i18n("Tiled"));
-	ui.cbFillingImageStyle->addItem(i18n("Center Tiled"));
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
-
 	// Error-bars
 	pm.fill(Qt::transparent);
 	pa.begin(&pm);
@@ -555,11 +508,19 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 }
 
 void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
+	// symbols
 	QList<Symbol*> symbols;
 	for (auto* curve : curves)
 		symbols << curve->symbol();
 
 	symbolWidget->setSymbols(symbols);
+
+	// backgrounds
+	QList<Background*> backgrounds;
+		for (auto* legend : m_curvesList)
+		backgrounds << legend->background();
+
+	backgroundWidget->setBackgrounds(backgrounds);
 }
 
 void XYCurveDock::initGeneralTab() {
@@ -1177,185 +1138,6 @@ void XYCurveDock::valuesColorChanged(const QColor& color) {
 		curve->setValuesColor(color);
 }
 
-// Filling-tab
-void XYCurveDock::fillingPositionChanged(int index) {
-	const auto fillingPosition{XYCurve::FillingPosition(index)};
-
-	bool b = (fillingPosition != XYCurve::FillingPosition::NoFilling);
-	ui.cbFillingType->setEnabled(b);
-	ui.cbFillingColorStyle->setEnabled(b);
-	ui.cbFillingBrushStyle->setEnabled(b);
-	ui.cbFillingImageStyle->setEnabled(b);
-	ui.kcbFillingFirstColor->setEnabled(b);
-	ui.kcbFillingSecondColor->setEnabled(b);
-	ui.leFillingFileName->setEnabled(b);
-	ui.bFillingOpen->setEnabled(b);
-	ui.sbFillingOpacity->setEnabled(b);
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingPosition(fillingPosition);
-}
-
-void XYCurveDock::fillingTypeChanged(int index) {
-	const auto type = (WorksheetElement::BackgroundType)index;
-
-	if (type == WorksheetElement::BackgroundType::Color) {
-		ui.lFillingColorStyle->show();
-		ui.cbFillingColorStyle->show();
-		ui.lFillingImageStyle->hide();
-		ui.cbFillingImageStyle->hide();
-		ui.lFillingBrushStyle->hide();
-		ui.cbFillingBrushStyle->hide();
-
-		ui.lFillingFileName->hide();
-		ui.leFillingFileName->hide();
-		ui.bFillingOpen->hide();
-
-		ui.lFillingFirstColor->show();
-		ui.kcbFillingFirstColor->show();
-
-		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbFillingColorStyle->currentIndex();
-		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-			ui.lFillingFirstColor->setText(i18n("Color:"));
-			ui.lFillingSecondColor->hide();
-			ui.kcbFillingSecondColor->hide();
-		} else {
-			ui.lFillingFirstColor->setText(i18n("First color:"));
-			ui.lFillingSecondColor->show();
-			ui.kcbFillingSecondColor->show();
-		}
-	} else if (type == WorksheetElement::BackgroundType::Image) {
-		ui.lFillingColorStyle->hide();
-		ui.cbFillingColorStyle->hide();
-		ui.lFillingImageStyle->show();
-		ui.cbFillingImageStyle->show();
-		ui.lFillingBrushStyle->hide();
-		ui.cbFillingBrushStyle->hide();
-		ui.lFillingFileName->show();
-		ui.leFillingFileName->show();
-		ui.bFillingOpen->show();
-
-		ui.lFillingFirstColor->hide();
-		ui.kcbFillingFirstColor->hide();
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-	} else if (type == WorksheetElement::BackgroundType::Pattern) {
-		ui.lFillingFirstColor->setText(i18n("Color:"));
-		ui.lFillingColorStyle->hide();
-		ui.cbFillingColorStyle->hide();
-		ui.lFillingImageStyle->hide();
-		ui.cbFillingImageStyle->hide();
-		ui.lFillingBrushStyle->show();
-		ui.cbFillingBrushStyle->show();
-		ui.lFillingFileName->hide();
-		ui.leFillingFileName->hide();
-		ui.bFillingOpen->hide();
-
-		ui.lFillingFirstColor->show();
-		ui.kcbFillingFirstColor->show();
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingType(type);
-}
-
-void XYCurveDock::fillingColorStyleChanged(int index) {
-	const auto style = (WorksheetElement::BackgroundColorStyle)index;
-
-	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-		ui.lFillingFirstColor->setText(i18n("Color:"));
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-	} else {
-		ui.lFillingFirstColor->setText(i18n("First color:"));
-		ui.lFillingSecondColor->show();
-		ui.kcbFillingSecondColor->show();
-		ui.lFillingBrushStyle->hide();
-		ui.cbFillingBrushStyle->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingColorStyle(style);
-}
-
-void XYCurveDock::fillingImageStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto style = (WorksheetElement::BackgroundImageStyle)index;
-	for (auto* curve : m_curvesList)
-		curve->setFillingImageStyle(style);
-}
-
-void XYCurveDock::fillingBrushStyleChanged(int index) {
-	if (index == -1 || m_initializing)
-		return;
-
-	auto style = (Qt::BrushStyle)index;
-	for (auto* curve : m_curvesList)
-		curve->setFillingBrushStyle(style);
-}
-
-void XYCurveDock::fillingFirstColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingFirstColor(c);
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, c);
-	m_initializing = false;
-}
-
-void XYCurveDock::fillingSecondColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingSecondColor(c);
-}
-
-/*!
-	opens a file dialog and lets the user select the image file.
-*/
-void XYCurveDock::selectFile() {
-	const QString& path = GuiTools::openImageFile(QLatin1String("XYCurveDock"));
-	if (path.isEmpty())
-		return;
-
-	ui.leFillingFileName->setText(path);
-}
-
-void XYCurveDock::fileNameChanged() {
-	if (m_initializing)
-		return;
-
-	QString fileName = ui.leFillingFileName->text();
-	for (auto* curve : m_curvesList)
-		curve->setFillingFileName(fileName);
-}
-
-void XYCurveDock::fillingOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setFillingOpacity(opacity);
-}
-
 //"Error bars"-Tab
 void XYCurveDock::xErrorTypeChanged(int index) const {
 	if (index == 0) {
@@ -1769,54 +1551,6 @@ void XYCurveDock::curveValuesColorChanged(QColor color) {
 	m_initializing = false;
 }
 
-// Filling
-void XYCurveDock::curveFillingPositionChanged(XYCurve::FillingPosition position) {
-	m_initializing = true;
-	ui.cbFillingPosition->setCurrentIndex((int)position);
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingTypeChanged(WorksheetElement::BackgroundType type) {
-	m_initializing = true;
-	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
-	m_initializing = true;
-	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
-	m_initializing = true;
-	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingBrushStyleChanged(Qt::BrushStyle style) {
-	m_initializing = true;
-	ui.cbFillingBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingFirstColorChanged(QColor& color) {
-	m_initializing = true;
-	ui.kcbFillingFirstColor->setColor(color);
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, color);
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingSecondColorChanged(QColor& color) {
-	m_initializing = true;
-	ui.kcbFillingSecondColor->setColor(color);
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingFileNameChanged(QString& filename) {
-	m_initializing = true;
-	ui.leFillingFileName->setText(filename);
-	m_initializing = false;
-}
-void XYCurveDock::curveFillingOpacityChanged(float opacity) {
-	m_initializing = true;
-	ui.sbFillingOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
-
 //"Error bars"-Tab
 void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
 	m_initializing = true;
@@ -1939,17 +1673,6 @@ void XYCurveDock::load() {
 	ui.kcbValuesColor->setColor(m_curve->valuesColor());
 	this->updateValuesWidgets();
 
-	// Filling
-	ui.cbFillingPosition->setCurrentIndex((int)m_curve->fillingPosition());
-	ui.cbFillingType->setCurrentIndex((int)m_curve->fillingType());
-	ui.cbFillingColorStyle->setCurrentIndex((int)m_curve->fillingColorStyle());
-	ui.cbFillingImageStyle->setCurrentIndex((int)m_curve->fillingImageStyle());
-	ui.cbFillingBrushStyle->setCurrentIndex((int)m_curve->fillingBrushStyle());
-	ui.leFillingFileName->setText(m_curve->fillingFileName());
-	ui.kcbFillingFirstColor->setColor(m_curve->fillingFirstColor());
-	ui.kcbFillingSecondColor->setColor(m_curve->fillingSecondColor());
-	ui.sbFillingOpacity->setValue(round(m_curve->fillingOpacity() * 100.0));
-
 	// Error bars
 	ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorType());
 	ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorType());
@@ -2035,15 +1758,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.kcbValuesColor->setColor(group.readEntry("ValuesColor", m_curve->valuesColor()));
 
 	// Filling
-	ui.cbFillingPosition->setCurrentIndex(group.readEntry("FillingPosition", (int)m_curve->fillingPosition()));
-	ui.cbFillingType->setCurrentIndex(group.readEntry("FillingType", (int)m_curve->fillingType()));
-	ui.cbFillingColorStyle->setCurrentIndex(group.readEntry("FillingColorStyle", (int)m_curve->fillingColorStyle()));
-	ui.cbFillingImageStyle->setCurrentIndex(group.readEntry("FillingImageStyle", (int)m_curve->fillingImageStyle()));
-	ui.cbFillingBrushStyle->setCurrentIndex(group.readEntry("FillingBrushStyle", (int)m_curve->fillingBrushStyle()));
-	ui.leFillingFileName->setText(group.readEntry("FillingFileName", m_curve->fillingFileName()));
-	ui.kcbFillingFirstColor->setColor(group.readEntry("FillingFirstColor", m_curve->fillingFirstColor()));
-	ui.kcbFillingSecondColor->setColor(group.readEntry("FillingSecondColor", m_curve->fillingSecondColor()));
-	ui.sbFillingOpacity->setValue(round(group.readEntry("FillingOpacity", m_curve->fillingOpacity()) * 100.0));
+	backgroundWidget->loadConfig(group);
 
 	// Error bars
 	ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
@@ -2060,7 +1775,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, ui.kcbFillingFirstColor->color());
 	m_initializing = false;
 }
 
@@ -2104,15 +1818,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ValuesColor", ui.kcbValuesColor->color());
 
 	// Filling
-	group.writeEntry("FillingPosition", ui.cbFillingPosition->currentIndex());
-	group.writeEntry("FillingType", ui.cbFillingType->currentIndex());
-	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
-	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());
-	group.writeEntry("FillingBrushStyle", ui.cbFillingBrushStyle->currentIndex());
-	group.writeEntry("FillingFileName", ui.leFillingFileName->text());
-	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
-	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
-	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value() / 100.0);
+	backgroundWidget->saveConfig(group);
 
 	// Error bars
 	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());

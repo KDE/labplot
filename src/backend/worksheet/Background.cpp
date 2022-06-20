@@ -31,24 +31,33 @@ Background::~Background() {
 	delete d_ptr;
 }
 
+void Background::setPrefix(const QString& prefix) {
+	Q_D(Background);
+	d->prefix = prefix;
+}
+
 void Background::init(const KConfigGroup& group) {
 	Q_D(Background);
 
-	d->type = (Type)group.readEntry("Type", static_cast<int>(Type::Color));
-	d->colorStyle = (ColorStyle)group.readEntry("ColorStyle", static_cast<int>(ColorStyle::SingleColor));
-	d->imageStyle = (ImageStyle)group.readEntry("ImageStyle", static_cast<int>(ImageStyle::Scaled));
-	d->brushStyle = (Qt::BrushStyle)group.readEntry("BrushStyle", static_cast<int>(Qt::SolidPattern));
-	d->fileName = group.readEntry("FileName", QString());
-	d->firstColor = group.readEntry("FirstColor", QColor(Qt::white));
-	d->secondColor = group.readEntry("SecondColor", QColor(Qt::black));
-	d->opacity = group.readEntry("Opacity", 1.0);
+	d->position = (Position)group.readEntry(d->prefix + "Position", static_cast<int>(Position::No));
+	d->type = (Type)group.readEntry(d->prefix + "Type", static_cast<int>(Type::Color));
+	d->colorStyle = (ColorStyle)group.readEntry(d->prefix + "ColorStyle", static_cast<int>(ColorStyle::SingleColor));
+	d->imageStyle = (ImageStyle)group.readEntry(d->prefix + "ImageStyle", static_cast<int>(ImageStyle::Scaled));
+	d->brushStyle = (Qt::BrushStyle)group.readEntry(d->prefix + "BrushStyle", static_cast<int>(Qt::SolidPattern));
+	d->fileName = group.readEntry(d->prefix + "FileName", QString());
+	d->firstColor = group.readEntry(d->prefix + "FirstColor", QColor(Qt::white));
+	d->secondColor = group.readEntry(d->prefix + "SecondColor", QColor(Qt::black));
+	d->opacity = group.readEntry(d->prefix + "Opacity", 1.0);
 }
 
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(Background, bool, showEnabled, showEnabled)
+BASIC_SHARED_D_READER_IMPL(Background, bool, enabledAvailable, enabledAvailable)
+BASIC_SHARED_D_READER_IMPL(Background, bool, positionAvailable, positionAvailable)
+
 BASIC_SHARED_D_READER_IMPL(Background, bool, enabled, enabled)
+BASIC_SHARED_D_READER_IMPL(Background, Background::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Background, Background::Type, type, type)
 BASIC_SHARED_D_READER_IMPL(Background, Background::ColorStyle, colorStyle, colorStyle)
 BASIC_SHARED_D_READER_IMPL(Background, Background::ImageStyle, imageStyle, imageStyle)
@@ -61,6 +70,23 @@ BASIC_SHARED_D_READER_IMPL(Background, double, opacity, opacity)
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+void Background::setEnabledAvailable(bool available) {
+	Q_D(Background);
+	d->enabledAvailable = available;
+}
+
+void Background::setPositionAvailable(bool available) {
+	Q_D(Background);
+	d->positionAvailable = available;
+}
+
+STD_SETTER_CMD_IMPL_F_S(Background, SetPosition, Background::Position, position, updatePosition)
+void Background::setPosition(Position position) {
+	Q_D(Background);
+	if (position != d->position)
+		exec(new BackgroundSetPositionCmd(d, position, ki18n("%1: filling position changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Background, SetType, Background::Type, type, update)
 void Background::setType(Background::Type type) {
 	Q_D(Background);
@@ -132,6 +158,10 @@ void BackgroundPrivate::update() {
 	Q_EMIT q->updateRequested();
 }
 
+void BackgroundPrivate::updatePosition() {
+	Q_EMIT q->updatePositionRequested();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -139,7 +169,8 @@ void BackgroundPrivate::update() {
 void Background::save(QXmlStreamWriter* writer) const {
 	Q_D(const Background);
 
-	writer->writeStartElement("background");
+	writer->writeStartElement(d->prefix.toLower());
+	writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->colorStyle)));
 	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->imageStyle)));
@@ -166,6 +197,7 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 
 	auto attribs = reader->attributes();
 
+	READ_INT_VALUE("position", position, Position);
 	READ_INT_VALUE("type", type, Background::Type);
 	READ_INT_VALUE("colorStyle", colorStyle, Background::ColorStyle);
 	READ_INT_VALUE("imageStyle", imageStyle, Background::ImageStyle);
@@ -219,22 +251,23 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Background::loadThemeConfig(const KConfigGroup& group) {
-	setType((Type)group.readEntry("BackgroundType", static_cast<int>(Type::Color)));
-	setColorStyle((ColorStyle)group.readEntry("BackgroundColorStyle", static_cast<int>(ColorStyle::SingleColor)));
-	setImageStyle((ImageStyle)group.readEntry("BackgroundImageStyle", static_cast<int>(ImageStyle::Scaled)));
-	setBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
-	setFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
-	setSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
-	setOpacity(group.readEntry("BackgroundOpacity", 1.0));
+	Q_D(const Background);
+	setType((Type)group.readEntry(d->prefix + "Type", static_cast<int>(Type::Color)));
+	setColorStyle((ColorStyle)group.readEntry(d->prefix + "ColorStyle", static_cast<int>(ColorStyle::SingleColor)));
+	setImageStyle((ImageStyle)group.readEntry(d->prefix + "ImageStyle", static_cast<int>(ImageStyle::Scaled)));
+	setBrushStyle((Qt::BrushStyle)group.readEntry(d->prefix + "BrushStyle", static_cast<int>(Qt::SolidPattern)));
+	setFirstColor(group.readEntry(d->prefix + "FirstColor", QColor(Qt::white)));
+	setSecondColor(group.readEntry(d->prefix + "SecondColor", QColor(Qt::black)));
+	setOpacity(group.readEntry(d->prefix + "Opacity", 1.0));
 }
 
 void Background::saveThemeConfig(KConfigGroup& group) const {
 	Q_D(const Background);
-	group.writeEntry("BackgroundType", static_cast<int>(d->type));
-	group.writeEntry("BackgroundColorStyle", static_cast<int>(d->colorStyle));
-	group.writeEntry("BackgroundBrushStyle", static_cast<int>(d->brushStyle));
-	group.writeEntry("BackgroundImageStyle", static_cast<int>(d->imageStyle));
-	group.writeEntry("BackgroundFirstColor", d->firstColor);
-	group.writeEntry("BackgroundSecondColor", d->secondColor);
-	group.writeEntry("BackgroundOpacity", d->opacity);
+	group.writeEntry(d->prefix + "Type", static_cast<int>(d->type));
+	group.writeEntry(d->prefix + "ColorStyle", static_cast<int>(d->colorStyle));
+	group.writeEntry(d->prefix + "BrushStyle", static_cast<int>(d->brushStyle));
+	group.writeEntry(d->prefix + "ImageStyle", static_cast<int>(d->imageStyle));
+	group.writeEntry(d->prefix + "FirstColor", d->firstColor);
+	group.writeEntry(d->prefix + "SecondColor", d->secondColor);
+	group.writeEntry(d->prefix + "Opacity", d->opacity);
 }

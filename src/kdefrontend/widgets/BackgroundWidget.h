@@ -21,6 +21,8 @@ public:
 	explicit BackgroundWidget(QWidget*);
 
 	void setBackgrounds(QList<Background*>);
+	void setPrefix(const QString&);
+	void setEnabled(bool);
 
 	void load();
 	void loadConfig(const KConfigGroup&);
@@ -31,6 +33,7 @@ private:
 	Background* m_background{nullptr};
 	QList<Background*> m_backgrounds;
 	bool m_initializing{false};
+	QString m_prefix{QLatin1String("Background")};
 
 	void retranslateUi();
 
@@ -39,6 +42,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BackgroundWidget
+	void positionChanged(int);
 	void typeChanged(int);
 	void colorStyleChanged(int);
 	void imageStyleChanged(int);
@@ -50,6 +54,7 @@ private Q_SLOTS:
 	void fileNameChanged();
 
 	// SLOTs for changes triggered in Background
+	void backgroundPositionChanged(Background::Position);
 	void backgroundTypeChanged(Background::Type);
 	void backgroundColorStyleChanged(Background::ColorStyle);
 	void backgroundImageStyleChanged(Background::ImageStyle);
