@@ -139,7 +139,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 }
 
 // TEX -> PDF -> QImage
-QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, Result *res) {
+QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, Result* res) {
 	Q_UNUSED(dpi)
 	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
@@ -182,7 +182,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	}
 
 	QByteArray ba = pdfFile.readAll();
- 	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + ".pdf");
 	res->successful = true;
 	res->errorMessage = "";
 
@@ -273,7 +273,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	}
 
 	QByteArray ba = pdfFile.readAll();
- 	QFile::remove(baseName + ".pdf");
+	QFile::remove(baseName + ".pdf");
 	res->successful = true;
 	res->errorMessage = "";
 

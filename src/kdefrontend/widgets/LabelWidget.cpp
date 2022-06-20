@@ -219,8 +219,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
 	gridLayout->addWidget(m_messageWidget, 1, 4);
 
-	//SLOTS
-	// text properties
+	// SLOTS
+	//  text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
 	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
 	connect(ui.teLabel, &ResizableTextEdit::currentCharFormatChanged, this, &LabelWidget::charFormatChanged);
@@ -1204,7 +1204,7 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * \brief Highlights the text field if wrong latex syntax was used (null image was produced)
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
-void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result &result) {
+void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result& result) {
 	if (!result.successful) {
 		if (ui.teLabel->styleSheet().isEmpty()) {
 			SET_WARNING_STYLE(ui.teLabel)
@@ -1524,8 +1524,8 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 
 	updateBackground();
 
-	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
-	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+	// when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
+	// in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (mode != TextLabel::Mode::LaTeX) {
 		ui.teLabel->setStyleSheet(QString());
 		ui.lError->setVisible(false);

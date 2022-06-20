@@ -27,7 +27,9 @@ public:
 	};
 
 	typedef struct Result {
-		Result(): successful(false) {}
+		Result()
+			: successful(false) {
+		}
 		bool successful;
 		QString errorMessage;
 	};

@@ -14,9 +14,9 @@
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "tools/TeXRenderer.h"
-#include <QStaticText>
 #include <QDesktopWidget>
 #include <QFutureWatcher>
+#include <QStaticText>
 
 extern "C" {
 #include <gsl/gsl_const_cgs.h>
