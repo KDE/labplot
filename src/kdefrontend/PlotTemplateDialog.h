@@ -8,7 +8,6 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #ifndef PLOTTEMPLATEDIALOG_H
 #define PLOTTEMPLATEDIALOG_H
 
@@ -60,7 +59,9 @@ public:
 	void setSearchPath(const QString& searchPath);
 	virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-	QString searchPath() { return mSearchPath;}
+	QString searchPath() {
+		return mSearchPath;
+	}
 
 	enum Roles {
 		FilenameRole = Qt::ItemDataRole::UserRole + 1,

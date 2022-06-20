@@ -10,9 +10,9 @@
 */
 
 #include "CartesianPlotDock.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/core/Project.h"
 
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/PlotTemplateDialog.h"
@@ -218,7 +218,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	layout->addWidget(m_themeHandler);
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &CartesianPlotDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
-
 
 	// templates for plot properties
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);

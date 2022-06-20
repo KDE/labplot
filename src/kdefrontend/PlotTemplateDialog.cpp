@@ -93,7 +93,6 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
 
-
 	if (ui->cbTemplateLocation->currentIndex() == 0) // otherwise no change will be triggered
 		changePreviewSource(0); // use default path as initial point
 	else
@@ -134,7 +133,7 @@ QString PlotTemplateDialog::defaultTemplateInstallPath() {
 }
 
 void PlotTemplateDialog::chooseTemplateSearchPath() {
-	//Lock lock(mLoading); // No lock needed
+	// Lock lock(mLoading); // No lock needed
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
@@ -162,7 +161,7 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 
 	XmlStreamReader reader(&file);
 
-	while(!(reader.isStartDocument() || reader.atEnd()))
+	while (!(reader.isStartDocument() || reader.atEnd()))
 		reader.readNext();
 
 	if (reader.atEnd()) {
@@ -171,19 +170,19 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	}
 
 	reader.readNext();
-	if (!reader.isDTD()){
+	if (!reader.isDTD()) {
 		updateErrorMessage(i18n("XML error: No DTD token found"));
 		return nullptr;
 	}
 	reader.readNext();
-	if (!reader.isStartElement() || reader.name() != "PlotTemplate"){
+	if (!reader.isStartElement() || reader.name() != "PlotTemplate") {
 		updateErrorMessage(i18n("XML error: No PlotTemplate found"));
 		return nullptr;
 	}
 
 	bool ok;
 	int xmlVersion = reader.readAttributeInt("xmlVersion", &ok);
-	if (!ok){
+	if (!ok) {
 		updateErrorMessage(i18n("XML error: xmlVersion found"));
 		return nullptr;
 	}
@@ -208,7 +207,6 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	plot->setIsLoading(false);
 	for (auto* child : plot->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
-
 
 	for (auto* equationCurve : plot->children<XYEquationCurve>())
 		static_cast<XYEquationCurve*>(equationCurve)->recalculate();
@@ -246,7 +244,8 @@ void PlotTemplateDialog::updateErrorMessage(const QString& message) {
 }
 
 QString PlotTemplateDialog::templatePath() const {
-	return ui->lvInstalledTemplates->model()->data(ui->lvInstalledTemplates->currentIndex(), TemplateListModel::Roles::FilePathRole).toString();;
+	return ui->lvInstalledTemplates->model()->data(ui->lvInstalledTemplates->currentIndex(), TemplateListModel::Roles::FilePathRole).toString();
+	;
 }
 
 void PlotTemplateDialog::listViewTemplateChanged(const QModelIndex& current, const QModelIndex& previous) {
@@ -290,7 +289,6 @@ TemplateListModel::TemplateListModel(const QString& searchPath, QObject* parent)
 }
 
 void TemplateListModel::setSearchPath(const QString& searchPath) {
-
 	beginResetModel();
 	mSearchPath = searchPath;
 	mFiles.clear();
