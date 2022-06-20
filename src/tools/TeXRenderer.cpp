@@ -15,6 +15,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+#include <QObject>
 #include <QColor>
 #include <QDir>
 #include <QImage>
@@ -59,7 +60,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	if (!tempPath.contains(QLatin1String("preview.sty"))) {
 		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("latex/preview.sty"));
 		if (file.isEmpty()) {
-			QString err = tr("Couldn't find preview.sty.");
+			QString err = QObject::tr("Couldn't find preview.sty.");
 			WARN(err.toStdString());
 			res->successful = false;
 			res->errorMessage = err;
@@ -75,7 +76,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	if (file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		QString err = tr("Couldn't open the file") + " " + file.fileName();
+		QString err = QObject::tr("Couldn't open the file") + " " + file.fileName();
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
@@ -162,7 +163,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
 		auto o = latexProcess.readAllStandardOutput();
-		QString err = engine + " " + tr("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" + o;
+		QString err = engine + " " + QObject::tr("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" + o;
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
@@ -203,7 +204,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QProcess latexProcess;
 	latexProcess.start(latexFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QString err = tr("latex process failed, exit code =") + " " + QString::number(latexProcess.exitCode());
+		QString err = QObject::tr("latex process failed, exit code =") + " " + QString::number(latexProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
@@ -221,7 +222,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QProcess dvipsProcess;
 	dvipsProcess.start(dvipsFullPath, QStringList() << "-E" << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
-		QString err = tr("dvips process failed, exit code =") + " " + QString::number(dvipsProcess.exitCode());
+		QString err = QObject::tr("dvips process failed, exit code =") + " " + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
 		QFile::remove(baseName + ".aux");
@@ -248,7 +249,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	convertProcess.start(convertFullPath, params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
-		QString err = tr("convert process failed, exit code =") + " " + QString::number(convertProcess.exitCode());
+		QString err = QObject::tr("convert process failed, exit code =") + " " + QString::number(convertProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
