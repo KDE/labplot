@@ -15,10 +15,10 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-#include <QObject>
 #include <QColor>
 #include <QDir>
 #include <QImage>
+#include <QObject>
 #include <QProcess>
 #include <QStandardPaths>
 #include <QTemporaryFile>
