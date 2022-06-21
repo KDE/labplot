@@ -2996,7 +2996,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
-		// DEBUG("CURVE " << STDSTRING(curve->name()))
+		DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
 
 		auto* xColumn = curve->xColumn();
 		if (!xColumn) {
