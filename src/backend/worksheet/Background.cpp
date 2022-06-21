@@ -170,7 +170,12 @@ void Background::save(QXmlStreamWriter* writer) const {
 	Q_D(const Background);
 
 	writer->writeStartElement(d->prefix.toLower());
-	writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
+	if (d->enabledAvailable)
+		if (d->positionAvailable)
+
+	if (d->positionAvailable)
+		writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
+
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->type)));
 	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->colorStyle)));
 	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->imageStyle)));
@@ -197,7 +202,12 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 
 	auto attribs = reader->attributes();
 
-	READ_INT_VALUE("position", position, Position);
+	if (d->enabledAvailable)
+		READ_INT_VALUE("enabled", enabled, bool);
+
+	if (d->positionAvailable)
+		READ_INT_VALUE("position", position, Position);
+
 	READ_INT_VALUE("type", type, Background::Type);
 	READ_INT_VALUE("colorStyle", colorStyle, Background::ColorStyle);
 	READ_INT_VALUE("imageStyle", imageStyle, Background::ImageStyle);

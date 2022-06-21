@@ -627,8 +627,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				}
 
 				// for the brush, use the histogram filling or symbols filling or no brush
-				if (hist->fillingEnabled())
-					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
+				if (hist->background()->enabled())
+					painter->setBrush(QBrush(hist->background()->firstColor(), hist->background()->brushStyle()));
 				else if (hist->symbol()->style() != Symbol::Style::NoSymbols)
 					painter->setBrush(hist->symbol()->brush());
 				else

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>1338</height>
+    <height>1324</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -806,173 +806,8 @@
       <attribute name="title">
        <string>Filling</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lFillingEnabled">
-         <property name="text">
-          <string>Enabled:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="chkFillingEnabled">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lFillingType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="KComboBox" name="cbFillingType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lFillingFileName">
-         <property name="text">
-          <string>File name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="leFillingFileName">
-         <property name="toolTip">
-          <string>Specify the name of the image file.</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QPushButton" name="bFillingOpen">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string> Select the file to import</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lFillingColorStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="KComboBox" name="cbFillingColorStyle"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lFillingImageStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="KComboBox" name="cbFillingImageStyle"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lFillingBrushStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="KComboBox" name="cbFillingBrushStyle"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lFillingFirstColor">
-         <property name="text">
-          <string>First color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="KColorButton" name="kcbFillingFirstColor"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lFillingSecondColor">
-         <property name="text">
-          <string>Second color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="KColorButton" name="kcbFillingSecondColor"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lFillingOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QSpinBox" name="sbFillingOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
         <spacer name="verticalSpacer_9">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1254,16 +1089,6 @@
   <tabstop>leValuesSuffix</tabstop>
   <tabstop>kfrValuesFont</tabstop>
   <tabstop>kcbValuesColor</tabstop>
-  <tabstop>cbFillingType</tabstop>
-  <tabstop>chkFillingEnabled</tabstop>
-  <tabstop>leFillingFileName</tabstop>
-  <tabstop>bFillingOpen</tabstop>
-  <tabstop>cbFillingColorStyle</tabstop>
-  <tabstop>cbFillingImageStyle</tabstop>
-  <tabstop>cbFillingBrushStyle</tabstop>
-  <tabstop>kcbFillingFirstColor</tabstop>
-  <tabstop>kcbFillingSecondColor</tabstop>
-  <tabstop>sbFillingOpacity</tabstop>
   <tabstop>cbErrorType</tabstop>
   <tabstop>cbErrorBarsType</tabstop>
   <tabstop>cbErrorBarsStyle</tabstop>

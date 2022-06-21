@@ -17,6 +17,8 @@
 #include <vector>
 
 class Column;
+class Background;
+
 extern "C" {
 #include <gsl/gsl_histogram.h>
 }
@@ -96,15 +98,7 @@ public:
 	QColor valuesColor;
 
 	// filling
-	bool fillingEnabled{true};
-	WorksheetElement::BackgroundType fillingType;
-	WorksheetElement::BackgroundColorStyle fillingColorStyle;
-	WorksheetElement::BackgroundImageStyle fillingImageStyle;
-	Qt::BrushStyle fillingBrushStyle;
-	QColor fillingFirstColor;
-	QColor fillingSecondColor;
-	QString fillingFileName;
-	qreal fillingOpacity;
+	Background* background{nullptr};
 
 	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
