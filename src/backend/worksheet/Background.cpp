@@ -80,6 +80,13 @@ void Background::setPositionAvailable(bool available) {
 	d->positionAvailable = available;
 }
 
+STD_SETTER_CMD_IMPL_F_S(Background, SetEnabled, bool, enabled, update)
+void Background::setEnabled(bool enabled) {
+	Q_D(Background);
+	if (enabled != d->enabled)
+		exec(new BackgroundSetEnabledCmd(d, enabled, ki18n("%1: filling changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Background, SetPosition, Background::Position, position, updatePosition)
 void Background::setPosition(Position position) {
 	Q_D(Background);

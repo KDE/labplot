@@ -31,6 +31,7 @@ BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
+	connect(ui.chkEnabled, &QCheckBox::toggled, this, &BackgroundWidget::enabledChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::positionChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::typeChanged);
 	connect(ui.cbColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BackgroundWidget::colorStyleChanged);
@@ -52,6 +53,8 @@ void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
 
 	load();
 
+	connect(m_background, &Background::enabledChanged, this, &BackgroundWidget::backgroundEnabledChanged);
+	connect(m_background, &Background::positionChanged, this, &BackgroundWidget::backgroundPositionChanged);
 	connect(m_background, &Background::typeChanged, this, &BackgroundWidget::backgroundTypeChanged);
 	connect(m_background, &Background::colorStyleChanged, this, &BackgroundWidget::backgroundColorStyleChanged);
 	connect(m_background, &Background::imageStyleChanged, this, &BackgroundWidget::backgroundImageStyleChanged);
@@ -67,7 +70,6 @@ void BackgroundWidget::setPrefix(const QString& prefix) {
 }
 
 void BackgroundWidget::setEnabled(bool enabled) {
-	ui.chkEnabled->setEnabled(enabled);
 	ui.cbType->setEnabled(enabled);
 	ui.leFileName->setEnabled(enabled);
 	ui.bOpen->setEnabled(enabled);
@@ -116,6 +118,24 @@ void BackgroundWidget::retranslateUi() {
 //*************************************************************
 //******** SLOTs for changes triggered in BackgroundWidget ****
 //*************************************************************
+void BackgroundWidget::enabledChanged(bool state) const {
+	ui.cbType->setEnabled(state);
+	ui.cbColorStyle->setEnabled(state);
+	ui.cbBrushStyle->setEnabled(state);
+	ui.cbImageStyle->setEnabled(state);
+	ui.kcbFirstColor->setEnabled(state);
+	ui.kcbSecondColor->setEnabled(state);
+	ui.leFileName->setEnabled(state);
+	ui.bOpen->setEnabled(state);
+	ui.sbOpacity->setEnabled(state);
+
+	if (m_initializing)
+		return;
+
+	for (auto* background : m_backgrounds)
+		background->setEnabled(state);
+}
+
 void BackgroundWidget::positionChanged(int index) {
 	const auto position{Background::Position(index)};
 
@@ -298,58 +318,54 @@ void BackgroundWidget::fileNameChanged() {
 //*************************************************************
 //********* SLOTs for changes triggered in Background *********
 //*************************************************************
+void BackgroundWidget::backgroundEnabledChanged(bool status) {
+	const Lock lock(m_initializing);
+	ui.chkEnabled->setChecked(status);
+}
+
 void BackgroundWidget::backgroundPositionChanged(Background::Position position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbPosition->setCurrentIndex((int)position);
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundTypeChanged(Background::Type type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundColorStyleChanged(Background::ColorStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbColorStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundImageStyleChanged(Background::ImageStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbImageStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundBrushStyleChanged(Qt::BrushStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundFirstColorChanged(const QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbFirstColor->setColor(color);
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundSecondColorChanged(const QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbSecondColor->setColor(color);
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundFileNameChanged(const QString& name) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void BackgroundWidget::backgroundOpacityChanged(float opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbOpacity->setValue(qRound(opacity * 100.0));
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -357,21 +373,6 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 //**********************************************************
 void BackgroundWidget::load() {
 	const Lock lock(m_initializing);
-
-	bool visible = m_background->enabledAvailable();
-	ui.lEnabled->setVisible(visible);
-	ui.chkEnabled->setVisible(visible);
-
-	visible = m_background->positionAvailable();
-	ui.lPosition->setVisible(visible);
-	ui.cbPosition->setVisible(visible);
-
-	// highlight the text field for the background image red if an image is used and cannot be found
-	const QString& fileName = m_background->fileName();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leFileName, invalid);
-
-	ui.cbPosition->setCurrentIndex((int)m_background->position());
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());
 	ui.cbImageStyle->setCurrentIndex((int)m_background->imageStyle());
@@ -380,11 +381,30 @@ void BackgroundWidget::load() {
 	ui.kcbFirstColor->setColor(m_background->firstColor());
 	ui.kcbSecondColor->setColor(m_background->secondColor());
 	ui.sbOpacity->setValue(qRound(m_background->opacity() * 100));
+
+	// optional parameters
+	bool visible = m_background->enabledAvailable();
+	ui.lEnabled->setVisible(visible);
+	ui.chkEnabled->setVisible(visible);
+
+	visible = m_background->positionAvailable();
+	ui.lPosition->setVisible(visible);
+	ui.cbPosition->setVisible(visible);
+
+	if (m_background->enabledAvailable())
+		ui.chkEnabled->setChecked(m_background->enabled());
+
+	if (m_background->enabledAvailable())
+		ui.cbPosition->setCurrentIndex((int)m_background->position());
+
+	// highlight the text field for the background image red if an image is used and cannot be found
+	const QString& fileName = m_background->fileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leFileName, invalid);
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
-	ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + "Position", (int)m_background->position()));
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + "ColorStyle", (int)m_background->colorStyle()));
 	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + "ImageStyle", (int)m_background->imageStyle()));
@@ -393,10 +413,16 @@ void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + "FirstColor", m_background->firstColor()));
 	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + "SecondColor", m_background->secondColor()));
 	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + "Opacity", m_background->opacity()) * 100));
+
+	// optional parameters
+	if (m_background->enabledAvailable())
+		ui.chkEnabled->setChecked(group.readEntry("Enabled", m_background->enabled()));
+
+	if (m_background->positionAvailable())
+		ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + "Position", (int)m_background->position()));
 }
 
 void BackgroundWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry(m_prefix + "Position", ui.cbPosition->currentIndex());
 	group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
 	group.writeEntry(m_prefix + "ColorStyle", ui.cbColorStyle->currentIndex());
 	group.writeEntry(m_prefix + "ImageStyle", ui.cbImageStyle->currentIndex());
@@ -405,4 +431,11 @@ void BackgroundWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry(m_prefix + "FirstColor", ui.kcbFirstColor->color());
 	group.writeEntry(m_prefix + "SecondColor", ui.kcbSecondColor->color());
 	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);;
+
+	// optional parameters
+	if (m_background->enabledAvailable())
+		group.writeEntry(m_prefix + "Enabled", ui.chkEnabled->isChecked());
+
+	if (m_background->positionAvailable())
+		group.writeEntry(m_prefix + "Position", ui.cbPosition->currentIndex());
 }

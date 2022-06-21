@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Box Plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,7 @@
 
 class BoxPlotPrivate;
 class AbstractColumn;
+class Background;
 class Symbol;
 
 #ifdef SDK
@@ -56,15 +57,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
 	// box filling
-	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
+	Background* background() const;
 
 	// box border
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
@@ -134,17 +127,6 @@ Q_SIGNALS:
 	void variableWidthChanged(bool);
 	void widthFactorChanged(double);
 	void notchesEnabledChanged(bool);
-
-	// box filling
-	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(WorksheetElement::BackgroundType);
-	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void fillingBrushStyleChanged(Qt::BrushStyle);
-	void fillingFirstColorChanged(QColor&);
-	void fillingSecondColorChanged(QColor&);
-	void fillingFileNameChanged(QString&);
-	void fillingOpacityChanged(float);
 
 	// box border
 	void borderPenChanged(QPen&);

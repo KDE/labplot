@@ -303,8 +303,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	// backgrounds
 	QList<Background*> backgrounds;
-		for (auto* legend : m_curvesList)
-		backgrounds << legend->background();
+		for (auto* hist : m_curvesList)
+		backgrounds << hist->background();
 
 	backgroundWidget->setBackgrounds(backgrounds);
 
