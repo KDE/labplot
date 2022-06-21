@@ -30,6 +30,15 @@ optional packages
 	* Discount to support Markdown markup language text
 
 ===============================================================================
+# Windows build
+Labplot uses the KDE technology craft to build the source.
+
+1) Install craft by following the [craft guidline](https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source/Windows)
+2) Start craft environment: `C:\CraftRoot\craft\craftenv.ps1`
+3) Install labplot dependencies: `craft labplot`
+4) Follow the instructions of the "Using Craft with an IDE" in https://community.kde.org/Craft to get IDE support
+
+===============================================================================
 To build LabPlot execute
 # ./compile
 
