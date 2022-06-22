@@ -19,9 +19,6 @@
 	\class BackgroundWidget
 	\brief Widget for editing the properties of a Background object, mostly used in an appropriate dock widget.
 
-	In order the properties of the label to be shown, \c loadConfig() has to be called with the corresponding KConfigGroup
-	(settings for a label in *Plot, Axis etc. or for an independent label on the worksheet).
-
 	\ingroup kdefrontend
  */
 BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
@@ -63,22 +60,27 @@ void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
 	connect(m_background, &Background::secondColorChanged, this, &BackgroundWidget::backgroundSecondColorChanged);
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
+
+	adjustLayout();
 }
 
 void BackgroundWidget::setPrefix(const QString& prefix) {
 	m_prefix = prefix;
 }
 
-void BackgroundWidget::setEnabled(bool enabled) {
-	ui.cbType->setEnabled(enabled);
-	ui.leFileName->setEnabled(enabled);
-	ui.bOpen->setEnabled(enabled);
-	ui.cbColorStyle->setEnabled(enabled);
-	ui.cbImageStyle->setEnabled(enabled);
-	ui.cbBrushStyle->setEnabled(enabled);
-	ui.kcbFirstColor->setEnabled(enabled);
-	ui.kcbSecondColor->setEnabled(enabled);
-	ui.sbOpacity->setEnabled(enabled);
+void BackgroundWidget::adjustLayout() {
+	auto* parentGridLayout = dynamic_cast<QGridLayout*>(parentWidget()->layout());
+	if (!parentGridLayout)
+		return;
+
+	auto* gridLayout = static_cast<QGridLayout*>(layout());
+	auto* parentWidget = parentGridLayout->itemAtPosition(0,0)->widget();
+	auto* widget = gridLayout->itemAtPosition(0,0)->widget();
+
+	if (parentWidget->width() > widget->width())
+		widget->setMinimumWidth(parentWidget->width());
+	else
+		parentWidget->setMinimumWidth(widget->width());
 }
 
 void BackgroundWidget::retranslateUi() {
@@ -137,10 +139,12 @@ void BackgroundWidget::enabledChanged(bool state) const {
 }
 
 void BackgroundWidget::positionChanged(int index) {
-	const auto position{Background::Position(index)};
+	if (!m_background || !m_background->positionAvailable())
+		return;
 
+	const auto position{Background::Position(index)};
 	bool b = (position != Background::Position::No);
-	setEnabled(b);
+	setEnabled(b); // call this to enable/disable the properties widget depending on the position value
 
 	if (m_initializing)
 		return;
@@ -241,7 +245,7 @@ void BackgroundWidget::colorStyleChanged(int index) {
 
 	int size = m_backgrounds.size();
 	if (size > 1) {
-		m_background->beginMacro(i18n("%1 worksheets: background color style changed", size));
+		m_background->beginMacro(i18n("%1 elements: background color style changed", size));
 		for (auto* background : m_backgrounds)
 			background->setColorStyle(style);
 		m_background->endMacro();
@@ -416,7 +420,7 @@ void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 
 	// optional parameters
 	if (m_background->enabledAvailable())
-		ui.chkEnabled->setChecked(group.readEntry("Enabled", m_background->enabled()));
+		ui.chkEnabled->setChecked(group.readEntry(m_prefix + "Enabled", m_background->enabled()));
 
 	if (m_background->positionAvailable())
 		ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + "Position", (int)m_background->position()));
