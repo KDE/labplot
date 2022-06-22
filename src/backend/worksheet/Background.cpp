@@ -9,7 +9,8 @@
 
 /*!
   \class Background
-  \brief
+  \brief This class contains the background properties of worksheet elements like worksheet background,
+  plot background, the area filling in XYCurve, Histogram, etc.
 
   \ingroup worksheet
 */
@@ -18,7 +19,6 @@
 #include "BackgroundPrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/Background.h"
 
 #include <KLocalizedString>
 
@@ -39,7 +39,6 @@ void Background::setPrefix(const QString& prefix) {
 void Background::init(const KConfigGroup& group) {
 	Q_D(Background);
 
-	d->position = (Position)group.readEntry(d->prefix + "Position", static_cast<int>(Position::No));
 	d->type = (Type)group.readEntry(d->prefix + "Type", static_cast<int>(Type::Color));
 	d->colorStyle = (ColorStyle)group.readEntry(d->prefix + "ColorStyle", static_cast<int>(ColorStyle::SingleColor));
 	d->imageStyle = (ImageStyle)group.readEntry(d->prefix + "ImageStyle", static_cast<int>(ImageStyle::Scaled));
@@ -47,7 +46,19 @@ void Background::init(const KConfigGroup& group) {
 	d->fileName = group.readEntry(d->prefix + "FileName", QString());
 	d->firstColor = group.readEntry(d->prefix + "FirstColor", QColor(Qt::white));
 	d->secondColor = group.readEntry(d->prefix + "SecondColor", QColor(Qt::black));
-	d->opacity = group.readEntry(d->prefix + "Opacity", 1.0);
+
+	double defaultOpacity = 1.0;
+	auto type = parentAspect()->type();
+	if (type == AspectType::Histogram|| type == AspectType::BoxPlot)
+		defaultOpacity = 0.5;
+	d->opacity = group.readEntry(d->prefix + "Opacity", defaultOpacity);
+
+	// optional parameters
+	if (d->enabledAvailable)
+		d->enabled = group.readEntry(d->prefix + "Enabled", true);
+
+	if (d->positionAvailable)
+		d->position = (Position)group.readEntry(d->prefix + "Position", static_cast<int>(Position::No));
 }
 
 //##############################################################################
@@ -147,7 +158,7 @@ STD_SETTER_CMD_IMPL_F_S(Background, SetOpacity, double, opacity, update)
 void Background::setOpacity(double opacity) {
 	Q_D(Background);
 	if (opacity != d->opacity)
-		exec(new BackgroundSetOpacityCmd(d, opacity, ki18n("%1: set opacity")));
+		exec(new BackgroundSetOpacityCmd(d, opacity, ki18n("%1: set background opacity")));
 }
 
 //##############################################################################
@@ -178,7 +189,7 @@ void Background::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(d->prefix.toLower());
 	if (d->enabledAvailable)
-		if (d->positionAvailable)
+		writer->writeAttribute("enabled", QString::number(d->enabled));
 
 	if (d->positionAvailable)
 		writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
@@ -275,7 +286,12 @@ void Background::loadThemeConfig(const KConfigGroup& group) {
 	setBrushStyle((Qt::BrushStyle)group.readEntry(d->prefix + "BrushStyle", static_cast<int>(Qt::SolidPattern)));
 	setFirstColor(group.readEntry(d->prefix + "FirstColor", QColor(Qt::white)));
 	setSecondColor(group.readEntry(d->prefix + "SecondColor", QColor(Qt::black)));
-	setOpacity(group.readEntry(d->prefix + "Opacity", 1.0));
+
+	double defaultOpacity = 1.0;
+	auto type = parentAspect()->type();
+	if (type == AspectType::Histogram|| type == AspectType::BoxPlot)
+		defaultOpacity = 0.5;
+	setOpacity(group.readEntry(d->prefix + "Opacity", defaultOpacity));
 }
 
 void Background::saveThemeConfig(KConfigGroup& group) const {
