@@ -100,16 +100,6 @@ void BaseDock::plotRangeChanged(int index) {
     }
 }
 
-void BaseDock::setAspects(QList<AbstractAspect*> aspects) {
-    if (aspects.length() == 0) {
-        m_aspect = nullptr;
-        m_aspects.clear();
-        return;
-    }
-    m_aspect = aspects.first();
-    m_aspects = aspects;
-}
-
 void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)
 		return;

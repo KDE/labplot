@@ -48,7 +48,19 @@ public:
 	virtual void updateUnits(){};
 	virtual void updatePlotRanges(){}; // used in worksheet element docks
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
-    void setAspects(QList<AbstractAspect*>);
+    template <typename T> // TODO: check if it is possible to check at compile time if the type is derived from AbstractAspect
+    void setAspects(QList<T*> aspects) {
+        m_aspects.clear();
+        if (aspects.length() == 0) {
+            m_aspect = nullptr;
+            return;
+        }
+
+        m_aspect = aspects.first();
+        for (auto* aspect: aspects) {
+            m_aspects.append(static_cast<AbstractAspect*>(aspect));
+        }
+    }
 
 protected:
 	bool m_initializing{false};
