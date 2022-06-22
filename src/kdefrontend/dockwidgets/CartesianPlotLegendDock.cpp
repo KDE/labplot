@@ -119,7 +119,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	Lock lock(m_initializing);
 	m_legendList = list;
 	m_legend = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	// if there is more then one legend in the list, disable the tab "general"
 	if (list.size() == 1) {

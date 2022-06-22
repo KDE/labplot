@@ -55,7 +55,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	m_initializing = true;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	// check whether we have non-editable columns:
 	bool nonEditable = false;

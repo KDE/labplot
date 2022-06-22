@@ -31,7 +31,7 @@ AspectDock::AspectDock(QWidget* parent)
 }
 
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
-	m_aspect = list.first();
+	setAspects(list);
 
 	const Lock lock(m_initializing);
 	if (list.size() == 1) {

@@ -77,7 +77,7 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 
 	m_curveList = list;
 	m_curve = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

@@ -48,6 +48,7 @@ public:
 	virtual void updateUnits(){};
 	virtual void updatePlotRanges(){}; // used in worksheet element docks
 	static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue = NAN);
+    void setAspects(QList<AbstractAspect*>);
 
 protected:
 	bool m_initializing{false};

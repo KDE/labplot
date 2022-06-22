@@ -179,7 +179,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	const Lock lock(m_initializing);
 	m_boxPlots = list;
 	m_boxPlot = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 	Q_ASSERT(m_boxPlot);
 	m_aspectTreeModel = new AspectTreeModel(m_boxPlot->project());
 	setModel();

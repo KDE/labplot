@@ -71,7 +71,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	m_initializing = true;
 	m_columnsList = list;
 	m_column = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	// check whether we have non-editable columns:
 	// 1. columns in a LiveDataSource

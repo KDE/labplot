@@ -374,7 +374,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	m_initializing = true;
 	m_plotList = list;
 	m_plot = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	QList<TextLabel*> labels;
 	for (auto* plot : list)

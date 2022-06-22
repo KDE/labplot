@@ -69,7 +69,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	m_initializing = true;
 	m_matrixList = list;
 	m_matrix = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);

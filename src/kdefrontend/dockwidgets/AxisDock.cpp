@@ -441,7 +441,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	Lock lock(m_initializing);
 	m_axesList = list;
 	m_axis = list.first();
-	m_aspect = list.first();
+    setAspects(list);
 	Q_ASSERT(m_axis != nullptr);
 	m_aspectTreeModel = new AspectTreeModel(m_axis->project());
 	this->setModel();

@@ -58,7 +58,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	m_initializing = true;
 	m_linesList = list;
 	m_line = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 	Q_ASSERT(m_line);
 
 	// if there is more then one point in the list, disable the comment and name widgets in "general"

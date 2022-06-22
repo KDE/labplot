@@ -40,7 +40,7 @@ NoteDock::NoteDock(QWidget* parent)
 void NoteDock::setNotesList(QList<Note*> list) {
 	m_notesList = list;
 	m_notes = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	m_initializing = true;
 	ui.leName->setText(m_notes->name());

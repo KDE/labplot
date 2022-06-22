@@ -117,7 +117,7 @@ void ImageDock::setImages(QList<Image*> list) {
 	Lock lock(m_initializing);
 	m_imageList = list;
 	m_image = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	SET_NUMBER_LOCALE
 	ui.sbWidth->setLocale(numberLocale);

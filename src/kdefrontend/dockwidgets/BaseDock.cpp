@@ -87,14 +87,27 @@ void BaseDock::plotRangeChanged(int index) {
 		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
-	if (index != element->coordinateSystemIndex()) {
-		element->setCoordinateSystemIndex(index);
-		if (dynamic_cast<Axis*>(element))
-			dynamic_cast<AxisDock*>(this)->updateAutoScale();
-		updateLocale(); // update line edits
-		element->retransform(); // redraw
-		element->project()->setChanged(true);
-	}
+    for (auto aspect: m_aspects) {
+        auto* e{static_cast<WorksheetElement*>(aspect)};
+        if (index != e->coordinateSystemIndex()) {
+            e->setCoordinateSystemIndex(index);
+            if (dynamic_cast<Axis*>(e))
+                dynamic_cast<AxisDock*>(this)->updateAutoScale();
+            updateLocale(); // update line edits
+            e->retransform(); // redraw
+            e->project()->setChanged(true);
+        }
+    }
+}
+
+void BaseDock::setAspects(QList<AbstractAspect*> aspects) {
+    if (aspects.length() == 0) {
+        m_aspect = nullptr;
+        m_aspects.clear();
+        return;
+    }
+    m_aspect = aspects.first();
+    m_aspects = aspects;
 }
 
 void BaseDock::nameChanged() {

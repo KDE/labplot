@@ -36,7 +36,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	Lock lock(m_initializing);
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	// remove the available panel plugins first
 	int k = 0;
