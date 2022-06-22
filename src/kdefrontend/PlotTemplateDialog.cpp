@@ -11,10 +11,6 @@
 #include "PlotTemplateDialog.h"
 #include "ui_PlotTemplateDialog.h"
 
-#include "kconfiggroup.h"
-#include "klocalizedstring.h"
-#include "ksharedconfig.h"
-
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Worksheet.h"
@@ -25,7 +21,9 @@
 #include <QFileInfo>
 #include <QWindow>
 
-#include <KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
 #include <KWindowConfig>
 
 namespace {
@@ -54,11 +52,21 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	ui->setupUi(this);
 
 	setWindowTitle(i18nc("@title:window", "Plot Templates"));
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme("document-new-from-template"));
 
-	ui->cbTemplateLocation->addItem(i18n("Default"));
-	ui->cbTemplateLocation->addItem(i18n("Custom Folder"));
-	ui->pbCustomFolder->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
+	ui->cbLocation->addItem(i18n("Default"));
+	ui->cbLocation->addItem(i18n("Custom Folder"));
+	ui->pbCustomFolder->setIcon(QIcon::fromTheme(QLatin1String("document-open-folder")));
+
+	QString info = i18n("Location of plot templates");
+	ui->lLocation->setToolTip(info);
+	ui->cbLocation->setToolTip(info);
+
+	info = i18n("Custom folder for the location of plot templates");
+	ui->lCustomFolder->setToolTip(info);
+	ui->leCustomFolder->setToolTip(info);
+
+	ui->pbCustomFolder->setToolTip(i18n("Open the folder for the location of plot templates"));
 
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 
@@ -75,6 +83,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	m_project->addChild(m_worksheet);
 	ui->lPreview->addWidget(m_worksheetView);
 	m_worksheetView->hide();
+
 	mTemplateListModelDefault = new TemplateListModel(defaultTemplateInstallPath(), this);
 	mTemplateListModelCustom = new TemplateListModel(conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation)), this);
 	ui->leCustomFolder->setText(mTemplateListModelCustom->searchPath());
@@ -82,8 +91,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	connect(ui->pbCustomFolder, &QPushButton::pressed, this, &PlotTemplateDialog::chooseTemplateSearchPath);
 	connect(ui->leCustomFolder, &QLineEdit::textChanged, this, &PlotTemplateDialog::customTemplatePathChanged);
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentChanged, this, &PlotTemplateDialog::listViewTemplateChanged);
-	connect(ui->cbTemplateLocation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PlotTemplateDialog::changePreviewSource);
-	updateErrorMessage("No template selected.");
+	connect(ui->cbLocation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PlotTemplateDialog::changePreviewSource);
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -93,10 +101,9 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	} else
 		resize(QSize(0, 0).expandedTo(minimumSize()));
 
-	if (ui->cbTemplateLocation->currentIndex() == 0) // otherwise no change will be triggered
-		changePreviewSource(0); // use default path as initial point
-	else
-		ui->cbTemplateLocation->setCurrentIndex(0);
+	ui->cbLocation->setCurrentIndex(conf.readEntry(QLatin1String("Location"), 0));
+	if (ui->cbLocation->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
+		changePreviewSource(0);
 }
 
 PlotTemplateDialog::~PlotTemplateDialog() {
@@ -104,8 +111,9 @@ PlotTemplateDialog::~PlotTemplateDialog() {
 	delete m_project;
 
 	// save current settings
-	KConfigGroup conf(KSharedConfig::openConfig(), "PlotTemplateDialog");
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+	conf.writeEntry(QLatin1String("Location"), ui->cbLocation->currentIndex());
 }
 
 void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
@@ -114,7 +122,7 @@ void PlotTemplateDialog::customTemplatePathChanged(const QString& path) {
 		conf.writeEntry(lastDirConfigEntry, path);
 
 	mTemplateListModelCustom->setSearchPath(path);
-	ui->cbTemplateLocation->setToolTip(path); // custom path index is selected
+	ui->cbLocation->setToolTip(path); // custom path index is selected
 	auto index = mTemplateListModelCustom->index(0, 0);
 	ui->lvInstalledTemplates->setCurrentIndex(index);
 
@@ -137,7 +145,7 @@ void PlotTemplateDialog::chooseTemplateSearchPath() {
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("PlotTemplateDialog"));
 	const QString& dir = conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
 
-	const QString& path = QFileDialog::getExistingDirectory(nullptr, i18nc("@title:window", "Selec template search path"), dir);
+	const QString& path = QFileDialog::getExistingDirectory(nullptr, i18nc("@title:window", "Select template search path"), dir);
 
 	ui->leCustomFolder->setText(path);
 }
@@ -244,8 +252,8 @@ void PlotTemplateDialog::updateErrorMessage(const QString& message) {
 }
 
 QString PlotTemplateDialog::templatePath() const {
-	return ui->lvInstalledTemplates->model()->data(ui->lvInstalledTemplates->currentIndex(), TemplateListModel::Roles::FilePathRole).toString();
-	;
+	return ui->lvInstalledTemplates->model()->data(ui->lvInstalledTemplates->currentIndex(),
+												   TemplateListModel::Roles::FilePathRole).toString();
 }
 
 void PlotTemplateDialog::listViewTemplateChanged(const QModelIndex& current, const QModelIndex& previous) {
@@ -266,12 +274,13 @@ void PlotTemplateDialog::changePreviewSource(int row) {
 	if (row == 1)
 		model = mTemplateListModelCustom;
 
-	ui->cbTemplateLocation->setToolTip(model->searchPath());
+	ui->cbLocation->setToolTip(model->searchPath());
 
 	ui->lCustomFolder->setVisible(row == 1);
 	ui->leCustomFolder->setVisible(row == 1);
 	ui->pbCustomFolder->setVisible(row == 1);
 	ui->lvInstalledTemplates->setModel(model);
+
 	// must be done every time the model changes
 	connect(ui->lvInstalledTemplates->selectionModel(), &QItemSelectionModel::currentChanged, this, &PlotTemplateDialog::listViewTemplateChanged);
 	ui->lvInstalledTemplates->setCurrentIndex(model->index(0, 0));
@@ -297,7 +306,7 @@ void TemplateListModel::setSearchPath(const QString& searchPath) {
 	QDir sPath(searchPath);
 	while (it.hasNext()) {
 		QFileInfo f(it.next());
-		File file{f.absoluteFilePath(), sPath.relativeFilePath(f.absoluteFilePath()).split(PlotTemplateDialog::format)[0]};
+		File file{f.absoluteFilePath(), sPath.relativeFilePath(f.absoluteFilePath()).split(PlotTemplateDialog::format).at(0)};
 		mFiles << file;
 	}
 	endResetModel();
