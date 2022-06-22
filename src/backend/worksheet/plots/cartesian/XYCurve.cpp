@@ -1631,8 +1631,6 @@ void XYCurvePrivate::updateLines() {
 #endif
 		emit q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
-		QDEBUG(Q_FUNC_INFO << QLatin1String("Number of logicalPoints: ") << m_logicalPoints.count());
-		QDEBUG(Q_FUNC_INFO << QLatin1String("Number of lines left: ") << m_lines.count());
 	}
 
 	{
@@ -2858,8 +2856,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setOpacity(lineOpacity);
 		painter->setPen(linePen);
 		painter->setBrush(Qt::NoBrush);
-		for (auto& line: m_lines)
-			painter->drawLine(line);
+		painter->drawPath(linePath);
 	}
 
 	// draw drop lines
