@@ -169,6 +169,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 		res->errorMessage = err;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
+		QFile::remove(baseName + ".pdf"); // in some cases the pdf was also created
 		return {};
 	}
 
