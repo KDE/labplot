@@ -183,6 +183,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	}
 
 	QByteArray ba = pdfFile.readAll();
+	pdfFile.close();
 	QFile::remove(baseName + ".pdf");
 	res->successful = true;
 	res->errorMessage = "";
