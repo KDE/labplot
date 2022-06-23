@@ -23,6 +23,7 @@
 #include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QTextStream>
+#include <QRegularExpression>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
@@ -162,13 +163,25 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 #endif
 
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		auto o = latexProcess.readAllStandardOutput();
-		QString err = engine + " " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" + o;
+		QFile logFile(baseName + ".log");
+		QString errorLogs;
+		if (logFile.open(QIODevice::ReadOnly)) {
+			QRegularExpression regex("^! ");
+			// really slow, but texrenderer is running asynchronous so it is not a problem
+			while(!logFile.atEnd()) {
+				const auto line = logFile.readLine();
+				auto match = regex.match(line);
+				if (match.hasMatch())
+					errorLogs += line;
+			}
+			logFile.close();
+		}
+		QString err = errorLogs.isEmpty() ? engine + " " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
 		QFile::remove(baseName + ".aux");
-		QFile::remove(baseName + ".log");
+		QFile::remove(logFile.fileName());
 		QFile::remove(baseName + ".pdf"); // in some cases the pdf was also created
 		return {};
 	}
