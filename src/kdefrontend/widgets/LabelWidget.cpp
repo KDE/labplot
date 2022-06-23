@@ -380,7 +380,7 @@ void LabelWidget::initConnections() {
 		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlotLegend) {
 		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
-		connect(legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(legend->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::Axis) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
 		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);

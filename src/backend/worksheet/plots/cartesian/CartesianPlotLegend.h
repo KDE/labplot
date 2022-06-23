@@ -85,14 +85,6 @@ Q_SIGNALS:
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(QColor&);
-	void backgroundSecondColorChanged(QColor&);
-	void backgroundFileNameChanged(QString&);
-	void backgroundOpacityChanged(float);
 	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
 	void borderOpacityChanged(float);
