@@ -68,6 +68,11 @@ void BackgroundWidget::setPrefix(const QString& prefix) {
 	m_prefix = prefix;
 }
 
+/*!
+ * this functions adjusts the width of the first column in the layout of BackgroundWidget
+ * to the width of the first column in the layout of of the parent widget
+ * which BackgroundWidget is being embedded into.
+ */
 void BackgroundWidget::adjustLayout() {
 	auto* parentGridLayout = dynamic_cast<QGridLayout*>(parentWidget()->layout());
 	if (!parentGridLayout)
@@ -75,12 +80,17 @@ void BackgroundWidget::adjustLayout() {
 
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* parentWidget = parentGridLayout->itemAtPosition(0,0)->widget();
-	auto* widget = gridLayout->itemAtPosition(0,0)->widget();
+	auto* widget = gridLayout->itemAtPosition(2,0)->widget(); // use the third line, the first two are optional and not always visible
 
-	if (parentWidget->width() > widget->width())
+	if (parentWidget->width() > widget->width()) {
+		gridLayout->activate();
 		widget->setMinimumWidth(parentWidget->width());
-	else
+		updateGeometry();
+	} else {
+		parentGridLayout->activate();
 		parentWidget->setMinimumWidth(widget->width());
+		this->parentWidget()->updateGeometry();;
+	}
 }
 
 void BackgroundWidget::retranslateUi() {

@@ -26,6 +26,9 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <property name="spacing">
+    <number>2</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="lPosition">
      <property name="text">
@@ -49,6 +52,9 @@
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lType">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
      <property name="text">
       <string>Type:</string>
      </property>
@@ -153,13 +159,6 @@
    <item row="7" column="2">
     <widget class="KColorButton" name="kcbFirstColor"/>
    </item>
-   <item row="8" column="0" colspan="2">
-    <widget class="QLabel" name="lSecondColor">
-     <property name="text">
-      <string>Second color:</string>
-     </property>
-    </widget>
-   </item>
    <item row="8" column="2">
     <widget class="KColorButton" name="kcbSecondColor"/>
    </item>
@@ -205,6 +204,13 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lSecondColor">
+     <property name="text">
+      <string>Second color:</string>
      </property>
     </widget>
    </item>
