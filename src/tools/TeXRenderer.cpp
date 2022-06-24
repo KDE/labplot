@@ -166,12 +166,11 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 		QFile logFile(baseName + ".log");
 		QString errorLogs;
 		if (logFile.open(QIODevice::ReadOnly)) {
-			QRegularExpression regex("^! ");
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while(!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				auto match = regex.match(line);
-				if (match.hasMatch()) {
+				// ! as first character means error
+				if (line.count() > 0 && line.at(0) == '!') {
 					errorLogs += line;
 					break; // only first error message is enough
 				}
@@ -226,12 +225,10 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QFile logFile(baseName + ".log");
 		QString errorLogs;
 		if (logFile.open(QIODevice::ReadOnly)) {
-			QRegularExpression regex("^! ");
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while(!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				auto match = regex.match(line);
-				if (match.hasMatch()) {
+				if (line.count() > 0 && line.at(0) == '!') {
 					errorLogs += line;
 					break;// only first error message is enough
 				}
