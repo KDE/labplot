@@ -213,24 +213,42 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	// latex: produce the DVI file
 	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
 	if (latexFullPath.isEmpty()) {
+		res->successful = false;
+		res->errorMessage = i18n("latex not found");
 		WARN("latex not found");
 		return {};
 	}
 	QProcess latexProcess;
 	latexProcess.start(latexFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QString err = i18n("latex process failed, exit code =") + " " + QString::number(latexProcess.exitCode());
+		QFile logFile(baseName + ".log");
+		QString errorLogs;
+		if (logFile.open(QIODevice::ReadOnly)) {
+			QRegularExpression regex("^! ");
+			// really slow, but texrenderer is running asynchronous so it is not a problem
+			while(!logFile.atEnd()) {
+				const auto line = logFile.readLine();
+				auto match = regex.match(line);
+				if (match.hasMatch())
+					errorLogs += line;
+			}
+			logFile.close();
+		}
+		QString err = errorLogs.isEmpty() ?  "latex " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
 		QFile::remove(baseName + ".aux");
-		QFile::remove(baseName + ".log");
+		QFile::remove(logFile.fileName());
+		QFile::remove(baseName + ".dvi"); // in some cases the dvi was also created
 		return {};
 	}
 
 	// dvips: DVI -> PS
 	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
 	if (dvipsFullPath.isEmpty()) {
+		res->successful = false;
+		res->errorMessage = i18n("dvips not found");
 		WARN("dvips not found");
 		return {};
 	}
@@ -240,6 +258,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QString err = i18n("dvips process failed, exit code =") + " " + QString::number(dvipsProcess.exitCode());
 		WARN(err.toStdString());
 		res->successful = false;
+		res->errorMessage = err;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
 		QFile::remove(baseName + ".dvi");
@@ -257,6 +276,8 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
 	if (convertFullPath.isEmpty()) {
 		WARN("convert not found");
+		res->successful = false;
+		res->errorMessage = i18n("convert not found");
 		return {};
 	}
 
@@ -285,6 +306,8 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
 		QFile::remove(baseName + ".pdf");
+		res->successful = false;
+		res->errorMessage = i18n("Unable to open file:") + pdfFile.fileName();
 		return {};
 	}
 
