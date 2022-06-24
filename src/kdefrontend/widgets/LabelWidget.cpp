@@ -1206,14 +1206,13 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  */
 void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result& result) {
 	if (!result.successful) {
-		if (ui.teLabel->styleSheet().isEmpty()) {
+		if (ui.teLabel->styleSheet().isEmpty())
 			SET_WARNING_STYLE(ui.teLabel)
-			m_messageWidget->setText(result.errorMessage);
-			m_messageWidget->setMaximumWidth(ui.teLabel->width());
-		}
-	} else {
+		m_messageWidget->setText(result.errorMessage);
+		m_messageWidget->setMaximumWidth(ui.teLabel->width());
+	} else
 		ui.teLabel->setStyleSheet(QString());
-	}
+
 	m_messageWidget->setVisible(!result.successful);
 	ui.lError->setVisible(!result.successful);
 }
