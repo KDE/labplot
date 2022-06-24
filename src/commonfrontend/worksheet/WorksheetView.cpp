@@ -832,11 +832,11 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	painter->setOpacity(background->opacity());
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
-			case Background::ColorStyle::SingleColor: {
+		case Background::ColorStyle::SingleColor: {
 			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-			case Background::ColorStyle::HorizontalLinearGradient: {
+		case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
 			linearGrad.setColorAt(0, background->firstColor());
 			linearGrad.setColorAt(1, background->secondColor());

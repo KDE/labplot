@@ -517,7 +517,7 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 
 	// backgrounds
 	QList<Background*> backgrounds;
-		for (auto* legend : m_curvesList)
+	for (auto* legend : m_curvesList)
 		backgrounds << legend->background();
 
 	backgroundWidget->setBackgrounds(backgrounds);

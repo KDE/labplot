@@ -8,8 +8,8 @@
 */
 
 #include "BackgroundWidget.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -22,7 +22,8 @@
 
 	\ingroup kdefrontend
  */
-BackgroundWidget::BackgroundWidget(QWidget* parent) : QWidget(parent) {
+BackgroundWidget::BackgroundWidget(QWidget* parent)
+	: QWidget(parent) {
 	ui.setupUi(this);
 
 	ui.cbColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -81,9 +82,9 @@ void BackgroundWidget::adjustLayout() {
 	if (!parentGridLayout)
 		return;
 
-	auto* parentWidget = parentGridLayout->itemAtPosition(0,0)->widget();
+	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
-	auto* widget = gridLayout->itemAtPosition(2,0)->widget(); // use the third line, the first two are optional and not always visible
+	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
 	if (parentWidget->width() >= widget->width()) {
 		gridLayout->activate();
@@ -92,7 +93,8 @@ void BackgroundWidget::adjustLayout() {
 	} else {
 		parentGridLayout->activate();
 		parentWidget->setMinimumWidth(widget->width());
-		this->parentWidget()->updateGeometry();;
+		this->parentWidget()->updateGeometry();
+		;
 	}
 }
 
@@ -447,7 +449,8 @@ void BackgroundWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry(m_prefix + "FileName", ui.leFileName->text());
 	group.writeEntry(m_prefix + "FirstColor", ui.kcbFirstColor->color());
 	group.writeEntry(m_prefix + "SecondColor", ui.kcbSecondColor->color());
-	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);;
+	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);
+	;
 
 	// optional parameters
 	if (m_background->enabledAvailable())

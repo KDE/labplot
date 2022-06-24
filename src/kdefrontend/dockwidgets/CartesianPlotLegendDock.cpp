@@ -759,7 +759,7 @@ void CartesianPlotLegendDock::load() {
 
 	// Background-tab
 	QList<Background*> backgrounds;
-		for (auto* legend : m_legendList)
+	for (auto* legend : m_legendList)
 		backgrounds << legend->background();
 
 	backgroundWidget->setBackgrounds(backgrounds);

@@ -10,10 +10,10 @@
 */
 
 #include "WorksheetDock.h"
-#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 
 #include <QPageSize>
 

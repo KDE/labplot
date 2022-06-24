@@ -203,7 +203,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	// backgrounds
 	QList<Background*> backgrounds;
-		for (auto* plot : m_boxPlots)
+	for (auto* plot : m_boxPlots)
 		backgrounds << plot->background();
 
 	backgroundWidget->setBackgrounds(backgrounds);

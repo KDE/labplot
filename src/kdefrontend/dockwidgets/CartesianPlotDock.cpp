@@ -12,8 +12,8 @@
 #include "CartesianPlotDock.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "kdefrontend/widgets/BackgroundWidget.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/PlotTemplateDialog.h"

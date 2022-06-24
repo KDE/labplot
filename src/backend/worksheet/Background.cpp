@@ -49,7 +49,7 @@ void Background::init(const KConfigGroup& group) {
 
 	double defaultOpacity = 1.0;
 	auto type = parentAspect()->type();
-	if (type == AspectType::Histogram|| type == AspectType::BoxPlot)
+	if (type == AspectType::Histogram || type == AspectType::BoxPlot)
 		defaultOpacity = 0.5;
 	d->opacity = group.readEntry(d->prefix + "Opacity", defaultOpacity);
 
@@ -289,7 +289,7 @@ void Background::loadThemeConfig(const KConfigGroup& group) {
 
 	double defaultOpacity = 1.0;
 	auto type = parentAspect()->type();
-	if (type == AspectType::Histogram|| type == AspectType::BoxPlot)
+	if (type == AspectType::Histogram || type == AspectType::BoxPlot)
 		defaultOpacity = 0.5;
 	setOpacity(group.readEntry(d->prefix + "Opacity", defaultOpacity));
 }
