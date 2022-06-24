@@ -14,6 +14,7 @@
 #include <QCompleter>
 #include <QDirModel>
 #include <QFile>
+#include <QTimer>
 
 /*!
 	\class BackgroundWidget
@@ -61,7 +62,9 @@ void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
 
-	adjustLayout();
+	QTimer::singleShot(100, this, [=]() {
+		adjustLayout();
+	});
 }
 
 void BackgroundWidget::setPrefix(const QString& prefix) {
@@ -70,7 +73,7 @@ void BackgroundWidget::setPrefix(const QString& prefix) {
 
 /*!
  * this functions adjusts the width of the first column in the layout of BackgroundWidget
- * to the width of the first column in the layout of of the parent widget
+ * to the width of the first column in the layout of the parent widget
  * which BackgroundWidget is being embedded into.
  */
 void BackgroundWidget::adjustLayout() {
@@ -78,11 +81,11 @@ void BackgroundWidget::adjustLayout() {
 	if (!parentGridLayout)
 		return;
 
-	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* parentWidget = parentGridLayout->itemAtPosition(0,0)->widget();
+	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2,0)->widget(); // use the third line, the first two are optional and not always visible
 
-	if (parentWidget->width() > widget->width()) {
+	if (parentWidget->width() >= widget->width()) {
 		gridLayout->activate();
 		widget->setMinimumWidth(parentWidget->width());
 		updateGeometry();
