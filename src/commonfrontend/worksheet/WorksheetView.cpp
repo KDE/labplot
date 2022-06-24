@@ -9,8 +9,10 @@
 */
 
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
@@ -20,6 +22,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "commonfrontend/core/PartMdiView.h"
+#include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
@@ -193,6 +196,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("document-new-from-template"), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
@@ -440,6 +444,8 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
+	m_addNewCartesianPlotMenu->addSeparator();
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlotTemplateAction);
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme("list-add"));
@@ -1404,6 +1410,7 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
+	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		auto* plot = new CartesianPlot(i18n("xy-plot"));
@@ -1433,6 +1440,20 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
+	} else if (action == addCartesianPlotTemplateAction) {
+		// open dialog
+		PlotTemplateDialog d;
+		if (d.exec() != QDialog::Accepted)
+			return;
+
+		auto* plot = d.generatePlot();
+		if (!plot)
+			return;
+
+		restorePointers = true;
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
@@ -1445,6 +1466,11 @@ void WorksheetView::addNew(QAction* action) {
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	if (restorePointers) {
+		m_worksheet->project()->restorePointers(m_worksheet);
+		m_worksheet->project()->retransformElements(m_worksheet);
+	}
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent

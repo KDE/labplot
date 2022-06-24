@@ -1104,7 +1104,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
-			if (project()->xmlVersion() < 4) {
+			if (Project::xmlVersion() < 4) {
 				str = attribs.value("teXUsed").toString();
 				d->textWrapper.mode = static_cast<TextLabel::Mode>(str.toInt());
 			} else

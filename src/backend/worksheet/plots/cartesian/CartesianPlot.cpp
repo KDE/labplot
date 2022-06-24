@@ -2996,7 +2996,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
-		// DEBUG("CURVE " << STDSTRING(curve->name()))
+		DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
 
 		auto* xColumn = curve->xColumn();
 		if (!xColumn) {
@@ -5378,7 +5378,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			m_coordinateSystems.clear();
 
-			if (project()->xmlVersion() < 7) {
+			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
 				str = attribs.value("niceExtend").toString();

@@ -543,10 +543,9 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setInteractive(bool value) {
-	if (m_view)
-		m_view->setInteractive(value);
-	else
+	if (!m_view)
 		view();
+	m_view->setInteractive(value);
 }
 
 void Worksheet::setPlotsLocked(bool lock) {
