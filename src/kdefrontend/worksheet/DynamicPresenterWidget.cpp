@@ -4,7 +4,7 @@
 	Description          : Widget for dynamic presenting of worksheets
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-	SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "DynamicPresenterWidget.h"
@@ -26,15 +26,18 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* pa
 	m_view->setParent(this);
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-	m_view->fitInView(m_view->sceneRect(), Qt::KeepAspectRatio);
-	m_view->adjustSize();
+	m_view->setContextMenuPolicy(Qt::NoContextMenu);
 
 	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
+	if (worksheet->useViewSize())
+		m_view->setGeometry(screenSize); // use the full screen size for the view
+	else {
+		m_view->fitInView(screenSize, Qt::KeepAspectRatio);
+		const int moveDown = (screenSize.height() - m_view->height()) / 2.0;
+		const int moveRight = (screenSize.width() - m_view->width()) / 2.0;
+		m_view->move(moveRight, moveDown);
+	}
 
-	const int moveRight = (screenSize.width() - m_view->width()) / 2.0;
-	const int moveDown = (screenSize.height() - m_view->height()) / 2.0;
-	m_view->move(moveRight, moveDown);
 	m_view->show();
 
 	m_panel = new SlidingPanel(this, worksheet->name());

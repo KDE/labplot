@@ -2674,9 +2674,9 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		const AbstractColumn* col = curve->xColumn();
+		const auto* col = curve->xColumn();
 		const auto xRangeFormat{xRange().format()};
-		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
+		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
 			setXRangeFormat(RangeT::Format::DateTime);
 			setUndoAware(true);
