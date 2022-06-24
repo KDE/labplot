@@ -171,8 +171,10 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 			while(!logFile.atEnd()) {
 				const auto line = logFile.readLine();
 				auto match = regex.match(line);
-				if (match.hasMatch())
+				if (match.hasMatch()) {
 					errorLogs += line;
+					break; // only first error message is enough
+				}
 			}
 			logFile.close();
 		}
@@ -229,8 +231,10 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 			while(!logFile.atEnd()) {
 				const auto line = logFile.readLine();
 				auto match = regex.match(line);
-				if (match.hasMatch())
+				if (match.hasMatch()) {
 					errorLogs += line;
+					break;// only first error message is enough
+				}
 			}
 			logFile.close();
 		}
