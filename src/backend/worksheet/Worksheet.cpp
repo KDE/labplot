@@ -193,6 +193,7 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 bool Worksheet::exportView() const {
 #ifndef SDK
 	auto* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {

@@ -4,6 +4,8 @@
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
+	* [export]
+		* Use the current working project directory, if available, as the default export path
 
 Bug fixes:
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar

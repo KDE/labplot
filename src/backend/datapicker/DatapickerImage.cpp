@@ -4,13 +4,14 @@
 	Description          : Worksheet for Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerImage.h"
 #include "DatapickerImagePrivate.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/ImageEditor.h"
 #include "backend/datapicker/Segments.h"
@@ -150,6 +151,7 @@ QWidget* DatapickerImage::view() const {
 
 bool DatapickerImage::exportView() const {
 	auto* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setProjectFileName(const_cast<DatapickerImage*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {

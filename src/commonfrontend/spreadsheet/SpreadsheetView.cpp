@@ -3,13 +3,14 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-202 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "SpreadsheetView.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
@@ -3413,6 +3414,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 
 bool SpreadsheetView::exportView() {
 	auto* dlg = new ExportSpreadsheetDialog(this);
+	dlg->setProjectFileName(m_spreadsheet->project()->fileName());
 	dlg->setFileName(m_spreadsheet->name());
 #ifdef HAVE_FITS
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
