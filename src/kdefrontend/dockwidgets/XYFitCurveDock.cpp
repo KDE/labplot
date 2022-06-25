@@ -875,8 +875,7 @@ void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom) {
 		DEBUG(Q_FUNC_INFO << ", category = nsl_fit_model_custom, type = " << m_fitData.modelType);
 	} else {
-		DEBUG(Q_FUNC_INFO << ", category = " << nsl_fit_model_category_name[m_fitData.modelCategory]
-																  << ", type = " << m_fitData.modelType);
+		DEBUG(Q_FUNC_INFO << ", category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
 	}
 
 	// this function can also be called when the value for the degree was changed -> update the fit data structure
