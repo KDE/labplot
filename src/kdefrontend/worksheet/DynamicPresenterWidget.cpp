@@ -27,18 +27,12 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* pa
 	m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_view->setContextMenuPolicy(Qt::NoContextMenu);
+	m_view->initActions(); // init the actions so we can also navigate in the plots
 
 	const QRect& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
-	if (worksheet->useViewSize())
-		m_view->setGeometry(screenSize); // use the full screen size for the view
-	else {
-		m_view->fitInView(screenSize, Qt::KeepAspectRatio);
-		const int moveDown = (screenSize.height() - m_view->height()) / 2.0;
-		const int moveRight = (screenSize.width() - m_view->width()) / 2.0;
-		m_view->move(moveRight, moveDown);
-	}
-
+	m_view->setGeometry(screenSize); // use the full screen size for the view
 	m_view->show();
+	m_view->setFocus();
 
 	m_panel = new SlidingPanel(this, worksheet->name());
 	qApp->installEventFilter(this);

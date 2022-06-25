@@ -1246,6 +1246,14 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		// duplicate
 		aspect->copy();
 		aspect->parentAspect()->paste(true);
+
+	/* zooming related key events, handle them here so we can also use them in DynamicPresenterWidget without registering shortcuts */
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Plus)) {
+		changeZoom(zoomInViewAction);
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Minus)) {
+		changeZoom(zoomOutViewAction);
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_1)) {
+		changeZoom(zoomOriginAction);
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
