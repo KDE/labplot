@@ -24,6 +24,4 @@ Environment:
 
 Options:
   setup-dbus-session: False
-# tests currently fail on Windows CI
-#  require-passing-tests-on: ['@all']
-  require-passing-tests-on: ['Linux', 'FreeBSD']
+  require-passing-tests-on: ['@all']
