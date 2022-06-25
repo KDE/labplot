@@ -111,12 +111,12 @@ HistogramDock::HistogramDock(QWidget* parent)
 	// General
 	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &HistogramDock::commentChanged);
-	connect(ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
-	connect(cbDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataColumnChanged(QModelIndex)));
-	connect(ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
-	connect(ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)));
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &HistogramDock::visibilityChanged);
+	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::dataColumnChanged);
+	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::typeChanged);
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::orientationChanged);
 	connect(ui.cbNormalization, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::normalizationChanged);
-	connect(ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)));
+	connect(ui.cbBinningMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::binningMethodChanged);
 	connect(ui.sbBinCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
 	connect(ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged);
@@ -134,28 +134,28 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::lineOpacityChanged);
 
 	// Values
-	connect(ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)));
-	connect(cbValuesColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(valuesColumnChanged(QModelIndex)));
-	connect(ui.cbValuesPosition, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesPositionChanged(int)));
-	connect(ui.sbValuesDistance, SIGNAL(valueChanged(double)), this, SLOT(valuesDistanceChanged(double)));
-	connect(ui.sbValuesRotation, SIGNAL(valueChanged(int)), this, SLOT(valuesRotationChanged(int)));
-	connect(ui.sbValuesOpacity, SIGNAL(valueChanged(int)), this, SLOT(valuesOpacityChanged(int)));
+	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::valuesTypeChanged);
+	connect(cbValuesColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::valuesColumnChanged);
+	connect(ui.cbValuesPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::valuesPositionChanged);
+	connect(ui.sbValuesDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::valuesDistanceChanged);
+	connect(ui.sbValuesRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::valuesRotationChanged);
+	connect(ui.sbValuesOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::valuesOpacityChanged);
 	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::valuesNumericFormatChanged);
 	connect(ui.sbValuesPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::valuesPrecisionChanged);
 	connect(ui.cbValuesDateTimeFormat, &QComboBox::currentTextChanged, this, &HistogramDock::valuesDateTimeFormatChanged);
 	connect(ui.leValuesPrefix, &QLineEdit::textChanged, this, &HistogramDock::valuesPrefixChanged);
 	connect(ui.leValuesSuffix, &QLineEdit::textChanged, this, &HistogramDock::valuesSuffixChanged);
-	connect(ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)));
-	connect(ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)));
+	connect(ui.kfrValuesFont, &KFontRequester::fontSelected, this, &HistogramDock::valuesFontChanged);
+	connect(ui.kcbValuesColor, &KColorButton::changed, this, &HistogramDock::valuesColorChanged);
 
 	// Error bars
-	connect(ui.cbErrorType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorTypeChanged(int)));
-	connect(ui.cbErrorBarsType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsTypeChanged(int)));
-	connect(ui.sbErrorBarsCapSize, SIGNAL(valueChanged(double)), this, SLOT(errorBarsCapSizeChanged(double)));
-	connect(ui.cbErrorBarsStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(errorBarsStyleChanged(int)));
-	connect(ui.kcbErrorBarsColor, SIGNAL(changed(QColor)), this, SLOT(errorBarsColorChanged(QColor)));
-	connect(ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)));
-	connect(ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)));
+	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
+	connect(ui.cbErrorBarsType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsTypeChanged);
+	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsCapSizeChanged);
+	connect(ui.cbErrorBarsStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsStyleChanged);
+	connect(ui.kcbErrorBarsColor, &KColorButton::changed, this, &HistogramDock::errorBarsColorChanged);
+	connect(ui.sbErrorBarsWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsWidthChanged);
+	connect(ui.sbErrorBarsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::errorBarsOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
