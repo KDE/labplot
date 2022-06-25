@@ -3,32 +3,35 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CartesianPlotDock.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 
+#include <KIconLoader>
 #include <KMessageBox>
 
 #include <QButtonGroup>
-#include <QCompleter>
 #include <QDebug>
-#include <QDir>
-#include <QDirModel>
+#include <QFileDialog>
 #include <QIntValidator>
 #include <QPainter>
 #include <QRadioButton>
 #include <QWheelEvent>
+#include <QXmlStreamWriter>
 
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
@@ -101,8 +104,9 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.cbYBreak->addItem("1");
 
 	//"Background"-tab
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
-	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabPlotArea->layout());
+	backgroundWidget = new BackgroundWidget(ui.tabPlotArea);
+	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -168,17 +172,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.sbYBreakPosition, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::yBreakPositionChanged);
 	connect(ui.cbYBreakStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::yBreakStyleChanged);
 
-	// Background
-	connect(ui.cbBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::backgroundTypeChanged);
-	connect(ui.cbBackgroundColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::backgroundColorStyleChanged);
-	connect(ui.cbBackgroundImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::backgroundImageStyleChanged);
-	connect(ui.cbBackgroundBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::backgroundBrushStyleChanged);
-	connect(ui.bOpen, &QPushButton::clicked, this, &CartesianPlotDock::selectFile);
-	connect(ui.leBackgroundFileName, &QLineEdit::textChanged, this, &CartesianPlotDock::fileNameChanged);
-	connect(ui.kcbBackgroundFirstColor, &KColorButton::changed, this, &CartesianPlotDock::backgroundFirstColorChanged);
-	connect(ui.kcbBackgroundSecondColor, &KColorButton::changed, this, &CartesianPlotDock::backgroundSecondColorChanged);
-	connect(ui.sbBackgroundOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::backgroundOpacityChanged);
-
 	// Border
 	connect(ui.tbBorderTypeLeft, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeTop, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
@@ -207,16 +200,27 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
+	// themes
 	m_themeHandler = new ThemeHandler(this);
 	layout->addWidget(m_themeHandler);
 	connect(m_themeHandler, &ThemeHandler::loadThemeRequested, this, &CartesianPlotDock::loadTheme);
 	connect(m_themeHandler, &ThemeHandler::info, this, &CartesianPlotDock::info);
 
+	// templates for plot properties
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlot);
 	layout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &CartesianPlotDock::info);
+
+	// templates for plot definitions
+	auto* tbExportTemplate = new QToolButton;
+	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
+	tbExportTemplate->setIconSize(QSize(size, size));
+	tbExportTemplate->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
+	tbExportTemplate->setToolTip(i18n("Save current plot definition as template"));
+	connect(tbExportTemplate, &QToolButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
+	layout->addWidget(tbExportTemplate);
 
 	ui.verticalLayout->addWidget(frame);
 
@@ -441,17 +445,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::yRangeBreaksChanged, this, &CartesianPlotDock::plotYRangeBreaksChanged);
 
 	// Plot Area
-	connect(m_plot->plotArea(), &PlotArea::backgroundTypeChanged, this, &CartesianPlotDock::plotBackgroundTypeChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundColorStyleChanged, this, &CartesianPlotDock::plotBackgroundColorStyleChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundImageStyleChanged, this, &CartesianPlotDock::plotBackgroundImageStyleChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundBrushStyleChanged, this, &CartesianPlotDock::plotBackgroundBrushStyleChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundFirstColorChanged, this, &CartesianPlotDock::plotBackgroundFirstColorChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundSecondColorChanged, this, &CartesianPlotDock::plotBackgroundSecondColorChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundFileNameChanged, this, &CartesianPlotDock::plotBackgroundFileNameChanged);
-	connect(m_plot->plotArea(), &PlotArea::backgroundOpacityChanged, this, &CartesianPlotDock::plotBackgroundOpacityChanged);
-	connect(m_plot->plotArea(), &PlotArea::borderTypeChanged, this, &CartesianPlotDock::plotBorderTypeChanged);
-	connect(m_plot->plotArea(), &PlotArea::borderPenChanged, this, &CartesianPlotDock::plotBorderPenChanged);
-	connect(m_plot->plotArea(), &PlotArea::borderOpacityChanged, this, &CartesianPlotDock::plotBorderOpacityChanged);
 	connect(m_plot, &CartesianPlot::horizontalPaddingChanged, this, &CartesianPlotDock::plotHorizontalPaddingChanged);
 	connect(m_plot, &CartesianPlot::verticalPaddingChanged, this, &CartesianPlotDock::plotVerticalPaddingChanged);
 	connect(m_plot, &CartesianPlot::rightPaddingChanged, this, &CartesianPlotDock::plotRightPaddingChanged);
@@ -920,26 +913,7 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYBreakStyle->addItem(i18n("Sloped"));
 
 	// plot area
-	ui.cbBackgroundType->addItem(i18n("Color"));
-	ui.cbBackgroundType->addItem(i18n("Image"));
-	ui.cbBackgroundType->addItem(i18n("Pattern"));
-
-	ui.cbBackgroundColorStyle->addItem(i18n("Single Color"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Horizontal Gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Vertical Gradient"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
-	ui.cbBackgroundColorStyle->addItem(i18n("Radial Gradient"));
-
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled and Cropped"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Scaled, Keep Proportions"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Centered"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Tiled"));
-	ui.cbBackgroundImageStyle->addItem(i18n("Center Tiled"));
-
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
-	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
 	QString suffix;
 	if (m_units == Units::Metric)
@@ -1814,163 +1788,6 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 }
 
 // "Plot area"-tab
-void CartesianPlotDock::backgroundTypeChanged(int index) {
-	auto type = (WorksheetElement::BackgroundType)index;
-
-	if (type == WorksheetElement::BackgroundType::Color) {
-		ui.lBackgroundColorStyle->show();
-		ui.cbBackgroundColorStyle->show();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-
-		ui.lBackgroundFileName->hide();
-		ui.leBackgroundFileName->hide();
-		ui.bOpen->hide();
-
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
-
-		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbBackgroundColorStyle->currentIndex();
-		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-			ui.lBackgroundFirstColor->setText(i18n("Color:"));
-			ui.lBackgroundSecondColor->hide();
-			ui.kcbBackgroundSecondColor->hide();
-		} else {
-			ui.lBackgroundFirstColor->setText(i18n("First color:"));
-			ui.lBackgroundSecondColor->show();
-			ui.kcbBackgroundSecondColor->show();
-		}
-	} else if (type == WorksheetElement::BackgroundType::Image) {
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->show();
-		ui.cbBackgroundImageStyle->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-		ui.lBackgroundFileName->show();
-		ui.leBackgroundFileName->show();
-		ui.bOpen->show();
-
-		ui.lBackgroundFirstColor->hide();
-		ui.kcbBackgroundFirstColor->hide();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	} else if (type == WorksheetElement::BackgroundType::Pattern) {
-		ui.lBackgroundFirstColor->setText(i18n("Color:"));
-		ui.lBackgroundColorStyle->hide();
-		ui.cbBackgroundColorStyle->hide();
-		ui.lBackgroundImageStyle->hide();
-		ui.cbBackgroundImageStyle->hide();
-		ui.lBackgroundBrushStyle->show();
-		ui.cbBackgroundBrushStyle->show();
-		ui.lBackgroundFileName->hide();
-		ui.leBackgroundFileName->hide();
-		ui.bOpen->hide();
-
-		ui.lBackgroundFirstColor->show();
-		ui.kcbBackgroundFirstColor->show();
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundType(type);
-}
-
-void CartesianPlotDock::backgroundColorStyleChanged(int index) {
-	auto style = (WorksheetElement::BackgroundColorStyle)index;
-
-	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-		ui.lBackgroundFirstColor->setText(i18n("Color:"));
-		ui.lBackgroundSecondColor->hide();
-		ui.kcbBackgroundSecondColor->hide();
-	} else {
-		ui.lBackgroundFirstColor->setText(i18n("First color:"));
-		ui.lBackgroundSecondColor->show();
-		ui.kcbBackgroundSecondColor->show();
-		ui.lBackgroundBrushStyle->hide();
-		ui.cbBackgroundBrushStyle->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundColorStyle(style);
-}
-
-void CartesianPlotDock::backgroundImageStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto style = (WorksheetElement::BackgroundImageStyle)index;
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundImageStyle(style);
-}
-
-void CartesianPlotDock::backgroundBrushStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto style = (Qt::BrushStyle)index;
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundBrushStyle(style);
-}
-
-void CartesianPlotDock::backgroundFirstColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundFirstColor(c);
-}
-
-void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundSecondColor(c);
-}
-
-/*!
-	opens a file dialog and lets the user select the image file.
-*/
-void CartesianPlotDock::selectFile() {
-	const QString& path = GuiTools::openImageFile(QLatin1String("CartesianPlotDock"));
-	if (path.isEmpty())
-		return;
-
-	ui.leBackgroundFileName->setText(path);
-}
-
-void CartesianPlotDock::fileNameChanged() {
-	if (m_initializing)
-		return;
-
-	const QString& fileName = ui.leBackgroundFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leBackgroundFileName, invalid);
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundFileName(fileName);
-}
-
-void CartesianPlotDock::backgroundOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value / 100.;
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundOpacity(opacity);
-}
-
-// "Border"-tab
 void CartesianPlotDock::borderTypeChanged() {
 	if (m_initializing)
 		return;
@@ -2171,6 +1988,33 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 	}
 }
 
+void CartesianPlotDock::exportPlotTemplate() {
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("PlotTemplate"));
+	const QString dir = group.readEntry(QLatin1String("ExportPath"), PlotTemplateDialog::defaultTemplateInstallPath());
+	QString path = QFileDialog::getSaveFileName(nullptr,
+												i18nc("@title:window", "Choose Template Save File"),
+												dir,
+												i18n("Labplot Plot Templates (*%1)", PlotTemplateDialog::format));
+
+	if (path.split(PlotTemplateDialog::format).count() < 2)
+		path.append(PlotTemplateDialog::format); // Sometimes the format is not added to the file. Don't know why
+	QFile file(path);
+	if (!file.open(QIODevice::OpenModeFlag::WriteOnly)) {
+		// TODO: show error message
+		return;
+	}
+	QXmlStreamWriter writer(&file);
+	writer.setAutoFormatting(true);
+	writer.writeStartDocument();
+	writer.writeDTD("<!DOCTYPE LabPlotXML>");
+	writer.writeStartElement("PlotTemplate");
+	writer.writeAttribute("xmlVersion", QString::number(Project::currentBuildXmlVersion()));
+	m_plot->save(&writer);
+	writer.writeEndElement();
+	writer.writeEndDocument();
+}
+
 //*************************************************************
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
@@ -2353,55 +2197,7 @@ void CartesianPlotDock::plotVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
-// background
-void CartesianPlotDock::plotBackgroundTypeChanged(WorksheetElement::BackgroundType type) {
-	m_initializing = true;
-	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
-	m_initializing = true;
-	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
-	m_initializing = true;
-	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundBrushStyleChanged(Qt::BrushStyle style) {
-	m_initializing = true;
-	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundFirstColorChanged(QColor& color) {
-	m_initializing = true;
-	ui.kcbBackgroundFirstColor->setColor(color);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundSecondColorChanged(QColor& color) {
-	m_initializing = true;
-	ui.kcbBackgroundSecondColor->setColor(color);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundFileNameChanged(QString& filename) {
-	m_initializing = true;
-	ui.leBackgroundFileName->setText(filename);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBackgroundOpacityChanged(float opacity) {
-	m_initializing = true;
-	ui.sbBackgroundOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
-
+// border
 void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
 	Lock lock(m_initializing);
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
@@ -2544,20 +2340,11 @@ void CartesianPlotDock::load() {
 	const auto* plotArea = m_plot->plotArea();
 
 	// Background
-	ui.cbBackgroundType->setCurrentIndex((int)plotArea->backgroundType());
-	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
-	ui.cbBackgroundColorStyle->setCurrentIndex((int)plotArea->backgroundColorStyle());
-	ui.cbBackgroundImageStyle->setCurrentIndex((int)plotArea->backgroundImageStyle());
-	ui.cbBackgroundBrushStyle->setCurrentIndex((int)plotArea->backgroundBrushStyle());
-	ui.leBackgroundFileName->setText(plotArea->backgroundFileName());
-	ui.kcbBackgroundFirstColor->setColor(plotArea->backgroundFirstColor());
-	ui.kcbBackgroundSecondColor->setColor(plotArea->backgroundSecondColor());
-	ui.sbBackgroundOpacity->setValue(round(plotArea->backgroundOpacity() * 100.0));
+	QList<Background*> backgrounds;
+	for (auto* plot : m_plotList)
+		backgrounds << plot->plotArea()->background();
 
-	// highlight the text field for the background image red if an image is used and cannot be found
-	const QString& fileName = plotArea->backgroundFileName();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leBackgroundFileName, invalid);
+	backgroundWidget->setBackgrounds(backgrounds);
 
 	// Padding
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit));
@@ -2602,15 +2389,9 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	// TODO
 
 	// Background-tab
-	const auto* plotArea = m_plot->plotArea();
-	ui.cbBackgroundType->setCurrentIndex(group.readEntry("BackgroundType", (int)plotArea->backgroundType()));
-	ui.cbBackgroundColorStyle->setCurrentIndex(group.readEntry("BackgroundColorStyle", (int)plotArea->backgroundColorStyle()));
-	ui.cbBackgroundImageStyle->setCurrentIndex(group.readEntry("BackgroundImageStyle", (int)plotArea->backgroundImageStyle()));
-	ui.cbBackgroundBrushStyle->setCurrentIndex(group.readEntry("BackgroundBrushStyle", (int)plotArea->backgroundBrushStyle()));
-	ui.leBackgroundFileName->setText(group.readEntry("BackgroundFileName", plotArea->backgroundFileName()));
-	ui.kcbBackgroundFirstColor->setColor(group.readEntry("BackgroundFirstColor", plotArea->backgroundFirstColor()));
-	ui.kcbBackgroundSecondColor->setColor(group.readEntry("BackgroundSecondColor", plotArea->backgroundSecondColor()));
-	ui.sbBackgroundOpacity->setValue(round(group.readEntry("BackgroundOpacity", plotArea->backgroundOpacity()) * 100.0));
+	backgroundWidget->loadConfig(group);
+
+	// Layout-tab
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
@@ -2618,6 +2399,7 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
 	// Border-tab
+	const auto* plotArea = m_plot->plotArea();
 	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
@@ -2650,19 +2432,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	// TODO
 
 	// Background
-	group.writeEntry("BackgroundType", ui.cbBackgroundType->currentIndex());
-	group.writeEntry("BackgroundColorStyle", ui.cbBackgroundColorStyle->currentIndex());
-	group.writeEntry("BackgroundImageStyle", ui.cbBackgroundImageStyle->currentIndex());
-	group.writeEntry("BackgroundBrushStyle", ui.cbBackgroundBrushStyle->currentIndex());
-	group.writeEntry("BackgroundFileName", ui.leBackgroundFileName->text());
-	group.writeEntry("BackgroundFirstColor", ui.kcbBackgroundFirstColor->color());
-	group.writeEntry("BackgroundSecondColor", ui.kcbBackgroundSecondColor->color());
-	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value() / 100.0);
-	group.writeEntry("HorizontalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingHorizontal->value(), m_worksheetUnit));
-	group.writeEntry("VerticalPadding", Worksheet::convertToSceneUnits(ui.sbPaddingVertical->value(), m_worksheetUnit));
-	group.writeEntry("RightPadding", Worksheet::convertToSceneUnits(ui.sbPaddingRight->value(), m_worksheetUnit));
-	group.writeEntry("BottomPadding", Worksheet::convertToSceneUnits(ui.sbPaddingBottom->value(), m_worksheetUnit));
-	group.writeEntry("SymmetricPadding", ui.cbPaddingSymmetric->isChecked());
+	backgroundWidget->saveConfig(group);
 
 	// Border
 	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));

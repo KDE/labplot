@@ -9,9 +9,12 @@
 */
 
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "backend/core/AbstractAspect.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -19,6 +22,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h" //TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "commonfrontend/core/PartMdiView.h"
+#include "kdefrontend/PlotTemplateDialog.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
@@ -192,6 +196,7 @@ void WorksheetView::initActions() {
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action =
 		new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("document-new-from-template"), i18n("Load from Template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
@@ -439,6 +444,8 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
+	m_addNewCartesianPlotMenu->addSeparator();
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlotTemplateAction);
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme("list-add"));
@@ -821,45 +828,46 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 
 void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_rect) {
 	// canvas
-	painter->setOpacity(m_worksheet->backgroundOpacity());
-	if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Color) {
-		switch (m_worksheet->backgroundColorStyle()) {
-		case WorksheetElement::BackgroundColorStyle::SingleColor: {
-			painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
+	const auto* background = m_worksheet->background();
+	painter->setOpacity(background->opacity());
+	if (background->type() == Background::Type::Color) {
+		switch (background->colorStyle()) {
+		case Background::ColorStyle::SingleColor: {
+			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
+		case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
+		case Background::ColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomLeft());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.topLeft(), scene_rect.bottomRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(scene_rect.bottomLeft(), scene_rect.topRight());
-			linearGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			linearGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
+		case Background::ColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(scene_rect.center(), scene_rect.width() / 2);
-			radialGrad.setColorAt(0, m_worksheet->backgroundFirstColor());
-			radialGrad.setColorAt(1, m_worksheet->backgroundSecondColor());
+			radialGrad.setColorAt(0, background->firstColor());
+			radialGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(radialGrad));
 			break;
 		}
@@ -867,38 +875,38 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 			//	painter->setBrush(QBrush(m_worksheet->backgroundFirstColor()));
 		}
 		painter->drawRect(scene_rect);
-	} else if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Image) { // background image
-		const QString& backgroundFileName = m_worksheet->backgroundFileName().trimmed();
+	} else if (background->type() == Background::Type::Image) { // background image
+		const QString& backgroundFileName = background->fileName().trimmed();
 		if (!backgroundFileName.isEmpty()) {
 			QPixmap pix(backgroundFileName);
-			switch (m_worksheet->backgroundImageStyle()) {
-			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
+			switch (background->imageStyle()) {
+			case Background::ImageStyle::ScaledCropped:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Scaled:
+			case Background::ImageStyle::Scaled:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
+			case Background::ImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(scene_rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				painter->drawPixmap(scene_rect.topLeft(), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Centered:
+			case Background::ImageStyle::Centered:
 				painter->drawPixmap(QPointF(scene_rect.center().x() - pix.size().width() / 2, scene_rect.center().y() - pix.size().height() / 2), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Tiled:
+			case Background::ImageStyle::Tiled:
 				painter->drawTiledPixmap(scene_rect, pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::CenterTiled:
+			case Background::ImageStyle::CenterTiled:
 				painter->drawTiledPixmap(scene_rect, pix, QPoint(scene_rect.size().width() / 2, scene_rect.size().height() / 2));
 				break;
 				// default:
 				//	painter->drawPixmap(scene_rect.topLeft(),pix);
 			}
 		}
-	} else if (m_worksheet->backgroundType() == WorksheetElement::BackgroundType::Pattern) { // background pattern
-		painter->setBrush(QBrush(m_worksheet->backgroundFirstColor(), m_worksheet->backgroundBrushStyle()));
+	} else if (background->type() == Background::Type::Pattern) { // background pattern
+		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 		painter->drawRect(scene_rect);
 	}
 
@@ -1238,6 +1246,14 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		// duplicate
 		aspect->copy();
 		aspect->parentAspect()->paste(true);
+
+	/* zooming related key events, handle them here so we can also use them in DynamicPresenterWidget without registering shortcuts */
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Plus)) {
+		changeZoom(zoomInViewAction);
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_Minus)) {
+		changeZoom(zoomOutViewAction);
+	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_1)) {
+		changeZoom(zoomOriginAction);
 	} else if (event->key() == 32) {
 		// space key - hide/show the current object
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
@@ -1402,6 +1418,7 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 
 //"Add new" related slots
 void WorksheetView::addNew(QAction* action) {
+	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
 		auto* plot = new CartesianPlot(i18n("xy-plot"));
@@ -1431,6 +1448,20 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
+	} else if (action == addCartesianPlotTemplateAction) {
+		// open dialog
+		PlotTemplateDialog d;
+		if (d.exec() != QDialog::Accepted)
+			return;
+
+		auto* plot = d.generatePlot();
+		if (!plot)
+			return;
+
+		restorePointers = true;
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
@@ -1443,6 +1474,11 @@ void WorksheetView::addNew(QAction* action) {
 		return;
 
 	m_worksheet->addChild(aspect);
+
+	if (restorePointers) {
+		m_worksheet->project()->restorePointers(m_worksheet);
+		m_worksheet->project()->retransformElements(m_worksheet);
+	}
 
 	// labels and images with their initial positions need to be retransformed
 	// after they have gotten a parent

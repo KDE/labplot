@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -14,6 +14,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class AbstractColumn;
+class Background;
 class HistogramPrivate;
 class Symbol;
 
@@ -87,15 +88,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
+	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
 	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
@@ -169,17 +162,6 @@ Q_SIGNALS:
 	void valuesSuffixChanged(QString);
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
-
-	// Filling
-	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(WorksheetElement::BackgroundType);
-	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void fillingBrushStyleChanged(Qt::BrushStyle);
-	void fillingFirstColorChanged(QColor&);
-	void fillingSecondColorChanged(QColor&);
-	void fillingFileNameChanged(QString&);
-	void fillingOpacityChanged(float);
 
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);

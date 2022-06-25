@@ -223,6 +223,14 @@ int Project::xmlVersion() {
 	return Private::xmlVersion();
 }
 
+void Project::setXmlVersion(int version) {
+	Private::mXmlVersion = version;
+}
+
+int Project::currentBuildXmlVersion() {
+	return buildXmlVersion;
+}
+
 QUndoStack* Project::undoStack() const {
 	return &d->undo_stack;
 }

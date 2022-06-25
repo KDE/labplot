@@ -3,7 +3,7 @@
 	Project          : LabPlot
 	Description      : widget for curve properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -20,6 +20,7 @@
 #include "ui_xycurvedockgeneraltab.h"
 
 class AspectTreeModel;
+class BackgroundWidget;
 class Column;
 class SymbolWidget;
 class TreeViewComboBox;
@@ -59,10 +60,11 @@ protected:
 	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	SymbolWidget* symbolWidget{nullptr};
 
 public Q_SLOTS:
 	void visibilityChanged(bool);
@@ -106,18 +108,6 @@ private Q_SLOTS:
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
-
-	// Filling-tab
-	void fillingPositionChanged(int);
-	void fillingTypeChanged(int);
-	void fillingColorStyleChanged(int);
-	void fillingImageStyleChanged(int);
-	void fillingBrushStyleChanged(int);
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void fillingOpacityChanged(int);
 
 	//"Error bars"-Tab
 	void xErrorTypeChanged(int) const;
@@ -173,17 +163,6 @@ private Q_SLOTS:
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
-
-	// Filling-Tab
-	void curveFillingPositionChanged(XYCurve::FillingPosition);
-	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
-	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void curveFillingBrushStyleChanged(Qt::BrushStyle);
-	void curveFillingFirstColorChanged(QColor&);
-	void curveFillingSecondColorChanged(QColor&);
-	void curveFillingFileNameChanged(QString&);
-	void curveFillingOpacityChanged(float);
 
 	//"Error bars"-Tab
 	void curveXErrorTypeChanged(XYCurve::ErrorType);

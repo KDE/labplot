@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the box plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,6 +17,7 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BoxPlot;
+class BackgroundWidget;
 class SymbolWidget;
 class TreeViewComboBox;
 class KConfig;
@@ -31,10 +32,12 @@ public:
 
 private:
 	Ui::BoxPlotDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
+
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	SymbolWidget* symbolWidget{nullptr};
 
 	QGridLayout* m_gridLayout;
 	QPushButton* m_buttonNew;
@@ -62,18 +65,6 @@ private Q_SLOTS:
 
 	//"Box"-tab
 	void widthFactorChanged(int) const;
-
-	// box filling
-	void fillingEnabledChanged(bool) const;
-	void fillingTypeChanged(int) const;
-	void fillingColorStyleChanged(int) const;
-	void fillingImageStyleChanged(int) const;
-	void fillingBrushStyleChanged(int) const;
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&) const;
-	void selectFile();
-	void fileNameChanged() const;
-	void fillingOpacityChanged(int) const;
 
 	// box border
 	void borderStyleChanged(int) const;
@@ -114,17 +105,6 @@ private Q_SLOTS:
 	void plotWidthFactorChanged(double);
 	void plotNotchesEnabledChanged(bool);
 	void plotVisibilityChanged(bool);
-
-	// box filling
-	void plotFillingEnabledChanged(bool);
-	void plotFillingTypeChanged(WorksheetElement::BackgroundType);
-	void plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void plotFillingBrushStyleChanged(Qt::BrushStyle);
-	void plotFillingFirstColorChanged(QColor&);
-	void plotFillingSecondColorChanged(QColor&);
-	void plotFillingFileNameChanged(QString&);
-	void plotFillingOpacityChanged(double);
 
 	// box border
 	void plotBorderPenChanged(QPen&);

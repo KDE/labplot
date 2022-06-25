@@ -21,6 +21,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -1024,15 +1025,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	const Origin::ColorGradientDirection bckgColorGradient = graph.windowBackgroundColorGradient;
 	const Origin::Color bckgBaseColor = graph.windowBackgroundColorBase;
 	const Origin::Color bckgEndColor = graph.windowBackgroundColorEnd;
-	worksheet->setBackgroundColorStyle(backgroundColorStyle(bckgColorGradient));
+	worksheet->background()->setColorStyle(backgroundColorStyle(bckgColorGradient));
 	switch (bckgColorGradient) {
 	case Origin::ColorGradientDirection::NoGradient:
 	case Origin::ColorGradientDirection::TopLeft:
 	case Origin::ColorGradientDirection::Left:
 	case Origin::ColorGradientDirection::BottomLeft:
 	case Origin::ColorGradientDirection::Top:
-		worksheet->setBackgroundFirstColor(color(bckgEndColor));
-		worksheet->setBackgroundSecondColor(color(bckgBaseColor));
+		worksheet->background()->setFirstColor(color(bckgEndColor));
+		worksheet->background()->setSecondColor(color(bckgBaseColor));
 		break;
 	case Origin::ColorGradientDirection::Center:
 		break;
@@ -1040,8 +1041,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	case Origin::ColorGradientDirection::TopRight:
 	case Origin::ColorGradientDirection::Right:
 	case Origin::ColorGradientDirection::BottomRight:
-		worksheet->setBackgroundFirstColor(color(bckgBaseColor));
-		worksheet->setBackgroundSecondColor(color(bckgEndColor));
+		worksheet->background()->setFirstColor(color(bckgBaseColor));
+		worksheet->background()->setSecondColor(color(bckgEndColor));
 	}
 
 	// TODO: do we need changes on the worksheet layout?
@@ -1063,9 +1064,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			// background color
 			const Origin::Color& regColor = layer.backgroundColor;
 			if (regColor.type == Origin::Color::None)
-				plot->plotArea()->setBackgroundOpacity(0);
+				plot->plotArea()->background()->setOpacity(0);
 			else
-				plot->plotArea()->setBackgroundFirstColor(color(regColor));
+				plot->plotArea()->background()->setFirstColor(color(regColor));
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)
@@ -1251,11 +1252,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// background color, determine it with the help of the border type
 				if (originLegend.borderType == Origin::BorderType::DarkMarble)
-					legend->setBackgroundFirstColor(Qt::darkGray);
+					legend->background()->setFirstColor(Qt::darkGray);
 				else if (originLegend.borderType == Origin::BorderType::BlackOut)
-					legend->setBackgroundFirstColor(Qt::black);
+					legend->background()->setFirstColor(Qt::black);
 				else
-					legend->setBackgroundFirstColor(Qt::white);
+					legend->background()->setFirstColor(Qt::white);
 			}
 
 			// texts
@@ -2025,53 +2026,54 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		// with 'fillAreaType'=0x14 the area included inside the curve is filled. First and last curve points are joined by a line to close the otherwise open
 		// area. with 'fillAreaType'=0x12 the area excluded outside the curve is filled. The inverse of fillAreaType=0x14 is filled. At the moment we only
 		// support the first type, so set it to XYCurve::FillingBelow
-		curve->setFillingPosition(XYCurve::FillingPosition::Below);
+		curve->background()->setPosition(Background::Position::Below);
+		auto* background = curve->background();
 
 		if (originCurve.fillAreaPattern == 0) {
-			curve->setFillingType(WorksheetElement::BackgroundType::Color);
+			background->setType(Background::Type::Color);
 		} else {
-			curve->setFillingType(WorksheetElement::BackgroundType::Pattern);
+			background->setType(Background::Type::Pattern);
 
 			// map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
 			switch (originCurve.fillAreaPattern) {
 			case 0:
-				curve->setFillingBrushStyle(Qt::NoBrush);
+				background->setBrushStyle(Qt::NoBrush);
 				break;
 			case 1:
 			case 2:
 			case 3:
-				curve->setFillingBrushStyle(Qt::BDiagPattern);
+				background->setBrushStyle(Qt::BDiagPattern);
 				break;
 			case 4:
 			case 5:
 			case 6:
-				curve->setFillingBrushStyle(Qt::FDiagPattern);
+				background->setBrushStyle(Qt::FDiagPattern);
 				break;
 			case 7:
 			case 8:
 			case 9:
-				curve->setFillingBrushStyle(Qt::DiagCrossPattern);
+				background->setBrushStyle(Qt::DiagCrossPattern);
 				break;
 			case 10:
 			case 11:
 			case 12:
-				curve->setFillingBrushStyle(Qt::HorPattern);
+				background->setBrushStyle(Qt::HorPattern);
 				break;
 			case 13:
 			case 14:
 			case 15:
-				curve->setFillingBrushStyle(Qt::VerPattern);
+				background->setBrushStyle(Qt::VerPattern);
 				break;
 			case 16:
 			case 17:
 			case 18:
-				curve->setFillingBrushStyle(Qt::CrossPattern);
+				background->setBrushStyle(Qt::CrossPattern);
 				break;
 			}
 		}
 
-		curve->setFillingFirstColor(color(originCurve.fillAreaColor));
-		curve->setFillingOpacity(1 - originCurve.fillAreaTransparency / 255);
+		background->setFirstColor(color(originCurve.fillAreaColor));
+		background->setOpacity(1 - originCurve.fillAreaTransparency / 255);
 
 		// Color fillAreaPatternColor - color for the pattern lines, not supported
 		// double fillAreaPatternWidth - width of the pattern lines, not supported
@@ -2086,7 +2088,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		// fillAreaPatternBorderColor   for the line color
 		// fillAreaPatternBorderWidth   for the line width
 	} else
-		curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+		curve->background()->setPosition(Background::Position::No);
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
@@ -2198,31 +2200,31 @@ QColor OriginProjectParser::color(Origin::Color color) const {
 	return Qt::white;
 }
 
-WorksheetElement::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
+Background::ColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
 	switch (colorGradient) {
 	case Origin::ColorGradientDirection::NoGradient:
-		return WorksheetElement::BackgroundColorStyle::SingleColor;
+		return Background::ColorStyle::SingleColor;
 	case Origin::ColorGradientDirection::TopLeft:
-		return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+		return Background::ColorStyle::TopLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Left:
-		return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
+		return Background::ColorStyle::HorizontalLinearGradient;
 	case Origin::ColorGradientDirection::BottomLeft:
-		return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		return Background::ColorStyle::BottomLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Top:
-		return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
+		return Background::ColorStyle::VerticalLinearGradient;
 	case Origin::ColorGradientDirection::Center:
-		return WorksheetElement::BackgroundColorStyle::RadialGradient;
+		return Background::ColorStyle::RadialGradient;
 	case Origin::ColorGradientDirection::Bottom:
-		return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
+		return Background::ColorStyle::VerticalLinearGradient;
 	case Origin::ColorGradientDirection::TopRight:
-		return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+		return Background::ColorStyle::BottomLeftDiagonalLinearGradient;
 	case Origin::ColorGradientDirection::Right:
-		return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
+		return Background::ColorStyle::HorizontalLinearGradient;
 	case Origin::ColorGradientDirection::BottomRight:
-		return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+		return Background::ColorStyle::TopLeftDiagonalLinearGradient;
 	}
 
-	return WorksheetElement::BackgroundColorStyle::SingleColor;
+	return Background::ColorStyle::SingleColor;
 }
 
 QString strreverse(const QString& str) { // QString reversing

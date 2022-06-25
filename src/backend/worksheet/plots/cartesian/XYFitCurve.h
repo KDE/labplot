@@ -105,10 +105,11 @@ public:
 
 	void recalculate() override;
 	void evaluate(bool preview);
-	void initFitData(XYAnalysisCurve::AnalysisAction);
-	static void initFitData(XYFitCurve::FitData&);
 	void initStartValues(const XYCurve*);
 	static void initStartValues(XYFitCurve::FitData&, const XYCurve*);
+	void initFitData(XYAnalysisCurve::AnalysisAction);
+	static void initFitData(XYFitCurve::FitData&);
+	void clearFitResult();
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;

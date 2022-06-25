@@ -71,6 +71,8 @@ public:
 	static QString version();
 	static int versionNumber();
 	static int xmlVersion();
+	static void setXmlVersion(int version);
+	static int currentBuildXmlVersion();
 
 	class Private;
 

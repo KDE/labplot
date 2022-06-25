@@ -4,6 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +19,7 @@
 class AspectTreeModel;
 class Column;
 class Histogram;
+class BackgroundWidget;
 class SymbolWidget;
 class TreeViewComboBox;
 
@@ -43,10 +45,12 @@ private:
 
 protected:
 	Ui::HistogramDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
+
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	SymbolWidget* symbolWidget{nullptr};
 
 	virtual void setModel();
 
@@ -94,18 +98,6 @@ private Q_SLOTS:
 	void valuesFontChanged(const QFont&);
 	void valuesColorChanged(const QColor&);
 
-	// Filling-tab
-	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(int);
-	void fillingColorStyleChanged(int);
-	void fillingImageStyleChanged(int);
-	void fillingBrushStyleChanged(int);
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void fillingOpacityChanged(int);
-
 	//"Error bars"-Tab
 	void errorTypeChanged(int) const;
 	void errorBarsTypeChanged(int) const;
@@ -148,17 +140,6 @@ private Q_SLOTS:
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
 	void curveValuesColorChanged(QColor);
-
-	// Filling-Tab
-	void curveFillingEnabledChanged(bool);
-	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
-	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void curveFillingBrushStyleChanged(Qt::BrushStyle);
-	void curveFillingFirstColorChanged(QColor&);
-	void curveFillingSecondColorChanged(QColor&);
-	void curveFillingFileNameChanged(QString&);
-	void curveFillingOpacityChanged(double);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

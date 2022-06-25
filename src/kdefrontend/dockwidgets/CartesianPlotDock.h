@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for cartesian plot properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -21,6 +21,7 @@
 
 template<class T>
 class QList;
+class BackgroundWidget;
 class LabelWidget;
 class ThemeHandler;
 
@@ -39,6 +40,7 @@ public:
 
 private:
 	Ui::CartesianPlotDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
@@ -113,15 +115,6 @@ private Q_SLOTS:
 	void yBreakStyleChanged(int);
 
 	//"Plot area"-tab
-	void backgroundTypeChanged(int);
-	void backgroundColorStyleChanged(int);
-	void backgroundImageStyleChanged(int);
-	void backgroundBrushStyleChanged(int);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void backgroundOpacityChanged(int);
 	void borderTypeChanged();
 	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
@@ -138,6 +131,8 @@ private Q_SLOTS:
 	void cursorLineWidthChanged(int);
 	void cursorLineColorChanged(const QColor&);
 	void cursorLineStyleChanged(int);
+
+	void exportPlotTemplate();
 
 	// SLOTs for changes triggered in CartesianPlot
 	// general
@@ -170,14 +165,6 @@ private Q_SLOTS:
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	// background
-	void plotBackgroundTypeChanged(WorksheetElement::BackgroundType);
-	void plotBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void plotBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void plotBackgroundFirstColorChanged(QColor&);
-	void plotBackgroundSecondColorChanged(QColor&);
-	void plotBackgroundFileNameChanged(QString&);
-	void plotBackgroundOpacityChanged(float);
 	void plotBorderTypeChanged(PlotArea::BorderType);
 	void plotBorderPenChanged(QPen&);
 	void plotBorderCornerRadiusChanged(double);

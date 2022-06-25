@@ -128,7 +128,9 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
-	BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
+	BASIC_D_ACCESSOR_DECL(bool, majorTicksAutoNumber, MajorTicksAutoNumber)
+	int majorTicksNumber() const;
+	void setMajorTicksNumber(const int number, bool automatic = false);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
@@ -139,6 +141,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
+	BASIC_D_ACCESSOR_DECL(bool, minorTicksAutoNumber, MinorTicksAutoNumber)
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
@@ -245,6 +248,7 @@ Q_SIGNALS:
 	// major ticks
 	void majorTicksDirectionChanged(TicksDirection);
 	void majorTicksTypeChanged(TicksType);
+	void majorTicksAutoNumberChanged(bool);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
@@ -256,6 +260,7 @@ Q_SIGNALS:
 	// minor ticks
 	void minorTicksDirectionChanged(TicksDirection);
 	void minorTicksTypeChanged(TicksType);
+	void minorTicksAutoNumberChanged(bool);
 	void minorTicksNumberChanged(int);
 	void minorTicksIncrementChanged(qreal);
 	void minorTicksColumnChanged(const AbstractColumn*);

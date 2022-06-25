@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Legend for the cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,6 +14,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
+class Background;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
@@ -46,14 +47,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, labelColumnMajor, LabelColumnMajor)
 	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
-	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
+	Background* background() const;
 
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(float, borderCornerRadius, BorderCornerRadius)
@@ -91,14 +85,6 @@ Q_SIGNALS:
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);
 	void lineSymbolWidthChanged(float);
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(QColor&);
-	void backgroundSecondColorChanged(QColor&);
-	void backgroundFileNameChanged(QString&);
-	void backgroundOpacityChanged(float);
 	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
 	void borderOpacityChanged(float);

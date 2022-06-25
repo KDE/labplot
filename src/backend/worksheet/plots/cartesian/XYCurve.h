@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@
 #include <QPen>
 
 class AbstractColumn;
+class Background;
 class Symbol;
 class XYCurvePrivate;
 
@@ -57,7 +58,6 @@ public:
 	enum class ValuesType { NoValues, X, Y, XY, XYBracketed, CustomColumn };
 	enum class ValuesPosition { Above, Under, Left, Right };
 	enum class ErrorType { NoError, Symmetric, Asymmetric };
-	enum class FillingPosition { NoFilling, Above, Below, ZeroBaseline, Left, Right };
 	enum class ErrorBarsType { Simple, WithEnds };
 
 	explicit XYCurve(const QString& name, AspectType type = AspectType::XYCurve);
@@ -120,15 +120,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	BASIC_D_ACCESSOR_DECL(FillingPosition, fillingPosition, FillingPosition)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
+	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
@@ -244,17 +236,6 @@ Q_SIGNALS:
 	void valuesSuffixChanged(QString);
 	void valuesFontChanged(QFont);
 	void valuesColorChanged(QColor);
-
-	// Filling
-	void fillingPositionChanged(XYCurve::FillingPosition);
-	void fillingTypeChanged(WorksheetElement::BackgroundType);
-	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void fillingBrushStyleChanged(Qt::BrushStyle);
-	void fillingFirstColorChanged(QColor&);
-	void fillingSecondColorChanged(QColor&);
-	void fillingFileNameChanged(QString&);
-	void fillingOpacityChanged(float);
 
 	// Error bars
 	void xErrorTypeChanged(XYCurve::ErrorType);

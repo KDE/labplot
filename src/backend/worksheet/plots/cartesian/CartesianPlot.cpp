@@ -2690,9 +2690,9 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		const AbstractColumn* col = curve->xColumn();
+		const auto* col = curve->xColumn();
 		const auto xRangeFormat{xRange().format()};
-		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
+		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
 			setXRangeFormat(RangeT::Format::DateTime);
 			setUndoAware(true);
@@ -3012,7 +3012,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
-		// DEBUG("CURVE " << STDSTRING(curve->name()))
+		DEBUG("CURVE \"" << STDSTRING(curve->name()) << "\"")
 
 		auto* xColumn = curve->xColumn();
 		if (!xColumn) {
@@ -5422,7 +5422,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			m_coordinateSystems.clear();
 
-			if (project()->xmlVersion() < 7) {
+			if (Project::xmlVersion() < 7) {
 				d->niceExtend = true;
 			} else {
 				str = attribs.value("niceExtend").toString();

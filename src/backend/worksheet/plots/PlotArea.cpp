@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Plot area (for background filling and clipping).
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,6 +12,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotAreaPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -56,15 +57,13 @@ void PlotArea::init() {
 	KConfigGroup group = config.group("PlotArea");
 
 	// Background
-	d->backgroundType = (WorksheetElement::BackgroundType)group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));
-	d->backgroundColorStyle =
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("BackgroundColorStyle", static_cast<int>(BackgroundColorStyle::SingleColor));
-	d->backgroundImageStyle = (WorksheetElement::BackgroundImageStyle)group.readEntry("BackgroundImageStyle", static_cast<int>(BackgroundImageStyle::Scaled));
-	d->backgroundBrushStyle = (Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern));
-	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
-	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
-	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
-	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
+	d->background = new Background(QString());
+	addChild(d->background);
+	d->background->setHidden(true);
+	d->background->init(group);
+	connect(d->background, &Background::updateRequested, [=] {
+		d->update();
+	});
 
 	// Border
 	PlotArea::BorderType type; // default value
@@ -112,14 +111,11 @@ void PlotArea::retransform() {
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled())
 BASIC_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect)
 
-BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundType, backgroundType, backgroundType)
-BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
-BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
-BASIC_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
-BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor)
-BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor)
-BASIC_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName)
-BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity)
+// background
+Background* PlotArea::background() const {
+	Q_D(const PlotArea);
+	return d->background;
+}
 
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BorderType, borderType, borderType)
 BASIC_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
@@ -142,63 +138,6 @@ void PlotArea::setClippingEnabled(bool on) {
 void PlotArea::setRect(const QRectF& newRect) {
 	Q_D(PlotArea);
 	d->setRect(newRect);
-}
-
-// Background
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundType, WorksheetElement::BackgroundType, backgroundType, update)
-void PlotArea::setBackgroundType(WorksheetElement::BackgroundType type) {
-	Q_D(PlotArea);
-	if (type != d->backgroundType)
-		exec(new PlotAreaSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundColorStyle, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, update)
-void PlotArea::setBackgroundColorStyle(WorksheetElement::BackgroundColorStyle style) {
-	Q_D(PlotArea);
-	if (style != d->backgroundColorStyle)
-		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundImageStyle, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, update)
-void PlotArea::setBackgroundImageStyle(WorksheetElement::BackgroundImageStyle style) {
-	Q_D(PlotArea);
-	if (style != d->backgroundImageStyle)
-		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
-void PlotArea::setBackgroundBrushStyle(Qt::BrushStyle style) {
-	Q_D(PlotArea);
-	if (style != d->backgroundBrushStyle)
-		exec(new PlotAreaSetBackgroundBrushStyleCmd(d, style, ki18n("%1: background brush style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
-void PlotArea::setBackgroundFirstColor(const QColor& color) {
-	Q_D(PlotArea);
-	if (color != d->backgroundFirstColor)
-		exec(new PlotAreaSetBackgroundFirstColorCmd(d, color, ki18n("%1: set background first color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
-void PlotArea::setBackgroundSecondColor(const QColor& color) {
-	Q_D(PlotArea);
-	if (color != d->backgroundSecondColor)
-		exec(new PlotAreaSetBackgroundSecondColorCmd(d, color, ki18n("%1: set background second color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundFileName, QString, backgroundFileName, update)
-void PlotArea::setBackgroundFileName(const QString& fileName) {
-	Q_D(PlotArea);
-	if (fileName != d->backgroundFileName)
-		exec(new PlotAreaSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundOpacity, qreal, backgroundOpacity, update)
-void PlotArea::setBackgroundOpacity(qreal opacity) {
-	Q_D(PlotArea);
-	if (opacity != d->backgroundOpacity)
-		exec(new PlotAreaSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set plot area opacity")));
 }
 
 // Border
@@ -278,87 +217,87 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 		return;
 
 	// draw the area
-	painter->setOpacity(backgroundOpacity);
+	painter->setOpacity(background->opacity());
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == WorksheetElement::BackgroundType::Color) {
-		switch (backgroundColorStyle) {
-		case WorksheetElement::BackgroundColorStyle::SingleColor: {
-			painter->setBrush(QBrush(backgroundFirstColor));
+	if (background->type() == Background::Type::Color) {
+		switch (background->colorStyle()) {
+		case Background::ColorStyle::SingleColor: {
+			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
+		case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, backgroundFirstColor);
-			linearGrad.setColorAt(1, backgroundSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
+		case Background::ColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, backgroundFirstColor);
-			linearGrad.setColorAt(1, backgroundSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, backgroundFirstColor);
-			linearGrad.setColorAt(1, backgroundSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, backgroundFirstColor);
-			linearGrad.setColorAt(1, backgroundSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
+		case Background::ColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, backgroundFirstColor);
-			radialGrad.setColorAt(1, backgroundSecondColor);
+			radialGrad.setColorAt(0, background->firstColor());
+			radialGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(radialGrad));
 			break;
 		}
 		}
-	} else if (backgroundType == WorksheetElement::BackgroundType::Image) {
-		if (!backgroundFileName.trimmed().isEmpty()) {
-			QPixmap pix(backgroundFileName);
-			switch (backgroundImageStyle) {
-			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
+	} else if (background->type() == Background::Type::Image) {
+		if (!background->fileName().trimmed().isEmpty()) {
+			QPixmap pix(background->fileName());
+			switch (background->imageStyle()) {
+			case Background::ImageStyle::ScaledCropped:
 				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Scaled:
+			case Background::ImageStyle::Scaled:
 				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
+			case Background::ImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Centered:
+			case Background::ImageStyle::Centered:
 				painter->drawPixmap(QPointF(rect.center().x() - pix.size().width() / 2, rect.center().y() - pix.size().height() / 2), pix);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Tiled:
+			case Background::ImageStyle::Tiled:
 				painter->setBrush(QBrush(pix));
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case WorksheetElement::BackgroundImageStyle::CenterTiled:
+			case Background::ImageStyle::CenterTiled:
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
-	} else if (backgroundType == WorksheetElement::BackgroundType::Pattern) {
-		painter->setBrush(QBrush(backgroundFirstColor, backgroundBrushStyle));
+	} else if (background->type() == Background::Type::Pattern) {
+		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 	}
 
 	// draw the background
@@ -416,20 +355,8 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement("background");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->backgroundType)));
-	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->backgroundColorStyle)));
-	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->backgroundImageStyle)));
-	writer->writeAttribute("brushStyle", QString::number(d->backgroundBrushStyle));
-	writer->writeAttribute("firstColor_r", QString::number(d->backgroundFirstColor.red()));
-	writer->writeAttribute("firstColor_g", QString::number(d->backgroundFirstColor.green()));
-	writer->writeAttribute("firstColor_b", QString::number(d->backgroundFirstColor.blue()));
-	writer->writeAttribute("secondColor_r", QString::number(d->backgroundSecondColor.red()));
-	writer->writeAttribute("secondColor_g", QString::number(d->backgroundSecondColor.green()));
-	writer->writeAttribute("secondColor_b", QString::number(d->backgroundSecondColor.blue()));
-	writer->writeAttribute("fileName", d->backgroundFileName);
-	writer->writeAttribute("opacity", QString::number(d->backgroundOpacity));
-	writer->writeEndElement();
+	// background
+	d->background->save(writer);
 
 	// border
 	writer->writeStartElement("border");
@@ -464,78 +391,9 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "background") {
-			attribs = reader->attributes();
-
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->backgroundType = WorksheetElement::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
-			else
-				d->backgroundColorStyle = WorksheetElement::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
-			else
-				d->backgroundImageStyle = WorksheetElement::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
-			else
-				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
-
-			str = attribs.value("firstColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
-			else
-				d->backgroundFirstColor.setRed(str.toInt());
-
-			str = attribs.value("firstColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
-			else
-				d->backgroundFirstColor.setGreen(str.toInt());
-
-			str = attribs.value("firstColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
-			else
-				d->backgroundFirstColor.setBlue(str.toInt());
-
-			str = attribs.value("secondColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
-			else
-				d->backgroundSecondColor.setRed(str.toInt());
-
-			str = attribs.value("secondColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
-			else
-				d->backgroundSecondColor.setGreen(str.toInt());
-
-			str = attribs.value("secondColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
-			else
-				d->backgroundSecondColor.setBlue(str.toInt());
-
-			str = attribs.value("fileName").toString();
-			d->backgroundFileName = str;
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->backgroundOpacity = str.toDouble();
-		} else if (!preview && reader->name() == "border") {
+		} else if (!preview && reader->name() == "background")
+			d->background->load(reader, preview);
+		else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("borderType", borderType, PlotArea::BorderType);
@@ -570,15 +428,7 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 		group = config.group("PlotArea");
 
 	// background
-	this->setBackgroundType((WorksheetElement::BackgroundType)group.readEntry("BackgroundType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
-	this->setBackgroundColorStyle(
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("BackgroundColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
-	this->setBackgroundImageStyle(
-		(WorksheetElement::BackgroundImageStyle)group.readEntry("BackgroundImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled)));
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+	background()->loadThemeConfig(group);
 
 	// border
 	QPen pen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
@@ -592,14 +442,10 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 void PlotArea::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("CartesianPlot");
 
-	group.writeEntry("BackgroundBrushStyle", (int)this->backgroundBrushStyle());
-	group.writeEntry("BackgroundColorStyle", (int)this->backgroundColorStyle());
-	group.writeEntry("BackgroundFirstColor", (QColor)this->backgroundFirstColor());
-	group.writeEntry("BackgroundImageStyle", (int)this->backgroundImageStyle());
-	group.writeEntry("BackgroundOpacity", this->backgroundOpacity());
-	group.writeEntry("BackgroundSecondColor", (QColor)this->backgroundSecondColor());
-	group.writeEntry("BackgroundType", (int)this->backgroundType());
+	// background
+	background()->saveThemeConfig(group);
 
+	// border
 	group.writeEntry("BorderColor", (QColor)this->borderPen().color());
 	group.writeEntry("BorderCornerRadius", this->borderCornerRadius());
 	group.writeEntry("BorderOpacity", this->borderOpacity());

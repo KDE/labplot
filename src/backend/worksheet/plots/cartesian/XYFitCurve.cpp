@@ -733,6 +733,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	}
 }
 
+void XYFitCurve::clearFitResult() {
+	Q_D(XYFitCurve);
+	d->fitResult = XYFitCurve::FitResult();
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -2265,10 +2270,9 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	SET_NUMBER_LOCALE
 	bool rc = parser->evaluateCartesian(fitData.model,
-										numberLocale.toString(xRange.start()),
-										numberLocale.toString(xRange.end()),
+										QString::number(xRange.start()),
+										QString::number(xRange.end()),
 										(int)fitData.evaluatedPoints,
 										xVector,
 										yVector,

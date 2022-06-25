@@ -9,6 +9,7 @@
 */
 
 #include "LabelWidget.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -329,13 +330,13 @@ void LabelWidget::updateBackground() const {
 	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
 		const auto type = m_label->parentAspect()->type();
 		if (type == AspectType::Worksheet)
-			color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
+			color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
 		else if (type == AspectType::CartesianPlot)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
+			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
 		else if (type == AspectType::CartesianPlotLegend)
-			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
 		else if (type == AspectType::InfoElement || type == AspectType::Axis)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
 		else
 			DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 	}
@@ -373,16 +374,16 @@ void LabelWidget::initConnections() {
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
-		connect(worksheet, &Worksheet::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(worksheet->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlot) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
-		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlotLegend) {
 		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
-		connect(legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(legend->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::Axis) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
-		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	}
 }
 

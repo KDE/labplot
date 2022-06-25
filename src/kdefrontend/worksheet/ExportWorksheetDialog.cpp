@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -122,12 +122,28 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/*!
+ * sets the current project file name. If not empty, the path of the project file
+ * is determined that is then used as the default location for the exported file.
+ */
+void ExportWorksheetDialog::setProjectFileName(const QString& name) {
+	if (name.isEmpty())
+		return;
+
+	QFileInfo fi(name);
+	m_projectPath = fi.dir().canonicalPath();
+}
+
 void ExportWorksheetDialog::setFileName(const QString& name) {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty())
-		dir = QDir::homePath();
-	ui->leFileName->setText(dir + QLatin1String("/") + name);
+	if (m_projectPath.isEmpty()) {
+		// no project folder is available (yet), use the last used directory in this dialog
+		KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+		QString dir = conf.readEntry("LastDir", "");
+		if (dir.isEmpty())
+			dir = QDir::homePath();
+		ui->leFileName->setText(dir + QLatin1String("/") + name);
+	} else
+		ui->leFileName->setText(m_projectPath + QLatin1String("/") + name);
 
 	formatChanged(ui->cbFormat->currentIndex());
 	exportToChanged(ui->cbExportTo->currentIndex());

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of PlotArea.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,8 +13,9 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>
 
-class QBrush;
+class Background;
 class PlotArea;
+class QBrush;
 
 class PlotAreaPrivate : public WorksheetElementPrivate {
 public:
@@ -32,14 +33,7 @@ public:
 	virtual void recalcShapeAndBoundingRect() override{};
 
 	QRectF rect;
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
-	QString backgroundFileName;
-	qreal backgroundOpacity;
+	Background* background{nullptr};
 
 	PlotArea::BorderType borderType;
 	QPen borderPen;

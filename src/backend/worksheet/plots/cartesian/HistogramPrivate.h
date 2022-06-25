@@ -4,7 +4,7 @@
 	Description          : Private members of Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,6 +17,8 @@
 #include <vector>
 
 class Column;
+class Background;
+
 extern "C" {
 #include <gsl/gsl_histogram.h>
 }
@@ -96,15 +98,7 @@ public:
 	QColor valuesColor;
 
 	// filling
-	bool fillingEnabled{true};
-	WorksheetElement::BackgroundType fillingType;
-	WorksheetElement::BackgroundColorStyle fillingColorStyle;
-	WorksheetElement::BackgroundImageStyle fillingImageStyle;
-	Qt::BrushStyle fillingBrushStyle;
-	QColor fillingFirstColor;
-	QColor fillingSecondColor;
-	QString fillingFileName;
-	qreal fillingOpacity;
+	Background* background{nullptr};
 
 	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
