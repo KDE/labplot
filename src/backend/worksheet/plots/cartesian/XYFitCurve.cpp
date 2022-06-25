@@ -642,6 +642,11 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 	}
 }
 
+void XYFitCurve::clearFitResult() {
+	Q_D(XYFitCurve);
+	d->fitResult = XYFitCurve::FitResult();
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

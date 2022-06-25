@@ -865,15 +865,16 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 }
 
 /*!
- * Show the preview pixmap of the fit model expression for the current model category and type.
  * Called when the model type or the degree of the model were changed.
+ * Show the preview pixmap of the fit model expression for the current model category and type.
  */
 void XYFitCurveDock::updateModelEquation() {
 
 	if (m_fitData.modelCategory == nsl_fit_model_custom) {
-		DEBUG("XYFitCurveDock::updateModelEquation() category = nsl_fit_model_custom, type = " << m_fitData.modelType);
+		DEBUG(Q_FUNC_INFO << ", category = nsl_fit_model_custom, type = " << m_fitData.modelType);
 	} else {
-		DEBUG("XYFitCurveDock::updateModelEquation() category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
+		DEBUG(Q_FUNC_INFO << ", category = " << nsl_fit_model_category_name[m_fitData.modelCategory]
+																  << ", type = " << m_fitData.modelType);
 	}
 
 	//this function can also be called when the value for the degree was changed -> update the fit data structure
@@ -885,6 +886,11 @@ void XYFitCurveDock::updateModelEquation() {
 		XYFitCurve::initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
+		// invalidate result
+		m_fitCurve->clearFitResult();
+		if (m_messageWidget)
+			m_messageWidget->close();
+		showFitResult();
 	}
 
 	// variables/parameter that are known
@@ -1113,8 +1119,8 @@ void XYFitCurveDock::recalculateClicked() {
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 
-	//show the warning/error message, if available
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	// show the warning/error message, if available
+	const auto& fitResult = m_fitCurve->fitResult();
 	const QString& status = fitResult.status;
 	if (status != i18n("Success")) {
 		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
@@ -1312,7 +1318,7 @@ void XYFitCurveDock::showFitResult() {
 	for (const auto &s : m_fitData.paramNamesUtf8)
 		sCorr += '\t' + s;
 	int index{0};
-	DEBUG(Q_FUNC_INFO << ", correlation values size = " << fitResult.correlationMatrix.size())
+	DEBUG(Q_FUNC_INFO << ", correlation matrix size = " << fitResult.correlationMatrix.size())
 	for (int i = 0; i < np; i++) {
 		sCorr += '\n' + m_fitData.paramNamesUtf8.at(i);
 		for (int j = 0; j <= i; j++)
