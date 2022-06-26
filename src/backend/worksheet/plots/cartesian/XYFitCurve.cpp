@@ -74,20 +74,23 @@ void XYFitCurve::initStartValues(const XYCurve* curve) {
 
 void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
 	DEBUG(Q_FUNC_INFO);
+	//TODO: curve used for anything?
 	if (!curve) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no curve given");
 		return;
 	}
 
-	const Column* tmpXDataColumn = dynamic_cast<const Column*>(curve->xColumn());
-	const Column* tmpYDataColumn = dynamic_cast<const Column*>(curve->yColumn());
+	Q_D(XYFitCurve);
+	const Column* xColumn = dynamic_cast<const Column*>(d->xDataColumn);
+	const Column* yColumn = dynamic_cast<const Column*>(d->yDataColumn);
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
+	if (!xColumn || !yColumn) {
 		DEBUG(Q_FUNC_INFO << ", data columns not available");
 		return;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", x data rows = " << tmpXDataColumn->rowCount());
+	DEBUG(Q_FUNC_INFO << ", x data rows = " << xColumn->rowCount());
+	DEBUG(Q_FUNC_INFO << ", y data rows = " << yColumn->rowCount());
 
 	nsl_fit_model_category modelCategory = fitData.modelCategory;
 	int modelType = fitData.modelType;
@@ -98,10 +101,10 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	// QVector<double>* xVector = static_cast<QVector<double>* >(tmpXDataColumn->data());
 
 	// double xmean = gsl_stats_mean(xVector->constData(), 1, tmpXDataColumn->rowCount());
-	double xmin = tmpXDataColumn->minimum();
-	double xmax = tmpXDataColumn->maximum();
+	double xmin = xColumn->minimum();
+	double xmax = xColumn->maximum();
 	// double ymin = tmpYDataColumn->minimum();
-	double ymax = tmpYDataColumn->maximum();
+	double ymax = yColumn->maximum();
 	double xrange = xmax - xmin;
 	// double yrange = ymax-ymin;
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
@@ -111,9 +114,28 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
-		case nsl_fit_model_polynomial:
-			// not needed (works anyway)
+		case nsl_fit_model_polynomial: {
+			if (degree == 1) {	// linear regression
+				const auto& xstats = xColumn->statistics();
+				const auto& ystats = yColumn->statistics();
+				if (xColumn->columnMode() == AbstractColumn::ColumnMode::Double &&
+					yColumn->columnMode() == AbstractColumn::ColumnMode::Double) {
+					auto *xVector = static_cast<QVector<double>* >(xColumn->data());
+					auto *yVector = static_cast<QVector<double>* >(yColumn->data());
+					DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
+					double b = gsl_stats_covariance_m(xVector->constData(), 1, yVector->constData(), 1, qMin(xVector->size(), yVector->size()),
+						xstats.arithmeticMean, ystats.arithmeticMean) / xstats.variance;
+					double a = ystats.arithmeticMean - b * xstats.arithmeticMean;
+					DEBUG("START PARAMETER: a = " << a << ", b = " << b)
+					paramStartValues[0] = a;
+					paramStartValues[1] = b;
+				} else {
+					//TODO: other modes for x and y data column
+					//TODO: GSL only has covariance for double data
+				}
+			}
 			break;
+		}
 		// TODO: handle basic models
 		case nsl_fit_model_power:
 		case nsl_fit_model_exponential:

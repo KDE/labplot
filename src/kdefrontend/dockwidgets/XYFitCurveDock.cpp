@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of fit curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -490,7 +490,11 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curve);
+	DEBUG(Q_FUNC_INFO)
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	// udpate parameter widget
+	fitParametersWidget->setFitData(&m_fitData);
+	enableRecalculate();	// update preview
 
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
@@ -510,7 +514,11 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curve);
+	DEBUG(Q_FUNC_INFO)
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	// udpate parameter widget
+	fitParametersWidget->setFitData(&m_fitData);
+	enableRecalculate();	// update preview
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -884,7 +892,8 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.degree = degree;
 		XYFitCurve::initFitData(m_fitData);
 		// set model dependent start values from curve data
-		XYFitCurve::initStartValues(m_fitData, m_curve);
+		DEBUG(Q_FUNC_INFO)
+		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
 		// invalidate result
