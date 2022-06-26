@@ -16,6 +16,7 @@
 
 class AbstractAspect;
 class AspectTreeModel;
+class BackgroundWidget;
 class BarPlot;
 class TreeViewComboBox;
 class KConfig;
@@ -30,6 +31,7 @@ public:
 
 private:
 	Ui::BarPlotDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -61,18 +63,6 @@ private Q_SLOTS:
 	//"Box"-tab
 	void widthFactorChanged(int) const;
 
-	// box filling
-	void fillingEnabledChanged(bool) const;
-	void fillingTypeChanged(int) const;
-	void fillingColorStyleChanged(int) const;
-	void fillingImageStyleChanged(int) const;
-	void fillingBrushStyleChanged(int) const;
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&) const;
-	void selectFile();
-	void fileNameChanged() const;
-	void fillingOpacityChanged(int) const;
-
 	// box border
 	void borderStyleChanged(int) const;
 	void borderColorChanged(const QColor&);
@@ -88,17 +78,6 @@ private Q_SLOTS:
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
 	void plotVisibilityChanged(bool);
-
-	// box filling
-	void plotFillingEnabledChanged(bool);
-	void plotFillingTypeChanged(WorksheetElement::BackgroundType);
-	void plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void plotFillingBrushStyleChanged(Qt::BrushStyle);
-	void plotFillingFirstColorChanged(QColor&);
-	void plotFillingSecondColorChanged(QColor&);
-	void plotFillingFileNameChanged(QString&);
-	void plotFillingOpacityChanged(double);
 
 	// box border
 	void plotBorderPenChanged(QPen&);

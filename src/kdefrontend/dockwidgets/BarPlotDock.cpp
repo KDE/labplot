@@ -11,11 +11,10 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
-#include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
-#include "kdefrontend/widgets/SymbolWidget.h"
+#include "kdefrontend/widgets/BackgroundWidget.h"
 
 #include <QPushButton>
 
@@ -60,28 +59,9 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	ui.sbWidthFactor->setToolTip(msg);
 
 	// filling
-	ui.cbFillingType->addItem(i18n("Color"));
-	ui.cbFillingType->addItem(i18n("Image"));
-	ui.cbFillingType->addItem(i18n("Pattern"));
-
-	ui.cbFillingColorStyle->addItem(i18n("Single Color"));
-	ui.cbFillingColorStyle->addItem(i18n("Horizontal Gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("Vertical Gradient"));
-	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Top Left)"));
-	ui.cbFillingColorStyle->addItem(i18n("Diag. Gradient (From Bottom Left)"));
-	ui.cbFillingColorStyle->addItem(i18n("Radial Gradient"));
-
-	ui.cbFillingImageStyle->addItem(i18n("Scaled and Cropped"));
-	ui.cbFillingImageStyle->addItem(i18n("Scaled"));
-	ui.cbFillingImageStyle->addItem(i18n("Scaled, Keep Proportions"));
-	ui.cbFillingImageStyle->addItem(i18n("Centered"));
-	ui.cbFillingImageStyle->addItem(i18n("Tiled"));
-	ui.cbFillingImageStyle->addItem(i18n("Center Tiled"));
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
-
-	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	ui.bFillingOpen->setIcon(QIcon::fromTheme("document-open"));
-
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
+	backgroundWidget = new BackgroundWidget(ui.tabBars);
+	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -107,19 +87,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// Tab "Bars"
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
-
-	// box filling
-	connect(ui.chkFillingEnabled, &QCheckBox::toggled, this, &BarPlotDock::fillingEnabledChanged);
-	connect(ui.cbFillingType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::fillingTypeChanged);
-	connect(ui.cbFillingColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::fillingColorStyleChanged);
-	connect(ui.cbFillingImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::fillingImageStyleChanged);
-	connect(ui.cbFillingBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::fillingBrushStyleChanged);
-	connect(ui.bFillingOpen, &QPushButton::clicked, this, &BarPlotDock::selectFile);
-	connect(ui.leFillingFileName, &QLineEdit::returnPressed, this, &BarPlotDock::fileNameChanged);
-	connect(ui.leFillingFileName, &QLineEdit::textChanged, this, &BarPlotDock::fileNameChanged);
-	connect(ui.kcbFillingFirstColor, &KColorButton::changed, this, &BarPlotDock::fillingFirstColorChanged);
-	connect(ui.kcbFillingSecondColor, &KColorButton::changed, this, &BarPlotDock::fillingSecondColorChanged);
-	connect(ui.sbFillingOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::fillingOpacityChanged);
 
 	// box border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::borderStyleChanged);
@@ -173,6 +140,13 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
+	// backgrounds
+	QList<Background*> backgrounds;
+	for (auto* plot : m_barPlots)
+		backgrounds << plot->background();
+
+	backgroundWidget->setBackgrounds(backgrounds);
+
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_barPlot->isVisible());
 	KConfig config(QString(), KConfig::SimpleConfig);
@@ -193,17 +167,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
 
 	connect(m_barPlot, &BarPlot::widthFactorChanged, this, &BarPlotDock::plotWidthFactorChanged);
-
-	// box filling
-	connect(m_barPlot, &BarPlot::fillingEnabledChanged, this, &BarPlotDock::plotFillingEnabledChanged);
-	connect(m_barPlot, &BarPlot::fillingTypeChanged, this, &BarPlotDock::plotFillingTypeChanged);
-	connect(m_barPlot, &BarPlot::fillingColorStyleChanged, this, &BarPlotDock::plotFillingColorStyleChanged);
-	connect(m_barPlot, &BarPlot::fillingImageStyleChanged, this, &BarPlotDock::plotFillingImageStyleChanged);
-	connect(m_barPlot, &BarPlot::fillingBrushStyleChanged, this, &BarPlotDock::plotFillingBrushStyleChanged);
-	connect(m_barPlot, &BarPlot::fillingFirstColorChanged, this, &BarPlotDock::plotFillingFirstColorChanged);
-	connect(m_barPlot, &BarPlot::fillingSecondColorChanged, this, &BarPlotDock::plotFillingSecondColorChanged);
-	connect(m_barPlot, &BarPlot::fillingFileNameChanged, this, &BarPlotDock::plotFillingFileNameChanged);
-	connect(m_barPlot, &BarPlot::fillingOpacityChanged, this, &BarPlotDock::plotFillingOpacityChanged);
 
 	// box border
 	connect(m_barPlot, &BarPlot::borderPenChanged, this, &BarPlotDock::plotBorderPenChanged);
@@ -438,185 +401,6 @@ void BarPlotDock::widthFactorChanged(int value) const {
 		barPlot->setWidthFactor(factor);
 }
 
-// box filling
-void BarPlotDock::fillingEnabledChanged(bool state) const {
-	ui.cbFillingType->setEnabled(state);
-	ui.cbFillingColorStyle->setEnabled(state);
-	ui.cbFillingBrushStyle->setEnabled(state);
-	ui.cbFillingImageStyle->setEnabled(state);
-	ui.kcbFillingFirstColor->setEnabled(state);
-	ui.kcbFillingSecondColor->setEnabled(state);
-	ui.leFillingFileName->setEnabled(state);
-	ui.bFillingOpen->setEnabled(state);
-	ui.sbFillingOpacity->setEnabled(state);
-
-	if (m_initializing)
-		return;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingEnabled(state);
-}
-
-void BarPlotDock::fillingTypeChanged(int index) const {
-	if (index == -1)
-		return;
-
-	auto type = (WorksheetElement::BackgroundType)index;
-
-	if (type == WorksheetElement::BackgroundType::Color) {
-		ui.lFillingColorStyle->show();
-		ui.cbFillingColorStyle->show();
-		ui.lFillingImageStyle->hide();
-		ui.cbFillingImageStyle->hide();
-		ui.lFillingBrushStyle->hide();
-		ui.cbFillingBrushStyle->hide();
-
-		ui.lFillingFileName->hide();
-		ui.leFillingFileName->hide();
-		ui.bFillingOpen->hide();
-
-		ui.lFillingFirstColor->show();
-		ui.kcbFillingFirstColor->show();
-
-		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbFillingColorStyle->currentIndex();
-		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-			ui.lFillingFirstColor->setText(i18n("Color:"));
-			ui.lFillingSecondColor->hide();
-			ui.kcbFillingSecondColor->hide();
-		} else {
-			ui.lFillingFirstColor->setText(i18n("First color:"));
-			ui.lFillingSecondColor->show();
-			ui.kcbFillingSecondColor->show();
-		}
-	} else if (type == WorksheetElement::BackgroundType::Image) {
-		ui.lFillingFirstColor->hide();
-		ui.kcbFillingFirstColor->hide();
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-
-		ui.lFillingColorStyle->hide();
-		ui.cbFillingColorStyle->hide();
-		ui.lFillingImageStyle->show();
-		ui.cbFillingImageStyle->show();
-		ui.lFillingBrushStyle->hide();
-		ui.cbFillingBrushStyle->hide();
-		ui.lFillingFileName->show();
-		ui.leFillingFileName->show();
-		ui.bFillingOpen->show();
-	} else if (type == WorksheetElement::BackgroundType::Pattern) {
-		ui.lFillingFirstColor->setText(i18n("Color:"));
-		ui.lFillingFirstColor->show();
-		ui.kcbFillingFirstColor->show();
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-
-		ui.lFillingColorStyle->hide();
-		ui.cbFillingColorStyle->hide();
-		ui.lFillingImageStyle->hide();
-		ui.cbFillingImageStyle->hide();
-		ui.lFillingBrushStyle->show();
-		ui.cbFillingBrushStyle->show();
-		ui.lFillingFileName->hide();
-		ui.leFillingFileName->hide();
-		ui.bFillingOpen->hide();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingType(type);
-}
-
-void BarPlotDock::fillingColorStyleChanged(int index) const {
-	if (index == -1)
-		return;
-
-	auto style = (WorksheetElement::BackgroundColorStyle)index;
-
-	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
-		ui.lFillingFirstColor->setText(i18n("Color:"));
-		ui.lFillingSecondColor->hide();
-		ui.kcbFillingSecondColor->hide();
-	} else {
-		ui.lFillingFirstColor->setText(i18n("First color:"));
-		ui.lFillingSecondColor->show();
-		ui.kcbFillingSecondColor->show();
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingColorStyle(style);
-}
-
-void BarPlotDock::fillingImageStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto style = (WorksheetElement::BackgroundImageStyle)index;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingImageStyle(style);
-}
-
-void BarPlotDock::fillingBrushStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto style = (Qt::BrushStyle)index;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingBrushStyle(style);
-}
-
-void BarPlotDock::fillingFirstColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingFirstColor(c);
-
-	Lock lock(m_initializing);
-	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, c);
-}
-
-void BarPlotDock::fillingSecondColorChanged(const QColor& c) const {
-	if (m_initializing)
-		return;
-
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingSecondColor(c);
-}
-
-/*!
-	opens a file dialog and lets the user select the image file.
-*/
-void BarPlotDock::selectFile() {
-	const QString& path = GuiTools::openImageFile(QLatin1String("BarPlotDock"));
-	if (path.isEmpty())
-		return;
-
-	ui.leFillingFileName->setText(path);
-}
-
-void BarPlotDock::fileNameChanged() const {
-	if (m_initializing)
-		return;
-
-	QString fileName = ui.leFillingFileName->text();
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingFileName(fileName);
-}
-
-void BarPlotDock::fillingOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	float opacity = (float)value / 100;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setFillingOpacity(opacity);
-}
-
 // box border
 void BarPlotDock::borderStyleChanged(int index) const {
 	if (m_initializing)
@@ -701,44 +485,6 @@ void BarPlotDock::plotWidthFactorChanged(double factor) {
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
-// box filling
-void BarPlotDock::plotFillingEnabledChanged(bool status) {
-	Lock lock(m_initializing);
-	ui.chkFillingEnabled->setChecked(status);
-}
-void BarPlotDock::plotFillingTypeChanged(WorksheetElement::BackgroundType type) {
-	Lock lock(m_initializing);
-	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
-}
-void BarPlotDock::plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
-	Lock lock(m_initializing);
-	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
-}
-void BarPlotDock::plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
-	Lock lock(m_initializing);
-	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
-}
-void BarPlotDock::plotFillingBrushStyleChanged(Qt::BrushStyle style) {
-	Lock lock(m_initializing);
-	ui.cbFillingBrushStyle->setCurrentIndex(style);
-}
-void BarPlotDock::plotFillingFirstColorChanged(QColor& color) {
-	Lock lock(m_initializing);
-	ui.kcbFillingFirstColor->setColor(color);
-}
-void BarPlotDock::plotFillingSecondColorChanged(QColor& color) {
-	Lock lock(m_initializing);
-	ui.kcbFillingSecondColor->setColor(color);
-}
-void BarPlotDock::plotFillingFileNameChanged(QString& filename) {
-	Lock lock(m_initializing);
-	ui.leFillingFileName->setText(filename);
-}
-void BarPlotDock::plotFillingOpacityChanged(double opacity) {
-	Lock lock(m_initializing);
-	ui.sbFillingOpacity->setValue(round(opacity * 100.0));
-}
-
 // box border
 void BarPlotDock::plotBorderPenChanged(QPen& pen) {
 	Lock lock(m_initializing);
@@ -770,19 +516,7 @@ void BarPlotDock::loadConfig(KConfig& config) {
 	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
 
 	// box filling
-	ui.chkFillingEnabled->setChecked(group.readEntry("FillingEnabled", m_barPlot->fillingEnabled()));
-	ui.cbFillingType->setCurrentIndex(group.readEntry("FillingType", (int)m_barPlot->fillingType()));
-	ui.cbFillingColorStyle->setCurrentIndex(group.readEntry("FillingColorStyle", (int)m_barPlot->fillingColorStyle()));
-	ui.cbFillingImageStyle->setCurrentIndex(group.readEntry("FillingImageStyle", (int)m_barPlot->fillingImageStyle()));
-	ui.cbFillingBrushStyle->setCurrentIndex(group.readEntry("FillingBrushStyle", (int)m_barPlot->fillingBrushStyle()));
-	ui.leFillingFileName->setText(group.readEntry("FillingFileName", m_barPlot->fillingFileName()));
-	ui.kcbFillingFirstColor->setColor(group.readEntry("FillingFirstColor", m_barPlot->fillingFirstColor()));
-	ui.kcbFillingSecondColor->setColor(group.readEntry("FillingSecondColor", m_barPlot->fillingSecondColor()));
-	ui.sbFillingOpacity->setValue(round(group.readEntry("FillingOpacity", m_barPlot->fillingOpacity()) * 100));
-
-	// update the box filling widgets
-	fillingEnabledChanged(ui.chkFillingEnabled->isChecked());
-	fillingTypeChanged(ui.cbFillingType->currentIndex());
+	backgroundWidget->loadConfig(group);
 
 	// box border
 	const QPen& penBorder = m_barPlot->borderPen();
@@ -826,15 +560,7 @@ void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
 
 	// box filling
-	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());
-	group.writeEntry("FillingType", ui.cbFillingType->currentIndex());
-	group.writeEntry("FillingColorStyle", ui.cbFillingColorStyle->currentIndex());
-	group.writeEntry("FillingImageStyle", ui.cbFillingImageStyle->currentIndex());
-	group.writeEntry("FillingBrushStyle", ui.cbFillingBrushStyle->currentIndex());
-	group.writeEntry("FillingFileName", ui.leFillingFileName->text());
-	group.writeEntry("FillingFirstColor", ui.kcbFillingFirstColor->color());
-	group.writeEntry("FillingSecondColor", ui.kcbFillingSecondColor->color());
-	group.writeEntry("FillingOpacity", ui.sbFillingOpacity->value() / 100.0);
+	backgroundWidget->saveConfig(group);
 
 	// box border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());

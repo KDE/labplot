@@ -14,6 +14,7 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>
 
+class Background;
 class CartesianCoordinateSystem;
 
 typedef QVector<QPointF> Points;
@@ -54,15 +55,7 @@ public:
 	double yMax;
 
 	// box filling
-	bool fillingEnabled{true};
-	WorksheetElement::BackgroundType fillingType;
-	WorksheetElement::BackgroundColorStyle fillingColorStyle;
-	WorksheetElement::BackgroundImageStyle fillingImageStyle;
-	Qt::BrushStyle fillingBrushStyle;
-	QColor fillingFirstColor;
-	QColor fillingSecondColor;
-	QString fillingFileName;
-	qreal fillingOpacity;
+	Background* background{nullptr};
 
 	// box border
 	QPen borderPen;
