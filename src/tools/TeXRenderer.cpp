@@ -20,10 +20,10 @@
 #include <QDir>
 #include <QImage>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QTextStream>
-#include <QRegularExpression>
 
 #ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
@@ -167,7 +167,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 		QString errorLogs;
 		if (logFile.open(QIODevice::ReadOnly)) {
 			// really slow, but texrenderer is running asynchronous so it is not a problem
-			while(!logFile.atEnd()) {
+			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
 				// ! as first character means error
 				if (line.count() > 0 && line.at(0) == '!') {
@@ -177,7 +177,8 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 			}
 			logFile.close();
 		}
-		QString err = errorLogs.isEmpty() ? engine + " " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
+		QString err =
+			errorLogs.isEmpty() ? engine + " " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
@@ -226,16 +227,16 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QString errorLogs;
 		if (logFile.open(QIODevice::ReadOnly)) {
 			// really slow, but texrenderer is running asynchronous so it is not a problem
-			while(!logFile.atEnd()) {
+			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
 				if (line.count() > 0 && line.at(0) == '!') {
 					errorLogs += line;
-					break;// only first error message is enough
+					break; // only first error message is enough
 				}
 			}
 			logFile.close();
 		}
-		QString err = errorLogs.isEmpty() ?  "latex " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
+		QString err = errorLogs.isEmpty() ? "latex " + i18n("process failed, exit code =") + " " + QString::number(latexProcess.exitCode()) + "\n" : errorLogs;
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
