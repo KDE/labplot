@@ -45,6 +45,7 @@
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
   <summary xml:lang="it">Analisi e visualizzazione dei dati interattiva</summary>
   <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
+  <summary xml:lang="pl">Interaktywne obrazowanie i analiza danych</summary>
   <summary xml:lang="pt">Visualização e Análise Interactivas de Dados</summary>
   <summary xml:lang="pt-BR">Visualização e análise de dados interativa</summary>
   <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
@@ -119,6 +120,7 @@
       <caption xml:lang="fr">Affichage basique de données</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="pt">Visualização básica dos dados</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
@@ -139,6 +141,7 @@
       <caption xml:lang="fr">Affichage basique de données</caption>
       <caption xml:lang="it">Visualizzazione di base dei dati</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="pt">Visualização básica dos dados</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
       <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
@@ -159,6 +162,7 @@
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
       <caption xml:lang="it">Tracciamento avanzato di grafici e immagini</caption>
       <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
+      <caption xml:lang="pl">Rozbudowane układy wykresów i obrazów</caption>
       <caption xml:lang="pt">Formatação avançada dos gráficos e imagens</caption>
       <caption xml:lang="pt-BR">Layout avançado de gráficos e imagens</caption>
       <caption xml:lang="sl">Napredna postavitev risb in slik</caption>
@@ -180,6 +184,7 @@
       <caption xml:lang="fr">Application de thèmes</caption>
       <caption xml:lang="it">Temi</caption>
       <caption xml:lang="nl">Thema's</caption>
+      <caption xml:lang="pl">Dostosowywanie wyglądu</caption>
       <caption xml:lang="pt">Suporte para temas</caption>
       <caption xml:lang="pt-BR">Temas</caption>
       <caption xml:lang="sl">Oblikovanje s temami</caption>
@@ -200,6 +205,7 @@
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
       <caption xml:lang="it">Visualizzazione di funzioni matematiche</caption>
       <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
+      <caption xml:lang="pl">Obrazowanie funkcji matematycznych</caption>
       <caption xml:lang="pt">Visualização das funções matemáticas</caption>
       <caption xml:lang="pt-BR">Visualização de funções matemáticas</caption>
       <caption xml:lang="sl">Vizualizacija matematičnih funkcij</caption>
@@ -220,6 +226,7 @@
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
       <caption xml:lang="it">Adatta modelli predefiniti o personalizzati ai dati</caption>
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
+      <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
       <caption xml:lang="pt">Ajuste de modelos predefinidos ou personalizados aos dados</caption>
       <caption xml:lang="sl">Podatkom prilagodite vnaprej določene modele ali modele po meri</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
@@ -239,6 +246,7 @@
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
       <caption xml:lang="it">Smussa i dati per mezzo di diversi metodi di smussatura</caption>
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
+      <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
       <caption xml:lang="pt">Suavização dos dados com a ajuda de vários métodos</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
@@ -257,6 +265,7 @@
       <caption xml:lang="fr">Interface pour ordinateur de type « Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
+      <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
       <caption xml:lang="pt">Interface de blocos de notas para sessões interactivas no Maxima, Octave, R, Sage, Scilab, Python, Julia, etc</caption>
       <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua, itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
@@ -276,6 +285,7 @@
       <caption xml:lang="fr">Analyse de signaux</caption>
       <caption xml:lang="it">Analisi del segnale</caption>
       <caption xml:lang="nl">Signaalanalyse</caption>
+      <caption xml:lang="pl">Analiza sygnałów</caption>
       <caption xml:lang="pt">Análise de sinais</caption>
       <caption xml:lang="pt-BR">Análise de sinais</caption>
       <caption xml:lang="sl">Analiza signala</caption>
@@ -296,6 +306,7 @@
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
       <caption xml:lang="it">Diagramma Hertzsprung-Russell in LabPlot</caption>
       <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
+      <caption xml:lang="pl">Diagram Herzsprung-Russel w LabPlocie</caption>
       <caption xml:lang="pt">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="pt-BR">Diagrama de Herzsprung-Russel no LabPlot</caption>
       <caption xml:lang="sl">Herzsprung-Russelov diagram v LabPlot</caption>
@@ -316,6 +327,7 @@
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
+      <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
       <caption xml:lang="pt">Visualização dos dados calculados numa sessão interactiva do Maxima</caption>
       <caption xml:lang="sl">Vizualizacija podatkov, izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
