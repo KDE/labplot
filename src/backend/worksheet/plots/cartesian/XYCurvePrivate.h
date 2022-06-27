@@ -13,8 +13,6 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include <vector>
 
 class Background;
@@ -49,13 +47,6 @@ public:
 							  QPointF& lastPoint,
 							  int& pixelDiff,
 							  QVector<QLineF>& lines,
-							  bool& prevPixelDiffZero); // finally add line if unique (no overlay)
-	void addUniqueLine2(QPointF p,
-							  double& minY,
-							  double& maxY,
-							  QPointF& lastPoint,
-							  int& pixelDiff,
-							  QVector<Points>& lines,
 							  bool& prevPixelDiffZero); // finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
@@ -172,7 +163,6 @@ private:
 	QPainterPath symbolsPath;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-	QVector<Points> m_lines_new;
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)
