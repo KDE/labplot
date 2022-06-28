@@ -33,7 +33,7 @@ public:
 		EquationType type{EquationType::Cartesian};
 		QString expression1;
 		QString expression2;
-		QString min;
+		QString min;	// localized strings to support expressions
 		QString max;
 		int count{1000};
 	};
