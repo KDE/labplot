@@ -37,6 +37,7 @@ extern "C" {
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
+#include <gsl/gsl_multifit.h>
 }
 
 #include <QDateTime>
@@ -94,7 +95,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 
 	nsl_fit_model_category modelCategory = fitData.modelCategory;
 	int modelType = fitData.modelType;
-	int degree = fitData.degree;
+	const int degree = fitData.degree;
 	DEBUG(Q_FUNC_INFO << ", fit model type = " << modelType << ", degree = " << degree);
 
 	QVector<double>& paramStartValues = fitData.paramStartValues;
@@ -115,7 +116,9 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: {
-			if (degree == 1) {	// use linear regression
+			const double p = degree;
+			const size_t n = qMin(xColumn->rowCount(), yColumn->rowCount());
+			if (p == 1) {	// use linear regression
 				const auto& xstats = xColumn->statistics();
 				const auto& ystats = yColumn->statistics();
 				DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
@@ -125,17 +128,48 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				// b = gsl_stats[_int]_covariance_m(xVector->constData(), 1, yVector->constData(), 1, qMin(xVector->size(), yVector->size()),
 				//	xstats.arithmeticMean, ystats.arithmeticMean) / xstats.variance;
 				double cov = 0.;
-				const size_t nrRows = qMin(xColumn->rowCount(), yColumn->rowCount());
-				for (size_t i = 0; i < nrRows; i++)
+				for (size_t i = 0; i < n; i++)
 					if (!std::isnan(xColumn->valueAt(i)) && !std::isnan(yColumn->valueAt(i)))
 						cov += (xColumn->valueAt(i) - xstats.arithmeticMean) * (yColumn->valueAt(i) - ystats.arithmeticMean);
-				if (!std::isnan(cov) && xstats.variance > 0 && nrRows > 1)
-					b = cov / xstats.variance / (nrRows - 1);
+				if (!std::isnan(cov) && xstats.variance > 0 && n > 1)
+					b = cov / xstats.variance / (n - 1);
 
 				double a = ystats.arithmeticMean - b * xstats.arithmeticMean;
 				DEBUG("START PARAMETER: a = " << a << ", b = " << b)
 				paramStartValues[0] = a;
 				paramStartValues[1] = b;
+			} else {	// do a multiparameter linear regression
+				gsl_matrix* X = gsl_matrix_alloc (n, p+1);	// X matrix
+				gsl_vector* y = gsl_vector_alloc (n);	// y values
+				gsl_vector* w = gsl_vector_alloc (n);	// weights
+
+				gsl_vector* c = gsl_vector_alloc (p+1);       // best fit parameter (p+1)
+				gsl_matrix* cov = gsl_matrix_alloc (p+1, p+1);
+
+				for (size_t i = 0; i < n; i++) {
+					double xi = xColumn->valueAt(i);
+					double yi = yColumn->valueAt(i);
+
+					for (int j = 0; j <= p; j++)
+						gsl_matrix_set (X, i, j, gsl_pow_int(xi, j));
+					gsl_vector_set (y, i, yi);
+					gsl_vector_set (w, i, 1.);	//TODO: use weights when available
+				}
+
+				gsl_multifit_linear_workspace* work = gsl_multifit_linear_alloc (n, p+1);
+				double chisq;
+				gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
+				gsl_multifit_linear_free (work);
+				gsl_matrix_free (X);
+				gsl_vector_free (y);
+				gsl_vector_free (w);
+
+				for (int i = 0; i < p+1; i++)
+					paramStartValues[i] = gsl_vector_get(c, i);
+
+				//TODO: fill results?
+				gsl_vector_free (c);
+				gsl_matrix_free (cov);
 			}
 			break;
 		}

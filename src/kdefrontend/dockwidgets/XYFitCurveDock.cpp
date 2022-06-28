@@ -1003,7 +1003,7 @@ void XYFitCurveDock::showFunctions() {
  * Only called for custom fit model
  */
 void XYFitCurveDock::updateParameterList() {
-	DEBUG("XYFitCurveDock::updateParameterList()");
+	DEBUG(Q_FUNC_INFO);
 	// use current model function
 	m_fitData.model = uiGeneralTab.teEquation->toPlainText();
 
