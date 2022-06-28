@@ -1,5 +1,5 @@
 /*
-	File                 : FitOptionsWidget.cc
+	File                 : FitOptionsWidget.cpp
 	Project              : LabPlot
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------

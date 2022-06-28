@@ -64,10 +64,13 @@ IF (BUILD_EXCEL)
         set(ext_src ${build_dir}/QXlsx/src/QXlsx)
         set(ext_insource ON)
         set(qxlsx_library ${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
+	# use fixed git tag until building on Windows is fixed
+	if (WIN32)
+		set(git_tag 0461eac8)	# 1.4.3
+	endif ()
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY ${ext_url}
-		# TODO: use fixed tag until issue with 1b0a2792 (breaks building on Windows) is fixed
-		GIT_TAG 0461eac8	# v1.4.3
+		GIT_TAG ${git_tag}
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
