@@ -1467,7 +1467,6 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 										 QVector<double>* yVector,
 										 const QStringList& paramNames,
 										 const QVector<double>& paramValues) {
-
 	DEBUG(Q_FUNC_INFO << ", v0: range = " << range.toStdString())
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)

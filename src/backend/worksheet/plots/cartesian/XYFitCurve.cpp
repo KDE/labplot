@@ -2270,13 +2270,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model,
-										xRange,
-										(int)fitData.evaluatedPoints,
-										xVector,
-										yVector,
-										fitData.paramNames,
-										paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, xRange, (int)fitData.evaluatedPoints, xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();
