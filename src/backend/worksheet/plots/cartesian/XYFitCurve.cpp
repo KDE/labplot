@@ -34,7 +34,7 @@ extern "C" {
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
-#include <gsl/gsl_statistics_double.h>
+#include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
 }
@@ -110,29 +110,32 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
 	// DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
 
-	// guess start values for parameter
+	// guess start values of parameter
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: {
-			if (degree == 1) {	// linear regression
+			if (degree == 1) {	// use linear regression
 				const auto& xstats = xColumn->statistics();
 				const auto& ystats = yColumn->statistics();
-				if (xColumn->columnMode() == AbstractColumn::ColumnMode::Double &&
-					yColumn->columnMode() == AbstractColumn::ColumnMode::Double) {
-					auto *xVector = static_cast<QVector<double>* >(xColumn->data());
-					auto *yVector = static_cast<QVector<double>* >(yColumn->data());
-					DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
-					double b = gsl_stats_covariance_m(xVector->constData(), 1, yVector->constData(), 1, qMin(xVector->size(), yVector->size()),
-						xstats.arithmeticMean, ystats.arithmeticMean) / xstats.variance;
-					double a = ystats.arithmeticMean - b * xstats.arithmeticMean;
-					DEBUG("START PARAMETER: a = " << a << ", b = " << b)
-					paramStartValues[0] = a;
-					paramStartValues[1] = b;
-				} else {
-					//TODO: other modes for x and y data column
-					//TODO: GSL only has covariance for double data
-				}
+				DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
+				double b = 1.;
+				// for x and y both double or int could use
+				// auto *x/yVector = static_cast<QVector<double/int>* >(x/yColumn->data());
+				// b = gsl_stats[_int]_covariance_m(xVector->constData(), 1, yVector->constData(), 1, qMin(xVector->size(), yVector->size()),
+				//	xstats.arithmeticMean, ystats.arithmeticMean) / xstats.variance;
+				double cov = 0.;
+				const size_t nrRows = qMin(xColumn->rowCount(), yColumn->rowCount());
+				for (size_t i = 0; i < nrRows; i++)
+					if (!std::isnan(xColumn->valueAt(i)) && !std::isnan(yColumn->valueAt(i)))
+						cov += (xColumn->valueAt(i) - xstats.arithmeticMean) * (yColumn->valueAt(i) - ystats.arithmeticMean);
+				if (!std::isnan(cov) && xstats.variance > 0 && nrRows > 1)
+					b = cov / xstats.variance / (nrRows - 1);
+
+				double a = ystats.arithmeticMean - b * xstats.arithmeticMean;
+				DEBUG("START PARAMETER: a = " << a << ", b = " << b)
+				paramStartValues[0] = a;
+				paramStartValues[1] = b;
 			}
 			break;
 		}
