@@ -1,11 +1,11 @@
 /*
-    File             : ExpressionParser.cpp
-    Project          : LabPlot
-    Description      : C++ wrapper for the bison generated parser.
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+	File             : ExpressionParser.cpp
+	Project          : LabPlot
+	Description      : C++ wrapper for the bison generated parser.
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2014-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 
@@ -1460,14 +1460,16 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 
 /*
  * Evaluate cartesian expression returning true on success and false if parsing fails
+ * using given range
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
-		int count, QVector<double>* xVector, QVector<double>* yVector,
-		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG(Q_FUNC_INFO << ", v1: range = " << STDSTRING(min) << " .. " << STDSTRING(max))
-	gsl_set_error_handler_off();
-
-	const Range<double> range{min, max};
+bool ExpressionParser::evaluateCartesian(const QString& expr,
+										 const Range<double> range,
+										 int count,
+										 QVector<double>* xVector,
+										 QVector<double>* yVector,
+										 const QStringList& paramNames,
+										 const QVector<double>& paramValues) {
+	DEBUG(Q_FUNC_INFO << ", v0: range = " << range.toStdString())
 	const double step = range.stepSize(count);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
@@ -1475,6 +1477,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	SET_NUMBER_LOCALE
+	gsl_set_error_handler_off();
 	for (int i = 0; i < count; i++) {
 		const double x{ range.start() + step * i };
 		assign_symbol("x", x);
@@ -1493,6 +1496,23 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	}
 
 	return true;
+}
+/*
+ * Evaluate cartesian expression returning true on success and false if parsing fails
+ * min and max are localized strings which are parsed to support expressions like "pi + 1.5"
+ */
+bool ExpressionParser::evaluateCartesian(const QString& expr,
+										 const QString& min,
+										 const QString& max,
+										 int count,
+										 QVector<double>* xVector,
+										 QVector<double>* yVector,
+										 const QStringList& paramNames,
+										 const QVector<double>& paramValues) {
+	DEBUG(Q_FUNC_INFO << ", v1: range = " << STDSTRING(min) << " .. " << STDSTRING(max))
+
+	const Range<double> range{min, max};
+	return evaluateCartesian(expr, range, count, xVector, yVector, paramNames, paramValues);
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,

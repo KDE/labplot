@@ -57,8 +57,8 @@ public:
 	Range(T start, T end, Format format = Format::Numeric, Scale scale = Scale::Linear) {
 		this->setRange(start, end, format, scale);
 	}
-	Range(const QString& start, const QString& end, const Format format = Format::Numeric,
-	      const Scale scale = Scale::Linear) {
+	// start and end as localized strings like "pi + 1.5" (will be parsed)
+	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		SET_NUMBER_LOCALE
 		// min
 		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
