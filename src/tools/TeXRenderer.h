@@ -26,7 +26,7 @@ public:
 		int dpi;
 	};
 
-	typedef struct Result {
+	struct Result {
 		Result()
 			: successful(false) {
 		}
