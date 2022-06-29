@@ -160,10 +160,10 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.minimum, -1.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 1.5);
-	QCOMPARE(stats.geometricMean, 0.);	// TODO: interpreted as percentage for geometric mean
+	WARN(stats.geometricMean)
+	QCOMPARE(stats.geometricMean, 1.474323891188);	// special case
 	QCOMPARE(stats.harmonicMean, 0.);	// TODO
 	QCOMPARE(stats.contraharmonicMean, 5.);	// TODO
-
 
 	WARN(stats.mode)
 	WARN(stats.firstQuartile)
@@ -216,11 +216,10 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, 0.);	// TODO: should be nan
+	QCOMPARE(stats.geometricMean, qQNaN());	// special case
 	QCOMPARE(stats.harmonicMean, 0.);	// TODO
 	WARN(stats.contraharmonicMean)
 	QCOMPARE(stats.contraharmonicMean, -107.8387096774);	// TODO
-
 
 	WARN(stats.mode)
 	WARN(stats.firstQuartile)
@@ -273,10 +272,10 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.minimum, 0.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 2.);
-	QCOMPARE(stats.geometricMean, 0.);	// TODO: zero replaced by one for geometric mean
+	WARN(stats.geometricMean)
+	QCOMPARE(stats.geometricMean, 1.77827941003892);	// special case
 	QCOMPARE(stats.harmonicMean, 0.);	// TODO
 	QCOMPARE(stats.contraharmonicMean, 3.75);	// TODO
-
 
 	WARN(stats.mode)
 	WARN(stats.firstQuartile)
