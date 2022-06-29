@@ -816,7 +816,7 @@ void Column::calculateStatistics() const {
 	PERFTRACE("calculate column statistics");
 
 	d->statistics = ColumnStatistics();
-	ColumnStatistics& statistics = d->statistics;
+	auto& statistics = d->statistics;
 
 	//######  location measures  #######
 	int rowValuesSize = 0;
@@ -960,11 +960,11 @@ void Column::calculateStatistics() const {
 	statistics.trimean = (statistics.firstQuartile + 2 * statistics.median + statistics.thirdQuartile) / 4;
 
 	//######  dispersion and shape measures  #######
-	statistics.variance = 0;
-	statistics.meanDeviation = 0.0;
-	statistics.meanDeviationAroundMedian = 0.0;
-	double centralMoment_r3 = 0.0;
-	double centralMoment_r4 = 0.0;
+	statistics.variance = 0.;
+	statistics.meanDeviation = 0.;
+	statistics.meanDeviationAroundMedian = 0.;
+	double centralMoment_r3 = 0.;
+	double centralMoment_r4 = 0.;
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
@@ -972,9 +972,9 @@ void Column::calculateStatistics() const {
 	for (int row = 0; row < notNanCount; ++row) {
 		val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
-		statistics.meanDeviation += fabs(val - statistics.arithmeticMean);
+		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);
 
-		absoluteMedianList[row] = fabs(val - statistics.median);
+		absoluteMedianList[row] = std::abs(val - statistics.median);
 		statistics.meanDeviationAroundMedian += absoluteMedianList[row];
 
 		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
@@ -986,8 +986,8 @@ void Column::calculateStatistics() const {
 	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
 	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
 
-	// standard variation
-	statistics.standardDeviation = sqrt(statistics.variance);
+	// standard deviation
+	statistics.standardDeviation = std::sqrt(statistics.variance);
 
 	//"median absolute deviation" - the median of the absolute deviations from the data's median.
 	std::sort(absoluteMedianList.begin(), absoluteMedianList.end());
@@ -1000,10 +1000,10 @@ void Column::calculateStatistics() const {
 	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
 
 	// entropy
-	double entropy = 0.0;
+	double entropy = 0.;
 	for (const auto& v : frequencyOfValues) {
 		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
-		entropy += (frequencyNorm * log2(frequencyNorm));
+		entropy += (frequencyNorm * std::log2(frequencyNorm));
 	}
 
 	statistics.entropy = -entropy;
@@ -1048,7 +1048,7 @@ bool Column::hasValues() const {
 	}
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
-		// integer column has always valid values
+		// integer values are always valid
 		foundValues = true;
 		break;
 	case ColumnMode::DateTime:
