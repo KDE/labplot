@@ -115,6 +115,8 @@ void ColumnTest::bigIntMaximum() {
 	QCOMPARE(c.maximum(0, 1), 2);
 }
 
+/////////////////////////////////////////////////////
+
 void ColumnTest::statisticsDouble() {
 	Column c("Double column", Column::ColumnMode::Double);
 	c.setValues({1.0, 1.0, 2.0, 5.0});
@@ -319,7 +321,327 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.entropy, 2.);
 }
 
-//TODO: int (overflow?), bigint
+void ColumnTest::statisticsInt() {
+	Column c("Integer column", Column::ColumnMode::Integer);
+	c.setIntegers({1, 1, 2, 5});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, 1.);
+	QCOMPARE(stats.maximum, 5.);
+	QCOMPARE(stats.arithmeticMean, 2.25);
+	QCOMPARE(stats.geometricMean, pow(10., 0.25));
+	QCOMPARE(stats.harmonicMean, 40./27.);
+	QCOMPARE(stats.contraharmonicMean, 31./9.);
+
+	QCOMPARE(stats.mode, 1.);
+	QCOMPARE(stats.firstQuartile, 1.);
+	QCOMPARE(stats.median, 1.5);
+	QCOMPARE(stats.thirdQuartile, 2.75);
+	QCOMPARE(stats.iqr, 1.75);
+	QCOMPARE(stats.percentile_1, 1.);
+	QCOMPARE(stats.percentile_5, 1.);
+	QCOMPARE(stats.percentile_10, 1.);
+	QCOMPARE(stats.percentile_90, 4.1);
+	QCOMPARE(stats.percentile_95, 4.55);
+	QCOMPARE(stats.percentile_99, 4.91);
+	QCOMPARE(stats.trimean, 1.6875);
+	QCOMPARE(stats.variance, 3.58333333333);
+	QCOMPARE(stats.standardDeviation, 1.8929694486);
+	QCOMPARE(stats.meanDeviation, 1.375);
+	QCOMPARE(stats.meanDeviationAroundMedian, 1.25);
+	QCOMPARE(stats.medianDeviation, 0.5);
+	QCOMPARE(stats.skewness, 0.621946425108);
+	QCOMPARE(stats.kurtosis, -1.7913399134667);
+	QCOMPARE(stats.entropy, 1.5);
+}
+void ColumnTest::statisticsIntNegative() {
+	Column c("Integer column", Column::ColumnMode::Integer);
+	c.setIntegers({-1, 0, 2, 5});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, -1.);
+	QCOMPARE(stats.maximum, 5.);
+	QCOMPARE(stats.arithmeticMean, 1.5);
+	WARN(stats.geometricMean)
+	QCOMPARE(stats.geometricMean, 1.474323891188);	// special case
+	QCOMPARE(stats.harmonicMean, 0.);
+	QCOMPARE(stats.contraharmonicMean, 5.);
+
+	WARN(stats.mode)
+	WARN(stats.firstQuartile)
+	WARN(stats.median)
+	WARN(stats.thirdQuartile)
+	WARN(stats.iqr)
+	WARN(stats.percentile_1)
+	WARN(stats.percentile_5)
+	WARN(stats.percentile_10)
+	WARN(stats.percentile_90)
+	WARN(stats.percentile_95)
+	WARN(stats.percentile_99)
+	WARN(stats.trimean)
+	WARN(stats.variance)
+	WARN(stats.standardDeviation)
+	WARN(stats.meanDeviation)
+	WARN(stats.meanDeviationAroundMedian)
+	WARN(stats.medianDeviation)
+	WARN(stats.skewness)
+	WARN(stats.kurtosis)
+	WARN(stats.entropy)
+	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.firstQuartile, -.25);
+	QCOMPARE(stats.median, 1.);
+	QCOMPARE(stats.thirdQuartile, 2.75);
+	QCOMPARE(stats.iqr, 3.);
+	QCOMPARE(stats.percentile_1, -.97);
+	QCOMPARE(stats.percentile_5, -.85);
+	QCOMPARE(stats.percentile_10, -.7);
+	QCOMPARE(stats.percentile_90, 4.1);
+	QCOMPARE(stats.percentile_95, 4.55);
+	QCOMPARE(stats.percentile_99, 4.91);
+	QCOMPARE(stats.trimean, 1.125);
+	QCOMPARE(stats.variance, 7.);
+	QCOMPARE(stats.standardDeviation, 2.64575131106459);
+	QCOMPARE(stats.meanDeviation, 2.);
+	QCOMPARE(stats.meanDeviationAroundMedian, 2.);
+	QCOMPARE(stats.medianDeviation, 1.5);
+	QCOMPARE(stats.skewness, 0.323969548293623);
+	QCOMPARE(stats.kurtosis, -2.00892857142857);
+	QCOMPARE(stats.entropy, 2.);
+}
+void ColumnTest::statisticsIntBigNegative() {
+	Column c("Integer column", Column::ColumnMode::Integer);
+	c.setIntegers({-100, 0, 2, 5});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, -100.);
+	QCOMPARE(stats.maximum, 5.);
+	QCOMPARE(stats.arithmeticMean, -23.25);
+	QCOMPARE(stats.geometricMean, qQNaN());	// special case
+	QCOMPARE(stats.harmonicMean, 0.);
+	WARN(stats.contraharmonicMean)
+	QCOMPARE(stats.contraharmonicMean, -3343./31.);
+
+	WARN(stats.mode)
+	WARN(stats.firstQuartile)
+	WARN(stats.median)
+	WARN(stats.thirdQuartile)
+	WARN(stats.iqr)
+	WARN(stats.percentile_1)
+	WARN(stats.percentile_5)
+	WARN(stats.percentile_10)
+	WARN(stats.percentile_90)
+	WARN(stats.percentile_95)
+	WARN(stats.percentile_99)
+	WARN(stats.trimean)
+	WARN(stats.variance)
+	WARN(stats.standardDeviation)
+	WARN(stats.meanDeviation)
+	WARN(stats.meanDeviationAroundMedian)
+	WARN(stats.medianDeviation)
+	WARN(stats.skewness)
+	WARN(stats.kurtosis)
+	WARN(stats.entropy)
+	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.firstQuartile, -25.);
+	QCOMPARE(stats.median, 1.);
+	QCOMPARE(stats.thirdQuartile, 2.75);
+	QCOMPARE(stats.iqr, 27.75);
+	QCOMPARE(stats.percentile_1, -97.);
+	QCOMPARE(stats.percentile_5, -85.);
+	QCOMPARE(stats.percentile_10, -70.);
+	QCOMPARE(stats.percentile_90, 4.1);
+	QCOMPARE(stats.percentile_95, 4.55);
+	QCOMPARE(stats.percentile_99, 4.91);
+	QCOMPARE(stats.trimean, -5.0625);
+	QCOMPARE(stats.variance, 2622.25);
+	QCOMPARE(stats.standardDeviation, 51.2079095453036);
+	QCOMPARE(stats.meanDeviation, 38.375);
+	QCOMPARE(stats.meanDeviationAroundMedian, 26.75);
+	QCOMPARE(stats.medianDeviation, 2.5);
+	QCOMPARE(stats.skewness, -0.746367760881076);
+	QCOMPARE(stats.kurtosis, -1.68988867569211);
+	QCOMPARE(stats.entropy, 2.);
+}
+void ColumnTest::statisticsIntZero() {
+	Column c("Integer column", Column::ColumnMode::Integer);
+	c.setIntegers({1, 0, 2, 5});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, 0.);
+	QCOMPARE(stats.maximum, 5.);
+	QCOMPARE(stats.arithmeticMean, 2.);
+	WARN(stats.geometricMean)
+	QCOMPARE(stats.geometricMean, 1.77827941003892);	// special case
+	QCOMPARE(stats.harmonicMean, 0.);
+	QCOMPARE(stats.contraharmonicMean, 3.75);
+
+	WARN(stats.mode)
+	WARN(stats.firstQuartile)
+	WARN(stats.median)
+	WARN(stats.thirdQuartile)
+	WARN(stats.iqr)
+	WARN(stats.percentile_1)
+	WARN(stats.percentile_5)
+	WARN(stats.percentile_10)
+	WARN(stats.percentile_90)
+	WARN(stats.percentile_95)
+	WARN(stats.percentile_99)
+	WARN(stats.trimean)
+	WARN(stats.variance)
+	WARN(stats.standardDeviation)
+	WARN(stats.meanDeviation)
+	WARN(stats.meanDeviationAroundMedian)
+	WARN(stats.medianDeviation)
+	WARN(stats.skewness)
+	WARN(stats.kurtosis)
+	WARN(stats.entropy)
+	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.firstQuartile, 0.75);
+	QCOMPARE(stats.median, 1.5);
+	QCOMPARE(stats.thirdQuartile, 2.75);
+	QCOMPARE(stats.iqr, 2.);
+	QCOMPARE(stats.percentile_1, 0.03);
+	QCOMPARE(stats.percentile_5, 0.15);
+	QCOMPARE(stats.percentile_10, 0.3);
+	QCOMPARE(stats.percentile_90, 4.1);
+	QCOMPARE(stats.percentile_95, 4.55);
+	QCOMPARE(stats.percentile_99, 4.91);
+	QCOMPARE(stats.trimean, 1.625);
+	QCOMPARE(stats.variance, 4.6666666666667);
+	QCOMPARE(stats.standardDeviation, 2.16024689946929);
+	QCOMPARE(stats.meanDeviation, 1.5);
+	QCOMPARE(stats.meanDeviationAroundMedian, 1.5);
+	QCOMPARE(stats.medianDeviation, 1.);
+	QCOMPARE(stats.skewness, 0.446377548104623);
+	QCOMPARE(stats.kurtosis, -1.875);
+	QCOMPARE(stats.entropy, 2.);
+}
+void ColumnTest::statisticsIntOverflow() {
+	Column c("Integer column", Column::ColumnMode::Integer);
+	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, 1000000000);
+	QCOMPARE(stats.maximum, 1300000000);
+	QCOMPARE(stats.arithmeticMean, 1150000000);
+	WARN(stats.geometricMean)
+	WARN(stats.harmonicMean)
+	WARN(stats.contraharmonicMean)
+	QCOMPARE(stats.geometricMean, 1144535640.12);
+	QCOMPARE(stats.harmonicMean, 1139064055.75838);
+	QCOMPARE(stats.contraharmonicMean, 1160869565.21739);
+
+	WARN(stats.mode)
+	WARN(stats.firstQuartile)
+	WARN(stats.median)
+	WARN(stats.thirdQuartile)
+	WARN(stats.iqr)
+	WARN(stats.percentile_1)
+	WARN(stats.percentile_5)
+	WARN(stats.percentile_10)
+	WARN(stats.percentile_90)
+	WARN(stats.percentile_95)
+	WARN(stats.percentile_99)
+	WARN(stats.trimean)
+	WARN(stats.variance)
+	WARN(stats.standardDeviation)
+	WARN(stats.meanDeviation)
+	WARN(stats.meanDeviationAroundMedian)
+	WARN(stats.medianDeviation)
+	WARN(stats.skewness)
+	WARN(stats.kurtosis)
+	WARN(stats.entropy)
+	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.firstQuartile, 1075000000);
+	QCOMPARE(stats.median, 1150000000);
+	QCOMPARE(stats.thirdQuartile, 1225000000);
+	QCOMPARE(stats.iqr, 150000000);
+	QCOMPARE(stats.percentile_1, 1003000000);
+	QCOMPARE(stats.percentile_5, 1015000000);
+	QCOMPARE(stats.percentile_10, 1030000000);
+	QCOMPARE(stats.percentile_90, 1270000000);
+	QCOMPARE(stats.percentile_95, 1285000000);
+	QCOMPARE(stats.percentile_99, 1297000000);
+	QCOMPARE(stats.trimean, 1150000000);
+	QCOMPARE(stats.variance, 1.66666666666667e+16);
+	QCOMPARE(stats.standardDeviation, 129099444.873581);
+	QCOMPARE(stats.meanDeviation, 100000000);
+	QCOMPARE(stats.meanDeviationAroundMedian, 100000000);
+	QCOMPARE(stats.medianDeviation, 100000000);
+	QCOMPARE(stats.skewness, 0.);
+	QCOMPARE(stats.kurtosis, -2.0775);
+	QCOMPARE(stats.entropy, 2.);
+}
+void ColumnTest::statisticsBigInt() {
+	Column c("BigInt column", Column::ColumnMode::BigInt);
+	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
+
+	auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 4);
+	QCOMPARE(stats.minimum, -10000000000);
+	QCOMPARE(stats.maximum, 10000000000);
+	QCOMPARE(stats.arithmeticMean, 250000000);
+	WARN(stats.geometricMean)
+	WARN(stats.harmonicMean)
+	WARN(stats.contraharmonicMean)
+	QCOMPARE(stats.geometricMean, qQNaN());
+	QCOMPARE(stats.harmonicMean, 0.);
+	QCOMPARE(stats.contraharmonicMean, 201000000000);
+
+	WARN(stats.mode)
+	WARN(stats.firstQuartile)
+	WARN(stats.median)
+	WARN(stats.thirdQuartile)
+	WARN(stats.iqr)
+	WARN(stats.percentile_1)
+	WARN(stats.percentile_5)
+	WARN(stats.percentile_10)
+	WARN(stats.percentile_90)
+	WARN(stats.percentile_95)
+	WARN(stats.percentile_99)
+	WARN(stats.trimean)
+	WARN(stats.variance)
+	WARN(stats.standardDeviation)
+	WARN(stats.meanDeviation)
+	WARN(stats.meanDeviationAroundMedian)
+	WARN(stats.medianDeviation)
+	WARN(stats.skewness)
+	WARN(stats.kurtosis)
+	WARN(stats.entropy)
+	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.firstQuartile, -2500000000);
+	QCOMPARE(stats.median, 500000000);
+	QCOMPARE(stats.thirdQuartile, 3250000000);
+	QCOMPARE(stats.iqr, 5750000000);
+	QCOMPARE(stats.percentile_1, -9700000000);
+	QCOMPARE(stats.percentile_5, -8500000000);
+	QCOMPARE(stats.percentile_10, -7000000000);
+	FuzzyCompare(stats.percentile_90, 7300000000, 1.e-15);
+	FuzzyCompare(stats.percentile_95, 8650000000, 1.e-15);
+	FuzzyCompare(stats.percentile_99, 9730000000, 1.e-15);
+	QCOMPARE(stats.trimean, 437500000);
+	QCOMPARE(stats.variance, 6.69166666666667e+19);
+	QCOMPARE(stats.standardDeviation, 8180260794.53868);
+	QCOMPARE(stats.meanDeviation, 5250000000);
+	QCOMPARE(stats.meanDeviationAroundMedian, 5250000000);
+	QCOMPARE(stats.medianDeviation, 5000000000);
+	QCOMPARE(stats.skewness, -0.0683349251790571);
+	QCOMPARE(stats.kurtosis, -1.87918466941373);
+	QCOMPARE(stats.entropy, 2.);
+}
+
+//TODO: bigint
 
 //////////////////////////////////////////////////
 
