@@ -819,8 +819,7 @@ void Column::calculateStatistics() const {
 	auto& statistics = d->statistics;
 
 	//######  location measures  #######
-	int rowValuesSize = 0;
-	double val;
+	int rowValuesSize = rowCount();
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
@@ -829,79 +828,26 @@ void Column::calculateStatistics() const {
 	statistics.maximum = -qInf();
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
+	rowData.reserve(rowValuesSize);
 
-	if (columnMode() == ColumnMode::Double) {
-		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
+	for (int row = 0; row < rowValuesSize; ++row) {
+		double val = valueAt(row);
+		if (std::isnan(val) || isMasked(row))
+			continue;
 
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);	//TODO: val == 0.0?
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::Integer) {
-		// TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::BigInt) {
-		// TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<qint64>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
+		if (val < statistics.minimum)
+			statistics.minimum = val;
+		if (val > statistics.maximum)
+			statistics.maximum = val;
+		columnSum += val;
+		columnSumNeg += (1.0 / val);	// will be Inf when val == 0
+		columnSumSquare += val * val;
+		columnProduct *= val;
+		if (frequencyOfValues.find(val) != frequencyOfValues.end())
+			frequencyOfValues.operator[](val)++;
+		else
+			frequencyOfValues.insert(std::make_pair(val, 1));
+		rowData.push_back(val);
 	}
 
 	const int notNanCount = rowData.size();
@@ -987,7 +933,7 @@ void Column::calculateStatistics() const {
 	absoluteMedianList.resize(notNanCount);
 
 	for (int row = 0; row < notNanCount; ++row) {
-		val = rowData.value(row);
+		double val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
 		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);
 
