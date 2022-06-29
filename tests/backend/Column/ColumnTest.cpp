@@ -641,8 +641,6 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.entropy, 2.);
 }
 
-//TODO: bigint
-
 //////////////////////////////////////////////////
 
 void ColumnTest::saveLoadDateTime() {

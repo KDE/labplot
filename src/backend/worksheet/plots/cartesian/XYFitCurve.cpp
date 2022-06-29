@@ -118,7 +118,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_polynomial: {
 			const double p = degree;
 			const size_t n = qMin(xColumn->rowCount(), yColumn->rowCount());
-			if (p == 1) {	// use linear regression
+			if (p == 1) {	// use linear regression: b = cov(x,y)/sigma_x^2, a = <y> - b * <x>
 				const auto& xstats = xColumn->statistics();
 				const auto& ystats = yColumn->statistics();
 				DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
@@ -139,45 +139,72 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				paramStartValues[0] = a;
 				paramStartValues[1] = b;
 			} else {	// do a multiparameter linear regression
-				gsl_matrix* X = gsl_matrix_alloc (n, p+1);	// X matrix
+				const double np = p + 1;
+				gsl_matrix* X = gsl_matrix_alloc (n, np);	// X matrix
 				gsl_vector* y = gsl_vector_alloc (n);	// y values
 				gsl_vector* w = gsl_vector_alloc (n);	// weights
 
-				gsl_vector* c = gsl_vector_alloc (p+1);       // best fit parameter (p+1)
-				gsl_matrix* cov = gsl_matrix_alloc (p+1, p+1);
+				gsl_vector* c = gsl_vector_alloc (np);       // best fit parameter (p+1)
+				gsl_matrix* cov = gsl_matrix_alloc (np, np);
 
 				for (size_t i = 0; i < n; i++) {
 					double xi = xColumn->valueAt(i);
 					double yi = yColumn->valueAt(i);
 
-					for (int j = 0; j <= p; j++)
+					for (int j = 0; j < np; j++)
 						gsl_matrix_set (X, i, j, gsl_pow_int(xi, j));
 					gsl_vector_set (y, i, yi);
 					gsl_vector_set (w, i, 1.);	//TODO: use weights when available
 				}
 
-				gsl_multifit_linear_workspace* work = gsl_multifit_linear_alloc (n, p+1);
+				gsl_multifit_linear_workspace* work = gsl_multifit_linear_alloc (n, np);
 				double chisq;
-				gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
+				int status = gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
 				gsl_multifit_linear_free (work);
 				gsl_matrix_free (X);
 				gsl_vector_free (y);
 				gsl_vector_free (w);
 
-				for (int i = 0; i < p+1; i++)
+				for (int i = 0; i < np; i++)
 					paramStartValues[i] = gsl_vector_get(c, i);
 
-				//TODO: fill results?
+				// results
+				// clear the previous result
+				d->fitResult = XYFitCurve::FitResult();
+
+				d->fitResult.available = true;
+				d->fitResult.valid = true;
+				d->fitResult.status = gslErrorToString(status);
+
+				d->fitResult.paramValues.resize(np);
+				d->fitResult.errorValues.resize(np);
+				d->fitResult.tdist_tValues.resize(np);
+				d->fitResult.tdist_pValues.resize(np);
+				d->fitResult.tdist_marginValues.resize(np);
+
+				// "errors"
+				//int gsl_multifit_linear_est(const gsl_vector *x, const gsl_vector *c, const gsl_matrix *cov, double *y, double *y_err)
+				// residuals
+				// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
+				for (unsigned int i = 0; i < np; i++) {
+					for (unsigned int j = 0; j <= i; j++)
+						d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
+					d->fitResult.paramValues[i] = gsl_vector_get(c, i);
+					//TODO: d->fitResult.errorValues[i] = 0.;
+				}
+
 				gsl_vector_free (c);
 				gsl_matrix_free (cov);
+
+
 			}
 			break;
 		}
 		// TODO: handle basic models
-		case nsl_fit_model_power:
-		case nsl_fit_model_exponential:
-		case nsl_fit_model_inverse_exponential:
-		case nsl_fit_model_fourier:
+		case nsl_fit_model_power:	// a x^b, a + b x^c
+		case nsl_fit_model_exponential: // a e^(bx), a1 e^(b1 x) + a2 e^(b2 x), ...
+		case nsl_fit_model_inverse_exponential: // a (1-e^(bx)) + c
+		case nsl_fit_model_fourier:	// a0 + a1*sin(x) + b1 * cos(x) + ...
 			break;
 		}
 		break;
@@ -979,10 +1006,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
-	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
+	auto modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
 	unsigned int degree = ((struct data*)params)->degree;
-	QStringList* paramNames = ((struct data*)params)->paramNames;
+	auto* paramNames = ((struct data*)params)->paramNames;
 	double* min = ((struct data*)params)->paramMin;
 	double* max = ((struct data*)params)->paramMax;
 	bool* fixed = ((struct data*)params)->paramFixed;
@@ -1971,8 +1998,8 @@ void XYFitCurvePrivate::recalculate() {
 	f.params = &params;
 
 	DEBUG(Q_FUNC_INFO << ", initialize the derivative solver (using Levenberg-Marquardt robust solver)");
-	const gsl_multifit_fdfsolver_type* T = gsl_multifit_fdfsolver_lmsder;
-	gsl_multifit_fdfsolver* s = gsl_multifit_fdfsolver_alloc(T, n, np);
+	const auto* T = gsl_multifit_fdfsolver_lmsder;
+	auto* s = gsl_multifit_fdfsolver_alloc(T, n, np);
 
 	DEBUG(Q_FUNC_INFO << ", set start values");
 	double* x_init = fitData.paramStartValues.data();
@@ -1982,7 +2009,7 @@ void XYFitCurvePrivate::recalculate() {
 	for (unsigned int i = 0; i < np; i++)
 		x_init[i] = nsl_fit_map_unbound(x_init[i], x_min[i], x_max[i]);
 	DEBUG(Q_FUNC_INFO << ",	DONE");
-	gsl_vector_view x = gsl_vector_view_array(x_init, np);
+	auto x = gsl_vector_view_array(x_init, np);
 	DEBUG(Q_FUNC_INFO << ", Turning off GSL error handler to avoid overflow/underflow");
 	gsl_set_error_handler_off();
 	DEBUG(Q_FUNC_INFO << ", Initialize solver with function f and initial guess x");
@@ -2144,10 +2171,10 @@ void XYFitCurvePrivate::recalculate() {
 
 	// get the covariance matrix
 	// TODO: scale the Jacobian when limits are used before constructing the covar matrix?
-	gsl_matrix* covar = gsl_matrix_alloc(np, np);
+	auto* covar = gsl_matrix_alloc(np, np);
 #if GSL_MAJOR_VERSION >= 2
 	// the Jacobian is not part of the solver anymore
-	gsl_matrix* J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
+	auto* J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
 	gsl_multifit_fdfsolver_jac(s, J);
 	gsl_multifit_covar(J, 0.0, covar);
 #else
@@ -2204,7 +2231,7 @@ void XYFitCurvePrivate::recalculate() {
 	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
 	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
 	const double cerr = sqrt(fitResult.rms);
-	// CI = 100* (1 - alpha)
+	// CI = 100 * (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	for (unsigned int i = 0; i < np; i++) {
 		// scale resulting values if they are bounded
@@ -2238,7 +2265,7 @@ void XYFitCurvePrivate::recalculate() {
 			else if (mode == AbstractColumn::ColumnMode::DateTime)
 				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
-		ExpressionParser* parser = ExpressionParser::getInstance();
+		auto* parser = ExpressionParser::getInstance();
 		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
 		if (rc) {
 			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
@@ -2314,7 +2341,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		return;
 	}
 
-	ExpressionParser* parser = ExpressionParser::getInstance();
+	auto* parser = ExpressionParser::getInstance();
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()}; // full data range
 	if (!fitData.autoEvalRange) { // use given range for evaluation
 		if (!fitData.evalRange.isZero()) // avoid zero range
@@ -2325,7 +2352,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	yVector->resize((int)fitData.evaluatedPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
 
-	QVector<double> paramValues = fitResult.paramValues;
+	auto paramValues = fitResult.paramValues;
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 

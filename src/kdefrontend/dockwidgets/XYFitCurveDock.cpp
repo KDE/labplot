@@ -495,6 +495,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// udpate parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate();	// update preview
+	showFitResult();	// show result of preview
 
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
@@ -516,9 +517,10 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	// set model dependent start values from new data
 	DEBUG(Q_FUNC_INFO)
 	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
-	// udpate parameter widget
+	// update parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
 	enableRecalculate();	// update preview
+	showFitResult();	// show result of preview
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -783,8 +785,8 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG("modelTypeChanged() type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
-	// leave if there is no selection
+	DEBUG(Q_FUNC_INFO << ", type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
+	// leave if no selection
 	if (index == -1)
 		return;
 
@@ -892,15 +894,14 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.degree = degree;
 		XYFitCurve::initFitData(m_fitData);
 		// set model dependent start values from curve data
-		DEBUG(Q_FUNC_INFO)
+		// invalidate result
+		m_fitCurve->clearFitResult();
 		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
-		// invalidate result
-		m_fitCurve->clearFitResult();
 		if (m_messageWidget)
 			m_messageWidget->close();
-		showFitResult();
+		showFitResult();	// show result of preview
 	}
 
 	// variables/parameter that are known
@@ -1280,6 +1281,7 @@ void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
  * show the result and details of the fit
  */
 void XYFitCurveDock::showFitResult() {
+	DEBUG(Q_FUNC_INFO)
 	// clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
 	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
@@ -1326,8 +1328,11 @@ void XYFitCurveDock::showFitResult() {
 	QString sCorr;
 	for (const auto& s : m_fitData.paramNamesUtf8)
 		sCorr += '\t' + s;
-	int index{0};
 	DEBUG(Q_FUNC_INFO << ", correlation matrix size = " << fitResult.correlationMatrix.size())
+	if (fitResult.correlationMatrix.size() < np * (np + 1) / 2)
+		return;
+
+	int index = 0;
 	for (int i = 0; i < np; i++) {
 		sCorr += '\n' + m_fitData.paramNamesUtf8.at(i);
 		for (int j = 0; j <= i; j++)
