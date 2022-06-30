@@ -116,9 +116,8 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: {
-			const double p = degree;
 			const size_t n = qMin(xColumn->rowCount(), yColumn->rowCount());
-			if (p == 1) {	// use linear regression: b = cov(x,y)/sigma_x^2, a = <y> - b * <x>
+			if (degree == 1) {	// use linear regression: b = cov(x,y)/sigma_x^2, a = <y> - b * <x>
 				const auto& xstats = xColumn->statistics();
 				const auto& ystats = yColumn->statistics();
 				DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
@@ -138,8 +137,9 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				DEBUG("START PARAMETER: a = " << a << ", b = " << b)
 				paramStartValues[0] = a;
 				paramStartValues[1] = b;
+				//TODO: fill results
 			} else {	// do a multiparameter linear regression
-				const double np = p + 1;
+				const double np = degree + 1;
 				gsl_matrix* X = gsl_matrix_alloc (n, np);	// X matrix
 				gsl_vector* y = gsl_vector_alloc (n);	// y values
 				gsl_vector* w = gsl_vector_alloc (n);	// weights
@@ -182,21 +182,22 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				d->fitResult.tdist_pValues.resize(np);
 				d->fitResult.tdist_marginValues.resize(np);
 
-				// "errors"
-				//int gsl_multifit_linear_est(const gsl_vector *x, const gsl_vector *c, const gsl_matrix *cov, double *y, double *y_err)
-				// residuals
-				// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
+				d->fitResult.sse = chisq;
+				d->fitResult.dof = n - np;
+				d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
+				const double cerr = sqrt(d->fitResult.rms);
 				for (unsigned int i = 0; i < np; i++) {
 					for (unsigned int j = 0; j <= i; j++)
 						d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
 					d->fitResult.paramValues[i] = gsl_vector_get(c, i);
-					//TODO: d->fitResult.errorValues[i] = 0.;
+					d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
 				}
+				//TODO: more results
+				// residuals
+				// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
 
 				gsl_vector_free (c);
 				gsl_matrix_free (cov);
-
-
 			}
 			break;
 		}
