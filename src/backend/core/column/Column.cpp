@@ -840,7 +840,7 @@ void Column::calculateStatistics() const {
 		if (val > statistics.maximum)
 			statistics.maximum = val;
 		columnSum += val;
-		columnSumNeg += (1.0 / val);	// will be Inf when val == 0
+		columnSumNeg += (1.0 / val); // will be Inf when val == 0
 		columnSumSquare += val * val;
 		columnProduct *= val;
 		if (frequencyOfValues.find(val) != frequencyOfValues.end())
@@ -866,16 +866,16 @@ void Column::calculateStatistics() const {
 	statistics.arithmeticMean = columnSum / notNanCount;
 
 	// geometric mean
-	if (statistics.minimum <= -100.)	// invalid
+	if (statistics.minimum <= -100.) // invalid
 		statistics.geometricMean = qQNaN();
-	else if (statistics.minimum < 0) {	// interpret as percentage (/100) and add 1
-		columnProduct = 1.;	// recalculate
+	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
+		columnProduct = 1.; // recalculate
 		for (auto val : rowData)
-			columnProduct *= val/100. + 1.;
+			columnProduct *= val / 100. + 1.;
 		// n-th root and convert back to percentage changes
 		statistics.geometricMean = 100. * (std::pow(columnProduct, 1.0 / notNanCount) - 1.);
-	} else if (statistics.minimum == 0) {	// replace zero values with 1
-		columnProduct = 1.;	// recalculate
+	} else if (statistics.minimum == 0) { // replace zero values with 1
+		columnProduct = 1.; // recalculate
 		for (auto val : rowData)
 			columnProduct *= (val == 0.) ? 1. : val;
 		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);

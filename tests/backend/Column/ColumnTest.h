@@ -25,16 +25,16 @@ private Q_SLOTS:
 	void bigIntMinimum();
 	void bigIntMaximum();
 
-	void statisticsDouble();		// only positive double values
-	void statisticsDoubleNegative();	// contains negative values (> -100)
-	void statisticsDoubleBigNegative();	// contains big negative values (<= -100)
-	void statisticsDoubleZero();		// contains zero value
-	void statisticsInt();			// only positive integer values
-	void statisticsIntNegative();		// contains negative values (> -100)
-	void statisticsIntBigNegative();	// contains big negative values (<= -100)
-	void statisticsIntZero();		// contains zero value
-	void statisticsIntOverflow();		// check overflow of integer
-	void statisticsBigInt();		// big ints
+	void statisticsDouble(); // only positive double values
+	void statisticsDoubleNegative(); // contains negative values (> -100)
+	void statisticsDoubleBigNegative(); // contains big negative values (<= -100)
+	void statisticsDoubleZero(); // contains zero value
+	void statisticsInt(); // only positive integer values
+	void statisticsIntNegative(); // contains negative values (> -100)
+	void statisticsIntBigNegative(); // contains big negative values (<= -100)
+	void statisticsIntZero(); // contains zero value
+	void statisticsIntOverflow(); // check overflow of integer
+	void statisticsBigInt(); // big ints
 
 	void loadDoubleFromProject();
 	void loadIntegerFromProject();

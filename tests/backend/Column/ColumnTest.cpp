@@ -128,8 +128,8 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 2.25);
 	QCOMPARE(stats.geometricMean, pow(10., 0.25));
-	QCOMPARE(stats.harmonicMean, 40./27.);
-	QCOMPARE(stats.contraharmonicMean, 31./9.);
+	QCOMPARE(stats.harmonicMean, 40. / 27.);
+	QCOMPARE(stats.contraharmonicMean, 31. / 9.);
 
 	QCOMPARE(stats.mode, 1.);
 	QCOMPARE(stats.firstQuartile, 1.);
@@ -163,7 +163,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 1.5);
 	WARN(stats.geometricMean)
-	QCOMPARE(stats.geometricMean, 1.474323891188);	// special case
+	QCOMPARE(stats.geometricMean, 1.474323891188); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
@@ -218,10 +218,10 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN());	// special case
+	QCOMPARE(stats.geometricMean, qQNaN()); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	WARN(stats.contraharmonicMean)
-	QCOMPARE(stats.contraharmonicMean, -3343./31.);
+	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
 	WARN(stats.mode)
 	WARN(stats.firstQuartile)
@@ -275,7 +275,7 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 2.);
 	WARN(stats.geometricMean)
-	QCOMPARE(stats.geometricMean, 1.77827941003892);	// special case
+	QCOMPARE(stats.geometricMean, 1.77827941003892); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
@@ -332,8 +332,8 @@ void ColumnTest::statisticsInt() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 2.25);
 	QCOMPARE(stats.geometricMean, pow(10., 0.25));
-	QCOMPARE(stats.harmonicMean, 40./27.);
-	QCOMPARE(stats.contraharmonicMean, 31./9.);
+	QCOMPARE(stats.harmonicMean, 40. / 27.);
+	QCOMPARE(stats.contraharmonicMean, 31. / 9.);
 
 	QCOMPARE(stats.mode, 1.);
 	QCOMPARE(stats.firstQuartile, 1.);
@@ -367,7 +367,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 1.5);
 	WARN(stats.geometricMean)
-	QCOMPARE(stats.geometricMean, 1.474323891188);	// special case
+	QCOMPARE(stats.geometricMean, 1.474323891188); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
@@ -422,10 +422,10 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN());	// special case
+	QCOMPARE(stats.geometricMean, qQNaN()); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	WARN(stats.contraharmonicMean)
-	QCOMPARE(stats.contraharmonicMean, -3343./31.);
+	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
 	WARN(stats.mode)
 	WARN(stats.firstQuartile)
@@ -479,7 +479,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, 2.);
 	WARN(stats.geometricMean)
-	QCOMPARE(stats.geometricMean, 1.77827941003892);	// special case
+	QCOMPARE(stats.geometricMean, 1.77827941003892); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 

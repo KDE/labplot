@@ -34,10 +34,10 @@ extern "C" {
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_multifit.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
-#include <gsl/gsl_multifit.h>
 }
 
 #include <QDateTime>
@@ -75,7 +75,7 @@ void XYFitCurve::initStartValues(const XYCurve* curve) {
 
 void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
 	DEBUG(Q_FUNC_INFO);
-	//TODO: curve used for anything?
+	// TODO: curve used for anything?
 	if (!curve) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no curve given");
 		return;
@@ -119,36 +119,36 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 		case nsl_fit_model_polynomial: {
 			// do a multiparameter linear regression
 			const double np = degree + 1;
-			gsl_matrix* X = gsl_matrix_alloc (n, np);	// X matrix
-			gsl_vector* y = gsl_vector_alloc (n);	// y values
-			gsl_vector* w = gsl_vector_alloc (n);	// weights
+			gsl_matrix* X = gsl_matrix_alloc(n, np); // X matrix
+			gsl_vector* y = gsl_vector_alloc(n); // y values
+			gsl_vector* w = gsl_vector_alloc(n); // weights
 
-			gsl_vector* c = gsl_vector_alloc (np);       // best fit parameter (p+1)
-			gsl_matrix* cov = gsl_matrix_alloc (np, np);
+			gsl_vector* c = gsl_vector_alloc(np); // best fit parameter (p+1)
+			gsl_matrix* cov = gsl_matrix_alloc(np, np);
 
 			for (size_t i = 0; i < n; i++) {
 				double xi = xColumn->valueAt(i);
 				double yi = yColumn->valueAt(i);
 
 				for (int j = 0; j < np; j++)
-					gsl_matrix_set (X, i, j, gsl_pow_int(xi, j));
-				gsl_vector_set (y, i, yi);
-				gsl_vector_set (w, i, 1.);	//TODO: use weights when available
+					gsl_matrix_set(X, i, j, gsl_pow_int(xi, j));
+				gsl_vector_set(y, i, yi);
+				gsl_vector_set(w, i, 1.); // TODO: use weights when available
 			}
 
-			auto* work = gsl_multifit_linear_alloc (n, np);
+			auto* work = gsl_multifit_linear_alloc(n, np);
 			double chisq;
-			int status = gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
-			gsl_multifit_linear_free (work);
-			gsl_matrix_free (X);
-			gsl_vector_free (y);
-			gsl_vector_free (w);
+			int status = gsl_multifit_wlinear(X, w, y, c, cov, &chisq, work);
+			gsl_multifit_linear_free(work);
+			gsl_matrix_free(X);
+			gsl_vector_free(y);
+			gsl_vector_free(w);
 
 			for (int i = 0; i < np; i++)
 				paramStartValues[i] = gsl_vector_get(c, i);
 
 			// results
-			d->fitResult = XYFitCurve::FitResult();	// clear result
+			d->fitResult = XYFitCurve::FitResult(); // clear result
 
 			d->fitResult.available = true;
 			d->fitResult.valid = true;
@@ -170,19 +170,19 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				d->fitResult.paramValues[i] = gsl_vector_get(c, i);
 				d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
 			}
-			//TODO: more results
-			// residuals
-			// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
+			// TODO: more results
+			//  residuals
+			//  int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
 
-			gsl_vector_free (c);
-			gsl_matrix_free (cov);
+			gsl_vector_free(c);
+			gsl_matrix_free(cov);
 			break;
 		}
 		// TODO: handle basic models
-		case nsl_fit_model_power:	// a x^b, a + b x^c
+		case nsl_fit_model_power: // a x^b, a + b x^c
 		case nsl_fit_model_exponential: // a e^(bx), a1 e^(b1 x) + a2 e^(b2 x), ...
 		case nsl_fit_model_inverse_exponential: // a (1-e^(bx)) + c
-		case nsl_fit_model_fourier:	// a0 + a1*sin(x) + b1 * cos(x) + ...
+		case nsl_fit_model_fourier: // a0 + a1*sin(x) + b1 * cos(x) + ...
 			break;
 		}
 		break;

@@ -494,8 +494,8 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 	// udpate parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
-	enableRecalculate();	// update preview
-	showFitResult();	// show result of preview
+	enableRecalculate(); // update preview
+	showFitResult(); // show result of preview
 
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
@@ -519,8 +519,8 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 	// update parameter widget
 	fitParametersWidget->setFitData(&m_fitData);
-	enableRecalculate();	// update preview
-	showFitResult();	// show result of preview
+	enableRecalculate(); // update preview
+	showFitResult(); // show result of preview
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -901,7 +901,7 @@ void XYFitCurveDock::updateModelEquation() {
 		fitParametersWidget->setFitData(&m_fitData);
 		if (m_messageWidget)
 			m_messageWidget->close();
-		showFitResult();	// show result of preview
+		showFitResult(); // show result of preview
 	}
 
 	// variables/parameter that are known
