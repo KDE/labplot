@@ -111,94 +111,71 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
 	// DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
 
+	const size_t n = qMin(xColumn->rowCount(), yColumn->rowCount());
 	// guess start values of parameter
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: {
-			const size_t n = qMin(xColumn->rowCount(), yColumn->rowCount());
-			if (degree == 1) {	// use linear regression: b = cov(x,y)/sigma_x^2, a = <y> - b * <x>
-				const auto& xstats = xColumn->statistics();
-				const auto& ystats = yColumn->statistics();
-				DEBUG("mean values: x = " << xstats.arithmeticMean << ", y = " << ystats.arithmeticMean)
-				double b = 1.;
-				// for x and y both double or int could use
-				// auto *x/yVector = static_cast<QVector<double/int>* >(x/yColumn->data());
-				// b = gsl_stats[_int]_covariance_m(xVector->constData(), 1, yVector->constData(), 1, qMin(xVector->size(), yVector->size()),
-				//	xstats.arithmeticMean, ystats.arithmeticMean) / xstats.variance;
-				double cov = 0.;
-				for (size_t i = 0; i < n; i++)
-					if (!std::isnan(xColumn->valueAt(i)) && !std::isnan(yColumn->valueAt(i)))
-						cov += (xColumn->valueAt(i) - xstats.arithmeticMean) * (yColumn->valueAt(i) - ystats.arithmeticMean);
-				if (!std::isnan(cov) && xstats.variance > 0 && n > 1)
-					b = cov / xstats.variance / (n - 1);
+			// do a multiparameter linear regression
+			const double np = degree + 1;
+			gsl_matrix* X = gsl_matrix_alloc (n, np);	// X matrix
+			gsl_vector* y = gsl_vector_alloc (n);	// y values
+			gsl_vector* w = gsl_vector_alloc (n);	// weights
 
-				double a = ystats.arithmeticMean - b * xstats.arithmeticMean;
-				DEBUG("START PARAMETER: a = " << a << ", b = " << b)
-				paramStartValues[0] = a;
-				paramStartValues[1] = b;
-				//TODO: fill results
-			} else {	// do a multiparameter linear regression
-				const double np = degree + 1;
-				gsl_matrix* X = gsl_matrix_alloc (n, np);	// X matrix
-				gsl_vector* y = gsl_vector_alloc (n);	// y values
-				gsl_vector* w = gsl_vector_alloc (n);	// weights
+			gsl_vector* c = gsl_vector_alloc (np);       // best fit parameter (p+1)
+			gsl_matrix* cov = gsl_matrix_alloc (np, np);
 
-				gsl_vector* c = gsl_vector_alloc (np);       // best fit parameter (p+1)
-				gsl_matrix* cov = gsl_matrix_alloc (np, np);
+			for (size_t i = 0; i < n; i++) {
+				double xi = xColumn->valueAt(i);
+				double yi = yColumn->valueAt(i);
 
-				for (size_t i = 0; i < n; i++) {
-					double xi = xColumn->valueAt(i);
-					double yi = yColumn->valueAt(i);
-
-					for (int j = 0; j < np; j++)
-						gsl_matrix_set (X, i, j, gsl_pow_int(xi, j));
-					gsl_vector_set (y, i, yi);
-					gsl_vector_set (w, i, 1.);	//TODO: use weights when available
-				}
-
-				gsl_multifit_linear_workspace* work = gsl_multifit_linear_alloc (n, np);
-				double chisq;
-				int status = gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
-				gsl_multifit_linear_free (work);
-				gsl_matrix_free (X);
-				gsl_vector_free (y);
-				gsl_vector_free (w);
-
-				for (int i = 0; i < np; i++)
-					paramStartValues[i] = gsl_vector_get(c, i);
-
-				// results
-				// clear the previous result
-				d->fitResult = XYFitCurve::FitResult();
-
-				d->fitResult.available = true;
-				d->fitResult.valid = true;
-				d->fitResult.status = gslErrorToString(status);
-
-				d->fitResult.paramValues.resize(np);
-				d->fitResult.errorValues.resize(np);
-				d->fitResult.tdist_tValues.resize(np);
-				d->fitResult.tdist_pValues.resize(np);
-				d->fitResult.tdist_marginValues.resize(np);
-
-				d->fitResult.sse = chisq;
-				d->fitResult.dof = n - np;
-				d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
-				const double cerr = sqrt(d->fitResult.rms);
-				for (unsigned int i = 0; i < np; i++) {
-					for (unsigned int j = 0; j <= i; j++)
-						d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
-					d->fitResult.paramValues[i] = gsl_vector_get(c, i);
-					d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
-				}
-				//TODO: more results
-				// residuals
-				// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
-
-				gsl_vector_free (c);
-				gsl_matrix_free (cov);
+				for (int j = 0; j < np; j++)
+					gsl_matrix_set (X, i, j, gsl_pow_int(xi, j));
+				gsl_vector_set (y, i, yi);
+				gsl_vector_set (w, i, 1.);	//TODO: use weights when available
 			}
+
+			auto* work = gsl_multifit_linear_alloc (n, np);
+			double chisq;
+			int status = gsl_multifit_wlinear (X, w, y, c, cov, &chisq, work);
+			gsl_multifit_linear_free (work);
+			gsl_matrix_free (X);
+			gsl_vector_free (y);
+			gsl_vector_free (w);
+
+			for (int i = 0; i < np; i++)
+				paramStartValues[i] = gsl_vector_get(c, i);
+
+			// results
+			d->fitResult = XYFitCurve::FitResult();	// clear result
+
+			d->fitResult.available = true;
+			d->fitResult.valid = true;
+			d->fitResult.status = gslErrorToString(status);
+
+			d->fitResult.paramValues.resize(np);
+			d->fitResult.errorValues.resize(np);
+			d->fitResult.tdist_tValues.resize(np);
+			d->fitResult.tdist_pValues.resize(np);
+			d->fitResult.tdist_marginValues.resize(np);
+
+			d->fitResult.sse = chisq;
+			d->fitResult.dof = n - np;
+			d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
+			const double cerr = sqrt(d->fitResult.rms);
+			for (unsigned int i = 0; i < np; i++) {
+				for (unsigned int j = 0; j <= i; j++)
+					d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
+				d->fitResult.paramValues[i] = gsl_vector_get(c, i);
+				d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
+			}
+			//TODO: more results
+			// residuals
+			// int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
+
+			gsl_vector_free (c);
+			gsl_matrix_free (cov);
 			break;
 		}
 		// TODO: handle basic models
