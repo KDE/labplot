@@ -398,7 +398,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.kurtosis, -1.875);
 	QCOMPARE(stats.entropy, 2.);
 }
-/*void ColumnTest::statisticsIntOverflow() {
+void ColumnTest::statisticsIntOverflow() {
 	Column c("Integer column", Column::ColumnMode::Integer);
 	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
 
@@ -433,7 +433,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.kurtosis, -2.0775);
 	QCOMPARE(stats.entropy, 2.);
 }
-void ColumnTest::statisticsBigInt() {
+/*void ColumnTest::statisticsBigInt() {
 	Column c("BigInt column", Column::ColumnMode::BigInt);
 	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
 
