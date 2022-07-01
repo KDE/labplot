@@ -59,8 +59,7 @@ void CustomPoint::init() {
 	const auto x = m_plot->xRange(cs->xIndex()).center();
 	const auto y = m_plot->yRange(cs->yIndex()).center();
 	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
-	d->updatePosition(); // To update also scene coordinates
+    setPositionLogical(QPointF(x, y));
 
 	// initialize the symbol
 	d->symbol = new Symbol(QString());
@@ -149,7 +148,6 @@ void CustomPointPrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	updatePosition();
 	recalcShapeAndBoundingRect();
 }
 

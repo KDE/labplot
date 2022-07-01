@@ -60,11 +60,11 @@ void ReferenceRange::init() {
 	const auto y = m_plot->yRange(cs->yIndex()).center();
 	const auto w = m_plot->xRange(cs->xIndex()).length() * 0.1;
 	const auto h = m_plot->yRange(cs->yIndex()).length() * 0.1;
-	d->positionLogical = QPointF(x, y);
 	d->positionLogicalStart = QPointF(x - w / 2, y - h / 2);
 	d->positionLogicalEnd = QPointF(x + w / 2, y + h / 2);
-	d->updatePosition(); // to update also scene coordinates
-// 	qDebug()<<"start/end " << d->positionLogicalStart << "  " << d->positionLogicalEnd;
+    setPositionLogical(QPointF(x, y));
+
+// 	qDebug()<<"start/end " << d->positionLogical << "  " << d->positionLogicalEnd;
 
 	// background
 	d->backgroundType = (WorksheetElement::BackgroundType)group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));

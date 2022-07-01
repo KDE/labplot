@@ -60,8 +60,7 @@ void ReferenceLine::init() {
 	const auto x = m_plot->xRange(cs->xIndex()).center();
 	const auto y = m_plot->yRange(cs->yIndex()).center();
 	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->positionLogical = QPointF(x, y);
-	d->updatePosition(); // To update also scene coordinates
+    setPositionLogical(QPointF(x, y));
 
 	d->pen.setStyle((Qt::PenStyle)group.readEntry("Style", (int)Qt::SolidLine));
 	d->pen.setColor(group.readEntry("Color", QColor(Qt::black)));
@@ -248,10 +247,9 @@ void ReferenceLinePrivate::retransform() {
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceLine::Orientation::Vertical)
-		positionLogical = QPointF(positionLogical.x(), yRange.center());
+		q->setPositionLogical(QPointF(positionLogical.x(), yRange.center()));
 	else
-		positionLogical = QPointF(xRange.center(), positionLogical.y());
-	updatePosition(); // To update position.point
+		q->setPositionLogical(QPointF(xRange.center(), positionLogical.y()));
 
 	// position.point contains already the scene position, but here it will be determined,
 	// if the point lies outside of the datarect or not
