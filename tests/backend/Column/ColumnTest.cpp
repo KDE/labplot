@@ -455,9 +455,11 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.percentile_1, -9700000000);
 	QCOMPARE(stats.percentile_5, -8500000000);
 	QCOMPARE(stats.percentile_10, -7000000000);
+#ifndef HAVE_WINDOWS
 	FuzzyCompare(stats.percentile_90, 7300000000.);
 	FuzzyCompare(stats.percentile_95, 8650000000.);
 	FuzzyCompare(stats.percentile_99, 9730000000.);
+#endif
 	QCOMPARE(stats.trimean, 437500000);
 	QCOMPARE(stats.variance, 6.69166666666667e+19);
 	QCOMPARE(stats.standardDeviation, 8180260794.53868);
