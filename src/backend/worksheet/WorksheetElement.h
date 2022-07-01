@@ -84,6 +84,7 @@ public:
 	void finalizeAdd() override;
 
 	virtual QGraphicsItem* graphicsItem() const = 0;
+	virtual void setParentGraphicsItem(QGraphicsItem* item) const;
 	virtual void setZValue(qreal);
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
@@ -123,6 +124,7 @@ private:
 
 protected:
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
+	CLASS_D_ACCESSOR_DECL(QRectF, rect, BoundingRect)
 	int m_cSystemIndex{0}; // index of coordinate system used from plot
 	// parent plot if available
 	// not const because of prepareGeometryChange()
