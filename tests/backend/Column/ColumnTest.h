@@ -34,7 +34,7 @@ private Q_SLOTS:
 	void statisticsIntBigNegative(); // contains big negative values (<= -100)
 	void statisticsIntZero(); // contains zero value
 	void statisticsIntOverflow(); // check overflow of integer
-//	void statisticsBigInt(); // big ints
+	void statisticsBigInt(); // big ints
 
 	void loadDoubleFromProject();
 	void loadIntegerFromProject();
