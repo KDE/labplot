@@ -956,10 +956,6 @@ XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
 	setAcceptHoverEvents(false);
 }
 
-QRectF XYCurvePrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
 /*!
   Returns the shape of the XYCurve as a QPainterPath in local coordinates
 */
@@ -2842,10 +2838,12 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (xErrorType != XYCurve::ErrorType::NoError || yErrorType != XYCurve::ErrorType::NoError)
 		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 
-	boundingRectangle = curveShape.boundingRect();
+	auto boundingRectangle = curveShape.boundingRect();
 
 	for (const auto& pol : qAsConst(m_fillPolygons))
 		boundingRectangle = boundingRectangle.united(pol.boundingRect());
+
+	q->setBoundingRect(boundingRectangle);
 
 	// TODO: when the selection is painted, line intersections are visible.
 	// simplified() removes those artifacts but is horrible slow for curves with large number of points.
@@ -2925,6 +2923,7 @@ void XYCurvePrivate::updatePixmap() {
 
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	const auto boundingRectangle = boundingRect();
 	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
 		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
@@ -2964,7 +2963,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if (!q->isPrinting() && KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true))
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); // draw the cached pixmap (fast)
+		painter->drawPixmap(boundingRect().topLeft(), m_pixmap); // draw the cached pixmap (fast)
 	else
 		draw(painter); // draw directly again (slow)
 
@@ -2980,7 +2979,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(boundingRect().topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -2996,7 +2995,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(boundingRect().topLeft(), m_selectionEffectImage, m_pixmap.rect());
 	}
 }
 

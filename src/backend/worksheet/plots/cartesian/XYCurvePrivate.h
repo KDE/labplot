@@ -24,7 +24,6 @@ class XYCurvePrivate : public WorksheetElementPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
 	void retransform() override;

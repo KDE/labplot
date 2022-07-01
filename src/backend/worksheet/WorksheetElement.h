@@ -171,6 +171,7 @@ Q_SIGNALS:
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
+	void boundingRectangleChanged(const QRectF& f);
 
 	void hovered();
 	void unhovered();

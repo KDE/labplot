@@ -181,7 +181,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		boundingRectangle = pointShape.boundingRect();
+		q->setBoundingRect(pointShape.boundingRect());
 	}
 }
 

@@ -534,12 +534,13 @@ void CartesianPlotLegendPrivate::retransform() {
 		}
 	}
 
-	rect.setX(-legendWidth / 2);
-	rect.setY(-legendHeight / 2);
-	rect.setWidth(legendWidth);
-	rect.setHeight(legendHeight);
+	QRectF rectangle;
+	rectangle.setX(-legendWidth / 2);
+	rectangle.setY(-legendHeight / 2);
+	rectangle.setWidth(legendWidth);
+	rectangle.setHeight(legendHeight);
 
-	updatePosition();
+	q->setBoundingRect(rectangle);
 }
 
 /*!

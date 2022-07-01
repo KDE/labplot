@@ -453,13 +453,7 @@ void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
 	d->retransform();
-}
-
 /*!
-	Returns the outer bounds of the item as a rectangle.
- */
-QRectF ReferenceRangePrivate::boundingRect() const {
-	return boundingRectangle;
 }
 
 /*!
@@ -480,7 +474,7 @@ void ReferenceRangePrivate::recalcShapeAndBoundingRect() {
 		QPainterPath path;
 		path.addRect(rect);
 		rangeShape.addPath(WorksheetElement::shapeFromPath(path, borderPen));
-		boundingRectangle = rangeShape.boundingRect();
+		q->setBoundingRect(rangeShape.boundingRect());
 	}
 }
 

@@ -26,7 +26,6 @@ public:
 	bool m_hovered{false};
 	bool m_visible{true}; // point inside the plot (visible) or not
 
-	QRectF boundingRectangle;
 	QPainterPath rangeShape;
 
 	ReferenceRange::Orientation orientation{ReferenceRange::Orientation::Horizontal};
@@ -50,7 +49,6 @@ public:
 	qreal borderOpacity;
 
 	// reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 

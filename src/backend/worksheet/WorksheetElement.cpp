@@ -602,6 +602,13 @@ void WorksheetElement::setPositionLogical(QPointF pos) {
 		exec(new WorksheetElementSetPositionLogicalCmd(d, pos, ki18n("%1: set logical position")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetBoundingRect, QRectF, boundingRectangle, updatePosition)
+void WorksheetElement::setBoundingRect(const QRectF& rect) {
+    Q_D(WorksheetElement);
+	if (rect != d->boundingRect())
+        exec(new WorksheetElementSetBoundingRectCmd(d, rect, ki18n("%1: set bounding Rect")));
+}
+
 /*!
  * \brief WorksheetElement::setPosition
  * sets the position without undo/redo-stuff

@@ -219,12 +219,13 @@ void ImagePrivate::retransform() {
 
 	int w = m_image.width();
 	int h = m_image.height();
+    QRectF boundingRectangle;
 	boundingRectangle.setX(-w / 2);
 	boundingRectangle.setY(-h / 2);
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
-	updatePosition();
+	q->setBoundingRect(boundingRectangle);
 	updateBorder();
 
 	Q_EMIT q->changed();

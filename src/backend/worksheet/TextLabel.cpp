@@ -426,7 +426,7 @@ QRectF TextLabelPrivate::size() {
  */
 QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 	if (m_gluePoints.isEmpty())
-		return boundingRectangle.center();
+		return WorksheetElementPrivate::boundingRect().center();
 
 	if (m_gluePoints.length() == 1)
 		return mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
@@ -458,7 +458,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	QString name;
 
 	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
-		pos = boundingRectangle.center();
+		pos = WorksheetElementPrivate::boundingRect().center();
 		name = QLatin1String("center");
 	} else if (index < 0) {
 		pos = m_gluePoints.at(0).point;
@@ -620,10 +620,12 @@ void TextLabelPrivate::updateBoundingRect() {
 	}
 
 	// DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
-	boundingRectangle.setX(-w / 2);
-	boundingRectangle.setY(-h / 2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
+	QRectF rect;
+	rect.setX(-w / 2);
+	rect.setY(-h / 2);
+	rect.setWidth(w);
+	rect.setHeight(h);
+	q->setBoundingRect(rect);
 
 	updateBorder();
 }
@@ -640,6 +642,7 @@ void TextLabelPrivate::updateBorder() {
 	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
+	const auto boundingRectangle = WorksheetElementPrivate::boundingRect();
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
@@ -914,8 +917,8 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 		labelShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
 		transformedBoundingRectangle = matrix.mapRect(labelShape.boundingRect());
 	} else {
-		labelShape.addRect(boundingRectangle);
-		transformedBoundingRectangle = matrix.mapRect(boundingRectangle);
+		labelShape.addRect(WorksheetElementPrivate::boundingRect());
+		transformedBoundingRectangle = matrix.mapRect(WorksheetElementPrivate::boundingRect());
 	}
 
 	labelShape = matrix.map(labelShape);
