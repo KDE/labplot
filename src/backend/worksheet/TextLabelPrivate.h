@@ -59,7 +59,7 @@ public:
 	void updateBoundingRect();
 	void setZoomFactor(double);
 	virtual void recalcShapeAndBoundingRect() override;
-	void updatePosition();
+	void updatePosition() override;
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
