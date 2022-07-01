@@ -478,7 +478,6 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	updatePosition();
 	updateBorder();
 
 	Q_EMIT q->changed();
@@ -495,6 +494,7 @@ void TextLabelPrivate::setZoomFactor(double factor) {
 
 /*!
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
+	Copied from WorksheetElementPrivate and added if branch
 */
 void TextLabelPrivate::updatePosition() {
 	if (q->isLoading())
@@ -513,7 +513,8 @@ void TextLabelPrivate::updatePosition() {
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
 			if (!coordinateBindingEnabled) {
-				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+				QPointF pos = q->align(p, WorksheetElementPrivate::boundingRect(), horizontalAlignment, verticalAlignment, false);
+				// Do not use setPositionLogical, because this is already updatePosition();
 				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
