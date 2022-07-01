@@ -152,7 +152,7 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.kurtosis, -1.7913399134667);
 	QCOMPARE(stats.entropy, 1.5);
 }
-void ColumnTest::statisticsDoubleNegative() {
+/*void ColumnTest::statisticsDoubleNegative() {
 	Column c("Double column", Column::ColumnMode::Double);
 	c.setValues({-1.0, 0.0, 2.0, 5.0});
 
@@ -467,7 +467,7 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.skewness, -0.0683349251790571);
 	QCOMPARE(stats.kurtosis, -1.87918466941373);
 	QCOMPARE(stats.entropy, 2.);
-}
+}*/
 
 //////////////////////////////////////////////////
 
