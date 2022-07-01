@@ -160,7 +160,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 	if (element && (aspect->parentAspect() == this)) {
 		connect(element, &WorksheetElement::hovered, this, &WorksheetElementContainer::childHovered);
 		connect(element, &WorksheetElement::unhovered, this, &WorksheetElementContainer::childUnhovered);
-		element->graphicsItem()->setParentItem(d);
+		element->setParentGraphicsItem(d);
 
 		qreal zVal = 0;
 		for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))

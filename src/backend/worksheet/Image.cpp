@@ -80,12 +80,6 @@ QGraphicsItem* Image::graphicsItem() const {
 	return d_ptr;
 }
 
-void Image::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(Image);
-	d->setParentItem(item);
-	d->updatePosition();
-}
-
 void Image::retransform() {
 	Q_D(Image);
 	d->retransform();

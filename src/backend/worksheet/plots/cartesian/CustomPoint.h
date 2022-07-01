@@ -36,7 +36,6 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	Symbol* symbol() const;
-	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

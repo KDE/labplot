@@ -702,12 +702,6 @@ void InfoElement::pointPositionChanged(const WorksheetElement::PositionWrapper&)
 	setPositionLogical(point->positionLogical().x());
 }
 
-void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(InfoElement);
-	d->setParentItem(item);
-	d->updatePosition();
-}
-
 QGraphicsItem* InfoElement::graphicsItem() const {
 	return d_ptr;
 }

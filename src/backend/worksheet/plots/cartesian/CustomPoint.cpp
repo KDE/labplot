@@ -124,11 +124,6 @@ Symbol* CustomPoint::symbol() const {
 	return d->symbol;
 }
 
-void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(CustomPoint);
-	d->setParentItem(item);
-}
-
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################

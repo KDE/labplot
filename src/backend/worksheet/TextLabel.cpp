@@ -181,16 +181,6 @@ QGraphicsItem* TextLabel::graphicsItem() const {
 	return d_ptr;
 }
 
-/*!
- * \brief TextLabel::setParentGraphicsItem
- * Sets the parent graphicsitem, needed for binding to coord
- * \param item parent graphicsitem
- */
-void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
-	Q_D(TextLabel);
-	d->setParentItem(item);
-}
-
 void TextLabel::setZoomFactor(double factor) {
 	Q_D(TextLabel);
 	d->setZoomFactor(factor);

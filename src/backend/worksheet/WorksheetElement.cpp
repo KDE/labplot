@@ -122,6 +122,10 @@ bool WorksheetElement::isPrinting() const {
 	return m_printing;
 }
 
+void WorksheetElement::setParentGraphicsItem(QGraphicsItem* item) const {
+	d_ptr->setParent(item);
+}
+
 void WorksheetElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);
 }

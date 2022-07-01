@@ -30,7 +30,6 @@ class InfoElement : public WorksheetElement {
 public:
 	InfoElement(const QString& name, CartesianPlot*);
 	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double pos);
-	void setParentGraphicsItem(QGraphicsItem* item);
 	~InfoElement();
 
 	struct MarkerPoints_T {

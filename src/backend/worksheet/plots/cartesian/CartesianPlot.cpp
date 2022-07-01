@@ -2158,7 +2158,6 @@ void CartesianPlot::addInfoElement() {
 
 	auto* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
-	element->setParentGraphicsItem(graphicsItem());
 	element->retransform(); // must be done, because the element must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
 }
 
@@ -2175,7 +2174,6 @@ void CartesianPlot::addTextLabel() {
 	}
 
 	this->addChild(label);
-	label->setParentGraphicsItem(graphicsItem());
 	label->retransform();
 }
 
@@ -5602,7 +5600,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				label->setIsLoading(true);
 				if (label->load(reader, preview)) {
 					addChildFast(label);
-					label->setParentGraphicsItem(graphicsItem());
+					label->setParentGraphicsItem(graphicsItem()); // TODO: needed?
 				} else {
 					delete label;
 					return false;
