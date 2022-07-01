@@ -55,7 +55,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 
 	// box filling
-	Background* background() const;
+	Background* backgroundAt(int) const;
 
 	// box border
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)

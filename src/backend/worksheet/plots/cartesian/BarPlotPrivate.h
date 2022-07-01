@@ -54,8 +54,9 @@ public:
 	double yMin;
 	double yMax;
 
-	// box filling
-	Background* background{nullptr};
+	// bar properties
+	QVector<Background*> backgrounds;
+	QVector<double> widthFactors;
 
 	// box border
 	QPen borderPen;

@@ -54,14 +54,18 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Tab "Bars"
-	QString msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
+	QString msg = i18n("Specify bar number which properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
+
+	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
 
 	// filling
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
-	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
+	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -76,6 +80,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
 	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
@@ -143,7 +148,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	// backgrounds
 	QList<Background*> backgrounds;
 	for (auto* plot : m_barPlots)
-		backgrounds << plot->background();
+		backgrounds << plot->backgroundAt(0);
 
 	backgroundWidget->setBackgrounds(backgrounds);
 
@@ -215,6 +220,9 @@ void BarPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_barPlot->dataColumns().count();
+	const int currentBarIndex = ui.cbNumber->currentIndex();
+	ui.cbNumber->clear();
+
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -229,11 +237,16 @@ void BarPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i)
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
+
+		for (int i = 0; i < count; ++i)
+			ui.cbNumber->addItem(QString::number(i + 1));
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
+
+		ui.cbNumber->addItem("1");
 	}
 
 	// disable data column widgets if we're modifying more than one box plot at the same time
@@ -243,9 +256,24 @@ void BarPlotDock::loadDataColumns() {
 		cb->setEnabled(enabled);
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
+
+	if (currentBarIndex != -1)
+		ui.cbNumber->setCurrentIndex(currentBarIndex);
+	else
+		ui.cbNumber->setCurrentIndex(0);
 }
 
 void BarPlotDock::setDataColumns() const {
+	int newCount = m_dataComboBoxes.count();
+	int oldCount = m_barPlot->dataColumns().count();
+
+	if (newCount > oldCount)
+		ui.cbNumber->addItem(QString::number(newCount));
+	else {
+		if (newCount != 0)
+			ui.cbNumber->removeItem(ui.cbNumber->count() - 1);
+	}
+
 	QVector<const AbstractColumn*> columns;
 
 	for (auto* cb : m_dataComboBoxes) {
@@ -258,8 +286,9 @@ void BarPlotDock::setDataColumns() const {
 }
 
 //**********************************************************
-//*** SLOTs for changes triggered in BarPlotDock *****
+//******* SLOTs for changes triggered in BarPlotDock *******
 //**********************************************************
+//"General"-tab
 void BarPlotDock::xColumnChanged(const QModelIndex& index) {
 	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column(nullptr);
@@ -392,6 +421,23 @@ void BarPlotDock::visibilityChanged(bool state) const {
 }
 
 //"Box"-tab
+/*!
+ * called when the current bar number was changed, shows the bar properties for the selected bar.
+ */
+void BarPlotDock::currentBarChanged(int index) const {
+	if (index == -1)
+		return;
+
+	QList<Background*> backgrounds;
+	for (auto* plot : m_barPlots) {
+		auto* background = plot->backgroundAt(index);
+		if (background)
+			backgrounds << background;
+	}
+
+	backgroundWidget->setBackgrounds(backgrounds);
+}
+
 void BarPlotDock::widthFactorChanged(int value) const {
 	if (m_initializing)
 		return;
@@ -457,9 +503,8 @@ void BarPlotDock::borderOpacityChanged(int value) const {
 //*************************************************************
 // general
 void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
-	m_initializing = false;
 }
 void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	Lock lock(m_initializing);

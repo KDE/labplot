@@ -61,6 +61,7 @@ private Q_SLOTS:
 	void visibilityChanged(bool) const;
 
 	//"Box"-tab
+	void currentBarChanged(int) const;
 	void widthFactorChanged(int) const;
 
 	// box border

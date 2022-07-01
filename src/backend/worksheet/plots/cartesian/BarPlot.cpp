@@ -62,16 +62,21 @@ void BarPlot::init() {
 	d->orientation = (BarPlot::Orientation)group.readEntry("Orientation", (int)BarPlot::Orientation::Vertical);
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 
+	d->widthFactors << d->widthFactor;
+
 	// box filling
-	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
-	d->background->setEnabledAvailable(true);
-	addChild(d->background);
-	d->background->setHidden(true);
-	d->background->init(group);
-	connect(d->background, &Background::updateRequested, [=] {
+
+	// create the initial background object that will be available even if not data column was set yet
+	auto* background = new Background(QString());
+	background->setPrefix(QLatin1String("Filling"));
+	background->setEnabledAvailable(true);
+	background->setHidden(true);
+	addChild(background);
+	background->init(group);
+	connect(background, &Background::updateRequested, [=] {
 		d->updatePixmap();
 	});
+	d->backgrounds << background;
 
 	// box border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
@@ -179,9 +184,12 @@ QString& BarPlot::xColumnPath() const {
 
 // box
 // filling
-Background* BarPlot::background() const {
+Background* BarPlot::backgroundAt(int index) const {
 	Q_D(const BarPlot);
-	return d->background;
+	if (index < d->backgrounds.size())
+		return d->backgrounds.at(index);
+	else
+		return nullptr;
 }
 
 // border
@@ -392,11 +400,43 @@ void BarPlotPrivate::retransform() {
 void BarPlotPrivate::recalc() {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
+	const int newSize = dataColumns.size();
 	// resize the internal containers
 	m_barLines.clear();
-	m_barLines.resize(dataColumns.size());
+	m_barLines.resize(newSize);
 	m_fillPolygons.clear();
-	m_fillPolygons.resize(dataColumns.size());
+	m_fillPolygons.resize(newSize);
+
+	// bar properties
+	if (newSize > widthFactors.size()) {
+		// one more bar needs to be added
+		KConfig config;
+		KConfigGroup group = config.group("BarPlot");
+
+		widthFactors << group.readEntry("WidthFactor", 1.0);
+
+		// box filling
+		auto* background = new Background(QString());
+		background->setPrefix(QLatin1String("Filling"));
+		background->setEnabledAvailable(true);
+		background->setHidden(true);
+		q->addChild(background);
+		background->init(group);
+		q->connect(background, &Background::updateRequested, [=] {
+			updatePixmap();
+		});
+
+		backgrounds << background;
+
+		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+		background->setFirstColor(plot->themeColorPalette(backgrounds.count() - 1));
+	} else {
+		// the last bar was deleted
+// 		if (newSize != 0) {
+// 			widthFactors.takeLast();
+// 			delete backgrounds.takeLast();
+// 		}
+	}
 
 	// determine the number of bar groups that we need to draw.
 	// this number is equal to the max number of non-empty
@@ -514,8 +554,8 @@ void BarPlotPrivate::recalc() {
 
 	// determine the width of a group and of the gaps around a group
 	m_groupWidth = 1.0;
-	if (xColumn && dataColumns.size() != 0)
-		m_groupWidth = (xColumn->maximum() - xColumn->minimum())/dataColumns.size();
+	if (xColumn && newSize != 0)
+		m_groupWidth = (xColumn->maximum() - xColumn->minimum())/newSize;
 
 	m_groupGap = m_groupWidth*0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
@@ -810,10 +850,13 @@ void BarPlotPrivate::draw(QPainter* painter) {
 		int valueIndex = 0;
 		for (const auto& barLines : columnBarLines) { // loop over the bars for every data column
 			// draw the box filling
-			if (background->enabled()) {
-				painter->setOpacity(background->opacity());
-				painter->setPen(Qt::SolidLine);
-				drawFilling(painter, columnIndex, valueIndex);
+			if (columnIndex < backgrounds.size()) { // TODO: remove this check later
+				auto* background = backgrounds.at(columnIndex);
+				if (background->enabled()) {
+					painter->setOpacity(background->opacity());
+					painter->setPen(Qt::SolidLine);
+					drawFilling(painter, columnIndex, valueIndex);
+				}
 			}
 
 			// draw the border
@@ -837,9 +880,7 @@ void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int valueIn
 	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
 	const QRectF& rect = polygon.boundingRect();
 
-	// TODO
-// 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-// 	background->setFirstColor(plot->themeColorPalette(columnIndex));
+	const auto* background = backgrounds.at(columnIndex);
 
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
@@ -1025,7 +1066,8 @@ void BarPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// box filling
-	d->background->save(writer);
+	for (auto* background : d->backgrounds)
+		background->save(writer);
 
 	// box border
 	writer->writeStartElement("border");
@@ -1046,6 +1088,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool firstBackgroundRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1079,7 +1122,22 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == "filling") {
-			d->background->load(reader, preview);
+			if(!firstBackgroundRead) {
+				auto* background = d->backgrounds.at(0);
+				background->load(reader, preview);
+				firstBackgroundRead = true;
+			} else {
+				auto* background = new Background(QString());
+				background->setPrefix(QLatin1String("Filling"));
+				background->setEnabledAvailable(true);
+				background->setHidden(true);
+				addChild(background);
+				connect(background, &Background::updateRequested, [=] {
+					d->updatePixmap();
+				});
+				background->load(reader, preview);
+				d->backgrounds << background;
+			}
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 
@@ -1127,7 +1185,11 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
 
 	// box filling
-	d->background->loadThemeConfig(group);
+	for (int i = 0; i < d->backgrounds.count(); ++i) {
+		auto* background = d->backgrounds.at(i);
+		background->loadThemeConfig(group);
+		background->setFirstColor(plot->themeColorPalette(i));
+	}
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
