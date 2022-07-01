@@ -67,6 +67,7 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
+	Q_D(WorksheetElement);
 	if (!m_plot) {
 		/*Not in every case the parentAspect is a cartesian plot. When creating an infoelement, the parent
 		 * of a custom point is not the CartesianPlot (and so this function returns a nullptr), but the InfoElement.
@@ -77,6 +78,9 @@ void WorksheetElement::finalizeAdd() {
 
 	if (m_plot) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+		if (coordinateBindingEnabled())
+			d->updatePosition(); // might be called also in retransform. TODO: check that (Textlabel, Custompoint, ...!
+		retransform();
 		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
@@ -534,10 +538,13 @@ void WorksheetElement::saveThemeConfig(const KConfig&) {
 // coordinate system
 
 void WorksheetElement::setCoordinateSystemIndex(int index) {
+	Q_D(WorksheetElement);
 	m_cSystemIndex = index;
-	if (m_plot)
+	if (m_plot) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
-	else
+		if (d->coordinateBindingEnabled)
+			d->updatePosition();
+	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
 	emit coordinateSystemIndexChanged(m_cSystemIndex);
 }
