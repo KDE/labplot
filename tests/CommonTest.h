@@ -52,10 +52,10 @@ protected:
 	// compare floats with given delta
 	// delta - relative error
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		if (fabs(expected) < delta)
-			QVERIFY(fabs(actual) < delta);
+		if (std::abs(expected) < delta)
+			QVERIFY(std::abs(actual) < delta);
 		else {
-			DEBUG(std::setprecision(15) << actual - fabs(actual) * delta << " <= " << expected << " <= " << actual + fabs(actual) * delta);
+			DEBUG(std::setprecision(15) << actual - std::abs(actual) * delta << " <= " << expected << " <= " << actual + std::abs(actual) * delta);
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}
