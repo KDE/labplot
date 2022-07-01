@@ -573,7 +573,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, retransform)
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition)
 void WorksheetElement::setPosition(const PositionWrapper& pos) {
 	Q_D(WorksheetElement);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition
@@ -581,14 +581,14 @@ void WorksheetElement::setPosition(const PositionWrapper& pos) {
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, updatePosition)
 void WorksheetElement::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
 	Q_D(WorksheetElement);
 	if (hAlign != d->horizontalAlignment)
 		exec(new WorksheetElementSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform)
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, updatePosition)
 void WorksheetElement::setVerticalAlignment(const WorksheetElement::VerticalAlignment vAlign) {
 	Q_D(WorksheetElement);
 	if (vAlign != d->verticalAlignment)
@@ -599,10 +599,10 @@ STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetCoordinateBindingEnabled, bool, coo
 void WorksheetElement::setCoordinateBindingEnabled(bool on) {
 	Q_D(WorksheetElement);
 	if (on != d->coordinateBindingEnabled)
-		exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
+        exec(new WorksheetElementSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: use scene coordinates")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPositionLogical, QPointF, positionLogical, retransform)
+STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPositionLogical, QPointF, positionLogical, updatePosition)
 void WorksheetElement::setPositionLogical(QPointF pos) {
 	Q_D(WorksheetElement);
 	if (pos != d->positionLogical)
@@ -625,7 +625,7 @@ void WorksheetElement::setPosition(QPointF point) {
 	Q_D(WorksheetElement);
 	if (point != d->position.point) {
 		d->position.point = point;
-		retransform();
+		d->updatePosition();
 	}
 }
 
