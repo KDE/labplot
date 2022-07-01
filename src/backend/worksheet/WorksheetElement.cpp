@@ -803,7 +803,7 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
 	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
-		// mapping from parent to item coordinates and them to plot area
+		// mapping from parent to item coordinates and then to plot area
 		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
 	}
 
