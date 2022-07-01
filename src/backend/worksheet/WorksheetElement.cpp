@@ -571,6 +571,7 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, WorksheetElement::VerticalAlignment
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, QPointF, positionLogical, positionLogical)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coordinateBindingEnabled)
+BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, positionInvalid, positionInvalid)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition)

@@ -63,9 +63,9 @@ public:
 			, positionLimit(limit) {
 		}
 
-		QPointF point;
-		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
-		VerticalPosition verticalPosition{VerticalPosition::Center};
+        QPointF point; // relative position to parent
+        HorizontalPosition horizontalPosition{HorizontalPosition::Center}; // reference point of the parent
+        VerticalPosition verticalPosition{VerticalPosition::Center}; // reference point of the parent
 		PositionLimit positionLimit{PositionLimit::None};
 	};
 
@@ -76,9 +76,9 @@ public:
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
-	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+    BASIC_D_ACCESSOR_DECL(bool, positionInvalid, PositionInvalid)
+    BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment) // reference point of this element
+    BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment) // reference point of this element
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	void finalizeAdd() override;
