@@ -349,23 +349,22 @@ void ReferenceRangePrivate::retransform() {
 
 	// calculate the position in the scene coordinates
 	if (orientation == ReferenceRange::Orientation::Vertical) {
-		positionLogical = QPointF(positionLogical.x(), yRange.center());
+		positionLogical.setX((positionLogicalEnd.x() + positionLogicalStart.x())/2); // set position between the two points
 		rect.setX(positionLogicalStart.x());
 		rect.setY(yRange.start());
-		rect.setWidth(positionLogicalEnd.x() - positionLogicalStart.x());
+		rect.setWidth(positionLogicalEnd.x() - rect.x());
 		rect.setHeight(yRange.length());
 	} else {
-		positionLogical = QPointF(xRange.center(), positionLogical.y());
+		positionLogical.setY((positionLogicalEnd.y() + positionLogicalStart.y())/2); // set position between the two points
 		rect.setX(xRange.start());
 		rect.setY(positionLogicalStart.y());
 		rect.setWidth(xRange.length());
-		rect.setHeight(positionLogicalEnd.y() - positionLogicalStart.y());
+		rect.setHeight(positionLogicalEnd.y() - rect.y());
 	}
-	updatePosition(); // To update position.point
 
 	prevPositionLogical = positionLogical;
 
-// 	qDebug() << "logical rect " << rect;
+	qDebug() << "logical rect " << rect;
 
 	//TODO: taken from BoxPlotPrivate::updateFillingRect(), maybe a more simpler version is possible here
 	Lines lines;
@@ -450,10 +449,9 @@ void ReferenceRange::updateStartEndPositions(QPointF newPosition) {
 		d->positionLogicalStart.setX(d->positionLogicalStart.x() + delta);
 		d->positionLogicalEnd.setX(d->positionLogicalEnd.x() + delta);
 	}
+	d->prevPositionLogical = d->positionLogical;
 	Q_EMIT positionLogicalStartChanged(d->positionLogicalStart);
 	Q_EMIT positionLogicalEndChanged(d->positionLogicalEnd);
-	d->retransform();
-/*!
 }
 
 /*!
@@ -617,8 +615,8 @@ void ReferenceRange::save(QXmlStreamWriter* writer) const {
 	// position and orientation
 	writer->writeStartElement("geometry");
 	WorksheetElement::save(writer);
-	writer->writeAttribute("logicalPosStartX", QString::number(d->positionLogicalStart.x()));
-	writer->writeAttribute("logicalPosStartY", QString::number(d->positionLogicalStart.y()));
+	writer->writeAttribute("logicalPosStartX", QString::number(d->positionLogical.x()));
+	writer->writeAttribute("logicalPosStartY", QString::number(d->positionLogical.y()));
 	writer->writeAttribute("logicalPosEndX", QString::number(d->positionLogicalEnd.x()));
 	writer->writeAttribute("logicalPosEndY", QString::number(d->positionLogicalEnd.y()));
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
@@ -679,13 +677,13 @@ bool ReferenceRange::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("logicalPosStartX").toString());
 			else
-				d->positionLogicalStart.setX(str.toDouble());
+				d->positionLogical.setX(str.toDouble());
 
 			str = attribs.value("logicalPosStartY").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("logicalPosStartY").toString());
 			else
-				d->positionLogicalStart.setY(str.toDouble());
+				d->positionLogical.setY(str.toDouble());
 
 			str = attribs.value("logicalPosEndX").toString();
 			if (str.isEmpty())

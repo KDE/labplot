@@ -13,6 +13,8 @@
 #include "Worksheet.h"
 #include <QGraphicsItem>
 
+class TextLabelPrivate;
+
 class WorksheetElement;
 
 class WorksheetElementPrivate : public QGraphicsItem {
@@ -22,17 +24,18 @@ public:
 	// position in parent's coordinate system, the label gets aligned around this point
 	// TODO: try to get away the Worksheet dependency
 	WorksheetElement::PositionWrapper position{
-		QPointF(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
+		QPointF(Worksheet::convertToSceneUnits(0, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(0, Worksheet::Unit::Centimeter)),
 		WorksheetElement::HorizontalPosition::Center,
 		WorksheetElement::VerticalPosition::Center,
 		WorksheetElement::PositionLimit::None};
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
-	bool positionInvalid{false};
+
+
 	bool coordinateBindingEnabled{false};
+	// Should be accessed only during initialization, use setter functions otherwise
 	QPointF positionLogical;
 	qreal rotationAngle{0.0};
-	QRectF boundingRectangle; // bounding rectangle of the text
     bool positionInvalid{false};
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
@@ -50,6 +53,19 @@ public:
 	virtual QVariant itemChange(GraphicsItemChange, const QVariant& value) override;
 	QPointF mapParentToPlotArea(QPointF);
 	QPointF mapPlotAreaToParent(QPointF);
-};
+	void setParent(QGraphicsItem *parent);
 
+private:
+	// To prevent this function will be called directly
+	// use setParent() instead
+	void setParentItem(QGraphicsItem*){}
+
+	// Private, because when changing one parameter, updatePosition must be called. So ensure those parameters
+	// cannot be called directly
+private: // ONLY FOR DEBUGGING Public!
+	QRectF boundingRectangle;
+
+	friend class WorksheetElementSetBoundingRectCmd;
+	friend class WorksheetElementTest;
+};
 #endif

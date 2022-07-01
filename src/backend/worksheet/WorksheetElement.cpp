@@ -665,9 +665,27 @@ QRectF WorksheetElementPrivate::boundingRect() const {
 void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 }
 
+/*!
+ * \brief WorksheetElementPrivate::updatePosition
+ * Shall be called if one of the following properties changes:
+ * - coordinateBindingEnabled -> positionLogical changed
+ * - !coordinateBindingEnabled -> position.point changed
+ * - position.horizontalPosition changed
+ * - position.verticalPosition changed
+ * - horizontalAlignment
+ * - verticalAlignment
+ * - boundingRectangle
+ * - parent changes
+ */
 void WorksheetElementPrivate::updatePosition() {
+	auto p_temp = pos();
 	QPointF p;
-	if (coordinateBindingEnabled && q->cSystem) {
+	if (coordinateBindingEnabled) {
+		// TODO: maybe consider using m_loading??
+		if (!q->cSystem) {
+			// During initialization, no cSystem is available. So do not set a wrong position
+			return;
+		}
 		// the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
 		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -744,7 +762,6 @@ void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 		WorksheetElement::PositionWrapper tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
-		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
 	}
 
@@ -812,7 +829,17 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
 }
 
 /*!
- * \brief TextLabelPrivate::mapPlotAreaToParent
+ * \brief WorksheetElementPrivate::setParentGraphicsItem
+ * Sets the parent graphicsitem, needed for binding to coord
+ * \param item parent graphicsitem
+ */
+void WorksheetElementPrivate::setParent(QGraphicsItem *parent) {
+	QGraphicsItem::setParentItem(parent);
+	updatePosition();
+}
+
+/*!
+ * \brief WorksheetElementPrivate::mapPlotAreaToParent
  * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
  * coordinates of this item
  * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
@@ -823,11 +850,22 @@ QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
 QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
 	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
 
-	if (parent) {
+	// No mapping needed if direct parent is already the cartesian Plot, because then
+	// the parent is already the plotArea
+	// TODO: check why the transformation is not the same!!!!
+	if (parent && q->parentAspect()->inherits(AspectType::CartesianPlot)) {
+		auto* plot = static_cast<CartesianPlot*>(parent);
+		// assert(mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point)) == p1);´
+		QDEBUG(Q_FUNC_INFO << "Parent pos: " << point << ", Mapped parent pos: " << mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point)));
+	} else if (parent) {
 		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent
 		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
 		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
+		QDEBUG(plot->dataRect());
+		QDEBUG(plot->plotArea()->graphicsItem()->boundingRect())
+		QDEBUG(mapFromItem(plot->plotArea()->graphicsItem(), point));
+		QDEBUG(boundingRect());
 		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
 	}
 

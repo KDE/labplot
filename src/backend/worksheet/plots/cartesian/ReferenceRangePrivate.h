@@ -32,7 +32,7 @@ public:
 	QPointF positionLogicalStart;
 	QPointF positionLogicalEnd;
 	QPointF prevPositionLogical;
-	QRectF rect;
+	QRectF rect; // the reference range rect. The bounding rect will be calculated from this
 
 	// background
 	WorksheetElement::BackgroundType backgroundType;
