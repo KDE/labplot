@@ -459,7 +459,6 @@ void ColumnTest::statisticsBigInt() {
 	FuzzyCompare(stats.percentile_90, 7300000000.);
 	FuzzyCompare(stats.percentile_95, 8650000000.);
 	FuzzyCompare(stats.percentile_99, 9730000000.);
-#endif
 	QCOMPARE(stats.trimean, 437500000);
 	QCOMPARE(stats.variance, 6.69166666666667e+19);
 	QCOMPARE(stats.standardDeviation, 8180260794.53868);
@@ -469,6 +468,7 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.skewness, -0.0683349251790571);
 	QCOMPARE(stats.kurtosis, -1.87918466941373);
 	QCOMPARE(stats.entropy, 2.);
+#endif
 }
 
 //////////////////////////////////////////////////
