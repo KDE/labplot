@@ -408,34 +408,38 @@ void BarPlotPrivate::recalc() {
 	m_fillPolygons.resize(newSize);
 
 	// bar properties
-	if (newSize > widthFactors.size()) {
+	int diff = newSize - backgrounds.size();
+	if (diff > 0) {
 		// one more bar needs to be added
 		KConfig config;
-		KConfigGroup group = config.group("BarPlot");
-
-		widthFactors << group.readEntry("WidthFactor", 1.0);
-
-		// box filling
-		auto* background = new Background(QString());
-		background->setPrefix(QLatin1String("Filling"));
-		background->setEnabledAvailable(true);
-		background->setHidden(true);
-		q->addChild(background);
-		background->init(group);
-		q->connect(background, &Background::updateRequested, [=] {
-			updatePixmap();
-		});
-
-		backgrounds << background;
-
+		KConfigGroup group = config.group(QLatin1String("BarPlot"));
 		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-		background->setFirstColor(plot->themeColorPalette(backgrounds.count() - 1));
+
+		for (int i = 0; i < diff; ++i) {
+			widthFactors << group.readEntry("WidthFactor", 1.0);
+
+			// box filling
+			auto* background = new Background(QString());
+			background->setPrefix(QLatin1String("Filling"));
+			background->setEnabledAvailable(true);
+			background->setHidden(true);
+			q->addChild(background);
+			background->init(group);
+			q->connect(background, &Background::updateRequested, [=] {
+				updatePixmap();
+			});
+
+			backgrounds << background;
+
+			if (plot /*&& !plot->themeColorPalette().isEmpty()*/)
+				background->setFirstColor(plot->themeColorPalette(backgrounds.count() - 1));
+		}
 	} else {
 		// the last bar was deleted
-// 		if (newSize != 0) {
-// 			widthFactors.takeLast();
-// 			delete backgrounds.takeLast();
-// 		}
+//		if (newSize != 0) {
+//			widthFactors.takeLast();
+//			delete backgrounds.takeLast();
+//		}
 	}
 
 	// determine the number of bar groups that we need to draw.
@@ -443,7 +447,7 @@ void BarPlotPrivate::recalc() {
 	// values in the provided datasets
 	int barGroupsCount = 0;
 	int columnIndex = 0;
-	for (auto* column : dataColumns) {
+	for (auto* column : qAsConst(dataColumns)) {
 		int size = static_cast<const Column*>(column)->statistics().size;
 		m_barLines[columnIndex].resize(size);
 		m_fillPolygons[columnIndex].resize(size);

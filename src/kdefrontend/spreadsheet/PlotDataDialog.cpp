@@ -871,9 +871,20 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				break;
 			}
 		}
-	}
-	case PlotType::BarPlot:
 		break;
+	}
+	case PlotType::BarPlot: {
+		auto* barPlot = static_cast<BarPlot*>(m_lastAddedCurve);
+		auto orientation = barPlot->orientation();
+
+		for (auto* axis : axes) {
+			if (axis->orientation() != orientation) {
+				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+				axis->setMinorTicksDirection(Axis::noTicks);
+			}
+			axis->title()->setText(QString()); // no title
+		}
+	}
 	}
 }
 
