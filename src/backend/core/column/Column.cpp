@@ -850,7 +850,7 @@ void Column::calculateStatistics() const {
 		rowData.push_back(val);
 	}
 
-	const int notNanCount = rowData.size();
+	const size_t notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
 		d->available.statistics = true;
@@ -910,17 +910,17 @@ void Column::calculateStatistics() const {
 
 	// sort the data to calculate the percentiles
 	std::sort(rowData.begin(), rowData.end());
-	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
-	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
-	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
-	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.01);
-	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.05);
-	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.1);
-	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.9);
-	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.95);
-	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.99);
+	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.25);
+	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.50);
+	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.75);
+	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.01);
+	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.05);
+	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.1);
+	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.9);
+	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.95);
+	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.99);
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
-	statistics.trimean = (statistics.firstQuartile + 2 * statistics.median + statistics.thirdQuartile) / 4;
+	statistics.trimean = (statistics.firstQuartile + 2. * statistics.median + statistics.thirdQuartile) / 4.;
 
 	//######  dispersion and shape measures  #######
 	statistics.variance = 0.;
@@ -932,7 +932,7 @@ void Column::calculateStatistics() const {
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
 
-	for (int row = 0; row < notNanCount; ++row) {
+	for (size_t row = 0; row < notNanCount; ++row) {
 		double val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
 		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);

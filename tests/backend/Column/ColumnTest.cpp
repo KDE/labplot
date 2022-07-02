@@ -447,11 +447,9 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 201000000000);
 
-// fails on Windows between here
 	QCOMPARE(stats.mode, qQNaN());
-#ifndef HAVE_WINDOWS
+// Windows fails here
 	QCOMPARE(stats.firstQuartile, -2500000000);
-// .. and here
 	QCOMPARE(stats.median, 500000000);
 	QCOMPARE(stats.thirdQuartile, 3250000000);
 	QCOMPARE(stats.iqr, 5750000000);
@@ -470,7 +468,6 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.skewness, -0.0683349251790571);
 	QCOMPARE(stats.kurtosis, -1.87918466941373);
 	QCOMPARE(stats.entropy, 2.);
-#endif
 }
 
 //////////////////////////////////////////////////
