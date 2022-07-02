@@ -13,8 +13,10 @@
 
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
+#include <QStaticText>
 
 extern "C" {
 #include <gsl/gsl_const_cgs.h>
@@ -47,7 +49,7 @@ public:
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
-	bool teXRenderSuccessful{false};
+	TeXRenderer::Result teXRenderResult;
 
 	// see TextLabel::init() for type specific default settings
 

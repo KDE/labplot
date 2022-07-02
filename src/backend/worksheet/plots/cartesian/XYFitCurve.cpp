@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -2261,7 +2261,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 		if (!fitData.evalRange.isZero()) // avoid zero range
 			xRange = fitData.evalRange;
 	}
-	DEBUG(Q_FUNC_INFO << ", eval range = " << STDSTRING(xRange.toString()));
+	DEBUG(Q_FUNC_INFO << ", eval range = " << xRange.toStdString());
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
@@ -2270,14 +2270,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview) // results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model,
-										QString::number(xRange.start()),
-										QString::number(xRange.end()),
-										(int)fitData.evaluatedPoints,
-										xVector,
-										yVector,
-										fitData.paramNames,
-										paramValues);
+	bool rc = parser->evaluateCartesian(fitData.model, xRange, (int)fitData.evaluatedPoints, xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
 		xVector->clear();

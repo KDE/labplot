@@ -26,6 +26,7 @@ class SyntaxHighlighter;
 class Label;
 class Axis;
 class QMenu;
+class KMessageWidget;
 
 class TextLabelTest;
 
@@ -62,6 +63,7 @@ private:
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif
+	KMessageWidget* m_messageWidget;
 
 	QVector<QMetaObject::Connection> m_connections;
 
@@ -120,7 +122,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
-	void labelTeXImageUpdated(bool);
+	void labelTeXImageUpdated(const TeXRenderer::Result&);
 	void labelTeXFontChanged(const QFont&);
 	void labelFontColorChanged(const QColor&);
 	void labelBackgroundColorChanged(const QColor&);
