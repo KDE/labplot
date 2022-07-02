@@ -431,10 +431,10 @@ void BarPlotPrivate::recalc() {
 
 			backgrounds << background;
 
-			if (plot /*&& !plot->themeColorPalette().isEmpty()*/)
+			if (plot)
 				background->setFirstColor(plot->themeColorPalette(backgrounds.count() - 1));
 		}
-	} else {
+	} else if (diff < 0){
 		// the last bar was deleted
 //		if (newSize != 0) {
 //			widthFactors.takeLast();
