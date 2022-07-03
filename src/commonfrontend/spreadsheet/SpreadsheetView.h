@@ -218,6 +218,7 @@ private:
 
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
@@ -226,7 +227,6 @@ public Q_SLOTS:
 	void pasteIntoSelection();
 
 private Q_SLOTS:
-	void createColumnContextMenu(QMenu*);
 	void goToCell(int row, int col);
 	void showSearch();
 	void toggleComments();

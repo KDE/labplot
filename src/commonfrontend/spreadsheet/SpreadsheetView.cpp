@@ -202,9 +202,6 @@ void SpreadsheetView::init() {
 	connect(m_spreadsheet, &Spreadsheet::aspectAboutToBeRemoved, this, &SpreadsheetView::handleAspectAboutToBeRemoved);
 	connect(m_spreadsheet, &Spreadsheet::requestProjectContextMenu, this, &SpreadsheetView::createContextMenu);
 
-	for (auto* column : m_spreadsheet->children<Column>())
-		connect(column, &Column::requestProjectContextMenu, this, &SpreadsheetView::createColumnContextMenu);
-
 	// selection relevant connections
 	QItemSelectionModel* sel_model = m_tableView->selectionModel();
 	connect(sel_model, &QItemSelectionModel::currentColumnChanged, this, &SpreadsheetView::currentColumnChanged);
@@ -923,8 +920,7 @@ void SpreadsheetView::createContextMenu(QMenu* menu) {
 /*!
  * adds column specific actions in SpreadsheetView to the context menu shown in the project explorer.
  */
-void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
-	const Column* column = dynamic_cast<Column*>(QObject::sender());
+void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	if (!column)
 		return; // should never happen, since the sender is always a Column
 
@@ -984,7 +980,6 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 		m_tableView->setColumnWidth(index, col->width());
 
 	goToCell(0, index);
-	connect(col, &Column::requestProjectContextMenu, this, &SpreadsheetView::createColumnContextMenu);
 }
 
 void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {

@@ -15,6 +15,7 @@ New features:
 Performance improvements:
 	* reduce the memory consumption during the spreadsheet export to Sqlite
 	* reduce the memory consumption when importing from a database table into the spreadsheet
+	* faster import of files with a big number of columns
 
 Bug fixes:
 	* [worksheet]

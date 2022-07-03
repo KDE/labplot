@@ -325,6 +325,11 @@ QMenu* Spreadsheet::createContextMenu() {
 	return menu;
 }
 
+void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (m_view)
+		m_view->fillColumnContextMenu(menu, column);
+}
+
 void Spreadsheet::moveColumn(int from, int to) {
 	Column* col = child<Column>(from);
 	beginMacro(i18n("%1: move column %2 from position %3 to %4.", name(), col->name(), from + 1, to + 1));
@@ -1038,6 +1043,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
+			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
+			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
@@ -1045,6 +1052,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 				newColumn->resizeTo(rows);
 				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
+			connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 		}
 
 		// 1. rename the columns that were already available
