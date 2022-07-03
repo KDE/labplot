@@ -29,6 +29,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
 
 	bool exportView() const override;

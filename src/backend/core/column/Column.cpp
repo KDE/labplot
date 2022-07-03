@@ -144,8 +144,10 @@ QMenu* Column::createContextMenu() {
 	// at the moment it's ok to check to the null pointer for firstAction here.
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction)
-		Q_EMIT requestProjectContextMenu(menu);
+	if (firstAction && parentAspect()->type() == AspectType::Spreadsheet) {
+		auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+		spreadsheet->fillColumnContextMenu(menu, this);
+	}
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
