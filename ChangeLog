@@ -11,6 +11,8 @@ New features:
 		* HDF5: support VLEN data import
 	* [export]
 		* Use the current working project directory, if available, as the default export path
+	* [analysis]
+		* guess start vaues of fit parameter for polynomial models by linear regression
 
 Performance improvements:
 	* reduce the memory consumption during the spreadsheet export to Sqlite
