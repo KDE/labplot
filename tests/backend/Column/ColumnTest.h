@@ -42,6 +42,7 @@ private Q_SLOTS:
 	void loadTextFromProject();
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
+	void testDictionaryIndex();
 };
 
 #endif // COLUMNTEST_H

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
-    <height>591</height>
+    <width>470</width>
+    <height>439</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -45,8 +45,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>668</width>
-           <height>124</height>
+           <width>442</width>
+           <height>89</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -151,7 +151,7 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="gbCurvePlacement">
      <property name="title">
-      <string>Curve Placement</string>
+      <string>Placement</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>

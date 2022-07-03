@@ -67,6 +67,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/HistogramDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/BarPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BoxPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
@@ -184,6 +185,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/barplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
@@ -340,6 +342,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp

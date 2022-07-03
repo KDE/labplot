@@ -625,6 +625,10 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	invalidateProperties();
 }
 
+int Column::dictionaryIndex(int row) const {
+	return d->dictionaryIndex(row);
+}
+
 void Column::addValueLabel(const QString& value, const QString& label) {
 	d->addValueLabel(value, label);
 }

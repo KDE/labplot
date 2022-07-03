@@ -524,6 +524,14 @@ void AbstractColumn::replaceTexts(int /*first*/, const QVector<QString>& /*new_t
 }
 
 /**
+ * \brief Return the position/index in the dictionary for the text value at \param row
+ *
+ * Use this only when columnMode() is Text
+ */
+int AbstractColumn::dictionaryIndex(int /* row */) const {
+	return 0;
+}
+/**
  * \brief Return the date part of row 'row'
  *
  * Use this only when columnMode() is DateTime, Month or Day

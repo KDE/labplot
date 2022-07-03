@@ -168,6 +168,8 @@ public:
 	virtual QString textAt(int row) const;
 	virtual void setTextAt(int row, const QString& new_value);
 	virtual void replaceTexts(int first, const QVector<QString>& new_values);
+	virtual int dictionaryIndex(int row) const;
+
 	virtual QDate dateAt(int row) const;
 	virtual void setDateAt(int row, QDate new_value);
 	virtual QTime timeAt(int row) const;
@@ -175,15 +177,19 @@ public:
 	virtual QDateTime dateTimeAt(int row) const;
 	virtual void setDateTimeAt(int row, const QDateTime& new_value);
 	virtual void replaceDateTimes(int first, const QVector<QDateTime>& new_values);
+
 	virtual double valueAt(int row) const;
 	virtual void setValueAt(int row, double new_value);
 	virtual void replaceValues(int first, const QVector<double>& new_values);
+
 	virtual int integerAt(int row) const;
 	virtual void setIntegerAt(int row, int new_value);
 	virtual void replaceInteger(int first, const QVector<int>& new_values);
+
 	virtual qint64 bigIntAt(int row) const;
 	virtual void setBigIntAt(int row, qint64 new_value);
 	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
+
 	virtual Properties properties() const;
 
 	// conditional formatting

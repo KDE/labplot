@@ -99,14 +99,18 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	double min = INFINITY;
 	double max = -INFINITY;
 	bool formatShown = false;
+	bool hasNumeric = false;
 	for (const auto* col : qAsConst(m_columns)) {
-		if (!col->isNumeric())
+		if (!col->isNumeric() && col->columnMode() != AbstractColumn::ColumnMode::Text)
 			continue;
 
-		if (col->minimum() < min)
-			min = col->minimum();
-		if (col->maximum() > max)
-			max = col->maximum();
+		if (col->isNumeric()) {
+			hasNumeric = true;
+			if (col->minimum() < min)
+				min = col->minimum();
+			if (col->maximum() > max)
+				max = col->maximum();
+		}
 
 		// show the format settings of the first column
 		if (!formatShown && col->hasHeatmapFormat()) {
@@ -123,15 +127,25 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	ColorMapsManager::instance()->render(pixmap, m_name);
 	ui.lColorMapPreview->setPixmap(pixmap);
 
-	if (min != INFINITY)
-		ui.leMinimum->setText(QString::number(min));
-	else
-		ui.leMinimum->setText(QString());
+	if (hasNumeric) {
+		if (min != INFINITY)
+			ui.leMinimum->setText(QString::number(min));
+		else
+			ui.leMinimum->setText(QString());
 
-	if (max != -INFINITY)
-		ui.leMaximum->setText(QString::number(max));
-	else
-		ui.leMaximum->setText(QString());
+		if (max != -INFINITY)
+			ui.leMaximum->setText(QString::number(max));
+		else
+			ui.leMaximum->setText(QString());
+	}
+
+	ui.lLevelsTop->setVisible(hasNumeric);
+	ui.lAutoScale->setVisible(hasNumeric);
+	ui.chkAutoRange->setVisible(hasNumeric);
+	ui.lMinimum->setVisible(hasNumeric);
+	ui.leMinimum->setVisible(hasNumeric);
+	ui.lMaximum->setVisible(hasNumeric);
+	ui.leMaximum->setVisible(hasNumeric);
 }
 
 AbstractColumn::HeatmapFormat FormattingHeatmapDialog::format() {

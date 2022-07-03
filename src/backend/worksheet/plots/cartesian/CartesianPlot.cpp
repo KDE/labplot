@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Cartesian plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -38,6 +38,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -335,6 +336,7 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
+	addBarPlotAction = new QAction(QIcon::fromTheme("office-chart-bar"), i18n("Bar Plot"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a Formula"), this);
 	// no icons yet
@@ -364,6 +366,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
 	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
@@ -521,6 +524,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramAction);
 	addNewMenu->addAction(addBoxPlotAction);
+	addNewMenu->addAction(addBarPlotAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 
@@ -705,6 +709,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 QVector<AspectType> CartesianPlot::pasteTypes() const {
 	QVector<AspectType> types{AspectType::XYCurve,
 							  AspectType::Histogram,
+							  AspectType::BarPlot,
 							  AspectType::BoxPlot,
 							  AspectType::Axis,
 							  AspectType::XYEquationCurve,
@@ -1917,6 +1922,10 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	endMacro();
 }
 
+void CartesianPlot::addBarPlot() {
+	addChild(new BarPlot("Bar Plot"));
+}
+
 void CartesianPlot::addBoxPlot() {
 	addChild(new BoxPlot("Box Plot"));
 }
@@ -2241,6 +2250,7 @@ int CartesianPlot::curveTotalCount() const {
 	int count = children<XYCurve>().size();
 	count += children<Histogram>().size();
 	count += children<BoxPlot>().size();
+	count += children<BarPlot>().size();
 	return count;
 }
 
@@ -2265,8 +2275,8 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		if (child == curve)
 			break;
 
-		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BoxPlot
-			|| child->inherits(AspectType::XYAnalysisCurve))
+		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
+			|| child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
 			++index;
 	}
 
@@ -2279,6 +2289,21 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
+
+	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
+	// TODO: why is child->type() == AspectType::XYCurve, etc. not working here?
+	if (elem
+		&& (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
+			|| child->type() == AspectType::BoxPlot)) {
+		auto* elem = static_cast<const WorksheetElement*>(child);
+		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
+		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+
+		updateLegend();
+		cSystemIndex = elem->coordinateSystemIndex();
+		checkRanges = true;
+	}
+
 	if (curve) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
 		// x and y data
@@ -2323,11 +2348,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			this->yDataChanged(const_cast<XYCurve*>(curve));
 		});
 
-		// visibility
-		connect(curve, &XYCurve::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-
-		// update the legend on changes of the name, line and symbol styles
-		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		// update the legend on line and symbol properties changes
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
 		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
@@ -2336,16 +2357,12 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::lineOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
-		updateLegend();
-
 		// in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
 			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
 
-		cSystemIndex = curve->coordinateSystemIndex();
-		checkRanges = true;
 		Q_EMIT curveAdded(curve);
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
@@ -2355,6 +2372,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(hist, &Histogram::dataChanged, [this, hist] {
 				this->dataChanged(-1, -1, const_cast<Histogram*>(hist));
 			});
+
 			connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
@@ -2369,17 +2387,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
 		if (boxPlot) {
 			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
-			// TODO: check if all ranges must be updated
-			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
-				this->dataChanged(-1, -1, const_cast<BoxPlot*>(boxPlot));
-			});
-			connect(boxPlot, &BoxPlot::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-			updateLegend();
-			cSystemIndex = boxPlot->coordinateSystemIndex();
-			checkRanges = true;
-
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
 				boxPlotOrientationChanged(boxPlot->orientation());
@@ -2388,15 +2395,23 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			}
 		}
 
+		const auto* barPlot = qobject_cast<const BarPlot*>(child);
+		if (barPlot) {
+			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
+			// TODO: check if all ranges must be updated
+			connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
+				this->dataChanged(-1, -1, const_cast<BarPlot*>(barPlot));
+			});
+		}
+
 		const auto* infoElement = qobject_cast<const InfoElement*>(child);
 		if (infoElement)
 			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
 
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
-		const auto* wsElement = qobject_cast<const WorksheetElement*>(child);
-		if (wsElement)
-			connect(wsElement, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+		if (elem)
+			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
 	auto rangeChanged = false;
@@ -2440,7 +2455,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
-		const auto* elem = qobject_cast<const WorksheetElement*>(child);
 		if (elem) {
 			// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 			if (!d->theme.isEmpty()) {
@@ -3064,6 +3078,20 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 			d->dataXRange(index).end() = max;
 	}
 
+	// loop over all box plots and determine the maximum and minimum x-values
+	for (const auto* curve : this->children<const BarPlot>()) {
+		if (!curve->isVisible() || curve->dataColumns().isEmpty())
+			continue;
+
+		const double min = curve->xMinimum();
+		if (d->dataXRange(index).start() > min)
+			d->dataXRange(index).start() = min;
+
+		const double max = curve->xMaximum();
+		if (max > d->dataXRange(index).end())
+			d->dataXRange(index).end() = max;
+	}
+
 	// check ranges for nonlinear scales
 	if (d->dataXRange(index).scale() != RangeT::Scale::Linear)
 		d->dataXRange(index) = d->checkRange(d->dataXRange(index));
@@ -3147,6 +3175,20 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	// loop over all box plots and determine the maximum y-value
 	for (const auto* curve : this->children<const BoxPlot>()) {
+		if (!curve->isVisible() || curve->dataColumns().isEmpty())
+			continue;
+
+		const double min = curve->yMinimum();
+		if (d->dataYRange(index).start() > min)
+			d->dataYRange(index).start() = min;
+
+		const double max = curve->yMaximum();
+		if (max > d->dataYRange(index).end())
+			d->dataYRange(index).end() = max;
+	}
+
+	// loop over all box plots and determine the maximum y-value
+	for (const auto* curve : this->children<const BarPlot>()) {
 		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
@@ -5771,6 +5813,15 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(boxPlot);
 			else {
 				removeChild(boxPlot);
+				return false;
+			}
+		} else if (reader->name() == "barPlot") {
+			auto* barPlot = new BarPlot("BarPlot");
+			barPlot->setIsLoading(true);
+			if (barPlot->load(reader, preview))
+				addChildFast(barPlot);
+			else {
+				removeChild(barPlot);
 				return false;
 			}
 		} else if (reader->name() == "Histogram") {

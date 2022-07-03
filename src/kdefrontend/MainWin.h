@@ -35,6 +35,7 @@ class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
+class BarPlotDock;
 class BoxPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -243,6 +244,7 @@ private:
 	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
 	HistogramDock* histogramDock{nullptr};
+	BarPlotDock* barPlotDock{nullptr};
 	BoxPlotDock* boxPlotDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};

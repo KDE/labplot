@@ -87,6 +87,7 @@ public:
 	void setTextAt(int row, const QString&);
 	void replaceValues(int first, const QVector<QString>&);
 	void replaceTexts(int first, const QVector<QString>&);
+	int dictionaryIndex(int row) const;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
 
@@ -134,6 +135,7 @@ public:
 			min = false;
 			max = false;
 			hasValues = false;
+			dictionary = false;
 			properties = false;
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
@@ -144,6 +146,7 @@ public:
 		bool min{false};
 		bool max{false};
 		bool hasValues{false}; // is 'hasValues' already available or needs to be (re-)calculated?
+		bool dictionary{false}; // dictionary of text values, relevant for text columns only, available?
 		bool properties{false}; // is 'properties' already available (true) or needs to be (re-)calculated (false)?
 	};
 
@@ -156,6 +159,7 @@ public:
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
+	QVector<QString> m_dictionary; // dictionary for string columns
 	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
@@ -169,6 +173,7 @@ private:
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 	void initLabels();
+	void initDictionary();
 	void connectFormulaColumn(const AbstractColumn* column);
 
 private Q_SLOTS:

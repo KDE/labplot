@@ -737,4 +737,26 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	}
 }
 
+void ColumnTest::testDictionaryIndex() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+
+	// check the position of the distinct values in the dictionary
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 1);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+
+	// modify a value which will invalidate the dictionary and verify it again
+	c.setTextAt(1, "yes");
+
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 0);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+}
+
 QTEST_MAIN(ColumnTest)

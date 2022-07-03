@@ -191,6 +191,7 @@ private:
 	QAction* action_plot_data_xycurve;
 	QAction* action_plot_data_histogram;
 	QAction* action_plot_data_boxplot;
+	QAction* action_plot_data_barplot;
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
