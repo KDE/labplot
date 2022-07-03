@@ -116,8 +116,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
-		case nsl_fit_model_polynomial: {
-			// do a multiparameter linear regression
+		case nsl_fit_model_polynomial: { // do a multiparameter linear regression
 			const double np = degree + 1;
 			gsl_matrix* X = gsl_matrix_alloc(n, np); // X matrix
 			gsl_vector* y = gsl_vector_alloc(n); // y values
@@ -140,8 +139,6 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			double chisq;
 			int status = gsl_multifit_wlinear(X, w, y, c, cov, &chisq, work);
 			gsl_multifit_linear_free(work);
-			gsl_matrix_free(X);
-			gsl_vector_free(y);
 			gsl_vector_free(w);
 
 			for (int i = 0; i < np; i++)
@@ -154,31 +151,63 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			d->fitResult.valid = true;
 			d->fitResult.status = gslErrorToString(status);
 
+			d->fitResult.sse = chisq;
+			d->fitResult.dof = n - np;
+			if (d->fitResult.dof != 0) {
+				d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
+				d->fitResult.rsd = sqrt(d->fitResult.rms);
+			}
+			d->fitResult.mse = d->fitResult.sse / n;
+			d->fitResult.rmse = sqrt(d->fitResult.mse);
+			// SST needed for coefficient of determination, R-squared and F test
+			d->fitResult.sst = gsl_stats_tss(y->data, 1, n);
+			// for a linear model without intercept R-squared is calculated differently
+			// also using alternative R^2 when R^2 would be negative
+			if (degree == 1 || d->fitResult.sst < d->fitResult.sse)
+				d->fitResult.sst = gsl_stats_tss_m(y->data, 1, n, 0);
+
+			d->fitResult.rsquare = nsl_stats_rsquare(d->fitResult.sse, d->fitResult.sst);
+			d->fitResult.rsquareAdj = nsl_stats_rsquareAdj(d->fitResult.rsquare, np, d->fitResult.dof, 1);
+			d->fitResult.chisq_p = nsl_stats_chisq_p(d->fitResult.sse, d->fitResult.dof);
+			d->fitResult.fdist_F = nsl_stats_fdist_F(d->fitResult.rsquare, np, d->fitResult.dof);
+			d->fitResult.fdist_p = nsl_stats_fdist_p(d->fitResult.fdist_F, np, d->fitResult.dof);
+			d->fitResult.logLik = nsl_stats_logLik(d->fitResult.sse, n);
+			d->fitResult.aic = nsl_stats_aic(d->fitResult.sse, n, np, 1);
+			d->fitResult.bic = nsl_stats_bic(d->fitResult.sse, n, np, 1);
+
 			d->fitResult.paramValues.resize(np);
 			d->fitResult.errorValues.resize(np);
 			d->fitResult.tdist_tValues.resize(np);
 			d->fitResult.tdist_pValues.resize(np);
 			d->fitResult.tdist_marginValues.resize(np);
 
-			d->fitResult.sse = chisq;
-			d->fitResult.dof = n - np;
-			d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
 			const double cerr = sqrt(d->fitResult.rms);
+			// CI = 100 * (1 - alpha)
+			const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 			for (unsigned int i = 0; i < np; i++) {
 				for (unsigned int j = 0; j <= i; j++)
 					d->fitResult.correlationMatrix << gsl_matrix_get(cov, i, j) / sqrt(gsl_matrix_get(cov, i, i)) / sqrt(gsl_matrix_get(cov, j, j));
 				d->fitResult.paramValues[i] = gsl_vector_get(c, i);
 				d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
+				d->fitResult.tdist_tValues[i] = nsl_stats_tdist_t(d->fitResult.paramValues.at(i), d->fitResult.errorValues.at(i));
+				d->fitResult.tdist_pValues[i] = nsl_stats_tdist_p(d->fitResult.tdist_tValues.at(i), d->fitResult.dof);
+				d->fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, d->fitResult.dof, d->fitResult.errorValues.at(i));
 			}
-			// TODO: more results
-			//  residuals
-			//  int gsl_multifit_linear_residuals(const gsl_matrix *X, const gsl_vector *y, const gsl_vector *c, gsl_vector *r)
 
+			// residuals
+			gsl_vector* r = gsl_vector_alloc(n);
+			status = gsl_multifit_linear_residuals(X, y, c, r);
+			if (!status)
+				d->fitResult.mae = gsl_blas_dasum(r) / n;
+			//TODO: show residuals?
+
+			gsl_matrix_free(X);
+			gsl_vector_free(y);
 			gsl_vector_free(c);
 			gsl_matrix_free(cov);
 			break;
 		}
-		// TODO: handle basic models
+		// TODO: handle all basic models
 		case nsl_fit_model_power: // a x^b, a + b x^c
 		case nsl_fit_model_exponential: // a e^(bx), a1 e^(b1 x) + a2 e^(b2 x), ...
 		case nsl_fit_model_inverse_exponential: // a (1-e^(bx)) + c
