@@ -112,13 +112,74 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
 	// DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
 
-	const int n = qMin(xColumn->rowCount(), yColumn->rowCount());
+	// copy all valid data point for the fit to temporary vectors
+	QVector<double> xdataVector;
+	QVector<double> ydataVector;
+	QVector<double> yerrorVector;
 
-	if (yErrorColumn && yErrorColumn->rowCount() < n) {
-		d->fitResult.available = true;
-		d->fitResult.status = i18n("Not sufficient weight data points provided.");
-		return;
+	Range<double> xRange{xmin, xmax};
+	if (fitData.autoRange) { // auto x range of data to fit
+		fitData.fitRange = xRange;
+	} else { // custom x range of data to fit
+		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
+			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 	}
+
+	const int rowCount = qMin(xColumn->rowCount(), yColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
+		// omit invalid data
+		if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row))
+			continue;
+
+		double x = qQNaN();
+		switch (xColumn->columnMode()) {
+		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			x = xColumn->valueAt(row);
+			break;
+		case AbstractColumn::ColumnMode::Text: // not valid
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+			x = xColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
+
+		double y = qQNaN();
+		switch (yColumn->columnMode()) {
+		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			y = yColumn->valueAt(row);
+			break;
+		case AbstractColumn::ColumnMode::Text: // not valid
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+			y = yColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
+
+		if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
+			if (!yErrorColumn || !fitData.useDataErrors) { // x-y
+				xdataVector.append(x);
+				ydataVector.append(y);
+			} else if (yErrorColumn) { // x-y-dy
+				if (!std::isnan(yErrorColumn->valueAt(row))) {
+					xdataVector.append(x);
+					ydataVector.append(y);
+					yerrorVector.append(yErrorColumn->valueAt(row));
+				}
+			}
+		}
+	}
+
+	const int n = xdataVector.size();
+	double* xdata = xdataVector.data();
+	double* ydata = ydataVector.data();
+	double* yerror = yerrorVector.data(); // size may be 0
+
 	// guess start values of parameter
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
@@ -129,40 +190,43 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			gsl_vector* y = gsl_vector_alloc(n); // y values
 			gsl_vector* w = gsl_vector_alloc(n); // weights
 
-			gsl_vector* c = gsl_vector_alloc(np); // best fit parameter (p+1)
+			gsl_vector* c = gsl_vector_alloc(np); // best fit parameter
 			gsl_matrix* cov = gsl_matrix_alloc(np, np);
 
 			const double minError = 1.e-199; // minimum error for weighting
 			for (int i = 0; i < n; i++) {
-				double xi = xColumn->valueAt(i);
-				double yi = yColumn->valueAt(i);
+				double xi = xdata[i];
+				double yi = ydata[i];
 
 				for (int j = 0; j < np; j++)
 					gsl_matrix_set(X, i, j, gsl_pow_int(xi, j));
 				gsl_vector_set(y, i, yi);
 
-				switch (fitData.yWeightsType) {
-				case nsl_fit_weight_no:
-				case nsl_fit_weight_statistical_fit:
-				case nsl_fit_weight_relative_fit:
+				if (yErrorColumn && i < yerrorVector.size()) {
+					switch (fitData.yWeightsType) {
+					case nsl_fit_weight_no:
+					case nsl_fit_weight_statistical_fit:
+					case nsl_fit_weight_relative_fit:
+						gsl_vector_set(w, i, 1.);
+						break;
+					case nsl_fit_weight_instrumental: // yerror are sigmas
+						gsl_vector_set(w, i, 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), std::abs(yi) * 1.e-15))));
+						break;
+					case nsl_fit_weight_direct: // yerror are weights
+						gsl_vector_set(w, i, yerror[i]);
+						break;
+					case nsl_fit_weight_inverse: // yerror are inverse weights
+						gsl_vector_set(w, i, 1. / qMax(yerror[i], qMax(minError, std::abs(yi) * 1.e-15)));
+						break;
+					case nsl_fit_weight_statistical:
+						gsl_vector_set(w, i, 1. / qMax(yi, minError));
+						break;
+					case nsl_fit_weight_relative:
+						gsl_vector_set(w, i, 1. / qMax(gsl_pow_2(yi), minError));
+						break;
+					}
+				} else
 					gsl_vector_set(w, i, 1.);
-					break;
-				case nsl_fit_weight_instrumental: // yerror are sigmas
-					gsl_vector_set(w, i, 1. / gsl_pow_2(qMax(yErrorColumn->valueAt(i), qMax(sqrt(minError), std::abs(yi) * 1.e-15))));
-					break;
-				case nsl_fit_weight_direct: // yerror are weights
-					gsl_vector_set(w, i, yErrorColumn->valueAt(i));
-					break;
-				case nsl_fit_weight_inverse: // yerror are inverse weights
-					gsl_vector_set(w, i, 1. / qMax(yErrorColumn->valueAt(i), qMax(minError, std::abs(yi) * 1.e-15)));
-					break;
-				case nsl_fit_weight_statistical:
-					gsl_vector_set(w, i, 1. / qMax(yi, minError));
-					break;
-				case nsl_fit_weight_relative:
-					gsl_vector_set(w, i, 1. / qMax(gsl_pow_2(yi), minError));
-					break;
-				}
 			}
 
 			auto* work = gsl_multifit_linear_alloc(n, np);
@@ -171,8 +235,10 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			gsl_multifit_linear_free(work);
 			gsl_vector_free(w);
 
-			for (int i = 0; i < np; i++)
-				paramStartValues[i] = gsl_vector_get(c, i);
+			for (int i = 0; i < np; i++) {
+				if (!std::isnan(gsl_vector_get(c, i)))
+					paramStartValues[i] = gsl_vector_get(c, i);
+			}
 
 			// results
 			d->fitResult = XYFitCurve::FitResult(); // clear result
@@ -229,7 +295,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			status = gsl_multifit_linear_residuals(X, y, c, r);
 			if (!status)
 				d->fitResult.mae = gsl_blas_dasum(r) / n;
-			//TODO: show residuals?
+			// TODO: show residuals?
 
 			gsl_matrix_free(X);
 			gsl_vector_free(y);
@@ -237,7 +303,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			gsl_matrix_free(cov);
 			break;
 		}
-		// TODO: use regression for all basic models
+		// TODO: use regression for all basic models?
 		case nsl_fit_model_power: // a x^b, a + b x^c
 		case nsl_fit_model_exponential: // a e^(bx), a1 e^(b1 x) + a2 e^(b2 x), ...
 		case nsl_fit_model_inverse_exponential: // a (1-e^(bx)) + c
@@ -1868,6 +1934,7 @@ void XYFitCurvePrivate::recalculate() {
 
 		double x = qQNaN();
 		switch (tmpXDataColumn->columnMode()) {
+			// TODO: valueAt for numerical data
 		case AbstractColumn::ColumnMode::Double:
 			x = tmpXDataColumn->valueAt(row);
 			break;
@@ -1887,6 +1954,7 @@ void XYFitCurvePrivate::recalculate() {
 
 		double y = qQNaN();
 		switch (tmpYDataColumn->columnMode()) {
+			// TODO: valueAt for numerical data
 		case AbstractColumn::ColumnMode::Double:
 			y = tmpYDataColumn->valueAt(row);
 			break;
