@@ -22,8 +22,8 @@
 #include <KLocalizedString>
 
 BarPlotDock::BarPlotDock(QWidget* parent)
-	: BaseDock(parent),
-	cbXColumn(new TreeViewComboBox) {
+	: BaseDock(parent)
+	, cbXColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
@@ -186,17 +186,17 @@ void BarPlotDock::setModel() {
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	list = {AspectType::Folder,
-						   AspectType::Workbook,
-						   AspectType::Datapicker,
-						   AspectType::DatapickerCurve,
-						   AspectType::Spreadsheet,
-						   AspectType::LiveDataSource,
-						   AspectType::Column,
-						   AspectType::Worksheet,
-						   AspectType::CartesianPlot,
-						   AspectType::XYFitCurve,
-						   AspectType::XYSmoothCurve,
-						   AspectType::CantorWorksheet};
+			AspectType::Workbook,
+			AspectType::Datapicker,
+			AspectType::DatapickerCurve,
+			AspectType::Spreadsheet,
+			AspectType::LiveDataSource,
+			AspectType::Column,
+			AspectType::Worksheet,
+			AspectType::CartesianPlot,
+			AspectType::XYFitCurve,
+			AspectType::XYSmoothCurve,
+			AspectType::CantorWorksheet};
 
 	cbXColumn->setTopLevelClasses(list);
 	cbXColumn->setModel(m_aspectTreeModel);
@@ -545,7 +545,6 @@ void BarPlotDock::plotBorderOpacityChanged(float value) {
 	float v = (float)value * 100.;
 	ui.sbBorderOpacity->setValue(v);
 }
-
 
 //**********************************************************
 //******************** SETTINGS ****************************

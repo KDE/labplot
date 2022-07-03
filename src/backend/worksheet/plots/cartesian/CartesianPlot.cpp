@@ -2275,9 +2275,8 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 		if (child == curve)
 			break;
 
-		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram
-			|| child->type() == AspectType::BarPlot || child->type() == AspectType::BoxPlot
-			|| child->inherits(AspectType::XYAnalysisCurve))
+		if (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
+			|| child->type() == AspectType::BoxPlot || child->inherits(AspectType::XYAnalysisCurve))
 			++index;
 	}
 
@@ -2293,8 +2292,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
 	// TODO: why is child->type() == AspectType::XYCurve, etc. not working here?
-	if (elem && (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram
-			|| child->type() == AspectType::BarPlot || child->type() == AspectType::BoxPlot)) {
+	if (elem
+		&& (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
+			|| child->type() == AspectType::BoxPlot)) {
 		auto* elem = static_cast<const WorksheetElement*>(child);
 		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
@@ -2347,7 +2347,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
 			this->yDataChanged(const_cast<XYCurve*>(curve));
 		});
-
 
 		// update the legend on line and symbol properties changes
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
@@ -2404,7 +2403,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				this->dataChanged(-1, -1, const_cast<BarPlot*>(barPlot));
 			});
 		}
-
 
 		const auto* infoElement = qobject_cast<const InfoElement*>(child);
 		if (infoElement)

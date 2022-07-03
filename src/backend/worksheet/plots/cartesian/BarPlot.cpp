@@ -231,7 +231,6 @@ void BarPlot::setXColumn(const AbstractColumn* column) {
 		exec(new BarPlotSetXColumnCmd(d, column, ki18n("%1: set x column")));
 
 		if (column) {
-
 			// update the curve itself on changes
 			connect(column, &AbstractColumn::dataChanged, this, &BarPlot::recalc);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &BarPlot::dataColumnAboutToBeRemoved);
@@ -434,12 +433,12 @@ void BarPlotPrivate::recalc() {
 			if (plot)
 				background->setFirstColor(plot->themeColorPalette(backgrounds.count() - 1));
 		}
-	} else if (diff < 0){
+	} else if (diff < 0) {
 		// the last bar was deleted
-//		if (newSize != 0) {
-//			widthFactors.takeLast();
-//			delete backgrounds.takeLast();
-//		}
+		//		if (newSize != 0) {
+		//			widthFactors.takeLast();
+		//			delete backgrounds.takeLast();
+		//		}
 	}
 
 	// determine the number of bar groups that we need to draw.
@@ -559,9 +558,9 @@ void BarPlotPrivate::recalc() {
 	// determine the width of a group and of the gaps around a group
 	m_groupWidth = 1.0;
 	if (xColumn && newSize != 0)
-		m_groupWidth = (xColumn->maximum() - xColumn->minimum())/newSize;
+		m_groupWidth = (xColumn->maximum() - xColumn->minimum()) / newSize;
 
-	m_groupGap = m_groupWidth*0.15*widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
+	m_groupGap = m_groupWidth * 0.15 * widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
 	// the size of the bar plots changed because of the actual
 	// data changes or because of new bar plot settings.
@@ -578,9 +577,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
 	if (type == BarPlot::Type::Grouped) {
-		const double barGap = m_groupWidth*0.1*widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (m_groupWidth*widthFactor - 2*m_groupGap - (barCount - 1)*barGap) / barCount; // bar width
+		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -595,7 +594,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			else
 				x = valueIndex + m_groupWidth;
 
-			x += -m_groupWidth*0.5*widthFactor + m_groupGap + (width + barGap)*columnIndex;
+			x += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -609,7 +608,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			++valueIndex;
 		}
 	} else { // stacked bar plot
-		const double width = 1*widthFactor - 2*m_groupGap; // bar width
+		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -629,7 +628,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			else
 				x = valueIndex + m_groupWidth;
 
-			x += -0.5*widthFactor + m_groupGap;
+			x += -0.5 * widthFactor + m_groupGap;
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -660,9 +659,9 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
 	if (type == BarPlot::Type::Grouped) {
-		const double barGap = m_groupWidth*0.1*widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
-		const double width = (m_groupWidth*widthFactor - 2*m_groupGap - (barCount - 1)*barGap) / barCount; // bar width
+		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -677,7 +676,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			else
 				y = valueIndex + m_groupWidth;
 
-			y += -m_groupWidth*0.5*widthFactor + m_groupGap + (width + barGap)*columnIndex;
+			y += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
 
 			lines.clear();
 			lines << QLineF(value, y, value, y + width);
@@ -691,7 +690,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			++valueIndex;
 		}
 	} else { // stacked bar plot
-		const double width = 1*widthFactor - 2*m_groupGap; // bar width
+		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -711,7 +710,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			else
 				y = valueIndex + m_groupWidth;
 
-			y += -0.5*widthFactor + m_groupGap;
+			y += -0.5 * widthFactor + m_groupGap;
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -738,7 +737,7 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
-		m_fillPolygons[columnIndex][valueIndex]  = QPolygonF();
+		m_fillPolygons[columnIndex][valueIndex] = QPolygonF();
 		return;
 	}
 
@@ -1126,7 +1125,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == "filling") {
-			if(!firstBackgroundRead) {
+			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);
 				background->load(reader, preview);
 				firstBackgroundRead = true;

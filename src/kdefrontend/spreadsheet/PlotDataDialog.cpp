@@ -513,8 +513,7 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		break;
 	}
 	case PlotType::BoxPlot:
-	case PlotType::BarPlot:
-	{
+	case PlotType::BarPlot: {
 		QVector<const AbstractColumn*> columns;
 		for (auto* comboBox : m_columnComboBoxes)
 			columns << columnFromName(comboBox->currentText());
@@ -584,8 +583,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 		break;
 	}
 	case PlotType::BoxPlot:
-	case PlotType::BarPlot:
-	{
+	case PlotType::BarPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
