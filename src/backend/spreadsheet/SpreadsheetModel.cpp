@@ -471,22 +471,30 @@ bool SpreadsheetModel::formulaModeActive() const {
 }
 
 QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
-	if (!column->isNumeric() || !column->isValid(row) || !column->hasHeatmapFormat())
+	if ( (!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text)
+			|| !column->isValid(row) || !column->hasHeatmapFormat())
 		return {};
 
 	const auto& format = column->heatmapFormat();
 	if (format.type != type || format.colors.isEmpty())
 		return {};
 
-	double value = column->valueAt(row);
-	double range = (format.max - format.min) / format.colors.count();
 	int index = 0;
-	for (int i = 0; i < format.colors.count(); ++i) {
-		if (value <= format.min + (i + 1) * range) {
-			index = i;
-			break;
+	if (column->isNumeric()) {
+		double value = column->valueAt(row);
+		double range = (format.max - format.min) / format.colors.count();
+		for (int i = 0; i < format.colors.count(); ++i) {
+			if (value <= format.min + (i + 1) * range) {
+				index = i;
+				break;
+			}
 		}
+	} else {
+		index = column->dictionaryIndex(row);
 	}
 
-	return {QColor(format.colors.at(index))};
+	if (index < format.colors.count())
+		return {QColor(format.colors.at(index))};
+	else
+		return {QColor(format.colors.constLast())};
 }

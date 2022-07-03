@@ -30,6 +30,7 @@ private Q_SLOTS:
 	void bigIntMinimum();
 	void bigIntMaximum();
 	void saveLoadDateTime();
+	void testDictionaryIndex();
 };
 
 #endif // COLUMNTEST_H
