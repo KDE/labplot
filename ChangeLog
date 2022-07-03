@@ -1,6 +1,7 @@
 -----2.10.0 () -----
 New features:
 	* [worksheet]
+		* Bar plots
 		* Plot templates - allow to save and re-use custom plot configurations
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
