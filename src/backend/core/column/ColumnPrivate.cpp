@@ -1546,7 +1546,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
-int ColumnPrivate::dictionaryIndex(int row) const{
+int ColumnPrivate::dictionaryIndex(int row) const {
 	if (!available.dictionary)
 		const_cast<ColumnPrivate*>(this)->initDictionary();
 
@@ -1583,8 +1583,7 @@ void ColumnPrivate::initDictionary() {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void ColumnPrivate::setDateAt(int row, QDate new_value) {
-	if (m_columnMode != AbstractColumn::ColumnMode::DateTime
-		&& m_columnMode != AbstractColumn::ColumnMode::Month
+	if (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
 		&& m_columnMode != AbstractColumn::ColumnMode::Day)
 		return;
 
