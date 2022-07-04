@@ -1934,15 +1934,10 @@ void XYFitCurvePrivate::recalculate() {
 
 		double x = qQNaN();
 		switch (tmpXDataColumn->columnMode()) {
-			// TODO: valueAt for numerical data
 		case AbstractColumn::ColumnMode::Double:
-			x = tmpXDataColumn->valueAt(row);
-			break;
 		case AbstractColumn::ColumnMode::Integer:
-			x = tmpXDataColumn->integerAt(row);
-			break;
 		case AbstractColumn::ColumnMode::BigInt:
-			x = tmpXDataColumn->bigIntAt(row);
+			x = tmpXDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Text: // not valid
 			break;
@@ -1954,15 +1949,10 @@ void XYFitCurvePrivate::recalculate() {
 
 		double y = qQNaN();
 		switch (tmpYDataColumn->columnMode()) {
-			// TODO: valueAt for numerical data
 		case AbstractColumn::ColumnMode::Double:
-			y = tmpYDataColumn->valueAt(row);
-			break;
 		case AbstractColumn::ColumnMode::Integer:
-			y = tmpYDataColumn->integerAt(row);
-			break;
 		case AbstractColumn::ColumnMode::BigInt:
-			y = tmpYDataColumn->bigIntAt(row);
+			y = tmpYDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Text: // not valid
 			break;
@@ -2359,12 +2349,8 @@ void XYFitCurvePrivate::recalculate() {
 		xVector->resize(tmpXDataColumn->rowCount());
 		auto mode = tmpXDataColumn->columnMode();
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			if (mode == AbstractColumn::ColumnMode::Double)
+			if (mode == AbstractColumn::ColumnMode::Double || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 				(*xVector)[i] = tmpXDataColumn->valueAt(i);
-			else if (mode == AbstractColumn::ColumnMode::Integer)
-				(*xVector)[i] = tmpXDataColumn->integerAt(i);
-			else if (mode == AbstractColumn::ColumnMode::BigInt)
-				(*xVector)[i] = tmpXDataColumn->bigIntAt(i);
 			else if (mode == AbstractColumn::ColumnMode::DateTime)
 				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
 
