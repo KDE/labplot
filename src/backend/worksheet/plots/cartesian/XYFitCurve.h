@@ -64,6 +64,7 @@ public:
 	struct FitResult {
 		FitResult() {
 		}
+		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
 
 		bool available{false};
 		bool valid{false};

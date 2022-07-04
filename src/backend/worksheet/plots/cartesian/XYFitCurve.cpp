@@ -249,12 +249,6 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 
 			d->fitResult.sse = chisq;
 			d->fitResult.dof = n - np;
-			if (d->fitResult.dof != 0) {
-				d->fitResult.rms = d->fitResult.sse / d->fitResult.dof;
-				d->fitResult.rsd = sqrt(d->fitResult.rms);
-			}
-			d->fitResult.mse = d->fitResult.sse / n;
-			d->fitResult.rmse = sqrt(d->fitResult.mse);
 			// SST needed for coefficient of determination, R-squared and F test
 			d->fitResult.sst = gsl_stats_tss(y->data, 1, n);
 			// for a linear model without intercept R-squared is calculated differently
@@ -262,14 +256,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			if (degree == 1 || d->fitResult.sst < d->fitResult.sse)
 				d->fitResult.sst = gsl_stats_tss_m(y->data, 1, n, 0);
 
-			d->fitResult.rsquare = nsl_stats_rsquare(d->fitResult.sse, d->fitResult.sst);
-			d->fitResult.rsquareAdj = nsl_stats_rsquareAdj(d->fitResult.rsquare, np, d->fitResult.dof, 1);
-			d->fitResult.chisq_p = nsl_stats_chisq_p(d->fitResult.sse, d->fitResult.dof);
-			d->fitResult.fdist_F = nsl_stats_fdist_F(d->fitResult.rsquare, np, d->fitResult.dof);
-			d->fitResult.fdist_p = nsl_stats_fdist_p(d->fitResult.fdist_F, np, d->fitResult.dof);
-			d->fitResult.logLik = nsl_stats_logLik(d->fitResult.sse, n);
-			d->fitResult.aic = nsl_stats_aic(d->fitResult.sse, n, np, 1);
-			d->fitResult.bic = nsl_stats_bic(d->fitResult.sse, n, np, 1);
+			d->fitResult.calculateResult(n, np);
 
 			d->fitResult.paramValues.resize(np);
 			d->fitResult.errorValues.resize(np);
@@ -925,6 +912,25 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 void XYFitCurve::clearFitResult() {
 	Q_D(XYFitCurve);
 	d->fitResult = XYFitCurve::FitResult();
+}
+
+void XYFitCurve::FitResult::calculateResult(size_t n, unsigned int np) {
+	if (dof != 0) {
+		rms = sse / dof;
+		rsd = std::sqrt(rms);
+	}
+
+	mse = sse / n;
+	rmse = std::sqrt(mse);
+
+	rsquare = nsl_stats_rsquare(sse, sst);
+	rsquareAdj = nsl_stats_rsquareAdj(rsquare, np, dof, 1);
+	chisq_p = nsl_stats_chisq_p(sse, dof);
+	fdist_F = nsl_stats_fdist_F(rsquare, np, dof);
+	fdist_p = nsl_stats_fdist_p(fdist_F, np, dof);
+	logLik = nsl_stats_logLik(sse, n);
+	aic = nsl_stats_aic(sse, n, np, 1);
+	bic = nsl_stats_bic(sse, n, np, 1);
 }
 
 /*!
@@ -2284,14 +2290,8 @@ void XYFitCurvePrivate::recalculate() {
 	// gsl_blas_dnrm2() - computes the Euclidian norm (||r||_2 = \sqrt {\sum r_i^2}) of the vector with the elements weight[i]*(Yi - y[i])
 	// gsl_blas_dasum() - computes the absolute sum \sum |r_i| of the elements of the vector with the elements weight[i]*(Yi - y[i])
 	fitResult.sse = gsl_pow_2(gsl_blas_dnrm2(s->f));
-
-	if (fitResult.dof != 0) {
-		fitResult.rms = fitResult.sse / fitResult.dof;
-		fitResult.rsd = sqrt(fitResult.rms);
-	}
-	fitResult.mse = fitResult.sse / n;
-	fitResult.rmse = sqrt(fitResult.mse);
 	fitResult.mae = gsl_blas_dasum(s->f) / n;
+
 	// SST needed for coefficient of determination, R-squared and F test
 	fitResult.sst = gsl_stats_tss(ydata, 1, n);
 	// for a linear model without intercept R-squared is calculated differently
@@ -2305,15 +2305,7 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG("	Using alternative R^2 since R^2 would be negative (probably custom model without intercept)");
 		fitResult.sst = gsl_stats_tss_m(ydata, 1, n, 0);
 	}
-
-	fitResult.rsquare = nsl_stats_rsquare(fitResult.sse, fitResult.sst);
-	fitResult.rsquareAdj = nsl_stats_rsquareAdj(fitResult.rsquare, np, fitResult.dof, 1);
-	fitResult.chisq_p = nsl_stats_chisq_p(fitResult.sse, fitResult.dof);
-	fitResult.fdist_F = nsl_stats_fdist_F(fitResult.rsquare, np, fitResult.dof);
-	fitResult.fdist_p = nsl_stats_fdist_p(fitResult.fdist_F, np, fitResult.dof);
-	fitResult.logLik = nsl_stats_logLik(fitResult.sse, n);
-	fitResult.aic = nsl_stats_aic(fitResult.sse, n, np, 1);
-	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np, 1);
+	fitResult.calculateResult(n, np);
 
 	// parameter values
 	fitResult.paramValues.resize(np);
