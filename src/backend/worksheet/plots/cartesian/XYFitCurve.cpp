@@ -112,79 +112,79 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 	DEBUG(Q_FUNC_INFO << ", x min/max = " << xmin << ' ' << xmax);
 	// DEBUG(Q_FUNC_INFO <<", y min/max = " << ymin << ' ' << ymax);
 
-	// copy all valid data point for the fit to temporary vectors
-	QVector<double> xdataVector;
-	QVector<double> ydataVector;
-	QVector<double> yerrorVector;
-
-	Range<double> xRange{xmin, xmax};
-	if (fitData.autoRange) { // auto x range of data to fit
-		fitData.fitRange = xRange;
-	} else { // custom x range of data to fit
-		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
-			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
-	}
-
-	const int rowCount = qMin(xColumn->rowCount(), yColumn->rowCount());
-	for (int row = 0; row < rowCount; ++row) {
-		// omit invalid data
-		if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row))
-			continue;
-
-		double x = qQNaN();
-		switch (xColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			x = xColumn->valueAt(row);
-			break;
-		case AbstractColumn::ColumnMode::Text: // not valid
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::Month:
-			x = xColumn->dateTimeAt(row).toMSecsSinceEpoch();
-		}
-
-		double y = qQNaN();
-		switch (yColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			y = yColumn->valueAt(row);
-			break;
-		case AbstractColumn::ColumnMode::Text: // not valid
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::Month:
-			y = yColumn->dateTimeAt(row).toMSecsSinceEpoch();
-		}
-
-		if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
-			if (!yErrorColumn || !fitData.useDataErrors) { // x-y
-				xdataVector.append(x);
-				ydataVector.append(y);
-			} else if (yErrorColumn) { // x-y-dy
-				if (!std::isnan(yErrorColumn->valueAt(row))) {
-					xdataVector.append(x);
-					ydataVector.append(y);
-					yerrorVector.append(yErrorColumn->valueAt(row));
-				}
-			}
-		}
-	}
-
-	const int n = xdataVector.size();
-	double* xdata = xdataVector.data();
-	double* ydata = ydataVector.data();
-	double* yerror = yerrorVector.data(); // size may be 0
-
 	// guess start values of parameter
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
 		switch (modelType) {
 		case nsl_fit_model_polynomial: { // do a multiparameter linear regression
+			// copy all valid data point for the fit to temporary vectors
+			QVector<double> xdataVector;
+			QVector<double> ydataVector;
+			QVector<double> yerrorVector;
+
+			Range<double> xRange{xmin, xmax};
+			if (fitData.autoRange) { // auto x range of data to fit
+				fitData.fitRange = xRange;
+			} else { // custom x range of data to fit
+				if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
+					xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
+			}
+
+			const int rowCount = qMin(xColumn->rowCount(), yColumn->rowCount());
+			for (int row = 0; row < rowCount; ++row) {
+				// omit invalid data
+				if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row))
+					continue;
+
+				double x = qQNaN();
+				switch (xColumn->columnMode()) {
+				case AbstractColumn::ColumnMode::Double:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+					x = xColumn->valueAt(row);
+					break;
+				case AbstractColumn::ColumnMode::Text: // not valid
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
+					x = xColumn->dateTimeAt(row).toMSecsSinceEpoch();
+				}
+
+				double y = qQNaN();
+				switch (yColumn->columnMode()) {
+				case AbstractColumn::ColumnMode::Double:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+					y = yColumn->valueAt(row);
+					break;
+				case AbstractColumn::ColumnMode::Text: // not valid
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
+					y = yColumn->dateTimeAt(row).toMSecsSinceEpoch();
+				}
+
+				if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
+					if (!yErrorColumn || !fitData.useDataErrors) { // x-y
+						xdataVector.append(x);
+						ydataVector.append(y);
+					} else if (yErrorColumn) { // x-y-dy
+						if (!std::isnan(yErrorColumn->valueAt(row))) {
+							xdataVector.append(x);
+							ydataVector.append(y);
+							yerrorVector.append(yErrorColumn->valueAt(row));
+						}
+					}
+				}
+			}
+
+			const int n = xdataVector.size();
+			double* xdata = xdataVector.data();
+			double* ydata = ydataVector.data();
+			double* yerror = yerrorVector.data(); // size may be 0
+
 			const double np = degree + 1;
 			gsl_matrix* X = gsl_matrix_alloc(n, np); // X matrix
 			gsl_vector* y = gsl_vector_alloc(n); // y values
