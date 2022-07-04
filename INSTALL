@@ -56,6 +56,7 @@ To compile LabPlot without optional dependencies even if they are present on the
 -DENABLE_QTSERIALPORT=OFF
 -DENABLE_LIBORIGIN=OFF
 -DENABLE_TOUCHBAR=OFF
+-DENABLE_EXCEL=OFF
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
