@@ -256,7 +256,7 @@ Q_SIGNALS:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
-    emit majorTickStartTypeChanged(TickStartType);
+    void majorTickStartTypeChanged(TickStartType);
 	void majorTickStartOffsetChanged(qreal);
     void majorTickStartValueChanged(qreal);
 	void majorTicksPenChanged(QPen);
