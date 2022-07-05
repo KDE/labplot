@@ -45,6 +45,8 @@ public:
 	enum class LabelsTextType { PositionValues, CustomValues };
 	enum class LabelsBackgroundType { Transparent, Color };
 
+    enum class Axis::TickStartType {Absolute, Offset};
+
 	// LabelsFormat <-> index, see AxisDock::init()
 	static int labelsFormatToIndex(LabelsFormat format) {
 		switch (format) {
@@ -132,7 +134,9 @@ public:
 	int majorTicksNumber() const;
 	void setMajorTicksNumber(const int number, bool automatic = false);
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
+    BASIC_D_ACCESSOR_DECL(TickStartType, majorTickStartType, MajorTickStartType)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
+    BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
@@ -252,7 +256,9 @@ Q_SIGNALS:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
+    emit majorTickStartTypeChanged(TickStartType);
 	void majorTickStartOffsetChanged(qreal);
+    void majorTickStartValueChanged(qreal);
 	void majorTicksPenChanged(QPen);
 	void majorTicksLengthChanged(qreal);
 	void majorTicksOpacityChanged(qreal);

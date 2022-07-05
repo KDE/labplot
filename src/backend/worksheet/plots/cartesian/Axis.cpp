@@ -116,7 +116,9 @@ void Axis::init(Orientation orientation) {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale)group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.)); // not auto ticked if already set to 1 here!
+    d->majorTickStartType = static_cast<Axis::TickStartType>(group.readEntry("MajorTickStartType", static_cast<bool>(Axis::TickStartType::Offset)))
 	d->majorTickStartOffset = group.readEntry("MajorTickStartOffset", 0.0);
+    d->majorTickStartValue = group.readEntry("MajorTickStartValue", 0.0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
@@ -366,7 +368,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, RangeT::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::TickStartType, majorTickStartType, majorTickStartType)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTickStartOffset, majorTickStartOffset)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTickStartValue, majorTickStartValue)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, showScaleOffset, showScaleOffset)
@@ -533,11 +537,25 @@ void Axis::setRange(double min, double max) {
 	setRange(range);
 }
 
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartType, Axis::TickStartType, majorTickStartType, retransform)
+void Axis::setMajorTickStartType(Axis::TickStartType type) {
+    Q_D(Axis);
+    if (type != d->majorTickStartType)
+        exec(new AxisSetMajorTickStartTypeCmd(d, type, ki18n("%1: set major tick start type")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartOffset, qreal, majorTickStartOffset, retransform)
 void Axis::setMajorTickStartOffset(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
+void Axis::setMajorTickStartValue(qreal offset) {
+    Q_D(Axis);
+    if (offset != d->majorTickStartValue)
+        exec(new AxisSetMajorTickStartValueCmd(d, offset, ki18n("%1: set major tick start value")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
@@ -1343,7 +1361,10 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	double start{range.start()}, end{range.end()};
-	start += majorTickStartOffset;
+    if (majorTickStartType == Axis::TickStartType::Absolute)
+        start = majorTickStartValue;
+    else if (majorTickStartType == Axis::TickStartType::Offset)
+        start += majorTickStartOffset;
 	DEBUG(Q_FUNC_INFO << ", ticks type = " << (int)majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber: // total number of major ticks is given - > determine the increment
@@ -2757,7 +2778,9 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("logicalPosition", QString::number(d->logicalPosition));
 	writer->writeAttribute("start", QString::number(d->range.start(), 'g', 12));
 	writer->writeAttribute("end", QString::number(d->range.end(), 'g', 12));
+    writer->writeAttribute("majorTickStartType", QString::number(static_cast<int>(d->majorTickStartType)));
 	writer->writeAttribute("majorTickStartOffset", QString::number(d->majorTickStartOffset));
+    writer->writeAttribute("majorTickStartValue", QString::number(d->majorTickStartValue));
 	writer->writeAttribute("scalingFactor", QString::number(d->scalingFactor));
 	writer->writeAttribute("zeroOffset", QString::number(d->zeroOffset));
 	writer->writeAttribute("showScaleOffset", QString::number(d->showScaleOffset));
@@ -2883,7 +2906,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());
 			READ_DOUBLE_VALUE("end", range.end());
-			READ_DOUBLE_VALUE("majorTickStartOffset", majorTickStartOffset);
+            READ_INT_VALUE("majorTickStartType", majorTickStartType, TickStartType);
+            READ_DOUBLE_VALUE("majorTickStartOffset", majorTickStartOffset);
+            READ_DOUBLE_VALUE("majorTickStartValue", majorTickStartValue);
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_INT_VALUE("showScaleOffset", showScaleOffset, bool);
