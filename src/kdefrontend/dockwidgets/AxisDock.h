@@ -103,7 +103,7 @@ private Q_SLOTS:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
-    void majorTickStartTypeChanged(bool);
+    void majorTickStartTypeChanged(int state);
 	void majorTickStartOffsetChanged();
     void majorTickStartValueChanged();
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)

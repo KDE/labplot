@@ -2107,7 +2107,7 @@ void AxisDock::axisMajorTickStartTypeChanged(Axis::TickStartType type) {
     if (m_initializing)
         return;
     const Lock lock(m_initializing);
-    ui.cbMajorTickStart->setChecked(type == Axis::TickStartType::Absolute);
+    ui.cbMajorTickStartType->setChecked(type == Axis::TickStartType::Absolute);
     updateMajorTickStartType(true);
 }
 void AxisDock::axisMajorTickStartOffsetChanged(qreal value) {
