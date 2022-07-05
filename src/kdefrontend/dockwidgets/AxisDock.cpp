@@ -154,7 +154,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorTicksNumberChanged);
 	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
-    connect(ui.leMajorTickStartType, &QCheckBox::checkStateChanged, this, &AxisDock::majorTickStartTypeChanged);
+    connect(ui.cbMajorTickStartType, &QCheckBox::stateChanged, this, &AxisDock::majorTickStartTypeChanged);
 	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTickStartOffsetChanged);
     connect(ui.leMajorTickStartValue, &KLineEdit::textChanged, this, &AxisDock::majorTickStartValueChanged);
 	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
@@ -1184,12 +1184,12 @@ void AxisDock::majorTicksSpacingChanged() {
 		axis->setMajorTicksSpacing(spacing);
 }
 
-void AxisDock::majorTickStartTypeChanged(bool absolute) {
+void AxisDock::majorTickStartTypeChanged(int state) {
     if (m_initializing)
         return;
 
     for (auto* axis : m_axesList)
-        axis->setMajorTickStartType(absolute ? Axis::TickStartType::Absolute : Axis::TickStartType::Offset);
+        axis->setMajorTickStartType(state == Qt::CheckState::Checked ? Axis::TickStartType::Absolute : Axis::TickStartType::Offset);
 }
 
 void AxisDock::majorTickStartOffsetChanged() {
@@ -1227,7 +1227,7 @@ void AxisDock::majorTickStartValueChanged() {
     ui.leMajorTickStartValue->setClearButtonEnabled(value != 0);
 
     for (auto* axis : m_axesList)
-        axis->setMajorTickStartValue(offset);
+        axis->setMajorTickStartValue(value);
 }
 
 void AxisDock::setTickOffsetData(bool nice) {
@@ -2103,11 +2103,11 @@ void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 	else
 		dtsbMajorTicksIncrement->setValue(increment);
 }
-void AxisDock::axisMajorTickStartTypeChanged(Axis::StartTickType type) {
+void AxisDock::axisMajorTickStartTypeChanged(Axis::TickStartType type) {
     if (m_initializing)
         return;
     const Lock lock(m_initializing);
-    ui.cbMajorTickStart->setChecked(type == Axis::StartTickType::Absolute);
+    ui.cbMajorTickStart->setChecked(type == Axis::TickStartType::Absolute);
     updateMajorTickStartType(true);
 }
 void AxisDock::axisMajorTickStartOffsetChanged(qreal value) {
@@ -2313,7 +2313,7 @@ void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
 
 void AxisDock::updateMajorTickStartType(bool visible) {
     Lock l(m_initializing);
-    const bool absoluteValue = ui.cbMajorTickStart->isChecked();
+    const bool absoluteValue = ui.cbMajorTickStartType->isChecked();
 
     ui.leMajorTickStartOffset->setVisible(visible && !absoluteValue);
     ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue);
@@ -2449,7 +2449,7 @@ void AxisDock::load() {
 		ui.sbMajorTicksSpacingNumeric->setSingleStep(value / 10.);
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
-    ui.cbMajorTicksStartType->setChecked(m_axis->majorTickStartType() == Axis::StartType::Absolute);
+    ui.cbMajorTickStartType->setChecked(m_axis->majorTickStartType() == Axis::TickStartType::Absolute);
 	ui.leMajorTickStartOffset->setText(numberLocale.toString(m_axis->majorTickStartOffset()));
     ui.leMajorTickStartValue->setText(numberLocale.toString(m_axis->majorTickStartValue()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex((int)m_axis->majorTicksPen().style());

@@ -45,7 +45,7 @@ public:
 	enum class LabelsTextType { PositionValues, CustomValues };
 	enum class LabelsBackgroundType { Transparent, Color };
 
-    enum class Axis::TickStartType {Absolute, Offset};
+    enum class TickStartType {Absolute, Offset};
 
 	// LabelsFormat <-> index, see AxisDock::init()
 	static int labelsFormatToIndex(LabelsFormat format) {
