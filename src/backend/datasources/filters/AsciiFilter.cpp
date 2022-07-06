@@ -767,7 +767,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			m_actualRows = 1;
 			m_actualCols = 1;
 			columnModes.clear();
-			//columnNames.clear();
+			// columnNames.clear();
 			if (createIndexEnabled) {
 				columnModes << AbstractColumn::ColumnMode::Integer;
 				columnNames << i18n("Index");
@@ -987,11 +987,11 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
 		DEBUG(Q_FUNC_INFO << ", number of columns: " << dataStringList.size());
 		QDEBUG(Q_FUNC_INFO << ", first data row split: " << dataStringList);
-		int defaultCols = (int)createIndexEnabled + (int)createTimestampEnabled;	// automatic columns
+		int defaultCols = (int)createIndexEnabled + (int)createTimestampEnabled; // automatic columns
 		m_actualCols += dataStringList.size() - 1;
 		columnModes.resize(m_actualCols);
-		//m_dataContainer.resize(m_actualCols);
-		//initDataContainer(spreadsheet);
+		// m_dataContainer.resize(m_actualCols);
+		// initDataContainer(spreadsheet);
 
 		// remove automatic names ("A", "B") in column names (TODO: fix earlier)
 		columnNames.removeFirst();
@@ -1000,16 +1000,15 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		for (int i = 0; i < m_actualCols - defaultCols; i++) {
 			columnModes[i + defaultCols] = AbstractFileFilter::columnMode(dataStringList.at(i), dateTimeFormat, numberFormat);
 			columnNames << i18n("Value");
-			//TODO: columnNames << i18n("Value") + QString::number(i+1);
+			// TODO: columnNames << i18n("Value") + QString::number(i+1);
 		}
 		QDEBUG("COLUMN names: " << columnNames)
 
-		for (int i = 0; i < columnModes.size(); i ++)
+		for (int i = 0; i < columnModes.size(); i++)
 			QDEBUG("Data column mode " << i << " : " << static_cast<int>(columnModes.at(i)))
 
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
-
 	}
 
 	const int spreadsheetRowCountBeforeResize = spreadsheet->rowCount();
@@ -1238,7 +1237,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QStringList lineStringList;
 			// only FileOrPipe and TCPSocket support multiple columns
 			if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe
-					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
+				|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 				QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
 				if (m_separator.size() > 0)
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
