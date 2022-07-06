@@ -579,6 +579,22 @@ void ReferenceRangePrivate::paint(QPainter* painter, const QStyleOptionGraphicsI
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(rangeShape);
 	}
+
+#define DEBUG_REFERENCE_RANGE 1
+#if DEBUG_REFERENCE_RANGE
+	painter->save();
+	QPen pen(QBrush(Qt::red), 10);
+	painter->setPen(pen);
+
+	painter->drawRect(rect);
+
+	pen.setBrush(QBrush(Qt::green));
+	painter->setPen(pen);
+	// 0 in item coordinates is exact the center of the bounding rect
+	painter->drawLine(QLineF(0, boundingRect().top(), 0, boundingRect().bottom()));
+
+	painter->restore();
+#endif
 }
 
 void ReferenceRangePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
