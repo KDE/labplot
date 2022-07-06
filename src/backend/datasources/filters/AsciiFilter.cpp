@@ -767,7 +767,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			m_actualRows = 1;
 			m_actualCols = 1;
 			columnModes.clear();
-			columnNames.clear();
+			//columnNames.clear();
 			if (createIndexEnabled) {
 				columnModes << AbstractColumn::ColumnMode::Integer;
 				columnNames << i18n("Index");
@@ -987,12 +987,20 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
 		DEBUG(Q_FUNC_INFO << ", number of columns: " << dataStringList.size());
 		QDEBUG(Q_FUNC_INFO << ", first data row split: " << dataStringList);
-		int oldCols = m_actualCols - 1;	// non-data columns
+		int defaultCols = (int)createIndexEnabled + (int)createTimestampEnabled;	// automatic columns
 		m_actualCols += dataStringList.size() - 1;
 		columnModes.resize(m_actualCols);
-		for (int i = 0; i < m_actualCols - oldCols; i++) {
-			columnModes[i + oldCols] = AbstractFileFilter::columnMode(dataStringList.at(i), dateTimeFormat, numberFormat);
+		//m_dataContainer.resize(m_actualCols);
+		//initDataContainer(spreadsheet);
+
+		// remove automatic names ("A", "B") in column names (TODO: fix earlier)
+		columnNames.removeFirst();
+		columnNames.removeFirst();
+
+		for (int i = 0; i < m_actualCols - defaultCols; i++) {
+			columnModes[i + defaultCols] = AbstractFileFilter::columnMode(dataStringList.at(i), dateTimeFormat, numberFormat);
 			columnNames << i18n("Value");
+			//TODO: columnNames << i18n("Value") + QString::number(i+1);
 		}
 		QDEBUG("COLUMN names: " << columnNames)
 
@@ -1266,6 +1274,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			// add current timestamp if required
 			if (createTimestampEnabled) {
+				DEBUG("current row = " << currentRow << ", container size = " << static_cast<QVector<QDateTime>*>(m_dataContainer[offset])->size())
 				(*static_cast<QVector<QDateTime>*>(m_dataContainer[offset]))[currentRow] = QDateTime::currentDateTime();
 				++offset;
 			}
