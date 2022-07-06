@@ -229,7 +229,7 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	for (auto* equationCurve : plot->children<XYEquationCurve>())
 		static_cast<XYEquationCurve*>(equationCurve)->recalculate();
 
-	plot->retransformAll();
+	plot->retransform();
 	return plot;
 }
 
