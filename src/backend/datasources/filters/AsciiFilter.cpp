@@ -760,13 +760,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 			break;
 		}
-		case LiveDataSource::SourceType::NetworkTcpSocket:
-		case LiveDataSource::SourceType::NetworkUdpSocket:
+		case LiveDataSource::SourceType::NetworkTCPSocket:
+		case LiveDataSource::SourceType::NetworkUDPSocket:
 		case LiveDataSource::SourceType::LocalSocket:
 		case LiveDataSource::SourceType::SerialPort:
 			m_actualRows = 1;
 			m_actualCols = 1;
 			columnModes.clear();
+			columnNames.clear();
 			if (createIndexEnabled) {
 				columnModes << AbstractColumn::ColumnMode::Integer;
 				columnNames << i18n("Index");
@@ -806,7 +807,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		// value column, available only when reading from sockets and serial port
 		auto type = spreadsheet->sourceType();
-		if (type == LiveDataSource::SourceType::NetworkTcpSocket || type == LiveDataSource::SourceType::NetworkUdpSocket
+		if (type == LiveDataSource::SourceType::NetworkTCPSocket || type == LiveDataSource::SourceType::NetworkUDPSocket
 			|| type == LiveDataSource::SourceType::LocalSocket || type == LiveDataSource::SourceType::SerialPort) {
 			const int index = (int)createIndexEnabled + (int)createTimestampEnabled;
 			spreadsheet->column(index)->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
@@ -884,13 +885,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::LocalSocket:
 					newData[newDataIdx++] = device.readAll();
 					break;
-				case LiveDataSource::SourceType::NetworkUdpSocket:
+				case LiveDataSource::SourceType::NetworkUDPSocket:
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
 					newData.push_back(device.readLine());
 					break;
-				case LiveDataSource::SourceType::NetworkTcpSocket:
+				case LiveDataSource::SourceType::NetworkTCPSocket:
 				// TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData[newDataIdx++] = device.read(device.bytesAvailable());
@@ -903,13 +904,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				case LiveDataSource::SourceType::LocalSocket:
 					newData.push_back(device.readAll());
 					break;
-				case LiveDataSource::SourceType::NetworkUdpSocket:
+				case LiveDataSource::SourceType::NetworkUDPSocket:
 					newData.push_back(device.read(device.bytesAvailable()));
 					break;
 				case LiveDataSource::SourceType::FileOrPipe:
 					newData.push_back(device.readLine());
 					break;
-				case LiveDataSource::SourceType::NetworkTcpSocket:
+				case LiveDataSource::SourceType::NetworkTCPSocket:
 				// TODO: check serial port
 				case LiveDataSource::SourceType::SerialPort:
 					newData.push_back(device.read(device.bytesAvailable()));
@@ -944,7 +945,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		device.seek(from);
 
 	// split newData to get data columns
-	if (!m_prepared && spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket) {
+	if (!m_prepared && spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 		DEBUG("TCP: COLUMN count = " << m_actualCols)
 		QString firstRowData = newData.at(0);
 		QStringList dataStringList;
@@ -989,11 +990,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		int oldCols = m_actualCols - 1;	// non-data columns
 		m_actualCols += dataStringList.size() - 1;
 		columnModes.resize(m_actualCols);
-		for (int i = 0; i < m_actualCols - oldCols; i++)
+		for (int i = 0; i < m_actualCols - oldCols; i++) {
 			columnModes[i + oldCols] = AbstractFileFilter::columnMode(dataStringList.at(i), dateTimeFormat, numberFormat);
+			columnNames << i18n("Value");
+		}
+		QDEBUG("COLUMN names: " << columnNames)
 
 		for (int i = 0; i < columnModes.size(); i ++)
-			QDEBUG("NEW column mode " << i << " : " << static_cast<int>(columnModes.at(i)))
+			QDEBUG("Data column mode " << i << " : " << static_cast<int>(columnModes.at(i)))
 
 		spreadsheet->setUndoAware(false);
 		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
@@ -1226,7 +1230,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			QStringList lineStringList;
 			// only FileOrPipe and TCPSocket support multiple columns
 			if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe
-					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTcpSocket) {
+					|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 				QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
 				if (m_separator.size() > 0)
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))

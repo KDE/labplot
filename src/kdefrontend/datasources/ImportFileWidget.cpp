@@ -569,8 +569,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setLocalSocketName(fileName());
 		source->setComment(fileName());
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		source->setHost(ui.leHost->text());
 		source->setPort((quint16)ui.lePort->text().toInt());
 		break;
@@ -1427,7 +1427,7 @@ void ImportFileWidget::refreshPreview() {
 
 			break;
 		}
-		case LiveDataSource::SourceType::NetworkTcpSocket: {
+		case LiveDataSource::SourceType::NetworkTCPSocket: {
 			QTcpSocket tcpSocket{this};
 			tcpSocket.connectToHost(host(), port().toInt(), QTcpSocket::ReadOnly);
 			if (tcpSocket.waitForConnected()) {
@@ -1442,7 +1442,7 @@ void ImportFileWidget::refreshPreview() {
 
 			break;
 		}
-		case LiveDataSource::SourceType::NetworkUdpSocket: {
+		case LiveDataSource::SourceType::NetworkUDPSocket: {
 			QUdpSocket udpSocket{this};
 			DEBUG("UDP Socket: CONNECT PREVIEW, state = " << udpSocket.state());
 			udpSocket.bind(QHostAddress(host()), port().toInt());
@@ -1760,7 +1760,7 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 	const auto readingType = static_cast<LiveDataSource::ReadingType>(idx);
 	const LiveDataSource::SourceType sourceType = currentSourceType();
 
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+	if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::LocalSocket
 		|| sourceType == LiveDataSource::SourceType::SerialPort || readingType == LiveDataSource::ReadingType::TillEnd
 		|| readingType == LiveDataSource::ReadingType::WholeFile) {
 		ui.lSampleSize->hide();
@@ -1838,13 +1838,13 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		ui.lFileType->show();
 		setMQTTVisible(false);
 		break;
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		ui.lHost->show();
 		ui.leHost->show();
 		ui.lePort->show();
 		ui.lPort->show();
-		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {

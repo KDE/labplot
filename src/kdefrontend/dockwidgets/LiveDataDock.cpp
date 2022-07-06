@@ -257,8 +257,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		GuiTools::highlight(ui.leSourceInfo, invalid);
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkTcpSocket:
-	case LiveDataSource::SourceType::NetworkUdpSocket:
+	case LiveDataSource::SourceType::NetworkTCPSocket:
+	case LiveDataSource::SourceType::NetworkUDPSocket:
 		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
@@ -305,7 +305,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
-	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUdpSocket)
+	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUDPSocket)
 		 && (readingType == LiveDataSource::ReadingType::ContinuousFixed || readingType == LiveDataSource::ReadingType::FromEnd)))
 		ui.sbSampleSize->setValue(source->sampleSize());
 	else {
@@ -316,7 +316,7 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	// disable "on new data"-option if not available
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
-	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket
+	if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::NetworkUDPSocket
 		|| sourceType == LiveDataSource::SourceType::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
@@ -395,7 +395,7 @@ void LiveDataDock::updateTypeChanged(int idx) {
 			ui.sbUpdateInterval->show();
 			const auto s = m_liveDataSource->sourceType();
 			const auto r = m_liveDataSource->readingType();
-			const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUdpSocket)
+			const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUDPSocket)
 										 && (r == LiveDataSource::ReadingType::ContinuousFixed || r == LiveDataSource::ReadingType::FromEnd));
 			ui.lSampleSize->setVisible(showSampleSize);
 			ui.sbSampleSize->setVisible(showSampleSize);
@@ -444,7 +444,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 		const auto sourceType = m_liveDataSource->sourceType();
 		const auto updateType = m_liveDataSource->updateType();
 
-		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+		if (sourceType == LiveDataSource::SourceType::NetworkTCPSocket || sourceType == LiveDataSource::SourceType::LocalSocket
 			|| sourceType == LiveDataSource::SourceType::SerialPort || type == LiveDataSource::ReadingType::TillEnd
 			|| type == LiveDataSource::ReadingType::WholeFile || updateType == LiveDataSource::UpdateType::NewData) {
 			ui.lSampleSize->hide();
