@@ -41,7 +41,7 @@ public:
 
 	// helpers
 	int prepareDeviceToRead(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max());
-	void initDataContainers(Spreadsheet*);
+	void initDataContainer(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, QStringView value);
 	QString getLine(QIODevice&);
