@@ -4,7 +4,7 @@ target_link_libraries(RetransformTest Qt5::Test labplot2lib labplot2test)
 
 
 # enable special access variables
-target_compile_definitions(labplot2test INTERFACE RETRANSFORMTEST_EN)
-target_compile_definitions(labplot2lib PRIVATE RETRANSFORMTEST_EN)
+target_compile_definitions(labplot2test PUBLIC RETRANSFORMTEST_EN)
+target_compile_definitions(labplot2lib PUBLIC RETRANSFORMTEST_EN)
 
 add_test(NAME RetransformTest COMMAND RetransformTest)
