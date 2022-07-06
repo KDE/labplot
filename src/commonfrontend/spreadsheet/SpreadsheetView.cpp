@@ -216,13 +216,33 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
-	const auto columns = m_spreadsheet->children<Column>();
+	const auto& columns = m_spreadsheet->children<Column>();
+
+	QFontMetrics fontMetrics(m_horizontalHeader->font());
+	const auto* style = m_horizontalHeader->style();
+	int headerOffset = style->pixelMetric(QStyle::PM_SmallIconSize, nullptr, m_horizontalHeader); // icon size
+	headerOffset += 3 * style->pixelMetric(QStyle::PM_HeaderMargin, nullptr, m_horizontalHeader); // two margins plus the margin between icon and text
+
 	int i = 0;
 	for (auto col : columns) {
-		if (col->width() == 0)
-			m_tableView->resizeColumnToContents(i);
-		else
+		if (col->width() == 0) {
+			// No width was saved yet, resize to fit the content:
+			// Calling m_tableView->resizeColumnToContents(i) is expensive since Qt needs to iterate over all values in the column
+			// and to determine the maximal length which takes time the more rows we have in the spreadsheet. For a high number of
+			// columns in the spreadsheet this operation can take significant amount of time, s. a. BUG: 455977.
+			// To improve the performance, we check the width of the header texts only and resize the column widths to fit the header
+			// widths. There will be cases where this is not a perfect fit but the user still can resize manually if needed.
+			// Since this approach doesn't always lead to precise results (text width in other cells in the column can be bigger) and
+			// since in many cases we deal with much lower number of columns during the import, we apply the more precise method with
+			// resizeColumnToContents() if the number of columns is smaller than 50.
+			if (columns.count() > 50) {
+				int width = headerOffset + fontMetrics.horizontalAdvance(m_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
+				m_tableView->setColumnWidth(i, width);
+			} else
+				m_tableView->resizeColumnToContents(i);
+		} else
 			m_tableView->setColumnWidth(i, col->width());
+
 		i++;
 	}
 }
