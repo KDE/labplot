@@ -52,39 +52,11 @@ IF (BUILD_READSTAT)
 ENDIF ()
 
 IF (BUILD_EXCEL)
-        include(ExternalProject)
-
-        set(build_dir ${CMAKE_BINARY_DIR}/src/3rdparty)
-
-        set(install_dir ${build_dir}/install)
-        file(MAKE_DIRECTORY ${install_dir}/lib)
-        file(MAKE_DIRECTORY ${install_dir}/include)
-
-	set(ext_url https://github.com/QtExcel/QXlsx.git)
-        set(ext_src ${build_dir}/QXlsx/src/QXlsx)
-        set(ext_insource ON)
-        set(qxlsx_library ${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
-	# use fixed git tag until building on Windows is fixed
-	if (WIN32)
-		set(git_tag 0461eac8)	# 1.4.3
-	endif ()
-        ExternalProject_Add(3rdparty_QXlsx
-                GIT_REPOSITORY ${ext_url}
-		GIT_TAG ${git_tag}
-                PREFIX ${build_dir}/QXlsx
-		SOURCE_DIR ${ext_src}
-		SOURCE_SUBDIR QXlsx
-                BUILD_IN_SOURCE ${ext_insource}
-		UPDATE_COMMAND ""
-		CMAKE_ARGS
-		    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-		#INSTALL_COMMAND "")
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${qxlsx_library} ${install_dir}/lib && ${CMAKE_COMMAND} -E copy_directory header ${install_dir}/include
-		# see https://stackoverflow.com/questions/54866067/cmake-and-ninja-missing-and-no-known-rule-to-make-it
-		BUILD_BYPRODUCTS ${install_dir}/lib/${qxlsx_library}
-	)
-
-        include_directories(${install_dir}/include)
+	set(BUILD_SHARED_LIBS OFF)
+	# git clone -b v1.4.3 https://github.com/QtExcel/QXlsx.git tmp
+	# mv tmp/QXlsx .
+	# rm -rf tmp
+	add_subdirectory(QXlsx)
 ENDIF ()
 
 # preview.sty
