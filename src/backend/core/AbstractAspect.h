@@ -425,7 +425,7 @@ Q_SIGNALS:
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
 
-#ifdef RETRANSFORMTEST_EN
+#if CMAKE_TESTING_ENABLED
 Q_SIGNALS:
 	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
 public:

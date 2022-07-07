@@ -163,7 +163,7 @@ private:
 	QPainterPath symbolsPath;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-#ifdef XYCurveTest_EN
+#if CMAKE_TESTING_ENABLED
 	QVector<QLineF> m_lines_test;
 #endif
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
