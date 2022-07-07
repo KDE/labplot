@@ -1002,7 +1002,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (dataStringList.size() == 1)
 				columnNames << i18n("Value");
 			else
-				columnNames << i18n("Value") + QLatin1String(" ") + QString::number(i + 1);
+				columnNames << i18n("Value %1", i + 1);
 		}
 		QDEBUG("COLUMN names: " << columnNames)
 
@@ -1583,9 +1583,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 		if (skipEmptyParts && !QString::compare(valueString, " ")) // handle left white spaces
 			continue;
 
-		columnNames << i18n("Value %1", i);
+		if (firstLineStringList.size() == 1)
+			columnNames << i18n("Value");
+		else
+			columnNames << i18n("Value %1", i++);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
-		++i;
 	}
 
 	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
@@ -2098,9 +2100,11 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		if (removeQuotesEnabled)
 			valueString.remove(QLatin1Char('"'));
 
-		columnNames << i18n("Value %1", i);
+		if (firstLineStringList.size() == 1)
+			columnNames << i18n("Value");
+		else
+			columnNames << i18n("Value %1", i++);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
-		++i;
 	}
 
 	m_actualStartRow = startRow;
