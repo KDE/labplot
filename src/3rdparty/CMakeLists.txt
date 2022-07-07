@@ -55,6 +55,7 @@ IF (BUILD_EXCEL)
 	set(BUILD_SHARED_LIBS OFF)
 	# git clone -b v1.4.3 https://github.com/QtExcel/QXlsx.git tmp
 	# mv tmp/QXlsx .
+	# mv tmp/{LICENSE, README.md} QXlsx
 	# rm -rf tmp
 	add_subdirectory(QXlsx)
 ENDIF ()
