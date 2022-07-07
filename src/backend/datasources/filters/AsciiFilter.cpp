@@ -987,7 +987,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		DEBUG(Q_FUNC_INFO << ", number of data columns: " << dataStringList.size());
 		QDEBUG(Q_FUNC_INFO << ", first data row split: " << dataStringList);
 		int defaultCols = (int)createIndexEnabled + (int)createTimestampEnabled; // automatic columns
-		m_actualCols += dataStringList.size() - 1;	// one data column already counted
+		m_actualCols += dataStringList.size() - 1; // one data column already counted
 		columnModes.resize(m_actualCols);
 
 		// column header
@@ -1002,7 +1002,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (dataStringList.size() == 1)
 				columnNames << i18n("Value");
 			else
-				columnNames << i18n("Value") + QLatin1String(" ") + QString::number(i+1);
+				columnNames << i18n("Value") + QLatin1String(" ") + QString::number(i + 1);
 		}
 		QDEBUG("COLUMN names: " << columnNames)
 
