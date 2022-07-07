@@ -17,7 +17,7 @@ while True:
   conn, addr = serv.accept()
   print('client connected ... ', addr)
   #message = str(psutil.cpu_percent())
-  # more values
+  # multiple values
   message = str(psutil.cpu_percent()) + " " + str(psutil.boot_time()) + " " + str(psutil.cpu_count())
   conn.send(message.encode())
   print('written ' + message)
