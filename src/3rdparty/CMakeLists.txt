@@ -58,6 +58,9 @@ IF (BUILD_EXCEL)
 	# mv tmp/{LICENSE, README.md} QXlsx
 	# rm -rf tmp
 	add_subdirectory(QXlsx)
+	# Fix ninja "missing and no known rule to make it"
+	set(qxlsx_library ${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
+	set_target_properties(QXlsx PROPERTIES IMPORTED_LOCATION QXlsx/${qxlsx_library})
 ENDIF ()
 
 # preview.sty
