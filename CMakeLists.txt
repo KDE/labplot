@@ -485,7 +485,6 @@ IF (ENABLE_EXCEL)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_EXCEL)
-			set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
 		ELSE ()
 			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
 		ENDIF ()
