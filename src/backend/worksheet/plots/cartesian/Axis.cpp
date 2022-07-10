@@ -1887,6 +1887,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	} else if (datetime) {
 		for (const auto value : tickLabelValues) {
 			QDateTime dateTime;
+			dateTime.setTimeSpec(Qt::UTC);
 			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
@@ -2307,6 +2308,8 @@ void AxisPrivate::retransformMajorGrid() {
 	// TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	// Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMajorTickPoints = q->cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	// for (auto p : logicalMajorTickPoints)
+	//	QDEBUG(Q_FUNC_INFO << ", logical major tick: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
@@ -2746,8 +2749,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("scale", QString::number(static_cast<int>(d->scale)));
 	writer->writeAttribute("offset", QString::number(d->offset));
 	writer->writeAttribute("logicalPosition", QString::number(d->logicalPosition));
-	writer->writeAttribute("start", QString::number(d->range.start()));
-	writer->writeAttribute("end", QString::number(d->range.end()));
+	writer->writeAttribute("start", QString::number(d->range.start(), 'g', 12));
+	writer->writeAttribute("end", QString::number(d->range.end(), 'g', 12));
 	writer->writeAttribute("majorTickStartOffset", QString::number(d->majorTickStartOffset));
 	writer->writeAttribute("scalingFactor", QString::number(d->scalingFactor));
 	writer->writeAttribute("zeroOffset", QString::number(d->zeroOffset));

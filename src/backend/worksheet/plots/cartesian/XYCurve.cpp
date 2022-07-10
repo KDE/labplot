@@ -959,6 +959,9 @@ void XYCurvePrivate::retransform() {
 
 			const int numberOfPoints = m_logicalPoints.size();
 			DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
+			// for (auto p : m_logicalPoints)
+			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+
 			if (numberOfPoints > 0) {
 				const auto dataRect{plot()->dataRect()};
 				// this is the old method considering DPI
@@ -1010,6 +1013,8 @@ void XYCurvePrivate::retransform() {
 
 				m_pointVisible.resize(numberOfPoints);
 				q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
+				// for (auto p : m_logicalPoints)
+				//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 			}
 		}
 		//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )

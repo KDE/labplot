@@ -504,8 +504,8 @@ void CartesianPlotDock::updateLocale() {
 				le->setCursorPosition(pos);
 
 			} else {
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start())));
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end())));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC)));
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
@@ -535,8 +535,8 @@ void CartesianPlotDock::updateLocale() {
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 			} else {
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start())));
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end())));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start(), Qt::UTC)));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end(), Qt::UTC)));
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
@@ -657,14 +657,16 @@ void CartesianPlotDock::updateXRangeList() {
 		} else {
 			auto* dte = new QDateTimeEdit(ui.twXRanges);
 			dte->setDisplayFormat(m_plot->xRangeDateTimeFormat(i));
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start()));
+			dte->setTimeSpec(Qt::UTC);
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
 			connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 			dte = new QDateTimeEdit(ui.twXRanges);
 			dte->setDisplayFormat(m_plot->xRangeDateTimeFormat(i));
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end()));
+			dte->setTimeSpec(Qt::UTC);
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
@@ -750,14 +752,16 @@ void CartesianPlotDock::updateYRangeList() {
 		} else {
 			auto* dte = new QDateTimeEdit(ui.twYRanges);
 			dte->setDisplayFormat(m_plot->yRangeDateTimeFormat(i));
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).start()));
+			dte->setTimeSpec(Qt::UTC);
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).start(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
 			connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::yMinDateTimeChanged);
 			dte = new QDateTimeEdit(ui.twYRanges);
 			dte->setDisplayFormat(m_plot->yRangeDateTimeFormat(i));
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).end()));
+			dte->setTimeSpec(Qt::UTC);
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).end(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
@@ -2083,7 +2087,7 @@ void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value)));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
@@ -2092,7 +2096,7 @@ void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value)));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
 void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
@@ -2102,7 +2106,7 @@ void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value)));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
@@ -2111,7 +2115,7 @@ void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value)));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
 void CartesianPlotDock::plotXRangeChanged(int xRangeIndex, Range<double> range) {
@@ -2122,9 +2126,9 @@ void CartesianPlotDock::plotXRangeChanged(int xRangeIndex, Range<double> range) 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(range.start())));
-	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start())));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(range.end())));
-	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end())));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
 }
 void CartesianPlotDock::plotYRangeChanged(int yRangeIndex, Range<double> range) {
 	DEBUG(Q_FUNC_INFO)
@@ -2134,9 +2138,9 @@ void CartesianPlotDock::plotYRangeChanged(int yRangeIndex, Range<double> range) 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(range.start())));
-	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start())));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(range.end())));
-	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end())));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
 }
 
 void CartesianPlotDock::plotXScaleChanged(int xRangeIndex, RangeT::Scale scale) {
