@@ -30,6 +30,7 @@ Bug fixes:
 		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
 		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
 		* fix displayed end value of date time plot range
+		* fix shifts in date time values due to locale settings (BUG 455579)
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 	* [fit] fix locale usage in evaluation range
 	* [fit] correctly invalidate fit result when model changes
