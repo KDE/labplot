@@ -1573,11 +1573,11 @@ void WorksheetView::deleteElement() {
 }
 
 void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* /* aspect */) {
-/*
-	lastAddedWorksheetElement = dynamic_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
-	if (!lastAddedWorksheetElement)
-		return;
-*/
+	/*
+		lastAddedWorksheetElement = dynamic_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
+		if (!lastAddedWorksheetElement)
+			return;
+	*/
 	// FIXME: fading-out doesn't work
 	// also, the following code collides with undo/redo of the deletion
 	// of a worksheet element (after redoing the element is not shown with the full opacity
