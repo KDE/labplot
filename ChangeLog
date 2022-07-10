@@ -28,6 +28,7 @@ Bug fixes:
 		* use the full screen size in the dynamic presenter widget for worksheets with "use view size" property set to true
 		* allow to zoom the view in the dynamic presenter widget
 		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
+		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 	* [fit] fix locale usage in evaluation range
 	* [fit] correctly invalidate fit result when model changes

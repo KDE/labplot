@@ -1499,6 +1499,15 @@ void WorksheetView::addNew(QAction* action) {
 
 	handleCartesianPlotActions();
 
+	// fade-in the newly added element.
+	// TODO: don't do any fade-in for text labels - when a text label is added
+	// after new curves were created via PlotDataDialog, the undo or delete steps for this label
+	// lead to a crash in the handling of graphics effects in Qt. The root cause for the crash
+	// is not completely clear (maybe related ot its child ScaledTextItem) so we deactivate
+	// this effect completely for text labels, s.a. BUG: 455096.
+	if (aspect->type() == AspectType::TextLabel)
+		return;
+
 	if (!m_fadeInTimeLine) {
 		m_fadeInTimeLine = new QTimeLine(1000, this);
 		m_fadeInTimeLine->setFrameRange(0, 100);
@@ -1513,7 +1522,7 @@ void WorksheetView::addNew(QAction* action) {
 		lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 	}
 
-	// fade-in the newly added element
+	// create the opacity effect and start the actual fade-in
 	lastAddedWorksheetElement = aspect;
 	auto* effect = new QGraphicsOpacityEffect();
 	effect->setOpacity(0);
@@ -1563,11 +1572,12 @@ void WorksheetView::deleteElement() {
 	m_suppressSelectionChangedEvent = false;
 }
 
-void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
+void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* /* aspect */) {
+/*
 	lastAddedWorksheetElement = dynamic_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (!lastAddedWorksheetElement)
 		return;
-
+*/
 	// FIXME: fading-out doesn't work
 	// also, the following code collides with undo/redo of the deletion
 	// of a worksheet element (after redoing the element is not shown with the full opacity
@@ -1587,9 +1597,8 @@ void WorksheetView::aspectAboutToBeRemoved(const AbstractAspect* aspect) {
 }
 
 void WorksheetView::fadeIn(qreal value) {
-	auto* effect = new QGraphicsOpacityEffect();
+	auto* effect = static_cast<QGraphicsOpacityEffect*>(lastAddedWorksheetElement->graphicsItem()->graphicsEffect());
 	effect->setOpacity(value);
-	lastAddedWorksheetElement->graphicsItem()->setGraphicsEffect(effect);
 }
 
 void WorksheetView::fadeOut(qreal value) {
