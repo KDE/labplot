@@ -1,5 +1,7 @@
 -----2.10.0 () -----
 Bug fixes:
+	* [worksheet]
+		* fix displayed end value of date time plot range
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 	* [xy-curve] fix using custom value label with invalid data points (BUG 455214)
 	* [fit] fix locale usage in evaluation range
