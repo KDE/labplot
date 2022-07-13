@@ -497,8 +497,13 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 
 			// if only one column was selected, allow to use this column for x and for y.
 			// otherwise, don't assign xColumn to y
-			if (m_columns.size() > 1 && yColumn == xColumn)
-				continue;
+			if (yColumn == xColumn) {
+				if (m_columns.size() == 1){
+					addCurve(name, xColumn, yColumn, plot);
+					break;
+				} else
+					continue;
+			}
 
 			addCurve(name, xColumn, yColumn, plot);
 		}
