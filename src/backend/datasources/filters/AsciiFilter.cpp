@@ -815,9 +815,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		// columns in a file data source don't have any manual changes.
 		// make the available columns undo unaware and suppress the "data changed" signal.
 		// data changes will be propagated via an explicit Column::setChanged() call once new data was read.
-		for (int i = 0; i < spreadsheet->childCount<Column>(); i++) {
-			spreadsheet->child<Column>(i)->setUndoAware(false);
-			spreadsheet->child<Column>(i)->setSuppressDataChangedSignal(true);
+		for (auto* c : spreadsheet->children<Column>()) {
+			c->setUndoAware(false);
+			c->setSuppressDataChangedSignal(true);
 		}
 
 		int keepNValues = spreadsheet->keepNValues();
@@ -943,7 +943,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 	if (spreadsheet->sourceType() == LiveDataSource::SourceType::FileOrPipe)
 		device.seek(from);
 
-	// split newData to get data columns
+	// split newData to get data columns (only TCP atm)
 	if (!m_prepared && spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 		DEBUG("TCP: COLUMN count = " << m_actualCols)
 		QString firstRowData = newData.at(0);
@@ -1570,9 +1570,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 
 	// parse the first data line to determine data type for each column
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList firstLineStringList = newData.at(0).split(' ', Qt::SkipEmptyParts);
+	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, Qt::SkipEmptyParts);
 #else
-	QStringList firstLineStringList = newData.at(0).split(' ', QString::SkipEmptyParts);
+	QStringList firstLineStringList = newData.at(0).split(separatingCharacter, QString::SkipEmptyParts);
 #endif
 	int i = 1;
 	for (auto& valueString : firstLineStringList) {
@@ -1617,10 +1617,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice& device) {
 		if (createTimestampEnabled)
 			lineString += QDateTime::currentDateTime().toString();
 
+			// TODO: use separator
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QStringList lineStringList = line.split(' ', Qt::SkipEmptyParts);
+		QStringList lineStringList = line.split(separatingCharacter, Qt::SkipEmptyParts);
 #else
-		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
+		QStringList lineStringList = line.split(separatingCharacter, QString::SkipEmptyParts);
 #endif
 		QDEBUG(" line = " << lineStringList);
 

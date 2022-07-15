@@ -470,7 +470,7 @@ void LiveDataSource::readOnUpdate() {
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
-	DEBUG("\nLiveDataSource::read()");
+	DEBUG(Q_FUNC_INFO);
 	if (!m_filter)
 		return;
 
@@ -645,7 +645,7 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
+	DEBUG(Q_FUNC_INFO << ", update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == AbstractFileFilter::FileType::Ascii)
