@@ -50,9 +50,11 @@ public:
 				emit col->parentAspect()->aspectAboutToBeRemoved(col);
 		}
 
-		emit m_target->q->aspectAboutToBeRemoved(m_child);
+		if (!m_child->hidden())
+			emit m_target->q->aspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);
-		emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
+		if (!m_child->hidden())
+			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
 		QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
 		//		m_removed = true;
 	}
