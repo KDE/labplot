@@ -2777,7 +2777,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("majorTicks");
 	writer->writeAttribute("direction", QString::number(d->majorTicksDirection));
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->majorTicksType)));
-	writer->writeAttribute("majorTicksAutoNumber", QString::number(d->majorTicksAutoNumber));
+	writer->writeAttribute("numberAuto", QString::number(d->majorTicksAutoNumber));
 	writer->writeAttribute("number", QString::number(d->majorTicksNumber));
 	writer->writeAttribute("increment", QString::number(d->majorTicksSpacing));
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
@@ -2790,7 +2790,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("minorTicks");
 	writer->writeAttribute("direction", QString::number(d->minorTicksDirection));
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->minorTicksType)));
-	writer->writeAttribute("minorTicksAutoNumber", QString::number(d->minorTicksAutoNumber));
+	writer->writeAttribute("numberAuto", QString::number(d->minorTicksAutoNumber));
 	writer->writeAttribute("number", QString::number(d->minorTicksNumber));
 	writer->writeAttribute("increment", QString::number(d->minorTicksIncrement));
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);

@@ -932,7 +932,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
-					m_host = str;
+					m_port = str.toInt();
 				break;
 			case SourceType::MQTT:
 				break;
