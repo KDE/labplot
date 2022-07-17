@@ -1743,7 +1743,7 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 
 // set value depending on data type
 void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
-// 	QDEBUG(Q_FUNC_INFO << ", string = " << valueString)
+	// 	QDEBUG(Q_FUNC_INFO << ", string = " << valueString)
 	if (!valueString.isEmpty()) {
 		switch (columnModes.at(col)) {
 		case AbstractColumn::ColumnMode::Double: {
