@@ -266,10 +266,10 @@ void Spreadsheet::removeColumns(int first, int count) {
 void Spreadsheet::insertColumns(int before, int count) {
 	WAIT_CURSOR;
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
-	Column* before_col = column(before);
+	auto* before_col = column(before);
 	int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		Column* new_col = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+		auto* new_col = new Column(QString::number(count + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
@@ -277,6 +277,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	endMacro();
 	RESET_CURSOR;
 }
+
 /*!
   Sets the number of columns to \c new_size
 */
@@ -285,10 +286,16 @@ void Spreadsheet::setColumnCount(int new_size) {
 	if (old_size == new_size || new_size < 0)
 		return;
 
+	// suppress handling of child add and remove signals when adding/removing multiple columns
+	// TODO: undo/redo of this step is still very slow for a big number of columns
+	m_model->suppressSignals(true);
+	disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 	if (new_size < old_size)
 		removeColumns(new_size, old_size - new_size);
 	else
 		insertColumns(old_size, new_size - old_size);
+	m_model->suppressSignals(false);
+	connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 }
 
 /*!

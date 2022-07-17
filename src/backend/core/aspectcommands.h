@@ -34,7 +34,7 @@ public:
 
 	// calling redo transfers ownership of m_child to the undo command
 	void redo() override {
-		QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
+		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
 		AbstractAspect* nextSibling;
 		if (m_child == m_target->m_children.last())
 			nextSibling = nullptr;
@@ -55,7 +55,7 @@ public:
 		m_index = m_target->removeChild(m_child);
 		if (!m_child->hidden())
 			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
-		QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
+		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
 		//		m_removed = true;
 	}
 
