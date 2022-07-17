@@ -505,18 +505,9 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 		if (firstLine.indexOf(QLatin1Char('\t')) != -1) {
 			// in case we have a mix of tabs and spaces in the header, give the tab character preference
 			m_separator = QLatin1Char('\t');
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-			firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+			firstLineStringList = split(firstLine, false);
 		} else {
-			const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			firstLineStringList = firstLine.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
-#else
-			firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
-#endif
+			firstLineStringList = split(firstLine);
 
 			if (!firstLineStringList.isEmpty()) {
 				int length1 = firstLineStringList.at(0).length();
@@ -524,11 +515,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 					m_separator = firstLine.mid(length1, 1);
 				else { // no spaces, use comma as default (CSV) and split
 					m_separator = ',';
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-					firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-					firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+					firstLineStringList = split(firstLine, false);
 				}
 			}
 		}
@@ -542,11 +529,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 		m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+		firstLineStringList = split(firstLine, false);
 	}
 	QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
 	DEBUG(Q_FUNC_INFO << ", number of columns: " << firstLineStringList.size());
@@ -954,18 +937,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (firstRowData.indexOf(QLatin1Char('\t')) != -1) {
 				// in case we have a mix of tabs and spaces in the header, give the tab character preference
 				m_separator = QLatin1Char('\t');
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-				dataStringList = firstRowData.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-				dataStringList = firstRowData.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+				dataStringList = split(firstRowData, false);
 			} else {
-				const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-				dataStringList = firstRowData.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
-#else
-				dataStringList = firstRowData.split(regExp, (QString::SplitBehavior)skipEmptyParts);
-#endif
+				dataStringList = split(firstRowData);
 			}
 		} else {
 			DEBUG(Q_FUNC_INFO << ", using GIVEN separator: " << STDSTRING(m_separator))
@@ -977,11 +951,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
 			m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 			m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			dataStringList = firstRowData.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-			dataStringList = firstRowData.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+			dataStringList = split(firstRowData, false);
 		}
 		QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
 		DEBUG(Q_FUNC_INFO << ", number of data columns: " << dataStringList.size());
@@ -1242,19 +1212,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				|| spreadsheet->sourceType() == LiveDataSource::SourceType::NetworkTCPSocket) {
 				QDEBUG("separator = " << m_separator << " , size = " << m_separator.size())
 				if (m_separator.size() > 0)
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-					lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-					lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
-				else {
-					const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-					lineStringList = line.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
-#else
-					lineStringList = line.split(regExp, (QString::SplitBehavior)skipEmptyParts);
-#endif
-				}
+					lineStringList = split(line, false);
+				else
+					lineStringList = split(line);
 			} else
 				lineStringList << line;
 			// 			QDEBUG("	line = " << lineStringList << ", separator = \'" << m_separator << "\'");
@@ -1444,18 +1404,16 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			line.remove(QLatin1Char('\n'));
 			line.remove(QLatin1Char('\r'));
 
-			if (removeQuotesEnabled)
-				line.remove(QLatin1Char('"'));
-
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+			auto lineStringList = split(line, false);
 			// 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+
+			if (removeQuotesEnabled) {
+				for (int i = 0; i < lineStringList.size(); ++i)
+					lineStringList[i] = lineStringList[i].remove(QLatin1Char('"'));
+			}
 
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)
@@ -1697,11 +1655,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+		auto lineStringList = split(line, false);
 		// QDEBUG(" line = " << lineStringList);
 		// DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
@@ -1789,7 +1743,7 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 
 // set value depending on data type
 void AsciiFilterPrivate::setValue(int col, int row, QStringView valueString) {
-	QDEBUG(Q_FUNC_INFO << ", string = " << valueString)
+// 	QDEBUG(Q_FUNC_INFO << ", string = " << valueString)
 	if (!valueString.isEmpty()) {
 		switch (columnModes.at(col)) {
 		case AbstractColumn::ColumnMode::Double: {
@@ -1925,17 +1879,53 @@ QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 
 	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]"))); // remove any newline
 	DEBUG("data line : \'" << STDSTRING(line) << '\'');
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+	auto lineStringList = split(line, false);
+
 	// TODO: remove quotes here?
 	if (simplifyWhitespacesEnabled) {
 		for (int i = 0; i < lineStringList.size(); ++i)
 			lineStringList[i] = lineStringList[i].simplified();
 	}
+
 	QDEBUG("data line, parsed: " << lineStringList);
+
+	return lineStringList;
+}
+
+QStringList AsciiFilterPrivate::split(const QString& line, bool autoSeparator) {
+	QStringList lineStringList;
+	if (autoSeparator) {
+		static const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		lineStringList = line.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
+#else
+		lineStringList = line.split(regExp, (QString::SplitBehavior)skipEmptyParts);
+#endif
+		// TODO: determine the separator here and perform the merge of columns as in the else-case, if needed
+	} else {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
+#else
+		lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+#endif
+
+		// merge the columns if they were splitted because of the separators inside the quotes
+		for (int i = 0; i < lineStringList.size(); ++i) {
+			if (lineStringList.at(i).simplified().startsWith(QLatin1Char('"')) && !lineStringList.at(i).simplified().endsWith(QLatin1Char('"'))) {
+				int mergeStart = i;
+				int mergeEnd = i;
+				for (; mergeEnd < lineStringList.size(); ++mergeEnd) {
+					if (lineStringList.at(mergeEnd).simplified().endsWith(QLatin1Char('"')))
+						break;
+				}
+
+				if (mergeStart != mergeEnd) {
+					for (int i = 0; i < (mergeEnd - mergeStart); ++i)
+						lineStringList[mergeStart] += m_separator + lineStringList.takeAt(mergeStart + 1);
+				}
+			}
+		}
+	}
 
 	return lineStringList;
 }
@@ -2046,12 +2036,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
 		DEBUG("automatic separator");
-		const QRegularExpression regExp(QStringLiteral("[,;:]?\\s+"));
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		firstLineStringList = firstLine.split(regExp, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		firstLineStringList = firstLine.split(regExp, (QString::SplitBehavior)skipEmptyParts);
-#endif
+		firstLineStringList = split(firstLine);
 	} else { // use given separator
 		// replace symbolic "TAB" with '\t'
 		m_separator = separatingCharacter.replace(QLatin1String("2xTAB"), "\t\t", Qt::CaseInsensitive);
@@ -2061,11 +2046,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		m_separator = m_separator.replace(QLatin1String("3xSPACE"), QLatin1String("   "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("4xSPACE"), QLatin1String("    "), Qt::CaseInsensitive);
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		firstLineStringList = firstLine.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+		firstLineStringList = split(firstLine, false);
 	}
 	DEBUG("separator: \'" << STDSTRING(m_separator) << '\'');
 	DEBUG("number of columns: " << firstLineStringList.size());
@@ -2139,11 +2120,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		const QStringList& lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-		const QStringList& lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+		auto lineStringList = split(line, false);
 		QDEBUG(" line = " << lineStringList);
 
 		QStringList lineString;
@@ -2637,11 +2614,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter)))
 				continue;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			QStringList lineStringList = line.split(m_separator, (Qt::SplitBehavior)skipEmptyParts);
-#else
-			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-#endif
+			auto lineStringList = split(line, false);
 
 			if (simplifyWhitespacesEnabled) {
 				for (int i = 0; i < lineStringList.size(); ++i)

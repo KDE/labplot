@@ -836,6 +836,42 @@ void AsciiFilterTest::testQuotedStrings03() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(0), 1.1);
 }
 
+/*!
+ * test quoted text having separators inside - the text between quotes shouldn't be splitted into separate columns.
+ */
+void AsciiFilterTest::testQuotedStrings04() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_with_separator_inside.csv"));
+
+	filter.setSimplifyWhitespacesEnabled(true); // TODO: this shouldn't be required, but QString::split() seems to introduce blanks...
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// three rows and two columns to read
+	//	QCOMPARE(spreadsheet.rowCount(), 2);
+	//	QCOMPARE(spreadsheet.columnCount(), 3);
+
+	// column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("id"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("text"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("value"));
+
+	// data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	// values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->textAt(0), QLatin1String("some text, having a comma, and yet another comma"));
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 1.0);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(1)->textAt(1), QLatin1String("more text"));
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.0);
+}
+
 //##############################################################################
 //###############################  skip comments ###############################
 //##############################################################################
