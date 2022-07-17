@@ -1131,7 +1131,7 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 }
 
 int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
- 	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
+	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
 	m_children.removeAll(child);

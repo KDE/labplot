@@ -288,14 +288,18 @@ void Spreadsheet::setColumnCount(int new_size) {
 
 	// suppress handling of child add and remove signals when adding/removing multiple columns
 	// TODO: undo/redo of this step is still very slow for a big number of columns
-	m_model->suppressSignals(true);
 	disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+	if (m_model)
+		m_model->suppressSignals(true);
+
 	if (new_size < old_size)
 		removeColumns(new_size, old_size - new_size);
 	else
 		insertColumns(old_size, new_size - old_size);
-	m_model->suppressSignals(false);
+
 	connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+	if (m_model)
+		m_model->suppressSignals(false);
 }
 
 /*!
