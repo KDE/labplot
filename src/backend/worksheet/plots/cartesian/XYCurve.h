@@ -196,6 +196,9 @@ private:
 	bool m_menusInitialized{false};
 
 Q_SIGNALS:
+	void linesUpdated(const XYCurve*, const QVector<QLineF>&);
+
+Q_SIGNALS:
 	// General-Tab
 	void dataChanged(); // emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();

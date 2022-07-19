@@ -3650,9 +3650,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-#if CMAKE_TESTING_ENABLED
 	retransformCalled(suppressRetransform || q->isLoading());
-#endif
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG(Q_FUNC_INFO << ", x range " << i + 1 << " : " << xRanges.at(i).range.toStdString()
 						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()));
@@ -3682,9 +3680,7 @@ void CartesianPlotPrivate::retransform() {
  */
 void CartesianPlotPrivate::retransformXScale(int index) {
 	DEBUG(Q_FUNC_INFO)
-#if CMAKE_TESTING_ENABLED
 	emit q->retransformXScaleCalled(q, index);
-#endif
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3783,9 +3779,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 }
 
 void CartesianPlotPrivate::retransformYScale(int index) {
-#if CMAKE_TESTING_ENABLED
 	emit q->retransformYScaleCalled(q, index);
-#endif
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
 	Range<double> sceneRange, logicalRange;

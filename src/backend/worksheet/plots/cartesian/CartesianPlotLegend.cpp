@@ -367,9 +367,7 @@ void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
-#if CMAKE_TESTING_ENABLED
 	retransformCalled(suppressRetransform || !plot || q->isLoading());
-#endif
 
 	// Assert cannot be used, because the Textlabel sends the
 	// changed signal during load and so a retransform is triggered

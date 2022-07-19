@@ -425,7 +425,7 @@ Q_SIGNALS:
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
 
-#if CMAKE_TESTING_ENABLED
+// Used by the retransformTests
 Q_SIGNALS:
 	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
 public:
@@ -436,7 +436,6 @@ public:
 	#define retransformCalled(suppressed) \
 		emit q->retransformCalledSignal(q, suppressed); \
 		q->mRetransformCalled.append(suppressed);
-#endif
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

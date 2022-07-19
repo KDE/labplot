@@ -163,9 +163,6 @@ private:
 	QPainterPath symbolsPath;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-#if CMAKE_TESTING_ENABLED
-	QVector<QLineF> m_lines_test;
-#endif
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)

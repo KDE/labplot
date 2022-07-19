@@ -1041,9 +1041,7 @@ QPainterPath AxisPrivate::shape() const {
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	#if CMAKE_TESTING_ENABLED
-		retransformCalled(suppressRetransform || !plot() || q->isLoading());
-	#endif
+	retransformCalled(suppressRetransform || !plot() || q->isLoading());
 	if (suppressRetransform || !plot() || q->isLoading())
 		return;
 

@@ -915,9 +915,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-#if CMAKE_TESTING_ENABLED
 	retransformCalled(!isVisible() || q->isLoading());
-#endif
 	if (!isVisible() || q->isLoading())
 		return;
 
@@ -1619,9 +1617,7 @@ void XYCurvePrivate::updateLines() {
 #ifdef PERFTRACE_CURVES
 		PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name() + QLatin1String(", map lines to scene coordinates"));
 #endif
-#if CMAKE_TESTING_ENABLED
-		m_lines_test = m_lines;
-#endif
+		emit q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
 	}
 
