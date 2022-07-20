@@ -363,8 +363,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	// TODO: we need to react on range format changes in the plot in general,
 	// add signal-slot connection for this
 	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
-	ui.dteBinRangesMin->setDisplayFormat(plot->xRangeDateTimeFormat());
-	ui.dteBinRangesMax->setDisplayFormat(plot->xRangeDateTimeFormat());
+	ui.dteBinRangesMin->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X));
+	ui.dteBinRangesMax->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X));
 	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMin()));
 	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMax()));
 

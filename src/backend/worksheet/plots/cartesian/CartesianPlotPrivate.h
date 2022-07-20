@@ -32,8 +32,7 @@ public:
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void xRangeFormatChanged();
-	void yRangeFormatChanged();
+	void rangeFormatChanged(Direction dir);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -95,6 +94,22 @@ public:
 			case Direction::X: xRanges[index].range = range; break;
 			case Direction::Y: yRanges[index].range = range; break;
 			default: DEBUG("setRangeDirty: ERROR: unhandled case") break;
+		}
+	}
+
+	void setFormat(const Direction dir, const int index, RangeT::Format format) {
+		switch(dir) {
+			case Direction::X: xRanges[index].range.setFormat(format); break;
+			case Direction::Y: yRanges[index].range.setFormat(format); break;
+			default: DEBUG("setFormat: ERROR: unhandled case") break;
+		}
+	}
+
+	void setScale(const Direction dir, const int index, RangeT::Scale scale) {
+		switch(dir) {
+			case Direction::X: xRanges[index].range.setScale(scale); break;
+			case Direction::Y: yRanges[index].range.setScale(scale); break;
+			default: DEBUG("setFormat: ERROR: unhandled case") break;
 		}
 	}
 

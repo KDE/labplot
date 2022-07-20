@@ -34,6 +34,7 @@ public:
 	void activateTitleTab();
 	void updateLocale() override;
 	void updateUnits() override;
+	void updateRangeList(Direction dir);
 	void updateXRangeList();
 	void updateYRangeList();
 	void updatePlotRangeList();
@@ -49,8 +50,7 @@ private:
 	bool m_autoScale{false};
 	bool m_updateUI{true};
 
-	void autoScaleXRange(int rangeIndex, bool);
-	void autoScaleYRange(int rangeIndex, bool);
+	void autoScaleRange(const Direction, const int index, bool);
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
@@ -67,33 +67,24 @@ private Q_SLOTS:
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
-	void autoScaleXChanged(bool);
-	void xMinChanged(const QString&);
-	void xMaxChanged(const QString&);
-	void xRangeChanged(const Range<double>&);
-	void xMinDateTimeChanged(const QDateTime&);
-	void xMaxDateTimeChanged(const QDateTime&);
+	void autoScaleChanged(const Direction, bool);
+	void rangeChanged(Direction, const Range<double>&);
+	void minDateTimeChanged(const Direction, const QDateTime&);
+	void maxDateTimeChanged(const Direction, const QDateTime&);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
-	void xRangeFormatChanged(int);
-	void xScaleChanged(int);
+	void rangeFormatChanged(Direction dir, int index);
+	void scaleChanged(Direction dir, int);
 	void addXRange();
 	void addYRange();
-	void removeXRange();
-	void removeYRange();
+	void removeRange(const Direction dir);
 	void addPlotRange();
 	void removePlotRange();
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void autoScaleYChanged(bool);
-	void yMinChanged(const QString&);
-	void yMaxChanged(const QString&);
-	void yRangeChanged(const Range<double>&);
-	void yMinDateTimeChanged(const QDateTime&);
-	void yMaxDateTimeChanged(const QDateTime&);
+	void minChanged(const Direction dir, const QString& value);
+	void maxChanged(const Direction dir, const QString& value);
 	// void yRangeDateTimeChanged(const Range<quint64>&);
-	void yRangeFormatChanged(int);
-	void yScaleChanged(int);
 
 	//"Range Breaks"-tab
 	void toggleXBreak(bool);
@@ -147,10 +138,8 @@ private Q_SLOTS:
 	void plotXMaxChanged(int xRangeIndex, double);
 	void plotYMaxChanged(int yRangeIndex, double);
 	void plotRangeChanged(Direction, int, Range<double>);
-	void plotXRangeFormatChanged(int xRangeIndex, RangeT::Format);
-	void plotYRangeFormatChanged(int yRangeIndex, RangeT::Format);
-	void plotXScaleChanged(int xRangeIndex, RangeT::Scale);
-	void plotYScaleChanged(int yRangeIndex, RangeT::Scale);
+	void plotRangeFormatChanged(Direction, int rangeIndex, RangeT::Format format);
+	void plotScaleChanged(const Direction, int xRangeIndex, RangeT::Scale);
 
 	void defaultPlotRangeChanged();
 

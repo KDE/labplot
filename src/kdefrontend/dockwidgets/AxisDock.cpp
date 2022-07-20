@@ -2357,12 +2357,12 @@ void AxisDock::load() {
 
 	if (!numeric) {
 		if (m_axis->orientation() == Axis::Orientation::Horizontal) {
-			ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
-			ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
+			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X, xIndex));
+			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X, xIndex));
 		} else {
 			// TODO
-			ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
-			ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
+			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Direction::Y));
+			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Direction::Y));
 		}
 		ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
 		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));

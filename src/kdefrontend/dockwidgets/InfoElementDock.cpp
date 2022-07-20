@@ -174,7 +174,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->lPositionDateTime->hide();
 		ui->dateTimeEditPosition->hide();
 	} else {
-		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->xRangeDateTimeFormat());
+		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->rangeDateTimeFormat(Direction::X));
 		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical()));
 		ui->lPosition->hide();
 		ui->lePosition->hide();

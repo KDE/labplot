@@ -307,14 +307,14 @@ void ReferenceLineDock::load() {
 		if (plot->yRangeFormat() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().y()));
 		else { // DateTime
-			ui.dtePosition->setDisplayFormat(plot->yRangeDateTimeFormat());
+			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Direction::Y));
 			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y()));
 		}
 	} else {
 		if (plot->xRangeFormat() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().x()));
 		else { // DateTime
-			ui.dtePosition->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X));
 			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
 		}
 	}

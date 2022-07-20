@@ -137,10 +137,8 @@ public:
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
 
-	const QString xRangeDateTimeFormat() const;
-	const QString xRangeDateTimeFormat(int index) const;
-	const QString yRangeDateTimeFormat() const;
-	const QString yRangeDateTimeFormat(int index) const;
+	const QString rangeDateTimeFormat(const Direction dir) const;
+	const QString rangeDateTimeFormat(const Direction dir, const int index) const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(bool, niceExtend, NiceExtend)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
@@ -162,16 +160,19 @@ public:
 	void addYRange(); // add new y range
 	void addXRange(const Range<double>&); // add x range
 	void addYRange(const Range<double>&); // add y range
-	void removeXRange(int index); // remove selected x range
-	void removeYRange(int index); // remove selected y range
+	void removeRange(const Direction dir, int index); // remove selected range
 	// convenience methods
 
 	void setMin(Direction, int index, double); // set x min of range index
 	void setMax(Direction, int index, double); // set x max of range index
+	void setRangeFormat(const Direction, const RangeT::Format);
+	void setRangeFormat(const Direction, const int, const RangeT::Format);
+	RangeT::Format rangeFormat(Direction, const int) const;
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
+	void setRangeScale(const Direction dir, const int index, const RangeT::Scale scale);
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // range scale of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
@@ -360,8 +361,7 @@ protected:
 Q_SIGNALS:
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void niceExtendChanged(bool);
-	void xRangeFormatChanged(int xRangeIndex, RangeT::Format);
-	void yRangeFormatChanged(int yRangeIndex, RangeT::Format);
+	void rangeFormatChanged(Direction, int rangeIndex, RangeT::Format);
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
@@ -372,8 +372,7 @@ Q_SIGNALS:
 	void xMaxChanged(int xRangeIndex, double);
 	void yMinChanged(int yRangeIndex, double);
 	void yMaxChanged(int yRangeIndex, double);
-	void xScaleChanged(int xRangeIndex, RangeT::Scale);
-	void yScaleChanged(int yRangeIndex, RangeT::Scale);
+	void scaleChanged(Direction dir, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);

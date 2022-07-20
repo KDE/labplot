@@ -953,21 +953,14 @@ CartesianPlot::MouseMode CartesianPlot::mouseMode() const {
 	return d->mouseMode;
 }
 
-const QString CartesianPlot::xRangeDateTimeFormat() const {
-	const int index{defaultCoordinateSystem()->index(Direction::X)};
-	return xRangeDateTimeFormat(index);
+const QString CartesianPlot::rangeDateTimeFormat(const Direction dir) const {
+	const int index{defaultCoordinateSystem()->index(dir)};
+	return rangeDateTimeFormat(dir, index);
 }
-const QString CartesianPlot::yRangeDateTimeFormat() const {
-	const int index{defaultCoordinateSystem()->index(Direction::Y)};
-	return yRangeDateTimeFormat(index);
-}
-const QString CartesianPlot::xRangeDateTimeFormat(const int index) const {
+
+const QString CartesianPlot::rangeDateTimeFormat(const Direction dir, const int index) const {
 	Q_D(const CartesianPlot);
-	return d->xRanges.at(index).range.dateTimeFormat();
-}
-const QString CartesianPlot::yRangeDateTimeFormat(const int index) const {
-	Q_D(const CartesianPlot);
-	return d->yRanges.at(index).range.dateTimeFormat();
+	return d->rangeConst(dir, index).dateTimeFormat();
 }
 
 //##############################################################################
@@ -1075,115 +1068,86 @@ void CartesianPlot::setRangeFirstValues(int values) {
 }
 
 // x/y ranges
-
-class CartesianPlotSetXRangeFormatIndexCmd : public QUndoCommand {
+class CartesianPlotSetRangeFormatIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetXRangeFormatIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Format format, int index)
+	CartesianPlotSetRangeFormatIndexCmd(CartesianPlotPrivate* private_obj, Direction dir, RangeT::Format format, int index)
 		: m_private(private_obj)
+		, m_direction(dir)
 		, m_format(format)
 		, m_index(index) {
-		setText(i18n("%1: change x-range %2 format", m_private->name(), index + 1));
+		setText(i18n("%1: change %2-range %3 format", m_private->name(), CartesianCoordinateSystem::directionToString(dir), index + 1));
 	}
 
 	void redo() override {
-		m_formatOld = m_private->xRanges.at(m_index).range.format();
-		m_private->xRanges[m_index].range.setFormat(m_format);
-		Q_EMIT m_private->q->xRangeFormatChanged(m_index, m_format);
+		m_formatOld = m_private->rangeConst(m_direction, m_index).format();
+		m_private->setFormat(m_direction, m_index, m_format);
+		Q_EMIT m_private->q->rangeFormatChanged(m_direction, m_index, m_format);
 	}
 
 	void undo() override {
-		m_private->xRanges[m_index].range.setFormat(m_formatOld);
-		Q_EMIT m_private->q->xRangeFormatChanged(m_index, m_formatOld);
+		m_private->setFormat(m_direction, m_index, m_formatOld);
+		Q_EMIT m_private->q->rangeFormatChanged(m_direction, m_index, m_formatOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
-	RangeT::Format m_format;
-	int m_index;
-	RangeT::Format m_formatOld{RangeT::Format::Numeric};
-};
-class CartesianPlotSetYRangeFormatIndexCmd : public QUndoCommand {
-public:
-	CartesianPlotSetYRangeFormatIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Format format, int index)
-		: m_private(private_obj)
-		, m_format(format)
-		, m_index(index) {
-		setText(i18n("%1: change y-range %2 format", m_private->name(), index + 1));
-	}
-
-	void redo() override {
-		m_formatOld = m_private->yRanges.at(m_index).range.format();
-		m_private->yRanges[m_index].range.setFormat(m_format);
-		Q_EMIT m_private->q->yRangeFormatChanged(m_index, m_format);
-	}
-
-	void undo() override {
-		m_private->yRanges[m_index].range.setFormat(m_formatOld);
-		Q_EMIT m_private->q->yRangeFormatChanged(m_index, m_formatOld);
-	}
-
-private:
-	CartesianPlotPrivate* m_private;
+	Direction m_direction;
 	RangeT::Format m_format;
 	int m_index;
 	RangeT::Format m_formatOld{RangeT::Format::Numeric};
 };
 
 RangeT::Format CartesianPlot::xRangeFormat() const {
-	return xRangeFormat(defaultCoordinateSystem()->index(Direction::X));
+	return rangeFormat(Direction::X, defaultCoordinateSystem()->index(Direction::X));
 }
 RangeT::Format CartesianPlot::yRangeFormat() const {
-	return yRangeFormat(defaultCoordinateSystem()->index(Direction::Y));
+	return rangeFormat(Direction::Y, defaultCoordinateSystem()->index(Direction::Y));
+}
+RangeT::Format CartesianPlot::rangeFormat(Direction dir, const int index) const {
+	Q_D(const CartesianPlot);
+	if (index < 0 || index > rangeCount(dir)) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return RangeT::Format::Numeric;
+	}
+	return d->rangeConst(dir, index).format();
 }
 RangeT::Format CartesianPlot::xRangeFormat(const int index) const {
-	Q_D(const CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::X)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return RangeT::Format::Numeric;
-	}
-	return d->xRanges.at(index).range.format();
+	return rangeFormat(Direction::X, index);
 }
 RangeT::Format CartesianPlot::yRangeFormat(const int index) const {
-	Q_D(const CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::Y)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return RangeT::Format::Numeric;
-	}
-	return d->yRanges.at(index).range.format();
+	return rangeFormat(Direction::Y, index);
 }
+
+void CartesianPlot::setRangeFormat(const Direction dir, const RangeT::Format format) {
+	setRangeFormat(dir, defaultCoordinateSystem()->index(dir), format);
+}
+
 void CartesianPlot::setXRangeFormat(const RangeT::Format format) {
-	setXRangeFormat(defaultCoordinateSystem()->index(Direction::X), format);
+	setRangeFormat(Direction::X, defaultCoordinateSystem()->index(Direction::X), format);
 }
 void CartesianPlot::setYRangeFormat(const RangeT::Format format) {
-	setYRangeFormat(defaultCoordinateSystem()->index(Direction::Y), format);
+	setRangeFormat(Direction::Y, defaultCoordinateSystem()->index(Direction::Y), format);
 }
-void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format) {
+
+void CartesianPlot::setRangeFormat(const Direction dir, const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::X)) {
+	if (index < 0 || index > rangeCount(dir)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	if (format != xRangeFormat(index)) {
-		//		d->xRanges[index].setFormat(format);
-		exec(new CartesianPlotSetXRangeFormatIndexCmd(d, format, index));
-		Q_EMIT d->xRangeFormatChanged();
+	if (format != rangeFormat(dir, index)) {
+		exec(new CartesianPlotSetRangeFormatIndexCmd(d, dir, format, index));
+		Q_EMIT d->rangeFormatChanged(dir); // TODO: must be inside UndoCommand!
 		if (project())
 			project()->setChanged(true);
 	}
+}
+
+void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format) {
+	setRangeFormat(Direction::X, index, format);
 }
 void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format) {
-	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::Y)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-	if (format != yRangeFormat(index)) {
-		//		d->yRanges[index].setFormat(format);
-		exec(new CartesianPlotSetYRangeFormatIndexCmd(d, format, index));
-		Q_EMIT d->yRangeFormatChanged();
-		if (project())
-			project()->setChanged(true);
-	}
+	setRangeFormat(Direction::Y, index, format);
 }
 
 // auto scale
@@ -1401,23 +1365,20 @@ void CartesianPlot::addYRange(const Range<double>& range) {
 		project()->setChanged(true);
 }
 
-void CartesianPlot::removeXRange(int index) {
+void CartesianPlot::removeRange(const Direction dir, int index) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::X)) {
+	if (index < 0 || index > rangeCount(dir)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	d->xRanges.remove(index);
-	if (project())
-		project()->setChanged(true);
-}
-void CartesianPlot::removeYRange(int index) {
-	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::Y)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
+
+	switch(dir) {
+		case Direction::X: d->xRanges.remove(index); break;
+		case Direction::Y: d->yRanges.remove(index); break;
+		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction"); return;
 	}
-	d->yRanges.remove(index);
+
+
 	if (project())
 		project()->setChanged(true);
 }
@@ -1440,54 +1401,30 @@ void CartesianPlot::setMax(Direction dir, int index, double value) {
 
 // x/y scale
 
-class CartesianPlotSetXScaleIndexCmd : public QUndoCommand {
+class CartesianPlotSetScaleIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetXScaleIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Scale scale, int index)
+	CartesianPlotSetScaleIndexCmd(CartesianPlotPrivate* private_obj, Direction dir, RangeT::Scale scale, int index)
 		: m_private(private_obj)
+		, m_direction(dir)
 		, m_scale(scale)
 		, m_index(index) {
 		setText(i18n("%1: change x-range %2 scale", m_private->name(), index + 1));
 	}
 
 	void redo() override {
-		m_scaleOld = m_private->xRanges.at(m_index).range.scale();
-		m_private->xRanges[m_index].range.setScale(m_scale);
-		Q_EMIT m_private->q->xScaleChanged(m_index, m_scale);
+		m_scaleOld = m_private->rangeConst(m_direction, m_index).scale();
+		m_private->setScale(m_direction, m_index, m_scale);
+		Q_EMIT m_private->q->scaleChanged(m_direction, m_index, m_scale);
 	}
 
 	void undo() override {
-		m_private->xRanges[m_index].range.setScale(m_scaleOld);
-		Q_EMIT m_private->q->xScaleChanged(m_index, m_scaleOld);
+		m_private->setScale(m_direction, m_index, m_scaleOld);
+		Q_EMIT m_private->q->scaleChanged(m_direction, m_index, m_scaleOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
-	RangeT::Scale m_scale;
-	int m_index;
-	RangeT::Scale m_scaleOld{RangeT::Scale::Linear};
-};
-class CartesianPlotSetYScaleIndexCmd : public QUndoCommand {
-public:
-	CartesianPlotSetYScaleIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Scale scale, int index)
-		: m_private(private_obj)
-		, m_scale(scale)
-		, m_index(index) {
-		setText(i18n("%1: change x-range %2 scale", m_private->name(), index + 1));
-	}
-
-	void redo() override {
-		m_scaleOld = m_private->yRanges.at(m_index).range.scale();
-		m_private->yRanges[m_index].range.setScale(m_scale);
-		Q_EMIT m_private->q->yScaleChanged(m_index, m_scale);
-	}
-
-	void undo() override {
-		m_private->yRanges[m_index].range.setScale(m_scaleOld);
-		Q_EMIT m_private->q->yScaleChanged(m_index, m_scaleOld);
-	}
-
-private:
-	CartesianPlotPrivate* m_private;
+	Direction m_direction;
 	RangeT::Scale m_scale;
 	int m_index;
 	RangeT::Scale m_scaleOld{RangeT::Scale::Linear};
@@ -1521,27 +1458,23 @@ void CartesianPlot::setYRangeScale(const RangeT::Scale scale) {
 	setYRangeScale(defaultCoordinateSystem()->index(Direction::Y), scale);
 }
 
-void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
+void CartesianPlot::setRangeScale(const Direction dir, const int index, const RangeT::Scale scale) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::X)) {
+	if (index < 0 || index > rangeCount(dir)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	exec(new CartesianPlotSetXScaleIndexCmd(d, scale, index));
-	d->retransformScale(Direction::X, index);
+	exec(new CartesianPlotSetScaleIndexCmd(d, dir, scale, index));
+	d->retransformScale(dir, index); // TODO: this retransform in the Undocommand?
 	if (project())
 		project()->setChanged(true);
 }
+
+void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
+	setRangeScale(Direction::X, index, scale);
+}
 void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
-	Q_D(CartesianPlot);
-	if (index < 0 || index > rangeCount(Direction::Y)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-	exec(new CartesianPlotSetYScaleIndexCmd(d, scale, index));
-	d->retransformScale(Direction::Y, index);
-	if (project())
-		project()->setChanged(true);
+	setRangeScale(Direction::Y, index, scale);
 }
 
 // coordinate systems
@@ -2339,7 +2272,7 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				d->xRanges[cSystem ? cSystem->index(Direction::X) : 0].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
-				axis->setLabelsDateTimeFormat(xRangeDateTimeFormat());
+				axis->setLabelsDateTimeFormat(rangeDateTimeFormat(Direction::X));
 				axis->setUndoAware(true);
 			}
 		}
@@ -3593,20 +3526,25 @@ void CartesianPlotPrivate::niceExtendChanged() {
 	q->WorksheetElementContainer::retransform();
 }
 
-void CartesianPlotPrivate::xRangeFormatChanged() {
+void CartesianPlotPrivate::rangeFormatChanged(Direction dir) {
 	DEBUG(Q_FUNC_INFO)
-	for (auto* axis : q->children<Axis>()) {
-		// TODO: only if x range of axis's plot range is changed
-		if (axis->orientation() == Axis::Orientation::Horizontal)
-			axis->retransformTickLabelStrings();
-	}
-}
-void CartesianPlotPrivate::yRangeFormatChanged() {
-	DEBUG(Q_FUNC_INFO)
-	for (auto* axis : q->children<Axis>()) {
-		// TODO: only if x range of axis's plot range is changed
-		if (axis->orientation() == Axis::Orientation::Vertical)
-			axis->retransformTickLabelStrings();
+	switch(dir) {
+		case Direction::X: {
+			for (auto* axis : q->children<Axis>()) {
+				// TODO: only if x range of axis's plot range is changed
+				if (axis->orientation() == Axis::Orientation::Horizontal)
+					axis->retransformTickLabelStrings();
+			}
+			break;
+		} case Direction::Y: {
+			for (auto* axis : q->children<Axis>()) {
+				// TODO: only if x range of axis's plot range is changed
+				if (axis->orientation() == Axis::Orientation::Horizontal)
+					axis->retransformTickLabelStrings();
+			}
+			break;
+		}
+		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
 	}
 }
 
