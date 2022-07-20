@@ -2842,8 +2842,9 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 		if (fullRange) {
 			// If not fullrange the x range will be used. So that means
 			// the xrange would not change and therefore it must not be dirty
-			for (int i = 0; i < m_coordinateSystems.count(); i++) {
-				auto cs = coordinateSystem(i);
+			for (const auto* c: m_coordinateSystems) {
+				// All x ranges with this xIndex must be dirty
+				const auto* cs = dynamic_cast<const CartesianCoordinateSystem*>(c);
 				if (cs->xIndex() == index)
 					setYRangeDirty(cs->yIndex(), true);
 			}
@@ -2914,9 +2915,9 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		if (fullRange) {
 			// If not fullrange the x range will be used. So that means
 			// the xrange would not change and therefore it must not be dirty
-			for (int i = 0; i < m_coordinateSystems.count(); i++) {
+			for (const auto* c: m_coordinateSystems) {
 				// All x ranges with this yIndex must be dirty
-				auto cs = coordinateSystem(i);
+				const auto* cs = dynamic_cast<const CartesianCoordinateSystem*>(c);
 				if (cs->yIndex() == index)
 					setXRangeDirty(cs->xIndex(), true);
 			}

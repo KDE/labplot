@@ -760,9 +760,8 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
-		for (auto* plot : plots) {
+		for (auto* plot : plots)
 			plot->retransform();
-		}
 	}
 
 #ifndef SDK

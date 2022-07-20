@@ -67,8 +67,6 @@ class MemoryWidget;
 class CartesianPlot;
 class InfoElementDialog;
 
-class RetransformTest;
-
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
 class CantorWorksheetDock;
@@ -355,8 +353,6 @@ private Q_SLOTS:
 	void propertiesExplorerRequested();
 
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
-
-	friend RetransformTest;
 };
 
 #endif
