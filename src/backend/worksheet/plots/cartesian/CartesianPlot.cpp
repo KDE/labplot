@@ -2670,7 +2670,7 @@ bool CartesianPlot::scaleAuto(Direction dir, int index, bool fullRange, bool sup
 
 	// if no curve: do not reset to [0, 1]
 
-	DEBUG(Q_FUNC_INFO << ", x range " << index << " = " << r.toStdString() << "., x data range = " << d->dataRange(Direction::X, index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", x range " << index << " = " << r.toStdString() << "., x data range = " << d->dataRange(dir, index).toStdString())
 	bool update = false;
 	if (!qFuzzyCompare(dataRange.start(), r.start()) && !qIsInf(dataRange.start())) {
 		r.start() = dataRange.start();
