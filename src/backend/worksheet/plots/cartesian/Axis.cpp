@@ -1058,9 +1058,9 @@ void AxisPrivate::retransformRange() {
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->xRange(q->cSystem->index(Direction::X));
+			range = q->m_plot->range(Direction::X, q->cSystem->index(Direction::X));
 		else
-			range = q->m_plot->yRange(q->cSystem->index(Direction::Y));
+			range = q->m_plot->range(Direction::Y, q->cSystem->index(Direction::Y));
 
 		DEBUG(Q_FUNC_INFO << ", new auto range = " << range.toStdString())
 		break;
@@ -1448,8 +1448,8 @@ void AxisPrivate::retransformTicks() {
 	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Direction::X)
 	//)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const int xRangeDirection = plot()->xRange(cs->index(Direction::X)).direction();
-	const int yRangeDirection = plot()->yRange(cs->index(Direction::Y)).direction();
+	const int xRangeDirection = plot()->range(Direction::X, cs->index(Direction::X)).direction();
+	const int yRangeDirection = plot()->range(Direction::Y, cs->index(Direction::Y)).direction();
 	//	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 	const int xDirection = q->cSystem->direction(Direction::X) * xRangeDirection;
 	const int yDirection = q->cSystem->direction(Direction::Y) * yRangeDirection;
@@ -1458,8 +1458,8 @@ void AxisPrivate::retransformTicks() {
 	// calculate the position of the center point in scene coordinates,
 	// will be used later to differentiate between "in" and "out" depending
 	// on the position relative to the center.
-	const double middleX = plot()->xRange(cs->index(Direction::X)).center();
-	const double middleY = plot()->yRange(cs->index(Direction::Y)).center();
+	const double middleX = plot()->range(Direction::X, cs->index(Direction::X)).center();
+	const double middleY = plot()->range(Direction::Y, cs->index(Direction::Y)).center();
 	QPointF center(middleX, middleY);
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
@@ -1526,7 +1526,7 @@ void AxisPrivate::retransformTicks() {
 		// calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
-				auto startY = q->plot()->yRange(cs->index(Direction::Y)).start();
+				auto startY = q->plot()->range(Direction::Y, cs->index(Direction::Y)).start();
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(startY); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
 				valid = transformAnchor(&anchorPoint);
@@ -1542,7 +1542,7 @@ void AxisPrivate::retransformTicks() {
 					}
 				}
 			} else { // vertical
-				auto startX = q->plot()->xRange(cs->index(Direction::X)).start();
+				auto startX = q->plot()->range(Direction::X, cs->index(Direction::X)).start();
 				anchorPoint.setY(majorTickPos);
 				anchorPoint.setX(startX); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
 				valid = transformAnchor(&anchorPoint);
@@ -1627,7 +1627,7 @@ void AxisPrivate::retransformTicks() {
 
 				// calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
-					auto startY = q->plot()->yRange(cs->index(Direction::Y)).start();
+					auto startY = q->plot()->range(Direction::Y, cs->index(Direction::Y)).start();
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(startY);
 					valid = transformAnchor(&anchorPoint);
@@ -1642,7 +1642,7 @@ void AxisPrivate::retransformTicks() {
 						}
 					}
 				} else { // vertical
-					auto startX = q->plot()->xRange(cs->index(Direction::X)).start();
+					auto startX = q->plot()->range(Direction::X, cs->index(Direction::X)).start();
 					anchorPoint.setY(minorTickPos);
 					anchorPoint.setX(startX);
 					valid = transformAnchor(&anchorPoint);
@@ -1740,8 +1740,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	// category of format
 	bool numeric = false, datetime = false, text = false;
 	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
-		auto xRangeFormat{plot()->xRange(cs->index(Direction::X)).format()};
-		auto yRangeFormat{plot()->yRange(cs->index(Direction::Y)).format()};
+		auto xRangeFormat{plot()->range(Direction::X, cs->index(Direction::X)).format()};
+		auto yRangeFormat{plot()->range(Direction::Y, cs->index(Direction::Y)).format()};
 		numeric = ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 				   || (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric));
 
@@ -2145,8 +2145,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double middleX = plot()->xRange(cs->index(Direction::X)).center();
-	const double middleY = plot()->yRange(cs->index(Direction::Y)).center();
+	const double middleX = plot()->range(Direction::X, cs->index(Direction::X)).center();
+	const double middleY = plot()->range(Direction::Y, cs->index(Direction::Y)).center();
 	QPointF center(middleX, middleY);
 	//	const int xDirection = q->cSystem->direction(Direction::X);
 	//	const int yDirection = q->cSystem->direction(Direction::Y);
@@ -2159,8 +2159,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = qSin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
 
 	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
-	auto xRangeFormat{plot()->xRange(cs->index(Direction::X)).format()};
-	auto yRangeFormat{plot()->yRange(cs->index(Direction::Y)).format()};
+	auto xRangeFormat{plot()->range(Direction::X, cs->index(Direction::X)).format()};
+	auto yRangeFormat{plot()->range(Direction::Y, cs->index(Direction::Y)).format()};
 	for (int i = 0; i < size; i++) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
@@ -2180,8 +2180,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 		QPointF anchorPoint = majorTickPoints.at(i);
 
 		// center align all labels with respect to the end point of the tick line
-		const int xRangeDirection = plot()->xRange(cs->index(Direction::X)).direction();
-		const int yRangeDirection = plot()->yRange(cs->index(Direction::Y)).direction();
+		const int xRangeDirection = plot()->range(Direction::X, cs->index(Direction::X)).direction();
+		const int yRangeDirection = plot()->range(Direction::Y, cs->index(Direction::Y)).direction();
 		//		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 		const int xDirection = q->cSystem->direction(Direction::X) * xRangeDirection;
 		const int yDirection = q->cSystem->direction(Direction::Y) * yRangeDirection;
@@ -2321,8 +2321,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->index(Direction::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->index(Direction::Y) + 1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->xRange(cs->index(Direction::X))};
-	const auto yRange{plot()->yRange(cs->index(Direction::X))};
+	const auto xRange{plot()->range(Direction::X, cs->index(Direction::X))};
+	const auto yRange{plot()->range(Direction::Y, cs->index(Direction::X))};
 
 	// TODO:
 	// when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -2401,12 +2401,12 @@ void AxisPrivate::retransformMinorGrid() {
 	QVector<QLineF> lines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	if (orientation == Axis::Orientation::Horizontal) { // horizontal axis
-		const Range<double> yRange{plot()->yRange(cs->index(Direction::Y))};
+		const Range<double> yRange{plot()->range(Direction::Y, cs->index(Direction::Y))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(point.x(), yRange.start(), point.x(), yRange.end()));
 	} else { // vertical axis
-		const Range<double> xRange{plot()->xRange(cs->index(Direction::X))};
+		const Range<double> xRange{plot()->range(Direction::X, cs->index(Direction::X))};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append(QLineF(xRange.start(), point.y(), xRange.end(), point.y()));
@@ -2560,8 +2560,8 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		auto xRangeFormat{plot()->xRange(cs->index(Direction::X)).format()};
-		auto yRangeFormat{plot()->yRange(cs->index(Direction::Y)).format()};
+		auto xRangeFormat{plot()->range(Direction::X, cs->index(Direction::X)).format()};
+		auto yRangeFormat{plot()->range(Direction::Y, cs->index(Direction::Y)).format()};
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 			|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			// QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
@@ -2621,8 +2621,8 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 			// used to determinde direction (up/down, left/right)
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const qreal middleX = plot()->xRange(cs->index(Direction::X)).center();
-			const qreal middleY = plot()->yRange(cs->index(Direction::Y)).center();
+			const qreal middleX = plot()->range(Direction::X, cs->index(Direction::X)).center();
+			const qreal middleY = plot()->range(Direction::Y, cs->index(Direction::Y)).center();
 			QPointF center(middleX, middleY);
 			bool valid = true;
 			center = q->cSystem->mapLogicalToScene(center, valid);

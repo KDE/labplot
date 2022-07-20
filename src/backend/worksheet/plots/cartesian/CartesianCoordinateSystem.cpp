@@ -40,7 +40,7 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (d->plot)
-		return QString(QLatin1String("x = ") + d->plot->xRange(d->xIndex).toString() + QLatin1String(", y = ") + d->plot->yRange(d->yIndex).toString());
+		return QString(QLatin1String("x = ") + d->plot->range(Direction::X, d->xIndex).toString() + QLatin1String(", y = ") + d->plot->range(Direction::Y, d->yIndex).toString());
 
 	return i18n("no info available");
 }

@@ -86,6 +86,18 @@ public:
 		}
 	}
 
+	const Range<double>& rangeConst(const Direction dir, int index = -1) const {
+		if (index == -1)
+			index = defaultCoordinateSystem()->index(dir);
+		switch(dir) {
+			case Direction::X:
+				return xRanges[index].range;
+			case Direction::Y:
+			default:
+				return yRanges[index].range;
+		}
+	}
+
 	Range<double>& dataRange(const Direction dir, int index = -1) {
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);

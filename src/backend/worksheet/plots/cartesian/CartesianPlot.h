@@ -152,8 +152,7 @@ public:
 	void enableAutoScaleY(int index, bool enable, bool fullRange = false);
 
 	int rangeCount(const Direction dir) const;
-	const Range<double>& xRange(int index = -1) const; // get x range of (default) plot range
-	const Range<double>& yRange(int index = -1) const; // get y range of (default) plot range
+	const Range<double>& range(const Direction dir, int index = -1) const; // get range of (default) plot range
 	void setXRange(const Range<double>); // set x range of default plot range
 	void setYRange(const Range<double>); // set y range of default plot range
 	void setXRange(int index, const Range<double>&);

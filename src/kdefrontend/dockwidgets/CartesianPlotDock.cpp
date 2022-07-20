@@ -491,7 +491,7 @@ void CartesianPlotDock::updateLocale() {
 		// x ranges
 		bool isDateTime = false;
 		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->rangeCount(Direction::X)); row++) {
-			const auto xRange{m_plot->xRange(row)};
+			const auto xRange{m_plot->range(Direction::X, row)};
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = xRange.relativePrecision();
@@ -523,7 +523,7 @@ void CartesianPlotDock::updateLocale() {
 		// y ranges
 		isDateTime = false;
 		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->rangeCount(Direction::Y)); row++) {
-			const auto yRange{m_plot->yRange(row)};
+			const auto yRange{m_plot->range(Direction::Y, row)};
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = yRange.relativePrecision();
@@ -620,7 +620,7 @@ void CartesianPlotDock::updateXRangeList() {
 		ui.lXRanges->setText(i18n("X-Range:"));
 	ui.twXRanges->setRowCount(xRangeCount);
 	for (int i = 0; i < xRangeCount; i++) {
-		const auto xRange = m_plot->xRange(i);
+		const auto xRange = m_plot->range(Direction::X, i);
 		const auto format = xRange.format();
 		const auto scale = xRange.scale();
 		DEBUG(Q_FUNC_INFO << ", x range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
@@ -697,7 +697,7 @@ void CartesianPlotDock::updateXRangeList() {
 
 	// enable/disable widgets
 	for (int i = 0; i < xRangeCount; i++) {
-		const bool checked{m_plot->xRange(i).autoScale()};
+		const bool checked{m_plot->range(Direction::X, i).autoScale()};
 		CELLWIDGET(twXRanges, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
 		CELLWIDGET(twXRanges, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
 		CELLWIDGET(twXRanges, i, TwRangesColumn::Max, QWidget, setEnabled(!checked));
@@ -716,7 +716,7 @@ void CartesianPlotDock::updateYRangeList() {
 		ui.lYRanges->setText(i18n("Y-Range:"));
 	ui.twYRanges->setRowCount(yRangeCount);
 	for (int i = 0; i < yRangeCount; i++) {
-		const auto yRange{m_plot->yRange(i)};
+		const auto yRange{m_plot->range(Direction::Y, i)};
 		const auto format{yRange.format()};
 		const auto scale{yRange.scale()};
 		DEBUG(Q_FUNC_INFO << ", y range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
@@ -755,7 +755,7 @@ void CartesianPlotDock::updateYRangeList() {
 			auto* dte = new QDateTimeEdit(ui.twYRanges);
 			dte->setDisplayFormat(m_plot->yRangeDateTimeFormat(i));
 			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).start(), Qt::UTC));
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->range(Direction::Y, i).start(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
@@ -763,7 +763,7 @@ void CartesianPlotDock::updateYRangeList() {
 			dte = new QDateTimeEdit(ui.twYRanges);
 			dte->setDisplayFormat(m_plot->yRangeDateTimeFormat(i));
 			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).end(), Qt::UTC));
+			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->range(Direction::Y, i).end(), Qt::UTC));
 			dte->setWrapping(true);
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
@@ -800,7 +800,7 @@ void CartesianPlotDock::updateYRangeList() {
 
 	// enable/disable widgets
 	for (int i = 0; i < yRangeCount; i++) {
-		const bool checked{m_plot->yRange(i).autoScale()};
+		const bool checked{m_plot->range(Direction::Y, i).autoScale()};
 		CELLWIDGET(twYRanges, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
 		CELLWIDGET(twYRanges, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
 		CELLWIDGET(twYRanges, i, TwRangesColumn::Max, QWidget, setEnabled(!checked));
@@ -822,7 +822,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 		const int xIndex{cSystem->index(Direction::X)}, yIndex{cSystem->index(Direction::Y)};
-		const auto xRange{m_plot->xRange(xIndex)}, yRange{m_plot->yRange(yIndex)};
+		const auto xRange{m_plot->range(Direction::X, xIndex)}, yRange{m_plot->range(Direction::Y, yIndex)};
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i + 1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
@@ -834,7 +834,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->rangeCount(Direction::X) > 1) {
 			for (int index = 0; index < m_plot->rangeCount(Direction::X); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString());
+				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Direction::X, index).toLocaleString());
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
@@ -850,7 +850,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->rangeCount(Direction::Y) > 1) {
 			for (int index = 0; index < m_plot->rangeCount(Direction::Y); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString());
+				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Direction::Y, index).toLocaleString());
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
@@ -1044,7 +1044,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	for (auto* plot : m_plotList) {
 		bool retransform = true; // must be true, because in enableAutoScale scaleAutoX will be already called
 		plot->enableAutoScaleX(index, checked, true);
-		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->range(Direction::X, index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Direction::Y)
 			retransform |= plot->scaleAutoX(index, true);
 
@@ -1092,7 +1092,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	for (auto* plot : m_plotList) {
 		bool retransform = true; // must be true, because in enableAutoScale scaleAutoY will be already called
 		plot->enableAutoScaleY(index, checked, true);
-		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->range(Direction::Y, index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Direction::Y)
 			retransform |= plot->scaleAutoY(index, true);
 
@@ -1128,7 +1128,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(xMin, plot->xRange(index).start())) {
+			if (!qFuzzyCompare(xMin, plot->range(Direction::X, index).start())) {
 				plot->setXMin(index, xMin);
 				changed = true;
 			}
@@ -1152,7 +1152,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 		DEBUG(Q_FUNC_INFO << ", y range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(yMin, plot->yRange(index).start())) {
+			if (!qFuzzyCompare(yMin, plot->range(Direction::Y, index).start())) {
 				plot->setYMin(index, yMin);
 				changed = true;
 			}
@@ -1177,7 +1177,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(xMax, plot->xRange(index).end())) {
+			if (!qFuzzyCompare(xMax, plot->range(Direction::X, index).end())) {
 				plot->setXMax(index, xMax);
 				changed = true;
 			}
@@ -1201,7 +1201,7 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 		DEBUG(Q_FUNC_INFO << ", y range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(yMax, plot->yRange(index).end())) {
+			if (!qFuzzyCompare(yMax, plot->range(Direction::Y, index).end())) {
 				plot->setYMax(index, yMax);
 				changed = true;
 			}
@@ -1502,7 +1502,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 	cSystem->setIndex(Direction::X, index);
 
 	// auto scale x range when on auto scale (now that it is used)
-	if (m_plot->xRange(index).autoScale()) {
+	if (m_plot->range(Direction::X, index).autoScale()) {
 		autoScaleXRange(index, true);
 		updateXRangeList();
 	}
@@ -1513,8 +1513,8 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Horizontal) {
-				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->xRange(index).toStdString())
-				axis->setRange(m_plot->xRange(index));
+				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->range(Direction::X, index).toStdString())
+				axis->setRange(m_plot->range(Direction::X, index));
 			}
 		}
 	}
@@ -1528,7 +1528,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	cSystem->setIndex(Direction::Y, index);
 
 	// auto scale y range when on auto scale (now that it is used)
-	if (m_plot->yRange(index).autoScale()) {
+	if (m_plot->range(Direction::Y, index).autoScale()) {
 		autoScaleYRange(index, true);
 		updateYRangeList();
 	}
@@ -1537,8 +1537,8 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Vertical) {
-				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->yRange(index).toStdString())
-				axis->setRange(m_plot->yRange(index));
+				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->range(Direction::Y, index).toStdString())
+				axis->setRange(m_plot->range(Direction::Y, index));
 			}
 		}
 	}

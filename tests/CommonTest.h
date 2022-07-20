@@ -35,8 +35,8 @@ extern "C" {
 		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                                \
 		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                                \
                                                                                                                                                                \
-		auto xrange = plot->xRange(xIndex);                                                                                                                    \
-		auto yrange = plot->yRange(yIndex);                                                                                                                    \
+		auto xrange = plot->range(Direction::X, xIndex);                                                                                                                    \
+		auto yrange = plot->range(Direction::Y, yIndex);                                                                                                                    \
 		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}

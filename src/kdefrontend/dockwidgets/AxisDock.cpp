@@ -598,9 +598,9 @@ void AxisDock::updatePlotRanges() {
 	Axis::Orientation orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
-		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::Y));
+		logicalRange = m_axis->plot()->range(Direction::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::Y));
 	else
-		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::X));
+		logicalRange = m_axis->plot()->range(Direction::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::X));
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
 }
 
@@ -2289,12 +2289,12 @@ void AxisDock::load() {
 
 	Range<double> logicalRange(0, 0);
 	if (orientation == Axis::Orientation::Horizontal) {
-		logicalRange = plot->yRange(yIndex);
+		logicalRange = plot->range(Direction::Y, yIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));
 	} else {
-		logicalRange = plot->xRange(xIndex);
+		logicalRange = plot->range(Direction::X, xIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));

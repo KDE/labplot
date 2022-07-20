@@ -311,8 +311,8 @@ void CartesianPlot::setType(Type type) {
 	}
 	}
 
-	d->xRanges[0].prev = xRange();
-	d->yRanges[0].prev = yRange();
+	d->xRanges[0].prev = range(Direction::X);
+	d->yRanges[0].prev = range(Direction::Y);
 
 	// Geometry, specify the plot rect in scene coordinates.
 	// TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
@@ -1192,23 +1192,23 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 bool CartesianPlot::autoScaleX(int index) const {
 	if (index == -1) {
 		for (int i = 0; i < rangeCount(Direction::X); i++) {
-			if (!xRange(i).autoScale())
+			if (!range(Direction::X, i).autoScale())
 				return false;
 		}
 		return true;
 	}
-	return xRange(index).autoScale();
+	return range(Direction::X, index).autoScale();
 }
 // is auto scale enabled for y axis index (index == -1: all axes)
 bool CartesianPlot::autoScaleY(int index) const {
 	if (index == -1) {
 		for (int i = 0; i < rangeCount(Direction::Y); i++) {
-			if (!yRange(i).autoScale())
+			if (!range(Direction::Y, i).autoScale())
 				return false;
 		}
 		return true;
 	}
-	return yRange(index).autoScale();
+	return range(Direction::Y, index).autoScale();
 }
 
 class CartesianPlotEnableAutoScaleXIndexCmd : public QUndoCommand {
@@ -1297,7 +1297,7 @@ void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool fullRang
 		return;
 	}
 
-	if (enable != xRange(index).autoScale()) {
+	if (enable != range(Direction::X, index).autoScale()) {
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleXIndexCmd(d, enable, index, fullRange));
@@ -1315,7 +1315,7 @@ void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool fullRang
 		return;
 	}
 
-	if (enable != yRange(index).autoScale()) {
+	if (enable != range(Direction::Y, index).autoScale()) {
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
 		exec(new CartesianPlotEnableAutoScaleYIndexCmd(d, enable, index, fullRange));
 		if (project())
@@ -1334,18 +1334,13 @@ int CartesianPlot::rangeCount(const Direction dir) const {
 	}
 }
 
-const Range<double>& CartesianPlot::xRange(int index) const {
+const Range<double>& CartesianPlot::range(const Direction dir, int index) const {
 	if (index == -1)
-		index = defaultCoordinateSystem()->index(Direction::X);
+		index = defaultCoordinateSystem()->index(dir);
 	Q_D(const CartesianPlot);
-	return d->xRanges.at(index).range;
+	return d->rangeConst(dir, index);
 }
-const Range<double>& CartesianPlot::yRange(int index) const {
-	if (index == -1)
-		index = defaultCoordinateSystem()->index(Direction::Y);
-	Q_D(const CartesianPlot);
-	return d->yRanges.at(index).range;
-}
+
 // sets x range of default plot range
 void CartesianPlot::setXRange(const Range<double> range) {
 	const int index{defaultCoordinateSystem()->index(Direction::X)};
@@ -1537,33 +1532,33 @@ void CartesianPlot::removeYRange(int index) {
 }
 void CartesianPlot::setXMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	Range<double> range{xRange(index)};
-	range.setStart(value);
-	DEBUG(Q_FUNC_INFO << ", new range = " << range.toStdString())
+	Range<double> r{range(Direction::X, index)};
+	r.setStart(value);
+	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString())
 
-	setXRange(index, range);
+	setXRange(index, r);
 }
 void CartesianPlot::setXMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << ", value = " << value)
-	Range<double> range{xRange(index)};
-	range.setEnd(value);
+	Range<double> r{range(Direction::X, index)};
+	r.setEnd(value);
 
-	setXRange(index, range);
+	setXRange(index, r);
 }
 void CartesianPlot::setYMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{yRange(index)};
-	range.setStart(value);
+	Range<double> r{range(Direction::Y, index)};
+	r.setStart(value);
 
-	setYRange(index, range);
+	setYRange(index, r);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
-	Range<double> range = yRange(index);
-	DEBUG(Q_FUNC_INFO << ", old range = " << range.toStdString() << ", auto scale = " << range.autoScale())
-	range.setEnd(value);
-	DEBUG(Q_FUNC_INFO << ", new range = " << range.toStdString() << ", auto scale = " << range.autoScale())
+	Range<double> r{range(Direction::Y, index)};
+	DEBUG(Q_FUNC_INFO << ", old range = " << r.toStdString() << ", auto scale = " << r.autoScale())
+	r.setEnd(value);
+	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString() << ", auto scale = " << r.autoScale())
 
-	setYRange(index, range);
+	setYRange(index, r);
 }
 
 // x/y scale
@@ -1632,14 +1627,14 @@ RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
 	}
-	return xRange(index).scale();
+	return range(Direction::X, index).scale();
 }
 RangeT::Scale CartesianPlot::yRangeScale(const int index) const {
 	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
 	}
-	return yRange(index).scale();
+	return range(Direction::Y, index).scale();
 }
 void CartesianPlot::setXRangeScale(const RangeT::Scale scale) {
 	setXRangeScale(defaultCoordinateSystem()->index(Direction::X), scale);
@@ -1824,8 +1819,8 @@ void CartesianPlot::addHorizontalAxis() {
 	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
 		// use x range of default plot range
-		axis->setRange(xRange());
-		axis->setMajorTicksNumber(xRange().autoTickCount());
+		axis->setRange(range(Direction::X));
+		axis->setMajorTicksNumber(range(Direction::X).autoTickCount());
 		axis->setUndoAware(true);
 	}
 	addChild(axis);
@@ -1840,8 +1835,8 @@ void CartesianPlot::addVerticalAxis() {
 	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
 		// use y range of default plot range
-		axis->setRange(yRange());
-		axis->setMajorTicksNumber(yRange().autoTickCount());
+		axis->setRange(range(Direction::Y));
+		axis->setMajorTicksNumber(range(Direction::Y).autoTickCount());
 		axis->setUndoAware(true);
 	}
 	addChild(axis);
@@ -2134,7 +2129,7 @@ void CartesianPlot::addInfoElement() {
 		pos = d->logicalPos.x();
 		d->calledFromContextMenu = false;
 	} else
-		pos = xRange().center();
+		pos = range(Direction::X).center();
 
 	auto* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
@@ -2666,7 +2661,7 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		const auto* col = curve->xColumn();
-		const auto xRangeFormat{xRange().format()};
+		const auto xRangeFormat{range(Direction::X).format()};
 		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
 			setXRangeFormat(RangeT::Format::DateTime);
@@ -2726,7 +2721,7 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		const AbstractColumn* col = curve->yColumn();
-		const auto yRangeFormat{yRange().format()};
+		const auto yRangeFormat{range(Direction::Y).format()};
 		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && yRangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
 			setYRangeFormat(RangeT::Format::DateTime);
@@ -3017,8 +3012,8 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		Range<int> indexRange{0, 0};
 		if (!completeRange && d->rangeType == RangeType::Free && curve->yColumn()) { // only data within y range
 			const int yIndex = coordinateSystem(curve->coordinateSystemIndex())->index(Direction::Y);
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << yRange(yIndex).toStdString())
-			curve->yColumn()->indicesMinMax(yRange(yIndex).start(), yRange(yIndex).end(), indexRange.start(), indexRange.end());
+			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(Direction::Y, yIndex).toStdString())
+			curve->yColumn()->indicesMinMax(d->range(Direction::Y, yIndex).start(), d->range(Direction::Y, yIndex).end(), indexRange.start(), indexRange.end());
 		} else { // all data
 			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 			switch (d->rangeType) {
@@ -3129,7 +3124,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 		Range<int> indexRange{0, 0};
 		if (!completeRange && d->rangeType == RangeType::Free && curve->xColumn()) {
 			const int xIndex = coordinateSystem(curve->coordinateSystemIndex())->index(Direction::X);
-			curve->xColumn()->indicesMinMax(xRange(xIndex).start(), xRange(xIndex).end(), indexRange.start(), indexRange.end());
+			curve->xColumn()->indicesMinMax(d->range(Direction::X, xIndex).start(), d->range(Direction::X, xIndex).end(), indexRange.start(), indexRange.end());
 		} else {
 			switch (d->rangeType) {
 			case RangeType::Free:
@@ -5121,11 +5116,11 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	//	writer->writeStartElement( "coordinateSystem" );
 	//	writer->writeAttribute( "autoScaleX", QString::number(d->autoScaleX) );
 	//	writer->writeAttribute( "autoScaleY", QString::number(d->autoScaleY) );
-	//	writer->writeAttribute( "xMin", QString::number(xRange(0).start(), 'g', 16));
-	//	writer->writeAttribute( "xMax", QString::number(xRange(0).end(), 'g', 16) );
+	//	writer->writeAttribute( "xMin", QString::number(d->range(Direction::X, 0).start(), 'g', 16));
+	//	writer->writeAttribute( "xMax", QString::number(d->range(Direction::X, 0).end(), 'g', 16) );
 	//	writer->writeAttribute( "yMin", QString::number(d->yRange.range.start(), 'g', 16) );
 	//	writer->writeAttribute( "yMax", QString::number(d->yRange.range.end(), 'g', 16) );
-	//	writer->writeAttribute( "xScale", QString::number(static_cast<int>(xRange(0).scale())) );
+	//	writer->writeAttribute( "xScale", QString::number(static_cast<int>(d->range(Direction::X, 0).scale())) );
 	//	writer->writeAttribute( "yScale", QString::number(static_cast<int>(d->yScale)) );
 	//	writer->writeAttribute( "xRangeFormat", QString::number(static_cast<int>(xRangeFormat(0))) );
 	//	writer->writeAttribute( "yRangeFormat", QString::number(static_cast<int>(d->yRangeFormat)) );
@@ -5384,7 +5379,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMin").toString());
 				else {
 					d->xRanges[0].range.start() = str.toDouble();
-					d->xRanges[0].prev.start() = xRange(0).start();
+					d->xRanges[0].prev.start() = d->range(Direction::X, 0).start();
 				}
 
 				str = attribs.value("xMax").toString();
@@ -5392,7 +5387,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMax").toString());
 				else {
 					d->xRanges[0].range.end() = str.toDouble();
-					d->xRanges[0].prev.end() = xRange(0).end();
+					d->xRanges[0].prev.end() = d->range(Direction::X, 0).end();
 				}
 
 				str = attribs.value("yMin").toString();
@@ -5400,7 +5395,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMin").toString());
 				else {
 					d->yRanges[0].range.start() = str.toDouble();
-					d->yRanges[0].prev.start() = yRange(0).start();
+					d->yRanges[0].prev.start() = range(Direction::Y, 0).start();
 				}
 
 				str = attribs.value("yMax").toString();
@@ -5408,7 +5403,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMax").toString());
 				else {
 					d->yRanges[0].range.end() = str.toDouble();
-					d->yRanges[0].prev.end() = yRange(0).end();
+					d->yRanges[0].prev.end() = range(Direction::Y, 0).end();
 				}
 
 				str = attribs.value("xScale").toString();
