@@ -87,8 +87,8 @@ void CartesianPlotTest::initTestCase() {
 		return;                                                                                                                                                \
 	QCOMPARE(curve->name(), "2");                                                                                                                              \
                                                                                                                                                                \
-	CHECK_RANGE(plot, curve, x, 1, 2);                                                                                                                         \
-	CHECK_RANGE(plot, curve, y, 1, 2);                                                                                                                         \
+	CHECK_RANGE(plot, curve, Direction::X, 1, 2);                                                                                                                         \
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 2);                                                                                                                         \
                                                                                                                                                                \
 	auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));                                                                                                    \
 	QVERIFY(xAxis != nullptr);                                                                                                                                 \
@@ -151,8 +151,8 @@ void CartesianPlotTest::initTestCase() {
 		return;                                                                                                                                                \
 	QCOMPARE(curve2->name(), "f(x)");                                                                                                                          \
                                                                                                                                                                \
-	CHECK_RANGE(plot, curve1, x, -4, 4);                                                                                                                       \
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);                                                                                                                       \
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 #define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
 
@@ -160,8 +160,8 @@ void CartesianPlotTest::initTestCase() {
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
 	VALUES_EQUAL(range.end(), end_);
 
-#define CHECK_RANGE(plot, aspect, xy, start_, end_)                                                                                                            \
-	RANGE_CORRECT(plot->xy##Range(plot->coordinateSystem(aspect->coordinateSystemIndex())->xy##Index()), start_, end_)
+#define CHECK_RANGE(plot, aspect, dir, start_, end_)                                                                                                            \
+	RANGE_CORRECT(plot->range(dir, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dir)), start_, end_)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
@@ -191,8 +191,8 @@ void CartesianPlotTest::changeData1() {
 	QVERIFY(c1->valueAt(2) == 3.);
 	QVERIFY(c2->valueAt(2) == 3.);
 
-	CHECK_RANGE(plot, curve, x, 1, 3);
-	CHECK_RANGE(plot, curve, y, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 3);
 }
 
 void CartesianPlotTest::changeData2() {
@@ -205,8 +205,8 @@ void CartesianPlotTest::changeData2() {
 	QVERIFY(c1->valueAt(2) == 3.);
 	QVERIFY(c2->valueAt(2) == 2.);
 
-	CHECK_RANGE(plot, curve, x, 1, 3);
-	CHECK_RANGE(plot, curve, y, 1, 2);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 2);
 
 	DEBUG_RANGE(plot, curve);
 }
@@ -221,8 +221,8 @@ void CartesianPlotTest::changeData3() {
 	QVERIFY(c1->valueAt(2) == 2.);
 	QVERIFY(c2->valueAt(2) == 3.);
 
-	CHECK_RANGE(plot, curve, x, 1, 2);
-	CHECK_RANGE(plot, curve, y, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 2);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 3);
 }
 
 void CartesianPlotTest::changeData4() {
@@ -235,8 +235,8 @@ void CartesianPlotTest::changeData4() {
 	QVERIFY(c1->valueAt(2) == 3.);
 	QVERIFY(c2->valueAt(2) == 3.);
 
-	CHECK_RANGE(plot, curve, x, 1, 3);
-	CHECK_RANGE(plot, curve, y, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 3);
 }
 
 void CartesianPlotTest::changeData5() {
@@ -249,8 +249,8 @@ void CartesianPlotTest::changeData5() {
 	QVERIFY(c1->valueAt(2) == 3.);
 	QVERIFY(c2->valueAt(2) == 2.);
 
-	CHECK_RANGE(plot, curve, x, 1, 3);
-	CHECK_RANGE(plot, curve, y, 1, 2);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 2);
 }
 
 void CartesianPlotTest::changeData6() {
@@ -263,8 +263,8 @@ void CartesianPlotTest::changeData6() {
 	QVERIFY(c1->valueAt(2) == 2.);
 	QVERIFY(c2->valueAt(2) == 3.);
 
-	CHECK_RANGE(plot, curve, x, 1, 2);
-	CHECK_RANGE(plot, curve, y, 1, 3);
+	CHECK_RANGE(plot, curve, Direction::X, 1, 2);
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 3);
 }
 
 // check deleting curve
@@ -275,8 +275,8 @@ void CartesianPlotTest::deleteCurveAutoscale() {
 	// delete curve in plot
 	plot->removeChild(curve2);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 0.45);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 0.45);
 }
 
 void CartesianPlotTest::deleteCurveNoAutoscale() {
@@ -284,14 +284,14 @@ void CartesianPlotTest::deleteCurveNoAutoscale() {
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
 	plot->enableAutoScale(Direction::Y, cs->index(Direction::Y), false, false);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 	// delete curve in plot
 	plot->removeChild(curve2);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 	QCOMPARE(plot->autoScale(Direction::Y, cs->index(Direction::Y)), false);
 }
@@ -301,8 +301,8 @@ void CartesianPlotTest::invisibleCurveAutoscale() {
 
 	curve2->setVisible(false);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 0.45);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 0.45);
 }
 
 void CartesianPlotTest::invisibleCurveNoAutoscale() {
@@ -310,13 +310,13 @@ void CartesianPlotTest::invisibleCurveNoAutoscale() {
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
 	plot->enableAutoScale(Direction::Y, cs->index(Direction::Y), false, false);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 	curve2->setVisible(false);
 
-	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);
+	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 	QCOMPARE(plot->autoScale(Direction::Y, cs->index(Direction::Y)), false);
 }
@@ -332,8 +332,8 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 	equationData.max = "10";
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
-	CHECK_RANGE(plot, curve2, y, 0, 10);
+	CHECK_RANGE(plot, curve2, Direction::X, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
+	CHECK_RANGE(plot, curve2, Direction::Y, 0, 10);
 
 	QCOMPARE(plot->autoScale(Direction::Y, cs->index(Direction::Y)), true);
 }
@@ -350,8 +350,8 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	equationData.max = "10";
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
-	CHECK_RANGE(plot, curve2, y, 0, 1);
+	CHECK_RANGE(plot, curve2, Direction::X, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
+	CHECK_RANGE(plot, curve2, Direction::Y, 0, 1);
 
 	QCOMPARE(plot->autoScale(Direction::Y, cs->index(Direction::Y)), false);
 }

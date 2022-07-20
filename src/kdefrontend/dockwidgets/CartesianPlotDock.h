@@ -35,8 +35,6 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 	void updateRangeList(Direction dir);
-	void updateXRangeList();
-	void updateYRangeList();
 	void updatePlotRangeList();
 
 private:

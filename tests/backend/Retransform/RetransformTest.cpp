@@ -503,7 +503,7 @@ void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, b
 	logsRetransformed.append({sender, suppressed});
 }
 
-void RetransformCallCounter::retransformXScaleCalled(const CartesianPlot* plot, Direction dir, int index) {
+void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, Direction dir, int index) {
 	switch(dir) {
 		case Direction::X: logsXScaleRetransformed.append({plot, index}); break;
 		case Direction::Y: logsYScaleRetransformed.append({plot, index}); break;

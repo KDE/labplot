@@ -25,8 +25,8 @@ extern "C" {
 	VALUES_EQUAL(range.start(), start_)                                                                                                                        \
 	VALUES_EQUAL(range.end(), end_)
 
-#define CHECK_RANGE(plot, aspect, xy, start_, end_)                                                                                                            \
-	RANGE_CORRECT(plot->xy##Range(plot->coordinateSystem(aspect->coordinateSystemIndex())->xy##Index()), start_, end_)
+#define CHECK_RANGE(plot, aspect, dir, start_, end_)                                                                                                            \
+	RANGE_CORRECT(plot->range(dir, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dir)), start_, end_)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \

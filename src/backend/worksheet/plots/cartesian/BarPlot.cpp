@@ -217,7 +217,7 @@ double BarPlot::maximum(Direction dir) const {
 		case Direction::X: return d->xMax;
 		case Direction::Y: return d->yMax;
 	}
-	DEBUG("BarPlot::minimum ERROR: unhandled case!")
+	DEBUG("BarPlot::maximum ERROR: unhandled case!")
 	return NAN;
 }
 

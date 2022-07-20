@@ -352,7 +352,7 @@ double BoxPlot::maximum(Direction dir) const {
 		case Direction::X: return d->xMax;
 		case Direction::Y: return d->yMax;
 	}
-	DEBUG("BoxPlot::minimum ERROR: unhandled case!")
+	DEBUG("BoxPlot::maximum ERROR: unhandled case!")
 	return NAN;
 }
 
