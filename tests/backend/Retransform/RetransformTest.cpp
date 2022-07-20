@@ -27,86 +27,12 @@ do {\
 	}\
 } while (false)
 
-QHash<QString, int> RetransformTest::statistic(bool includeSuppressed) {
-	QHash<QString, int> result;
-	for (auto& log: logsRetransformed) {
-		const auto& path = log.aspect->path();
-		if (!includeSuppressed && log.suppressed)
-			continue;
-
-		if (!result.contains(path))
-			result.insert(path, 1);
-		else
-			result.insert(path, result.take(path) + 1);
-	}
-	return result;
-}
-
-int RetransformTest::elementLogCount(bool includeSuppressed) {
-	return statistic(includeSuppressed).count();
-}
-
-bool RetransformTest::calledExact(int requiredCallCount, bool includeSuppressed) {
-
-	const auto& result = statistic(includeSuppressed);
-	QHash<QString, int>::const_iterator i;
-	for (i = result.constBegin(); i != result.constEnd(); ++i) {
-		if (i.value() != requiredCallCount)  {
-			qDebug() << "Expected CallCount: " << requiredCallCount << ", Current: " << i.value() << ". " << i.key();
-			return false;
-		}
-	}
-	return true;
-}
-
-int RetransformTest::callCount(const QString& path, bool includeSuppressed) {
-	const auto& result = statistic(includeSuppressed);
-	if (!result.contains(path))
-		return 0;
-
-	return result.value(path);
-}
-
-int RetransformTest::callCount(const AbstractAspect* aspect, bool includeSuppressed) {
-	int count = 0;
-	for (auto& suppressed: aspect->readRetransformCalled()) {
-		if (suppressed && !includeSuppressed)
-			continue;
-		count += 1;
-	}
-	return count;
-}
-
-void RetransformTest::resetRetransformCount() {
-	logsRetransformed.clear();
-	logsXScaleRetransformed.clear();
-	logsYScaleRetransformed.clear();
-}
-
-void RetransformTest::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
-
-	logsRetransformed.append({sender, suppressed});
-}
-
-void RetransformTest::retransformXScaleCalled(const CartesianPlot* plot, int index) {
-	logsXScaleRetransformed.append({plot, index});
-}
-
-void RetransformTest::retransformYScaleCalled(const CartesianPlot* plot, int index) {
-	logsYScaleRetransformed.append({plot, index});
-}
-
-
-void RetransformTest::aspectAdded(const AbstractAspect* aspect) {
-	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
-}
-
 void RetransformTest::TestLoadProject() {
-	resetRetransformCount(); // Must be called before every test
+	RetransformCallCounter c;
 	Project project;
 
 	// Does not work during load.
-	//connect(&project, &Project::aspectAdded, this, &RetransformTest::aspectAdded);
+	//connect(&project, &Project::aspectAdded, &c, &RetransformCallCounter::aspectAdded);
 
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
@@ -135,12 +61,12 @@ void RetransformTest::TestLoadProject() {
 		const QString& path = child->path();
 		if (h.contains(path))
 			expectedCallCount = h.value(path);
-		COMPARE(callCount(child, false), expectedCallCount, path);
+		COMPARE(c.callCount(child, false), expectedCallCount, path);
 	}
 }
 
 void RetransformTest::TestResizeWindows() {
-	resetRetransformCount(); // Must be called before every test
+	RetransformCallCounter c;
 	Project project;
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
 
@@ -153,7 +79,7 @@ void RetransformTest::TestResizeWindows() {
 	view->processResize();
 
 	for (const auto& child: project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive))
-		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	view->resize(1000, 1000);
 	view->processResize();
@@ -179,10 +105,10 @@ void RetransformTest::TestResizeWindows() {
 		{"Project/Worksheet/plot2/xy-curve", 1}
 	};
 
-	QCOMPARE(elementLogCount(false), h.count());
+	QCOMPARE(c.elementLogCount(false), h.count());
 	QHash<QString, int>::const_iterator i;
 	for (i = h.constBegin(); i != h.constEnd(); ++i)
-		QCOMPARE(callCount(i.key(), false), 1);
+		QCOMPARE(c.callCount(i.key(), false), 1);
 }
 
 /*!
@@ -191,7 +117,7 @@ void RetransformTest::TestResizeWindows() {
  * also the number of calls of the retransforms
  */
 void RetransformTest::TestZoomSelectionAutoscale() {
-	resetRetransformCount(); // Must be called before every test
+	RetransformCallCounter c;
 	Project project;
 
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
@@ -222,11 +148,11 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	// XYCurve "xy-curve"
 	QCOMPARE(children.length(), 22);
 	for (const auto& child: children)
-		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
 	}
 
 	auto* worksheet = project.child<Worksheet>(0);
@@ -247,26 +173,26 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));                                                                                                                         \
 	view->cartesianPlotMouseModeChanged(&a);
 
-	QCOMPARE(elementLogCount(false), 0);
-	QVERIFY(calledExact(0, false));
+	QCOMPARE(c.elementLogCount(false), 0);
+	QVERIFY(c.calledExact(0, false));
 
 	emit plot->mousePressZoomSelectionModeSignal(QPointF(0.2, -150));
 	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(0.6, 100));
 	emit plot->mouseReleaseZoomSelectionModeSignal();
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
-	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsXScaleRetransformed.at(1).plot, plot2);
-	QCOMPARE(logsXScaleRetransformed.at(1).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
-	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
-	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
-	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(2).plot, plot2);
+	QCOMPARE(c.logsYScaleRetransformed.at(2).index, 0);
 
 	// Check that every element is exactly called once
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
@@ -286,32 +212,32 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	 "Project/Worksheet/plot2/x",
 	 "Project/Worksheet/plot2/y",
 	 "Project/Worksheet/plot2/xy-curve",};
-	QCOMPARE(elementLogCount(false), list.count());
+	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s: list)
-		QCOMPARE(callCount(s, false), 1);
+		QCOMPARE(c.callCount(s, false), 1);
 
-	resetRetransformCount();
+	c.resetRetransformCount();
 	view->selectItem(plot->graphicsItem());
 	a.setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
 	view->cartesianPlotNavigationChanged(&a);
 
-	QCOMPARE(elementLogCount(false), list.count());
+	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s: list)
-		QCOMPARE(callCount(s, false), 1);
+		QCOMPARE(c.callCount(s, false), 1);
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
-	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsXScaleRetransformed.at(1).plot, plot2);
-	QCOMPARE(logsXScaleRetransformed.at(1).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
-	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
-	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
-	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(2).plot, plot2);
+	QCOMPARE(c.logsYScaleRetransformed.at(2).index, 0);
 }
 
 /*!
@@ -319,7 +245,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
  * Check that during a padding change retransform and retransform scale is called
  */
 void RetransformTest::TestPadding() {
-	resetRetransformCount(); // Must be called before every test
+	RetransformCallCounter c;
 	Project project;
 
 	project.load(QFINDTESTDATA(QLatin1String("data/p1.lml")));
@@ -350,11 +276,11 @@ void RetransformTest::TestPadding() {
 	// XYCurve "xy-curve"
 	QCOMPARE(children.length(), 22);
 	for (const auto& child: children)
-		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
 	}
 
 	auto* worksheet = project.child<Worksheet>(0);
@@ -384,21 +310,21 @@ void RetransformTest::TestPadding() {
 	double hPad = plot->horizontalPadding();
 	plot->setHorizontalPadding(hPad + 10);
 
-	QCOMPARE(elementLogCount(false), list.count());
+	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s: list)
-		QCOMPARE(callCount(s, false), 1);
+		QCOMPARE(c.callCount(s, false), 1);
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 1);
-	QCOMPARE(logsXScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
-	QCOMPARE(logsYScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 2); // there are two vertical ranges (sin,cos and tan range)
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
 
-	resetRetransformCount();
+	c.resetRetransformCount();
 
 	list = QStringList({
 		 // data rect of the plot does not change, so retransforming the
@@ -414,13 +340,13 @@ void RetransformTest::TestPadding() {
 		 "Project/Worksheet/xy-plot/plotImage"});
 	plot->navigate(-1, CartesianPlot::NavigationOperation::ScaleAuto);
 
-	QCOMPARE(elementLogCount(false), list.count());
+	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s: list)
-		QCOMPARE(callCount(s, false), 1);
+		QCOMPARE(c.callCount(s, false), 1);
 
 	// x and y are already scaled due to the change of padding
-	QCOMPARE(logsXScaleRetransformed.count(), 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 }
 
 void RetransformTest::TestCopyPastePlot() {
@@ -438,7 +364,7 @@ void RetransformTest::TestCopyPastePlot() {
 	QVERIFY(ws2 != nullptr);
 	project.addChild(ws2);
 
-	resetRetransformCount();
+	RetransformCallCounter c;
 
 	p->copy();
 	ws2->paste(true);
@@ -447,7 +373,7 @@ void RetransformTest::TestCopyPastePlot() {
 	QCOMPARE(plots.count(), 1);
 
 	// Check that the plot was retransformed after pasting
-	QCOMPARE(callCount(plots.at(0), false), 1);
+	QCOMPARE(c.callCount(plots.at(0), false), 1);
 }
 
 void RetransformTest::TestAddCurve() {
@@ -461,12 +387,12 @@ void RetransformTest::TestAddCurve() {
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	resetRetransformCount();
+	RetransformCallCounter c;
 
 	p->addEquationCurve();
 
 	// check that plot will be recalculated if a curve will be added
-	QCOMPARE(callCount(p, false), 1);
+	QCOMPARE(c.callCount(p, false), 1);
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
@@ -477,14 +403,14 @@ void RetransformTest::TestAddCurve() {
 	// Project/Worksheet/plot/f(x) // equation curve
 	QCOMPARE(children.length(), 5);
 	for (const auto& child: children)
-		connect(child, &AbstractAspect::retransformCalledSignal, this, &RetransformTest::aspectRetransformed);
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, this, &RetransformTest::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, this, &RetransformTest::retransformYScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
 	}
 
-	resetRetransformCount();
+	c.resetRetransformCount();
 
 	auto equationCurves = p->children(AspectType::XYEquationCurve);
 	QCOMPARE(equationCurves.count(), 1);
@@ -502,17 +428,95 @@ void RetransformTest::TestAddCurve() {
 			   "Project/Worksheet/plot/x",
 			   "Project/Worksheet/plot/y",
 			   "Project/Worksheet/plot/f(x)"});
-	QCOMPARE(elementLogCount(false), list.count());
+	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s: list)
-		QCOMPARE(callCount(s, false), 1);
+		QCOMPARE(c.callCount(s, false), 1);
 
 	// x and y are called only once
-	QCOMPARE(logsXScaleRetransformed.count(), 1);
-	QCOMPARE(logsXScaleRetransformed.at(0).plot, p);
-	QCOMPARE(logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(logsYScaleRetransformed.count(), 1);
-	QCOMPARE(logsYScaleRetransformed.at(0).plot, p);
-	QCOMPARE(logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+}
+
+// ############################################################################################
+// ############################################################################################
+// ############################################################################################
+
+QHash<QString, int> RetransformCallCounter::statistic(bool includeSuppressed) {
+	QHash<QString, int> result;
+	for (auto& log: logsRetransformed) {
+		const auto& path = log.aspect->path();
+		if (!includeSuppressed && log.suppressed)
+			continue;
+
+		if (!result.contains(path))
+			result.insert(path, 1);
+		else
+			result.insert(path, result.take(path) + 1);
+	}
+	return result;
+}
+
+int RetransformCallCounter::elementLogCount(bool includeSuppressed) {
+	return statistic(includeSuppressed).count();
+}
+
+bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSuppressed) {
+
+	const auto& result = statistic(includeSuppressed);
+	QHash<QString, int>::const_iterator i;
+	for (i = result.constBegin(); i != result.constEnd(); ++i) {
+		if (i.value() != requiredCallCount)  {
+			qDebug() << "Expected CallCount: " << requiredCallCount << ", Current: " << i.value() << ". " << i.key();
+			return false;
+		}
+	}
+	return true;
+}
+
+int RetransformCallCounter::callCount(const QString& path, bool includeSuppressed) {
+	const auto& result = statistic(includeSuppressed);
+	if (!result.contains(path))
+		return 0;
+
+	return result.value(path);
+}
+
+int RetransformCallCounter::callCount(const AbstractAspect* aspect, bool includeSuppressed) {
+	int count = 0;
+	for (auto& suppressed: aspect->readRetransformCalled()) {
+		if (suppressed && !includeSuppressed)
+			continue;
+		count += 1;
+	}
+	return count;
+}
+
+void RetransformCallCounter::resetRetransformCount() {
+	logsRetransformed.clear();
+	logsXScaleRetransformed.clear();
+	logsYScaleRetransformed.clear();
+}
+
+void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, bool suppressed) {
+
+	logsRetransformed.append({sender, suppressed});
+}
+
+void RetransformCallCounter::retransformXScaleCalled(const CartesianPlot* plot, int index) {
+	logsXScaleRetransformed.append({plot, index});
+}
+
+void RetransformCallCounter::retransformYScaleCalled(const CartesianPlot* plot, int index) {
+	logsYScaleRetransformed.append({plot, index});
+}
+
+
+void RetransformCallCounter::aspectAdded(const AbstractAspect* aspect) {
+	connect(aspect, &AbstractAspect::retransformCalledSignal, this, &RetransformCallCounter::aspectRetransformed);
 }
 
 // Test change data

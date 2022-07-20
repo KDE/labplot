@@ -16,10 +16,36 @@
 class RetransformTest : public CommonTest {
 	Q_OBJECT
 
-private:
-	void resetRetransformCount();
+// Tests
+private Q_SLOTS:
+	void TestLoadProject();
+	void TestResizeWindows();
+	void TestZoomSelectionAutoscale();
+	void TestPadding();
+	void TestCopyPastePlot();
+	void TestAddCurve();
+};
+
+/*!
+ * \brief The RetransformCallCounter class
+ * Used to count the retransform calls to evaluate that
+ * the items retransform are called a exact number of times
+ */
+class RetransformCallCounter: public QObject {
+	Q_OBJECT
+public:
 	QHash<QString, int> statistic(bool includeSuppressed);
 	int elementLogCount(bool includeSuppressed);
+	bool calledExact(int requiredCallCount, bool includeSuppressed);
+	int callCount(const QString& path, bool includeSuppressed);
+	int callCount(const AbstractAspect* aspect, bool includeSuppressed);
+	void resetRetransformCount();
+	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
+	void retransformXScaleCalled(const CartesianPlot* plot, int index);
+	void retransformYScaleCalled(const CartesianPlot* plot, int index);
+	void aspectAdded(const AbstractAspect* aspect);
+
+public:
 	struct Retransformed {
 		const AbstractAspect* aspect;
 		bool suppressed;
@@ -29,33 +55,9 @@ private:
 		const CartesianPlot* plot;
 		int index;
 	};
-
-	bool calledExact(int requiredCallCount, bool includeSuppressed);
-	int callCount(const QString& path, bool includeSuppressed);
-	int callCount(const AbstractAspect *aspect, bool includeSuppressed);
-
 	QVector<Retransformed> logsRetransformed;
 	QVector<ScaleRetransformed> logsXScaleRetransformed;
 	QVector<ScaleRetransformed> logsYScaleRetransformed;
-
-
-
-// helper functions
-private Q_SLOTS:
-	void aspectAdded(const AbstractAspect* aspect);
-	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
-	void retransformXScaleCalled(const CartesianPlot* plot, int index);
-	void retransformYScaleCalled(const CartesianPlot* plot, int index);
-
-// Tests
-private Q_SLOTS:
-	void TestLoadProject();
-	void TestResizeWindows();
-	void TestZoomSelectionAutoscale();
-	void TestPadding();
-	void TestCopyPastePlot();
-	void TestAddCurve();
-	
 };
 
 #endif // RETRANSFORMTEST_H
