@@ -65,13 +65,13 @@ private Q_SLOTS:
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
-	void autoScaleChanged(const Direction, bool);
-	void rangeChanged(Direction, const Range<double>&);
-	void minDateTimeChanged(const Direction, const QDateTime&);
-	void maxDateTimeChanged(const Direction, const QDateTime&);
+	void autoScaleChanged(const QObject *sender, const Direction, bool);
+	void rangeChanged(const QObject *sender, Direction, const Range<double>&);
+	void minDateTimeChanged(const QObject* sender, const Direction, const QDateTime&);
+	void maxDateTimeChanged(const QObject *sender, const Direction, const QDateTime&);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
-	void rangeFormatChanged(Direction dir, int index);
-	void scaleChanged(Direction dir, int);
+	void rangeFormatChanged(const QObject *sender, Direction dir, int index);
+	void scaleChanged(const QObject *sender, Direction dir, int);
 	void addXRange();
 	void addYRange();
 	void removeRange(const Direction dir);
@@ -80,8 +80,8 @@ private Q_SLOTS:
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void minChanged(const Direction dir, const QString& value);
-	void maxChanged(const Direction dir, const QString& value);
+	void minChanged(const QObject* sender, const Direction dir, const QString& value);
+	void maxChanged(const QObject *sender, const Direction dir, const QString& value);
 	// void yRangeDateTimeChanged(const Range<quint64>&);
 
 	//"Range Breaks"-tab

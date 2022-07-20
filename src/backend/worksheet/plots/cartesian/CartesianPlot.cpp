@@ -2733,7 +2733,7 @@ void CartesianPlot::calculateDataRange(const Direction dir, const int index, boo
 	Q_D(CartesianPlot);
 
 	d->dataRange(dir, index).setRange(qInf(), -qInf());
-	auto range{d->range(dir, index)}; // value does not matter, will be overwritten
+	auto range{d->range(dir, index)}; // get reference to range from private
 
 	// loop over all xy-curves and determine the maximum and minimum dir-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -3359,7 +3359,7 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 
 				// current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
 				sceneRange.start() = sceneEndLast;
-				if (&rb == &yRangeBreaks.list.first())
+				if (&rb == &rangeBreaks(dir).list.first())
 					sceneRange.start() -= breakGap;
 				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
@@ -3382,33 +3382,47 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 	}
 
 	// Set ranges in the axis
-	for (int i = 0; i < yRanges.count(); i++) {
-		auto& rangep = yRanges[i];
-		const double deltaYMin = rangep.range.start() - rangep.prev.start();
-		const double deltaYMax = rangep.range.end() - rangep.prev.end();
+	for (int i = 0; i < q->rangeCount(dir); i++) {
+		auto& rangep = ranges(dir)[i];
+		const double deltaMin = rangep.range.start() - rangep.prev.start();
+		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
-		if (!qFuzzyIsNull(deltaYMin))
-			Q_EMIT q->yMinChanged(i, rangep.range.start());
-		if (!qFuzzyIsNull(deltaYMax))
-			Q_EMIT q->yMaxChanged(i, rangep.range.end());
+		switch(dir) {
+		case Direction::X: {
+			if (!qFuzzyIsNull(deltaMin))
+				Q_EMIT q->xMinChanged(i, rangep.range.start());
+			if (!qFuzzyIsNull(deltaMax))
+				Q_EMIT q->xMaxChanged(i, rangep.range.end());
+			break;
+		} case Direction::Y: {
+			if (!qFuzzyIsNull(deltaMin))
+				Q_EMIT q->yMinChanged(i, rangep.range.start());
+			if (!qFuzzyIsNull(deltaMax))
+				Q_EMIT q->yMaxChanged(i, rangep.range.end());
+			break;
+		} default: DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
+		}
 
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
 			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << STDSTRING(axis->name()) << "\"")
 			// use ranges of axis
-			int axisYIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dir);
-			if (axis->rangeType() != Axis::RangeType::Auto || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)
+			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dir);
+			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
+				continue;
+			if ((dir == Direction::Y && axis->orientation() != Axis::Orientation::Vertical) ||
+				 (dir == Direction::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaYMax)) {
+			if (!qFuzzyIsNull(deltaMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setEnd(rangep.range.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-			if (!qFuzzyIsNull(deltaYMin)) {
+			if (!qFuzzyIsNull(deltaMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setStart(rangep.range.start());

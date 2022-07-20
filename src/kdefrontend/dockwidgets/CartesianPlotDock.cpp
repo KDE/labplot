@@ -651,7 +651,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		chk->setChecked(r.autoScale());
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
-		connect(chk, &QCheckBox::toggled, [this, dir](bool checked) {this->autoScaleChanged(dir, checked);});
+		connect(chk, &QCheckBox::toggled, [this, chk, dir](bool checked) {this->autoScaleChanged(chk, dir, checked);});
 
 		// format
 		auto* cb = new ComboBoxIgnoreWheel(tw);
@@ -660,7 +660,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		tw->setCellWidget(i, TwRangesColumn::Format, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir](int index) {this->rangeFormatChanged(dir, index);});
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {this->rangeFormatChanged(cb, dir, index);});
 
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
@@ -668,13 +668,13 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Min, le);
-			connect(le, &QLineEdit::textChanged, [this, dir](const QString& text) {this->minChanged(dir, text);});
+			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {this->minChanged(le, dir, text);});
 			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(tw);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Max, le);
-			connect(le, &QLineEdit::textChanged, [this, dir](const QString& text) {this->maxChanged(dir, text);});
+			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {this->maxChanged(le, dir, text);});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
@@ -683,7 +683,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir](const QDateTime &dateTime) {this->minDateTimeChanged(dir, dateTime);});
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime &dateTime) {this->minDateTimeChanged(dte, dir, dateTime);});
 			dte = new QDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
 			dte->setTimeSpec(Qt::UTC);
@@ -691,7 +691,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir](const QDateTime &dateTime) {this->maxDateTimeChanged(dir, dateTime);});
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime &dateTime) {this->maxDateTimeChanged(dte, dir, dateTime);});
 		}
 
 		// scale
@@ -703,7 +703,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
 		tw->setCellWidget(i, TwRangesColumn::Scale, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir] (int index) {this->scaleChanged(dir, index);});
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb] (int index) {this->scaleChanged(cb, dir, index);});
 	}
 	tw->resizeColumnToContents(1);
 
@@ -935,14 +935,13 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 	}
 }
 
-void CartesianPlotDock::autoScaleChanged(const Direction dir, bool state) {
+void CartesianPlotDock::autoScaleChanged(const QObject *sender, const Direction dir, bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
 
 	Lock lock(m_initializing);
-
-	const int rangeIndex{sender()->property("row").toInt()}; // TODO: is sender still valid here?
+	const int rangeIndex{sender->property("row").toInt()}; // TODO: is sender still valid here?
 	DEBUG(Q_FUNC_INFO << ", range index: " << rangeIndex)
 
 	autoScaleRange(dir, rangeIndex, state);
@@ -991,7 +990,7 @@ void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, boo
 	updateRangeList(dir); // see range changes
 }
 
-void CartesianPlotDock::minChanged(const Direction dir, const QString& value) {
+void CartesianPlotDock::minChanged(const QObject *sender, const Direction dir, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
@@ -1009,7 +1008,7 @@ void CartesianPlotDock::minChanged(const Direction dir, const QString& value) {
 	const double min = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x/y range
-		const int index{sender()->property("row").toInt()};
+		const int index{sender->property("row").toInt()};
 		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
@@ -1023,7 +1022,7 @@ void CartesianPlotDock::minChanged(const Direction dir, const QString& value) {
 	}
 }
 
-void CartesianPlotDock::maxChanged(const Direction dir, const QString& value) {
+void CartesianPlotDock::maxChanged(const QObject* sender, const Direction dir, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
@@ -1041,7 +1040,7 @@ void CartesianPlotDock::maxChanged(const Direction dir, const QString& value) {
 	const double max = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x/y range
-		const int index{sender()->property("row").toInt()};
+		const int index{sender->property("row").toInt()};
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(max, plot->range(dir, index).end())) {
@@ -1054,38 +1053,38 @@ void CartesianPlotDock::maxChanged(const Direction dir, const QString& value) {
 	}
 }
 
-void CartesianPlotDock::rangeChanged(const Direction dir, const Range<double>& range) {
+void CartesianPlotDock::rangeChanged(const QObject* sender, const Direction dir, const Range<double>& range) {
 	if (m_initializing)
 		return;
 
 	// selected x range
-	const int index{sender()->property("row").toInt()};
+	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", range index: " << index)
 	for (auto* plot : m_plotList)
 		plot->setRange(dir, index, range);
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::minDateTimeChanged(const Direction dir, const QDateTime& dateTime) {
+void CartesianPlotDock::minDateTimeChanged(const QObject *sender, const Direction dir, const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
-	const int index{sender()->property("row").toInt()};
+	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
 		plot->setMin(dir, index, value);
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::maxDateTimeChanged(const Direction dir, const QDateTime& dateTime) {
+void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Direction dir, const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
-	const int index{sender()->property("row").toInt()};
+	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
 		plot->setMax(dir, index, value);
@@ -1095,19 +1094,19 @@ void CartesianPlotDock::maxDateTimeChanged(const Direction dir, const QDateTime&
 /*!
  *  called on scale changes (linear, log) for the x-/y-axis
  */
-void CartesianPlotDock::scaleChanged(Direction dir, int index) {
+void CartesianPlotDock::scaleChanged(const QObject* sender, Direction dir, int index) {
 	if (m_initializing)
 		return;
 
-	const int rangeIndex{sender()->property("row").toInt()};
+	const int rangeIndex{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", range " << rangeIndex << " scale changed to " << ENUM_TO_STRING(RangeT, Scale, index))
 	const auto scale{static_cast<RangeT::Scale>(index)};
 	for (auto* plot : m_plotList)
 		plot->setRangeScale(dir, rangeIndex, scale);
 }
 
-void CartesianPlotDock::rangeFormatChanged(Direction dir, int index) {
-	const int rangeIndex{sender()->property("row").toInt()};
+void CartesianPlotDock::rangeFormatChanged(const QObject* sender, Direction dir, int index) {
+	const int rangeIndex{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range " << rangeIndex + 1 << " format = " << index)
 
 	if (m_initializing)

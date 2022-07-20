@@ -62,7 +62,7 @@ public:
 		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
 	};
 
-	QVector<RichRange> ranges(const Direction dir) {
+	QVector<RichRange>& ranges(const Direction dir) {
 		switch(dir) {
 			case Direction::X:
 				return xRanges;
