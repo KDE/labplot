@@ -846,9 +846,9 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		// to make sure we have every tick precisely under the middle of the box plot
 		Range<double> range(0.5, count + 0.5);
 		if (orientation == WorksheetElement::Orientation::Vertical)
-			plot->setXRange(range);
+			plot->setRange(Direction::X, range);
 		else
-			plot->setYRange(range);
+			plot->setRange(Direction::Y, range);
 
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {

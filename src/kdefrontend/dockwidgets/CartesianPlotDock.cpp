@@ -1135,7 +1135,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(xMin, plot->range(Direction::X, index).start())) {
-				plot->setXMin(index, xMin);
+				plot->setMin(Direction::X, index, xMin);
 				changed = true;
 			}
 
@@ -1159,7 +1159,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(yMin, plot->range(Direction::Y, index).start())) {
-				plot->setYMin(index, yMin);
+				plot->setMin(Direction::Y, index, yMin);
 				changed = true;
 			}
 
@@ -1184,7 +1184,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(xMax, plot->range(Direction::X, index).end())) {
-				plot->setXMax(index, xMax);
+				plot->setMax(Direction::X, index, xMax);
 				changed = true;
 			}
 
@@ -1208,7 +1208,7 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(yMax, plot->range(Direction::Y, index).end())) {
-				plot->setYMax(index, yMax);
+				plot->setMax(Direction::Y, index, yMax);
 				changed = true;
 			}
 
@@ -1225,7 +1225,7 @@ void CartesianPlotDock::xRangeChanged(const Range<double>& range) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setXRange(index, range);
+		plot->setRange(Direction::X, index, range);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yRangeChanged(const Range<double>& range) {
@@ -1236,7 +1236,7 @@ void CartesianPlotDock::yRangeChanged(const Range<double>& range) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", y range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setYRange(index, range);
+		plot->setRange(Direction::Y, index, range);
 	updatePlotRangeList();
 }
 
@@ -1249,7 +1249,7 @@ void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setXMin(index, value);
+		plot->setMin(Direction::X, index, value);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
@@ -1261,7 +1261,7 @@ void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", y range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setYMin(index, value);
+		plot->setMin(Direction::Y, index, value);
 	updatePlotRangeList();
 }
 
@@ -1274,7 +1274,7 @@ void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setXMax(index, value);
+		plot->setMax(Direction::X, index, value);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
@@ -1286,7 +1286,7 @@ void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
 	const int index{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", y range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setYMax(index, value);
+		plot->setMax(Direction::Y, index, value);
 	updatePlotRangeList();
 }
 

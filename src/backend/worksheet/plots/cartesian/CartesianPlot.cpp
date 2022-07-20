@@ -1278,15 +1278,9 @@ const Range<double>& CartesianPlot::range(const Direction dir, int index) const 
 	return d->rangeConst(dir, index);
 }
 
-// sets x range of default plot range
-void CartesianPlot::setXRange(const Range<double> range) {
+void CartesianPlot::setRange(Direction dir, const Range<double> range) {
 	const int index{defaultCoordinateSystem()->index(Direction::X)};
-	setXRange(index, range);
-}
-// sets y range of default plot range
-void CartesianPlot::setYRange(const Range<double> range) {
-	const int index{defaultCoordinateSystem()->index(Direction::Y)};
-	setYRange(index, range);
+	setRange(dir, index, range);
 }
 
 class CartesianPlotSetRangeIndexCmd : public QUndoCommand {
@@ -1319,41 +1313,29 @@ private:
 	int m_index;                                                                                                                                           \
 };
 
-void CartesianPlot::setXRange(const int index, const Range<double>& range) {
+void CartesianPlot::setRange(const Direction dir, const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
-	auto r = d->checkRange(range);
-	if (index >= 0 && index < d->xRanges.count() && r.finite() && r != d->xRanges.at(index).range) {
-		d->yRanges[index].dirty = true;
-		exec(new CartesianPlotSetRangeIndexCmd(d, Direction::X, r, index));
-		QVector<int> scaledIndices;
-		for (int i = 0; i < coordinateSystemCount(); i++) {
-			auto cs = coordinateSystem(i);
-			auto yIndex = cs->index(Direction::Y);
-			if (cs->index(Direction::X) == index && scaledIndices.indexOf(yIndex) == -1) {
-				scaledIndices << yIndex;
-				if (autoScale(Direction::Y, yIndex) && scaleAuto(Direction::Y, yIndex, false))
-					d->retransformScale(Direction::Y, yIndex);
-			}
-		}
-		WorksheetElementContainer::retransform();
-	}
-}
-
-void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
-	Q_D(CartesianPlot);
+
+	Direction dir_other;
+	switch (dir) {
+		case Direction::X: dir_other = Direction::Y; break;
+		case Direction::Y: dir_other = Direction::X; break;
+		default: DEBUG("CartesianPlot::setRange ERROR unhandled direction"); return;
+	}
+
 	auto r = d->checkRange(range);
-	DEBUG(Q_FUNC_INFO << ", r = " << r.toStdString() << ", auto scale = " << r.autoScale())
-	if (index >= 0 && index < d->yRanges.count() && r.finite() && r != d->yRanges.at(index).range) {
-		exec(new CartesianPlotSetRangeIndexCmd(d, Direction::Y, r, index));
+	if (index >= 0 && index < rangeCount(dir) && r.finite() && r != d->rangeConst(dir, index)) {
+		d->setRangeDirty(dir_other, index, true);
+		exec(new CartesianPlotSetRangeIndexCmd(d, dir, r, index));
 		QVector<int> scaledIndices;
 		for (int i = 0; i < coordinateSystemCount(); i++) {
 			auto cs = coordinateSystem(i);
-			auto xIndex = cs->index(Direction::X);
-			if (cs->index(Direction::Y) == index && scaledIndices.indexOf(xIndex) == -1) {
-				scaledIndices << xIndex;
-				if (autoScale(Direction::X, xIndex) && scaleAuto(Direction::X, xIndex, false))
-					d->retransformScale(Direction::X, xIndex);
+			auto index_other = cs->index(dir_other);
+			if (cs->index(dir) == index && scaledIndices.indexOf(index_other) == -1) {
+				scaledIndices << index_other;
+				if (autoScale(dir_other, index_other) && scaleAuto(dir_other, index_other, false))
+					d->retransformScale(dir_other, index_other);
 			}
 		}
 		WorksheetElementContainer::retransform();
@@ -1439,35 +1421,21 @@ void CartesianPlot::removeYRange(int index) {
 	if (project())
 		project()->setChanged(true);
 }
-void CartesianPlot::setXMin(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	Range<double> r{range(Direction::X, index)};
+
+void CartesianPlot::setMin(Direction dir, int index, double value) {
+	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::directionToString(dir).toStdString() << "value = " << value)
+	Range<double> r{range(dir, index)};
 	r.setStart(value);
 	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString())
-
-	setXRange(index, r);
+	setRange(dir, index, r);
 }
-void CartesianPlot::setXMax(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index << ", value = " << value)
-	Range<double> r{range(Direction::X, index)};
+
+void CartesianPlot::setMax(Direction dir, int index, double value) {
+	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::directionToString(dir).toStdString() << "value = " << value)
+	Range<double> r{range(dir, index)};
 	r.setEnd(value);
 
-	setXRange(index, r);
-}
-void CartesianPlot::setYMin(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO)
-	Range<double> r{range(Direction::Y, index)};
-	r.setStart(value);
-
-	setYRange(index, r);
-}
-void CartesianPlot::setYMax(const int index, const double value) {
-	Range<double> r{range(Direction::Y, index)};
-	DEBUG(Q_FUNC_INFO << ", old range = " << r.toStdString() << ", auto scale = " << r.autoScale())
-	r.setEnd(value);
-	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString() << ", auto scale = " << r.autoScale())
-
-	setYRange(index, r);
+	setRange(dir, index, r);
 }
 
 // x/y scale
@@ -3700,11 +3668,11 @@ void CartesianPlotPrivate::checkXRange(int index) {
 	const double start = newRange.start(), end = newRange.end();
 	if (start != xRange.start()) {
 		DEBUG(Q_FUNC_INFO << ", old/new start = " << xRange.start() << "/" << start)
-		q->setXMin(index, start);
+		q->setMin(Direction::X, index, start);
 	}
 	if (end != xRange.end()) {
 		DEBUG(Q_FUNC_INFO << ", old/new end = " << xRange.end() << "/" << end)
-		q->setXMax(index, end);
+		q->setMax(Direction::X, index, end);
 	}
 }
 
@@ -3720,11 +3688,11 @@ void CartesianPlotPrivate::checkYRange(int index) {
 	const double start = newRange.start(), end = newRange.end();
 	if (start != yRange.start()) {
 		DEBUG(Q_FUNC_INFO << ", old/new start = " << yRange.start() << "/" << start)
-		q->setYMin(index, start);
+		q->setMin(Direction::Y, index, start);
 	}
 	if (end != yRange.end()) {
 		DEBUG(Q_FUNC_INFO << ", old/new end = " << yRange.end() << "/" << end)
-		q->setYMax(index, end);
+		q->setMax(Direction::Y, index, end);
 	}
 }
 

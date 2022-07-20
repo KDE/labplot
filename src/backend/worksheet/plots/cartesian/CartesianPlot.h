@@ -151,8 +151,8 @@ public:
 
 	int rangeCount(const Direction dir) const;
 	const Range<double>& range(const Direction dir, int index = -1) const; // get range of (default) plot range
-	void setXRange(const Range<double>); // set x range of default plot range
-	void setYRange(const Range<double>); // set y range of default plot range
+	void setRange(Direction, const Range<double>); // set range of default plot range
+	void setRange(const Direction dir, const int index, const Range<double>& range);
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
 	const Range<double>& dataRange(Direction dir, int index = -1);
@@ -165,10 +165,9 @@ public:
 	void removeXRange(int index); // remove selected x range
 	void removeYRange(int index); // remove selected y range
 	// convenience methods
-	void setXMin(int index, double); // set x min of x range index
-	void setXMax(int index, double); // set x max of x range index
-	void setYMin(int index, double); // set y min of y range index
-	void setYMax(int index, double); // set y max of y range index
+
+	void setMin(Direction, int index, double); // set x min of range index
+	void setMax(Direction, int index, double); // set x max of range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
