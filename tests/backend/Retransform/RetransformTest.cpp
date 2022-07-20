@@ -97,8 +97,8 @@ void RetransformTest::TestResizeWindows() {
 		{"Project/Worksheet/xy-plot/legend", 1},
 		{"Project/Worksheet/xy-plot/plotImage", 1},
 		{"Project/Worksheet/xy-plot/plotText", 1},
-		//{"Project/Worksheet/Text Label", 1},
-		//{"Project/Worksheet/Image", 1},
+		{"Project/Worksheet/Text Label", 1},
+		{"Project/Worksheet/Image", 1},
 		{"Project/Worksheet/plot2", 1},
 		{"Project/Worksheet/plot2/x", 1},
 		{"Project/Worksheet/plot2/y", 1},
@@ -228,16 +228,16 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0); // first x axis of first plot
 	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot2);
-	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0); // first x axis of second plot
 	QCOMPARE(c.logsYScaleRetransformed.count(), 3); // there are two vertical ranges (sin,cos and tan range) for the first plot and one y axis for the second plot
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
-	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // first y axis of first plot
 	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1); // second y axis of first plot
 	QCOMPARE(c.logsYScaleRetransformed.at(2).plot, plot2);
-	QCOMPARE(c.logsYScaleRetransformed.at(2).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(2).index, 0); // first y axis of second plot
 }
 
 /*!
