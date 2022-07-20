@@ -158,6 +158,8 @@ void RetransformTest::TestResizeWindows() {
 	view->resize(1000, 1000);
 	view->processResize();
 
+
+	// Check that every element is exactly called once
 	QHash<QString, int> h = {
 		{"Project/Worksheet/xy-plot", 1},
 		{"Project/Worksheet/xy-plot/x", 1},
@@ -169,8 +171,8 @@ void RetransformTest::TestResizeWindows() {
 		{"Project/Worksheet/xy-plot/legend", 1},
 		{"Project/Worksheet/xy-plot/plotImage", 1},
 		{"Project/Worksheet/xy-plot/plotText", 1},
-		{"Project/Worksheet/Text Label", 1},
-		{"Project/Worksheet/Image", 1},
+		//{"Project/Worksheet/Text Label", 1},
+		//{"Project/Worksheet/Image", 1},
 		{"Project/Worksheet/plot2", 1},
 		{"Project/Worksheet/plot2/x", 1},
 		{"Project/Worksheet/plot2/y", 1},
@@ -266,6 +268,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	QCOMPARE(logsYScaleRetransformed.at(2).plot, plot2);
 	QCOMPARE(logsYScaleRetransformed.at(2).index, 0);
 
+	// Check that every element is exactly called once
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
 	 QStringList list = {
 	 "Project/Worksheet/xy-plot/x",
@@ -364,6 +367,7 @@ void RetransformTest::TestPadding() {
 	QVERIFY(plot);
 	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
 
+	// Check that every element is exactly called once
 	// TODO: set to 6. legend should not retransform
 	// plot it self does not change so retransform is not called on cartesianplotPrivate
 	 QStringList list = {

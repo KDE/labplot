@@ -4623,12 +4623,14 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 			q->enableAutoScaleX(xIndex, false);
 			q->enableAutoScaleY(yIndex, false);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
+			q->setXRangeDirty(xIndex, true);
 			q->setYRangeDirty(yIndex, true);
 			q->enableAutoScaleX(xIndex, false);
 			if (q->autoScaleY(yIndex))
 				q->scaleAutoY(yIndex, false, true);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setXRangeDirty(xIndex, true);
+			q->setYRangeDirty(yIndex, true);
 			q->enableAutoScaleY(yIndex, false);
 			if (q->autoScaleX(xIndex))
 				q->scaleAutoX(xIndex, false, true);
