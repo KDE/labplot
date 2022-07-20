@@ -20,6 +20,8 @@
 #include <QPen>
 #include <QStaticText>
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
@@ -51,25 +53,29 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	Range<double>& xRange(int index = -1) {
+	Range<double>& range(const Direction dir, int index = -1) {
 		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		return xRanges[index].range;
+			index = defaultCoordinateSystem()->index(dir);
+		switch(dir) {
+			case Direction::X:
+				return xRanges[index].range;
+			case Direction::Y:
+			default:
+				return yRanges[index].range;
+		}
 	}
-	Range<double>& yRange(int index = -1) {
+
+	Range<double>& dataRange(const Direction dir, int index = -1) {
 		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
-		return yRanges[index].range;
-	}
-	Range<double>& dataXRange(int index = -1) { // get x range of data
-		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		return xRanges[index].dataRange;
-	}
-	Range<double>& dataYRange(int index = -1) { // get y range of data
-		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
-		return yRanges[index].dataRange;
+			index = defaultCoordinateSystem()->index(dir);
+
+		switch(dir) {
+			case Direction::X:
+				return xRanges[index].dataRange;
+			case Direction::Y:
+			default:
+				return yRanges[index].dataRange;
+		}
 	}
 
 	bool autoScaleX(int index = -1) {
@@ -134,7 +140,7 @@ public:
 		Range<double> range; // current range
 		Range<double> prev;
 		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
-		bool dirty{false};
+		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
 	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.

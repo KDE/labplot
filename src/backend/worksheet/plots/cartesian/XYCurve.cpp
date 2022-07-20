@@ -47,6 +47,8 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 XYCURVE_COLUMN_CONNECT(x)
 XYCURVE_COLUMN_CONNECT(y)
 XYCURVE_COLUMN_CONNECT(xErrorPlus)
@@ -1262,8 +1264,8 @@ void XYCurvePrivate::updateLines() {
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->xRange(cs->xIndex())};
-			const auto yRange{plot()->yRange(cs->yIndex())};
+			const auto xRange{plot()->xRange(cs->index(Direction::X))};
+			const auto yRange{plot()->yRange(cs->index(Direction::Y))};
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1273,7 +1275,7 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->xIndex()};
+			const auto xIndex{q->cSystem->index(Direction::X)};
 			const auto xRange{plot()->xRange(xIndex)};
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
@@ -1656,8 +1658,8 @@ void XYCurvePrivate::updateDropLines() {
 	// calculate drop lines
 	QVector<QLineF> dlines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->xRange(cs->xIndex()).start();
-	const double yMin = plot()->yRange(cs->yIndex()).start();
+	const double xMin = plot()->xRange(cs->index(Direction::X)).start();
+	const double yMin = plot()->yRange(cs->index(Direction::Y)).start();
 
 	int i = 0;
 	switch (dropLineType) {
@@ -1758,8 +1760,8 @@ void XYCurvePrivate::updateRug() {
 
 	QVector<QPointF> points;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->xRange(cs->xIndex()).start();
-	const double yMin = plot()->yRange(cs->yIndex()).start();
+	const double xMin = plot()->xRange(cs->index(Direction::X)).start();
+	const double yMin = plot()->yRange(cs->index(Direction::Y)).start();
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
@@ -1821,7 +1823,7 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{plot()->xRange(cs->xIndex()).format()};
+		auto xRangeFormat{plot()->xRange(cs->index(Direction::X)).format()};
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1838,7 +1840,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{plot()->yRange(cs->yIndex()).format()};
+		auto rangeFormat{plot()->yRange(cs->index(Direction::Y)).format()};
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1856,8 +1858,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{plot()->xRange(cs->xIndex()).format()};
-		auto yRangeFormat{plot()->yRange(cs->yIndex()).format()};
+		auto xRangeFormat{plot()->xRange(cs->index(Direction::X)).format()};
+		auto yRangeFormat{plot()->yRange(cs->index(Direction::Y)).format()};
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1902,7 +1904,7 @@ void XYCurvePrivate::updateValues() {
 
 		// need to check x range
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-		auto xRange = plot()->xRange(cs->xIndex());
+		auto xRange = plot()->xRange(cs->index(Direction::X));
 
 		size_t index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
@@ -2062,8 +2064,8 @@ void XYCurvePrivate::updateFilling() {
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->xRange(cs->xIndex())};
-	const auto yRange{plot()->yRange(cs->yIndex())};
+	const auto xRange{plot()->xRange(cs->index(Direction::X))};
+	const auto yRange{plot()->yRange(cs->index(Direction::Y))};
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;

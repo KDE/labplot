@@ -167,8 +167,8 @@ void CartesianPlotTest::initTestCase() {
 	{                                                                                                                                                          \
 		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
 		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->xIndex();                                                                                                \
-		int yIndex = plot->coordinateSystem(cSystem)->yIndex();                                                                                                \
+		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                                \
+		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                                \
                                                                                                                                                                \
 		auto xrange = plot->xRange(xIndex);                                                                                                                    \
 		auto yrange = plot->yRange(yIndex);                                                                                                                    \
@@ -282,7 +282,7 @@ void CartesianPlotTest::deleteCurveAutoscale() {
 void CartesianPlotTest::deleteCurveNoAutoscale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false);
+	plot->enableAutoScaleY(cs->index(Direction::Y), false, false);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
@@ -293,7 +293,7 @@ void CartesianPlotTest::deleteCurveNoAutoscale() {
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
 
-	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+	QCOMPARE(plot->autoScaleY(cs->index(Direction::Y)), false);
 }
 
 void CartesianPlotTest::invisibleCurveAutoscale() {
@@ -308,7 +308,7 @@ void CartesianPlotTest::invisibleCurveAutoscale() {
 void CartesianPlotTest::invisibleCurveNoAutoscale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false);
+	plot->enableAutoScaleY(cs->index(Direction::Y), false, false);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
@@ -318,7 +318,7 @@ void CartesianPlotTest::invisibleCurveNoAutoscale() {
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
 
-	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+	QCOMPARE(plot->autoScaleY(cs->index(Direction::Y)), false);
 }
 
 void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
@@ -335,13 +335,13 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
 	CHECK_RANGE(plot, curve2, y, 0, 10);
 
-	QCOMPARE(plot->autoScaleY(cs->yIndex()), true);
+	QCOMPARE(plot->autoScaleY(cs->index(Direction::Y)), true);
 }
 
 void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
-	plot->enableAutoScaleY(cs->yIndex(), false, false);
+	plot->enableAutoScaleY(cs->index(Direction::Y), false, false);
 
 	QCOMPARE(curve2->type(), AspectType::XYEquationCurve);
 	auto eqc = static_cast<XYEquationCurve*>(curve2);
@@ -353,7 +353,7 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
 	CHECK_RANGE(plot, curve2, y, 0, 1);
 
-	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+	QCOMPARE(plot->autoScaleY(cs->index(Direction::Y)), false);
 }
 
 void CartesianPlotTest::undoInfoElement() {

@@ -41,6 +41,8 @@ enum PositionAlignmentComboBoxIndex {
 };
 }
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 /*!
  \class AxisDock
  \brief Provides a widget for editing the properties of the axes currently selected in the project explorer.
@@ -596,9 +598,9 @@ void AxisDock::updatePlotRanges() {
 	Axis::Orientation orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
-		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
+		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::Y));
 	else
-		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
+		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::X));
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
 }
 
@@ -2283,7 +2285,7 @@ void AxisDock::load() {
 
 	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem = plot->coordinateSystem(m_axis->coordinateSystemIndex());
-	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
+	const int xIndex{cSystem->index(Direction::X)}, yIndex{cSystem->index(Direction::Y)};
 
 	Range<double> logicalRange(0, 0);
 	if (orientation == Axis::Orientation::Horizontal) {

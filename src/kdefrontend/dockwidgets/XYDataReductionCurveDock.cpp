@@ -131,7 +131,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_dataReductionCurve->parentAspect());
-	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
+	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Direction::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		SET_NUMBER_LOCALE

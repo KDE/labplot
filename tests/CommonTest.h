@@ -32,8 +32,8 @@ extern "C" {
 	{                                                                                                                                                          \
 		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
 		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->xIndex();                                                                                                \
-		int yIndex = plot->coordinateSystem(cSystem)->yIndex();                                                                                                \
+		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                                \
+		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                                \
                                                                                                                                                                \
 		auto xrange = plot->xRange(xIndex);                                                                                                                    \
 		auto yrange = plot->yRange(yIndex);                                                                                                                    \

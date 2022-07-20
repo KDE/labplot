@@ -56,6 +56,8 @@ protected:
 };
 }
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 #define CELLWIDGET(treewidget, rangeIndex, Column, castObject, function)                                                                                       \
 	if (rangeIndex < 0) {                                                                                                                                      \
 		for (int i = 0; i < ui.treewidget->rowCount(); i++) {                                                                                                  \
@@ -819,7 +821,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 	ui.twPlotRanges->setRowCount(cSystemCount);
 	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
-		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
+		const int xIndex{cSystem->index(Direction::X)}, yIndex{cSystem->index(Direction::Y)};
 		const auto xRange{m_plot->xRange(xIndex)}, yRange{m_plot->yRange(yIndex)};
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i + 1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
@@ -1043,14 +1045,14 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 		bool retransform = true; // must be true, because in enableAutoScale scaleAutoX will be already called
 		plot->enableAutoScaleX(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
-		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
+		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Direction::Y)
 			retransform |= plot->scaleAutoX(index, true);
 
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
-				if (cSystem->xIndex() == index) {
-					if (plot->autoScaleY(cSystem->xIndex()))
-						retransform |= plot->scaleAutoY(cSystem->yIndex(), false);
+				if (cSystem->index(Direction::X) == index) {
+					if (plot->autoScaleY(cSystem->index(Direction::X)))
+						retransform |= plot->scaleAutoY(cSystem->index(Direction::Y), false);
 				}
 			}
 		}
@@ -1091,14 +1093,14 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 		bool retransform = true; // must be true, because in enableAutoScale scaleAutoY will be already called
 		plot->enableAutoScaleY(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
-		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
+		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Direction::Y)
 			retransform |= plot->scaleAutoY(index, true);
 
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
-				if (cSystem->yIndex() == index) {
-					if (plot->autoScaleX(cSystem->xIndex()))
-						retransform |= plot->scaleAutoX(cSystem->xIndex(), false);
+				if (cSystem->index(Direction::Y) == index) {
+					if (plot->autoScaleX(cSystem->index(Direction::X)))
+						retransform |= plot->scaleAutoX(cSystem->index(Direction::X), false);
 				}
 			}
 		}
@@ -1373,7 +1375,7 @@ void CartesianPlotDock::removeXRange() {
 	for (int i{0}; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 
-		if (cSystem->xIndex() == currentRow) {
+		if (cSystem->index(Direction::X) == currentRow) {
 			if (msg.size() > 0)
 				msg += ", ";
 			msg += QString::number(i + 1);
@@ -1390,10 +1392,10 @@ void CartesianPlotDock::removeXRange() {
 			for (int i{0}; i < cSystemCount; i++) {
 				auto* cSystem{m_plot->coordinateSystem(i)};
 
-				if (cSystem->xIndex() == currentRow)
-					cSystem->setXIndex(0); // first range
-				else if (cSystem->xIndex() > currentRow)
-					cSystem->setXIndex(cSystem->xIndex() - 1);
+				if (cSystem->index(Direction::X) == currentRow)
+					cSystem->setIndex(Direction::X, 0); // first range
+				else if (cSystem->index(Direction::X) > currentRow)
+					cSystem->setIndex(Direction::X, cSystem->index(Direction::X) - 1);
 			}
 		}
 	}
@@ -1420,7 +1422,7 @@ void CartesianPlotDock::removeYRange() {
 	for (int i{0}; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 
-		if (cSystem->yIndex() == currentRow) {
+		if (cSystem->index(Direction::Y) == currentRow) {
 			if (msg.size() > 0)
 				msg += ", ";
 			msg += QString::number(i + 1);
@@ -1437,10 +1439,10 @@ void CartesianPlotDock::removeYRange() {
 			for (int i{0}; i < cSystemCount; i++) {
 				auto* cSystem{m_plot->coordinateSystem(i)};
 
-				if (cSystem->yIndex() == currentRow)
-					cSystem->setYIndex(0); // first range
-				else if (cSystem->yIndex() > currentRow)
-					cSystem->setYIndex(cSystem->yIndex() - 1);
+				if (cSystem->index(Direction::Y) == currentRow)
+					cSystem->setIndex(Direction::Y, 0); // first range
+				else if (cSystem->index(Direction::Y) > currentRow)
+					cSystem->setIndex(Direction::Y, cSystem->index(Direction::Y) - 1);
 			}
 		}
 	}
@@ -1497,7 +1499,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 	const int plotRangeIndex{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", Set x range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setXIndex(index);
+	cSystem->setIndex(Direction::X, index);
 
 	// auto scale x range when on auto scale (now that it is used)
 	if (m_plot->xRange(index).autoScale()) {
@@ -1523,7 +1525,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", set y range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setYIndex(index);
+	cSystem->setIndex(Direction::Y, index);
 
 	// auto scale y range when on auto scale (now that it is used)
 	if (m_plot->yRange(index).autoScale()) {

@@ -17,6 +17,8 @@ extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
@@ -571,77 +573,86 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 /**************************************************************************************/
 
 /**
- * \brief Determine the horizontal direction relative to the page.
+ * \brief Determine the direction relative to the page in different directions
  *
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::xDirection() const {
-	if (d->xScales.isEmpty() || !d->xScales.at(0)) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
-		return 1;
+int CartesianCoordinateSystem::direction(const Direction dir) const {
+	switch(dir) {
+		case Direction::X: {
+			if (d->xScales.isEmpty() || !d->xScales.at(0)) {
+				DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+				return 1;
+			}
+
+			return d->xScales.at(0)->direction();
+		}
+		case Direction::Y:
+		default: {
+		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
+			return 1;
+		}
+
+		return d->yScales.at(0)->direction();
+		}
 	}
-
-	return d->xScales.at(0)->direction();
-}
-
-/**
- * \brief Determine the vertical direction relative to the page.
- *
- * This function is needed for untransformed lengths such as axis tick length.
- * \return 1 or -1
- */
-int CartesianCoordinateSystem::yDirection() const {
-	if (d->yScales.isEmpty() || !d->yScales.at(0)) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
-		return 1;
-	}
-
-	return d->yScales.at(0)->direction();
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale*>& scales) {
+bool CartesianCoordinateSystem::setScales(const Direction dir, const QVector<CartesianScale*>& scales) {
 	DEBUG(Q_FUNC_INFO)
-	while (!d->xScales.isEmpty())
-		delete d->xScales.takeFirst();
+	switch(dir) {
+		case Direction::X: {
+			while (!d->xScales.isEmpty())
+				delete d->xScales.takeFirst();
 
-	d->xScales = scales;
-	return true; // TODO: check scales validity
+			d->xScales = scales;
+			return true; // TODO: check scales validity
+		}
+		case Direction::Y:
+		default: {
+			while (!d->yScales.isEmpty())
+				delete d->yScales.takeFirst();
+
+			d->yScales = scales;
+			return true; // TODO: check scales validity
+		}
+	}
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::xScales() const {
+QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Direction dir) const {
 	DEBUG(Q_FUNC_INFO)
-	return d->xScales; // TODO: should rather return a copy of the scales here
+	switch(dir) {
+		case Direction::X:
+			return d->xScales; // TODO: should rather return a copy of the scales here
+		case Direction::Y:
+		default:
+			return d->yScales; // TODO: should rather return a copy of the scales here
+	}
 }
 
-bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*>& scales) {
-	DEBUG(Q_FUNC_INFO)
-	while (!d->yScales.isEmpty())
-		delete d->yScales.takeFirst();
-
-	d->yScales = scales;
-	return true; // TODO: check scales validity
+int CartesianCoordinateSystem::index(const Direction dir) const {
+	switch(dir) {
+		case Direction::X:
+			return d->xIndex;
+		case Direction::Y:
+		default:
+			return d->yIndex;
+	}
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
-	DEBUG(Q_FUNC_INFO)
-	return d->yScales; // TODO: should rather return a copy of the scales here
+void CartesianCoordinateSystem::setIndex(const Direction dir, const int index) {
+	switch(dir) {
+		case Direction::X:
+			d->xIndex = index;
+		case Direction::Y:
+		default:
+			d->yIndex = index;
+	}
 }
 
-int CartesianCoordinateSystem::xIndex() const {
-	return d->xIndex;
-}
-void CartesianCoordinateSystem::setXIndex(int index) {
-	d->xIndex = index;
-}
-
-int CartesianCoordinateSystem::yIndex() const {
-	return d->yIndex;
-}
-void CartesianCoordinateSystem::setYIndex(int index) {
-	d->yIndex = index;
-}
 
 /*!
  * Adjusted the function QRectF::contains(QPointF) from Qt 4.8.4 to handle the
