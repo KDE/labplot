@@ -1803,8 +1803,8 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot) {
 		scaleAutoYAction->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection: {
-		bool enableX = plot->xRangeCount() == 1;
-		bool enableY = plot->yRangeCount() == 1;
+		bool enableX = plot->rangeCount(Direction::X) == 1;
+		bool enableY = plot->rangeCount(Direction::Y) == 1;
 		// only when only one range available
 		cartesianPlotZoomSelectionModeAction->setEnabled(enableX && enableY);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(enableX);

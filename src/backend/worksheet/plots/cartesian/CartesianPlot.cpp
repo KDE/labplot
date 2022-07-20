@@ -1137,7 +1137,7 @@ RangeT::Format CartesianPlot::yRangeFormat() const {
 }
 RangeT::Format CartesianPlot::xRangeFormat(const int index) const {
 	Q_D(const CartesianPlot);
-	if (index < 0 || index > xRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Format::Numeric;
 	}
@@ -1145,7 +1145,7 @@ RangeT::Format CartesianPlot::xRangeFormat(const int index) const {
 }
 RangeT::Format CartesianPlot::yRangeFormat(const int index) const {
 	Q_D(const CartesianPlot);
-	if (index < 0 || index > yRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Format::Numeric;
 	}
@@ -1159,7 +1159,7 @@ void CartesianPlot::setYRangeFormat(const RangeT::Format format) {
 }
 void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > xRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -1173,7 +1173,7 @@ void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format
 }
 void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > yRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -1191,7 +1191,7 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 // is auto scale enabled for x axis index (index == -1: all axes)
 bool CartesianPlot::autoScaleX(int index) const {
 	if (index == -1) {
-		for (int i = 0; i < xRangeCount(); i++) {
+		for (int i = 0; i < rangeCount(Direction::X); i++) {
 			if (!xRange(i).autoScale())
 				return false;
 		}
@@ -1202,7 +1202,7 @@ bool CartesianPlot::autoScaleX(int index) const {
 // is auto scale enabled for y axis index (index == -1: all axes)
 bool CartesianPlot::autoScaleY(int index) const {
 	if (index == -1) {
-		for (int i = 0; i < yRangeCount(); i++) {
+		for (int i = 0; i < rangeCount(Direction::Y); i++) {
 			if (!yRange(i).autoScale())
 				return false;
 		}
@@ -1292,7 +1292,7 @@ void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool fullRang
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all x ranges
-		for (int i = 0; i < xRangeCount(); i++)
+		for (int i = 0; i < rangeCount(Direction::X); i++)
 			enableAutoScaleX(i, enable, fullRange);
 		return;
 	}
@@ -1310,7 +1310,7 @@ void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool fullRang
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all y axes
-		for (int i = 0; i < yRangeCount(); i++)
+		for (int i = 0; i < rangeCount(Direction::Y); i++)
 			enableAutoScaleY(i, enable, fullRange);
 		return;
 	}
@@ -1323,14 +1323,17 @@ void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool fullRang
 	}
 }
 
-int CartesianPlot::xRangeCount() const {
+int CartesianPlot::rangeCount(const Direction dir) const {
 	Q_D(const CartesianPlot);
-	return (d ? d->xRanges.size() : 0);
+	switch(dir) {
+		case Direction::X:
+			return (d ? d->xRanges.size() : 0);
+		case Direction::Y:
+		default:
+			return (d ? d->yRanges.size() : 0);
+	}
 }
-int CartesianPlot::yRangeCount() const {
-	Q_D(const CartesianPlot);
-	return (d ? d->yRanges.size() : 0);
-}
+
 const Range<double>& CartesianPlot::xRange(int index) const {
 	if (index == -1)
 		index = defaultCoordinateSystem()->index(Direction::X);
@@ -1447,7 +1450,7 @@ const Range<double>& CartesianPlot::dataYRange(int index) {
 
 bool CartesianPlot::xRangeDirty(int index) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < xRangeCount())
+	if (index >= 0 && index < rangeCount(Direction::X))
 		return d->xRanges.at(index).dirty;
 	else {
 		bool dirty = false;
@@ -1458,7 +1461,7 @@ bool CartesianPlot::xRangeDirty(int index) {
 }
 bool CartesianPlot::yRangeDirty(int index) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < yRangeCount())
+	if (index >= 0 && index < rangeCount(Direction::Y))
 		return d->yRanges.at(index).dirty;
 	else {
 		bool dirty = false;
@@ -1470,7 +1473,7 @@ bool CartesianPlot::yRangeDirty(int index) {
 
 void CartesianPlot::setXRangeDirty(int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < xRangeCount())
+	if (index >= 0 && index < rangeCount(Direction::X))
 		d->xRanges[index].dirty = dirty;
 	else {
 		for (auto& r : d->xRanges)
@@ -1479,7 +1482,7 @@ void CartesianPlot::setXRangeDirty(int index, bool dirty) {
 }
 void CartesianPlot::setYRangeDirty(int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < yRangeCount())
+	if (index >= 0 && index < rangeCount(Direction::Y))
 		d->yRanges[index].dirty = dirty;
 	else {
 		for (auto& r : d->yRanges)
@@ -1514,7 +1517,7 @@ void CartesianPlot::addYRange(const Range<double>& range) {
 
 void CartesianPlot::removeXRange(int index) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > xRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -1524,7 +1527,7 @@ void CartesianPlot::removeXRange(int index) {
 }
 void CartesianPlot::removeYRange(int index) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > yRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -1625,14 +1628,14 @@ RangeT::Scale CartesianPlot::yRangeScale() const {
 	return yRangeScale(defaultCoordinateSystem()->index(Direction::Y));
 }
 RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
-	if (index < 0 || index > xRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
 	}
 	return xRange(index).scale();
 }
 RangeT::Scale CartesianPlot::yRangeScale(const int index) const {
-	if (index < 0 || index > yRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
 	}
@@ -1648,7 +1651,7 @@ void CartesianPlot::setYRangeScale(const RangeT::Scale scale) {
 
 void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > xRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -1659,7 +1662,7 @@ void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
 }
 void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 	Q_D(CartesianPlot);
-	if (index < 0 || index > yRangeCount()) {
+	if (index < 0 || index > rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
@@ -2576,13 +2579,13 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 
 	Q_D(CartesianPlot);
 	if (xIndex == -1) {
-		for (int i = 0; i < xRangeCount(); i++)
+		for (int i = 0; i < rangeCount(Direction::X); i++)
 			d->xRanges[i].dirty = true;
 	} else
 		d->xRanges[xIndex].dirty = true;
 
 	if (yIndex == -1) {
-		for (int i = 0; i < yRangeCount(); i++)
+		for (int i = 0; i < rangeCount(Direction::Y); i++)
 			d->yRanges[i].dirty = true;
 	} else
 		d->yRanges[yIndex].dirty = true;
@@ -2825,7 +2828,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 	Q_D(CartesianPlot);
 	if (index == -1) { // all ranges
 		bool updated = false;
-		for (int i = 0; i < xRangeCount(); i++) {
+		for (int i = 0; i < rangeCount(Direction::X); i++) {
 			if (autoScaleX(i) && scaleAutoX(i, fullRange, true))
 				updated = true; // at least one was updated
 		}
@@ -2897,7 +2900,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 	Q_D(CartesianPlot);
 	if (index == -1) {
 		bool updated = false;
-		for (int i = 0; i < yRangeCount(); i++) {
+		for (int i = 0; i < rangeCount(Direction::Y); i++) {
 			if (autoScaleY(i) && scaleAutoY(i, fullRange, true))
 				updated = true; // at least one was updated
 		}

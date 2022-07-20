@@ -490,7 +490,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		bool isDateTime = false;
-		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->xRangeCount()); row++) {
+		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->rangeCount(Direction::X)); row++) {
 			const auto xRange{m_plot->xRange(row)};
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
@@ -522,7 +522,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// y ranges
 		isDateTime = false;
-		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->yRangeCount()); row++) {
+		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->rangeCount(Direction::Y)); row++) {
 			const auto yRange{m_plot->yRange(row)};
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
@@ -611,7 +611,7 @@ void CartesianPlotDock::updateXRangeList() {
 	if (!m_plot)
 		return;
 
-	const int xRangeCount = m_plot->xRangeCount();
+	const int xRangeCount = m_plot->rangeCount(Direction::X);
 	DEBUG(Q_FUNC_INFO << ", x range count = " << xRangeCount)
 
 	if (xRangeCount > 1)
@@ -707,7 +707,7 @@ void CartesianPlotDock::updateYRangeList() {
 	if (!m_plot)
 		return;
 
-	const int yRangeCount{m_plot->yRangeCount()};
+	const int yRangeCount{m_plot->rangeCount(Direction::Y)};
 	DEBUG(Q_FUNC_INFO << ", y range count = " << yRangeCount)
 
 	if (yRangeCount > 1)
@@ -832,8 +832,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->xRangeCount() > 1) {
-			for (int index = 0; index < m_plot->xRangeCount(); index++)
+		if (m_plot->rangeCount(Direction::X) > 1) {
+			for (int index = 0; index < m_plot->rangeCount(Direction::X); index++)
 				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString());
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
@@ -848,8 +848,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->yRangeCount() > 1) {
-			for (int index = 0; index < m_plot->yRangeCount(); index++)
+		if (m_plot->rangeCount(Direction::Y) > 1) {
+			for (int index = 0; index < m_plot->rangeCount(Direction::Y); index++)
 				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString());
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
@@ -1341,7 +1341,7 @@ void CartesianPlotDock::addXRange() {
 	if (!m_plot)
 		return;
 
-	DEBUG(Q_FUNC_INFO << ", current x range count = " << m_plot->xRangeCount())
+	DEBUG(Q_FUNC_INFO << ", current x range count = " << m_plot->rangeCount(Direction::X))
 
 	m_plot->addXRange();
 	updateXRangeList();
@@ -1350,7 +1350,7 @@ void CartesianPlotDock::addYRange() {
 	if (!m_plot)
 		return;
 
-	DEBUG(Q_FUNC_INFO << ", current y range count = " << m_plot->yRangeCount())
+	DEBUG(Q_FUNC_INFO << ", current y range count = " << m_plot->rangeCount(Direction::Y))
 
 	m_plot->addYRange();
 	updateYRangeList();
@@ -1362,9 +1362,9 @@ void CartesianPlotDock::removeXRange() {
 
 	int currentRow{ui.twXRanges->currentRow()};
 	QDEBUG(Q_FUNC_INFO << ", current x range = " << currentRow)
-	if (currentRow < 0 || currentRow > m_plot->xRangeCount()) {
+	if (currentRow < 0 || currentRow > m_plot->rangeCount(Direction::X)) {
 		DEBUG(Q_FUNC_INFO << ", no current x range")
-		currentRow = m_plot->xRangeCount() - 1;
+		currentRow = m_plot->rangeCount(Direction::X) - 1;
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing x range " << currentRow)
 
@@ -1409,9 +1409,9 @@ void CartesianPlotDock::removeYRange() {
 
 	int currentRow{ui.twYRanges->currentRow()};
 	QDEBUG(Q_FUNC_INFO << ", current y range = " << currentRow)
-	if (currentRow < 0 || currentRow > m_plot->yRangeCount()) {
+	if (currentRow < 0 || currentRow > m_plot->rangeCount(Direction::Y)) {
 		DEBUG(Q_FUNC_INFO << ", no current y range")
-		currentRow = m_plot->yRangeCount() - 1;
+		currentRow = m_plot->rangeCount(Direction::Y) - 1;
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing y range " << currentRow)
 

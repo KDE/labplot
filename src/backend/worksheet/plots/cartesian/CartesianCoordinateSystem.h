@@ -10,12 +10,12 @@
 #ifndef CARTESIANCOORDINATESYSTEM_H
 #define CARTESIANCOORDINATESYSTEM_H
 
-#include "CartesianPlot.h"
 #include "CartesianScale.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
+class CartesianPlot;
 
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
 public:

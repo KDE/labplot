@@ -15,6 +15,7 @@
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"
@@ -29,6 +30,8 @@ class Histogram;
 class InfoElementDialog;
 class XYCurve;
 class KConfig;
+
+using Direction = CartesianCoordinateSystem::Direction;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -148,8 +151,7 @@ public:
 	bool autoScaleY(int index = -1) const;
 	void enableAutoScaleY(int index, bool enable, bool fullRange = false);
 
-	int xRangeCount() const;
-	int yRangeCount() const;
+	int rangeCount(const Direction dir) const;
 	const Range<double>& xRange(int index = -1) const; // get x range of (default) plot range
 	const Range<double>& yRange(int index = -1) const; // get y range of (default) plot range
 	void setXRange(const Range<double>); // set x range of default plot range

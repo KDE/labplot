@@ -53,6 +53,27 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
+	struct RichRange {
+		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
+			: range(r)
+			, dirty(d) {
+		}
+		Range<double> range; // current range
+		Range<double> prev;
+		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
+		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
+	};
+
+	QVector<RichRange> ranges(const Direction dir) {
+		switch(dir) {
+			case Direction::X:
+				return xRanges;
+			case Direction::Y:
+			default:
+				return yRanges;
+		}
+	}
+
 	Range<double>& range(const Direction dir, int index = -1) {
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);
@@ -80,7 +101,7 @@ public:
 
 	bool autoScaleX(int index = -1) {
 		if (index == -1) {
-			for (int i = 0; i < q->xRangeCount(); i++)
+			for (int i = 0; i < q->rangeCount(Direction::X); i++)
 				if (!autoScaleX(i))
 					return false;
 			return true;
@@ -89,7 +110,7 @@ public:
 	}
 	bool autoScaleY(int index = -1) {
 		if (index == -1) {
-			for (int i = 0; i < q->yRangeCount(); i++)
+			for (int i = 0; i < q->rangeCount(Direction::Y); i++)
 				if (!autoScaleY(i))
 					return false;
 			return true;
@@ -98,7 +119,7 @@ public:
 	}
 	void enableAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->xRangeCount(); i++)
+			for (int i = 0; i < q->rangeCount(Direction::X); i++)
 				enableAutoScaleX(i, b);
 			return;
 		}
@@ -106,7 +127,7 @@ public:
 	}
 	void enableAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->yRangeCount(); i++)
+			for (int i = 0; i < q->rangeCount(Direction::Y); i++)
 				enableAutoScaleY(i, b);
 			return;
 		}
@@ -131,17 +152,6 @@ public:
 
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
-
-	struct RichRange {
-		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
-			: range(r)
-			, dirty(d) {
-		}
-		Range<double> range; // current range
-		Range<double> prev;
-		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
-		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
-	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
 	bool niceExtend{true};

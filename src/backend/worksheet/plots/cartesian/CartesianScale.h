@@ -12,7 +12,6 @@
 #ifndef CARTESIANSCALE_H
 #define CARTESIANSCALE_H
 
-#include "CartesianPlot.h"
 #include "backend/lib/Range.h"
 
 class CartesianScale {
