@@ -239,6 +239,14 @@ void XYCurve::setHover(bool on) {
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
+const AbstractColumn* XYCurve::column(Direction dir) const {
+	switch(dir) {
+		case Direction::X: return xColumn();
+		case Direction::Y: return yColumn();
+	}
+	DEBUG("ERROR: Unhandled case!");
+	return nullptr;
+}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xColumnPath, xColumnPath)
@@ -2355,12 +2363,13 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
-bool XYCurve::minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars) const {
-	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, xRange, includeErrorBars);
-}
-
-bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars) const {
-	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, yRange, includeErrorBars);
+bool XYCurve::minMax(const Direction dir, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
+	switch(dir) {
+		case Direction::X: return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, r, includeErrorBars);
+		case Direction::Y: return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, r, includeErrorBars);
+	}
+	DEBUG("XYCurve::minMax ERROR: unhandled case")
+	return false;
 }
 
 /*!

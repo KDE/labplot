@@ -28,8 +28,7 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformYScale(int index);
-	void retransformXScale(int index);
+	void retransformScale(Direction, int index);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
@@ -74,6 +73,31 @@ public:
 		}
 	}
 
+	bool rangeDirty(const Direction dir, int index) const {
+		switch(dir) {
+			case Direction::X: return xRanges.at(index).dirty;
+			case Direction::Y: return yRanges.at(index).dirty;
+			default: DEBUG("rangeDirty: ERROR: unhandled case");
+		}
+		return false;
+	}
+
+	void setRangeDirty(const Direction dir, const int index, const bool dirty) {
+		switch(dir) {
+			case Direction::X: xRanges[index].dirty = dirty; break;
+			case Direction::Y: yRanges[index].dirty = dirty; break;
+			default: DEBUG("setRangeDirty: ERROR: unhandled case") break;
+		}
+	}
+
+	void setRange(const Direction dir, const int index, const Range<double>& range) {
+		switch(dir) {
+			case Direction::X: xRanges[index].range = range; break;
+			case Direction::Y: yRanges[index].range = range; break;
+			default: DEBUG("setRangeDirty: ERROR: unhandled case") break;
+		}
+	}
+
 	Range<double>& range(const Direction dir, int index = -1) {
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);
@@ -111,43 +135,46 @@ public:
 		}
 	}
 
-	bool autoScaleX(int index = -1) {
+	bool autoScale(const Direction dir, int index = -1) const {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(Direction::X); i++)
-				if (!autoScaleX(i))
+			for (int i = 0; i < q->rangeCount(dir); i++)
+				if (!autoScale(dir, i))
 					return false;
 			return true;
 		}
-		return xRanges[index].range.autoScale();
-	}
-	bool autoScaleY(int index = -1) {
-		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(Direction::Y); i++)
-				if (!autoScaleY(i))
-					return false;
-			return true;
+
+		switch(dir) {
+			case Direction::X:
+				return xRanges[index].range.autoScale();
+			case Direction::Y:
+			default:
+				return yRanges[index].range.autoScale();
 		}
-		return yRanges[index].range.autoScale();
 	}
-	void enableAutoScaleX(int index = -1, bool b = true) {
+
+	void enableAutoScale(const Direction dir, int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(Direction::X); i++)
-				enableAutoScaleX(i, b);
+			for (int i = 0; i < q->rangeCount(dir); i++)
+				enableAutoScale(dir, i, b);
 			return;
 		}
-		xRanges[index].range.setAutoScale(b);
-	}
-	void enableAutoScaleY(int index = -1, bool b = true) {
-		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(Direction::Y); i++)
-				enableAutoScaleY(i, b);
-			return;
+
+		switch(dir) {
+			case Direction::X:
+				xRanges[index].range.setAutoScale(b);
+				break;
+			case Direction::Y:
+			default:
+				yRanges[index].range.setAutoScale(b);
+				break;
 		}
-		yRanges[index].range.setAutoScale(b);
 	}
+
 	void checkXRange(int index);
 	void checkYRange(int index);
 	Range<double> checkRange(const Range<double>&);
+	CartesianPlot::RangeBreaks rangeBreaks(Direction);
+	bool rangeBreakingEnabled(Direction);
 
 	// the following factor determines the size of the offset between the min/max points of the curves
 	// and the coordinate system ranges, when doing auto scaling

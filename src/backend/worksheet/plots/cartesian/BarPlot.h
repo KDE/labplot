@@ -13,6 +13,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/Curve.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class BarPlotPrivate;
 class AbstractColumn;
@@ -64,10 +65,8 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	double xMinimum() const;
-	double xMaximum() const;
-	double yMinimum() const;
-	double yMaximum() const;
+	double minimum(CartesianCoordinateSystem::Direction dir) const;
+	double maximum(CartesianCoordinateSystem::Direction dir) const;
 
 	typedef BarPlotPrivate Private;
 

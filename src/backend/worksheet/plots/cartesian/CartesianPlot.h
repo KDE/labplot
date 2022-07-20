@@ -146,10 +146,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX(int index = -1) const;
-	void enableAutoScaleX(int index, bool enable, bool fullRange = false);
-	bool autoScaleY(int index = -1) const;
-	void enableAutoScaleY(int index, bool enable, bool fullRange = false);
+	bool autoScale(const Direction, int index = -1) const;
+	void enableAutoScale(Direction, int index, bool enable, bool fullRange = false);
 
 	int rangeCount(const Direction dir) const;
 	const Range<double>& range(const Direction dir, int index = -1) const; // get range of (default) plot range
@@ -157,12 +155,9 @@ public:
 	void setYRange(const Range<double>); // set y range of default plot range
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
-	const Range<double>& dataXRange(int index = -1);
-	const Range<double>& dataYRange(int index = -1);
-	bool xRangeDirty(int index);
-	bool yRangeDirty(int index);
-	void setXRangeDirty(int index, bool dirty);
-	void setYRangeDirty(int index, bool dirty);
+	const Range<double>& dataRange(Direction dir, int index = -1);
+	bool rangeDirty(Direction dir, int index) const;
+	void setRangeDirty(Direction dir, int index, bool dirty);
 	void addXRange(); // add new x range
 	void addYRange(); // add new y range
 	void addXRange(const Range<double>&); // add x range
@@ -218,8 +213,7 @@ private:
 	void shift(int index, bool x, bool leftOrDown);
 	void zoom(int index, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	void calculateDataXRange(int index, bool completeRange = true);
-	void calculateDataYRange(int index, bool completeRange = true);
+	void calculateDataRange(const Direction, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
 	CartesianPlotLegend* m_legend{nullptr};
@@ -328,8 +322,7 @@ public Q_SLOTS:
 
 	void scaleAutoTriggered();
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
-	bool scaleAutoX(int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
-	bool scaleAutoY(int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
+	bool scaleAuto(Direction dir, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
@@ -373,9 +366,8 @@ Q_SIGNALS:
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
-	void xAutoScaleChanged(int xRangeIndex, bool);
-	void yAutoScaleChanged(int yRangeIndex, bool);
-	void xRangeChanged(int xRangeIndex, Range<double>);
+	void autoScaleChanged(Direction, int xRangeIndex, bool);
+	void rangeChanged(Direction, int, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);
 	void xMinChanged(int xRangeIndex, double);
 	void xMaxChanged(int xRangeIndex, double);
@@ -411,8 +403,7 @@ Q_SIGNALS:
 	void cursor1EnableChanged(bool enable);
 
 Q_SIGNALS:
-	void retransformXScaleCalled(const CartesianPlot* plot, int index);
-	void retransformYScaleCalled(const CartesianPlot* plot, int index);
+	void retransformScaleCalled(const CartesianPlot* plot, Direction dir, int index);
 
 	friend CartesianPlotDock;
 };

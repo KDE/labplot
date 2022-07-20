@@ -37,6 +37,14 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
+QString CartesianCoordinateSystem::directionToString(Direction dir) {
+	switch(dir) {
+		case Direction::X: return "x";
+		case Direction::Y: return "y";
+		default: return "ERROR: unhandled case";
+	}
+}
+
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (d->plot)
@@ -647,9 +655,11 @@ void CartesianCoordinateSystem::setIndex(const Direction dir, const int index) {
 	switch(dir) {
 		case Direction::X:
 			d->xIndex = index;
-		case Direction::Y:
+			break;
 		default:
+		case Direction::Y:
 			d->yIndex = index;
+			break;
 	}
 }
 

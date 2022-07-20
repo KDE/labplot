@@ -201,24 +201,24 @@ QVector<QString>& BarPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
-double BarPlot::xMinimum() const {
-	D(BarPlot);
-	return d->xMin;
+double BarPlot::minimum(Direction dir) const {
+	Q_D(const BarPlot);
+	switch (dir) {
+		case Direction::X: return d->xMin;
+		case Direction::Y: return d->yMin;
+	}
+	DEBUG("BarPlot::minimum ERROR: unhandled case!")
+	return NAN;
 }
 
-double BarPlot::xMaximum() const {
-	D(BarPlot);
-	return d->xMax;
-}
-
-double BarPlot::yMinimum() const {
-	D(BarPlot);
-	return d->yMin;
-}
-
-double BarPlot::yMaximum() const {
-	D(BarPlot);
-	return d->yMax;
+double BarPlot::maximum(Direction dir) const {
+	Q_D(const BarPlot);
+	switch (dir) {
+		case Direction::X: return d->xMax;
+		case Direction::Y: return d->yMax;
+	}
+	DEBUG("BarPlot::minimum ERROR: unhandled case!")
+	return NAN;
 }
 
 /* ============================ setter methods and undo commands ================= */

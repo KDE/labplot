@@ -24,6 +24,8 @@ public:
 
 	enum class Direction {X, Y};
 
+	static QString directionToString(Direction);
+
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	void mapLogicalToScene(const Points& logicalPoints,

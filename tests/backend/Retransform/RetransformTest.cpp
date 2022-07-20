@@ -27,6 +27,8 @@ do {\
 	}\
 } while (false)
 
+using Direction = CartesianCoordinateSystem::Direction;
+
 void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;
 	Project project;
@@ -151,8 +153,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
 	}
 
 	auto* worksheet = project.child<Worksheet>(0);
@@ -278,10 +279,8 @@ void RetransformTest::TestPadding() {
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
-	}
+	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
 
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
@@ -405,10 +404,8 @@ void RetransformTest::TestAddCurve() {
 	for (const auto& child: children)
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformXScaleCalled, &c, &RetransformCallCounter::retransformXScaleCalled);
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformYScaleCalled, &c, &RetransformCallCounter::retransformYScaleCalled);
-	}
+	for (const auto& plot: project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
 
 	c.resetRetransformCount();
 
@@ -506,12 +503,11 @@ void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, b
 	logsRetransformed.append({sender, suppressed});
 }
 
-void RetransformCallCounter::retransformXScaleCalled(const CartesianPlot* plot, int index) {
-	logsXScaleRetransformed.append({plot, index});
-}
-
-void RetransformCallCounter::retransformYScaleCalled(const CartesianPlot* plot, int index) {
-	logsYScaleRetransformed.append({plot, index});
+void RetransformCallCounter::retransformXScaleCalled(const CartesianPlot* plot, Direction dir, int index) {
+	switch(dir) {
+		case Direction::X: logsXScaleRetransformed.append({plot, index}); break;
+		case Direction::Y: logsYScaleRetransformed.append({plot, index}); break;
+	}	
 }
 
 

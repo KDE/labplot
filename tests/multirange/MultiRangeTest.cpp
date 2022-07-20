@@ -773,7 +773,7 @@ void MultiRangeTest::shiftDown_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 
 	// check auto scale
-	// p1->enableAutoScaleY(0);
+	// p1->enableAutoScale(Direction::Y, 0);
 	p1->navigate(0, CartesianPlot::NavigationOperation::ScaleAutoY);
 
 	CHECK_RANGE(p1, sinCurve, x, 0., 1.);

@@ -141,14 +141,12 @@ private Q_SLOTS:
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
 
-	void plotXAutoScaleChanged(int xRangeIndex, bool);
-	void plotYAutoScaleChanged(int yRangeIndex, bool);
+	void plotAutoScaleChanged(Direction, int, bool);
 	void plotXMinChanged(int xRangeIndex, double);
 	void plotYMinChanged(int yRangeIndex, double);
 	void plotXMaxChanged(int xRangeIndex, double);
 	void plotYMaxChanged(int yRangeIndex, double);
-	void plotXRangeChanged(int xRangeIndex, Range<double>);
-	void plotYRangeChanged(int yRangeIndex, Range<double>);
+	void plotRangeChanged(Direction, int, Range<double>);
 	void plotXRangeFormatChanged(int xRangeIndex, RangeT::Format);
 	void plotYRangeFormatChanged(int yRangeIndex, RangeT::Format);
 	void plotXScaleChanged(int xRangeIndex, RangeT::Scale);

@@ -336,24 +336,24 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
-double BoxPlot::xMinimum() const {
-	D(BoxPlot);
-	return d->xMin;
+double BoxPlot::minimum(Direction dir) const {
+	Q_D(const BoxPlot);
+	switch (dir) {
+		case Direction::X: return d->xMin;
+		case Direction::Y: return d->yMin;
+	}
+	DEBUG("BoxPlot::minimum ERROR: unhandled case!")
+	return NAN;
 }
 
-double BoxPlot::xMaximum() const {
-	D(BoxPlot);
-	return d->xMax;
-}
-
-double BoxPlot::yMinimum() const {
-	D(BoxPlot);
-	return d->yMin;
-}
-
-double BoxPlot::yMaximum() const {
-	D(BoxPlot);
-	return d->yMax;
+double BoxPlot::maximum(Direction dir) const {
+	Q_D(const BoxPlot);
+	switch (dir) {
+		case Direction::X: return d->xMax;
+		case Direction::Y: return d->yMax;
+	}
+	DEBUG("BoxPlot::minimum ERROR: unhandled case!")
+	return NAN;
 }
 
 /* ============================ setter methods and undo commands ================= */
