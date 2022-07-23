@@ -116,7 +116,7 @@ void Axis::init(Orientation orientation) {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale)group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.)); // not auto ticked if already set to 1 here!
-    d->majorTickStartType = static_cast<Axis::TickStartType>(group.readEntry("MajorTickStartType", static_cast<bool>(Axis::TickStartType::Offset)))
+	d->majorTickStartType = static_cast<Axis::TickStartType>(group.readEntry("MajorTickStartType", static_cast<bool>(Axis::TickStartType::Offset)));
 	d->majorTickStartOffset = group.readEntry("MajorTickStartOffset", 0.0);
     d->majorTickStartValue = group.readEntry("MajorTickStartValue", 0.0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);

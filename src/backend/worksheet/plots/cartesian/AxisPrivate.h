@@ -52,7 +52,9 @@ public:
 	RangeT::Scale scale;
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
 	Range<double> range; //!< coordinate range of the axis line
+	Axis::TickStartType majorTickStartType{Axis::TickStartType::Offset};
 	qreal majorTickStartOffset{0};
+	qreal majorTickStartValue{0};
 	qreal scalingFactor{1};
 	qreal zeroOffset{0};
 	bool showScaleOffset{true};
