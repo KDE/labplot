@@ -3356,14 +3356,14 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 				 (dir == Direction::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
-			if (!qFuzzyIsNull(deltaMin)) {
+			if (!qFuzzyIsNull(deltaMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setEnd(rangep.range.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-			if (!qFuzzyIsNull(deltaMax)) {
+			if (!qFuzzyIsNull(deltaMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setStart(rangep.range.start());
