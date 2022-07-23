@@ -2705,7 +2705,7 @@ void CartesianPlot::calculateDataRange(const Direction dir, const int index, boo
 		if (!completeRange && d->rangeType == RangeType::Free && curve->column(dir_other)) { // only data within y range
 			const int index = coordinateSystem(curve->coordinateSystemIndex())->index(dir_other);
 			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << d->range(dir_other, index).toStdString())
-			curve->yColumn()->indicesMinMax(d->range(dir_other, index).start(), d->range(dir_other, index).end(), indexRange.start(), indexRange.end());
+			curve->column(dir_other)->indicesMinMax(d->range(dir_other, index).start(), d->range(dir_other, index).end(), indexRange.start(), indexRange.end());
 		} else { // all data
 			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 			switch (d->rangeType) {
