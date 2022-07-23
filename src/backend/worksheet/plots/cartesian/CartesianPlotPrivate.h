@@ -67,8 +67,9 @@ public:
 			case Direction::X:
 				return xRanges;
 			case Direction::Y:
-			default:
 				return yRanges;
+			default:
+				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges;
 		}
 	}
 
@@ -120,8 +121,9 @@ public:
 			case Direction::X:
 				return xRanges[index].range;
 			case Direction::Y:
-			default:
 				return yRanges[index].range;
+			default:
+				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range;
 		}
 	}
 
@@ -132,8 +134,9 @@ public:
 			case Direction::X:
 				return xRanges[index].range;
 			case Direction::Y:
-			default:
 				return yRanges[index].range;
+			default:
+				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range;
 		}
 	}
 
@@ -145,8 +148,9 @@ public:
 			case Direction::X:
 				return xRanges[index].dataRange;
 			case Direction::Y:
-			default:
 				return yRanges[index].dataRange;
+			default:
+				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].dataRange;
 		}
 	}
 
@@ -162,8 +166,9 @@ public:
 			case Direction::X:
 				return xRanges[index].range.autoScale();
 			case Direction::Y:
-			default:
 				return yRanges[index].range.autoScale();
+			default:
+				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range.autoScale();
 		}
 	}
 
