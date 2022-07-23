@@ -498,7 +498,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	const Lock lock(m_initializing);
 	m_curvesList = list;
 	m_curve = list.first();
-    setAspects(list);
+	setAspects(list);
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
