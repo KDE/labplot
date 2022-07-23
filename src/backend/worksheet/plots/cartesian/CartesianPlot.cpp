@@ -2097,16 +2097,16 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
-			this->xDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::X);
 		});
 		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve]() {
-			this->xDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::X);
 		});
 		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve]() {
-			this->xDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::X);
 		});
 		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve]() {
-			this->xDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::X);
 		});
 
 		// y data
@@ -2115,16 +2115,16 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				checkAxisFormat(column, Axis::Orientation::Vertical);
 		});
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
-			this->yDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::Y);
 		});
 		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve]() {
-			this->yDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::Y);
 		});
 		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve]() {
-			this->yDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::Y);
 		});
 		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve]() {
-			this->yDataChanged(const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve), Direction::Y);
 		});
 
 		// update the legend on line and symbol properties changes
@@ -2613,7 +2613,7 @@ bool CartesianPlot::scaleAuto(Direction dir, int index, bool fullRange, bool sup
 
 	// if no curve: do not reset to [0, 1]
 
-	DEBUG(Q_FUNC_INFO << ", x range " << index << " = " << r.toStdString() << "., x data range = " << d->dataRange(dir, index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", range " << index << " = " << r.toStdString() << "., data range = " << d->dataRange(dir, index).toStdString())
 	bool update = false;
 	if (!qFuzzyCompare(dataRange.start(), r.start()) && !qIsInf(dataRange.start())) {
 		r.start() = dataRange.start();
