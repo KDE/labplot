@@ -204,8 +204,10 @@ QVector<QString>& BarPlot::dataColumnPaths() const {
 double BarPlot::minimum(Direction dir) const {
 	Q_D(const BarPlot);
 	switch (dir) {
-		case Direction::X: return d->xMin;
-		case Direction::Y: return d->yMin;
+	case Direction::X:
+		return d->xMin;
+	case Direction::Y:
+		return d->yMin;
 	}
 	DEBUG("BarPlot::minimum ERROR: unhandled case!")
 	return NAN;
@@ -214,8 +216,10 @@ double BarPlot::minimum(Direction dir) const {
 double BarPlot::maximum(Direction dir) const {
 	Q_D(const BarPlot);
 	switch (dir) {
-		case Direction::X: return d->xMax;
-		case Direction::Y: return d->yMax;
+	case Direction::X:
+		return d->xMax;
+	case Direction::Y:
+		return d->yMax;
 	}
 	DEBUG("BarPlot::maximum ERROR: unhandled case!")
 	return NAN;

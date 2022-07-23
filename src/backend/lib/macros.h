@@ -273,7 +273,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {}                    \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
+		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
@@ -285,7 +286,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	class class_name##cmd_name##Cmd : public StandardMacroSetterCmd<class_name::Private, value_type> {                                                         \
 	public:                                                                                                                                                    \
 		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {}   \
+			: StandardMacroSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                       \
+		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \

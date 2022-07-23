@@ -58,31 +58,36 @@ protected:
 
 using Direction = CartesianCoordinateSystem::Direction;
 
-#define CELLWIDGET(dir, rangeIndex, Column, castObject, function)                                                                                       \
-	do { \
-		QTableWidget* treewidget; \
-		switch(dir) { \
-			case Direction::X: treewidget = ui.twXRanges; break; \
-			case Direction::Y: treewidget = ui.twYRanges; break; \
-			default: qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case."; \
-		} \
-		if (rangeIndex < 0) {                                                                                                                                      \
-			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                  \
-				auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                        \
-				if (obj)                                                                                                                                           \
-					obj->function;                                                                                                                                 \
-				else                                                                                                                                               \
-					qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                      \
-							 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                               \
-			}                                                                                                                                                      \
-		} else {                                                                                                                                                   \
-			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                   \
-			if (obj)                                                                                                                                               \
-				obj->function;                                                                                                                                     \
-			else                                                                                                                                                   \
-				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex << ", Column: " << Column \
-						 << "). Wether the object does not exist or the cellWidget has differnt type";                                                             \
-		} \
+#define CELLWIDGET(dir, rangeIndex, Column, castObject, function)                                                                                              \
+	do {                                                                                                                                                       \
+		QTableWidget* treewidget;                                                                                                                              \
+		switch (dir) {                                                                                                                                         \
+		case Direction::X:                                                                                                                                     \
+			treewidget = ui.twXRanges;                                                                                                                         \
+			break;                                                                                                                                             \
+		case Direction::Y:                                                                                                                                     \
+			treewidget = ui.twYRanges;                                                                                                                         \
+			break;                                                                                                                                             \
+		default:                                                                                                                                               \
+			qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";                                      \
+		}                                                                                                                                                      \
+		if (rangeIndex < 0) {                                                                                                                                  \
+			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
+				auto obj = qobject_cast<castObject*>(treewidget->cellWidget(i, Column));                                                                       \
+				if (obj)                                                                                                                                       \
+					obj->function;                                                                                                                             \
+				else                                                                                                                                           \
+					qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex                  \
+							 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                           \
+			}                                                                                                                                                  \
+		} else {                                                                                                                                               \
+			auto obj = qobject_cast<castObject*>(treewidget->cellWidget(rangeIndex, Column));                                                                  \
+			if (obj)                                                                                                                                           \
+				obj->function;                                                                                                                                 \
+			else                                                                                                                                               \
+				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex                       \
+						 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                               \
+		}                                                                                                                                                      \
 	} while (0);
 
 /*!
@@ -624,10 +629,20 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 	QTableWidget* tw = nullptr;
 	QLabel* l = nullptr;
 	QToolButton* tb = nullptr;
-	switch(dir) {
-		case Direction::X: tw = ui.twXRanges; l = ui.lXRanges; tb = ui.tbRemoveXRange; break;
-		case Direction::Y: tw = ui.twYRanges; l = ui.lYRanges; tb = ui.tbRemoveYRange; break;
-		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction"); return;
+	switch (dir) {
+	case Direction::X:
+		tw = ui.twXRanges;
+		l = ui.lXRanges;
+		tb = ui.tbRemoveXRange;
+		break;
+	case Direction::Y:
+		tw = ui.twYRanges;
+		l = ui.lYRanges;
+		tb = ui.tbRemoveYRange;
+		break;
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
+		return;
 	}
 
 	const int rangeCount = m_plot->rangeCount(dir);
@@ -642,8 +657,8 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		const auto r = m_plot->range(dir, i);
 		const auto format = r.format();
 		const auto scale = r.scale();
-		DEBUG(Q_FUNC_INFO << ", range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
-						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << r.autoScale())
+		DEBUG(Q_FUNC_INFO << ", range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format) << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale)
+						  << ", auto scale = " << r.autoScale())
 
 		// auto scale
 		auto* chk = new QCheckBox(tw);
@@ -651,7 +666,9 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		chk->setChecked(r.autoScale());
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
-		connect(chk, &QCheckBox::toggled, [this, chk, dir](bool checked) {this->autoScaleChanged(chk, dir, checked);});
+		connect(chk, &QCheckBox::toggled, [this, chk, dir](bool checked) {
+			this->autoScaleChanged(chk, dir, checked);
+		});
 
 		// format
 		auto* cb = new ComboBoxIgnoreWheel(tw);
@@ -660,7 +677,9 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		tw->setCellWidget(i, TwRangesColumn::Format, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {this->rangeFormatChanged(cb, dir, index);});
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {
+			this->rangeFormatChanged(cb, dir, index);
+		});
 
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
@@ -668,13 +687,17 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Min, le);
-			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {this->minChanged(le, dir, text);});
+			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {
+				this->minChanged(le, dir, text);
+			});
 			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(tw);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Max, le);
-			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {this->maxChanged(le, dir, text);});
+			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {
+				this->maxChanged(le, dir, text);
+			});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
@@ -683,7 +706,9 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime &dateTime) {this->minDateTimeChanged(dte, dir, dateTime);});
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime& dateTime) {
+				this->minDateTimeChanged(dte, dir, dateTime);
+			});
 			dte = new QDateTimeEdit(tw);
 			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
 			dte->setTimeSpec(Qt::UTC);
@@ -691,7 +716,9 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime &dateTime) {this->maxDateTimeChanged(dte, dir, dateTime);});
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime& dateTime) {
+				this->maxDateTimeChanged(dte, dir, dateTime);
+			});
 		}
 
 		// scale
@@ -703,7 +730,9 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
 		tw->setCellWidget(i, TwRangesColumn::Scale, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb] (int index) {this->scaleChanged(cb, dir, index);});
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {
+			this->scaleChanged(cb, dir, index);
+		});
 	}
 	tw->resizeColumnToContents(1);
 
@@ -935,7 +964,7 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 	}
 }
 
-void CartesianPlotDock::autoScaleChanged(const QObject *sender, const Direction dir, bool state) {
+void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Direction dir, bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
@@ -952,10 +981,18 @@ void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, boo
 
 	QTableWidget* treewidget;
 	Direction dir_other;
-	switch(dir) {
-		case Direction::X: dir_other = Direction::Y; treewidget = ui.twXRanges; break;
-		case Direction::Y: dir_other = Direction::X; treewidget = ui.twYRanges; break;
-		default: qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case."; return;
+	switch (dir) {
+	case Direction::X:
+		dir_other = Direction::Y;
+		treewidget = ui.twXRanges;
+		break;
+	case Direction::Y:
+		dir_other = Direction::X;
+		treewidget = ui.twYRanges;
+		break;
+	default:
+		qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";
+		return;
 	}
 
 	if (treewidget->cellWidget(index, TwRangesColumn::Format)) {
@@ -990,16 +1027,22 @@ void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, boo
 	updateRangeList(dir); // see range changes
 }
 
-void CartesianPlotDock::minChanged(const QObject *sender, const Direction dir, const QString& value) {
+void CartesianPlotDock::minChanged(const QObject* sender, const Direction dir, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
 	Direction dir_other;
-	switch(dir) {
-		case Direction::X: dir_other = Direction::Y; break;
-		case Direction::Y: dir_other = Direction::X; break;
-		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction"); return;
+	switch (dir) {
+	case Direction::X:
+		dir_other = Direction::Y;
+		break;
+	case Direction::Y:
+		dir_other = Direction::X;
+		break;
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
+		return;
 	}
 
 	const Lock lock(m_initializing);
@@ -1028,10 +1071,16 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Direction dir, c
 		return;
 
 	Direction dir_other;
-	switch(dir) {
-		case Direction::X: dir_other = Direction::Y; break;
-		case Direction::Y: dir_other = Direction::X; break;
-		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction"); return;
+	switch (dir) {
+	case Direction::X:
+		dir_other = Direction::Y;
+		break;
+	case Direction::Y:
+		dir_other = Direction::X;
+		break;
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
+		return;
 	}
 
 	const Lock lock(m_initializing);
@@ -1065,7 +1114,7 @@ void CartesianPlotDock::rangeChanged(const QObject* sender, const Direction dir,
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::minDateTimeChanged(const QObject *sender, const Direction dir, const QDateTime& dateTime) {
+void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Direction dir, const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
@@ -1144,10 +1193,16 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 		return;
 
 	QTableWidget* treewidget;
-	switch(dir) {
-		case Direction::X: treewidget = ui.twXRanges; break;
-		case Direction::Y: treewidget = ui.twYRanges; break;
-		default: qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case."; return;
+	switch (dir) {
+	case Direction::X:
+		treewidget = ui.twXRanges;
+		break;
+	case Direction::Y:
+		treewidget = ui.twYRanges;
+		break;
+	default:
+		qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";
+		return;
 	}
 
 	int currentRow{treewidget->currentRow()};
@@ -1174,7 +1229,10 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 
 	if (msg.size() > 0) {
 		DEBUG(Q_FUNC_INFO << ", range used in plot range " << STDSTRING(msg))
-		auto ret = KMessageBox::warningYesNo(this, i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::directionToString(dir).toUpper(), currentRow + 1, msg) + i18n("Really remove it?"));
+		auto ret = KMessageBox::warningYesNo(
+			this,
+			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::directionToString(dir).toUpper(), currentRow + 1, msg)
+				+ i18n("Really remove it?"));
 		if (ret == KMessageBox::No)
 			return;
 		else {

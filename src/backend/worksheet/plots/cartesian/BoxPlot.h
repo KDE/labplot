@@ -12,8 +12,8 @@
 
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/Curve.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Curve.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;

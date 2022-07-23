@@ -1085,7 +1085,8 @@ void AxisPrivate::retransformLine() {
 	DEBUG(Q_FUNC_INFO << ", \"" << STDSTRING(title->name()) << "\", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->index(Direction::X) + 1)
 	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->index(Direction::Y) + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Direction::X)
+	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
+	//CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Direction::X)
 	//)
 	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 
@@ -1445,7 +1446,8 @@ void AxisPrivate::retransformTicks() {
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
 	//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
 	//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
-	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Direction::X)
+	//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const
+	//CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->index(Direction::X)
 	//)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const int xRangeDirection = plot()->range(Direction::X, cs->index(Direction::X)).direction();

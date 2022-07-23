@@ -16,7 +16,7 @@
 class RetransformTest : public CommonTest {
 	Q_OBJECT
 
-// Tests
+	// Tests
 private Q_SLOTS:
 	void TestLoadProject();
 	void TestResizeWindows();
@@ -31,7 +31,7 @@ private Q_SLOTS:
  * Used to count the retransform calls to evaluate that
  * the items retransform are called a exact number of times
  */
-class RetransformCallCounter: public QObject {
+class RetransformCallCounter : public QObject {
 	Q_OBJECT
 public:
 	QHash<QString, int> statistic(bool includeSuppressed);

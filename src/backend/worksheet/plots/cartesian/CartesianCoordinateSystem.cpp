@@ -38,17 +38,21 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 }
 
 QString CartesianCoordinateSystem::directionToString(Direction dir) {
-	switch(dir) {
-		case Direction::X: return "x";
-		case Direction::Y: return "y";
-		default: return "ERROR: unhandled case";
+	switch (dir) {
+	case Direction::X:
+		return "x";
+	case Direction::Y:
+		return "y";
+	default:
+		return "ERROR: unhandled case";
 	}
 }
 
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (d->plot)
-		return QString(QLatin1String("x = ") + d->plot->range(Direction::X, d->xIndex).toString() + QLatin1String(", y = ") + d->plot->range(Direction::Y, d->yIndex).toString());
+		return QString(QLatin1String("x = ") + d->plot->range(Direction::X, d->xIndex).toString() + QLatin1String(", y = ")
+					   + d->plot->range(Direction::Y, d->yIndex).toString());
 
 	return i18n("no info available");
 }
@@ -587,82 +591,81 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
  * \return 1 or -1
  */
 int CartesianCoordinateSystem::direction(const Direction dir) const {
-	switch(dir) {
-		case Direction::X: {
-			if (d->xScales.isEmpty() || !d->xScales.at(0)) {
-				DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
-				return 1;
-			}
-
-			return d->xScales.at(0)->direction();
+	switch (dir) {
+	case Direction::X: {
+		if (d->xScales.isEmpty() || !d->xScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+			return 1;
 		}
-		case Direction::Y:
-		default: {
+
+		return d->xScales.at(0)->direction();
+	}
+	case Direction::Y:
+	default: {
 		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
 			return 1;
 		}
 
 		return d->yScales.at(0)->direction();
-		}
+	}
 	}
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
 bool CartesianCoordinateSystem::setScales(const Direction dir, const QVector<CartesianScale*>& scales) {
 	DEBUG(Q_FUNC_INFO)
-	switch(dir) {
-		case Direction::X: {
-			while (!d->xScales.isEmpty())
-				delete d->xScales.takeFirst();
+	switch (dir) {
+	case Direction::X: {
+		while (!d->xScales.isEmpty())
+			delete d->xScales.takeFirst();
 
-			d->xScales = scales;
-			return true; // TODO: check scales validity
-		}
-		case Direction::Y:
-		default: {
-			while (!d->yScales.isEmpty())
-				delete d->yScales.takeFirst();
+		d->xScales = scales;
+		return true; // TODO: check scales validity
+	}
+	case Direction::Y:
+	default: {
+		while (!d->yScales.isEmpty())
+			delete d->yScales.takeFirst();
 
-			d->yScales = scales;
-			return true; // TODO: check scales validity
-		}
+		d->yScales = scales;
+		return true; // TODO: check scales validity
+	}
 	}
 }
 
 QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Direction dir) const {
 	DEBUG(Q_FUNC_INFO)
-	switch(dir) {
-		case Direction::X:
-			return d->xScales; // TODO: should rather return a copy of the scales here
-		case Direction::Y:
-		default:
-			return d->yScales; // TODO: should rather return a copy of the scales here
+	switch (dir) {
+	case Direction::X:
+		return d->xScales; // TODO: should rather return a copy of the scales here
+	case Direction::Y:
+	default:
+		return d->yScales; // TODO: should rather return a copy of the scales here
 	}
 }
 
 int CartesianCoordinateSystem::index(const Direction dir) const {
-	switch(dir) {
-		case Direction::X:
-			return d->xIndex;
-		case Direction::Y:
-		default:
-			return d->yIndex;
+	switch (dir) {
+	case Direction::X:
+		return d->xIndex;
+	case Direction::Y:
+	default:
+		return d->yIndex;
 	}
 }
 
 void CartesianCoordinateSystem::setIndex(const Direction dir, const int index) {
-	switch(dir) {
-		case Direction::X:
-			d->xIndex = index;
-			break;
-		default:
-		case Direction::Y:
-			d->yIndex = index;
-			break;
+	switch (dir) {
+	case Direction::X:
+		d->xIndex = index;
+		break;
+	default:
+	case Direction::Y:
+		d->yIndex = index;
+		break;
 	}
 }
-
 
 /*!
  * Adjusted the function QRectF::contains(QPointF) from Qt 4.8.4 to handle the

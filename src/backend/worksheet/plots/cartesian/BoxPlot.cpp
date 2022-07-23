@@ -339,8 +339,10 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 double BoxPlot::minimum(Direction dir) const {
 	Q_D(const BoxPlot);
 	switch (dir) {
-		case Direction::X: return d->xMin;
-		case Direction::Y: return d->yMin;
+	case Direction::X:
+		return d->xMin;
+	case Direction::Y:
+		return d->yMin;
 	}
 	DEBUG("BoxPlot::minimum ERROR: unhandled case!")
 	return NAN;
@@ -349,8 +351,10 @@ double BoxPlot::minimum(Direction dir) const {
 double BoxPlot::maximum(Direction dir) const {
 	Q_D(const BoxPlot);
 	switch (dir) {
-		case Direction::X: return d->xMax;
-		case Direction::Y: return d->yMax;
+	case Direction::X:
+		return d->xMax;
+	case Direction::Y:
+		return d->yMax;
 	}
 	DEBUG("BoxPlot::maximum ERROR: unhandled case!")
 	return NAN;

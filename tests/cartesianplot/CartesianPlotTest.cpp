@@ -87,8 +87,8 @@ void CartesianPlotTest::initTestCase() {
 		return;                                                                                                                                                \
 	QCOMPARE(curve->name(), "2");                                                                                                                              \
                                                                                                                                                                \
-	CHECK_RANGE(plot, curve, Direction::X, 1, 2);                                                                                                                         \
-	CHECK_RANGE(plot, curve, Direction::Y, 1, 2);                                                                                                                         \
+	CHECK_RANGE(plot, curve, Direction::X, 1, 2);                                                                                                              \
+	CHECK_RANGE(plot, curve, Direction::Y, 1, 2);                                                                                                              \
                                                                                                                                                                \
 	auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));                                                                                                    \
 	QVERIFY(xAxis != nullptr);                                                                                                                                 \
@@ -151,7 +151,7 @@ void CartesianPlotTest::initTestCase() {
 		return;                                                                                                                                                \
 	QCOMPARE(curve2->name(), "f(x)");                                                                                                                          \
                                                                                                                                                                \
-	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);                                                                                                                       \
+	CHECK_RANGE(plot, curve1, Direction::X, -4, 4);                                                                                                            \
 	CHECK_RANGE(plot, curve1, Direction::Y, 0, 1);
 
 #define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
@@ -160,18 +160,18 @@ void CartesianPlotTest::initTestCase() {
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
 	VALUES_EQUAL(range.end(), end_);
 
-#define CHECK_RANGE(plot, aspect, dir, start_, end_)                                                                                                            \
+#define CHECK_RANGE(plot, aspect, dir, start_, end_)                                                                                                           \
 	RANGE_CORRECT(plot->range(dir, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dir)), start_, end_)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
 		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
 		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                                \
-		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                                \
+		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                     \
+		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                     \
                                                                                                                                                                \
-		auto xrange = plot->range(Direction::X, xIndex);                                                                                                                    \
-		auto yrange = plot->range(Direction::Y, yIndex);                                                                                                                    \
+		auto xrange = plot->range(Direction::X, xIndex);                                                                                                       \
+		auto yrange = plot->range(Direction::Y, yIndex);                                                                                                       \
 		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}

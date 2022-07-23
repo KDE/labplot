@@ -63,80 +63,106 @@ public:
 	};
 
 	QVector<RichRange>& ranges(const Direction dir) {
-		switch(dir) {
-			case Direction::X:
-				return xRanges;
-			case Direction::Y:
-				return yRanges;
-			default:
-				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges;
+		switch (dir) {
+		case Direction::X:
+			return xRanges;
+		case Direction::Y:
+			return yRanges;
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
+			return yRanges;
 		}
 	}
 
 	bool rangeDirty(const Direction dir, int index) const {
-		switch(dir) {
-			case Direction::X: return xRanges.at(index).dirty;
-			case Direction::Y: return yRanges.at(index).dirty;
-			default: DEBUG("rangeDirty: ERROR: unhandled case");
+		switch (dir) {
+		case Direction::X:
+			return xRanges.at(index).dirty;
+		case Direction::Y:
+			return yRanges.at(index).dirty;
+		default:
+			DEBUG("rangeDirty: ERROR: unhandled case");
 		}
 		return false;
 	}
 
 	void setRangeDirty(const Direction dir, const int index, const bool dirty) {
-		switch(dir) {
-			case Direction::X: xRanges[index].dirty = dirty; break;
-			case Direction::Y: yRanges[index].dirty = dirty; break;
-			default: DEBUG("setRangeDirty: ERROR: unhandled case") break;
+		switch (dir) {
+		case Direction::X:
+			xRanges[index].dirty = dirty;
+			break;
+		case Direction::Y:
+			yRanges[index].dirty = dirty;
+			break;
+		default:
+			DEBUG("setRangeDirty: ERROR: unhandled case") break;
 		}
 	}
 
 	void setRange(const Direction dir, const int index, const Range<double>& range) {
-		switch(dir) {
-			case Direction::X: xRanges[index].range = range; break;
-			case Direction::Y: yRanges[index].range = range; break;
-			default: DEBUG("setRangeDirty: ERROR: unhandled case") break;
+		switch (dir) {
+		case Direction::X:
+			xRanges[index].range = range;
+			break;
+		case Direction::Y:
+			yRanges[index].range = range;
+			break;
+		default:
+			DEBUG("setRangeDirty: ERROR: unhandled case") break;
 		}
 	}
 
 	void setFormat(const Direction dir, const int index, RangeT::Format format) {
-		switch(dir) {
-			case Direction::X: xRanges[index].range.setFormat(format); break;
-			case Direction::Y: yRanges[index].range.setFormat(format); break;
-			default: DEBUG("setFormat: ERROR: unhandled case") break;
+		switch (dir) {
+		case Direction::X:
+			xRanges[index].range.setFormat(format);
+			break;
+		case Direction::Y:
+			yRanges[index].range.setFormat(format);
+			break;
+		default:
+			DEBUG("setFormat: ERROR: unhandled case") break;
 		}
 	}
 
 	void setScale(const Direction dir, const int index, RangeT::Scale scale) {
-		switch(dir) {
-			case Direction::X: xRanges[index].range.setScale(scale); break;
-			case Direction::Y: yRanges[index].range.setScale(scale); break;
-			default: DEBUG("setFormat: ERROR: unhandled case") break;
+		switch (dir) {
+		case Direction::X:
+			xRanges[index].range.setScale(scale);
+			break;
+		case Direction::Y:
+			yRanges[index].range.setScale(scale);
+			break;
+		default:
+			DEBUG("setFormat: ERROR: unhandled case") break;
 		}
 	}
 
 	Range<double>& range(const Direction dir, int index = -1) {
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);
-		switch(dir) {
-			case Direction::X:
-				return xRanges[index].range;
-			case Direction::Y:
-				return yRanges[index].range;
-			default:
-				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range;
+		switch (dir) {
+		case Direction::X:
+			return xRanges[index].range;
+		case Direction::Y:
+			return yRanges[index].range;
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
+			return yRanges[index].range;
 		}
 	}
 
 	const Range<double>& rangeConst(const Direction dir, int index = -1) const {
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);
-		switch(dir) {
-			case Direction::X:
-				return xRanges[index].range;
-			case Direction::Y:
-				return yRanges[index].range;
-			default:
-				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range;
+		switch (dir) {
+		case Direction::X:
+			return xRanges[index].range;
+		case Direction::Y:
+			return yRanges[index].range;
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
+			return yRanges[index].range;
 		}
 	}
 
@@ -144,13 +170,14 @@ public:
 		if (index == -1)
 			index = defaultCoordinateSystem()->index(dir);
 
-		switch(dir) {
-			case Direction::X:
-				return xRanges[index].dataRange;
-			case Direction::Y:
-				return yRanges[index].dataRange;
-			default:
-				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].dataRange;
+		switch (dir) {
+		case Direction::X:
+			return xRanges[index].dataRange;
+		case Direction::Y:
+			return yRanges[index].dataRange;
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
+			return yRanges[index].dataRange;
 		}
 	}
 
@@ -162,13 +189,14 @@ public:
 			return true;
 		}
 
-		switch(dir) {
-			case Direction::X:
-				return xRanges[index].range.autoScale();
-			case Direction::Y:
-				return yRanges[index].range.autoScale();
-			default:
-				DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction"); return yRanges[index].range.autoScale();
+		switch (dir) {
+		case Direction::X:
+			return xRanges[index].range.autoScale();
+		case Direction::Y:
+			return yRanges[index].range.autoScale();
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
+			return yRanges[index].range.autoScale();
 		}
 	}
 
@@ -179,14 +207,14 @@ public:
 			return;
 		}
 
-		switch(dir) {
-			case Direction::X:
-				xRanges[index].range.setAutoScale(b);
-				break;
-			case Direction::Y:
-			default:
-				yRanges[index].range.setAutoScale(b);
-				break;
+		switch (dir) {
+		case Direction::X:
+			xRanges[index].range.setAutoScale(b);
+			break;
+		case Direction::Y:
+		default:
+			yRanges[index].range.setAutoScale(b);
+			break;
 		}
 	}
 

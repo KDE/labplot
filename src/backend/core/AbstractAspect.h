@@ -425,17 +425,22 @@ Q_SIGNALS:
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
 
-// Used by the retransformTests
+	// Used by the retransformTests
 Q_SIGNALS:
 	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
+
 public:
-	void resetRetransformCalled() {mRetransformCalled.clear();}
-	QVector<bool> readRetransformCalled() const {return mRetransformCalled;}
+	void resetRetransformCalled() {
+		mRetransformCalled.clear();
+	}
+	QVector<bool> readRetransformCalled() const {
+		return mRetransformCalled;
+	}
 	QVector<bool> mRetransformCalled; // false means it was not suppressed and therefore a retransform is done
 
-	#define retransformCalled(suppressed) \
-		emit q->retransformCalledSignal(q, suppressed); \
-		q->mRetransformCalled.append(suppressed);
+#define retransformCalled(suppressed)                                                                                                                          \
+	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	q->mRetransformCalled.append(suppressed);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

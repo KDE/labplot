@@ -284,8 +284,10 @@ BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 double Histogram::minimum(Direction dir) const {
 	Q_D(const Histogram);
 	switch (dir) {
-		case Direction::X: return d->xMinimum();
-		case Direction::Y: return d->yMinimum();
+	case Direction::X:
+		return d->xMinimum();
+	case Direction::Y:
+		return d->yMinimum();
 	}
 	DEBUG("Histogram::minimum ERROR: unhandled case!")
 	return NAN;
@@ -294,8 +296,10 @@ double Histogram::minimum(Direction dir) const {
 double Histogram::maximum(Direction dir) const {
 	Q_D(const Histogram);
 	switch (dir) {
-		case Direction::X: return d->xMaximum();
-		case Direction::Y: return d->yMaximum();
+	case Direction::X:
+		return d->xMaximum();
+	case Direction::Y:
+		return d->yMaximum();
 	}
 	DEBUG("Histogram::minimum ERROR: unhandled case!")
 	return NAN;

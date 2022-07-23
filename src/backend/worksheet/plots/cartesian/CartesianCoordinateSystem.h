@@ -22,7 +22,7 @@ public:
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
 
-	enum class Direction {X, Y};
+	enum class Direction { X, Y };
 
 	static QString directionToString(Direction);
 

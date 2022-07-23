@@ -913,26 +913,28 @@ void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& l
 void XYCurveTest::updateLinesNoGapDirectConnection() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines{
-			QLineF(QPointF(1, 1), QPointF(2, 2)),
-			QLineF(QPointF(2, 2), QPointF(3, 3)),
-			QLineF(QPointF(3, 3), QPointF(4, 7)),
-			QLineF(QPointF(4, 7), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(6, 3)),
-			QLineF(QPointF(6, 3), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(8, 0)),
-			QLineF(QPointF(8, 0), QPointF(9, 5)),
-			QLineF(QPointF(9, 5), QPointF(10, 8)),
-		};
-		QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines{
+					QLineF(QPointF(1, 1), QPointF(2, 2)),
+					QLineF(QPointF(2, 2), QPointF(3, 3)),
+					QLineF(QPointF(3, 3), QPointF(4, 7)),
+					QLineF(QPointF(4, 7), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(6, 3)),
+					QLineF(QPointF(6, 3), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(8, 0)),
+					QLineF(QPointF(8, 0), QPointF(9, 5)),
+					QLineF(QPointF(9, 5), QPointF(10, 8)),
+				};
+				QCOMPARE(lastValueInvalidCurvePrivate->m_logicalPoints.size(), refLines.size() + 1); // last row is invalid so it will be ommitted
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurvePrivate->updateLines();
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -940,35 +942,36 @@ void XYCurveTest::updateLinesNoGapDirectConnection() {
 void XYCurveTest::updateLinesNoGapStartHorizontal() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(2, 1)),
-			QLineF(QPointF(2, 1), QPointF(2, 2)),
-			QLineF(QPointF(2, 2), QPointF(3, 2)),
-			QLineF(QPointF(3, 2), QPointF(3, 3)),
-			QLineF(QPointF(3, 3), QPointF(4, 3)),
-			QLineF(QPointF(4, 3), QPointF(4, 7)),
-			QLineF(QPointF(4, 7), QPointF(5, 7)),
-			QLineF(QPointF(5, 7), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(6, 15)),
-			QLineF(QPointF(6, 15), QPointF(6, 3)),
-			QLineF(QPointF(6, 3), QPointF(7, 3)),
-			QLineF(QPointF(7, 3), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(8, -10)),
-			QLineF(QPointF(8, -10), QPointF(8, 0)),
-			QLineF(QPointF(8, 0), QPointF(9, 0)),
-			QLineF(QPointF(9, 0), QPointF(9, 5)),
-			QLineF(QPointF(9, 5), QPointF(10, 5)),
-			QLineF(QPointF(10, 5), QPointF(10, 8)),
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-
-	});
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(2, 1)),
+					QLineF(QPointF(2, 1), QPointF(2, 2)),
+					QLineF(QPointF(2, 2), QPointF(3, 2)),
+					QLineF(QPointF(3, 2), QPointF(3, 3)),
+					QLineF(QPointF(3, 3), QPointF(4, 3)),
+					QLineF(QPointF(4, 3), QPointF(4, 7)),
+					QLineF(QPointF(4, 7), QPointF(5, 7)),
+					QLineF(QPointF(5, 7), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(6, 15)),
+					QLineF(QPointF(6, 15), QPointF(6, 3)),
+					QLineF(QPointF(6, 3), QPointF(7, 3)),
+					QLineF(QPointF(7, 3), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(8, -10)),
+					QLineF(QPointF(8, -10), QPointF(8, 0)),
+					QLineF(QPointF(8, 0), QPointF(9, 0)),
+					QLineF(QPointF(9, 0), QPointF(9, 5)),
+					QLineF(QPointF(9, 5), QPointF(10, 5)),
+					QLineF(QPointF(10, 5), QPointF(10, 8)),
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::StartHorizontal);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -976,34 +979,36 @@ void XYCurveTest::updateLinesNoGapStartHorizontal() {
 void XYCurveTest::updateLinesNoGapStartVertical() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(1, 2)),
-			QLineF(QPointF(1, 2), QPointF(2, 2)),
-			QLineF(QPointF(2, 2), QPointF(2, 3)),
-			QLineF(QPointF(2, 3), QPointF(3, 3)),
-			QLineF(QPointF(3, 3), QPointF(3, 7)),
-			QLineF(QPointF(3, 7), QPointF(4, 7)),
-			QLineF(QPointF(4, 7), QPointF(4, 15)),
-			QLineF(QPointF(4, 15), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(5, 3)),
-			QLineF(QPointF(5, 3), QPointF(6, 3)),
-			QLineF(QPointF(6, 3), QPointF(6, -10)),
-			QLineF(QPointF(6, -10), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(7, 0)),
-			QLineF(QPointF(7, 0), QPointF(8, 0)),
-			QLineF(QPointF(8, 0), QPointF(8, 5)),
-			QLineF(QPointF(8, 5), QPointF(9, 5)),
-			QLineF(QPointF(9, 5), QPointF(9, 8)),
-			QLineF(QPointF(9, 8), QPointF(10, 8)),
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(1, 2)),
+					QLineF(QPointF(1, 2), QPointF(2, 2)),
+					QLineF(QPointF(2, 2), QPointF(2, 3)),
+					QLineF(QPointF(2, 3), QPointF(3, 3)),
+					QLineF(QPointF(3, 3), QPointF(3, 7)),
+					QLineF(QPointF(3, 7), QPointF(4, 7)),
+					QLineF(QPointF(4, 7), QPointF(4, 15)),
+					QLineF(QPointF(4, 15), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(5, 3)),
+					QLineF(QPointF(5, 3), QPointF(6, 3)),
+					QLineF(QPointF(6, 3), QPointF(6, -10)),
+					QLineF(QPointF(6, -10), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(7, 0)),
+					QLineF(QPointF(7, 0), QPointF(8, 0)),
+					QLineF(QPointF(8, 0), QPointF(8, 5)),
+					QLineF(QPointF(8, 5), QPointF(9, 5)),
+					QLineF(QPointF(9, 5), QPointF(9, 8)),
+					QLineF(QPointF(9, 8), QPointF(10, 8)),
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::StartVertical);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -1011,26 +1016,28 @@ void XYCurveTest::updateLinesNoGapStartVertical() {
 void XYCurveTest::updateLinesNoGapMidPointHorizontal() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(1.5, 1)),		QLineF(QPointF(1.5, 1), QPointF(1.5, 2)),	QLineF(QPointF(1.5, 2), QPointF(2, 2)),
-			QLineF(QPointF(2, 2), QPointF(2.5, 2)),		QLineF(QPointF(2.5, 2), QPointF(2.5, 3)),	QLineF(QPointF(2.5, 3), QPointF(3, 3)),
-			QLineF(QPointF(3, 3), QPointF(3.5, 3)),		QLineF(QPointF(3.5, 3), QPointF(3.5, 7)),	QLineF(QPointF(3.5, 7), QPointF(4, 7)),
-			QLineF(QPointF(4, 7), QPointF(4.5, 7)),		QLineF(QPointF(4.5, 7), QPointF(4.5, 15)),	QLineF(QPointF(4.5, 15), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(5.5, 15)),	QLineF(QPointF(5.5, 15), QPointF(5.5, 3)),	QLineF(QPointF(5.5, 3), QPointF(6, 3)),
-			QLineF(QPointF(6, 3), QPointF(6.5, 3)),		QLineF(QPointF(6.5, 3), QPointF(6.5, -10)), QLineF(QPointF(6.5, -10), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(7.5, -10)), QLineF(QPointF(7.5, -10), QPointF(7.5, 0)), QLineF(QPointF(7.5, 0), QPointF(8, 0)),
-			QLineF(QPointF(8, 0), QPointF(8.5, 0)),		QLineF(QPointF(8.5, 0), QPointF(8.5, 5)),	QLineF(QPointF(8.5, 5), QPointF(9, 5)),
-			QLineF(QPointF(9, 5), QPointF(9.5, 5)),		QLineF(QPointF(9.5, 5), QPointF(9.5, 8)),	QLineF(QPointF(9.5, 8), QPointF(10, 8)),
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(1.5, 1)),		QLineF(QPointF(1.5, 1), QPointF(1.5, 2)),	QLineF(QPointF(1.5, 2), QPointF(2, 2)),
+					QLineF(QPointF(2, 2), QPointF(2.5, 2)),		QLineF(QPointF(2.5, 2), QPointF(2.5, 3)),	QLineF(QPointF(2.5, 3), QPointF(3, 3)),
+					QLineF(QPointF(3, 3), QPointF(3.5, 3)),		QLineF(QPointF(3.5, 3), QPointF(3.5, 7)),	QLineF(QPointF(3.5, 7), QPointF(4, 7)),
+					QLineF(QPointF(4, 7), QPointF(4.5, 7)),		QLineF(QPointF(4.5, 7), QPointF(4.5, 15)),	QLineF(QPointF(4.5, 15), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(5.5, 15)),	QLineF(QPointF(5.5, 15), QPointF(5.5, 3)),	QLineF(QPointF(5.5, 3), QPointF(6, 3)),
+					QLineF(QPointF(6, 3), QPointF(6.5, 3)),		QLineF(QPointF(6.5, 3), QPointF(6.5, -10)), QLineF(QPointF(6.5, -10), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(7.5, -10)), QLineF(QPointF(7.5, -10), QPointF(7.5, 0)), QLineF(QPointF(7.5, 0), QPointF(8, 0)),
+					QLineF(QPointF(8, 0), QPointF(8.5, 0)),		QLineF(QPointF(8.5, 0), QPointF(8.5, 5)),	QLineF(QPointF(8.5, 5), QPointF(9, 5)),
+					QLineF(QPointF(9, 5), QPointF(9.5, 5)),		QLineF(QPointF(9.5, 5), QPointF(9.5, 8)),	QLineF(QPointF(9.5, 8), QPointF(10, 8)),
 
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::MidpointHorizontal);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -1038,59 +1045,61 @@ void XYCurveTest::updateLinesNoGapMidPointHorizontal() {
 void XYCurveTest::updateLinesNoGapMidPointVertical() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(1, 1.5)),
-			QLineF(QPointF(1, 1.5), QPointF(2, 1.5)),
-			//		QLineF(QPointF(2, 1.5), QPointF(2, 2)),
-			//		QLineF(QPointF(2, 2), QPointF(2, 2.5)),
-			QLineF(QPointF(2, 1.5), QPointF(2, 2.5)),
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(1, 1.5)),
+					QLineF(QPointF(1, 1.5), QPointF(2, 1.5)),
+					//		QLineF(QPointF(2, 1.5), QPointF(2, 2)),
+					//		QLineF(QPointF(2, 2), QPointF(2, 2.5)),
+					QLineF(QPointF(2, 1.5), QPointF(2, 2.5)),
 
-			QLineF(QPointF(2, 2.5), QPointF(3, 2.5)),
-			//		QLineF(QPointF(3, 2.5), QPointF(3, 3)),
-			//		QLineF(QPointF(3, 3), QPointF(3, 5)),
-			QLineF(QPointF(3, 2.5), QPointF(3, 5)),
+					QLineF(QPointF(2, 2.5), QPointF(3, 2.5)),
+					//		QLineF(QPointF(3, 2.5), QPointF(3, 3)),
+					//		QLineF(QPointF(3, 3), QPointF(3, 5)),
+					QLineF(QPointF(3, 2.5), QPointF(3, 5)),
 
-			QLineF(QPointF(3, 5), QPointF(4, 5)),
-			//		QLineF(QPointF(4, 5), QPointF(4, 7)),
-			//		QLineF(QPointF(4, 7), QPointF(4, 11)),
-			QLineF(QPointF(4, 5), QPointF(4, 11)),
+					QLineF(QPointF(3, 5), QPointF(4, 5)),
+					//		QLineF(QPointF(4, 5), QPointF(4, 7)),
+					//		QLineF(QPointF(4, 7), QPointF(4, 11)),
+					QLineF(QPointF(4, 5), QPointF(4, 11)),
 
-			QLineF(QPointF(4, 11), QPointF(5, 11)),
-			//		QLineF(QPointF(5, 11), QPointF(5, 15)),
-			//		QLineF(QPointF(5, 15), QPointF(5, 9)),
-			QLineF(QPointF(5, 9), QPointF(5, 15)),
+					QLineF(QPointF(4, 11), QPointF(5, 11)),
+					//		QLineF(QPointF(5, 11), QPointF(5, 15)),
+					//		QLineF(QPointF(5, 15), QPointF(5, 9)),
+					QLineF(QPointF(5, 9), QPointF(5, 15)),
 
-			QLineF(QPointF(5, 9), QPointF(6, 9)),
-			//		QLineF(QPointF(6, 9), QPointF(6, 3)),
-			//		QLineF(QPointF(6, 3), QPointF(6, -3.5)),
-			QLineF(QPointF(6, 9), QPointF(6, -3.5)),
+					QLineF(QPointF(5, 9), QPointF(6, 9)),
+					//		QLineF(QPointF(6, 9), QPointF(6, 3)),
+					//		QLineF(QPointF(6, 3), QPointF(6, -3.5)),
+					QLineF(QPointF(6, 9), QPointF(6, -3.5)),
 
-			QLineF(QPointF(6, -3.5), QPointF(7, -3.5)),
-			//		QLineF(QPointF(7, -3.5), QPointF(7, -10)),
-			//		QLineF(QPointF(7, -10), QPointF(7, -5)),
-			QLineF(QPointF(7, -10), QPointF(7, -3.5)),
+					QLineF(QPointF(6, -3.5), QPointF(7, -3.5)),
+					//		QLineF(QPointF(7, -3.5), QPointF(7, -10)),
+					//		QLineF(QPointF(7, -10), QPointF(7, -5)),
+					QLineF(QPointF(7, -10), QPointF(7, -3.5)),
 
-			QLineF(QPointF(7, -5), QPointF(8, -5)),
-			//		QLineF(QPointF(8, -5), QPointF(8, 0)),
-			//		QLineF(QPointF(8, 0), QPointF(8, 2.5)),
-			QLineF(QPointF(8, -5), QPointF(8, 2.5)),
+					QLineF(QPointF(7, -5), QPointF(8, -5)),
+					//		QLineF(QPointF(8, -5), QPointF(8, 0)),
+					//		QLineF(QPointF(8, 0), QPointF(8, 2.5)),
+					QLineF(QPointF(8, -5), QPointF(8, 2.5)),
 
-			QLineF(QPointF(8, 2.5), QPointF(9, 2.5)),
-			//		QLineF(QPointF(9, 2.5), QPointF(9, 5)),
-			//		QLineF(QPointF(9, 5), QPointF(9, 6.5)),
-			QLineF(QPointF(9, 2.5), QPointF(9, 6.5)),
+					QLineF(QPointF(8, 2.5), QPointF(9, 2.5)),
+					//		QLineF(QPointF(9, 2.5), QPointF(9, 5)),
+					//		QLineF(QPointF(9, 5), QPointF(9, 6.5)),
+					QLineF(QPointF(9, 2.5), QPointF(9, 6.5)),
 
-			QLineF(QPointF(9, 6.5), QPointF(10, 6.5)),
-			QLineF(QPointF(10, 6.5), QPointF(10, 8)),
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+					QLineF(QPointF(9, 6.5), QPointF(10, 6.5)),
+					QLineF(QPointF(10, 6.5), QPointF(10, 8)),
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::MidpointVertical);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -1098,25 +1107,27 @@ void XYCurveTest::updateLinesNoGapMidPointVertical() {
 void XYCurveTest::updateLinesNoGapSegments2() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(2, 2)),
-			//		QLineF(QPointF(2, 2), QPointF(3, 3)),
-			QLineF(QPointF(3, 3), QPointF(4, 7)),
-			//		QLineF(QPointF(4, 7), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(6, 3)),
-			//		QLineF(QPointF(6, 3), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(8, 0)),
-			//		QLineF(QPointF(8, 0), QPointF(9, 5)),
-			QLineF(QPointF(9, 5), QPointF(10, 8)),
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(2, 2)),
+					//		QLineF(QPointF(2, 2), QPointF(3, 3)),
+					QLineF(QPointF(3, 3), QPointF(4, 7)),
+					//		QLineF(QPointF(4, 7), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(6, 3)),
+					//		QLineF(QPointF(6, 3), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(8, 0)),
+					//		QLineF(QPointF(8, 0), QPointF(9, 5)),
+					QLineF(QPointF(9, 5), QPointF(10, 8)),
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::Segments2);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -1124,25 +1135,27 @@ void XYCurveTest::updateLinesNoGapSegments2() {
 void XYCurveTest::updateLinesNoGapSegments3() {
 	LOAD_PROJECT
 	bool updateLinesCalled = false;
-	connect(lastValueInvalidCurve, &XYCurve::linesUpdated, [lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
-		updateLinesCalled = true;
-		QVector<QLineF> refLines = {
-			QLineF(QPointF(1, 1), QPointF(2, 2)),
-			QLineF(QPointF(2, 2), QPointF(3, 3)),
-			//		QLineF(QPointF(3, 3), QPointF(4, 7)),
-			QLineF(QPointF(4, 7), QPointF(5, 15)),
-			QLineF(QPointF(5, 15), QPointF(6, 3)),
-			//		QLineF(QPointF(6, 3), QPointF(7, -10)),
-			QLineF(QPointF(7, -10), QPointF(8, 0)),
-			QLineF(QPointF(8, 0), QPointF(9, 5)),
-			//		QLineF(QPointF(9, 5), QPointF(10, 8)),
-		};
-		auto test_lines = lastValueInvalidCurvePrivate->m_lines;
-		QCOMPARE(refLines.size(), test_lines.size());
-		for (int i = 0; i < test_lines.size(); i++) {
-			COMPARE_LINES(test_lines.at(i), refLines.at(i));
-		}
-	});
+	connect(lastValueInvalidCurve,
+			&XYCurve::linesUpdated,
+			[lastValueInvalidCurvePrivate, &updateLinesCalled](const XYCurve* curve, const QVector<QLineF>& lines) {
+				updateLinesCalled = true;
+				QVector<QLineF> refLines = {
+					QLineF(QPointF(1, 1), QPointF(2, 2)),
+					QLineF(QPointF(2, 2), QPointF(3, 3)),
+					//		QLineF(QPointF(3, 3), QPointF(4, 7)),
+					QLineF(QPointF(4, 7), QPointF(5, 15)),
+					QLineF(QPointF(5, 15), QPointF(6, 3)),
+					//		QLineF(QPointF(6, 3), QPointF(7, -10)),
+					QLineF(QPointF(7, -10), QPointF(8, 0)),
+					QLineF(QPointF(8, 0), QPointF(9, 5)),
+					//		QLineF(QPointF(9, 5), QPointF(10, 8)),
+				};
+				auto test_lines = lastValueInvalidCurvePrivate->m_lines;
+				QCOMPARE(refLines.size(), test_lines.size());
+				for (int i = 0; i < test_lines.size(); i++) {
+					COMPARE_LINES(test_lines.at(i), refLines.at(i));
+				}
+			});
 	lastValueInvalidCurve->setLineType(XYCurve::LineType::Segments3);
 	QCOMPARE(updateLinesCalled, true);
 }
@@ -1460,7 +1473,6 @@ void XYCurveTest::updateLinesWithGapLineSkipStartHorizontal() {
 	});
 	withGapCurve2->setLineSkipGaps(true);
 	QCOMPARE(updateLinesCalled, true);
-
 }
 
 void XYCurveTest::updateLinesWithGapLineSkipStartVertical() {

@@ -28,17 +28,17 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -1166,13 +1166,13 @@ bool CartesianPlot::autoScale(const Direction dir, int index) const {
 
 class CartesianPlotEnableAutoScaleIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotEnableAutoScaleIndexCmd(CartesianPlotPrivate* private_obj, Direction dir ,bool autoScale, int index, bool fullRange)
+	CartesianPlotEnableAutoScaleIndexCmd(CartesianPlotPrivate* private_obj, Direction dir, bool autoScale, int index, bool fullRange)
 		: m_private(private_obj)
 		, m_direction(dir)
 		, m_autoScale(autoScale)
 		, m_index(index)
 		, m_fullRange(fullRange) {
-		setText(i18n("%1: change %2-range %3 auto scaling", m_private->name(), CartesianCoordinateSystem::directionToString(dir),m_index + 1));
+		setText(i18n("%1: change %2-range %3 auto scaling", m_private->name(), CartesianCoordinateSystem::directionToString(dir), m_index + 1));
 	}
 
 	void redo() override {
@@ -1225,12 +1225,12 @@ void CartesianPlot::enableAutoScale(Direction dir, int index, const bool enable,
 
 int CartesianPlot::rangeCount(const Direction dir) const {
 	Q_D(const CartesianPlot);
-	switch(dir) {
-		case Direction::X:
-			return (d ? d->xRanges.size() : 0);
-		case Direction::Y:
-		default:
-			return (d ? d->yRanges.size() : 0);
+	switch (dir) {
+	case Direction::X:
+		return (d ? d->xRanges.size() : 0);
+	case Direction::Y:
+	default:
+		return (d ? d->yRanges.size() : 0);
 	}
 }
 
@@ -1272,8 +1272,8 @@ public:
 private:
 	CartesianPlot::Private* m_target;
 	Direction m_direction;
-	Range<double> m_otherValue;                                                                                                                            \
-	int m_index;                                                                                                                                           \
+	Range<double> m_otherValue;
+	int m_index;
 };
 
 void CartesianPlot::setRange(const Direction dir, const int index, const Range<double>& range) {
@@ -1282,9 +1282,15 @@ void CartesianPlot::setRange(const Direction dir, const int index, const Range<d
 
 	Direction dir_other;
 	switch (dir) {
-		case Direction::X: dir_other = Direction::Y; break;
-		case Direction::Y: dir_other = Direction::X; break;
-		default: DEBUG("CartesianPlot::setRange ERROR unhandled direction"); return;
+	case Direction::X:
+		dir_other = Direction::Y;
+		break;
+	case Direction::Y:
+		dir_other = Direction::X;
+		break;
+	default:
+		DEBUG("CartesianPlot::setRange ERROR unhandled direction");
+		return;
 	}
 
 	auto r = d->checkRange(range);
@@ -1323,7 +1329,7 @@ bool CartesianPlot::rangeDirty(Direction dir, int index) const {
 		return d->rangeDirty(dir, index);
 	else {
 		bool dirty = false;
-		for (int i=0; i < rangeCount(dir); i++)
+		for (int i = 0; i < rangeCount(dir); i++)
 			dirty |= d->rangeDirty(dir, i);
 		return dirty;
 	}
@@ -1334,7 +1340,7 @@ void CartesianPlot::setRangeDirty(Direction dir, int index, bool dirty) {
 	if (index >= 0 && index < rangeCount(dir))
 		d->setRangeDirty(dir, index, dirty);
 	else {
-		for (int i=0; i < rangeCount(dir); i++)
+		for (int i = 0; i < rangeCount(dir); i++)
 			d->setRangeDirty(dir, i, dirty);
 	}
 }
@@ -1371,12 +1377,17 @@ void CartesianPlot::removeRange(const Direction dir, int index) {
 		return;
 	}
 
-	switch(dir) {
-		case Direction::X: d->xRanges.remove(index); break;
-		case Direction::Y: d->yRanges.remove(index); break;
-		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction"); return;
+	switch (dir) {
+	case Direction::X:
+		d->xRanges.remove(index);
+		break;
+	case Direction::Y:
+		d->yRanges.remove(index);
+		break;
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
+		return;
 	}
-
 
 	if (project())
 		project()->setChanged(true);
@@ -2443,8 +2454,14 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Direction dir) {
 	auto index = coordinateSystem(cSystemIndex)->index(dir);
 	Direction dir_other;
 	switch (dir) {
-		case Direction::X: dir_other = Direction::Y; d->xRanges[index].dirty = true; break;
-		case Direction::Y: dir_other = Direction::X; d->yRanges[index].dirty = true; break;
+	case Direction::X:
+		dir_other = Direction::Y;
+		d->xRanges[index].dirty = true;
+		break;
+	case Direction::Y:
+		dir_other = Direction::X;
+		d->yRanges[index].dirty = true;
+		break;
 	}
 
 	bool updated = false;
@@ -2595,13 +2612,17 @@ bool CartesianPlot::scaleAuto(Direction dir, int index, bool fullRange, bool sup
 		if (fullRange) {
 			// If not fullrange the y range will be used. So that means
 			// the yrange would not change and therefore it must not be dirty
-			for (const auto* c: m_coordinateSystems) {
+			for (const auto* c : m_coordinateSystems) {
 				// All x ranges with this xIndex must be dirty
 				const auto* cs = dynamic_cast<const CartesianCoordinateSystem*>(c);
 				if (cs->index(dir) == index) {
-					switch(dir) {
-						case Direction::X:	setRangeDirty(Direction::Y, cs->index(Direction::Y), true); break;
-						case Direction::Y:	setRangeDirty(Direction::X, cs->index(Direction::X), true); break;
+					switch (dir) {
+					case Direction::X:
+						setRangeDirty(Direction::Y, cs->index(Direction::Y), true);
+						break;
+					case Direction::Y:
+						setRangeDirty(Direction::X, cs->index(Direction::X), true);
+						break;
 					}
 				}
 			}
@@ -2672,7 +2693,8 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange, bool suppr
  * The range of the y axis is not considered.
  */
 void CartesianPlot::calculateDataRange(const Direction dir, const int index, bool completeRange) {
-	DEBUG(Q_FUNC_INFO << ", direction = " << CartesianCoordinateSystem::directionToString(dir).toStdString() << ", index = " << index << ", complete range = " << completeRange)
+	DEBUG(Q_FUNC_INFO << ", direction = " << CartesianCoordinateSystem::directionToString(dir).toStdString() << ", index = " << index
+					  << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
 	d->dataRange(dir, index).setRange(qInf(), -qInf());
@@ -2695,9 +2717,13 @@ void CartesianPlot::calculateDataRange(const Direction dir, const int index, boo
 		}
 
 		Direction dir_other;
-		switch(dir) {
-			case Direction::X: dir_other = Direction::Y; break;
-			case Direction::Y: dir_other = Direction::X; break;
+		switch (dir) {
+		case Direction::X:
+			dir_other = Direction::Y;
+			break;
+		case Direction::Y:
+			dir_other = Direction::X;
+			break;
 		}
 
 		// range of indices
@@ -3265,10 +3291,15 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 	emit q->retransformScaleCalled(q, dir, index);
 	static const int breakGap = 20;
 	Range<double> plotSceneRange;
-	switch(dir) {
-		case Direction::X: plotSceneRange = {dataRect.x(), dataRect.x() + dataRect.width()}; break;
-		case Direction::Y: plotSceneRange = {dataRect.y() + dataRect.height(), dataRect.y()}; break;
-		default: DEBUG(Q_FUNC_INFO << "ERROR unimplemented direction. ");
+	switch (dir) {
+	case Direction::X:
+		plotSceneRange = {dataRect.x(), dataRect.x() + dataRect.width()};
+		break;
+	case Direction::Y:
+		plotSceneRange = {dataRect.y() + dataRect.height(), dataRect.y()};
+		break;
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR unimplemented direction. ");
 	};
 	Range<double> sceneRange, logicalRange;
 
@@ -3278,7 +3309,8 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 			continue;
 
 		const auto r = range(dir, index);
-		DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::directionToString(dir).toStdString() << "range = " << r.toStdString() << ", auto scale = " << r.autoScale())
+		DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::directionToString(dir).toStdString() << "range = " << r.toStdString()
+						  << ", auto scale = " << r.autoScale())
 
 		QVector<CartesianScale*> scales;
 
@@ -3328,20 +3360,23 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 		const double deltaMin = rangep.range.start() - rangep.prev.start();
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
-		switch(dir) {
-			case Direction::X: {
-				if (!qFuzzyIsNull(deltaMin))
-					Q_EMIT q->xMinChanged(i, rangep.range.start());
-				if (!qFuzzyIsNull(deltaMax))
-					Q_EMIT q->xMaxChanged(i, rangep.range.end());
-				break;
-			} case Direction::Y: {
-				if (!qFuzzyIsNull(deltaMin))
-					Q_EMIT q->yMinChanged(i, rangep.range.start());
-				if (!qFuzzyIsNull(deltaMax))
-					Q_EMIT q->yMaxChanged(i, rangep.range.end());
-				break;
-			} default: DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
+		switch (dir) {
+		case Direction::X: {
+			if (!qFuzzyIsNull(deltaMin))
+				Q_EMIT q->xMinChanged(i, rangep.range.start());
+			if (!qFuzzyIsNull(deltaMax))
+				Q_EMIT q->xMaxChanged(i, rangep.range.end());
+			break;
+		}
+		case Direction::Y: {
+			if (!qFuzzyIsNull(deltaMin))
+				Q_EMIT q->yMinChanged(i, rangep.range.start());
+			if (!qFuzzyIsNull(deltaMax))
+				Q_EMIT q->yMaxChanged(i, rangep.range.end());
+			break;
+		}
+		default:
+			DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
 		}
 
 		rangep.prev = rangep.range;
@@ -3352,8 +3387,8 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 			int axisIndex = q->coordinateSystem(axis->coordinateSystemIndex())->index(dir);
 			if (axis->rangeType() != Axis::RangeType::Auto || axisIndex != i)
 				continue;
-			if ((dir == Direction::Y && axis->orientation() != Axis::Orientation::Vertical) ||
-				 (dir == Direction::X && axis->orientation() != Axis::Orientation::Horizontal))
+			if ((dir == Direction::Y && axis->orientation() != Axis::Orientation::Vertical)
+				|| (dir == Direction::X && axis->orientation() != Axis::Orientation::Horizontal))
 				continue;
 
 			if (!qFuzzyIsNull(deltaMax)) {
@@ -3483,39 +3518,45 @@ void CartesianPlotPrivate::niceExtendChanged() {
 
 void CartesianPlotPrivate::rangeFormatChanged(Direction dir) {
 	DEBUG(Q_FUNC_INFO)
-	switch(dir) {
-		case Direction::X: {
-			for (auto* axis : q->children<Axis>()) {
-				// TODO: only if x range of axis's plot range is changed
-				if (axis->orientation() == Axis::Orientation::Horizontal)
-					axis->retransformTickLabelStrings();
-			}
-			break;
-		} case Direction::Y: {
-			for (auto* axis : q->children<Axis>()) {
-				// TODO: only if x range of axis's plot range is changed
-				if (axis->orientation() == Axis::Orientation::Horizontal)
-					axis->retransformTickLabelStrings();
-			}
-			break;
+	switch (dir) {
+	case Direction::X: {
+		for (auto* axis : q->children<Axis>()) {
+			// TODO: only if x range of axis's plot range is changed
+			if (axis->orientation() == Axis::Orientation::Horizontal)
+				axis->retransformTickLabelStrings();
 		}
-		default: DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
+		break;
+	}
+	case Direction::Y: {
+		for (auto* axis : q->children<Axis>()) {
+			// TODO: only if x range of axis's plot range is changed
+			if (axis->orientation() == Axis::Orientation::Horizontal)
+				axis->retransformTickLabelStrings();
+		}
+		break;
+	}
+	default:
+		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
 	}
 }
 
 CartesianPlot::RangeBreaks CartesianPlotPrivate::rangeBreaks(Direction dir) {
-	switch(dir) {
-		case Direction::X: return xRangeBreaks;
-		case Direction::Y: return yRangeBreaks;
+	switch (dir) {
+	case Direction::X:
+		return xRangeBreaks;
+	case Direction::Y:
+		return yRangeBreaks;
 	}
 	DEBUG("CartesianPlotPrivate::rangeBreaks ERROR: unhandled case");
 	return CartesianPlot::RangeBreaks();
 }
 
 bool CartesianPlotPrivate::rangeBreakingEnabled(Direction dir) {
-	switch(dir) {
-		case Direction::X: return xRangeBreakingEnabled;
-		case Direction::Y: return yRangeBreakingEnabled;
+	switch (dir) {
+	case Direction::X:
+		return xRangeBreakingEnabled;
+	case Direction::Y:
+		return yRangeBreakingEnabled;
 	}
 	DEBUG("CartesianPlotPrivate::rangeBreakingEnabled ERROR: unhandled case");
 	return false;
@@ -3682,10 +3723,12 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 			cursorPenWidth2 = 10.;
 
 		bool visible;
-		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Direction::Y).start()), visible).x()) < cursorPenWidth2) {
+		if (cursor0Enable
+			&& qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Direction::Y).start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
 		} else if (cursor1Enable
-				   && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Direction::Y).start()), visible).x()) < cursorPenWidth2) {
+				   && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Direction::Y).start()), visible).x())
+					   < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
 			cursor1Enable = true;
@@ -4392,7 +4435,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			bool visible;
 			if ((cursor0Enable
-				 && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Direction::Y).start()), visible).x()) < cursorPenWidth2)
+				 && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Direction::Y).start()), visible).x())
+					 < cursorPenWidth2)
 				|| (cursor1Enable
 					&& qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Direction::Y).start()), visible).x())
 						< cursorPenWidth2))
