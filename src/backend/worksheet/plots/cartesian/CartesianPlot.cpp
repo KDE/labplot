@@ -3000,7 +3000,7 @@ void CartesianPlot::zoom(int index, Direction dir, bool zoom_in) { // TODO: chan
 	}
 
 	if (range.finite())
-		d->range(dir, index);
+		d->setRange(dir, index, range);
 }
 
 /*!
@@ -3329,19 +3329,19 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
 		switch(dir) {
-		case Direction::X: {
-			if (!qFuzzyIsNull(deltaMin))
-				Q_EMIT q->xMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax))
-				Q_EMIT q->xMaxChanged(i, rangep.range.end());
-			break;
-		} case Direction::Y: {
-			if (!qFuzzyIsNull(deltaMin))
-				Q_EMIT q->yMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax))
-				Q_EMIT q->yMaxChanged(i, rangep.range.end());
-			break;
-		} default: DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
+			case Direction::X: {
+				if (!qFuzzyIsNull(deltaMin))
+					Q_EMIT q->xMinChanged(i, rangep.range.start());
+				if (!qFuzzyIsNull(deltaMax))
+					Q_EMIT q->xMaxChanged(i, rangep.range.end());
+				break;
+			} case Direction::Y: {
+				if (!qFuzzyIsNull(deltaMin))
+					Q_EMIT q->yMinChanged(i, rangep.range.start());
+				if (!qFuzzyIsNull(deltaMax))
+					Q_EMIT q->yMaxChanged(i, rangep.range.end());
+				break;
+			} default: DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
 		}
 
 		rangep.prev = rangep.range;
