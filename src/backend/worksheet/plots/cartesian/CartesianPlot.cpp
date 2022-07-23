@@ -1217,8 +1217,7 @@ void CartesianPlot::enableAutoScale(Direction dir, int index, const bool enable,
 	if (enable != range(dir, index).autoScale()) {
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
-		if (dir == Direction::X)
-			exec(new CartesianPlotEnableAutoScaleIndexCmd(d, dir, enable, index, fullRange));
+		exec(new CartesianPlotEnableAutoScaleIndexCmd(d, dir, enable, index, fullRange));
 		if (project())
 			project()->setChanged(true);
 	}
