@@ -197,85 +197,83 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 }
 
 void AxisTest::TickStartValue() {
-    Project project;
-    auto* ws = new Worksheet("worksheet");
-    QVERIFY(ws != nullptr);
-    project.addChild(ws);
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
 
-    auto* p = new CartesianPlot("plot");
-    p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
-    QVERIFY(p != nullptr);
-    ws->addChild(p);
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
 
-    auto axes = p->children<Axis>();
-    QCOMPARE(axes.count(), 2);
-    QCOMPARE(axes.at(0)->name(), "x");
-    QCOMPARE(axes.at(1)->name(), "y");
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), "x");
+	QCOMPARE(axes.at(1)->name(), "y");
 
-    AxisDock axisDock(nullptr);
+	AxisDock axisDock(nullptr);
 
-    auto* xAxis = axes.at(0);
+	auto* xAxis = axes.at(0);
 
-    {
-        QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-        CHECK_AXIS_LABELS(expectedTickValues);
-    }
+	{
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
+	}
 
-    // To check also if the dock shows the correct values
-    axisDock.setAxes({xAxis});
+	// To check also if the dock shows the correct values
+	axisDock.setAxes({xAxis});
 
-    QCOMPARE(axisDock.ui.cbMajorTickStartType->isChecked(), false); // by default offset is used
-    QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), false);
-    QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), false);
-    QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), true);
-    QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), true);
+	QCOMPARE(axisDock.ui.cbMajorTickStartType->isChecked(), false); // by default offset is used
+	QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), false);
+	QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), false);
+	QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), true);
+	QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), true);
 
-    QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Offset);
+	QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Offset);
 
-    xAxis->setMajorTickStartValue(0.1); // does not affect anything, but just that the ticklabels are different to the offset when setting
+	xAxis->setMajorTickStartValue(0.1); // does not affect anything, but just that the ticklabels are different to the offset when setting
 
-    xAxis->setMajorTickStartType(Axis::TickStartType::Absolute);
+	xAxis->setMajorTickStartType(Axis::TickStartType::Absolute);
 
-    QCOMPARE(axisDock.ui.cbMajorTickStartType->isChecked(), true);
-    QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), true);
-    QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), true);
-    QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), false);
-    QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), false);
+	QCOMPARE(axisDock.ui.cbMajorTickStartType->isChecked(), true);
+	QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), true);
+	QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), true);
+	QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), false);
+	QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), false);
 
-    QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Absolute);
-    {
-        QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
-        CHECK_AXIS_LABELS(expectedTickValues);
-    }
+	QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Absolute);
+	{
+		QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
+		CHECK_AXIS_LABELS(expectedTickValues);
+	}
 
+	xAxis->setMajorTickStartValue(0.2);
+	QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), "0.2");
 
-    xAxis->setMajorTickStartValue(0.2);
-    QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), "0.2");
+	{
+		QVector<double> expectedTickValues = {0.2, 0.36, 0.52, 0.68, 0.84, 1.0}; // starting now from 0.2
+		CHECK_AXIS_LABELS(expectedTickValues);
+	}
 
-    {
-        QVector<double> expectedTickValues = {0.2, 0.36, 0.52, 0.68, 0.84, 1.0}; // starting now from 0.2
-        CHECK_AXIS_LABELS(expectedTickValues);
-    }
+	project.undoStack()->undo();
 
-    project.undoStack()->undo();
+	QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Absolute);
 
-     QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Absolute);
+	{
+		QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
+		CHECK_AXIS_LABELS(expectedTickValues);
+	}
 
-    {
-        QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
-        CHECK_AXIS_LABELS(expectedTickValues);
-    }
+	project.undoStack()->undo();
 
-    project.undoStack()->undo();
+	QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Offset);
 
-     QCOMPARE(xAxis->majorTickStartType(), Axis::TickStartType::Offset);
-
-    // by default the offset is zero, so we are starting again from the begining
-    {
-        QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-        CHECK_AXIS_LABELS(expectedTickValues);
-    }
-
+	// by default the offset is zero, so we are starting again from the begining
+	{
+		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+		CHECK_AXIS_LABELS(expectedTickValues);
+	}
 }
 
 QTEST_MAIN(AxisTest)
