@@ -1430,6 +1430,14 @@ private:
 	RangeT::Scale m_scaleOld{RangeT::Scale::Linear};
 };
 
+RangeT::Scale CartesianPlot::rangeScale(const Direction dir, const int index) const {
+	if (index < 0 || index > rangeCount(dir)) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return RangeT::Scale::Linear;
+	}
+	return range(dir, index).scale();
+}
+
 RangeT::Scale CartesianPlot::xRangeScale() const {
 	return xRangeScale(defaultCoordinateSystem()->index(Direction::X));
 }
@@ -1437,18 +1445,10 @@ RangeT::Scale CartesianPlot::yRangeScale() const {
 	return yRangeScale(defaultCoordinateSystem()->index(Direction::Y));
 }
 RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
-	if (index < 0 || index > rangeCount(Direction::X)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return RangeT::Scale::Linear;
-	}
-	return range(Direction::X, index).scale();
+	return rangeScale(Direction::X, index);
 }
 RangeT::Scale CartesianPlot::yRangeScale(const int index) const {
-	if (index < 0 || index > rangeCount(Direction::Y)) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return RangeT::Scale::Linear;
-	}
-	return range(Direction::Y, index).scale();
+	return rangeScale(Direction::Y, index);
 }
 void CartesianPlot::setXRangeScale(const RangeT::Scale scale) {
 	setXRangeScale(defaultCoordinateSystem()->index(Direction::X), scale);
