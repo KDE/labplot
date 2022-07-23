@@ -267,9 +267,10 @@ void Spreadsheet::insertColumns(int before, int count) {
 	WAIT_CURSOR;
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
 	auto* before_col = column(before);
-	int rows = rowCount();
+	const int cols = columnCount();
+	const int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		auto* new_col = new Column(QString::number(count + i + 1), AbstractColumn::ColumnMode::Double);
+		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
