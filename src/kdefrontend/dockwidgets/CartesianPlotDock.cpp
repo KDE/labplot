@@ -621,10 +621,6 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		return;
 
 	auto dir_str = CartesianCoordinateSystem::directionToString(dir);
-			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC));
-			dte->setTimeSpec(Qt::UTC);
-			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC));
 
 	QTableWidget* tw = nullptr;
 	QLabel* l = nullptr;
