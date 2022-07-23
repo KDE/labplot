@@ -1243,7 +1243,7 @@ const Range<double>& CartesianPlot::range(const Direction dir, int index) const 
 }
 
 void CartesianPlot::setRange(Direction dir, const Range<double> range) {
-	const int index{defaultCoordinateSystem()->index(Direction::X)};
+	const int index{defaultCoordinateSystem()->index(dir)};
 	setRange(dir, index, range);
 }
 
