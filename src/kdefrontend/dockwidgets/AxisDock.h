@@ -48,7 +48,7 @@ private:
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 	void updatePlotRanges() override;
-    void updateMajorTickStartType(bool visible);
+	void updateMajorTickStartType(bool visible);
 	void initConnections();
 
 	void load();
@@ -103,9 +103,9 @@ private Q_SLOTS:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
-    void majorTickStartTypeChanged(int state);
+	void majorTickStartTypeChanged(int state);
 	void majorTickStartOffsetChanged();
-    void majorTickStartValueChanged();
+	void majorTickStartValueChanged();
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);
@@ -187,9 +187,9 @@ private Q_SLOTS:
 	void axisMajorTicksAutoNumberChanged(bool);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksSpacingChanged(qreal);
-    void axisMajorTickStartTypeChanged(Axis::TickStartType);
+	void axisMajorTickStartTypeChanged(Axis::TickStartType);
 	void axisMajorTickStartOffsetChanged(qreal);
-    void axisMajorTickStartValueChanged(qreal);
+	void axisMajorTickStartValueChanged(qreal);
 	void axisMajorTicksColumnChanged(const AbstractColumn*);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
