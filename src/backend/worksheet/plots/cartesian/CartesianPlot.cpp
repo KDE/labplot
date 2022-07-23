@@ -3271,7 +3271,12 @@ void CartesianPlotPrivate::retransform() {
 void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 	emit q->retransformScaleCalled(q, dir, index);
 	static const int breakGap = 20;
-	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
+	Range<double> plotSceneRange;
+	switch(dir) {
+		case Direction::X: plotSceneRange = {dataRect.x(), dataRect.x() + dataRect.width()}; break;
+		case Direction::Y: plotSceneRange = {dataRect.y() + dataRect.height(), dataRect.y()}; break;
+		default: DEBUG(Q_FUNC_INFO << "ERROR unimplemented direction. ");
+	};
 	Range<double> sceneRange, logicalRange;
 
 	for (const auto cSystem : coordinateSystems()) {
