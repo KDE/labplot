@@ -211,8 +211,8 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int index, bool x, bool leftOrDown);
-	void zoom(int index, bool x, bool in);
+	void shift(int index, Direction, bool leftOrDown);
+	void zoom(int index, Direction, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Direction, const int index, bool completeRange = true);
 	int curveTotalCount() const;

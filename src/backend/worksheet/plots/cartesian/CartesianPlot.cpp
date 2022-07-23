@@ -2795,8 +2795,8 @@ void CartesianPlot::zoomIn(int xIndex, int yIndex) {
 	setUndoAware(true);
 	setRangeDirty(Direction::X, xIndex, true);
 	setRangeDirty(Direction::Y, yIndex, true);
-	zoom(xIndex, true, true); // zoom in x
-	zoom(yIndex, false, true); // zoom in y
+	zoom(xIndex, Direction::X, true); // zoom in x
+	zoom(yIndex, Direction::Y, true); // zoom in y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
@@ -2810,8 +2810,8 @@ void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 	setUndoAware(true);
 	setRangeDirty(Direction::X, xIndex, true);
 	setRangeDirty(Direction::Y, yIndex, true);
-	zoom(xIndex, true, false); // zoom out x
-	zoom(yIndex, false, false); // zoom out y
+	zoom(xIndex, Direction::X, false); // zoom out x
+	zoom(yIndex, Direction::Y, false); // zoom out y
 
 	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
@@ -2823,7 +2823,7 @@ void CartesianPlot::zoomInX(int index) {
 	enableAutoScale(Direction::X, index, false);
 	setUndoAware(true);
 	setRangeDirty(Direction::Y, index, true);
-	zoom(index, true, true); // zoom in x
+	zoom(index, Direction::X, true); // zoom in x
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2847,7 +2847,7 @@ void CartesianPlot::zoomOutX(int index) {
 	enableAutoScale(Direction::X, index, false);
 	setUndoAware(true);
 	setRangeDirty(Direction::Y, index, true);
-	zoom(index, true, false); // zoom out x
+	zoom(index, Direction::X, false); // zoom out x
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2871,7 +2871,7 @@ void CartesianPlot::zoomInY(int index) {
 	enableAutoScale(Direction::Y, index, false);
 	setUndoAware(true);
 	setRangeDirty(Direction::X, index, true);
-	zoom(index, false, true); // zoom in y
+	zoom(index, Direction::Y, true); // zoom in y
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2895,7 +2895,7 @@ void CartesianPlot::zoomOutY(int index) {
 	enableAutoScale(Direction::Y, index, false);
 	setUndoAware(true);
 	setRangeDirty(Direction::X, index, true);
-	zoom(index, false, false); // zoom out y
+	zoom(index, Direction::Y, false); // zoom out y
 
 	bool retransform = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2918,24 +2918,22 @@ void CartesianPlot::zoomOutY(int index) {
  * @param x if set to \true the x-range is modified, the y-range for \c false
  * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
  */
-void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
+void CartesianPlot::zoom(int index, Direction dir, bool zoom_in) { // TODO: change x to Direction!
 	Q_D(CartesianPlot);
 
 	Range<double> range;
 	if (index == -1) {
 		QVector<int> zoomedIndices;
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
-			int idx = x ? coordinateSystem(i)->index(Direction::X) : coordinateSystem(i)->index(Direction::Y);
+			int idx = coordinateSystem(i)->index(dir);
 			if (zoomedIndices.contains(idx))
 				continue;
-			zoom(idx, x, zoom_in);
+			zoom(idx, dir, zoom_in);
 			zoomedIndices.append(idx);
 		}
 		return;
-	} else if (x)
-		range = d->xRanges.at(index).range;
-	else
-		range = d->yRanges.at(index).range;
+	}
+	range = d->range(dir, index);
 
 	double factor = m_zoomFactor;
 	if (zoom_in)
@@ -3002,7 +3000,7 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
 	}
 
 	if (range.finite())
-		x ? d->range(Direction::X, index) = range : d->range(Direction::Y, index) = range;
+		d->range(dir, index);
 }
 
 /*!
@@ -3012,24 +3010,22 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
  * @param leftOrDown the "shift left" for x or "shift dows" for y is performed if set to \c \true,
  * "shift right" or "shift up" for \c false
  */
-void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
+void CartesianPlot::shift(int index, Direction dir, bool leftOrDown) {
 	Q_D(CartesianPlot);
 
 	Range<double> range;
 	if (index == -1) {
 		QVector<int> shiftedIndices;
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
-			int idx = x ? coordinateSystem(i)->index(Direction::X) : coordinateSystem(i)->index(Direction::Y);
+			int idx = coordinateSystem(i)->index(dir);
 			if (shiftedIndices.contains(idx))
 				continue;
-			shift(idx, x, leftOrDown);
+			shift(idx, dir, leftOrDown);
 			shiftedIndices.append(idx);
 		}
 		return;
-	} else if (x)
-		range = d->xRanges.at(index).range;
-	else
-		range = d->yRanges.at(index).range;
+	}
+	range = d->range(dir, index);
 
 	double offset = 0.0, factor = 0.1;
 
@@ -3081,19 +3077,16 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 	}
 
 	if (range.finite())
-		x ? d->range(Direction::X, index) = range : d->range(Direction::Y, index) = range;
+		d->setRange(dir, index, range);
 
-	if (x)
-		d->retransformScale(Direction::X, index);
-	else
-		d->retransformScale(Direction::Y, index);
+	d->retransformScale(dir, index);
 }
 
 void CartesianPlot::shiftLeftX(int index) {
 	setUndoAware(false);
 	enableAutoScale(Direction::X, index, false);
 	setUndoAware(true);
-	shift(index, true, true);
+	shift(index, Direction::X, true);
 
 	bool retrans = false;
 	for (const auto cSystem : m_coordinateSystems) {
@@ -3115,7 +3108,7 @@ void CartesianPlot::shiftRightX(int index) {
 	setUndoAware(false);
 	enableAutoScale(Direction::X, index, false);
 	setUndoAware(true);
-	shift(index, true, false);
+	shift(index, Direction::X, false);
 
 	bool retrans = false;
 	for (const auto cSystem : m_coordinateSystems) {
@@ -3137,7 +3130,7 @@ void CartesianPlot::shiftUpY(int index) {
 	setUndoAware(false);
 	enableAutoScale(Direction::Y, index, false);
 	setUndoAware(true);
-	shift(index, false, false);
+	shift(index, Direction::Y, false);
 
 	bool retrans = false;
 	for (const auto cSystem : m_coordinateSystems) {
@@ -3159,7 +3152,7 @@ void CartesianPlot::shiftDownY(int index) {
 	setUndoAware(false);
 	enableAutoScale(Direction::Y, index, false);
 	setUndoAware(true);
-	shift(index, false, true);
+	shift(index, Direction::Y, true);
 
 	bool retrans = false;
 	for (const auto cSystem : m_coordinateSystems) {
