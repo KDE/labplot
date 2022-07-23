@@ -168,6 +168,7 @@ public:
 	void setRangeFormat(const Direction, const RangeT::Format);
 	void setRangeFormat(const Direction, const int, const RangeT::Format);
 	RangeT::Format rangeFormat(Direction, const int) const;
+	RangeT::Scale rangeScale(const Direction, const int index) const;
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
@@ -346,8 +347,7 @@ private Q_SLOTS:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChanged(XYCurve*);
-	void yDataChanged(XYCurve*);
+	void dataChanged(XYCurve*, const Direction);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);

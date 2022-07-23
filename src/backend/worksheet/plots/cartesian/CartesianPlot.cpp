@@ -2423,10 +2423,10 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 }
 
 /*!
-	called when in one of the curves the x-data was changed.
-	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+	called when in one of the curves the data in one direction was changed.
+	Autoscales the coordinate system and the x/y-axes, when "auto-scale" is active.
 */
-void CartesianPlot::xDataChanged(XYCurve* curve) {
+void CartesianPlot::dataChanged(XYCurve* curve, const Direction dir) {
 	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
@@ -2441,20 +2441,24 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 	int cSystemIndex = curve->coordinateSystemIndex();
 	if (cSystemIndex == -1)
 		return;
-	auto xIndex = coordinateSystem(cSystemIndex)->index(Direction::X);
-	d->xRanges[xIndex].dirty = true;
+	auto index = coordinateSystem(cSystemIndex)->index(dir);
+	Direction dir_other;
+	switch (dir) {
+		case Direction::X: dir_other = Direction::Y; d->xRanges[index].dirty = true; break;
+		case Direction::Y: dir_other = Direction::X; d->yRanges[index].dirty = true; break;
+	}
 
 	bool updated = false;
-	if (autoScale(Direction::X, xIndex))
-		updated = this->scaleAuto(Direction::X, xIndex);
+	if (autoScale(dir, index))
+		updated = this->scaleAuto(dir, index);
 
 	QVector<int> scaled;
 	for (auto* acSystem : m_coordinateSystems) {
 		auto* cSystem = static_cast<CartesianCoordinateSystem*>(acSystem);
-		if (cSystem->index(Direction::X) == xIndex && scaled.indexOf(cSystem->index(Direction::Y)) == -1 && // do not scale again
-			autoScale(Direction::Y, cSystem->index(Direction::Y))) {
-			scaled << cSystem->index(Direction::Y);
-			updated |= scaleAuto(Direction::Y, cSystem->index(Direction::Y), false);
+		if (cSystem->index(dir) == index && scaled.indexOf(cSystem->index(dir_other)) == -1 && // do not scale again
+			autoScale(dir_other, cSystem->index(dir_other))) {
+			scaled << cSystem->index(dir_other);
+			updated |= scaleAuto(dir_other, cSystem->index(dir_other), false);
 		}
 	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
@@ -2471,70 +2475,10 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		const auto* col = curve->xColumn();
-		const auto xRangeFormat{range(Direction::X).format()};
-		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
+		const auto rangeFormat{range(dir).format()};
+		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
-			setXRangeFormat(RangeT::Format::DateTime);
-			setUndoAware(true);
-		}
-	}
-	Q_EMIT curveDataChanged(curve);
-}
-
-/*!
-	called when the y-data in one of the curves was changed.
-	Autoscales the coordinate system and the y-axes, when "auto-scale" is active.
-*/
-void CartesianPlot::yDataChanged(XYCurve* curve) {
-	DEBUG(Q_FUNC_INFO)
-	if (project() && project()->isLoading())
-		return;
-
-	Q_D(CartesianPlot);
-	if (d->suppressRetransform)
-		return;
-
-	if (!curve)
-		return;
-
-	int cSystemIndex = curve->coordinateSystemIndex();
-	if (cSystemIndex == -1)
-		return;
-	auto yIndex = coordinateSystem(cSystemIndex)->index(Direction::Y);
-	d->yRanges[yIndex].dirty = true;
-
-	bool updated = false;
-	if (autoScale(Direction::Y, yIndex))
-		updated = this->scaleAuto(Direction::Y, yIndex);
-
-	QVector<int> scaled;
-	for (auto* acSystem : m_coordinateSystems) {
-		auto* cSystem = static_cast<CartesianCoordinateSystem*>(acSystem);
-		if (cSystem->index(Direction::Y) == yIndex && scaled.indexOf(cSystem->index(Direction::X)) == -1 && // do not scale again
-			autoScale(Direction::X, cSystem->index(Direction::X))) {
-			scaled << cSystem->index(Direction::X);
-			updated |= scaleAuto(Direction::X, cSystem->index(Direction::X), false);
-		}
-	}
-
-	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
-
-	if (updated)
-		WorksheetElementContainer::retransform();
-	else {
-		// even if the plot ranges were not changed, either no auto scale active or the new data
-		// is within the current ranges and no change of the ranges is required,
-		// retransform the curve in order to show the changes
-		curve->retransform();
-	}
-
-	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
-	if (children<XYCurve>().size() == 1) {
-		const AbstractColumn* col = curve->yColumn();
-		const auto yRangeFormat{range(Direction::Y).format()};
-		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && yRangeFormat != RangeT::Format::DateTime) {
-			setUndoAware(false);
-			setYRangeFormat(RangeT::Format::DateTime);
+			setRangeFormat(dir, RangeT::Format::DateTime);
 			setUndoAware(true);
 		}
 	}
