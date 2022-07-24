@@ -81,12 +81,12 @@ public:
 				const Range<int>& indexRange,
 				Range<double>& yRange,
 				bool includeErrorBars) const;
-	bool minMax(const CartesianCoordinateSystem::Direction dir, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
+	bool minMax(const CartesianCoordinateSystem::Dimension dir, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars = true) const;
 
 	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
-	const AbstractColumn* column(CartesianCoordinateSystem::Direction dir) const;
+	const AbstractColumn* column(CartesianCoordinateSystem::Dimension dir) const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
 	CLASS_D_ACCESSOR_DECL(QString, xColumnPath, XColumnPath)

@@ -31,7 +31,7 @@ class InfoElementDialog;
 class XYCurve;
 class KConfig;
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 #ifdef SDK
 #include "labplot_export.h"

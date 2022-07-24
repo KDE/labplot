@@ -22,9 +22,9 @@ public:
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
 
-	enum class Direction { X, Y };
+	enum class Dimension { X, Y };
 
-	static QString directionToString(Direction);
+	static QString directionToString(Dimension);
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
@@ -43,11 +43,11 @@ public:
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 
-	int direction(const Direction) const;
-	bool setScales(const Direction, const QVector<CartesianScale*>&);
-	QVector<CartesianScale*> scales(const Direction) const;
-	int index(const Direction) const;
-	void setIndex(const Direction, const int);
+	int direction(const Dimension) const;
+	bool setScales(const Dimension, const QVector<CartesianScale*>&);
+	QVector<CartesianScale*> scales(const Dimension) const;
+	int index(const Dimension) const;
+	void setIndex(const Dimension, const int);
 	int xIndex() const;
 	void setXIndex(int);
 	int yIndex() const;

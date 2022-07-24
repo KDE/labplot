@@ -58,7 +58,7 @@
 #include <QPainter>
 #include <QWidgetAction>
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 /**
  * \class CartesianPlot

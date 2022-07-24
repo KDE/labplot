@@ -17,7 +17,7 @@ extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
@@ -37,11 +37,11 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
-QString CartesianCoordinateSystem::directionToString(Direction dir) {
+QString CartesianCoordinateSystem::directionToString(Dimension dir) {
 	switch (dir) {
-	case Direction::X:
+	case Dimension::X:
 		return "x";
-	case Direction::Y:
+	case Dimension::Y:
 		return "y";
 	default:
 		return "ERROR: unhandled case";
@@ -51,8 +51,8 @@ QString CartesianCoordinateSystem::directionToString(Direction dir) {
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (d->plot)
-		return QString(QLatin1String("x = ") + d->plot->range(Direction::X, d->xIndex).toString() + QLatin1String(", y = ")
-					   + d->plot->range(Direction::Y, d->yIndex).toString());
+		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
+					   + d->plot->range(Dimension::Y, d->yIndex).toString());
 
 	return i18n("no info available");
 }
@@ -590,9 +590,9 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::direction(const Direction dir) const {
+int CartesianCoordinateSystem::direction(const Dimension dir) const {
 	switch (dir) {
-	case Direction::X: {
+	case Dimension::X: {
 		if (d->xScales.isEmpty() || !d->xScales.at(0)) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
 			return 1;
@@ -600,7 +600,7 @@ int CartesianCoordinateSystem::direction(const Direction dir) const {
 
 		return d->xScales.at(0)->direction();
 	}
-	case Direction::Y:
+	case Dimension::Y:
 	default: {
 		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
@@ -613,17 +613,17 @@ int CartesianCoordinateSystem::direction(const Direction dir) const {
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setScales(const Direction dir, const QVector<CartesianScale*>& scales) {
+bool CartesianCoordinateSystem::setScales(const Dimension dir, const QVector<CartesianScale*>& scales) {
 	DEBUG(Q_FUNC_INFO)
 	switch (dir) {
-	case Direction::X: {
+	case Dimension::X: {
 		while (!d->xScales.isEmpty())
 			delete d->xScales.takeFirst();
 
 		d->xScales = scales;
 		return true; // TODO: check scales validity
 	}
-	case Direction::Y:
+	case Dimension::Y:
 	default: {
 		while (!d->yScales.isEmpty())
 			delete d->yScales.takeFirst();
@@ -634,34 +634,34 @@ bool CartesianCoordinateSystem::setScales(const Direction dir, const QVector<Car
 	}
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Direction dir) const {
+QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) const {
 	DEBUG(Q_FUNC_INFO)
 	switch (dir) {
-	case Direction::X:
+	case Dimension::X:
 		return d->xScales; // TODO: should rather return a copy of the scales here
-	case Direction::Y:
+	case Dimension::Y:
 	default:
 		return d->yScales; // TODO: should rather return a copy of the scales here
 	}
 }
 
-int CartesianCoordinateSystem::index(const Direction dir) const {
+int CartesianCoordinateSystem::index(const Dimension dir) const {
 	switch (dir) {
-	case Direction::X:
+	case Dimension::X:
 		return d->xIndex;
-	case Direction::Y:
+	case Dimension::Y:
 	default:
 		return d->yIndex;
 	}
 }
 
-void CartesianCoordinateSystem::setIndex(const Direction dir, const int index) {
+void CartesianCoordinateSystem::setIndex(const Dimension dir, const int index) {
 	switch (dir) {
-	case Direction::X:
+	case Dimension::X:
 		d->xIndex = index;
 		break;
 	default:
-	case Direction::Y:
+	case Dimension::Y:
 		d->yIndex = index;
 		break;
 	}

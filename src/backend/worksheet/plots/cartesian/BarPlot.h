@@ -65,8 +65,8 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	double minimum(CartesianCoordinateSystem::Direction dir) const;
-	double maximum(CartesianCoordinateSystem::Direction dir) const;
+	double minimum(CartesianCoordinateSystem::Dimension dir) const;
+	double maximum(CartesianCoordinateSystem::Dimension dir) const;
 
 	typedef BarPlotPrivate Private;
 

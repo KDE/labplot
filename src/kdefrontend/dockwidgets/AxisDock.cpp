@@ -41,7 +41,7 @@ enum PositionAlignmentComboBoxIndex {
 };
 }
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 /*!
  \class AxisDock

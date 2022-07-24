@@ -47,7 +47,7 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 XYCURVE_COLUMN_CONNECT(x)
 XYCURVE_COLUMN_CONNECT(y)

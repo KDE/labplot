@@ -29,7 +29,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 /**
  * \class CustomPoint

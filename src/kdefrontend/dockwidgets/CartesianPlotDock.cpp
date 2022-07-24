@@ -56,7 +56,7 @@ protected:
 };
 }
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 #define CELLWIDGET(dir, rangeIndex, Column, castObject, function)                                                                                              \
 	do {                                                                                                                                                       \

@@ -98,8 +98,8 @@ public:
 
 	void suppressRetransform(bool);
 
-	double minimum(CartesianCoordinateSystem::Direction dir) const;
-	double maximum(CartesianCoordinateSystem::Direction dir) const;
+	double minimum(CartesianCoordinateSystem::Dimension dir) const;
+	double maximum(CartesianCoordinateSystem::Dimension dir) const;
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;

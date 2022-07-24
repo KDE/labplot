@@ -27,7 +27,7 @@
 		}                                                                                                                                                      \
 	} while (false)
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;

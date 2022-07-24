@@ -34,7 +34,7 @@ extern "C" {
 #include <QTextDocument>
 #include <QtMath>
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 /**
  * \class AxisGrid

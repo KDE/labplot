@@ -20,7 +20,7 @@
 #include <QPen>
 #include <QStaticText>
 
-using Direction = CartesianCoordinateSystem::Direction;
+using Direction = CartesianCoordinateSystem::Dimension;
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
