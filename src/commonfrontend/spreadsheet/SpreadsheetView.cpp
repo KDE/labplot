@@ -1360,10 +1360,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			m_plotDataMenu->setEnabled(plottable);
-			m_analyzePlotMenu->setEnabled(numeric);
+			m_plotDataMenu->setEnabled(plottable && hasValues);
+			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
 			action_statistics_columns->setEnabled(numeric && hasValues);
+			action_clear_columns->setEnabled(hasValues);
+			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);
 
 			if (!m_readOnly)
