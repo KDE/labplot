@@ -44,6 +44,7 @@ QString CartesianCoordinateSystem::directionToString(Dimension dir) {
 	case Dimension::Y:
 		return "y";
 	}
+	return "";
 }
 
 QString CartesianCoordinateSystem::info() const {
@@ -607,6 +608,7 @@ int CartesianCoordinateSystem::direction(const Dimension dir) const {
 		return d->yScales.at(0)->direction();
 	}
 	}
+	return 1;
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
@@ -628,6 +630,7 @@ bool CartesianCoordinateSystem::setScales(const Dimension dir, const QVector<Car
 		return true; // TODO: check scales validity
 	}
 	}
+	return 1;
 }
 
 QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) const {
@@ -638,6 +641,7 @@ QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) 
 	case Dimension::Y:
 		return d->yScales; // TODO: should rather return a copy of the scales here
 	}
+	return QVector<CartesianScale*>();
 }
 
 int CartesianCoordinateSystem::index(const Dimension dir) const {
@@ -647,6 +651,7 @@ int CartesianCoordinateSystem::index(const Dimension dir) const {
 	case Dimension::Y:
 		return d->yIndex;
 	}
+	return 0;
 }
 
 void CartesianCoordinateSystem::setIndex(const Dimension dir, const int index) {

@@ -246,7 +246,6 @@ const AbstractColumn* XYCurve::column(Direction dir) const {
 	case Direction::Y:
 		return yColumn();
 	}
-	DEBUG("ERROR: Unhandled case!");
 	return nullptr;
 }
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
@@ -2373,7 +2372,6 @@ bool XYCurve::minMax(const Direction dir, const Range<int>& indexRange, Range<do
 	case Direction::Y:
 		return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, r, includeErrorBars);
 	}
-	DEBUG("XYCurve::minMax ERROR: unhandled case")
 	return false;
 }
 

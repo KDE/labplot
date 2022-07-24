@@ -209,6 +209,7 @@ double BarPlot::minimum(Direction dir) const {
 	case Direction::Y:
 		return d->yMin;
 	}
+	return NAN;
 }
 
 double BarPlot::maximum(Direction dir) const {
@@ -219,6 +220,7 @@ double BarPlot::maximum(Direction dir) const {
 	case Direction::Y:
 		return d->yMax;
 	}
+	return NAN;
 }
 
 /* ============================ setter methods and undo commands ================= */

@@ -67,7 +67,7 @@ using Direction = CartesianCoordinateSystem::Dimension;
 			break;                                                                                                                                             \
 		case Direction::Y:                                                                                                                                     \
 			treewidget = ui.twYRanges;                                                                                                                         \
-			break;                                                                                                                                             \                                     \
+			break;                                                                                                                                             \
 		}                                                                                                                                                      \
 		if (rangeIndex < 0) {                                                                                                                                  \
 			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \

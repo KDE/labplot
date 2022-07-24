@@ -289,7 +289,6 @@ double Histogram::minimum(Direction dir) const {
 	case Direction::Y:
 		return d->yMinimum();
 	}
-	DEBUG("Histogram::minimum ERROR: unhandled case!")
 	return NAN;
 }
 
@@ -301,7 +300,6 @@ double Histogram::maximum(Direction dir) const {
 	case Direction::Y:
 		return d->yMaximum();
 	}
-	DEBUG("Histogram::minimum ERROR: unhandled case!")
 	return NAN;
 }
 

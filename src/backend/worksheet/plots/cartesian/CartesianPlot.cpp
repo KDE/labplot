@@ -1231,6 +1231,7 @@ int CartesianPlot::rangeCount(const Direction dir) const {
 	case Direction::Y:
 		return (d ? d->yRanges.size() : 0);
 	}
+	return 0;
 }
 
 const Range<double>& CartesianPlot::range(const Direction dir, int index) const {
@@ -3535,6 +3536,7 @@ CartesianPlot::RangeBreaks CartesianPlotPrivate::rangeBreaks(Direction dir) {
 	case Direction::Y:
 		return yRangeBreaks;
 	}
+	return CartesianPlot::RangeBreaks();
 }
 
 bool CartesianPlotPrivate::rangeBreakingEnabled(Direction dir) {
@@ -3544,6 +3546,7 @@ bool CartesianPlotPrivate::rangeBreakingEnabled(Direction dir) {
 	case Direction::Y:
 		return yRangeBreakingEnabled;
 	}
+	return false;
 }
 
 /*!

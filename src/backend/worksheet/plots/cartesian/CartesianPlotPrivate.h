@@ -69,6 +69,7 @@ public:
 		case Direction::Y:
 			return yRanges;
 		}
+		return yRanges;
 	}
 
 	bool rangeDirty(const Direction dir, int index) const {
@@ -134,6 +135,7 @@ public:
 		case Direction::Y:
 			return yRanges[index].range;
 		}
+		return yRanges[index].range;
 	}
 
 	const Range<double>& rangeConst(const Direction dir, int index = -1) const {
@@ -145,6 +147,7 @@ public:
 		case Direction::Y:
 			return yRanges[index].range;
 		}
+		return yRanges[index].range;
 	}
 
 	Range<double>& dataRange(const Direction dir, int index = -1) {
@@ -157,6 +160,7 @@ public:
 		case Direction::Y:
 			return yRanges[index].dataRange;
 		}
+		return yRanges[index].dataRange;
 	}
 
 	bool autoScale(const Direction dir, int index = -1) const {
@@ -173,6 +177,7 @@ public:
 		case Direction::Y:
 			return yRanges[index].range.autoScale();
 		}
+		return yRanges[index].range.autoScale();
 	}
 
 	void enableAutoScale(const Direction dir, int index = -1, bool b = true) {
