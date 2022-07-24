@@ -68,9 +68,6 @@ public:
 			return xRanges;
 		case Direction::Y:
 			return yRanges;
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
-			return yRanges;
 		}
 	}
 
@@ -80,8 +77,6 @@ public:
 			return xRanges.at(index).dirty;
 		case Direction::Y:
 			return yRanges.at(index).dirty;
-		default:
-			DEBUG("rangeDirty: ERROR: unhandled case");
 		}
 		return false;
 	}
@@ -94,8 +89,6 @@ public:
 		case Direction::Y:
 			yRanges[index].dirty = dirty;
 			break;
-		default:
-			DEBUG("setRangeDirty: ERROR: unhandled case") break;
 		}
 	}
 
@@ -107,8 +100,6 @@ public:
 		case Direction::Y:
 			yRanges[index].range = range;
 			break;
-		default:
-			DEBUG("setRangeDirty: ERROR: unhandled case") break;
 		}
 	}
 
@@ -120,8 +111,6 @@ public:
 		case Direction::Y:
 			yRanges[index].range.setFormat(format);
 			break;
-		default:
-			DEBUG("setFormat: ERROR: unhandled case") break;
 		}
 	}
 
@@ -133,8 +122,6 @@ public:
 		case Direction::Y:
 			yRanges[index].range.setScale(scale);
 			break;
-		default:
-			DEBUG("setFormat: ERROR: unhandled case") break;
 		}
 	}
 
@@ -145,9 +132,6 @@ public:
 		case Direction::X:
 			return xRanges[index].range;
 		case Direction::Y:
-			return yRanges[index].range;
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
 			return yRanges[index].range;
 		}
 	}
@@ -160,9 +144,6 @@ public:
 			return xRanges[index].range;
 		case Direction::Y:
 			return yRanges[index].range;
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
-			return yRanges[index].range;
 		}
 	}
 
@@ -174,9 +155,6 @@ public:
 		case Direction::X:
 			return xRanges[index].dataRange;
 		case Direction::Y:
-			return yRanges[index].dataRange;
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
 			return yRanges[index].dataRange;
 		}
 	}
@@ -194,9 +172,6 @@ public:
 			return xRanges[index].range.autoScale();
 		case Direction::Y:
 			return yRanges[index].range.autoScale();
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR: Unhandled direction");
-			return yRanges[index].range.autoScale();
 		}
 	}
 
@@ -212,7 +187,6 @@ public:
 			xRanges[index].range.setAutoScale(b);
 			break;
 		case Direction::Y:
-		default:
 			yRanges[index].range.setAutoScale(b);
 			break;
 		}

@@ -43,8 +43,6 @@ QString CartesianCoordinateSystem::directionToString(Dimension dir) {
 		return "x";
 	case Dimension::Y:
 		return "y";
-	default:
-		return "ERROR: unhandled case";
 	}
 }
 
@@ -600,8 +598,7 @@ int CartesianCoordinateSystem::direction(const Dimension dir) const {
 
 		return d->xScales.at(0)->direction();
 	}
-	case Dimension::Y:
-	default: {
+	case Dimension::Y: {
 		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
 			return 1;
@@ -623,8 +620,7 @@ bool CartesianCoordinateSystem::setScales(const Dimension dir, const QVector<Car
 		d->xScales = scales;
 		return true; // TODO: check scales validity
 	}
-	case Dimension::Y:
-	default: {
+	case Dimension::Y: {
 		while (!d->yScales.isEmpty())
 			delete d->yScales.takeFirst();
 
@@ -640,7 +636,6 @@ QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) 
 	case Dimension::X:
 		return d->xScales; // TODO: should rather return a copy of the scales here
 	case Dimension::Y:
-	default:
 		return d->yScales; // TODO: should rather return a copy of the scales here
 	}
 }
@@ -650,7 +645,6 @@ int CartesianCoordinateSystem::index(const Dimension dir) const {
 	case Dimension::X:
 		return d->xIndex;
 	case Dimension::Y:
-	default:
 		return d->yIndex;
 	}
 }
@@ -660,7 +654,6 @@ void CartesianCoordinateSystem::setIndex(const Dimension dir, const int index) {
 	case Dimension::X:
 		d->xIndex = index;
 		break;
-	default:
 	case Dimension::Y:
 		d->yIndex = index;
 		break;

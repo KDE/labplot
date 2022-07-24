@@ -67,9 +67,7 @@ using Direction = CartesianCoordinateSystem::Dimension;
 			break;                                                                                                                                             \
 		case Direction::Y:                                                                                                                                     \
 			treewidget = ui.twYRanges;                                                                                                                         \
-			break;                                                                                                                                             \
-		default:                                                                                                                                               \
-			qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";                                      \
+			break;                                                                                                                                             \                                     \
 		}                                                                                                                                                      \
 		if (rangeIndex < 0) {                                                                                                                                  \
 			for (int i = 0; i < treewidget->rowCount(); i++) {                                                                                                 \
@@ -636,9 +634,6 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		l = ui.lYRanges;
 		tb = ui.tbRemoveYRange;
 		break;
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
-		return;
 	}
 
 	const int rangeCount = m_plot->rangeCount(dir);
@@ -986,9 +981,6 @@ void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, boo
 		dir_other = Direction::X;
 		treewidget = ui.twYRanges;
 		break;
-	default:
-		qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";
-		return;
 	}
 
 	if (treewidget->cellWidget(index, TwRangesColumn::Format)) {
@@ -1036,9 +1028,6 @@ void CartesianPlotDock::minChanged(const QObject* sender, const Direction dir, c
 	case Direction::Y:
 		dir_other = Direction::X;
 		break;
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
-		return;
 	}
 
 	const Lock lock(m_initializing);
@@ -1074,9 +1063,6 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Direction dir, c
 	case Direction::Y:
 		dir_other = Direction::X;
 		break;
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
-		return;
 	}
 
 	const Lock lock(m_initializing);
@@ -1196,9 +1182,6 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 	case Direction::Y:
 		treewidget = ui.twYRanges;
 		break;
-	default:
-		qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << "Unhandled case.";
-		return;
 	}
 
 	int currentRow{treewidget->currentRow()};

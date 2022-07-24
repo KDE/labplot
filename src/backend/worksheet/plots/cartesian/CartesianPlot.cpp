@@ -1229,7 +1229,6 @@ int CartesianPlot::rangeCount(const Direction dir) const {
 	case Direction::X:
 		return (d ? d->xRanges.size() : 0);
 	case Direction::Y:
-	default:
 		return (d ? d->yRanges.size() : 0);
 	}
 }
@@ -1288,9 +1287,6 @@ void CartesianPlot::setRange(const Direction dir, const int index, const Range<d
 	case Direction::Y:
 		dir_other = Direction::X;
 		break;
-	default:
-		DEBUG("CartesianPlot::setRange ERROR unhandled direction");
-		return;
 	}
 
 	auto r = d->checkRange(range);
@@ -1384,9 +1380,6 @@ void CartesianPlot::removeRange(const Direction dir, int index) {
 	case Direction::Y:
 		d->yRanges.remove(index);
 		break;
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
-		return;
 	}
 
 	if (project())
@@ -3299,8 +3292,6 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 	case Direction::Y:
 		plotSceneRange = {dataRect.y() + dataRect.height(), dataRect.y()};
 		break;
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR unimplemented direction. ");
 	};
 	Range<double> sceneRange, logicalRange;
 
@@ -3376,8 +3367,6 @@ void CartesianPlotPrivate::retransformScale(Direction dir, int index) {
 				Q_EMIT q->yMaxChanged(i, rangep.range.end());
 			break;
 		}
-		default:
-			DEBUG(Q_FUNC_INFO << "ERROR unhandled direction");
 		}
 
 		rangep.prev = rangep.range;
@@ -3536,8 +3525,6 @@ void CartesianPlotPrivate::rangeFormatChanged(Direction dir) {
 		}
 		break;
 	}
-	default:
-		DEBUG(Q_FUNC_INFO << "ERROR: unhandled direction");
 	}
 }
 
@@ -3548,8 +3535,6 @@ CartesianPlot::RangeBreaks CartesianPlotPrivate::rangeBreaks(Direction dir) {
 	case Direction::Y:
 		return yRangeBreaks;
 	}
-	DEBUG("CartesianPlotPrivate::rangeBreaks ERROR: unhandled case");
-	return CartesianPlot::RangeBreaks();
 }
 
 bool CartesianPlotPrivate::rangeBreakingEnabled(Direction dir) {
@@ -3559,8 +3544,6 @@ bool CartesianPlotPrivate::rangeBreakingEnabled(Direction dir) {
 	case Direction::Y:
 		return yRangeBreakingEnabled;
 	}
-	DEBUG("CartesianPlotPrivate::rangeBreakingEnabled ERROR: unhandled case");
-	return false;
 }
 
 /*!

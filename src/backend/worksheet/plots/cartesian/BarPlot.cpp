@@ -209,8 +209,6 @@ double BarPlot::minimum(Direction dir) const {
 	case Direction::Y:
 		return d->yMin;
 	}
-	DEBUG("BarPlot::minimum ERROR: unhandled case!")
-	return NAN;
 }
 
 double BarPlot::maximum(Direction dir) const {
@@ -221,8 +219,6 @@ double BarPlot::maximum(Direction dir) const {
 	case Direction::Y:
 		return d->yMax;
 	}
-	DEBUG("BarPlot::maximum ERROR: unhandled case!")
-	return NAN;
 }
 
 /* ============================ setter methods and undo commands ================= */
