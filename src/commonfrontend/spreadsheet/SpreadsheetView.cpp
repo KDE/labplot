@@ -772,7 +772,6 @@ void SpreadsheetView::initMenus() {
 	}
 	m_rowMenu->addSeparator();
 	m_rowMenu->addAction(action_statistics_rows);
-	action_statistics_rows->setVisible(false);
 }
 
 void SpreadsheetView::connectActions() {
@@ -871,7 +870,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 		toolBar->addAction(action_insert_row_below);
 		toolBar->addAction(action_remove_rows);
 	}
-	toolBar->addAction(action_statistics_rows);
+// 	toolBar->addAction(action_statistics_rows); // TODO: the status enabled or not needs to be synchronized with the current selection (has valid numeric values?)
 	toolBar->addSeparator();
 	if (!m_readOnly) {
 		toolBar->addAction(action_insert_column_left);
@@ -879,7 +878,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 		toolBar->addAction(action_remove_columns);
 	}
 
-	toolBar->addAction(action_statistics_columns);
+// 	toolBar->addAction(action_statistics_columns);
 	if (!m_readOnly) {
 		toolBar->addSeparator();
 		toolBar->addAction(action_sort_asc_column);
@@ -1278,19 +1277,41 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()) {
-			bool onlyNumeric = true;
-			for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
-				if (m_spreadsheet->column(i)->columnMode() != AbstractColumn::ColumnMode::Double) {
-					onlyNumeric = false;
+			bool numeric = true;
+			bool hasValues = false;
+			const auto& columns = m_spreadsheet->children<Column>();
+			for (const auto* col : columns) {
+				if (!col->isNumeric()) {
+					numeric = false;
 					break;
 				}
 			}
-			action_statistics_rows->setVisible(onlyNumeric);
+
+			if (numeric) {
+				const auto& rows = m_tableView->selectionModel()->selectedRows();
+				for (int i = 0; i < rows.count(); ++i) {
+					int row = rows.at(i).row();
+
+					for (int j = 0; j < m_spreadsheet->columnCount(); ++j) {
+						hasValues = !std::isnan(m_spreadsheet->column(j)->valueAt(row));
+						if (hasValues)
+							break;
+					}
+
+				if (hasValues)
+					break;
+				}
+			}
+
+			if (!m_rowMenu)
+				initMenus();
+
+			action_statistics_rows->setEnabled(numeric && hasValues);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader())) {
 			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
-				QItemSelectionModel* sel_model = m_tableView->selectionModel();
+				auto* sel_model = m_tableView->selectionModel();
 				sel_model->clearSelection();
 				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex())),
 								  QItemSelectionModel::Select);
@@ -3052,7 +3073,7 @@ void SpreadsheetView::showAllColumnsStatistics() {
 }
 
 void SpreadsheetView::showColumnStatistics(bool forAll) {
-	QString dlgTitle(m_spreadsheet->name() + " column statistics");
+	QString dlgTitle(i18n("%1: column statistics", m_spreadsheet->name()));
 	QVector<Column*> columns;
 
 	if (!forAll)
@@ -3075,17 +3096,19 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 }
 
 void SpreadsheetView::showRowStatistics() {
-	QString dlgTitle(m_spreadsheet->name() + " row statistics");
+	QString dlgTitle(i18n("%1: row statistics", m_spreadsheet->name()));
 
 	QVector<Column*> columns;
-	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-		if (isRowSelected(i)) {
-			QVector<double> rowValues;
-			for (int j = 0; j < m_spreadsheet->columnCount(); ++j)
-				rowValues << m_spreadsheet->column(j)->valueAt(i);
-			columns << new Column(i18n("Row %1").arg(i + 1), rowValues);
-		}
+	const auto& rows = m_tableView->selectionModel()->selectedRows();
+
+	for (int i = 0; i < rows.count(); ++i) {
+		int row = rows.at(i).row();
+		QVector<double> rowValues;
+		for (int j = 0; j < m_spreadsheet->columnCount(); ++j)
+			rowValues << m_spreadsheet->column(j)->valueAt(row);
+		columns << new Column(i18n("Row %1").arg(row + 1), rowValues);
 	}
+
 	auto* dlg = new StatisticsDialog(dlgTitle, columns);
 	dlg->showStatistics();
 
