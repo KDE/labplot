@@ -1043,8 +1043,9 @@ QPainterPath AxisPrivate::shape() const {
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	retransformCalled(suppressRetransform || !plot() || q->isLoading());
-	if (suppressRetransform || !plot() || q->isLoading())
+	const bool required = suppressRetransform || !plot() || q->isLoading();
+	retransformCalled(required);
+	if (required)
 		return;
 
 	// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");

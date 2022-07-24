@@ -367,12 +367,13 @@ void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
-	retransformCalled(suppressRetransform || !plot || q->isLoading());
+	const bool required = suppressRetransform || !plot || q->isLoading();
+	retransformCalled(required);
 
 	// Assert cannot be used, because the Textlabel sends the
 	// changed signal during load and so a retransform is triggered
 	// assert(!q->isLoading());
-	if (suppressRetransform || !plot || q->isLoading())
+	if (required)
 		return;
 
 	prepareGeometryChange();
