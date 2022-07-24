@@ -75,6 +75,8 @@ private Q_SLOTS:
 	void addXRange();
 	void addYRange();
 	void removeRange(const Direction dir);
+	void removeXRange();
+	void removeYRange();
 	void addPlotRange();
 	void removePlotRange();
 	void PlotRangeXChanged(const int index);

@@ -1170,6 +1170,14 @@ void CartesianPlotDock::addYRange() {
 	updateRangeList(Direction::Y);
 }
 
+void CartesianPlotDock::removeXRange() {
+	removeRange(Direction::X);
+}
+
+void CartesianPlotDock::removeYRange() {
+	removeRange(Direction::Y);
+}
+
 void CartesianPlotDock::removeRange(const Direction dir) {
 	if (!m_plot)
 		return;
