@@ -870,7 +870,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 		toolBar->addAction(action_insert_row_below);
 		toolBar->addAction(action_remove_rows);
 	}
-// 	toolBar->addAction(action_statistics_rows); // TODO: the status enabled or not needs to be synchronized with the current selection (has valid numeric values?)
+	// toolBar->addAction(action_statistics_rows); // TODO: the status enabled or not needs to be synchronized with the current selection (has valid numeric values?)
 	toolBar->addSeparator();
 	if (!m_readOnly) {
 		toolBar->addAction(action_insert_column_left);
@@ -878,7 +878,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 		toolBar->addAction(action_remove_columns);
 	}
 
-// 	toolBar->addAction(action_statistics_columns);
+	// toolBar->addAction(action_statistics_columns);
 	if (!m_readOnly) {
 		toolBar->addSeparator();
 		toolBar->addAction(action_sort_asc_column);
@@ -1298,8 +1298,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 							break;
 					}
 
-				if (hasValues)
-					break;
+					if (hasValues)
+						break;
 				}
 			}
 
