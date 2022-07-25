@@ -75,8 +75,8 @@ public:
     void addDxfFormat(const Format &format, bool force=false);
     Format dxfFormat(int idx) const;
 
-    void saveToXmlFile(QIODevice *device) const;
-    bool loadFromXmlFile(QIODevice *device);
+    void saveToXmlFile(QIODevice *device) const override;
+    bool loadFromXmlFile(QIODevice *device) override;
 
 #if QT_VERSION >= 0x050600
     QColor getColorByIndex(int idx);

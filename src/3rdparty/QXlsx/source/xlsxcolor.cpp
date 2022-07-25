@@ -152,19 +152,19 @@ QColor XlsxColor::fromARGBString(const QString &c)
     color.setBlue( blue );
 #else
     QStringRef strAlpha = strColor.midRef(0, 2);
-    int alpha = strAlpha.toInt(0, 16);
+    int alpha = strAlpha.toInt(nullptr, 16);
     color.setAlpha( alpha );
 
     QStringRef strRed = strColor.midRef(2, 2);
-    int red = strRed.toInt(0, 16);
+    int red = strRed.toInt(nullptr, 16);
     color.setRed( red );
 
     QStringRef strGreen = strColor.midRef(4, 2);
-    int green = strGreen.toInt(0, 16);
+    int green = strGreen.toInt(nullptr, 16);
     color.setGreen( green );
 
     QStringRef strBlue = strColor.midRef(6, 2);
-    int blue = strBlue.toInt(0, 16);
+    int blue = strBlue.toInt(nullptr, 16);
     color.setBlue( blue );
 #endif
 
