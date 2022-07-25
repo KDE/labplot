@@ -475,13 +475,7 @@ int RetransformCallCounter::callCount(const QString& path, bool includeSuppresse
 }
 
 int RetransformCallCounter::callCount(const AbstractAspect* aspect, bool includeSuppressed) {
-	int count = 0;
-	for (auto& suppressed : aspect->readRetransformCalled()) {
-		if (suppressed && !includeSuppressed)
-			continue;
-		count += 1;
-	}
-	return count;
+	return aspect->readRetransformCalled();
 }
 
 void RetransformCallCounter::resetRetransformCount() {

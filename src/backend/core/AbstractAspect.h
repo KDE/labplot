@@ -431,16 +431,17 @@ Q_SIGNALS:
 
 public:
 	void resetRetransformCalled() {
-		mRetransformCalled.clear();
+		mRetransformCalled = 0;
 	}
-	QVector<bool> readRetransformCalled() const {
+	int readRetransformCalled() const {
 		return mRetransformCalled;
 	}
-	QVector<bool> mRetransformCalled; // false means it was not suppressed and therefore a retransform is done
+	int mRetransformCalled;
 
 #define retransformCalled(suppressed)                                                                                                                          \
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
-	q->mRetransformCalled.append(suppressed);
+	if (!suppressed)                                                                                                                                           \
+		q->mRetransformCalled += 1;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)
