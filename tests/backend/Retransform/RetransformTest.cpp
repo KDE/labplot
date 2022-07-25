@@ -496,10 +496,10 @@ void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, b
 
 void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index) {
 	switch (dim) {
-    case Dimension::X:
+	case Dimension::X:
 		logsXScaleRetransformed.append({plot, index});
 		break;
-    case Dimension::Y:
+	case Dimension::Y:
 		logsYScaleRetransformed.append({plot, index});
 		break;
 	}
