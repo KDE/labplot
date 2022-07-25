@@ -20,7 +20,7 @@
 #include <QPen>
 #include <QStaticText>
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
@@ -28,11 +28,11 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformScale(Direction, int index);
+	void retransformScale(const Dimension, int index);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void rangeFormatChanged(Direction dir);
+	void rangeFormatChanged(const Dimension dim);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -62,136 +62,136 @@ public:
 		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
 	};
 
-	QVector<RichRange>& ranges(const Direction dir) {
-		switch (dir) {
-		case Direction::X:
+	QVector<RichRange>& ranges(const Dimension dim) {
+		switch (dim) {
+		case Dimension::X:
 			return xRanges;
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges;
 		}
 		return yRanges;
 	}
 
-	bool rangeDirty(const Direction dir, int index) const {
-		switch (dir) {
-		case Direction::X:
+	bool rangeDirty(const Dimension dim, int index) const {
+		switch (dim) {
+		case Dimension::X:
 			return xRanges.at(index).dirty;
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges.at(index).dirty;
 		}
 		return false;
 	}
 
-	void setRangeDirty(const Direction dir, const int index, const bool dirty) {
-		switch (dir) {
-		case Direction::X:
+	void setRangeDirty(const Dimension dim, const int index, const bool dirty) {
+		switch (dim) {
+		case Dimension::X:
 			xRanges[index].dirty = dirty;
 			break;
-		case Direction::Y:
+		case Dimension::Y:
 			yRanges[index].dirty = dirty;
 			break;
 		}
 	}
 
-	void setRange(const Direction dir, const int index, const Range<double>& range) {
-		switch (dir) {
-		case Direction::X:
+	void setRange(const Dimension dim, const int index, const Range<double>& range) {
+		switch (dim) {
+		case Dimension::X:
 			xRanges[index].range = range;
 			break;
-		case Direction::Y:
+		case Dimension::Y:
 			yRanges[index].range = range;
 			break;
 		}
 	}
 
-	void setFormat(const Direction dir, const int index, RangeT::Format format) {
-		switch (dir) {
-		case Direction::X:
+	void setFormat(const Dimension dim, const int index, RangeT::Format format) {
+		switch (dim) {
+		case Dimension::X:
 			xRanges[index].range.setFormat(format);
 			break;
-		case Direction::Y:
+		case Dimension::Y:
 			yRanges[index].range.setFormat(format);
 			break;
 		}
 	}
 
-	void setScale(const Direction dir, const int index, RangeT::Scale scale) {
-		switch (dir) {
-		case Direction::X:
+	void setScale(const Dimension dim, const int index, RangeT::Scale scale) {
+		switch (dim) {
+		case Dimension::X:
 			xRanges[index].range.setScale(scale);
 			break;
-		case Direction::Y:
+		case Dimension::Y:
 			yRanges[index].range.setScale(scale);
 			break;
 		}
 	}
 
-	Range<double>& range(const Direction dir, int index = -1) {
+	Range<double>& range(const Dimension dim, int index = -1) {
 		if (index == -1)
-			index = defaultCoordinateSystem()->index(dir);
-		switch (dir) {
-		case Direction::X:
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
 			return xRanges[index].range;
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges[index].range;
 		}
 		return yRanges[index].range;
 	}
 
-	const Range<double>& rangeConst(const Direction dir, int index = -1) const {
+	const Range<double>& rangeConst(const Dimension dim, int index = -1) const {
 		if (index == -1)
-			index = defaultCoordinateSystem()->index(dir);
-		switch (dir) {
-		case Direction::X:
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
 			return xRanges[index].range;
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges[index].range;
 		}
 		return yRanges[index].range;
 	}
 
-	Range<double>& dataRange(const Direction dir, int index = -1) {
+	Range<double>& dataRange(const Dimension dim, int index = -1) {
 		if (index == -1)
-			index = defaultCoordinateSystem()->index(dir);
+			index = defaultCoordinateSystem()->index(dim);
 
-		switch (dir) {
-		case Direction::X:
+		switch (dim) {
+		case Dimension::X:
 			return xRanges[index].dataRange;
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges[index].dataRange;
 		}
 		return yRanges[index].dataRange;
 	}
 
-	bool autoScale(const Direction dir, int index = -1) const {
+	bool autoScale(const Dimension dim, int index = -1) const {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(dir); i++)
-				if (!autoScale(dir, i))
+			for (int i = 0; i < q->rangeCount(dim); i++)
+				if (!autoScale(dim, i))
 					return false;
 			return true;
 		}
 
-		switch (dir) {
-		case Direction::X:
+		switch (dim) {
+		case Dimension::X:
 			return xRanges[index].range.autoScale();
-		case Direction::Y:
+		case Dimension::Y:
 			return yRanges[index].range.autoScale();
 		}
 		return yRanges[index].range.autoScale();
 	}
 
-	void enableAutoScale(const Direction dir, int index = -1, bool b = true) {
+	void enableAutoScale(const Dimension dim, int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(dir); i++)
-				enableAutoScale(dir, i, b);
+			for (int i = 0; i < q->rangeCount(dim); i++)
+				enableAutoScale(dim, i, b);
 			return;
 		}
 
-		switch (dir) {
-		case Direction::X:
+		switch (dim) {
+		case Dimension::X:
 			xRanges[index].range.setAutoScale(b);
 			break;
-		case Direction::Y:
+		case Dimension::Y:
 			yRanges[index].range.setAutoScale(b);
 			break;
 		}
@@ -200,8 +200,8 @@ public:
 	void checkXRange(int index);
 	void checkYRange(int index);
 	Range<double> checkRange(const Range<double>&);
-	CartesianPlot::RangeBreaks rangeBreaks(Direction);
-	bool rangeBreakingEnabled(Direction);
+	CartesianPlot::RangeBreaks rangeBreaks(Dimension);
+	bool rangeBreakingEnabled(Dimension);
 
 	// the following factor determines the size of the offset between the min/max points of the curves
 	// and the coordinate system ranges, when doing auto scaling

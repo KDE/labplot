@@ -47,7 +47,7 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 XYCURVE_COLUMN_CONNECT(x)
 XYCURVE_COLUMN_CONNECT(y)
@@ -239,11 +239,11 @@ void XYCurve::setHover(bool on) {
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
-const AbstractColumn* XYCurve::column(Direction dir) const {
-	switch (dir) {
-	case Direction::X:
+const AbstractColumn* XYCurve::column(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X:
 		return xColumn();
-	case Direction::Y:
+	case Dimension::Y:
 		return yColumn();
 	}
 	return nullptr;
@@ -1274,8 +1274,8 @@ void XYCurvePrivate::updateLines() {
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->range(Direction::X, cs->index(Direction::X))};
-			const auto yRange{plot()->range(Direction::Y, cs->index(Direction::Y))};
+			const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+			const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1285,8 +1285,8 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->index(Direction::X)};
-			const auto xRange{plot()->range(Direction::X, xIndex)};
+			const auto xIndex{q->cSystem->index(Dimension::X)};
+			const auto xRange{plot()->range(Dimension::X, xIndex)};
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
@@ -1668,8 +1668,8 @@ void XYCurvePrivate::updateDropLines() {
 	// calculate drop lines
 	QVector<QLineF> dlines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->range(Direction::X, cs->index(Direction::X)).start();
-	const double yMin = plot()->range(Direction::Y, cs->index(Direction::Y)).start();
+	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	int i = 0;
 	switch (dropLineType) {
@@ -1770,8 +1770,8 @@ void XYCurvePrivate::updateRug() {
 
 	QVector<QPointF> points;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->range(Direction::X, cs->index(Direction::X)).start();
-	const double yMin = plot()->range(Direction::Y, cs->index(Direction::Y)).start();
+	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
@@ -1833,7 +1833,7 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{plot()->range(Direction::X, cs->index(Direction::X)).format()};
+		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1850,7 +1850,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{plot()->range(Direction::Y, cs->index(Direction::Y)).format()};
+		auto rangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1868,8 +1868,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{plot()->range(Direction::X, cs->index(Direction::X)).format()};
-		auto yRangeFormat{plot()->range(Direction::Y, cs->index(Direction::Y)).format()};
+		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1914,7 +1914,7 @@ void XYCurvePrivate::updateValues() {
 
 		// need to check x range
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-		auto xRange = plot()->range(Direction::X, cs->index(Direction::X));
+		auto xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
 
 		size_t index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
@@ -2074,8 +2074,8 @@ void XYCurvePrivate::updateFilling() {
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->range(Direction::X, cs->index(Direction::X))};
-	const auto yRange{plot()->range(Direction::Y, cs->index(Direction::Y))};
+	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;
@@ -2365,11 +2365,11 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
-bool XYCurve::minMax(const Direction dir, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
-	switch (dir) {
-	case Direction::X:
+bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
+	switch (dim) {
+	case Dimension::X:
 		return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, r, includeErrorBars);
-	case Direction::Y:
+	case Dimension::Y:
 		return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, r, includeErrorBars);
 	}
 	return false;

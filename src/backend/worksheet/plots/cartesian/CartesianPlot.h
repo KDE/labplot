@@ -31,7 +31,7 @@ class InfoElementDialog;
 class XYCurve;
 class KConfig;
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -137,43 +137,43 @@ public:
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
 
-	const QString rangeDateTimeFormat(const Direction dir) const;
-	const QString rangeDateTimeFormat(const Direction dir, const int index) const;
+	const QString rangeDateTimeFormat(const Dimension) const;
+	const QString rangeDateTimeFormat(const Dimension, const int index) const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(bool, niceExtend, NiceExtend)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScale(const Direction, int index = -1) const;
-	void enableAutoScale(Direction, int index, bool enable, bool fullRange = false);
+	bool autoScale(const Dimension, int index = -1) const;
+	void enableAutoScale(const Dimension, int index, bool enable, bool fullRange = false);
 
-	int rangeCount(const Direction dir) const;
-	const Range<double>& range(const Direction dir, int index = -1) const; // get range of (default) plot range
-	void setRange(Direction, const Range<double>); // set range of default plot range
-	void setRange(const Direction dir, const int index, const Range<double>& range);
+	int rangeCount(const Dimension) const;
+	const Range<double>& range(const Dimension, int index = -1) const; // get range of (default) plot range
+	void setRange(const Dimension, const Range<double>); // set range of default plot range
+	void setRange(const Dimension, const int index, const Range<double>& range);
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
-	const Range<double>& dataRange(Direction dir, int index = -1);
-	bool rangeDirty(Direction dir, int index) const;
-	void setRangeDirty(Direction dir, int index, bool dirty);
+	const Range<double>& dataRange(const Dimension, int index = -1);
+	bool rangeDirty(const Dimension, int index) const;
+	void setRangeDirty(const Dimension, int index, bool dirty);
 	void addXRange(); // add new x range
 	void addYRange(); // add new y range
 	void addXRange(const Range<double>&); // add x range
 	void addYRange(const Range<double>&); // add y range
-	void removeRange(const Direction dir, int index); // remove selected range
+	void removeRange(const Dimension, int index); // remove selected range
 	// convenience methods
 
-	void setMin(Direction, int index, double); // set x min of range index
-	void setMax(Direction, int index, double); // set x max of range index
-	void setRangeFormat(const Direction, const RangeT::Format);
-	void setRangeFormat(const Direction, const int, const RangeT::Format);
-	RangeT::Format rangeFormat(Direction, const int) const;
-	RangeT::Scale rangeScale(const Direction, const int index) const;
+	void setMin(const Dimension, int index, double); // set x min of range index
+	void setMax(const Dimension, int index, double); // set x max of range index
+	void setRangeFormat(const Dimension, const RangeT::Format);
+	void setRangeFormat(const Dimension, const int, const RangeT::Format);
+	RangeT::Format rangeFormat(const Dimension, const int) const;
+	RangeT::Scale rangeScale(const Dimension, const int index) const;
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
-	void setRangeScale(const Direction dir, const int index, const RangeT::Scale scale);
+	void setRangeScale(const Dimension, const int index, const RangeT::Scale scale);
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // range scale of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
@@ -211,10 +211,10 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int index, Direction, bool leftOrDown);
-	void zoom(int index, Direction, bool in);
+	void shift(int index, const Dimension, bool leftOrDown);
+	void zoom(int index, const Dimension, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	void calculateDataRange(const Direction, const int index, bool completeRange = true);
+	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
 	CartesianPlotLegend* m_legend{nullptr};
@@ -323,7 +323,7 @@ public Q_SLOTS:
 
 	void scaleAutoTriggered();
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
-	bool scaleAuto(Direction dir, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
+	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
@@ -347,7 +347,7 @@ private Q_SLOTS:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void dataChanged(XYCurve*, const Direction);
+	void dataChanged(XYCurve*, const Dimension);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
@@ -361,18 +361,18 @@ protected:
 Q_SIGNALS:
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void niceExtendChanged(bool);
-	void rangeFormatChanged(Direction, int rangeIndex, RangeT::Format);
+	void rangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format);
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
-	void autoScaleChanged(Direction, int xRangeIndex, bool);
-	void rangeChanged(Direction, int, Range<double>);
+	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
+	void rangeChanged(const Dimension, int, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);
 	void xMinChanged(int xRangeIndex, double);
 	void xMaxChanged(int xRangeIndex, double);
 	void yMinChanged(int yRangeIndex, double);
 	void yMaxChanged(int yRangeIndex, double);
-	void scaleChanged(Direction dir, int rangeIndex, RangeT::Scale);
+	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
@@ -401,7 +401,7 @@ Q_SIGNALS:
 	void cursor1EnableChanged(bool enable);
 
 Q_SIGNALS:
-	void retransformScaleCalled(const CartesianPlot* plot, Direction dir, int index);
+	void retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index);
 
 	friend CartesianPlotDock;
 };

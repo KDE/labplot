@@ -732,7 +732,7 @@ void CartesianPlotLegendDock::load() {
 			ui.lPositionXLogicalDateTime->show();
 			ui.dtePositionXLogical->show();
 
-			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X));
+			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_legend->positionLogical().x()));
 		}
 

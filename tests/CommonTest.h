@@ -25,18 +25,18 @@ extern "C" {
 	VALUES_EQUAL(range.start(), start_)                                                                                                                        \
 	VALUES_EQUAL(range.end(), end_)
 
-#define CHECK_RANGE(plot, aspect, dir, start_, end_)                                                                                                           \
-	RANGE_CORRECT(plot->range(dir, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dir)), start_, end_)
+#define CHECK_RANGE(plot, aspect, dim, start_, end_)                                                                                                           \
+	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dim)), start_, end_)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
 		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
 		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->index(Direction::X);                                                                                     \
-		int yIndex = plot->coordinateSystem(cSystem)->index(Direction::Y);                                                                                     \
+		int xIndex = plot->coordinateSystem(cSystem)->index(Dimension::X);                                                                                     \
+		int yIndex = plot->coordinateSystem(cSystem)->index(Dimension::Y);                                                                                     \
                                                                                                                                                                \
-		auto xrange = plot->range(Direction::X, xIndex);                                                                                                       \
-		auto yrange = plot->range(Direction::Y, yIndex);                                                                                                       \
+		auto xrange = plot->range(Dimension::X, xIndex);                                                                                                       \
+		auto yrange = plot->range(Dimension::Y, yIndex);                                                                                                       \
 		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}

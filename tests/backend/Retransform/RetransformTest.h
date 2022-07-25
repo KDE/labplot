@@ -41,7 +41,7 @@ public:
 	int callCount(const AbstractAspect* aspect, bool includeSuppressed);
 	void resetRetransformCount();
 	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
-	void retransformScaleCalled(const CartesianPlot* plot, CartesianCoordinateSystem::Dimension dir, int index);
+	void retransformScaleCalled(const CartesianPlot* plot, CartesianCoordinateSystem::Dimension dim, int index);
 	void aspectAdded(const AbstractAspect* aspect);
 
 public:

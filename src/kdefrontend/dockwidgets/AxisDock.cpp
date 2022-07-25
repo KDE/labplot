@@ -41,7 +41,7 @@ enum PositionAlignmentComboBoxIndex {
 };
 }
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 /*!
  \class AxisDock
@@ -598,9 +598,9 @@ void AxisDock::updatePlotRanges() {
 	Axis::Orientation orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
-		logicalRange = m_axis->plot()->range(Direction::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::Y));
+		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
 	else
-		logicalRange = m_axis->plot()->range(Direction::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Direction::X));
+		logicalRange = m_axis->plot()->range(Dimension::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::X));
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
 }
 
@@ -1204,9 +1204,9 @@ void AxisDock::majorTickStartOffsetChanged() {
 void AxisDock::setTickOffsetData(bool nice) {
 	Range<double> dataRange;
 	if (m_axis->orientation() == Axis::Orientation::Horizontal)
-		dataRange = m_axis->plot()->dataRange(Direction::X);
+		dataRange = m_axis->plot()->dataRange(Dimension::X);
 	else
-		dataRange = m_axis->plot()->dataRange(Direction::Y);
+		dataRange = m_axis->plot()->dataRange(Dimension::Y);
 
 	if (nice)
 		dataRange.niceExtend();
@@ -2285,16 +2285,16 @@ void AxisDock::load() {
 
 	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem = plot->coordinateSystem(m_axis->coordinateSystemIndex());
-	const int xIndex{cSystem->index(Direction::X)}, yIndex{cSystem->index(Direction::Y)};
+	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 
 	Range<double> logicalRange(0, 0);
 	if (orientation == Axis::Orientation::Horizontal) {
-		logicalRange = plot->range(Direction::Y, yIndex);
+		logicalRange = plot->range(Dimension::Y, yIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));
 	} else {
-		logicalRange = plot->range(Direction::X, xIndex);
+		logicalRange = plot->range(Dimension::X, xIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));
@@ -2357,12 +2357,12 @@ void AxisDock::load() {
 
 	if (!numeric) {
 		if (m_axis->orientation() == Axis::Orientation::Horizontal) {
-			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X, xIndex));
-			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Direction::X, xIndex));
+			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X, xIndex));
+			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X, xIndex));
 		} else {
 			// TODO
-			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Direction::Y));
-			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Direction::Y));
+			ui.dateTimeEditStart->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
+			ui.dateTimeEditEnd->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 		}
 		ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
 		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));

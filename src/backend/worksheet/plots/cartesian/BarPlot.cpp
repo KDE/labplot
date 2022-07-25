@@ -201,23 +201,23 @@ QVector<QString>& BarPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
-double BarPlot::minimum(Direction dir) const {
+double BarPlot::minimum(const Dimension dim) const {
 	Q_D(const BarPlot);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMin;
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMin;
 	}
 	return NAN;
 }
 
-double BarPlot::maximum(Direction dir) const {
+double BarPlot::maximum(const Dimension dim) const {
 	Q_D(const BarPlot);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMax;
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMax;
 	}
 	return NAN;

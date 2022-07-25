@@ -56,16 +56,16 @@ protected:
 };
 }
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
-#define CELLWIDGET(dir, rangeIndex, Column, castObject, function)                                                                                              \
+#define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
 	do {                                                                                                                                                       \
 		QTableWidget* treewidget;                                                                                                                              \
-		switch (dir) {                                                                                                                                         \
-		case Direction::X:                                                                                                                                     \
+		switch (dim) {                                                                                                                                         \
+		case Dimension::X:                                                                                                                                     \
 			treewidget = ui.twXRanges;                                                                                                                         \
 			break;                                                                                                                                             \
-		case Direction::Y:                                                                                                                                     \
+		case Dimension::Y:                                                                                                                                     \
 			treewidget = ui.twYRanges;                                                                                                                         \
 			break;                                                                                                                                             \
 		}                                                                                                                                                      \
@@ -497,24 +497,24 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		bool isDateTime = false;
-		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->rangeCount(Direction::X)); row++) {
-			const auto xRange{m_plot->range(Direction::X, row)};
+		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->rangeCount(Dimension::X)); row++) {
+			const auto xRange{m_plot->range(Dimension::X, row)};
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = xRange.relativePrecision();
 				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(Direction::X, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', relPrec)));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(Direction::X, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', relPrec)));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 
 			} else {
-				CELLWIDGET(Direction::X, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)));
-				CELLWIDGET(Direction::X, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC)));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)));
+				CELLWIDGET(Dimension::X, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.end(), Qt::UTC)));
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
@@ -529,23 +529,23 @@ void CartesianPlotDock::updateLocale() {
 
 		// y ranges
 		isDateTime = false;
-		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->rangeCount(Direction::Y)); row++) {
-			const auto yRange{m_plot->range(Direction::Y, row)};
+		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->rangeCount(Dimension::Y)); row++) {
+			const auto yRange{m_plot->range(Dimension::Y, row)};
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = yRange.relativePrecision();
 				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(Direction::Y, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', relPrec)));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(Direction::Y, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', relPrec)));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 			} else {
-				CELLWIDGET(Direction::Y, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start(), Qt::UTC)));
-				CELLWIDGET(Direction::Y, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end(), Qt::UTC)));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start(), Qt::UTC)));
+				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end(), Qt::UTC)));
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				if (dte)
 					isDateTime = true;
@@ -614,29 +614,29 @@ void CartesianPlotDock::updateUnits() {
 	labelWidget->updateUnits();
 }
 
-void CartesianPlotDock::updateRangeList(Direction dir) {
+void CartesianPlotDock::updateRangeList(const Dimension dim) {
 	if (!m_plot)
 		return;
 
-	auto dir_str = CartesianCoordinateSystem::directionToString(dir);
+	auto dir_str = CartesianCoordinateSystem::dimensionToString(dim);
 
 	QTableWidget* tw = nullptr;
 	QLabel* l = nullptr;
 	QToolButton* tb = nullptr;
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		tw = ui.twXRanges;
 		l = ui.lXRanges;
 		tb = ui.tbRemoveXRange;
 		break;
-	case Direction::Y:
+	case Dimension::Y:
 		tw = ui.twYRanges;
 		l = ui.lYRanges;
 		tb = ui.tbRemoveYRange;
 		break;
 	}
 
-	const int rangeCount = m_plot->rangeCount(dir);
+	const int rangeCount = m_plot->rangeCount(dim);
 	DEBUG(Q_FUNC_INFO << ", " << dir_str.toStdString() << " range count = " << rangeCount)
 
 	if (rangeCount > 1)
@@ -645,7 +645,7 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		l->setText(i18n("%1-Range:", dir_str.toUpper()));
 	tw->setRowCount(rangeCount);
 	for (int i = 0; i < rangeCount; i++) {
-		const auto r = m_plot->range(dir, i);
+		const auto r = m_plot->range(dim, i);
 		const auto format = r.format();
 		const auto scale = r.scale();
 		DEBUG(Q_FUNC_INFO << ", range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format) << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale)
@@ -657,8 +657,8 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		chk->setChecked(r.autoScale());
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
-		connect(chk, &QCheckBox::toggled, [this, chk, dir](bool checked) {
-			this->autoScaleChanged(chk, dir, checked);
+		connect(chk, &QCheckBox::toggled, [this, chk, dim](bool checked) {
+			this->autoScaleChanged(chk, dim, checked);
 		});
 
 		// format
@@ -668,8 +668,8 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		tw->setCellWidget(i, TwRangesColumn::Format, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {
-			this->rangeFormatChanged(cb, dir, index);
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dim, cb](int index) {
+			this->rangeFormatChanged(cb, dim, index);
 		});
 
 		// start/end (values set in updateLocale())
@@ -678,37 +678,37 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Min, le);
-			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {
-				this->minChanged(le, dir, text);
+			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
+				this->minChanged(le, dim, text);
 			});
 			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(tw);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Max, le);
-			connect(le, &QLineEdit::textChanged, [this, dir, le](const QString& text) {
-				this->maxChanged(le, dir, text);
+			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
+				this->maxChanged(le, dim, text);
 			});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
-			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
+			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
 			dte->setTimeSpec(Qt::UTC);
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.start(), Qt::UTC));
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Min, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime& dateTime) {
-				this->minDateTimeChanged(dte, dir, dateTime);
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dim, dte](const QDateTime& dateTime) {
+				this->minDateTimeChanged(dte, dim, dateTime);
 			});
 			dte = new QDateTimeEdit(tw);
-			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dir, i));
+			dte->setDisplayFormat(m_plot->rangeDateTimeFormat(dim, i));
 			dte->setTimeSpec(Qt::UTC);
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(r.end(), Qt::UTC));
 			dte->setWrapping(true);
 			tw->setCellWidget(i, TwRangesColumn::Max, dte);
 			dte->setProperty("row", i);
-			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dir, dte](const QDateTime& dateTime) {
-				this->maxDateTimeChanged(dte, dir, dateTime);
+			connect(dte, &QDateTimeEdit::dateTimeChanged, [this, dim, dte](const QDateTime& dateTime) {
+				this->maxDateTimeChanged(dte, dim, dateTime);
 			});
 		}
 
@@ -721,8 +721,8 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
 		tw->setCellWidget(i, TwRangesColumn::Scale, cb);
-		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dir, cb](int index) {
-			this->scaleChanged(cb, dir, index);
+		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), [this, dim, cb](int index) {
+			this->scaleChanged(cb, dim, index);
 		});
 	}
 	tw->resizeColumnToContents(1);
@@ -736,10 +736,10 @@ void CartesianPlotDock::updateRangeList(Direction dir) {
 
 	// enable/disable widgets
 	for (int i = 0; i < rangeCount; i++) {
-		const bool checked{m_plot->range(dir, i).autoScale()};
-		CELLWIDGET(dir, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
-		CELLWIDGET(dir, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
-		CELLWIDGET(dir, i, TwRangesColumn::Max, QWidget, setEnabled(!checked));
+		const bool checked{m_plot->range(dim, i).autoScale()};
+		CELLWIDGET(dim, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+		CELLWIDGET(dim, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
+		CELLWIDGET(dim, i, TwRangesColumn::Max, QWidget, setEnabled(!checked));
 	}
 }
 
@@ -757,8 +757,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 	ui.twPlotRanges->setRowCount(cSystemCount);
 	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
-		const int xIndex{cSystem->index(Direction::X)}, yIndex{cSystem->index(Direction::Y)};
-		const auto xRange{m_plot->range(Direction::X, xIndex)}, yRange{m_plot->range(Direction::Y, yIndex)};
+		const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
+		const auto xRange{m_plot->range(Dimension::X, xIndex)}, yRange{m_plot->range(Dimension::Y, yIndex)};
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i + 1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
@@ -768,9 +768,9 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->rangeCount(Direction::X) > 1) {
-			for (int index = 0; index < m_plot->rangeCount(Direction::X); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Direction::X, index).toLocaleString());
+		if (m_plot->rangeCount(Dimension::X) > 1) {
+			for (int index = 0; index < m_plot->rangeCount(Dimension::X); index++)
+				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Dimension::X, index).toLocaleString());
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
@@ -784,9 +784,9 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->setEditable(true); // to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
-		if (m_plot->rangeCount(Direction::Y) > 1) {
-			for (int index = 0; index < m_plot->rangeCount(Direction::Y); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Direction::Y, index).toLocaleString());
+		if (m_plot->rangeCount(Dimension::Y) > 1) {
+			for (int index = 0; index < m_plot->rangeCount(Dimension::Y); index++)
+				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Dimension::Y, index).toLocaleString());
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
@@ -955,7 +955,7 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 	}
 }
 
-void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Direction dir, bool state) {
+void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Dimension dim, bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
@@ -964,43 +964,43 @@ void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Direction 
 	const int rangeIndex{sender->property("row").toInt()}; // TODO: is sender still valid here?
 	DEBUG(Q_FUNC_INFO << ", range index: " << rangeIndex)
 
-	autoScaleRange(dir, rangeIndex, state);
+	autoScaleRange(dim, rangeIndex, state);
 }
 
-void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, bool checked) {
+void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
 
 	QTableWidget* treewidget;
-	Direction dir_other;
-	switch (dir) {
-	case Direction::X:
-		dir_other = Direction::Y;
+	Dimension dim_other;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
 		treewidget = ui.twXRanges;
 		break;
-	case Direction::Y:
-		dir_other = Direction::X;
+	case Dimension::Y:
+		dim_other = Dimension::X;
 		treewidget = ui.twYRanges;
 		break;
 	}
 
 	if (treewidget->cellWidget(index, TwRangesColumn::Format)) {
-		CELLWIDGET(dir, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
-		CELLWIDGET(dir, index, TwRangesColumn::Min, QWidget, setEnabled(!checked));
-		CELLWIDGET(dir, index, TwRangesColumn::Max, QWidget, setEnabled(!checked));
+		CELLWIDGET(dim, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+		CELLWIDGET(dim, index, TwRangesColumn::Min, QWidget, setEnabled(!checked));
+		CELLWIDGET(dim, index, TwRangesColumn::Max, QWidget, setEnabled(!checked));
 	}
 
 	for (auto* plot : m_plotList) {
 		bool retransform = true; // must be true, because in enableAutoScale scaleAutoX will be already called
-		plot->enableAutoScale(dir, index, checked, true);
-		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->range(dir, index).autoScale())
-		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Direction::Y)
-			retransform |= plot->scaleAuto(dir, index, true);
+		plot->enableAutoScale(dim, index, checked, true);
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->range(dim, index).autoScale())
+		if (checked) { // && index == plot->defaultCoordinateSystem()->index(Dimension::Y)
+			retransform |= plot->scaleAuto(dim, index, true);
 
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
-				if (cSystem->index(dir) == index) {
-					if (plot->autoScale(dir_other, cSystem->index(dir)))
-						retransform |= plot->scaleAuto(dir_other, cSystem->index(dir_other), false);
+				if (cSystem->index(dim) == index) {
+					if (plot->autoScale(dim_other, cSystem->index(dim)))
+						retransform |= plot->scaleAuto(dim_other, cSystem->index(dim_other), false);
 				}
 			}
 		}
@@ -1012,21 +1012,21 @@ void CartesianPlotDock::autoScaleRange(const Direction dir, const int index, boo
 			// TODO:when no object used the range, handle it differently
 		}
 	}
-	updateRangeList(dir); // see range changes
+	updateRangeList(dim); // see range changes
 }
 
-void CartesianPlotDock::minChanged(const QObject* sender, const Direction dir, const QString& value) {
+void CartesianPlotDock::minChanged(const QObject* sender, const Dimension dim, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
-	Direction dir_other;
-	switch (dir) {
-	case Direction::X:
-		dir_other = Direction::Y;
+	Dimension dim_other;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
 		break;
-	case Direction::Y:
-		dir_other = Direction::X;
+	case Dimension::Y:
+		dim_other = Dimension::X;
 		break;
 	}
 
@@ -1040,28 +1040,28 @@ void CartesianPlotDock::minChanged(const QObject* sender, const Direction dir, c
 		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(min, plot->range(dir, index).start())) {
-				plot->setMin(dir, index, min);
+			if (!qFuzzyCompare(min, plot->range(dim, index).start())) {
+				plot->setMin(dim, index, min);
 				changed = true;
 			}
 
 		if (changed)
-			updateRangeList(dir_other); // plot is auto scaled
+			updateRangeList(dim_other); // plot is auto scaled
 	}
 }
 
-void CartesianPlotDock::maxChanged(const QObject* sender, const Direction dir, const QString& value) {
+void CartesianPlotDock::maxChanged(const QObject* sender, const Dimension dim, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
-	Direction dir_other;
-	switch (dir) {
-	case Direction::X:
-		dir_other = Direction::Y;
+	Dimension dim_other;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
 		break;
-	case Direction::Y:
-		dir_other = Direction::X;
+	case Dimension::Y:
+		dim_other = Dimension::X;
 		break;
 	}
 
@@ -1074,17 +1074,17 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Direction dir, c
 		const int index{sender->property("row").toInt()};
 		bool changed = false;
 		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(max, plot->range(dir, index).end())) {
-				plot->setMax(dir, index, max);
+			if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
+				plot->setMax(dim, index, max);
 				changed = true;
 			}
 
 		if (changed)
-			updateRangeList(dir_other); // plot is auto scaled
+			updateRangeList(dim_other); // plot is auto scaled
 	}
 }
 
-void CartesianPlotDock::rangeChanged(const QObject* sender, const Direction dir, const Range<double>& range) {
+void CartesianPlotDock::rangeChanged(const QObject* sender, const Dimension dim, const Range<double>& range) {
 	if (m_initializing)
 		return;
 
@@ -1092,11 +1092,11 @@ void CartesianPlotDock::rangeChanged(const QObject* sender, const Direction dir,
 	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setRange(dir, index, range);
+		plot->setRange(dim, index, range);
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Direction dir, const QDateTime& dateTime) {
+void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
@@ -1105,11 +1105,11 @@ void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Directio
 	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setMin(dir, index, value);
+		plot->setMin(dim, index, value);
 	updatePlotRangeList();
 }
 
-void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Direction dir, const QDateTime& dateTime) {
+void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
@@ -1118,14 +1118,14 @@ void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Directio
 	const int index{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 	for (auto* plot : m_plotList)
-		plot->setMax(dir, index, value);
+		plot->setMax(dim, index, value);
 	updatePlotRangeList();
 }
 
 /*!
  *  called on scale changes (linear, log) for the x-/y-axis
  */
-void CartesianPlotDock::scaleChanged(const QObject* sender, Direction dir, int index) {
+void CartesianPlotDock::scaleChanged(const QObject* sender, const Dimension dim, int index) {
 	if (m_initializing)
 		return;
 
@@ -1133,10 +1133,10 @@ void CartesianPlotDock::scaleChanged(const QObject* sender, Direction dir, int i
 	DEBUG(Q_FUNC_INFO << ", range " << rangeIndex << " scale changed to " << ENUM_TO_STRING(RangeT, Scale, index))
 	const auto scale{static_cast<RangeT::Scale>(index)};
 	for (auto* plot : m_plotList)
-		plot->setRangeScale(dir, rangeIndex, scale);
+		plot->setRangeScale(dim, rangeIndex, scale);
 }
 
-void CartesianPlotDock::rangeFormatChanged(const QObject* sender, Direction dir, int index) {
+void CartesianPlotDock::rangeFormatChanged(const QObject* sender, const Dimension dim, int index) {
 	const int rangeIndex{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range " << rangeIndex + 1 << " format = " << index)
 
@@ -1146,57 +1146,57 @@ void CartesianPlotDock::rangeFormatChanged(const QObject* sender, Direction dir,
 	const auto format{static_cast<RangeT::Format>(index)};
 	for (auto* plot : m_plotList) {
 		DEBUG(Q_FUNC_INFO << ", set format of range " << rangeIndex + 1 << " to " << static_cast<int>(format))
-		plot->setRangeFormat(dir, rangeIndex, format);
+		plot->setRangeFormat(dim, rangeIndex, format);
 	}
-	updateRangeList(dir);
+	updateRangeList(dim);
 }
 
 void CartesianPlotDock::addXRange() {
 	if (!m_plot)
 		return;
 
-	DEBUG(Q_FUNC_INFO << ", current x range count = " << m_plot->rangeCount(Direction::X))
+	DEBUG(Q_FUNC_INFO << ", current x range count = " << m_plot->rangeCount(Dimension::X))
 
 	m_plot->addXRange();
-	updateRangeList(Direction::X);
+	updateRangeList(Dimension::X);
 }
 void CartesianPlotDock::addYRange() {
 	if (!m_plot)
 		return;
 
-	DEBUG(Q_FUNC_INFO << ", current y range count = " << m_plot->rangeCount(Direction::Y))
+	DEBUG(Q_FUNC_INFO << ", current y range count = " << m_plot->rangeCount(Dimension::Y))
 
 	m_plot->addYRange();
-	updateRangeList(Direction::Y);
+	updateRangeList(Dimension::Y);
 }
 
 void CartesianPlotDock::removeXRange() {
-	removeRange(Direction::X);
+	removeRange(Dimension::X);
 }
 
 void CartesianPlotDock::removeYRange() {
-	removeRange(Direction::Y);
+	removeRange(Dimension::Y);
 }
 
-void CartesianPlotDock::removeRange(const Direction dir) {
+void CartesianPlotDock::removeRange(const Dimension dim) {
 	if (!m_plot)
 		return;
 
 	QTableWidget* treewidget;
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		treewidget = ui.twXRanges;
 		break;
-	case Direction::Y:
+	case Dimension::Y:
 		treewidget = ui.twYRanges;
 		break;
 	}
 
 	int currentRow{treewidget->currentRow()};
 	QDEBUG(Q_FUNC_INFO << ", current range = " << currentRow)
-	if (currentRow < 0 || currentRow > m_plot->rangeCount(dir)) {
+	if (currentRow < 0 || currentRow > m_plot->rangeCount(dim)) {
 		DEBUG(Q_FUNC_INFO << ", no current range")
-		currentRow = m_plot->rangeCount(dir) - 1;
+		currentRow = m_plot->rangeCount(dim) - 1;
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing range " << currentRow)
 
@@ -1207,7 +1207,7 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 	for (int i{0}; i < cSystemCount; i++) {
 		const auto* cSystem{m_plot->coordinateSystem(i)};
 
-		if (cSystem->index(dir) == currentRow) {
+		if (cSystem->index(dim) == currentRow) {
 			if (msg.size() > 0)
 				msg += ", ";
 			msg += QString::number(i + 1);
@@ -1218,7 +1218,7 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 		DEBUG(Q_FUNC_INFO << ", range used in plot range " << STDSTRING(msg))
 		auto ret = KMessageBox::warningYesNo(
 			this,
-			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::directionToString(dir).toUpper(), currentRow + 1, msg)
+			i18n("%1 range %2 is used in plot range %3. ", CartesianCoordinateSystem::dimensionToString(dim).toUpper(), currentRow + 1, msg)
 				+ i18n("Really remove it?"));
 		if (ret == KMessageBox::No)
 			return;
@@ -1227,16 +1227,16 @@ void CartesianPlotDock::removeRange(const Direction dir) {
 			for (int i{0}; i < cSystemCount; i++) {
 				auto* cSystem{m_plot->coordinateSystem(i)};
 
-				if (cSystem->index(dir) == currentRow)
-					cSystem->setIndex(dir, 0); // first range
-				else if (cSystem->index(dir) > currentRow)
-					cSystem->setIndex(dir, cSystem->index(dir) - 1);
+				if (cSystem->index(dim) == currentRow)
+					cSystem->setIndex(dim, 0); // first range
+				else if (cSystem->index(dim) > currentRow)
+					cSystem->setIndex(dim, cSystem->index(dim) - 1);
 			}
 		}
 	}
 
-	m_plot->removeRange(dir, currentRow);
-	updateRangeList(dir);
+	m_plot->removeRange(dim, currentRow);
+	updateRangeList(dim);
 }
 
 // plot ranges
@@ -1287,12 +1287,12 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 	const int plotRangeIndex{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", Set x range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setIndex(Direction::X, index);
+	cSystem->setIndex(Dimension::X, index);
 
 	// auto scale x range when on auto scale (now that it is used)
-	if (m_plot->range(Direction::X, index).autoScale()) {
-		autoScaleRange(Direction::X, index, true);
-		updateRangeList(Direction::X);
+	if (m_plot->range(Dimension::X, index).autoScale()) {
+		autoScaleRange(Dimension::X, index, true);
+		updateRangeList(Dimension::X);
 	}
 
 	for (auto* axis : m_plot->children<Axis>()) {
@@ -1301,8 +1301,8 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Horizontal) {
-				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->range(Direction::X, index).toStdString())
-				axis->setRange(m_plot->range(Direction::X, index));
+				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->range(Dimension::X, index).toStdString())
+				axis->setRange(m_plot->range(Dimension::X, index));
 			}
 		}
 	}
@@ -1313,20 +1313,20 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{sender()->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", set y range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setIndex(Direction::Y, index);
+	cSystem->setIndex(Dimension::Y, index);
 
 	// auto scale y range when on auto scale (now that it is used)
-	if (m_plot->range(Direction::Y, index).autoScale()) {
-		autoScaleRange(Direction::Y, index, true);
-		updateRangeList(Direction::Y);
+	if (m_plot->range(Dimension::Y, index).autoScale()) {
+		autoScaleRange(Dimension::Y, index, true);
+		updateRangeList(Dimension::Y);
 	}
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{axis->coordinateSystemIndex()};
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Vertical) {
-				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->range(Direction::Y, index).toStdString())
-				axis->setRange(m_plot->range(Direction::Y, index));
+				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->range(Dimension::Y, index).toStdString())
+				axis->setRange(m_plot->range(Dimension::Y, index));
 			}
 		}
 	}
@@ -1845,17 +1845,17 @@ void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 }
 
 // x & y ranges
-void CartesianPlotDock::plotAutoScaleChanged(Direction dir, int index, bool checked) {
+void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, bool checked) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 
-	CELLWIDGET(dir, index, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
-	CELLWIDGET(dir, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
-	CELLWIDGET(dir, index, TwRangesColumn::Min, QLineEdit, setEnabled(!checked));
-	CELLWIDGET(dir, index, TwRangesColumn::Max, QLineEdit, setEnabled(!checked));
-	CELLWIDGET(dir, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Min, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
 void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
@@ -1864,8 +1864,8 @@ void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	CELLWIDGET(Direction::X, xRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(Direction::X, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
@@ -1873,8 +1873,8 @@ void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	CELLWIDGET(Direction::Y, yRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(Direction::Y, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
 void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
@@ -1883,8 +1883,8 @@ void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	CELLWIDGET(Direction::X, xRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(Direction::X, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
@@ -1892,34 +1892,34 @@ void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	CELLWIDGET(Direction::Y, yRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
-	CELLWIDGET(Direction::Y, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
-void CartesianPlotDock::plotRangeChanged(Direction dir, int index, Range<double> range) {
-	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::directionToString(dir).toStdString() << " range = " << range.toStdString())
+void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
+	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
 	if (m_initializing)
 		return;
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	CELLWIDGET(dir, index, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(range.start())));
-	CELLWIDGET(dir, index, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
-	CELLWIDGET(dir, index, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(range.end())));
-	CELLWIDGET(dir, index, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
+	CELLWIDGET(dim, index, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(range.start())));
+	CELLWIDGET(dim, index, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(range.end())));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
 }
 
-void CartesianPlotDock::plotScaleChanged(const Direction dir, int rangeIndex, RangeT::Scale scale) {
+void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {
 	DEBUG(Q_FUNC_INFO << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale))
 	m_initializing = true;
-	CELLWIDGET(dir, rangeIndex, TwRangesColumn::Scale, QComboBox, setCurrentIndex(static_cast<int>(scale)));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Scale, QComboBox, setCurrentIndex(static_cast<int>(scale)));
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotRangeFormatChanged(Direction dir, int rangeIndex, RangeT::Format format) {
+void CartesianPlotDock::plotRangeFormatChanged(const Dimension dim, int rangeIndex, RangeT::Format format) {
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
 	m_initializing = true;
-	CELLWIDGET(dir, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
+	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
 	m_initializing = false;
 }
 
@@ -2065,9 +2065,9 @@ void CartesianPlotDock::load() {
 	ui.cbNiceExtend->setChecked(m_plot->niceExtend());
 
 	m_updateUI = false; // avoid updating twice
-	updateRangeList(Direction::X);
+	updateRangeList(Dimension::X);
 	m_updateUI = true;
-	updateRangeList(Direction::Y);
+	updateRangeList(Dimension::Y);
 
 	// Title
 	labelWidget->load();

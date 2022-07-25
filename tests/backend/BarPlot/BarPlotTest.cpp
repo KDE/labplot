@@ -40,10 +40,10 @@ void BarPlotTest::testRange01() {
 	barPlot->setDataColumns(dataColumns);
 
 	// check the min and max range values
-	QCOMPARE(barPlot->minimum(Direction::X), 0.0);
-	QCOMPARE(barPlot->maximum(Direction::X), 5.0);
-	QCOMPARE(barPlot->minimum(Direction::Y), 0.);
-	QCOMPARE(barPlot->maximum(Direction::Y), 12.);
+	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 5.0);
+	QCOMPARE(barPlot->minimum(Dimension::Y), 0.);
+	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
 }
 
 /*!
@@ -72,10 +72,10 @@ void BarPlotTest::testRange02() {
 	barPlot->setDataColumns(dataColumns);
 
 	// check the min and max range values
-	QCOMPARE(barPlot->minimum(Direction::X), 0.0);
-	QCOMPARE(barPlot->maximum(Direction::X), 5.0);
-	QCOMPARE(barPlot->minimum(Direction::Y), -6.);
-	QCOMPARE(barPlot->maximum(Direction::Y), 12.);
+	QCOMPARE(barPlot->minimum(Dimension::X), 0.0);
+	QCOMPARE(barPlot->maximum(Dimension::X), 5.0);
+	QCOMPARE(barPlot->minimum(Dimension::Y), -6.);
+	QCOMPARE(barPlot->maximum(Dimension::Y), 12.);
 }
 
 QTEST_MAIN(BarPlotTest)

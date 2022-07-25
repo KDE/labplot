@@ -17,7 +17,7 @@ extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
@@ -37,8 +37,8 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
-QString CartesianCoordinateSystem::directionToString(Dimension dir) {
-	switch (dir) {
+QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
+	switch (dim) {
 	case Dimension::X:
 		return "x";
 	case Dimension::Y:
@@ -589,8 +589,8 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::direction(const Dimension dir) const {
-	switch (dir) {
+int CartesianCoordinateSystem::direction(const Dimension dim) const {
+	switch (dim) {
 	case Dimension::X: {
 		if (d->xScales.isEmpty() || !d->xScales.at(0)) {
 			DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
@@ -612,9 +612,9 @@ int CartesianCoordinateSystem::direction(const Dimension dir) const {
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setScales(const Dimension dir, const QVector<CartesianScale*>& scales) {
+bool CartesianCoordinateSystem::setScales(const Dimension dim, const QVector<CartesianScale*>& scales) {
 	DEBUG(Q_FUNC_INFO)
-	switch (dir) {
+	switch (dim) {
 	case Dimension::X: {
 		while (!d->xScales.isEmpty())
 			delete d->xScales.takeFirst();
@@ -633,9 +633,9 @@ bool CartesianCoordinateSystem::setScales(const Dimension dir, const QVector<Car
 	return 1;
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) const {
+QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dim) const {
 	DEBUG(Q_FUNC_INFO)
-	switch (dir) {
+	switch (dim) {
 	case Dimension::X:
 		return d->xScales; // TODO: should rather return a copy of the scales here
 	case Dimension::Y:
@@ -644,8 +644,8 @@ QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dir) 
 	return QVector<CartesianScale*>();
 }
 
-int CartesianCoordinateSystem::index(const Dimension dir) const {
-	switch (dir) {
+int CartesianCoordinateSystem::index(const Dimension dim) const {
+	switch (dim) {
 	case Dimension::X:
 		return d->xIndex;
 	case Dimension::Y:
@@ -654,8 +654,8 @@ int CartesianCoordinateSystem::index(const Dimension dir) const {
 	return 0;
 }
 
-void CartesianCoordinateSystem::setIndex(const Dimension dir, const int index) {
-	switch (dir) {
+void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
+	switch (dim) {
 	case Dimension::X:
 		d->xIndex = index;
 		break;

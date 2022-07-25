@@ -281,23 +281,23 @@ BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
-double Histogram::minimum(Direction dir) const {
+double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMinimum();
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMinimum();
 	}
 	return NAN;
 }
 
-double Histogram::maximum(Direction dir) const {
+double Histogram::maximum(const Dimension dim) const {
 	Q_D(const Histogram);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMaximum();
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMaximum();
 	}
 	return NAN;

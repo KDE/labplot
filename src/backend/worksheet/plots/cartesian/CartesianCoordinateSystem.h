@@ -24,7 +24,7 @@ public:
 
 	enum class Dimension { X, Y };
 
-	static QString directionToString(Dimension);
+	static QString dimensionToString(Dimension);
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;

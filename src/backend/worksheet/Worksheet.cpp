@@ -993,7 +993,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
 				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
-				data = datetime[i].toString(sender->rangeDateTimeFormat(Direction::X));
+				data = datetime[i].toString(sender->rangeDateTimeFormat(Dimension::X));
 			} else
 				data = QVariant(valueCursor[i]);
 			treeModel->setTreeData(data, 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);

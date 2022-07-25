@@ -29,7 +29,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 /**
  * \class CustomPoint
@@ -58,8 +58,8 @@ void CustomPoint::init() {
 
 	// default position
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	const auto x = m_plot->range(Direction::X, cs->index(Direction::X)).center();
-	const auto y = m_plot->range(Direction::Y, cs->index(Direction::Y)).center();
+	const auto x = m_plot->range(Dimension::X, cs->index(Dimension::X)).center();
+	const auto y = m_plot->range(Dimension::Y, cs->index(Dimension::Y)).center();
 	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 	d->positionLogical = QPointF(x, y);
 	d->updatePosition(); // To update also scene coordinates

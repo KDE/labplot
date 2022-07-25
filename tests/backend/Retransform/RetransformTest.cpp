@@ -27,7 +27,7 @@
 		}                                                                                                                                                      \
 	} while (false)
 
-using Direction = CartesianCoordinateSystem::Dimension;
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 void RetransformTest::TestLoadProject() {
 	RetransformCallCounter c;
@@ -494,12 +494,12 @@ void RetransformCallCounter::aspectRetransformed(const AbstractAspect* sender, b
 	logsRetransformed.append({sender, suppressed});
 }
 
-void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, Direction dir, int index) {
-	switch (dir) {
-	case Direction::X:
+void RetransformCallCounter::retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index) {
+	switch (dim) {
+    case Dimension::X:
 		logsXScaleRetransformed.append({plot, index});
 		break;
-	case Direction::Y:
+    case Dimension::Y:
 		logsYScaleRetransformed.append({plot, index});
 		break;
 	}

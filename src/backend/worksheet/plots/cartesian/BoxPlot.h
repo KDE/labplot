@@ -88,8 +88,8 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	double minimum(CartesianCoordinateSystem::Dimension dir) const;
-	double maximum(CartesianCoordinateSystem::Dimension dir) const;
+	double minimum(CartesianCoordinateSystem::Dimension dim) const;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const;
 
 	typedef BoxPlotPrivate Private;
 

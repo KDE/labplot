@@ -336,23 +336,23 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d->dataColumnPaths;
 }
 
-double BoxPlot::minimum(Direction dir) const {
+double BoxPlot::minimum(const Dimension dim) const {
 	Q_D(const BoxPlot);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMin;
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMin;
 	}
 	return NAN;
 }
 
-double BoxPlot::maximum(Direction dir) const {
+double BoxPlot::maximum(const Dimension dim) const {
 	Q_D(const BoxPlot);
-	switch (dir) {
-	case Direction::X:
+	switch (dim) {
+	case Dimension::X:
 		return d->xMax;
-	case Direction::Y:
+	case Dimension::Y:
 		return d->yMax;
 	}
 	return NAN;

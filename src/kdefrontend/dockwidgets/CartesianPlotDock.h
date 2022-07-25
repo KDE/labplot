@@ -34,7 +34,7 @@ public:
 	void activateTitleTab();
 	void updateLocale() override;
 	void updateUnits() override;
-	void updateRangeList(Direction dir);
+	void updateRangeList(const Dimension dim);
 	void updatePlotRangeList();
 
 private:
@@ -48,7 +48,7 @@ private:
 	bool m_autoScale{false};
 	bool m_updateUI{true};
 
-	void autoScaleRange(const Direction, const int index, bool);
+	void autoScaleRange(const Dimension, const int index, bool);
 	void loadConfig(KConfig&);
 
 private Q_SLOTS:
@@ -65,16 +65,16 @@ private Q_SLOTS:
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
-	void autoScaleChanged(const QObject* sender, const Direction, bool);
-	void rangeChanged(const QObject* sender, Direction, const Range<double>&);
-	void minDateTimeChanged(const QObject* sender, const Direction, const QDateTime&);
-	void maxDateTimeChanged(const QObject* sender, const Direction, const QDateTime&);
+	void autoScaleChanged(const QObject* sender, const Dimension, bool);
+	void rangeChanged(const QObject* sender, const Dimension, const Range<double>&);
+	void minDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
+	void maxDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
-	void rangeFormatChanged(const QObject* sender, Direction dir, int index);
-	void scaleChanged(const QObject* sender, Direction dir, int);
+	void rangeFormatChanged(const QObject* sender, const Dimension, int index);
+	void scaleChanged(const QObject* sender, const Dimension, int);
 	void addXRange();
 	void addYRange();
-	void removeRange(const Direction dir);
+	void removeRange(const Dimension dim);
 	void removeXRange();
 	void removeYRange();
 	void addPlotRange();
@@ -82,8 +82,8 @@ private Q_SLOTS:
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void minChanged(const QObject* sender, const Direction dir, const QString& value);
-	void maxChanged(const QObject* sender, const Direction dir, const QString& value);
+	void minChanged(const QObject* sender, const Dimension dim, const QString& value);
+	void maxChanged(const QObject* sender, const Dimension dim, const QString& value);
 	// void yRangeDateTimeChanged(const Range<quint64>&);
 
 	//"Range Breaks"-tab
@@ -132,14 +132,14 @@ private Q_SLOTS:
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
 
-	void plotAutoScaleChanged(Direction, int, bool);
+	void plotAutoScaleChanged(const Dimension, int, bool);
 	void plotXMinChanged(int xRangeIndex, double);
 	void plotYMinChanged(int yRangeIndex, double);
 	void plotXMaxChanged(int xRangeIndex, double);
 	void plotYMaxChanged(int yRangeIndex, double);
-	void plotRangeChanged(Direction, int, Range<double>);
-	void plotRangeFormatChanged(Direction, int rangeIndex, RangeT::Format format);
-	void plotScaleChanged(const Direction, int xRangeIndex, RangeT::Scale);
+	void plotRangeChanged(const Dimension, int, Range<double>);
+	void plotRangeFormatChanged(const Dimension, int rangeIndex, RangeT::Format format);
+	void plotScaleChanged(const Dimension, int xRangeIndex, RangeT::Scale);
 
 	void defaultPlotRangeChanged();
 
