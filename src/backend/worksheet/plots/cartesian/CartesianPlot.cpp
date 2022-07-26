@@ -3254,7 +3254,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	const bool required = suppressRetransform || q->isLoading();
-	retransformCalled(required);
+	trackRetransformCalled(required);
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG(Q_FUNC_INFO << ", x range " << i + 1 << " : " << xRanges.at(i).range.toStdString()
 						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()));

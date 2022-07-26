@@ -927,7 +927,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 */
 void XYCurvePrivate::retransform() {
 	const bool required = !isVisible() || q->isLoading();
-	retransformCalled(required);
+	trackRetransformCalled(required);
 	if (required)
 		return;
 

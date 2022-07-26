@@ -368,7 +368,7 @@ void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
 */
 void CartesianPlotLegendPrivate::retransform() {
 	const bool required = suppressRetransform || !plot || q->isLoading();
-	retransformCalled(required);
+	trackRetransformCalled(required);
 
 	// Assert cannot be used, because the Textlabel sends the
 	// changed signal during load and so a retransform is triggered

@@ -486,7 +486,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
  */
 void TextLabelPrivate::retransform() {
 	const bool required = suppressRetransform || q->isLoading();
-	retransformCalled(required);
+	trackRetransformCalled(required);
 	if (required)
 		return;
 

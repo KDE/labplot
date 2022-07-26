@@ -475,7 +475,7 @@ int RetransformCallCounter::callCount(const QString& path) {
 }
 
 int RetransformCallCounter::callCount(const AbstractAspect* aspect) {
-	return aspect->readRetransformCalled();
+	return aspect->retransformCalled();
 }
 
 void RetransformCallCounter::resetRetransformCount() {

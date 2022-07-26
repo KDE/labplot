@@ -433,12 +433,12 @@ public:
 	void resetRetransformCalled() {
 		mRetransformCalled = 0;
 	}
-	int readRetransformCalled() const {
+	int retransformCalled() const {
 		return mRetransformCalled;
 	}
 	int mRetransformCalled{0};
 
-#define retransformCalled(suppressed)                                                                                                                          \
+#define trackRetransformCalled(suppressed)                                                                                                                          \
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
