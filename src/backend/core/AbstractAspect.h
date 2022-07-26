@@ -438,7 +438,7 @@ public:
 	}
 	int mRetransformCalled{0};
 
-#define trackRetransformCalled(suppressed)                                                                                                                          \
+#define trackRetransformCalled(suppressed)                                                                                                                     \
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
 	if (!suppressed)                                                                                                                                           \
 		q->mRetransformCalled += 1;
