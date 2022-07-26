@@ -61,7 +61,7 @@ void RetransformTest::TestLoadProject() {
 		const QString& path = child->path();
 		if (h.contains(path))
 			expectedCallCount = h.value(path);
-		COMPARE(c.callCount(child, false), expectedCallCount, path);
+		COMPARE(c.callCount(child), expectedCallCount, path);
 	}
 }
 
@@ -105,7 +105,7 @@ void RetransformTest::TestResizeWindows() {
 	QCOMPARE(c.elementLogCount(false), h.count());
 	QHash<QString, int>::const_iterator i;
 	for (i = h.constBegin(); i != h.constEnd(); ++i)
-		QCOMPARE(c.callCount(i.key(), false), 1);
+		QCOMPARE(c.callCount(i.key()), 1);
 }
 
 /*!
@@ -212,7 +212,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 	};
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
-		QCOMPARE(c.callCount(s, false), 1);
+		QCOMPARE(c.callCount(s), 1);
 
 	c.resetRetransformCount();
 	view->selectItem(plot->graphicsItem());
@@ -221,7 +221,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
-		QCOMPARE(c.callCount(s, false), 1);
+		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // 2 plots with each one x axis
@@ -308,7 +308,7 @@ void RetransformTest::TestPadding() {
 
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
-		QCOMPARE(c.callCount(s, false), 1);
+		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
@@ -337,7 +337,7 @@ void RetransformTest::TestPadding() {
 
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
-		QCOMPARE(c.callCount(s, false), 1);
+		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are already scaled due to the change of padding
 	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
@@ -368,7 +368,7 @@ void RetransformTest::TestCopyPastePlot() {
 	QCOMPARE(plots.count(), 1);
 
 	// Check that the plot was retransformed after pasting
-	QCOMPARE(c.callCount(plots.at(0), false), 1);
+	QCOMPARE(c.callCount(plots.at(0)), 1);
 }
 
 void RetransformTest::TestAddCurve() {
@@ -387,7 +387,7 @@ void RetransformTest::TestAddCurve() {
 	p->addEquationCurve();
 
 	// check that plot will be recalculated if a curve will be added
-	QCOMPARE(c.callCount(p, false), 1);
+	QCOMPARE(c.callCount(p), 1);
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
@@ -420,7 +420,7 @@ void RetransformTest::TestAddCurve() {
 	auto list = QStringList({"Project/Worksheet/plot/x", "Project/Worksheet/plot/y", "Project/Worksheet/plot/f(x)"});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list)
-		QCOMPARE(c.callCount(s, false), 1);
+		QCOMPARE(c.callCount(s), 1);
 
 	// x and y are called only once
 	QCOMPARE(c.logsXScaleRetransformed.count(), 1);
@@ -466,15 +466,15 @@ bool RetransformCallCounter::calledExact(int requiredCallCount, bool includeSupp
 	return true;
 }
 
-int RetransformCallCounter::callCount(const QString& path, bool includeSuppressed) {
-	const auto& result = statistic(includeSuppressed);
+int RetransformCallCounter::callCount(const QString& path) {
+	const auto& result = statistic(false);
 	if (!result.contains(path))
 		return 0;
 
 	return result.value(path);
 }
 
-int RetransformCallCounter::callCount(const AbstractAspect* aspect, bool includeSuppressed) {
+int RetransformCallCounter::callCount(const AbstractAspect* aspect) {
 	return aspect->readRetransformCalled();
 }
 

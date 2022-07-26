@@ -37,8 +37,8 @@ public:
 	QHash<QString, int> statistic(bool includeSuppressed);
 	int elementLogCount(bool includeSuppressed);
 	bool calledExact(int requiredCallCount, bool includeSuppressed);
-	int callCount(const QString& path, bool includeSuppressed);
-	int callCount(const AbstractAspect* aspect, bool includeSuppressed);
+    int callCount(const QString& path);
+    int callCount(const AbstractAspect* aspect);
 	void resetRetransformCount();
 	void aspectRetransformed(const AbstractAspect* sender, bool suppressed);
 	void retransformScaleCalled(const CartesianPlot* plot, CartesianCoordinateSystem::Dimension dim, int index);
