@@ -40,9 +40,9 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
 	switch (dim) {
 	case Dimension::X:
-		return "x";
+		return QLatin1String("x");
 	case Dimension::Y:
-		return "y";
+		return QLatin1String("y");
 	}
 	return "";
 }
