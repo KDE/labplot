@@ -514,7 +514,14 @@ void Column::setWidth(int value) {
  * \brief Clear the whole column
  */
 void Column::clear() {
-	exec(new ColumnClearCmd(d));
+	if (d->formula().isEmpty())
+		exec(new ColumnClearCmd(d));
+	else {
+		beginMacro(i18n("%1: clear column", name()));
+		exec(new ColumnClearCmd(d));
+		exec(new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false));
+		endMacro();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

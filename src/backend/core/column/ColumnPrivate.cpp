@@ -1146,6 +1146,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 		if (autoUpdate)
 			connectFormulaColumn(column);
 	}
+
+	Q_EMIT m_owner->formulaChanged(m_owner);
 }
 
 /*!
