@@ -436,7 +436,7 @@ public:
 	int readRetransformCalled() const {
 		return mRetransformCalled;
 	}
-	int mRetransformCalled;
+	int mRetransformCalled{0};
 
 #define retransformCalled(suppressed)                                                                                                                          \
 	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
