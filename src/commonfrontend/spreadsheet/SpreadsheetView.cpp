@@ -339,7 +339,7 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Delete"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Drop"), this);
 	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask"), this);
 	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);

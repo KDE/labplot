@@ -544,14 +544,15 @@ void DropValuesDialog::maskValues() const {
 		m_spreadsheet->endMacro();
 		return;
 	}
+
 	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
-	if (!ok) {
+	if (ui.leValue2->isVisible() && !ok) {
 		DEBUG("Double value 2 invalid!")
 		m_spreadsheet->endMacro();
 		return;
 	}
 
-	for (Column* col : m_columns) {
+	for (auto* col : m_columns) {
 		auto* task = new MaskValuesTask(col, op, value1, value2);
 		task->run();
 		// TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
@@ -579,16 +580,19 @@ void DropValuesDialog::dropValues() const {
 	if (!ok) {
 		DEBUG("Double value 1 invalid!")
 		m_spreadsheet->endMacro();
-		return;
-	}
-	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
-	if (!ok) {
-		DEBUG("Double value 2 invalid!")
-		m_spreadsheet->endMacro();
+		RESET_CURSOR;
 		return;
 	}
 
-	for (Column* col : m_columns) {
+	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
+	if (ui.leValue2->isVisible() && !ok) {
+		DEBUG("Double value 2 invalid!")
+		m_spreadsheet->endMacro();
+		RESET_CURSOR;
+		return;
+	}
+
+	for (auto* col : m_columns) {
 		auto* task = new DropValuesTask(col, op, value1, value2);
 		QThreadPool::globalInstance()->start(task);
 	}
