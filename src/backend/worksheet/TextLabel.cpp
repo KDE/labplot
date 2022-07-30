@@ -139,6 +139,11 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+	if (engine == QLatin1String("lualatex"))
+		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));
+
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types

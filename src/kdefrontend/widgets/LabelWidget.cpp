@@ -1214,7 +1214,6 @@ void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result& result) {
 		ui.teLabel->setStyleSheet(QString());
 
 	m_messageWidget->setVisible(!result.successful);
-	ui.lError->setVisible(!result.successful);
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {
@@ -1527,7 +1526,6 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 	// in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 	if (mode != TextLabel::Mode::LaTeX) {
 		ui.teLabel->setStyleSheet(QString());
-		ui.lError->setVisible(false);
 		m_messageWidget->setVisible(false);
 	}
 }

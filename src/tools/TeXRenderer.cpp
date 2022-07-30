@@ -111,7 +111,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	}
 
 	if (engine == "xelatex" || engine == "lualatex") {
-		out << "\\usepackage{xltxtra}";
+		out << "\\usepackage{fontspec}";
 		out << "\\defaultfontfeatures{Ligatures=TeX}";
 		if (!fontFamily.isEmpty())
 			out << "\\setmainfont[Mapping=tex-text]{" << fontFamily << "}";
