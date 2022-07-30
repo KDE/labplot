@@ -2446,10 +2446,9 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 	if (cSystemIndex == -1)
 		return;
 	auto index = coordinateSystem(cSystemIndex)->index(dim);
-	Dimension dim_other;
+	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:
-		dim_other = Dimension::Y;
 		d->xRanges[index].dirty = true;
 		break;
 	case Dimension::Y:
@@ -2710,10 +2709,9 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 			continue;
 		}
 
-		Dimension dim_other;
+		Dimension dim_other = Dimension::Y;
 		switch (dim) {
 		case Dimension::X:
-			dim_other = Dimension::Y;
 			break;
 		case Dimension::Y:
 			dim_other = Dimension::X;

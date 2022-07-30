@@ -59,8 +59,8 @@ protected:
 using Dimension = CartesianCoordinateSystem::Dimension;
 
 #define CELLWIDGET(dim, rangeIndex, Column, castObject, function)                                                                                              \
-	do {                                                                                                                                                       \
-		QTableWidget* treewidget;                                                                                                                              \
+	{                                                                                                                                                          \
+		QTableWidget* treewidget = nullptr;                                                                                                                    \
 		switch (dim) {                                                                                                                                         \
 		case Dimension::X:                                                                                                                                     \
 			treewidget = ui.twXRanges;                                                                                                                         \
@@ -86,7 +86,7 @@ using Dimension = CartesianCoordinateSystem::Dimension;
 				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex                       \
 						 << ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type";                               \
 		}                                                                                                                                                      \
-	} while (0);
+	}
 
 /*!
   \class CartesianPlotDock
@@ -970,12 +970,10 @@ void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Dimension 
 void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
 
-	QTableWidget* treewidget;
-	Dimension dim_other;
+	QTableWidget* treewidget = ui.twXRanges;
+	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:
-		dim_other = Dimension::Y;
-		treewidget = ui.twXRanges;
 		break;
 	case Dimension::Y:
 		dim_other = Dimension::X;
@@ -1020,10 +1018,9 @@ void CartesianPlotDock::minChanged(const QObject* sender, const Dimension dim, c
 	if (m_initializing)
 		return;
 
-	Dimension dim_other;
+	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:
-		dim_other = Dimension::Y;
 		break;
 	case Dimension::Y:
 		dim_other = Dimension::X;
@@ -1055,10 +1052,9 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Dimension dim, c
 	if (m_initializing)
 		return;
 
-	Dimension dim_other;
+	Dimension dim_other = Dimension::Y;
 	switch (dim) {
 	case Dimension::X:
-		dim_other = Dimension::Y;
 		break;
 	case Dimension::Y:
 		dim_other = Dimension::X;
@@ -1182,10 +1178,9 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 	if (!m_plot)
 		return;
 
-	QTableWidget* treewidget;
+	QTableWidget* treewidget = ui.twXRanges;
 	switch (dim) {
 	case Dimension::X:
-		treewidget = ui.twXRanges;
 		break;
 	case Dimension::Y:
 		treewidget = ui.twYRanges;
