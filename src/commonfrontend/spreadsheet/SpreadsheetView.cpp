@@ -1539,10 +1539,15 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValu
 	if (isColumnSelected(0, true)) {
 		action_freeze_columns->setVisible(true);
 		if (m_frozenTableView) {
-			if (!m_frozenTableView->isVisible())
+			if (!m_frozenTableView->isVisible()) {
 				action_freeze_columns->setText(i18n("Freeze Column"));
-			else
+				action_insert_column_left->setEnabled(true);
+				action_insert_columns_left->setEnabled(true);
+			} else {
 				action_freeze_columns->setText(i18n("Unfreeze Column"));
+				action_insert_column_left->setEnabled(false);
+				action_insert_columns_left->setEnabled(false);
+			}
 		}
 	} else
 		action_freeze_columns->setVisible(false);
@@ -2411,53 +2416,8 @@ void SpreadsheetView::insertColumnsLeft() {
  * private helper function doing the actual insertion of columns to the left
  */
 void SpreadsheetView::insertColumnsLeft(int count) {
-	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: insert empty column", "%1: insert empty columns", m_spreadsheet->name(), count));
-
 	const int first = firstSelectedColumn();
-
-	if (first >= 0) {
-		// determine the first selected column
-		Column* firstCol = m_spreadsheet->child<Column>(first);
-
-		for (int i = 0; i < count; ++i) {
-			Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
-			newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-
-			// resize the new column and insert it before the first selected column
-			newCol->insertRows(0, m_spreadsheet->rowCount());
-			m_spreadsheet->insertChildBefore(newCol, firstCol);
-		}
-	} else {
-		if (m_spreadsheet->columnCount() > 0) {
-			// columns available but no columns selected -> prepend the new column at the very beginning
-			Column* firstCol = m_spreadsheet->child<Column>(0);
-
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
-				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, m_spreadsheet->rowCount());
-				m_spreadsheet->insertChildBefore(newCol, firstCol);
-			}
-		} else {
-			// no columns available anymore -> resize the spreadsheet and the new column to the default size
-			KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Spreadsheet"));
-			const int rows = group.readEntry(QLatin1String("RowCount"), 100);
-			m_spreadsheet->setRowCount(rows);
-
-			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
-				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::PlotDesignation::X) : newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
-				newCol->insertRows(0, rows);
-
-				// add/append a new column
-				m_spreadsheet->addChild(newCol);
-			}
-		}
-	}
-
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	m_spreadsheet->insertColumns(first, count);
 }
 
 /*!
@@ -2489,11 +2449,13 @@ void SpreadsheetView::insertColumnsRight() {
 /*!
  * private helper function doing the actual insertion of columns to the right
  */
+// TODO: check whether this function can be rewritten to use Spreadsheet::insertColumns()
 void SpreadsheetView::insertColumnsRight(int count) {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18np("%1: insert empty column", "%1: insert empty columns", m_spreadsheet->name(), count));
 
 	const int last = lastSelectedColumn();
+	const int cols = m_spreadsheet->columnCount();
 
 	if (last >= 0) {
 		if (last < m_spreadsheet->columnCount() - 1) {
@@ -2501,7 +2463,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			Column* nextCol = m_spreadsheet->child<Column>(last + 1);
 
 			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
@@ -2510,7 +2472,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			}
 		} else {
 			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
@@ -2521,7 +2483,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 	} else {
 		if (m_spreadsheet->columnCount() > 0) {
 			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 				newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, m_spreadsheet->rowCount());
 
@@ -2535,7 +2497,7 @@ void SpreadsheetView::insertColumnsRight(int count) {
 			m_spreadsheet->setRowCount(rows);
 
 			for (int i = 0; i < count; ++i) {
-				Column* newCol = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+				Column* newCol = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 				(i == 0) ? newCol->setPlotDesignation(AbstractColumn::PlotDesignation::X) : newCol->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				newCol->insertRows(0, rows);
 
