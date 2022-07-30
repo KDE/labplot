@@ -175,6 +175,32 @@ bool ConditionalFormatting::addHighlightCellsRule(HighlightRuleType type, const 
         case Highlight_LessThanOrEqual: op = QStringLiteral("lessThanOrEqual"); break;
         case Highlight_NotBetween: op = QStringLiteral("notBetween"); break;
         case Highlight_NotEqual: op = QStringLiteral("notEqual"); break;
+	case Highlight_ContainsText:
+	case Highlight_NotContainsText:
+	case Highlight_BeginsWith:
+	case Highlight_EndsWith:
+	case Highlight_TimePeriod:
+	case Highlight_Duplicate:
+	case Highlight_Unique:
+	case Highlight_Blanks:
+	case Highlight_NoBlanks:
+	case Highlight_Errors:
+	case Highlight_NoErrors:
+	case Highlight_Top:
+	case Highlight_TopPercent:
+	case Highlight_Bottom:
+	case Highlight_BottomPercent:
+	case Highlight_AboveAverage:
+	case Highlight_AboveOrEqualAverage:
+	case Highlight_AboveStdDev1:
+	case Highlight_AboveStdDev2:
+	case Highlight_AboveStdDev3:
+	case Highlight_BelowAverage:
+	case Highlight_BelowOrEqualAverage:
+	case Highlight_BelowStdDev1:
+	case Highlight_BelowStdDev2:
+	case Highlight_BelowStdDev3:
+	case Highlight_Expression:
         default: break;
         }
         cfRule->attrs[XlsxCfRuleData::A_operator] = op;

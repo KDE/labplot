@@ -782,6 +782,7 @@ void ChartPrivate::saveXmlChart(QXmlStreamWriter &writer) const
         case Chart::CT_SurfaceChart:  break;
         case Chart::CT_Surface3DChart: break;
         case Chart::CT_BubbleChart:  break;
+        case Chart::CT_NoStatementChart:  break;
         default:  break;
     }
 
@@ -1074,6 +1075,7 @@ void ChartPrivate::saveXmlChartLegend(QXmlStreamWriter &writer) const
                     pos = QStringLiteral("b");
                     break;
 
+                case Chart::None :
                 default:
                     pos = QStringLiteral("r");
                     break;
@@ -2209,6 +2211,7 @@ QString ChartPrivate::GetAxisPosString( XlsxAxis::AxisPos axisPos ) const
         case XlsxAxis::Bottom : pos = QStringLiteral("b"); break;
         case XlsxAxis::Left   : pos = QStringLiteral("l"); break;
         case XlsxAxis::Right  : pos = QStringLiteral("r"); break;
+	case XlsxAxis::None :
         default: break; // ??
     }
 
