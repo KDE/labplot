@@ -13,7 +13,7 @@
 
 #include "3rdparty/liborigin/OriginFile.h"
 #include "backend/datasources/projects/ProjectParser.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/Background.h"
 
 class Axis;
 class Column;
@@ -58,7 +58,7 @@ private:
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
 	QColor color(Origin::Color) const;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
+	Background::ColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
 
 	QList<QPair<QString, QString>> charReplacementList() const;
 	QString replaceSpecialChars(const QString&) const;

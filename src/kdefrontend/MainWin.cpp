@@ -369,6 +369,8 @@ void MainWin::initGUI(const QString& fileName) {
 			}
 
 			updateGUIOnProjectChanges();
+			if (m_project)
+				m_project->setChanged(false); // the project was initialized on startup, nothing has changed from user's perspective
 		} else { // welcome screen
 			// 			m_showWelcomeScreen = true;
 			// 			m_welcomeWidget = createWelcomeScreen();

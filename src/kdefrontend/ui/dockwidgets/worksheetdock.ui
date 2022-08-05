@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>399</width>
-    <height>705</height>
+    <height>581</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -19,7 +19,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
        <string>General</string>
       </attribute>
@@ -207,153 +207,27 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabBackground">
       <attribute name="title">
        <string>Background</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lBackgroundType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2">
-        <widget class="KComboBox" name="cbBackgroundType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lBackgroundFileName">
-         <property name="text">
-          <string>File name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="leBackgroundFileName">
-         <property name="toolTip">
-          <string>Specify the name of the image file.</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QPushButton" name="bOpen">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string> Select the file to import</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lBackgroundColorStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="KComboBox" name="cbBackgroundColorStyle"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lBackgroundImageStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="KComboBox" name="cbBackgroundImageStyle"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lBackgroundFirstColor">
-         <property name="text">
-          <string>First color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="KColorButton" name="kcbBackgroundFirstColor"/>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lBackgroundSecondColor">
-         <property name="text">
-          <string>Second color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="KColorButton" name="kcbBackgroundSecondColor"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lBackgroundOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QSpinBox" name="sbBackgroundOpacity">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is fully opaque.</string>
-         </property>
-         <property name="suffix">
-          <string> %</string>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>2</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>2</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -366,19 +240,9 @@
          </property>
         </spacer>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lBackgroundBrushStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="KComboBox" name="cbBackgroundBrushStyle"/>
-       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tabLayout">
       <attribute name="title">
        <string>Layout</string>
       </attribute>
@@ -676,11 +540,6 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
@@ -695,15 +554,6 @@
   <tabstop>sbWidth</tabstop>
   <tabstop>sbHeight</tabstop>
   <tabstop>chScaleContent</tabstop>
-  <tabstop>cbBackgroundType</tabstop>
-  <tabstop>leBackgroundFileName</tabstop>
-  <tabstop>bOpen</tabstop>
-  <tabstop>cbBackgroundColorStyle</tabstop>
-  <tabstop>cbBackgroundImageStyle</tabstop>
-  <tabstop>cbBackgroundBrushStyle</tabstop>
-  <tabstop>kcbBackgroundFirstColor</tabstop>
-  <tabstop>kcbBackgroundSecondColor</tabstop>
-  <tabstop>sbBackgroundOpacity</tabstop>
   <tabstop>cbLayout</tabstop>
   <tabstop>sbLayoutTopMargin</tabstop>
   <tabstop>sbLayoutBottomMargin</tabstop>

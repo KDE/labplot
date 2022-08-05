@@ -4,7 +4,7 @@
 	Description          : widget for worksheet properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -17,6 +17,7 @@
 #include "ui_worksheetdock.h"
 
 class AbstractAspect;
+class BackgroundWidget;
 class ThemeHandler;
 class Worksheet;
 
@@ -31,6 +32,7 @@ public:
 
 private:
 	Ui::WorksheetDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
 	QList<Worksheet*> m_worksheetList;
 	Worksheet* m_worksheet{nullptr};
 	ThemeHandler* m_themeHandler;
@@ -51,17 +53,6 @@ private Q_SLOTS:
 	void sizeChanged();
 	void orientationChanged(int);
 
-	//"Background"-tab
-	void backgroundTypeChanged(int);
-	void backgroundColorStyleChanged(int);
-	void backgroundImageStyleChanged(int);
-	void backgroundBrushStyleChanged(int);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void backgroundOpacityChanged(int);
-	void selectFile();
-	void fileNameChanged();
-
 	//"Layout"-tab
 	void layoutChanged(int);
 	void layoutTopMarginChanged(double);
@@ -79,14 +70,6 @@ private Q_SLOTS:
 	void worksheetUseViewSizeChanged(bool);
 	void worksheetPageRectChanged(const QRectF&);
 
-	void worksheetBackgroundTypeChanged(WorksheetElement::BackgroundType);
-	void worksheetBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void worksheetBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void worksheetBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void worksheetBackgroundFirstColorChanged(const QColor&);
-	void worksheetBackgroundSecondColorChanged(const QColor&);
-	void worksheetBackgroundFileNameChanged(const QString&);
-	void worksheetBackgroundOpacityChanged(float);
 	void worksheetLayoutChanged(Worksheet::Layout);
 	void worksheetLayoutTopMarginChanged(float);
 	void worksheetLayoutBottomMarginChanged(float);

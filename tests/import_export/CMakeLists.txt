@@ -9,7 +9,7 @@ IF (ZLIB_FOUND AND LZ4_FOUND)
 	add_subdirectory(ROOT)
 ENDIF ()
 
-IF (READSTAT_FOUND OR NOT WIN32)
+IF (READSTAT_FOUND OR BUILD_READSTAT)
 	add_subdirectory(ReadStat)
 ENDIF ()
 

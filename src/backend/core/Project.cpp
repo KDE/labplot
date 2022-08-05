@@ -18,7 +18,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -220,6 +220,14 @@ int Project::versionNumber() {
 
 int Project::xmlVersion() {
 	return Private::xmlVersion();
+}
+
+void Project::setXmlVersion(int version) {
+	Private::mXmlVersion = version;
+}
+
+int Project::currentBuildXmlVersion() {
+	return buildXmlVersion;
 }
 
 QUndoStack* Project::undoStack() const {
@@ -734,22 +742,16 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	// all data was read:
 	// call retransform() to every element
 	if (hasChildren && aspect->type() == AspectType::Worksheet) {
-		for (auto* e : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
-			if (e->type() == AspectType::CartesianPlot)
-				static_cast<CartesianPlot*>(e)->retransformAll();
-			else
-				e->retransform();
-		}
+		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* e : elements)
+			e->retransform();
 	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
 		for (const auto* w : aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 			// retransform all elements in the worksheet (labels, images, plots)
 			// the plots will then recursive retransform the childs of them
-			for (auto* e : w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
-				if (e->type() == AspectType::CartesianPlot)
-					static_cast<CartesianPlot*>(e)->retransformAll();
-				else
-					e->retransform();
-			}
+			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+			for (auto* e : elements)
+				e->retransform();
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
@@ -840,12 +842,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			continue;
 		curve->suppressRetransform(true);
 
-		auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
 		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (equationCurve) {
-			// curves defined by a mathematical equations recalculate their own columns on load again.
-			equationCurve->recalculate();
-		} else if (analysisCurve) {
+		if (analysisCurve) {
 			RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
@@ -941,6 +939,41 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		}
 
 		boxPlot->setDataColumns(dataColumns);
+	}
+
+	// bar plots
+	QVector<BarPlot*> barPlots;
+	if (hasChildren)
+		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		barPlots << static_cast<BarPlot*>(aspect);
+
+	for (auto* barPlot : barPlots) {
+		if (!barPlot)
+			continue;
+
+		// initialize the array for the column pointers
+		int count = barPlot->dataColumnPaths().count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = barPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		barPlot->setDataColumns(dataColumns);
+
+		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
 	}
 
 	// data picker curves

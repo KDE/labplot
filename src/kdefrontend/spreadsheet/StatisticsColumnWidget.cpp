@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Widget showing statistics for column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -375,7 +376,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	pen.setStyle(Qt::SolidLine);
 	curve->setLinePen(pen);
 	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
@@ -434,7 +435,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
-	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
@@ -470,7 +471,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	pen.setStyle(Qt::SolidLine);
 	curve2->setLinePen(pen);
 	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
-	curve2->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve2->background()->setPosition(Background::Position::No);
 	curve2->setXColumn(xColumn2);
 	curve2->setYColumn(yColumn2);
 

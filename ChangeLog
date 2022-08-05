@@ -1,9 +1,42 @@
 -----2.10.0 () -----
+New features:
+	* [worksheet]
+		* Bar plots
+		* Plot templates - allow to save and re-use custom plot configurations
+	* [spreadsheet]
+		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
+		* Heatmap formatting for categorical data in text columns
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
+		* Live data: support multiple values via TCP
+	* [export]
+		* Use the current working project directory, if available, as the default export path
+	* [analysis]
+		* guess start vaues of fit parameter for polynomial models by linear regression
+
+Performance improvements:
+	* reduce the memory consumption during the spreadsheet export to Sqlite
+	* reduce the memory consumption when importing from a database table into the spreadsheet
+	* faster import of files with a big number of columns
+	* faster creation of a big number of columns in the spreadsheet
+
 Bug fixes:
+	* [worksheet]
+		* don't crash when undoing the step "add info element".
+		* don't crash when changing the error bar types in the curve with no x-column selected yet
+		* don't show any context menu in the presenter widget
+		* use the full screen size in the dynamic presenter widget for worksheets with "use view size" property set to true
+		* allow to zoom the view in the dynamic presenter widget
+		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
+		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
+		* fix displayed end value of date time plot range
+		* fix shifts in date time values due to locale settings (BUG 455579)
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
+	* [fit] fix locale usage in evaluation range
+	* [fit] correctly invalidate fit result when model changes
+
+
 -----2.9.0 (03.05.2022) -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer

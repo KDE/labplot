@@ -4,12 +4,13 @@
 	Description          : Worksheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "Worksheet.h"
+#include "Background.h"
 #include "WorksheetElement.h"
 #include "WorksheetPrivate.h"
 #include "backend/core/Project.h"
@@ -55,6 +56,13 @@ Worksheet::Worksheet(const QString& name, bool loading)
 	connect(this, &Worksheet::aspectAboutToBeRemoved, this, &Worksheet::handleAspectAboutToBeRemoved);
 	connect(this, &Worksheet::aspectRemoved, this, &Worksheet::handleAspectRemoved);
 
+	d->background = new Background(QString());
+	addChild(d->background);
+	d->background->setHidden(true);
+	connect(d->background, &Background::updateRequested, [=] {
+		d->update();
+	});
+
 	if (!loading)
 		init();
 }
@@ -77,7 +85,7 @@ void Worksheet::init() {
 	d->m_scene->setSceneRect(d->pageRect);
 
 	// background
-	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
+	d->background->init(group);
 
 	// layout
 	d->layout = (Layout)group.readEntry("Layout", static_cast<int>(Layout::VerticalLayout));
@@ -185,6 +193,7 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 bool Worksheet::exportView() const {
 #ifndef SDK
 	auto* dlg = new ExportWorksheetDialog(m_view);
+	dlg->setProjectFileName(const_cast<Worksheet*>(this)->project()->fileName());
 	dlg->setFileName(name());
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {
@@ -535,10 +544,9 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 }
 
 void Worksheet::setInteractive(bool value) {
-	if (m_view)
-		m_view->setInteractive(value);
-	else
+	if (!m_view)
 		view();
+	m_view->setInteractive(value);
 }
 
 void Worksheet::setPlotsLocked(bool lock) {
@@ -574,15 +582,10 @@ void Worksheet::unregisterShortcuts() {
 BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
 
-/* =============================== getter methods for background options ================================= */
-BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundType, backgroundType, backgroundType)
-BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
-BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
-BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
-BASIC_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
-BASIC_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
-BASIC_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
-BASIC_D_READER_IMPL(Worksheet, double, backgroundOpacity, backgroundOpacity)
+// background
+Background* Worksheet::background() const {
+	return d->background;
+}
 
 /* =============================== getter methods for layout options ====================================== */
 BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout)
@@ -610,55 +613,6 @@ STD_SETTER_CMD_IMPL_S(Worksheet, SetScaleContent, bool, scaleContent)
 void Worksheet::setScaleContent(bool scaleContent) {
 	if (scaleContent != d->scaleContent)
 		exec(new WorksheetSetScaleContentCmd(d, scaleContent, ki18n("%1: change \"rescale the content\" property")));
-}
-
-/* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, WorksheetElement::BackgroundType, backgroundType, update)
-void Worksheet::setBackgroundType(WorksheetElement::BackgroundType type) {
-	if (type != d->backgroundType)
-		exec(new WorksheetSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundColorStyle, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, update)
-void Worksheet::setBackgroundColorStyle(WorksheetElement::BackgroundColorStyle style) {
-	if (style != d->backgroundColorStyle)
-		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundImageStyle, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, update)
-void Worksheet::setBackgroundImageStyle(WorksheetElement::BackgroundImageStyle style) {
-	if (style != d->backgroundImageStyle)
-		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundBrushStyle, Qt::BrushStyle, backgroundBrushStyle, update)
-void Worksheet::setBackgroundBrushStyle(Qt::BrushStyle style) {
-	if (style != d->backgroundBrushStyle)
-		exec(new WorksheetSetBackgroundBrushStyleCmd(d, style, ki18n("%1: background brush style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFirstColor, QColor, backgroundFirstColor, update)
-void Worksheet::setBackgroundFirstColor(const QColor& color) {
-	if (color != d->backgroundFirstColor)
-		exec(new WorksheetSetBackgroundFirstColorCmd(d, color, ki18n("%1: set background first color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundSecondColor, QColor, backgroundSecondColor, update)
-void Worksheet::setBackgroundSecondColor(const QColor& color) {
-	if (color != d->backgroundSecondColor)
-		exec(new WorksheetSetBackgroundSecondColorCmd(d, color, ki18n("%1: set background second color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundFileName, QString, backgroundFileName, update)
-void Worksheet::setBackgroundFileName(const QString& fileName) {
-	if (fileName != d->backgroundFileName)
-		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundOpacity, double, backgroundOpacity, update)
-void Worksheet::setBackgroundOpacity(double opacity) {
-	if (opacity != d->backgroundOpacity)
-		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set opacity")));
 }
 
 /* ============================ setter methods and undo commands  for layout options  ================= */
@@ -1039,7 +993,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
 				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
-				data = datetime[i].toString(sender->xRangeDateTimeFormat());
+				data = datetime[i].toString(sender->rangeDateTimeFormat(Dimension::X));
 			} else
 				data = QVariant(valueCursor[i]);
 			treeModel->setTreeData(data, 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);
@@ -1427,7 +1381,7 @@ QString WorksheetPrivate::name() const {
 /*!
  * called if the worksheet page (the actual size of worksheet's rectangular) was changed.
  * if a layout is active, it is is updated - this adjusts the sizes of the elements in the layout to the new page size.
- * if no layout is active and the option "scale content" is active, \c handleResize() is called to adjust zhe properties.
+ * if no layout is active and the option "scale content" is active, \c handleResize() is called to adjust the properties.
  */
 void WorksheetPrivate::updatePageRect() {
 	if (q->isLoading())
@@ -1599,20 +1553,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// background properties
-	writer->writeStartElement("background");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->backgroundType)));
-	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->backgroundColorStyle)));
-	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->backgroundImageStyle)));
-	writer->writeAttribute("brushStyle", QString::number(d->backgroundBrushStyle));
-	writer->writeAttribute("firstColor_r", QString::number(d->backgroundFirstColor.red()));
-	writer->writeAttribute("firstColor_g", QString::number(d->backgroundFirstColor.green()));
-	writer->writeAttribute("firstColor_b", QString::number(d->backgroundFirstColor.blue()));
-	writer->writeAttribute("secondColor_r", QString::number(d->backgroundSecondColor.red()));
-	writer->writeAttribute("secondColor_g", QString::number(d->backgroundSecondColor.green()));
-	writer->writeAttribute("secondColor_b", QString::number(d->backgroundSecondColor.blue()));
-	writer->writeAttribute("fileName", d->backgroundFileName);
-	writer->writeAttribute("opacity", QString::number(d->backgroundOpacity));
-	writer->writeEndElement();
+	d->background->save(writer);
 
 	// cartesian properties
 	writer->writeStartElement("plotProperties");
@@ -1694,55 +1635,9 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
 			READ_INT_VALUE("columnCount", layoutColumnCount, int);
 			READ_INT_VALUE("rowCount", layoutRowCount, int);
-		} else if (!preview && reader->name() == "background") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", backgroundType, WorksheetElement::BackgroundType);
-			READ_INT_VALUE("colorStyle", backgroundColorStyle, WorksheetElement::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", backgroundImageStyle, WorksheetElement::BackgroundImageStyle);
-			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
-
-			str = attribs.value("firstColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
-			else
-				d->backgroundFirstColor.setRed(str.toInt());
-
-			str = attribs.value("firstColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
-			else
-				d->backgroundFirstColor.setGreen(str.toInt());
-
-			str = attribs.value("firstColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
-			else
-				d->backgroundFirstColor.setBlue(str.toInt());
-
-			str = attribs.value("secondColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
-			else
-				d->backgroundSecondColor.setRed(str.toInt());
-
-			str = attribs.value("secondColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
-			else
-				d->backgroundSecondColor.setGreen(str.toInt());
-
-			str = attribs.value("secondColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
-			else
-				d->backgroundSecondColor.setBlue(str.toInt());
-
-			str = attribs.value("fileName").toString();
-			d->backgroundFileName = str;
-
-			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
-		} else if (!preview && reader->name() == "plotProperties") {
+		} else if (!preview && reader->name() == "background")
+			d->background->load(reader, preview);
+		else if (!preview && reader->name() == "plotProperties") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
@@ -1812,15 +1707,8 @@ void Worksheet::loadTheme(const QString& theme) {
 		group = config->group("Worksheet");
 	}
 
-	this->setBackgroundType((WorksheetElement::BackgroundType)group.readEntry("BackgroundType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
-	this->setBackgroundColorStyle(
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("BackgroundColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
-	this->setBackgroundImageStyle(
-		(WorksheetElement::BackgroundImageStyle)group.readEntry("BackgroundImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled)));
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+	// load background properties
+	d->background->loadThemeConfig(group);
 
 	// load the theme for all the children
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);

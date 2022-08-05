@@ -144,8 +144,10 @@ QMenu* Column::createContextMenu() {
 	// at the moment it's ok to check to the null pointer for firstAction here.
 	// later, once we have some actions in the menu also for MQTT topics we'll
 	// need to explicitly to dynamic_cast for MQTTTopic
-	if (firstAction)
-		Q_EMIT requestProjectContextMenu(menu);
+	if (firstAction && parentAspect()->type() == AspectType::Spreadsheet) {
+		auto* spreadsheet = static_cast<Spreadsheet*>(parentAspect());
+		spreadsheet->fillColumnContextMenu(menu, this);
+	}
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
@@ -512,7 +514,14 @@ void Column::setWidth(int value) {
  * \brief Clear the whole column
  */
 void Column::clear() {
-	exec(new ColumnClearCmd(d));
+	if (d->formula().isEmpty())
+		exec(new ColumnClearCmd(d));
+	else {
+		beginMacro(i18n("%1: clear column", name()));
+		exec(new ColumnClearCmd(d));
+		exec(new ColumnSetGlobalFormulaCmd(d, QString(), QStringList(), QVector<Column*>(), false));
+		endMacro();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -565,6 +574,7 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
 void Column::updateFormula() {
 	invalidateProperties();
 	d->updateFormula();
+	Q_EMIT formulaChanged(this);
 }
 
 /**
@@ -622,6 +632,10 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	else
 		exec(new ColumnReplaceCmd<QString>(d, first, new_values));
 	invalidateProperties();
+}
+
+int Column::dictionaryIndex(int row) const {
+	return d->dictionaryIndex(row);
 }
 
 void Column::addValueLabel(const QString& value, const QString& label) {
@@ -815,11 +829,10 @@ void Column::calculateStatistics() const {
 	PERFTRACE("calculate column statistics");
 
 	d->statistics = ColumnStatistics();
-	ColumnStatistics& statistics = d->statistics;
+	auto& statistics = d->statistics;
 
 	//######  location measures  #######
-	int rowValuesSize = 0;
-	double val;
+	int rowValuesSize = rowCount();
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
@@ -828,82 +841,29 @@ void Column::calculateStatistics() const {
 	statistics.maximum = -qInf();
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
+	rowData.reserve(rowValuesSize);
 
-	if (columnMode() == ColumnMode::Double) {
-		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
+	for (int row = 0; row < rowValuesSize; ++row) {
+		double val = valueAt(row);
+		if (std::isnan(val) || isMasked(row))
+			continue;
 
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::Integer) {
-		// TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<int>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
-	} else if (columnMode() == ColumnMode::BigInt) {
-		// TODO: code duplication because of the reinterpret_cast...
-		auto* rowValues = reinterpret_cast<QVector<qint64>*>(data());
-		rowValuesSize = rowValues->size();
-		rowData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || isMasked(row))
-				continue;
-
-			if (val < statistics.minimum)
-				statistics.minimum = val;
-			if (val > statistics.maximum)
-				statistics.maximum = val;
-			columnSum += val;
-			columnSumNeg += (1.0 / val);
-			columnSumSquare += val * val;
-			columnProduct *= val;
-			if (frequencyOfValues.find(val) != frequencyOfValues.end())
-				frequencyOfValues.operator[](val)++;
-			else
-				frequencyOfValues.insert(std::make_pair(val, 1));
-			rowData.push_back(val);
-		}
+		if (val < statistics.minimum)
+			statistics.minimum = val;
+		if (val > statistics.maximum)
+			statistics.maximum = val;
+		columnSum += val;
+		columnSumNeg += (1.0 / val); // will be Inf when val == 0
+		columnSumSquare += val * val;
+		columnProduct *= val;
+		if (frequencyOfValues.find(val) != frequencyOfValues.end())
+			frequencyOfValues.operator[](val)++;
+		else
+			frequencyOfValues.insert(std::make_pair(val, 1));
+		rowData.push_back(val);
 	}
 
-	const int notNanCount = rowData.size();
+	const size_t notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
 		d->available.statistics = true;
@@ -917,7 +877,24 @@ void Column::calculateStatistics() const {
 
 	statistics.size = notNanCount;
 	statistics.arithmeticMean = columnSum / notNanCount;
-	statistics.geometricMean = pow(columnProduct, 1.0 / notNanCount);
+
+	// geometric mean
+	if (statistics.minimum <= -100.) // invalid
+		statistics.geometricMean = qQNaN();
+	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
+		columnProduct = 1.; // recalculate
+		for (auto val : rowData)
+			columnProduct *= val / 100. + 1.;
+		// n-th root and convert back to percentage changes
+		statistics.geometricMean = 100. * (std::pow(columnProduct, 1.0 / notNanCount) - 1.);
+	} else if (statistics.minimum == 0) { // replace zero values with 1
+		columnProduct = 1.; // recalculate
+		for (auto val : rowData)
+			columnProduct *= (val == 0.) ? 1. : val;
+		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
+	} else
+		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
+
 	statistics.harmonicMean = notNanCount / columnSumNeg;
 	statistics.contraharmonicMean = columnSumSquare / columnSum;
 
@@ -946,34 +923,34 @@ void Column::calculateStatistics() const {
 
 	// sort the data to calculate the percentiles
 	std::sort(rowData.begin(), rowData.end());
-	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
-	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
-	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
-	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.01);
-	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.05);
-	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.1);
-	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.9);
-	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.95);
-	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.99);
+	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.25);
+	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.50);
+	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.75);
+	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.01);
+	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.05);
+	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.1);
+	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.9);
+	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.95);
+	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.99);
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
-	statistics.trimean = (statistics.firstQuartile + 2 * statistics.median + statistics.thirdQuartile) / 4;
+	statistics.trimean = (statistics.firstQuartile + 2. * statistics.median + statistics.thirdQuartile) / 4.;
 
 	//######  dispersion and shape measures  #######
-	statistics.variance = 0;
-	statistics.meanDeviation = 0.0;
-	statistics.meanDeviationAroundMedian = 0.0;
-	double centralMoment_r3 = 0.0;
-	double centralMoment_r4 = 0.0;
+	statistics.variance = 0.;
+	statistics.meanDeviation = 0.;
+	statistics.meanDeviationAroundMedian = 0.;
+	double centralMoment_r3 = 0.;
+	double centralMoment_r4 = 0.;
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
 
-	for (int row = 0; row < notNanCount; ++row) {
-		val = rowData.value(row);
+	for (size_t row = 0; row < notNanCount; ++row) {
+		double val = rowData.value(row);
 		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
-		statistics.meanDeviation += fabs(val - statistics.arithmeticMean);
+		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);
 
-		absoluteMedianList[row] = fabs(val - statistics.median);
+		absoluteMedianList[row] = std::abs(val - statistics.median);
 		statistics.meanDeviationAroundMedian += absoluteMedianList[row];
 
 		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
@@ -985,8 +962,8 @@ void Column::calculateStatistics() const {
 	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
 	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
 
-	// standard variation
-	statistics.standardDeviation = sqrt(statistics.variance);
+	// standard deviation
+	statistics.standardDeviation = std::sqrt(statistics.variance);
 
 	//"median absolute deviation" - the median of the absolute deviations from the data's median.
 	std::sort(absoluteMedianList.begin(), absoluteMedianList.end());
@@ -999,10 +976,10 @@ void Column::calculateStatistics() const {
 	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
 
 	// entropy
-	double entropy = 0.0;
+	double entropy = 0.;
 	for (const auto& v : frequencyOfValues) {
 		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
-		entropy += (frequencyNorm * log2(frequencyNorm));
+		entropy += (frequencyNorm * std::log2(frequencyNorm));
 	}
 
 	statistics.entropy = -entropy;
@@ -1047,7 +1024,7 @@ bool Column::hasValues() const {
 	}
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
-		// integer column has always valid values
+		// integer values are always valid
 		foundValues = true;
 		break;
 	case ColumnMode::DateTime:
@@ -1208,7 +1185,10 @@ const QMap<qint64, QString>& Column::bigIntValueLabels() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	return modeIcon(columnMode());
+	if (formula().isEmpty())
+		return modeIcon(columnMode());
+	else
+		return QIcon::fromTheme(QLatin1String("mathmode"));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

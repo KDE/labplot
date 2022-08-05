@@ -139,6 +139,11 @@ void TextLabel::init() {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+	const auto& engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+	if (engine == QLatin1String("lualatex"))
+		d->teXFont.setFamily(QLatin1String("Latin Modern Roman"));
+
 	// read settings from config if group exists
 	if (group.isValid()) {
 		// properties common to all types
@@ -485,7 +490,9 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform() {
-	if (suppressRetransform || q->isLoading())
+	const bool required = suppressRetransform || q->isLoading();
+	trackRetransformCalled(required);
+	if (required)
 		return;
 
 	updatePosition();
@@ -569,7 +576,7 @@ void TextLabelPrivate::updateText() {
 		format.fontSize = teXFont.pointSize();
 		format.fontFamily = teXFont.family();
 		format.dpi = teXImageResolution;
-		QFuture<QByteArray> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderSuccessful, format);
+		QFuture<QByteArray> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderResult, format);
 		teXImageFutureWatcher.setFuture(future);
 
 		// don't need to call retransform() here since it is done in updateTeXImage
@@ -642,8 +649,8 @@ void TextLabelPrivate::updateTeXImage() {
 	teXPdfData = teXImageFutureWatcher.result();
 	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 	updateBoundingRect();
-	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderSuccessful);
-	Q_EMIT q->teXImageUpdated(teXRenderSuccessful);
+	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderResult.successful);
+	Q_EMIT q->teXImageUpdated(teXRenderResult);
 }
 
 void TextLabelPrivate::updateBorder() {
@@ -1104,7 +1111,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
-			if (project()->xmlVersion() < 4) {
+			if (Project::xmlVersion() < 4) {
 				str = attribs.value("teXUsed").toString();
 				d->textWrapper.mode = static_cast<TextLabel::Mode>(str.toInt());
 			} else

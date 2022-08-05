@@ -51,6 +51,7 @@ enum class AspectType : quint64 {
 	ReferenceLine = 0x0210040,
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
+	BarPlot = 0x0210200,
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -181,6 +182,8 @@ public:
 			return QStringLiteral("XYSmoothCurve");
 		case AspectType::XYHilbertTransformCurve:
 			return QStringLiteral("XYHilbertTransformCurve");
+		case AspectType::BarPlot:
+			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
 		case AspectType::AbstractPart:
@@ -421,6 +424,24 @@ Q_SIGNALS:
 	// selection/deselection in view
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
+
+	// Used by the retransformTests
+Q_SIGNALS:
+	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
+
+public:
+	void resetRetransformCalled() {
+		mRetransformCalled = 0;
+	}
+	int retransformCalled() const {
+		return mRetransformCalled;
+	}
+	int mRetransformCalled{0};
+
+#define trackRetransformCalled(suppressed)                                                                                                                     \
+	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	if (!suppressed)                                                                                                                                           \
+		q->mRetransformCalled += 1;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

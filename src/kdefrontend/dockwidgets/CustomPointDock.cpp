@@ -394,7 +394,7 @@ void CustomPointDock::load() {
 		if (numeric)
 			ui.lePositionXLogical->setText(numberLocale.toString(m_point->positionLogical().x()));
 		else {
-			ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().x()));
 		}
 
@@ -407,7 +407,7 @@ void CustomPointDock::load() {
 		if (numeric)
 			ui.lePositionYLogical->setText(numberLocale.toString(m_point->positionLogical().y()));
 		else {
-			ui.dtePositionYLogical->setDisplayFormat(plot->yRangeDateTimeFormat());
+			ui.dtePositionYLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 			ui.dtePositionYLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().y()));
 		}
 

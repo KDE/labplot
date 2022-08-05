@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet view
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,6 +24,8 @@ class QTimeLine;
 
 class AbstractAspect;
 class WorksheetElement;
+
+class RetransformTest;
 
 #ifdef HAVE_TOUCHBAR
 class KDMacTouchBar;
@@ -55,8 +57,8 @@ public:
 	void exportToClipboard();
 	void setIsClosing();
 	void setIsBeingPresented(bool presenting);
-	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode);
-	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode);
+	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode);
+	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode);
 	void setPlotLock(bool lock);
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
@@ -65,10 +67,10 @@ public:
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
 	void unregisterShortcuts();
+	void initActions();
 
 private:
 	void initBasicActions();
-	void initActions();
 	void initMenus();
 	void processResize();
 	void drawForeground(QPainter*, const QRectF&) override;
@@ -78,11 +80,11 @@ private:
 	CartesianPlot* plotAt(QPoint) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
-	void handleAxisSelected(const Axis* a);
-	void handleCartesianPlotSelected(const CartesianPlot* plot);
+	void handleAxisSelected(const Axis*);
+	void handleCartesianPlotSelected(const CartesianPlot*);
 	void handleXYCurveSelected();
 	void handleReferenceLineSelected();
-	bool eventFilter(QObject* watched, QEvent* event) override;
+	bool eventFilter(QObject* watched, QEvent*) override;
 	void updateLabelsZoom() const;
 
 	// events
@@ -167,6 +169,7 @@ private:
 	QAction* addCartesianPlot2Action{nullptr};
 	QAction* addCartesianPlot3Action{nullptr};
 	QAction* addCartesianPlot4Action{nullptr};
+	QAction* addCartesianPlotTemplateAction{nullptr};
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
 	QAction* addGlobalInfoElementAction{nullptr};
@@ -269,7 +272,7 @@ public Q_SLOTS:
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
-	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode); // from cartesian plot
+	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode); // from cartesian plot
 	void cartesianPlotMouseModeChanged(QAction*);
 
 private Q_SLOTS:
@@ -309,6 +312,8 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void statusInfo(const QString&);
 	void propertiesExplorerRequested();
+
+	friend RetransformTest;
 };
 
 #endif

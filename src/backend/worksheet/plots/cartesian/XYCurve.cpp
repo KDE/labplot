@@ -26,6 +26,7 @@
 #include "backend/lib/macrosXYCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -45,6 +46,8 @@ extern "C" {
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_spline.h>
 }
+
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 XYCURVE_COLUMN_CONNECT(x)
 XYCURVE_COLUMN_CONNECT(y)
@@ -117,17 +120,19 @@ void XYCurve::init() {
 	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
-	d->fillingPosition = (FillingPosition)group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling));
-	d->fillingType = (WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color));
-	d->fillingColorStyle =
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor));
-	d->fillingImageStyle =
-		(WorksheetElement::BackgroundImageStyle)group.readEntry("FillingImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled));
-	d->fillingBrushStyle = (Qt::BrushStyle)group.readEntry("FillingBrushStyle", static_cast<int>(Qt::SolidPattern));
-	d->fillingFileName = group.readEntry("FillingFileName", QString());
-	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
-	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
-	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
+	// Background/Filling
+	d->background = new Background(QString());
+	d->background->setPrefix(QLatin1String("Filling"));
+	d->background->setPositionAvailable(true);
+	addChild(d->background);
+	d->background->setHidden(true);
+	d->background->init(group);
+	connect(d->background, &Background::updateRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->background, &Background::updatePositionRequested, [=] {
+		d->updateFilling();
+	});
 
 	d->xErrorType = (ErrorType)group.readEntry("XErrorType", static_cast<int>(ErrorType::NoError));
 	d->yErrorType = (ErrorType)group.readEntry("YErrorType", static_cast<int>(ErrorType::NoError));
@@ -234,6 +239,15 @@ void XYCurve::setHover(bool on) {
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 // data source
+const AbstractColumn* XYCurve::column(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X:
+		return xColumn();
+	case Dimension::Y:
+		return yColumn();
+	}
+	return nullptr;
+}
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xColumnPath, xColumnPath)
@@ -275,16 +289,11 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
-// filling
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::FillingPosition, fillingPosition, fillingPosition)
-BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundType, fillingType, fillingType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QString, fillingFileName, fillingFileName)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
+// Filling
+Background* XYCurve::background() const {
+	Q_D(const XYCurve);
+	return d->background;
+}
 
 // error bars
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, xErrorType, xErrorType)
@@ -524,70 +533,6 @@ void XYCurve::setValuesColor(const QColor& color) {
 	Q_D(XYCurve);
 	if (color != d->valuesColor)
 		exec(new XYCurveSetValuesColorCmd(d, color, ki18n("%1: set values color")));
-}
-
-// Filling
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingPosition, XYCurve::FillingPosition, fillingPosition, updateFilling)
-void XYCurve::setFillingPosition(FillingPosition position) {
-	Q_D(XYCurve);
-	if (position != d->fillingPosition)
-		exec(new XYCurveSetFillingPositionCmd(d, position, ki18n("%1: filling position changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, WorksheetElement::BackgroundType, fillingType, updatePixmap)
-void XYCurve::setFillingType(WorksheetElement::BackgroundType type) {
-	Q_D(XYCurve);
-	if (type != d->fillingType)
-		exec(new XYCurveSetFillingTypeCmd(d, type, ki18n("%1: filling type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, WorksheetElement::BackgroundColorStyle, fillingColorStyle, updatePixmap)
-void XYCurve::setFillingColorStyle(WorksheetElement::BackgroundColorStyle style) {
-	Q_D(XYCurve);
-	if (style != d->fillingColorStyle)
-		exec(new XYCurveSetFillingColorStyleCmd(d, style, ki18n("%1: filling color style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, WorksheetElement::BackgroundImageStyle, fillingImageStyle, updatePixmap)
-void XYCurve::setFillingImageStyle(WorksheetElement::BackgroundImageStyle style) {
-	Q_D(XYCurve);
-	if (style != d->fillingImageStyle)
-		exec(new XYCurveSetFillingImageStyleCmd(d, style, ki18n("%1: filling image style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
-void XYCurve::setFillingBrushStyle(Qt::BrushStyle style) {
-	Q_D(XYCurve);
-	if (style != d->fillingBrushStyle)
-		exec(new XYCurveSetFillingBrushStyleCmd(d, style, ki18n("%1: filling brush style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
-void XYCurve::setFillingFirstColor(const QColor& color) {
-	Q_D(XYCurve);
-	if (color != d->fillingFirstColor)
-		exec(new XYCurveSetFillingFirstColorCmd(d, color, ki18n("%1: set filling first color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
-void XYCurve::setFillingSecondColor(const QColor& color) {
-	Q_D(XYCurve);
-	if (color != d->fillingSecondColor)
-		exec(new XYCurveSetFillingSecondColorCmd(d, color, ki18n("%1: set filling second color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingFileName, QString, fillingFileName, updatePixmap)
-void XYCurve::setFillingFileName(const QString& fileName) {
-	Q_D(XYCurve);
-	if (fileName != d->fillingFileName)
-		exec(new XYCurveSetFillingFileNameCmd(d, fileName, ki18n("%1: set filling image")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
-void XYCurve::setFillingOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->fillingOpacity)
-		exec(new XYCurveSetFillingOpacityCmd(d, opacity, ki18n("%1: set filling opacity")));
 }
 
 // Error bars
@@ -981,7 +926,9 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	if (!isVisible() || q->isLoading())
+	const bool required = !isVisible() || q->isLoading();
+	trackRetransformCalled(required);
+	if (required)
 		return;
 
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
@@ -1025,6 +972,9 @@ void XYCurvePrivate::retransform() {
 
 			const int numberOfPoints = m_logicalPoints.size();
 			DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
+			// for (auto p : m_logicalPoints)
+			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+
 			if (numberOfPoints > 0) {
 				const auto dataRect{plot()->dataRect()};
 				// this is the old method considering DPI
@@ -1076,6 +1026,8 @@ void XYCurvePrivate::retransform() {
 
 				m_pointVisible.resize(numberOfPoints);
 				q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
+				// for (auto p : m_logicalPoints)
+				//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
 			}
 		}
 		//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
@@ -1183,19 +1135,13 @@ void XYCurvePrivate::addLine(QPointF p,
 							 RangeT::Scale scale,
 							 bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = llabs(qRound64(p.x() / minDiffX) - qRound64(x / minDiffX)) > 0; // only relevant if greater zero or not
-		if (std::isnan(x)) {
-			x = p.x();
-			lastPoint = p;
-			minY = p.y();
-			maxY = p.y();
-		} else {
-			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
-			if (pixelDiff > 0) // set x to next pixel
-				x = p.x();
-		}
+		pixelDiff = (qRound64(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
+		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+		if (pixelDiff > 0) // set x to next pixel
+			x = qRound64(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
+		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
 		bool visible;
 		QPointF pScene = q->cSystem->mapLogicalToScene(p, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 
@@ -1203,21 +1149,15 @@ void XYCurvePrivate::addLine(QPointF p,
 		if (!visible)
 			return;
 
-		if (std::isnan(x)) {
-			x = pScene.x();
-			lastPoint = p;
-		} else {
-			// using only the difference between the points is not sufficient, because p0 is updated always
-			// independent if new line added or not
-			int xPixel = qRound((x - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
-			int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
-			pixelDiff = p1Pixel - xPixel;
+		// using only the difference between the points is not sufficient, because
+		// p0 is updated always independent if new line added or not
+		const int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+		pixelDiff = p1Pixel - x;
 
-			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
+		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
-			if (pixelDiff > 0) // set x to next pixel
-				x = pScene.x();
-		}
+		if (pixelDiff > 0) // set x to next pixel
+			x = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
 	}
 }
 
@@ -1235,7 +1175,6 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		maxY = qMax(p.y(), maxY);
 		minY = qMin(p.y(), minY);
 		prevPixelDiffZero = true;
-		lastPoint = p;
 	} else {
 		if (prevPixelDiffZero) {
 			// If previously more than one point lied on the same pixel
@@ -1259,8 +1198,8 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPoint
 		// TODO: needed?
 		//			if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
 		//				return;
-		lastPoint = p;
 	}
+	lastPoint = p;
 }
 
 /*!
@@ -1335,8 +1274,8 @@ void XYCurvePrivate::updateLines() {
 		if (columnProperties == AbstractColumn::Properties::Constant) {
 			DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-			const auto xRange{plot()->xRange(cs->xIndex())};
-			const auto yRange{plot()->yRange(cs->yIndex())};
+			const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+			const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
 			tempPoint1 = QPointF(xRange.start(), yRange.start());
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1346,8 +1285,8 @@ void XYCurvePrivate::updateLines() {
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
 			QPointF p0, p1;
-			const auto xIndex{q->cSystem->xIndex()};
-			const auto xRange{plot()->xRange(xIndex)};
+			const auto xIndex{q->cSystem->index(Dimension::X)};
+			const auto xRange{plot()->range(Dimension::X, xIndex)};
 			double minDiffX;
 			const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
@@ -1369,8 +1308,21 @@ void XYCurvePrivate::updateLines() {
 				startIndex = i + 1;
 
 				if (lineType != XYCurve::LineType::SplineCubicNatural && lineType != XYCurve::LineType::SplineCubicPeriodic
-					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic)
-					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minDiffX, scale, prevPixelDiffZero);
+					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic) {
+					if (scale == RangeT::Scale::Linear) {
+						xPos = qRound64(p0.x() / minDiffX);
+						lastPoint = p0;
+						minY = p0.y();
+						maxY = p0.y();
+					} else {
+						bool visible;
+						QPointF pScene = q->cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+						if (!visible)
+							continue;
+						xPos = qRound((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
+						lastPoint = p0;
+					}
+				}
 				break;
 			}
 
@@ -1677,9 +1629,7 @@ void XYCurvePrivate::updateLines() {
 #ifdef PERFTRACE_CURVES
 		PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name() + QLatin1String(", map lines to scene coordinates"));
 #endif
-#ifdef XYCurveTest_EN
-		m_lines_test = m_lines;
-#endif
+		emit q->linesUpdated(q, m_lines);
 		m_lines = q->cSystem->mapLogicalToScene(m_lines);
 	}
 
@@ -1718,8 +1668,8 @@ void XYCurvePrivate::updateDropLines() {
 	// calculate drop lines
 	QVector<QLineF> dlines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->xRange(cs->xIndex()).start();
-	const double yMin = plot()->yRange(cs->yIndex()).start();
+	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	int i = 0;
 	switch (dropLineType) {
@@ -1820,8 +1770,8 @@ void XYCurvePrivate::updateRug() {
 
 	QVector<QPointF> points;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const double xMin = plot()->xRange(cs->xIndex()).start();
-	const double yMin = plot()->yRange(cs->yIndex()).start();
+	const double xMin = plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	// vertical rug
 	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
@@ -1883,7 +1833,7 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{plot()->xRange(cs->xIndex()).format()};
+		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1900,7 +1850,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{plot()->yRange(cs->yIndex()).format()};
+		auto rangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1918,8 +1868,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{plot()->xRange(cs->xIndex()).format()};
-		auto yRangeFormat{plot()->yRange(cs->yIndex()).format()};
+		auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
+		auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1958,10 +1908,19 @@ void XYCurvePrivate::updateValues() {
 			return;
 		}
 
-		const int endRow{qMin(numberOfPoints, valuesColumn->rowCount())};
-		auto xColMode{valuesColumn->columnMode()};
+		const int endRow{qMin(qMin(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
+		auto xColMode{xColumn->columnMode()};
+		auto vColMode{valuesColumn->columnMode()};
+
+		// need to check x range
+		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		auto xRange = plot()->range(Dimension::X, cs->index(Dimension::X));
+
+		size_t index = 0; // index of valid points (logicalPoints)
 		for (int i = 0; i < endRow; ++i) {
-			if (!m_pointVisible.at(i))
+			// ignore value labels for invalid data points
+			// otherwise the assignment to the data points get lost
+			if (!xColumn->isValid(i) || xColumn->isMasked(i) || !yColumn->isValid(i) || yColumn->isMasked(i) || !m_pointVisible.at(index++))
 				continue;
 
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i)) {
@@ -1969,7 +1928,26 @@ void XYCurvePrivate::updateValues() {
 				continue;
 			}
 
+			// check if inside x range
 			switch (xColMode) {
+			case AbstractColumn::ColumnMode::Double:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				if (!xRange.contains(xColumn->valueAt(i)))
+					continue;
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				if (xColumn->dateTimeAt(i) < QDateTime::fromMSecsSinceEpoch(xRange.start())
+					|| xColumn->dateTimeAt(i) > QDateTime::fromMSecsSinceEpoch(xRange.end()))
+					continue;
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				break;
+			}
+
+			switch (vColMode) {
 			case AbstractColumn::ColumnMode::Double:
 				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
@@ -1999,6 +1977,9 @@ void XYCurvePrivate::updateValues() {
 
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
+		// catch case with more label strings than scene points (should not happen even with custom column)
+		if (i >= m_scenePoints.size())
+			break;
 		const int w{fm.boundingRect(string).width()};
 		const double x{m_scenePoints.at(i).x()};
 		const double y{m_scenePoints.at(i).y()};
@@ -2050,7 +2031,8 @@ void XYCurvePrivate::updateFilling() {
 	//  - no filling was enabled
 	//  - the number of visible points on the scene is too high
 	//  - no scene points available, everything outside of the plot region or no scene points calculated yet
-	if (fillingPosition == XYCurve::FillingPosition::NoFilling || m_scenePoints.size() > 1000 || m_scenePoints.isEmpty()) {
+	auto fillingPosition = background->position();
+	if (fillingPosition == Background::Position::No || m_scenePoints.size() > 1000 || m_scenePoints.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -2092,12 +2074,12 @@ void XYCurvePrivate::updateFilling() {
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	const auto xRange{plot()->xRange(cs->xIndex())};
-	const auto yRange{plot()->yRange(cs->yIndex())};
+	const auto xRange{plot()->range(Dimension::X, cs->index(Dimension::X))};
+	const auto yRange{plot()->range(Dimension::Y, cs->index(Dimension::Y))};
 	const double xMin{xRange.start()}, xMax{xRange.end()};
 	const double yMin{yRange.start()}, yMax{yRange.end()};
 	bool visible;
-	if (fillingPosition == XYCurve::FillingPosition::Above) {
+	if (fillingPosition == Background::Position::Above) {
 		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible);
 
 		// start point
@@ -2122,7 +2104,7 @@ void XYCurvePrivate::updateFilling() {
 
 		// coordinate at which to close all polygons
 		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible).y();
-	} else if (fillingPosition == XYCurve::FillingPosition::Below) {
+	} else if (fillingPosition == Background::Position::Below) {
 		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 
 		// start point
@@ -2147,7 +2129,7 @@ void XYCurvePrivate::updateFilling() {
 
 		// coordinate at which to close all polygons
 		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin), visible).y();
-	} else if (fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
+	} else if (fillingPosition == Background::Position::ZeroBaseline) {
 		edge = q->cSystem->mapLogicalToScene(QPointF(xMin, yMax), visible);
 
 		// start point
@@ -2189,7 +2171,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		yEnd = q->cSystem->mapLogicalToScene(QPointF(xMin, yMin > 0 ? yMin : 0), visible).y();
-	} else if (fillingPosition == XYCurve::FillingPosition::Left) {
+	} else if (fillingPosition == Background::Position::Left) {
 		edge = q->cSystem->mapLogicalToScene(QPointF(xMax, yMin), visible);
 
 		// start point
@@ -2258,8 +2240,8 @@ void XYCurvePrivate::updateFilling() {
 				pol << fillLines.at(i - 1).p2() << p1;
 			} else {
 				//-> we have a break in the curve -> close the polygon, add it to the polygon list and start a new polygon
-				if (fillingPosition == XYCurve::FillingPosition::Above || fillingPosition == XYCurve::FillingPosition::Below
-					|| fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
+				if (fillingPosition == Background::Position::Above || fillingPosition == Background::Position::Below
+					|| fillingPosition == Background::Position::ZeroBaseline) {
 					pol << QPointF(fillLines.at(i - 1).p2().x(), yEnd);
 					pol << QPointF(start.x(), yEnd);
 				} else {
@@ -2279,8 +2261,8 @@ void XYCurvePrivate::updateFilling() {
 		pol << end;
 
 	// close the last polygon
-	if (fillingPosition == XYCurve::FillingPosition::Above || fillingPosition == XYCurve::FillingPosition::Below
-		|| fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
+	if (fillingPosition == Background::Position::Above || fillingPosition == Background::Position::Below
+		|| fillingPosition == Background::Position::ZeroBaseline) {
 		pol << QPointF(end.x(), yEnd);
 		pol << QPointF(start.x(), yEnd);
 	} else {
@@ -2383,12 +2365,14 @@ QDateTime XYCurve::yDateTime(double x, bool& valueFound) const {
 	return {};
 }
 
-bool XYCurve::minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars) const {
-	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, xRange, includeErrorBars);
-}
-
-bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars) const {
-	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, yRange, includeErrorBars);
+bool XYCurve::minMax(const Dimension dim, const Range<int>& indexRange, Range<double>& r, bool includeErrorBars) const {
+	switch (dim) {
+	case Dimension::X:
+		return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, r, includeErrorBars);
+	case Dimension::Y:
+		return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, r, includeErrorBars);
+	}
+	return false;
 }
 
 /*!
@@ -2861,8 +2845,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 #endif
 
 	// draw filling
-	if (fillingPosition != XYCurve::FillingPosition::NoFilling) {
-		painter->setOpacity(fillingOpacity);
+	if (background->position() != Background::Position::No) {
+		painter->setOpacity(background->opacity());
 		painter->setPen(Qt::SolidLine);
 		drawFilling(painter);
 	}
@@ -3022,6 +3006,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawValues(QPainter* painter) {
+	// QDEBUG(Q_FUNC_INFO << ", value strings = " << m_valueStrings)
 	int i = 0;
 	for (const auto& point : qAsConst(m_valuePoints)) {
 		painter->translate(point);
@@ -3039,68 +3024,68 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 void XYCurvePrivate::drawFilling(QPainter* painter) {
 	for (const auto& pol : qAsConst(m_fillPolygons)) {
 		QRectF rect = pol.boundingRect();
-		if (fillingType == WorksheetElement::BackgroundType::Color) {
-			switch (fillingColorStyle) {
-			case WorksheetElement::BackgroundColorStyle::SingleColor: {
-				painter->setBrush(QBrush(fillingFirstColor));
+		if (background->type() == Background::Type::Color) {
+			switch (background->colorStyle()) {
+			case Background::ColorStyle::SingleColor: {
+				painter->setBrush(QBrush(background->firstColor()));
 				break;
 			}
-			case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
+			case Background::ColorStyle::HorizontalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
+				linearGrad.setColorAt(0, background->firstColor());
+				linearGrad.setColorAt(1, background->secondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
+			case Background::ColorStyle::VerticalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
+				linearGrad.setColorAt(0, background->firstColor());
+				linearGrad.setColorAt(1, background->secondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+			case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
+				linearGrad.setColorAt(0, background->firstColor());
+				linearGrad.setColorAt(1, background->secondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+			case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-				linearGrad.setColorAt(0, fillingFirstColor);
-				linearGrad.setColorAt(1, fillingSecondColor);
+				linearGrad.setColorAt(0, background->firstColor());
+				linearGrad.setColorAt(1, background->secondColor());
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case WorksheetElement::BackgroundColorStyle::RadialGradient: {
+			case Background::ColorStyle::RadialGradient: {
 				QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-				radialGrad.setColorAt(0, fillingFirstColor);
-				radialGrad.setColorAt(1, fillingSecondColor);
+				radialGrad.setColorAt(0, background->firstColor());
+				radialGrad.setColorAt(1, background->secondColor());
 				painter->setBrush(QBrush(radialGrad));
 				break;
 			}
 			}
-		} else if (fillingType == WorksheetElement::BackgroundType::Image) {
-			if (!fillingFileName.trimmed().isEmpty()) {
-				QPixmap pix(fillingFileName);
-				switch (fillingImageStyle) {
-				case WorksheetElement::BackgroundImageStyle::ScaledCropped:
+		} else if (background->type() == Background::Type::Image) {
+			if (!background->fileName().trimmed().isEmpty()) {
+				QPixmap pix(background->fileName());
+				switch (background->imageStyle()) {
+				case Background::ImageStyle::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 					break;
-				case WorksheetElement::BackgroundImageStyle::Scaled:
+				case Background::ImageStyle::Scaled:
 					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 					break;
-				case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
+				case Background::ImageStyle::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 					break;
-				case WorksheetElement::BackgroundImageStyle::Centered: {
+				case Background::ImageStyle::Centered: {
 					QPixmap backpix(rect.size().toSize());
 					backpix.fill();
 					QPainter p(&backpix);
@@ -3110,16 +3095,16 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 					painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
 					break;
 				}
-				case WorksheetElement::BackgroundImageStyle::Tiled:
+				case Background::ImageStyle::Tiled:
 					painter->setBrush(QBrush(pix));
 					break;
-				case WorksheetElement::BackgroundImageStyle::CenterTiled:
+				case Background::ImageStyle::CenterTiled:
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				}
 			}
-		} else if (fillingType == WorksheetElement::BackgroundType::Pattern)
-			painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
+		} else if (background->type() == Background::Type::Pattern)
+			painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 
 		painter->drawPolygon(pol);
 	}
@@ -3235,21 +3220,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// Filling
-	writer->writeStartElement("filling");
-	writer->writeAttribute("position", QString::number(static_cast<int>(d->fillingPosition)));
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->fillingType)));
-	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->fillingColorStyle)));
-	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->fillingImageStyle)));
-	writer->writeAttribute("brushStyle", QString::number(d->fillingBrushStyle));
-	writer->writeAttribute("firstColor_r", QString::number(d->fillingFirstColor.red()));
-	writer->writeAttribute("firstColor_g", QString::number(d->fillingFirstColor.green()));
-	writer->writeAttribute("firstColor_b", QString::number(d->fillingFirstColor.blue()));
-	writer->writeAttribute("secondColor_r", QString::number(d->fillingSecondColor.red()));
-	writer->writeAttribute("secondColor_g", QString::number(d->fillingSecondColor.green()));
-	writer->writeAttribute("secondColor_b", QString::number(d->fillingSecondColor.blue()));
-	writer->writeAttribute("fileName", d->fillingFileName);
-	writer->writeAttribute("opacity", QString::number(d->fillingOpacity));
-	writer->writeEndElement();
+	d->background->save(writer);
 
 	// Error bars
 	writer->writeStartElement("errorBars");
@@ -3355,54 +3326,9 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
-		} else if (!preview && reader->name() == "filling") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("position", fillingPosition, FillingPosition);
-			READ_INT_VALUE("type", fillingType, WorksheetElement::BackgroundType);
-			READ_INT_VALUE("colorStyle", fillingColorStyle, WorksheetElement::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", fillingImageStyle, WorksheetElement::BackgroundImageStyle);
-			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
-
-			str = attribs.value("firstColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
-			else
-				d->fillingFirstColor.setRed(str.toInt());
-
-			str = attribs.value("firstColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
-			else
-				d->fillingFirstColor.setGreen(str.toInt());
-
-			str = attribs.value("firstColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
-			else
-				d->fillingFirstColor.setBlue(str.toInt());
-
-			str = attribs.value("secondColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
-			else
-				d->fillingSecondColor.setRed(str.toInt());
-
-			str = attribs.value("secondColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
-			else
-				d->fillingSecondColor.setGreen(str.toInt());
-
-			str = attribs.value("secondColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
-			else
-				d->fillingSecondColor.setBlue(str.toInt());
-
-			READ_STRING_VALUE("fileName", fillingFileName);
-			READ_DOUBLE_VALUE("opacity", fillingOpacity);
-		} else if (!preview && reader->name() == "errorBars") {
+		} else if (!preview && reader->name() == "filling")
+			d->background->load(reader, preview);
+		else if (!preview && reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("xErrorType", xErrorType, ErrorType);
@@ -3472,14 +3398,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
 
 	// Filling
-	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
-	this->setFillingColorStyle(
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
-	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
-	this->setFillingPosition((FillingPosition)group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling)));
-	this->setFillingFirstColor(themeColor);
-	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	this->setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
+	d->background->loadThemeConfig(group);
 
 	// Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
@@ -3517,12 +3436,8 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
 
 	// Filling
-	group.writeEntry("FillingBrushStyle", (int)this->fillingBrushStyle());
-	group.writeEntry("FillingColorStyle", (int)this->fillingColorStyle());
-	group.writeEntry("FillingOpacity", this->fillingOpacity());
-	group.writeEntry("FillingPosition", (int)this->fillingPosition());
-	group.writeEntry("FillingSecondColor", (QColor)this->fillingSecondColor());
-	group.writeEntry("FillingType", (int)this->fillingType());
+	Q_D(const XYCurve);
+	d->background->saveThemeConfig(group);
 
 	// Line
 	group.writeEntry("LineOpacity", this->lineOpacity());
@@ -3530,7 +3445,6 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	// Symbol
-	Q_D(const XYCurve);
 	d->symbol->saveThemeConfig(group);
 
 	// Values

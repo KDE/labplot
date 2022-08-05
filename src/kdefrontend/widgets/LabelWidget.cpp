@@ -9,6 +9,7 @@
 */
 
 #include "LabelWidget.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
@@ -33,6 +34,43 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+#include <KMessageWidget>
+
+/*!
+ * Setting label property without changing the content. This is needed,
+ * because the text is html formatted and therefore setting properties
+ * is not that easy
+ */
+#define SETLABELTEXTPROPERTY(TextEditFunction, TextEditArgument)                                                                                               \
+	auto cursor = ui.teLabel->textCursor();                                                                                                                    \
+	int cursorAnchor = cursor.anchor(), cursorPos = cursor.position();                                                                                         \
+	bool cursorHasSelection = cursor.hasSelection();                                                                                                           \
+	if (!cursorHasSelection)                                                                                                                                   \
+		ui.teLabel->selectAll();                                                                                                                               \
+                                                                                                                                                               \
+	ui.teLabel->TextEditFunction(TextEditArgument);                                                                                                            \
+	QTextEdit te;                                                                                                                                              \
+	for (auto& label : m_labelsList) {                                                                                                                         \
+		TextLabel::TextWrapper w = label->text();                                                                                                              \
+		te.setText(w.text);                                                                                                                                    \
+		if (!cursorHasSelection)                                                                                                                               \
+			te.selectAll();                                                                                                                                    \
+		else {                                                                                                                                                 \
+			/* Set cursor as it is in the ui.teLabel*/                                                                                                         \
+			auto c = te.textCursor();                                                                                                                          \
+			c.setPosition(cursorAnchor);                                                                                                                       \
+			c.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, cursorPos - cursorAnchor);                                                             \
+			te.setTextCursor(c);                                                                                                                               \
+		}                                                                                                                                                      \
+		te.TextEditFunction(TextEditArgument);                                                                                                                 \
+		w.text = te.toHtml();                                                                                                                                  \
+		label->setText(w);                                                                                                                                     \
+	}                                                                                                                                                          \
+                                                                                                                                                               \
+	if (!cursorHasSelection) {                                                                                                                                 \
+		cursor.clearSelection();                                                                                                                               \
+		ui.teLabel->setTextCursor(cursor);                                                                                                                     \
+	}
 
 /*!
 	\class LabelWidget
@@ -175,6 +213,12 @@ LabelWidget::LabelWidget(QWidget* parent)
 																				: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
+	m_messageWidget = new KMessageWidget(this);
+	m_messageWidget->setMessageType(KMessageWidget::Error);
+	m_messageWidget->setWordWrap(true);
+	auto* gridLayout = qobject_cast<QGridLayout*>(layout());
+	gridLayout->addWidget(m_messageWidget, 2, 3);
+
 	// SLOTS
 	//  text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
@@ -293,13 +337,13 @@ void LabelWidget::updateBackground() const {
 	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
 		const auto type = m_label->parentAspect()->type();
 		if (type == AspectType::Worksheet)
-			color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
+			color = static_cast<const Worksheet*>(m_label->parentAspect())->background()->firstColor();
 		else if (type == AspectType::CartesianPlot)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
+			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->background()->firstColor();
 		else if (type == AspectType::CartesianPlotLegend)
-			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->background()->firstColor();
 		else if (type == AspectType::InfoElement || type == AspectType::Axis)
-			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->background()->firstColor();
 		else
 			DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 	}
@@ -310,23 +354,25 @@ void LabelWidget::updateBackground() const {
 	ui.teLabel->setPalette(p);
 }
 
-void LabelWidget::initConnections() const {
-	connect(m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
-	connect(m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
-	connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
-	connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
-	connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
-	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+void LabelWidget::initConnections() {
+	while (!m_connections.isEmpty())
+		disconnect(m_connections.takeFirst());
+	m_connections << connect(m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
+	m_connections << connect(m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
+	m_connections << connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
+	m_connections << connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
+	m_connections << connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
+	m_connections << connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
 
-	connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
-	connect(m_label, &TextLabel::coordinateBindingEnabledChanged, this, &LabelWidget::labelCoordinateBindingEnabledChanged);
-	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
-	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
-	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
-	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
-	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	m_connections << connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
+	m_connections << connect(m_label, &TextLabel::coordinateBindingEnabledChanged, this, &LabelWidget::labelCoordinateBindingEnabledChanged);
+	m_connections << connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	m_connections << connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	m_connections << connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
+	m_connections << connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
+	m_connections << connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
+	m_connections << connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
+	m_connections << connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 
 	if (!m_label->parentAspect()) {
 		QDEBUG(Q_FUNC_INFO << ", LABEL " << m_label << " HAS NO PARENT!")
@@ -335,16 +381,16 @@ void LabelWidget::initConnections() const {
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
-		connect(worksheet, &Worksheet::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(worksheet->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlot) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
-		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlotLegend) {
 		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
-		connect(legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(legend->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::Axis) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
-		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+		connect(plotArea->background(), &Background::firstColorChanged, this, &LabelWidget::updateBackground);
 	}
 }
 
@@ -462,6 +508,10 @@ void LabelWidget::textChanged() {
 	if (m_initializing)
 		return;
 
+	const QString plainText = ui.teLabel->toPlainText();
+	QTextEdit te(ui.chbShowPlaceholderText->isChecked() ? m_label->text().textPlaceholder : m_label->text().text);
+	bool plainTextChanged = plainText != te.toPlainText();
+
 	const Lock lock(m_initializing);
 
 	auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
@@ -473,13 +523,19 @@ void LabelWidget::textChanged() {
 		wrapper.mode = mode;
 
 		if (!ui.chbShowPlaceholderText->isChecked()) {
-			wrapper.text = text;
-			for (auto* label : m_labelsList) {
-				wrapper.textPlaceholder = label->text().textPlaceholder;
-				wrapper.allowPlaceholder = label->text().allowPlaceholder;
-				label->setText(wrapper);
+			if (plainTextChanged) {
+				// set text only if the plain text change. otherwise the text is changed
+				// already in the setter functions
+				wrapper.text = text;
+				for (auto* label : m_labelsList) {
+					wrapper.textPlaceholder = label->text().textPlaceholder;
+					wrapper.allowPlaceholder = label->text().allowPlaceholder;
+					label->setText(wrapper);
+				}
 			}
 		} else {
+			// No need to compare if plainTextChanged
+			// Change it always.
 			wrapper.textPlaceholder = text;
 			for (auto* label : m_labelsList) {
 				wrapper.allowPlaceholder = label->text().allowPlaceholder;
@@ -514,20 +570,22 @@ void LabelWidget::textChanged() {
 			text = ui.teLabel->toHtml();
 		}
 
-		// QDEBUG(Q_FUNC_INFO << ", NEW TEXT = " << text << '\n')
+		QDEBUG(Q_FUNC_INFO << ", NEW TEXT = " << text << '\n')
 		TextLabel::TextWrapper wrapper(text, TextLabel::Mode::Text, true);
 		// Don't set font color, because it is already in the html code
 		// of the text. The font color is used to change the color for Latex text
 		if (!ui.chbShowPlaceholderText->isChecked()) {
-			wrapper.text = text;
-			for (auto* label : m_labelsList) {
-				if (text.isEmpty()) {
-					label->setFontColor(ui.kcbFontColor->color());
-					label->setBackgroundColor(ui.kcbBackgroundColor->color());
+			if (plainTextChanged) {
+				wrapper.text = text;
+				for (auto* label : m_labelsList) {
+					if (text.isEmpty()) {
+						label->setFontColor(ui.kcbFontColor->color());
+						label->setBackgroundColor(ui.kcbBackgroundColor->color());
+					}
+					wrapper.allowPlaceholder = label->text().allowPlaceholder;
+					wrapper.textPlaceholder = label->text().textPlaceholder;
+					label->setText(wrapper);
 				}
-				wrapper.allowPlaceholder = label->text().allowPlaceholder;
-				wrapper.textPlaceholder = label->text().textPlaceholder;
-				label->setText(wrapper);
 			}
 		} else {
 			wrapper.textPlaceholder = text;
@@ -625,17 +683,7 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 
 	auto mode = m_label->text().mode;
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		auto cursor = ui.teLabel->textCursor();
-		bool deselect = false;
-		if (!cursor.hasSelection()) {
-			ui.teLabel->selectAll();
-			deselect = true;
-		}
-		ui.teLabel->setTextColor(color);
-		if (deselect) {
-			cursor.clearSelection();
-			ui.teLabel->setTextCursor(cursor);
-		}
+		SETLABELTEXTPROPERTY(setTextColor, color);
 	} else { // LaTeX (enabled) or Markup mode
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);
@@ -650,19 +698,7 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	auto mode = m_label->text().mode;
 	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
-		DEBUG(Q_FUNC_INFO << ", update background color")
-		auto cursor = ui.teLabel->textCursor();
-		bool deselect = false;
-		if (!cursor.hasSelection()) {
-			ui.teLabel->selectAll();
-			deselect = true;
-		}
-
-		ui.teLabel->setTextBackgroundColor(color);
-		if (deselect) {
-			cursor.clearSelection();
-			ui.teLabel->setTextCursor(cursor);
-		}
+		SETLABELTEXTPROPERTY(setTextBackgroundColor, color);
 	} else { // LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
@@ -685,75 +721,52 @@ void LabelWidget::fontBoldChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
+	QFont::Weight weight;
 	if (checked)
-		ui.teLabel->setFontWeight(QFont::Bold);
+		weight = QFont::Bold;
 	else
-		ui.teLabel->setFontWeight(QFont::Normal);
+		weight = QFont::Normal;
+	SETLABELTEXTPROPERTY(setFontWeight, weight);
 }
 
 void LabelWidget::fontItalicChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
-	ui.teLabel->setFontItalic(checked);
+	SETLABELTEXTPROPERTY(setFontItalic, checked);
 }
 
 void LabelWidget::fontUnderlineChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
-	ui.teLabel->setFontUnderline(checked);
+	SETLABELTEXTPROPERTY(setFontUnderline, checked);
 }
 
 void LabelWidget::fontStrikeOutChanged(bool checked) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	format.setFontStrikeOut(checked);
-	ui.teLabel->setCurrentCharFormat(format);
+	SETLABELTEXTPROPERTY(setCurrentCharFormat, format);
 }
 
 void LabelWidget::fontSuperScriptChanged(bool checked) {
 	if (m_initializing)
 		return;
-
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
 		format.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
 	else
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 
-	ui.teLabel->setCurrentCharFormat(format);
+	SETLABELTEXTPROPERTY(setCurrentCharFormat, format);
 }
 
 void LabelWidget::fontSubScriptChanged(bool checked) {
 	if (m_initializing)
 		return;
-
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
 
 	QTextCharFormat format = ui.teLabel->currentCharFormat();
 	if (checked)
@@ -761,16 +774,12 @@ void LabelWidget::fontSubScriptChanged(bool checked) {
 	else
 		format.setVerticalAlignment(QTextCharFormat::AlignNormal);
 
-	ui.teLabel->setCurrentCharFormat(format);
+	SETLABELTEXTPROPERTY(setCurrentCharFormat, format);
 }
 
 void LabelWidget::fontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
-
-	const auto c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
 
 	// use mergeCurrentCharFormat(QTextCharFormat) instead of setFontFamily(font.family()), etc.
 	// because this avoids textChanged() after every command
@@ -788,7 +797,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 		format.setFontStrikeOut(font.strikeOut());
 
 	// QDEBUG(Q_FUNC_INFO << ", BEFORE:" << ui.teLabel->toHtml())
-	ui.teLabel->mergeCurrentCharFormat(format);
+	SETLABELTEXTPROPERTY(mergeCurrentCharFormat, format);
 	// QDEBUG(Q_FUNC_INFO << ", AFTER :" << ui.teLabel->toHtml())
 }
 
@@ -1195,12 +1204,16 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * \brief Highlights the text field if wrong latex syntax was used (null image was produced)
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
-void LabelWidget::labelTeXImageUpdated(bool valid) {
-	if (!valid) {
+void LabelWidget::labelTeXImageUpdated(const TeXRenderer::Result& result) {
+	if (!result.successful) {
 		if (ui.teLabel->styleSheet().isEmpty())
 			SET_WARNING_STYLE(ui.teLabel)
+		m_messageWidget->setText(result.errorMessage);
+		m_messageWidget->setMaximumWidth(ui.teLabel->width());
 	} else
 		ui.teLabel->setStyleSheet(QString());
+
+	m_messageWidget->setVisible(!result.successful);
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {
@@ -1413,7 +1426,7 @@ void LabelWidget::load() {
 			ui.lPositionXLogicalDateTime->show();
 			ui.dtePositionXLogical->show();
 
-			ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePositionXLogical->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
 		}
 
@@ -1511,8 +1524,10 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 
 	// when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
 	// in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-	if (mode != TextLabel::Mode::LaTeX)
+	if (mode != TextLabel::Mode::LaTeX) {
 		ui.teLabel->setStyleSheet(QString());
+		m_messageWidget->setVisible(false);
+	}
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {

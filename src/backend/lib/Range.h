@@ -61,6 +61,7 @@ public:
 	Range(T start, T end, Format format = Format::Numeric, Scale scale = Scale::Linear) {
 		this->setRange(start, end, format, scale);
 	}
+	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
 		SET_NUMBER_LOCALE
 		// min
@@ -214,8 +215,8 @@ public:
 		if (m_format == Format::Numeric)
 			return locale.toString(m_start) + " .. " + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
-				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + " .. "
+				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
 	}
 	std::string toStdString() const {
 		return STDSTRING(toString());
@@ -438,8 +439,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

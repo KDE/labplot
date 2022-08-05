@@ -146,6 +146,7 @@ public:
 	void setTextAt(int, const QString&) override;
 	void setText(const QVector<QString>&);
 	void replaceTexts(int, const QVector<QString>&) override;
+	int dictionaryIndex(int row) const override;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
 
@@ -226,6 +227,7 @@ private:
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
+	void formulaChanged(const AbstractColumn*);
 
 private Q_SLOTS:
 	void navigateTo(QAction*);

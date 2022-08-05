@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlotLegend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,9 +15,11 @@
 #include <QFont>
 #include <QPen>
 
-class QBrush;
+class Background;
 class CartesianPlotLegend;
 class XYCurve;
+
+class QBrush;
 class QGraphicsSceneContextMenuEvent;
 class QKeyEvent;
 
@@ -51,16 +53,7 @@ public:
 	const CartesianPlot* plot{nullptr};
 
 	TextLabel* title{nullptr};
-
-	// Background
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
-	QString backgroundFileName;
-	float backgroundOpacity;
+	Background* background{nullptr};
 
 	// Border
 	QPen borderPen;

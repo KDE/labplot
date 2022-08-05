@@ -21,6 +21,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
@@ -44,6 +45,7 @@
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AspectDock.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/BarPlotDock.h"
 #include "kdefrontend/dockwidgets/BoxPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
@@ -339,6 +341,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 		raiseDockConnect(m_mainWindow->histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->histogramDock->setCurves(castList<Histogram>(selectedAspects));
+		break;
+	case AspectType::BarPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar Plot"));
+		raiseDock(m_mainWindow->barPlotDock, m_mainWindow->stackedWidget);
+		m_mainWindow->barPlotDock->setBarPlots(castList<BarPlot>(selectedAspects));
 		break;
 	case AspectType::BoxPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Box Plot"));

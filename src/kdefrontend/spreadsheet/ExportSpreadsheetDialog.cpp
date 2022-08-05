@@ -40,14 +40,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->gbOptions->hide();
 
-	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_showOptionsButton = new QPushButton;
-
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	connect(btnBox, &QDialogButtonBox::clicked, this, &ExportSpreadsheetDialog::slotButtonClicked);
-
-	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
 	ui->verticalLayout->addWidget(btnBox);
 
+	m_showOptionsButton = btnBox->button(QDialogButtonBox::Reset);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
@@ -145,16 +142,33 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/*!
+ * sets the current project file name. If not empty, the path of the project file
+ * is determined that is then used as the default location for the exported file.
+ */
+void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
+	if (name.isEmpty())
+		return;
+
+	QFileInfo fi(name);
+	m_projectPath = fi.dir().canonicalPath();
+}
+
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
-	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty()) { // use project dir as fallback
-		KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
-		dir = conf2.readEntry("LastOpenDir", "");
-		if (dir.isEmpty())
-			dir = QDir::homePath();
-	}
-	ui->leFileName->setText(dir + QLatin1Char('/') + name);
+	if (m_projectPath.isEmpty()) {
+		// no project folder is available (yet), use the last used directory in this dialog
+		KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+		QString dir = conf.readEntry("LastDir", "");
+		if (dir.isEmpty()) { // use project dir as fallback
+			KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
+			dir = conf2.readEntry("LastOpenDir", "");
+			if (dir.isEmpty())
+				dir = QDir::homePath();
+		}
+		ui->leFileName->setText(dir + QLatin1Char('/') + name);
+	} else
+		ui->leFileName->setText(m_projectPath + QLatin1String("/") + name);
+
 	this->formatChanged(ui->cbFormat->currentIndex());
 }
 
@@ -515,7 +529,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	if (!enable) {
 		const auto* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
-		QStandardItem* item = areaToExportModel->item(1);
+		auto* item = areaToExportModel->item(1);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 }

@@ -244,6 +244,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
+// setter class with finalize()
 #define STD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, field_name, finalize_method)                                                                   \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
@@ -255,38 +256,27 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
-// setter class with finalize() and signal emitting.
+// setter class with signal emitting.
 #define STD_SETTER_CMD_IMPL_S(class_name, cmd_name, value_type, field_name)                                                                                    \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
 
+// setter class with finalize() and signal emitting.
 #define STD_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, finalize_method)                                                                 \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
-		}                                                                                                                                                      \
-	};
-
-#define STD_SETTER_CMD_IMPL_F_S_Arguments(class_name, cmd_name, value_type, field_name, finalize_method)                                                       \
-	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
-	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			m_target->finalize_method;                                                                                                                         \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};

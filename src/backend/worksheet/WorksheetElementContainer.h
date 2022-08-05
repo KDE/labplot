@@ -39,7 +39,7 @@ public:
 	typedef WorksheetElementContainerPrivate Private;
 
 public Q_SLOTS:
-	void retransform() override;
+	virtual void retransform() override;
 	void childHovered();
 	void childUnhovered();
 

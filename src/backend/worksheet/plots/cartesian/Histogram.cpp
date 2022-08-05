@@ -4,7 +4,7 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,6 +22,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -106,17 +107,19 @@ void Histogram::init() {
 	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
-	d->fillingEnabled = group.readEntry("FillingEnabled", true);
-	d->fillingType = (WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color));
-	d->fillingColorStyle =
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor));
-	d->fillingImageStyle =
-		(WorksheetElement::BackgroundImageStyle)group.readEntry("FillingImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled));
-	d->fillingBrushStyle = (Qt::BrushStyle)group.readEntry("FillingBrushStyle", static_cast<int>(Qt::SolidPattern));
-	d->fillingFileName = group.readEntry("FillingFileName", QString());
-	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
-	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
-	d->fillingOpacity = group.readEntry("FillingOpacity", 0.5);
+	// Background/Filling
+	d->background = new Background(QString());
+	d->background->setPrefix(QLatin1String("Filling"));
+	d->background->setEnabledAvailable(true);
+	addChild(d->background);
+	d->background->setHidden(true);
+	d->background->init(group);
+	connect(d->background, &Background::updateRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->background, &Background::updatePositionRequested, [=] {
+		d->updateFilling();
+	});
 
 	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
 	d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
@@ -266,15 +269,10 @@ BASIC_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
 BASIC_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 // filling
-BASIC_SHARED_D_READER_IMPL(Histogram, bool, fillingEnabled, fillingEnabled)
-BASIC_SHARED_D_READER_IMPL(Histogram, WorksheetElement::BackgroundType, fillingType, fillingType)
-BASIC_SHARED_D_READER_IMPL(Histogram, WorksheetElement::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
-BASIC_SHARED_D_READER_IMPL(Histogram, WorksheetElement::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-BASIC_SHARED_D_READER_IMPL(Histogram, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-BASIC_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstColor)
-BASIC_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
+Background* Histogram::background() const {
+	Q_D(const Histogram);
+	return d->background;
+}
 
 // error bars
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
@@ -283,24 +281,26 @@ BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
-double Histogram::xMinimum() const {
+double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
-	return d->xMinimum();
+	switch (dim) {
+	case Dimension::X:
+		return d->xMinimum();
+	case Dimension::Y:
+		return d->yMinimum();
+	}
+	return NAN;
 }
 
-double Histogram::xMaximum() const {
+double Histogram::maximum(const Dimension dim) const {
 	Q_D(const Histogram);
-	return d->xMaximum();
-}
-
-double Histogram::yMinimum() const {
-	Q_D(const Histogram);
-	return d->yMinimum();
-}
-
-double Histogram::yMaximum() const {
-	Q_D(const Histogram);
-	return d->yMaximum();
+	switch (dim) {
+	case Dimension::X:
+		return d->xMaximum();
+	case Dimension::Y:
+		return d->yMaximum();
+	}
+	return NAN;
 }
 
 const AbstractColumn* Histogram::bins() const {
@@ -557,70 +557,6 @@ void Histogram::setValuesColor(const QColor& color) {
 	Q_D(Histogram);
 	if (color != d->valuesColor)
 		exec(new HistogramSetValuesColorCmd(d, color, ki18n("%1: set values color")));
-}
-
-// Filling
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingEnabled, bool, fillingEnabled, updateFilling)
-void Histogram::setFillingEnabled(bool enabled) {
-	Q_D(Histogram);
-	if (enabled != d->fillingEnabled)
-		exec(new HistogramSetFillingEnabledCmd(d, enabled, ki18n("%1: filling changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingType, WorksheetElement::BackgroundType, fillingType, updatePixmap)
-void Histogram::setFillingType(WorksheetElement::BackgroundType type) {
-	Q_D(Histogram);
-	if (type != d->fillingType)
-		exec(new HistogramSetFillingTypeCmd(d, type, ki18n("%1: filling type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingColorStyle, WorksheetElement::BackgroundColorStyle, fillingColorStyle, updatePixmap)
-void Histogram::setFillingColorStyle(WorksheetElement::BackgroundColorStyle style) {
-	Q_D(Histogram);
-	if (style != d->fillingColorStyle)
-		exec(new HistogramSetFillingColorStyleCmd(d, style, ki18n("%1: filling color style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingImageStyle, WorksheetElement::BackgroundImageStyle, fillingImageStyle, updatePixmap)
-void Histogram::setFillingImageStyle(WorksheetElement::BackgroundImageStyle style) {
-	Q_D(Histogram);
-	if (style != d->fillingImageStyle)
-		exec(new HistogramSetFillingImageStyleCmd(d, style, ki18n("%1: filling image style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingBrushStyle, Qt::BrushStyle, fillingBrushStyle, updatePixmap)
-void Histogram::setFillingBrushStyle(Qt::BrushStyle style) {
-	Q_D(Histogram);
-	if (style != d->fillingBrushStyle)
-		exec(new HistogramSetFillingBrushStyleCmd(d, style, ki18n("%1: filling brush style changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingFirstColor, QColor, fillingFirstColor, updatePixmap)
-void Histogram::setFillingFirstColor(const QColor& color) {
-	Q_D(Histogram);
-	if (color != d->fillingFirstColor)
-		exec(new HistogramSetFillingFirstColorCmd(d, color, ki18n("%1: set filling first color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingSecondColor, QColor, fillingSecondColor, updatePixmap)
-void Histogram::setFillingSecondColor(const QColor& color) {
-	Q_D(Histogram);
-	if (color != d->fillingSecondColor)
-		exec(new HistogramSetFillingSecondColorCmd(d, color, ki18n("%1: set filling second color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingFileName, QString, fillingFileName, updatePixmap)
-void Histogram::setFillingFileName(const QString& fileName) {
-	Q_D(Histogram);
-	if (fileName != d->fillingFileName)
-		exec(new HistogramSetFillingFileNameCmd(d, fileName, ki18n("%1: set filling image")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetFillingOpacity, qreal, fillingOpacity, updatePixmap)
-void Histogram::setFillingOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->fillingOpacity)
-		exec(new HistogramSetFillingOpacityCmd(d, opacity, ki18n("%1: set filling opacity")));
 }
 
 // Error bars
@@ -1377,7 +1313,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygon.clear();
 
-	if (!fillingEnabled || lineType == Histogram::DropLines || lineType == Histogram::HalfBars) {
+	if (!background->enabled() || lineType == Histogram::DropLines || lineType == Histogram::HalfBars) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1480,8 +1416,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	// draw filling
-	if (fillingEnabled) {
-		painter->setOpacity(fillingOpacity);
+	if (background->enabled()) {
+		painter->setOpacity(background->opacity());
 		painter->setPen(Qt::SolidLine);
 		drawFilling(painter);
 	}
@@ -1609,68 +1545,68 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 
 void HistogramPrivate::drawFilling(QPainter* painter) {
 	const QRectF& rect = fillPolygon.boundingRect();
-	if (fillingType == WorksheetElement::BackgroundType::Color) {
-		switch (fillingColorStyle) {
-		case WorksheetElement::BackgroundColorStyle::SingleColor: {
-			painter->setBrush(QBrush(fillingFirstColor));
+	if (background->type() == Background::Type::Color) {
+		switch (background->colorStyle()) {
+		case Background::ColorStyle::SingleColor: {
+			painter->setBrush(QBrush(background->firstColor()));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
+		case Background::ColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
-			linearGrad.setColorAt(0, fillingFirstColor);
-			linearGrad.setColorAt(1, fillingSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
+		case Background::ColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
-			linearGrad.setColorAt(0, fillingFirstColor);
-			linearGrad.setColorAt(1, fillingSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
-			linearGrad.setColorAt(0, fillingFirstColor);
-			linearGrad.setColorAt(1, fillingSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case Background::ColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
-			linearGrad.setColorAt(0, fillingFirstColor);
-			linearGrad.setColorAt(1, fillingSecondColor);
+			linearGrad.setColorAt(0, background->firstColor());
+			linearGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
+		case Background::ColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(rect.center(), rect.width() / 2);
-			radialGrad.setColorAt(0, fillingFirstColor);
-			radialGrad.setColorAt(1, fillingSecondColor);
+			radialGrad.setColorAt(0, background->firstColor());
+			radialGrad.setColorAt(1, background->secondColor());
 			painter->setBrush(QBrush(radialGrad));
 			break;
 		}
 		}
-	} else if (fillingType == WorksheetElement::BackgroundType::Image) {
-		if (!fillingFileName.trimmed().isEmpty()) {
-			QPixmap pix(fillingFileName);
-			switch (fillingImageStyle) {
-			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
+	} else if (background->type() == Background::Type::Image) {
+		if (!background->fileName().trimmed().isEmpty()) {
+			QPixmap pix(background->fileName());
+			switch (background->imageStyle()) {
+			case Background::ImageStyle::ScaledCropped:
 				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Scaled:
+			case Background::ImageStyle::Scaled:
 				pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				break;
-			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
+			case Background::ImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 				break;
-			case WorksheetElement::BackgroundImageStyle::Centered: {
+			case Background::ImageStyle::Centered: {
 				QPixmap backpix(rect.size().toSize());
 				backpix.fill();
 				QPainter p(&backpix);
@@ -1680,16 +1616,16 @@ void HistogramPrivate::drawFilling(QPainter* painter) {
 				painter->setBrushOrigin(-pix.size().width() / 2, -pix.size().height() / 2);
 				break;
 			}
-			case WorksheetElement::BackgroundImageStyle::Tiled:
+			case Background::ImageStyle::Tiled:
 				painter->setBrush(QBrush(pix));
 				break;
-			case WorksheetElement::BackgroundImageStyle::CenterTiled:
+			case Background::ImageStyle::CenterTiled:
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width() / 2, pix.size().height() / 2);
 			}
 		}
-	} else if (fillingType == WorksheetElement::BackgroundType::Pattern)
-		painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
+	} else if (background->type() == Background::Type::Pattern)
+		painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 
 	painter->drawPolygon(fillPolygon);
 }
@@ -1808,21 +1744,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// Filling
-	writer->writeStartElement("filling");
-	writer->writeAttribute("enabled", QString::number(d->fillingEnabled));
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->fillingType)));
-	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->fillingColorStyle)));
-	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->fillingImageStyle)));
-	writer->writeAttribute("brushStyle", QString::number(d->fillingBrushStyle));
-	writer->writeAttribute("firstColor_r", QString::number(d->fillingFirstColor.red()));
-	writer->writeAttribute("firstColor_g", QString::number(d->fillingFirstColor.green()));
-	writer->writeAttribute("firstColor_b", QString::number(d->fillingFirstColor.blue()));
-	writer->writeAttribute("secondColor_r", QString::number(d->fillingSecondColor.red()));
-	writer->writeAttribute("secondColor_g", QString::number(d->fillingSecondColor.green()));
-	writer->writeAttribute("secondColor_b", QString::number(d->fillingSecondColor.blue()));
-	writer->writeAttribute("fileName", d->fillingFileName);
-	writer->writeAttribute("opacity", QString::number(d->fillingOpacity));
-	writer->writeEndElement();
+	d->background->save(writer);
 
 	writer->writeEndElement(); // close "Histogram" section
 }
@@ -1904,52 +1826,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_QCOLOR(d->valuesColor);
 			READ_QFONT(d->valuesFont);
 		} else if (!preview && reader->name() == "filling") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("enabled", fillingEnabled, bool);
-			READ_INT_VALUE("type", fillingType, WorksheetElement::BackgroundType);
-			READ_INT_VALUE("colorStyle", fillingColorStyle, WorksheetElement::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", fillingImageStyle, WorksheetElement::BackgroundImageStyle);
-			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
-
-			str = attribs.value("firstColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
-			else
-				d->fillingFirstColor.setRed(str.toInt());
-
-			str = attribs.value("firstColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
-			else
-				d->fillingFirstColor.setGreen(str.toInt());
-
-			str = attribs.value("firstColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
-			else
-				d->fillingFirstColor.setBlue(str.toInt());
-
-			str = attribs.value("secondColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
-			else
-				d->fillingSecondColor.setRed(str.toInt());
-
-			str = attribs.value("secondColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
-			else
-				d->fillingSecondColor.setGreen(str.toInt());
-
-			str = attribs.value("secondColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
-			else
-				d->fillingSecondColor.setBlue(str.toInt());
-
-			d->fillingFileName = attribs.value("fileName").toString();
-			READ_DOUBLE_VALUE("opacity", fillingOpacity);
+			d->background->load(reader, preview);
 		}
 	}
 	return true;
@@ -1990,13 +1867,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
 
 	// Filling
-	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
-	this->setFillingColorStyle(
-		(WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
-	this->setFillingOpacity(group.readEntry("FillingOpacity", 0.5));
-	this->setFillingFirstColor(themeColor);
-	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	this->setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
+	d->background->loadThemeConfig(group);
 
 	// Error Bars
 	// TODO:
@@ -2028,13 +1899,6 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	// 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
 	// 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
 
-	// Filling
-	group.writeEntry("FillingBrushStyle", (int)this->fillingBrushStyle());
-	group.writeEntry("FillingColorStyle", (int)this->fillingColorStyle());
-	group.writeEntry("FillingOpacity", this->fillingOpacity());
-	group.writeEntry("FillingSecondColor", (QColor)this->fillingSecondColor());
-	group.writeEntry("FillingType", (int)this->fillingType());
-
 	// Symbol
 	Q_D(const Histogram);
 	d->symbol->saveThemeConfig(group);
@@ -2043,6 +1907,9 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
 	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
+
+	// Filling
+	d->background->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {

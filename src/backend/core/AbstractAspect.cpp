@@ -536,8 +536,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  * \sa reparent()
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
-	QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
-	Q_ASSERT(child->parentAspect() == this);
+	// QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
 
 	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
@@ -1132,12 +1131,12 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 }
 
 int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
-	QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
+	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
 	m_children.removeAll(child);
 	QObject::disconnect(child, nullptr, q, nullptr);
 	child->setParentAspect(nullptr);
-	QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
+	// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
 	return index;
 }

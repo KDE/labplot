@@ -4,7 +4,7 @@
 	Description      : widget for editing properties of fit curves
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -490,7 +490,12 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYFitCurve*>(curve)->setXDataColumn(column);
 
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curve);
+	DEBUG(Q_FUNC_INFO)
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	// udpate parameter widget
+	fitParametersWidget->setFitData(&m_fitData);
+	enableRecalculate(); // update preview
+	showFitResult(); // show result of preview
 
 	// update model limits depending on number of points
 	modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
@@ -510,7 +515,12 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYFitCurve*>(curve)->setYDataColumn(column);
 
 	// set model dependent start values from new data
-	XYFitCurve::initStartValues(m_fitData, m_curve);
+	DEBUG(Q_FUNC_INFO)
+	static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
+	// update parameter widget
+	fitParametersWidget->setFitData(&m_fitData);
+	enableRecalculate(); // update preview
+	showFitResult(); // show result of preview
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -775,8 +785,8 @@ void XYFitCurveDock::categoryChanged(int index) {
  * Updates the model type dependent widgets in the general-tab and calls \c updateModelEquation() to update the preview pixmap.
  */
 void XYFitCurveDock::modelTypeChanged(int index) {
-	DEBUG("modelTypeChanged() type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
-	// leave if there is no selection
+	DEBUG(Q_FUNC_INFO << ", type = " << (unsigned int)index << ", initializing = " << m_initializing << ", current type = " << m_fitData.modelType);
+	// leave if no selection
 	if (index == -1)
 		return;
 
@@ -868,15 +878,14 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 }
 
 /*!
- * Show the preview pixmap of the fit model expression for the current model category and type.
  * Called when the model type or the degree of the model were changed.
+ * Show the preview pixmap of the fit model expression for the current model category and type.
  */
 void XYFitCurveDock::updateModelEquation() {
 	if (m_fitData.modelCategory == nsl_fit_model_custom) {
-		DEBUG("XYFitCurveDock::updateModelEquation() category = nsl_fit_model_custom, type = " << m_fitData.modelType);
+		DEBUG(Q_FUNC_INFO << ", category = nsl_fit_model_custom, type = " << m_fitData.modelType);
 	} else {
-		DEBUG("XYFitCurveDock::updateModelEquation() category = " << nsl_fit_model_category_name[m_fitData.modelCategory]
-																  << ", type = " << m_fitData.modelType);
+		DEBUG(Q_FUNC_INFO << ", category = " << nsl_fit_model_category_name[m_fitData.modelCategory] << ", type = " << m_fitData.modelType);
 	}
 
 	// this function can also be called when the value for the degree was changed -> update the fit data structure
@@ -885,9 +894,14 @@ void XYFitCurveDock::updateModelEquation() {
 		m_fitData.degree = degree;
 		XYFitCurve::initFitData(m_fitData);
 		// set model dependent start values from curve data
-		XYFitCurve::initStartValues(m_fitData, m_curve);
+		// invalidate result
+		m_fitCurve->clearFitResult();
+		static_cast<XYFitCurve*>(m_curve)->initStartValues(m_fitData, m_curve);
 		// udpate parameter widget
 		fitParametersWidget->setFitData(&m_fitData);
+		if (m_messageWidget)
+			m_messageWidget->close();
+		showFitResult(); // show result of preview
 	}
 
 	// variables/parameter that are known
@@ -990,7 +1004,7 @@ void XYFitCurveDock::showFunctions() {
  * Only called for custom fit model
  */
 void XYFitCurveDock::updateParameterList() {
-	DEBUG("XYFitCurveDock::updateParameterList()");
+	DEBUG(Q_FUNC_INFO);
 	// use current model function
 	m_fitData.model = uiGeneralTab.teEquation->toPlainText();
 
@@ -1117,7 +1131,7 @@ void XYFitCurveDock::recalculateClicked() {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 
 	// show the warning/error message, if available
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	const auto& fitResult = m_fitCurve->fitResult();
 	const QString& status = fitResult.status;
 	if (status != i18n("Success")) {
 		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
@@ -1267,6 +1281,7 @@ void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
  * show the result and details of the fit
  */
 void XYFitCurveDock::showFitResult() {
+	DEBUG(Q_FUNC_INFO)
 	// clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
 	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
@@ -1313,8 +1328,11 @@ void XYFitCurveDock::showFitResult() {
 	QString sCorr;
 	for (const auto& s : m_fitData.paramNamesUtf8)
 		sCorr += '\t' + s;
-	int index{0};
-	DEBUG(Q_FUNC_INFO << ", correlation values size = " << fitResult.correlationMatrix.size())
+	DEBUG(Q_FUNC_INFO << ", correlation matrix size = " << fitResult.correlationMatrix.size())
+	if (fitResult.correlationMatrix.size() < np * (np + 1) / 2)
+		return;
+
+	int index = 0;
 	for (int i = 0; i < np; i++) {
 		sCorr += '\n' + m_fitData.paramNamesUtf8.at(i);
 		for (int j = 0; j <= i; j++)

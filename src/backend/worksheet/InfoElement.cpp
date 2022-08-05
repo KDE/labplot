@@ -408,7 +408,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
 		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical);
-		xValueStr = dateTime.toString(m_plot->xRangeDateTimeFormat());
+		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
 	if (wrapper.mode == TextLabel::Mode::Text)

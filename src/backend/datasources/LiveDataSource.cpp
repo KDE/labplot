@@ -470,7 +470,7 @@ void LiveDataSource::readOnUpdate() {
  * called periodically or on new data changes (file changed, new data in the socket, etc.)
  */
 void LiveDataSource::read() {
-	DEBUG("\nLiveDataSource::read()");
+	DEBUG(Q_FUNC_INFO);
 	if (!m_filter)
 		return;
 
@@ -487,7 +487,7 @@ void LiveDataSource::read() {
 			delete m_device;
 			m_device = new QFile(m_fileName);
 			break;
-		case SourceType::NetworkTcpSocket:
+		case SourceType::NetworkTCPSocket:
 			m_tcpSocket = new QTcpSocket(this);
 			m_device = m_tcpSocket;
 			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
@@ -503,7 +503,7 @@ void LiveDataSource::read() {
 #endif
 
 			break;
-		case SourceType::NetworkUdpSocket:
+		case SourceType::NetworkUDPSocket:
 			m_udpSocket = new QUdpSocket(this);
 			m_device = m_udpSocket;
 			m_udpSocket->bind(QHostAddress(m_host), m_port);
@@ -601,13 +601,13 @@ void LiveDataSource::read() {
 			break;
 		}
 		break;
-	case SourceType::NetworkTcpSocket:
+	case SourceType::NetworkTCPSocket:
 		DEBUG("reading from TCP socket. state before abort = " << m_tcpSocket->state());
 		m_tcpSocket->abort();
 		m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 		DEBUG("reading from TCP socket. state after reconnect = " << m_tcpSocket->state());
 		break;
-	case SourceType::NetworkUdpSocket:
+	case SourceType::NetworkUDPSocket:
 		DEBUG("	Reading from UDP socket. state = " << m_udpSocket->state());
 
 		// reading data here
@@ -645,7 +645,7 @@ void LiveDataSource::read() {
  * or when a new block of data has been appended to your device.
  */
 void LiveDataSource::readyRead() {
-	DEBUG("LiveDataSource::readyRead() update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
+	DEBUG(Q_FUNC_INFO << ", update type = " << ENUM_TO_STRING(LiveDataSource, UpdateType, m_updateType));
 	DEBUG("	REMAINING TIME = " << m_updateTimer->remainingTime());
 
 	if (m_fileType == AbstractFileFilter::FileType::Ascii)
@@ -782,8 +782,8 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("baudRate", QString::number(m_baudRate));
 		writer->writeAttribute("serialPortName", m_serialPortName);
 		break;
-	case SourceType::NetworkTcpSocket:
-	case SourceType::NetworkUdpSocket:
+	case SourceType::NetworkTCPSocket:
+	case SourceType::NetworkUDPSocket:
 		writer->writeAttribute("host", m_host);
 		writer->writeAttribute("port", QString::number(m_port));
 		break;
@@ -920,8 +920,8 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 					m_serialPortName = str;
 
 				break;
-			case SourceType::NetworkTcpSocket:
-			case SourceType::NetworkUdpSocket:
+			case SourceType::NetworkTCPSocket:
+			case SourceType::NetworkUDPSocket:
 				str = attribs.value("host").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("host").toString());
@@ -932,7 +932,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("port").toString());
 				else
-					m_host = str;
+					m_port = str.toInt();
 				break;
 			case SourceType::MQTT:
 				break;

@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -295,6 +295,7 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 	connect(col, &Column::rowsInserted, this, &SpreadsheetModel::handleRowCountChanged);
 	connect(col, &Column::rowsRemoved, this, &SpreadsheetModel::handleRowCountChanged);
 	connect(col, &Column::maskingChanged, this, &SpreadsheetModel::handleDataChange);
+	connect(col, &Column::formulaChanged, this, &SpreadsheetModel::handlePlotDesignationChange); // we can re-use the same slot to update the header here
 	connect(col->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &SpreadsheetModel::handleDigitsChange);
 
 	if (!m_suppressSignals) {
@@ -435,7 +436,10 @@ void SpreadsheetModel::updateHorizontalHeader() {
 
 	for (int i = 0; i < column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
-		QString header = col->name();
+		QString header;
+		if (!col->formula().isEmpty() && col->formulaAutoUpdate())
+			header += QLatin1String("*");
+		header += col->name();
 
 		if (showColumnType)
 			header += QLatin1String(" {") + col->columnModeString() + QLatin1Char('}');
@@ -444,6 +448,7 @@ void SpreadsheetModel::updateHorizontalHeader() {
 			if (col->plotDesignation() != AbstractColumn::PlotDesignation::NoDesignation)
 				header += QLatin1String(" ") + col->plotDesignationString();
 		}
+
 		m_horizontal_header_data.replace(i, header);
 	}
 }
@@ -466,22 +471,29 @@ bool SpreadsheetModel::formulaModeActive() const {
 }
 
 QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
-	if (!column->isNumeric() || !column->isValid(row) || !column->hasHeatmapFormat())
+	if ((!column->isNumeric() && column->columnMode() != AbstractColumn::ColumnMode::Text) || !column->isValid(row) || !column->hasHeatmapFormat())
 		return {};
 
 	const auto& format = column->heatmapFormat();
 	if (format.type != type || format.colors.isEmpty())
 		return {};
 
-	double value = column->valueAt(row);
-	double range = (format.max - format.min) / format.colors.count();
 	int index = 0;
-	for (int i = 0; i < format.colors.count(); ++i) {
-		if (value <= format.min + (i + 1) * range) {
-			index = i;
-			break;
+	if (column->isNumeric()) {
+		double value = column->valueAt(row);
+		double range = (format.max - format.min) / format.colors.count();
+		for (int i = 0; i < format.colors.count(); ++i) {
+			if (value <= format.min + (i + 1) * range) {
+				index = i;
+				break;
+			}
 		}
+	} else {
+		index = column->dictionaryIndex(row);
 	}
 
-	return {QColor(format.colors.at(index))};
+	if (index < format.colors.count())
+		return {QColor(format.colors.at(index))};
+	else
+		return {QColor(format.colors.constLast())};
 }

@@ -1,5 +1,5 @@
 /*
-	File                 : FitOptionsWidget.cc
+	File                 : FitOptionsWidget.cpp
 	Project              : LabPlot
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------
@@ -45,7 +45,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
-	const int xIndex = plot->coordinateSystem(m_fitCurve->coordinateSystemIndex())->xIndex();
+	const int xIndex = plot->coordinateSystem(m_fitCurve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		ui.leMin->setText(numberLocale.toString(m_fitData->fitRange.start()));

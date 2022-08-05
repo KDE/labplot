@@ -1146,6 +1146,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 		if (autoUpdate)
 			connectFormulaColumn(column);
 	}
+
+	Q_EMIT m_owner->formulaChanged(m_owner);
 }
 
 /*!
@@ -1544,6 +1546,37 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
+}
+
+int ColumnPrivate::dictionaryIndex(int row) const {
+	if (!available.dictionary)
+		const_cast<ColumnPrivate*>(this)->initDictionary();
+
+	const auto& value = textAt(row);
+	int index = 0;
+	auto it = m_dictionary.constBegin();
+	while (it != m_dictionary.constEnd()) {
+		if (*it == value)
+			break;
+		++index;
+		++it;
+	}
+
+	return index;
+}
+
+void ColumnPrivate::initDictionary() {
+	m_dictionary.clear();
+	if (columnMode() != AbstractColumn::ColumnMode::Text)
+		return;
+
+	auto data = static_cast<QVector<QString>*>(m_data);
+	for (auto& value : *data) {
+		if (!value.isEmpty() && !m_dictionary.contains(value))
+			m_dictionary << value;
+	}
+
+	available.dictionary = true;
 }
 
 /**

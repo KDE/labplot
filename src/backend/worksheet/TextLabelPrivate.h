@@ -13,8 +13,10 @@
 
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
+#include <QStaticText>
 
 extern "C" {
 #include <gsl/gsl_const_cgs.h>
@@ -41,13 +43,13 @@ public:
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern", 20}; // reasonable default font and size
+	QFont teXFont{"Computer Modern", 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
-	bool teXRenderSuccessful{false};
+	TeXRenderer::Result teXRenderResult;
 
 	// see TextLabel::init() for type specific default settings
 

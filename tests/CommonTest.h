@@ -25,18 +25,18 @@ extern "C" {
 	VALUES_EQUAL(range.start(), start_)                                                                                                                        \
 	VALUES_EQUAL(range.end(), end_)
 
-#define CHECK_RANGE(plot, aspect, xy, start_, end_)                                                                                                            \
-	RANGE_CORRECT(plot->xy##Range(plot->coordinateSystem(aspect->coordinateSystemIndex())->xy##Index()), start_, end_)
+#define CHECK_RANGE(plot, aspect, dim, start_, end_)                                                                                                           \
+	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dim)), start_, end_)
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
 		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
 		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->xIndex();                                                                                                \
-		int yIndex = plot->coordinateSystem(cSystem)->yIndex();                                                                                                \
+		int xIndex = plot->coordinateSystem(cSystem)->index(Dimension::X);                                                                                     \
+		int yIndex = plot->coordinateSystem(cSystem)->index(Dimension::Y);                                                                                     \
                                                                                                                                                                \
-		auto xrange = plot->xRange(xIndex);                                                                                                                    \
-		auto yrange = plot->yRange(yIndex);                                                                                                                    \
+		auto xrange = plot->range(Dimension::X, xIndex);                                                                                                       \
+		auto yrange = plot->range(Dimension::Y, yIndex);                                                                                                       \
 		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}
@@ -52,10 +52,10 @@ protected:
 	// compare floats with given delta
 	// delta - relative error
 	static inline void FuzzyCompare(double actual, double expected, double delta = 1.e-12) {
-		if (fabs(expected) < delta)
-			QVERIFY(fabs(actual) < delta);
+		if (std::abs(expected) < delta)
+			QVERIFY(std::abs(actual) < delta);
 		else {
-			DEBUG(std::setprecision(15) << actual - fabs(actual) * delta << " <= " << expected << " <= " << actual + fabs(actual) * delta);
+			DEBUG(std::setprecision(15) << actual - std::abs(actual) * delta << " <= " << expected << " <= " << actual + std::abs(actual) * delta);
 			QVERIFY(!gsl_fcmp(actual, expected, delta));
 		}
 	}

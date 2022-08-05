@@ -430,7 +430,7 @@ void ImportFileDialog::checkOkButton() {
 
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkTcpSocket: {
+	case LiveDataSource::SourceType::NetworkTCPSocket: {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket socket(this);
@@ -454,7 +454,7 @@ void ImportFileDialog::checkOkButton() {
 		}
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkUdpSocket: {
+	case LiveDataSource::SourceType::NetworkUDPSocket: {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);

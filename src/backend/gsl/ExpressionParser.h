@@ -4,7 +4,7 @@
 	Description      : c++ wrapper for the bison generated parser.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -25,6 +25,13 @@ public:
 
 	bool isValid(const QString& expr, const QStringList& vars);
 	QStringList getParameter(const QString& expr, const QStringList& vars);
+	bool evaluateCartesian(const QString& expr,
+						   Range<double> range,
+						   int count,
+						   QVector<double>* xVector,
+						   QVector<double>* yVector,
+						   const QStringList& paramNames,
+						   const QVector<double>& paramValues);
 	bool evaluateCartesian(const QString& expr,
 						   const QString& min,
 						   const QString& max,

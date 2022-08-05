@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of XYCurve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,7 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <vector>
 
+class Background;
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class Symbol;
@@ -114,15 +115,7 @@ public:
 	QColor valuesColor;
 
 	// filling
-	XYCurve::FillingPosition fillingPosition;
-	WorksheetElement::BackgroundType fillingType;
-	WorksheetElement::BackgroundColorStyle fillingColorStyle;
-	WorksheetElement::BackgroundImageStyle fillingImageStyle;
-	Qt::BrushStyle fillingBrushStyle;
-	QColor fillingFirstColor;
-	QColor fillingSecondColor;
-	QString fillingFileName;
-	qreal fillingOpacity;
+	Background* background{nullptr};
 
 	// error bars
 	XYCurve::ErrorType xErrorType;
@@ -170,9 +163,6 @@ private:
 	QPainterPath symbolsPath;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-#ifdef XYCurveTest_EN
-	QVector<QLineF> m_lines_test;
-#endif
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)

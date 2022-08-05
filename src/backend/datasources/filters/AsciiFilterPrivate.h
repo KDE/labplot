@@ -41,7 +41,7 @@ public:
 
 	// helpers
 	int prepareDeviceToRead(QIODevice&, size_t maxLines = std::numeric_limits<std::size_t>::max());
-	void initDataContainers(Spreadsheet*);
+	void initDataContainer(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, QStringView value);
 	QString getLine(QIODevice&);
@@ -94,6 +94,7 @@ private:
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers
 
+	QStringList split(const QString&, bool autoSeparator = true);
 	QDateTime parseDateTime(const QString& string, const QString& format);
 };
 
