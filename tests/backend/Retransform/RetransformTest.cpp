@@ -466,7 +466,7 @@ void RetransformTest::TestBarPlotOrientation() {
 	QCOMPARE(barplot->name(), "Bar Plot");
 
 	// Trigger retransform
-	barplot->dataChanged();
+	barplot->setOrientation(BarPlot::Orientation::Horizontal);
 
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
@@ -475,16 +475,12 @@ void RetransformTest::TestBarPlotOrientation() {
 	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
 
 	// x and y are called only once
-	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // one plot with 2 x-Axes
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.count(), 2); // one plot with 2 y-Axes
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
-	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
-	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 0);
 }
 
 // ############################################################################################
