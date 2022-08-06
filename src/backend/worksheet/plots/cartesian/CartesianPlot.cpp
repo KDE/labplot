@@ -2817,7 +2817,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
 		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
-	DEBUG(Q_FUNC_INFO << ", data x range = " << d->dataRange(dim, index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << d->dataRange(dim, index).toStdString())
 }
 
 void CartesianPlot::retransformScales() {
