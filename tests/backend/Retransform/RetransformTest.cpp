@@ -12,11 +12,11 @@
 
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/MainWin.h"
-#include "backend/worksheet/plots/cartesian/BarPlot.h"
 
 #include <QAction>
 
