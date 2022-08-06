@@ -402,7 +402,7 @@ Q_SIGNALS:
 	void cursor1EnableChanged(bool enable);
 
 Q_SIGNALS:
-	void retransformScaleCalled(const CartesianPlot* plot, const Dimension dim, int index);
+	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
 
 	friend CartesianPlotDock;
 };

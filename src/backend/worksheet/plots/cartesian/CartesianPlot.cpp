@@ -3302,7 +3302,6 @@ void CartesianPlotPrivate::retransform() {
  * \param index
  */
 void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
-	emit q->retransformScaleCalled(q, dim, index);
 	static const int breakGap = 20;
 	Range<double> plotSceneRange;
 	switch (dim) {
@@ -3314,7 +3313,7 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
 		break;
 	};
 	Range<double> sceneRange, logicalRange;
-
+	bool scaleChanged = false;
 	for (const auto cSystem : coordinateSystems()) {
 		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if (cs->index(dim) != index)
@@ -3364,7 +3363,11 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
 				scales << this->createScale(r.scale(), sceneRange, logicalRange);
 		}
 		cs->setScales(dim, scales);
+		scaleChanged = true;
 	}
+
+	if (scaleChanged)
+		emit q->scaleRetransformed(q, dim, index);
 
 	// Set ranges in the axis
 	for (int i = 0; i < q->rangeCount(dim); i++) {
