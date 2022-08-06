@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/MainWin.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 
 #include <QAction>
 
@@ -429,6 +430,61 @@ void RetransformTest::TestAddCurve() {
 	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+}
+
+void RetransformTest::TestBarPlotOrientation() {
+	RetransformCallCounter c;
+	Project project;
+
+	project.load(QFINDTESTDATA(QLatin1String("data/barplot_test.lml")));
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "labels"
+	// Column "1"
+	// Column "2"
+	// Column "3"
+	// Column "4"
+	// Worksheet "Worksheet"
+	// CartesianPlot "xy-plot"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// BarPlot "BarPlot"
+	QCOMPARE(children.length(), 13);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+
+	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
+	}
+
+	auto barplots = project.children(AspectType::BarPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(barplots.length(), 1);
+	auto barplot = static_cast<BarPlot*>(barplots.at(0));
+	QCOMPARE(barplot->name(), "Bar Plot");
+
+	// Trigger retransform
+	barplot->dataChanged();
+
+	auto* worksheet = project.child<Worksheet>(0);
+	QVERIFY(worksheet);
+	auto* plot = worksheet->child<CartesianPlot>(0);
+	QVERIFY(plot);
+	QCOMPARE(plot->name(), QLatin1String("xy-plot"));
+
+	// x and y are called only once
+	QCOMPARE(c.logsXScaleRetransformed.count(), 2); // one plot with 2 x-Axes
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(1).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 2); // one plot with 2 y-Axes
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 0);
 }
 
 // ############################################################################################
