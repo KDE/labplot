@@ -149,7 +149,7 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 	}
 
 	auto* worksheet = project.child<Worksheet>(0);
@@ -279,7 +279,7 @@ void RetransformTest::TestPadding() {
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 
 	auto* worksheet = project.child<Worksheet>(0);
 	QVERIFY(worksheet);
@@ -402,7 +402,7 @@ void RetransformTest::TestAddCurve() {
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 
 	c.resetRetransformCount();
 
@@ -457,7 +457,7 @@ void RetransformTest::TestBarPlotOrientation() {
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
 	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive)) {
-		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::retransformScaleCalled, &c, &RetransformCallCounter::retransformScaleCalled);
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 	}
 
 	auto barplots = project.children(AspectType::BarPlot, AbstractAspect::ChildIndexFlag::Recursive);
