@@ -55,6 +55,9 @@ public:
 	QPointF mapPlotAreaToParent(QPointF);
 	void setParent(QGraphicsItem *parent);
 
+protected:
+	void paintBoundingRect(QPainter* painter);
+
 private:
 	// To prevent this function will be called directly
 	// use setParent() instead

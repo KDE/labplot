@@ -26,6 +26,7 @@
 #include <QPen>
 #include <QStringLiteral>
 #include <QXmlStreamReader>
+#include <QPainter>
 
 /**
  * \class WorksheetElement
@@ -610,6 +611,7 @@ void WorksheetElement::setPositionLogical(QPointF pos) {
 		exec(new WorksheetElementSetPositionLogicalCmd(d, pos, ki18n("%1: set logical position")));
 }
 
+// TODO: needed to be an undo command?
 STD_SETTER_CMD_IMPL_I_F_S(WorksheetElement, SetBoundingRect, QRectF, boundingRectangle, prepareGeometryChange, updatePosition)
 void WorksheetElement::setBoundingRect(const QRectF& rect) {
     Q_D(WorksheetElement);
@@ -870,4 +872,23 @@ QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
 	}
 
 	return point; // don't map if no parent set. Then it's during load
+}
+
+void WorksheetElementPrivate::paintBoundingRect(QPainter* painter) {
+#define DEBUG_PAINT_BOUNDING_RECT 1
+#if DEBUG_PAINT_BOUNDING_RECT
+	painter->save();
+	QPen pen(QBrush(Qt::red), 10);
+	painter->setPen(pen);
+
+	auto r = boundingRect();
+	painter->drawRect(r);
+
+	pen.setBrush(QBrush(Qt::green));
+	painter->setPen(pen);
+	// 0 in item coordinates is exact the center of the bounding rect
+	painter->drawLine(QLineF(boundingRect().center().x(), boundingRect().top(), boundingRect().center().x(), boundingRect().bottom()));
+
+	painter->restore();
+#endif
 }
