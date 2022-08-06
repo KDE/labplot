@@ -2608,12 +2608,12 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 	if (index == -1) { // all ranges
 		bool updated = false;
 		for (int i = 0; i < rangeCount(dim); i++) {
-			if (autoScale(dim, i) && scaleAuto(dim, i, fullRange, true))
+			if (autoScale(dim, i) && scaleAuto(dim, i, fullRange, true)) {
+				if (!suppressRetransformScale)
+					d->retransformScale(dim, i);
 				updated = true; // at least one was updated
+			}
 		}
-
-		if (updated && !suppressRetransformScale)
-			d->retransformScale(dim, index);
 		return updated;
 	}
 
