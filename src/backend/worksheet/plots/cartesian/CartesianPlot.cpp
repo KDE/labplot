@@ -2092,8 +2092,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
 		// x and y data
 		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {
-			auto cs = coordinateSystem(curve->coordinateSystemIndex());
-			this->dataChanged(cs->index(Dimension::X), cs->index(Dimension::Y), const_cast<XYCurve*>(curve));
+			this->dataChanged(const_cast<XYCurve*>(curve));
 		});
 
 		// x data
@@ -2154,7 +2153,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
 			// TODO: check if all ranges must be updated
 			connect(hist, &Histogram::dataChanged, [this, hist] {
-				this->dataChanged(-1, -1, const_cast<Histogram*>(hist));
+				this->dataChanged(const_cast<Histogram*>(hist));
 			});
 			connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
@@ -2171,7 +2170,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (boxPlot) {
 			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
-				this->dataChanged(-1, -1, const_cast<BoxPlot*>(boxPlot));
+				this->dataChanged(const_cast<BoxPlot*>(boxPlot));
 			});
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
@@ -2186,7 +2185,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 			// TODO: check if all ranges must be updated
 			connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
-				this->dataChanged(-1, -1, const_cast<BarPlot*>(barPlot));
+				this->dataChanged(const_cast<BarPlot*>(barPlot));
 			});
 		}
 
@@ -2424,6 +2423,28 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		}
 	} else if (updated)
 		WorksheetElementContainer::retransform();
+}
+
+void CartesianPlot::dataChanged(WorksheetElement* element) {
+	DEBUG(Q_FUNC_INFO)
+	if (project() && project()->isLoading())
+		return;
+
+	Q_D(CartesianPlot);
+	if (d->suppressRetransform)
+		return;
+
+	if (!element)
+		return;
+
+	int cSystemIndex = element->coordinateSystemIndex();
+	if (cSystemIndex == -1)
+		return;
+
+	auto xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
+	auto yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
+
+	dataChanged(xIndex, yIndex, element);
 }
 
 /*!

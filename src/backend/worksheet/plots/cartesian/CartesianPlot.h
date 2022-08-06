@@ -347,6 +347,7 @@ private Q_SLOTS:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
+	void dataChanged(WorksheetElement*);
 	void dataChanged(XYCurve*, const Dimension);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
