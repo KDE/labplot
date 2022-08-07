@@ -66,21 +66,23 @@ AxisDock::AxisDock(QWidget* parent)
 	hboxLayout->setSpacing(0);
 
 	//"Ticks"-tab
+	// major ticks
 	auto* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMajorTicksColumn, 8, 2);
-	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbLabelsTextColumn, 10, 2);
-	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMinorTicksColumn, 21, 2);
-	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	layout->addWidget(dtsbMajorTicksIncrement, 6, 2);
-	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	layout->addWidget(dtsbMinorTicksIncrement, 20, 2);
+	layout->addWidget(cbMajorTicksColumn, 9, 3);
 
-	//"Labels"-tab
-	// TODO: never used
-	// layout = static_cast<QGridLayout*>(ui.tabLabels->layout());
+	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
+	layout->addWidget(cbLabelsTextColumn, 9, 3);
+
+	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
+	layout->addWidget(dtsbMajorTicksIncrement, 5, 3);
+
+	// minor ticks
+	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
+	layout->addWidget(cbMinorTicksColumn, 25, 3);
+
+	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
+	layout->addWidget(dtsbMinorTicksIncrement, 24, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -154,9 +156,9 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorTicksNumberChanged);
 	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
-	connect(ui.cbMajorTickStartType, &QCheckBox::stateChanged, this, &AxisDock::majorTickStartTypeChanged);
-	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTickStartOffsetChanged);
-	connect(ui.leMajorTickStartValue, &KLineEdit::textChanged, this, &AxisDock::majorTickStartValueChanged);
+	connect(ui.cbMajorTicksStartType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksStartTypeChanged);
+	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTicksStartOffsetChanged);
+	connect(ui.leMajorTickStartValue, &KLineEdit::textChanged, this, &AxisDock::majorTicksStartValueChanged);
 	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
 	connect(ui.tbFirstTickAuto, &QToolButton::clicked, this, &AxisDock::setTickOffsetAuto);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::majorTicksColumnChanged);
@@ -377,6 +379,9 @@ void AxisDock::init() {
 	ui.cbMajorTicksType->addItem(i18n("Spacing"));
 	ui.cbMajorTicksType->addItem(i18n("Custom column"));
 
+	ui.cbMajorTicksStartType->addItem(i18n("Absolute Value"));
+	ui.cbMajorTicksStartType->addItem(i18n("Offset"));
+
 	ui.cbMinorTicksDirection->addItem(i18n("None"));
 	ui.cbMinorTicksDirection->addItem(i18n("In"));
 	ui.cbMinorTicksDirection->addItem(i18n("Out"));
@@ -508,9 +513,9 @@ void AxisDock::initConnections() {
 	m_connections << connect(m_axis, &Axis::majorTicksAutoNumberChanged, this, &AxisDock::axisMajorTicksAutoNumberChanged);
 	m_connections << connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
 	m_connections << connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
-	m_connections << connect(m_axis, &Axis::majorTickStartTypeChanged, this, &AxisDock::axisMajorTickStartTypeChanged);
-	m_connections << connect(m_axis, &Axis::majorTickStartOffsetChanged, this, &AxisDock::axisMajorTickStartOffsetChanged);
-	m_connections << connect(m_axis, &Axis::majorTickStartValueChanged, this, &AxisDock::axisMajorTickStartValueChanged);
+	m_connections << connect(m_axis, &Axis::majorTicksStartTypeChanged, this, &AxisDock::axisMajorTicksStartTypeChanged);
+	m_connections << connect(m_axis, &Axis::majorTickStartOffsetChanged, this, &AxisDock::axisMajorTicksStartOffsetChanged);
+	m_connections << connect(m_axis, &Axis::majorTickStartValueChanged, this, &AxisDock::axisMajorTicksStartValueChanged);
 	m_connections << connect(m_axis, &Axis::majorTicksColumnChanged, this, &AxisDock::axisMajorTicksColumnChanged);
 	m_connections << connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
 	m_connections << connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
@@ -1073,6 +1078,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.sbMajorTicksNumber->show();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
+		ui.cbMajorTicksAutoNumber->show();
+		ui.lMajorTicksStartType->show();
+		ui.cbMajorTicksStartType->show();
 		ui.lMajorTicksIncrementDateTime->hide();
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
@@ -1080,11 +1088,14 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.leZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
-		updateMajorTickStartType(true);
+		updateMajorTicksStartType(true);
 	} else if (type == Axis::TicksType::Spacing) {
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
+		ui.cbMajorTicksAutoNumber->hide();
 		ui.lMajorTicksSpacingNumeric->show();
+		ui.lMajorTicksStartType->show();
+		ui.cbMajorTicksStartType->show();
 
 		if (m_axis->isNumeric()) {
 			ui.lMajorTicksIncrementDateTime->hide();
@@ -1103,17 +1114,20 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.leZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
-		updateMajorTickStartType(true);
+		updateMajorTicksStartType(true);
 
 		// Check if spacing is not too small
 		majorTicksSpacingChanged();
 	} else { // custom column
 		ui.lMajorTicksNumber->hide();
 		ui.sbMajorTicksNumber->hide();
+		ui.cbMajorTicksAutoNumber->hide();
 		ui.lMajorTicksSpacingNumeric->hide();
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
 		dtsbMajorTicksIncrement->hide();
+		ui.lMajorTicksStartType->hide();
+		ui.cbMajorTicksStartType->hide();
 		ui.leZeroOffset->hide();
 		ui.tbFirstTickAuto->hide();
 		ui.tbFirstTickData->hide();
@@ -1121,7 +1135,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.lMajorTicksColumn->show();
 		cbMajorTicksColumn->show();
 
-		updateMajorTickStartType(false);
+		updateMajorTicksStartType(false);
 	}
 
 	if (m_initializing)
@@ -1184,15 +1198,16 @@ void AxisDock::majorTicksSpacingChanged() {
 		axis->setMajorTicksSpacing(spacing);
 }
 
-void AxisDock::majorTickStartTypeChanged(int state) {
+void AxisDock::majorTicksStartTypeChanged(int state) {
 	if (m_initializing)
 		return;
 
+	auto type = static_cast<Axis::TicksStartType>(state);
 	for (auto* axis : m_axesList)
-		axis->setMajorTickStartType(state == Qt::CheckState::Checked ? Axis::TickStartType::Absolute : Axis::TickStartType::Offset);
+		axis->setMajorTicksStartType(type);
 }
 
-void AxisDock::majorTickStartOffsetChanged() {
+void AxisDock::majorTicksStartOffsetChanged() {
 	if (m_initializing)
 		return;
 
@@ -1211,7 +1226,7 @@ void AxisDock::majorTickStartOffsetChanged() {
 		axis->setMajorTickStartOffset(offset);
 }
 
-void AxisDock::majorTickStartValueChanged() {
+void AxisDock::majorTicksStartValueChanged() {
 	if (m_initializing)
 		return;
 
@@ -1382,6 +1397,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	if (type == Axis::TicksType::TotalNumber) {
 		ui.lMinorTicksNumber->show();
 		ui.sbMinorTicksNumber->show();
+		ui.cbMinorTicksAutoNumber->show();
 		ui.lMinorTicksSpacingNumeric->hide();
 		ui.sbMinorTicksSpacingNumeric->hide();
 		ui.lMinorTicksColumn->hide();
@@ -1391,6 +1407,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	} else if (type == Axis::TicksType::Spacing) {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
+		ui.cbMinorTicksAutoNumber->hide();
 
 		if (m_axis->isNumeric()) {
 			ui.lMinorTicksSpacingNumeric->show();
@@ -1412,6 +1429,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 	} else {
 		ui.lMinorTicksNumber->hide();
 		ui.sbMinorTicksNumber->hide();
+		ui.cbMinorTicksAutoNumber->hide();
 		ui.lMinorTicksSpacingNumeric->hide();
 		ui.sbMinorTicksSpacingNumeric->hide();
 		ui.lMinorTicksIncrementDateTime->hide();
@@ -2103,21 +2121,21 @@ void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 	else
 		dtsbMajorTicksIncrement->setValue(increment);
 }
-void AxisDock::axisMajorTickStartTypeChanged(Axis::TickStartType type) {
+void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	ui.cbMajorTickStartType->setChecked(type == Axis::TickStartType::Absolute);
-	updateMajorTickStartType(true);
+	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(type));
+	updateMajorTicksStartType(true);
 }
-void AxisDock::axisMajorTickStartOffsetChanged(qreal value) {
+void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leMajorTickStartOffset->setText(numberLocale.toString(value));
 }
-void AxisDock::axisMajorTickStartValueChanged(qreal value) {
+void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
@@ -2311,12 +2329,13 @@ void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-void AxisDock::updateMajorTickStartType(bool visible) {
-	Lock l(m_initializing);
-	const bool absoluteValue = ui.cbMajorTickStartType->isChecked();
+void AxisDock::updateMajorTicksStartType(bool visible) {
+	const bool absoluteValue = (ui.cbMajorTicksStartType->currentIndex() == 0);
 
-	ui.leMajorTickStartOffset->setVisible(visible && !absoluteValue);
 	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue);
+	ui.leMajorTickStartOffset->setVisible(visible && !absoluteValue);
+	ui.tbFirstTickData->setVisible(visible && !absoluteValue);
+	ui.tbFirstTickAuto->setVisible(visible && !absoluteValue);
 	ui.leMajorTickStartValue->setVisible(visible && absoluteValue);
 	ui.lMajorTickStartValue->setVisible(visible && absoluteValue);
 }
@@ -2449,7 +2468,7 @@ void AxisDock::load() {
 		ui.sbMajorTicksSpacingNumeric->setSingleStep(value / 10.);
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
-	ui.cbMajorTickStartType->setChecked(m_axis->majorTickStartType() == Axis::TickStartType::Absolute);
+	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(m_axis->majorTicksStartType()));
 	ui.leMajorTickStartOffset->setText(numberLocale.toString(m_axis->majorTickStartOffset()));
 	ui.leMajorTickStartValue->setText(numberLocale.toString(m_axis->majorTickStartValue()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex((int)m_axis->majorTicksPen().style());
@@ -2584,8 +2603,7 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.sbMajorTicksSpacingNumeric->setSingleStep(value / 10.);
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
-	ui.cbMajorTickStartType->setChecked(
-		group.readEntry("MajorTickStartType", m_axis->majorTickStartType() == Axis::TickStartType::Offset)); // Offset is the default
+	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
 	ui.leMajorTickStartOffset->setText(numberLocale.toString(group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset())));
 	ui.leMajorTickStartValue->setText(numberLocale.toString(group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue())));
 	ui.cbMajorTicksLineStyle->setCurrentIndex(group.readEntry("MajorTicksLineStyle", (int)m_axis->majorTicksPen().style()));
@@ -2706,7 +2724,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 		group.writeEntry("MajorTicksIncrement", QString::number(ui.sbMajorTicksSpacingNumeric->value()));
 	else
 		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
-	group.writeEntry("MajorTickStartType", QString::number(ui.cbMajorTickStartType->isChecked()));
+	group.writeEntry("MajorTicksStartType", ui.cbMajorTicksStartType->currentIndex());
 	group.writeEntry("MajorTickStartOffset", numberLocale.toDouble(ui.leMajorTickStartOffset->text()));
 	group.writeEntry("MajorTickStartValue", numberLocale.toDouble(ui.leMajorTickStartValue->text()));
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
