@@ -19,7 +19,7 @@ class AxisTest : public CommonTest {
 private Q_SLOTS:
 	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
-	void TickStartValue();
+	void majorTicksStartValue();
 };
 
 #endif // WORKSHEETELEMENTTEST_H
