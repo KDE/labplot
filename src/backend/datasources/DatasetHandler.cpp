@@ -74,7 +74,7 @@ void DatasetHandler::markMetadataAsInvalid() {
 void DatasetHandler::configureFilter() {
 	// set some default values common to many datasets
 	m_filter->setNumberFormat(QLocale::C);
-	m_filter->setSkipEmptyParts(true);
+	m_filter->setSkipEmptyParts(false);
 	m_filter->setHeaderEnabled(false);
 	m_filter->setRemoveQuotesEnabled(true);
 
