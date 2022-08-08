@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : View class for Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-202 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -2703,7 +2703,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 
 	WAIT_CURSOR;
 	QStringList messages;
-	QString message = i18n("Normalization of the column <i>%1</i> was not possible because of %2.");
+	auto* message = "Normalization of the column <i>%1</i> was not possible because of %2.";
 	m_spreadsheet->beginMacro(i18n("%1: normalize columns", m_spreadsheet->name()));
 
 	for (auto* col : columns) {
@@ -2724,7 +2724,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / sum;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Sum = 0"));
+				messages << i18n(message, col->name(), i18n("Sum = 0"));
 				continue;
 			}
 			break;
@@ -2735,7 +2735,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / min;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Min = 0"));
+				messages << i18n(message, col->name(), i18n("Min = 0"));
 				continue;
 			}
 			break;
@@ -2746,7 +2746,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / max;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Max = 0"));
+				messages << i18n(message, col->name(), i18n("Max = 0"));
 				continue;
 			}
 			break;
@@ -2757,7 +2757,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / count;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Count = 0"));
+				messages << i18n(message, col->name(), i18n("Count = 0"));
 				continue;
 			}
 			break;
@@ -2768,7 +2768,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / mean;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Mean = 0"));
+				messages << i18n(message, col->name(), i18n("Mean = 0"));
 				continue;
 			}
 			break;
@@ -2779,7 +2779,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / median;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Median = 0"));
+				messages << i18n(message, col->name(), i18n("Median = 0"));
 				continue;
 			}
 			break;
@@ -2791,9 +2791,9 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 					new_data[i] = data->operator[](i) / mode;
 			} else {
 				if (mode == 0.0)
-					messages << message.arg(col->name()).arg(QLatin1String("Mode = 0"));
+					messages << i18n(message, col->name(), i18n("Mode = 0"));
 				else
-					messages << message.arg(col->name()).arg(i18n("'Mode not defined'"));
+					messages << i18n(message, col->name(), i18n("'Mode not defined'"));
 				continue;
 			}
 			break;
@@ -2804,7 +2804,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / range;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Range = 0"));
+				messages << i18n(message, col->name(), i18n("Range = 0"));
 				continue;
 			}
 			break;
@@ -2815,7 +2815,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / std;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
+				messages << i18n(message, col->name(), i18n("SD = 0"));
 				continue;
 			}
 			break;
@@ -2826,7 +2826,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / mad;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("MAD = 0"));
+				messages << i18n(message, col->name(), i18n("MAD = 0"));
 				continue;
 			}
 			break;
@@ -2837,7 +2837,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = data->operator[](i) / iqr;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("IQR = 0"));
+				messages << i18n(message, col->name(), i18n("IQR = 0"));
 				continue;
 			}
 			break;
@@ -2849,7 +2849,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = (data->operator[](i) - mean) / std;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("SD = 0"));
+				messages << i18n(message, col->name(), i18n("SD = 0"));
 				continue;
 			}
 			break;
@@ -2861,7 +2861,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = (data->operator[](i) - median) / mad;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("MAD = 0"));
+				messages << i18n(message, col->name(), i18n("MAD = 0"));
 				continue;
 			}
 			break;
@@ -2873,7 +2873,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = (data->operator[](i) - median) / iqr;
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("IQR = 0"));
+				messages << i18n(message, col->name(), i18n("IQR = 0"));
 				continue;
 			}
 			break;
@@ -2885,7 +2885,7 @@ void SpreadsheetView::normalizeSelectedColumns(QAction* action) {
 				for (int i = 0; i < col->rowCount(); ++i)
 					new_data[i] = rescaleIntervalMin + (data->operator[](i) - min) / (max - min) * (rescaleIntervalMax - rescaleIntervalMin);
 			} else {
-				messages << message.arg(col->name()).arg(QLatin1String("Max - Min = 0"));
+				messages << i18n(message, col->name(), i18n("Max - Min = 0"));
 				continue;
 			}
 			break;
@@ -3071,7 +3071,7 @@ void SpreadsheetView::showRowStatistics() {
 		QVector<double> rowValues;
 		for (int j = 0; j < m_spreadsheet->columnCount(); ++j)
 			rowValues << m_spreadsheet->column(j)->valueAt(row);
-		columns << new Column(i18n("Row %1").arg(row + 1), rowValues);
+		columns << new Column(i18n("Row %1", row + 1), rowValues);
 	}
 
 	auto* dlg = new StatisticsDialog(dlgTitle, columns);
