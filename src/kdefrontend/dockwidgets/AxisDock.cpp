@@ -1202,6 +1202,8 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 	if (m_initializing)
 		return;
 
+	updateMajorTicksStartType(true);
+
 	auto type = static_cast<Axis::TicksStartType>(state);
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksStartType(type);
@@ -2122,15 +2124,10 @@ void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 		dtsbMajorTicksIncrement->setValue(increment);
 }
 void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(type));
-	updateMajorTicksStartType(true);
 }
 void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leMajorTickStartOffset->setText(numberLocale.toString(value));
@@ -2142,7 +2139,6 @@ void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 	SET_NUMBER_LOCALE
 	ui.leMajorTickStartValue->setText(numberLocale.toString(value));
 }
-
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	Lock lock(m_initializing);
 	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
