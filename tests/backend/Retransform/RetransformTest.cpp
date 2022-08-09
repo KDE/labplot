@@ -12,14 +12,14 @@
 
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/core/column/Column.h"
+#include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/spreadsheet/Spreadsheet.cpp"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "backend/spreadsheet/Spreadsheet.cpp"
-#include "backend/core/column/Column.h"
-#include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QAction>
 
@@ -650,9 +650,7 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 
-	auto list = QStringList({"Project/Worksheet/plot/x",
-							"Project/Worksheet/plot/y",
-							"Project/Worksheet/plot/xy-curve"});
+	auto list = QStringList({"Project/Worksheet/plot/x", "Project/Worksheet/plot/y", "Project/Worksheet/plot/xy-curve"});
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list) {
 		qDebug() << s;
