@@ -921,13 +921,10 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void XYCurvePrivate::retransform() {
-	const bool required = !isVisible() || q->isLoading();
-	trackRetransformCalled(required);
-	if (required)
-		return;
-
-	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
-	if (m_suppressRetransform || !plot())
+	const bool suppressed = !isVisible() || q->isLoading() || suppressRetransform || !plot();
+	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", suppressRetransform = " << suppressRetransform);
+	trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	{

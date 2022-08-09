@@ -3218,12 +3218,12 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-	const bool required = suppressRetransform || q->isLoading();
-	trackRetransformCalled(required);
+	const bool suppress = suppressRetransform || q->isLoading();
+	trackRetransformCalled(suppress);
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG(Q_FUNC_INFO << ", x range " << i + 1 << " : " << xRanges.at(i).range.toStdString()
 						  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()));
-	if (required)
+	if (suppress)
 		return;
 
 	PERFTRACE(Q_FUNC_INFO);

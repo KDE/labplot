@@ -654,10 +654,7 @@ void RetransformTest::TestImportCSV() {
 	QCOMPARE(c.elementLogCount(false), list.count());
 	for (auto& s : list) {
 		qDebug() << s;
-		if (s != "Project/Worksheet/plot/xy-curve")
-			QCOMPARE(c.callCount(s), 1);
-		else
-			QCOMPARE(c.callCount(s), 5); // TODO: remove. It should be called only once
+		QCOMPARE(c.callCount(s), 1);
 	}
 }
 

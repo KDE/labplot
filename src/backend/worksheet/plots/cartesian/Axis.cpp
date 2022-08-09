@@ -1061,9 +1061,9 @@ QPainterPath AxisPrivate::shape() const {
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	const bool required = suppressRetransform || !plot() || q->isLoading();
-	trackRetransformCalled(required);
-	if (required)
+	const bool suppress = suppressRetransform || !plot() || q->isLoading();
+	trackRetransformCalled(suppress);
+	if (suppress)
 		return;
 
 	// 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
