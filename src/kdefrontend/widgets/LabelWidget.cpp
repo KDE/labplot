@@ -226,7 +226,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &LabelWidget::commentChanged);
 
-	//  text properties
+	// text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
 	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
 	connect(ui.teLabel, &ResizableTextEdit::currentCharFormatChanged, this, &LabelWidget::charFormatChanged);

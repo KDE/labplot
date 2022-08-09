@@ -518,7 +518,7 @@ void BarPlotPrivate::recalc() {
 		// min/max for y
 		yMin = 0;
 		yMax = -INFINITY;
-		switch(type) {
+		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
 				double max = column->maximum();
@@ -549,7 +549,7 @@ void BarPlotPrivate::recalc() {
 		// min/max for x
 		xMin = 0;
 		xMax = -INFINITY;
-		switch(type) {
+		switch (type) {
 		case BarPlot::Type::Grouped: {
 			for (auto* column : dataColumns) {
 				double max = column->maximum();
@@ -608,7 +608,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
-	switch(type) {
+	switch (type) {
 	case BarPlot::Type::Grouped: {
 		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
@@ -732,7 +732,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
 	QVector<QVector<QLineF>> barLines; // lines for all bars for one colum in scene coordinates
 
-	switch(type) {
+	switch (type) {
 	case BarPlot::Type::Grouped: {
 		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
