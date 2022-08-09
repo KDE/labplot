@@ -30,7 +30,7 @@ class KMessageWidget;
 
 class TextLabelTest;
 
-class LabelWidget : public QWidget {
+class LabelWidget : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -38,8 +38,8 @@ public:
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
-	void updateUnits();
-	void updateLocale();
+	void updateUnits() override;
+	void updateLocale() override;
 
 	void load();
 	void loadConfig(KConfigGroup&);

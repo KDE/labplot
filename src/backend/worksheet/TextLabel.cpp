@@ -235,7 +235,18 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 	Returns an icon to be used in the project explorer.
 */
 QIcon TextLabel::icon() const {
-	return QIcon::fromTheme("draw-text");
+	switch(text().mode) {
+	case Mode::Markdown:
+		return QIcon::fromTheme(QLatin1String("text-x-markdown"));
+		break;
+	case Mode::LaTeX:
+		return QIcon::fromTheme(QLatin1String("text-x-tex"));
+		break;
+	case Mode::Text:
+	default:
+		return QIcon::fromTheme(QLatin1String("draw-text"));
+		// return QIcon::fromTheme(QLatin1String("text-x-plain"));
+	}
 }
 
 QMenu* TextLabel::createContextMenu() {

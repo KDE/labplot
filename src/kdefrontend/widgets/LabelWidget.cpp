@@ -82,9 +82,12 @@
 	\ingroup kdefrontend
  */
 LabelWidget::LabelWidget(QWidget* parent)
-	: QWidget(parent)
+	: BaseDock(parent)
 	, m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
+	m_leName = ui.leName;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(1.5 * m_leName->height());
 
 	// set the minimum size of the text edit widget to one row of a QLineEdit
 	ui.teLabel->setMinimumHeight(ui.lePositionXLogical->height());
@@ -220,6 +223,9 @@ LabelWidget::LabelWidget(QWidget* parent)
 	gridLayout->addWidget(m_messageWidget, 2, 3);
 
 	// SLOTS
+	connect(ui.leName, &QLineEdit::textChanged, this, &LabelWidget::nameChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &LabelWidget::commentChanged);
+
 	//  text properties
 	connect(ui.cbMode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::modeChanged);
 	connect(ui.teLabel, &ResizableTextEdit::textChanged, this, &LabelWidget::textChanged);
@@ -274,12 +280,41 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	m_labelsList = labels;
 	m_axesList.clear();
 	m_label = labels.first();
+	m_aspect = labels.first();
 
 	ui.lOffsetX->hide();
 	ui.lOffsetY->hide();
 
 	ui.sbOffsetX->hide();
 	ui.sbOffsetY->hide();
+
+	// show the text fields for name and comment if the label is not hidden (i.e. not a plot title, etc.)
+	bool visible = !m_label->hidden();
+	ui.lName->setVisible(visible);
+	ui.leName->setVisible(visible);
+	ui.lComment->setVisible(visible);
+	ui.teComment->setVisible(visible);
+
+	if (visible) {
+		// if there is more then one point in the list, disable the comment and name widgets in "general"
+		if (labels.size() == 1) {
+			ui.lName->setEnabled(true);
+			ui.leName->setEnabled(true);
+			ui.lComment->setEnabled(true);
+			ui.teComment->setEnabled(true);
+			ui.leName->setText(m_label->name());
+			ui.teComment->setText(m_label->comment());
+		} else {
+			ui.lName->setEnabled(false);
+			ui.leName->setEnabled(false);
+			ui.lComment->setEnabled(false);
+			ui.teComment->setEnabled(false);
+			ui.leName->setText(QString());
+			ui.teComment->setText(QString());
+		}
+		ui.leName->setStyleSheet("");
+		ui.leName->setToolTip("");
+	}
 
 	this->load();
 	initConnections();
@@ -288,7 +323,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 	// hide the option "Visible" if the label is child of a InfoElement,
 	// the label is what the user identifies with the info element itself
-	bool visible = (m_label->parentAspect()->type() != AspectType::InfoElement);
+	visible = (m_label->parentAspect()->type() != AspectType::InfoElement);
 	ui.chbVisible->setVisible(visible);
 
 	// resize the widget to take the minimal height
@@ -310,6 +345,11 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 
 	m_axesList = axes;
 	m_label = m_labelsList.first();
+
+	ui.lName->hide();
+	ui.leName->hide();
+	ui.lComment->hide();
+	ui.teComment->hide();
 
 	this->load();
 	initConnections();
