@@ -618,10 +618,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) {
 	if (!m_analysisMode) {
 		auto* curve = new XYCurve(name);
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
 		m_lastAddedCurve = curve;
 	} else {
@@ -629,10 +629,10 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		XYCurve* curve = nullptr;
 		if (createDataCurve) {
 			curve = new XYCurve(name);
-			curve->suppressRetransform(true);
+			curve->setSuppressRetransform(true);
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
-			curve->suppressRetransform(false);
+			curve->setSuppressRetransform(false);
 			plot->addChild(curve);
 			m_lastAddedCurve = curve;
 		}
@@ -675,12 +675,12 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		}
 
 		if (analysisCurve != nullptr) {
-			analysisCurve->suppressRetransform(true);
+			analysisCurve->setSuppressRetransform(true);
 			analysisCurve->setXDataColumn(xColumn);
 			analysisCurve->setYDataColumn(yColumn);
 			if (m_analysisAction != XYAnalysisCurve::AnalysisAction::FitCustom) // no custom fit-model set yet, no need to recalculate
 				analysisCurve->recalculate();
-			analysisCurve->suppressRetransform(false);
+			analysisCurve->setSuppressRetransform(false);
 			plot->addChild(analysisCurve);
 			m_lastAddedCurve = analysisCurve;
 		}
@@ -689,9 +689,9 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) {
 	auto* hist = new Histogram(name);
-	// 	hist->suppressRetransform(true);
+	// 	hist->setSuppressRetransform(true);
 	hist->setDataColumn(column);
-	// 	hist->suppressRetransform(false);
+	// 	hist->setSuppressRetransform(false);
 	plot->addChild(hist);
 	m_lastAddedCurve = hist;
 }

@@ -686,11 +686,6 @@ void XYCurve::setRugOffset(double offset) {
 		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
 }
 
-void XYCurve::suppressRetransform(bool b) {
-	Q_D(XYCurve);
-	d->suppressRetransform(b);
-}
-
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -2022,7 +2017,7 @@ void XYCurvePrivate::updateValues() {
 }
 
 void XYCurvePrivate::updateFilling() {
-	if (m_suppressRetransform)
+	if (suppressRetransform)
 		return;
 
 	m_fillPolygons.clear();
@@ -3118,11 +3113,6 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 
 		painter->drawPolygon(pol);
 	}
-}
-
-void XYCurvePrivate::suppressRetransform(bool on) {
-	m_suppressRetransform = on;
-	m_suppressRecalc = on;
 }
 
 /*!

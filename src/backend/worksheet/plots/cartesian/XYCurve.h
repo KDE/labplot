@@ -146,7 +146,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	void suppressRetransform(bool);
 	bool isSourceDataChangedSinceLastRecalc() const;
 
 	typedef XYCurvePrivate Private;

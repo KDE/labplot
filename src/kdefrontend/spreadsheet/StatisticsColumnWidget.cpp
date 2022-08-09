@@ -370,7 +370,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 	// add KDE curve
 	auto* curve = new XYCurve("");
-	curve->suppressRetransform(false);
+	curve->setSuppressRetransform(false);
 	plot->addChild(curve);
 	QPen pen = curve->linePen();
 	pen.setStyle(Qt::SolidLine);
@@ -380,7 +380,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
-	curve->suppressRetransform(false);
+	curve->setSuppressRetransform(false);
 	plot->retransform();
 	m_kdePlotInitialized = true;
 	RESET_CURSOR;
@@ -431,7 +431,7 @@ void StatisticsColumnWidget::showQQPlot() {
 
 	// add curve with the quantiles
 	auto* curve = new XYCurve("");
-	curve->suppressRetransform(true);
+	curve->setSuppressRetransform(true);
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
@@ -465,7 +465,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	yColumn2->setValueAt(1, y2New);
 
 	auto* curve2 = new XYCurve("2");
-	curve2->suppressRetransform(true);
+	curve2->setSuppressRetransform(true);
 	plot->addChild(curve2);
 	QPen pen = curve2->linePen();
 	pen.setStyle(Qt::SolidLine);
@@ -475,8 +475,8 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve2->setXColumn(xColumn2);
 	curve2->setYColumn(yColumn2);
 
-	curve->suppressRetransform(false);
-	curve2->suppressRetransform(false);
+	curve->setSuppressRetransform(false);
+	curve2->setSuppressRetransform(false);
 	plot->retransform();
 	m_qqPlotInitialized = true;
 	RESET_CURSOR;

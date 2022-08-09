@@ -77,6 +77,7 @@ public:
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
+	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);
 	bool isPrinting() const;

@@ -840,11 +840,6 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 		shiftDownY(yIndex);
 }
 
-void CartesianPlot::setSuppressRetransform(bool value) {
-	Q_D(CartesianPlot);
-	d->suppressRetransform = value;
-}
-
 void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 	PERFTRACE(Q_FUNC_INFO);
 
@@ -888,11 +883,11 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 			continue;
 
 		XYCurve* curve = new XYCurve(column->name());
-		curve->suppressRetransform(true); // suppress retransform, all curved will be recalculated at the end
+		curve->setSuppressRetransform(true); // suppress retransform, all curved will be recalculated at the end
 		curve->setXColumn(xColumn);
 		curve->setYColumn(column);
 		addChild(curve);
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 		curvesAdded = true;
 	}
 

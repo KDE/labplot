@@ -54,10 +54,10 @@ void XYEquationCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 
 	setUndoAware(false);
-	suppressRetransform(true);
+	setSuppressRetransform(true);
 	setXColumn(d->xColumn);
 	setYColumn(d->yColumn);
-	suppressRetransform(false);
+	setSuppressRetransform(false);
 	setUndoAware(true);
 }
 

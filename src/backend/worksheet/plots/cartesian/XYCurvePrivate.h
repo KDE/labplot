@@ -56,7 +56,6 @@ public:
 	void updateErrorBars();
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
-	void suppressRetransform(bool);
 
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
@@ -180,7 +179,6 @@ private:
 	bool m_selectionEffectImageIsDirty{false};
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
-	bool m_suppressRetransform{false};
 	QPointF mousePos;
 };
 

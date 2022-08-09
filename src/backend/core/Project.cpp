@@ -840,7 +840,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	for (auto* curve : qAsConst(curves)) {
 		if (!curve)
 			continue;
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 
 		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
 		if (analysisCurve) {
@@ -866,7 +866,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (analysisCurve)
 			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 	}
 
 	// assign to all markers the curves they need

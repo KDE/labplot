@@ -109,6 +109,11 @@ bool WorksheetElement::isFullyVisible() const {
 	return isVisible();
 }
 
+void WorksheetElement::setSuppressRetransform(bool value) {
+	Q_D(WorksheetElement);
+	d->suppressRetransform = value;
+}
+
 /**
  * \fn void WorksheetElement::setPrinting(bool on)
  * \brief Switches the printing mode on/off

@@ -76,9 +76,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 		if (curve) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->suppressRetransform(true);
+			curve->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->suppressRetransform(false);
+			curve->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}

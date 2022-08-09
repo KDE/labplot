@@ -201,7 +201,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 					  << "/" << spreadsheets.count() << "/" << columns.count())
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		DEBUG(Q_FUNC_INFO << ", RESTORE CURVE with x/y column path " << STDSTRING(curve->xColumnPath()) << " " << STDSTRING(curve->yColumnPath()))
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 
 		// x-column
 		QString spreadsheetName = curve->xColumnPath();
@@ -267,7 +267,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 		// TODO: error columns
 
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 	}
 
 	if (!preview) {
@@ -1337,11 +1337,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						curve->setYColumnPath(tableName + '/' + originCurve.yColumnName.c_str());
 						DEBUG(Q_FUNC_INFO << ", x/y column path = \"" << STDSTRING(curve->xColumnPath()) << "\" \"" << STDSTRING(curve->yColumnPath()) << "\"")
 
-						curve->suppressRetransform(true);
+						curve->setSuppressRetransform(true);
 						if (!preview)
 							loadCurve(originCurve, curve);
 						plot->addChildFast(curve);
-						curve->suppressRetransform(false);
+						curve->setSuppressRetransform(false);
 					} else if (originCurve.type == Origin::GraphCurve::Column) {
 						// vertical bars
 
@@ -1383,12 +1383,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						eqData.max = QString::number(function.end);
 					}
 
-					xyEqCurve->suppressRetransform(true);
+					xyEqCurve->setSuppressRetransform(true);
 					xyEqCurve->setEquationData(eqData);
 					if (!preview)
 						loadCurve(originCurve, xyEqCurve);
 					plot->addChildFast(xyEqCurve);
-					xyEqCurve->suppressRetransform(false);
+					xyEqCurve->setSuppressRetransform(false);
 				}
 					// TODO case 'M': Matrix
 				}
