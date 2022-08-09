@@ -1076,7 +1076,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		// 5. Enable retransform for all WorksheetElements
 		auto project = this->project();
 		for (int i = 0; i < childCount<Column>(); i++) {
-			const auto& wes = project->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+			const auto& wes = project ? project->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive) : QVector<WorksheetElement*>();
 			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 			child<Column>(i)->setSuppressDataChangedSignal(true);
