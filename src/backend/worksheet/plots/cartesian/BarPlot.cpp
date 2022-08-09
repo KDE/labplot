@@ -361,7 +361,7 @@ void BarPlotPrivate::setHover(bool on) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BarPlotPrivate::retransform() {
-	if (m_suppressRetransform || !isVisible() || q->isLoading())
+	if (suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
 	PERFTRACE(name() + Q_FUNC_INFO);

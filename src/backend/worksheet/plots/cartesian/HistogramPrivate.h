@@ -147,7 +147,6 @@ private:
 
 	//	bool m_printing{false};
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;

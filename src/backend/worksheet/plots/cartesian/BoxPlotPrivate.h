@@ -111,7 +111,6 @@ private:
 	void drawSymbols(QPainter*, int);
 
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;

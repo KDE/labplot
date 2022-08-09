@@ -77,7 +77,6 @@ private:
 	void drawFilling(QPainter*, int columnIndex, int valueIndex);
 
 	bool m_hovered{false};
-	bool m_suppressRetransform{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_barPlotShape;

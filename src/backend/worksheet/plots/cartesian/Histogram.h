@@ -109,8 +109,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	void suppressRetransform(bool);
-
 	double minimum(CartesianCoordinateSystem::Dimension dim) const;
 	double maximum(CartesianCoordinateSystem::Dimension dim) const;
 
