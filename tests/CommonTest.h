@@ -40,6 +40,11 @@ extern "C" {
 		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
 		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
 	}
+	
+#define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
+	QCOMPARE(res.length(), ref.length());                                                                                                                      \
+	for (int i = 0; i < res.length(); i++)                                                                                                                     \
+		QVERIFY(qFuzzyCompare(res.at(i), ref.at(i)));
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {

@@ -98,11 +98,6 @@
 	a.setData(static_cast<int>(mode));                                                                                                                         \
 	view->cartesianPlotMouseModeChanged(&a);
 
-#define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
-	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	for (int i = 0; i < res.length(); i++)                                                                                                                     \
-		QVERIFY(qFuzzyCompare(res.at(i), ref.at(i)));
-
 ////////////////////////////////////////////////////////////////
 
 // Test1:

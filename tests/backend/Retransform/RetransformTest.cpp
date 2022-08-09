@@ -17,7 +17,9 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
-#include "kdefrontend/MainWin.h"
+#include "backend/spreadsheet/Spreadsheet.cpp"
+#include "backend/core/column/Column.h"
+#include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QAction>
 
@@ -549,6 +551,116 @@ void RetransformTest::TestZoom() {
 	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
 	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+}
+
+void RetransformTest::TestImportCSV() {
+	Project project;
+	auto* ws = new Worksheet("Worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	Spreadsheet* spreadsheet = new Spreadsheet("test", false);
+	spreadsheet->setColumnCount(2);
+	spreadsheet->setRowCount(3);
+
+	auto* xCol = spreadsheet->column(0);
+	xCol->replaceValues(0, QVector<double>({1, 2, 3}));
+
+	auto* yCol = spreadsheet->column(1);
+	yCol->replaceValues(0, QVector<double>({2, 3, 4}));
+
+	QCOMPARE(spreadsheet->rowCount(), 3);
+	QCOMPARE(spreadsheet->columnCount(), 2);
+
+	project.addChild(spreadsheet);
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve = new XYCurve("xy-curve");
+	curve->setXColumn(xCol);
+	curve->setYColumn(yCol);
+	p->addChild(curve);
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	RetransformCallCounter c;
+	// Worksheet "Worksheet"
+	// CartesianPlot "plot"
+	// Axis "x"
+	// Axis "y"
+	// XYCurve "xy-curve"
+	// Spreadsheet "test"
+	// Column "1"
+	// Column "2"
+	QCOMPARE(children.length(), 8);
+	for (const auto& child : children) {
+		qDebug() << child->name();
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	}
+
+	for (const auto& plot : project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive))
+		connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	// check axis ranges
+	auto axes = p->children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 2);
+	auto* xAxis = axes.at(0);
+	QVector<double> ref = {1, 1.5, 2, 2.5, 3};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(xAxis)->tickLabelValues(), ref);
+	auto* yAxis = axes.at(1);
+	ref = {2, 2.5, 3, 3.5, 4};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis)->tickLabelValues(), ref);
+
+	QTemporaryFile file;
+	QCOMPARE(file.open(), true);
+	QVERIFY(file.write("1,2\n10,10\n20,20\n30,30\n") > 0);
+	file.close();
+
+	AsciiFilter filter;
+	filter.readDataFromFile(file.fileName(), spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet->rowCount(), 3);
+	QCOMPARE(spreadsheet->columnCount(), 2);
+
+	xCol = spreadsheet->column(0);
+	QCOMPARE(xCol->name(), "1");
+	QCOMPARE(xCol->valueAt(0), 10);
+	QCOMPARE(xCol->valueAt(1), 20);
+	QCOMPARE(xCol->valueAt(2), 30);
+
+	yCol = spreadsheet->column(1);
+	QCOMPARE(yCol->name(), "2");
+	QCOMPARE(yCol->valueAt(0), 10);
+	QCOMPARE(yCol->valueAt(1), 20);
+	QCOMPARE(yCol->valueAt(2), 30);
+
+	ref = {10, 15, 20, 25, 30};
+	auto tickLabelValues = static_cast<Axis*>(xAxis)->tickLabelValues();
+	COMPARE_DOUBLE_VECTORS(tickLabelValues, ref);
+	ref = {10, 15, 20, 25, 30};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis)->tickLabelValues(), ref);
+
+	// x and y are called only once
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 1 x-Axis
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, p);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 1 x-Axis
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, p);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+
+	auto list = QStringList({"Project/Worksheet/plot/x",
+							"Project/Worksheet/plot/y",
+							"Project/Worksheet/plot/xy-curve"});
+	QCOMPARE(c.elementLogCount(false), list.count());
+	for (auto& s : list) {
+		qDebug() << s;
+		if (s != "Project/Worksheet/plot/xy-curve")
+			QCOMPARE(c.callCount(s), 1);
+		else
+			QCOMPARE(c.callCount(s), 5); // TODO: remove. It should be called only once
+	}
 }
 
 // ############################################################################################

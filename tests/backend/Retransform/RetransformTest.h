@@ -26,6 +26,7 @@ private Q_SLOTS:
 	void TestAddCurve();
 	void TestBarPlotOrientation();
 	void TestZoom();
+	void TestImportCSV();
 };
 
 /*!
