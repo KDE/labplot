@@ -29,7 +29,7 @@ class BarPlot : public WorksheetElement, Curve {
 	Q_OBJECT
 
 public:
-	enum class Type { Grouped, Stacked };
+	enum class Type { Grouped, Stacked, Stacked_100_Percent };
 
 	explicit BarPlot(const QString&);
 	~BarPlot() override;

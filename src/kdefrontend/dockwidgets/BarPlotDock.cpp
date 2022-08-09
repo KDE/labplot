@@ -49,6 +49,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	ui.cbType->addItem(i18n("Grouped"));
 	ui.cbType->addItem(i18n("Stacked"));
+	ui.cbType->addItem(i18n("Stacked 100%"));
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
