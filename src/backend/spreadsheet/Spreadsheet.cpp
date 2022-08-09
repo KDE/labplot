@@ -14,13 +14,13 @@
 #include "SpreadsheetModel.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "backend/core/Project.h"
 
 #include <QIcon>
 
@@ -1077,13 +1077,13 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		auto project = this->project();
 		for (int i = 0; i < childCount<Column>(); i++) {
 			const auto& wes = project->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
-			for (auto* we: wes)
+			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->setName(colNameList.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
-			for (auto* we: wes)
+			for (auto* we : wes)
 				we->setSuppressRetransform(false);
 		}
 	}
