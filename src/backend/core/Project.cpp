@@ -365,7 +365,7 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			updateColumnDependencies(boxPlots, column);
 	}
 
-	if (aspect.type() == AspectType::SpreadSheet) {
+	if (aspect->type() == AspectType::SpreadSheet) {
 		connect(aspect, &SpreadSheet::aboutToUpdateColumnProperties, [this] () {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
