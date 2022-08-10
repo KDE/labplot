@@ -365,13 +365,13 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			updateColumnDependencies(boxPlots, column);
 	}
 
-	if (aspect->type() == AspectType::SpreadSheet) {
-		connect(aspect, &SpreadSheet::aboutToUpdateColumnProperties, [this] () {
+	if (aspect->type() == AspectType::Spreadsheet) {
+		connect(aspect, &Spreadsheet::aboutToUpdateColumnProperties, [this] () {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 		});
-		connect(aspect, &SpreadSheet::updateColumnPropertiesFinished, [this] () {
+		connect(aspect, &Spreadsheet::updateColumnPropertiesFinished, [this] () {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
