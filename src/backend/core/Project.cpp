@@ -349,22 +349,34 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 			columns.append(static_cast<const AbstractColumn*>(child));
 	}
 
-	if (columns.isEmpty())
-		return;
+	if (!columns.isEmpty()) {
+		// if a new column was addded, check whether the column names match the missing
+		// names in the curves, etc. and update the dependencies
+		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
+		for (auto column : columns)
+			updateColumnDependencies(curves, column);
 
-	// if a new column was addded, check whether the column names match the missing
-	// names in the curves, etc. and update the dependencies
-	const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(curves, column);
+		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
+		for (auto column : columns)
+			updateColumnDependencies(histograms, column);
 
-	const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(histograms, column);
+		const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
+		for (auto column : columns)
+			updateColumnDependencies(boxPlots, column);
+	}
 
-	const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(boxPlots, column);
+	if (aspect.type() == AspectType::SpreadSheet) {
+		connect(aspect, &SpreadSheet::aboutToUpdateColumnProperties, [this] () {
+			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* we : wes)
+				we->setSuppressRetransform(true);
+		});
+		connect(aspect, &SpreadSheet::updateColumnPropertiesFinished, [this] () {
+			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* we : wes)
+				we->setSuppressRetransform(false);
+		});
+	}
 }
 
 // TODO: move this update*() functions into the classes, Project shouldn't be aware of the details

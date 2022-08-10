@@ -120,6 +120,8 @@ Q_SIGNALS:
 	// for spreadsheet dock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
+	void aboutToUpdateColumnProperties();
+	void updateColumnPropertiesFinished();
 };
 
 #endif

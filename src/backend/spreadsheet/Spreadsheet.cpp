@@ -14,7 +14,6 @@
 #include "SpreadsheetModel.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
-#include "backend/core/Project.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -1074,18 +1073,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		// 5. Enable retransform for all WorksheetElements
-		auto project = this->project();
+		emit aboutToUpdateColumnProperties();
 		for (int i = 0; i < childCount<Column>(); i++) {
-			const auto& wes = project ? project->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive) : QVector<WorksheetElement*>();
-			for (auto* we : wes)
-				we->setSuppressRetransform(true);
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->setName(colNameList.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
-			for (auto* we : wes)
-				we->setSuppressRetransform(false);
 		}
+		emit updateColumnPropertiesFinished();
 	}
 
 	return columnOffset;
