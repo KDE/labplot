@@ -1020,6 +1020,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
+	emit aboutToResize();
+
 	for (int k = colNameList.size(); k < cols; k++)
 		colNameList.append("Column " + QString::number(k + 1));
 
@@ -1073,16 +1075,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		// 5. Enable retransform for all WorksheetElements
-		emit aboutToUpdateColumnProperties();
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->setName(colNameList.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
-		emit updateColumnPropertiesFinished();
 	}
-
+	emit resizeFinished();
 	return columnOffset;
 }
 

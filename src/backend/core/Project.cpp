@@ -338,40 +338,42 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// check whether new columns were added and if yes,
-	// update the dependencies in the project
-	QVector<const AbstractColumn*> columns;
-	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column)
-		columns.append(column);
-	else {
-		for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
-			columns.append(static_cast<const AbstractColumn*>(child));
-	}
+	auto type = aspect->type();
 
-	if (!columns.isEmpty()) {
-		// if a new column was addded, check whether the column names match the missing
-		// names in the curves, etc. and update the dependencies
-		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-		for (auto column : columns)
-			updateColumnDependencies(curves, column);
+	if (aspect->inherits(AspectType::AbstractColumn)) {
+		// check whether new columns were added and if yes,
+		// update the dependencies in the project
+		QVector<const AbstractColumn*> columns;
+		const auto* column = static_cast<const AbstractColumn*>(aspect);
+		if (column)
+			columns.append(column);
+		else {
+			for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
+				columns.append(static_cast<const AbstractColumn*>(child));
+		}
 
-		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-		for (auto column : columns)
-			updateColumnDependencies(histograms, column);
+		if (!columns.isEmpty()) {
+			// if a new column was addded, check whether the column names match the missing
+			// names in the curves, etc. and update the dependencies
+			const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(curves, column);
 
-		const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-		for (auto column : columns)
-			updateColumnDependencies(boxPlots, column);
-	}
+			const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(histograms, column);
 
-	if (aspect->type() == AspectType::Spreadsheet) {
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToUpdateColumnProperties, [this] () {
+			const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(boxPlots, column);
+		}
+	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this] () {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 		});
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::updateColumnPropertiesFinished, [this] () {
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::resizeFinished, [this] () {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
