@@ -62,7 +62,9 @@ public:
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
 	}
-	const AbstractAspect* aspect() {return m_aspect;}
+	const AbstractAspect* aspect() {
+		return m_aspect;
+	}
 
 protected:
 	bool m_initializing{false};
@@ -74,7 +76,6 @@ protected:
 private:
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
-
 
 protected Q_SLOTS:
 	void nameChanged();
