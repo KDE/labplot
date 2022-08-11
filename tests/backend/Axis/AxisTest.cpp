@@ -225,10 +225,6 @@ void AxisTest::majorTicksStartValue() {
 	axisDock.setAxes({xAxis});
 
 	QCOMPARE(axisDock.ui.cbMajorTicksStartType->currentIndex(), 1); // by default offset is used
-	// QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), false);
-	// QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), false);
-	// QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), true);
-	// QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), true);
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Offset);
 
@@ -237,10 +233,6 @@ void AxisTest::majorTicksStartValue() {
 	xAxis->setMajorTicksStartType(Axis::TicksStartType::Absolute);
 
 	QCOMPARE(axisDock.ui.cbMajorTicksStartType->currentIndex(), 0);
-	// QCOMPARE(axisDock.ui.lMajorTickStartValue->isVisible(), true);
-	// QCOMPARE(axisDock.ui.leMajorTickStartValue->isVisible(), true);
-	// QCOMPARE(axisDock.ui.lMajorTickStartOffset->isVisible(), false);
-	// QCOMPARE(axisDock.ui.leMajorTickStartOffset->isVisible(), false);
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
