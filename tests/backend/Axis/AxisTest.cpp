@@ -236,7 +236,7 @@ void AxisTest::majorTicksStartValue() {
 
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
-		QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
 		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
@@ -244,7 +244,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), "0.2");
 
 	{
-		QVector<double> expectedTickValues = {0.2, 0.36, 0.52, 0.68, 0.84, 1.0}; // starting now from 0.2
+		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2
 		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
@@ -253,7 +253,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 
 	{
-		QVector<double> expectedTickValues = {0.1, 0.28, 0.46, 0.64, 0.82, 1.0}; // starting now from 0.1
+		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
 		CHECK_AXIS_LABELS(expectedTickValues);
 	}
 
