@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=labplot2 -qwindowtitle %c %f
+Exec=labplot2 %f
 Icon=labplot2
 Name=LabPlot2
 Name[ar]=معمل الرسم٢
