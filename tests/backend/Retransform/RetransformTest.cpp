@@ -483,6 +483,43 @@ void RetransformTest::TestBarPlotOrientation() {
 	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
 }
 
+void RetransformTest::TestZoom() {
+	RetransformCallCounter c;
+	Project project;
+
+	project.load(QFINDTESTDATA(QLatin1String("data/TestZoom.lml")));
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Worksheet "Worksheet-Spreadsheet"
+	// CartesianPlot "Plot-Spreadsheet"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// XYCurve "2"
+	QCOMPARE(children.length(), 10);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	plot->zoomInX();
+
+	// x and y are called only once
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsYScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+}
+
 // ############################################################################################
 // ############################################################################################
 // ############################################################################################

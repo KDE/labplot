@@ -25,6 +25,7 @@ private Q_SLOTS:
 	void TestCopyPastePlot();
 	void TestAddCurve();
 	void TestBarPlotOrientation();
+	void TestZoom();
 };
 
 /*!

@@ -2884,7 +2884,6 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 		break;
 	}
 
-
 	setUndoAware(false);
 	enableAutoScale(dim, index, false);
 	setUndoAware(true);
@@ -2903,11 +2902,14 @@ void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool z
 
 	Q_D(CartesianPlot);
 	if (retrans) {
-		switch(dim) {
-		case Dimension::X: d->retransformScales(index, -1); break; // TODO: why this is needed for y also?
-		case Dimension::Y: d->retransformScales(-1, index); break;
-		}
-
+		// If the other dimension is autoScale it will be scaled and then
+		// retransformScale() will be called. So here we just have to do
+		// it for the nontransformed scale because in zoom it will not be done
+		if (index == -1) {
+			for (int i = 0; i < rangeCount(dim); i++)
+				d->retransformScale(dim, i);
+		} else
+			d->retransformScale(dim, index);
 		WorksheetElementContainer::retransform();
 	}
 }
