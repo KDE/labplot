@@ -83,4 +83,3 @@ Terminal=false
 MimeType=application/x-LabPlot-gzip;application/x-LabPlot-xz;application/x-labplot2;
 Categories=Qt;KDE;Education;Science;Physics;Math;
 X-DocPath=labplot2/index.html
-X-ServiceTypes=Browser/View
