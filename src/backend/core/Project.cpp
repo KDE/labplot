@@ -368,12 +368,12 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 				updateColumnDependencies(boxPlots, column);
 		}
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this] () {
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(true);
 		});
-		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::resizeFinished, [this] () {
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::resizeFinished, [this]() {
 			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* we : wes)
 				we->setSuppressRetransform(false);
