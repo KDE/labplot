@@ -2858,97 +2858,58 @@ void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 }
 
 void CartesianPlot::zoomInX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::Y, index, true);
-	zoom(index, Dimension::X, true); // zoom in x
-
-	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
-		if (index == -1 || index == cs->index(Dimension::X)) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y)))
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y)); // TODO: fullRange false?
-			retrans = true;
-		}
-	}
-
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(index, -1);
-		WorksheetElementContainer::retransform();
-	}
+	zoomInOut(index, Dimension::X, true);
 }
 
 void CartesianPlot::zoomOutX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::Y, index, true);
-	zoom(index, Dimension::X, false); // zoom out x
-
-	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y)))
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y)); // TODO: fullRange false?
-			retrans = true;
-		}
-	}
-
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(index, -1);
-		WorksheetElementContainer::retransform();
-	}
+	zoomInOut(index, Dimension::X, false);
 }
 
 void CartesianPlot::zoomInY(int index) {
+	zoomInOut(index, Dimension::Y, true);
+}
+
+void CartesianPlot::zoomOutY(int index) {
+	zoomInOut(index, Dimension::Y, false);
+}
+
+void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn) {
+	Dimension dim_other;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
+		break;
+	case Dimension::Y:
+		dim_other = Dimension::X;
+		break;
+	}
+
+
 	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
+	enableAutoScale(dim, index, false);
 	setUndoAware(true);
-	setRangeDirty(Dimension::X, index, true);
-	zoom(index, Dimension::Y, true); // zoom in y
+	setRangeDirty(dim_other, index, true);
+	zoom(index, dim, zoomIn);
 
 	bool retrans = false;
 	for (int i = 0; i < m_coordinateSystems.count(); i++) {
 		const auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X)))
-				scaleAuto(Dimension::X, cs->index(Dimension::X));
+		if (index == -1 || index == cs->index(dim)) {
+			if (autoScale(dim_other, cs->index(dim_other)))
+				scaleAuto(dim_other, cs->index(dim_other), false);
 			retrans = true;
 		}
 	}
 
 	Q_D(CartesianPlot);
 	if (retrans) {
-		d->retransformScales(-1, index);
+		switch(dim) {
+		case Dimension::X: d->retransformScales(index, -1); break; // TODO: why this is needed for y also?
+		case Dimension::Y: d->retransformScales(-1, index); break;
+		}
+
 		WorksheetElementContainer::retransform();
 	}
-}
-
-void CartesianPlot::zoomOutY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
-	setRangeDirty(Dimension::X, index, true);
-	zoom(index, Dimension::Y, false); // zoom out y
-
-	bool retransform = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X)))
-				scaleAuto(Dimension::X, cs->index(Dimension::X));
-			retransform = true;
-		}
-	}
-
-	Q_D(CartesianPlot);
-	if (retransform)
-		d->retransformScales(-1, index);
 }
 
 /*!
@@ -2957,7 +2918,7 @@ void CartesianPlot::zoomOutY(int index) {
  * @param x if set to \true the x-range is modified, the y-range for \c false
  * @param in the "zoom in" is performed if set to \c \true, "zoom out" for \c false
  */
-void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) { // TODO: change x to Direction!
+void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	Q_D(CartesianPlot);
 
 	Range<double> range;

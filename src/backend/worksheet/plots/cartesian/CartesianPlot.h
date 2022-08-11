@@ -331,6 +331,7 @@ public Q_SLOTS:
 	void zoomOutX(int index = -1);
 	void zoomInY(int index = -1);
 	void zoomOutY(int index = -1);
+	void zoomInOut(const int index, const Dimension dim, const bool zoomIn);
 
 	void shiftLeftX(int index = -1);
 	void shiftRightX(int index = -1);
