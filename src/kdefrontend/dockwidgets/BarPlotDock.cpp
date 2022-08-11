@@ -118,7 +118,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	const Lock lock(m_initializing);
 	m_barPlots = list;
 	m_barPlot = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 	Q_ASSERT(m_barPlot);
 	m_aspectTreeModel = new AspectTreeModel(m_barPlot->project());
 	setModel();

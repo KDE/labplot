@@ -38,8 +38,8 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 		ui.leName->setEnabled(true);
 		ui.teComment->setEnabled(true);
 
-		ui.leName->setText(m_aspect->name());
-		ui.teComment->setText(m_aspect->comment());
+		ui.leName->setText(aspect()->name());
+		ui.teComment->setText(aspect()->comment());
 	} else {
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
@@ -49,14 +49,14 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	}
 
 	// slots
-	connect(m_aspect, &AbstractColumn::aspectDescriptionChanged, this, &AspectDock::aspectDescriptionChanged);
+	connect(aspect(), &AbstractColumn::aspectDescriptionChanged, this, &AspectDock::aspectDescriptionChanged);
 }
 
 //*************************************************************
 //********* SLOTs for changes triggered in Column *************
 //*************************************************************
 void AspectDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_aspect != aspect)
+	if (this->aspect() != aspect)
 		return;
 
 	m_initializing = true;

@@ -88,7 +88,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 	const Lock lock(m_initializing);
 	m_points = points;
 	m_point = m_points.first();
-	m_aspect = m_points.first();
+	setAspects(points);
 	Q_ASSERT(m_point);
 
 	QList<Symbol*> symbols;

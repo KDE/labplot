@@ -208,7 +208,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_filterCurve = static_cast<XYFourierFilterCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();

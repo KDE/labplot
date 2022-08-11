@@ -58,10 +58,11 @@ public:
 
 		m_aspect = aspects.first();
 		for (auto* aspect : aspects) {
-			if (aspect.inherits(AspectType::AbstractAspect))
+			if (aspect->inherits(AspectType::AbstractAspect))
 				m_aspects.append(static_cast<AbstractAspect*>(aspect));
 		}
 	}
+	const AbstractAspect* aspect() {return m_aspect;}
 
 protected:
 	bool m_initializing{false};
@@ -70,11 +71,10 @@ protected:
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 	void updatePlotRangeList(QComboBox*); // used in worksheet element docks
-
 private:
-	// use setAspects to set the aspects
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
+
 
 protected Q_SLOTS:
 	void nameChanged();

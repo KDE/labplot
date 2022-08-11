@@ -70,7 +70,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 
 	m_elements = list;
 	m_element = list.first();
-	m_aspect = m_element;
+	setAspects(list);
 
 	// check if all InfoElements have the same CartesianPlot as Parent
 	m_sameParent = true;

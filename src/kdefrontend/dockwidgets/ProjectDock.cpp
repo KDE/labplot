@@ -43,7 +43,7 @@ ProjectDock::ProjectDock(QWidget* parent)
 
 void ProjectDock::setProject(Project* project) {
 	m_project = project;
-	m_aspect = project;
+	setAspects(QList<Project*>({project}));
 
 	Lock lock(m_initializing);
 	ui.leFileName->setText(project->fileName());
