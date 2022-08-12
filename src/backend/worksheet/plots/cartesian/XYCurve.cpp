@@ -106,6 +106,13 @@ void XYCurve::init() {
 		d->updatePixmap();
 	});
 
+	connect(this, &WorksheetElement::printingChanged, [this](const bool print) {
+		// Retransform if printing was turned on, so a different algorithm
+		// optimized for printing is used.
+		if (print)
+			retransform();
+	});
+
 	d->valuesType = (ValuesType)group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
 	d->valuesPosition = (ValuesPosition)group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
@@ -2856,15 +2863,17 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setOpacity(lineOpacity);
 		painter->setPen(linePen);
 		painter->setBrush(Qt::NoBrush);
-		if (linePen.style() == Qt::SolidLine) {
+		if (linePen.style() == Qt::SolidLine && !q->isPrinting()) {
 			// Much fast than drawPath but has problems
 			// with different styles
-			for (auto& line: m_lines)
+			// When exporting to svg or pdf, this creates for every line
+			// it's own path in the saved file which is not desired. We
+			// would like to have one complete path for a curve not many paths
+			for (auto& line : m_lines)
 				painter->drawLine(line);
 		} else {
 			painter->drawPath(linePath);
 		}
-
 	}
 
 	// draw drop lines

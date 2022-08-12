@@ -116,6 +116,7 @@ bool WorksheetElement::isFullyVisible() const {
  */
 void WorksheetElement::setPrinting(bool printing) {
 	m_printing = printing;
+	emit printingChanged(printing);
 }
 
 bool WorksheetElement::isPrinting() const {
