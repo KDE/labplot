@@ -2856,7 +2856,15 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setOpacity(lineOpacity);
 		painter->setPen(linePen);
 		painter->setBrush(Qt::NoBrush);
-		painter->drawPath(linePath);
+		if (linePen.style() == Qt::SolidLine) {
+			// Much fast than drawPath but has problems
+			// with different styles
+			for (auto& line: m_lines)
+				painter->drawLine(line);
+		} else {
+			painter->drawPath(linePath);
+		}
+
 	}
 
 	// draw drop lines
