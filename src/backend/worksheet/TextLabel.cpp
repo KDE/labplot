@@ -235,7 +235,7 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 	Returns an icon to be used in the project explorer.
 */
 QIcon TextLabel::icon() const {
-	switch(text().mode) {
+	switch (text().mode) {
 	case Mode::Markdown:
 		return QIcon::fromTheme(QLatin1String("text-x-markdown"));
 		break;
