@@ -94,8 +94,21 @@ void BackgroundWidget::adjustLayout() {
 		parentGridLayout->activate();
 		parentWidget->setMinimumWidth(widget->width());
 		this->parentWidget()->updateGeometry();
-		;
 	}
+}
+
+void BackgroundWidget::setEnabled(bool enabled) {
+	ui.cbPosition->setEnabled(enabled);
+	ui.chkEnabled->setEnabled(enabled);
+	ui.cbType->setEnabled(enabled);
+	ui.leFileName->setEnabled(enabled);
+	ui.bOpen->setEnabled(enabled);
+	ui.cbColorStyle->setEnabled(enabled);
+	ui.cbImageStyle->setEnabled(enabled);
+	ui.cbBrushStyle->setEnabled(enabled);
+	ui.kcbFirstColor->setEnabled(enabled);
+	ui.kcbSecondColor->setEnabled(enabled);
+	ui.sbOpacity->setEnabled(enabled);
 }
 
 void BackgroundWidget::retranslateUi() {
@@ -450,7 +463,6 @@ void BackgroundWidget::saveConfig(KConfigGroup& group) const {
 	group.writeEntry(m_prefix + "FirstColor", ui.kcbFirstColor->color());
 	group.writeEntry(m_prefix + "SecondColor", ui.kcbSecondColor->color());
 	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);
-	;
 
 	// optional parameters
 	if (m_background->enabledAvailable())

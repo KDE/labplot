@@ -23,6 +23,7 @@ public:
 	void setBackgrounds(QList<Background*>);
 	void setPrefix(const QString&);
 	void adjustLayout();
+	void setEnabled(bool);
 
 	void load();
 	void loadConfig(const KConfigGroup&);

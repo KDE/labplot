@@ -383,7 +383,7 @@ public:
 		: m_private(private_obj)
 		, m_autoBinRanges(autoBinRanges) {
 		setText(i18n("%1: change auto bin ranges", m_private->name()));
-	};
+	}
 
 	void redo() override {
 		m_autoBinRangesOld = m_private->autoBinRanges;
@@ -394,7 +394,7 @@ public:
 			m_private->q->recalcHistogram();
 		}
 		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRanges);
-	};
+	}
 
 	void undo() override {
 		m_private->autoBinRanges = m_autoBinRangesOld;
@@ -414,10 +414,10 @@ public:
 
 private:
 	HistogramPrivate* m_private;
-	bool m_autoBinRanges;
-	bool m_autoBinRangesOld{false};
 	double m_binRangesMinOld{0.0};
 	double m_binRangesMaxOld{0.0};
+	bool m_autoBinRanges;
+	bool m_autoBinRangesOld{false};
 };
 
 void Histogram::setAutoBinRanges(bool autoBinRanges) {
@@ -1418,7 +1418,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	// draw filling
 	if (background->enabled()) {
 		painter->setOpacity(background->opacity());
-		painter->setPen(Qt::SolidLine);
+		painter->setPen(Qt::NoPen);
 		drawFilling(painter);
 	}
 
@@ -1441,7 +1441,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 
 void HistogramPrivate::updatePixmap() {
 	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+	if (boundingRectangle.width() == 0. || boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;

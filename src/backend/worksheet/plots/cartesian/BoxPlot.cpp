@@ -1296,7 +1296,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 void BoxPlotPrivate::updatePixmap() {
 	PERFTRACE(name() + Q_FUNC_INFO);
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
-	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
+	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -1331,7 +1331,7 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 			// draw the box filling
 			if (background->enabled()) {
 				painter->setOpacity(background->opacity());
-				painter->setPen(Qt::SolidLine);
+				painter->setPen(Qt::NoPen);
 				drawFilling(painter, i);
 			}
 

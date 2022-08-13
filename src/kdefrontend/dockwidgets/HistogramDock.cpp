@@ -651,6 +651,9 @@ void HistogramDock::lineTypeChanged(int index) {
 		ui.sbLineOpacity->setEnabled(true);
 	}
 
+	const bool fillingEnabled = (lineType == Histogram::LineType::Bars || lineType == Histogram::LineType::Envelope);
+	backgroundWidget->setEnabled(fillingEnabled);
+
 	if (m_initializing)
 		return;
 
