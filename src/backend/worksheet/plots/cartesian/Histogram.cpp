@@ -24,8 +24,6 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "tools/ImageTools.h"
 
@@ -985,12 +983,10 @@ void HistogramPrivate::updateLines() {
 		horizontalHistogram();
 
 	// map the lines and the symbol positions to the scene coordinates
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem{plot->defaultCoordinateSystem()};
-	linesUnclipped = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	lines = cSystem->mapLogicalToScene(lines);
+	linesUnclipped = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
-	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
+	q->cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
 
 	// new line path
 	for (const auto& line : lines) {
