@@ -109,6 +109,7 @@ private:
 
 public Q_SLOTS:
 	void recalc();
+	void createDataSpreadsheet();
 
 private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu

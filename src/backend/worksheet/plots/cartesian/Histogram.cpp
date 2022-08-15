@@ -19,9 +19,11 @@
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
@@ -134,6 +136,34 @@ void Histogram::initActions() {
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
+}
+
+/*!
+ * creates a new spreadsheet having the data with the positions and the values of the bins.
+ * the new spreadsheet is added to the current folder.
+ */
+void Histogram::createDataSpreadsheet() {
+	if (!bins() || !binValues())
+		return;
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
+	spreadsheet->setRowCount(bins()->rowCount());
+
+	// bin positions
+	auto* data = static_cast<const Column*>(bins())->data();
+	auto* xColumn = new Column(i18n("bin positions"), *static_cast<QVector<double>*>(data));
+	xColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	spreadsheet->addChild(xColumn);
+
+	// y values
+	data = static_cast<const Column*>(binValues())->data();
+	auto* yColumn = new Column(i18n("bin values"), *static_cast<QVector<double>*>(data));
+	yColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	spreadsheet->addChild(yColumn);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
 QMenu* Histogram::createContextMenu() {

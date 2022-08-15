@@ -329,7 +329,7 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 	if (!xColumn() || !yColumn())
 		return;
 
-	auto* spreadsheet = new Spreadsheet(i18n("%1 - Result Data", name()));
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
 	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
 	spreadsheet->setRowCount(xColumn()->rowCount());
 

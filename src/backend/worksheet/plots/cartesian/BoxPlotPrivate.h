@@ -16,6 +16,7 @@
 
 class Background;
 class CartesianCoordinateSystem;
+class Spreadsheet;
 
 typedef QVector<QPointF> Points;
 
@@ -27,6 +28,7 @@ public:
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
+	void fillDataSpreadsheet(Spreadsheet*) const;
 
 	bool m_suppressRecalc{false};
 

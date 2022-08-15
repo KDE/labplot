@@ -111,6 +111,7 @@ public Q_SLOTS:
 	void retransform() override;
 	void recalcHistogram();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void createDataSpreadsheet();
 
 private Q_SLOTS:
 	void updateValues();

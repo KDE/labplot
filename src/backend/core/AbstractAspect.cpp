@@ -342,10 +342,30 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
+	// action to create data spreadsheet based on the results of the calculations for analysis curves and histograms and box plots
+	QAction* actionDataSpreadsheet{nullptr};
+
+	// handle analysis curves
 	const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this);
 	if (analysisCurve && analysisCurve->resultAvailable()) {
-		auto* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+		actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
 		connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+	} else {
+		// handle histograms and box plots
+		const auto* histogram = dynamic_cast<Histogram*>(this);
+		if (histogram && histogram->bins()) {
+			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+		}
+
+		const auto* boxPlot = dynamic_cast<BoxPlot*>(this);
+		if (boxPlot && !boxPlot->dataColumns().isEmpty()) {
+			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+		}
+	}
+
+	if (actionDataSpreadsheet) {
 		menu->addAction(actionDataSpreadsheet);
 		menu->addSeparator();
 	}

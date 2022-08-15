@@ -12,9 +12,11 @@
 #include "BoxPlotPrivate.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Folder.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
@@ -269,6 +271,47 @@ bool BoxPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
 void BoxPlot::setHover(bool on) {
 	Q_D(BoxPlot);
 	d->setHover(on);
+}
+
+/*!
+ * creates a new spreadsheet having the data with the positions and the values of the bins.
+ * the new spreadsheet is added to the current folder.
+ */
+void BoxPlot::createDataSpreadsheet() {
+	if (dataColumns().isEmpty())
+		return;
+
+	// create a new spreadsheet for the following 9 metrics:
+	// index
+	// 1st quartile
+	// 3rd quartile
+	// median
+	// whiskers min
+	// whiskers max
+	// data points count
+	// outliers count
+	// far out points count
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Data", name()));
+	spreadsheet->setColumnCount(9);
+	spreadsheet->setRowCount(dataColumns().count());
+	spreadsheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	spreadsheet->column(0)->setName(i18n("index"));
+	spreadsheet->column(1)->setName(i18n("1st quartile"));
+	spreadsheet->column(2)->setName(i18n("3rd quartile"));
+	spreadsheet->column(3)->setName(i18n("median"));
+	spreadsheet->column(4)->setName(i18n("whiskers min"));
+	spreadsheet->column(5)->setName(i18n("whiskers max"));
+	spreadsheet->column(6)->setName(i18n("data points count"));
+	spreadsheet->column(7)->setName(i18n("outliers count"));
+	spreadsheet->column(8)->setName(i18n("far out points count"));
+
+	Q_D(const BoxPlot);
+	d->fillDataSpreadsheet(spreadsheet);
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
 /* ============================ getter methods ================= */
@@ -560,6 +603,32 @@ void BoxPlotPrivate::setHover(bool on) {
 	update();
 }
 
+void BoxPlotPrivate::fillDataSpreadsheet(Spreadsheet* spreadsheet) const {
+	// index
+	// 1st quartile
+	// 3rd quartile
+	// median
+	// whiskers min
+	// whiskers max
+	// data points count
+	// outliers count
+	// far out points count
+
+	for (int i = 0; i < q->dataColumns().count(); ++i) {
+		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
+		const auto& statistics = column->statistics();
+
+		spreadsheet->column(0)->setIntegerAt(i, i + 1);
+		spreadsheet->column(1)->setValueAt(i, statistics.firstQuartile);
+		spreadsheet->column(2)->setValueAt(i, statistics.thirdQuartile);
+		spreadsheet->column(3)->setValueAt(i, statistics.median);
+		spreadsheet->column(4)->setValueAt(i, m_whiskerMin.at(i));
+		spreadsheet->column(5)->setValueAt(i, m_whiskerMax.at(i));
+		spreadsheet->column(6)->setValueAt(i, m_dataPointsLogical.at(i).count());
+		spreadsheet->column(7)->setValueAt(i, m_outlierPointsLogical.at(i).count());
+		spreadsheet->column(8)->setValueAt(i, m_farOutPointsLogical.at(i).count());
+	}
+}
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
@@ -573,7 +642,7 @@ void BoxPlotPrivate::retransform() {
 
 	const int count = dataColumns.size();
 	if (!count || m_boxRect.size() != count) {
-		// no columns or relacl() was not called yet, nothing to do
+		// no columns or recalc() was not called yet, nothing to do
 		recalcShapeAndBoundingRect();
 		return;
 	}
