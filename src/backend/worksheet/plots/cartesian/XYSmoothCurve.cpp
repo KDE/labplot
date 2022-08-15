@@ -51,6 +51,11 @@ void XYSmoothCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYSmoothCurve::resultAvailable() const {
+	Q_D(const XYSmoothCurve);
+	return d->smoothResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -61,6 +66,11 @@ QIcon XYSmoothCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+const AbstractColumn* XYSmoothCurve::roughsColumn() const {
+	Q_D(const XYSmoothCurve);
+	return d->roughColumn;
+}
+
 BASIC_SHARED_D_READER_IMPL(XYSmoothCurve, XYSmoothCurve::SmoothData, smoothData, smoothData)
 
 const XYSmoothCurve::SmoothResult& XYSmoothCurve::smoothResult() const {

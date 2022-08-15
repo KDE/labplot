@@ -48,6 +48,11 @@ void XYDifferentiationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYDifferentiationCurve::resultAvailable() const {
+	Q_D(const XYDifferentiationCurve);
+	return d->differentiationResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

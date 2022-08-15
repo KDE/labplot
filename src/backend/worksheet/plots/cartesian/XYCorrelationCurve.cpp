@@ -47,6 +47,11 @@ void XYCorrelationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYCorrelationCurve::resultAvailable() const {
+	Q_D(const XYCorrelationCurve);
+	return d->correlationResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

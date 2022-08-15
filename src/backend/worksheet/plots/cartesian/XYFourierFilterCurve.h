@@ -37,7 +37,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct FilterResult {
-		FilterResult(){};
+		FilterResult(){}
 
 		bool available{false};
 		bool valid{false};
@@ -49,6 +49,7 @@ public:
 	~XYFourierFilterCurve() override;
 
 	void recalculate() override;
+	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

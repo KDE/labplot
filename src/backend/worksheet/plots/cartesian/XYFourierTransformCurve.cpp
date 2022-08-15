@@ -51,6 +51,11 @@ void XYFourierTransformCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYFourierTransformCurve::resultAvailable() const {
+	Q_D(const XYFourierTransformCurve);
+	return d->transformResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

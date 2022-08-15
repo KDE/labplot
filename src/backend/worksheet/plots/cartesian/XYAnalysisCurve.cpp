@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Base class for all analysis curves
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,7 +22,10 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 
 #include <KLocalizedString>
 #include <QDateTime>
@@ -316,6 +319,48 @@ void XYAnalysisCurve::yDataColumnNameChanged() {
 void XYAnalysisCurve::y2DataColumnNameChanged() {
 	Q_D(XYAnalysisCurve);
 	setYDataColumnPath(d->y2DataColumn->path());
+}
+
+/*!
+ * creates a new spreadsheet having the data with the results of the calculation.
+ * the new spreadsheet is added to the current folder.
+ */
+void XYAnalysisCurve::createDataSpreadsheet() {
+	if (!xColumn() || !yColumn())
+		return;
+
+	auto* spreadsheet = new Spreadsheet(i18n("%1 - Result Data", name()));
+	spreadsheet->removeColumns(0, spreadsheet->columnCount()); // remove default columns
+	spreadsheet->setRowCount(xColumn()->rowCount());
+
+	// x values
+	auto* data = static_cast<const Column*>(xColumn())->data();
+	auto* xColumn = new Column(QLatin1String("x"), *static_cast<QVector<double>*>(data));
+	xColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+	spreadsheet->addChild(xColumn);
+
+	// y values
+	data = static_cast<const Column*>(yColumn())->data();
+	auto* yColumn = new Column(QLatin1String("y"), *static_cast<QVector<double>*>(data));
+	yColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	spreadsheet->addChild(yColumn);
+
+	// residual values for fit curves
+	if (type() == AspectType::XYFitCurve) {
+		data = static_cast<const Column*>(static_cast<XYFitCurve*>(this)->residualsColumn())->data();
+		auto* residualsColumn = new Column(QLatin1String("residuals"), *static_cast<QVector<double>*>(data));
+		residualsColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+		spreadsheet->addChild(residualsColumn);
+	} else 	if (type() == AspectType::XYSmoothCurve) {
+		// rough values for smooth curves
+		data = static_cast<const Column*>(static_cast<XYSmoothCurve*>(this)->roughsColumn())->data();
+		auto* roughsColumn = new Column(QLatin1String("rough values"), *static_cast<QVector<double>*>(data));
+		roughsColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+		spreadsheet->addChild(roughsColumn);
+	}
+
+	// add the new spreadsheet to the current folder
+	folder()->addChild(spreadsheet);
 }
 
 //##############################################################################

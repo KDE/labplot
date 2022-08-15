@@ -38,7 +38,7 @@ public:
 		QVector<double> xRange{0, 0}; // x range for interpolation
 	};
 	struct InterpolationResult {
-		InterpolationResult(){};
+		InterpolationResult(){}
 
 		bool available{false};
 		bool valid{false};
@@ -50,6 +50,7 @@ public:
 	~XYInterpolationCurve() override;
 
 	void recalculate() override;
+	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

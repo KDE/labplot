@@ -67,6 +67,11 @@ void XYFitCurve::evaluate(bool preview) {
 	d->evaluate(preview);
 }
 
+bool XYFitCurve::resultAvailable() const {
+	Q_D(const XYFitCurve);
+	return d->fitResult.available;
+}
+
 void XYFitCurve::initStartValues(const XYCurve* curve) {
 	Q_D(XYFitCurve);
 	XYFitCurve::FitData& fitData = d->fitData;
@@ -943,6 +948,11 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+const AbstractColumn* XYFitCurve::residualsColumn() const {
+	Q_D(const XYFitCurve);
+	return d->residualsColumn;
+}
+
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
 const QString& XYFitCurve::xErrorColumnPath() const {

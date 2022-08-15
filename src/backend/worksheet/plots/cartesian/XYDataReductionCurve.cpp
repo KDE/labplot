@@ -45,6 +45,10 @@ void XYDataReductionCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYDataReductionCurve::resultAvailable() const {
+	Q_D(const XYDataReductionCurve);
+	return d->dataReductionResult.available;
+}
 /*!
 	Returns an icon to be used in the project explorer.
 */

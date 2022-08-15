@@ -50,6 +50,11 @@ void XYHilbertTransformCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYHilbertTransformCurve::resultAvailable() const {
+	Q_D(const XYHilbertTransformCurve);
+	return d->transformResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

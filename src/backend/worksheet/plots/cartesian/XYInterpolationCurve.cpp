@@ -52,6 +52,11 @@ void XYInterpolationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYInterpolationCurve::resultAvailable() const {
+	Q_D(const XYInterpolationCurve);
+	return d->interpolationResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

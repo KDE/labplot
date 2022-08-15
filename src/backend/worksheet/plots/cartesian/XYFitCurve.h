@@ -106,6 +106,7 @@ public:
 
 	void recalculate() override;
 	void evaluate(bool preview);
+	bool resultAvailable() const override;
 	void initStartValues(const XYCurve*);
 	void initStartValues(XYFitCurve::FitData&, const XYCurve*);
 	void initFitData(XYAnalysisCurve::AnalysisAction);
@@ -116,6 +117,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	const AbstractColumn* residualsColumn() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
 	const QString& xErrorColumnPath() const;

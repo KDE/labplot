@@ -55,6 +55,11 @@ void XYFourierFilterCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYFourierFilterCurve::resultAvailable() const {
+	Q_D(const XYFourierFilterCurve);
+	return d->filterResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

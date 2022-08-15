@@ -47,6 +47,11 @@ void XYConvolutionCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYConvolutionCurve::resultAvailable() const {
+	Q_D(const XYConvolutionCurve);
+	return d->convolutionResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */

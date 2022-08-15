@@ -14,6 +14,7 @@ New features:
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
 		* guess start vaues of fit parameter for polynomial models by linear regression
+		* allow to create a spreadsheet with the data steming from the result of the computation
 
 Performance improvements:
 	* reduce the memory consumption during the spreadsheet export to Sqlite

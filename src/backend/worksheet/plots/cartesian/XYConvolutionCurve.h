@@ -38,7 +38,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for convolution
 	};
 	struct ConvolutionResult {
-		ConvolutionResult(){};
+		ConvolutionResult(){}
 
 		bool available{false};
 		bool valid{false};
@@ -50,6 +50,7 @@ public:
 	~XYConvolutionCurve() override;
 
 	void recalculate() override;
+	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

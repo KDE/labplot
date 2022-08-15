@@ -33,7 +33,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for correlation
 	};
 	struct CorrelationResult {
-		CorrelationResult(){};
+		CorrelationResult(){}
 
 		bool available{false};
 		bool valid{false};
@@ -45,6 +45,7 @@ public:
 	~XYCorrelationCurve() override;
 
 	void recalculate() override;
+	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

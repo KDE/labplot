@@ -342,6 +342,14 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
+	const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this);
+	if (analysisCurve && analysisCurve->resultAvailable()) {
+		auto* actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+		connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+		menu->addAction(actionDataSpreadsheet);
+		menu->addSeparator();
+	}
+
 	// don't allow to rename and delete fixed objects and
 	//  - columns in live-data source
 	//  - Mqtt subscriptions

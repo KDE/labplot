@@ -49,6 +49,11 @@ void XYIntegrationCurve::recalculate() {
 	d->recalculate();
 }
 
+bool XYIntegrationCurve::resultAvailable() const {
+	Q_D(const XYIntegrationCurve);
+	return d->integrationResult.available;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
