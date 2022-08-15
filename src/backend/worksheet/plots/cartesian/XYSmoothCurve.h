@@ -38,7 +38,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct SmoothResult {
-		SmoothResult(){}
+		SmoothResult(){};
 
 		bool available{false};
 		bool valid{false};

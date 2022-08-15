@@ -351,7 +351,7 @@ void XYAnalysisCurve::createDataSpreadsheet() {
 		auto* residualsColumn = new Column(QLatin1String("residuals"), *static_cast<QVector<double>*>(data));
 		residualsColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		spreadsheet->addChild(residualsColumn);
-	} else 	if (type() == AspectType::XYSmoothCurve) {
+	} else if (type() == AspectType::XYSmoothCurve) {
 		// rough values for smooth curves
 		data = static_cast<const Column*>(static_cast<XYSmoothCurve*>(this)->roughsColumn())->data();
 		auto* roughsColumn = new Column(QLatin1String("rough values"), *static_cast<QVector<double>*>(data));

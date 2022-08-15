@@ -36,7 +36,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct DataReductionResult {
-		DataReductionResult(){}
+		DataReductionResult(){};
 
 		bool available{false};
 		bool valid{false};

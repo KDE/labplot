@@ -38,7 +38,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for convolution
 	};
 	struct ConvolutionResult {
-		ConvolutionResult(){}
+		ConvolutionResult(){};
 
 		bool available{false};
 		bool valid{false};

@@ -38,7 +38,7 @@ public:
 		QVector<double> xRange{0, 0}; // x range for interpolation
 	};
 	struct InterpolationResult {
-		InterpolationResult(){}
+		InterpolationResult(){};
 
 		bool available{false};
 		bool valid{false};

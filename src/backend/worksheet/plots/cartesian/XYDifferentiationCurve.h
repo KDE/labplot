@@ -33,7 +33,7 @@ public:
 		QVector<double> xRange{0., 0.}; // x range for integration
 	};
 	struct DifferentiationResult {
-		DifferentiationResult(){}
+		DifferentiationResult(){};
 
 		bool available{false};
 		bool valid{false};

@@ -36,7 +36,7 @@ public:
 		QVector<double> xRange{0, 0}; // x range for transform
 	};
 	struct TransformResult {
-		TransformResult(){}
+		TransformResult(){};
 
 		bool available{false};
 		bool valid{false};
