@@ -341,6 +341,11 @@ const AbstractColumn* Histogram::binValues() const {
 	return d->binValues();
 }
 
+const AbstractColumn* Histogram::binPDValues() const {
+	D(Histogram);
+	return d->binPDValues();
+}
+
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
