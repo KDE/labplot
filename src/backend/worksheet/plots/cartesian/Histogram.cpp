@@ -798,12 +798,31 @@ const AbstractColumn* HistogramPrivate::binValues() {
 		m_binValuesColumn = new Column("values");
 
 		m_binValuesColumn->resizeTo(m_bins);
-		const double width = (binRangesMax - binRangesMin) / m_bins;
-		for (size_t i = 0; i < m_bins; ++i)
-			m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+		double value = 0.;
+		for (size_t i = 0; i < m_bins; ++i) {
+			 histogramValue(value, i);
+			 m_binValuesColumn->setValueAt(i, value);
+		}
 	}
 
 	return m_binValuesColumn;
+}
+
+/*!
+ * returns a column with the bin values in the probability density normalization
+ * \return
+ */
+const AbstractColumn* HistogramPrivate::binPDValues() {
+	if (!m_binPDValuesColumn) {
+		m_binPDValuesColumn = new Column("values");
+
+		m_binPDValuesColumn->resizeTo(m_bins);
+		const double width = (binRangesMax - binRangesMin) / m_bins;
+		for (size_t i = 0; i < m_bins; ++i)
+			m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+	}
+
+	return m_binPDValuesColumn;
 }
 
 /*!
@@ -969,9 +988,18 @@ void HistogramPrivate::recalcHistogram() {
 
 			if (m_binValuesColumn) {
 				m_binValuesColumn->resizeTo(m_bins);
+				double value = 0.;
+				for (size_t i = 0; i < m_bins; ++i){
+					 histogramValue(value, i);
+					 m_binValuesColumn->setValueAt(i, value);
+				}
+			}
+
+			if (m_binPDValuesColumn) {
+				m_binPDValuesColumn->resizeTo(m_bins);
 				const double width = (binRangesMax - binRangesMin) / m_bins;
 				for (size_t i = 0; i < m_bins; ++i)
-					m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
+					m_binPDValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i) / totalCount / width); // probability density normalization
 			}
 		} else
 			DEBUG("Number of bins must be positiv integer")
@@ -1028,7 +1056,7 @@ void HistogramPrivate::updateLines() {
 	recalcShapeAndBoundingRect();
 }
 
-void HistogramPrivate::histogramValue(double& value, int bin) {
+void HistogramPrivate::histogramValue(double& value, int bin) const {
 	switch (normalization) {
 	case Histogram::Count: {
 		if (type == Histogram::Ordinary)

@@ -1887,7 +1887,7 @@ void XYFitCurvePrivate::recalculate() {
 	} else {
 		DEBUG(Q_FUNC_INFO << ", HISTOGRAM columns as data source");
 		tmpXDataColumn = dataSourceHistogram->bins();
-		tmpYDataColumn = dataSourceHistogram->binValues();
+		tmpYDataColumn = dataSourceHistogram->binPDValues();
 	}
 
 	// clear the previous result

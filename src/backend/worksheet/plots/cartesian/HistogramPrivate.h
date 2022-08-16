@@ -52,8 +52,11 @@ public:
 	double xMaximum() const;
 	double yMinimum() const;
 	double yMaximum() const;
+
 	const AbstractColumn* bins();
 	const AbstractColumn* binValues();
+	const AbstractColumn* binPDValues();
+
 	double getMaximumOccuranceofHistogram() const;
 
 	bool m_suppressRecalc{false};
@@ -137,8 +140,9 @@ private:
 	QImage m_selectionEffectImage;
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
-	Column* m_binsColumn{nullptr};
-	Column* m_binValuesColumn{nullptr};
+	Column* m_binsColumn{nullptr}; // bin positions/edges
+	Column* m_binValuesColumn{nullptr}; // bin values
+	Column* m_binPDValuesColumn{nullptr}; // bin values in the probability density normalization
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
@@ -146,7 +150,7 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void histogramValue(double& value, int bin);
+	void histogramValue(double& value, int bin) const;
 	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);

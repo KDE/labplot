@@ -103,6 +103,7 @@ public:
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;
+	const AbstractColumn* binPDValues() const;
 
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
