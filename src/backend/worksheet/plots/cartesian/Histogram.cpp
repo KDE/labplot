@@ -92,6 +92,7 @@ void Histogram::init() {
 		d->updatePixmap();
 	});
 
+	// values
 	d->valuesType = (Histogram::ValuesType)group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = nullptr;
 	d->valuesPosition = (Histogram::ValuesPosition)group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
@@ -121,6 +122,7 @@ void Histogram::init() {
 		d->updateFilling();
 	});
 
+	// error bars
 	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
 	d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
 	d->errorBarsCapSize = group.readEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
@@ -128,6 +130,12 @@ void Histogram::init() {
 	d->errorBarsPen.setColor(group.readEntry("ErrorBarsColor", QColor(Qt::black)));
 	d->errorBarsPen.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+
+	// marginal plots (rug, histogram, boxplot)
+	d->rugEnabled = group.readEntry("RugEnabled", false);
+	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", 0.0);
+	d->rugOffset = group.readEntry("RugOffset", 0.0);
 
 	this->initActions();
 }
@@ -308,6 +316,12 @@ BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, err
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
+
+// margin plots
+BASIC_SHARED_D_READER_IMPL(Histogram, bool, rugEnabled, rugEnabled)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugLength, rugLength)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugWidth, rugWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, rugOffset, rugOffset)
 
 double Histogram::minimum(const Dimension dim) const {
 	Q_D(const Histogram);
@@ -628,6 +642,35 @@ void Histogram::setErrorBarsOpacity(qreal opacity) {
 		exec(new HistogramSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
 }
 
+// margin plots
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugEnabled, bool, rugEnabled, updateRug)
+void Histogram::setRugEnabled(bool enabled) {
+	Q_D(Histogram);
+	if (enabled != d->rugEnabled)
+		exec(new HistogramSetRugEnabledCmd(d, enabled, ki18n("%1: change rug enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugWidth, double, rugWidth, updatePixmap)
+void Histogram::setRugWidth(double width) {
+	Q_D(Histogram);
+	if (width != d->rugWidth)
+		exec(new HistogramSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugLength, double, rugLength, updateRug)
+void Histogram::setRugLength(double length) {
+	Q_D(Histogram);
+	if (length != d->rugLength)
+		exec(new HistogramSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugOffset, double, rugOffset, updateRug)
+void Histogram::setRugOffset(double offset) {
+	Q_D(Histogram);
+	if (offset != d->rugOffset)
+		exec(new HistogramSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -805,8 +848,8 @@ const AbstractColumn* HistogramPrivate::binValues() {
 		m_binValuesColumn->resizeTo(m_bins);
 		double value = 0.;
 		for (size_t i = 0; i < m_bins; ++i) {
-			 histogramValue(value, i);
-			 m_binValuesColumn->setValueAt(i, value);
+			histogramValue(value, i);
+			m_binValuesColumn->setValueAt(i, value);
 		}
 	}
 
@@ -859,6 +902,7 @@ void HistogramPrivate::retransform() {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
+		rugPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
 		linesUnclipped.clear();
@@ -875,6 +919,7 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = true;
 	updateLines();
 	updateSymbols();
+	updateRug();
 	m_suppressRecalc = false;
 	updateValues();
 }
@@ -995,8 +1040,8 @@ void HistogramPrivate::recalcHistogram() {
 				m_binValuesColumn->resizeTo(m_bins);
 				double value = 0.;
 				for (size_t i = 0; i < m_bins; ++i){
-					 histogramValue(value, i);
-					 m_binValuesColumn->setValueAt(i, value);
+					histogramValue(value, i);
+					m_binValuesColumn->setValueAt(i, value);
 				}
 			}
 
@@ -1433,6 +1478,52 @@ void HistogramPrivate::updateFilling() {
 void HistogramPrivate::updateErrorBars() {
 }
 
+void HistogramPrivate::updateRug() {
+	rugPath = QPainterPath();
+
+	if (!rugEnabled || !q->plot()) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	QVector<QPointF> points;
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+
+	if (orientation == Histogram::Vertical) {
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
+				points << QPointF(dataColumn->valueAt(row), yMin);
+		}
+
+		// map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		// path for the vertical rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x(), point.y() - rugOffset);
+			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
+		}
+	} else {
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if (dataColumn->isValid(row) && !dataColumn->isMasked(row))
+				points << QPointF(xMin, dataColumn->valueAt(row));
+		}
+
+		// map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		// path for the horizontal rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x() + rugOffset, point.y());
+			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
+		}
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
 /*!
   recalculates the outer bounds and the shape of the curve.
   */
@@ -1450,6 +1541,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	if (valuesType != Histogram::NoValues)
 		curveShape.addPath(valuesPath);
+
+	curveShape.addPath(rugPath);
 
 	boundingRectangle = curveShape.boundingRect();
 
@@ -1495,6 +1588,16 @@ void HistogramPrivate::draw(QPainter* painter) {
 		painter->setPen(QPen(valuesColor));
 		painter->setFont(valuesFont);
 		drawValues(painter);
+	}
+
+	// draw rug
+	if (rugEnabled) {
+		QPen pen;
+		pen.setColor(linePen.color());
+		pen.setWidthF(rugWidth);
+		painter->setPen(pen);
+		painter->setOpacity(lineOpacity);
+		painter->drawPath(rugPath);
 	}
 }
 
@@ -1805,6 +1908,14 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	// Filling
 	d->background->save(writer);
 
+	// margin plots
+	writer->writeStartElement("margins");
+	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
+	writer->writeAttribute("rugLength", QString::number(d->rugLength));
+	writer->writeAttribute("rugWidth", QString::number(d->rugWidth));
+	writer->writeAttribute("rugOffset", QString::number(d->rugOffset));
+	writer->writeEndElement();
+
 	writer->writeEndElement(); // close "Histogram" section
 }
 
@@ -1886,6 +1997,13 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_QFONT(d->valuesFont);
 		} else if (!preview && reader->name() == "filling") {
 			d->background->load(reader, preview);
+		} else if (!preview && reader->name() == "margins") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
+			READ_DOUBLE_VALUE("rugLength", rugLength);
+			READ_DOUBLE_VALUE("rugWidth", rugWidth);
+			READ_DOUBLE_VALUE("rugOffset", rugOffset);
 		}
 	}
 	return true;

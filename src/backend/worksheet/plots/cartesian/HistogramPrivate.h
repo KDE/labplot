@@ -42,6 +42,7 @@ public:
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
+	void updateRug();
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
@@ -109,6 +110,13 @@ public:
 	double errorBarsCapSize{1};
 	QPen errorBarsPen;
 	qreal errorBarsOpacity;
+
+	// rug
+	bool rugEnabled{false};
+	double rugOffset;
+	double rugLength;
+	double rugWidth;
+	QPainterPath rugPath;
 
 	QPainterPath linePath;
 	QPainterPath symbolsPath;

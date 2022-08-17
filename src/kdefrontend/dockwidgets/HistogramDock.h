@@ -107,6 +107,12 @@ private Q_SLOTS:
 	void errorBarsWidthChanged(double) const;
 	void errorBarsOpacityChanged(int) const;
 
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(bool) const;
+	void rugLengthChanged(double) const;
+	void rugWidthChanged(double) const;
+	void rugOffsetChanged(double) const;
+
 	// SLOTs for changes triggered in Histogram
 	// General-Tab
 	void curveDataColumnChanged(const AbstractColumn*);
@@ -147,6 +153,12 @@ private Q_SLOTS:
 	void curveErrorBarsPenChanged(const QPen&);
 	void curveErrorBarsCapSizeChanged(qreal);
 	void curveErrorBarsOpacityChanged(qreal);
+
+	//"Margin Plots"-Tab
+	void curveRugEnabledChanged(bool);
+	void curveRugLengthChanged(double);
+	void curveRugWidthChanged(double);
+	void curveRugOffsetChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

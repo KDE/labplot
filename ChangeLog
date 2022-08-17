@@ -5,6 +5,7 @@ New features:
 		* Plot templates - allow to save and re-use custom plot configurations
 		* For a histogram, allow to create a data spreadsheet with the positions and values of the histogram bins
 		* For a box plot, allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
+		* Rug plots for histograms
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
@@ -15,7 +16,7 @@ New features:
 	* [export]
 		* Use the current working project directory, if available, as the default export path
 	* [analysis]
-		* guess start vaues of fit parameter for polynomial models by linear regression
+		* guess start values of fit parameter for polynomial models by linear regression
 		* allow to create a spreadsheet with the data steming from the result of the computation
 
 Performance improvements:

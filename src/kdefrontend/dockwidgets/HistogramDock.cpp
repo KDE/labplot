@@ -157,6 +157,12 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.sbErrorBarsWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsWidthChanged);
 	connect(ui.sbErrorBarsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::errorBarsOpacityChanged);
 
+	// Margin Plots
+	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugOffsetChanged);
+
 	// template handler
 	auto* frame = new QFrame(this);
 	layout = new QHBoxLayout(frame);
@@ -426,6 +432,12 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::errorBarsTypeChanged, this, &HistogramDock::curveErrorBarsTypeChanged);
 	connect(m_curve, &Histogram::errorBarsPenChanged, this, &HistogramDock::curveErrorBarsPenChanged);
 	connect(m_curve, &Histogram::errorBarsOpacityChanged, this, &HistogramDock::curveErrorBarsOpacityChanged);
+
+	//"Margin Plots"-Tab
+	connect(m_curve, &Histogram::rugEnabledChanged, this, &HistogramDock::curveRugEnabledChanged);
+	connect(m_curve, &Histogram::rugLengthChanged, this, &HistogramDock::curveRugLengthChanged);
+	connect(m_curve, &Histogram::rugWidthChanged, this, &HistogramDock::curveRugWidthChanged);
+	connect(m_curve, &Histogram::rugOffsetChanged, this, &HistogramDock::curveRugOffsetChanged);
 
 	m_initializing = false;
 }
@@ -999,6 +1011,42 @@ void HistogramDock::errorBarsOpacityChanged(int value) const {
 		curve->setErrorBarsOpacity(opacity);
 }
 
+//"Margin Plots"-Tab
+void HistogramDock::rugEnabledChanged(bool state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugEnabled(state);
+}
+
+void HistogramDock::rugLengthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugLength(length);
+}
+
+void HistogramDock::rugWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugWidth(width);
+}
+
+void HistogramDock::rugOffsetChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugOffset(offset);
+}
+
 //*************************************************************
 //*********** SLOTs for changes triggered in Histogram *******
 //*************************************************************
@@ -1195,6 +1243,28 @@ void HistogramDock::curveErrorBarsOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
+//"Margin Plot"-Tab
+void HistogramDock::curveRugEnabledChanged(bool status) {
+	m_initializing = true;
+	ui.chkRugEnabled->setChecked(status);
+	m_initializing = false;
+}
+void HistogramDock::curveRugLengthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void HistogramDock::curveRugWidthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void HistogramDock::curveRugOffsetChanged(double value) {
+	m_initializing = true;
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************
@@ -1242,6 +1312,12 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.sbErrorBarsWidth->setValue(
 		Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()), Worksheet::Unit::Point));
 	ui.sbErrorBarsOpacity->setValue(round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity()) * 100.0));
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
 
 	Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());

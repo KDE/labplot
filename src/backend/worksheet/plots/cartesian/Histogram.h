@@ -73,6 +73,7 @@ public:
 
 	Symbol* symbol() const;
 
+	// values
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
 	QString& valuesColumnPath() const;
@@ -88,13 +89,21 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
+	// filling
 	Background* background() const;
 
+	// error bars
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
 	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+
+	// margin plots
+	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
+	BASIC_D_ACCESSOR_DECL(double, rugOffset, RugOffset)
+	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
+	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
 	void suppressRetransform(bool);
 
@@ -169,6 +178,12 @@ Q_SIGNALS:
 	void errorBarsPenChanged(QPen);
 	void errorBarsCapSizeChanged(qreal);
 	void errorBarsOpacityChanged(qreal);
+
+	// Margin Plots
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 };
 
 #endif
