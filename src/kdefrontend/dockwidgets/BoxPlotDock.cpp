@@ -155,6 +155,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.sbWhiskersCapWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapWidthChanged);
 	connect(ui.sbWhiskersCapOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapOpacityChanged);
 
+	// Margin Plots
+	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &BoxPlotDock::rugEnabledChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::rugOffsetChanged);
+
 	// template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
@@ -247,6 +253,12 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapPenChanged, this, &BoxPlotDock::plotWhiskersCapPenChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapOpacityChanged, this, &BoxPlotDock::plotWhiskersCapOpacityChanged);
+
+	//"Margin Plots"-Tab
+	connect(m_boxPlot, &BoxPlot::rugEnabledChanged, this, &BoxPlotDock::plotRugEnabledChanged);
+	connect(m_boxPlot, &BoxPlot::rugLengthChanged, this, &BoxPlotDock::plotRugLengthChanged);
+	connect(m_boxPlot, &BoxPlot::rugWidthChanged, this, &BoxPlotDock::plotRugWidthChanged);
+	connect(m_boxPlot, &BoxPlot::rugOffsetChanged, this, &BoxPlotDock::plotRugOffsetChanged);
 }
 
 void BoxPlotDock::setModel() {
@@ -726,9 +738,45 @@ void BoxPlotDock::whiskersCapOpacityChanged(int value) const {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value / 100.;
+	qreal opacity = static_cast<qreal>(value) / 100.;
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersCapOpacity(opacity);
+}
+
+//"Margin Plots"-Tab
+void BoxPlotDock::rugEnabledChanged(bool state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : qAsConst(m_boxPlots))
+		curve->setRugEnabled(state);
+}
+
+void BoxPlotDock::rugLengthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_boxPlots))
+		curve->setRugLength(length);
+}
+
+void BoxPlotDock::rugWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_boxPlots))
+		curve->setRugWidth(width);
+}
+
+void BoxPlotDock::rugOffsetChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_boxPlots))
+		curve->setRugOffset(offset);
 }
 
 //*************************************************************
@@ -862,6 +910,28 @@ void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
 	ui.sbWhiskersCapOpacity->setValue(v);
 }
 
+//"Margin Plot"-Tab
+void BoxPlotDock::plotRugEnabledChanged(bool status) {
+	m_initializing = true;
+	ui.chkRugEnabled->setChecked(status);
+	m_initializing = false;
+}
+void BoxPlotDock::plotRugLengthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void BoxPlotDock::plotRugWidthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void BoxPlotDock::plotRugOffsetChanged(double value) {
+	m_initializing = true;
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
@@ -915,6 +985,12 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.kcbWhiskersCapColor->setColor(group.readEntry("WhiskersCapColor", penCap.color()));
 	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapWidth", penCap.widthF()), Worksheet::Unit::Point));
 	ui.sbWhiskersCapOpacity->setValue(group.readEntry("WhiskersCapOpacity", m_boxPlot->whiskersCapOpacity()) * 100);
+
+	// Margin plots
+	ui.chkRugEnabled->setChecked(m_boxPlot->rugEnabled());
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
 
 	Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());

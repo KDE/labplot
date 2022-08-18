@@ -164,6 +164,12 @@ void BoxPlot::init() {
 							 group.readEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 							 (Qt::PenStyle)group.readEntry("WhiskersCapStyle", (int)Qt::SolidLine));
 	d->whiskersCapOpacity = group.readEntry("WhiskersCapOpacity", 1.0);
+
+	// marginal plots (rug, BoxPlot, boxplot)
+	d->rugEnabled = group.readEntry("RugEnabled", false);
+	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", 0.0);
+	d->rugOffset = group.readEntry("RugOffset", 0.0);
 }
 
 /*!
@@ -374,6 +380,12 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
 
+// margin plots
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, rugEnabled, rugEnabled)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugLength, rugLength)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugWidth, rugWidth)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, rugOffset, rugOffset)
+
 QVector<QString>& BoxPlot::dataColumnPaths() const {
 	D(BoxPlot);
 	return d->dataColumnPaths;
@@ -547,6 +559,35 @@ void BoxPlot::setJitteringEnabled(bool enabled) {
 		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
 }
 
+// margin plots
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugEnabled, bool, rugEnabled, updateRug)
+void BoxPlot::setRugEnabled(bool enabled) {
+	Q_D(BoxPlot);
+	if (enabled != d->rugEnabled)
+		exec(new BoxPlotSetRugEnabledCmd(d, enabled, ki18n("%1: change rug enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugWidth, double, rugWidth, updatePixmap)
+void BoxPlot::setRugWidth(double width) {
+	Q_D(BoxPlot);
+	if (width != d->rugWidth)
+		exec(new BoxPlotSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugLength, double, rugLength, updateRug)
+void BoxPlot::setRugLength(double length) {
+	Q_D(BoxPlot);
+	if (length != d->rugLength)
+		exec(new BoxPlotSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugOffset, double, rugOffset, updateRug)
+void BoxPlot::setRugOffset(double offset) {
+	Q_D(BoxPlot);
+	if (offset != d->rugOffset)
+		exec(new BoxPlotSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -652,6 +693,7 @@ void BoxPlotPrivate::retransform() {
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
 		m_whiskersCapPath[i] = QPainterPath();
+		m_rugPath[i] = QPainterPath();
 		m_outlierPoints[i].clear();
 		m_dataPoints[i].clear();
 		m_farOutPoints[i].clear();
@@ -669,6 +711,8 @@ void BoxPlotPrivate::retransform() {
 					horizontalBoxPlot(i);
 			}
 		}
+
+		updateRug();
 	}
 
 	recalcShapeAndBoundingRect();
@@ -689,6 +733,7 @@ void BoxPlotPrivate::recalc() {
 	m_medianLine.resize(count);
 	m_whiskersPath.resize(count);
 	m_whiskersCapPath.resize(count);
+	m_rugPath.resize(count);
 	m_whiskerMin.resize(count);
 	m_whiskerMax.resize(count);
 	m_outlierPointsLogical.resize(count);
@@ -1187,6 +1232,61 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		m_medianSymbolPointVisible[index] = false;
 }
 
+void BoxPlotPrivate::updateRug() {
+	if (!rugEnabled || !q->plot()) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
+	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
+
+	QPainterPath rugPath;
+	QVector<QPointF> points;
+
+	for (int i = 0; i < q->dataColumns().count(); ++i) {
+		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
+		rugPath.clear();
+		points.clear();
+
+		if (orientation == BoxPlot::Orientation::Horizontal) {
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if (column->isValid(row) && !column->isMasked(row))
+					points << QPointF(column->valueAt(row), yMin);
+			}
+
+			// map the points to scene coordinates
+			points = q->cSystem->mapLogicalToScene(points);
+
+			// path for the vertical rug lines
+			for (const auto& point : qAsConst(points)) {
+				rugPath.moveTo(point.x(), point.y() - rugOffset);
+				rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
+			}
+		} else { // horizontal
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if (column->isValid(row) && !column->isMasked(row))
+					points << QPointF(xMin, column->valueAt(row));
+			}
+
+			// map the points to scene coordinates
+			points = q->cSystem->mapLogicalToScene(points);
+
+			// path for the horizontal rug lines
+			for (const auto& point : qAsConst(points)) {
+				rugPath.moveTo(point.x() + rugOffset, point.y());
+				rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
+			}
+		}
+
+		m_rugPath[i] = rugPath;
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
 void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) {
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
@@ -1292,6 +1392,8 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapPen));
 
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderPen));
+
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
 
@@ -1303,7 +1405,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolOutlier->rotationAngle() != 0) {
+			if (symbolOutlier->rotationAngle() != 0.) {
 				trafo.rotate(symbolOutlier->rotationAngle());
 				path = trafo.map(path);
 			}
@@ -1323,7 +1425,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolData->rotationAngle() != 0) {
+			if (symbolData->rotationAngle() != 0.) {
 				trafo.rotate(symbolData->rotationAngle());
 				path = trafo.map(path);
 			}
@@ -1343,7 +1445,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolFarOut->rotationAngle() != 0) {
+			if (symbolFarOut->rotationAngle() != 0.) {
 				trafo.rotate(symbolFarOut->rotationAngle());
 				path = trafo.map(path);
 			}
@@ -1436,6 +1538,16 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 			painter->setBrush(Qt::NoBrush);
 			painter->setOpacity(whiskersCapOpacity);
 			painter->drawPath(m_whiskersCapPath.at(i));
+		}
+
+		// draw rug
+		if (rugEnabled && !m_rugPath.at(i).isEmpty()) {
+			QPen pen;
+			pen.setColor(borderPen.color());
+			pen.setWidthF(rugWidth);
+			painter->setPen(pen);
+			painter->setOpacity(borderOpacity);
+			painter->drawPath(m_rugPath.at(i));
 		}
 
 		// draw the symbols
@@ -1765,6 +1877,14 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("opacity", QString::number(d->whiskersCapOpacity));
 	writer->writeEndElement();
 
+	// margin plots
+	writer->writeStartElement("margins");
+	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
+	writer->writeAttribute("rugLength", QString::number(d->rugLength));
+	writer->writeAttribute("rugWidth", QString::number(d->rugWidth));
+	writer->writeAttribute("rugOffset", QString::number(d->rugOffset));
+	writer->writeEndElement();
+
 	writer->writeEndElement(); // close "BoxPlot" section
 }
 
@@ -1848,6 +1968,13 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("size", whiskersCapSize);
 			READ_QPEN(d->whiskersCapPen);
 			READ_DOUBLE_VALUE("opacity", whiskersCapOpacity);
+		} else if (!preview && reader->name() == "margins") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
+			READ_DOUBLE_VALUE("rugLength", rugLength);
+			READ_DOUBLE_VALUE("rugWidth", rugWidth);
+			READ_DOUBLE_VALUE("rugOffset", rugOffset);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())

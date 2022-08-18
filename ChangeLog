@@ -5,7 +5,7 @@ New features:
 		* Plot templates - allow to save and re-use custom plot configurations
 		* For a histogram, allow to create a data spreadsheet with the positions and values of the histogram bins
 		* For a box plot, allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
-		* Rug plots for histograms
+		* Rug plots for histograms and box plots
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns

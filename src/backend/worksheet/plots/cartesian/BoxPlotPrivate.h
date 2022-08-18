@@ -27,6 +27,7 @@ public:
 	void retransform() override;
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
+	void updateRug();
 	void updatePixmap();
 	void fillDataSpreadsheet(Spreadsheet*) const;
 
@@ -85,6 +86,13 @@ public:
 	QPen whiskersCapPen;
 	qreal whiskersCapOpacity;
 
+	// rug
+	bool rugEnabled{false};
+	double rugOffset;
+	double rugLength;
+	double rugWidth;
+	QPainterPath rugPath;
+
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
@@ -120,6 +128,7 @@ private:
 	QVector<double> m_mean;
 	QVector<QPainterPath> m_whiskersPath;
 	QVector<QPainterPath> m_whiskersCapPath;
+	QVector<QPainterPath> m_rugPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;
 	QVector<Points> m_outlierPointsLogical; // positions of the outlier symbols in logical coordinates

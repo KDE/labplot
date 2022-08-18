@@ -95,6 +95,12 @@ private Q_SLOTS:
 	void whiskersCapWidthChanged(double) const;
 	void whiskersCapOpacityChanged(int) const;
 
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(bool) const;
+	void rugLengthChanged(double) const;
+	void rugWidthChanged(double) const;
+	void rugOffsetChanged(double) const;
+
 	// SLOTs for changes triggered in BoxPlot
 	// general
 	void plotDescriptionChanged(const AbstractAspect*);
@@ -125,6 +131,12 @@ private Q_SLOTS:
 	void plotWhiskersCapSizeChanged(double);
 	void plotWhiskersCapPenChanged(QPen&);
 	void plotWhiskersCapOpacityChanged(float);
+
+	//"Margin Plots"-Tab
+	void plotRugEnabledChanged(bool);
+	void plotRugLengthChanged(double);
+	void plotRugWidthChanged(double);
+	void plotRugOffsetChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

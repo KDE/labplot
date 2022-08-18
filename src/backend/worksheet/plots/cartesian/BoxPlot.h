@@ -85,6 +85,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
 
+	// margin plots
+	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
+	BASIC_D_ACCESSOR_DECL(double, rugOffset, RugOffset)
+	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
+	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
+
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
@@ -147,6 +153,12 @@ Q_SIGNALS:
 	void whiskersCapSizeChanged(double);
 	void whiskersCapPenChanged(QPen&);
 	void whiskersCapOpacityChanged(float);
+
+	// Margin Plots
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 };
 
 #endif
