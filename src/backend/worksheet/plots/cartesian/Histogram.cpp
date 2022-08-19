@@ -18,8 +18,8 @@
 #include "Histogram.h"
 #include "HistogramPrivate.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Folder.h"
+#include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/trace.h"
@@ -1039,7 +1039,7 @@ void HistogramPrivate::recalcHistogram() {
 			if (m_binValuesColumn) {
 				m_binValuesColumn->resizeTo(m_bins);
 				double value = 0.;
-				for (size_t i = 0; i < m_bins; ++i){
+				for (size_t i = 0; i < m_bins; ++i) {
 					histogramValue(value, i);
 					m_binValuesColumn->setValueAt(i, value);
 				}

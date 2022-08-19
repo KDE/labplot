@@ -1238,7 +1238,6 @@ void BoxPlotPrivate::updateRug() {
 		return;
 	}
 
-
 	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const double xMin = q->plot()->range(Dimension::X, cs->index(Dimension::X)).start();
 	const double yMin = q->plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
