@@ -312,6 +312,10 @@ Background* Histogram::background() const {
 
 // error bars
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
+BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorPlusColumn, errorPlusColumn)
+BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorMinusColumn, errorMinusColumn)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorPlusColumnPath, errorPlusColumnPath)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorMinusColumnPath, errorMinusColumnPath)
 BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
@@ -614,6 +618,42 @@ void Histogram::setErrorType(ErrorType type) {
 		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorPlusColumn, const AbstractColumn*, errorPlusColumn, updateErrorBars)
+void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
+	Q_D(Histogram);
+	if (column != d->errorPlusColumn) {
+		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
+		if (column) {
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
+			// in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			// TODO: disconnect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcLogicalPoints);
+		}
+	}
+}
+
+void Histogram::setErrorPlusColumnPath(const QString& path) {
+	Q_D(Histogram);
+	d->errorPlusColumnPath = path;
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorMinusColumn, const AbstractColumn*, errorMinusColumn, updateErrorBars)
+void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
+	Q_D(Histogram);
+	if (column != d->errorMinusColumn) {
+		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
+		if (column) {
+			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
+			// in the macro we connect to recalcLogicalPoints which is not needed for error columns
+			// TODO disconnect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcLogicalPoints);
+		}
+	}
+}
+
+void Histogram::setErrorMinusColumnPath(const QString& path) {
+	Q_D(Histogram);
+	d->errorMinusColumnPath = path;
+}
+
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
 void Histogram::setErrorBarsCapSize(qreal size) {
 	Q_D(Histogram);
@@ -713,6 +753,27 @@ void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->valuesColumn) {
 		d->valuesColumn = nullptr;
 		d->updateValues();
+	}
+}
+
+void Histogram::updateErrorBars() {
+	Q_D(Histogram);
+	d->updateErrorBars();
+}
+
+void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Histogram);
+	if (aspect == d->errorPlusColumn) {
+		d->errorPlusColumn = nullptr;
+		d->updateErrorBars();
+	}
+}
+
+void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(Histogram);
+	if (aspect == d->errorMinusColumn) {
+		d->errorMinusColumn = nullptr;
+		d->updateErrorBars();
 	}
 }
 
@@ -902,6 +963,7 @@ void HistogramPrivate::retransform() {
 		linePath = QPainterPath();
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
+		errorBarsPath = QPainterPath();
 		rugPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
@@ -919,6 +981,7 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = true;
 	updateLines();
 	updateSymbols();
+	updateErrorBars();
 	updateRug();
 	m_suppressRecalc = false;
 	updateValues();
@@ -1331,7 +1394,7 @@ void HistogramPrivate::updateValues() {
 		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
-			if (!visiblePoints[i])
+			if (!visiblePoints.at(i))
 				continue;
 
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))
@@ -1476,6 +1539,42 @@ void HistogramPrivate::updateFilling() {
 }
 
 void HistogramPrivate::updateErrorBars() {
+	errorBarsPath = QPainterPath();
+
+	QVector<QLineF> elines;
+
+	switch (errorType) {
+	case Histogram::ErrorType::NoError:
+		break;
+	case Histogram::ErrorType::Poisson: {
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				double value = point.y();
+				lines << QLineF(point.x(), value + sqrt(value), point.x(), value - sqrt(value));
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				double value = point.x();
+				lines << QLineF(value - sqrt(value), point.y(), value + sqrt(value), point.y());
+			}
+		}
+		break;
+	}
+	case Histogram::ErrorType::CustomSymmetric:
+	case Histogram::ErrorType::CustomAsymmetric:
+		break;
+	}
+
+	// map the error bars to scene coordinates
+	lines = q->cSystem->mapLogicalToScene(lines);
+
+	// new painter path for the error bars
+	for (const auto& line : qAsConst(lines)) {
+		errorBarsPath.moveTo(line.p1());
+		errorBarsPath.lineTo(line.p2());
+	}
+
+	recalcShapeAndBoundingRect();
 }
 
 void HistogramPrivate::updateRug() {
@@ -1542,6 +1641,9 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (valuesType != Histogram::NoValues)
 		curveShape.addPath(valuesPath);
 
+	if (errorType != Histogram::ErrorType::NoError)
+		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
+
 	curveShape.addPath(rugPath);
 
 	boundingRectangle = curveShape.boundingRect();
@@ -1588,6 +1690,14 @@ void HistogramPrivate::draw(QPainter* painter) {
 		painter->setPen(QPen(valuesColor));
 		painter->setFont(valuesFont);
 		drawValues(painter);
+	}
+
+	// draw error bars
+	if (errorType != Histogram::ErrorType::NoError) {
+		painter->setOpacity(errorBarsOpacity);
+		painter->setPen(errorBarsPen);
+		painter->setBrush(Qt::NoBrush);
+		painter->drawPath(errorBarsPath);
 	}
 
 	// draw rug
@@ -1908,6 +2018,17 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	// Filling
 	d->background->save(writer);
 
+	// Error bars
+	writer->writeStartElement("errorBars");
+	writer->writeAttribute("errorType", QString::number(static_cast<int>(d->errorType)));
+	writer->writeAttribute("errorPlusColumn", d->errorPlusColumnPath);
+	writer->writeAttribute("errorMinusColumn", d->errorMinusColumnPath);
+	writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
+	writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
+	WRITE_QPEN(d->errorBarsPen);
+	writer->writeAttribute("opacity", QString::number(d->errorBarsOpacity));
+	writer->writeEndElement();
+
 	// margin plots
 	writer->writeStartElement("margins");
 	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
@@ -1997,6 +2118,16 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_QFONT(d->valuesFont);
 		} else if (!preview && reader->name() == "filling") {
 			d->background->load(reader, preview);
+		} else if (!preview && reader->name() == "errorBars") {
+				attribs = reader->attributes();
+
+				READ_INT_VALUE("errorType", errorType, ErrorType);
+				READ_COLUMN(errorPlusColumn);
+				READ_COLUMN(errorMinusColumn);
+				READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+				READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
+				READ_QPEN(d->errorBarsPen);
+				READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
 		} else if (!preview && reader->name() == "margins") {
 			attribs = reader->attributes();
 
@@ -2029,61 +2160,64 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = true;
 
 	// Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", static_cast<int>(Qt::SolidLine)));
 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	p.setWidthF(group.readEntry("LineWidth", d->linePen.widthF()));
 	p.setColor(themeColor);
-	this->setLinePen(p);
-	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
+	setLinePen(p);
+	setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	// Symbol
 	d->symbol->loadThemeConfig(group, themeColor);
 
 	// Values
-	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
+	setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
+	setValuesColor(group.readEntry("ValuesColor", themeColor));
 
 	// Filling
 	d->background->loadThemeConfig(group);
 
 	// Error Bars
-	// TODO:
-	// 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle",(int) this->errorBarsPen().style()));
-	// 	p.setWidthF(group.readEntry("ErrorBarsWidth", this->errorBarsPen().widthF()));
-	// 	p.setColor(themeColor);
-	// 	this->setErrorBarsPen(p);
-	// 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style())));
+	p.setWidthF(group.readEntry("ErrorBarsWidth", d->errorBarsPen.widthF()));
+	p.setColor(themeColor);
+	setErrorBarsPen(p);
+	setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",d->errorBarsOpacity));
 
-	if (plot->theme() == QLatin1String("Tufte"))
+	if (plot->theme() == QLatin1String("Tufte")) {
 		setLineType(Histogram::LineType::HalfBars);
+		if (d->dataColumn && d->dataColumn->rowCount() < 100)
+			setRugEnabled(true);
+	} else
+		setRugEnabled(false);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
 
 void Histogram::saveThemeConfig(const KConfig& config) {
+	Q_D(const Histogram);
 	KConfigGroup group = config.group("Histogram");
 
 	// Line
-	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineStyle", (int)this->linePen().style());
-	group.writeEntry("LineWidth", this->linePen().widthF());
+	group.writeEntry("LineOpacity", d->lineOpacity);
+	group.writeEntry("LineStyle", static_cast<int>(d->linePen.style()));
+	group.writeEntry("LineWidth", d->linePen.widthF());
 
 	// Error Bars
-	// 	group.writeEntry("ErrorBarsCapSize",this->errorBarsCapSize());
-	// 	group.writeEntry("ErrorBarsOpacity",this->errorBarsOpacity());
-	// 	group.writeEntry("ErrorBarsColor",(QColor) this->errorBarsPen().color());
-	// 	group.writeEntry("ErrorBarsStyle",(int) this->errorBarsPen().style());
-	// 	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
+	group.writeEntry("ErrorBarsCapSize", d->errorBarsCapSize);
+	group.writeEntry("ErrorBarsOpacity", d->errorBarsOpacity);
+	group.writeEntry("ErrorBarsColor", d->errorBarsPen.color());
+	group.writeEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style()));
+	group.writeEntry("ErrorBarsWidth", d->errorBarsPen.widthF());
 
 	// Symbol
-	Q_D(const Histogram);
 	d->symbol->saveThemeConfig(group);
 
 	// Values
-	group.writeEntry("ValuesOpacity", this->valuesOpacity());
-	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
-	group.writeEntry("ValuesFont", this->valuesFont());
+	group.writeEntry("ValuesOpacity", d->valuesOpacity);
+	group.writeEntry("ValuesColor", d->valuesColor);
+	group.writeEntry("ValuesFont", d->valuesFont);
 
 	// Filling
 	d->background->saveThemeConfig(group);
@@ -2093,7 +2227,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 		KConfigGroup themeGroup = config.group("Theme");
 		for (int i = index; i < 5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i + 1);
-			themeGroup.writeEntry(s, (QColor)this->linePen().color());
+			themeGroup.writeEntry(s, d->linePen.color());
 		}
 	}
 }

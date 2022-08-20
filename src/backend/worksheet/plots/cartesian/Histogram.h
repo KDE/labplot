@@ -34,7 +34,7 @@ public:
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
-	enum ErrorType { NoError };
+	enum ErrorType { NoError, Poisson, CustomSymmetric, CustomAsymmetric };
 
 	explicit Histogram(const QString& name);
 
@@ -94,6 +94,10 @@ public:
 
 	// error bars
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorPlusColumn, ErrorPlusColumn)
+	CLASS_D_ACCESSOR_DECL(QString, errorPlusColumnPath, ErrorPlusColumnPath)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorMinusColumn, ErrorMinusColumn)
+	CLASS_D_ACCESSOR_DECL(QString, errorMinusColumnPath, ErrorMinusColumnPath)
 	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
@@ -125,8 +129,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 	void updateValues();
+	void updateErrorBars();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
@@ -174,6 +181,8 @@ Q_SIGNALS:
 
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);
+	void errorPlusColumnChanged(const AbstractColumn*);
+	void errorMinusColumnChanged(const AbstractColumn*);
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsPenChanged(QPen);
 	void errorBarsCapSizeChanged(qreal);

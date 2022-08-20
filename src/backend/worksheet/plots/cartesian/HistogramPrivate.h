@@ -106,6 +106,10 @@ public:
 
 	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
+	const AbstractColumn* errorPlusColumn{nullptr};
+	QString errorPlusColumnPath;
+	const AbstractColumn* errorMinusColumn{nullptr};
+	QString errorMinusColumnPath;
 	XYCurve::ErrorBarsType errorBarsType;
 	double errorBarsCapSize{1};
 	QPen errorBarsPen;
@@ -121,6 +125,7 @@ public:
 	QPainterPath linePath;
 	QPainterPath symbolsPath;
 	QPainterPath valuesPath;
+	QPainterPath errorBarsPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
 	// TODO: use Qt container

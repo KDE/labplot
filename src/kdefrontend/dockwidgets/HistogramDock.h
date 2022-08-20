@@ -38,6 +38,8 @@ private:
 
 	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbValuesColumn;
+	TreeViewComboBox* cbErrorPlusColumn;
+	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
@@ -100,6 +102,8 @@ private Q_SLOTS:
 
 	//"Error bars"-Tab
 	void errorTypeChanged(int) const;
+	void errorPlusColumnChanged(const QModelIndex&) const;
+	void errorMinusColumnChanged(const QModelIndex&) const;
 	void errorBarsTypeChanged(int) const;
 	void errorBarsCapSizeChanged(double) const;
 	void errorBarsStyleChanged(int) const;
@@ -149,6 +153,8 @@ private Q_SLOTS:
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);
+	void curveErrorPlusColumnChanged(const AbstractColumn*);
+	void curveErrorMinusColumnChanged(const AbstractColumn*);
 	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void curveErrorBarsPenChanged(const QPen&);
 	void curveErrorBarsCapSizeChanged(qreal);

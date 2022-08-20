@@ -103,6 +103,16 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setVerticalSpacing(2);
 	}
 
+	// Tab "Error Bars"
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
+
+	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorPlusColumn, 2, 2, 1, 1);
+
+	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
+
+	// validators
 	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
 	ui.leBinRangesMin->setValidator(new QDoubleValidator(ui.leBinRangesMin));
 	ui.leBinRangesMax->setValidator(new QDoubleValidator(ui.leBinRangesMax));
@@ -150,6 +160,8 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Error bars
 	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
+	connect(cbErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorPlusColumnChanged);
+	connect(cbErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorMinusColumnChanged);
 	connect(ui.cbErrorBarsType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsTypeChanged);
 	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsCapSizeChanged);
 	connect(ui.cbErrorBarsStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsStyleChanged);
@@ -178,9 +190,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	retranslateUi();
 	init();
-
-	// TODO: activate the tab for error-bars again once the functionality is implemented
-	ui.tabWidget->removeTab(5);
 }
 
 HistogramDock::~HistogramDock() {
@@ -235,6 +244,11 @@ void HistogramDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Right"));
 
 	// Error-bars
+	ui.cbErrorType->addItem(i18n("No Errors"));
+	ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
+	ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
+	ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
+
 	QPainter pa;
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
@@ -261,8 +275,6 @@ void HistogramDock::init() {
 	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
 	ui.cbErrorBarsType->setItemIcon(1, pm);
 
-	ui.cbErrorType->addItem(i18n("No Errors"));
-
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
 
@@ -285,12 +297,16 @@ void HistogramDock::setModel() {
 
 	cbDataColumn->setTopLevelClasses(list);
 	cbValuesColumn->setTopLevelClasses(list);
+	cbErrorPlusColumn->setTopLevelClasses(list);
+	cbErrorMinusColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbDataColumn->setModel(m_aspectTreeModel);
 	cbValuesColumn->setModel(m_aspectTreeModel);
+	cbErrorPlusColumn->setModel(m_aspectTreeModel);
+	cbErrorMinusColumn->setModel(m_aspectTreeModel);
 }
 
 void HistogramDock::setCurves(QList<Histogram*> list) {
@@ -333,6 +349,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
 		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
+		cbErrorPlusColumn->setColumn(m_curve->errorPlusColumn(), m_curve->errorPlusColumnPath());
+		cbErrorMinusColumn->setColumn(m_curve->errorMinusColumn(), m_curve->errorMinusColumnPath());
 		ui.leName->setText(m_curve->name());
 		ui.teComment->setText(m_curve->comment());
 	} else {
@@ -345,6 +363,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		cbDataColumn->setEnabled(false);
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
+		cbErrorPlusColumn->setCurrentModelIndex(QModelIndex());
+		cbErrorMinusColumn->setCurrentModelIndex(QModelIndex());
 
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
@@ -428,6 +448,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	//"Error bars"-Tab
 	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
+	connect(m_curve, &Histogram::errorPlusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
+	connect(m_curve, &Histogram::errorMinusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
 	connect(m_curve, &Histogram::errorBarsCapSizeChanged, this, &HistogramDock::curveErrorBarsCapSizeChanged);
 	connect(m_curve, &Histogram::errorBarsTypeChanged, this, &HistogramDock::curveErrorBarsTypeChanged);
 	connect(m_curve, &Histogram::errorBarsPenChanged, this, &HistogramDock::curveErrorBarsPenChanged);
@@ -918,8 +940,30 @@ void HistogramDock::valuesColorChanged(const QColor& color) {
 
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) const {
-	bool b = (index != 0);
-	ui.lErrorData->setVisible(b);
+
+	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
+		// no error
+		ui.lErrorDataPlus->setVisible(false);
+		cbErrorPlusColumn->setVisible(false);
+		ui.lErrorDataMinus->setVisible(false);
+		cbErrorMinusColumn->setVisible(false);
+	} else if (index == 2) {
+		// symmetric error
+		ui.lErrorDataPlus->setVisible(true);
+		cbErrorPlusColumn->setVisible(true);
+		ui.lErrorDataMinus->setVisible(false);
+		cbErrorMinusColumn->setVisible(false);
+		ui.lErrorDataPlus->setText(i18n("Data, +-:"));
+	} else if (index == 3) {
+		// asymmetric error
+		ui.lErrorDataPlus->setVisible(true);
+		cbErrorPlusColumn->setVisible(true);
+		ui.lErrorDataMinus->setVisible(true);
+		cbErrorMinusColumn->setVisible(true);
+		ui.lErrorDataPlus->setText(i18n("Data, +:"));
+	}
+
+	bool b = (index != 0 && index != 1);
 	ui.lErrorFormat->setVisible(b);
 	ui.lErrorBarsType->setVisible(b);
 	ui.cbErrorBarsType->setVisible(b);
@@ -937,6 +981,30 @@ void HistogramDock::errorTypeChanged(int index) const {
 
 	for (auto* curve : m_curvesList)
 		curve->setErrorType(Histogram::ErrorType(index));
+}
+
+void HistogramDock::errorPlusColumnChanged(const QModelIndex& index) const {
+	if (m_initializing)
+		return;
+
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	for (auto* curve : m_curvesList)
+		curve->setErrorPlusColumn(column);
+}
+
+void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) const {
+	if (m_initializing)
+		return;
+
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	Q_ASSERT(column);
+
+	for (auto* curve : m_curvesList)
+		curve->setErrorMinusColumn(column);
 }
 
 void HistogramDock::errorBarsTypeChanged(int index) const {
@@ -1219,6 +1287,16 @@ void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
 	ui.cbErrorType->setCurrentIndex((int)type);
 	m_initializing = false;
 }
+void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	cbErrorPlusColumn->setColumn(column, m_curve->errorPlusColumnPath());
+	m_initializing = false;
+}
+void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
+	m_initializing = false;
+}
 void HistogramDock::curveErrorBarsCapSizeChanged(qreal size) {
 	m_initializing = true;
 	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
@@ -1370,6 +1448,14 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Filling
 	backgroundWidget->saveConfig(group);
+
+	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
+	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
+	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
+	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
+	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
+	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value() / 100.0);
 
 	config.sync();
 }
