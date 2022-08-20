@@ -1574,6 +1574,31 @@ void HistogramPrivate::updateErrorBars() {
 		errorBarsPath.lineTo(line.p2());
 	}
 
+	// add caps for error bars
+	if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
+		if (orientation == Histogram::Vertical) {
+			for (const auto& line : qAsConst(lines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x() - errorBarsCapSize / 2., p1.y()));
+				errorBarsPath.lineTo(QPointF(p1.x() + errorBarsCapSize / 2., p1.y()));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x() - errorBarsCapSize / 2., p2.y()));
+				errorBarsPath.lineTo(QPointF(p2.x() + errorBarsCapSize / 2., p2.y()));
+			}
+		} else {
+			for (const auto& line : qAsConst(lines)) {
+				const auto& p1 = line.p1();
+				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + errorBarsCapSize / 2.));
+
+				const auto& p2 = line.p2();
+				errorBarsPath.moveTo(QPointF(p2.x(), p2.y() - errorBarsCapSize / 2.));
+				errorBarsPath.lineTo(QPointF(p2.x(), p2.y() + errorBarsCapSize / 2.));
+			}
+		}
+	}
+
 	recalcShapeAndBoundingRect();
 }
 
@@ -2119,15 +2144,15 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "filling") {
 			d->background->load(reader, preview);
 		} else if (!preview && reader->name() == "errorBars") {
-				attribs = reader->attributes();
+			attribs = reader->attributes();
 
-				READ_INT_VALUE("errorType", errorType, ErrorType);
-				READ_COLUMN(errorPlusColumn);
-				READ_COLUMN(errorMinusColumn);
-				READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
-				READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
-				READ_QPEN(d->errorBarsPen);
-				READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
+			READ_INT_VALUE("errorType", errorType, ErrorType);
+			READ_COLUMN(errorPlusColumn);
+			READ_COLUMN(errorMinusColumn);
+			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
+			READ_QPEN(d->errorBarsPen);
+			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
 		} else if (!preview && reader->name() == "margins") {
 			attribs = reader->attributes();
 
@@ -2182,7 +2207,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("ErrorBarsWidth", d->errorBarsPen.widthF()));
 	p.setColor(themeColor);
 	setErrorBarsPen(p);
-	setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",d->errorBarsOpacity));
+	setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", d->errorBarsOpacity));
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		setLineType(Histogram::LineType::HalfBars);

@@ -940,7 +940,6 @@ void HistogramDock::valuesColorChanged(const QColor& color) {
 
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) const {
-
 	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
 		// no error
 		ui.lErrorDataPlus->setVisible(false);
@@ -963,7 +962,7 @@ void HistogramDock::errorTypeChanged(int index) const {
 		ui.lErrorDataPlus->setText(i18n("Data, +:"));
 	}
 
-	bool b = (index != 0 && index != 1);
+	const bool b = (index != 0);
 	ui.lErrorFormat->setVisible(b);
 	ui.lErrorBarsType->setVisible(b);
 	ui.cbErrorBarsType->setVisible(b);
