@@ -623,11 +623,8 @@ void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->errorPlusColumn) {
 		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column) {
+		if (column)
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-			// in the macro we connect to recalcLogicalPoints which is not needed for error columns
-			// TODO: disconnect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcLogicalPoints);
-		}
 	}
 }
 
@@ -641,11 +638,8 @@ void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
 	if (column != d->errorMinusColumn) {
 		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column) {
+		if (column)
 			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-			// in the macro we connect to recalcLogicalPoints which is not needed for error columns
-			// TODO disconnect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcLogicalPoints);
-		}
 	}
 }
 
@@ -1549,27 +1543,84 @@ void HistogramPrivate::updateErrorBars() {
 	case Histogram::ErrorType::Poisson: {
 		if (orientation == Histogram::Vertical) {
 			for (auto& point : pointsLogical) {
-				double value = point.y();
-				lines << QLineF(point.x(), value + sqrt(value), point.x(), value - sqrt(value));
+				double error = sqrt(point.y());
+				if (error != 0.)
+					elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
 			}
 		} else {
 			for (auto& point : pointsLogical) {
-				double value = point.x();
-				lines << QLineF(value - sqrt(value), point.y(), value + sqrt(value), point.y());
+				double error = sqrt(point.x());
+				if (error != 0.)
+					elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
 			}
 		}
 		break;
 	}
-	case Histogram::ErrorType::CustomSymmetric:
-	case Histogram::ErrorType::CustomAsymmetric:
+	case Histogram::ErrorType::CustomSymmetric: {
+		int index = 0;
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x(), point.y() + error, point.x(), point.y() - error);
+				}
+				++index;
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index)) {
+					double error = errorPlusColumn->valueAt(index);
+					if (error != 0.)
+						elines << QLineF(point.x() - error, point.y(), point.x() + error, point.y());
+				}
+				++index;
+			}
+		}
 		break;
+	}
+	case Histogram::ErrorType::CustomAsymmetric: {
+		int index = 0;
+		if (orientation == Histogram::Vertical) {
+			for (auto& point : pointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0.|| errorMinus != 0.)
+					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
+
+				++index;
+			}
+		} else {
+			for (auto& point : pointsLogical) {
+				double errorPlus = 0.;
+				double errorMinus = 0.;
+				if (errorPlusColumn && errorPlusColumn->isValid(index) && !errorPlusColumn->isMasked(index))
+					errorPlus = errorPlusColumn->valueAt(index);
+
+				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
+					errorMinus = errorMinusColumn->valueAt(index);
+
+				if (errorPlus != 0. || errorMinus != 0.)
+					elines << QLineF(point.x() - errorMinus, point.y(), point.x() + errorPlus, point.y());
+
+				++index;
+			}
+		}
+		break;
+	}
 	}
 
 	// map the error bars to scene coordinates
-	lines = q->cSystem->mapLogicalToScene(lines);
+	elines = q->cSystem->mapLogicalToScene(elines);
 
 	// new painter path for the error bars
-	for (const auto& line : qAsConst(lines)) {
+	for (const auto& line : qAsConst(elines)) {
 		errorBarsPath.moveTo(line.p1());
 		errorBarsPath.lineTo(line.p2());
 	}
@@ -1577,7 +1628,7 @@ void HistogramPrivate::updateErrorBars() {
 	// add caps for error bars
 	if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
 		if (orientation == Histogram::Vertical) {
-			for (const auto& line : qAsConst(lines)) {
+			for (const auto& line : qAsConst(elines)) {
 				const auto& p1 = line.p1();
 				errorBarsPath.moveTo(QPointF(p1.x() - errorBarsCapSize / 2., p1.y()));
 				errorBarsPath.lineTo(QPointF(p1.x() + errorBarsCapSize / 2., p1.y()));
@@ -1587,7 +1638,7 @@ void HistogramPrivate::updateErrorBars() {
 				errorBarsPath.lineTo(QPointF(p2.x() + errorBarsCapSize / 2., p2.y()));
 			}
 		} else {
-			for (const auto& line : qAsConst(lines)) {
+			for (const auto& line : qAsConst(elines)) {
 				const auto& p1 = line.p1();
 				errorBarsPath.moveTo(QPointF(p1.x(), p1.y() - errorBarsCapSize / 2.));
 				errorBarsPath.lineTo(QPointF(p1.x(), p1.y() + errorBarsCapSize / 2.));
@@ -2046,8 +2097,8 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	// Error bars
 	writer->writeStartElement("errorBars");
 	writer->writeAttribute("errorType", QString::number(static_cast<int>(d->errorType)));
-	writer->writeAttribute("errorPlusColumn", d->errorPlusColumnPath);
-	writer->writeAttribute("errorMinusColumn", d->errorMinusColumnPath);
+	WRITE_COLUMN(d->errorPlusColumn, errorPlusColumn);
+	WRITE_COLUMN(d->errorMinusColumn, errorMinusColumn);
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
 	writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
 	WRITE_QPEN(d->errorBarsPen);

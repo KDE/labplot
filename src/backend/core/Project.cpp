@@ -906,6 +906,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 		RESTORE_COLUMN_POINTER(hist, valuesColumn, ValuesColumn);
+		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
+		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
 	}
 
 	// box plots
