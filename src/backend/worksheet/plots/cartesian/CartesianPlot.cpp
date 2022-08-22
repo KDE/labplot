@@ -2398,7 +2398,22 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	else if (autoScale(Dimension::Y, yIndex))
 		updated = scaleAuto(Dimension::Y, yIndex);
 
-	if (updated)
+	if (!updated || !sender) {
+		// even if the plot ranges were not changed, either no auto scale active or the new data
+		// is within the current ranges and no change of the ranges is required,
+		// retransform the curve in order to show the changes
+		if (sender)
+			sender->retransform();
+		else {
+			// no sender available, the function was called directly in the file filter (live data source got new data)
+			// or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			// TODO: this logic can be very expensive
+			for (auto* child : children<XYCurve>()) {
+				child->recalcLogicalPoints();
+				child->retransform();
+			}
+		}
+	} else if (updated)
 		WorksheetElementContainer::retransform();
 }
 
