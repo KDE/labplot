@@ -1220,13 +1220,7 @@ void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool e
 
 int CartesianPlot::rangeCount(const Dimension dim) const {
 	Q_D(const CartesianPlot);
-	switch (dim) {
-	case Dimension::X:
-		return (d ? d->xRanges.size() : 0);
-	case Dimension::Y:
-		return (d ? d->yRanges.size() : 0);
-	}
-	return 0;
+	return d ? d->rangeCount(dim) : 0;
 }
 
 const Range<double>& CartesianPlot::range(const Dimension dim, int index) const {
@@ -3248,6 +3242,12 @@ void CartesianPlotPrivate::retransform() {
  * \param index
  */
 void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
+	if (index == -1) {
+		for (int i = 0; i < rangeCount(dim); i++)
+			retransformScale(dim, i);
+		return;
+	}
+
 	static const int breakGap = 20;
 	Range<double> plotSceneRange;
 	switch (dim) {
@@ -3386,16 +3386,8 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 
 	PERFTRACE(Q_FUNC_INFO);
 
-	if (xIndex == -1) {
-		for (int i = 0; i < xRanges.count(); i++)
-			retransformScale(Dimension::X, i);
-	} else
-		retransformScale(Dimension::X, xIndex);
-	if (yIndex == -1) {
-		for (int i = 0; i < yRanges.count(); i++)
-			retransformScale(Dimension::Y, i);
-	} else
-		retransformScale(Dimension::Y, yIndex);
+	retransformScale(Dimension::X, xIndex);
+	retransformScale(Dimension::Y, yIndex);
 }
 
 /*

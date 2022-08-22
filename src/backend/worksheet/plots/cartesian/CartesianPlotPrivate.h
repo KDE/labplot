@@ -165,7 +165,7 @@ public:
 
 	bool autoScale(const Dimension dim, int index = -1) const {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(dim); i++)
+			for (int i = 0; i < rangeCount(dim); i++)
 				if (!autoScale(dim, i))
 					return false;
 			return true;
@@ -180,9 +180,19 @@ public:
 		return yRanges[index].range.autoScale();
 	}
 
+	int rangeCount(const Dimension dim) const {
+		switch (dim) {
+		case Dimension::X:
+			return xRanges.size();
+		case Dimension::Y:
+			return yRanges.size();
+		}
+		return 0;
+	}
+
 	void enableAutoScale(const Dimension dim, int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->rangeCount(dim); i++)
+			for (int i = 0; i < rangeCount(dim); i++)
 				enableAutoScale(dim, i, b);
 			return;
 		}
