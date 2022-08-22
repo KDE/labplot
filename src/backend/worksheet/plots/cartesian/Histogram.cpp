@@ -1591,7 +1591,7 @@ void HistogramPrivate::updateErrorBars() {
 				if (errorMinusColumn && errorMinusColumn->isValid(index) && !errorMinusColumn->isMasked(index))
 					errorMinus = errorMinusColumn->valueAt(index);
 
-				if (errorPlus != 0.|| errorMinus != 0.)
+				if (errorPlus != 0. || errorMinus != 0.)
 					elines << QLineF(point.x(), point.y() - errorMinus, point.x(), point.y() + errorPlus);
 
 				++index;
