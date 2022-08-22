@@ -280,7 +280,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	m_labelsList = labels;
 	m_axesList.clear();
 	m_label = labels.first();
-	m_aspect = labels.first();
+	setAspects(labels);
 
 	ui.lOffsetX->hide();
 	ui.lOffsetY->hide();
