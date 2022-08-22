@@ -997,7 +997,7 @@ void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, boo
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->index(dim) == index) {
-					if (plot->autoScale(dim_other, cSystem->index(dim)))
+					if (plot->autoScale(dim_other, cSystem->index(dim_other)))
 						retransform |= plot->scaleAuto(dim_other, cSystem->index(dim_other), false);
 				}
 			}
