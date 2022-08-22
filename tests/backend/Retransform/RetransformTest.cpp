@@ -11,6 +11,7 @@
 #include "RetransformTest.h"
 
 #include "backend/core/Project.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -487,7 +488,37 @@ void RetransformTest::TestZoom() {
 	RetransformCallCounter c;
 	Project project;
 
-	project.load(QFINDTESTDATA(QLatin1String("data/TestZoom.lml")));
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(100);
+
+	QVector<int> xData;
+	QVector<double> yData;
+	for (int i = 0; i < 100; i++) {
+		xData.append(i);
+		yData.append(i);
+	}
+	auto* xColumn = sheet->column(0);
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	xColumn->replaceInteger(0, xData);
+	auto* yColumn = sheet->column(1);
+	yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	yColumn->replaceValues(0, yData);
+
+	project.addChild(sheet);
+
+	auto* worksheet = new Worksheet("Worksheet - Spreadsheet");
+	project.addChild(worksheet);
+
+	auto* p = new CartesianPlot("Plot - Spreadsheet");
+	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
+
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
 	// Spreadsheet "Spreadsheet"
