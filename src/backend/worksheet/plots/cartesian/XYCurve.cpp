@@ -106,13 +106,6 @@ void XYCurve::init() {
 		d->updatePixmap();
 	});
 
-	connect(this, &WorksheetElement::printingChanged, [this](const bool print) {
-		// Retransform if printing was turned on, so a different algorithm
-		// optimized for printing is used.
-		if (print)
-			retransform();
-	});
-
 	d->valuesType = (ValuesType)group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
 	d->valuesPosition = (ValuesPosition)group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));

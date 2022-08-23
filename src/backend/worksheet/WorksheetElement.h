@@ -160,7 +160,6 @@ Q_SIGNALS:
 	void visibleChanged(bool) const;
 	void coordinateSystemIndexChanged(int) const;
 	void changed();
-	void printingChanged(const bool printing);
 
 	void hovered();
 	void unhovered();
