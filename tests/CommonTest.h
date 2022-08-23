@@ -43,8 +43,11 @@ extern "C" {
 
 #define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	for (int i = 0; i < res.length(); i++)                                                                                                                     \
-		QVERIFY(qFuzzyCompare(res.at(i), ref.at(i)));
+	for (int i = 0; i < res.length(); i++) {                                                                                                                   \
+		const bool same = qFuzzyCompare(res.at(i), ref.at(i));                                                                                                 \
+		WARN("i=" << i << ", res=" << res.at(i) << ", ref=" << ref.at(i))                                                                                      \
+		QVERIFY(same);                                                                                                                                         \
+	}
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {
