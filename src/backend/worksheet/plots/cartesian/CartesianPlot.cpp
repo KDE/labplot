@@ -2398,7 +2398,9 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	else if (autoScale(Dimension::Y, yIndex))
 		updated = scaleAuto(Dimension::Y, yIndex);
 
-	if (!updated || !sender) {
+	if (updated)
+		WorksheetElementContainer::retransform();
+	else {
 		// even if the plot ranges were not changed, either no auto scale active or the new data
 		// is within the current ranges and no change of the ranges is required,
 		// retransform the curve in order to show the changes
@@ -2413,8 +2415,7 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 				child->retransform();
 			}
 		}
-	} else if (updated)
-		WorksheetElementContainer::retransform();
+	}
 }
 
 void CartesianPlot::dataChanged(WorksheetElement* element) {
