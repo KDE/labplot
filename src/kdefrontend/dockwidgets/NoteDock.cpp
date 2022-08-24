@@ -85,13 +85,6 @@ void NoteDock::textFontChanged(const QFont& font) {
 //************************* Settings **************************
 //*************************************************************
 void NoteDock::loadConfigFromTemplate(KConfig& config) {
-	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
-	if (index != -1)
-		name = config.name().right(config.name().size() - index - 1);
-	else
-		name = config.name();
-
 	KConfigGroup group = config.group("Notes");
 	ui.kcbBgColor->setColor(group.readEntry("BackgroundColor", m_notes->backgroundColor()));
 	ui.kcbTextColor->setColor(group.readEntry("TextColor", m_notes->textColor()));

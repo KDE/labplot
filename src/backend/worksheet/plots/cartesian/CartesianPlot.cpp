@@ -1240,9 +1240,9 @@ public:
 	CartesianPlotSetRangeIndexCmd(CartesianPlot::Private* target, const Dimension dim, Range<double> newValue, int index)
 		: QUndoCommand()
 		, m_target(target)
+		, m_index(index)
 		, m_dimension(dim)
-		, m_otherValue(newValue)
-		, m_index(index) {
+		, m_otherValue(newValue) {
 	}
 	void redo() override {
 		auto tmp = m_target->rangeConst(m_dimension, m_index);
@@ -1260,9 +1260,9 @@ public:
 
 private:
 	CartesianPlot::Private* m_target;
+	int m_index;
 	Dimension m_dimension;
 	Range<double> m_otherValue;
-	int m_index;
 };
 
 void CartesianPlot::setRange(const Dimension dim, const int index, const Range<double>& range) {

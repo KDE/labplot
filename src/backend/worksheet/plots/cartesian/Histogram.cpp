@@ -1753,12 +1753,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	// draw symbols
-	if (symbol->style() != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbol->opacity());
-		painter->setPen(symbol->pen());
-		painter->setBrush(symbol->brush());
-		drawSymbols(painter);
-	}
+	symbol->draw(painter, pointsScene);
 
 	// draw values
 	if (valuesType != Histogram::NoValues) {
@@ -1856,23 +1851,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::stylePath(symbol->style());
-
-	QTransform trafo;
-	trafo.scale(symbol->size(), symbol->size());
-	if (symbol->rotationAngle() != 0.)
-		trafo.rotate(-symbol->rotationAngle());
-
-	path = trafo.map(path);
-
-	for (const auto& point : pointsScene) {
-		trafo.reset();
-		trafo.translate(point.x(), point.y());
-		painter->drawPath(trafo.map(path));
 	}
 }
 

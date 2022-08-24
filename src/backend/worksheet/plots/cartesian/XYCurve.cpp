@@ -2878,12 +2878,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	// draw symbols
-	if (symbol->style() != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbol->opacity());
-		painter->setPen(symbol->pen());
-		painter->setBrush(symbol->brush());
-		drawSymbols(painter);
-	}
+	symbol->draw(painter, m_scenePoints);
 
 	// draw values
 	if (valuesType != XYCurve::ValuesType::NoValues) {
@@ -2983,27 +2978,6 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 		}
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
-	}
-}
-
-/*!
-	Drawing of symbolsPath is very slow, so we draw every symbol in the loop which is much faster (factor 10)
-*/
-void XYCurvePrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::stylePath(symbol->style());
-
-	QTransform trafo;
-	trafo.scale(symbol->size(), symbol->size());
-
-	if (symbol->rotationAngle() != 0.)
-		trafo.rotate(symbol->rotationAngle());
-
-	path = trafo.map(path);
-
-	for (const auto& point : qAsConst(m_scenePoints)) {
-		trafo.reset();
-		trafo.translate(point.x(), point.y());
-		painter->drawPath(trafo.map(path));
 	}
 }
 

@@ -1135,14 +1135,14 @@ void XYCurveDock::xErrorTypeChanged(int index) const {
 		cbXErrorPlusColumn->setVisible(true);
 		ui.lXErrorDataMinus->setVisible(false);
 		cbXErrorMinusColumn->setVisible(false);
-		ui.lXErrorDataPlus->setText(i18n("Data, +-"));
+		ui.lXErrorDataPlus->setText(i18n("Data, +-:"));
 	} else if (index == 2) {
 		// asymmetric error
 		ui.lXErrorDataPlus->setVisible(true);
 		cbXErrorPlusColumn->setVisible(true);
 		ui.lXErrorDataMinus->setVisible(true);
 		cbXErrorMinusColumn->setVisible(true);
-		ui.lXErrorDataPlus->setText(i18n("Data, +"));
+		ui.lXErrorDataPlus->setText(i18n("Data, +:"));
 	}
 
 	bool b = (index != 0 || ui.cbYErrorType->currentIndex() != 0);
@@ -1202,14 +1202,14 @@ void XYCurveDock::yErrorTypeChanged(int index) const {
 		cbYErrorPlusColumn->setVisible(true);
 		ui.lYErrorDataMinus->setVisible(false);
 		cbYErrorMinusColumn->setVisible(false);
-		ui.lYErrorDataPlus->setText(i18n("Data, +-"));
+		ui.lYErrorDataPlus->setText(i18n("Data, +-:"));
 	} else if (index == 2) {
 		// asymmetric error
 		ui.lYErrorDataPlus->setVisible(true);
 		cbYErrorPlusColumn->setVisible(true);
 		ui.lYErrorDataMinus->setVisible(true);
 		cbYErrorMinusColumn->setVisible(true);
-		ui.lYErrorDataPlus->setText(i18n("Data, +"));
+		ui.lYErrorDataPlus->setText(i18n("Data, +:"));
 	}
 
 	bool b = (index != 0 || ui.cbXErrorType->currentIndex() != 0);

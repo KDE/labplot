@@ -149,7 +149,6 @@ private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
