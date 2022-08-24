@@ -11,10 +11,9 @@
 #include "RetransformTest.h"
 
 #include "backend/core/Project.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/spreadsheet/Spreadsheet.cpp"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
