@@ -603,6 +603,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QRadioButton" name="rbWhiskerEnd">
+            <property name="text">
+             <string>Whisker End</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_4">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -662,7 +669,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabErrorBars">
+     <widget class="QWidget" name="tabWhiskers">
       <attribute name="title">
        <string>Whiskers</string>
       </attribute>

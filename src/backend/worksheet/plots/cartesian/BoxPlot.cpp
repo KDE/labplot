@@ -152,6 +152,18 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
+	d->symbolWhiskerEnd = new Symbol("symbolWhiskerEnd");
+	addChild(d->symbolWhiskerEnd);
+	d->symbolWhiskerEnd->setHidden(true);
+	d->symbolWhiskerEnd->init(group);
+	d->symbolWhiskerEnd->setStyle(Symbol::Style::NoSymbols);
+	connect(d->symbolWhiskerEnd, &Symbol::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+	connect(d->symbolWhiskerEnd, &Symbol::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+
 	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 
 	// whiskers
@@ -369,6 +381,11 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, jitteringEnabled, jitteringEnabled)
 Symbol* BoxPlot::symbolData() const {
 	Q_D(const BoxPlot);
 	return d->symbolData;
+}
+
+Symbol* BoxPlot::symbolWhiskerEnd() const {
+	Q_D(const BoxPlot);
+	return d->symbolWhiskerEnd;
 }
 
 // whiskers
@@ -688,6 +705,7 @@ void BoxPlotPrivate::retransform() {
 		return;
 	}
 
+	// clear the containers holding the information in scene coordinates
 	for (int i = 0; i < count; ++i) {
 		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
@@ -697,6 +715,7 @@ void BoxPlotPrivate::retransform() {
 		m_outlierPoints[i].clear();
 		m_dataPoints[i].clear();
 		m_farOutPoints[i].clear();
+		m_whiskerEndPoints[i].clear();
 	}
 
 	if (count) {
@@ -742,11 +761,15 @@ void BoxPlotPrivate::recalc() {
 	m_dataPoints.resize(count);
 	m_farOutPointsLogical.resize(count);
 	m_farOutPoints.resize(count);
+	m_whiskerEndPointsLogical.resize(count);
+	m_whiskerEndPoints.resize(count);
 	m_mean.resize(count);
-	m_meanSymbolPoint.resize(count);
-	m_meanSymbolPointVisible.resize(count);
-	m_medianSymbolPoint.resize(count);
-	m_medianSymbolPointVisible.resize(count);
+	m_meanPointLogical.resize(count);
+	m_meanPoint.resize(count);
+	m_meanPointVisible.resize(count);
+	m_medianPointLogical.resize(count);
+	m_medianPoint.resize(count);
+	m_medianPointVisible.resize(count);
 
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
@@ -840,7 +863,7 @@ void BoxPlotPrivate::recalc(int index) {
 	if (!column)
 		return;
 
-	// clear the containers for outliers, etc. since the their number
+	// clear the containers for outliers, etc. since their number
 	// can be changed because of the new settings for whiskers, etc.
 	m_outlierPointsLogical[index].clear();
 	m_outlierPoints[index].clear();
@@ -848,6 +871,8 @@ void BoxPlotPrivate::recalc(int index) {
 	m_dataPoints[index].clear();
 	m_farOutPointsLogical[index].clear();
 	m_farOutPoints[index].clear();
+	m_whiskerEndPointsLogical[index].clear();
+	m_whiskerEndPoints[index].clear();
 
 	const auto& statistics = column->statistics();
 	double width = 0.5 * widthFactor;
@@ -1057,57 +1082,21 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize / 2., maxPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize / 2., maxPoint.y()));
+			m_whiskerEndPointsLogical[index] << QPointF(x, m_whiskerMax.at(index));
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize / 2., minPoint.y()));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize / 2., minPoint.y()));
+			m_whiskerEndPointsLogical[index] << QPointF(x, m_whiskerMin.at(index));
 		}
 	}
 
-	// outliers symbols
-	mapOutliersToScene(index);
-
-	// jitter values
-	int size = m_dataPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], m_pointVisible);
-	}
-
-	// far out values
-	size = m_farOutPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], m_pointVisible);
-	}
-
-	// mean symbol
-	QVector<QPointF> points = {QPointF(x, m_mean.at(index))};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_meanSymbolPoint[index] = points.at(0);
-		m_meanSymbolPointVisible[index] = true;
-	} else
-		m_meanSymbolPointVisible[index] = false;
-
-	// median symbol
-	points = {QPointF(x, median)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_medianSymbolPoint[index] = points.at(0);
-		m_medianSymbolPointVisible[index] = true;
-	} else
-		m_medianSymbolPointVisible[index] = false;
+	// map the logical points of symbols to scene coordinates
+	m_meanPointLogical[index] = QPointF(x, m_mean.at(index));
+	m_medianPointLogical[index] = QPointF(x, m_median.at(index));
+	mapSymbolsToScene(index);
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
@@ -1181,55 +1170,21 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize / 2));
+			m_whiskerEndPointsLogical[index] << QPointF(m_whiskerMax.at(index), y);
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
 		if (visible) {
 			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize / 2));
 			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize / 2));
+			m_whiskerEndPointsLogical[index] << QPointF(m_whiskerMin.at(index), y);
 		}
 	}
 
 	// outliers symbols
-	mapOutliersToScene(index);
-
-	int size = m_dataPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_dataPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], m_pointVisible);
-	}
-
-	size = m_farOutPointsLogical[index].size();
-	if (size > 0) {
-		const int startIndex = 0;
-		const int endIndex = m_farOutPointsLogical[index].size() - 1;
-		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(size);
-
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], m_pointVisible);
-	}
-
-	// mean symbol
-	QVector<QPointF> points = {QPointF(m_mean.at(index), y)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_meanSymbolPoint[index] = points.at(0);
-		m_meanSymbolPointVisible[index] = true;
-	} else
-		m_meanSymbolPointVisible[index] = false;
-
-	// median symbol
-	points = {QPointF(m_mean.at(index), y)};
-	points = q->cSystem->mapLogicalToScene(points);
-	if (points.count() == 1) {
-		m_medianSymbolPoint[index] = points.at(0);
-		m_medianSymbolPointVisible[index] = true;
-	} else
-		m_medianSymbolPointVisible[index] = false;
+	m_meanPointLogical[index] = QPointF(m_mean.at(index), y);
+	m_medianPointLogical[index] = QPointF(m_median.at(index), y);
+	mapSymbolsToScene(index);
 }
 
 void BoxPlotPrivate::updateRug() {
@@ -1344,16 +1299,59 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
  * avoid drawing overlapping points, logic similar to
  * //XYCurvePrivate::retransform()
  */
-void BoxPlotPrivate::mapOutliersToScene(int index) {
-	const int numberOfPoints = m_outlierPointsLogical[index].size();
-	if (numberOfPoints > 0) {
+void BoxPlotPrivate::mapSymbolsToScene(int index) {
+	// outliers
+	int size = m_outlierPointsLogical[index].size();
+	if (size > 0) {
 		const int startIndex = 0;
 		const int endIndex = m_outlierPointsLogical[index].size() - 1;
 		std::vector<bool> m_pointVisible;
-		m_pointVisible.resize(numberOfPoints);
+		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outlierPointsLogical[index], m_outlierPoints[index], m_pointVisible);
 	}
+
+	// data points
+	size = m_dataPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_dataPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_dataPointsLogical[index], m_dataPoints[index], pointVisible);
+	}
+
+	// far out points
+	size = m_farOutPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_farOutPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_farOutPointsLogical[index], m_farOutPoints[index], pointVisible);
+	}
+
+	// whisker ends
+	size = m_whiskerEndPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_whiskerEndPointsLogical[index].size() - 1;
+		std::vector<bool> pointVisible;
+		pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_whiskerEndPointsLogical[index], m_whiskerEndPoints[index], pointVisible);
+	}
+
+	// mean
+	bool visible;
+	m_meanPoint[index] = q->cSystem->mapLogicalToScene(m_meanPointLogical[index], visible);
+	m_meanPointVisible[index] = visible;
+
+	// median
+	m_medianPoint[index] = q->cSystem->mapLogicalToScene(m_medianPointLogical[index], visible);
+	m_medianPointVisible[index] = visible;
 }
 
 /*!
@@ -1450,6 +1448,26 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			}
 
 			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+		}
+
+		// whisker ends
+		if (symbolWhiskerEnd->style() != Symbol::Style::NoSymbols && !m_whiskerEndPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::stylePath(symbolWhiskerEnd->style());
+			QTransform trafo;
+			trafo.scale(symbolWhiskerEnd->size(), symbolWhiskerEnd->size());
+			path = trafo.map(path);
+			trafo.reset();
+
+			if (symbolWhiskerEnd->rotationAngle() != 0.) {
+				trafo.rotate(symbolWhiskerEnd->rotationAngle());
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : qAsConst(m_whiskerEndPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1556,100 +1574,24 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	// outlier values
-	if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolOutlier->opacity());
-		painter->setPen(symbolOutlier->pen());
-		painter->setBrush(symbolOutlier->brush());
-		QPainterPath path = Symbol::stylePath(symbolOutlier->style());
-		QTransform trafo;
-		trafo.scale(symbolOutlier->size(), symbolOutlier->size());
-		if (symbolOutlier->rotationAngle() != 0)
-			trafo.rotate(-symbolOutlier->rotationAngle());
-
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_outlierPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	symbolOutlier->draw(painter, m_outlierPoints.at(index));
 
 	// mean value
-	if (symbolMean->style() != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
-		painter->setOpacity(symbolMean->opacity());
-		painter->setPen(symbolMean->pen());
-		painter->setBrush(symbolMean->brush());
-		QTransform trafo;
-		trafo.scale(symbolMean->size(), symbolMean->size());
-		QPainterPath path = Symbol::stylePath(symbolMean->style());
-		if (symbolMean->rotationAngle() != 0)
-			trafo.rotate(-symbolMean->rotationAngle());
-
-		path = trafo.map(path);
-
-		trafo.reset();
-		trafo.translate(m_meanSymbolPoint.at(index).x(), m_meanSymbolPoint.at(index).y());
-		painter->drawPath(trafo.map(path));
-	}
+	if (m_meanPointVisible.at(index))
+		symbolMean->draw(painter, m_meanPoint.at(index));
 
 	// median value
-	if (symbolMedian->style() != Symbol::Style::NoSymbols && m_medianSymbolPointVisible.at(index)) {
-		painter->setOpacity(symbolMedian->opacity());
-		painter->setPen(symbolMedian->pen());
-		painter->setBrush(symbolMedian->brush());
-		QTransform trafo;
-		trafo.scale(symbolMedian->size(), symbolMedian->size());
-		QPainterPath path = Symbol::stylePath(symbolMedian->style());
-		if (symbolMedian->rotationAngle() != 0)
-			trafo.rotate(-symbolMedian->rotationAngle());
-
-		path = trafo.map(path);
-
-		trafo.reset();
-		trafo.translate(m_medianSymbolPoint.at(index).x(), m_medianSymbolPoint.at(index).y());
-		painter->drawPath(trafo.map(path));
-	}
+	if (m_medianPointVisible.at(index))
+		symbolMedian->draw(painter, m_medianPoint.at(index));
 
 	// jitter values
-	if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolData->opacity());
-		painter->setPen(symbolData->pen());
-		painter->setBrush(symbolData->brush());
-		QPainterPath path = Symbol::stylePath(symbolData->style());
-		QTransform trafo;
-		trafo.scale(symbolData->size(), symbolData->size());
-		if (symbolData->rotationAngle() != 0)
-			trafo.rotate(-symbolData->rotationAngle());
-
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_dataPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	symbolData->draw(painter, m_dataPoints.at(index));
 
 	// far out values
-	if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolFarOut->opacity());
-		painter->setPen(symbolFarOut->pen());
-		painter->setBrush(symbolFarOut->brush());
-		QPainterPath path = Symbol::stylePath(symbolFarOut->style());
-		QTransform trafo;
-		trafo.scale(symbolFarOut->size(), symbolFarOut->size());
-		if (symbolFarOut->rotationAngle() != 0)
-			trafo.rotate(-symbolFarOut->rotationAngle());
+	symbolFarOut->draw(painter, m_farOutPoints.at(index));
 
-		path = trafo.map(path);
-
-		for (const auto& point : qAsConst(m_farOutPoints.at(index))) {
-			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			painter->drawPath(trafo.map(path));
-		}
-	}
+	// whisker end points
+	symbolWhiskerEnd->draw(painter, m_whiskerEndPoints.at(index));
 }
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
@@ -1861,6 +1803,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	d->symbolOutlier->save(writer);
 	d->symbolFarOut->save(writer);
 	d->symbolData->save(writer);
+	d->symbolWhiskerEnd->save(writer);
 
 	// whiskers
 	writer->writeStartElement("whiskers");
@@ -1953,6 +1896,8 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			d->symbolFarOut->load(reader, preview);
 		else if (!preview && reader->name() == "symbolData")
 			d->symbolData->load(reader, preview);
+		else if (!preview && reader->name() == "symbolWhiskerEnd")
+			d->symbolWhiskerEnd->load(reader, preview);
 		else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 

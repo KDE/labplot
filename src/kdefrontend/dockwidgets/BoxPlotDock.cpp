@@ -140,6 +140,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbWhiskerEnd, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.chkJitteringEnabled, &QCheckBox::toggled, this, &BoxPlotDock::jitteringEnabledChanged);
 
 	// Tab "Whiskers"
@@ -588,6 +589,8 @@ void BoxPlotDock::symbolCategoryChanged() {
 			symbols << plot->symbolFarOut();
 		else if (ui.rbJitter->isChecked())
 			symbols << plot->symbolData();
+		else if (ui.rbWhiskerEnd->isChecked())
+			symbols << plot->symbolWhiskerEnd();
 	}
 
 	symbolWidget->setSymbols(symbols);

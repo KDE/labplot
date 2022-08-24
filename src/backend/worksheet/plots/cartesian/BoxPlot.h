@@ -74,6 +74,7 @@ public:
 	Symbol* symbolOutlier() const;
 	Symbol* symbolFarOut() const;
 	Symbol* symbolData() const;
+	Symbol* symbolWhiskerEnd() const;
 	BASIC_D_ACCESSOR_DECL(bool, jitteringEnabled, JitteringEnabled)
 
 	// whiskers

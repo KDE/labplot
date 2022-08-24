@@ -17,6 +17,7 @@
 
 class SymbolPrivate;
 class KConfigGroup;
+class QPainter;
 
 class Symbol : public AbstractAspect {
 	Q_OBJECT
@@ -96,6 +97,9 @@ public:
 	explicit Symbol(const QString& name);
 	~Symbol() override;
 	void init(const KConfigGroup&);
+
+	void draw(QPainter*, QPointF);
+	void draw(QPainter*, const QVector<QPointF>&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

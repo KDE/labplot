@@ -24,6 +24,7 @@
 #include <KLocalizedString>
 
 #include <QFont>
+#include <QPainter>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -885,4 +886,48 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	}
 
 	return path;
+}
+
+void Symbol::draw(QPainter* painter, QPointF point) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols)
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	QPainterPath path = Symbol::stylePath(d->style);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	trafo.reset();
+	trafo.translate(point.x(), point.y());
+	painter->drawPath(trafo.map(path));
+}
+
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QPainterPath path = Symbol::stylePath(d->style);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	for (const auto& point : points) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
 }
