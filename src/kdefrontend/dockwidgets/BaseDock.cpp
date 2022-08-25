@@ -90,7 +90,9 @@ void BaseDock::plotRangeChanged(int index) {
 	for (auto aspect : m_aspects) {
 		auto* e{static_cast<WorksheetElement*>(aspect)};
 		if (index != e->coordinateSystemIndex()) {
+			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
+			e->setSuppressRetransform(false);
 			if (dynamic_cast<Axis*>(e))
 				dynamic_cast<AxisDock*>(this)->updateAutoScale();
 			updateLocale(); // update line edits

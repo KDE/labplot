@@ -196,6 +196,11 @@ void Axis::init(Orientation orientation) {
 	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
 	d->minorGridPen.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
+
+	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
+		Q_D(Axis);
+		d->retransformRange();
+	});
 }
 
 /*!

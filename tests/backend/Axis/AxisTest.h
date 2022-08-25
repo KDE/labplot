@@ -20,6 +20,7 @@ private Q_SLOTS:
 	void majorTicksAutoNumberEnableDisable();
 	void minorTicksAutoNumberEnableDisable();
 	void majorTicksStartValue();
+	void TestSetCoordinateSystem();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

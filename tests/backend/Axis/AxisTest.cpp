@@ -268,4 +268,47 @@ void AxisTest::majorTicksStartValue() {
 	}
 }
 
+void AxisTest::TestSetCoordinateSystem() {
+	// Test if the range stored in the Axis gets updated when a new coordinatesystemindex is set
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	auto yAxis = axes.at(1);
+	QCOMPARE(yAxis->name(), "y");
+	{
+		auto range = yAxis->range();
+		QCOMPARE(range.start(), 0);
+		QCOMPARE(range.end(), 1);
+	}
+
+	// Add new coordinatesystem to the plot
+	p->addYRange(Range<double>(5, 100));
+	QCOMPARE(p->rangeCount(Dimension::X), 1);
+	QCOMPARE(p->rangeCount(Dimension::Y), 2);
+	p->addCoordinateSystem();
+	QCOMPARE(p->coordinateSystemCount(), 2);
+	auto cSystem = p->coordinateSystem(1);
+	cSystem->setIndex(Dimension::X, 0);
+	cSystem->setIndex(Dimension::Y, 1);
+
+	// Change CoordinatesystemIndex of the axis
+	yAxis->setCoordinateSystemIndex(1);
+
+	{
+		auto range = yAxis->range();
+		QCOMPARE(range.start(), 5);
+		QCOMPARE(range.end(), 100);
+	}
+}
+
 QTEST_MAIN(AxisTest)

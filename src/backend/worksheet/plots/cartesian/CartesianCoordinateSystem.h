@@ -48,10 +48,6 @@ public:
 	QVector<CartesianScale*> scales(const Dimension) const;
 	int index(const Dimension) const;
 	void setIndex(const Dimension, const int);
-	int xIndex() const;
-	void setXIndex(int);
-	int yIndex() const;
-	void setYIndex(int);
 
 	QString info() const override;
 
