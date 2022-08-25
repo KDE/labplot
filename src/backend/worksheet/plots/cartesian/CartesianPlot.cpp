@@ -1281,7 +1281,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
-		d->setRangeDirty(dim_other, index, true);
+		d->setRangeDirty(dim, index, true);
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
 		QVector<int> scaledIndices;
 		for (int i = 0; i < coordinateSystemCount(); i++) {
