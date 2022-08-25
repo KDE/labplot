@@ -3557,42 +3557,23 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
 }
 
 /*!
- * check for negative values in the x range when non-linear scalings are used
+ * check for negative values in the range when non-linear scalings are used
  */
-void CartesianPlotPrivate::checkXRange(int index) {
-	const auto xRange = xRanges.at(index).range;
-	DEBUG(Q_FUNC_INFO << ", x range " << index + 1 << " : " << xRange.toStdString() << ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRange.scale()))
+void CartesianPlotPrivate::checkRange(Dimension dim, int index) {
+	const auto range = ranges(dim).at(index).range;
+	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range " << index + 1 << " : " << range.toStdString()
+					  << ", scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 
-	const auto newRange = checkRange(xRange);
+	const auto newRange = checkRange(range);
 
 	const double start = newRange.start(), end = newRange.end();
-	if (start != xRange.start()) {
-		DEBUG(Q_FUNC_INFO << ", old/new start = " << xRange.start() << "/" << start)
-		q->setMin(Dimension::X, index, start);
+	if (start != range.start()) {
+		DEBUG(Q_FUNC_INFO << ", old/new start = " << range.start() << "/" << start)
+		q->setMin(dim, index, start);
 	}
-	if (end != xRange.end()) {
-		DEBUG(Q_FUNC_INFO << ", old/new end = " << xRange.end() << "/" << end)
-		q->setMax(Dimension::X, index, end);
-	}
-}
-
-/*!
- * check for negative values in the y range when non-linear scalings are used
- */
-void CartesianPlotPrivate::checkYRange(int index) {
-	const auto yRange = yRanges.at(index).range;
-	DEBUG(Q_FUNC_INFO << ", y range " << index + 1 << " : " << yRange.toStdString() << ", scale = " << ENUM_TO_STRING(RangeT, Scale, yRange.scale()))
-
-	const auto newRange = checkRange(yRange);
-
-	const double start = newRange.start(), end = newRange.end();
-	if (start != yRange.start()) {
-		DEBUG(Q_FUNC_INFO << ", old/new start = " << yRange.start() << "/" << start)
-		q->setMin(Dimension::Y, index, start);
-	}
-	if (end != yRange.end()) {
-		DEBUG(Q_FUNC_INFO << ", old/new end = " << yRange.end() << "/" << end)
-		q->setMax(Dimension::Y, index, end);
+	if (end != range.end()) {
+		DEBUG(Q_FUNC_INFO << ", old/new end = " << range.end() << "/" << end)
+		q->setMax(dim, index, end);
 	}
 }
 
