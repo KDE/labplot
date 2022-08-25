@@ -531,7 +531,7 @@ void RetransformTest::TestZoom() {
 	// Axis "x2"
 	// Axis "y"
 	// Axis "y2"
-	// XYCurve "2"
+	// XYCurve "curve"
 	QCOMPARE(children.length(), 10);
 	for (const auto& child : children)
 		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
@@ -655,6 +655,85 @@ void RetransformTest::TestImportCSV() {
 		qDebug() << s;
 		QCOMPARE(c.callCount(s), 1);
 	}
+}
+
+void RetransformTest::TestSetScale() {
+	RetransformCallCounter c;
+	Project project;
+
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(100);
+
+	QVector<int> xData;
+	QVector<double> yData;
+	for (int i = 0; i < 100; i++) {
+		xData.append(i);
+		yData.append(i);
+	}
+	auto* xColumn = sheet->column(0);
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	xColumn->replaceInteger(0, xData);
+	auto* yColumn = sheet->column(1);
+	yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	yColumn->replaceValues(0, yData);
+
+	project.addChild(sheet);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* p = new CartesianPlot("Plot");
+	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
+
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Worksheet "Worksheet"
+	// CartesianPlot "Plot"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// XYCurve "curve"
+	QCOMPARE(children.length(), 10);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	c.resetRetransformCount();
+
+	auto list = QStringList({// data rect of the plot does not change, so retransforming the
+							 // plot is not needed
+							 "Project/Worksheet/Plot/x",
+							 "Project/Worksheet/Plot/x2",
+							 "Project/Worksheet/Plot/y",
+							 "Project/Worksheet/Plot/y2",
+							 "Project/Worksheet/Plot/curve"});
+
+	plot->setRangeScale(Dimension::X, 0, RangeT::Scale::Log10);
+
+	QCOMPARE(c.elementLogCount(false), list.count());
+	for (auto& s : list)
+		QCOMPARE(c.callCount(s), 1);
+
+	// x and y are called only once
+	QCOMPARE(c.logsXScaleRetransformed.count(), 1); // one plot with 2 x-Axes but both are using the same range so 1
+	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
+	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 }
 
 // ############################################################################################

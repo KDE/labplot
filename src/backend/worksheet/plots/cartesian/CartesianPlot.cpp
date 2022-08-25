@@ -1407,11 +1407,15 @@ public:
 	void redo() override {
 		m_scaleOld = m_private->rangeConst(m_dimension, m_index).scale();
 		m_private->setScale(m_dimension, m_index, m_scale);
+		m_private->retransformScale(m_dimension, m_index);
+		m_private->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_private->q->scaleChanged(m_dimension, m_index, m_scale);
 	}
 
 	void undo() override {
 		m_private->setScale(m_dimension, m_index, m_scaleOld);
+		m_private->retransformScale(m_dimension, m_index);
+		m_private->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_private->q->scaleChanged(m_dimension, m_index, m_scaleOld);
 	}
 
@@ -1458,7 +1462,6 @@ void CartesianPlot::setRangeScale(const Dimension dim, const int index, const Ra
 		return;
 	}
 	exec(new CartesianPlotSetScaleIndexCmd(d, dim, scale, index));
-	d->retransformScale(dim, index); // TODO: this retransform in the Undocommand?
 	if (project())
 		project()->setChanged(true);
 }

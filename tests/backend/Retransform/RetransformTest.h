@@ -27,6 +27,7 @@ private Q_SLOTS:
 	void TestBarPlotOrientation();
 	void TestZoom();
 	void TestImportCSV();
+	void TestSetScale();
 };
 
 /*!
