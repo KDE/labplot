@@ -26,7 +26,9 @@ public:
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
-	void init();
+
+	void initDataContainer();
+	void initIOFilters();
 
 	AbstractColumn::ColumnMode columnMode() const;
 	void setColumnMode(AbstractColumn::ColumnMode);
@@ -159,6 +161,7 @@ public:
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
+	int m_rowCount{0};
 	QVector<QString> m_dictionary; // dictionary for string columns
 	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
