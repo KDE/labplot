@@ -314,6 +314,10 @@ void ProjectExplorer::setProject(Project* project) {
 	// for projects loaded from a file, this function will be called laterto fit the sizes
 	// of the content once the project is loaded
 	resizeHeader();
+
+	// remove all error messages from the previous project, if any are visible
+	if (m_messageWidget && m_messageWidget->isVisible())
+		m_messageWidget->close();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -481,31 +485,30 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 	} else if (event->matches(QKeySequence::Paste)) {
 		// paste
 		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
 		if (!name.isEmpty()) {
-			auto t = AbstractAspect::clipboardAspectType(name);
 			if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1) {
 				aspect->paste();
 				showErrorMessage(QString());
 			} else {
-				QString msg = i18n("The data cannot be pasted into %2.", name, aspect->name());
+				QString msg = i18n("'%1' cannot be pasted into '%2'.", name, aspect->name());
 				showErrorMessage(msg);
 			}
 		} else {
 			// no name is available, we are copy&pasting the content of a columm ("the data") and not the column itself
-			const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+			const auto* mimeData = QApplication::clipboard()->mimeData();
 			if (!mimeData->hasFormat("text/plain"))
 				return;
 
 			// pasting is allowed into spreadsheet columns only
-			if (aspect->type() == AspectType::Column || aspect->parentAspect()->type() == AspectType::Spreadsheet) {
+			if (aspect->type() == AspectType::Column && aspect->parentAspect()->type() == AspectType::Spreadsheet) {
 				auto* column = static_cast<Column*>(aspect);
 				column->pasteData();
 			} else {
-				QString msg = i18n("Data cannot be pasted into %2 directly. Select a spreadsheet column for this.", name, aspect->name());
+				QString msg = i18n("Data cannot be pasted into '%1' directly. Select a spreadsheet column for this.", aspect->name());
 				showErrorMessage(msg);
 			}
 		}
-
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
 		// duplicate
 		if (aspect != m_project) {
