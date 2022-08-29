@@ -68,6 +68,31 @@ void RetransformTest::TestLoadProject() {
 	}
 }
 
+// Problem in this project was that the second axis labels are not loaded. Zooming in/out once shows the correct range
+void RetransformTest::TestLoadProject2() {
+	RetransformCallCounter c;
+	Project project;
+
+	project.load(QFINDTESTDATA(QLatin1String("bars_dis_004.lml")));
+
+	QHash<QString, int> h = {{"Project/Worksheet - Spreadsheet/Plot - Spreadsheet", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/x", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/y", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/x2", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/y2", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Frequency", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Cumulative", 1}}
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto& child : children) {
+		int expectedCallCount = 0;
+		const QString& path = child->path();
+		if (h.contains(path))
+			expectedCallCount = h.value(path);
+		COMPARE(c.callCount(child), expectedCallCount, path);
+	}
+}
+
 void RetransformTest::TestResizeWindows() {
 	RetransformCallCounter c;
 	Project project;
