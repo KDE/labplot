@@ -81,7 +81,7 @@ void RetransformTest::TestLoadProject2() {
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/x2", 1},
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/y2", 1},
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Frequency", 1},
-							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Cumulative", 1}}
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Cumulative", 1}};
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto& child : children) {
