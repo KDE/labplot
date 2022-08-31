@@ -537,7 +537,7 @@ IF (ENABLE_READSTAT)
 		add_dependencies( labplot2lib 3rdparty_readstat )
 	ENDIF ()
 	# link system readstat with iconv
-	IF (READSTAT_FOUND AND (WIN32 OR APPLE))
+	IF (READSTAT_FOUND)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
 		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
 	ENDIF ()
