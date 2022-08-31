@@ -169,10 +169,15 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				// ! as first character means error
-				if (line.count() > 0 && line.at(0) == '!') {
-					errorLogs += line;
-					break; // only first error message is enough
+				// ! character as the first character means the line is part of the error output.
+				// determine the first line in this output having a non-empty content and forward it to the user
+				if (line.count() > 0 && line.at(0) == QLatin1Char('!')) {
+					QString errorMsg(line);
+					errorMsg = errorMsg.remove(QLatin1Char('!')).simplified();
+					if (!errorMsg.isEmpty()) {
+						errorLogs += errorMsg;
+						break; // only first error message is enough
+					}
 				}
 			}
 			logFile.close();
