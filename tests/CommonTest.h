@@ -43,11 +43,14 @@ extern "C" {
 
 #define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	for (int i = 0; i < res.length(); i++) {                                                                                                                   \
-		const bool same = qFuzzyCompare(res.at(i), ref.at(i));                                                                                                 \
-		WARN("i=" << i << ", res=" << res.at(i) << ", ref=" << ref.at(i))                                                                                      \
-		QVERIFY(same);                                                                                                                                         \
-	}
+	for (int i = 0; i < res.length(); i++)                                                                                                                     \
+		QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                          \
+				 qPrintable(QString("i=") + QString::number(i) + ", res=" + QString::number(res.at(i)) + ", ref=" + QString::number(ref.at(i))));
+
+#define COMPARE_STRING_VECTORS(res, ref)                                                                                                                       \
+	QCOMPARE(res.length(), ref.length());                                                                                                                      \
+	for (int i = 0; i < res.length(); i++)                                                                                                                     \
+		QVERIFY2(res.at(i).compare(ref.at(i)) == 0, qPrintable(QString("i=") + QString::number(i) + ", res=" + res.at(i) + ", ref=" + ref.at(i)));
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {
