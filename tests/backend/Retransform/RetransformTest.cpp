@@ -73,7 +73,7 @@ void RetransformTest::TestLoadProject2() {
 	RetransformCallCounter c;
 	Project project;
 
-	project.load(QFINDTESTDATA(QLatin1String("bars_dis_004.lml")));
+	project.load(QFINDTESTDATA(QLatin1String("data/bars_dis_004.lml")));
 
 	QHash<QString, int> h = {{"Project/Worksheet - Spreadsheet/Plot - Spreadsheet", 1},
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/x", 1},
@@ -81,7 +81,8 @@ void RetransformTest::TestLoadProject2() {
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/x2", 1},
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/y2", 1},
 							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Frequency", 1},
-							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Cumulative", 1}};
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/Cumulative", 1},
+							 {"Project/Worksheet - Spreadsheet/Plot - Spreadsheet/legend", 1}};
 
 	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto& child : children) {
@@ -91,6 +92,27 @@ void RetransformTest::TestLoadProject2() {
 			expectedCallCount = h.value(path);
 		COMPARE(c.callCount(child), expectedCallCount, path);
 	}
+
+	// check axis ranges
+	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 4);
+	auto* xAxis = axes.at(0);
+	auto* xAxis2 = axes.at(1);
+	auto* yAxis1 = axes.at(2);
+	auto* yAxis2 = axes.at(3);
+
+	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis2->name(), "x2");
+	QCOMPARE(yAxis1->name(), "y");
+	QCOMPARE(yAxis2->name(), "y2");
+
+	// xAxis2 does not have any labels
+	QVector<QString> refString = {"161.2", "166.7", "172.2", "177.8", "183.3", "188.8", "194.4"};
+	COMPARE_STRING_VECTORS(static_cast<Axis*>(xAxis)->tickLabelStrings(), refString);
+	QVector<double> ref = {0, 20, 40, 60, 80, 100};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis1)->tickLabelValues(), ref);
+	ref = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis2)->tickLabelValues(), ref);
 }
 
 void RetransformTest::TestResizeWindows() {

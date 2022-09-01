@@ -165,6 +165,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
 	QString& labelsTextColumnPath() const;
 	QVector<double> tickLabelValues() const;
+	QVector<QString> tickLabelStrings() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
 	BASIC_D_ACCESSOR_DECL(LabelsBackgroundType, labelsBackgroundType, LabelsBackgroundType)

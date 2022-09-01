@@ -57,7 +57,7 @@ public:
 			, dirty(d) {
 		}
 		Range<double> range; // current range
-		Range<double> prev;
+		Range<double> prev{Range<double>(NAN, NAN)};
 		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
 		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
 	};
