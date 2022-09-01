@@ -311,4 +311,44 @@ void AxisTest::TestSetCoordinateSystem() {
 	}
 }
 
+void AxisTest::TestSetRange() {
+	Axis a("x", Axis::Orientation::Horizontal);
+
+	auto arange = a.range();
+	// different to default values!
+	Range<double> r(5, 11, RangeT::Format::DateTime, RangeT::Scale::Log10);
+	QVERIFY(arange.start() != r.start());
+	QVERIFY(arange.end() != r.end());
+	QVERIFY(arange.format() != r.format());
+	QVERIFY(arange.scale() != r.scale());
+
+	a.setRange(r);
+	arange = a.range();
+	QCOMPARE(arange.start(), 5);
+	QCOMPARE(arange.end(), 11);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+
+	a.setStart(1);
+	arange = a.range();
+	QCOMPARE(arange.start(), 1);
+	QCOMPARE(arange.end(), 11);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+
+	a.setEnd(23);
+	arange = a.range();
+	QCOMPARE(arange.start(), 1);
+	QCOMPARE(arange.end(), 23);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+
+	a.setRange(-10, 10);
+	arange = a.range();
+	QCOMPARE(arange.start(), -10);
+	QCOMPARE(arange.end(), 10);
+	QCOMPARE(arange.format(), RangeT::Format::DateTime);
+	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
+}
+
 QTEST_MAIN(AxisTest)

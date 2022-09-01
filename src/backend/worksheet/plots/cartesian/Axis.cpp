@@ -533,16 +533,21 @@ void Axis::setRange(Range<double> range) {
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
-	Range<double> range{min, d->range.end()};
+	Range<double> range = d->range;
+	range.setStart(min);
 	setRange(range);
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
-	Range<double> range{d->range.start(), max};
+	Range<double> range = d->range;
+	range.setEnd(max);
 	setRange(range);
 }
 void Axis::setRange(double min, double max) {
-	Range<double> range{min, max};
+	Q_D(Axis);
+	Range<double> range = d->range;
+	range.setStart(min);
+	range.setEnd(max);
 	setRange(range);
 }
 
