@@ -338,8 +338,6 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	auto type = aspect->type();
-
 	if (aspect->inherits(AspectType::AbstractColumn)) {
 		// check whether new columns were added and if yes,
 		// update the dependencies in the project

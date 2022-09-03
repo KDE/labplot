@@ -137,13 +137,12 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	if (engine == "latex")
 		return imageFromDVI(file, dpi, res);
 	else
-		return imageFromPDF(file, dpi, engine, res);
+		return imageFromPDF(file, engine, res);
 }
 
 // TEX -> PDF -> QImage
-QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, Result* res) {
-	Q_UNUSED(dpi)
-	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
+QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& engine, Result* res) {
+	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine))
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
