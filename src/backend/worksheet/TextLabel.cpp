@@ -631,9 +631,11 @@ void TextLabelPrivate::updateBoundingRect() {
 	// determine the size of the label in scene units.
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
-		// image size is in pixel, convert to scene units
-		w = teXImage.width() * teXImageScaleFactor;
-		h = teXImage.height() * teXImageScaleFactor;
+		// image size is in pixel, convert to scene units.
+		// the image is scaled so we have a good image quality when the worksheet was zoomed,
+		// for the bounding rect we need to scale back since it's scaled again in paint() when drawing the rect
+		w = teXImage.width() * teXImageScaleFactor / zoomFactor;
+		h = teXImage.height() * teXImageScaleFactor / zoomFactor;
 	} else {
 		// size is in points, convert to scene units
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
@@ -657,6 +659,14 @@ void TextLabelPrivate::updateBoundingRect() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
+	if (zoomFactor == -1.0) {
+		// the view was not zoomed after the label was added so the zoom factor is not set yet.
+		// determine the current zoom factor in the view and use it
+		auto* worksheet = static_cast<const Worksheet*>(q->parent(AspectType::Worksheet));
+		if (!worksheet)
+			return;
+		zoomFactor = worksheet->zoomFactor();
+	}
 	teXPdfData = teXImageFutureWatcher.result();
 	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 	updateBoundingRect();

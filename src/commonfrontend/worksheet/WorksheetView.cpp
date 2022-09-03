@@ -1375,12 +1375,17 @@ void WorksheetView::changeZoom(QAction* action) {
 	updateLabelsZoom();
 }
 
-void WorksheetView::updateLabelsZoom() const {
+double WorksheetView::zoomFactor() const {
 	double scale = transform().m11();
 	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch) / QApplication::desktop()->physicalDpiX();
+	return scale;
+}
+
+void WorksheetView::updateLabelsZoom() const {
+	const double zoom = zoomFactor();
 	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* label : labels)
-		label->setZoomFactor(scale);
+		label->setZoomFactor(zoom);
 }
 
 void WorksheetView::magnificationChanged(QAction* action) {
