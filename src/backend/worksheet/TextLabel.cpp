@@ -999,14 +999,24 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->restore();
 	}
 
-	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
-	}
+	// TODO: move the handling of m_hovered and the logic below
+	// to draw the selectiong/hover box to WorksheetElementPrivate
+	// so there is no need to duplicate this code in Plot, Label, Image, etc.
+	const bool selected = isSelected();
+	const bool hovered = (m_hovered && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 2.;
+		const QRectF& br = boundingRect();
+		const qreal width = br.width();
+		const qreal height = br.height();
+		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
-	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
+
+		painter->drawRect(rect);
 	}
 
 #define DEBUG_TEXTLABEL_GLUEPOINTS 0
