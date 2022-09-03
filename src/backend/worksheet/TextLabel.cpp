@@ -976,8 +976,9 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
 		painter->rotate(-rotationAngle);
-		if (boundingRect().width() != 0.0 && boundingRect().height() != 0.0)
-			painter->drawImage(boundingRect(), teXImage);
+		painter->setRenderHint(QPainter::SmoothPixmapTransform);
+		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
+			painter->drawImage(boundingRectangle, teXImage);
 		break;
 	}
 	case TextLabel::Mode::Text:
