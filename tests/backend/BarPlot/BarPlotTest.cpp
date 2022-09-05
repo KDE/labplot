@@ -160,7 +160,6 @@ void BarPlotTest::testRange04() {
 	QCOMPARE(barPlot->maximum(Dimension::Y), 17.);
 }
 
-
 /*!
  * \brief two datasets, stacked 100%
  */
