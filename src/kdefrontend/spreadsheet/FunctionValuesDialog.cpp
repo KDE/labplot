@@ -29,8 +29,6 @@
 #include <KSharedConfig>
 #include <KWindowConfig>
 
-#include <cmath>
-
 /*!
 	\class FunctionValuesDialog
 	\brief Dialog for generating values from a mathematical function.
@@ -40,7 +38,7 @@
 FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s) {
-	Q_ASSERT(s != nullptr);
+	Q_ASSERT(s);
 	setWindowTitle(i18nc("@title:window", "Function Values"));
 
 	ui.setupUi(this);
@@ -176,17 +174,19 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 
 void FunctionValuesDialog::checkValues() {
 	if (!ui.teEquation->isValid()) { // check whether the formula syntax is correct
+		DEBUG(Q_FUNC_INFO << ", syntax incorrect")
 		m_okButton->setEnabled(false);
 		return;
 	}
 
 	// check whether for the variables where a name was provided also a column was selected
 	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
 		if (m_variableLineEdits.at(i)->text().simplified().isEmpty())
 			continue;
 
-		TreeViewComboBox* cb = m_variableDataColumns.at(i);
-		AbstractAspect* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
+		auto* cb = m_variableDataColumns.at(i);
+		auto* aspect = static_cast<AbstractAspect*>(cb->currentModelIndex().internalPointer());
 		if (!aspect || !validVariableName(m_variableLineEdits.at(i))) {
 			m_okButton->setEnabled(false);
 			return;
