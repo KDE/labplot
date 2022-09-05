@@ -19,6 +19,9 @@ class BarPlotTest : public CommonTest {
 private Q_SLOTS:
 	void testRange01();
 	void testRange02();
+	void testRange03();
+	void testRange04();
+	void testRange05();
 };
 
 #endif
