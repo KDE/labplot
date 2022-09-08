@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Widget showing statistics for column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -33,6 +33,8 @@ private:
 	void showKDEPlot();
 	void showQQPlot();
 	void showBoxPlot();
+	void showBarPlot();
+
 	CartesianPlot* addPlot(QWidget*);
 
 	const QString isNanValue(const double) const;
@@ -47,14 +49,16 @@ private:
 	QWidget m_kdePlotWidget;
 	QWidget m_qqPlotWidget;
 	QWidget m_boxPlotWidget;
+	QWidget m_barPlotWidget;
 
-	QString m_htmlText;
+	QString m_htmlOverview;
 
 	bool m_overviewInitialized{false};
 	bool m_histogramInitialized{false};
 	bool m_kdePlotInitialized{false};
 	bool m_qqPlotInitialized{false};
 	bool m_boxPlotInitialized{false};
+	bool m_barPlotInitialized{false};
 
 private Q_SLOTS:
 	void currentTabChanged(int);

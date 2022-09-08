@@ -957,6 +957,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	const bool hasValues = column->hasValues();
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
+	const bool text = (column->columnMode() == AbstractColumn::ColumnMode::Text);
 
 	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
@@ -982,7 +983,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
-	action_statistics_columns->setEnabled(numeric && hasValues);
+	action_statistics_columns->setEnabled((numeric || text) && hasValues);
 }
 
 // SLOTS
@@ -1332,6 +1333,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool numeric = true;
 			bool plottable = true;
 			bool datetime = false;
+			bool text = false;
 			bool hasValues = false;
 			bool hasFormat = false;
 			const auto& columns = selectedColumns();
@@ -1343,6 +1345,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 						plottable = false;
 
 					numeric = false;
+					break;
+				}
+			}
+
+			for (const Column* col : columns) {
+				if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
+					text = true;
 					break;
 				}
 			}
@@ -1364,7 +1373,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_plotDataMenu->setEnabled(plottable && hasValues);
 			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled(numeric && hasValues);
+			action_statistics_columns->setEnabled((numeric || text) && hasValues);
 			action_clear_columns->setEnabled(hasValues);
 			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);

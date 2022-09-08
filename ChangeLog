@@ -15,6 +15,7 @@ New features:
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
 		* when generating random numbers, allow to specify the seed number
+		* show column statistics also for text columns
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import

@@ -86,6 +86,7 @@ public:
 
 	struct ColumnStatistics {
 		int size{0};
+		int unique{0}; // number of unique values, relevant for text columns only
 		double minimum{NAN};
 		double maximum{NAN};
 		double arithmeticMean{NAN};

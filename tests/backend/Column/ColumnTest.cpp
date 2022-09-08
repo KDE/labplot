@@ -472,6 +472,59 @@ void ColumnTest::statisticsBigInt() {
 #endif
 }
 
+void ColumnTest::statisticsText() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	const auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 5);
+	QCOMPARE(stats.unique, 2);
+}
+
+void ColumnTest::testDictionaryIndex() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	// check the position of the distinct values in the dictionary
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 1);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+
+	// modify a value which will invalidate the dictionary and verify it again
+	c.setTextAt(1, "yes");
+
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 0);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+}
+
+void ColumnTest::testTextFrequencies() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	const auto& frequencies = c.frequencies();
+
+	QCOMPARE(frequencies["yes"], 3);
+	QCOMPARE(frequencies["no"], 2);
+}
+
 //////////////////////////////////////////////////
 
 void ColumnTest::saveLoadDateTime() {
@@ -735,28 +788,6 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	for (int i=0; i < 8; i++) {
 	//		QCOMPARE(dateTimeColumn->dateTimeAt(i), QDateTime::fromString("2022-01-12T12:30:24.920"));
 	//	}
-}
-
-void ColumnTest::testDictionaryIndex() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
-
-	// check the position of the distinct values in the dictionary
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 1);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
-
-	// modify a value which will invalidate the dictionary and verify it again
-	c.setTextAt(1, "yes");
-
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 0);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
 }
 
 QTEST_MAIN(ColumnTest)

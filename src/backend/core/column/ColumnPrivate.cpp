@@ -18,6 +18,14 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <array>
+#include <unordered_map>
+
+extern "C" {
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_statistics.h>
+}
+
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 	: m_columnMode(mode)
 	, m_owner(owner) {
@@ -1565,6 +1573,13 @@ int ColumnPrivate::dictionaryIndex(int row) const {
 	return index;
 }
 
+const QMap<QString, int>& ColumnPrivate::frequencies() const {
+	if (!available.dictionary)
+		const_cast<ColumnPrivate*>(this)->initDictionary();
+
+	return m_dictionaryFrequencies;
+}
+
 void ColumnPrivate::initDictionary() {
 	m_dictionary.clear();
 	if (columnMode() != AbstractColumn::ColumnMode::Text)
@@ -1572,8 +1587,16 @@ void ColumnPrivate::initDictionary() {
 
 	auto data = static_cast<QVector<QString>*>(m_data);
 	for (auto& value : *data) {
-		if (!value.isEmpty() && !m_dictionary.contains(value))
+		if (value.isEmpty())
+			continue;
+
+		if (!m_dictionary.contains(value))
 			m_dictionary << value;
+
+		if (m_dictionaryFrequencies.constFind(value) == m_dictionaryFrequencies.constEnd())
+			m_dictionaryFrequencies[value] = 1;
+		else
+			m_dictionaryFrequencies[value]++;
 	}
 
 	available.dictionary = true;
@@ -2065,4 +2088,192 @@ IntervalAttribute<QString> ColumnPrivate::formulaAttribute() const {
  */
 void ColumnPrivate::replaceFormulas(const IntervalAttribute<QString>& formulas) {
 	m_formulas = formulas;
+}
+
+
+void ColumnPrivate::calculateStatistics() {
+	PERFTRACE("calculate column statistics");
+	statistics = AbstractColumn::ColumnStatistics();
+
+	if (m_owner->columnMode() == AbstractColumn::ColumnMode::Text) {
+		calculateTextStatistics();
+		return;
+	}
+
+	if (!m_owner->isNumeric())
+		return;
+
+	//######  location measures  #######
+	int rowValuesSize = rowCount();
+	double columnSum = 0.0;
+	double columnProduct = 1.0;
+	double columnSumNeg = 0.0;
+	double columnSumSquare = 0.0;
+	statistics.minimum = qInf();
+	statistics.maximum = -qInf();
+	std::unordered_map<double, int> frequencyOfValues;
+	QVector<double> rowData;
+	rowData.reserve(rowValuesSize);
+
+	for (int row = 0; row < rowValuesSize; ++row) {
+		double val = valueAt(row);
+		if (std::isnan(val) || m_owner->isMasked(row))
+			continue;
+
+		if (val < statistics.minimum)
+			statistics.minimum = val;
+		if (val > statistics.maximum)
+			statistics.maximum = val;
+		columnSum += val;
+		columnSumNeg += (1.0 / val); // will be Inf when val == 0
+		columnSumSquare += val * val;
+		columnProduct *= val;
+		if (frequencyOfValues.find(val) != frequencyOfValues.end())
+			frequencyOfValues.operator[](val)++;
+		else
+			frequencyOfValues.insert(std::make_pair(val, 1));
+		rowData.push_back(val);
+	}
+
+	const size_t notNanCount = rowData.size();
+
+	if (notNanCount == 0) {
+		available.statistics = true;
+		available.min = true;
+		available.max = true;
+		return;
+	}
+
+	if (rowData.size() < rowValuesSize)
+		rowData.squeeze();
+
+	statistics.size = notNanCount;
+	statistics.arithmeticMean = columnSum / notNanCount;
+
+	// geometric mean
+	if (statistics.minimum <= -100.) // invalid
+		statistics.geometricMean = qQNaN();
+	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
+		columnProduct = 1.; // recalculate
+		for (auto val : rowData)
+			columnProduct *= val / 100. + 1.;
+		// n-th root and convert back to percentage changes
+		statistics.geometricMean = 100. * (std::pow(columnProduct, 1.0 / notNanCount) - 1.);
+	} else if (statistics.minimum == 0) { // replace zero values with 1
+		columnProduct = 1.; // recalculate
+		for (auto val : rowData)
+			columnProduct *= (val == 0.) ? 1. : val;
+		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
+	} else
+		statistics.geometricMean = std::pow(columnProduct, 1.0 / notNanCount);
+
+	statistics.harmonicMean = notNanCount / columnSumNeg;
+	statistics.contraharmonicMean = columnSumSquare / columnSum;
+
+	// calculate the mode, the most frequent value in the data set
+	int maxFreq = 0;
+	double mode = NAN;
+	for (const auto& it : frequencyOfValues) {
+		if (it.second > maxFreq) {
+			maxFreq = it.second;
+			mode = it.first;
+		}
+	}
+	// check how many times the max frequency occurs in the data set.
+	// if more than once, we have a multi-modal distribution and don't show any mode
+	int maxFreqOccurance = 0;
+	for (const auto& it : frequencyOfValues) {
+		if (it.second == maxFreq)
+			++maxFreqOccurance;
+
+		if (maxFreqOccurance > 1) {
+			mode = NAN;
+			break;
+		}
+	}
+	statistics.mode = mode;
+
+	// sort the data to calculate the percentiles
+	std::sort(rowData.begin(), rowData.end());
+	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.25);
+	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.50);
+	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.75);
+	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.01);
+	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.05);
+	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.1);
+	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.9);
+	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.95);
+	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.constData(), 1, notNanCount, 0.99);
+	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
+	statistics.trimean = (statistics.firstQuartile + 2. * statistics.median + statistics.thirdQuartile) / 4.;
+
+	//######  dispersion and shape measures  #######
+	statistics.variance = 0.;
+	statistics.meanDeviation = 0.;
+	statistics.meanDeviationAroundMedian = 0.;
+	double centralMoment_r3 = 0.;
+	double centralMoment_r4 = 0.;
+	QVector<double> absoluteMedianList;
+	absoluteMedianList.reserve(notNanCount);
+	absoluteMedianList.resize(notNanCount);
+
+	for (size_t row = 0; row < notNanCount; ++row) {
+		double val = rowData.value(row);
+		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
+		statistics.meanDeviation += std::abs(val - statistics.arithmeticMean);
+
+		absoluteMedianList[row] = std::abs(val - statistics.median);
+		statistics.meanDeviationAroundMedian += absoluteMedianList[row];
+
+		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
+		centralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
+	}
+
+	// normalize
+	statistics.variance = (notNanCount != 1) ? statistics.variance / (notNanCount - 1) : NAN;
+	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
+	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
+
+	// standard deviation
+	statistics.standardDeviation = std::sqrt(statistics.variance);
+
+	//"median absolute deviation" - the median of the absolute deviations from the data's median.
+	std::sort(absoluteMedianList.begin(), absoluteMedianList.end());
+	statistics.medianDeviation = gsl_stats_quantile_from_sorted_data(absoluteMedianList.data(), 1, notNanCount, 0.50);
+
+	// skewness and kurtosis
+	centralMoment_r3 = centralMoment_r3 / notNanCount;
+	centralMoment_r4 = centralMoment_r4 / notNanCount;
+	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
+	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
+
+	// entropy
+	double entropy = 0.;
+	for (const auto& v : frequencyOfValues) {
+		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
+		entropy += (frequencyNorm * std::log2(frequencyNorm));
+	}
+
+	statistics.entropy = -entropy;
+
+	available.statistics = true;
+	available.min = true;
+	available.max = true;
+}
+
+void ColumnPrivate::calculateTextStatistics() {
+	if (!available.dictionary)
+		initDictionary();
+
+	int valid = 0;
+	for (int row = 0; row < rowCount(); ++row) {
+		if (m_owner->isMasked(row))
+			continue;
+
+		++valid;
+	}
+
+	statistics.size = valid;
+	statistics.unique = m_dictionary.count();
+	available.statistics = true;
 }

@@ -147,6 +147,7 @@ public:
 	void setText(const QVector<QString>&);
 	void replaceTexts(int, const QVector<QString>&) override;
 	int dictionaryIndex(int row) const override;
+	const QMap<QString, int>& frequencies() const;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
 
@@ -214,8 +215,6 @@ private:
 
 	void handleRowInsertion(int before, int count) override;
 	void handleRowRemoval(int first, int count) override;
-
-	void calculateStatistics() const;
 
 	bool m_suppressDataChangedSignal{false};
 	QAction* m_copyDataAction{nullptr};

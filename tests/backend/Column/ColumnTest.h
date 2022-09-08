@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
 	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -18,6 +19,7 @@ class ColumnTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	// ranges
 	void doubleMinimum();
 	void doubleMaximum();
 	void integerMinimum();
@@ -25,6 +27,7 @@ private Q_SLOTS:
 	void bigIntMinimum();
 	void bigIntMaximum();
 
+	// statistical properties for different column modes
 	void statisticsDouble(); // only positive double values
 	void statisticsDoubleNegative(); // contains negative values (> -100)
 	void statisticsDoubleBigNegative(); // contains big negative values (<= -100)
@@ -35,14 +38,20 @@ private Q_SLOTS:
 	void statisticsIntZero(); // contains zero value
 	void statisticsIntOverflow(); // check overflow of integer
 	void statisticsBigInt(); // big ints
+	void statisticsText();
 
+	// dictionary related tests for text columns
+	void testDictionaryIndex();
+	void testTextFrequencies();
+
+	// performance of save and load
 	void loadDoubleFromProject();
 	void loadIntegerFromProject();
 	void loadBigIntegerFromProject();
 	void loadTextFromProject();
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
-	void testDictionaryIndex();
+
 };
 
 #endif // COLUMNTEST_H
