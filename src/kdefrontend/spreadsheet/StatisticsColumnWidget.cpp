@@ -227,25 +227,25 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 
 	if (column->isNumeric()) {
 		m_teOverview->setHtml(m_htmlOverview
-								.arg(QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"))
-								.arg(QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"),
-									QLatin1String("-"))
-								.arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+								  .arg(QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"))
+								  .arg(QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"))
+								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
 		m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
 		m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
 		m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
@@ -297,25 +297,25 @@ void StatisticsColumnWidget::showOverview() {
 
 	if (m_column->isNumeric()) {
 		m_teOverview->setHtml(m_htmlOverview
-								.arg(QString::number(statistics.size),
-									isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
-									isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
-									isNanValue(statistics.arithmeticMean),
-									isNanValue(statistics.geometricMean),
-									isNanValue(statistics.harmonicMean),
-									isNanValue(statistics.contraharmonicMean),
-									modeValue(m_column, statistics.mode),
-									isNanValue(statistics.firstQuartile))
-								.arg(isNanValue(statistics.median),
-									isNanValue(statistics.thirdQuartile),
-									isNanValue(statistics.trimean),
-									isNanValue(statistics.variance),
-									isNanValue(statistics.standardDeviation),
-									isNanValue(statistics.meanDeviation),
-									isNanValue(statistics.meanDeviationAroundMedian),
-									isNanValue(statistics.medianDeviation),
-									isNanValue(statistics.iqr))
-								.arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
+								  .arg(QString::number(statistics.size),
+									   isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
+									   isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
+									   isNanValue(statistics.arithmeticMean),
+									   isNanValue(statistics.geometricMean),
+									   isNanValue(statistics.harmonicMean),
+									   isNanValue(statistics.contraharmonicMean),
+									   modeValue(m_column, statistics.mode),
+									   isNanValue(statistics.firstQuartile))
+								  .arg(isNanValue(statistics.median),
+									   isNanValue(statistics.thirdQuartile),
+									   isNanValue(statistics.trimean),
+									   isNanValue(statistics.variance),
+									   isNanValue(statistics.standardDeviation),
+									   isNanValue(statistics.meanDeviation),
+									   isNanValue(statistics.meanDeviationAroundMedian),
+									   isNanValue(statistics.medianDeviation),
+									   isNanValue(statistics.iqr))
+								  .arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
 	} else {
 		// add the frequencies table
 		const auto& frequencies = m_column->frequencies();
@@ -345,8 +345,7 @@ void StatisticsColumnWidget::showOverview() {
 		}
 
 		m_htmlOverview += "</table>";
-		m_teOverview->setHtml(m_htmlOverview .arg(QString::number(statistics.size), QString::number(statistics.unique)));
-
+		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size), QString::number(statistics.unique)));
 	}
 
 	RESET_CURSOR;
@@ -611,7 +610,7 @@ void StatisticsColumnWidget::showBarPlot() {
 	auto i = frequencies.constBegin();
 	int row = 0;
 	while (i != frequencies.constEnd()) {
-		labels[row] =  i.key();
+		labels[row] = i.key();
 		data[row] = i.value();
 		++row;
 		++i;

@@ -37,7 +37,6 @@
 #include <QMimeData>
 #include <QThreadPool>
 
-
 /**
  * \class Column
  * \brief Aspect that manages a column

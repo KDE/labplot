@@ -2090,7 +2090,6 @@ void ColumnPrivate::replaceFormulas(const IntervalAttribute<QString>& formulas) 
 	m_formulas = formulas;
 }
 
-
 void ColumnPrivate::calculateStatistics() {
 	PERFTRACE("calculate column statistics");
 	statistics = AbstractColumn::ColumnStatistics();

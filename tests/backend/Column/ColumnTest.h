@@ -51,7 +51,6 @@ private Q_SLOTS:
 	void loadTextFromProject();
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
-
 };
 
 #endif // COLUMNTEST_H
