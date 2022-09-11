@@ -466,6 +466,11 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabValues">
+      <attribute name="title">
+       <string>Values</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
   </layout>

@@ -21,6 +21,7 @@ class Column;
 class Histogram;
 class BackgroundWidget;
 class SymbolWidget;
+class ValueWidget;
 class TreeViewComboBox;
 
 class HistogramDock : public BaseDock {
@@ -37,7 +38,6 @@ private:
 	QStringList timeStrings;
 
 	TreeViewComboBox* cbDataColumn;
-	TreeViewComboBox* cbValuesColumn;
 	TreeViewComboBox* cbErrorPlusColumn;
 	TreeViewComboBox* cbErrorMinusColumn;
 
@@ -49,6 +49,7 @@ protected:
 	Ui::HistogramDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
+	ValueWidget* valueWidget{nullptr};
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
@@ -85,21 +86,6 @@ private Q_SLOTS:
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 
-	// Values-Tab
-	void valuesTypeChanged(int);
-	void valuesColumnChanged(const QModelIndex&);
-	void valuesPositionChanged(int);
-	void valuesDistanceChanged(double);
-	void valuesRotationChanged(int);
-	void valuesOpacityChanged(int);
-	void valuesNumericFormatChanged(int);
-	void valuesPrecisionChanged(int);
-	void valuesDateTimeFormatChanged(const QString&);
-	void valuesPrefixChanged();
-	void valuesSuffixChanged();
-	void valuesFontChanged(const QFont&);
-	void valuesColorChanged(const QColor&);
-
 	//"Error bars"-Tab
 	void errorTypeChanged(int) const;
 	void errorPlusColumnChanged(const QModelIndex&) const;
@@ -135,21 +121,6 @@ private Q_SLOTS:
 	void curveLineTypeChanged(Histogram::LineType);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
-
-	// Values-Tab
-	void curveValuesTypeChanged(Histogram::ValuesType);
-	void curveValuesColumnChanged(const AbstractColumn*);
-	void curveValuesPositionChanged(Histogram::ValuesPosition);
-	void curveValuesDistanceChanged(qreal);
-	void curveValuesOpacityChanged(qreal);
-	void curveValuesRotationAngleChanged(qreal);
-	void curveValuesNumericFormatChanged(char);
-	void curveValuesPrecisionChanged(int);
-	void curveValuesDateTimeFormatChanged(const QString&);
-	void curveValuesPrefixChanged(const QString&);
-	void curveValuesSuffixChanged(const QString&);
-	void curveValuesFontChanged(QFont);
-	void curveValuesColorChanged(QColor);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

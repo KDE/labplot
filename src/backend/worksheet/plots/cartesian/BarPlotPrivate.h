@@ -16,6 +16,7 @@
 
 class Background;
 class CartesianCoordinateSystem;
+class Value;
 
 typedef QVector<QPointF> Points;
 
@@ -26,6 +27,7 @@ public:
 	void retransform() override;
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
+	void updateValues();
 	void updatePixmap();
 
 	bool m_suppressRecalc{false};
@@ -61,6 +63,9 @@ public:
 	// box border
 	QPen borderPen;
 	qreal borderOpacity;
+
+	// values
+	Value* value{nullptr};
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

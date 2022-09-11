@@ -18,7 +18,7 @@
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
-class Symbol;
+class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -57,6 +57,9 @@ public:
 
 	// box filling
 	Background* backgroundAt(int) const;
+
+	// values
+	Value* value() const;
 
 	// box border
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)

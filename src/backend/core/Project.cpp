@@ -18,6 +18,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -446,9 +447,9 @@ void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, co
 			histogram->setUndoAware(true);
 		}
 
-		if (histogram->valuesColumnPath() == columnPath) {
+		if (histogram->value()->columnPath() == columnPath) {
 			histogram->setUndoAware(false);
-			histogram->setValuesColumn(column);
+			histogram->value()->setColumn(column);
 			histogram->setUndoAware(true);
 		}
 	}
@@ -917,7 +918,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!hist)
 			continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-		RESTORE_COLUMN_POINTER(hist, valuesColumn, ValuesColumn);
+		auto* value = hist->value();
+		RESTORE_COLUMN_POINTER(value, column, Column);
 		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
 		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
 	}

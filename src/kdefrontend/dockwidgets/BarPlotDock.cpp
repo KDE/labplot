@@ -15,6 +15,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/ValueWidget.h"
 
 #include <QPushButton>
 
@@ -67,6 +68,13 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
+
+	// Tab "Values"
+	auto* hboxLayout = new QHBoxLayout(ui.tabValues);
+	valueWidget = new ValueWidget(ui.tabValues);
+	hboxLayout->addWidget(valueWidget);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
+	hboxLayout->setSpacing(2);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -152,6 +160,13 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 		backgrounds << plot->backgroundAt(0);
 
 	backgroundWidget->setBackgrounds(backgrounds);
+
+	// values
+	QList<Value*> values;
+	for (auto* plot : m_barPlots)
+		values << plot->value();
+
+	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_barPlot->isVisible());

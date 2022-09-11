@@ -17,6 +17,7 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BackgroundWidget;
+class ValueWidget;
 class BarPlot;
 class TreeViewComboBox;
 class KConfig;
@@ -32,6 +33,7 @@ public:
 private:
 	Ui::BarPlotDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	ValueWidget* valueWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};

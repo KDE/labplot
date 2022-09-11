@@ -18,6 +18,7 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
 #include <QActionGroup>
@@ -77,6 +78,19 @@ void BarPlot::init() {
 		d->updatePixmap();
 	});
 	d->backgrounds << background;
+
+	// values
+	d->value = new Value(QString());
+	addChild(d->value);
+	d->value->setHidden(true);
+	d->value->init(group);
+	connect(d->value, &Value::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->value, &Value::updateRequested, [=] {
+		d->updateValues();
+	});
+
 
 	// box border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
@@ -221,6 +235,12 @@ double BarPlot::maximum(const Dimension dim) const {
 		return d->yMax;
 	}
 	return NAN;
+}
+
+// values
+Value* BarPlot::value() const {
+	Q_D(const BarPlot);
+	return d->value;
 }
 
 /* ============================ setter methods and undo commands ================= */
@@ -900,6 +920,10 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 	}
 
 	m_fillPolygons[columnIndex][valueIndex] = polygon;
+}
+
+void BarPlotPrivate::updateValues() {
+
 }
 
 /*!
