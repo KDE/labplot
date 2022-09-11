@@ -678,7 +678,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 		++i;
 	}
 
-	//sort the frequencies and the accomponying labels
+	// sort the frequencies and the accomponying labels
 	auto data = dataUnsorted;
 	std::sort(data.begin(), data.end(), std::greater<int>());
 
