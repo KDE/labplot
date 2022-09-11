@@ -253,6 +253,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	} else {
 		m_teOverview->setHtml(m_htmlOverview.arg(QLatin1String("-"), QLatin1String("-")));
 		m_tabWidget->addTab(&m_barPlotWidget, i18n("Bar Plot"));
+		m_tabWidget->addTab(&m_paretoPlotWidget, i18n("Pareto Plot"));
 	}
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &StatisticsColumnWidget::currentTabChanged);
@@ -271,28 +272,32 @@ void StatisticsColumnWidget::setCurrentTab(int index) {
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
-	if (index == 0 && !m_overviewInitialized)
-		showOverview();
-	else if (index == 1) {
-		if (m_column->isNumeric()) {
-			if (!m_histogramInitialized)
-				showHistogram();
-		} else {
-			if (!m_barPlotInitialized)
-				showBarPlot();
-		}
-	} else if (index == 2 && !m_kdePlotInitialized)
-		showKDEPlot();
-	else if (index == 3 && !m_qqPlotInitialized)
-		showQQPlot();
-	else if (index == 4 && !m_boxPlotInitialized)
-		showBoxPlot();
+	WAIT_CURSOR;
+	if (m_column->isNumeric()) {
+		if (index == 0 && !m_overviewInitialized)
+			showOverview();
+		else if (index == 1 && !m_histogramInitialized)
+			showHistogram();
+		else if (index == 2 && !m_kdePlotInitialized)
+			showKDEPlot();
+		else if (index == 3 && !m_qqPlotInitialized)
+			showQQPlot();
+		else if (index == 4 && !m_boxPlotInitialized)
+			showBoxPlot();
+	} else {
+		if (index == 0 && !m_overviewInitialized)
+			showOverview();
+		else if (index == 1 && !m_barPlotInitialized)
+			showBarPlot();
+		else if (index == 2 && !m_paretoPlotInitialized)
+			showParetoPlot();
+	}
 
 	Q_EMIT tabChanged(index);
+	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showOverview() {
-	WAIT_CURSOR;
 	const Column::ColumnStatistics& statistics = m_column->statistics();
 
 	if (m_column->isNumeric()) {
@@ -348,14 +353,10 @@ void StatisticsColumnWidget::showOverview() {
 		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size), QString::number(statistics.unique)));
 	}
 
-	RESET_CURSOR;
-
 	m_overviewInitialized = true;
 }
 
 void StatisticsColumnWidget::showHistogram() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_histogramWidget);
 
@@ -377,12 +378,9 @@ void StatisticsColumnWidget::showHistogram() {
 
 	plot->retransform();
 	m_histogramInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showKDEPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_kdePlotWidget);
 
@@ -447,12 +445,9 @@ void StatisticsColumnWidget::showKDEPlot() {
 	curve->setSuppressRetransform(false);
 	plot->retransform();
 	m_kdePlotInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showQQPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_qqPlotWidget);
 
@@ -543,12 +538,9 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve2->setSuppressRetransform(false);
 	plot->retransform();
 	m_qqPlotInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showBoxPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_boxPlotWidget);
 
@@ -578,12 +570,9 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	plot->retransform();
 	m_boxPlotInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showBarPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_barPlotWidget);
 	plot->title()->setText(m_column->name());
@@ -641,7 +630,108 @@ void StatisticsColumnWidget::showBarPlot() {
 
 	plot->retransform();
 	m_barPlotInitialized = true;
-	RESET_CURSOR;
+}
+
+void StatisticsColumnWidget::showParetoPlot() {
+	// add plot
+	auto* plot = addPlot(&m_paretoPlotWidget);
+	plot->title()->setText(m_column->name());
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	plot->addChild(barPlot);
+
+	// generate columns holding the data and the labels
+	int count = m_column->statistics().unique;
+
+	auto* dataColumn = new Column("data");
+	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVector<int> dataUnsorted;
+	dataUnsorted.resize(count);
+
+	auto* xColumn = new Column("x");
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVector<int> xData;
+	xData.resize(count);
+
+	auto* yColumn = new Column("y");
+	yColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVector<int> yData;
+	yData.resize(count);
+
+	auto* labelsColumn = new Column("labels");
+	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+	QVector<QString> labels;
+	labels.resize(count);
+	QVector<QString> labelsUnsorted;
+	labelsUnsorted.resize(count);
+
+	const auto& frequencies = m_column->frequencies();
+	auto i = frequencies.constBegin();
+	int row = 0;
+	while (i != frequencies.constEnd()) {
+		labelsUnsorted[row] = i.key();
+		dataUnsorted[row] = i.value();
+		xData[row] = 1 + row;
+		++row;
+		++i;
+	}
+
+	//sort the frequencies and the accomponying labels
+	auto data = dataUnsorted;
+	std::sort(data.begin(), data.end(), std::greater<int>());
+
+	// calculate the cummulative values and sort the labels according to the new order of sorted values
+	int sum = 0;
+	row = 0;
+	for (auto value : data) {
+		sum += value;
+		yData[row] = sum;
+
+		int index = dataUnsorted.indexOf(value);
+		labels[row] = labelsUnsorted.at(index);
+
+		++row;
+	}
+
+	dataColumn->replaceInteger(0, data);
+	labelsColumn->replaceTexts(0, labels);
+	xColumn->replaceInteger(0, xData);
+	yColumn->replaceInteger(0, yData);
+
+	QVector<const AbstractColumn*> columns;
+	columns << dataColumn;
+	barPlot->setDataColumns(columns);
+
+	// add xy-curve
+	auto* curve = new XYCurve("curve");
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+	auto pen = curve->linePen();
+	pen.setStyle(Qt::SolidLine);
+	curve->setLinePen(pen);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+
+	// axes properties
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
+			axis->title()->setText(QString());
+			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+			axis->setMajorTickStartOffset(1.0);
+			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+			axis->setLabelsTextColumn(labelsColumn);
+		} else
+			axis->title()->setText(i18n("Frequency"));
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+	}
+
+	plot->retransform();
+	m_paretoPlotInitialized = true;
 }
 
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {

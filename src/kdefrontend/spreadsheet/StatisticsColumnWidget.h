@@ -34,6 +34,7 @@ private:
 	void showQQPlot();
 	void showBoxPlot();
 	void showBarPlot();
+	void showParetoPlot();
 
 	CartesianPlot* addPlot(QWidget*);
 
@@ -50,6 +51,7 @@ private:
 	QWidget m_qqPlotWidget;
 	QWidget m_boxPlotWidget;
 	QWidget m_barPlotWidget;
+	QWidget m_paretoPlotWidget;
 
 	QString m_htmlOverview;
 
@@ -59,6 +61,7 @@ private:
 	bool m_qqPlotInitialized{false};
 	bool m_boxPlotInitialized{false};
 	bool m_barPlotInitialized{false};
+	bool m_paretoPlotInitialized{false};
 
 private Q_SLOTS:
 	void currentTabChanged(int);

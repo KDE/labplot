@@ -91,7 +91,6 @@ void BarPlot::init() {
 		d->updateValues();
 	});
 
-
 	// box border
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
 						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
@@ -923,7 +922,7 @@ void BarPlotPrivate::updateFillingRect(int columnIndex, int valueIndex, const QV
 }
 
 void BarPlotPrivate::updateValues() {
-
+	// TODO
 }
 
 /*!

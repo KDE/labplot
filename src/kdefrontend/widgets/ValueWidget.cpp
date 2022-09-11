@@ -9,10 +9,10 @@
 
 #include "ValueWidget.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
+#include "backend/core/column/Column.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 
 /*!
 	\class ValueWidget
@@ -71,7 +71,6 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.leSuffix, &QLineEdit::textChanged, this, &ValueWidget::suffixChanged);
 	connect(ui.kfrFont, &KFontRequester::fontSelected, this, &ValueWidget::fontChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &ValueWidget::colorChanged);
-
 }
 
 void ValueWidget::setValues(QList<Value*> values) {
