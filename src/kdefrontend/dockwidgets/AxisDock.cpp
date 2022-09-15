@@ -186,6 +186,7 @@ AxisDock::AxisDock(QWidget* parent)
 
 	//"Tick labels"-tab
 	connect(ui.cbLabelsFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::labelsFormatChanged);
+	connect(ui.chkLabelsFormatAuto, &QCheckBox::toggled, this, &AxisDock::labelsFormatAutoChanged);
 	connect(ui.sbLabelsPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsPrecisionChanged);
 	connect(ui.chkLabelsAutoPrecision, &QCheckBox::toggled, this, &AxisDock::labelsAutoPrecisionChanged);
 	connect(ui.cbLabelsDateTimeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::labelsDateTimeFormatChanged);
@@ -532,6 +533,7 @@ void AxisDock::initConnections() {
 
 	// labels
 	m_connections << connect(m_axis, &Axis::labelsFormatChanged, this, &AxisDock::axisLabelsFormatChanged);
+	m_connections << connect(m_axis, &Axis::labelsFormatAutoChanged, this, &AxisDock::axisLabelsFormatAutoChanged);
 	m_connections << connect(m_axis, &Axis::labelsAutoPrecisionChanged, this, &AxisDock::axisLabelsAutoPrecisionChanged);
 	m_connections << connect(m_axis, &Axis::labelsPrecisionChanged, this, &AxisDock::axisLabelsPrecisionChanged);
 	m_connections << connect(m_axis, &Axis::labelsDateTimeFormatChanged, this, &AxisDock::axisLabelsDateTimeFormatChanged);
@@ -1601,6 +1603,14 @@ void AxisDock::labelsFormatChanged(int index) {
 		axis->setLabelsFormat(Axis::indexToLabelsFormat(index));
 }
 
+void AxisDock::labelsFormatAutoChanged(bool automatic) {
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsFormatAuto(automatic);
+}
+
 void AxisDock::labelsPrecisionChanged(int value) {
 	if (m_initializing)
 		return;
@@ -2218,6 +2228,12 @@ void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(format));
 	m_initializing = false;
 }
+void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
+	m_initializing = true;
+	ui.chkLabelsFormatAuto->setChecked(automatic);
+	ui.cbLabelsFormat->setEnabled(!automatic);
+	m_initializing = false;
+}
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
 	m_initializing = true;
 	ui.chkLabelsAutoPrecision->setChecked(on);
@@ -2417,6 +2433,7 @@ void AxisDock::load() {
 
 	// tick labels format
 	ui.lLabelsFormat->setVisible(numeric);
+	ui.chkLabelsFormatAuto->setVisible(numeric);
 	ui.cbLabelsFormat->setVisible(numeric);
 	ui.chkLabelsAutoPrecision->setVisible(numeric);
 	ui.lLabelsPrecision->setVisible(numeric);
@@ -2494,6 +2511,8 @@ void AxisDock::load() {
 	ui.sbLabelsRotation->setValue(m_axis->labelsRotationAngle());
 	ui.cbLabelsTextType->setCurrentIndex((int)m_axis->labelsTextType());
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(m_axis->labelsFormat()));
+	ui.cbLabelsFormat->setEnabled(!m_axis->labelsFormatAuto());
+	ui.chkLabelsFormatAuto->setChecked(m_axis->labelsFormatAuto());
 	ui.chkLabelsAutoPrecision->setChecked((int)m_axis->labelsAutoPrecision());
 	ui.sbLabelsPrecision->setValue((int)m_axis->labelsPrecision());
 	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());

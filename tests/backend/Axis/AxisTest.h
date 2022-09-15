@@ -24,6 +24,8 @@ private Q_SLOTS:
 	void TestSetRange();
 	void TestAddingHorizontalAxis();
 	void TestAddingVerticalAxis();
+	void tickLabelRepresentationAutomatic();
+	void tickLabelRepresentationManual();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

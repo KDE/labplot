@@ -21,13 +21,12 @@
 #include "src/kdefrontend/dockwidgets/AxisDock.h" // to be able to access the ui elements
 #undef private
 
-#define CHECK_AXIS_LABELS(expectedTickValues)                                                                                                                  \
+#define CHECK_AXIS_LABELS(currentTickValues, expectedTickValues)                                                                                               \
 	{                                                                                                                                                          \
 		/* To check if retransform ticks was called at the correct time */                                                                                     \
-		auto tickLabelValues = xAxis->tickLabelValues();                                                                                                       \
-		QCOMPARE(tickLabelValues.length(), expectedTickValues.length());                                                                                       \
+		QCOMPARE(currentTickValues.length(), expectedTickValues.length());                                                                                     \
 		for (int i = 0; i < expectedTickValues.length(); i++)                                                                                                  \
-			QCOMPARE(tickLabelValues.at(i), expectedTickValues.at(i));                                                                                         \
+			QCOMPARE(currentTickValues.at(i), expectedTickValues.at(i));                                                                                       \
 	}
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
@@ -54,7 +53,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	// To check also if the dock shows the correct values
@@ -71,7 +70,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), false);
@@ -85,7 +84,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	QCOMPARE(axisDock.ui.cbMajorTicksAutoNumber->isChecked(), true);
@@ -98,7 +97,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	xAxis->setMajorTicksAutoNumber(true);
@@ -107,7 +106,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	// Check that undo/redo works for setting autonumber enable/disable
@@ -117,7 +116,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.25, 0.5, 0.75, 1};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	project.undoStack()->redo();
@@ -126,7 +125,7 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 }
 
@@ -217,7 +216,7 @@ void AxisTest::majorTicksStartValue() {
 
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	// To check also if the dock shows the correct values
@@ -236,7 +235,7 @@ void AxisTest::majorTicksStartValue() {
 	QCOMPARE(xAxis->majorTicksStartType(), Axis::TicksStartType::Absolute);
 	{
 		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	xAxis->setMajorTickStartValue(0.2);
@@ -244,7 +243,7 @@ void AxisTest::majorTicksStartValue() {
 
 	{
 		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	project.undoStack()->undo();
@@ -253,7 +252,7 @@ void AxisTest::majorTicksStartValue() {
 
 	{
 		QVector<double> expectedTickValues = {0.1, 0.3, 0.5, 0.7, 0.9}; // starting now from 0.1
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 
 	project.undoStack()->undo();
@@ -263,7 +262,7 @@ void AxisTest::majorTicksStartValue() {
 	// by default the offset is zero, so we are starting again from the begining
 	{
 		QVector<double> expectedTickValues = {0, 0.2, 0.4, 0.6, 0.8, 1.0};
-		CHECK_AXIS_LABELS(expectedTickValues);
+		CHECK_AXIS_LABELS(xAxis->tickLabelValues(), expectedTickValues);
 	}
 }
 
@@ -379,5 +378,119 @@ void AxisTest::TestAddingVerticalAxis() {
 
 	p->addVerticalAxis(); // should not crash
 }
+
+void AxisTest::tickLabelRepresentationAutomatic() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), "x");
+	QCOMPARE(axes.at(1)->name(), "y");
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({yAxis});
+
+	QCOMPARE(dock.ui.chkLabelsFormatAuto->isChecked(), true);
+	QCOMPARE(dock.ui.cbLabelsFormat->isEnabled(), false);
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	p->setRange(Dimension::Y, Range<double>(0, 1e6));
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Scientific);
+		QStringList expectedStrings{
+			"0",
+			AxisPrivate::createScientificRepresentation("2", "5"),
+			AxisPrivate::createScientificRepresentation("4", "5"),
+			AxisPrivate::createScientificRepresentation("6", "5"),
+			AxisPrivate::createScientificRepresentation("8", "5"),
+			AxisPrivate::createScientificRepresentation("1", "6"),
+		};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	p->setRange(Dimension::Y, Range<double>(0, 1));
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+void AxisTest::tickLabelRepresentationManual() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto axes = p->children<Axis>();
+	QCOMPARE(axes.count(), 2);
+	QCOMPARE(axes.at(0)->name(), "x");
+	QCOMPARE(axes.at(1)->name(), "y");
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+
+	AxisDock dock(nullptr);
+	dock.setAxes({yAxis});
+
+	QCOMPARE(dock.ui.chkLabelsFormatAuto->isChecked(), true);
+	QCOMPARE(dock.ui.cbLabelsFormat->isEnabled(), false);
+
+	dock.labelsFormatAutoChanged(false);
+
+	QCOMPARE(dock.ui.chkLabelsFormatAuto->isChecked(), false);
+	QCOMPARE(dock.ui.cbLabelsFormat->isEnabled(), true);
+
+	{
+		// Check if applied also when settings
+		AxisDock dock2(nullptr);
+		dock2.setAxes({yAxis});
+		QCOMPARE(dock2.ui.chkLabelsFormatAuto->isChecked(), false);
+		QCOMPARE(dock2.ui.cbLabelsFormat->isEnabled(), true);
+	}
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	p->setRange(Dimension::Y, Range<double>(0, 1e6));
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		QStringList expectedStrings{"0", "200,000", "400,000", "600,000", "800,000", "1,000,000"};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+
+	p->setRange(Dimension::Y, Range<double>(0, 1));
+
+	{
+		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
+		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
+	}
+}
+
+// TODO: write test switching between numeric and datetime
 
 QTEST_MAIN(AxisTest)

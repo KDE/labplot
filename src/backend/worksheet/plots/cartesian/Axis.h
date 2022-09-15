@@ -155,6 +155,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
+	BASIC_D_ACCESSOR_DECL(bool, labelsFormatAuto, LabelsFormatAuto)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
 	CLASS_D_ACCESSOR_DECL(QString, labelsDateTimeFormat, LabelsDateTimeFormat)
@@ -277,6 +278,7 @@ Q_SIGNALS:
 
 	// labels
 	void labelsFormatChanged(LabelsFormat);
+	void labelsFormatAutoChanged(bool);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
 	void labelsDateTimeFormatChanged(const QString&);
