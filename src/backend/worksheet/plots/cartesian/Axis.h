@@ -297,6 +297,8 @@ Q_SIGNALS:
 	void majorGridOpacityChanged(qreal);
 	void minorGridPenChanged(QPen);
 	void minorGridOpacityChanged(qreal);
+
+	friend class RetransformTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

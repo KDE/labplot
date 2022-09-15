@@ -2383,15 +2383,15 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 
 	if (xIndex == -1) {
 		for (int i = 0; i < rangeCount(Dimension::X); i++)
-			d->xRanges[i].dirty = true;
+			d->setRangeDirty(Dimension::X, i, true);
 	} else
-		d->xRanges[xIndex].dirty = true;
+		d->setRangeDirty(Dimension::X, xIndex, true);
 
 	if (yIndex == -1) {
 		for (int i = 0; i < rangeCount(Dimension::Y); i++)
-			d->yRanges[i].dirty = true;
+			d->setRangeDirty(Dimension::Y, i, true);
 	} else
-		d->yRanges[yIndex].dirty = true;
+		d->setRangeDirty(Dimension::Y, yIndex, true);
 
 	bool updated = false;
 	if (autoScale(Dimension::X, xIndex) && autoScale(Dimension::Y, yIndex))
@@ -2819,6 +2819,10 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 void CartesianPlot::retransformScales() {
 	Q_D(CartesianPlot);
 	d->retransformScales(-1, -1);
+}
+void CartesianPlot::retransformScale(Dimension dim, int index) {
+	Q_D(CartesianPlot);
+	d->retransformScale(dim, index);
 }
 
 // zoom

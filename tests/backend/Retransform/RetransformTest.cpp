@@ -15,10 +15,13 @@
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 
 #include <QAction>
 
@@ -781,6 +784,126 @@ void RetransformTest::TestSetScale() {
 	QCOMPARE(c.logsXScaleRetransformed.at(0).plot, plot);
 	QCOMPARE(c.logsXScaleRetransformed.at(0).index, 0);
 	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+}
+
+void RetransformTest::TestChangePlotRange() {
+	RetransformCallCounter c;
+	Project project;
+
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(100);
+
+	QVector<int> xData;
+	QVector<double> yData;
+	for (int i = 0; i < 100; i++) {
+		xData.append(i);
+		yData.append(i);
+	}
+	auto* xColumn = sheet->column(0);
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	xColumn->replaceInteger(0, xData);
+	auto* yColumn = sheet->column(1);
+	yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	yColumn->replaceValues(0, yData);
+
+	project.addChild(sheet);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* p = new CartesianPlot("Plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
+
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Worksheet "Worksheet"
+	// CartesianPlot "Plot"
+	// Axis "x"
+	// Axis "y"
+	// XYCurve "curve"
+	QCOMPARE(children.length(), 8);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	c.resetRetransformCount();
+
+	auto list = QStringList({// data rect of the plot does not change, so retransforming the
+							 // plot is not needed
+							 "Project/Worksheet/Plot/x",
+							 "Project/Worksheet/Plot/y",
+							 "Project/Worksheet/Plot/curve"});
+
+	CartesianPlotDock dock(nullptr);
+	dock.setPlots({plot});
+	dock.addXRange();
+
+	QCOMPARE(plot->rangeCount(Dimension::X), 2);
+
+	dock.autoScaleChanged(Dimension::X, 1, false);
+	QCOMPARE(plot->autoScale(Dimension::X, 1), false);
+
+	dock.minChanged(Dimension::X, 1, "10");
+	dock.maxChanged(Dimension::X, 1, "20");
+
+	// check axis ranges
+	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 2);
+	auto* xAxis = static_cast<Axis*>(axes.at(0));
+	auto* yAxis = static_cast<Axis*>(axes.at(1));
+
+	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(yAxis->name(), "y");
+
+	//	QVector<QString> refString = {"0", "20", "20", "177.8", "183.3", "188.8", "194.4"};
+	//	COMPARE_STRING_VECTORS(static_cast<Axis*>(xAxis)->tickLabelStrings(), refString);
+	QVector<double> ref = {0, 20, 40, 60, 80, 100};
+	COMPARE_DOUBLE_VECTORS(xAxis->tickLabelValues(), ref);
+	ref = {0, 20, 40, 60, 80, 100};
+	COMPARE_DOUBLE_VECTORS(yAxis->tickLabelValues(), ref);
+
+	int linesUpdatedCounter = 0;
+	connect(curve, &XYCurve::linesUpdated, [&linesUpdatedCounter](const XYCurve*, const QVector<QLineF> lines) {
+		// One point before and one point after is used therefore it is not 10, 20
+		// se XYCurvePrivate::updateLines() startIndex--; and endIndex++;
+		QCOMPARE(lines.at(0).p1().x(), 9);
+		QCOMPARE(lines.last().p2().x(), 21);
+		linesUpdatedCounter++;
+	});
+	// switch in first csystem from the first x range to the second x range
+	dock.PlotRangeChanged(0, Dimension::X, 1);
+
+	ref = {10, 12, 14, 16, 18, 20};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(xAxis)->tickLabelValues(), ref);
+	ref = {0, 20, 40, 60, 80, 100};
+	COMPARE_DOUBLE_VECTORS(static_cast<Axis*>(yAxis)->tickLabelValues(), ref);
+
+	auto dataRect = plot->dataRect();
+
+	// check that lines are starting at the beginning of the datarect
+	auto line = xAxis->d_func()->lines.at(0);
+	QCOMPARE(line.p1().x(), dataRect.left());
+	QCOMPARE(line.p2().x(), dataRect.right());
+
+	auto lines = curve->d_func()->m_lines;
+	QCOMPARE(lines.at(0).p1().x(), dataRect.left());
+	QCOMPARE(lines.last().p2().x(), dataRect.right());
+
+	QCOMPARE(linesUpdatedCounter, 1);
 }
 
 // ############################################################################################

@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void TestZoom();
 	void TestImportCSV();
 	void TestSetScale();
+	void TestChangePlotRange();
 };
 
 /*!

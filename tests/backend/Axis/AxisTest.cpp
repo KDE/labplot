@@ -14,7 +14,6 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
-#include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
 
 #include <QUndoStack>
 

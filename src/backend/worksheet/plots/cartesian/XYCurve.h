@@ -41,6 +41,7 @@ public:
 	friend class XYCurveSetYErrorPlusColumnCmd;
 	friend class XYCurveSetYErrorMinusColumnCmd;
 	friend class XYCurveSetValuesColumnCmd;
+	friend class RetransformTest;
 	enum class LineType {
 		NoLine,
 		Line,

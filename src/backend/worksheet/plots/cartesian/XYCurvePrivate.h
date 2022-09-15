@@ -179,6 +179,8 @@ private:
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	QPointF mousePos;
+
+	friend class RetransformTest;
 };
 
 #endif
