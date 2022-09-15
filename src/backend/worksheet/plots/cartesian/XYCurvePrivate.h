@@ -13,6 +13,7 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
 class Background;
