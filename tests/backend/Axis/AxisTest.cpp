@@ -455,7 +455,7 @@ void AxisTest::tickLabelRepresentationManual() {
 	QCOMPARE(dock.ui.chkLabelsFormatAuto->isChecked(), true);
 	QCOMPARE(dock.ui.cbLabelsFormat->isEnabled(), false);
 
-	dock.labelsFormatAutoChanged(false);
+	yAxis->setLabelsFormatAuto(false);
 
 	QCOMPARE(dock.ui.chkLabelsFormatAuto->isChecked(), false);
 	QCOMPARE(dock.ui.cbLabelsFormat->isEnabled(), true);
