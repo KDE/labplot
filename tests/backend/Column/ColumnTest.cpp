@@ -790,4 +790,78 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	}
 }
 
+void ColumnTest::testIndexForValue() {
+	{
+		const double value = 5;
+		QVector<QPointF> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
+
+	{
+		const double value = 5;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
+
+	{
+		const double value = 60;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
+
+	{
+		const double value = 16;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+}
+
+void ColumnTest::testIndexForValueDoubleVector() {
+	{
+		const double value = 5;
+		QVector<double> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
+
+	{
+		const double value = 5;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
+
+	{
+		const double value = 60;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
+
+	{
+		const double value = 16;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+}
+
 QTEST_MAIN(ColumnTest)

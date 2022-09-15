@@ -51,6 +51,9 @@ private Q_SLOTS:
 	void loadTextFromProject();
 	void loadDateTimeFromProject();
 	void saveLoadDateTime();
+
+	void testIndexForValue();
+	void testIndexForValueDoubleVector();
 };
 
 #endif // COLUMNTEST_H
