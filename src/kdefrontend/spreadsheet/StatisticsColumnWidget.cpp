@@ -701,18 +701,15 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// calculate the cummulative values and sort the labels according to the new order of sorted values
 	int sum = 0;
 	row = 0;
-	QDEBUG("DATA = " << data)
 	for (auto value : data) {
 		sum += value;
-		yData[row] = sum / totalSumOfFrequencies * 100;
+		yData[row] = (double)sum / totalSumOfFrequencies * 100;
 
 		int index = dataUnsorted.indexOf(value);
 		labels[row] = labelsUnsorted.at(index);
 
 		++row;
 	}
-	QDEBUG("XDATA = " << xData)
-	QDEBUG("YDATA = " << yData)
 
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
