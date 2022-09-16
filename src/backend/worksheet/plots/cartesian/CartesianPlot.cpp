@@ -2598,7 +2598,7 @@ void CartesianPlot::scaleAutoTriggered() {
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index << ", full range = " << fullRange)
+	DEBUG(Q_FUNC_INFO << ", dim = " << int(dim) <<", index = " << index << ", full range = " << fullRange)
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all ranges
@@ -2657,7 +2657,14 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 	}
 
 	if (update) {
-		DEBUG(Q_FUNC_INFO << ", set new x range = " << r.toStdString())
+		switch (dim) {
+		case Dimension::X:
+			DEBUG(Q_FUNC_INFO << ", set new x range = " << r.toStdString())
+			break;
+		case Dimension::Y:
+			DEBUG(Q_FUNC_INFO << ", set new y range = " << r.toStdString())
+			break;
+		}
 		// in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (r.isZero()) {
 			const double value{r.start()};
