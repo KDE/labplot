@@ -16,6 +16,7 @@ New features:
 		* Heatmap formatting for categorical data in text columns
 		* when generating random numbers, allow to specify the seed number
 		* show column statistics also for text columns
+		* Dropping and masking of values also for text columns
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import

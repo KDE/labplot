@@ -114,7 +114,7 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
-	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
+	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
 
 	// selection related actions
 	QAction* action_cut_selection;

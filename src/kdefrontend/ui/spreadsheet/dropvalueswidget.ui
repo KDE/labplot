@@ -6,60 +6,160 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>453</width>
-    <height>51</height>
+    <width>397</width>
+    <height>180</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="lMode">
-     <property name="text">
-      <string>Drop values:</string>
+    <widget class="QFrame" name="frameNumeric">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="1" column="6">
+       <widget class="QLineEdit" name="leValue2"/>
+      </item>
+      <item row="0" column="0" colspan="7">
+       <widget class="QLabel" name="lNumeric">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Drop Numeric Values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="lMin">
+        <property name="text">
+         <string>min.</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cbOperator"/>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="leValue1"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lMode">
+        <property name="text">
+         <string>Condition:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="lAnd">
+        <property name="text">
+         <string>and</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QLabel" name="lMax">
+        <property name="text">
+         <string>max.</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="cbOperator"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="lMin">
-     <property name="text">
-      <string>min.</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="leValue1"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="lAnd">
-     <property name="text">
-      <string>and</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="lMax">
-     <property name="text">
-      <string>max.</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="leValue2"/>
-   </item>
-   <item>
-    <spacer name="horizontalSpacer">
+    <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
       <enum>QSizePolicy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>30</width>
-       <height>20</height>
+       <width>20</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QFrame" name="frameText">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lConditionText">
+        <property name="text">
+         <string>Condition:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="leValueText"/>
+      </item>
+      <item row="0" column="0" colspan="4">
+       <widget class="QLabel" name="lText">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Drop Text Values</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cbOperatorText"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
