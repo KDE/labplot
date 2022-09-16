@@ -639,10 +639,10 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	// add second range for the cumulative percentage of the total number of occurences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
-	plot->addCoordinateSystem();	// add cs for second y range
+	plot->addCoordinateSystem(); // add cs for second y range
 	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
-	cs->setIndex(CartesianCoordinateSystem::Dimension::Y, 1);	// specify new y range
-	plot->enableAutoScale(Dimension::Y, 1, false);	// disable auto scale to stay at 0 .. 100
+	cs->setIndex(CartesianCoordinateSystem::Dimension::Y, 1); // specify new y range
+	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis
 	auto* axis = new Axis(QString());
@@ -694,13 +694,14 @@ void StatisticsColumnWidget::showParetoPlot() {
 		++i;
 	}
 
-	// sort the frequencies and the accomponying labels
+	// sort the frequencies and the accompanying labels
 	auto data = dataUnsorted;
 	std::sort(data.begin(), data.end(), std::greater<int>());
 
 	// calculate the cummulative values and sort the labels according to the new order of sorted values
 	int sum = 0;
 	row = 0;
+	QDEBUG("DATA = " << data)
 	for (auto value : data) {
 		sum += value;
 		yData[row] = sum / totalSumOfFrequencies * 100;
@@ -710,6 +711,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 		++row;
 	}
+	QDEBUG("XDATA = " << xData)
+	QDEBUG("YDATA = " << yData)
 
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);

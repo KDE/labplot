@@ -2598,7 +2598,7 @@ void CartesianPlot::scaleAutoTriggered() {
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {
-	DEBUG(Q_FUNC_INFO << ", dim = " << int(dim) <<", index = " << index << ", full range = " << fullRange)
+	DEBUG(Q_FUNC_INFO << ", dim = " << int(dim) << ", index = " << index << ", full range = " << fullRange)
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all ranges

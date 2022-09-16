@@ -36,7 +36,6 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s)
 	, m_mask(mask) {
-
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
@@ -612,7 +611,6 @@ private:
 	Column* m_column;
 };
 
-
 // implementation of tasks for text columns
 class MaskTextValuesTask : public QRunnable {
 public:
@@ -759,13 +757,11 @@ public:
 			m_column->replaceTexts(0, new_data);
 	}
 
-
 private:
 	OperatorText m_operator;
 	QString m_value;
 	Column* m_column;
 };
-
 
 void DropValuesDialog::maskValues() const {
 	Q_ASSERT(m_spreadsheet);

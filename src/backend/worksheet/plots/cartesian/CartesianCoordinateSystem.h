@@ -20,7 +20,7 @@ class CartesianPlot;
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
 	Q_ENUMS(Dimension)
 public:
-	enum class Dimension {X, Y};
+	enum class Dimension { X, Y };
 
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
