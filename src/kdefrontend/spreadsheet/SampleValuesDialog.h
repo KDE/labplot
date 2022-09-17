@@ -1,32 +1,32 @@
 /*
-	File                 : DropValuesDialog.h
+	File                 : SampleValuesDialog.h
 	Project              : LabPlot
-	Description          : Dialog for droping and masking values in columns
+	Description          : Dialog for sampling values in columns
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef DROPVALUESDIALOG_H
-#define DROPVALUESDIALOG_H
+#ifndef SAMPLEVALUESDIALOG_H
+#define SAMPLEVALUESDIALOG_H
 
-#include "ui_dropvalueswidget.h"
+#include "ui_samplevalueswidget.h"
 #include <QDialog>
 
 class Column;
 class Spreadsheet;
 class QPushButton;
 
-class DropValuesDialog : public QDialog {
+class SampleValuesDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit DropValuesDialog(Spreadsheet* s, bool mask = false, QWidget* parent = nullptr);
-	~DropValuesDialog() override;
+	explicit SampleValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
+	~SampleValuesDialog() override;
 	void setColumns(const QVector<Column*>&);
 
 private:
-	Ui::DropValuesWidget ui;
+	Ui::SampleValuesWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
@@ -34,12 +34,9 @@ private:
 	bool m_hasNumeric{false};
 	bool m_hasText{false};
 
-	void dropValues() const;
-	void maskValues() const;
-
 private Q_SLOTS:
-	void operatorChanged(int) const;
-	void okClicked() const;
+	void methodChanged(int) const;
+	void sampleValues() const;
 };
 
 #endif

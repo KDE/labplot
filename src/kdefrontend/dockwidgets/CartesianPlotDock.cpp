@@ -658,7 +658,8 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
 		connect(chk, &QCheckBox::toggled, [this, chk, dim](bool checked) {
-			this->autoScaleChanged(chk, dim, checked);
+			const bool rangeIndex = chk->property("row").toInt();
+			this->autoScaleChanged(dim, rangeIndex, checked);
 		});
 
 		// format
@@ -679,7 +680,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Min, le);
 			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
-				this->minChanged(le, dim, text);
+				this->minChanged(dim, le->property("row").toInt(), text);
 			});
 			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(tw);
@@ -687,7 +688,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 			le->setProperty("row", i);
 			tw->setCellWidget(i, TwRangesColumn::Max, le);
 			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
-				this->maxChanged(le, dim, text);
+				this->maxChanged(dim, le->property("row").toInt(), text);
 			});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
@@ -955,13 +956,12 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 	}
 }
 
-void CartesianPlotDock::autoScaleChanged(const QObject* sender, const Dimension dim, bool state) {
+void CartesianPlotDock::autoScaleChanged(const Dimension dim, const int rangeIndex, bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
 
 	Lock lock(m_initializing);
-	const int rangeIndex{sender->property("row").toInt()}; // TODO: is sender still valid here?
 	DEBUG(Q_FUNC_INFO << ", range index: " << rangeIndex)
 
 	autoScaleRange(dim, rangeIndex, state);
@@ -1013,7 +1013,7 @@ void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, boo
 	updateRangeList(dim); // see range changes
 }
 
-void CartesianPlotDock::minChanged(const QObject* sender, const Dimension dim, const QString& value) {
+void CartesianPlotDock::minChanged(const Dimension dim, const int index, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
@@ -1033,7 +1033,6 @@ void CartesianPlotDock::minChanged(const QObject* sender, const Dimension dim, c
 	const double min = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x/y range
-		const int index{sender->property("row").toInt()};
 		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
 		bool changed = false;
 		for (auto* plot : m_plotList)
@@ -1047,7 +1046,7 @@ void CartesianPlotDock::minChanged(const QObject* sender, const Dimension dim, c
 	}
 }
 
-void CartesianPlotDock::maxChanged(const QObject* sender, const Dimension dim, const QString& value) {
+void CartesianPlotDock::maxChanged(const Dimension dim, const int index, const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
@@ -1067,7 +1066,6 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Dimension dim, c
 	const double max = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x/y range
-		const int index{sender->property("row").toInt()};
 		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
@@ -1078,18 +1076,6 @@ void CartesianPlotDock::maxChanged(const QObject* sender, const Dimension dim, c
 		if (changed)
 			updateRangeList(dim_other); // plot is auto scaled
 	}
-}
-
-void CartesianPlotDock::rangeChanged(const QObject* sender, const Dimension dim, const Range<double>& range) {
-	if (m_initializing)
-		return;
-
-	// selected x range
-	const int index{sender->property("row").toInt()};
-	DEBUG(Q_FUNC_INFO << ", range index: " << index)
-	for (auto* plot : m_plotList)
-		plot->setRange(dim, index, range);
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
@@ -1275,59 +1261,45 @@ void CartesianPlotDock::removePlotRange() {
 	m_plot->retransform(); // update plot and elements
 }
 
-/*
- * Called when x/y range of plot range in plot range list changes
- */
-void CartesianPlotDock::PlotRangeXChanged(const int index) {
-	const int plotRangeIndex{sender()->property("row").toInt()};
-	DEBUG(Q_FUNC_INFO << ", Set x range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
+void CartesianPlotDock::PlotRangeChanged(const int plotRangeIndex, const Dimension dim, const int index) {
+	const std::string dimStr = CartesianCoordinateSystem::dimensionToString(dim).toStdString();
+	DEBUG(Q_FUNC_INFO << ", Set " << dimStr << " range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setIndex(Dimension::X, index);
+	cSystem->setIndex(dim, index);
 
 	// auto scale x range when on auto scale (now that it is used)
-	if (m_plot->range(Dimension::X, index).autoScale()) {
-		autoScaleRange(Dimension::X, index, true);
-		updateRangeList(Dimension::X);
-	}
+	if (m_plot->range(dim, index).autoScale()) {
+		autoScaleRange(dim, index, true);
+		updateRangeList(dim);
+	} else
+		m_plot->retransformScale(dim, index);
 
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{axis->coordinateSystemIndex()};
 		DEBUG(Q_FUNC_INFO << ", Axis \"" << STDSTRING(axis->name()) << "\" cSystem index = " << cSystemIndex)
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
-			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Horizontal) {
-				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->range(Dimension::X, index).toStdString())
-				axis->setRange(m_plot->range(Dimension::X, index));
+			if (axis->rangeType() == Axis::RangeType::Auto
+				&& ((dim == Dimension::X && axis->orientation() == Axis::Orientation::Horizontal)
+					|| (dim == Dimension::Y && axis->orientation() == Axis::Orientation::Vertical))) {
+				DEBUG(Q_FUNC_INFO << ", set " << dimStr << " range of axis to " << m_plot->range(dim, index).toStdString())
+				axis->setRange(m_plot->range(dim, index));
 			}
 		}
 	}
 
-	m_plot->dataChanged(index, -1); // update plot
+	// Retransform axes and all other elements, because the coordinatesystem changed
+	m_plot->WorksheetElementContainer::retransform();
+}
+
+/*
+ * Called when x/y range of plot range in plot range list changes
+ */
+void CartesianPlotDock::PlotRangeXChanged(const int index) {
+	PlotRangeChanged(sender()->property("row").toInt(), Dimension::X, index);
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
-	const int plotRangeIndex{sender()->property("row").toInt()};
-	DEBUG(Q_FUNC_INFO << ", set y range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
-	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
-	cSystem->setIndex(Dimension::Y, index);
-
-	// auto scale y range when on auto scale (now that it is used)
-	if (m_plot->range(Dimension::Y, index).autoScale()) {
-		autoScaleRange(Dimension::Y, index, true);
-		updateRangeList(Dimension::Y);
-	}
-	for (auto* axis : m_plot->children<Axis>()) {
-		const int cSystemIndex{axis->coordinateSystemIndex()};
-		if (cSystemIndex == plotRangeIndex) {
-			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
-			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Vertical) {
-				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->range(Dimension::Y, index).toStdString())
-				axis->setRange(m_plot->range(Dimension::Y, index));
-			}
-		}
-	}
-
-	// TODO: cha
-	m_plot->dataChanged(-1, index); // update plot
+	PlotRangeChanged(sender()->property("row").toInt(), Dimension::Y, index);
 }
 
 // "Range Breaks"-tab

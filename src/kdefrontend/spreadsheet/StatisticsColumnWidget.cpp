@@ -633,9 +633,24 @@ void StatisticsColumnWidget::showBarPlot() {
 }
 
 void StatisticsColumnWidget::showParetoPlot() {
-	// add plot
+	DEBUG(Q_FUNC_INFO)
 	auto* plot = addPlot(&m_paretoPlotWidget);
 	plot->title()->setText(m_column->name());
+
+	// add second range for the cumulative percentage of the total number of occurences
+	plot->addYRange(Range<double>(0, 100)); // add second y range
+	plot->addCoordinateSystem(); // add cs for second y range
+	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
+	cs->setIndex(CartesianCoordinateSystem::Dimension::Y, 1); // specify new y range
+	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+	// add second y-axis
+	auto* axis = new Axis(QString());
+	plot->addChild(axis);
+	axis->setOrientation(Axis::Orientation::Vertical);
+	axis->setPosition(Axis::Position::Right);
+	axis->setCoordinateSystemIndex(1);
+
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	auto* barPlot = new BarPlot(QString());
@@ -656,8 +671,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	xData.resize(count);
 
 	auto* yColumn = new Column("y");
-	yColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> yData;
+	QVector<double> yData;
 	yData.resize(count);
 
 	auto* labelsColumn = new Column("labels");
@@ -670,15 +684,17 @@ void StatisticsColumnWidget::showParetoPlot() {
 	const auto& frequencies = m_column->frequencies();
 	auto i = frequencies.constBegin();
 	int row = 0;
+	int totalSumOfFrequencies = 0;
 	while (i != frequencies.constEnd()) {
 		labelsUnsorted[row] = i.key();
 		dataUnsorted[row] = i.value();
 		xData[row] = 1 + row;
+		totalSumOfFrequencies += i.value();
 		++row;
 		++i;
 	}
 
-	// sort the frequencies and the accomponying labels
+	// sort the frequencies and the accompanying labels
 	auto data = dataUnsorted;
 	std::sort(data.begin(), data.end(), std::greater<int>());
 
@@ -687,7 +703,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	row = 0;
 	for (auto value : data) {
 		sum += value;
-		yData[row] = sum;
+		yData[row] = (double)sum / totalSumOfFrequencies * 100;
 
 		int index = dataUnsorted.indexOf(value);
 		labels[row] = labelsUnsorted.at(index);
@@ -698,7 +714,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
 	xColumn->replaceInteger(0, xData);
-	yColumn->replaceInteger(0, yData);
+	yColumn->replaceValues(0, yData);
 
 	QVector<const AbstractColumn*> columns;
 	columns << dataColumn;
@@ -706,6 +722,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	// add xy-curve
 	auto* curve = new XYCurve("curve");
+	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 	auto pen = curve->linePen();
@@ -716,6 +733,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	// axes properties
 	auto axes = plot->children<Axis>();
+	bool firstYAxis = false;
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
@@ -724,8 +742,13 @@ void StatisticsColumnWidget::showParetoPlot() {
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
-		} else
-			axis->title()->setText(i18n("Frequency"));
+		} else {
+			if (!firstYAxis) {
+				axis->title()->setText(i18n("Frequency"));
+				firstYAxis = true;
+			} else
+				axis->title()->setText(i18n("Cumulative Percentage"));
+		}
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
