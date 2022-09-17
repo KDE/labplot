@@ -37,6 +37,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
+#include "kdefrontend/spreadsheet/SampleValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
@@ -279,6 +280,8 @@ void SpreadsheetView::initActions() {
 	action_fill_equidistant = new QAction(QIcon::fromTheme(QString()), i18n("Equidistant Values"), this);
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
+
+	action_sample_values = new QAction(i18n("Sample"), this);
 
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
@@ -613,9 +616,13 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu = new QMenu(i18n("Generate Data"), this);
 		m_columnGenerateDataMenu->addAction(action_fill_row_numbers);
 		m_columnGenerateDataMenu->addAction(action_fill_const);
+		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
 		m_columnGenerateDataMenu->addAction(action_fill_function);
+		m_columnGenerateDataMenu->addSeparator();
+		m_columnGenerateDataMenu->addAction(action_sample_values);
+
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
 		m_columnMenu->addSeparator();
@@ -823,6 +830,8 @@ void SpreadsheetView::connectActions() {
 	connect(action_reverse_columns, &QAction::triggered, this, &SpreadsheetView::reverseColumns);
 	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
+	connect(action_sample_values, &QAction::triggered, this, &SpreadsheetView::sampleColumnValues);
+
 	// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
 	connect(ladderOfPowersActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::powerTransformSelectedColumns);
@@ -1529,7 +1538,12 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues) {
 	// generate data is only possible for numeric columns and if there are cells available
 	const bool hasCells = m_spreadsheet->rowCount() > 0;
-	m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
+	m_columnGenerateDataMenu->setEnabled(hasCells);
+	action_fill_row_numbers->setEnabled(numeric);
+	action_fill_const->setEnabled(numeric);
+	action_fill_equidistant->setEnabled(numeric);
+	action_fill_random_nonuniform->setEnabled(numeric);
+	action_fill_function->setEnabled(numeric);
 
 	// manipulate data is only possible for numeric and datetime and if there values.
 	// datetime has only "add/subtract value", everything else is deactivated
@@ -2681,6 +2695,14 @@ void SpreadsheetView::maskColumnValues() {
 	if (selectedColumnCount() < 1)
 		return;
 	auto* dlg = new DropValuesDialog(m_spreadsheet, true);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::sampleColumnValues() {
+	if (selectedColumnCount() < 1)
+		return;
+	auto* dlg = new SampleValuesDialog(m_spreadsheet, this);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }
