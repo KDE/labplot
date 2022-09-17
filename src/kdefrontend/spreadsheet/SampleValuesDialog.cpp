@@ -180,27 +180,27 @@ void SampleValuesDialog::sampleValues() const {
 
 	QVector<int> rows;
 	switch (method) {
-		case Method::Periodic: {
-			int period =  ui.sbValue->value();
-			int count = std::floor(m_spreadsheet->rowCount() / period);
-			for (int i = 0; i < count; ++i)
-				rows << period * (i + 1) - 1;
-			break;
-		}
-		case Method::Random: {
-			// create a generator chosen by the environment variable GSL_RNG_TYPE
-			gsl_rng_env_setup();
-			const gsl_rng_type* T = gsl_rng_default;
-			gsl_rng* r = gsl_rng_alloc(T);
-			gsl_rng_set(r, QDateTime::currentMSecsSinceEpoch());
+	case Method::Periodic: {
+		int period =  ui.sbValue->value();
+		int count = std::floor(m_spreadsheet->rowCount() / period);
+		for (int i = 0; i < count; ++i)
+			rows << period * (i + 1) - 1;
+		break;
+	}
+	case Method::Random: {
+		// create a generator chosen by the environment variable GSL_RNG_TYPE
+		gsl_rng_env_setup();
+		const gsl_rng_type* T = gsl_rng_default;
+		gsl_rng* r = gsl_rng_alloc(T);
+		gsl_rng_set(r, QDateTime::currentMSecsSinceEpoch());
 
-			int sampleSize =  ui.sbValue->value();
-			int a = 0;
-			int b = m_spreadsheet->rowCount() - 1;
-			for (int i = 0; i < sampleSize; ++i)
-				rows << (int)round(gsl_ran_flat(r, a, b));
-			break;
-		}
+		int sampleSize =  ui.sbValue->value();
+		int a = 0;
+		int b = m_spreadsheet->rowCount() - 1;
+		for (int i = 0; i < sampleSize; ++i)
+			rows << (int)round(gsl_ran_flat(r, a, b));
+		break;
+	}
 	}
 
 	m_spreadsheet->beginMacro(i18n("%1: sample values", m_spreadsheet->name()));
@@ -216,7 +216,7 @@ void SampleValuesDialog::sampleValues() const {
 		auto* target = targetColumns.at(index);
 		target->setName(source->name());
 		target->setColumnMode(source->columnMode());
-		 ++index;
+		++index;
 	}
 
 	for (int i = 0; i < m_columns.count(); ++i) {
