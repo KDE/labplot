@@ -594,24 +594,6 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 		hist->setBinRangesMax(max);
 }
 
-void HistogramDock::plotRangeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
-	if (!plot)
-		return;
-
-	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-
-	if (index != m_curve->coordinateSystemIndex()) {
-		m_curve->setCoordinateSystemIndex(index);
-		updateLocale(); // update line edits
-		m_curve->retransform(); // redraw
-	}
-}
-
 // Line tab
 void HistogramDock::lineTypeChanged(int index) {
 	auto lineType = Histogram::LineType(index);

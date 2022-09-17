@@ -77,7 +77,6 @@ private Q_SLOTS:
 	void binRangesMaxChanged(const QString&);
 	void binRangesMinDateTimeChanged(const QDateTime&);
 	void binRangesMaxDateTimeChanged(const QDateTime&);
-	void plotRangeChanged(int);
 
 	// Lines-Tab
 	void lineTypeChanged(int);
