@@ -181,7 +181,7 @@ void SampleValuesDialog::sampleValues() const {
 	QVector<int> rows;
 	switch (method) {
 	case Method::Periodic: {
-		int period =  ui.sbValue->value();
+		int period = ui.sbValue->value();
 		int count = std::floor(m_spreadsheet->rowCount() / period);
 		for (int i = 0; i < count; ++i)
 			rows << period * (i + 1) - 1;
@@ -194,7 +194,7 @@ void SampleValuesDialog::sampleValues() const {
 		gsl_rng* r = gsl_rng_alloc(T);
 		gsl_rng_set(r, QDateTime::currentMSecsSinceEpoch());
 
-		int sampleSize =  ui.sbValue->value();
+		int sampleSize = ui.sbValue->value();
 		int a = 0;
 		int b = m_spreadsheet->rowCount() - 1;
 		for (int i = 0; i < sampleSize; ++i)
