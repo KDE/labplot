@@ -618,7 +618,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 	if (!m_plot)
 		return;
 
-	auto dir_str = CartesianCoordinateSystem::dimensionToString(dim);
+	const auto dir_str = CartesianCoordinateSystem::dimensionToString(dim);
 
 	QTableWidget* tw = nullptr;
 	QLabel* l = nullptr;
