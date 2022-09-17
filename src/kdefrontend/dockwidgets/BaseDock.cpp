@@ -72,11 +72,11 @@ void BaseDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
-	const CartesianPlot* plot;
+	CartesianPlot* plot;
 	if (element->plot()) {
 		plot = element->plot();
 	} else {
-		plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+		plot = dynamic_cast<CartesianPlot*>(m_aspect->parentAspect());
 	}
 
 	if (!plot)
@@ -87,19 +87,43 @@ void BaseDock::plotRangeChanged(int index) {
 		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
+	const int xIndexNew = plot->coordinateSystem(index)->index(Dimension::X);
+	const int yIndexNew = plot->coordinateSystem(index)->index(Dimension::Y);
+
+	QVector<int> xRangesChanged;
+	QVector<int> yRangesChanged;
 	for (auto aspect : m_aspects) {
 		auto* e{static_cast<WorksheetElement*>(aspect)};
 		if (index != e->coordinateSystemIndex()) {
+			const auto* elementOldCSystem = plot->coordinateSystem(e->coordinateSystemIndex());
+			const auto xIndexOld = elementOldCSystem->index(Dimension::X);
+			const auto yIndexOld = elementOldCSystem->index(Dimension::Y);
+			// If indices are same, the range will not change, so do not track those
+			if (xIndexOld != xIndexNew && !xRangesChanged.contains(xIndexOld))
+				xRangesChanged.append(xIndexOld);
+			if (yIndexOld != yIndexNew && !yRangesChanged.contains(yIndexOld))
+				yRangesChanged.append(yIndexOld);
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
 			e->setSuppressRetransform(false);
 			if (dynamic_cast<Axis*>(e))
 				dynamic_cast<AxisDock*>(this)->updateAutoScale();
 			updateLocale(); // update line edits
-			e->retransform(); // redraw
-			e->project()->setChanged(true);
 		}
 	}
+
+	// Retransform all changed indices and the new indices
+	for (const int index : xRangesChanged)
+		plot->retransformScale(Dimension::X, index);
+	if (!xRangesChanged.contains(xIndexNew))
+		plot->retransformScale(Dimension::X, xIndexNew);
+	for (const int index : yRangesChanged)
+		plot->retransformScale(Dimension::Y, index);
+	if (!yRangesChanged.contains(yIndexNew))
+		plot->retransformScale(Dimension::Y, yIndexNew);
+
+	plot->WorksheetElementContainer::retransform();
+	plot->project()->setChanged(true);
 }
 
 void BaseDock::nameChanged() {
