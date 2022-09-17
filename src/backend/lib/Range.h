@@ -52,11 +52,7 @@ public:
 template<class T>
 class Range : RangeT {
 public:
-	Range()
-		: m_start(0)
-		, m_end(1)
-		, m_format(Format::Numeric)
-		, m_scale(Scale::Linear) {
+	Range() {
 	}
 	Range(T start, T end, Format format = Format::Numeric, Scale scale = Scale::Linear) {
 		this->setRange(start, end, format, scale);
@@ -419,8 +415,8 @@ public:
 	// TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:
-	T m_start; // start value
-	T m_end; // end value
+	T m_start{0}; // start value
+	T m_end{1}; // end value
 	Format m_format{Format::Numeric}; // format (Numeric or DateTime)
 	QString m_dateTimeFormat{QLatin1String("yyyy-MM-dd hh:mm:ss")}; // only used for DateTime
 	Scale m_scale{Scale::Linear}; // scale (Linear, Log , ...)
