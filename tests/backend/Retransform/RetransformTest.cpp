@@ -21,9 +21,9 @@
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
-#include "kdefrontend/dockwidgets/AxisDock.h"
 
 #include <QAction>
 
@@ -909,335 +909,563 @@ void RetransformTest::TestChangePlotRange() {
 }
 
 void RetransformTest::TestChangePlotRangeElement() {
-    // Change the plotrange of one of the elements
+	// Change the plotrange of one of the elements
 
-    RetransformCallCounter c;
-    Project project;
+	RetransformCallCounter c;
+	Project project;
 
-    auto* sheet = new Spreadsheet("Spreadsheet", false);
-    sheet->setColumnCount(2);
-    sheet->setRowCount(100);
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(2);
+	sheet->setRowCount(100);
 
-    QVector<int> xData;
-    QVector<double> yData;
-    for (int i = 0; i < 100; i++) {
-        xData.append(i);
-        yData.append(i);
-    }
-    auto* xColumn = sheet->column(0);
-    xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-    xColumn->replaceInteger(0, xData);
-    auto* yColumn = sheet->column(1);
-    yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
-    yColumn->replaceValues(0, yData);
+	QVector<int> xData;
+	QVector<double> yData;
+	for (int i = 0; i < 100; i++) {
+		xData.append(i);
+		yData.append(i);
+	}
+	auto* xColumn = sheet->column(0);
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	xColumn->replaceInteger(0, xData);
+	auto* yColumn = sheet->column(1);
+	yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	yColumn->replaceValues(0, yData);
 
-    project.addChild(sheet);
+	project.addChild(sheet);
 
-    auto* worksheet = new Worksheet("Worksheet");
-    project.addChild(worksheet);
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
 
-    auto* p = new CartesianPlot("Plot");
-    p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
-    worksheet->addChild(p);
+	auto* p = new CartesianPlot("Plot");
+	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
 
-    auto* curve = new XYCurve("curve");
-    p->addChild(curve);
-    curve->setXColumn(xColumn);
-    curve->setYColumn(yColumn);
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
 
-    auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
-    // Spreadsheet "Spreadsheet"
-    // Column "1"
-    // Column "2"
-    // Worksheet "Worksheet"
-    // CartesianPlot "Plot"
-    // Axis "x"
-    // Axis "x2"
-    // Axis "y"
-    // Axis "y2"
-    // XYCurve "curve"
-    QCOMPARE(children.length(), 10);
-    for (const auto& child : children)
-        connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Worksheet "Worksheet"
+	// CartesianPlot "Plot"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// XYCurve "curve"
+	QCOMPARE(children.length(), 10);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-    auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
-    QCOMPARE(plots.length(), 1);
-    auto* plot = static_cast<CartesianPlot*>(plots[0]);
-    connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 
-    c.resetRetransformCount();
+	// check axes
+	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 4);
+	auto* xAxis1 = static_cast<Axis*>(axes.at(0));
+	auto* xAxis2 = static_cast<Axis*>(axes.at(1));
+	auto* yAxis1 = static_cast<Axis*>(axes.at(2));
+	auto* yAxis2 = static_cast<Axis*>(axes.at(3));
+	QCOMPARE(xAxis1->name(), "x");
+	QCOMPARE(xAxis2->name(), "x2");
+	QCOMPARE(yAxis1->name(), "y");
+	QCOMPARE(yAxis2->name(), "y2");
 
-    auto list = QStringList({// data rect of the plot does not change, so retransforming the
-                             // plot is not needed
-                             "Project/Worksheet/Plot/x",
-                             "Project/Worksheet/Plot/y",
-                             "Project/Worksheet/Plot/x2",
-                             "Project/Worksheet/Plot/y2",
-                             "Project/Worksheet/Plot/curve"});
+	auto list = QStringList({// data rect of the plot does not change, so retransforming the
+							 // plot is not needed
+							 "Project/Worksheet/Plot/x",
+							 "Project/Worksheet/Plot/y",
+							 "Project/Worksheet/Plot/x2",
+							 "Project/Worksheet/Plot/y2",
+							 "Project/Worksheet/Plot/curve"});
 
-    CartesianPlotDock dock(nullptr);
-    dock.setPlots({plot});
-    dock.addYRange();
-    QCOMPARE(plot->rangeCount(Dimension::Y), 2);
-    dock.addPlotRange();
-    QCOMPARE(plot->coordinateSystemCount(), 2);
+	CartesianPlotDock dock(nullptr);
+	dock.setPlots({plot});
+	dock.addYRange();
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+	dock.addPlotRange();
+	QCOMPARE(plot->coordinateSystemCount(), 2);
 
-    dock.autoScaleChanged(Dimension::Y, 1, false);
-    QCOMPARE(plot->autoScale(Dimension::Y, 1), false);
-    dock.minChanged(Dimension::Y, 1, "10");
-    dock.maxChanged(Dimension::Y, 1, "20");
+	dock.autoScaleChanged(Dimension::Y, 1, false);
+	QCOMPARE(plot->autoScale(Dimension::Y, 1), false);
+	dock.minChanged(Dimension::Y, 1, "10");
+	dock.maxChanged(Dimension::Y, 1, "20");
 
-    // Csystem1:
-    // x 0..1
-    // y 0..1
-    // Csystem2:
-    // x 0..1
-    // y 10..20
+	// Csystem1:
+	// x 0..1
+	// y 0..1
+	// Csystem2:
+	// x 0..1
+	// y 10..20
 
-    // check axis ranges
-    auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
-    QCOMPARE(axes.length(), 4);
-    auto* xAxis1 = static_cast<Axis*>(axes.at(0));
-    auto* yAxis1 = static_cast<Axis*>(axes.at(1));
-    auto* xAxis2 = static_cast<Axis*>(axes.at(2));
-    auto* yAxis2 = static_cast<Axis*>(axes.at(3));
+	c.resetRetransformCount();
 
-    QCOMPARE(xAxis1->name(), "x");
-    QCOMPARE(yAxis1->name(), "x2");
-    QCOMPARE(xAxis2->name(), "y");
-    QCOMPARE(yAxis2->name(), "y2");
+	dock.PlotRangeChanged(1, Dimension::Y, 1);
 
-    dock.PlotRangeChanged(1, Dimension::Y, 1);
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
 
-    QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-    QCOMPARE(c.logsYScaleRetransformed.count(), 1);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
+	QCOMPARE(plot->range(Dimension::X, 0).start(), 0);
+	QCOMPARE(plot->range(Dimension::X, 0).end(), 100);
+	QCOMPARE(plot->range(Dimension::Y, 0).start(), 0);
+	QCOMPARE(plot->range(Dimension::Y, 0).end(), 100);
+	QCOMPARE(plot->range(Dimension::Y, 1).start(), 10);
+	QCOMPARE(plot->range(Dimension::Y, 1).end(), 20);
 
-    c.resetRetransformCount();
+	c.resetRetransformCount();
 
+	{
+		AxisDock d(nullptr);
+		d.setAxes({yAxis2});
+		QCOMPARE(yAxis2->coordinateSystemIndex(), 0);
+		d.plotRangeChanged(1); // change plotrange of yAxis2 from 0 to 1
+		QCOMPARE(yAxis2->coordinateSystemIndex(), 1);
+	}
 
-    {
-        AxisDock d(nullptr);
-        d.setAxes({yAxis2});
-        QCOMPARE(yAxis2->coordinateSystemIndex(), 0);
-        d.plotRangeChanged(1); // change plotrange of yAxis2 from 0 to 1
-        QCOMPARE(yAxis2->coordinateSystemIndex(), 1);
-    }
+	// the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
+	// an element switches from y1 to y2
+	// xScale shall not be retransformed because it is common for both cSystems
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	//	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // range did not change so retransformScale was not called
+	//	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1); // range did not change so retransformScale was not called
 
-    // the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
-    // an element switches from y1 to y2
-    // xScale shall not be retransformed because it is common for both cSystems
-    QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-    QCOMPARE(c.logsYScaleRetransformed.count(), 2);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
-    QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
+	const auto dataRect = plot->dataRect();
 
-    const auto dataRect = plot->dataRect();
+	// Check that both lines go from bottom to top
+	{
+		QCOMPARE(yAxis1->d_func()->lines.count(), 1);
+		const auto line = yAxis1->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
 
-
-    // Check that both lines go from bottom to top
-    {
-        const auto line = yAxis1->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
-
-    {
-        const auto line = yAxis2->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
+	{
+		QCOMPARE(yAxis2->d_func()->lines.count(), 1);
+		const auto line = yAxis2->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
 }
 
 void RetransformTest::TestChangePlotRangeElement2() {
-    // Change the plotrange of one of the elements
+	// Change the plotrange of one of the elements
 
-    RetransformCallCounter c;
-    Project project;
+	RetransformCallCounter c;
+	Project project;
 
-    auto* sheet = new Spreadsheet("Spreadsheet", false);
-    sheet->setColumnCount(4);
-    sheet->setRowCount(100);
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(4);
+	sheet->setRowCount(100);
 
-    project.addChild(sheet);
+	project.addChild(sheet);
 
-    auto* worksheet = new Worksheet("Worksheet");
-    project.addChild(worksheet);
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
 
-    auto* p = new CartesianPlot("Plot");
-    p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
-    worksheet->addChild(p);
+	auto* p = new CartesianPlot("Plot");
+	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
+	p->setNiceExtend(false);
 
-    auto* curve = new XYCurve("curve");
-    p->addChild(curve);
-    {
-        QVector<int> xData;
-        QVector<double> yData;
-        for (int i = 0; i < 100; i++) {
-            xData.append(i);
-            yData.append(i);
-        }
-        auto* xColumn = sheet->column(0);
-        xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-        xColumn->replaceInteger(0, xData);
-        auto* yColumn = sheet->column(1);
-        yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
-        yColumn->replaceValues(0, yData);
-        curve->setXColumn(xColumn);
-        curve->setYColumn(yColumn);
-    }
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 101; i++) {
+			xData.append(i);
+			yData.append(i);
+		}
+		auto* xColumn = sheet->column(0);
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		auto* yColumn = sheet->column(1);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve->setXColumn(xColumn);
+		curve->setYColumn(yColumn);
+	}
 
-    auto* curve2 = new XYCurve("curve2");
-    p->addChild(curve2);
-    {
-        QVector<int> xData;
-        QVector<double> yData;
-        for (int i = 0; i < 30; i++) { // different to the above
-            xData.append(i);
-            yData.append(i);
-        }
-        auto* xColumn = sheet->column(0);
-        xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-        xColumn->replaceInteger(0, xData);
-        auto* yColumn = sheet->column(1);
-        yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
-        yColumn->replaceValues(0, yData);
-        curve2->setXColumn(xColumn);
-        curve2->setYColumn(yColumn);
-    }
+	auto* curve2 = new XYCurve("curve2");
+	p->addChild(curve2);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 31; i++) { // different to the above
+			xData.append(i);
+			yData.append(i);
+		}
+		auto* xColumn = sheet->column(2);
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		auto* yColumn = sheet->column(3);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
 
-    auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+	// SAVE_PROJECT("TestChangePlotRangeElement2.lml");
 
-    // Spreadsheet "Spreadsheet"
-    // Column "1"
-    // Column "2"
-    // Worksheet "Worksheet"
-    // CartesianPlot "Plot"
-    // Axis "x"
-    // Axis "x2"
-    // Axis "y"
-    // Axis "y2"
-    // XYCurve "curve"
-    // XYCurve "curve2"
-    QCOMPARE(children.length(), 11);
-    for (const auto& child : children)
-        connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+	QCOMPARE(p->range(Dimension::X, 0).start(), 1);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 100);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 100);
 
-    auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
-    QCOMPARE(plots.length(), 1);
-    auto* plot = static_cast<CartesianPlot*>(plots[0]);
-    connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
-    c.resetRetransformCount();
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Column "3"
+	// Column "4"
+	// Worksheet "Worksheet"
+	// CartesianPlot "Plot"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// XYCurve "curve"
+	// XYCurve "curve2"
+	QCOMPARE(children.length(), 13);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
 
-    auto list = QStringList({// data rect of the plot does not change, so retransforming the
-                             // plot is not needed
-                             "Project/Worksheet/Plot/x",
-                             "Project/Worksheet/Plot/y",
-                             "Project/Worksheet/Plot/x2",
-                             "Project/Worksheet/Plot/y2",
-                             "Project/Worksheet/Plot/curve",
-                             "Project/Worksheet/Plot/curve2"});
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
 
-    CartesianPlotDock dock(nullptr);
-    dock.setPlots({plot});
-    dock.addYRange();
-    QCOMPARE(plot->rangeCount(Dimension::Y), 2);
-    dock.addPlotRange();
-    QCOMPARE(plot->coordinateSystemCount(), 2);
-    dock.PlotRangeChanged(1, Dimension::Y, 1); // switch for second csystem to y range 2
+	// check axis ranges
+	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 4);
+	auto* xAxis1 = static_cast<Axis*>(axes.at(0));
+	auto* xAxis2 = static_cast<Axis*>(axes.at(1));
+	auto* yAxis1 = static_cast<Axis*>(axes.at(2));
+	auto* yAxis2 = static_cast<Axis*>(axes.at(3));
+	QCOMPARE(xAxis1->name(), "x");
+	QCOMPARE(xAxis2->name(), "x2");
+	QCOMPARE(yAxis1->name(), "y");
+	QCOMPARE(yAxis2->name(), "y2");
 
-    QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-    QCOMPARE(c.logsYScaleRetransformed.count(), 1);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
+	auto list = QStringList({// data rect of the plot does not change, so retransforming the
+							 // plot is not needed
+							 "Project/Worksheet/Plot/x",
+							 "Project/Worksheet/Plot/y",
+							 "Project/Worksheet/Plot/x2",
+							 "Project/Worksheet/Plot/y2",
+							 "Project/Worksheet/Plot/curve",
+							 "Project/Worksheet/Plot/curve2"});
 
-    c.resetRetransformCount();
+	CartesianPlotDock dock(nullptr);
+	dock.setPlots({plot});
+	dock.addYRange();
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+	dock.addPlotRange();
+	QCOMPARE(plot->coordinateSystemCount(), 2);
 
-    // check axis ranges
-    auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
-    QCOMPARE(axes.length(), 4);
-    auto* xAxis1 = static_cast<Axis*>(axes.at(0));
-    auto* yAxis1 = static_cast<Axis*>(axes.at(1));
-    auto* xAxis2 = static_cast<Axis*>(axes.at(2));
-    auto* yAxis2 = static_cast<Axis*>(axes.at(3));
-    QCOMPARE(xAxis1->name(), "x");
-    QCOMPARE(yAxis1->name(), "x2");
-    QCOMPARE(xAxis2->name(), "y");
-    QCOMPARE(yAxis2->name(), "y2");
+	c.resetRetransformCount();
 
-    XYCurveDock curveDock(nullptr);
-    curveDock.setCurves({curve2});
-    QCOMPARE(curve2->coordinateSystemIndex(), 0);
-    curveDock.plotRangeChanged(1); // set curve range to other
-    QCOMPARE(curve2->coordinateSystemIndex(), 1);
+	dock.PlotRangeChanged(1, Dimension::Y, 1); // switch for second csystem to y range 2
 
-    // Csystem1:
-    // x 0..100
-    // y 0..100
-    // Csystem2:
-    // x 0..100 // bigger 100 > 30
-    // y 0..30
+	// No update of the scales, because the range did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
 
-    QCOMPARE(plot->range(Dimension::X, 0).start(), 0);
-    QCOMPARE(plot->range(Dimension::X, 0).end(), 100);
-    QCOMPARE(plot->range(Dimension::Y, 0).start(), 0);
-    QCOMPARE(plot->range(Dimension::Y, 0).end(), 100);
-    QCOMPARE(plot->range(Dimension::Y, 1).start(), 0);
-    QCOMPARE(plot->range(Dimension::Y, 1).end(), 30);
+	c.resetRetransformCount();
 
-    // the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
-    // cruve2 switches from y1 to y2
-    // xScale shall not be retransformed because it did not change
-    QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-    QCOMPARE(c.logsYScaleRetransformed.count(), 2);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
+	XYCurveDock curveDock(nullptr);
+	curveDock.setupGeneral();
+	curveDock.setCurves({curve2});
+	QCOMPARE(curve2->coordinateSystemIndex(), 0);
+	curveDock.plotRangeChanged(1); // set curve range to other
+	QCOMPARE(curve2->coordinateSystemIndex(), 1);
 
-    const auto dataRect = plot->dataRect();
+	// CSystem1:
+	// x 1..100
+	// y 1..100
+	// CSystem2:
+	// x 1..100 // bigger 100 > 30 (same xrange as for CSystem1
+	// y 1..30
 
+	QCOMPARE(plot->range(Dimension::X, 0).start(), 1);
+	QCOMPARE(plot->range(Dimension::X, 0).end(), 100);
+	QCOMPARE(plot->range(Dimension::Y, 0).start(), 1);
+	QCOMPARE(plot->range(Dimension::Y, 0).end(), 100);
+	QCOMPARE(plot->range(Dimension::Y, 1).start(), 1);
+	QCOMPARE(plot->range(Dimension::Y, 1).end(), 30);
 
-    // Check that both lines go from bottom to top
-    {
-        const auto line = yAxis1->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
+	// the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
+	// cruve2 switches from y1 to y2
+	// xScale shall not be retransformed because it did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 1);
+	// QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // did not change, because range is already at 1..100
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
 
-    {
-        const auto line = yAxis2->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
+	const auto dataRect = plot->dataRect();
 
-    // Now change cSystemIndex of second yAxis too
-    c.resetRetransformCount();
+	// Check that both lines go from bottom to top
+	{
+		QCOMPARE(yAxis1->d_func()->lines.count(), 1);
+		const auto line = yAxis1->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
 
-    {
-        AxisDock d(nullptr);
-        d.setAxes({yAxis2});
-        d.plotRangeChanged(1); // change from cSystem1 to cSystem2
-    }
+	{
+		QCOMPARE(yAxis2->d_func()->lines.count(), 1);
+		const auto line = yAxis2->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
 
-    // the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
-    // yAxis2 switches from y1 to y2
-    // xScale shall not be retransformed because it did not change
-    QCOMPARE(c.logsXScaleRetransformed.count(), 0);
-    QCOMPARE(c.logsYScaleRetransformed.count(), 2);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
-    QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1);
+	// Now change cSystemIndex of second yAxis too
+	c.resetRetransformCount();
 
-    {
-        const auto line = yAxis1->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
+	{
+		AxisDock d(nullptr);
+		d.setAxes({yAxis2});
+		d.plotRangeChanged(1); // change from cSystem1 to cSystem2
+	}
 
-    {
-        const auto line = yAxis2->d_func()->lines.at(0);
-        QCOMPARE(line.p1().x(), dataRect.bottom());
-        QCOMPARE(line.p2().x(), dataRect.top());
-    }
+	// the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
+	// yAxis2 switches from y1 to y2
+	// xScale shall not be retransformed because it did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	//	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // range did not change, so retransformScale gets not called
+	//	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // range did not change, so retransformScale gets not called
+
+	{
+		QCOMPARE(yAxis1->d_func()->lines.count(), 1);
+		const auto line = yAxis1->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
+
+	{
+		QCOMPARE(yAxis2->d_func()->lines.count(), 1);
+		const auto line = yAxis2->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
+}
+
+void RetransformTest::TestChangePlotRangeElement3() {
+	// Change the plotrange of one of the elements
+	// This time curve1 changes csystem
+	// --> yRange1 and yRange2 have to be transformed
+
+	RetransformCallCounter c;
+	Project project;
+
+	auto* sheet = new Spreadsheet("Spreadsheet", false);
+	sheet->setColumnCount(4);
+	sheet->setRowCount(100);
+
+	project.addChild(sheet);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* p = new CartesianPlot("Plot");
+	p->setType(CartesianPlot::Type::FourAxes); // Otherwise no axis are created
+	worksheet->addChild(p);
+	p->setNiceExtend(false);
+
+	auto* curve = new XYCurve("curve");
+	p->addChild(curve);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 101; i++) {
+			xData.append(i);
+			yData.append(i);
+		}
+		auto* xColumn = sheet->column(0);
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		auto* yColumn = sheet->column(1);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve->setXColumn(xColumn);
+		curve->setYColumn(yColumn);
+	}
+
+	auto* curve2 = new XYCurve("curve2");
+	p->addChild(curve2);
+	{
+		QVector<int> xData;
+		QVector<double> yData;
+		for (int i = 1; i < 31; i++) { // different to the above
+			xData.append(i);
+			yData.append(i);
+		}
+		auto* xColumn = sheet->column(2);
+		xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+		xColumn->replaceInteger(0, xData);
+		auto* yColumn = sheet->column(3);
+		yColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+		yColumn->replaceValues(0, yData);
+		curve2->setXColumn(xColumn);
+		curve2->setYColumn(yColumn);
+	}
+
+	// SAVE_PROJECT("TestChangePlotRangeElement2.lml");
+
+	QCOMPARE(p->range(Dimension::X, 0).start(), 1);
+	QCOMPARE(p->range(Dimension::X, 0).end(), 100);
+	QCOMPARE(p->range(Dimension::Y, 0).start(), 1);
+	QCOMPARE(p->range(Dimension::Y, 0).end(), 100);
+
+	auto children = project.children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
+
+	// Spreadsheet "Spreadsheet"
+	// Column "1"
+	// Column "2"
+	// Column "3"
+	// Column "4"
+	// Worksheet "Worksheet"
+	// CartesianPlot "Plot"
+	// Axis "x"
+	// Axis "x2"
+	// Axis "y"
+	// Axis "y2"
+	// XYCurve "curve"
+	// XYCurve "curve2"
+	QCOMPARE(children.length(), 13);
+	for (const auto& child : children)
+		connect(child, &AbstractAspect::retransformCalledSignal, &c, &RetransformCallCounter::aspectRetransformed);
+
+	auto plots = project.children(AspectType::CartesianPlot, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(plots.length(), 1);
+	auto* plot = static_cast<CartesianPlot*>(plots[0]);
+	connect(static_cast<CartesianPlot*>(plot), &CartesianPlot::scaleRetransformed, &c, &RetransformCallCounter::retransformScaleCalled);
+
+	// check axis ranges
+	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
+	QCOMPARE(axes.length(), 4);
+	auto* xAxis1 = static_cast<Axis*>(axes.at(0));
+	auto* xAxis2 = static_cast<Axis*>(axes.at(1));
+	auto* yAxis1 = static_cast<Axis*>(axes.at(2));
+	auto* yAxis2 = static_cast<Axis*>(axes.at(3));
+	QCOMPARE(xAxis1->name(), "x");
+	QCOMPARE(xAxis2->name(), "x2");
+	QCOMPARE(yAxis1->name(), "y");
+	QCOMPARE(yAxis2->name(), "y2");
+
+	auto list = QStringList({// data rect of the plot does not change, so retransforming the
+							 // plot is not needed
+							 "Project/Worksheet/Plot/x",
+							 "Project/Worksheet/Plot/y",
+							 "Project/Worksheet/Plot/x2",
+							 "Project/Worksheet/Plot/y2",
+							 "Project/Worksheet/Plot/curve",
+							 "Project/Worksheet/Plot/curve2"});
+
+	CartesianPlotDock dock(nullptr);
+	dock.setPlots({plot});
+	dock.addYRange();
+	QCOMPARE(plot->rangeCount(Dimension::Y), 2);
+	dock.addPlotRange();
+	QCOMPARE(plot->coordinateSystemCount(), 2);
+
+	c.resetRetransformCount();
+
+	dock.PlotRangeChanged(1, Dimension::Y, 1); // switch for second csystem to y range 2
+
+	// No update of the scales, because the range did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+
+	c.resetRetransformCount();
+
+	XYCurveDock curveDock(nullptr);
+	curveDock.setupGeneral();
+	curveDock.setCurves({curve});
+	QCOMPARE(curve->coordinateSystemIndex(), 0);
+	curveDock.plotRangeChanged(1); // set curve range to other
+	QCOMPARE(curve->coordinateSystemIndex(), 1);
+
+	// CSystem1:
+	// x 1..100
+	// y 1..30
+	// CSystem2:
+	// x 1..100
+	// y 1..100
+
+	QCOMPARE(plot->range(Dimension::X, 0).start(), 1);
+	QCOMPARE(plot->range(Dimension::X, 0).end(), 100);
+	QCOMPARE(plot->range(Dimension::Y, 0).start(), 1);
+	QCOMPARE(plot->range(Dimension::Y, 0).end(), 30);
+	QCOMPARE(plot->range(Dimension::Y, 1).start(), 1);
+	QCOMPARE(plot->range(Dimension::Y, 1).end(), 100);
+
+	// the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
+	// cruve2 switches from y1 to y2
+	// xScale shall not be retransformed because it did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 2);
+	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0);
+	QCOMPARE(c.logsYScaleRetransformed.at(1).index, 1);
+
+	const auto dataRect = plot->dataRect();
+
+	// Check that both lines go from bottom to top
+	{
+		QCOMPARE(yAxis1->d_func()->lines.count(), 1);
+		const auto line = yAxis1->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
+
+	{
+		QCOMPARE(yAxis2->d_func()->lines.count(), 1);
+		const auto line = yAxis2->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
+
+	// Now change cSystemIndex of second yAxis too
+	c.resetRetransformCount();
+
+	{
+		AxisDock d(nullptr);
+		d.setAxes({yAxis2});
+		d.plotRangeChanged(1); // change from cSystem1 to cSystem2
+	}
+
+	// the y scale of cSystem1 and the y scale of CSystem2 shall be retransformed, because
+	// yAxis2 switches from y1 to y2
+	// xScale shall not be retransformed because it did not change
+	QCOMPARE(c.logsXScaleRetransformed.count(), 0);
+	QCOMPARE(c.logsYScaleRetransformed.count(), 0);
+	//	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 0); // range did not change, so retransformScale gets not called
+	//	QCOMPARE(c.logsYScaleRetransformed.at(0).index, 1); // range did not change, so retransformScale gets not called
+
+	{
+		QCOMPARE(yAxis1->d_func()->lines.count(), 1);
+		const auto line = yAxis1->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
+
+	{
+		QCOMPARE(yAxis2->d_func()->lines.count(), 1);
+		const auto line = yAxis2->d_func()->lines.at(0);
+		QCOMPARE(line.p1().y(), dataRect.bottom());
+		QCOMPARE(line.p2().y(), dataRect.top());
+	}
 }
 
 // ############################################################################################

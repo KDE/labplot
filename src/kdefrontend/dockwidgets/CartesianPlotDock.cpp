@@ -1002,13 +1002,8 @@ void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, boo
 				}
 			}
 		}
-		if (retransform) { // TODO: not necessary to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only
-						   // them
-			plot->retransformScales();
-			plot->retransform();
-		} else {
-			// TODO:when no object used the range, handle it differently
-		}
+		if (retransform)
+			plot->WorksheetElementContainer::retransform();
 	}
 	updateRangeList(dim); // see range changes
 }
@@ -1265,7 +1260,11 @@ void CartesianPlotDock::PlotRangeChanged(const int plotRangeIndex, const Dimensi
 	const std::string dimStr = CartesianCoordinateSystem::dimensionToString(dim).toStdString();
 	DEBUG(Q_FUNC_INFO << ", Set " << dimStr << " range of plot range " << plotRangeIndex + 1 << " to " << index + 1)
 	auto* cSystem{m_plot->coordinateSystem(plotRangeIndex)};
+	const auto indexOld = cSystem->index(dim);
 	cSystem->setIndex(dim, index);
+
+	m_plot->setRangeDirty(dim, index, true);
+	m_plot->setRangeDirty(dim, indexOld, true);
 
 	// auto scale x range when on auto scale (now that it is used)
 	if (m_plot->range(dim, index).autoScale()) {

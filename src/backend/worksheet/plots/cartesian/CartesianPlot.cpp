@@ -1488,7 +1488,12 @@ CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 }
 
 void CartesianPlot::addCoordinateSystem() {
-	addCoordinateSystem(new CartesianCoordinateSystem(this));
+	auto cSystem = new CartesianCoordinateSystem(this);
+	addCoordinateSystem(cSystem);
+	// retransform scales, because otherwise the CartesianCoordinateSystem
+	// does not have any scales
+	retransformScale(Dimension::X, cSystem->index(Dimension::X));
+	retransformScale(Dimension::Y, cSystem->index(Dimension::Y));
 }
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
@@ -3269,6 +3274,7 @@ void CartesianPlotPrivate::retransform() {
 /*!
  * \brief CartesianPlotPrivate::retransformScale
  * Sets new Scales to coordinate systems and updates the ranges of the axis
+ * Needed when the range (xRange/yRange) changed
  * \param index
  */
 void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {

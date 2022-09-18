@@ -90,6 +90,8 @@ void BaseDock::plotRangeChanged(int index) {
 	const int xIndexNew = plot->coordinateSystem(index)->index(Dimension::X);
 	const int yIndexNew = plot->coordinateSystem(index)->index(Dimension::Y);
 
+	bool xIndexNewDifferent = false;
+	bool yIndexNewDifferent = false;
 	QVector<int> xRangesChanged;
 	QVector<int> yRangesChanged;
 	for (auto aspect : m_aspects) {
@@ -99,10 +101,16 @@ void BaseDock::plotRangeChanged(int index) {
 			const auto xIndexOld = elementOldCSystem->index(Dimension::X);
 			const auto yIndexOld = elementOldCSystem->index(Dimension::Y);
 			// If indices are same, the range will not change, so do not track those
-			if (xIndexOld != xIndexNew && !xRangesChanged.contains(xIndexOld))
-				xRangesChanged.append(xIndexOld);
-			if (yIndexOld != yIndexNew && !yRangesChanged.contains(yIndexOld))
-				yRangesChanged.append(yIndexOld);
+			if (xIndexOld != xIndexNew) {
+				xIndexNewDifferent = true;
+				if (!xRangesChanged.contains(xIndexOld))
+					xRangesChanged.append(xIndexOld);
+			}
+			if (yIndexOld != yIndexNew) {
+				yIndexNewDifferent = true;
+				if (!yRangesChanged.contains(yIndexOld))
+					yRangesChanged.append(yIndexOld);
+			}
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
 			e->setSuppressRetransform(false);
@@ -113,14 +121,21 @@ void BaseDock::plotRangeChanged(int index) {
 	}
 
 	// Retransform all changed indices and the new indices
-	for (const int index : xRangesChanged)
-		plot->retransformScale(Dimension::X, index);
-	if (!xRangesChanged.contains(xIndexNew))
-		plot->retransformScale(Dimension::X, xIndexNew);
-	for (const int index : yRangesChanged)
-		plot->retransformScale(Dimension::Y, index);
-	if (!yRangesChanged.contains(yIndexNew))
-		plot->retransformScale(Dimension::Y, yIndexNew);
+	if (!xRangesChanged.contains(xIndexNew) && xIndexNewDifferent)
+		xRangesChanged.append(xIndexNew);
+	for (const int index : xRangesChanged) {
+		plot->setRangeDirty(Dimension::X, index, true);
+		if (plot->autoScale(Dimension::X, index))
+			plot->scaleAuto(Dimension::X, index);
+	}
+
+	if (!yRangesChanged.contains(yIndexNew) && yIndexNewDifferent)
+		yRangesChanged.append(yIndexNew);
+	for (const int index : yRangesChanged) {
+		plot->setRangeDirty(Dimension::Y, index, true);
+		if (plot->autoScale(Dimension::Y, index))
+			plot->scaleAuto(Dimension::Y, index);
+	}
 
 	plot->WorksheetElementContainer::retransform();
 	plot->project()->setChanged(true);
