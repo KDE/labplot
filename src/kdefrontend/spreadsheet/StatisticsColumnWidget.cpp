@@ -587,22 +587,33 @@ void StatisticsColumnWidget::showBarPlot() {
 
 	auto* dataColumn = new Column("data");
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> data;
-	data.resize(count);
+	QVector<int> dataUnsorted(count);
 
 	auto* labelsColumn = new Column("labels");
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
-	QVector<QString> labels;
-	labels.resize(count);
+	QVector<QString> labels(count);
+	QVector<QString> labelsUnsorted(count);
 
 	const auto& frequencies = m_column->frequencies();
 	auto i = frequencies.constBegin();
 	int row = 0;
 	while (i != frequencies.constEnd()) {
-		labels[row] = i.key();
-		data[row] = i.value();
+		labelsUnsorted[row] = i.key();
+		dataUnsorted[row] = i.value();
 		++row;
 		++i;
+	}
+
+	// sort the frequencies and the accompanying labels
+	auto data = dataUnsorted;
+	std::sort(data.begin(), data.end(), std::greater<int>());
+
+	// sort the labels according to the new order of sorted values
+	row = 0;
+	for (auto value : data) {
+		int index = dataUnsorted.indexOf(value);
+		labels[row] = labelsUnsorted.at(index);
+		++row;
 	}
 
 	dataColumn->replaceInteger(0, data);
@@ -671,24 +682,19 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	auto* dataColumn = new Column("data");
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> dataUnsorted;
-	dataUnsorted.resize(count);
+	QVector<int> dataUnsorted(count);
 
 	auto* xColumn = new Column("x");
 	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> xData;
-	xData.resize(count);
+	QVector<int> xData(count);
 
 	auto* yColumn = new Column("y");
-	QVector<double> yData;
-	yData.resize(count);
+	QVector<double> yData(count);
 
 	auto* labelsColumn = new Column("labels");
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
-	QVector<QString> labels;
-	labels.resize(count);
-	QVector<QString> labelsUnsorted;
-	labelsUnsorted.resize(count);
+	QVector<QString> labels(count);
+	QVector<QString> labelsUnsorted(count);
 
 	const auto& frequencies = m_column->frequencies();
 	auto i = frequencies.constBegin();
@@ -739,6 +745,12 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setLinePen(pen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	plot->addChild(curve);
+
+	// resize the first y range to have the first point of the xy-curve at the top of the first bar
+	if (yData.at(0) != 0) {
+		const double max = (double)data.at(0) * 100. / yData.at(0);
+		plot->setMax(CartesianCoordinateSystem::Dimension::Y, 0, max);
+	}
 
 	// axes properties
 	auto axes = plot->children<Axis>();
