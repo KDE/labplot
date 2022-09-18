@@ -1038,7 +1038,7 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 }
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
-	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+	if (isInteractive() && (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier))) {
 		// https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		QPoint numDegrees = event->angleDelta() / 8;
 		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
@@ -2314,21 +2314,13 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 }
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
-	if (event->type() == QEvent::KeyPress) {
+	if (event->type() == QEvent::KeyPress && m_actionsInitialized) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
 		int key = keyEvent->key();
 		switch (key) {
 		case Qt::Key_S:
 			if (cartesianPlotSelectionModeAction->isEnabled())
 				cartesianPlotSelectionModeAction->trigger();
-			return true;
-		case Qt::Key_X:
-			if (cartesianPlotZoomXSelectionModeAction->isEnabled())
-				cartesianPlotZoomXSelectionModeAction->trigger();
-			return true;
-		case Qt::Key_Y:
-			if (cartesianPlotZoomYSelectionModeAction->isEnabled())
-				cartesianPlotZoomYSelectionModeAction->trigger();
 			return true;
 		case Qt::Key_Z:
 			if (cartesianPlotZoomSelectionModeAction->isEnabled())
