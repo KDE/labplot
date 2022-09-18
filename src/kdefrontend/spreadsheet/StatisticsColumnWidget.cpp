@@ -622,10 +622,13 @@ void StatisticsColumnWidget::showBarPlot() {
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
-		} else
+		} else {
 			axis->title()->setText(i18n("Frequency"));
+			axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		}
 
 		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
 	plot->retransform();
@@ -636,6 +639,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 	DEBUG(Q_FUNC_INFO)
 	auto* plot = addPlot(&m_paretoPlotWidget);
 	plot->title()->setText(m_column->name());
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(3.2, Worksheet::Unit::Centimeter));
 
 	// add second range for the cumulative percentage of the total number of occurences
 	plot->addYRange(Range<double>(0, 100)); // add second y range
@@ -649,6 +654,10 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->addChild(axis);
 	axis->setOrientation(Axis::Orientation::Vertical);
 	axis->setPosition(Axis::Position::Right);
+	axis->setMajorTicksDirection(Axis::ticksBoth);
+	axis->setLabelsPosition(Axis::LabelsPosition::In);
+	axis->setLabelsSuffix(QLatin1String("%"));
+	axis->title()->setRotationAngle(90);
 	axis->setCoordinateSystemIndex(1);
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -745,12 +754,17 @@ void StatisticsColumnWidget::showParetoPlot() {
 		} else {
 			if (!firstYAxis) {
 				axis->title()->setText(i18n("Frequency"));
+				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
 				firstYAxis = true;
-			} else
+			} else {
 				axis->title()->setText(i18n("Cumulative Percentage"));
+				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was adressed
+				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+			}
 		}
 
 		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
 	}
 
 	plot->retransform();
