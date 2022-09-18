@@ -19,7 +19,7 @@ extern "C" {
 
 ///////////////////////// macros ///////////
 
-#define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true);
+#define VALUES_EQUAL(v1, v2) QVERIFY2(nsl_math_approximately_equal(v1, v2), qPrintable(QString::number(v1) + " is not equal to " + QString::number(v2)));
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \
 	VALUES_EQUAL(range.start(), start_)                                                                                                                        \
