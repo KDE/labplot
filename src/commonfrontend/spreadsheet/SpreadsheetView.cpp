@@ -1285,6 +1285,10 @@ void SpreadsheetView::getCurrentCell(int* row, int* col) const {
 
 bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
+		// initialize all menus and actions if not done yet
+		if (!m_plotDataMenu)
+			initMenus();
+
 		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()) {
@@ -1313,9 +1317,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 						break;
 				}
 			}
-
-			if (!m_rowMenu)
-				initMenus();
 
 			action_statistics_rows->setEnabled(numeric && hasValues);
 			m_rowMenu->exec(global_pos);
