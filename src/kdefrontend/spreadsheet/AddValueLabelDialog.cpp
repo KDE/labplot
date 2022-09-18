@@ -3,13 +3,15 @@
 	Project              : LabPlot
 	Description          : Dialog to add a new the value label
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "AddValueLabelDialog.h"
 #include "backend/lib/macros.h"
+#include "backend/core/column/Column.h"
 
+#include <QComboBox>
 #include <QDateTimeEdit>
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -29,10 +31,11 @@
 
 	\ingroup kdefrontend
  */
-AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::ColumnMode mode)
+AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, const Column* column)
 	: QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Add Value Label"));
 
+	auto mode = column->columnMode();
 	auto* layout = new QGridLayout(this);
 
 	// value
@@ -50,6 +53,25 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 			leValue->setValidator(new QDoubleValidator(leValue));
 		} else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
 			leValue->setValidator(new QIntValidator(leValue));
+	} else if (mode == AbstractColumn::ColumnMode::Text) {
+		cbValue = new QComboBox(this);
+
+		// show all unique text values in the combobox
+		QStringList items;
+		QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+		const auto& frequencies = column->frequencies();
+		auto i = frequencies.constBegin();
+		while (i != frequencies.constEnd()) {
+			items << i.key();
+			++i;
+		}
+
+		cbValue->addItems(items);
+		QApplication::restoreOverrideCursor();
+
+		cbValue->setFocus();
+		layout->addWidget(cbValue, 0, 1);
+
 	} else {
 		dateTimeEdit = new QDateTimeEdit(this);
 		dateTimeEdit->setFocus();
@@ -115,7 +137,7 @@ qint64 AddValueLabelDialog::valueBigInt() const {
 }
 
 QString AddValueLabelDialog::valueText() const {
-	return leValue->text();
+	return cbValue->currentText();
 }
 
 QDateTime AddValueLabelDialog::valueDateTime() const {
