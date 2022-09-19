@@ -1088,6 +1088,9 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformRange() {
+	if (!q->cSystem || !q->m_plot)
+		return;
+
 	switch (rangeType) { // also if not changing (like on plot range changes)
 	case Axis::RangeType::Auto: {
 		if (orientation == Axis::Orientation::Horizontal)

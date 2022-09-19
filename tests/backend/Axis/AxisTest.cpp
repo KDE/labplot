@@ -350,4 +350,19 @@ void AxisTest::TestSetRange() {
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 }
 
+void AxisTest::TestAddingAxis() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+
+	ws->addChild(p);
+
+	p->addHorizontalAxis(); // should not crash
+}
+
 QTEST_MAIN(AxisTest)
