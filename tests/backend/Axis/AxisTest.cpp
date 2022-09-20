@@ -350,7 +350,7 @@ void AxisTest::TestSetRange() {
 	QCOMPARE(arange.scale(), RangeT::Scale::Log10);
 }
 
-void AxisTest::TestAddingAxis() {
+void AxisTest::TestAddingHorizontalAxis() {
 	Project project;
 	auto* ws = new Worksheet("worksheet");
 	QVERIFY(ws != nullptr);
@@ -363,6 +363,21 @@ void AxisTest::TestAddingAxis() {
 	ws->addChild(p);
 
 	p->addHorizontalAxis(); // should not crash
+}
+
+void AxisTest::TestAddingVerticalAxis() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
+	QVERIFY(p != nullptr);
+
+	ws->addChild(p);
+
+	p->addVerticalAxis(); // should not crash
 }
 
 QTEST_MAIN(AxisTest)

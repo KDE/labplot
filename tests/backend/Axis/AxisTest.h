@@ -22,7 +22,8 @@ private Q_SLOTS:
 	void majorTicksStartValue();
 	void TestSetCoordinateSystem();
 	void TestSetRange();
-	void TestAddingAxis();
+	void TestAddingHorizontalAxis();
+	void TestAddingVerticalAxis();
 };
 
 #endif // WORKSHEETELEMENTTEST_H

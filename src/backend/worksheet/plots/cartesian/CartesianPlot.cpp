@@ -1625,6 +1625,7 @@ void CartesianPlot::retransform() {
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
+	addChild(axis);
 	axis->setSuppressRetransform(true); // retransformTicks() needs plot
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->rangeType() == Axis::RangeType::Auto) {
@@ -1634,7 +1635,6 @@ void CartesianPlot::addHorizontalAxis() {
 		axis->setMajorTicksNumber(range(Dimension::X).autoTickCount());
 		axis->setUndoAware(true);
 	}
-	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
 }
@@ -1642,6 +1642,7 @@ void CartesianPlot::addHorizontalAxis() {
 void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
 	axis->setSuppressRetransform(true); // retransformTicks() needs plot
+	addChild(axis);
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
@@ -1650,7 +1651,6 @@ void CartesianPlot::addVerticalAxis() {
 		axis->setMajorTicksNumber(range(Dimension::Y).autoTickCount());
 		axis->setUndoAware(true);
 	}
-	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
 }
