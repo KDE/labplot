@@ -1813,9 +1813,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
-				if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2
-					|| scale == RangeT::Scale::Ln) // don't use same precision for all label on log scales
-					str = numberLocale.toString(value, 'f', qMax(0, nsl_math_rounded_decimals(value)));
+				if (RangeT::isLogScale(scale)) // don't use same precision for all label on log scales
+					str = numberLocale.toString(value, 'f', qMax(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == "-" + nullStr)
