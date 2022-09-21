@@ -47,6 +47,11 @@ public:
 	const static QStringList scaleNames; // see Range.cpp
 	// TODO: when we have C++17: use inline initialization
 	//	const static inline QStringList scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
+	static bool isLogScale(Scale scale) {
+		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
+			return true;
+		return false;
+	}
 };
 
 template<class T>
