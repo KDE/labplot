@@ -1811,7 +1811,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
 				if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2
 					|| scale == RangeT::Scale::Ln) // don't use same precision for all label on log scales
@@ -1827,7 +1827,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 		case Axis::LabelsFormat::ScientificE: {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1844,7 +1844,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers10: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1858,7 +1858,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers2: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1873,7 +1873,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::PowersE: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1888,7 +1888,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::MultipliesPi: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
@@ -1902,7 +1902,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Scientific: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				// DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1926,7 +1926,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 		}
 	} else if (datetime) {
-		for (const auto value : tickLabelValues) {
+		for (const auto value : qAsConst(tickLabelValues)) {
 			QDateTime dateTime;
 			dateTime.setTimeSpec(Qt::UTC);
 			dateTime.setMSecsSinceEpoch(value);
