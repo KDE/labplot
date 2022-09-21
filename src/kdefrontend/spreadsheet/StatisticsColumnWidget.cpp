@@ -767,7 +767,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 			if (!firstYAxis) {
 				axis->title()->setText(i18n("Frequency"));
 				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
-				axis->setMajorTicksNumber(10+1);	// same tick number as percentage axis
+				axis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
 				firstYAxis = true;
 			} else {
 				axis->title()->setText(i18n("Cumulative Percentage"));
