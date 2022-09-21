@@ -657,11 +657,11 @@ void StatisticsColumnWidget::showParetoPlot() {
 	plot->addYRange(Range<double>(0, 100)); // add second y range
 	plot->addCoordinateSystem(); // add cs for second y range
 	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
-	cs->setIndex(CartesianCoordinateSystem::Dimension::Y, 1); // specify new y range
+	cs->setIndex(Dimension::Y, 1); // specify new y range
 	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
 
 	// add second y-axis
-	auto* axis = new Axis(QString());
+	auto* axis = new Axis(QLatin1String("y2"));
 	plot->addChild(axis);
 	axis->setOrientation(Axis::Orientation::Vertical);
 	axis->setPosition(Axis::Position::Right);
@@ -735,7 +735,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	columns << dataColumn;
 	barPlot->setDataColumns(columns);
 
-	// add xy-curve
+	// add cumulated percentage curve
 	auto* curve = new XYCurve("curve");
 	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
@@ -749,7 +749,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	// resize the first y range to have the first point of the xy-curve at the top of the first bar
 	if (yData.at(0) != 0) {
 		const double max = (double)data.at(0) * 100. / yData.at(0);
-		plot->setMax(CartesianCoordinateSystem::Dimension::Y, 0, max);
+		plot->setMax(Dimension::Y, 0, max);
 	}
 
 	// axes properties
@@ -767,6 +767,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 			if (!firstYAxis) {
 				axis->title()->setText(i18n("Frequency"));
 				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+				axis->setMajorTicksNumber(10+1);	// same tick number as percentage axis
 				firstYAxis = true;
 			} else {
 				axis->title()->setText(i18n("Cumulative Percentage"));
