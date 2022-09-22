@@ -196,7 +196,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 
 	hsize_t size;
 	herr_t status = H5Fget_filesize(file, &size);
-	if (status >= 0) {
+    if (status >= 0) {<
 		info += i18n("File size: %1 bytes", QString::number(size));
 		info += QLatin1String("<br>");
 	}

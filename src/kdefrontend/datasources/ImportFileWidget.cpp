@@ -1330,6 +1330,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::Spice:
 			infoStrings << SpiceFilter::fileInfoString(fileName);
 			break;
+        case AbstractFileFilter::FileType::MDF:
+            infoStrings << MDFFilter::fileInfoString(fileName);
+            break;
 		case AbstractFileFilter::FileType::READSTAT:
 			infoStrings << ReadStatFilter::fileInfoString(fileName);
 			break;

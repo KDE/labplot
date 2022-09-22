@@ -28,5 +28,8 @@ ENDIF ()
 IF (QXLSX_LIBRARIES)
 	add_subdirectory(XLSX)
 ENDIF ()
+#IF (MDF_FOUND)
+	add_subdirectory(MDF)
+#ENDIF ()
 
 # add_subdirectory(DATASETS)

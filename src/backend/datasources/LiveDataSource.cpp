@@ -17,6 +17,7 @@
 #include "backend/datasources/filters/FITSFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/SpiceFilter.h"
+#include "backend/datasources/filters/MDFFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
@@ -954,7 +955,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			setFilter(new SpiceFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "column") {
+        } else if (reader->name() == MDFFilter::xmlElementName) {
+            setFilter(new MDFFilter);
+            if (!m_filter->load(reader))
+                return false;
+        } else if (reader->name() == "column") {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;

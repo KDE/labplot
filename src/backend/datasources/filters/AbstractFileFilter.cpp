@@ -141,6 +141,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		fileType = FileType::JSON;
 	} else if (SpiceFilter::isSpiceFile(fileName))
 		fileType = FileType::Spice;
+    else if (MDFFilter::isMDFFile(fileName))
+        fileType = FileType::MDF;
 #ifdef HAVE_EXCEL // before ASCII, because XLSX is XML and XML is ASCII
 	else if (fileInfo.contains("Microsoft Excel") || fileName.endsWith(QLatin1String("xlsx"), Qt::CaseInsensitive))
 		fileType = FileType::Excel;

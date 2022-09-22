@@ -43,6 +43,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
+        ${KDEFRONTEND_DIR}/datasources/MDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
@@ -168,6 +169,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
+        ${KDEFRONTEND_DIR}/ui/datasources/mdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
@@ -313,6 +315,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
+        ${BACKEND_DIR}/datasources/filters/MDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/NetCDFFilter.cpp
 	${BACKEND_DIR}/datasources/filters/SpiceReader.cpp
 	${BACKEND_DIR}/datasources/filters/SpiceFilter.cpp

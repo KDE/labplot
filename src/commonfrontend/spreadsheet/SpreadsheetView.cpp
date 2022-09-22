@@ -1321,6 +1321,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			action_statistics_rows->setEnabled(numeric && hasValues);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader())) {
+			if (!m_rowMenu)
+				initMenus();
 			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
 				auto* sel_model = m_tableView->selectionModel();
