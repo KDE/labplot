@@ -1959,6 +1959,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 
 	// box filling
 	d->background->loadThemeConfig(group);
+	d->background->setFirstColor(themeColor);
 
 	// median line
 	setMedianLinePen(p);

@@ -2079,6 +2079,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 
 	// Filling
 	d->background->loadThemeConfig(group);
+	d->background->setFirstColor(themeColor);
 
 	// Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style())));
