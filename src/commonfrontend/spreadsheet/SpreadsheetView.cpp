@@ -31,6 +31,7 @@
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+#include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 #include "kdefrontend/spreadsheet/FormattingHeatmapDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/GoToDialog.h"
@@ -281,7 +282,8 @@ void SpreadsheetView::initActions() {
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
-	action_sample_values = new QAction(i18n("Sample"), this);
+	action_sample_values = new QAction(QIcon::fromTheme(QString("view-list-details")), i18n("Sample"), this);
+	action_flatten_values = new QAction(QIcon::fromTheme(QString("gnumeric-object-list")), i18n("Flatten"), this);
 
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
@@ -342,9 +344,9 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Drop"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask"), this);
-	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QString("delete-table-row")), i18n("Drop"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QString("hide_table_row")), i18n("Mask"), this);
+	action_reverse_columns = new QAction(QIcon::fromTheme(QString("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
 	// normalization
@@ -622,6 +624,7 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu->addAction(action_fill_function);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_sample_values);
+		m_columnGenerateDataMenu->addAction(action_flatten_values);
 
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
@@ -831,6 +834,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
 	connect(action_sample_values, &QAction::triggered, this, &SpreadsheetView::sampleColumnValues);
+	connect(action_flatten_values, &QAction::triggered, this, &SpreadsheetView::flattenColumnValues);
 
 	// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
@@ -2706,6 +2710,14 @@ void SpreadsheetView::sampleColumnValues() {
 	if (selectedColumnCount() < 1)
 		return;
 	auto* dlg = new SampleValuesDialog(m_spreadsheet, this);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::flattenColumnValues() {
+	if (selectedColumnCount() < 1)
+		return;
+	auto* dlg = new FlattenColumnsDialog(m_spreadsheet, this);
 	dlg->setColumns(selectedColumns());
 	dlg->exec();
 }

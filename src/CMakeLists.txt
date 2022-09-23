@@ -98,6 +98,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
@@ -220,6 +221,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/addsubtractvaluewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/flattencolumnswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui

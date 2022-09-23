@@ -170,6 +170,7 @@ private:
 	QAction* action_drop_values;
 	QAction* action_mask_values;
 	QAction* action_sample_values;
+	QAction* action_flatten_values;
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
 	QActionGroup* ladderOfPowersActionGroup;
@@ -280,6 +281,7 @@ private Q_SLOTS:
 	void dropColumnValues();
 	void maskColumnValues();
 	void sampleColumnValues();
+	void flattenColumnValues();
 	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);

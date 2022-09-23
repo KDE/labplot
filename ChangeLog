@@ -18,6 +18,7 @@ New features:
 		* show column statistics also for text columns
 		* Dropping and masking of values also for text columns
 		* Data sampling (random and periodic methods)
+		* Data 'flattening' - convert pivoted data to column base format
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
