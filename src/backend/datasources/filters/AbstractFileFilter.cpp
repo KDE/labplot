@@ -159,8 +159,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 #endif
 #ifdef HAVE_HDF5 // before NETCDF to treat NetCDF 4 files with .nc ending as HDF5 when fileInfo detects it (HDF4 not supported)
 	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format (version 5)")) || fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
-			 || (fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) && ! fileInfo.contains(QLatin1String("(version 4)"))) || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive)
-			 || fileName.endsWith(QLatin1String("nc4"), Qt::CaseInsensitive))
+			 || (fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive) && !fileInfo.contains(QLatin1String("(version 4)")))
+			 || fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) || fileName.endsWith(QLatin1String("nc4"), Qt::CaseInsensitive))
 		fileType = FileType::HDF5;
 #endif
 #ifdef HAVE_NETCDF
