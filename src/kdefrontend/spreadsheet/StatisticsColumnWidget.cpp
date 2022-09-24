@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <QTabWidget>
@@ -579,8 +580,10 @@ void StatisticsColumnWidget::showBarPlot() {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	auto* barPlot = new BarPlot(QString());
-	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	plot->addChild(barPlot);
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->value()->setType(Value::Type::BinEntries);
+	barPlot->value()->setPosition(Value::Position::Above);
 
 	// generate columns holding the data and the labels
 	int count = m_column->statistics().unique;
@@ -745,6 +748,10 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setLinePen(pen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	plot->addChild(curve);
+	curve->setValuesType(XYCurve::ValuesType::Y);
+	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
+	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	curve->setValuesSuffix(QLatin1String("%"));
 
 	// resize the first y range to have the first point of the xy-curve at the top of the first bar
 	if (yData.at(0) != 0) {

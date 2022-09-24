@@ -656,7 +656,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			lines << QLineF(x + width, 0, x, 0);
 			lines << QLineF(x, 0, x, value);
 
-			m_valuesPointsLogical << QPointF(x + width/2, value);
+			m_valuesPointsLogical << QPointF(x + width / 2, value);
 
 			barLines << q->cSystem->mapLogicalToScene(lines);
 			updateFillingRect(columnIndex, valueIndex, lines);
@@ -951,7 +951,7 @@ void BarPlotPrivate::updateValues() {
 			auto& point = m_valuesPointsLogical.at(i);
 			if (orientation == BarPlot::Orientation::Vertical)
 				m_valuesStrings << prefix + QString::number(point.y()) + suffix;
-			 else
+			else
 				m_valuesStrings << prefix + QString::number(point.x()) + suffix;
 		}
 	} else if (value->type() == Value::CustomColumn) {

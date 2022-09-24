@@ -46,8 +46,9 @@ void Value::init(const KConfigGroup& group) {
 	d->dateTimeFormat = group.readEntry("ValueDateTimeFormat", "yyyy-MM-dd");
 	d->prefix = group.readEntry("ValuePrefix", "");
 	d->suffix = group.readEntry("ValueSuffix", "");
+	auto defaultFont = QFont();
 	d->font = group.readEntry("ValueFont", QFont());
-	d->font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
+	d->font.setPixelSize(Worksheet::convertToSceneUnits(defaultFont.pointSizeF(), Worksheet::Unit::Point));
 	d->color = group.readEntry("ValueColor", QColor(Qt::black));
 }
 
