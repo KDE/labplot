@@ -145,7 +145,6 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void histogramValue(double& value, int bin) const;
-	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 };

@@ -21,6 +21,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
+#include <QPainter>
 #include <KLocalizedString>
 
 Value::Value(const QString& name)
@@ -48,6 +49,30 @@ void Value::init(const KConfigGroup& group) {
 	d->font = group.readEntry("ValueFont", QFont());
 	d->font.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->color = group.readEntry("ValueColor", QColor(Qt::black));
+}
+
+void Value::draw(QPainter* painter, const QVector<QPointF>& points, const QVector<QString>& strings) {
+	Q_D(Value);
+
+	if (d->type == Value::NoValues)
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(QPen(d->color));
+	painter->setFont(d->font);
+
+	int i = 0;
+	for (const auto& point : points) {
+		painter->translate(point);
+		if (d->rotationAngle != 0.)
+			painter->rotate(-d->rotationAngle);
+
+		painter->drawText(QPoint(0, 0), strings.at(i++));
+
+		if (d->rotationAngle != 0.)
+			painter->rotate(d->rotationAngle);
+		painter->translate(-point);
+	}
 }
 
 //##############################################################################

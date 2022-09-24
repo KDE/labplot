@@ -28,6 +28,7 @@ public:
 	~Value() override;
 
 	void init(const KConfigGroup&);
+	void draw(QPainter*, const QVector<QPointF>&, const QVector<QString>&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

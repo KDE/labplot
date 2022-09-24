@@ -1642,12 +1642,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	symbol->draw(painter, pointsScene);
 
 	// draw values
-	if (value->type() != Value::NoValues) {
-		painter->setOpacity(value->opacity());
-		painter->setPen(QPen(value->color()));
-		painter->setFont(value->font());
-		drawValues(painter);
-	}
+	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
 	if (errorType != Histogram::ErrorType::NoError) {
@@ -1737,22 +1732,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::drawValues(QPainter* painter) {
-	int i = 0;
-	double valuesRotationAngle = value->rotationAngle();
-	for (const auto& point : qAsConst(valuesPoints)) {
-		painter->translate(point);
-		if (valuesRotationAngle != 0.)
-			painter->rotate(-valuesRotationAngle);
-
-		painter->drawText(QPoint(0, 0), valuesStrings.at(i++));
-
-		if (valuesRotationAngle != 0.)
-			painter->rotate(valuesRotationAngle);
-		painter->translate(-point);
 	}
 }
 
