@@ -883,7 +883,7 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
-	Q_EMIT error(QString());	//clear previous errors
+	Q_EMIT error(QString()); // clear previous errors
 
 	const QString fileName = absolutePath(name);
 
@@ -1709,7 +1709,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::HDF5: {
 			int status = m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
-			if (status != 0) {// parsing failed: switch to binary filter
+			if (status != 0) { // parsing failed: switch to binary filter
 				ui.cbFileType->setCurrentIndex(ui.cbFileType->findData(static_cast<int>(AbstractFileFilter::FileType::Binary)));
 				Q_EMIT error(i18n("Not a HDF5 file: %1", fileName));
 			}
