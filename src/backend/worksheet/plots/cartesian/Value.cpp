@@ -21,8 +21,8 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 
-#include <QPainter>
 #include <KLocalizedString>
+#include <QPainter>
 
 Value::Value(const QString& name)
 	: AbstractAspect(name, AspectType::AbstractAspect)
