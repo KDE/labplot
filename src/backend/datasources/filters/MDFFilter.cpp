@@ -1,5 +1,6 @@
 #include "MDFFilter.h"
 #include "MDFFilterPrivate.h"
+#include "backend/lib/macros.h"
 
 #include <mdf/mdfreader.h>
 using namespace mdf;
@@ -26,16 +27,12 @@ bool MDFFilter::isValid(const QString& fileName) {
     if (!ending_valid)
         return false;
 
-    MdfReader reader(fileName.toStdString());
-    // If header is valid. It will be assumed it is valid
-    reader.ReadHeader();
-
-    return true;
+    return IsMdfFile(fileName.toStdString());
 }
 
 QString MDFFilter::fileInfoString(const QString& filename) {
     if (!MDFFilter::isValid(filename)) {
-        DEBUG(qPrintable(filename) << " is not a MDF file!");
+        DEBUG(Q_FUNC_INFO  << qPrintable(filename) << " is not a MDF file!");
         return tr("Not a MDF file");
     }
     return "";
@@ -43,6 +40,8 @@ QString MDFFilter::fileInfoString(const QString& filename) {
 
 QVector<QStringList> MDFFilter::preview(const QString& fileName, int lines) {
     //https://ihedvall.github.io/mdflib/mdfreader.html
+
+    return QVector<QStringList>();
 }
 
 void MDFFilter::readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode) {
