@@ -586,39 +586,31 @@ void StatisticsColumnWidget::showBarPlot() {
 	barPlot->value()->setPosition(Value::Position::Above);
 
 	// generate columns holding the data and the labels
-	int count = m_column->statistics().unique;
-
 	auto* dataColumn = new Column("data");
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> dataUnsorted(count);
 
 	auto* labelsColumn = new Column("labels");
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
-	QVector<QString> labels(count);
-	QVector<QString> labelsUnsorted(count);
 
+	// sort the frequencies and the accompanying labels
 	const auto& frequencies = m_column->frequencies();
 	auto i = frequencies.constBegin();
-	int row = 0;
+	QVector<QPair<QString, int>> pairs;
 	while (i != frequencies.constEnd()) {
-		labelsUnsorted[row] = i.key();
-		dataUnsorted[row] = i.value();
-		++row;
+		pairs << QPair<QString, int>(i.key(), i.value());
 		++i;
 	}
 
-	// sort the frequencies and the accompanying labels
-	auto data = dataUnsorted;
-	std::sort(data.begin(), data.end(), std::greater<int>());
+	std::sort(pairs.begin(), pairs.end(), [](QPair<QString, int> a, QPair<QString, int> b) {
+		return a.second > b.second;
+	});
 
-	// sort the labels according to the new order of sorted values
-	row = 0;
-	for (auto value : data) {
-		int index = dataUnsorted.indexOf(value);
-		labels[row] = labelsUnsorted.at(index);
-		++row;
+	QVector<int> data;
+	QVector<QString> labels;
+	for (const auto& pair : pairs) {
+		labels << pair.first;
+		data << pair.second;
 	}
-
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
 
@@ -685,7 +677,6 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	auto* dataColumn = new Column("data");
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> dataUnsorted(count);
 
 	auto* xColumn = new Column("x");
 	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
@@ -696,36 +687,38 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	auto* labelsColumn = new Column("labels");
 	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
-	QVector<QString> labels(count);
-	QVector<QString> labelsUnsorted(count);
 
+	// sort the frequencies and the accompanying labels and calculate the total sum of frequencies
 	const auto& frequencies = m_column->frequencies();
 	auto i = frequencies.constBegin();
+	QVector<QPair<QString, int>> pairs;
 	int row = 0;
 	int totalSumOfFrequencies = 0;
 	while (i != frequencies.constEnd()) {
-		labelsUnsorted[row] = i.key();
-		dataUnsorted[row] = i.value();
+		pairs << QPair<QString, int>(i.key(), i.value());
 		xData[row] = 1 + row;
 		totalSumOfFrequencies += i.value();
 		++row;
 		++i;
 	}
 
-	// sort the frequencies and the accompanying labels
-	auto data = dataUnsorted;
-	std::sort(data.begin(), data.end(), std::greater<int>());
+	std::sort(pairs.begin(), pairs.end(), [](QPair<QString, int> a, QPair<QString, int> b) {
+		return a.second > b.second;
+	});
 
-	// calculate the cummulative values and sort the labels according to the new order of sorted values
+	QVector<int> data;
+	QVector<QString> labels;
+	for (const auto& pair : pairs) {
+		labels << pair.first;
+		data << pair.second;
+	}
+
+	// calculate the cummulative values
 	int sum = 0;
 	row = 0;
 	for (auto value : data) {
 		sum += value;
 		yData[row] = (double)sum / totalSumOfFrequencies * 100;
-
-		int index = dataUnsorted.indexOf(value);
-		labels[row] = labelsUnsorted.at(index);
-
 		++row;
 	}
 

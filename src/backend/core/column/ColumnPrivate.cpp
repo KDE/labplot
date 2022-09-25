@@ -1582,6 +1582,7 @@ const QMap<QString, int>& ColumnPrivate::frequencies() const {
 
 void ColumnPrivate::initDictionary() {
 	m_dictionary.clear();
+	m_dictionaryFrequencies.clear();
 	if (columnMode() != AbstractColumn::ColumnMode::Text)
 		return;
 
