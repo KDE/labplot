@@ -340,6 +340,20 @@ ELSE ()
 	MESSAGE (STATUS "Hierarchical Data Format (HDF5) Library DISABLED")
 ENDIF ()
 
+### MDF (optional) #############################
+if (ENABLE_MDF)
+    FIND_PACKAGE(MdfLib)
+    IF (MdfLib_FOUND)
+        add_definitions(-DHAVE_MDF)
+        include_directories(${MdfLib_INCLUDE_DIRS})
+    ELSE()
+        MESSAGE (STATUS "MDF Library NOT FOUND")
+        SET(MdfLib_LIBRARIES "")
+    ENDIF()
+ELSE()
+    MESSAGE (STATUS "MDF Library DISABLED")
+ENDIF()
+
 ### NETCDF (optional) #############################
 IF (ENABLE_NETCDF)
 	FIND_PACKAGE(netCDF)
