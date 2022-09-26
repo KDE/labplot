@@ -2715,10 +2715,21 @@ void SpreadsheetView::sampleColumnValues() {
 }
 
 void SpreadsheetView::flattenColumnValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
+	// ensure all selected columns have the same column mode
+	auto mode = columns.at(0)->columnMode();
+	for (auto* col : columns) {
+		if (col->columnMode() != mode) {
+			KMessageBox::error(this, i18n("The selected columns have different data types and cannot be flattened because of this. "));
+			return;
+		}
+	}
+
 	auto* dlg = new FlattenColumnsDialog(m_spreadsheet, this);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 

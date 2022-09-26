@@ -28,7 +28,7 @@ private:
 	Ui::FlattenColumnsWidget ui;
 	Spreadsheet* m_spreadsheet;
 	QVector<Column*> m_columns;
-	QStringList m_columnNames;
+	QStringList m_referenceColumnNames;
 
 	// widgets to handle the reference columns
 	QPushButton* m_okButton;

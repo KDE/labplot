@@ -50,13 +50,6 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	m_okButton->setToolTip(i18n("Flatten values in the selected spreadsheet columns"));
 	setWindowTitle(i18nc("@title:window", "Flatten Selected Columns"));
 
-	// add column names
-	const auto& columns = m_spreadsheet->children<Column>();
-	for (const auto* column : columns)
-		m_columnNames << column->name();
-
-	ui.cbReferenceColumn->addItems(m_columnNames);
-
 	connect(m_okButton, &QPushButton::clicked, this, &FlattenColumnsDialog::flattenColumns);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FlattenColumnsDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FlattenColumnsDialog::reject);
@@ -80,6 +73,17 @@ FlattenColumnsDialog::~FlattenColumnsDialog() {
 void FlattenColumnsDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
+	// add column names
+	const auto& allColumns = m_spreadsheet->children<Column>();
+	for (auto* column : allColumns) {
+		if (m_columns.indexOf(column) == -1)
+			m_referenceColumnNames << column->name();
+	}
+
+	ui.cbReferenceColumn->addItems(m_referenceColumnNames);
+
+	m_columnComboBoxes << ui.cbReferenceColumn;
+
 	// resize the dialog to have the minimum height
 	layout()->activate();
 	resize(QSize(this->width(), 0).expandedTo(minimumSize()));
@@ -90,7 +94,7 @@ void FlattenColumnsDialog::addReferenceColumn() {
 
 	// add new combo box
 	auto* cb = new QComboBox;
-	cb->addItems(m_columnNames);
+	cb->addItems(m_referenceColumnNames);
 	m_gridLayout->addWidget(cb, index, 1, 1, 1);
 	m_columnComboBoxes << cb;
 
@@ -103,7 +107,10 @@ void FlattenColumnsDialog::addReferenceColumn() {
 	m_removeButtons << button;
 
 	// move the "add new" button to the next grid line
-	m_gridLayout->addWidget(m_buttonNew, index + 1, 2, 1, 1);
+	if (m_columnComboBoxes.count() < m_referenceColumnNames.count())
+		m_gridLayout->addWidget(m_buttonNew, index + 1, 2, 1, 1);
+	else
+		m_buttonNew->hide();
 }
 
 void FlattenColumnsDialog::removeReferenceColumn() {
@@ -117,23 +124,9 @@ void FlattenColumnsDialog::flattenColumns() const {
 
 	// reference columns in the source spreadsheet
 	QVector<Column*> referenceColumns;
-	referenceColumns << m_spreadsheet->column(ui.cbReferenceColumn->currentText());
+	for (const auto* cb : m_columnComboBoxes)
+		referenceColumns << m_spreadsheet->column(cb->currentText());
 	const int referenceColumnCount = referenceColumns.count();
-// 	qDebug()<<"ref count " << referenceColumnCount;
-// 	qDebug()<<"ref column name " << referenceColumns.at(0);
-// 	qDebug()<<referenceColumns;
-
-	// columns with values to be flattened in the source spreadsheet,
-	// in case a selected column is part of the reference columns, remove it
-	// from the list of source value columns
-	QVector<Column*> sourceColumns;
-	for (auto* col : m_columns) {
-		if (referenceColumns.indexOf(col) != -1)
-			sourceColumns << col;
-	}
-
-	// check whether all source columns have the same column mode
-	// TODO:
 
 	// create target spreadsheet
 	auto* targetSpreadsheet = new Spreadsheet(i18n("Flatten of %1", m_spreadsheet->name()));
@@ -141,7 +134,6 @@ void FlattenColumnsDialog::flattenColumns() const {
 	const auto& targetColumns = targetSpreadsheet->children<Column>();
 
 	// set the names and modes for the reference columns in the target spreadsheet
-	auto* source = referenceColumns.at(0);
 	for (int i = 0; i < referenceColumnCount; ++i) {
 		auto* source = referenceColumns.at(i);
 		auto* target = targetSpreadsheet->column(i);
@@ -157,13 +149,17 @@ void FlattenColumnsDialog::flattenColumns() const {
 
 	auto* valueColumn = targetSpreadsheet->column(referenceColumnCount + 1);
 	valueColumn->setName(i18n("Value"));
-	auto valueColumnMode = sourceColumns.at(0)->columnMode();
+	auto valueColumnMode = m_columns.at(0)->columnMode();
 	valueColumn->setColumnMode(valueColumnMode);
 
 	// flatten
 	int row = 0; // current row in the target spreadsheet
 	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-		for (int j = 0; j < sourceColumns.count(); ++j) {
+		for (int j = 0; j < m_columns.count(); ++j) {
+			auto* sourceColumn = m_columns.at(j);
+			if (sourceColumn->asStringColumn()->textAt(i).isEmpty())
+				continue;
+
 			// add reference values for every source column to be flattened
 			int refIndex = 0;
 			for (auto* col : referenceColumns) {
@@ -201,31 +197,30 @@ void FlattenColumnsDialog::flattenColumns() const {
 			}
 
 			// "Category" column
-			auto* col = sourceColumns.at(j);
-			categoryColumn->setTextAt(row, col->name());
+			categoryColumn->setTextAt(row, sourceColumn->name());
 
 			// "Value" column
 			switch (valueColumnMode) {
 			case AbstractColumn::ColumnMode::Double: {
-				valueColumn->setValueAt(row, col->valueAt(i));
+				valueColumn->setValueAt(row, sourceColumn->valueAt(i));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Integer: {
-				valueColumn->setIntegerAt(row, col->integerAt(i));
+				valueColumn->setIntegerAt(row, sourceColumn->integerAt(i));
 				break;
 			}
 			case AbstractColumn::ColumnMode::BigInt: {
-				valueColumn->setBigIntAt(row, col->bigIntAt(i));
+				valueColumn->setBigIntAt(row, sourceColumn->bigIntAt(i));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Text: {
-				valueColumn->setTextAt(row, col->textAt(i));
+				valueColumn->setTextAt(row, sourceColumn->textAt(i));
 				break;
 			}
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
 			case AbstractColumn::ColumnMode::DateTime: {
-				valueColumn->setDateTimeAt(row, col->dateTimeAt(i));
+				valueColumn->setDateTimeAt(row, sourceColumn->dateTimeAt(i));
 				break;
 			}
 			}
