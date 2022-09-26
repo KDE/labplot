@@ -664,6 +664,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 
 		// format
 		auto* cb = new ComboBoxIgnoreWheel(tw);
+		cb->setFrame(false);
 		cb->addItem(i18n("Numeric"));
 		cb->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime));
 		cb->setProperty("row", i);
@@ -715,6 +716,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 
 		// scale
 		cb = new ComboBoxIgnoreWheel(tw);
+		cb->setFrame(false);
 		// TODO: -> updateLocale()
 		for (const auto& name : RangeT::scaleNames)
 			cb->addItem(name);

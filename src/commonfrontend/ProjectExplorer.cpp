@@ -653,14 +653,16 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		caseSensitiveAction->setCheckable(true);
 		caseSensitiveAction->setChecked(false);
 		connect(caseSensitiveAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 		matchCompleteWordAction->setCheckable(true);
 		matchCompleteWordAction->setChecked(false);
 		connect(matchCompleteWordAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 #if HAS_FUZZY_MATCHER
@@ -671,7 +673,8 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 			bool enabled = !fuzzyMatchingAction->isChecked();
 			caseSensitiveAction->setEnabled(enabled);
 			matchCompleteWordAction->setEnabled(enabled);
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 		caseSensitiveAction->setEnabled(false);
 		matchCompleteWordAction->setEnabled(false);
