@@ -967,7 +967,7 @@
      </widget>
      <widget class="QWidget" name="tabPlotArea">
       <attribute name="title">
-       <string>Plot Area</string>
+       <string>Area</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="14" column="2">

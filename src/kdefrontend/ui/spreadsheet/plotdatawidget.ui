@@ -157,7 +157,7 @@
       <item>
        <widget class="QRadioButton" name="rbCurvePlacement1">
         <property name="text">
-         <string>&amp;All curves in one plot</string>
+         <string>&amp;All plots in one plot area</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -167,7 +167,7 @@
       <item>
        <widget class="QRadioButton" name="rbCurvePlacement2">
         <property name="text">
-         <string>One p&amp;lot per curve</string>
+         <string>One p&amp;lot area per plot</string>
         </property>
        </widget>
       </item>
@@ -177,13 +177,13 @@
    <item row="2" column="0">
     <widget class="QGroupBox" name="gbPlotPlacement">
      <property name="title">
-      <string>Add Curves to</string>
+      <string>Add plots to</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement1">
         <property name="text">
-         <string>E&amp;xisting plot</string>
+         <string>E&amp;xisting plot area</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -193,14 +193,14 @@
       <item row="1" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement2">
         <property name="text">
-         <string>&amp;New plot in an existing worksheet</string>
+         <string>&amp;New plot area in an existing worksheet</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QRadioButton" name="rbPlotPlacement3">
         <property name="text">
-         <string>New plot in a new wor&amp;ksheet</string>
+         <string>New plot area in a new wor&amp;ksheet</string>
         </property>
        </widget>
       </item>
@@ -223,7 +223,7 @@
       <item row="4" column="0">
        <widget class="QCheckBox" name="chkCreateDataCurve">
         <property name="text">
-         <string>Create curve for original data</string>
+         <string>Create plot for original data</string>
         </property>
         <property name="checked">
          <bool>true</bool>

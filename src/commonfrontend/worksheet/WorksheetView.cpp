@@ -267,13 +267,13 @@ void WorksheetView::initActions() {
 	// action for cartesian plots
 	auto* cartesianPlotActionModeActionGroup = new QActionGroup(this);
 	cartesianPlotActionModeActionGroup->setExclusive(true);
-	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plots"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToSelectionAction = new QAction(i18n("Selected Plot Areas"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToSelectionAction->setCheckable(true);
-	cartesianPlotApplyToAllAction = new QAction(i18n("All Plots"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllAction = new QAction(i18n("All Plot Areas"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllAction->setCheckable(true);
-	cartesianPlotApplyToAllXAction = new QAction(i18n("All Plots X"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllXAction = new QAction(i18n("All Plot Areas X"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllXAction->setCheckable(true);
-	cartesianPlotApplyToAllYAction = new QAction(i18n("All Plots Y"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllYAction = new QAction(i18n("All Plot Areas Y"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllYAction->setCheckable(true);
 	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
 	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
@@ -281,9 +281,9 @@ void WorksheetView::initActions() {
 	// cursor apply to all/selected
 	auto* plotActionCursorGroup = new QActionGroup(this);
 	plotActionCursorGroup->setExclusive(true);
-	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plots"), plotActionCursorGroup);
+	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plot Areas"), plotActionCursorGroup);
 	cartesianPlotApplyToSelectionCursor->setCheckable(true);
-	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plots"), plotActionCursorGroup);
+	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plot Areas"), plotActionCursorGroup);
 	cartesianPlotApplyToAllCursor->setCheckable(true);
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
 	connect(plotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
@@ -439,7 +439,7 @@ void WorksheetView::initMenus() {
 	if (!m_actionsInitialized)
 		initActions();
 
-	m_addNewCartesianPlotMenu = new QMenu(i18n("xy-plot"), this);
+	m_addNewCartesianPlotMenu = new QMenu(i18n("Plot Area"), this);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot1Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
@@ -501,7 +501,7 @@ void WorksheetView::initMenus() {
 	// 	m_gridMenu->addSeparator();
 	// 	m_gridMenu->addAction(snapToGridAction);
 
-	m_cartesianPlotMenu = new QMenu(i18n("Cartesian Plot"), this);
+	m_cartesianPlotMenu = new QMenu(i18n("Plot Area"), this);
 	m_cartesianPlotMenu->setIcon(QIcon::fromTheme("office-chart-line"));
 
 	m_cartesianPlotMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
@@ -1426,28 +1426,28 @@ void WorksheetView::addNew(QAction* action) {
 	bool restorePointers = false;
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
-		auto* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	} else if (action == addCartesianPlot2Action) {
-		auto* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	} else if (action == addCartesianPlot3Action) {
-		auto* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	} else if (action == addCartesianPlot4Action) {
-		auto* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("Plot Area"));
 		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
