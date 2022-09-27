@@ -46,6 +46,7 @@
   <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
   <summary xml:lang="pl">Interaktywne obrazowanie i analiza danych</summary>
   <summary xml:lang="pt-BR">Visualização e análise de dados interativa</summary>
+  <summary xml:lang="ru">Интерактивная визуализация и анализ данных</summary>
   <summary xml:lang="sl">Interaktivna vizualizacija in analiza podatkov</summary>
   <summary xml:lang="sv">Interaktiv datavisualisering och analys</summary>
   <summary xml:lang="tr">Etkileşimli Veri Görselleştirme ve Çözümleme</summary>
@@ -119,6 +120,7 @@
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
       <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
+      <caption xml:lang="ru">Базовая визуализация данных</caption>
       <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Yalın veri görselleştirmesi</caption>
@@ -139,6 +141,7 @@
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
       <caption xml:lang="pl">Podstawowe obrazowanie danych</caption>
       <caption xml:lang="pt-BR">Visualização básica de dados</caption>
+      <caption xml:lang="ru">Базовая визуализация данных</caption>
       <caption xml:lang="sl">Osnovna vizualizacija podatkov</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
       <caption xml:lang="tr">Yalın veri görselleştirmesi</caption>
@@ -159,6 +162,7 @@
       <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
       <caption xml:lang="pl">Rozbudowane układy wykresów i obrazów</caption>
       <caption xml:lang="pt-BR">Layout avançado de gráficos e imagens</caption>
+      <caption xml:lang="ru">Расширенные возможности формирования графиков и изображений</caption>
       <caption xml:lang="sl">Napredna postavitev risb in slik</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
       <caption xml:lang="tr">Görsellerin ve çizimlerin gelişmiş yerleşimi</caption>
@@ -180,6 +184,7 @@
       <caption xml:lang="nl">Thema's</caption>
       <caption xml:lang="pl">Dostosowywanie wyglądu</caption>
       <caption xml:lang="pt-BR">Temas</caption>
+      <caption xml:lang="ru">Темы</caption>
       <caption xml:lang="sl">Oblikovanje s temami</caption>
       <caption xml:lang="sv">Teman</caption>
       <caption xml:lang="tr">Temalama</caption>
@@ -220,6 +225,7 @@
       <caption xml:lang="it">Adatta modelli predefiniti o personalizzati ai dati</caption>
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
       <caption xml:lang="pl">Wpasuj uprzednio określone lub własne modele do danych</caption>
+      <caption xml:lang="ru">Подбор предопределённых или настраиваемых моделей по данным</caption>
       <caption xml:lang="sl">Podatkom prilagodite vnaprej določene modele ali modele po meri</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
       <caption xml:lang="tr">Veriye önceden tanımlanmış veya özel modeller uygulayın</caption>
@@ -239,6 +245,7 @@
       <caption xml:lang="it">Smussa i dati per mezzo di diversi metodi di smussatura</caption>
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
       <caption xml:lang="pl">Wygładzanie danych przy pomocy różnych sposobów</caption>
+      <caption xml:lang="ru">Сглаживание данных с помощью различных методов сглаживания</caption>
       <caption xml:lang="sl">Zgladite podatke s pomočjo različnih metod glajenja</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
       <caption xml:lang="tr">Çeşitli düzleştirme yöntemleri ile veriyi düzleştirin</caption>
@@ -258,6 +265,7 @@
       <caption xml:lang="it">Interfaccia a taccuino per sessioni integrate in Maxima, Octave, R, Sage, Scilab, Python, Julia, eccetera</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="pl">Interfejs zeszytu dla interaktywnych posiedzeń w programach takich jak: Maxima, Octave, R, Sage, Scilab, Python, Julia, itp.</caption>
+      <caption xml:lang="ru">Блокнот служит в качестве интерфейса для интерактивного взаимодействия с Maxima, Octave, R, Sage, Scilab, Python, Julia и так далее.</caption>
       <caption xml:lang="sl">Vmesnik prenosnika za interaktivne seje v Maxima, Octave, R, Sage, Scilab, Python, Julia in Lua, itd.</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia, etc.</caption>
       <caption xml:lang="tr">Maxima, Octave, R, Sage, Scilab, Python, Julia, vb. içinde etkileşimli oturumlar için defter arabirimi</caption>
@@ -278,6 +286,7 @@
       <caption xml:lang="nl">Signaalanalyse</caption>
       <caption xml:lang="pl">Analiza sygnałów</caption>
       <caption xml:lang="pt-BR">Análise de sinais</caption>
+      <caption xml:lang="ru">Анализ сигнала</caption>
       <caption xml:lang="sl">Analiza signala</caption>
       <caption xml:lang="sv">Signalanalys</caption>
       <caption xml:lang="tr">Sinyal çözümlemesi</caption>
@@ -298,6 +307,7 @@
       <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
       <caption xml:lang="pl">Diagram Herzsprung-Russel w LabPlocie</caption>
       <caption xml:lang="pt-BR">Diagrama de Herzsprung-Russel no LabPlot</caption>
+      <caption xml:lang="ru">Диаграмма Герцшпрунга-Рассела в LabPlot</caption>
       <caption xml:lang="sl">Herzsprung-Russelov diagram v LabPlot</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i LabPlot</caption>
       <caption xml:lang="tr">LabPlot içinde Herzsprung-Russel diyagramı</caption>
@@ -317,6 +327,7 @@
       <caption xml:lang="it">Visualizzazione dei dati calcolati in una sessione interattiva di Maxima</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
       <caption xml:lang="pl">Obrazowanie danych obliczonych w interaktywnym posiedzeniu Maximy</caption>
+      <caption xml:lang="ru">Визаулизация данных, рассчитанных в результате интерактивного взаимодействия с Maxima</caption>
       <caption xml:lang="sl">Vizualizacija podatkov, izračunanih v interaktivni seji Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
       <caption xml:lang="tr">Etkileşimli Maxima oturumu içinde hesaplanan verinin görselleştirilmesi</caption>
