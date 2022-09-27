@@ -37,11 +37,11 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	m_buttonNew->setToolTip(i18n("Add additional reference column"));
 	connect(m_buttonNew, &QPushButton::clicked, this, &FlattenColumnsDialog::addReferenceColumn);
 
-	m_gridLayout = static_cast<QGridLayout*>(ui.gbColumns->layout());
+	m_gridLayout = static_cast<QGridLayout*>(ui.scrollArea->widget()->layout());
 	m_gridLayout->addWidget(m_buttonNew, 1, 2, 1, 1);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	ui.gridLayout->addWidget(btnBox, 3, 1, 1, 2);
+	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FlattenColumnsDialog::close);
@@ -80,9 +80,13 @@ void FlattenColumnsDialog::setColumns(const QVector<Column*>& columns) {
 			m_referenceColumnNames << column->name();
 	}
 
+	// initialize the first reference column (minimal requirement)
 	ui.cbReferenceColumn->addItems(m_referenceColumnNames);
-
 	m_columnComboBoxes << ui.cbReferenceColumn;
+
+	// add all other columns in the spreadsheet that were not selected as reference columns
+	for (int i = 1; i < m_referenceColumnNames.count(); ++i)
+		addReferenceColumn();
 
 	// resize the dialog to have the minimum height
 	layout()->activate();
@@ -95,6 +99,7 @@ void FlattenColumnsDialog::addReferenceColumn() {
 	// add new combo box
 	auto* cb = new QComboBox;
 	cb->addItems(m_referenceColumnNames);
+	cb->setCurrentText(m_referenceColumnNames.at(index));
 	m_gridLayout->addWidget(cb, index, 1, 1, 1);
 	m_columnComboBoxes << cb;
 
@@ -114,7 +119,20 @@ void FlattenColumnsDialog::addReferenceColumn() {
 }
 
 void FlattenColumnsDialog::removeReferenceColumn() {
-	// TODO:
+	auto* sender = static_cast<QPushButton*>(QObject::sender());
+	if (!sender)
+		return;
+
+	// remove button was clicked, determine which one and
+	// delete it together with the corresponding combobox
+	for (int i = 0; i < m_removeButtons.count(); ++i) {
+		if (sender == m_removeButtons.at(i)) {
+			delete m_columnComboBoxes.takeAt(i + 1);
+			delete m_removeButtons.takeAt(i);
+		}
+	}
+
+	m_buttonNew->show();
 }
 
 void FlattenColumnsDialog::flattenColumns() const {
