@@ -708,6 +708,20 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	const auto* model = index.model();
+	const int rows = model->rowCount(index);
+
+	// if the filter string is empty, just traverse the whole model and make every index visible
+	if (text.isEmpty()) {
+		for (int i = 0; i < rows; ++i) {
+			m_treeView->setRowHidden(i, index, false);
+			const auto& child = model->index(i, 0, index);
+			if (model->hasChildren(child))
+				filter(child, text);
+		}
+		return true;
+	}
+
 #if HAS_FUZZY_MATCHER
 	bool fuzzyFiltering = true;
 	if (fuzzyMatchingAction && !fuzzyMatchingAction->isChecked())
@@ -715,42 +729,34 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 #endif
 
 	bool childVisible = false;
-	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		const auto& child = index.model()->index(i, 0, index);
+		const auto& child = model->index(i, 0, index);
 		auto* aspect = static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if (text.isEmpty())
-			visible = true;
-		else {
 #if HAS_FUZZY_MATCHER
-			if (fuzzyFiltering)
-				visible = KFuzzyMatcher::matchSimple(text, aspect->name());
-			else
+		if (fuzzyFiltering)
+			visible = KFuzzyMatcher::matchSimple(text, aspect->name());
+		else
 #endif
-			{
-				bool matchCompleteWord = false;
-				if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
-					matchCompleteWord = true;
+		{
+			bool matchCompleteWord = false;
+			if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
+				matchCompleteWord = true;
 
-				Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
-				if (caseSensitiveAction && caseSensitiveAction->isChecked())
-					sensitivity = Qt::CaseSensitive;
+			Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+			if (caseSensitiveAction && caseSensitiveAction->isChecked())
+				sensitivity = Qt::CaseSensitive;
 
-				if (matchCompleteWord)
-					visible = aspect->name().startsWith(text, sensitivity);
-				else
-					visible = aspect->name().contains(text, sensitivity);
-			}
+			if (matchCompleteWord)
+				visible = aspect->name().startsWith(text, sensitivity);
+			else
+				visible = aspect->name().contains(text, sensitivity);
 		}
 
 		if (visible) {
 			// current item is visible -> make all its children visible without applying the filter
-			for (int j = 0; j < child.model()->rowCount(child); ++j) {
+			for (int j = 0; j < model->rowCount(child); ++j)
 				m_treeView->setRowHidden(j, child, false);
-				if (text.isEmpty())
-					filter(child, text);
-			}
 
 			childVisible = true;
 		} else {
