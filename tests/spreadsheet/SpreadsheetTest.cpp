@@ -15,7 +15,6 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
-
 #include <QApplication>
 #include <QClipboard>
 #include <QUndoStack>
@@ -1345,7 +1344,6 @@ void SpreadsheetTest::testFlatten01() {
 	QCOMPARE(col4->integerAt(4), 20);
 	QCOMPARE(col4->integerAt(5), 30);
 }
-
 
 // test with missing values in the reference columns - no result should be produced for these rows
 void SpreadsheetTest::testFlatten02() {
