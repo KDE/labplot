@@ -29,28 +29,36 @@
 FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	: QDialog(parent)
 	, m_spreadsheet(s) {
-	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
-	m_buttonNew->setToolTip(i18n("Add additional reference column"));
-	connect(m_buttonNew, &QPushButton::clicked, this, &FlattenColumnsDialog::addReferenceColumn);
-
-	m_gridLayout = static_cast<QGridLayout*>(ui.scrollArea->widget()->layout());
-	m_gridLayout->addWidget(m_buttonNew, 1, 2, 1, 1);
+	// setup the main widget and the button box
+	auto* mainWidget = new QWidget(this);
+	ui.setupUi(mainWidget);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
-
-	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FlattenColumnsDialog::close);
-
 	m_okButton->setText(i18n("&Flatten"));
 	m_okButton->setToolTip(i18n("Flatten values in the selected spreadsheet columns"));
+
+	auto* layout = new QVBoxLayout(this);
+	layout->addWidget(mainWidget);
+	layout->addWidget(btnBox);
+	setLayout(layout);
+
 	setWindowTitle(i18nc("@title:window", "Flatten Selected Columns"));
 
+	// create "add new reference column" button
+	m_buttonNew = new QPushButton();
+	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	m_buttonNew->setToolTip(i18n("Add additional reference column"));
+	m_gridLayout = static_cast<QGridLayout*>(ui.scrollArea->widget()->layout());
+	m_gridLayout->addWidget(m_buttonNew, 1, 2, 1, 1);
+
+	// signal/slot connections
+	connect(m_buttonNew, &QPushButton::clicked, this, &FlattenColumnsDialog::addReferenceColumn);
 	connect(m_okButton, &QPushButton::clicked, this, &FlattenColumnsDialog::flattenColumns);
+	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &FlattenColumnsDialog::close);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &FlattenColumnsDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FlattenColumnsDialog::reject);
 
@@ -137,16 +145,25 @@ void FlattenColumnsDialog::removeReferenceColumn() {
 
 void FlattenColumnsDialog::flattenColumns() const {
 	WAIT_CURSOR;
-
 	m_spreadsheet->beginMacro(i18n("%1: flatten values", m_spreadsheet->name()));
 
 	// reference columns in the source spreadsheet
 	QVector<Column*> referenceColumns;
 	for (const auto* cb : m_columnComboBoxes)
 		referenceColumns << m_spreadsheet->column(cb->currentText());
-	const int referenceColumnCount = referenceColumns.count();
 
+	flatten(m_spreadsheet, m_columns, referenceColumns);
+
+	m_spreadsheet->endMacro();
+	RESET_CURSOR;
+}
+
+/*!
+ * unit-testable helper function that is creating the new target spreadsheet and doing the actual flattening
+ */
+void FlattenColumnsDialog::flatten(const Spreadsheet* sourceSpreadsheet, const QVector<Column*>& valueColumns, const QVector<Column*>& referenceColumns) const {
 	// create target spreadsheet
+	const int referenceColumnCount = referenceColumns.count();
 	auto* targetSpreadsheet = new Spreadsheet(i18n("Flatten of %1", m_spreadsheet->name()));
 	targetSpreadsheet->setColumnCount(referenceColumnCount + 2);
 	const auto& targetColumns = targetSpreadsheet->children<Column>();
@@ -167,15 +184,29 @@ void FlattenColumnsDialog::flattenColumns() const {
 
 	auto* valueColumn = targetSpreadsheet->column(referenceColumnCount + 1);
 	valueColumn->setName(i18n("Value"));
-	auto valueColumnMode = m_columns.at(0)->columnMode();
+	auto valueColumnMode = valueColumns.at(0)->columnMode();
 	valueColumn->setColumnMode(valueColumnMode);
 
 	// flatten
 	int row = 0; // current row in the target spreadsheet
-	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
-		for (int j = 0; j < m_columns.count(); ++j) {
-			auto* sourceColumn = m_columns.at(j);
+	for (int i = 0; i < sourceSpreadsheet->rowCount(); ++i) {
+		for (int j = 0; j < valueColumns.count(); ++j) {
+			auto* sourceColumn = valueColumns.at(j);
+
+			// skip the current row if there are now source values to be flattened
 			if (sourceColumn->asStringColumn()->textAt(i).isEmpty())
+				continue;
+
+			// skip the current row if there is not a single reference value
+			bool hasReferenceValues = false;
+			for (auto* col : referenceColumns) {
+				if (!col->asStringColumn()->textAt(i).isEmpty()) {
+					hasReferenceValues = true;
+					break;
+				}
+			}
+
+			if (!hasReferenceValues)
 				continue;
 
 			// add reference values for every source column to be flattened
@@ -247,8 +278,7 @@ void FlattenColumnsDialog::flattenColumns() const {
 		}
 	}
 
-	m_spreadsheet->parentAspect()->addChild(targetSpreadsheet);
+	targetSpreadsheet->setRowCount(row);
 
-	m_spreadsheet->endMacro();
-	RESET_CURSOR;
+	sourceSpreadsheet->parentAspect()->addChild(targetSpreadsheet);
 }

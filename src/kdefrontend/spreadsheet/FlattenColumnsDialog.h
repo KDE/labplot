@@ -23,6 +23,7 @@ public:
 	explicit FlattenColumnsDialog(Spreadsheet* s, QWidget* parent = nullptr);
 	~FlattenColumnsDialog() override;
 	void setColumns(const QVector<Column*>&);
+	void flatten(const Spreadsheet* source, const QVector<Column*>& valuesColumns, const QVector<Column*>& referenceColumns) const;
 
 private:
 	Ui::FlattenColumnsWidget ui;

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -59,6 +59,10 @@ private Q_SLOTS:
 
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
+
+	void testFlatten00();
+	void testFlatten01();
+	void testFlatten02();
 };
 
 #endif
