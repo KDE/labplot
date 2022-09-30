@@ -63,6 +63,7 @@ private Q_SLOTS:
 	void testFlatten00();
 	void testFlatten01();
 	void testFlatten02();
+	void testFlatten03();
 };
 
 #endif

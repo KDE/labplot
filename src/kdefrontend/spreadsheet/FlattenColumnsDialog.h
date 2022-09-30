@@ -15,6 +15,7 @@
 
 class Column;
 class Spreadsheet;
+class QComboBox;
 
 class FlattenColumnsDialog : public QDialog {
 	Q_OBJECT

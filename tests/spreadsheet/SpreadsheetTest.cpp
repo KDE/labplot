@@ -1426,4 +1426,68 @@ void SpreadsheetTest::testFlatten02() {
 	QCOMPARE(col4->integerAt(2), 3);
 }
 
+// test with missing no reference columns
+void SpreadsheetTest::testFlatten03() {
+	Project project;
+	auto* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(2);
+
+	// "Sales for Product 1"
+	auto* col1 = sheet->column(0);
+	col1->setName("Product 1");
+	col1->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col1->setIntegerAt(0, 1);
+	col1->setIntegerAt(1, 10);
+
+	// "Sales for Product 2"
+	auto* col2 = sheet->column(1);
+	col2->setName("Product 2");
+	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col2->setIntegerAt(0, 2);
+	col2->setIntegerAt(1, 20);
+
+	// "Sales for Product 3"
+	auto* col3 = sheet->column(2);
+	col3->setName("Product 3");
+	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col3->setIntegerAt(0, 3);
+	col3->setIntegerAt(1, 30);
+
+	// flatten the product columns without any reference columns
+	QVector<Column*> valueColumns;
+	valueColumns << col1;
+	valueColumns << col2;
+	valueColumns << col3;
+
+	FlattenColumnsDialog dlg(sheet);
+	dlg.flatten(sheet, valueColumns, QVector<Column*>());
+
+	// checks
+	// make sure a new target spreadsheet with the flattened data was created
+	const auto& sheets = project.children<Spreadsheet>();
+	QCOMPARE(sheets.count(), 2);
+	auto* targetSheet = sheets.at(1);
+	QCOMPARE(targetSheet->columnCount(), 2); // no reference columns, only column "Category" and column "Value"
+	QCOMPARE(targetSheet->rowCount(), 6);
+
+	// check values
+	col1 = targetSheet->column(0);
+	QCOMPARE(col1->textAt(0), "Product 1");
+	QCOMPARE(col1->textAt(1), "Product 2");
+	QCOMPARE(col1->textAt(2), "Product 3");
+	QCOMPARE(col1->textAt(3), "Product 1");
+	QCOMPARE(col1->textAt(4), "Product 2");
+	QCOMPARE(col1->textAt(5), "Product 3");
+
+	col2 = targetSheet->column(1);
+	QCOMPARE(col2->integerAt(0), 1);
+	QCOMPARE(col2->integerAt(1), 2);
+	QCOMPARE(col2->integerAt(2), 3);
+	QCOMPARE(col2->integerAt(3), 10);
+	QCOMPARE(col2->integerAt(4), 20);
+	QCOMPARE(col2->integerAt(5), 30);
+}
+
 QTEST_MAIN(SpreadsheetTest)

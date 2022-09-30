@@ -12,6 +12,7 @@
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <QComboBox>
 #include <QPushButton>
 #include <QThreadPool>
 #include <QWindow>
@@ -81,19 +82,15 @@ FlattenColumnsDialog::~FlattenColumnsDialog() {
 void FlattenColumnsDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
-	// add column names
+	// names of reference columns - columns that are not in the current selection in the spreadsheet
 	const auto& allColumns = m_spreadsheet->children<Column>();
 	for (auto* column : allColumns) {
 		if (m_columns.indexOf(column) == -1)
 			m_referenceColumnNames << column->name();
 	}
 
-	// initialize the first reference column (minimal requirement)
-	ui.cbReferenceColumn->addItems(m_referenceColumnNames);
-	m_columnComboBoxes << ui.cbReferenceColumn;
-
 	// add all other columns in the spreadsheet that were not selected as reference columns
-	for (int i = 1; i < m_referenceColumnNames.count(); ++i)
+	for (int i = 0; i < m_referenceColumnNames.count(); ++i)
 		addReferenceColumn();
 
 	// resize the dialog to have the minimum height
@@ -106,6 +103,7 @@ void FlattenColumnsDialog::addReferenceColumn() {
 
 	// add new combo box
 	auto* cb = new QComboBox;
+	cb->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
 	cb->addItems(m_referenceColumnNames);
 	cb->setCurrentText(m_referenceColumnNames.at(index));
 	m_gridLayout->addWidget(cb, index, 1, 1, 1);
@@ -135,7 +133,7 @@ void FlattenColumnsDialog::removeReferenceColumn() {
 	// delete it together with the corresponding combobox
 	for (int i = 0; i < m_removeButtons.count(); ++i) {
 		if (sender == m_removeButtons.at(i)) {
-			delete m_columnComboBoxes.takeAt(i + 1);
+			delete m_columnComboBoxes.takeAt(i);
 			delete m_removeButtons.takeAt(i);
 		}
 	}
@@ -206,7 +204,7 @@ void FlattenColumnsDialog::flatten(const Spreadsheet* sourceSpreadsheet, const Q
 				}
 			}
 
-			if (!hasReferenceValues)
+			if (referenceColumnCount > 0 && !hasReferenceValues)
 				continue;
 
 			// add reference values for every source column to be flattened
