@@ -40,7 +40,7 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_okButton->setText(i18n("&Flatten"));
-	m_okButton->setToolTip(i18n("Flatten values in the selected spreadsheet columns"));
+	m_okButton->setToolTip(i18n("Flatten selected columns"));
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);

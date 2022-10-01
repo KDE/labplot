@@ -282,8 +282,8 @@ void SpreadsheetView::initActions() {
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
-	action_sample_values = new QAction(QIcon::fromTheme(QString("view-list-details")), i18n("Sample"), this);
-	action_flatten_values = new QAction(QIcon::fromTheme(QString("gnumeric-object-list")), i18n("Flatten"), this);
+	action_sample_values = new QAction(QIcon::fromTheme(QString("view-list-details")), i18n("Sample Values"), this);
+	action_flatten_columns = new QAction(QIcon::fromTheme(QString("gnumeric-object-list")), i18n("Flatten Columns"), this);
 
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
@@ -624,7 +624,7 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu->addAction(action_fill_function);
 		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_sample_values);
-		m_columnGenerateDataMenu->addAction(action_flatten_values);
+		m_columnGenerateDataMenu->addAction(action_flatten_columns);
 
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
@@ -834,7 +834,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
 	connect(action_sample_values, &QAction::triggered, this, &SpreadsheetView::sampleColumnValues);
-	connect(action_flatten_values, &QAction::triggered, this, &SpreadsheetView::flattenColumnValues);
+	connect(action_flatten_columns, &QAction::triggered, this, &SpreadsheetView::flattenColumns);
 
 	// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
@@ -2714,7 +2714,7 @@ void SpreadsheetView::sampleColumnValues() {
 	dlg->exec();
 }
 
-void SpreadsheetView::flattenColumnValues() {
+void SpreadsheetView::flattenColumns() {
 	const auto& columns = selectedColumns();
 	if (columns.isEmpty())
 		return;
