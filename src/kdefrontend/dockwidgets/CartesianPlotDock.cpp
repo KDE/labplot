@@ -157,14 +157,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &CartesianPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
+	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
+	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
+	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
+
+	// Layout
 	connect(ui.sbLeft, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 	connect(ui.sbTop, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-
-	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
-	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
-	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
+	connect(ui.sbPaddingHorizontal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::horizontalPaddingChanged);
+	connect(ui.sbPaddingVertical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::verticalPaddingChanged);
+	connect(ui.sbPaddingRight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
+	connect(ui.sbPaddingBottom, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
+	connect(ui.cbPaddingSymmetric, &QCheckBox::toggled, this, &CartesianPlotDock::symmetricPaddingChanged);
 
 	// Range breaks
 	connect(ui.chkXBreak, &QCheckBox::toggled, this, &CartesianPlotDock::toggleXBreak);
@@ -195,13 +201,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderWidthChanged);
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::borderOpacityChanged);
-
-	// Padding
-	connect(ui.sbPaddingHorizontal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::horizontalPaddingChanged);
-	connect(ui.sbPaddingVertical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::verticalPaddingChanged);
-	connect(ui.sbPaddingRight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
-	connect(ui.sbPaddingBottom, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
-	connect(ui.cbPaddingSymmetric, &QCheckBox::toggled, this, &CartesianPlotDock::symmetricPaddingChanged);
 
 	// Cursor
 	connect(ui.sbCursorLineWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::cursorLineWidthChanged);
@@ -238,7 +237,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.verticalLayout->addWidget(frame);
 
 	// TODO: activate the tab again once the functionality is implemented
-	ui.tabWidget->removeTab(2);
+	ui.tabWidget->removeTab(3);
 
 	init();
 }
@@ -453,7 +452,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::yRangeBreakingEnabledChanged, this, &CartesianPlotDock::plotYRangeBreakingEnabledChanged);
 	connect(m_plot, &CartesianPlot::yRangeBreaksChanged, this, &CartesianPlotDock::plotYRangeBreaksChanged);
 
-	// Plot Area
+	// Layout
 	connect(m_plot, &CartesianPlot::horizontalPaddingChanged, this, &CartesianPlotDock::plotHorizontalPaddingChanged);
 	connect(m_plot, &CartesianPlot::verticalPaddingChanged, this, &CartesianPlotDock::plotVerticalPaddingChanged);
 	connect(m_plot, &CartesianPlot::rightPaddingChanged, this, &CartesianPlotDock::plotRightPaddingChanged);
@@ -728,7 +727,12 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 			this->scaleChanged(cb, dim, index);
 		});
 	}
+
+	// adjust the size of the table widget
 	tw->resizeColumnToContents(1);
+	int height = tw->verticalHeader()->sectionSize(0) * tw->verticalHeader()->count();
+	height += tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
+	tw->setFixedHeight(height);
 
 	tb->setEnabled(rangeCount > 1 ? true : false);
 
@@ -799,8 +803,14 @@ void CartesianPlotDock::updatePlotRangeList() {
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::YRange, cb);
 	}
+
+	// adjust the size of the table widget
 	ui.twPlotRanges->resizeColumnToContents(0);
 	ui.twPlotRanges->resizeColumnToContents(1);
+	auto* tw = ui.twPlotRanges;
+	int height = tw->verticalHeader()->sectionSize(0) * tw->verticalHeader()->count();
+	height += tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
+	tw->setFixedHeight(height);
 
 	if (m_bgDefaultPlotRange) {
 		for (auto* button : m_bgDefaultPlotRange->buttons())
@@ -884,32 +894,6 @@ void CartesianPlotDock::visibilityChanged(bool state) {
 
 	for (auto* plot : m_plotList)
 		plot->setVisible(state);
-}
-
-void CartesianPlotDock::geometryChanged() {
-	if (m_initializing)
-		return;
-
-	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
-	double y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
-	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
-
-	QRectF rect(x, y, w, h);
-	m_plot->setRect(rect);
-}
-
-/*!
-	Called when the layout in the worksheet gets changed.
-	Enables/disables the geometry widgets if the layout was deactivated/activated.
-	Shows the new geometry values of the first plot if the layout was activated.
- */
-void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
-	bool b = (layout == Worksheet::Layout::NoLayout);
-	ui.sbTop->setEnabled(b);
-	ui.sbLeft->setEnabled(b);
-	ui.sbWidth->setEnabled(b);
-	ui.sbHeight->setEnabled(b);
 }
 
 void CartesianPlotDock::rangeTypeChanged(int index) {
@@ -1303,6 +1287,135 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	PlotRangeChanged(sender()->property("row").toInt(), Dimension::Y, index);
 }
 
+// "Layout" tab
+void CartesianPlotDock::geometryChanged() {
+	if (m_initializing)
+		return;
+
+	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
+	double y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
+	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+
+	QRectF rect(x, y, w, h);
+	m_plot->setRect(rect);
+}
+
+/*!
+	Called when the layout in the worksheet gets changed.
+	Enables/disables the geometry widgets if the layout was deactivated/activated.
+	Shows the new geometry values of the first plot if the layout was activated.
+ */
+void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
+	bool b = (layout == Worksheet::Layout::NoLayout);
+	ui.sbTop->setEnabled(b);
+	ui.sbLeft->setEnabled(b);
+	ui.sbWidth->setEnabled(b);
+	ui.sbHeight->setEnabled(b);
+}
+
+void CartesianPlotDock::borderOpacityChanged(int value) {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (double)value / 100.;
+	for (auto* plot : m_plotList)
+		plot->plotArea()->setBorderOpacity(opacity);
+}
+
+void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
+	ui.lPaddingHorizontalRight->setVisible(!checked);
+	ui.sbPaddingRight->setVisible(!checked);
+	ui.lPaddingVerticalDown->setVisible(!checked);
+	ui.sbPaddingBottom->setVisible(!checked);
+
+	if (checked) {
+		ui.lPaddingHorizontal->setText(i18n("Horizontal:"));
+		ui.lPaddingVertical->setText(i18n("Vertical:"));
+	} else {
+		ui.lPaddingHorizontal->setText(i18n("Left:"));
+		ui.lPaddingVertical->setText(i18n("Top:"));
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* plot : m_plotList)
+		plot->setSymmetricPadding(checked);
+
+	if (checked) {
+		rightPaddingChanged(ui.sbPaddingHorizontal->value());
+		bottomPaddingChanged(ui.sbPaddingVertical->value());
+	}
+}
+
+void CartesianPlotDock::horizontalPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* plot : m_plotList) {
+		// if symmetric padding is active we also adjust the right padding.
+		// start a macro in this case to only have one single entry on the undo stack.
+		// TODO: ideally this is done in CartesianPlot and is completely transparent to CartesianPlotDock.
+		const bool sym = m_plot->symmetricPadding();
+		if (sym)
+			plot->beginMacro(i18n("%1: set horizontal padding", plot->name()));
+
+		plot->setHorizontalPadding(padding);
+
+		if (sym) {
+			plot->setRightPadding(padding);
+			plot->endMacro();
+		}
+	}
+}
+
+void CartesianPlotDock::rightPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* plot : m_plotList)
+		plot->setRightPadding(padding);
+}
+
+void CartesianPlotDock::verticalPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+
+	const double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* plot : m_plotList) {
+		const bool sym = m_plot->symmetricPadding();
+		if (sym)
+			plot->beginMacro(i18n("%1: set vertical padding", plot->name()));
+
+		plot->setVerticalPadding(padding);
+
+		if (sym) {
+			plot->setBottomPadding(padding);
+			plot->endMacro();
+		}
+	}
+}
+
+void CartesianPlotDock::bottomPaddingChanged(double value) {
+	if (m_initializing)
+		return;
+	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* plot : m_plotList)
+		plot->setBottomPadding(padding);
+}
+
+void CartesianPlotDock::cursorLineWidthChanged(int width) {
+	if (m_initializing)
+		return;
+
+	for (auto* plot : m_plotList) {
+		QPen pen = plot->cursorPen();
+		pen.setWidthF(Worksheet::convertToSceneUnits(width, Worksheet::Unit::Point));
+		plot->setCursorPen(pen);
+	}
+}
+
 // "Range Breaks"-tab
 
 // x-range breaks
@@ -1619,108 +1732,7 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
-void CartesianPlotDock::borderOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value / 100.;
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderOpacity(opacity);
-}
-
-void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
-	ui.lPaddingHorizontalRight->setVisible(!checked);
-	ui.sbPaddingRight->setVisible(!checked);
-	ui.lPaddingVerticalDown->setVisible(!checked);
-	ui.sbPaddingBottom->setVisible(!checked);
-
-	if (checked) {
-		ui.lPaddingHorizontal->setText(i18n("Horizontal:"));
-		ui.lPaddingVertical->setText(i18n("Vertical:"));
-	} else {
-		ui.lPaddingHorizontal->setText(i18n("Left:"));
-		ui.lPaddingVertical->setText(i18n("Top:"));
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList)
-		plot->setSymmetricPadding(checked);
-
-	if (checked) {
-		rightPaddingChanged(ui.sbPaddingHorizontal->value());
-		bottomPaddingChanged(ui.sbPaddingVertical->value());
-	}
-}
-
-void CartesianPlotDock::horizontalPaddingChanged(double value) {
-	if (m_initializing)
-		return;
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList) {
-		// if symmetric padding is active we also adjust the right padding.
-		// start a macro in this case to only have one single entry on the undo stack.
-		// TODO: ideally this is done in CartesianPlot and is completely transparent to CartesianPlotDock.
-		const bool sym = m_plot->symmetricPadding();
-		if (sym)
-			plot->beginMacro(i18n("%1: set horizontal padding", plot->name()));
-
-		plot->setHorizontalPadding(padding);
-
-		if (sym) {
-			plot->setRightPadding(padding);
-			plot->endMacro();
-		}
-	}
-}
-
-void CartesianPlotDock::rightPaddingChanged(double value) {
-	if (m_initializing)
-		return;
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList)
-		plot->setRightPadding(padding);
-}
-
-void CartesianPlotDock::verticalPaddingChanged(double value) {
-	if (m_initializing)
-		return;
-
-	const double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList) {
-		const bool sym = m_plot->symmetricPadding();
-		if (sym)
-			plot->beginMacro(i18n("%1: set vertical padding", plot->name()));
-
-		plot->setVerticalPadding(padding);
-
-		if (sym) {
-			plot->setBottomPadding(padding);
-			plot->endMacro();
-		}
-	}
-}
-
-void CartesianPlotDock::bottomPaddingChanged(double value) {
-	if (m_initializing)
-		return;
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList)
-		plot->setBottomPadding(padding);
-}
-
-void CartesianPlotDock::cursorLineWidthChanged(int width) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList) {
-		QPen pen = plot->cursorPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(width, Worksheet::Unit::Point));
-		plot->setCursorPen(pen);
-	}
-}
-
+// cursor
 void CartesianPlotDock::cursorLineColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
@@ -1781,16 +1793,6 @@ void CartesianPlotDock::exportPlotTemplate() {
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
 // general
-void CartesianPlotDock::plotRectChanged(QRectF& rect) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));
-	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), m_worksheetUnit));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
-	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
-}
-
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	if (m_initializing)
 		return;
@@ -1925,37 +1927,15 @@ void CartesianPlotDock::plotVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
-// border
-void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
-	Lock lock(m_initializing);
-	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
-	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
-	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
-	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
-}
-
-void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
-	m_initializing = true;
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
-	m_initializing = true;
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBorderOpacityChanged(double value) {
-	m_initializing = true;
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
-	m_initializing = false;
+// layout
+void CartesianPlotDock::plotRectChanged(QRectF& rect) {
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
+	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));
+	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), m_worksheetUnit));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
+	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
 }
 
 void CartesianPlotDock::plotHorizontalPaddingChanged(double value) {
@@ -1993,6 +1973,39 @@ void CartesianPlotDock::plotCursorPenChanged(const QPen& pen) {
 	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	ui.kcbCursorLineColor->setColor(pen.color());
 	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
+	m_initializing = false;
+}
+
+// border
+void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
+	Lock lock(m_initializing);
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+}
+
+void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
+	m_initializing = true;
+	if (ui.cbBorderStyle->currentIndex() != pen.style())
+		ui.cbBorderStyle->setCurrentIndex(pen.style());
+	if (ui.kcbBorderColor->color() != pen.color())
+		ui.kcbBorderColor->setColor(pen.color());
+	if (ui.sbBorderWidth->value() != pen.widthF())
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
+	m_initializing = true;
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
+	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBorderOpacityChanged(double value) {
+	m_initializing = true;
+	float v = (float)value * 100.;
+	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }
 
