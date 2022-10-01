@@ -731,7 +731,8 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 	// adjust the size of the table widget
 	tw->resizeColumnToContents(1);
 	int height = tw->verticalHeader()->sectionSize(0) * tw->verticalHeader()->count();
-	height += tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
+	height +=
+		tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
 	tw->setFixedHeight(height);
 
 	tb->setEnabled(rangeCount > 1 ? true : false);
@@ -809,7 +810,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 	ui.twPlotRanges->resizeColumnToContents(1);
 	auto* tw = ui.twPlotRanges;
 	int height = tw->verticalHeader()->sectionSize(0) * tw->verticalHeader()->count();
-	height += tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
+	height +=
+		tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
 	tw->setFixedHeight(height);
 
 	if (m_bgDefaultPlotRange) {
