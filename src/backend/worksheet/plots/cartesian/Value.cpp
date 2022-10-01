@@ -288,7 +288,6 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Value::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
-	Q_D(const Value);
 	setOpacity(group.readEntry("ValueOpacity", 1.0));
 	setColor(group.readEntry("ValueColor", themeColor));
 }
