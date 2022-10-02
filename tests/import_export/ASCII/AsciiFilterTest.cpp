@@ -1005,11 +1005,13 @@ void AsciiFilterTest::testDateTime00() {
 
 	// values
 	auto value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 14.7982);
 
-	value = QDateTime::fromString(QLatin1String("01/01/2019 00:00:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
-	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
+	value = QDateTime::fromString(QLatin1String("01/01/2019 00:30:00"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1), value);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 14.8026);
 }
 
@@ -1050,6 +1052,7 @@ void AsciiFilterTest::testDateTimeHex() {
 	QCOMPARE(spreadsheet.column(16)->columnMode(), AbstractColumn::ColumnMode::Text);
 
 	auto value = QDateTime::fromString(QLatin1String("18/12/2019 02:36:08"), QLatin1String("dd/MM/yyyy hh:mm:ss"));
+	value.setTimeSpec(Qt::UTC);
 	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0), value);
 	QCOMPARE(spreadsheet.column(1)->textAt(0), QLatin1String("F"));
 	QCOMPARE(spreadsheet.column(2)->integerAt(0), 1000);
