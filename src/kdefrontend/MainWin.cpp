@@ -323,11 +323,7 @@ void MainWin::initGUI(const QString& fileName) {
 	if (!fileName.isEmpty()) {
 		createMdiArea();
 		setCentralWidget(m_mdiArea);
-#ifdef HAVE_LIBORIGIN
-		if (Project::isLabPlotProject(fileName) || OriginProjectParser::isOriginProject(fileName)) {
-#else
-		if (Project::isLabPlotProject(fileName)) {
-#endif
+		if (Project::isSupportedProject(fileName)) {
 			QTimer::singleShot(0, this, [=]() {
 				openProject(fileName);
 			});
@@ -2370,27 +2366,13 @@ void MainWin::dragEnterEvent(QDragEnterEvent* event) {
 void MainWin::dropEvent(QDropEvent* event) {
 	if (event->mimeData() && !event->mimeData()->urls().isEmpty()) {
 		QUrl url = event->mimeData()->urls().at(0);
-		const QString& f = url.toLocalFile();
-
-		bool open = Project::isLabPlotProject(f);
-#ifdef HAVE_LIBORIGIN
-		if (!open)
-			open = OriginProjectParser::isOriginProject(f);
-#endif
-
-#ifdef HAVE_CANTOR_LIBS
-		if (!open) {
-			QFileInfo fi(f);
-			open = (fi.completeSuffix() == QLatin1String("cws")) || (fi.completeSuffix() == QLatin1String("ipynb"));
-		}
-#endif
-
-		if (open)
-			openProject(f);
+		const QString& fileName = url.toLocalFile();
+		if (Project::isSupportedProject(fileName))
+			openProject(fileName);
 		else {
 			if (!m_project)
 				newProject();
-			importFileDialog(f);
+			importFileDialog(fileName);
 		}
 
 		event->accept();
