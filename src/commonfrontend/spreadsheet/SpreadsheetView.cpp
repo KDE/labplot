@@ -36,6 +36,7 @@
 #include "kdefrontend/spreadsheet/GoToDialog.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
+#include "kdefrontend/spreadsheet/ReplaceWidget.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SampleValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
@@ -289,8 +290,10 @@ void SpreadsheetView::initActions() {
 	action_clear_masks = new QAction(QIcon::fromTheme("format-remove-node"), i18n("Clear Masks"), this);
 	action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell..."), this);
-	action_search = new QAction(QIcon::fromTheme("edit-find"), i18n("&Search"), this);
+	action_search = new QAction(QIcon::fromTheme("edit-find"), i18n("&Find"), this);
 	action_search->setShortcut(QKeySequence::Find);
+	action_replace = new QAction(QIcon::fromTheme("edit-find-replace"), i18n("&Replace"), this);
+	action_replace->setShortcut(QKeySequence::Replace);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs..."), this);
 
 	// column related actions
@@ -752,6 +755,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addAction(action_search);
+	m_spreadsheetMenu->addAction(action_replace);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -803,6 +807,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
 	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearch);
+	connect(action_replace, &QAction::triggered, this, &SpreadsheetView::showReplace);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -1432,9 +1437,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			// 			}
 		} else if (key_event->matches(QKeySequence::Find)) {
 			showSearch();
-		} else if (key_event->key() == Qt::Key_Escape && m_frameSearch && m_frameSearch->isVisible()) {
-			m_leSearch->clear();
-			m_frameSearch->hide();
+		} else if (key_event->key() == Qt::Key_Escape) {
+			if (m_frameSearch && m_frameSearch->isVisible()) {
+				m_leSearch->clear();
+				m_frameSearch->hide();
+			} else if (m_frameReplace && m_frameReplace->isVisible()) {
+				m_frameReplace->hide();
+			}
 		} else if (key_event->matches(QKeySequence::Cut))
 			cutSelection();
 	}
@@ -3354,6 +3363,32 @@ void SpreadsheetView::showSearch() {
 	}
 	m_frameSearch->show();
 	m_leSearch->setFocus();
+}
+
+void SpreadsheetView::showReplace() {
+	if (!m_frameReplace) {
+		// initialize the widgets for search&replace options
+		m_frameReplace = new QFrame(this);
+		auto* layout = new QHBoxLayout(m_frameReplace);
+		layout->setSpacing(0);
+		layout->setContentsMargins(0, 0, 0, 0);
+
+		auto* replaceWidget = new ReplaceWidget(m_frameReplace);
+		layout->addWidget(replaceWidget);
+
+		auto* bClose = new QPushButton(this);
+		bClose->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
+		bClose->setToolTip(i18n("End Replace"));
+		bClose->setFlat(true);
+		layout->addWidget(bClose);
+		connect(bClose, &QPushButton::clicked, this, [=]() {
+			m_frameReplace->hide();
+		});
+
+		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_frameReplace);
+	}
+
+	m_frameReplace->show();
 }
 
 //! Open the sort dialog for the given columns

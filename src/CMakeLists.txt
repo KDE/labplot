@@ -102,6 +102,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/ReplaceWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
@@ -223,6 +224,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/replacewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui

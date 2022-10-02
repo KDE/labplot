@@ -109,6 +109,7 @@ private:
 	SpreadsheetHeaderView* m_horizontalHeader;
 	QFrame* m_frameSearch{nullptr};
 	QLineEdit* m_leSearch{nullptr};
+	QFrame* m_frameReplace{nullptr};
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
@@ -142,6 +143,7 @@ private:
 	QAction* action_formatting_remove;
 	QAction* action_go_to_cell;
 	QAction* action_search;
+	QAction* action_replace;
 	QAction* action_statistics_all_columns;
 
 	// column related actions
@@ -231,6 +233,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void goToCell(int row, int col);
 	void showSearch();
+	void showReplace();
 	void toggleComments();
 	void goToNextColumn();
 	void goToPreviousColumn();
