@@ -63,6 +63,7 @@ private Q_SLOTS:
 	void testQuotedStrings02();
 	void testQuotedStrings03();
 	void testQuotedStrings04();
+	void testQuotedStrings05();
 
 	// different locales
 

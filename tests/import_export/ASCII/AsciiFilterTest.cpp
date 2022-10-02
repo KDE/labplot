@@ -872,6 +872,24 @@ void AsciiFilterTest::testQuotedStrings04() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 2.0);
 }
 
+/*!
+ * test quoted text having separators inside - a JSON file has a similar structure and we should't crash because of this "wrong" data.
+ */
+void AsciiFilterTest::testQuotedStrings05() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
+
+	filter.setSimplifyWhitespacesEnabled(true); // TODO: this shouldn't be required, but QString::split() seems to introduce blanks...
+	filter.setRemoveQuotesEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	// everything should be read into one single text column.
+	// the actuall content is irrelevant, we just need to make sure we don't crash because of such wrong content
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+}
+
 //##############################################################################
 //###############################  skip comments ###############################
 //##############################################################################

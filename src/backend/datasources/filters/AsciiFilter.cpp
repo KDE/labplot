@@ -1920,8 +1920,10 @@ QStringList AsciiFilterPrivate::split(const QString& line, bool autoSeparator) {
 				}
 
 				if (mergeStart != mergeEnd) {
-					for (int i = 0; i < (mergeEnd - mergeStart); ++i)
-						lineStringList[mergeStart] += m_separator + lineStringList.takeAt(mergeStart + 1);
+					for (int i = 0; i < (mergeEnd - mergeStart); ++i) {
+						if (mergeStart + 1 < lineStringList.count())
+							lineStringList[mergeStart] += m_separator + lineStringList.takeAt(mergeStart + 1);
+					}
 				}
 			}
 		}
