@@ -2776,7 +2776,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 		if (range.end() > d->dataRange(dim, index).end())
 			d->dataRange(dim, index).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString())
+		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
 	}
 
 	// loop over all histograms and determine the maximum and minimum x-value
@@ -2825,7 +2825,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
 		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
-	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << d->dataRange(dim, index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << d->dataRange(dim, index).toStdString(false))
 }
 
 void CartesianPlot::retransformScales() {

@@ -219,8 +219,8 @@ public:
 			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + " .. "
 				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
 	}
-	std::string toStdString() const {
-		return STDSTRING(toString());
+	std::string toStdString(bool round = true) const {
+		return STDSTRING(toString(round));
 	}
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString(bool round = true) const {
