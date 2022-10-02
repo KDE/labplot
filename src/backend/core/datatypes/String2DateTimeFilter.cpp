@@ -44,6 +44,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
+	result.setTimeSpec(Qt::UTC);
 	if (result.isValid())
 		return result;
 

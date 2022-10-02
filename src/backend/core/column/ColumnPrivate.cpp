@@ -46,11 +46,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode)
 		m_data = new QVector<QString>();
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
-		m_data = new QVector<QDateTime>();
-		break;
 	case AbstractColumn::ColumnMode::Month:
-		m_data = new QVector<QDateTime>();
-		break;
 	case AbstractColumn::ColumnMode::Day:
 		m_data = new QVector<QDateTime>();
 		break;
