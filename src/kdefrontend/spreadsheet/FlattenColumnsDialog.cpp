@@ -89,9 +89,12 @@ void FlattenColumnsDialog::setColumns(const QVector<Column*>& columns) {
 			m_referenceColumnNames << column->name();
 	}
 
-	// add all other columns in the spreadsheet that were not selected as reference columns
-	for (int i = 0; i < m_referenceColumnNames.count(); ++i)
-		addReferenceColumn();
+	if (!m_referenceColumnNames.isEmpty()) {
+		// add all other columns in the spreadsheet that were not selected as reference columns
+		for (int i = 0; i < m_referenceColumnNames.count(); ++i)
+			addReferenceColumn();
+	} else
+		m_buttonNew->setEnabled(false);
 
 	// resize the dialog to have the minimum height
 	layout()->activate();

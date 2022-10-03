@@ -1549,6 +1549,8 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	action_fill_equidistant->setEnabled(numeric);
 	action_fill_random_nonuniform->setEnabled(numeric);
 	action_fill_function->setEnabled(numeric);
+	action_sample_values->setEnabled(hasValues);
+	action_flatten_columns->setEnabled(hasValues);
 
 	// manipulate data is only possible for numeric and datetime and if there values.
 	// datetime has only "add/subtract value", everything else is deactivated
