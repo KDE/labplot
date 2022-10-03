@@ -15,6 +15,7 @@
 #include <QPen>
 
 class Background;
+class Line;
 class CartesianCoordinateSystem;
 class Value;
 
@@ -29,6 +30,10 @@ public:
 	virtual void recalcShapeAndBoundingRect() override;
 	void updateValues();
 	void updatePixmap();
+
+	Background* addBackground(const KConfigGroup&);
+	Line* addBorderLine(const KConfigGroup&);
+	void addValue(const KConfigGroup&);
 
 	bool m_suppressRecalc{false};
 
@@ -58,11 +63,8 @@ public:
 
 	// bar properties
 	QVector<Background*> backgrounds;
+	QVector<Line*> borderLines;
 	QVector<double> widthFactors;
-
-	// box border
-	QPen borderPen;
-	qreal borderOpacity;
 
 	// values
 	Value* value{nullptr};

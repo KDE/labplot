@@ -25,6 +25,7 @@ public:
 	void setPrefix(const QString&);
 	void adjustLayout();
 	void setEnabled(bool);
+	void updateLocale();
 
 	void load();
 	void loadConfig(const KConfigGroup&);

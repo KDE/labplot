@@ -17,6 +17,7 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BackgroundWidget;
+class LineWidget;
 class ValueWidget;
 class BarPlot;
 class TreeViewComboBox;
@@ -33,6 +34,7 @@ public:
 private:
 	Ui::BarPlotDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
 	QList<BarPlot*> m_barPlots;
 	BarPlot* m_barPlot{nullptr};
@@ -66,12 +68,6 @@ private Q_SLOTS:
 	void currentBarChanged(int) const;
 	void widthFactorChanged(int) const;
 
-	// box border
-	void borderStyleChanged(int) const;
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double) const;
-	void borderOpacityChanged(int) const;
-
 	// SLOTs for changes triggered in BarPlot
 	// general
 	void updatePlotRanges() override;
@@ -81,10 +77,6 @@ private Q_SLOTS:
 	void plotOrientationChanged(BarPlot::Orientation);
 	void plotWidthFactorChanged(double);
 	void plotVisibilityChanged(bool);
-
-	// box border
-	void plotBorderPenChanged(QPen&);
-	void plotBorderOpacityChanged(float);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

@@ -15,6 +15,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
 
 #include <QPushButton>
@@ -56,7 +57,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Tab "Bars"
-	QString msg = i18n("Specify bar number which properties should be shown and edited");
+	QString msg = i18n("Specify the number of the bar for which the properties should be shown and edited");
 	ui.lNumber->setToolTip(msg);
 	ui.cbNumber->setToolTip(msg);
 
@@ -67,7 +68,18 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	// filling
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
+	backgroundWidget->setPrefix(QLatin1String("Filling"));
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
+	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
+	gridLayout->addItem(spacer, 6, 0, 1, 1);
+
+	// border lines
+	gridLayout->addWidget(ui.lBorder, 7, 0, 1, 1);
+	lineWidget = new LineWidget(ui.tabBars);
+	lineWidget->setPrefix(QLatin1String("Border"));
+	gridLayout->addWidget(lineWidget, 8, 0, 1, 3);
+	spacer = new QSpacerItem(18, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	gridLayout->addItem(spacer, 9, 0, 1, 1);
 
 	// Tab "Values"
 	auto* hboxLayout = new QHBoxLayout(ui.tabValues);
@@ -101,12 +113,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// Tab "Bars"
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
-
-	// box border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &BarPlotDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BarPlotDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::borderOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -161,6 +167,13 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	backgroundWidget->setBackgrounds(backgrounds);
 
+	// backgrounds
+	QList<Line*> lines;
+	for (auto* plot : m_barPlots)
+		lines<< plot->lineAt(0);
+
+	lineWidget->setLines(lines);
+
 	// values
 	QList<Value*> values;
 	for (auto* plot : m_barPlots)
@@ -188,10 +201,6 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	connect(m_barPlot, &BarPlot::dataColumnsChanged, this, &BarPlotDock::plotDataColumnsChanged);
 
 	connect(m_barPlot, &BarPlot::widthFactorChanged, this, &BarPlotDock::plotWidthFactorChanged);
-
-	// box border
-	connect(m_barPlot, &BarPlot::borderPenChanged, this, &BarPlotDock::plotBorderPenChanged);
-	connect(m_barPlot, &BarPlot::borderOpacityChanged, this, &BarPlotDock::plotBorderOpacityChanged);
 }
 
 void BarPlotDock::setModel() {
@@ -222,8 +231,7 @@ void BarPlotDock::setModel() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void BarPlotDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbBorderWidth->setLocale(numberLocale);
+	lineWidget->updateLocale();
 }
 
 void BarPlotDock::updatePlotRanges() {
@@ -445,13 +453,19 @@ void BarPlotDock::currentBarChanged(int index) const {
 		return;
 
 	QList<Background*> backgrounds;
+	QList<Line*> lines;
 	for (auto* plot : m_barPlots) {
 		auto* background = plot->backgroundAt(index);
 		if (background)
 			backgrounds << background;
+
+		auto* line = plot->lineAt(index);
+		if (line)
+			lines << line;
 	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
+	lineWidget->setLines(lines);
 }
 
 void BarPlotDock::widthFactorChanged(int value) const {
@@ -461,57 +475,6 @@ void BarPlotDock::widthFactorChanged(int value) const {
 	double factor = (double)value / 100.;
 	for (auto* barPlot : m_barPlots)
 		barPlot->setWidthFactor(factor);
-}
-
-// box border
-void BarPlotDock::borderStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setStyle(penStyle);
-		barPlot->setBorderPen(pen);
-	}
-}
-
-void BarPlotDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setColor(color);
-		barPlot->setBorderPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
-}
-
-void BarPlotDock::borderWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* barPlot : m_barPlots) {
-		pen = barPlot->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		barPlot->setBorderPen(pen);
-	}
-}
-
-void BarPlotDock::borderOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* barPlot : m_barPlots)
-		barPlot->setBorderOpacity(opacity);
 }
 
 //*************************************************************
@@ -546,22 +509,6 @@ void BarPlotDock::plotWidthFactorChanged(double factor) {
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
-// box border
-void BarPlotDock::plotBorderPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BarPlotDock::plotBorderOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
-}
-
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
@@ -574,19 +521,11 @@ void BarPlotDock::loadConfig(KConfig& config) {
 
 	// box
 	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_barPlot->widthFactor()) * 100));
-
-	// box filling
 	backgroundWidget->loadConfig(group);
+	lineWidget->loadConfig(group);
 
-	// box border
-	const QPen& penBorder = m_barPlot->borderPen();
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)penBorder.style()));
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", penBorder.color()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", penBorder.widthF()), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", m_barPlot->borderOpacity()) * 100);
-
-	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	// values
+	valueWidget->loadConfig(group);
 }
 
 void BarPlotDock::loadConfigFromTemplate(KConfig& config) {
@@ -618,15 +557,11 @@ void BarPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// box
 	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
-
-	// box filling
 	backgroundWidget->saveConfig(group);
+	lineWidget->saveConfig(group);
 
-	// box border
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
+	// values
+	valueWidget->saveConfig(group);
 
 	config.sync();
 }

@@ -83,6 +83,11 @@ void LineWidget::setEnabled(bool enabled) {
 	ui.sbOpacity->setEnabled(enabled);
 }
 
+void LineWidget::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbWidth->setLocale(numberLocale);
+}
+
 //*************************************************************
 //******** SLOTs for changes triggered in LineWidget ****
 //*************************************************************
@@ -148,6 +153,7 @@ void LineWidget::linePenChanged(QPen& pen) {
 	if (ui.sbWidth->value() != pen.widthF())
 		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 }
+
 void LineWidget::lineOpacityChanged(double value) {
 	Lock lock(m_initializing);
 	double v = (double)value * 100.;
@@ -164,20 +170,22 @@ void LineWidget::load() {
 	ui.kcbColor->setColor(penBorder.color());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(penBorder.widthF(), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(m_line->opacity() * 100);
+	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
 	const QPen& penBorder = m_line->pen();
-	ui.cbStyle->setCurrentIndex(group.readEntry("BorderStyle", static_cast<int>(penBorder.style())));
-	ui.kcbColor->setColor(group.readEntry("BorderColor", penBorder.color()));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", penBorder.widthF()), Worksheet::Unit::Point));
-	ui.sbOpacity->setValue(group.readEntry("BorderOpacity", m_line->opacity()) * 100);
+	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(penBorder.style())));
+	ui.kcbColor->setColor(group.readEntry(m_prefix + "Color", penBorder.color()));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "Width", penBorder.widthF()), Worksheet::Unit::Point));
+	ui.sbOpacity->setValue(group.readEntry(m_prefix + "Opacity", m_line->opacity()) * 100);
+	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
 
 void LineWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry("BorderStyle", ui.cbStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("BorderOpacity", ui.sbOpacity->value() / 100.0);
+	group.writeEntry(m_prefix + "Style", ui.cbStyle->currentIndex());
+	group.writeEntry(m_prefix + "Color", ui.kcbColor->color());
+	group.writeEntry(m_prefix + "Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);
 }

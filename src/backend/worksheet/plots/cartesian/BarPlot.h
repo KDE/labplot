@@ -18,6 +18,7 @@
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
+class Line;
 class Value;
 
 #ifdef SDK
@@ -58,12 +59,11 @@ public:
 	// box filling
 	Background* backgroundAt(int) const;
 
+	// box border line
+	Line* lineAt(int) const;
+
 	// values
 	Value* value() const;
-
-	// box border
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
