@@ -11,11 +11,11 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
+#include <KConfigGroup>
 #include <QCompleter>
 #include <QDirModel>
 #include <QFile>
 #include <QTimer>
-#include <KConfigGroup>
 
 /*!
 	\class LineWidget

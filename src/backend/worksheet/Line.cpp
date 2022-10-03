@@ -40,8 +40,8 @@ void Line::init(const KConfigGroup& group) {
 	Q_D(Line);
 
 	d->pen = QPen(group.readEntry(d->prefix + "Color", QColor(Qt::black)),
-						group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+				  group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->opacity = group.readEntry(d->prefix + "Opacity", 1.0);
 }
 
