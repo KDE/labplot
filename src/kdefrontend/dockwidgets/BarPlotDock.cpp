@@ -170,7 +170,7 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 	// backgrounds
 	QList<Line*> lines;
 	for (auto* plot : m_barPlots)
-		lines<< plot->lineAt(0);
+		lines << plot->lineAt(0);
 
 	lineWidget->setLines(lines);
 
