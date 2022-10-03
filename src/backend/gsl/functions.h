@@ -498,6 +498,12 @@ struct funs _functions[] = {
 	{"hypergeometricQ", (func_t)gsl_cdf_hypergeometric_Q, 4},
 	/* Logarithmic Distribution */
 	{"logarithmic", (func_t)nsl_sf_logarithmic, 2},
+	{"MAX", (func_t)nsl_sf_dummy, 1},
+	{"MIN", (func_t)nsl_sf_dummy, 1},
+	{"MEAN", (func_t)nsl_sf_dummy, 1},
+	{"MEDIAN", (func_t)nsl_sf_dummy, 1},
+	{"STDEV", (func_t)nsl_sf_dummy, 1},
+	/* Statistics for vectors */
 	{0, (func_t)0, 0}};
 
 #endif /*FUNCTIONS_H*/

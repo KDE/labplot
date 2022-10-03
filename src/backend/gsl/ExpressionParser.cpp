@@ -105,6 +105,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Geometric Distribution");
 	m_functionsGroups << i18n("Hypergeometric Distribution");
 	m_functionsGroups << i18n("Logarithmic Distribution");
+	m_functionsGroups << i18n("Statistical Methods");
 
 	int index = 0;
 
@@ -860,6 +861,15 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Probability density for a logarithmic distribution");
 	index++;
 	m_functionsGroupIndex << index;
+
+	m_functionsNames << i18n("Maximum");
+	m_functionsNames << i18n("Minimum");
+	m_functionsNames << i18n("Arithmetic mean");
+	m_functionsNames << i18n("Median");
+	m_functionsNames << i18n("Standard deviation");
+	index++;
+	for (int i = 0; i < 5; i++)
+		m_functionsGroupIndex << index;
 }
 
 // TODO: decide whether we want to have i18n here in the backend part of the code
@@ -1605,9 +1615,13 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 	Variable names (x_1, x_2, ...) are stored in \c vars.
 	Data is stored in \c dataVectors.
  */
-bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
+bool ExpressionParser::evaluateCartesian(const QString& expression,
+										 const QStringList& vars,
+										 const QVector<QVector<double>*>& xVectors,
+										 QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
+	QString expr = expression;
 	gsl_set_error_handler_off();
 
 	// determine the minimal size of involved vectors
@@ -1622,6 +1636,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	// calculate values
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < minSize; i++) {
+		// assign vars
 		for (int n = 0; n < vars.size(); ++n)
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 

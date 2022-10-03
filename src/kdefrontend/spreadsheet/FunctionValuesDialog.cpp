@@ -110,7 +110,6 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 		addVariable();
 		m_variableLineEdits[0]->setText("x");
 	} else { // formula and variables are available
-
 		// add all available variables and select the corresponding columns
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < formulaData.size(); ++i) {
@@ -372,7 +371,7 @@ void FunctionValuesDialog::generate() {
 	for (int i = 0; i < m_variableLineEdits.size(); ++i) {
 		variableNames << m_variableLineEdits.at(i)->text().simplified();
 
-		AbstractAspect* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
+		auto* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
 		Q_ASSERT(aspect);
 		auto* column{dynamic_cast<Column*>(aspect)};
 		Q_ASSERT(column);

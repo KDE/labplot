@@ -1234,17 +1234,30 @@ void ColumnPrivate::updateFormula() {
 	// determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
-	int maxRowCount = 0;
+	QString formula = m_formula;
 
 	bool valid = true;
 	QStringList formulaVariableNames;
+	int maxRowCount = 0;
 	for (const auto& formulaData : m_formulaData) {
 		auto* column = formulaData.column();
 		if (!column) {
 			valid = false;
 			break;
 		}
-		formulaVariableNames << formulaData.variableName();
+		auto varName = formulaData.variableName();
+		formulaVariableNames << varName;
+
+		// replace statistical values
+		SET_NUMBER_LOCALE
+		formula.replace(QLatin1String("MAX(%1)").arg(varName), numberLocale.toString(column->maximum()));
+		formula.replace(QLatin1String("MIN(%1)").arg(varName), numberLocale.toString(column->minimum()));
+		formula.replace(QLatin1String("MEAN(%1)").arg(varName), numberLocale.toString(column->statistics().arithmeticMean));
+		formula.replace(QLatin1String("MEDIAN(%1)").arg(varName), numberLocale.toString(column->statistics().median));
+		formula.replace(QLatin1String("STDEV(%1)").arg(varName), numberLocale.toString(column->statistics().standardDeviation));
+		// TODO: more
+		QDEBUG("FORMULA: " << formula);
+
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			// convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
@@ -1263,7 +1276,7 @@ void ColumnPrivate::updateFormula() {
 	if (valid) {
 		// resize the spreadsheet if one of the data vectors from
 		// other spreadsheet(s) has more elements than the parent spreadsheet
-		Spreadsheet* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
+		auto* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
 		if (spreadsheet->rowCount() < maxRowCount)
 			spreadsheet->setRowCount(maxRowCount);
 
@@ -1274,8 +1287,8 @@ void ColumnPrivate::updateFormula() {
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		ExpressionParser* parser = ExpressionParser::getInstance();
-		DEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian()")
-		parser->evaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
+		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
+		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(0, new_data);
 

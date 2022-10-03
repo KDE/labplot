@@ -14,6 +14,9 @@
 #include <gsl/gsl_version.h>
 #include <stdint.h> /* fixed size int types */
 
+/* dummy function for parsing statistical methods */
+double nsl_sf_dummy(double x);
+
 /* random functions */
 double nsl_sf_rand(void);
 double nsl_sf_random(void);
