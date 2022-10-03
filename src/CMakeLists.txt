@@ -122,6 +122,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
@@ -193,6 +194,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
@@ -336,6 +338,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/worksheet/Line.cpp
 	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
