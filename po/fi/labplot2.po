@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-03 00:42+0000\n"
+"POT-Creation-Date: 2022-10-04 00:40+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -60,8 +60,9 @@ msgstr ""
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:218
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1150
+#: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2887
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1365
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1387
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1844
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4710
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:856
@@ -107,7 +108,7 @@ msgstr "Määrite ”%1” puuttuu tai on tyhjä, käytetään oletusarvoa"
 #: src/backend/spreadsheet/Spreadsheet.cpp:913
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3026
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1426
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1445
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1927
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:300
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
@@ -406,14 +407,14 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2395
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2397
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: set heatmap format"
 msgstr "%1: aseta päiväyksen ja ajan muodoksi %2"
 
 #: src/backend/core/abstractcolumncommands.cpp:266
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2412
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2414
 #, fuzzy, kde-format
 #| msgid "%1: set date-time format to %2"
 msgid "%1: remove heatmap format"
@@ -657,7 +658,7 @@ msgid "%1: change cell values"
 msgstr "%1: muuta solujen arvoja"
 
 #: src/backend/core/column/columncommands.cpp:510
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2629
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2631
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -1221,12 +1222,12 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:602
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2292
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2347
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
-#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:184
+#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:191
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:17
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:62
@@ -1760,8 +1761,8 @@ msgid "Number of variables: "
 msgstr "Rivien määrä: %1"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:347
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:301
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:321
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:300
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
 #, kde-format
 msgid "Variables:"
 msgstr "Muuttujat:"
@@ -2755,1449 +2756,1427 @@ msgstr "Hypergeometrinen jakauma"
 msgid "Logarithmic Distribution"
 msgstr "Logaritminen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:112
+#: src/backend/gsl/ExpressionParser.cpp:108
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Statistical Methods"
+msgstr "Tilastot"
+
+#: src/backend/gsl/ExpressionParser.cpp:113
 #, kde-format
 msgid "pseudo-random integer [0,RAND_MAX]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:113
+#: src/backend/gsl/ExpressionParser.cpp:114
 #, kde-format
 msgid "nonlinear additive feedback rng [0,RAND_MAX]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:114
+#: src/backend/gsl/ExpressionParser.cpp:115
 #, kde-format
 msgid "nonlinear additive feedback rng [0,1]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:115
+#: src/backend/gsl/ExpressionParser.cpp:116
 #, kde-format
 msgid "Smallest integral value not less"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:116
+#: src/backend/gsl/ExpressionParser.cpp:117
 #, fuzzy, kde-format
 #| msgid "no values"
 msgid "Absolute value"
 msgstr "ei arvoja"
 
-#: src/backend/gsl/ExpressionParser.cpp:118
+#: src/backend/gsl/ExpressionParser.cpp:119
 #, kde-format
 msgid "Base 10 logarithm"
 msgstr "10-kantainen logaritmi"
 
-#: src/backend/gsl/ExpressionParser.cpp:119
+#: src/backend/gsl/ExpressionParser.cpp:120
 #, kde-format
 msgid "Power function [x^y]"
 msgstr "Potenssifunktio [x^y]"
 
-#: src/backend/gsl/ExpressionParser.cpp:120
+#: src/backend/gsl/ExpressionParser.cpp:121
 #, kde-format
 msgid "Nonnegative square root"
 msgstr "Ei-negatiivinen neliöjuuri"
 
-#: src/backend/gsl/ExpressionParser.cpp:121
+#: src/backend/gsl/ExpressionParser.cpp:122
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Sign function"
 msgstr "Funktiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:122
+#: src/backend/gsl/ExpressionParser.cpp:123
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Heavyside theta function"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:123
+#: src/backend/gsl/ExpressionParser.cpp:124
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Harmonic number function"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:126
+#: src/backend/gsl/ExpressionParser.cpp:127
 #, kde-format
 msgid "Cube root"
 msgstr "Kuutiojuuri"
 
-#: src/backend/gsl/ExpressionParser.cpp:127
+#: src/backend/gsl/ExpressionParser.cpp:128
 #, kde-format
 msgid "Extract the exponent"
 msgstr "Irrota eksponentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:128
+#: src/backend/gsl/ExpressionParser.cpp:129
 #, kde-format
 msgid "Round to an integer value"
 msgstr "Pyöristä kokonaislukuarvoon"
 
-#: src/backend/gsl/ExpressionParser.cpp:129
 #: src/backend/gsl/ExpressionParser.cpp:130
+#: src/backend/gsl/ExpressionParser.cpp:131
 #, kde-format
 msgid "Round to the nearest integer"
 msgstr "Pyöristä lähimpään kokonaislukuun"
 
-#: src/backend/gsl/ExpressionParser.cpp:154
+#: src/backend/gsl/ExpressionParser.cpp:155
 #, kde-format
 msgid "Airy function of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:155
+#: src/backend/gsl/ExpressionParser.cpp:156
 #, kde-format
 msgid "Airy function of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:156
+#: src/backend/gsl/ExpressionParser.cpp:157
 #, kde-format
 msgid "Scaled Airy function of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:157
+#: src/backend/gsl/ExpressionParser.cpp:158
 #, kde-format
 msgid "Scaled Airy function of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:158
+#: src/backend/gsl/ExpressionParser.cpp:159
 #, kde-format
 msgid "Airy function derivative of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:159
+#: src/backend/gsl/ExpressionParser.cpp:160
 #, kde-format
 msgid "Airy function derivative of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:160
+#: src/backend/gsl/ExpressionParser.cpp:161
 #, kde-format
 msgid "Scaled Airy function derivative of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:161
+#: src/backend/gsl/ExpressionParser.cpp:162
 #, kde-format
 msgid "Scaled Airy function derivative of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:162
+#: src/backend/gsl/ExpressionParser.cpp:163
 #, kde-format
 msgid "n-th zero of the Airy function of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:163
+#: src/backend/gsl/ExpressionParser.cpp:164
 #, kde-format
 msgid "n-th zero of the Airy function of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:164
+#: src/backend/gsl/ExpressionParser.cpp:165
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the first kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:165
+#: src/backend/gsl/ExpressionParser.cpp:166
 #, kde-format
 msgid "n-th zero of the Airy function derivative of the second kind"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:172
+#: src/backend/gsl/ExpressionParser.cpp:173
 #, kde-format
 msgid "Regular cylindrical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:173
+#: src/backend/gsl/ExpressionParser.cpp:174
 #, kde-format
 msgid "Regular cylindrical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:174
+#: src/backend/gsl/ExpressionParser.cpp:175
 #, kde-format
 msgid "Regular cylindrical Bessel function of order n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:175
+#: src/backend/gsl/ExpressionParser.cpp:176
 #, kde-format
 msgid "Irregular cylindrical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:176
+#: src/backend/gsl/ExpressionParser.cpp:177
 #, kde-format
 msgid "Irregular cylindrical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:177
+#: src/backend/gsl/ExpressionParser.cpp:178
 #, kde-format
 msgid "Irregular cylindrical Bessel function of order n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:178
+#: src/backend/gsl/ExpressionParser.cpp:179
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:179
+#: src/backend/gsl/ExpressionParser.cpp:180
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:180
+#: src/backend/gsl/ExpressionParser.cpp:181
 #, kde-format
 msgid "Regular modified cylindrical Bessel function of order n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:181
+#: src/backend/gsl/ExpressionParser.cpp:182
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of zeroth order exp(-|"
 "x|) I0(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:183
+#: src/backend/gsl/ExpressionParser.cpp:184
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of first order exp(-|x|) "
 "I1(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:184
+#: src/backend/gsl/ExpressionParser.cpp:185
 #, kde-format
 msgid ""
 "Scaled regular modified cylindrical Bessel function of order n exp(-|x|) "
 "In(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:185
+#: src/backend/gsl/ExpressionParser.cpp:186
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:186
+#: src/backend/gsl/ExpressionParser.cpp:187
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:187
+#: src/backend/gsl/ExpressionParser.cpp:188
 #, kde-format
 msgid "Irregular modified cylindrical Bessel function of order n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:188
+#: src/backend/gsl/ExpressionParser.cpp:189
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of zeroth order exp(x) "
 "K0(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:189
+#: src/backend/gsl/ExpressionParser.cpp:190
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of first order exp(x) "
 "K1(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:190
+#: src/backend/gsl/ExpressionParser.cpp:191
 #, kde-format
 msgid ""
 "Scaled irregular modified cylindrical Bessel function of order n exp(x) Kn(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:191
+#: src/backend/gsl/ExpressionParser.cpp:192
 #, kde-format
 msgid "Regular spherical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:192
+#: src/backend/gsl/ExpressionParser.cpp:193
 #, kde-format
 msgid "Regular spherical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:194
+#: src/backend/gsl/ExpressionParser.cpp:195
 #, kde-format
 msgid "Regular spherical Bessel function of second order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:195
+#: src/backend/gsl/ExpressionParser.cpp:196
 #, kde-format
 msgid "Regular spherical Bessel function of order l"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:196
+#: src/backend/gsl/ExpressionParser.cpp:197
 #, kde-format
 msgid "Irregular spherical Bessel function of zeroth order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:197
+#: src/backend/gsl/ExpressionParser.cpp:198
 #, kde-format
 msgid "Irregular spherical Bessel function of first order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:198
+#: src/backend/gsl/ExpressionParser.cpp:199
 #, kde-format
 msgid "Irregular spherical Bessel function of second order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:199
+#: src/backend/gsl/ExpressionParser.cpp:200
 #, kde-format
 msgid "Irregular spherical Bessel function of order l"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:200
+#: src/backend/gsl/ExpressionParser.cpp:201
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of zeroth order, exp(-|x|) "
 "i0(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:201
+#: src/backend/gsl/ExpressionParser.cpp:202
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of first order, exp(-|x|) "
 "i1(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:202
+#: src/backend/gsl/ExpressionParser.cpp:203
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of second order, exp(-|x|) "
 "i2(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:203
+#: src/backend/gsl/ExpressionParser.cpp:204
 #, kde-format
 msgid ""
 "Scaled regular modified spherical Bessel function of order l, exp(-|x|) il(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:205
+#: src/backend/gsl/ExpressionParser.cpp:206
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of zeroth order, exp(x) "
 "k0(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:206
+#: src/backend/gsl/ExpressionParser.cpp:207
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of first order, exp(-|"
 "x|) k1(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:207
+#: src/backend/gsl/ExpressionParser.cpp:208
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of second order, exp(-|"
 "x|) k2(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:208
+#: src/backend/gsl/ExpressionParser.cpp:209
 #, kde-format
 msgid ""
 "Scaled irregular modified spherical Bessel function of order l, exp(-|x|) "
 "kl(x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:209
+#: src/backend/gsl/ExpressionParser.cpp:210
 #, kde-format
 msgid "Regular cylindrical Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:210
+#: src/backend/gsl/ExpressionParser.cpp:211
 #, kde-format
 msgid "Irregular cylindrical Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:211
+#: src/backend/gsl/ExpressionParser.cpp:212
 #, kde-format
 msgid "Regular modified Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:212
+#: src/backend/gsl/ExpressionParser.cpp:213
 #, kde-format
 msgid "Scaled regular modified Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:213
+#: src/backend/gsl/ExpressionParser.cpp:214
 #, kde-format
 msgid "Irregular modified Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:214
+#: src/backend/gsl/ExpressionParser.cpp:215
 #, kde-format
 msgid "Logarithm of irregular modified Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:216
+#: src/backend/gsl/ExpressionParser.cpp:217
 #, kde-format
 msgid "Scaled irregular modified Bessel function of fractional order"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:217
+#: src/backend/gsl/ExpressionParser.cpp:218
 #, kde-format
 msgid "n-th positive zero of the Bessel function J0"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:218
+#: src/backend/gsl/ExpressionParser.cpp:219
 #, kde-format
 msgid "n-th positive zero of the Bessel function J1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:219
+#: src/backend/gsl/ExpressionParser.cpp:220
 #, kde-format
 msgid "n-th positive zero of the Bessel function Jnu"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:226
+#: src/backend/gsl/ExpressionParser.cpp:227
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgid "Clausen function"
 msgstr "Nykyinen valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:231
+#: src/backend/gsl/ExpressionParser.cpp:232
 #, kde-format
 msgid "Lowest-order normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:232
+#: src/backend/gsl/ExpressionParser.cpp:233
 #, kde-format
 msgid "n-th normalized hydrogenic bound state radial wavefunction"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:239
+#: src/backend/gsl/ExpressionParser.cpp:240
 #, kde-format
 msgid "Dawson integral"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:244
+#: src/backend/gsl/ExpressionParser.cpp:245
 #, kde-format
 msgid "First-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:245
+#: src/backend/gsl/ExpressionParser.cpp:246
 #, kde-format
 msgid "Second-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:246
+#: src/backend/gsl/ExpressionParser.cpp:247
 #, kde-format
 msgid "Third-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:247
+#: src/backend/gsl/ExpressionParser.cpp:248
 #, kde-format
 msgid "Fourth-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:248
+#: src/backend/gsl/ExpressionParser.cpp:249
 #, kde-format
 msgid "Fifth-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:249
+#: src/backend/gsl/ExpressionParser.cpp:250
 #, kde-format
 msgid "Sixth-order Debye function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:256
+#: src/backend/gsl/ExpressionParser.cpp:257
 #, kde-format
 msgid "Dilogarithm for a real argument"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:261
+#: src/backend/gsl/ExpressionParser.cpp:262
 #, kde-format
 msgid "Legendre form of complete elliptic integral K"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:262
+#: src/backend/gsl/ExpressionParser.cpp:263
 #, kde-format
 msgid "Legendre form of complete elliptic integral E"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:263
+#: src/backend/gsl/ExpressionParser.cpp:264
 #, kde-format
 msgid "Legendre form of complete elliptic integral Pi"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:264
+#: src/backend/gsl/ExpressionParser.cpp:265
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral F"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:265
+#: src/backend/gsl/ExpressionParser.cpp:266
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral E"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:266
+#: src/backend/gsl/ExpressionParser.cpp:267
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral P"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:267
+#: src/backend/gsl/ExpressionParser.cpp:268
 #, kde-format
 msgid "Legendre form of incomplete elliptic integral D"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:268
+#: src/backend/gsl/ExpressionParser.cpp:269
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RC"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:269
+#: src/backend/gsl/ExpressionParser.cpp:270
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RD"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:270
+#: src/backend/gsl/ExpressionParser.cpp:271
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RF"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:271
+#: src/backend/gsl/ExpressionParser.cpp:272
 #, kde-format
 msgid "Carlson form of incomplete elliptic integral RJ"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:278
+#: src/backend/gsl/ExpressionParser.cpp:279
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Error function"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:279
+#: src/backend/gsl/ExpressionParser.cpp:280
 #, kde-format
 msgid "Complementary error function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:280
+#: src/backend/gsl/ExpressionParser.cpp:281
 #, kde-format
 msgid "Logarithm of complementary error function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:281
+#: src/backend/gsl/ExpressionParser.cpp:282
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Gaussian probability density function Z"
 msgstr "Suunta"
 
-#: src/backend/gsl/ExpressionParser.cpp:282
+#: src/backend/gsl/ExpressionParser.cpp:283
 #, kde-format
 msgid "Upper tail of the Gaussian probability function Q"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:283
+#: src/backend/gsl/ExpressionParser.cpp:284
 #, kde-format
 msgid "Hazard function for the normal distribution Z/Q"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:286
+#: src/backend/gsl/ExpressionParser.cpp:287
 #, kde-format
 msgid "Underflow-compensating function exp(x^2) erfc(x) for real x"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:287
+#: src/backend/gsl/ExpressionParser.cpp:288
 #, kde-format
 msgid "Imaginary error function erfi(x) = -i erf(ix) for real x"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:288
+#: src/backend/gsl/ExpressionParser.cpp:289
 #, kde-format
 msgid ""
 "Imaginary part of Faddeeva's scaled complex error function w(x) = exp(-x^2) "
 "erfc(-ix) for real x"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:289
+#: src/backend/gsl/ExpressionParser.cpp:290
 #, kde-format
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:290 src/backend/nsl/nsl_fit.c:34
+#: src/backend/gsl/ExpressionParser.cpp:291 src/backend/nsl/nsl_fit.c:34
 #, kde-format
 msgid "Voigt profile"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:293
+#: src/backend/gsl/ExpressionParser.cpp:294
 #, kde-format
 msgid "Pseudo-Voigt profile (same width)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:301
+#: src/backend/gsl/ExpressionParser.cpp:302
 #, kde-format
 msgid "Exponential function"
 msgstr "Eksponenttifunktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:302
+#: src/backend/gsl/ExpressionParser.cpp:303
 #, kde-format
 msgid "exponentiate x and multiply by y"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:306
+#: src/backend/gsl/ExpressionParser.cpp:307
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "n-relative exponential"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:313
+#: src/backend/gsl/ExpressionParser.cpp:314
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential integral"
 msgstr "Eksponentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:314
+#: src/backend/gsl/ExpressionParser.cpp:315
 #, kde-format
 msgid "Second order exponential integral"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:315
+#: src/backend/gsl/ExpressionParser.cpp:316
 #, fuzzy, kde-format
 #| msgid "Exponential Distribution"
 msgid "Exponential integral of order n"
 msgstr "Eksponentiaalinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:316
+#: src/backend/gsl/ExpressionParser.cpp:317
 #, fuzzy, kde-format
 #| msgid "Exponential Distribution"
 msgid "Exponential integral Ei"
 msgstr "Eksponentiaalinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:317
+#: src/backend/gsl/ExpressionParser.cpp:318
 #, kde-format
 msgid "Hyperbolic integral Shi"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:318
+#: src/backend/gsl/ExpressionParser.cpp:319
 #, kde-format
 msgid "Hyperbolic integral Chi"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:319
+#: src/backend/gsl/ExpressionParser.cpp:320
 #, kde-format
 msgid "Third-order exponential integral"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:320
+#: src/backend/gsl/ExpressionParser.cpp:321
 #, fuzzy, kde-format
 #| msgid "Time interval"
 msgid "Sine integral"
 msgstr "Aikaväli"
 
-#: src/backend/gsl/ExpressionParser.cpp:321
+#: src/backend/gsl/ExpressionParser.cpp:322
 #, fuzzy, kde-format
 #| msgid "Time interval"
 msgid "Cosine integral"
 msgstr "Aikaväli"
 
-#: src/backend/gsl/ExpressionParser.cpp:322
+#: src/backend/gsl/ExpressionParser.cpp:323
 #, kde-format
 msgid "Arctangent integral"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:329
+#: src/backend/gsl/ExpressionParser.cpp:330
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:330
+#: src/backend/gsl/ExpressionParser.cpp:331
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 0"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:331
+#: src/backend/gsl/ExpressionParser.cpp:332
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:332
+#: src/backend/gsl/ExpressionParser.cpp:333
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:333
+#: src/backend/gsl/ExpressionParser.cpp:334
 #, kde-format
 msgid "Complete Fermi-Dirac integral with integer index j"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:334
+#: src/backend/gsl/ExpressionParser.cpp:335
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index -1/2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:335
+#: src/backend/gsl/ExpressionParser.cpp:336
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 1/2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:336
+#: src/backend/gsl/ExpressionParser.cpp:337
 #, kde-format
 msgid "Complete Fermi-Dirac integral with index 3/2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:337
+#: src/backend/gsl/ExpressionParser.cpp:338
 #, kde-format
 msgid "Incomplete Fermi-Dirac integral with index zero"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:344
 #: src/backend/gsl/ExpressionParser.cpp:345
+#: src/backend/gsl/ExpressionParser.cpp:346
 #, fuzzy, kde-format
 #| msgid "Gamma Distribution"
 msgid "Gamma function"
 msgstr "Gammajakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:346
 #: src/backend/gsl/ExpressionParser.cpp:347
+#: src/backend/gsl/ExpressionParser.cpp:348
 #, kde-format
 msgid "Logarithm of the gamma function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:348
+#: src/backend/gsl/ExpressionParser.cpp:349
 #, kde-format
 msgid "Regulated gamma function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:349
+#: src/backend/gsl/ExpressionParser.cpp:350
 #, kde-format
 msgid "Reciprocal of the gamma function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:350
+#: src/backend/gsl/ExpressionParser.cpp:351
 #, kde-format
 msgid "Factorial n!"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:351
+#: src/backend/gsl/ExpressionParser.cpp:352
 #, kde-format
 msgid "Double factorial n!!"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:352
+#: src/backend/gsl/ExpressionParser.cpp:353
 #, kde-format
 msgid "Logarithm of the factorial"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:353
+#: src/backend/gsl/ExpressionParser.cpp:354
 #, kde-format
 msgid "Logarithm of the double factorial"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:355
+#: src/backend/gsl/ExpressionParser.cpp:356
 #, kde-format
 msgid "Combinatorial factor"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:356
+#: src/backend/gsl/ExpressionParser.cpp:357
 #, kde-format
 msgid "Logarithm of the combinatorial factor"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:357
+#: src/backend/gsl/ExpressionParser.cpp:358
 #, kde-format
 msgid "Taylor coefficient"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:358
+#: src/backend/gsl/ExpressionParser.cpp:359
 #, kde-format
 msgid "Pochhammer symbol"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:359
+#: src/backend/gsl/ExpressionParser.cpp:360
 #, kde-format
 msgid "Logarithm of the Pochhammer symbol"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:360
+#: src/backend/gsl/ExpressionParser.cpp:361
 #, fuzzy, kde-format
 #| msgid "Relative scale"
 msgid "Relative Pochhammer symbol"
 msgstr "Suhteellinen asteikko"
 
-#: src/backend/gsl/ExpressionParser.cpp:361
+#: src/backend/gsl/ExpressionParser.cpp:362
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "Unnormalized incomplete gamma function"
 msgstr "N&ormalisoi valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:362
+#: src/backend/gsl/ExpressionParser.cpp:363
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "Normalized incomplete gamma function"
 msgstr "N&ormalisoi valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:363
+#: src/backend/gsl/ExpressionParser.cpp:364
 #, kde-format
 msgid "Complementary normalized incomplete gamma function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:364
+#: src/backend/gsl/ExpressionParser.cpp:365
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Beta function"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:366
+#: src/backend/gsl/ExpressionParser.cpp:367
 #, fuzzy, kde-format
 #| msgid "Logarithmic Distribution"
 msgid "Logarithm of the beta function"
 msgstr "Logaritminen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:367
+#: src/backend/gsl/ExpressionParser.cpp:368
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "Normalized incomplete beta function"
 msgstr "N&ormalisoi valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:374
+#: src/backend/gsl/ExpressionParser.cpp:375
 #, kde-format
 msgid "Gegenbauer polynomial C_1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:375
+#: src/backend/gsl/ExpressionParser.cpp:376
 #, kde-format
 msgid "Gegenbauer polynomial C_2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:376
+#: src/backend/gsl/ExpressionParser.cpp:377
 #, kde-format
 msgid "Gegenbauer polynomial C_3"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:377
+#: src/backend/gsl/ExpressionParser.cpp:378
 #, kde-format
 msgid "Gegenbauer polynomial C_n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:385
+#: src/backend/gsl/ExpressionParser.cpp:386
 #, kde-format
 msgid "Hermite polynomials physicists version"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:386
+#: src/backend/gsl/ExpressionParser.cpp:387
 #, kde-format
 msgid "Hermite polynomials probabilists version"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:387
+#: src/backend/gsl/ExpressionParser.cpp:388
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Hermite functions"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:389
+#: src/backend/gsl/ExpressionParser.cpp:390
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Hermite functions (fast version)"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:391
+#: src/backend/gsl/ExpressionParser.cpp:392
 #, kde-format
 msgid "Derivatives of Hermite polynomials physicists version"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:392
+#: src/backend/gsl/ExpressionParser.cpp:393
 #, kde-format
 msgid "Derivatives of Hermite polynomials probabilists version"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:393
+#: src/backend/gsl/ExpressionParser.cpp:394
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Derivatives of Hermite functions"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:405
+#: src/backend/gsl/ExpressionParser.cpp:406
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Hypergeometric function 0F1"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:406
+#: src/backend/gsl/ExpressionParser.cpp:407
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for integer parameters"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:407
+#: src/backend/gsl/ExpressionParser.cpp:408
 #, kde-format
 msgid "Confluent hypergeometric function 1F1 for general parameters"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:408
+#: src/backend/gsl/ExpressionParser.cpp:409
 #, kde-format
 msgid "Confluent hypergeometric function U for integer parameters"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:409
+#: src/backend/gsl/ExpressionParser.cpp:410
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Confluent hypergeometric function U"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:410
+#: src/backend/gsl/ExpressionParser.cpp:411
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Gauss hypergeometric function 2F1"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:411
+#: src/backend/gsl/ExpressionParser.cpp:412
 #, kde-format
 msgid "Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:412
+#: src/backend/gsl/ExpressionParser.cpp:413
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:413
+#: src/backend/gsl/ExpressionParser.cpp:414
 #, kde-format
 msgid "Renormalized Gauss hypergeometric function 2F1 with complex parameters"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:414
+#: src/backend/gsl/ExpressionParser.cpp:415
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Hypergeometric function 2F0"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:421
+#: src/backend/gsl/ExpressionParser.cpp:422
 #, kde-format
 msgid "generalized Laguerre polynomials L_1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:422
+#: src/backend/gsl/ExpressionParser.cpp:423
 #, kde-format
 msgid "generalized Laguerre polynomials L_2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:423
+#: src/backend/gsl/ExpressionParser.cpp:424
 #, kde-format
 msgid "generalized Laguerre polynomials L_3"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:424
+#: src/backend/gsl/ExpressionParser.cpp:425
 #, kde-format
 msgid "generalized Laguerre polynomials L_n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:431
+#: src/backend/gsl/ExpressionParser.cpp:432
 #, kde-format
 msgid "Principal branch of the Lambert W function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:432
+#: src/backend/gsl/ExpressionParser.cpp:433
 #, kde-format
 msgid "Secondary real-valued branch of the Lambert W function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:439
+#: src/backend/gsl/ExpressionParser.cpp:440
 #, kde-format
 msgid "Legendre polynomial P_1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:440
+#: src/backend/gsl/ExpressionParser.cpp:441
 #, kde-format
 msgid "Legendre polynomial P_2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:441
+#: src/backend/gsl/ExpressionParser.cpp:442
 #, kde-format
 msgid "Legendre polynomial P_3"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:442
+#: src/backend/gsl/ExpressionParser.cpp:443
 #, kde-format
 msgid "Legendre polynomial P_l"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:443
+#: src/backend/gsl/ExpressionParser.cpp:444
 #, kde-format
 msgid "Legendre function Q_0"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:444
+#: src/backend/gsl/ExpressionParser.cpp:445
 #, kde-format
 msgid "Legendre function Q_1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:445
+#: src/backend/gsl/ExpressionParser.cpp:446
 #, kde-format
 msgid "Legendre function Q_l"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:446
+#: src/backend/gsl/ExpressionParser.cpp:447
 #, kde-format
 msgid "Associated Legendre polynomial"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:447
+#: src/backend/gsl/ExpressionParser.cpp:448
 #, kde-format
 msgid "Normalized associated Legendre polynomial"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:448
+#: src/backend/gsl/ExpressionParser.cpp:449
 #, kde-format
 msgid "Irregular spherical conical function P^1/2"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:450
+#: src/backend/gsl/ExpressionParser.cpp:451
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:451
+#: src/backend/gsl/ExpressionParser.cpp:452
 #, kde-format
 msgid "Conical function P^0"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:452
+#: src/backend/gsl/ExpressionParser.cpp:453
 #, kde-format
 msgid "Conical function P^1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:453
+#: src/backend/gsl/ExpressionParser.cpp:454
 #, kde-format
 msgid "Regular spherical conical function P^(-1/2-l)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:454
+#: src/backend/gsl/ExpressionParser.cpp:455
 #, kde-format
 msgid "Regular cylindrical conical function P^(-m)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:455
+#: src/backend/gsl/ExpressionParser.cpp:456
 #, kde-format
 msgid ""
 "Zeroth radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:456
+#: src/backend/gsl/ExpressionParser.cpp:457
 #, kde-format
 msgid ""
 "First radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:457
+#: src/backend/gsl/ExpressionParser.cpp:458
 #, kde-format
 msgid ""
 "l-th radial eigenfunction of the Laplacian on the 3-dimensional hyperbolic "
 "space"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:464
+#: src/backend/gsl/ExpressionParser.cpp:465
 #, kde-format
 msgid "Logarithm"
 msgstr "Logaritmi"
 
-#: src/backend/gsl/ExpressionParser.cpp:465
+#: src/backend/gsl/ExpressionParser.cpp:466
 #, kde-format
 msgid "Logarithm of the magnitude"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:475
+#: src/backend/gsl/ExpressionParser.cpp:476
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:476
+#: src/backend/gsl/ExpressionParser.cpp:477
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:477
+#: src/backend/gsl/ExpressionParser.cpp:478
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:478
+#: src/backend/gsl/ExpressionParser.cpp:479
 #, kde-format
 msgid "Angular Mathieu functions se_n(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:479
+#: src/backend/gsl/ExpressionParser.cpp:480
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:480
+#: src/backend/gsl/ExpressionParser.cpp:481
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:488
+#: src/backend/gsl/ExpressionParser.cpp:489
 #, kde-format
 msgid "x^n for integer n with an error estimate"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:493
+#: src/backend/gsl/ExpressionParser.cpp:494
 #, kde-format
 msgid "Digamma function for positive integer n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:494
+#: src/backend/gsl/ExpressionParser.cpp:495
 #, fuzzy, kde-format
 #| msgid "Decimal notation"
 msgid "Digamma function"
 msgstr "Desimaalinen merkintätapa"
 
-#: src/backend/gsl/ExpressionParser.cpp:495
+#: src/backend/gsl/ExpressionParser.cpp:496
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:496
+#: src/backend/gsl/ExpressionParser.cpp:497
 #, kde-format
 msgid "Trigamma function psi' for positive integer n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:497
+#: src/backend/gsl/ExpressionParser.cpp:498
 #, kde-format
 msgid "Trigamma function psi'"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:498
+#: src/backend/gsl/ExpressionParser.cpp:499
 #, kde-format
 msgid "Polygamma function psi^(n)"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:505
+#: src/backend/gsl/ExpressionParser.cpp:506
 #, kde-format
 msgid "First synchrotron function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:506
+#: src/backend/gsl/ExpressionParser.cpp:507
 #, kde-format
 msgid "Second synchrotron function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:513
 #: src/backend/gsl/ExpressionParser.cpp:514
 #: src/backend/gsl/ExpressionParser.cpp:515
 #: src/backend/gsl/ExpressionParser.cpp:516
+#: src/backend/gsl/ExpressionParser.cpp:517
 #, kde-format
 msgid "Transport function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:523
+#: src/backend/gsl/ExpressionParser.cpp:524
 #, kde-format
 msgid "Sine"
 msgstr "Sini"
 
-#: src/backend/gsl/ExpressionParser.cpp:524 src/backend/nsl/nsl_sf_window.c:27
+#: src/backend/gsl/ExpressionParser.cpp:525 src/backend/nsl/nsl_sf_window.c:27
 #, kde-format
 msgid "Cosine"
 msgstr "Kosini"
 
-#: src/backend/gsl/ExpressionParser.cpp:525
+#: src/backend/gsl/ExpressionParser.cpp:526
 #, kde-format
 msgid "Tangent"
 msgstr "Tangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:526
+#: src/backend/gsl/ExpressionParser.cpp:527
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse sine"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:527
+#: src/backend/gsl/ExpressionParser.cpp:528
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse cosine"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:528 src/backend/nsl/nsl_fit.c:44
+#: src/backend/gsl/ExpressionParser.cpp:529 src/backend/nsl/nsl_fit.c:44
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse tangent"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:529
+#: src/backend/gsl/ExpressionParser.cpp:530
 #, kde-format
 msgid "Inverse tangent using sign"
 msgstr "Etumerkillinen käänteistangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:530
+#: src/backend/gsl/ExpressionParser.cpp:531
 #, kde-format
 msgid "Hyperbolic sine"
 msgstr "Hyperbolinen sini"
 
-#: src/backend/gsl/ExpressionParser.cpp:531
+#: src/backend/gsl/ExpressionParser.cpp:532
 #, kde-format
 msgid "Hyperbolic cosine"
 msgstr "Hyperbolinen kosini"
 
-#: src/backend/gsl/ExpressionParser.cpp:532 src/backend/nsl/nsl_fit.c:45
+#: src/backend/gsl/ExpressionParser.cpp:533 src/backend/nsl/nsl_fit.c:45
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Hyperbolinen tangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:533
+#: src/backend/gsl/ExpressionParser.cpp:534
 #, kde-format
 msgid "Inverse hyperbolic cosine"
 msgstr "Käänteinen hyperbolinen kosini"
 
-#: src/backend/gsl/ExpressionParser.cpp:534
+#: src/backend/gsl/ExpressionParser.cpp:535
 #, kde-format
 msgid "Inverse hyperbolic sine"
 msgstr "Käänteinen hyperbolinen sini"
 
-#: src/backend/gsl/ExpressionParser.cpp:535
+#: src/backend/gsl/ExpressionParser.cpp:536
 #, kde-format
 msgid "Inverse hyperbolic tangent"
 msgstr "Käänteinen hyperbolinen tangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:536
+#: src/backend/gsl/ExpressionParser.cpp:537
 #, kde-format
 msgid "Secant"
 msgstr "Sekantti"
 
-#: src/backend/gsl/ExpressionParser.cpp:537
+#: src/backend/gsl/ExpressionParser.cpp:538
 #, kde-format
 msgid "Cosecant"
 msgstr "Kosekantti"
 
-#: src/backend/gsl/ExpressionParser.cpp:538
+#: src/backend/gsl/ExpressionParser.cpp:539
 #, kde-format
 msgid "Cotangent"
 msgstr "Kotangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:539
+#: src/backend/gsl/ExpressionParser.cpp:540
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse secant"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:540
+#: src/backend/gsl/ExpressionParser.cpp:541
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse cosecant"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:541
+#: src/backend/gsl/ExpressionParser.cpp:542
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse cotangent"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:542
+#: src/backend/gsl/ExpressionParser.cpp:543
 #, kde-format
 msgid "Hyperbolic secant"
 msgstr "Hyperbolinen sekantti"
 
-#: src/backend/gsl/ExpressionParser.cpp:543
+#: src/backend/gsl/ExpressionParser.cpp:544
 #, kde-format
 msgid "Hyperbolic cosecant"
 msgstr "Hyperbolinen kosekantti"
 
-#: src/backend/gsl/ExpressionParser.cpp:544
+#: src/backend/gsl/ExpressionParser.cpp:545
 #, kde-format
 msgid "Hyperbolic cotangent"
 msgstr "Hyperbolinen kotangentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:545
+#: src/backend/gsl/ExpressionParser.cpp:546
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse hyperbolic secant"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:546
+#: src/backend/gsl/ExpressionParser.cpp:547
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse hyperbolic cosecant"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:547
+#: src/backend/gsl/ExpressionParser.cpp:548
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse hyperbolic cotangent"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:548
+#: src/backend/gsl/ExpressionParser.cpp:549
 #, fuzzy, kde-format
 #| msgid "Functions"
 msgid "Sinc function sin(x)/x"
 msgstr "Funktiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:551
+#: src/backend/gsl/ExpressionParser.cpp:552
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgid "Hypotenuse function"
 msgstr "Nykyinen valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:552
+#: src/backend/gsl/ExpressionParser.cpp:553
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgid "Three component hypotenuse function"
 msgstr "Nykyinen valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:553
+#: src/backend/gsl/ExpressionParser.cpp:554
 #, kde-format
 msgid "restrict to [-pi,pi]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:554
+#: src/backend/gsl/ExpressionParser.cpp:555
 #, kde-format
 msgid "restrict to [0,2 pi]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:561
+#: src/backend/gsl/ExpressionParser.cpp:562
 #, kde-format
 msgid "Riemann zeta function for integer n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:562
+#: src/backend/gsl/ExpressionParser.cpp:563
 #, kde-format
 msgid "Riemann zeta function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:563
+#: src/backend/gsl/ExpressionParser.cpp:564
 #, kde-format
 msgid "zeta(n)-1 for integer n"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:564
+#: src/backend/gsl/ExpressionParser.cpp:565
 #, kde-format
 msgid "zeta(x)-1"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:565
+#: src/backend/gsl/ExpressionParser.cpp:566
 #, kde-format
 msgid "Hurwitz zeta function"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:566
+#: src/backend/gsl/ExpressionParser.cpp:567
 #, kde-format
 msgid "Eta function for integer n"
 msgstr "Eetafunktio kokonaisluvulle n"
 
-#: src/backend/gsl/ExpressionParser.cpp:567
+#: src/backend/gsl/ExpressionParser.cpp:568
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Eta function"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:576
+#: src/backend/gsl/ExpressionParser.cpp:577
 #, fuzzy, kde-format
 #| msgid "Gaussian"
 msgid "Gaussian random numbers"
 msgstr "Gauss"
 
-#: src/backend/gsl/ExpressionParser.cpp:577
+#: src/backend/gsl/ExpressionParser.cpp:578
 #, fuzzy, kde-format
 #| msgid "Exponential"
 msgid "Exponential random numbers"
 msgstr "Eksponentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:578
+#: src/backend/gsl/ExpressionParser.cpp:579
 #, kde-format
 msgid "Laplacian random numbers"
 msgstr "Laplacen satunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:579
+#: src/backend/gsl/ExpressionParser.cpp:580
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:580
+#: src/backend/gsl/ExpressionParser.cpp:581
 #, kde-format
 msgid "Rayleigh random numbers"
 msgstr "Rayleigh’n satunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:581
+#: src/backend/gsl/ExpressionParser.cpp:582
 #, kde-format
 msgid "Landau random numbers"
 msgstr "Landaun satunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:582
+#: src/backend/gsl/ExpressionParser.cpp:583
 #, kde-format
 msgid "Levy alpha-stable random numbers"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:583
+#: src/backend/gsl/ExpressionParser.cpp:584
 #, kde-format
 msgid "Gamma random numbers"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:584
+#: src/backend/gsl/ExpressionParser.cpp:585
 #, kde-format
 msgid "Flat random numbers"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:585
+#: src/backend/gsl/ExpressionParser.cpp:586
 #, fuzzy, kde-format
 #| msgid "Random Values"
 msgid "Lognormal random numbers"
 msgstr "Satunnaisarvot"
 
-#: src/backend/gsl/ExpressionParser.cpp:587
+#: src/backend/gsl/ExpressionParser.cpp:588
 #, fuzzy, kde-format
 #| msgid "Chi-squared Distribution"
 msgid "Chi-squared random numbers"
 msgstr "Khiin neliö -jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:588
+#: src/backend/gsl/ExpressionParser.cpp:589
 #, fuzzy, kde-format
 #| msgid "t-distribution"
 msgid "t-distributed random numbers"
 msgstr "t-jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:589
+#: src/backend/gsl/ExpressionParser.cpp:590
 #, fuzzy, kde-format
 #| msgid "Function"
 msgid "Logistic random numbers"
 msgstr "Funktio"
 
-#: src/backend/gsl/ExpressionParser.cpp:590
+#: src/backend/gsl/ExpressionParser.cpp:591
 #, kde-format
 msgid "Poisson random numbers"
 msgstr "Poissonin satunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:591
+#: src/backend/gsl/ExpressionParser.cpp:592
 #, kde-format
 msgid "Bernoulli random numbers"
 msgstr "Bernoullin satunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:592
+#: src/backend/gsl/ExpressionParser.cpp:593
 #, kde-format
 msgid "Binomial random numbers"
 msgstr "Binomisatunnaisluvut"
 
-#: src/backend/gsl/ExpressionParser.cpp:602
+#: src/backend/gsl/ExpressionParser.cpp:603
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:603
+#: src/backend/gsl/ExpressionParser.cpp:604
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
-msgstr ""
-
-#: src/backend/gsl/ExpressionParser.cpp:604
-#: src/backend/gsl/ExpressionParser.cpp:623
-#: src/backend/gsl/ExpressionParser.cpp:634
-#: src/backend/gsl/ExpressionParser.cpp:654
-#: src/backend/gsl/ExpressionParser.cpp:665
-#: src/backend/gsl/ExpressionParser.cpp:682
-#: src/backend/gsl/ExpressionParser.cpp:693
-#: src/backend/gsl/ExpressionParser.cpp:704
-#: src/backend/gsl/ExpressionParser.cpp:715
-#: src/backend/gsl/ExpressionParser.cpp:726
-#: src/backend/gsl/ExpressionParser.cpp:737
-#: src/backend/gsl/ExpressionParser.cpp:748
-#: src/backend/gsl/ExpressionParser.cpp:759
-#: src/backend/gsl/ExpressionParser.cpp:770
-#: src/backend/gsl/ExpressionParser.cpp:781
-#: src/backend/gsl/ExpressionParser.cpp:792
-#: src/backend/gsl/ExpressionParser.cpp:797
-#: src/backend/gsl/ExpressionParser.cpp:808
-#: src/backend/gsl/ExpressionParser.cpp:822
-#: src/backend/gsl/ExpressionParser.cpp:825
-#: src/backend/gsl/ExpressionParser.cpp:834
-#: src/backend/gsl/ExpressionParser.cpp:843
-#: src/backend/gsl/ExpressionParser.cpp:852
-#, kde-format
-msgid "Cumulative distribution function P"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:605
 #: src/backend/gsl/ExpressionParser.cpp:624
 #: src/backend/gsl/ExpressionParser.cpp:635
-#: src/backend/gsl/ExpressionParser.cpp:646
 #: src/backend/gsl/ExpressionParser.cpp:655
 #: src/backend/gsl/ExpressionParser.cpp:666
 #: src/backend/gsl/ExpressionParser.cpp:683
@@ -4219,12 +4198,13 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:844
 #: src/backend/gsl/ExpressionParser.cpp:853
 #, kde-format
-msgid "Cumulative distribution function Q"
+msgid "Cumulative distribution function P"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:606
 #: src/backend/gsl/ExpressionParser.cpp:625
 #: src/backend/gsl/ExpressionParser.cpp:636
+#: src/backend/gsl/ExpressionParser.cpp:647
 #: src/backend/gsl/ExpressionParser.cpp:656
 #: src/backend/gsl/ExpressionParser.cpp:667
 #: src/backend/gsl/ExpressionParser.cpp:684
@@ -4239,8 +4219,14 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:783
 #: src/backend/gsl/ExpressionParser.cpp:794
 #: src/backend/gsl/ExpressionParser.cpp:799
+#: src/backend/gsl/ExpressionParser.cpp:810
+#: src/backend/gsl/ExpressionParser.cpp:824
+#: src/backend/gsl/ExpressionParser.cpp:827
+#: src/backend/gsl/ExpressionParser.cpp:836
+#: src/backend/gsl/ExpressionParser.cpp:845
+#: src/backend/gsl/ExpressionParser.cpp:854
 #, kde-format
-msgid "Inverse cumulative distribution function P"
+msgid "Cumulative distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:607
@@ -4261,794 +4247,857 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:795
 #: src/backend/gsl/ExpressionParser.cpp:800
 #, kde-format
-msgid "Inverse cumulative distribution function Q"
+msgid "Inverse cumulative distribution function P"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:608
+#: src/backend/gsl/ExpressionParser.cpp:627
+#: src/backend/gsl/ExpressionParser.cpp:638
+#: src/backend/gsl/ExpressionParser.cpp:658
+#: src/backend/gsl/ExpressionParser.cpp:669
+#: src/backend/gsl/ExpressionParser.cpp:686
+#: src/backend/gsl/ExpressionParser.cpp:697
+#: src/backend/gsl/ExpressionParser.cpp:708
+#: src/backend/gsl/ExpressionParser.cpp:719
+#: src/backend/gsl/ExpressionParser.cpp:730
+#: src/backend/gsl/ExpressionParser.cpp:741
+#: src/backend/gsl/ExpressionParser.cpp:752
+#: src/backend/gsl/ExpressionParser.cpp:763
+#: src/backend/gsl/ExpressionParser.cpp:774
+#: src/backend/gsl/ExpressionParser.cpp:785
+#: src/backend/gsl/ExpressionParser.cpp:796
+#: src/backend/gsl/ExpressionParser.cpp:801
 #, kde-format
-msgid "Cumulative unit distribution function P"
+msgid "Inverse cumulative distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:609
 #, kde-format
-msgid "Cumulative unit distribution function Q"
+msgid "Cumulative unit distribution function P"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:610
 #, kde-format
-msgid "Inverse cumulative unit distribution function P"
+msgid "Cumulative unit distribution function Q"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:611
 #, kde-format
+msgid "Inverse cumulative unit distribution function P"
+msgstr ""
+
+#: src/backend/gsl/ExpressionParser.cpp:612
+#, kde-format
 msgid "Inverse cumulative unit distribution function Q"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:613
+#: src/backend/gsl/ExpressionParser.cpp:614
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Probability density for Gaussian tail distribution"
 msgstr "Suunta"
 
-#: src/backend/gsl/ExpressionParser.cpp:614
+#: src/backend/gsl/ExpressionParser.cpp:615
 #, kde-format
 msgid "Probability density for unit Gaussian tail distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:615
+#: src/backend/gsl/ExpressionParser.cpp:616
 #, kde-format
 msgid "Probability density for a bivariate Gaussian distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:622
+#: src/backend/gsl/ExpressionParser.cpp:623
 #, kde-format
 msgid "Probability density for an exponential distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:633
+#: src/backend/gsl/ExpressionParser.cpp:634
 #, kde-format
 msgid "Probability density for a Laplace distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:644
+#: src/backend/gsl/ExpressionParser.cpp:645
 #, kde-format
 msgid "Probability density for an exponential power distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:645
+#: src/backend/gsl/ExpressionParser.cpp:646
 #, kde-format
 msgid "cumulative distribution function P"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:653
+#: src/backend/gsl/ExpressionParser.cpp:654
 #, kde-format
 msgid "Probability density for a Cauchy distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:664
+#: src/backend/gsl/ExpressionParser.cpp:665
 #, kde-format
 msgid "Probability density for a Rayleigh distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:669
+#: src/backend/gsl/ExpressionParser.cpp:670
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Probability density for a Rayleigh tail distribution"
 msgstr "Suunta"
 
-#: src/backend/gsl/ExpressionParser.cpp:676
+#: src/backend/gsl/ExpressionParser.cpp:677
 #, kde-format
 msgid "Probability density for a Landau distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:681
+#: src/backend/gsl/ExpressionParser.cpp:682
 #, kde-format
 msgid "Probability density for a gamma distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:692
+#: src/backend/gsl/ExpressionParser.cpp:693
 #, kde-format
 msgid "Probability density for a uniform distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:703
+#: src/backend/gsl/ExpressionParser.cpp:704
 #, kde-format
 msgid "Probability density for a lognormal distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:714
+#: src/backend/gsl/ExpressionParser.cpp:715
 #, kde-format
 msgid "Probability density for a chi squared distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:725
+#: src/backend/gsl/ExpressionParser.cpp:726
 #, kde-format
 msgid "Probability density for a F-distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:736
+#: src/backend/gsl/ExpressionParser.cpp:737
 #, kde-format
 msgid "Probability density for a t-distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:747
+#: src/backend/gsl/ExpressionParser.cpp:748
 #, kde-format
 msgid "Probability density for a beta distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:758
+#: src/backend/gsl/ExpressionParser.cpp:759
 #, kde-format
 msgid "Probability density for a logistic distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:769
+#: src/backend/gsl/ExpressionParser.cpp:770
 #, kde-format
 msgid "Probability density for a Pareto distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:780
+#: src/backend/gsl/ExpressionParser.cpp:781
 #, kde-format
 msgid "Probability density for a Weibull distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:791
+#: src/backend/gsl/ExpressionParser.cpp:792
 #, fuzzy, kde-format
 #| msgid "Type-1 Gumbel Distribution"
 msgid "Probability density for a Type-1 Gumbel distribution"
 msgstr "Tyypin 1 Gumbelin jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:796
+#: src/backend/gsl/ExpressionParser.cpp:797
 #, fuzzy, kde-format
 #| msgid "Type-2 Gumbel Distribution"
 msgid "Probability density for a Type-2 Gumbel distribution"
 msgstr "Tyypin 2 Gumbelin jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:807
+#: src/backend/gsl/ExpressionParser.cpp:808
 #, kde-format
 msgid "Probability density for a Poisson distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:816
+#: src/backend/gsl/ExpressionParser.cpp:817
 #, fuzzy, kde-format
 #| msgid "Bernoulli Distribution"
 msgid "Probability density for a Bernoulli distribution"
 msgstr "Bernoullin jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:821
+#: src/backend/gsl/ExpressionParser.cpp:822
 #, kde-format
 msgid "Probability density for a binomial distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:824
+#: src/backend/gsl/ExpressionParser.cpp:825
 #, fuzzy, kde-format
 #| msgid "Negative Binomial Distribution"
 msgid "Probability density for a negative binomial distribution"
 msgstr "Negatiivinen binomijakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:833
+#: src/backend/gsl/ExpressionParser.cpp:834
 #, kde-format
 msgid "Probability density for a Pascal distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:842
+#: src/backend/gsl/ExpressionParser.cpp:843
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Probability density for a geometric distribution"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:851
+#: src/backend/gsl/ExpressionParser.cpp:852
 #, fuzzy, kde-format
 #| msgid "Hypergeometric Distribution"
 msgid "Probability density for a hypergeometric distribution"
 msgstr "Hypergeometrinen jakauma"
 
-#: src/backend/gsl/ExpressionParser.cpp:860
+#: src/backend/gsl/ExpressionParser.cpp:861
 #, kde-format
 msgid "Probability density for a logarithmic distribution"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:871
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:865
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
+#, kde-format
+msgid "Maximum"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:866
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:71
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
+#, kde-format
+msgid "Minimum"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:867
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:83
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
+#, kde-format
+msgid "Arithmetic mean"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
+#: src/backend/gsl/ExpressionParser.cpp:868
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:119
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
+#, kde-format
+msgid "Median"
+msgstr "Mediaani"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:869
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
+#, kde-format
+msgid "Standard deviation"
+msgstr "Keskihajonta"
+
+#: src/backend/gsl/ExpressionParser.cpp:881
 #, kde-format
 msgid "Mathematical constants"
 msgstr "Matemaattiset vakiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:872
+#: src/backend/gsl/ExpressionParser.cpp:882
 #, kde-format
 msgid "Fundamental constants"
 msgstr "Luonnonvakiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:873
+#: src/backend/gsl/ExpressionParser.cpp:883
 #, kde-format
 msgid "Astronomy and Astrophysics"
 msgstr "Tähtitiede ja astrofysiikka"
 
-#: src/backend/gsl/ExpressionParser.cpp:874
+#: src/backend/gsl/ExpressionParser.cpp:884
 #, kde-format
 msgid "Atomic and Nuclear Physics"
 msgstr "Atomi- ja ydinfysiikka"
 
-#: src/backend/gsl/ExpressionParser.cpp:875
+#: src/backend/gsl/ExpressionParser.cpp:885
 #, kde-format
 msgid "Measurement of Time"
 msgstr "Ajan mittaaminen"
 
-#: src/backend/gsl/ExpressionParser.cpp:876
+#: src/backend/gsl/ExpressionParser.cpp:886
 #, kde-format
 msgid "Imperial Units"
 msgstr "Anglosaksiset yksiköt"
 
-#: src/backend/gsl/ExpressionParser.cpp:877
+#: src/backend/gsl/ExpressionParser.cpp:887
 #, kde-format
 msgid "Speed and Nautical Units"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:878
+#: src/backend/gsl/ExpressionParser.cpp:888
 #, kde-format
 msgid "Printers Units"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:879
+#: src/backend/gsl/ExpressionParser.cpp:889
 #, kde-format
 msgid "Volume, Area and Length"
 msgstr "Tilavuus, ala ja pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:880
+#: src/backend/gsl/ExpressionParser.cpp:890
 #, kde-format
 msgid "Mass and Weight"
 msgstr "Massa ja paino"
 
-#: src/backend/gsl/ExpressionParser.cpp:881
+#: src/backend/gsl/ExpressionParser.cpp:891
 #, kde-format
 msgid "Thermal Energy and Power"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:882
+#: src/backend/gsl/ExpressionParser.cpp:892
 #, kde-format
 msgid "Pressure"
 msgstr "Paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:883
+#: src/backend/gsl/ExpressionParser.cpp:893
 #, kde-format
 msgid "Viscosity"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:884
+#: src/backend/gsl/ExpressionParser.cpp:894
 #, kde-format
 msgid "Light and Illumination"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:885
+#: src/backend/gsl/ExpressionParser.cpp:895
 #, kde-format
 msgid "Radioactivity"
 msgstr "Radioaktiivisuus"
 
-#: src/backend/gsl/ExpressionParser.cpp:886
+#: src/backend/gsl/ExpressionParser.cpp:896
 #, kde-format
 msgid "Force and Energy"
 msgstr "Voima ja energia"
 
-#: src/backend/gsl/ExpressionParser.cpp:889
+#: src/backend/gsl/ExpressionParser.cpp:899
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Base of exponentials"
 msgstr "Käänteinen eksponentiaalinen"
 
-#: src/backend/gsl/ExpressionParser.cpp:892
+#: src/backend/gsl/ExpressionParser.cpp:902
 #, kde-format
 msgid "Pi"
 msgstr "Pii"
 
-#: src/backend/gsl/ExpressionParser.cpp:895
+#: src/backend/gsl/ExpressionParser.cpp:905
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Euler's constant"
 msgstr "Vakiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:903
+#: src/backend/gsl/ExpressionParser.cpp:913
 #, kde-format
 msgid "Speed of light"
 msgstr "Valonnopeus"
 
-#: src/backend/gsl/ExpressionParser.cpp:906
+#: src/backend/gsl/ExpressionParser.cpp:916
 #, kde-format
 msgid "Vacuum permeability"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:909
+#: src/backend/gsl/ExpressionParser.cpp:919
 #, kde-format
 msgid "Vacuum permittivity"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:912
+#: src/backend/gsl/ExpressionParser.cpp:922
 #, kde-format
 msgid "Planck constant"
 msgstr "Planckin vakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:915
+#: src/backend/gsl/ExpressionParser.cpp:925
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Reduced Planck constant"
 msgstr "Vakiot"
 
-#: src/backend/gsl/ExpressionParser.cpp:918
+#: src/backend/gsl/ExpressionParser.cpp:928
 #, kde-format
 msgid "Avogadro constant"
 msgstr "Avogadron vakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:921
+#: src/backend/gsl/ExpressionParser.cpp:931
 #, kde-format
 msgid "Faraday"
 msgstr "Faraday"
 
-#: src/backend/gsl/ExpressionParser.cpp:924
+#: src/backend/gsl/ExpressionParser.cpp:934
 #, kde-format
 msgid "Boltzmann constant"
 msgstr "Boltzmannin vakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:927
+#: src/backend/gsl/ExpressionParser.cpp:937
 #, kde-format
 msgid "Molar gas"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:930
+#: src/backend/gsl/ExpressionParser.cpp:940
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Standard gas volume"
 msgstr "Keskihajonta"
 
-#: src/backend/gsl/ExpressionParser.cpp:933
+#: src/backend/gsl/ExpressionParser.cpp:943
 #, kde-format
 msgid "Stefan-Boltzmann constant"
 msgstr "Stefan-Boltzmannin vakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:936
+#: src/backend/gsl/ExpressionParser.cpp:946
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Gauss"
 msgstr "Gauss"
 
-#: src/backend/gsl/ExpressionParser.cpp:944
+#: src/backend/gsl/ExpressionParser.cpp:954
 #, kde-format
 msgid "Astronomical unit"
 msgstr "Tähtitieteellinen yksikkö"
 
-#: src/backend/gsl/ExpressionParser.cpp:947
+#: src/backend/gsl/ExpressionParser.cpp:957
 #, kde-format
 msgid "Gravitational constant"
 msgstr "Painovoimavakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:950
+#: src/backend/gsl/ExpressionParser.cpp:960
 #, fuzzy, kde-format
 #| msgid "light cyan"
 msgid "Light year"
 msgstr "vaalea syaani"
 
-#: src/backend/gsl/ExpressionParser.cpp:953
+#: src/backend/gsl/ExpressionParser.cpp:963
 #, kde-format
 msgid "Parsec"
 msgstr "Parsek"
 
-#: src/backend/gsl/ExpressionParser.cpp:956
+#: src/backend/gsl/ExpressionParser.cpp:966
 #, kde-format
 msgid "Gravitational acceleration"
 msgstr "Painovoimakiihtyvyys"
 
-#: src/backend/gsl/ExpressionParser.cpp:959
+#: src/backend/gsl/ExpressionParser.cpp:969
 #, fuzzy, kde-format
 #| msgid "Color map"
 msgid "Solar mass"
 msgstr "Värikartta"
 
-#: src/backend/gsl/ExpressionParser.cpp:967
+#: src/backend/gsl/ExpressionParser.cpp:977
 #, fuzzy, kde-format
 #| msgid "Current selection"
 msgid "Charge of the electron"
 msgstr "Nykyinen valinta"
 
-#: src/backend/gsl/ExpressionParser.cpp:970
+#: src/backend/gsl/ExpressionParser.cpp:980
 #, kde-format
 msgid "Energy of 1 electron volt"
 msgstr "1 elektronivoltin energia"
 
-#: src/backend/gsl/ExpressionParser.cpp:973
+#: src/backend/gsl/ExpressionParser.cpp:983
 #, kde-format
 msgid "Unified atomic mass"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:976
+#: src/backend/gsl/ExpressionParser.cpp:986
 #, kde-format
 msgid "Mass of the electron"
 msgstr "Elektronin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:979
+#: src/backend/gsl/ExpressionParser.cpp:989
 #, kde-format
 msgid "Mass of the muon"
 msgstr "Myonin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:982
+#: src/backend/gsl/ExpressionParser.cpp:992
 #, kde-format
 msgid "Mass of the proton"
 msgstr "Protonin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:985
+#: src/backend/gsl/ExpressionParser.cpp:995
 #, kde-format
 msgid "Mass of the neutron"
 msgstr "Neutronin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:988
+#: src/backend/gsl/ExpressionParser.cpp:998
 #, kde-format
 msgid "Electromagnetic fine structure constant"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:991
+#: src/backend/gsl/ExpressionParser.cpp:1001
 #, kde-format
 msgid "Rydberg constant"
 msgstr "Rydbergin vakio"
 
-#: src/backend/gsl/ExpressionParser.cpp:994
+#: src/backend/gsl/ExpressionParser.cpp:1004
 #, fuzzy, kde-format
 #| msgid "Corner radius"
 msgid "Bohr radius"
 msgstr "Kulman säde"
 
-#: src/backend/gsl/ExpressionParser.cpp:997
+#: src/backend/gsl/ExpressionParser.cpp:1007
 #, kde-format
 msgid "Length of 1 angstrom"
 msgstr "1 ångströmin pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1000
+#: src/backend/gsl/ExpressionParser.cpp:1010
 #, kde-format
 msgid "Area of 1 barn"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1003
+#: src/backend/gsl/ExpressionParser.cpp:1013
 #, kde-format
 msgid "Bohr Magneton"
 msgstr "Bohrin magnetoni"
 
-#: src/backend/gsl/ExpressionParser.cpp:1006
+#: src/backend/gsl/ExpressionParser.cpp:1016
 #, kde-format
 msgid "Nuclear Magneton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1009
+#: src/backend/gsl/ExpressionParser.cpp:1019
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
 msgstr "Elektronin magneettinen momentti [absoluuttinen arvo]"
 
-#: src/backend/gsl/ExpressionParser.cpp:1012
+#: src/backend/gsl/ExpressionParser.cpp:1022
 #, kde-format
 msgid "Magnetic moment of the proton"
 msgstr "Protonin magneettinen momentti"
 
-#: src/backend/gsl/ExpressionParser.cpp:1015
+#: src/backend/gsl/ExpressionParser.cpp:1025
 #, kde-format
 msgid "Thomson cross section"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1018
+#: src/backend/gsl/ExpressionParser.cpp:1028
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1026
+#: src/backend/gsl/ExpressionParser.cpp:1036
 #, fuzzy, kde-format
 #| msgid "The number of vectors in the file"
 msgid "Number of seconds in 1 minute"
 msgstr "Vektorien määrä tiedostossa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1029
+#: src/backend/gsl/ExpressionParser.cpp:1039
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 hour"
 msgstr "Sarakkeiden määrä: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1032
+#: src/backend/gsl/ExpressionParser.cpp:1042
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 day"
 msgstr "Sarakkeiden määrä: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1035
+#: src/backend/gsl/ExpressionParser.cpp:1045
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 week"
 msgstr "Sarakkeiden määrä: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1043
+#: src/backend/gsl/ExpressionParser.cpp:1053
 #, kde-format
 msgid "Length of 1 inch"
 msgstr "1 tuuman pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1046
+#: src/backend/gsl/ExpressionParser.cpp:1056
 #, kde-format
 msgid "Length of 1 foot"
 msgstr "1 jalan pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1049
+#: src/backend/gsl/ExpressionParser.cpp:1059
 #, kde-format
 msgid "Length of 1 yard"
 msgstr "1 jaardin pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1052
+#: src/backend/gsl/ExpressionParser.cpp:1062
 #, kde-format
 msgid "Length of 1 mile"
 msgstr "1 mailin pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1055
+#: src/backend/gsl/ExpressionParser.cpp:1065
 #, kde-format
 msgid "Length of 1/1000th of an inch"
 msgstr "1/1000-tuuman pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1063
+#: src/backend/gsl/ExpressionParser.cpp:1073
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
 msgstr "1 km/h nopeus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1066
+#: src/backend/gsl/ExpressionParser.cpp:1076
 #, kde-format
 msgid "Speed of 1 mile per hour"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1069
+#: src/backend/gsl/ExpressionParser.cpp:1079
 #, kde-format
 msgid "Length of 1 nautical mile"
 msgstr "1 merimailin pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1072
+#: src/backend/gsl/ExpressionParser.cpp:1082
 #, kde-format
 msgid "Length of 1 fathom"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1075
+#: src/backend/gsl/ExpressionParser.cpp:1085
 #, kde-format
 msgid "Speed of 1 knot"
 msgstr "1 solmun pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1083
+#: src/backend/gsl/ExpressionParser.cpp:1093
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1086
+#: src/backend/gsl/ExpressionParser.cpp:1096
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1094
+#: src/backend/gsl/ExpressionParser.cpp:1104
 #, kde-format
 msgid "Length of 1 micron"
 msgstr "1 mikronin pituus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1097
+#: src/backend/gsl/ExpressionParser.cpp:1107
 #, kde-format
 msgid "Area of 1 hectare"
 msgstr "1 hehtaarin ala"
 
-#: src/backend/gsl/ExpressionParser.cpp:1100
+#: src/backend/gsl/ExpressionParser.cpp:1110
 #, kde-format
 msgid "Area of 1 acre"
 msgstr "1 eekkerin ala"
 
-#: src/backend/gsl/ExpressionParser.cpp:1103
+#: src/backend/gsl/ExpressionParser.cpp:1113
 #, kde-format
 msgid "Volume of 1 liter"
 msgstr "1 litran tilavuus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1106
+#: src/backend/gsl/ExpressionParser.cpp:1116
 #, kde-format
 msgid "Volume of 1 US gallon"
 msgstr "1 amerikkalaisen gallonan tilavuus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1109
+#: src/backend/gsl/ExpressionParser.cpp:1119
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
 msgstr "1 kanadalaisen gallonan tilavuus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1112
+#: src/backend/gsl/ExpressionParser.cpp:1122
 #, kde-format
 msgid "Volume of 1 UK gallon"
 msgstr "1 brittiläisen gallonan tilavuus"
 
-#: src/backend/gsl/ExpressionParser.cpp:1115
+#: src/backend/gsl/ExpressionParser.cpp:1125
 #, kde-format
 msgid "Volume of 1 quart"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1118
+#: src/backend/gsl/ExpressionParser.cpp:1128
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Volume of 1 pint"
 msgstr "Pisteiden määrä"
 
-#: src/backend/gsl/ExpressionParser.cpp:1126
+#: src/backend/gsl/ExpressionParser.cpp:1136
 #, kde-format
 msgid "Mass of 1 pound"
 msgstr "1 paunan massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1129
+#: src/backend/gsl/ExpressionParser.cpp:1139
 #, kde-format
 msgid "Mass of 1 ounce"
 msgstr "1 unssin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1132
+#: src/backend/gsl/ExpressionParser.cpp:1142
 #, kde-format
 msgid "Mass of 1 ton"
 msgstr "1 tonnin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1135
+#: src/backend/gsl/ExpressionParser.cpp:1145
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
 msgstr "1 metrisen tonnin massa [1000 kg]"
 
-#: src/backend/gsl/ExpressionParser.cpp:1138
+#: src/backend/gsl/ExpressionParser.cpp:1148
 #, kde-format
 msgid "Mass of 1 UK ton"
 msgstr "1 brittiläisen tonnin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1141
+#: src/backend/gsl/ExpressionParser.cpp:1151
 #, kde-format
 msgid "Mass of 1 troy ounce"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1144
+#: src/backend/gsl/ExpressionParser.cpp:1154
 #, kde-format
 msgid "Mass of 1 carat"
 msgstr "1 karaatin massa"
 
-#: src/backend/gsl/ExpressionParser.cpp:1147
+#: src/backend/gsl/ExpressionParser.cpp:1157
 #, kde-format
 msgid "Force of 1 gram weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1150
+#: src/backend/gsl/ExpressionParser.cpp:1160
 #, kde-format
 msgid "Force of 1 pound weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1153
+#: src/backend/gsl/ExpressionParser.cpp:1163
 #, kde-format
 msgid "Force of 1 kilopound weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1156
+#: src/backend/gsl/ExpressionParser.cpp:1166
 #, kde-format
 msgid "Force of 1 poundal"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1164
+#: src/backend/gsl/ExpressionParser.cpp:1174
 #, kde-format
 msgid "Energy of 1 calorie"
 msgstr "1 kalorin energia"
 
-#: src/backend/gsl/ExpressionParser.cpp:1167
+#: src/backend/gsl/ExpressionParser.cpp:1177
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1170
+#: src/backend/gsl/ExpressionParser.cpp:1180
 #, kde-format
 msgid "Energy of 1 Therm"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1173
+#: src/backend/gsl/ExpressionParser.cpp:1183
 #, fuzzy, kde-format
 #| msgid "Powers of e"
 msgid "Power of 1 horsepower"
 msgstr "e:n potenssit"
 
-#: src/backend/gsl/ExpressionParser.cpp:1181
+#: src/backend/gsl/ExpressionParser.cpp:1191
 #, kde-format
 msgid "Pressure of 1 bar"
 msgstr "1 baarin paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1184
+#: src/backend/gsl/ExpressionParser.cpp:1194
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
 msgstr "1 vakioilmakehän paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1187
+#: src/backend/gsl/ExpressionParser.cpp:1197
 #, kde-format
 msgid "Pressure of 1 torr"
 msgstr "1 torrin paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1190
+#: src/backend/gsl/ExpressionParser.cpp:1200
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
 msgstr "1 elohopeametrin paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1193
+#: src/backend/gsl/ExpressionParser.cpp:1203
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
 msgstr "1 elohopeatuuman paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1196
+#: src/backend/gsl/ExpressionParser.cpp:1206
 #, kde-format
 msgid "Pressure of 1 inch of water"
 msgstr "1 vesituuman paine"
 
-#: src/backend/gsl/ExpressionParser.cpp:1199
+#: src/backend/gsl/ExpressionParser.cpp:1209
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1207
+#: src/backend/gsl/ExpressionParser.cpp:1217
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1210
+#: src/backend/gsl/ExpressionParser.cpp:1220
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1218
+#: src/backend/gsl/ExpressionParser.cpp:1228
 #, kde-format
 msgid "Luminance of 1 stilb"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1221
+#: src/backend/gsl/ExpressionParser.cpp:1231
 #, kde-format
 msgid "Luminous flux of 1 lumen"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1224
+#: src/backend/gsl/ExpressionParser.cpp:1234
 #, kde-format
 msgid "Illuminance of 1 lux"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1227
+#: src/backend/gsl/ExpressionParser.cpp:1237
 #, kde-format
 msgid "Illuminance of 1 phot"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1230
+#: src/backend/gsl/ExpressionParser.cpp:1240
 #, kde-format
 msgid "Illuminance of 1 footcandle"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1233
+#: src/backend/gsl/ExpressionParser.cpp:1243
 #, kde-format
 msgid "Luminance of 1 lambert"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1236
+#: src/backend/gsl/ExpressionParser.cpp:1246
 #, kde-format
 msgid "Luminance of 1 footlambert"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1244
+#: src/backend/gsl/ExpressionParser.cpp:1254
 #, kde-format
 msgid "Activity of 1 curie"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1247
+#: src/backend/gsl/ExpressionParser.cpp:1257
 #, kde-format
 msgid "Exposure of 1 roentgen"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1250
+#: src/backend/gsl/ExpressionParser.cpp:1260
 #, kde-format
 msgid "Absorbed dose of 1 rad"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1258
+#: src/backend/gsl/ExpressionParser.cpp:1268
 #, kde-format
 msgid "SI unit of force"
 msgstr "Voiman SI-yksikkö"
 
-#: src/backend/gsl/ExpressionParser.cpp:1261
+#: src/backend/gsl/ExpressionParser.cpp:1271
 #, kde-format
 msgid "Force of 1 Dyne"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1264
+#: src/backend/gsl/ExpressionParser.cpp:1274
 #, kde-format
 msgid "SI unit of energy"
 msgstr "Energian SI-yksikkö"
 
-#: src/backend/gsl/ExpressionParser.cpp:1267
+#: src/backend/gsl/ExpressionParser.cpp:1277
 #, kde-format
 msgid "Energy 1 erg"
 msgstr "1 ergin energia"
@@ -5114,14 +5163,14 @@ msgid "unexpected end of document"
 msgstr "odottamaton tiedoston loppu"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3486
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "kuva"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3484
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3486
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -6374,7 +6423,7 @@ msgstr "%1: aseta taustan peittävyys"
 #: src/backend/worksheet/Image.cpp:117
 #: src/backend/worksheet/InfoElement.cpp:150
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:211
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:109
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:82
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:123
@@ -6422,7 +6471,6 @@ msgid "%1: embed image"
 msgstr "%1: upota kuva"
 
 #: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:318
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
 #: src/backend/worksheet/TextLabel.cpp:373
@@ -6470,7 +6518,7 @@ msgstr "Selite"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:255
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:470
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:353
-#: src/kdefrontend/ui/symbolwidget.ui:35
+#: src/kdefrontend/ui/symbolwidget.ui:38
 #, kde-format
 msgid "Symbol"
 msgstr "Symboli"
@@ -6511,6 +6559,21 @@ msgstr "%1: aseta reunan tyyli"
 msgid "%1: set connection line opacity"
 msgstr "%1: aseta fontti"
 
+#: src/backend/worksheet/Line.cpp:61
+#, fuzzy, kde-format
+#| msgid "%1: set vertical alignment"
+msgid "%1: set line pen"
+msgstr "%1: aseta pystytasaus"
+
+#: src/backend/worksheet/Line.cpp:68
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:630
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
+#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:212
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:409
+#, kde-format
+msgid "%1: set line opacity"
+msgstr ""
+
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1364
@@ -6537,11 +6600,11 @@ msgid "%1: set bottom padding"
 msgstr "%1: aseta kiertokulma"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:220
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:118
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:91
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:96
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:275
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:185
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
@@ -6553,11 +6616,11 @@ msgstr "Vaaka"
 #. i18n("AvgShifted Histogram"));
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:223
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:121
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:94
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:99
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:276
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:869
@@ -6569,7 +6632,7 @@ msgid "Vertical"
 msgstr "Pysty"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:243
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:129
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:102
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:116
 #, kde-format
@@ -6693,14 +6756,6 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:402
 #, kde-format
 msgid "%1: set line style"
-msgstr ""
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:630
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:497
-#: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:212
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:409
-#, kde-format
-msgid "%1: set line opacity"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:637
@@ -6923,26 +6978,26 @@ msgstr "%1: aseta apuruudukon tyyli"
 msgid "%1: set minor grid opacity"
 msgstr "%1: aseta apuruudukon peittävyys"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:252
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:229
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set x column"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:269
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:246
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:440
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: set data columns"
 msgstr "%1: lisää tyhjiä sarakkeita"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:289
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:266
 #, fuzzy, kde-format
 #| msgid "%1: set page size"
 msgid "%1: set type"
 msgstr "%1: aseta sivukoko"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:296
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:467
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #, fuzzy, kde-format
@@ -6950,19 +7005,12 @@ msgstr "%1: aseta sivukoko"
 msgid "%1: set orientation"
 msgstr "%1: aseta sijainti"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:303
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
 #, fuzzy, kde-format
 #| msgid "%1: set numeric format to '%2'"
 msgid "%1: width factor changed"
 msgstr "%1: aseta numeeriseksi muodoksi ”%2”"
-
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:311
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
-msgid "%1: set border pen"
-msgstr "%1: aseta reunan tyyli"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:154
@@ -7036,6 +7084,12 @@ msgstr "%1: viivan tyyppi muuttunut"
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: muuta kommenttia"
+
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
+#, fuzzy, kde-format
+#| msgid "%1: set border style"
+msgid "%1: set border pen"
+msgstr "%1: aseta reunan tyyli"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
 #, fuzzy, kde-format
@@ -9144,16 +9198,16 @@ msgid "Curve"
 msgstr "Kaari"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3721
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3775
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3723
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2308
 #, kde-format
 msgid "Failed to export"
 msgstr "Vienti epäonnistui"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3721
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3775
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3723
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2308
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9378,7 +9432,7 @@ msgid "%1: cut selected cell(s)"
 msgstr "%1: leikkaa valitut solut"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:673
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1705
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1707
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: liitä leikepöydältä"
@@ -9653,7 +9707,7 @@ msgid "Clear Content"
 msgstr "T&yhjennä sarakkeita"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1573
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1575
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Freeze Column"
@@ -9878,33 +9932,33 @@ msgstr "Lajittele"
 msgid "Hide Comments"
 msgstr "Piilota kommentit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1577
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1579
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Unfreeze Column"
 msgstr "&Valitut sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1624
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1626
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr "%1: leikkaa valitut solut"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1948
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1950
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1988
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1990
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2042
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2044
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr "%1: täytä solut rivinumeroin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2106
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2108
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with row numbers"
 msgid "%1: fill column with row numbers"
@@ -9912,39 +9966,39 @@ msgid_plural "%1: fill columns with row numbers"
 msgstr[0] "%1: täytä solut rivinumeroin"
 msgstr[1] "%1: täytä solut rivinumeroin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2146
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2148
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr "%1: täytä solut satunnaisarvoin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2283
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2285
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr "%1: täytä solut vakioarvoin"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2291
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2331
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2347
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2293
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2315
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2349
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr "Täytä valinta vakioarvolla"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2432
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2466
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2434
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2468
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Columns"
 msgid "Insert empty columns"
 msgstr "&Lisää tyhjiä sarakkeita"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2433
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2467
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2435
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2469
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of columns to insert"
 msgstr "Valitse tuotavan tiedoston nimi."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2485
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2487
 #, fuzzy, kde-format
 #| msgid "%1: insert empty columns"
 msgid "%1: insert empty column"
@@ -9952,17 +10006,17 @@ msgid_plural "%1: insert empty columns"
 msgstr[0] "%1: lisää tyhjiä sarakkeita"
 msgstr[1] "%1: lisää tyhjiä sarakkeita"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2546
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2548
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr "%1: poista valitut sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2557
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2559
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr "%1: tyhjennä valitut sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2659
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2661
 #, fuzzy, kde-format
 #| msgid "%1: remove %2 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -9971,135 +10025,135 @@ msgid_plural "%1: reverse columns"
 msgstr[0] "%1: poista %2 sarake"
 msgstr[1] "%1: poista %2 saraketta"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2726
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2728
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2764
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2766
 #, kde-format
 msgid "%1: normalize columns"
 msgstr "%1: normalisoi sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2784
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2786
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2795
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2797
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2806
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2808
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2817
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2819
 #, fuzzy, kde-format
 #| msgid "center"
 msgid "Count = 0"
 msgstr "keskitys"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2828
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2830
 #, fuzzy, kde-format
 #| msgid "Mean:"
 msgid "Mean = 0"
 msgstr "Keskiarvo:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2839
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2841
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "Median = 0"
 msgstr "Mediaani"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2851
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2853
 #, fuzzy, kde-format
 #| msgid "Model"
 msgid "Mode = 0"
 msgstr "Malli"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2853
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2855
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2864
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2866
 #, fuzzy, kde-format
 #| msgid "Range:"
 msgid "Range = 0"
 msgstr "Alue:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2875
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2909
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2877
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2911
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2886
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2921
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2888
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2923
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2897
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2933
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2899
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2935
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2945
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2947
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2964
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2966
 #, kde-format
 msgid "Normalization not possible"
 msgstr "Normalisointi ei mahdollista"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2976
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2978
 #, fuzzy, kde-format
 #| msgid "%1: normalize columns"
 msgid "%1: power transform columns"
 msgstr "%1: normalisoi sarakkeet"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3098
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3100
 #, fuzzy, kde-format
 #| msgid "Column Statisti&cs"
 msgid "%1: column statistics"
 msgstr "&Sarakkeen tilastot"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3121
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3123
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "&Rivin tilastot"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3131
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3133
 #, kde-format
 msgid "Row %1"
 msgstr "Rivi %1"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3156
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3195
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3158
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3197
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Lisää tyhjiä rivejä"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3157
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3196
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3159
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3198
 #, fuzzy, kde-format
 #| msgid "Specify the name of the file to import."
 msgid "Enter the number of rows to insert"
 msgstr "Valitse tuotavan tiedoston nimi."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3176
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3215
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3178
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3217
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -10107,22 +10161,22 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: lisää tyhjiä rivejä"
 msgstr[1] "%1: lisää tyhjiä rivejä"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3231
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3233
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: poista valitut rivit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3244
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3246
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: tyhjennä valitut rivit"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3295
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3297
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: tyhjennä valitut solut"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3354
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3356
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10130,31 +10184,31 @@ msgstr "%1: tyhjennä valitut solut"
 msgid "Search..."
 msgstr "Etsi…"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3364
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3366
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "End Search"
 msgstr "Hae/suodata:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3538
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Tulosta laskentataulukko"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4133
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4135
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "SQLite-tietokantaa %1 ei voitu luoda."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4165
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4167
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Avaaminen epäonnistui"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4218
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4220
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -10171,7 +10225,7 @@ msgid "Search/Filter text"
 msgstr "Etsi tai suodata tekstiä"
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:338
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:145
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:144
 #, kde-format
 msgid ""
 "The column \"%1\"\n"
@@ -11786,7 +11840,7 @@ msgstr "muuttuja"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabValues)
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:471
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:363
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:475
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:358
 #, kde-format
@@ -12167,7 +12221,7 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 akselia: ladattiin mallipohja ”%2”"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2566
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:605
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:544
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1018
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2030
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
@@ -12181,28 +12235,30 @@ msgstr "%1 akselia: ladattiin mallipohja ”%2”"
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: ladattiin mallipohja ”%2”"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:51
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:52
 #, fuzzy, kde-format
 #| msgid "Group: %1"
 msgid "Grouped"
 msgstr "Ryhmä: %1"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:52
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
 #, kde-format
 msgid "Stacked"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
 #, kde-format
 msgid "Stacked 100%"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:59
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
 #, kde-format
-msgid "Specify bar number which properties should be shown and edited"
+msgid ""
+"Specify the number of the bar for which the properties should be shown and "
+"edited"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:63
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
@@ -12210,8 +12266,8 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:371
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:397
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:405
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:378
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:403
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
@@ -12227,7 +12283,7 @@ msgstr "Sarakkeita:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:399
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:407
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:407
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:802
@@ -12239,7 +12295,7 @@ msgstr "Sarakkeita:"
 msgid "Column:"
 msgstr "Sarake:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:603
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1016
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:1068
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1694
@@ -15659,26 +15715,26 @@ msgstr "&Valitut sarakkeet"
 msgid "Add additional reference column"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:115
+#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:118
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "Remove reference column"
 msgstr "&Valitut sarakkeet"
 
-#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:146
+#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:149
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "%1: flatten values"
 msgstr "Arvot"
 
-#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:165
+#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:168
 #, kde-format
 msgid "Flatten of %1"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lSymbolCategory)
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
-#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:179
+#: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:182
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:545
 #, kde-format
@@ -15736,33 +15792,33 @@ msgid ""
 "Automatically update the calculated values on changes in the variable columns"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:162
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:161
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a constant. Please "
 "use another name."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:165
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:164
 #, kde-format
 msgid ""
 "Provided variable name is already reserved for a name of a function. Please "
 "use another name."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:295
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:294
 #, kde-format
 msgid "Delete variable"
 msgstr "Poista muuttuja"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:321
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
 #, kde-format
 msgid "Variable:"
 msgstr "Muuttuja:"
 
-#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:367
+#: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:366
 #, fuzzy, kde-format
 #| msgid "%1: fill cells with const values"
 msgid "%1: fill column with function values"
@@ -16104,27 +16160,6 @@ msgid "Location Measures"
 msgstr "Funktioarvot"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:71
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
-#, kde-format
-msgid "Minimum"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
-#, kde-format
-msgid "Maximum"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:83
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
-#, kde-format
-msgid "Arithmetic mean"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
 #, kde-format
@@ -16157,15 +16192,6 @@ msgstr "Malli"
 msgid "First Quartile"
 msgstr "Piirto&järjestys"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:119
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
-#, kde-format
-msgid "Median"
-msgstr "Mediaani"
-
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:125
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
@@ -16189,13 +16215,6 @@ msgstr "Funktioarvot"
 #, kde-format
 msgid "Variance"
 msgstr "Varianssi"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
-#, kde-format
-msgid "Standard deviation"
-msgstr "Keskihajonta"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:155
 #, kde-format
@@ -16608,7 +16627,7 @@ msgstr "Virhepalkit"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:562
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:824
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:201
-#: src/kdefrontend/ui/labelwidget.ui:552 src/kdefrontend/ui/symbolwidget.ui:75
+#: src/kdefrontend/ui/labelwidget.ui:552 src/kdefrontend/ui/symbolwidget.ui:78
 #, kde-format
 msgid "Size:"
 msgstr "Koko:"
@@ -16640,6 +16659,7 @@ msgstr "Koko:"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbValuesDistance)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsCapSize)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsWidth)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWidth)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:230
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:446
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:578
@@ -16650,7 +16670,6 @@ msgstr "Koko:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1510
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1698
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1781
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:411
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:302
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:337
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:750
@@ -16669,6 +16688,7 @@ msgstr "Koko:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:777
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:827
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:218
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:92
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:187
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:139
@@ -16680,8 +16700,8 @@ msgstr "Koko:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1047
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1087
 #: src/kdefrontend/ui/labelwidget.ui:53 src/kdefrontend/ui/labelwidget.ui:193
-#: src/kdefrontend/ui/labelwidget.ui:373 src/kdefrontend/ui/symbolwidget.ui:85
-#: src/kdefrontend/ui/symbolwidget.ui:284
+#: src/kdefrontend/ui/labelwidget.ui:373 src/kdefrontend/ui/symbolwidget.ui:88
+#: src/kdefrontend/ui/symbolwidget.ui:287
 #, kde-format
 msgid " pt"
 msgstr " pt"
@@ -16717,7 +16737,6 @@ msgstr " pt"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:333
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:484
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:512
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:693
@@ -16732,13 +16751,14 @@ msgstr " pt"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:501
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:233
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:313
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:35
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:206
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:233
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:868
-#: src/kdefrontend/ui/labelwidget.ui:331 src/kdefrontend/ui/symbolwidget.ui:42
-#: src/kdefrontend/ui/symbolwidget.ui:194
-#: src/kdefrontend/ui/symbolwidget.ui:250
+#: src/kdefrontend/ui/labelwidget.ui:331 src/kdefrontend/ui/symbolwidget.ui:45
+#: src/kdefrontend/ui/symbolwidget.ui:197
+#: src/kdefrontend/ui/symbolwidget.ui:253
 #: src/kdefrontend/worksheet/GridDialog.cpp:40
 #, kde-format
 msgid "Style:"
@@ -16769,7 +16789,6 @@ msgstr "Tyyli:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1085
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1681
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1764
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:404
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:477
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:505
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:726
@@ -16783,14 +16802,15 @@ msgstr "Tyyli:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:266
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:323
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:68
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:30
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:330
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:125
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:250
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:534
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:895
-#: src/kdefrontend/ui/labelwidget.ui:85 src/kdefrontend/ui/symbolwidget.ui:204
-#: src/kdefrontend/ui/symbolwidget.ui:260
+#: src/kdefrontend/ui/labelwidget.ui:85 src/kdefrontend/ui/symbolwidget.ui:207
+#: src/kdefrontend/ui/symbolwidget.ui:263
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:207
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:231
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:262
@@ -16859,7 +16879,7 @@ msgstr "Tyyppi:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:393
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:118
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:554
-#: src/kdefrontend/ui/labelwidget.ui:173 src/kdefrontend/ui/symbolwidget.ui:95
+#: src/kdefrontend/ui/labelwidget.ui:173 src/kdefrontend/ui/symbolwidget.ui:98
 #, kde-format
 msgid "Rotation:"
 msgstr "Kierto:"
@@ -16874,7 +16894,7 @@ msgstr "Kierto:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:131
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:626
-#: src/kdefrontend/ui/labelwidget.ui:69 src/kdefrontend/ui/symbolwidget.ui:111
+#: src/kdefrontend/ui/labelwidget.ui:69 src/kdefrontend/ui/symbolwidget.ui:114
 #, kde-format
 msgid "°"
 msgstr "°"
@@ -17386,9 +17406,11 @@ msgstr "Kokoelma"
 #. i18n: ectx: property (windowTitle), widget (QWidget, FlattenColumnsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, BackgroundWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, ValueWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, LineWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, ExcelOptionsWidget)
 #: src/kdefrontend/ui/datasources/exceloptionswidget.ui:14
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:14
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:14
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:14
 #: src/kdefrontend/ui/settingsnotebookpage.ui:14
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:14
@@ -18154,7 +18176,6 @@ msgstr "Suunta:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1102
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1691
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:397
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:463
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:498
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:743
@@ -18171,13 +18192,14 @@ msgstr "Suunta:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:463
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:276
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:333
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:85
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:147
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:125
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:132
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:257
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:912
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1060
-#: src/kdefrontend/ui/labelwidget.ui:186 src/kdefrontend/ui/symbolwidget.ui:277
+#: src/kdefrontend/ui/labelwidget.ui:186 src/kdefrontend/ui/symbolwidget.ui:280
 #, kde-format
 msgid "Width:"
 msgstr "Paksuus:"
@@ -18205,7 +18227,6 @@ msgstr "Paksuus:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1626
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1791
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:316
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:470
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:491
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:760
@@ -18218,13 +18239,14 @@ msgstr "Paksuus:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:407
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:290
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:347
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:102
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:213
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:147
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:149
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:274
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:427
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:929
-#: src/kdefrontend/ui/labelwidget.ui:109 src/kdefrontend/ui/symbolwidget.ui:130
+#: src/kdefrontend/ui/labelwidget.ui:109 src/kdefrontend/ui/symbolwidget.ui:133
 #: src/kdefrontend/worksheet/GridDialog.cpp:72
 #, kde-format
 msgid "Opacity:"
@@ -18253,7 +18275,6 @@ msgstr "Läpinäkymättömyys:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1714
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1804
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:359
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:270
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:363
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:773
@@ -18263,13 +18284,14 @@ msgstr "Läpinäkymättömyys:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:679
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:115
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:115
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:160
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:162
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:287
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:473
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:942
-#: src/kdefrontend/ui/labelwidget.ui:280 src/kdefrontend/ui/symbolwidget.ui:143
+#: src/kdefrontend/ui/labelwidget.ui:280 src/kdefrontend/ui/symbolwidget.ui:146
 #, kde-format
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
@@ -18301,7 +18323,6 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1717
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1807
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:362
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:273
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:366
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:776
@@ -18314,13 +18335,14 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:682
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:91
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:118
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:118
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:163
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:165
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:290
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:476
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:945
-#: src/kdefrontend/ui/labelwidget.ui:283 src/kdefrontend/ui/symbolwidget.ui:146
+#: src/kdefrontend/ui/labelwidget.ui:283 src/kdefrontend/ui/symbolwidget.ui:149
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
 msgid " %"
@@ -18666,11 +18688,47 @@ msgstr "x:"
 msgid "y:"
 msgstr "y:"
 
+#. i18n: ectx: property (text), widget (QLabel, lBorder)
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:525
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1197
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
+#: src/kdefrontend/ui/labelwidget.ui:736 src/kdefrontend/ui/symbolwidget.ui:246
+#, kde-format
+msgid "Border"
+msgstr "Reuna"
+
+#. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:271
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:398
+#, kde-format
+msgid "Width"
+msgstr "Leveys"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumber)
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:278
+#, fuzzy, kde-format
+#| msgid "Bars"
+msgid "Bar"
+msgstr "Baarit"
+
+#. i18n: ectx: property (text), widget (QLabel, lFilling)
+#. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:301
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:391
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:480
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:690
+#: src/kdefrontend/ui/symbolwidget.ui:190
+#, kde-format
+msgid "Filling"
+msgstr "Täyttö"
+
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbConfidenceInterval)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbWidthFactor)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbVerticalLineOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbConnectionLineOpacity)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:346
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:321
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:297
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:354
@@ -18678,42 +18736,6 @@ msgstr "y:"
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
-
-#. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:280
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:398
-#, kde-format
-msgid "Width"
-msgstr "Leveys"
-
-#. i18n: ectx: property (text), widget (QLabel, lFilling)
-#. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:346
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:391
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:480
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:690
-#: src/kdefrontend/ui/symbolwidget.ui:187
-#, kde-format
-msgid "Filling"
-msgstr "Täyttö"
-
-#. i18n: ectx: property (text), widget (QLabel, lBorder)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:427
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:525
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1197
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
-#: src/kdefrontend/ui/labelwidget.ui:736 src/kdefrontend/ui/symbolwidget.ui:243
-#, kde-format
-msgid "Border"
-msgstr "Reuna"
-
-#. i18n: ectx: property (text), widget (QLabel, lNumber)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:447
-#, fuzzy, kde-format
-#| msgid "Bars"
-msgid "Bar"
-msgstr "Baarit"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:103
