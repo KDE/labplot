@@ -64,7 +64,6 @@ public:
 	// bar properties
 	QVector<Background*> backgrounds;
 	QVector<Line*> borderLines;
-	QVector<double> widthFactors;
 
 	// values
 	Value* value{nullptr};

@@ -57,11 +57,11 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Tab "Bars"
-	QString msg = i18n("Specify the number of the bar for which the properties should be shown and edited");
+	QString msg = i18n("Select the data column for which the properties should be shown and edited");
 	ui.lNumber->setToolTip(msg);
 	ui.cbNumber->setToolTip(msg);
 
-	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value");
+	msg = i18n("Specify the factor in percent to control the width of the bar relative to its default value, applying to all bars");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
 
@@ -263,14 +263,12 @@ void BarPlotDock::loadDataColumns() {
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
 
 		for (int i = 0; i < count; ++i)
-			ui.cbNumber->addItem(QString::number(i + 1));
+			ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
 		for (int i = 0; i < m_dataComboBoxes.count(); ++i)
 			removeDataColumn();
-
-		ui.cbNumber->addItem("1");
 	}
 
 	// disable data column widgets if we're modifying more than one box plot at the same time

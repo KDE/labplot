@@ -61,8 +61,6 @@ void BarPlot::init() {
 	d->orientation = (BarPlot::Orientation)group.readEntry("Orientation", (int)BarPlot::Orientation::Vertical);
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 
-	d->widthFactors << d->widthFactor;
-
 	// initial background and border line objects that will be available even if not data column was set yet
 	d->addBackground(group);
 	d->addBorderLine(group);
@@ -456,8 +454,6 @@ void BarPlotPrivate::recalc() {
 		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 
 		for (int i = 0; i < diff; ++i) {
-			widthFactors << group.readEntry("WidthFactor", 1.0);
-
 			// box filling and border line
 			auto* background = addBackground(group);
 			auto* line = addBorderLine(group);
@@ -473,7 +469,6 @@ void BarPlotPrivate::recalc() {
 	} else if (diff < 0) {
 		// the last bar was deleted
 		//		if (newSize != 0) {
-		//			widthFactors.takeLast();
 		//			delete backgrounds.takeLast();
 		//		}
 	}
