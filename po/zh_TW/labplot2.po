@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-04 00:40+0000\n"
+"POT-Creation-Date: 2022-10-05 00:42+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -61,7 +61,7 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1150
 #: src/backend/worksheet/Line.cpp:109
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2887
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1387
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1382
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1844
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4710
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:856
@@ -107,7 +107,7 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:913
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3026
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1445
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1440
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1927
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:300
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
@@ -321,7 +321,7 @@ msgstr "方向"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
 #: src/commonfrontend/worksheet/WorksheetView.cpp:352
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1569
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1577
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:279
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:413
 #: src/kdefrontend/widgets/LabelWidget.cpp:186
@@ -484,7 +484,7 @@ msgstr "名稱"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:47
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1543
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1550
 #, fuzzy, kde-format
 msgid "Type"
 msgstr "類型"
@@ -6231,7 +6231,7 @@ msgstr "設定背景影像..."
 #: src/backend/worksheet/Image.cpp:117
 #: src/backend/worksheet/InfoElement.cpp:150
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:211
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:82
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:123
@@ -6404,7 +6404,7 @@ msgid "%1: set bottom padding"
 msgstr "設定不透明度"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:220
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:91
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:96
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:275
@@ -6420,7 +6420,7 @@ msgstr "水平"
 #. i18n("AvgShifted Histogram"));
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:223
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:94
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:99
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:276
@@ -6436,7 +6436,7 @@ msgid "Vertical"
 msgstr "垂直"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:243
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:102
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:116
 #, kde-format
@@ -6451,7 +6451,7 @@ msgstr "方向"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:122
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:371
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:382
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:383
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:686
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1433
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:102
@@ -6470,7 +6470,7 @@ msgstr "樣式"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:256
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:129
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:420
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1406
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1411
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
 #, fuzzy, kde-format
 msgid "Color"
@@ -6776,14 +6776,14 @@ msgstr ""
 msgid "%1: set minor grid opacity"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:229
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:227
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1: set x column"
 msgstr "%1：插入 %2 欄"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:246
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:440
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
@@ -6791,12 +6791,12 @@ msgstr "%1：插入 %2 欄"
 msgid "%1: set data columns"
 msgstr "%1：插入 %2 欄"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:266
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
 #, fuzzy, kde-format
 msgid "%1: set type"
 msgstr "設定佈局"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:273
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:467
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #, fuzzy, kde-format
@@ -6804,7 +6804,7 @@ msgstr "設定佈局"
 msgid "%1: set orientation"
 msgstr "%1：設定建立時間"
 
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:280
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
 #, fuzzy, kde-format
 msgid "%1: width factor changed"
@@ -10182,7 +10182,7 @@ msgstr "佈局"
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:489
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1620
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1628
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:266
 #, fuzzy, kde-format
 msgid "Grid"
@@ -10627,8 +10627,8 @@ msgstr "新增"
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
 #: src/kdefrontend/datasources/ImportDialog.cpp:100
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:42
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:545
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1298
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:547
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1303
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:926
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1090
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:46
@@ -11598,10 +11598,10 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:257
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:152
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:451
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:701
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1015
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1238
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1607
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:704
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1019
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1242
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1615
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:195
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:329
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:370
@@ -11853,7 +11853,7 @@ msgid "%1 axes: template \"%2\" loaded"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2566
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:544
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1018
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2030
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
@@ -11886,20 +11886,19 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
 #, kde-format
 msgid ""
-"Specify the number of the bar for which the properties should be shown and "
-"edited"
+"Select the data column for which the properties should be shown and edited"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
-"its default value"
+"its default value, applying to all bars"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:379
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:405
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:403
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:378
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:403
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
@@ -11915,11 +11914,11 @@ msgstr "欄位"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:407
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:405
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:407
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:802
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1045
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:805
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1049
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:37
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:81
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:364
@@ -11928,7 +11927,7 @@ msgstr "欄位"
 msgid "Column:"
 msgstr "欄"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:540
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1016
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:1068
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1694
@@ -15280,7 +15279,7 @@ msgstr "格式"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackground)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:58
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1458
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1465
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1184
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:420
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:505
@@ -16097,7 +16096,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lArrowSize)
 #. i18n: ectx: property (text), widget (QLabel, lSizeType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:198
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:562
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:564
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:824
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:201
 #: src/kdefrontend/ui/labelwidget.ui:552 src/kdefrontend/ui/symbolwidget.ui:78
@@ -16135,15 +16134,15 @@ msgstr "大小"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWidth)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:230
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:446
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:578
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:883
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:900
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1109
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1126
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1510
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1698
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1781
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:447
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:580
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:886
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:903
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1113
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1130
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1517
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1707
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1791
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:302
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:337
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:750
@@ -16203,11 +16202,11 @@ msgstr " 點 "
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineStyle)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineStyle)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:240
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:389
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:842
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1068
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1648
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1839
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:390
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:845
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1072
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1657
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1849
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
@@ -16258,11 +16257,11 @@ msgstr "樣式"
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:250
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:422
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:859
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1085
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1681
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1764
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:423
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:862
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1089
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1690
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:477
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:505
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:726
@@ -16316,9 +16315,9 @@ msgstr "影像"
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:85
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:231
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:528
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:665
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:986
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:530
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:668
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:990
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:34
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1347
@@ -16349,7 +16348,7 @@ msgstr "類型"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
 #. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:92
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1305
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1310
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:155
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:393
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:118
@@ -16365,7 +16364,7 @@ msgstr "旋轉"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:105
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1279
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1284
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:72
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:131
@@ -16445,8 +16444,8 @@ msgstr "片段"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:454
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:893
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:896
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1123
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:999
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:724
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1033
@@ -17634,11 +17633,11 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsWidth)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineWidth)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineWidth)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:439
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:876
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1102
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1691
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:440
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:879
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1106
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1700
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1784
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:463
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:498
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:743
@@ -17684,12 +17683,12 @@ msgstr "寬度"
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:462
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:910
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1136
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1392
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1626
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1791
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:463
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:913
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1140
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1397
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1634
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1801
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:470
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:491
@@ -17731,13 +17730,13 @@ msgstr "不透明度"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbDropLineOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbErrorBarsOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:475
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:575
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:923
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1149
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1419
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1714
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1804
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:476
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:577
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:926
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1153
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1424
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1723
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1814
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:270
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:363
@@ -17778,12 +17777,12 @@ msgstr ""
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbDropLineOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbErrorBarsOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:478
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:926
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1152
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1422
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1717
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1807
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:479
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:929
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1156
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1427
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1726
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1817
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:273
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:366
@@ -17811,20 +17810,20 @@ msgid " %"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lArrow)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:521
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:523
 #, fuzzy, kde-format
 #| msgid "Start row:"
 msgid "Arrow"
 msgstr "開始列："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:614
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:616
 #, kde-format
 msgid "Ticks"
 msgstr "步調"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:625
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:628
 #, kde-format
 msgid "Major ticks"
 msgstr ""
@@ -17834,8 +17833,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksDirection)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksDirection)
 #. i18n: ectx: property (text), widget (QLabel, lDirection)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:632
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:976
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:635
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:980
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:35
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:146
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:366
@@ -17847,8 +17846,8 @@ msgstr "方向"
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksNumber)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:682
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:996
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:685
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1000
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #, fuzzy, kde-format
 msgid "Number:"
@@ -17856,15 +17855,15 @@ msgstr "數字"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:710
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1024
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:713
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1028
 #, fuzzy, kde-format
 #| msgid "Spacing:"
 msgid "Spacing:"
 msgstr "間隔："
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, sbMajorTicksSpacingNumeric)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:723
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:726
 #, kde-format
 msgid "spacing between major ticks"
 msgstr ""
@@ -17872,8 +17871,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksIncrementDateTime)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:733
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1038
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:736
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1042
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:37
 #, fuzzy, kde-format
 #| msgid "Increment"
@@ -17881,19 +17880,19 @@ msgid "Increment:"
 msgstr "遞增"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:740
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:743
 #, fuzzy, kde-format
 msgid "First Tick at"
 msgstr "自訂"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:750
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:753
 #, fuzzy, kde-format
 msgid "First Tick Value:"
 msgstr "第一色彩"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:760
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:763
 #, kde-format
 msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
@@ -17901,13 +17900,13 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:763
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:766
 #, kde-format
 msgid "First Tick Offset:"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:775
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:778
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
@@ -17915,7 +17914,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:786
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:789
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
@@ -17923,34 +17922,34 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:809
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:812
 #, fuzzy, kde-format
 msgid "Label Type:"
 msgstr "數字"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:819
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:822
 #, fuzzy, kde-format
 #| msgid "Column"
 msgid "Label Column:"
 msgstr "欄"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:969
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:973
 #, kde-format
 msgid "Minor ticks"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1185
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1189
 #, fuzzy, kde-format
 msgid "Labels"
 msgstr "標籤"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1191
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1228
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1195
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1232
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr ""
@@ -17958,7 +17957,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1194
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1198
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:96
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:218
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:221
@@ -17969,7 +17968,7 @@ msgid "Precision:"
 msgstr "精確度"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1235
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1239
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -17978,7 +17977,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lPosition_2)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1263
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1268
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:139
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:356
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:170
@@ -17989,7 +17988,7 @@ msgstr "位置"
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, lValuesFont)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1312
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1317
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:101
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:92
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
@@ -18002,7 +18001,7 @@ msgstr "字型"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesSuffix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1338
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1343
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:303
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:420
 #, fuzzy, kde-format
@@ -18012,7 +18011,7 @@ msgstr "後置字串"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1355
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1360
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1033
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:807
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1040
@@ -18025,8 +18024,8 @@ msgstr "位移"
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1399
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1523
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1404
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1530
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:56
 #, fuzzy, kde-format
@@ -18034,7 +18033,7 @@ msgid "Format:"
 msgstr "格式："
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1446
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1452
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "字型"
@@ -18042,7 +18041,7 @@ msgstr "字型"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrefix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1550
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1557
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:286
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:571
 #, fuzzy, kde-format
@@ -18050,19 +18049,19 @@ msgid "Prefix:"
 msgstr "前置字串"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1557
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1564
 #, fuzzy, kde-format
 msgid "Font Color:"
 msgstr "第一色彩"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1641
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1650
 #, kde-format
 msgid "Major grid"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1757
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1767
 #, kde-format
 msgid "Minor grid"
 msgstr ""
@@ -18172,9 +18171,9 @@ msgstr "寬度"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:278
-#, fuzzy, kde-format
-msgid "Bar"
-msgstr "巴（bars）"
+#, kde-format
+msgid "Column"
+msgstr "欄"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
@@ -21617,6 +21616,10 @@ msgid "Unable to open file:"
 msgstr "開啟失敗"
 
 #, fuzzy
+#~ msgid "Bar"
+#~ msgstr "巴（bars）"
+
+#, fuzzy
 #~ msgid "Top margin:"
 #~ msgstr "上邊界"
 
@@ -21768,9 +21771,6 @@ msgstr "開啟失敗"
 #, fuzzy
 #~ msgid "Vertical Linear Gradient"
 #~ msgstr "輻射狀漸層"
-
-#~ msgid "Column"
-#~ msgstr "欄"
 
 #, fuzzy
 #~| msgid "cm"
