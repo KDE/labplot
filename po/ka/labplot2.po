@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:42+0000\n"
-"PO-Revision-Date: 2022-10-01 06:29+0200\n"
+"PO-Revision-Date: 2022-10-05 05:52+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2553,10 +2553,9 @@ msgid "Logarithmic Distribution"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:108
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Methods"
-msgstr "სტატისტიკა"
+msgstr "სტატისტიკური მეთოდები"
 
 #: src/backend/gsl/ExpressionParser.cpp:113
 #, kde-format
@@ -6205,10 +6204,9 @@ msgid "%1: set connection line opacity"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:61
-#, fuzzy, kde-format
-#| msgid "%1: set type"
+#, kde-format
 msgid "%1: set line pen"
-msgstr "%1: ტიპის დაყენება"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:68
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:630
@@ -9078,17 +9076,14 @@ msgid "Equidistant Values"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:285
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Sample Values"
+#, kde-format
 msgid "Sample Values"
-msgstr "მაგალითის მნიშვნელობები"
+msgstr "მაგალითი მნიშვნელობები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgid "Flatten Columns"
-msgstr "სვეტები"
+msgstr "სვეტების გაბრტყელება"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1094
@@ -14746,10 +14741,9 @@ msgid "Export to File"
 msgstr "ფაილში გატანა"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "&Flatten"
-msgstr "შაბლონი"
+msgstr "&გაბრტყელება"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
 #, kde-format
@@ -14757,11 +14751,10 @@ msgid "Flatten selected columns"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Delete Selected"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatten Selected Columns"
-msgstr "მონიშნულის წაშლა"
+msgstr "მონიშნული სვეტების გაბრტყელება"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:55
 #, kde-format
@@ -14774,10 +14767,9 @@ msgid "Remove reference column"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1: flatten values"
-msgstr "%1: მნიშვნელობების ჩანაცვლება"
+msgstr "%1: გაბრტყელებული მნიშვნელობები"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:168
 #, kde-format
@@ -16644,14 +16636,14 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:339
 #, kde-format
 msgid "From End"
-msgstr ""
+msgstr "ბოლოდან"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbReadingType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:730
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:344
 #, kde-format
 msgid "Till the End"
-msgstr ""
+msgstr "ბოლომდე"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:738
@@ -16678,7 +16670,7 @@ msgstr "განახლების ინტერვალი:"
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:307
 #, kde-format
 msgid "Keep last values:"
-msgstr ""
+msgstr "უკანასკნელი მნიშვნელობის დატოვება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSampleSize)
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:776
@@ -16736,7 +16728,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:58
 #, kde-format
 msgid "Import unused object"
-msgstr ""
+msgstr "გამოუყენებელი ობიექტის შემოტანა"
 
 #. i18n: ectx: property (text), widget (QLabel, lCustomFolder)
 #. i18n: ectx: property (text), widget (QLabel, lFolder)
@@ -16750,7 +16742,7 @@ msgstr "საქაღალდე:"
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:65
 #, kde-format
 msgid "Import from:"
-msgstr ""
+msgstr "შემოტანა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:91
@@ -16759,7 +16751,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
-msgstr ""
+msgstr "ათობითის გამყოფი:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbQuery)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:137
@@ -16815,7 +16807,7 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:23
 #, kde-format
 msgid "Manage connections:"
-msgstr ""
+msgstr "შეერთებების მართვა:"
 
 #. i18n: ectx: property (text), widget (QLabel, lID)
 #. i18n: ectx: property (text), widget (QLabel, lId)
@@ -16901,13 +16893,13 @@ msgstr ""
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:72
 #, kde-format
 msgid "First row:"
-msgstr ""
+msgstr "პირველი მწკრივი:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelLast)
 #: src/kdefrontend/ui/datasources/rootoptionswidget.ui:89
 #, kde-format
 msgid "Last row:"
-msgstr ""
+msgstr "ბოლო მწკრივი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)

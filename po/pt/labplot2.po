@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:42+0000\n"
-"PO-Revision-Date: 2022-10-04 10:23+0100\n"
+"PO-Revision-Date: 2022-10-05 11:18+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -11831,27 +11831,21 @@ msgid "Stacked 100%"
 msgstr "Empilhado a 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the number of the bar for which the properties should be shown "
-#| "and edited"
+#, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
-"Indique o número da barra cujas propriedades deverão ser apresentadas e "
+"Seleccione a coluna de dados cujas propriedades deverão ser apresentadas e "
 "editadas"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the factor in percent to control the width of the bar relative to "
-#| "its default value"
+#, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
 "Indique o factor em percentagem para controlar a largura da barra face ao "
-"seu valor predefinido"
+"seu valor predefinido, aplicando-se a todas as barras"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
@@ -18026,9 +18020,7 @@ msgstr "Largura"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:278
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Column"
+#, kde-format
 msgid "Column"
 msgstr "Coluna"
 
@@ -21380,6 +21372,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "Bar"
-#~ msgstr "Barra"

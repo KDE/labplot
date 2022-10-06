@@ -8953,7 +8953,7 @@ msgstr "Files, columnes i valors de XY"
 #: src/commonfrontend/matrix/MatrixView.cpp:175
 #, kde-format
 msgid "&Add Columns"
-msgstr "&Afig columnes"
+msgstr "Afi&g columnes"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:176
 #, kde-format
@@ -8979,7 +8979,7 @@ msgstr "Estadísti&ques"
 #: src/commonfrontend/matrix/MatrixView.cpp:182
 #, kde-format
 msgid "&Add Rows"
-msgstr "&Afig files"
+msgstr "Afi&g files"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:183
 #, kde-format
@@ -13891,13 +13891,13 @@ msgstr "DiagramaCartesià"
 #: src/kdefrontend/labplot2ui.rc:40
 #, kde-format
 msgid "&File"
-msgstr "&Fitxer"
+msgstr "Fi&txer"
 
 #. i18n: ectx: Menu (new)
 #: src/kdefrontend/labplot2ui.rc:42
 #, kde-format
 msgid "&Add New"
-msgstr "&Afig nou"
+msgstr "Afi&g nou"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
@@ -13994,7 +13994,7 @@ msgstr "No s'ha trobat el fitxer %1. Comproveu la instal·lació."
 #: src/kdefrontend/MainWin.cpp:502
 #, kde-format
 msgid "&Open Example"
-msgstr "&Obri un exemple"
+msgstr "O&bri un exemple"
 
 #: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1836
 #, kde-format
@@ -14856,7 +14856,7 @@ msgstr "Dividix pel valor"
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
 #, kde-format
 msgid "&Add"
-msgstr "&Afig"
+msgstr "Afi&g"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
 #, kde-format
@@ -20985,7 +20985,7 @@ msgstr "Editor de metadades de FITS [modificat]"
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:41
 #, kde-format
 msgid "&Add Keyword"
-msgstr "&Afig una paraula clau"
+msgstr "Afi&g una paraula clau"
 
 #: src/kdefrontend/widgets/FITSHeaderEditNewKeywordDialog.cpp:45
 #, kde-format
@@ -21457,6 +21457,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Bar"
-#~ msgstr "Barra"

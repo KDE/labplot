@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:42+0000\n"
-"PO-Revision-Date: 2022-10-04 03:46+0200\n"
+"PO-Revision-Date: 2022-10-05 05:09+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -11774,26 +11774,20 @@ msgid "Stacked 100%"
 msgstr "Apilado 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the number of the bar for which the properties should be shown "
-#| "and edited"
+#, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
-"Indicar el número de la barra cuyas propiedades se deben mostrar y editar"
+"Seleccionar la columna de datos cuyas propiedades se deben mostrar y editar"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the factor in percent to control the width of the bar relative to "
-#| "its default value"
+#, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
 "Indique el factor en porcentaje para controlar la anchura de la barra "
-"relativa a su valor predeterminado."
+"relativa a su valor predeterminado, aplicándolo a todas las barras"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377

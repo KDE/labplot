@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-05 00:42+0000\n"
-"PO-Revision-Date: 2022-10-04 07:21+0300\n"
+"PO-Revision-Date: 2022-10-05 06:59+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -11845,25 +11845,20 @@ msgid "Stacked 100%"
 msgstr "Стосами до 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the number of the bar for which the properties should be shown "
-#| "and edited"
+#, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
-msgstr "Вкажіть номер блоку, для якого має бути показано і змінено властивості"
+msgstr ""
+"Виберіть стовпчик даних, для якого має бути показано і змінено властивості"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the factor in percent to control the width of the bar relative to "
-#| "its default value"
+#, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
 "Вкажіть коефіцієнт у відсотках для керування шириною блоку відносно типового "
-"значення."
+"значення, який буде застосовано для усіх стовпців."
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
