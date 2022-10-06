@@ -47,7 +47,7 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	// show preview pixmaps
 	auto* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
+	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty()) {
 		delete mContentItemModel;
 		return;
