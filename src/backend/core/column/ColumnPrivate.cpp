@@ -1250,11 +1250,11 @@ void ColumnPrivate::updateFormula() {
 
 		// replace statistical values
 		SET_NUMBER_LOCALE
-		formula.replace(QLatin1String("MAX(%1)").arg(varName), numberLocale.toString(column->maximum()));
-		formula.replace(QLatin1String("MIN(%1)").arg(varName), numberLocale.toString(column->minimum()));
-		formula.replace(QLatin1String("MEAN(%1)").arg(varName), numberLocale.toString(column->statistics().arithmeticMean));
-		formula.replace(QLatin1String("MEDIAN(%1)").arg(varName), numberLocale.toString(column->statistics().median));
-		formula.replace(QLatin1String("STDEV(%1)").arg(varName), numberLocale.toString(column->statistics().standardDeviation));
+		formula.replace(QLatin1String("max(%1)").arg(varName), numberLocale.toString(column->maximum()));
+		formula.replace(QLatin1String("min(%1)").arg(varName), numberLocale.toString(column->minimum()));
+		formula.replace(QLatin1String("mean(%1)").arg(varName), numberLocale.toString(column->statistics().arithmeticMean));
+		formula.replace(QLatin1String("median(%1)").arg(varName), numberLocale.toString(column->statistics().median));
+		formula.replace(QLatin1String("stdev(%1)").arg(varName), numberLocale.toString(column->statistics().standardDeviation));
 		// TODO: more
 		QDEBUG("FORMULA: " << formula);
 
