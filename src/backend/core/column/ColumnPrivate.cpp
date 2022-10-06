@@ -1250,12 +1250,15 @@ void ColumnPrivate::updateFormula() {
 
 		// replace statistical values
 		SET_NUMBER_LOCALE
-		formula.replace(QLatin1String("max(%1)").arg(varName), numberLocale.toString(column->maximum()));
-		formula.replace(QLatin1String("min(%1)").arg(varName), numberLocale.toString(column->minimum()));
-		formula.replace(QLatin1String("mean(%1)").arg(varName), numberLocale.toString(column->statistics().arithmeticMean));
-		formula.replace(QLatin1String("median(%1)").arg(varName), numberLocale.toString(column->statistics().median));
-		formula.replace(QLatin1String("stdev(%1)").arg(varName), numberLocale.toString(column->statistics().standardDeviation));
+		// list of available statistical methods (see AbstractColumn.h)
+		QVector<QPair<QString,double>> methodList = {
+			{"min", column->minimum()}, {"max", column->maximum()},
+			{"mean", column->statistics().arithmeticMean}, {"median", column->statistics().median},
+			{"stdev", column->statistics().standardDeviation}};
 		// TODO: more
+
+		for (auto m : methodList)
+			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
 		QDEBUG("FORMULA: " << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
