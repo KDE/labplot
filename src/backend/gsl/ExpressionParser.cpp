@@ -862,13 +862,21 @@ void ExpressionParser::initFunctions() {
 	index++;
 	m_functionsGroupIndex << index;
 
-	m_functionsNames << i18n("Maximum");
+	m_functionsNames << i18n("Size");
 	m_functionsNames << i18n("Minimum");
+	m_functionsNames << i18n("Maximum");
 	m_functionsNames << i18n("Arithmetic mean");
 	m_functionsNames << i18n("Median");
 	m_functionsNames << i18n("Standard deviation");
+	m_functionsNames << i18n("Geometric mean");
+	m_functionsNames << i18n("Harmonic mean");
+	m_functionsNames << i18n("Contraharmonic mean");
+	m_functionsNames << i18n("Mode");
+	m_functionsNames << i18n("First quartile");
+	m_functionsNames << i18n("Third quartile");
+	m_functionsNames << i18n("Interquartile range");
 	index++;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 13; i++)
 		m_functionsGroupIndex << index;
 }
 

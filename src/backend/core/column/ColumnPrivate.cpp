@@ -1252,9 +1252,12 @@ void ColumnPrivate::updateFormula() {
 		SET_NUMBER_LOCALE
 		// list of available statistical methods (see AbstractColumn.h)
 		QVector<QPair<QString,double>> methodList = {
-			{"min", column->minimum()}, {"max", column->maximum()},
+			{"size", column->statistics().size}, {"min", column->minimum()}, {"max", column->maximum()},
 			{"mean", column->statistics().arithmeticMean}, {"median", column->statistics().median},
-			{"stdev", column->statistics().standardDeviation}};
+			{"stdev", column->statistics().standardDeviation}, {"gm", column->statistics().geometricMean},
+			{"hm", column->statistics().harmonicMean}, {"chm", column->statistics().contraharmonicMean},
+			{"mode", column->statistics().mode}, {"quartile1", column->statistics().firstQuartile},
+			{"quartile3", column->statistics().thirdQuartile}, {"iqr", column->statistics().iqr}};
 		// TODO: more
 
 		for (auto m : methodList)
