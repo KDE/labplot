@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-05 00:42+0000\n"
+"POT-Creation-Date: 2022-10-07 00:41+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -4490,13 +4490,13 @@ msgstr "Hipergeometrijska Distribucija"
 msgid "Probability density for a logarithmic distribution"
 msgstr ""
 
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/ExpressionParser.cpp:865
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
-#, kde-format
-msgid "Maximum"
-msgstr ""
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:150
+#, fuzzy, kde-format
+#| msgid "Size"
+msgid "Size"
+msgstr "Veličina"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:866
@@ -4508,6 +4508,14 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:867
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
+#, kde-format
+msgid "Maximum"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:868
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:83
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
 #, kde-format
@@ -4516,7 +4524,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
-#: src/backend/gsl/ExpressionParser.cpp:868
+#: src/backend/gsl/ExpressionParser.cpp:869
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:119
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
@@ -4525,7 +4533,7 @@ msgid "Median"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/ExpressionParser.cpp:869
+#: src/backend/gsl/ExpressionParser.cpp:870
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
 #, fuzzy, kde-format
@@ -4533,165 +4541,215 @@ msgstr ""
 msgid "Standard deviation"
 msgstr "rezidualna standardna devijacija"
 
-#: src/backend/gsl/ExpressionParser.cpp:881
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:871
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
+#, fuzzy, kde-format
+#| msgid "Geometric Distribution"
+msgid "Geometric mean"
+msgstr "Geometrijska Distribucija"
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:872
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:95
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
+#, kde-format
+msgid "Harmonic mean"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
+#: src/backend/gsl/ExpressionParser.cpp:873
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:101
+#: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
+#, kde-format
+msgid "Contraharmonic mean"
+msgstr ""
+
+#: src/backend/gsl/ExpressionParser.cpp:874
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:107
+#, fuzzy, kde-format
+#| msgid "Model"
+msgid "Mode"
+msgstr "Model"
+
+#: src/backend/gsl/ExpressionParser.cpp:875
+#, fuzzy, kde-format
+#| msgid "Drawing &order"
+msgid "First quartile"
+msgstr "&Redoslijed crtanja"
+
+#: src/backend/gsl/ExpressionParser.cpp:876
+#, fuzzy, kde-format
+#| msgid "Drawing &order"
+msgid "Third quartile"
+msgstr "&Redoslijed crtanja"
+
+#: src/backend/gsl/ExpressionParser.cpp:877
+#, fuzzy, kde-format
+#| msgid "Interface"
+msgid "Interquartile range"
+msgstr "Interfejs"
+
+#: src/backend/gsl/ExpressionParser.cpp:889
 #, kde-format
 msgid "Mathematical constants"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:882
+#: src/backend/gsl/ExpressionParser.cpp:890
 #, kde-format
 msgid "Fundamental constants"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:883
+#: src/backend/gsl/ExpressionParser.cpp:891
 #, kde-format
 msgid "Astronomy and Astrophysics"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:884
+#: src/backend/gsl/ExpressionParser.cpp:892
 #, kde-format
 msgid "Atomic and Nuclear Physics"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:885
+#: src/backend/gsl/ExpressionParser.cpp:893
 #, kde-format
 msgid "Measurement of Time"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:886
+#: src/backend/gsl/ExpressionParser.cpp:894
 #, kde-format
 msgid "Imperial Units"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:887
+#: src/backend/gsl/ExpressionParser.cpp:895
 #, kde-format
 msgid "Speed and Nautical Units"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:888
+#: src/backend/gsl/ExpressionParser.cpp:896
 #, kde-format
 msgid "Printers Units"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:889
+#: src/backend/gsl/ExpressionParser.cpp:897
 #, kde-format
 msgid "Volume, Area and Length"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:890
+#: src/backend/gsl/ExpressionParser.cpp:898
 #, fuzzy, kde-format
 #| msgid "%1: assign weights"
 msgid "Mass and Weight"
 msgstr "%1: dodijeli širinu"
 
-#: src/backend/gsl/ExpressionParser.cpp:891
+#: src/backend/gsl/ExpressionParser.cpp:899
 #, kde-format
 msgid "Thermal Energy and Power"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:892
+#: src/backend/gsl/ExpressionParser.cpp:900
 #, kde-format
 msgid "Pressure"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:893
+#: src/backend/gsl/ExpressionParser.cpp:901
 #, kde-format
 msgid "Viscosity"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:894
+#: src/backend/gsl/ExpressionParser.cpp:902
 #, kde-format
 msgid "Light and Illumination"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:895
+#: src/backend/gsl/ExpressionParser.cpp:903
 #, kde-format
 msgid "Radioactivity"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:896
+#: src/backend/gsl/ExpressionParser.cpp:904
 #, kde-format
 msgid "Force and Energy"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:899
+#: src/backend/gsl/ExpressionParser.cpp:907
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Base of exponentials"
 msgstr "Inverzni eksponent"
 
-#: src/backend/gsl/ExpressionParser.cpp:902
+#: src/backend/gsl/ExpressionParser.cpp:910
 #, kde-format
 msgid "Pi"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:905
+#: src/backend/gsl/ExpressionParser.cpp:913
 #, fuzzy, kde-format
 #| msgid "rescale the content"
 msgid "Euler's constant"
 msgstr "reskaliraj sadržaj"
 
-#: src/backend/gsl/ExpressionParser.cpp:913
+#: src/backend/gsl/ExpressionParser.cpp:921
 #, kde-format
 msgid "Speed of light"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:916
+#: src/backend/gsl/ExpressionParser.cpp:924
 #, kde-format
 msgid "Vacuum permeability"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:919
+#: src/backend/gsl/ExpressionParser.cpp:927
 #, kde-format
 msgid "Vacuum permittivity"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:922
+#: src/backend/gsl/ExpressionParser.cpp:930
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Planck constant"
 msgstr "Konstante"
 
-#: src/backend/gsl/ExpressionParser.cpp:925
+#: src/backend/gsl/ExpressionParser.cpp:933
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Reduced Planck constant"
 msgstr "Konstante"
 
-#: src/backend/gsl/ExpressionParser.cpp:928
+#: src/backend/gsl/ExpressionParser.cpp:936
 #, kde-format
 msgid "Avogadro constant"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:931
+#: src/backend/gsl/ExpressionParser.cpp:939
 #, kde-format
 msgid "Faraday"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:934
+#: src/backend/gsl/ExpressionParser.cpp:942
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Boltzmann constant"
 msgstr "Konstante"
 
-#: src/backend/gsl/ExpressionParser.cpp:937
+#: src/backend/gsl/ExpressionParser.cpp:945
 #, kde-format
 msgid "Molar gas"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:940
+#: src/backend/gsl/ExpressionParser.cpp:948
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Standard gas volume"
 msgstr "Standardna Devijacija"
 
-#: src/backend/gsl/ExpressionParser.cpp:943
+#: src/backend/gsl/ExpressionParser.cpp:951
 #, fuzzy, kde-format
 #| msgid "Constants"
 msgid "Stefan-Boltzmann constant"
 msgstr "Konstante"
 
-#: src/backend/gsl/ExpressionParser.cpp:946
+#: src/backend/gsl/ExpressionParser.cpp:954
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:425
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:491
 #, fuzzy, kde-format
@@ -4699,448 +4757,448 @@ msgstr "Konstante"
 msgid "Gauss"
 msgstr "Gaussov"
 
-#: src/backend/gsl/ExpressionParser.cpp:954
+#: src/backend/gsl/ExpressionParser.cpp:962
 #, kde-format
 msgid "Astronomical unit"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:957
+#: src/backend/gsl/ExpressionParser.cpp:965
 #, kde-format
 msgid "Gravitational constant"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:960
+#: src/backend/gsl/ExpressionParser.cpp:968
 #, fuzzy, kde-format
 #| msgid "light cyan"
 msgid "Light year"
 msgstr "svetloplavičasta"
 
-#: src/backend/gsl/ExpressionParser.cpp:963
+#: src/backend/gsl/ExpressionParser.cpp:971
 #, kde-format
 msgid "Parsec"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:966
+#: src/backend/gsl/ExpressionParser.cpp:974
 #, kde-format
 msgid "Gravitational acceleration"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:969
+#: src/backend/gsl/ExpressionParser.cpp:977
 #, fuzzy, kde-format
 #| msgid "%1: clear masks"
 msgid "Solar mass"
 msgstr "%1: očisti maske"
 
-#: src/backend/gsl/ExpressionParser.cpp:977
+#: src/backend/gsl/ExpressionParser.cpp:985
 #, fuzzy, kde-format
 #| msgid "Fit to selection"
 msgid "Charge of the electron"
 msgstr "Uklopi u selektovano"
 
-#: src/backend/gsl/ExpressionParser.cpp:980
+#: src/backend/gsl/ExpressionParser.cpp:988
 #, kde-format
 msgid "Energy of 1 electron volt"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:983
+#: src/backend/gsl/ExpressionParser.cpp:991
 #, kde-format
 msgid "Unified atomic mass"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:986
+#: src/backend/gsl/ExpressionParser.cpp:994
 #, fuzzy, kde-format
 #| msgid "&Mask Selection"
 msgid "Mass of the electron"
 msgstr "&Maskiraj selektovano"
 
-#: src/backend/gsl/ExpressionParser.cpp:989
+#: src/backend/gsl/ExpressionParser.cpp:997
 #, kde-format
 msgid "Mass of the muon"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:992
+#: src/backend/gsl/ExpressionParser.cpp:1000
 #, kde-format
 msgid "Mass of the proton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:995
+#: src/backend/gsl/ExpressionParser.cpp:1003
 #, kde-format
 msgid "Mass of the neutron"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:998
+#: src/backend/gsl/ExpressionParser.cpp:1006
 #, kde-format
 msgid "Electromagnetic fine structure constant"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1001
+#: src/backend/gsl/ExpressionParser.cpp:1009
 #, kde-format
 msgid "Rydberg constant"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1004
+#: src/backend/gsl/ExpressionParser.cpp:1012
 #, fuzzy, kde-format
 #| msgid "Corner radius"
 msgid "Bohr radius"
 msgstr "Prečnik ugla"
 
-#: src/backend/gsl/ExpressionParser.cpp:1007
+#: src/backend/gsl/ExpressionParser.cpp:1015
 #, kde-format
 msgid "Length of 1 angstrom"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1010
+#: src/backend/gsl/ExpressionParser.cpp:1018
 #, kde-format
 msgid "Area of 1 barn"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1013
+#: src/backend/gsl/ExpressionParser.cpp:1021
 #, kde-format
 msgid "Bohr Magneton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1016
+#: src/backend/gsl/ExpressionParser.cpp:1024
 #, kde-format
 msgid "Nuclear Magneton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1019
+#: src/backend/gsl/ExpressionParser.cpp:1027
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1022
+#: src/backend/gsl/ExpressionParser.cpp:1030
 #, kde-format
 msgid "Magnetic moment of the proton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1025
+#: src/backend/gsl/ExpressionParser.cpp:1033
 #, kde-format
 msgid "Thomson cross section"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1028
+#: src/backend/gsl/ExpressionParser.cpp:1036
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1036
+#: src/backend/gsl/ExpressionParser.cpp:1044
 #, fuzzy, kde-format
 #| msgid "The number of vectors in the file"
 msgid "Number of seconds in 1 minute"
 msgstr "Broj vektora u direktoriju"
 
-#: src/backend/gsl/ExpressionParser.cpp:1039
+#: src/backend/gsl/ExpressionParser.cpp:1047
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 hour"
 msgstr "Broj kolona: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1042
+#: src/backend/gsl/ExpressionParser.cpp:1050
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 day"
 msgstr "Broj kolona: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1045
+#: src/backend/gsl/ExpressionParser.cpp:1053
 #, fuzzy, kde-format
 #| msgid "Number of columns: %1"
 msgid "Number of seconds in 1 week"
 msgstr "Broj kolona: %1"
 
-#: src/backend/gsl/ExpressionParser.cpp:1053
+#: src/backend/gsl/ExpressionParser.cpp:1061
 #, kde-format
 msgid "Length of 1 inch"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1056
+#: src/backend/gsl/ExpressionParser.cpp:1064
 #, kde-format
 msgid "Length of 1 foot"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1059
+#: src/backend/gsl/ExpressionParser.cpp:1067
 #, kde-format
 msgid "Length of 1 yard"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1062
+#: src/backend/gsl/ExpressionParser.cpp:1070
 #, kde-format
 msgid "Length of 1 mile"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1065
+#: src/backend/gsl/ExpressionParser.cpp:1073
 #, kde-format
 msgid "Length of 1/1000th of an inch"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1073
+#: src/backend/gsl/ExpressionParser.cpp:1081
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1076
+#: src/backend/gsl/ExpressionParser.cpp:1084
 #, kde-format
 msgid "Speed of 1 mile per hour"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1079
+#: src/backend/gsl/ExpressionParser.cpp:1087
 #, kde-format
 msgid "Length of 1 nautical mile"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1082
+#: src/backend/gsl/ExpressionParser.cpp:1090
 #, kde-format
 msgid "Length of 1 fathom"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1085
+#: src/backend/gsl/ExpressionParser.cpp:1093
 #, kde-format
 msgid "Speed of 1 knot"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1093
+#: src/backend/gsl/ExpressionParser.cpp:1101
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1096
+#: src/backend/gsl/ExpressionParser.cpp:1104
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1104
+#: src/backend/gsl/ExpressionParser.cpp:1112
 #, kde-format
 msgid "Length of 1 micron"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1107
+#: src/backend/gsl/ExpressionParser.cpp:1115
 #, kde-format
 msgid "Area of 1 hectare"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1110
+#: src/backend/gsl/ExpressionParser.cpp:1118
 #, kde-format
 msgid "Area of 1 acre"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1113
+#: src/backend/gsl/ExpressionParser.cpp:1121
 #, kde-format
 msgid "Volume of 1 liter"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1116
+#: src/backend/gsl/ExpressionParser.cpp:1124
 #, kde-format
 msgid "Volume of 1 US gallon"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1119
+#: src/backend/gsl/ExpressionParser.cpp:1127
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1122
+#: src/backend/gsl/ExpressionParser.cpp:1130
 #, kde-format
 msgid "Volume of 1 UK gallon"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1125
+#: src/backend/gsl/ExpressionParser.cpp:1133
 #, kde-format
 msgid "Volume of 1 quart"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1128
+#: src/backend/gsl/ExpressionParser.cpp:1136
 #, fuzzy, kde-format
 #| msgid "Number of points"
 msgid "Volume of 1 pint"
 msgstr "Broj tačaka"
 
-#: src/backend/gsl/ExpressionParser.cpp:1136
+#: src/backend/gsl/ExpressionParser.cpp:1144
 #, kde-format
 msgid "Mass of 1 pound"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1139
+#: src/backend/gsl/ExpressionParser.cpp:1147
 #, kde-format
 msgid "Mass of 1 ounce"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1142
+#: src/backend/gsl/ExpressionParser.cpp:1150
 #, kde-format
 msgid "Mass of 1 ton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1145
+#: src/backend/gsl/ExpressionParser.cpp:1153
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1148
+#: src/backend/gsl/ExpressionParser.cpp:1156
 #, kde-format
 msgid "Mass of 1 UK ton"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1151
+#: src/backend/gsl/ExpressionParser.cpp:1159
 #, kde-format
 msgid "Mass of 1 troy ounce"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1154
+#: src/backend/gsl/ExpressionParser.cpp:1162
 #, kde-format
 msgid "Mass of 1 carat"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1157
+#: src/backend/gsl/ExpressionParser.cpp:1165
 #, kde-format
 msgid "Force of 1 gram weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1160
+#: src/backend/gsl/ExpressionParser.cpp:1168
 #, kde-format
 msgid "Force of 1 pound weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1163
+#: src/backend/gsl/ExpressionParser.cpp:1171
 #, kde-format
 msgid "Force of 1 kilopound weight"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1166
+#: src/backend/gsl/ExpressionParser.cpp:1174
 #, kde-format
 msgid "Force of 1 poundal"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1174
+#: src/backend/gsl/ExpressionParser.cpp:1182
 #, kde-format
 msgid "Energy of 1 calorie"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1177
+#: src/backend/gsl/ExpressionParser.cpp:1185
 #, kde-format
 msgid "Energy of 1 British Thermal Unit"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1180
+#: src/backend/gsl/ExpressionParser.cpp:1188
 #, kde-format
 msgid "Energy of 1 Therm"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1183
+#: src/backend/gsl/ExpressionParser.cpp:1191
 #, fuzzy, kde-format
 #| msgid "Powers of e"
 msgid "Power of 1 horsepower"
 msgstr "Stepeni e"
 
-#: src/backend/gsl/ExpressionParser.cpp:1191
+#: src/backend/gsl/ExpressionParser.cpp:1199
 #, kde-format
 msgid "Pressure of 1 bar"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1194
+#: src/backend/gsl/ExpressionParser.cpp:1202
 #, kde-format
 msgid "Pressure of 1 standard atmosphere"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1197
+#: src/backend/gsl/ExpressionParser.cpp:1205
 #, kde-format
 msgid "Pressure of 1 torr"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1200
+#: src/backend/gsl/ExpressionParser.cpp:1208
 #, kde-format
 msgid "Pressure of 1 meter of mercury"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1203
+#: src/backend/gsl/ExpressionParser.cpp:1211
 #, kde-format
 msgid "Pressure of 1 inch of mercury"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1206
+#: src/backend/gsl/ExpressionParser.cpp:1214
 #, kde-format
 msgid "Pressure of 1 inch of water"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1209
+#: src/backend/gsl/ExpressionParser.cpp:1217
 #, kde-format
 msgid "Pressure of 1 pound per square inch"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1217
+#: src/backend/gsl/ExpressionParser.cpp:1225
 #, kde-format
 msgid "Dynamic viscosity of 1 poise"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1220
+#: src/backend/gsl/ExpressionParser.cpp:1228
 #, kde-format
 msgid "Kinematic viscosity of 1 stokes"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1228
+#: src/backend/gsl/ExpressionParser.cpp:1236
 #, kde-format
 msgid "Luminance of 1 stilb"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1231
+#: src/backend/gsl/ExpressionParser.cpp:1239
 #, kde-format
 msgid "Luminous flux of 1 lumen"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1234
+#: src/backend/gsl/ExpressionParser.cpp:1242
 #, kde-format
 msgid "Illuminance of 1 lux"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1237
+#: src/backend/gsl/ExpressionParser.cpp:1245
 #, kde-format
 msgid "Illuminance of 1 phot"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1240
+#: src/backend/gsl/ExpressionParser.cpp:1248
 #, kde-format
 msgid "Illuminance of 1 footcandle"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1243
+#: src/backend/gsl/ExpressionParser.cpp:1251
 #, kde-format
 msgid "Luminance of 1 lambert"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1246
+#: src/backend/gsl/ExpressionParser.cpp:1254
 #, kde-format
 msgid "Luminance of 1 footlambert"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1254
+#: src/backend/gsl/ExpressionParser.cpp:1262
 #, kde-format
 msgid "Activity of 1 curie"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1257
+#: src/backend/gsl/ExpressionParser.cpp:1265
 #, kde-format
 msgid "Exposure of 1 roentgen"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1260
+#: src/backend/gsl/ExpressionParser.cpp:1268
 #, kde-format
 msgid "Absorbed dose of 1 rad"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1268
+#: src/backend/gsl/ExpressionParser.cpp:1276
 #, kde-format
 msgid "SI unit of force"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1271
+#: src/backend/gsl/ExpressionParser.cpp:1279
 #, kde-format
 msgid "Force of 1 Dyne"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1274
+#: src/backend/gsl/ExpressionParser.cpp:1282
 #, kde-format
 msgid "SI unit of energy"
 msgstr ""
 
-#: src/backend/gsl/ExpressionParser.cpp:1277
+#: src/backend/gsl/ExpressionParser.cpp:1285
 #, kde-format
 msgid "Energy 1 erg"
 msgstr ""
@@ -16496,34 +16554,6 @@ msgstr "Sortiraj kolone"
 msgid "Location Measures"
 msgstr "Vrijednosti funkcije"
 
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
-#, fuzzy, kde-format
-#| msgid "Geometric Distribution"
-msgid "Geometric mean"
-msgstr "Geometrijska Distribucija"
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:95
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
-#, kde-format
-msgid "Harmonic mean"
-msgstr ""
-
-#. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:101
-#: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
-#, kde-format
-msgid "Contraharmonic mean"
-msgstr ""
-
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:107
-#, fuzzy, kde-format
-#| msgid "Model"
-msgid "Mode"
-msgstr "Model"
-
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:113
 #, fuzzy, kde-format
 #| msgid "Drawing &order"
@@ -19825,13 +19855,6 @@ msgstr "Veličina kape"
 #| msgid "Vert. align."
 msgid "Vert. align.:"
 msgstr "Vert. poravnanje."
-
-#. i18n: ectx: property (text), widget (QLabel, lSize)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:150
-#, fuzzy, kde-format
-#| msgid "Size"
-msgid "Size"
-msgstr "Veličina"
 
 #. i18n: ectx: property (text), widget (QLabel, lRatio)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:344
