@@ -607,9 +607,6 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 void ColumnPrivate::replaceData(void* data) {
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
 
-	if (!m_data)
-		initDataContainer();
-
 	m_data = data;
 	invalidate();
 	if (!m_owner->m_suppressDataChangedSignal)
