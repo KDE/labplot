@@ -19,6 +19,7 @@ New features:
 		* Dropping and masking of values also for text columns
 		* Data sampling (random and periodic methods)
 		* Data 'flattening' - convert pivoted data to column base format
+		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
 	* [import]
 		* Import data from Excel .xlsx files using QXlsx library
 		* HDF5: support VLEN data import
