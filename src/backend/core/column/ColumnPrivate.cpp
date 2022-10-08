@@ -1110,7 +1110,6 @@ AbstractSimpleFilter* ColumnPrivate::outputFilter() const {
 	return m_outputFilter;
 }
 
-
 //! \name Labels related functions
 //@{
 bool ColumnPrivate::hasValueLabels() const {
@@ -1214,7 +1213,6 @@ const QMap<qint64, QString>& ColumnPrivate::bigIntValueLabels() {
 	return *(static_cast<QMap<qint64, QString>*>(m_labels));
 }
 //@}
-
 
 //! \name Formula related functions
 //@{
@@ -1587,8 +1585,9 @@ QString ColumnPrivate::textAt(int row) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QDate ColumnPrivate::dateAt(int row) const {
-	if (!m_data || (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
-		&& m_columnMode != AbstractColumn::ColumnMode::Day))
+	if (!m_data
+		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDate{};
 	return dateTimeAt(row).date();
 }
@@ -1599,8 +1598,9 @@ QDate ColumnPrivate::dateAt(int row) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime ColumnPrivate::timeAt(int row) const {
-	if (!m_data || (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
-		&& m_columnMode != AbstractColumn::ColumnMode::Day))
+	if (!m_data
+		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QTime{};
 	return dateTimeAt(row).time();
 }
@@ -1611,8 +1611,9 @@ QTime ColumnPrivate::timeAt(int row) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QDateTime ColumnPrivate::dateTimeAt(int row) const {
-	if (!m_data || (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
-		&& m_columnMode != AbstractColumn::ColumnMode::Day))
+	if (!m_data
+		|| (m_columnMode != AbstractColumn::ColumnMode::DateTime && m_columnMode != AbstractColumn::ColumnMode::Month
+			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
 }
