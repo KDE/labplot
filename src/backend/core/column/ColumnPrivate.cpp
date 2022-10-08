@@ -22,6 +22,7 @@
 #include <unordered_map>
 
 extern "C" {
+#include "backend/nsl/nsl_stats.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics.h>
 }
@@ -1249,7 +1250,6 @@ void ColumnPrivate::updateFormula() {
 		formulaVariableNames << varName;
 
 		// replace statistical values
-		SET_NUMBER_LOCALE
 		// list of available statistical methods (see AbstractColumn.h)
 		QVector<QPair<QString, double>> methodList = {{"size", static_cast<double>(column->statistics().size)},
 													  {"min", column->minimum()},
@@ -1279,8 +1279,64 @@ void ColumnPrivate::updateFormula() {
 													  {"kurt", column->statistics().kurtosis},
 													  {"entropy", column->statistics().entropy}};
 
+		SET_NUMBER_LOCALE
 		for (auto m : methodList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
+
+		// methods with options: get option and calculate value to replace method
+		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")};
+
+		for (auto m : optionMethodList) {
+			QRegExp rx(m.arg(varName));
+			rx.setMinimal(true); // only match one method call at a time
+
+			int pos = 0;
+			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
+				QDEBUG("method call:" << rx.cap(0))
+				double p = numberLocale.toDouble(rx.cap(1));
+				DEBUG("p = " << p)
+
+				// scale (quantile: p=0..1, percentile: p=0..100)
+				if (m.startsWith(QLatin1String("percentile")))
+					p /= 100.;
+
+				// all types
+				double value = 0.0;
+				switch (column->columnMode()) {
+				case AbstractColumn::ColumnMode::Double: {
+					auto data = reinterpret_cast<QVector<double>*>(column->data());
+					value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					break;
+				}
+				case AbstractColumn::ColumnMode::Integer: {
+					auto* intData = reinterpret_cast<QVector<int>*>(column->data());
+					QVector<double> data = QVector<double>();
+					data.reserve(column->rowCount());
+					for (auto v : *intData)
+						data << static_cast<double>(v);
+					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					break;
+				}
+				case AbstractColumn::ColumnMode::BigInt: {
+					auto* bigIntData = reinterpret_cast<QVector<qint64>*>(column->data());
+					QVector<double> data = QVector<double>();
+					data.reserve(column->rowCount());
+					for (auto v : *bigIntData)
+						data << static_cast<double>(v);
+					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					break;
+				}
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Text:
+					break;
+				}
+
+				formula.replace(rx.cap(0), numberLocale.toString(value));
+			}
+		}
+
 		QDEBUG("FORMULA: " << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
