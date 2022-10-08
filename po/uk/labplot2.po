@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-08 00:41+0000\n"
-"PO-Revision-Date: 2022-10-07 07:22+0300\n"
+"PO-Revision-Date: 2022-10-08 08:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -2309,16 +2309,14 @@ msgid "End of file"
 msgstr "Кінець файла"
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical functions"
+#, kde-format
 msgid "Standard Mathematical Functions"
 msgstr "Стандартні математичні функції"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Statistical Methods"
+#, kde-format
 msgid "Statistical Methods (of column)"
-msgstr "Статистичні методи"
+msgstr "Статистичні методи (стовпчика)"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -2774,40 +2772,34 @@ msgid "Interquartile range"
 msgstr "Міжквартильний діапазон"
 
 #: src/backend/gsl/ExpressionParser.cpp:168
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "1st percentile"
-msgstr "процентиль"
+msgstr "Перший процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:169
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "5th percentile"
-msgstr "процентиль"
+msgstr "П'ятий процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:170
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "10th percentile"
-msgstr "10/90 процентилів"
+msgstr "10-й процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:171
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "90th percentile"
-msgstr "10/90 процентилів"
+msgstr "90-й процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:172
-#, fuzzy, kde-format
-#| msgid "5/95 percentiles"
+#, kde-format
 msgid "95th percentile"
-msgstr "9/95 процентилів"
+msgstr "95-й процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
-#, fuzzy, kde-format
-#| msgid "1/99 percentiles"
+#, kde-format
 msgid "99th percentile"
-msgstr "1/99 процентилів"
+msgstr "99-й процентиль"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
@@ -2816,10 +2808,9 @@ msgid "Trimean"
 msgstr "Середнє Тьюкі"
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "Медіана абсолютного відхилення"
+msgstr "Середнє абсолютне відхилення"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:161

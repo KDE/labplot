@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-08 00:41+0000\n"
-"PO-Revision-Date: 2022-10-07 10:52+0200\n"
+"PO-Revision-Date: 2022-10-08 10:49+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -2286,16 +2286,14 @@ msgid "End of file"
 msgstr "Einde bestand"
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical functions"
+#, kde-format
 msgid "Standard Mathematical Functions"
 msgstr "Standaard wiskundige functies"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Statistical Methods"
+#, kde-format
 msgid "Statistical Methods (of column)"
-msgstr "Statistische methoden"
+msgstr "Statistische methoden (van kolom)"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -2748,40 +2746,34 @@ msgid "Interquartile range"
 msgstr "Interkwartiel bereik"
 
 #: src/backend/gsl/ExpressionParser.cpp:168
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "1st percentile"
-msgstr "percentiel"
+msgstr "1ste percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:169
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "5th percentile"
-msgstr "percentiel"
+msgstr "5de percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:170
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "10th percentile"
-msgstr "10/90 percentielen"
+msgstr "10de percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:171
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "90th percentile"
-msgstr "10/90 percentielen"
+msgstr "90ste percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:172
-#, fuzzy, kde-format
-#| msgid "5/95 percentiles"
+#, kde-format
 msgid "95th percentile"
-msgstr "5/95 percentielen"
+msgstr "95ste percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
-#, fuzzy, kde-format
-#| msgid "1/99 percentiles"
+#, kde-format
 msgid "99th percentile"
-msgstr "1/99 percentielen"
+msgstr "99ste percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
@@ -2790,10 +2782,9 @@ msgid "Trimean"
 msgstr "Gemiddelde 20e, 50e en 80e percentiel"
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "Mediaan absolute deviatie"
+msgstr "Gemiddelde absolute deviatie"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:161

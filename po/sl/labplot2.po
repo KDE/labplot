@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-08 00:41+0000\n"
-"PO-Revision-Date: 2022-10-06 09:12+0200\n"
+"PO-Revision-Date: 2022-10-08 09:08+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -2296,16 +2296,14 @@ msgid "End of file"
 msgstr "Konec datoteke"
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical functions"
+#, kde-format
 msgid "Standard Mathematical Functions"
 msgstr "Standardne matematične funkcije"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Statistical Methods"
+#, kde-format
 msgid "Statistical Methods (of column)"
-msgstr "Statistične metode"
+msgstr "Statistične metode (stolpcev)"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -2743,58 +2741,49 @@ msgid "Mode"
 msgstr "Način"
 
 #: src/backend/gsl/ExpressionParser.cpp:165
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "First quartile"
 msgstr "Prvi kvartil"
 
 #: src/backend/gsl/ExpressionParser.cpp:166
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "Third quartile"
 msgstr "Tretji kvartil"
 
 #: src/backend/gsl/ExpressionParser.cpp:167
-#, fuzzy, kde-format
-#| msgid "Interquartile Range"
+#, kde-format
 msgid "Interquartile range"
 msgstr "Medkvartilni obseg"
 
 #: src/backend/gsl/ExpressionParser.cpp:168
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "1st percentile"
-msgstr "percentil"
+msgstr "1. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:169
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "5th percentile"
-msgstr "percentil"
+msgstr "5. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:170
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "10th percentile"
-msgstr "10/90 percentilov"
+msgstr "10. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:171
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "90th percentile"
-msgstr "10/90 percentilov"
+msgstr "90. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:172
-#, fuzzy, kde-format
-#| msgid "5/95 percentiles"
+#, kde-format
 msgid "95th percentile"
-msgstr "5/95 percentilov"
+msgstr "95. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
-#, fuzzy, kde-format
-#| msgid "1/99 percentiles"
+#, kde-format
 msgid "99th percentile"
-msgstr "1/99 percentilov"
+msgstr "99. percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
@@ -2803,10 +2792,9 @@ msgid "Trimean"
 msgstr "Trimean"
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "Absolutno odstopanje mediane"
+msgstr "Povprečna absolutna deviacija"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:161

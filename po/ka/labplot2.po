@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-08 00:41+0000\n"
-"PO-Revision-Date: 2022-10-07 06:29+0200\n"
+"PO-Revision-Date: 2022-10-08 06:22+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2276,16 +2276,14 @@ msgid "End of file"
 msgstr "ფაილის ბოლო"
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Standard Mathematical Functions"
-msgstr "სტანდარტული აცდენა"
+msgstr "სტანდარტული მათემატიკური ფუნქციები"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Statistical Methods"
+#, kde-format
 msgid "Statistical Methods (of column)"
-msgstr "სტატისტიკური მეთოდები"
+msgstr "სტატისტიკური მეთოდები (სვეტის)"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -2723,10 +2721,9 @@ msgid "Mode"
 msgstr "რეჟიმი"
 
 #: src/backend/gsl/ExpressionParser.cpp:165
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "First quartile"
-msgstr "კვადრატი"
+msgstr "პირველი კვარტილი"
 
 #: src/backend/gsl/ExpressionParser.cpp:166
 #, kde-format
@@ -2734,46 +2731,39 @@ msgid "Third quartile"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:167
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Interquartile range"
-msgstr "ინტერაქტიური"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:168
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "1st percentile"
-msgstr "პროცენტი:"
+msgstr "პირველი პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:169
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "5th percentile"
-msgstr "პროცენტი:"
+msgstr "მეხუთე პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:170
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "10th percentile"
-msgstr "პროცენტი:"
+msgstr "მეათე პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:171
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "90th percentile"
-msgstr "პროცენტი:"
+msgstr "90-ე პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:172
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "95th percentile"
-msgstr "პროცენტი:"
+msgstr "95-ე პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "99th percentile"
-msgstr "პროცენტი:"
+msgstr "99-ე პროცენტულობა"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
@@ -2782,10 +2772,9 @@ msgid "Trimean"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "სტანდარტული აცდენა"
+msgstr "საშუალო აბსოლუტური აცდენა"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:161
@@ -13141,17 +13130,17 @@ msgstr ""
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
 msgid "Solid Line"
-msgstr ""
+msgstr "მყარი ხაზი"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
 msgid "Dash Line"
-msgstr ""
+msgstr "პუნქტირიანი ხაზი"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
 msgid "Dot Line"
-msgstr ""
+msgstr "წერტილებიანი ხაზი"
 
 #: src/kdefrontend/GuiTools.cpp:61 src/kdefrontend/GuiTools.cpp:87
 #, kde-format
@@ -16076,7 +16065,7 @@ msgstr "გამოსახულების რედაქტირებ�
 #: src/kdefrontend/ui/datapickerimagewidget.ui:673
 #, kde-format
 msgid "Intensity:"
-msgstr "ინტენსვობა:"
+msgstr "ინტენსივობა:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionY)
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
