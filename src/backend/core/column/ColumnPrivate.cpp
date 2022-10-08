@@ -47,6 +47,7 @@ void ColumnPrivate::initDataContainer() {
 	case AbstractColumn::ColumnMode::Double: {
 		auto* vec = new QVector<double>();
 		vec->resize(m_rowCount);
+		vec->fill(std::numeric_limits<double>::quiet_NaN());
 		m_data = vec;
 		break;
 	}
@@ -68,18 +69,8 @@ void ColumnPrivate::initDataContainer() {
 		m_data = vec;
 		break;
 	}
-	case AbstractColumn::ColumnMode::DateTime: {
-		auto* vec = new QVector<QDateTime>();
-		vec->resize(m_rowCount);
-		m_data = vec;
-		break;
-	}
-	case AbstractColumn::ColumnMode::Month: {
-		auto* vec = new QVector<QDateTime>();
-		vec->resize(m_rowCount);
-		m_data = vec;
-		break;
-	}
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
 		auto* vec = new QVector<QDateTime>();
 		vec->resize(m_rowCount);
