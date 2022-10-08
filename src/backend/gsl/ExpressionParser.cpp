@@ -37,7 +37,8 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << _functions[i].name;
 
-	m_functionsGroups << i18n("Standard Mathematical functions");
+	m_functionsGroups << i18n("Standard Mathematical Functions");
+	m_functionsGroups << i18n("Statistical Methods (of column)"); // column statistics
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	m_functionsGroups << i18n("Airy Functions and Derivatives");
 	m_functionsGroups << i18n("Bessel Functions");
@@ -105,7 +106,6 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Geometric Distribution");
 	m_functionsGroups << i18n("Hypergeometric Distribution");
 	m_functionsGroups << i18n("Logarithmic Distribution");
-	m_functionsGroups << i18n("Statistical Methods");
 
 	int index = 0;
 
@@ -148,8 +148,39 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
+	index++;
 
-	index++; // separator
+	// statistical methods for columns
+	m_functionsNames << i18n("Size");
+	m_functionsNames << i18n("Minimum");
+	m_functionsNames << i18n("Maximum");
+	m_functionsNames << i18n("Arithmetic mean");
+	m_functionsNames << i18n("Median");
+	m_functionsNames << i18n("Standard deviation");
+	m_functionsNames << i18n("Variance");
+	m_functionsNames << i18n("Geometric mean");
+	m_functionsNames << i18n("Harmonic mean");
+	m_functionsNames << i18n("Contraharmonic mean");
+	m_functionsNames << i18n("Mode");
+	m_functionsNames << i18n("First quartile");
+	m_functionsNames << i18n("Third quartile");
+	m_functionsNames << i18n("Interquartile range");
+	m_functionsNames << i18n("1st percentile");
+	m_functionsNames << i18n("5th percentile");
+	m_functionsNames << i18n("10th percentile");
+	m_functionsNames << i18n("90th percentile");
+	m_functionsNames << i18n("95th percentile");
+	m_functionsNames << i18n("99th percentile");
+	m_functionsNames << i18n("Trimean");
+	m_functionsNames << i18n("Mean absolute deviation");
+	m_functionsNames << i18n("Mean absolute deviation around median");
+	m_functionsNames << i18n("Median absolute deviation");
+	m_functionsNames << i18n("Skewness");
+	m_functionsNames << i18n("Kurtosis");
+	m_functionsNames << i18n("Entropy");
+	index++;
+	for (int i = 0; i < 27; i++)
+		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -861,23 +892,6 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Probability density for a logarithmic distribution");
 	index++;
 	m_functionsGroupIndex << index;
-
-	m_functionsNames << i18n("Size");
-	m_functionsNames << i18n("Minimum");
-	m_functionsNames << i18n("Maximum");
-	m_functionsNames << i18n("Arithmetic mean");
-	m_functionsNames << i18n("Median");
-	m_functionsNames << i18n("Standard deviation");
-	m_functionsNames << i18n("Geometric mean");
-	m_functionsNames << i18n("Harmonic mean");
-	m_functionsNames << i18n("Contraharmonic mean");
-	m_functionsNames << i18n("Mode");
-	m_functionsNames << i18n("First quartile");
-	m_functionsNames << i18n("Third quartile");
-	m_functionsNames << i18n("Interquartile range");
-	index++;
-	for (int i = 0; i < 13; i++)
-		m_functionsGroupIndex << index;
 }
 
 // TODO: decide whether we want to have i18n here in the backend part of the code

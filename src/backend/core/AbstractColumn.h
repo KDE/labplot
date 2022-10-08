@@ -84,6 +84,7 @@ public:
 		// add new values with next bit set (0x10)
 	};
 
+	// exposed in function dialog (ColumnPrivate::updateFormula(), ExpressionParser::initFunctions(), functions.h)
 	struct ColumnStatistics {
 		int size{0};
 		int unique{0}; // number of unique values, relevant for text columns only

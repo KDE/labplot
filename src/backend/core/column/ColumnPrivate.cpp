@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1352,14 +1352,33 @@ void ColumnPrivate::updateFormula() {
 		// replace statistical values
 		SET_NUMBER_LOCALE
 		// list of available statistical methods (see AbstractColumn.h)
-		QVector<QPair<QString,double>> methodList = {
-			{"size", column->statistics().size}, {"min", column->minimum()}, {"max", column->maximum()},
-			{"mean", column->statistics().arithmeticMean}, {"median", column->statistics().median},
-			{"stdev", column->statistics().standardDeviation}, {"gm", column->statistics().geometricMean},
-			{"hm", column->statistics().harmonicMean}, {"chm", column->statistics().contraharmonicMean},
-			{"mode", column->statistics().mode}, {"quartile1", column->statistics().firstQuartile},
-			{"quartile3", column->statistics().thirdQuartile}, {"iqr", column->statistics().iqr}};
-		// TODO: more
+		QVector<QPair<QString, double>> methodList = {{"size", static_cast<double>(column->statistics().size)},
+													  {"min", column->minimum()},
+													  {"max", column->maximum()},
+													  {"mean", column->statistics().arithmeticMean},
+													  {"median", column->statistics().median},
+													  {"stdev", column->statistics().standardDeviation},
+													  {"var", column->statistics().variance},
+													  {"gm", column->statistics().geometricMean},
+													  {"hm", column->statistics().harmonicMean},
+													  {"chm", column->statistics().contraharmonicMean},
+													  {"mode", column->statistics().mode},
+													  {"quartile1", column->statistics().firstQuartile},
+													  {"quartile3", column->statistics().thirdQuartile},
+													  {"iqr", column->statistics().iqr},
+													  {"percentile1", column->statistics().percentile_1},
+													  {"percentile5", column->statistics().percentile_5},
+													  {"percentile10", column->statistics().percentile_10},
+													  {"percentile90", column->statistics().percentile_90},
+													  {"percentile95", column->statistics().percentile_95},
+													  {"percentile99", column->statistics().percentile_99},
+													  {"trimean", column->statistics().trimean},
+													  {"meandev", column->statistics().meanDeviation},
+													  {"meandevmedian", column->statistics().meanDeviationAroundMedian},
+													  {"mediandev", column->statistics().medianDeviation},
+													  {"skew", column->statistics().skewness},
+													  {"kurt", column->statistics().kurtosis},
+													  {"entropy", column->statistics().entropy}};
 
 		for (auto m : methodList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
