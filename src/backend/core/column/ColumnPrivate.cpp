@@ -1023,7 +1023,7 @@ void ColumnPrivate::removeRows(int first, int count) {
 			corrected_count = rowCount() - first;
 
 		if (!m_data) {
-			m_rowCount += corrected_count;
+			m_rowCount -= corrected_count;
 			return;
 		}
 
