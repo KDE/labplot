@@ -286,7 +286,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		// two columns provided, only one curve is possible -> hide the curve placement options
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
-		ui->gbPlotPlacement->setTitle(i18n("Add Curve to"));
+		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 	}
 
 	// show all selected/available column names in the data comboboxes
@@ -352,16 +352,16 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
 		if (m_plotType == PlotType::Histogram) {
-			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
-			ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
+			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per histogram"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
 		} else if (m_plotType == PlotType::BoxPlot) {
-			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot"));
-			ui->rbCurvePlacement2->setText(i18n("One plot per box plot"));
+			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per box plot"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Box Plots to"));
 		} else {
-			ui->rbCurvePlacement1->setText(i18n("All bar plots in one plot"));
-			ui->rbCurvePlacement2->setText(i18n("One plot per bar plot"));
+			ui->rbCurvePlacement1->setText(i18n("All bar plots in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per bar plot"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Bar Plots to"));
 		}
 
@@ -396,7 +396,7 @@ void PlotDataDialog::plot() {
 		// add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		auto* plot = static_cast<CartesianPlot*>(aspect);
-		plot->beginMacro(i18n("Plot - %1", m_spreadsheet->name()));
+		plot->beginMacro(i18n("Plot Area - %1", m_spreadsheet->name()));
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacement2->isChecked()) {
@@ -407,7 +407,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -434,7 +434,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -562,7 +562,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			if (yColumn == xColumn)
 				continue;
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
@@ -577,7 +577,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
@@ -593,7 +593,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			if (m_plotType == PlotType::BoxPlot)

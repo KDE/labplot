@@ -33,7 +33,7 @@ class TextLabelPrivate : public WorksheetElementPrivate {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
-	double zoomFactor{1.0};
+	double zoomFactor{-1.0};
 	// scaling:
 	// we need to scale from the font size specified in points to scene units.
 	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution

@@ -256,6 +256,26 @@ void CartesianPlotLegendDock::updateUnits() {
 void CartesianPlotLegendDock::retranslateUi() {
 	Lock lock(m_initializing);
 
+	ui.cbOrder->addItem(i18n("Column Major"));
+	ui.cbOrder->addItem(i18n("Row Major"));
+
+	// Positioning and alignment
+	ui.cbPositionX->addItem(i18n("Left"));
+	ui.cbPositionX->addItem(i18n("Center"));
+	ui.cbPositionX->addItem(i18n("Right"));
+
+	ui.cbPositionY->addItem(i18n("Top"));
+	ui.cbPositionY->addItem(i18n("Center"));
+	ui.cbPositionY->addItem(i18n("Bottom"));
+
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
+
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
 	QString suffix;

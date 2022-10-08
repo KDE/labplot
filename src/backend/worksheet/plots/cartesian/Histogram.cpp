@@ -27,6 +27,7 @@
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "tools/ImageTools.h"
 
 #include <QGraphicsSceneContextMenuEvent>
@@ -93,20 +94,16 @@ void Histogram::init() {
 	});
 
 	// values
-	d->valuesType = (Histogram::ValuesType)group.readEntry("ValuesType", (int)Histogram::NoValues);
-	d->valuesColumn = nullptr;
-	d->valuesPosition = (Histogram::ValuesPosition)group.readEntry("ValuesPosition", (int)Histogram::ValuesAbove);
-	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->valuesRotationAngle = group.readEntry("ValuesRotation", 0.0);
-	d->valuesOpacity = group.readEntry("ValuesOpacity", 1.0);
-	d->valuesNumericFormat = group.readEntry("ValuesNumericFormat", "f").at(0).toLatin1();
-	d->valuesPrecision = group.readEntry("ValuesPrecision", 2);
-	d->valuesDateTimeFormat = group.readEntry("ValuesDateTimeFormat", "yyyy-MM-dd");
-	d->valuesPrefix = group.readEntry("ValuesPrefix", "");
-	d->valuesSuffix = group.readEntry("ValuesSuffix", "");
-	d->valuesFont = group.readEntry("ValuesFont", QFont());
-	d->valuesFont.setPixelSize(Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
-	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
+	d->value = new Value(QString());
+	addChild(d->value);
+	d->value->setHidden(true);
+	d->value->init(group);
+	connect(d->value, &Value::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->value, &Value::updateRequested, [=] {
+		d->updateValues();
+	});
 
 	// Background/Filling
 	d->background = new Background(QString());
@@ -286,23 +283,10 @@ Symbol* Histogram::symbol() const {
 }
 
 // values
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
-BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, valuesColumn, valuesColumn)
-QString& Histogram::valuesColumnPath() const {
-	D(Histogram);
-	return d->valuesColumnPath;
+Value* Histogram::value() const {
+	Q_D(const Histogram);
+	return d->value;
 }
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
-BASIC_SHARED_D_READER_IMPL(Histogram, char, valuesNumericFormat, valuesNumericFormat)
-BASIC_SHARED_D_READER_IMPL(Histogram, int, valuesPrecision, valuesPrecision)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesDateTimeFormat, valuesDateTimeFormat)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
-BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
-BASIC_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
-BASIC_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 // filling
 Background* Histogram::background() const {
@@ -513,103 +497,6 @@ void Histogram::setLineOpacity(qreal opacity) {
 		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
-// Values
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesType, Histogram::ValuesType, valuesType, updateValues)
-void Histogram::setValuesType(Histogram::ValuesType type) {
-	Q_D(Histogram);
-	if (type != d->valuesType)
-		exec(new HistogramSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColumn, const AbstractColumn*, valuesColumn, updateValues)
-void Histogram::setValuesColumn(const AbstractColumn* column) {
-	Q_D(Histogram);
-	if (column != d->valuesColumn) {
-		exec(new HistogramSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
-		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateValues);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Histogram::valuesColumnAboutToBeRemoved);
-		}
-	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPosition, Histogram::ValuesPosition, valuesPosition, updateValues)
-void Histogram::setValuesPosition(ValuesPosition position) {
-	Q_D(Histogram);
-	if (position != d->valuesPosition)
-		exec(new HistogramSetValuesPositionCmd(d, position, ki18n("%1: set values position")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDistance, qreal, valuesDistance, updateValues)
-void Histogram::setValuesDistance(qreal distance) {
-	Q_D(Histogram);
-	if (distance != d->valuesDistance)
-		exec(new HistogramSetValuesDistanceCmd(d, distance, ki18n("%1: set values distance")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
-void Histogram::setValuesRotationAngle(qreal angle) {
-	Q_D(Histogram);
-	if (!qFuzzyCompare(1 + angle, 1 + d->valuesRotationAngle))
-		exec(new HistogramSetValuesRotationAngleCmd(d, angle, ki18n("%1: rotate values")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesOpacity, qreal, valuesOpacity, updatePixmap)
-void Histogram::setValuesOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->valuesOpacity)
-		exec(new HistogramSetValuesOpacityCmd(d, opacity, ki18n("%1: set values opacity")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesNumericFormat, char, valuesNumericFormat, updateValues)
-void Histogram::setValuesNumericFormat(char format) {
-	Q_D(Histogram);
-	if (format != d->valuesNumericFormat)
-		exec(new HistogramSetValuesNumericFormatCmd(d, format, ki18n("%1: set values numeric format")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrecision, int, valuesPrecision, updateValues)
-void Histogram::setValuesPrecision(int precision) {
-	Q_D(Histogram);
-	if (precision != d->valuesPrecision)
-		exec(new HistogramSetValuesPrecisionCmd(d, precision, ki18n("%1: set values precision")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesDateTimeFormat, QString, valuesDateTimeFormat, updateValues)
-void Histogram::setValuesDateTimeFormat(const QString& format) {
-	Q_D(Histogram);
-	if (format != d->valuesDateTimeFormat)
-		exec(new HistogramSetValuesDateTimeFormatCmd(d, format, ki18n("%1: set values datetime format")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesPrefix, QString, valuesPrefix, updateValues)
-void Histogram::setValuesPrefix(const QString& prefix) {
-	Q_D(Histogram);
-	if (prefix != d->valuesPrefix)
-		exec(new HistogramSetValuesPrefixCmd(d, prefix, ki18n("%1: set values prefix")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesSuffix, QString, valuesSuffix, updateValues)
-void Histogram::setValuesSuffix(const QString& suffix) {
-	Q_D(Histogram);
-	if (suffix != d->valuesSuffix)
-		exec(new HistogramSetValuesSuffixCmd(d, suffix, ki18n("%1: set values suffix")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesFont, QFont, valuesFont, updateValues)
-void Histogram::setValuesFont(const QFont& font) {
-	Q_D(Histogram);
-	if (font != d->valuesFont)
-		exec(new HistogramSetValuesFontCmd(d, font, ki18n("%1: set values font")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetValuesColor, QColor, valuesColor, updatePixmap)
-void Histogram::setValuesColor(const QColor& color) {
-	Q_D(Histogram);
-	if (color != d->valuesColor)
-		exec(new HistogramSetValuesColorCmd(d, color, ki18n("%1: set values color")));
-}
-
 // Error bars
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorType, Histogram::ErrorType, errorType, updateErrorBars)
 void Histogram::setErrorType(ErrorType type) {
@@ -722,9 +609,9 @@ void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, b
 	Q_D(const Histogram);
 
 	// setValuesDistance(d->distance*);
-	QFont font = d->valuesFont;
+	QFont font = d->value->font();
 	font.setPointSizeF(font.pointSizeF() * horizontalRatio);
-	setValuesFont(font);
+	d->value->setFont(font);
 
 	retransform();
 }
@@ -739,14 +626,6 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->dataColumn) {
 		d->dataColumn = nullptr;
 		d->retransform();
-	}
-}
-
-void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
-	Q_D(Histogram);
-	if (aspect == d->valuesColumn) {
-		d->valuesColumn = nullptr;
-		d->updateValues();
 	}
 }
 
@@ -945,7 +824,9 @@ void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
-	if (suppressRetransform || q->isLoading())
+	const bool suppressed = suppressRetransform || q->isLoading();
+	trackRetransformCalled(suppressed);
+	if (suppressed)
 		return;
 
 	if (!isVisible())
@@ -1351,13 +1232,15 @@ void HistogramPrivate::updateValues() {
 	valuesPoints.clear();
 	valuesStrings.clear();
 
-	if (valuesType == Histogram::NoValues || !m_histogram) {
+	if (value->type() == Value::NoValues || !m_histogram) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	// determine the value string for all points that are currently visible in the plot
-	if (valuesType == Histogram::ValuesBinEntries) {
+	const auto& valuesPrefix = value->prefix();
+	const auto& valuesSuffix = value->suffix();
+	if (value->type() == Value::BinEntries) {
 		switch (type) {
 		case Histogram::Ordinary:
 			for (size_t i = 0; i < m_bins; ++i) {
@@ -1367,7 +1250,7 @@ void HistogramPrivate::updateValues() {
 			}
 			break;
 		case Histogram::Cumulative: {
-			value = 0;
+			int value = 0;
 			for (size_t i = 0; i < m_bins; ++i) {
 				if (!visiblePoints[i])
 					continue;
@@ -1379,7 +1262,8 @@ void HistogramPrivate::updateValues() {
 		case Histogram::AvgShift:
 			break;
 		}
-	} else if (valuesType == Histogram::ValuesCustomColumn) {
+	} else if (value->type() == Value::CustomColumn) {
+		const auto* valuesColumn = value->column();
 		if (!valuesColumn) {
 			recalcShapeAndBoundingRect();
 			return;
@@ -1396,7 +1280,7 @@ void HistogramPrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), value->numericFormat(), value->precision()) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
@@ -1408,7 +1292,7 @@ void HistogramPrivate::updateValues() {
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
+				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(value->dateTimeFormat()) + valuesSuffix;
 				break;
 			}
 		}
@@ -1417,11 +1301,12 @@ void HistogramPrivate::updateValues() {
 	// Calculate the coordinates where to paint the value strings.
 	// The coordinates depend on the actual size of the string.
 	QPointF tempPoint;
-	QFontMetrics fm(valuesFont);
+	QFontMetrics fm(value->font());
 	qreal w;
 	const qreal h = fm.ascent();
-	switch (valuesPosition) {
-	case Histogram::ValuesAbove:
+	int valuesDistance = value->distance();
+	switch (value->position()) {
+	case Value::Above:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - w / 2);
@@ -1429,7 +1314,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesUnder:
+	case Value::Under:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - w / 2);
@@ -1437,7 +1322,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesLeft:
+	case Value::Left:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			w = fm.boundingRect(valuesStrings.at(i)).width();
 			tempPoint.setX(pointsScene.at(i).x() - valuesDistance - w - 1);
@@ -1445,7 +1330,7 @@ void HistogramPrivate::updateValues() {
 			valuesPoints.append(tempPoint);
 		}
 		break;
-	case Histogram::ValuesRight:
+	case Value::Right:
 		for (int i = 0; i < valuesStrings.size(); i++) {
 			tempPoint.setX(pointsScene.at(i).x() + valuesDistance - 1);
 			tempPoint.setY(pointsScene.at(i).y());
@@ -1456,9 +1341,10 @@ void HistogramPrivate::updateValues() {
 
 	QTransform trafo;
 	QPainterPath path;
+	double valuesRotationAngle = value->rotationAngle();
 	for (int i = 0; i < valuesPoints.size(); i++) {
 		path = QPainterPath();
-		path.addText(QPoint(0, 0), valuesFont, valuesStrings.at(i));
+		path.addText(QPoint(0, 0), value->font(), valuesStrings.at(i));
 
 		trafo.reset();
 		trafo.translate(valuesPoints.at(i).x(), valuesPoints.at(i).y());
@@ -1714,7 +1600,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
-	if (valuesType != Histogram::NoValues)
+	if (value->type() != Value::NoValues)
 		curveShape.addPath(valuesPath);
 
 	if (errorType != Histogram::ErrorType::NoError)
@@ -1756,12 +1642,7 @@ void HistogramPrivate::draw(QPainter* painter) {
 	symbol->draw(painter, pointsScene);
 
 	// draw values
-	if (valuesType != Histogram::NoValues) {
-		painter->setOpacity(valuesOpacity);
-		painter->setPen(QPen(valuesColor));
-		painter->setFont(valuesFont);
-		drawValues(painter);
-	}
+	value->draw(painter, valuesPoints, valuesStrings);
 
 	// draw error bars
 	if (errorType != Histogram::ErrorType::NoError) {
@@ -1851,21 +1732,6 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
 		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
-	}
-}
-
-void HistogramPrivate::drawValues(QPainter* painter) {
-	int i = 0;
-	for (const auto& point : qAsConst(valuesPoints)) {
-		painter->translate(point);
-		if (valuesRotationAngle != 0.)
-			painter->rotate(-valuesRotationAngle);
-
-		painter->drawText(QPoint(0, 0), valuesStrings.at(i++));
-
-		if (valuesRotationAngle != 0.)
-			painter->rotate(valuesRotationAngle);
-		painter->translate(-point);
 	}
 }
 
@@ -2053,21 +1919,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	d->symbol->save(writer);
 
 	// Values
-	writer->writeStartElement("values");
-	writer->writeAttribute("type", QString::number(d->valuesType));
-	WRITE_COLUMN(d->valuesColumn, valuesColumn);
-	writer->writeAttribute("position", QString::number(d->valuesPosition));
-	writer->writeAttribute("distance", QString::number(d->valuesDistance));
-	writer->writeAttribute("rotation", QString::number(d->valuesRotationAngle));
-	writer->writeAttribute("opacity", QString::number(d->valuesOpacity));
-	writer->writeAttribute("numericFormat", QString(d->valuesNumericFormat));
-	writer->writeAttribute("dateTimeFormat", d->valuesDateTimeFormat);
-	writer->writeAttribute("precision", QString::number(d->valuesPrecision));
-	writer->writeAttribute("prefix", d->valuesPrefix);
-	writer->writeAttribute("suffix", d->valuesSuffix);
-	WRITE_QCOLOR(d->valuesColor);
-	WRITE_QFONT(d->valuesFont);
-	writer->writeEndElement();
+	d->value->save(writer);
 
 	// Filling
 	d->background->save(writer);
@@ -2143,36 +1995,13 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("type", lineType, Histogram::LineType);
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);
-		} else if (!preview && reader->name() == "symbols") {
+		} else if (!preview && reader->name() == "symbols")
 			d->symbol->load(reader, preview);
-		} else if (!preview && reader->name() == "values") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", valuesType, Histogram::ValuesType);
-			READ_COLUMN(valuesColumn);
-			READ_INT_VALUE("position", valuesPosition, Histogram::ValuesPosition);
-			READ_DOUBLE_VALUE("distance", valuesRotationAngle);
-			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
-			READ_DOUBLE_VALUE("opacity", valuesOpacity);
-
-			str = attribs.value("numericFormat").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
-			else
-				d->valuesNumericFormat = *(str.toLatin1().data());
-
-			READ_STRING_VALUE("dateTimeFormat", valuesDateTimeFormat);
-			READ_INT_VALUE("precision", valuesPrecision, int);
-
-			// don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
-			d->valuesPrefix = attribs.value("prefix").toString();
-			d->valuesSuffix = attribs.value("suffix").toString();
-
-			READ_QCOLOR(d->valuesColor);
-			READ_QFONT(d->valuesFont);
-		} else if (!preview && reader->name() == "filling") {
+		else if (!preview && reader->name() == "values")
+			d->value->load(reader, preview);
+		else if (!preview && reader->name() == "filling")
 			d->background->load(reader, preview);
-		} else if (!preview && reader->name() == "errorBars") {
+		else if (!preview && reader->name() == "errorBars") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("errorType", errorType, ErrorType);
@@ -2225,11 +2054,11 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->symbol->loadThemeConfig(group, themeColor);
 
 	// Values
-	setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
-	setValuesColor(group.readEntry("ValuesColor", themeColor));
+	d->value->loadThemeConfig(group, themeColor);
 
 	// Filling
 	d->background->loadThemeConfig(group);
+	d->background->setFirstColor(themeColor);
 
 	// Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style())));
@@ -2269,9 +2098,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	d->symbol->saveThemeConfig(group);
 
 	// Values
-	group.writeEntry("ValuesOpacity", d->valuesOpacity);
-	group.writeEntry("ValuesColor", d->valuesColor);
-	group.writeEntry("ValuesFont", d->valuesFont);
+	d->value->saveThemeConfig(group);
 
 	// Filling
 	d->background->saveThemeConfig(group);

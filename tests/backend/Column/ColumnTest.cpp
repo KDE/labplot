@@ -472,6 +472,59 @@ void ColumnTest::statisticsBigInt() {
 #endif
 }
 
+void ColumnTest::statisticsText() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	const auto& stats = c.statistics();
+
+	QCOMPARE(stats.size, 5);
+	QCOMPARE(stats.unique, 2);
+}
+
+void ColumnTest::testDictionaryIndex() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	// check the position of the distinct values in the dictionary
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 1);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+
+	// modify a value which will invalidate the dictionary and verify it again
+	c.setTextAt(1, "yes");
+
+	QCOMPARE(c.dictionaryIndex(0), 0);
+	QCOMPARE(c.dictionaryIndex(1), 0);
+	QCOMPARE(c.dictionaryIndex(2), 1);
+	QCOMPARE(c.dictionaryIndex(3), 0);
+	QCOMPARE(c.dictionaryIndex(4), 0);
+}
+
+void ColumnTest::testTextFrequencies() {
+	Column c("Text column", Column::ColumnMode::Text);
+	c.setTextAt(0, "yes");
+	c.setTextAt(1, "no");
+	c.setTextAt(2, "no");
+	c.setTextAt(3, "yes");
+	c.setTextAt(4, "yes");
+
+	const auto& frequencies = c.frequencies();
+
+	QCOMPARE(frequencies["yes"], 3);
+	QCOMPARE(frequencies["no"], 2);
+}
+
 //////////////////////////////////////////////////
 
 void ColumnTest::saveLoadDateTime() {
@@ -737,26 +790,78 @@ void ColumnTest::loadDateTimeFromProject() {
 	//	}
 }
 
-void ColumnTest::testDictionaryIndex() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
+void ColumnTest::testIndexForValue() {
+	{
+		const double value = 5;
+		QVector<QPointF> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
 
-	// check the position of the distinct values in the dictionary
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 1);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
+	{
+		const double value = 5;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
 
-	// modify a value which will invalidate the dictionary and verify it again
-	c.setTextAt(1, "yes");
+	{
+		const double value = 60;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
 
-	QCOMPARE(c.dictionaryIndex(0), 0);
-	QCOMPARE(c.dictionaryIndex(1), 0);
-	QCOMPARE(c.dictionaryIndex(2), 1);
-	QCOMPARE(c.dictionaryIndex(3), 0);
+	{
+		const double value = 16;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<QPointF> points{QPointF(10, 1), QPointF(20, 1), QPointF(30, 1), QPointF(40, 1), QPointF(50, 1)};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+}
+
+void ColumnTest::testIndexForValueDoubleVector() {
+	{
+		const double value = 5;
+		QVector<double> points{};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), -1);
+	}
+
+	{
+		const double value = 5;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 0);
+	}
+
+	{
+		const double value = 60;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 4);
+	}
+
+	{
+		const double value = 16;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
+
+	{
+		const double value = 20;
+		QVector<double> points{10, 20, 30, 40, 50};
+		Column::Properties properties = Column::Properties::MonotonicIncreasing;
+		QCOMPARE(Column::indexForValue(value, points, properties), 1);
+	}
 }
 
 QTEST_MAIN(ColumnTest)

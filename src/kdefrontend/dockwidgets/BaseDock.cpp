@@ -72,11 +72,11 @@ void BaseDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
 	auto* element{static_cast<WorksheetElement*>(m_aspect)};
-	const CartesianPlot* plot;
+	CartesianPlot* plot;
 	if (element->plot()) {
 		plot = element->plot();
 	} else {
-		plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+		plot = dynamic_cast<CartesianPlot*>(m_aspect->parentAspect());
 	}
 
 	if (!plot)
@@ -87,19 +87,58 @@ void BaseDock::plotRangeChanged(int index) {
 		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
+	const int xIndexNew = plot->coordinateSystem(index)->index(Dimension::X);
+	const int yIndexNew = plot->coordinateSystem(index)->index(Dimension::Y);
+
+	bool xIndexNewDifferent = false;
+	bool yIndexNewDifferent = false;
+	QVector<int> xRangesChanged;
+	QVector<int> yRangesChanged;
 	for (auto aspect : m_aspects) {
 		auto* e{static_cast<WorksheetElement*>(aspect)};
 		if (index != e->coordinateSystemIndex()) {
+			const auto* elementOldCSystem = plot->coordinateSystem(e->coordinateSystemIndex());
+			const auto xIndexOld = elementOldCSystem->index(Dimension::X);
+			const auto yIndexOld = elementOldCSystem->index(Dimension::Y);
+			// If indices are same, the range will not change, so do not track those
+			if (xIndexOld != xIndexNew) {
+				xIndexNewDifferent = true;
+				if (!xRangesChanged.contains(xIndexOld))
+					xRangesChanged.append(xIndexOld);
+			}
+			if (yIndexOld != yIndexNew) {
+				yIndexNewDifferent = true;
+				if (!yRangesChanged.contains(yIndexOld))
+					yRangesChanged.append(yIndexOld);
+			}
 			e->setSuppressRetransform(true);
 			e->setCoordinateSystemIndex(index);
 			e->setSuppressRetransform(false);
 			if (dynamic_cast<Axis*>(e))
 				dynamic_cast<AxisDock*>(this)->updateAutoScale();
 			updateLocale(); // update line edits
-			e->retransform(); // redraw
-			e->project()->setChanged(true);
 		}
 	}
+
+	// Retransform all changed indices and the new indices
+	if (!xRangesChanged.contains(xIndexNew) && xIndexNewDifferent)
+		xRangesChanged.append(xIndexNew);
+	for (const int index : xRangesChanged) {
+		plot->setRangeDirty(Dimension::X, index, true);
+		if (plot->autoScale(Dimension::X, index))
+			plot->scaleAuto(Dimension::X, index);
+	}
+
+	if (!yRangesChanged.contains(yIndexNew) && yIndexNewDifferent)
+		yRangesChanged.append(yIndexNew);
+	for (const int index : yRangesChanged) {
+		plot->setRangeDirty(Dimension::Y, index, true);
+		if (plot->autoScale(Dimension::Y, index))
+			plot->scaleAuto(Dimension::Y, index);
+	}
+
+	plot->WorksheetElementContainer::retransform();
+	plot->project()->setChanged(true);
 }
 
 void BaseDock::nameChanged() {

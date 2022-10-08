@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
 
 	QSplashScreen* splash = nullptr;
 	if (!parser.isSet(nosplashOption)) {
-		const QString& file = QStandardPaths::locate(QStandardPaths::DataLocation, "splash.png");
+		const QString& file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "splash.png");
 		splash = new QSplashScreen(QPixmap(file));
 		splash->show();
 	}

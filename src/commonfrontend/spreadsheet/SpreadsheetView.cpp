@@ -31,12 +31,14 @@
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
 #include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+#include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 #include "kdefrontend/spreadsheet/FormattingHeatmapDialog.h"
 #include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
 #include "kdefrontend/spreadsheet/GoToDialog.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/RandomValuesDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
+#include "kdefrontend/spreadsheet/SampleValuesDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
@@ -280,6 +282,9 @@ void SpreadsheetView::initActions() {
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
+	action_sample_values = new QAction(QIcon::fromTheme(QString("view-list-details")), i18n("Sample Values"), this);
+	action_flatten_columns = new QAction(QIcon::fromTheme(QString("gnumeric-object-list")), i18n("Flatten Columns"), this);
+
 	// spreadsheet related actions
 	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
 	action_clear_spreadsheet = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Spreadsheet"), this);
@@ -339,9 +344,9 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Drop"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask"), this);
-	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QString("delete-table-row")), i18n("Drop"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QString("hide_table_row")), i18n("Mask"), this);
+	action_reverse_columns = new QAction(QIcon::fromTheme(QString("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
 	// normalization
@@ -613,9 +618,14 @@ void SpreadsheetView::initMenus() {
 		m_columnGenerateDataMenu = new QMenu(i18n("Generate Data"), this);
 		m_columnGenerateDataMenu->addAction(action_fill_row_numbers);
 		m_columnGenerateDataMenu->addAction(action_fill_const);
+		m_columnGenerateDataMenu->addSeparator();
 		m_columnGenerateDataMenu->addAction(action_fill_equidistant);
 		m_columnGenerateDataMenu->addAction(action_fill_random_nonuniform);
 		m_columnGenerateDataMenu->addAction(action_fill_function);
+		m_columnGenerateDataMenu->addSeparator();
+		m_columnGenerateDataMenu->addAction(action_sample_values);
+		m_columnGenerateDataMenu->addAction(action_flatten_columns);
+
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnGenerateDataMenu);
 		m_columnMenu->addSeparator();
@@ -823,6 +833,9 @@ void SpreadsheetView::connectActions() {
 	connect(action_reverse_columns, &QAction::triggered, this, &SpreadsheetView::reverseColumns);
 	connect(action_drop_values, &QAction::triggered, this, &SpreadsheetView::dropColumnValues);
 	connect(action_mask_values, &QAction::triggered, this, &SpreadsheetView::maskColumnValues);
+	connect(action_sample_values, &QAction::triggered, this, &SpreadsheetView::sampleColumnValues);
+	connect(action_flatten_columns, &QAction::triggered, this, &SpreadsheetView::flattenColumns);
+
 	// 	connect(action_join_columns, &QAction::triggered, this, &SpreadsheetView::joinColumns);
 	connect(normalizeColumnActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::normalizeSelectedColumns);
 	connect(ladderOfPowersActionGroup, &QActionGroup::triggered, this, &SpreadsheetView::powerTransformSelectedColumns);
@@ -957,6 +970,7 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 	const bool hasValues = column->hasValues();
 	const bool numeric = column->isNumeric();
 	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
+	const bool text = (column->columnMode() == AbstractColumn::ColumnMode::Text);
 
 	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
@@ -977,12 +991,12 @@ void SpreadsheetView::fillColumnContextMenu(QMenu* menu, Column* column) {
 		action_sort_desc_column->setVisible(true);
 		action_sort_columns->setVisible(false);
 
-		checkColumnMenus(numeric, datetime, hasValues);
+		checkColumnMenus(numeric, datetime, text, hasValues);
 	}
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, action_statistics_columns);
-	action_statistics_columns->setEnabled(numeric && hasValues);
+	action_statistics_columns->setEnabled((numeric || text) && hasValues);
 }
 
 // SLOTS
@@ -1275,6 +1289,10 @@ void SpreadsheetView::getCurrentCell(int* row, int* col) const {
 
 bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 	if (event->type() == QEvent::ContextMenu) {
+		// initialize all menus and actions if not done yet
+		if (!m_plotDataMenu)
+			initMenus();
+
 		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint global_pos = cm_event->globalPos();
 		if (watched == m_tableView->verticalHeader()) {
@@ -1304,9 +1322,6 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			if (!m_rowMenu)
-				initMenus();
-
 			action_statistics_rows->setEnabled(numeric && hasValues);
 			m_rowMenu->exec(global_pos);
 		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader())) {
@@ -1332,6 +1347,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool numeric = true;
 			bool plottable = true;
 			bool datetime = false;
+			bool text = false;
 			bool hasValues = false;
 			bool hasFormat = false;
 			const auto& columns = selectedColumns();
@@ -1343,6 +1359,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 						plottable = false;
 
 					numeric = false;
+					break;
+				}
+			}
+
+			for (const Column* col : columns) {
+				if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
+					text = true;
 					break;
 				}
 			}
@@ -1364,13 +1387,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_plotDataMenu->setEnabled(plottable && hasValues);
 			m_analyzePlotMenu->setEnabled(numeric && hasValues);
 			m_columnSetAsMenu->setEnabled(numeric);
-			action_statistics_columns->setEnabled(numeric && hasValues);
+			action_statistics_columns->setEnabled((numeric || text) && hasValues);
 			action_clear_columns->setEnabled(hasValues);
 			m_formattingMenu->setEnabled(hasValues);
 			action_formatting_remove->setVisible(hasFormat);
 
 			if (!m_readOnly)
-				checkColumnMenus(numeric, datetime, hasValues);
+				checkColumnMenus(numeric, datetime, text, hasValues);
 
 			m_columnMenu->exec(global_pos);
 		} else if (watched == this) {
@@ -1517,19 +1540,28 @@ void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 	action_unmask_selection->setEnabled(hasMasked);
 }
 
-void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValues) {
+void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues) {
 	// generate data is only possible for numeric columns and if there are cells available
 	const bool hasCells = m_spreadsheet->rowCount() > 0;
-	m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
+	m_columnGenerateDataMenu->setEnabled(hasCells);
+	action_fill_row_numbers->setEnabled(numeric);
+	action_fill_const->setEnabled(numeric);
+	action_fill_equidistant->setEnabled(numeric);
+	action_fill_random_nonuniform->setEnabled(numeric);
+	action_fill_function->setEnabled(numeric);
+	action_sample_values->setEnabled(hasValues);
+	action_flatten_columns->setEnabled(hasValues);
 
 	// manipulate data is only possible for numeric and datetime and if there values.
 	// datetime has only "add/subtract value", everything else is deactivated
-	m_columnManipulateDataMenu->setEnabled((numeric || datetime) && hasValues);
+	m_columnManipulateDataMenu->setEnabled((numeric || datetime || text) && hasValues);
+	action_add_value->setEnabled(numeric || datetime);
+	action_subtract_value->setEnabled(numeric || datetime);
 	action_multiply_value->setEnabled(numeric);
 	action_divide_value->setEnabled(numeric);
 	action_reverse_columns->setEnabled(numeric);
-	action_drop_values->setEnabled(numeric);
-	action_mask_values->setEnabled(numeric);
+	action_drop_values->setEnabled(numeric || text);
+	action_mask_values->setEnabled(numeric || text);
 	m_columnNormalizeMenu->setEnabled(numeric);
 	m_columnLadderOfPowersMenu->setEnabled(numeric);
 
@@ -2673,6 +2705,33 @@ void SpreadsheetView::maskColumnValues() {
 		return;
 	auto* dlg = new DropValuesDialog(m_spreadsheet, true);
 	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::sampleColumnValues() {
+	if (selectedColumnCount() < 1)
+		return;
+	auto* dlg = new SampleValuesDialog(m_spreadsheet, this);
+	dlg->setColumns(selectedColumns());
+	dlg->exec();
+}
+
+void SpreadsheetView::flattenColumns() {
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
+		return;
+
+	// ensure all selected columns have the same column mode
+	auto mode = columns.at(0)->columnMode();
+	for (auto* col : columns) {
+		if (col->columnMode() != mode) {
+			KMessageBox::error(this, i18n("The selected columns have different data types and cannot be flattened because of this. "));
+			return;
+		}
+	}
+
+	auto* dlg = new FlattenColumnsDialog(m_spreadsheet, this);
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 

@@ -707,7 +707,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		QStringList names = selectedHDF5Names();
 		QDEBUG(Q_FUNC_INFO << ", selected HDF5 names =" << names);
 		if (!names.isEmpty())
-			filter->setCurrentDataSetName(names[0]);
+			filter->setCurrentDataSetName(names.at(0));
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
@@ -882,7 +882,9 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	and activates the corresponding options.
 */
 void ImportFileWidget::fileNameChanged(const QString& name) {
-	DEBUG("ImportFileWidget::fileNameChanged() : " << STDSTRING(name))
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
+	Q_EMIT error(QString()); // clear previous errors
+
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
@@ -960,7 +962,7 @@ void ImportFileWidget::manageFilters() {
 */
 void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	AbstractFileFilter::FileType fileType = currentFileType();
-	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget();
 
 	// default
@@ -1078,7 +1080,7 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 
 // file type specific option widgets
 void ImportFileWidget::initOptionsWidget() {
-	DEBUG("ImportFileWidget::initOptionsWidget for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
+	DEBUG(Q_FUNC_INFO << ", for " << ENUM_TO_STRING(AbstractFileFilter, FileType, currentFileType()));
 	switch (currentFileType()) {
 	case AbstractFileFilter::FileType::Ascii: {
 		if (!m_asciiOptionsWidget) {
@@ -1705,9 +1707,14 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
-		case AbstractFileFilter::FileType::HDF5:
-			m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
+		case AbstractFileFilter::FileType::HDF5: {
+			int status = m_hdf5OptionsWidget->updateContent(static_cast<HDF5Filter*>(filter), fileName);
+			if (status != 0) { // parsing failed: switch to binary filter
+				ui.cbFileType->setCurrentIndex(ui.cbFileType->findData(static_cast<int>(AbstractFileFilter::FileType::Binary)));
+				Q_EMIT error(i18n("Not a HDF5 file: %1", fileName));
+			}
 			break;
+		}
 		case AbstractFileFilter::FileType::NETCDF:
 			m_netcdfOptionsWidget->updateContent(static_cast<NetCDFFilter*>(filter), fileName);
 			break;

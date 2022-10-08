@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,6 +15,8 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
+
+#include <QMap>
 
 class Column;
 class ColumnSetGlobalFormulaCmd;
@@ -90,6 +92,7 @@ public:
 	void replaceValues(int first, const QVector<QString>&);
 	void replaceTexts(int first, const QVector<QString>&);
 	int dictionaryIndex(int row) const;
+	const QMap<QString, int>& frequencies() const;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
 
@@ -128,6 +131,7 @@ public:
 	const QMap<qint64, QString>& bigIntValueLabels();
 
 	void updateProperties();
+	void calculateStatistics();
 	void invalidate();
 	void finalizeLoad();
 
@@ -163,6 +167,7 @@ private:
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
 	int m_rowCount{0};
 	QVector<QString> m_dictionary; // dictionary for string columns
+	QMap<QString, int> m_dictionaryFrequencies; // dictionary for elements frequencies in string columns
 	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
@@ -177,7 +182,8 @@ private:
 
 	void initLabels();
 	void initDictionary();
-	void connectFormulaColumn(const AbstractColumn* column);
+	void calculateTextStatistics();
+	void connectFormulaColumn(const AbstractColumn*);
 
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);

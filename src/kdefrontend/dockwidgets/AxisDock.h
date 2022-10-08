@@ -133,6 +133,7 @@ private Q_SLOTS:
 
 	//"Tick labels"-tab
 	void labelsFormatChanged(int);
+	void labelsFormatAutoChanged(bool);
 	void labelsPrecisionChanged(int);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsDateTimeFormatChanged();
@@ -207,6 +208,7 @@ private Q_SLOTS:
 
 	// labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);
+	void axisLabelsFormatAutoChanged(bool);
 	void axisLabelsAutoPrecisionChanged(bool);
 	void axisLabelsPrecisionChanged(int);
 	void axisLabelsDateTimeFormatChanged(const QString&);

@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -22,8 +22,13 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+
+#ifdef HAVE_LIBORIGIN
+#include "backend/datasources/projects/OriginProjectParser.h"
+#endif
 
 #ifndef SDK
 #include "backend/datapicker/DatapickerCurve.h"
@@ -36,6 +41,7 @@
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
+#include <QFileInfo>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
@@ -338,8 +344,6 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	auto type = aspect->type();
-
 	if (aspect->inherits(AspectType::AbstractColumn)) {
 		// check whether new columns were added and if yes,
 		// update the dependencies in the project
@@ -448,9 +452,9 @@ void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, co
 			histogram->setUndoAware(true);
 		}
 
-		if (histogram->valuesColumnPath() == columnPath) {
+		if (histogram->value()->columnPath() == columnPath) {
 			histogram->setUndoAware(false);
-			histogram->setValuesColumn(column);
+			histogram->value()->setColumn(column);
 			histogram->setUndoAware(true);
 		}
 	}
@@ -481,6 +485,27 @@ void Project::updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const 
 
 void Project::navigateTo(const QString& path) {
 	Q_EMIT requestNavigateTo(path);
+}
+
+/*!
+ * returns \c true if the project file \fileName has a supported format and can be openned in LabPlot directly,
+ * returns \c false otherwise.
+ */
+bool Project::isSupportedProject(const QString& fileName) {
+	bool open = Project::isLabPlotProject(fileName);
+#ifdef HAVE_LIBORIGIN
+	if (!open)
+		open = OriginProjectParser::isOriginProject(fileName);
+#endif
+
+#ifdef HAVE_CANTOR_LIBS
+	if (!open) {
+		QFileInfo fi(fileName);
+		open = (fi.completeSuffix() == QLatin1String("cws")) || (fi.completeSuffix() == QLatin1String("ipynb"));
+	}
+#endif
+
+	return open;
 }
 
 bool Project::isLabPlotProject(const QString& fileName) {
@@ -919,7 +944,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!hist)
 			continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-		RESTORE_COLUMN_POINTER(hist, valuesColumn, ValuesColumn);
+		auto* value = hist->value();
+		RESTORE_COLUMN_POINTER(value, column, Column);
 		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
 		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
 	}

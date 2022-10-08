@@ -114,7 +114,7 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
-	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
+	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
 
 	// selection related actions
 	QAction* action_cut_selection;
@@ -169,6 +169,8 @@ private:
 	QAction* action_divide_value;
 	QAction* action_drop_values;
 	QAction* action_mask_values;
+	QAction* action_sample_values;
+	QAction* action_flatten_columns;
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
 	QActionGroup* ladderOfPowersActionGroup;
@@ -278,6 +280,8 @@ private Q_SLOTS:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
+	void sampleColumnValues();
+	void flattenColumns();
 	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);

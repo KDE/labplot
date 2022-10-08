@@ -1920,8 +1920,10 @@ QStringList AsciiFilterPrivate::split(const QString& line, bool autoSeparator) {
 				}
 
 				if (mergeStart != mergeEnd) {
-					for (int i = 0; i < (mergeEnd - mergeStart); ++i)
-						lineStringList[mergeStart] += m_separator + lineStringList.takeAt(mergeStart + 1);
+					for (int i = 0; i < (mergeEnd - mergeStart); ++i) {
+						if (mergeStart + 1 < lineStringList.count())
+							lineStringList[mergeStart] += m_separator + lineStringList.takeAt(mergeStart + 1);
+					}
 				}
 			}
 		}
@@ -1941,7 +1943,7 @@ void AsciiFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
  * create datetime from \c string using \c format considering corner cases
  */
 QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString& format) {
-	// DEBUG("string = " << STDSTRING(string) << ", format = " << STDSTRING(format))
+	// DEBUG(Q_FUNC_INFO << ", string = " << STDSTRING(string) << ", format = " << STDSTRING(format))
 	QString fixedString(string);
 	QString fixedFormat(format);
 	if (!format.contains("yy")) { // no year given: set temporary to 2000 (must be a leap year to parse "Feb 29")
@@ -1950,12 +1952,13 @@ QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString
 	}
 
 	QDateTime dateTime = QDateTime::fromString(fixedString, fixedFormat);
+	dateTime.setTimeSpec(Qt::UTC);
 	// QDEBUG("fromString() =" << dateTime)
 	//  interpret 2-digit year smaller than 50 as 20XX
 	if (dateTime.date().year() < 1950 && !format.contains("yyyy"))
 		dateTime = dateTime.addYears(100);
 	// QDEBUG("dateTime fixed =" << dateTime)
-	// DEBUG("dateTime.toString =" << STDSTRING(dateTime.toString(format)))
+	// DEBUG(Q_FUNC_INFO << ", dateTime.toString = " << STDSTRING(dateTime.toString(format)))
 
 	return dateTime;
 }

@@ -332,6 +332,10 @@ QRectF Worksheet::pageRect() const {
 	return d->m_scene->sceneRect();
 }
 
+double Worksheet::zoomFactor() const {
+	return m_view->zoomFactor();
+}
+
 /*!
 	this slot is called when a worksheet element is selected in the project explorer.
 	emits \c itemSelected() which forwards this event to the \c WorksheetView

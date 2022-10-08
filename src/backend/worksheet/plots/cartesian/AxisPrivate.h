@@ -42,6 +42,7 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
 	bool isHovered() const;
+	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
 
@@ -98,6 +99,7 @@ public:
 
 	// Tick Label
 	Axis::LabelsFormat labelsFormat;
+	bool labelsFormatAuto{true};
 	int labelsPrecision;
 	bool labelsAutoPrecision;
 	QString labelsDateTimeFormat;
@@ -127,8 +129,6 @@ public:
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool labelsFormatOverruled{false};
-	bool labelsFormatAutoChanged{false};
 
 	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
 	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.

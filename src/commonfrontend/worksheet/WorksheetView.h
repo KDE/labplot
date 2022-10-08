@@ -63,6 +63,7 @@ public:
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
 	QList<QGraphicsItem*> selectedItems() const;
+	double zoomFactor() const;
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();

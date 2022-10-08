@@ -196,9 +196,12 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 		case 1:
 			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
 				return QLatin1String("Notebook");
-			if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
+			else if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
 				return QLatin1String("DataExtractor");
-			return aspect->metaObject()->className();
+			else if (aspect->metaObject()->className() == QLatin1String("CartesianPlot"))
+				return QLatin1String("Plot Area");
+			else
+				return aspect->metaObject()->className();
 		case 2:
 			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:

@@ -18,10 +18,12 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 #include <QTabWidget>
@@ -51,184 +53,209 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	setLayout(layout);
 
 	const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
-	m_htmlText = QString("<table border=0 width=100%>"
-	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Location Measures")+
-	                     "</big><b></td>"
-	                     "</tr>"
-// 	                     "<tr></tr>"
-	                     "<tr>"
-	                     "<td width=70%><b>"
-	                     + i18n("Count")+
-	                     "<b></td>"
-	                     "<td>%1</td>"
-	                     "</tr>"
-						 "<tr>"
-	                     "<td><b>"
-	                     + i18n("Minimum")+
-	                     "<b></td>"
-	                     "<td>%2</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Maximum")+
-	                     "<b></td>"
-	                     "<td>%3</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Arithmetic mean")+
-	                     "<b></td>"
-	                     "<td>%4</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Geometric mean")+
-	                     "<b></td>"
-	                     "<td>%5</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Harmonic mean")+
-	                     "<b></td>"
-	                     "<td>%6</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Contraharmonic mean")+
-	                     "<b></td>"
-	                     "<td>%7</td>"
-	                     "</tr>"
+	if (column->isNumeric()) {
+		m_htmlOverview = QString("<table border=0 width=100%>"
+							"<tr>"
+							"<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
+							+ i18n("Location Measures")+
+							"</big><b></td>"
+							"</tr>"
+							"<tr>"
+							"<td width=60%><b>"
+							+ i18n("Count")+
+							"<b></td>"
+							"<td>%1</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Minimum")+
+							"<b></td>"
+							"<td>%2</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Maximum")+
+							"<b></td>"
+							"<td>%3</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Arithmetic mean")+
+							"<b></td>"
+							"<td>%4</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Geometric mean")+
+							"<b></td>"
+							"<td>%5</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Harmonic mean")+
+							"<b></td>"
+							"<td>%6</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Contraharmonic mean")+
+							"<b></td>"
+							"<td>%7</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Mode")+
+							"<b></td>"
+							"<td>%8</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("First Quartile")+
+							"<b></td>"
+							"<td>%9</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Median")+
+							"<b></td>"
+							"<td>%10</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Third Quartile")+
+							"<b></td>"
+							"<td>%11</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Trimean")+
+							"<b></td>"
+							"<td>%12</td>"
+							"</tr>"
+							"<tr></tr>"
+							"<tr>"
+							"<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
+							+ i18n("Dispersion Measures")+
+							"</big></b></td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Variance")+
+							"<b></td>"
+							"<td>%13</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Standard deviation")+
+							"<b></td>"
+							"<td>%14</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Mean absolute deviation around mean")+
+							"<b></td>"
+							"<td>%15</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Mean absolute deviation around median")+
+							"<b></td>"
+							"<td>%16</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Median absolute deviation")+
+							"<b></td>"
+							"<td>%17</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Interquartile Range")+
+							"<b></td>"
+							"<td>%18</td>"
+							"</tr>"
+							"<tr></tr>"
+							"<tr>"
+							"<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
+							+ i18n("Shape Measures")+
+							"</big></b></td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Skewness")+
+							"<b></td>"
+							"<td>%19</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Kurtosis")+
+							"<b></td>"
+							"<td>%20</td>"
+							"</tr>"
+							"<tr>"
+							"<td><b>"
+							+ i18n("Entropy")+
+							"<b></td>"
+							"<td>%21</td>"
+							"</tr>"
+							"</table>");
+	} else {
+		m_htmlOverview = QString("<table border=0 width=100%>"
 						"<tr>"
-	                     "<td><b>"
-	                     + i18n("Mode")+
-	                     "<b></td>"
-	                     "<td>%8</td>"
-	                     "</tr>"
+						"<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
+						+ i18n("General")+
+						"</big><b></td>"
+						"</tr>"
+						"<tr>"
+						"<td width=60%><b>"
+						+ i18n("Count")+
+						"<b></td>"
+						"<td>%1</td>"
+						"</tr>"
 						 "<tr>"
-	                     "<td><b>"
-	                     + i18n("First Quartile")+
-	                     "<b></td>"
-	                     "<td>%9</td>"
-	                     "</tr>"
-						 "<tr>"
-	                     "<td><b>"
-	                     + i18n("Median")+
-	                     "<b></td>"
-	                     "<td>%10</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Third Quartile")+
-	                     "<b></td>"
-	                     "<td>%11</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Trimean")+
-	                     "<b></td>"
-	                     "<td>%12</td>"
-	                     "</tr>"
-	                     "<tr></tr>"
-	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Dispersion Measures")+
-	                     "</big></b></td>"
-	                     "</tr>"
-// 	                     "<tr></tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Variance")+
-	                     "<b></td>"
-						 "<td>%13</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Standard deviation")+
-	                     "<b></td>"
-						 "<td>%14</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Mean absolute deviation around mean")+
-	                     "<b></td>"
-						 "<td>%15</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Mean absolute deviation around median")+
-	                     "<b></td>"
-						 "<td>%16</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Median absolute deviation")+
-	                     "<b></td>"
-						 "<td>%17</td>"
-	                     "</tr>"
-						 "<tr>"
-						  "<td><b>"
-						  + i18n("Interquartile Range")+
-						  "<b></td>"
-						  "<td>%18</td>"
-						  "</tr>"
-	                     "<tr></tr>"
-	                     "<tr>"
-	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Shape Measures")+
-	                     "</big></b></td>"
-	                     "</tr>"
-// 	                     "<tr></tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Skewness")+
-	                     "<b></td>"
-	                     "<td>%19</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Kurtosis")+
-	                     "<b></td>"
-	                     "<td>%20</td>"
-	                     "</tr>"
-	                     "<tr>"
-	                     "<td><b>"
-	                     + i18n("Entropy")+
-	                     "<b></td>"
-	                     "<td>%21</td>"
-	                     "</tr>"
-	                     "</table>");
+						"<td><b>"
+						+ i18n("Unique Values")+
+						"<b></td>"
+						"<td>%2</td>"
+						"</tr>"
+						"</table>");
+	}
 
 	// create tab widgets for every column and show the initial text with the placeholders
 	m_teOverview = new QTextEdit(this);
 	m_teOverview->setReadOnly(true);
-	m_teOverview->setHtml(m_htmlText
-							  .arg(QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"))
-							  .arg(QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"),
-								   QLatin1String("-"))
-							  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
-
 	m_tabWidget->addTab(m_teOverview, i18n("Overview"));
-	m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
-	m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
-	m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
-	m_tabWidget->addTab(&m_boxPlotWidget, i18n("Box Plot"));
+
+	if (column->isNumeric()) {
+		m_teOverview->setHtml(m_htmlOverview
+								  .arg(QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"))
+								  .arg(QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"),
+									   QLatin1String("-"))
+								  .arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+		m_tabWidget->addTab(&m_histogramWidget, i18n("Histogram"));
+		m_tabWidget->addTab(&m_kdePlotWidget, i18n("KDE Plot"));
+		m_tabWidget->addTab(&m_qqPlotWidget, i18n("Normal Q-Q Plot"));
+		m_tabWidget->addTab(&m_boxPlotWidget, i18n("Box Plot"));
+	} else {
+		m_teOverview->setHtml(m_htmlOverview.arg(QLatin1String("-"), QLatin1String("-")));
+		m_tabWidget->addTab(&m_barPlotWidget, i18n("Bar Plot"));
+		m_tabWidget->addTab(&m_paretoPlotWidget, i18n("Pareto Plot"));
+	}
 
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &StatisticsColumnWidget::currentTabChanged);
 }
@@ -246,52 +273,91 @@ void StatisticsColumnWidget::setCurrentTab(int index) {
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
-	if (index == 0 && !m_overviewInitialized)
-		showOverview();
-	else if (index == 1 && !m_histogramInitialized)
-		showHistogram();
-	else if (index == 2 && !m_kdePlotInitialized)
-		showKDEPlot();
-	else if (index == 3 && !m_qqPlotInitialized)
-		showQQPlot();
-	else if (index == 4 && !m_boxPlotInitialized)
-		showBoxPlot();
+	WAIT_CURSOR;
+	if (m_column->isNumeric()) {
+		if (index == 0 && !m_overviewInitialized)
+			showOverview();
+		else if (index == 1 && !m_histogramInitialized)
+			showHistogram();
+		else if (index == 2 && !m_kdePlotInitialized)
+			showKDEPlot();
+		else if (index == 3 && !m_qqPlotInitialized)
+			showQQPlot();
+		else if (index == 4 && !m_boxPlotInitialized)
+			showBoxPlot();
+	} else {
+		if (index == 0 && !m_overviewInitialized)
+			showOverview();
+		else if (index == 1 && !m_barPlotInitialized)
+			showBarPlot();
+		else if (index == 2 && !m_paretoPlotInitialized)
+			showParetoPlot();
+	}
 
 	Q_EMIT tabChanged(index);
+	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showOverview() {
-	WAIT_CURSOR;
 	const Column::ColumnStatistics& statistics = m_column->statistics();
 
-	m_teOverview->setHtml(m_htmlText
-							  .arg(QString::number(statistics.size),
-								   isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
-								   isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
-								   isNanValue(statistics.arithmeticMean),
-								   isNanValue(statistics.geometricMean),
-								   isNanValue(statistics.harmonicMean),
-								   isNanValue(statistics.contraharmonicMean),
-								   modeValue(m_column, statistics.mode),
-								   isNanValue(statistics.firstQuartile))
-							  .arg(isNanValue(statistics.median),
-								   isNanValue(statistics.thirdQuartile),
-								   isNanValue(statistics.trimean),
-								   isNanValue(statistics.variance),
-								   isNanValue(statistics.standardDeviation),
-								   isNanValue(statistics.meanDeviation),
-								   isNanValue(statistics.meanDeviationAroundMedian),
-								   isNanValue(statistics.medianDeviation),
-								   isNanValue(statistics.iqr))
-							  .arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
-	RESET_CURSOR;
+	if (m_column->isNumeric()) {
+		m_teOverview->setHtml(m_htmlOverview
+								  .arg(QString::number(statistics.size),
+									   isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
+									   isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
+									   isNanValue(statistics.arithmeticMean),
+									   isNanValue(statistics.geometricMean),
+									   isNanValue(statistics.harmonicMean),
+									   isNanValue(statistics.contraharmonicMean),
+									   modeValue(m_column, statistics.mode),
+									   isNanValue(statistics.firstQuartile))
+								  .arg(isNanValue(statistics.median),
+									   isNanValue(statistics.thirdQuartile),
+									   isNanValue(statistics.trimean),
+									   isNanValue(statistics.variance),
+									   isNanValue(statistics.standardDeviation),
+									   isNanValue(statistics.meanDeviation),
+									   isNanValue(statistics.meanDeviationAroundMedian),
+									   isNanValue(statistics.medianDeviation),
+									   isNanValue(statistics.iqr))
+								  .arg(isNanValue(statistics.skewness), isNanValue(statistics.kurtosis), isNanValue(statistics.entropy)));
+	} else {
+		// add the frequencies table
+		const auto& frequencies = m_column->frequencies();
+		const QString htmlColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#D1D1D1");
+		m_htmlOverview += "<br><table border=0 width=100%>"
+					"<tr>"
+					"<td colspan=3 align=center bgcolor=" + htmlColor + "><b><big>"
+					+ i18n("Frequency Table")+
+					"</big><b></td>"
+					"</tr>"
+					"<tr>"
+					"<td width=60%></td>"
+					"<td>" + i18n("Frequency") + "</td>"
+					"<td>" + i18n("Percent") + "</td>"
+					"</tr>";
+
+		auto i = frequencies.constBegin();
+		while (i != frequencies.constEnd()) {
+			int count = i.value();
+			double percent = (double)count / statistics.size * 100;
+			m_htmlOverview += "<tr>"
+							"<td>" + i.key() + "</td>"
+							"<td>" + QString::number(count) + "</td>"
+							"<td>" + QString::number(percent) + "%</td>"
+							"</tr>";
+			++i;
+		}
+
+		m_htmlOverview += "</table>";
+		m_teOverview->setHtml(m_htmlOverview.arg(QString::number(statistics.size), QString::number(statistics.unique)));
+	}
 
 	m_overviewInitialized = true;
 }
 
 void StatisticsColumnWidget::showHistogram() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_histogramWidget);
 
@@ -313,12 +379,9 @@ void StatisticsColumnWidget::showHistogram() {
 
 	plot->retransform();
 	m_histogramInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showKDEPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_kdePlotWidget);
 
@@ -383,12 +446,9 @@ void StatisticsColumnWidget::showKDEPlot() {
 	curve->setSuppressRetransform(false);
 	plot->retransform();
 	m_kdePlotInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showQQPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_qqPlotWidget);
 
@@ -479,12 +539,9 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve2->setSuppressRetransform(false);
 	plot->retransform();
 	m_qqPlotInitialized = true;
-	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showBoxPlot() {
-	WAIT_CURSOR;
-
 	// add plot
 	auto* plot = addPlot(&m_boxPlotWidget);
 
@@ -514,7 +571,217 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	plot->retransform();
 	m_boxPlotInitialized = true;
-	RESET_CURSOR;
+}
+
+void StatisticsColumnWidget::showBarPlot() {
+	// add plot
+	auto* plot = addPlot(&m_barPlotWidget);
+	plot->title()->setText(m_column->name());
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	auto* barPlot = new BarPlot(QString());
+	plot->addChild(barPlot);
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	barPlot->value()->setType(Value::Type::BinEntries);
+	barPlot->value()->setPosition(Value::Position::Above);
+
+	// generate columns holding the data and the labels
+	auto* dataColumn = new Column("data");
+	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	auto* labelsColumn = new Column("labels");
+	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+
+	// sort the frequencies and the accompanying labels
+	const auto& frequencies = m_column->frequencies();
+	auto i = frequencies.constBegin();
+	QVector<QPair<QString, int>> pairs;
+	while (i != frequencies.constEnd()) {
+		pairs << QPair<QString, int>(i.key(), i.value());
+		++i;
+	}
+
+	std::sort(pairs.begin(), pairs.end(), [](QPair<QString, int> a, QPair<QString, int> b) {
+		return a.second > b.second;
+	});
+
+	QVector<int> data;
+	QVector<QString> labels;
+	for (const auto& pair : pairs) {
+		labels << pair.first;
+		data << pair.second;
+	}
+	dataColumn->replaceInteger(0, data);
+	labelsColumn->replaceTexts(0, labels);
+
+	QVector<const AbstractColumn*> columns;
+	columns << dataColumn;
+	barPlot->setDataColumns(columns);
+
+	// axes properties
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
+			axis->title()->setText(QString());
+			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+			axis->setMajorTickStartOffset(1.0);
+			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+			axis->setLabelsTextColumn(labelsColumn);
+		} else {
+			axis->title()->setText(i18n("Frequency"));
+			axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+		}
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
+	}
+
+	plot->retransform();
+	m_barPlotInitialized = true;
+}
+
+void StatisticsColumnWidget::showParetoPlot() {
+	DEBUG(Q_FUNC_INFO)
+	auto* plot = addPlot(&m_paretoPlotWidget);
+	plot->title()->setText(m_column->name());
+	plot->setHorizontalPadding(Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter));
+	plot->setRightPadding(Worksheet::convertToSceneUnits(3.2, Worksheet::Unit::Centimeter));
+
+	// add second range for the cumulative percentage of the total number of occurences
+	plot->addYRange(Range<double>(0, 100)); // add second y range
+	plot->addCoordinateSystem(); // add cs for second y range
+	auto* cs = plot->coordinateSystem(plot->coordinateSystemCount() - 1); // get new cs
+	cs->setIndex(Dimension::Y, 1); // specify new y range
+	plot->enableAutoScale(Dimension::Y, 1, false); // disable auto scale to stay at 0 .. 100
+
+	// add second y-axis
+	auto* axis = new Axis(QLatin1String("y2"));
+	plot->addChild(axis);
+	axis->setOrientation(Axis::Orientation::Vertical);
+	axis->setPosition(Axis::Position::Right);
+	axis->setMajorTicksDirection(Axis::ticksBoth);
+	axis->setLabelsPosition(Axis::LabelsPosition::In);
+	axis->setLabelsSuffix(QLatin1String("%"));
+	axis->title()->setRotationAngle(90);
+	axis->setCoordinateSystemIndex(1);
+
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+
+	auto* barPlot = new BarPlot(QString());
+	barPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	plot->addChild(barPlot);
+
+	// generate columns holding the data and the labels
+	int count = m_column->statistics().unique;
+
+	auto* dataColumn = new Column("data");
+	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	auto* xColumn = new Column("x");
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	QVector<int> xData(count);
+
+	auto* yColumn = new Column("y");
+	QVector<double> yData(count);
+
+	auto* labelsColumn = new Column("labels");
+	labelsColumn->setColumnMode(AbstractColumn::ColumnMode::Text);
+
+	// sort the frequencies and the accompanying labels and calculate the total sum of frequencies
+	const auto& frequencies = m_column->frequencies();
+	auto i = frequencies.constBegin();
+	QVector<QPair<QString, int>> pairs;
+	int row = 0;
+	int totalSumOfFrequencies = 0;
+	while (i != frequencies.constEnd()) {
+		pairs << QPair<QString, int>(i.key(), i.value());
+		xData[row] = 1 + row;
+		totalSumOfFrequencies += i.value();
+		++row;
+		++i;
+	}
+
+	std::sort(pairs.begin(), pairs.end(), [](QPair<QString, int> a, QPair<QString, int> b) {
+		return a.second > b.second;
+	});
+
+	QVector<int> data;
+	QVector<QString> labels;
+	for (const auto& pair : pairs) {
+		labels << pair.first;
+		data << pair.second;
+	}
+
+	// calculate the cummulative values
+	int sum = 0;
+	row = 0;
+	for (auto value : data) {
+		sum += value;
+		yData[row] = (double)sum / totalSumOfFrequencies * 100;
+		++row;
+	}
+
+	dataColumn->replaceInteger(0, data);
+	labelsColumn->replaceTexts(0, labels);
+	xColumn->replaceInteger(0, xData);
+	yColumn->replaceValues(0, yData);
+
+	QVector<const AbstractColumn*> columns;
+	columns << dataColumn;
+	barPlot->setDataColumns(columns);
+
+	// add cumulated percentage curve
+	auto* curve = new XYCurve("curve");
+	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+	auto pen = curve->linePen();
+	pen.setStyle(Qt::SolidLine);
+	curve->setLinePen(pen);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
+	plot->addChild(curve);
+	curve->setValuesType(XYCurve::ValuesType::Y);
+	curve->setValuesPosition(XYCurve::ValuesPosition::Right);
+	curve->setValuesDistance(Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	curve->setValuesSuffix(QLatin1String("%"));
+
+	// resize the first y range to have the first point of the xy-curve at the top of the first bar
+	if (yData.at(0) != 0) {
+		const double max = (double)data.at(0) * 100. / yData.at(0);
+		plot->setMax(Dimension::Y, 0, max);
+	}
+
+	// axes properties
+	auto axes = plot->children<Axis>();
+	bool firstYAxis = false;
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
+			axis->title()->setText(QString());
+			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
+			axis->setMajorTickStartOffset(1.0);
+			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
+			axis->setLabelsTextColumn(labelsColumn);
+		} else {
+			if (!firstYAxis) {
+				axis->title()->setText(i18n("Frequency"));
+				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(-5, Worksheet::Unit::Point));
+				axis->setMajorTicksNumber(10 + 1); // same tick number as percentage axis
+				firstYAxis = true;
+			} else {
+				axis->title()->setText(i18n("Cumulative Percentage"));
+				// TODO: work with the same offset as for the first axis after https://invent.kde.org/education/labplot/-/issues/368 was adressed
+				axis->setTitleOffsetX(Worksheet::convertToSceneUnits(1.8, Worksheet::Unit::Centimeter));
+			}
+		}
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+		axis->setArrowType(Axis::ArrowType::NoArrow);
+	}
+
+	plot->retransform();
+	m_paretoPlotInitialized = true;
 }
 
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {

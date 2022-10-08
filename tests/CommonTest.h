@@ -43,11 +43,30 @@ extern "C" {
 
 #define COMPARE_DOUBLE_VECTORS(res, ref)                                                                                                                       \
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
-	for (int i = 0; i < res.length(); i++) {                                                                                                                   \
-		const bool same = qFuzzyCompare(res.at(i), ref.at(i));                                                                                                 \
-		WARN("i=" << i << ", res=" << res.at(i) << ", ref=" << ref.at(i))                                                                                      \
-		QVERIFY(same);                                                                                                                                         \
-	}
+	for (int i = 0; i < res.length(); i++)                                                                                                                     \
+		QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                          \
+				 qPrintable(QString("i=") + QString::number(i) + ", res=" + QString::number(res.at(i)) + ", ref=" + QString::number(ref.at(i))));
+
+#define COMPARE_STRING_VECTORS(res, ref)                                                                                                                       \
+	QCOMPARE(res.length(), ref.length());                                                                                                                      \
+	for (int i = 0; i < res.length(); i++)                                                                                                                     \
+		QVERIFY2(res.at(i).compare(ref.at(i)) == 0, qPrintable(QString("i=") + QString::number(i) + ", res=" + res.at(i) + ", ref=" + ref.at(i)));
+
+#define SAVE_PROJECT(project_name)                                                                                                                             \
+	do {                                                                                                                                                       \
+		auto* tempFile = new QTemporaryFile(QString("XXXXXX_") + QString(project_name), this);                                                                 \
+		QCOMPARE(tempFile->open(), true);                                                                                                                      \
+		QFile file(tempFile->fileName());                                                                                                                      \
+		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
+                                                                                                                                                               \
+		project.setFileName(tempFile->fileName());                                                                                                             \
+		QXmlStreamWriter writer(&file);                                                                                                                        \
+		QPixmap thumbnail;                                                                                                                                     \
+		project.save(thumbnail, &writer);                                                                                                                      \
+		file.close();                                                                                                                                          \
+		DEBUG(QString("File stored as: ").toStdString() << tempFile->fileName().toStdString());                                                                \
+	} while (0);
+
 ///////////////////////////////////////////////////////
 
 class CommonTest : public QObject {

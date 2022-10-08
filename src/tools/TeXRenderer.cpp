@@ -124,7 +124,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	// out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "\\setlength{\\fboxsep}{0.2pt}";
+	out << "\\setlength{\\fboxsep}{1.0pt}";
 	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
@@ -137,13 +137,12 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 	if (engine == "latex")
 		return imageFromDVI(file, dpi, res);
 	else
-		return imageFromPDF(file, dpi, engine, res);
+		return imageFromPDF(file, engine, res);
 }
 
 // TEX -> PDF -> QImage
-QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, Result* res) {
-	Q_UNUSED(dpi)
-	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
+QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& engine, Result* res) {
+	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine))
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
@@ -169,10 +168,15 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
 				const auto line = logFile.readLine();
-				// ! as first character means error
-				if (line.count() > 0 && line.at(0) == '!') {
-					errorLogs += line;
-					break; // only first error message is enough
+				// ! character as the first character means the line is part of the error output.
+				// determine the first line in this output having a non-empty content and forward it to the user
+				if (line.count() > 0 && line.at(0) == QLatin1Char('!')) {
+					QString errorMsg(line);
+					errorMsg = errorMsg.remove(QLatin1Char('!')).simplified();
+					if (!errorMsg.isEmpty()) {
+						errorLogs += errorMsg;
+						break; // only first error message is enough
+					}
 				}
 			}
 			logFile.close();

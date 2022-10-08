@@ -18,7 +18,8 @@
 class BarPlotPrivate;
 class AbstractColumn;
 class Background;
-class Symbol;
+class Line;
+class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -58,9 +59,11 @@ public:
 	// box filling
 	Background* backgroundAt(int) const;
 
-	// box border
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	// box border line
+	Line* lineAt(int) const;
+
+	// values
+	Value* value() const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

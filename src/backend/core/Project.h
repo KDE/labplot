@@ -65,6 +65,7 @@ public:
 	static void restorePointers(AbstractAspect*, bool preview = false);
 	static void retransformElements(AbstractAspect*);
 
+	static bool isSupportedProject(const QString& fileName);
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
 	QVector<quintptr> droppedAspects(const QMimeData*);

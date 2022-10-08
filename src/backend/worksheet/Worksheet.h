@@ -62,6 +62,7 @@ public:
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
+	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
 	void setThemeName(const QString&);

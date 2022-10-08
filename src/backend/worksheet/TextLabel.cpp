@@ -631,9 +631,11 @@ void TextLabelPrivate::updateBoundingRect() {
 	// determine the size of the label in scene units.
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
-		// image size is in pixel, convert to scene units
-		w = teXImage.width() * teXImageScaleFactor;
-		h = teXImage.height() * teXImageScaleFactor;
+		// image size is in pixel, convert to scene units.
+		// the image is scaled so we have a good image quality when the worksheet was zoomed,
+		// for the bounding rect we need to scale back since it's scaled again in paint() when drawing the rect
+		w = teXImage.width() * teXImageScaleFactor / zoomFactor;
+		h = teXImage.height() * teXImageScaleFactor / zoomFactor;
 	} else {
 		// size is in points, convert to scene units
 		// QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
@@ -657,6 +659,14 @@ void TextLabelPrivate::updateBoundingRect() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
+	if (zoomFactor == -1.0) {
+		// the view was not zoomed after the label was added so the zoom factor is not set yet.
+		// determine the current zoom factor in the view and use it
+		auto* worksheet = static_cast<const Worksheet*>(q->parent(AspectType::Worksheet));
+		if (!worksheet)
+			return;
+		zoomFactor = worksheet->zoomFactor();
+	}
 	teXPdfData = teXImageFutureWatcher.result();
 	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 	updateBoundingRect();
@@ -966,8 +976,9 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
 		painter->rotate(-rotationAngle);
-		if (boundingRect().width() != 0.0 && boundingRect().height() != 0.0)
-			painter->drawImage(boundingRect(), teXImage);
+		painter->setRenderHint(QPainter::SmoothPixmapTransform);
+		if (boundingRectangle.width() != 0.0 && boundingRectangle.height() != 0.0)
+			painter->drawImage(boundingRectangle, teXImage);
 		break;
 	}
 	case TextLabel::Mode::Text:
@@ -989,14 +1000,24 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->restore();
 	}
 
-	if (m_hovered && !isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
-	}
+	// TODO: move the handling of m_hovered and the logic below
+	// to draw the selectiong/hover box to WorksheetElementPrivate
+	// so there is no need to duplicate this code in Plot, Label, Image, etc.
+	const bool selected = isSelected();
+	const bool hovered = (m_hovered && !selected);
+	if ((hovered || selected) && !q->isPrinting()) {
+		static double penWidth = 2.;
+		const QRectF& br = boundingRect();
+		const qreal width = br.width();
+		const qreal height = br.height();
+		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
-	if (isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
-		painter->drawPath(labelShape);
+		if (hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
+
+		painter->drawRect(rect);
 	}
 
 #define DEBUG_TEXTLABEL_GLUEPOINTS 0

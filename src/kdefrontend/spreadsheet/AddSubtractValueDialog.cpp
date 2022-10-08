@@ -143,21 +143,23 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	// depending on the current column mode, activate/deactivate the corresponding widgets
 	// and show the first valid value in the first selected column as the value to add/subtract
 	const Column* column = m_columns.first();
-	const auto mode = column->columnMode();
 	SET_NUMBER_LOCALE
-	// TODO: switch
-	if (mode == AbstractColumn::ColumnMode::Integer) {
+	switch (column->columnMode()) {
+	case AbstractColumn::ColumnMode::Integer: {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(column->integerAt(0)));
-	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+		break;
+	case AbstractColumn::ColumnMode::BigInt: {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(column->bigIntAt(0)));
-	} else if (mode == AbstractColumn::ColumnMode::Double) {
+		break;
+	}
+	case AbstractColumn::ColumnMode::Double: {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
@@ -169,7 +171,11 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 				break;
 			}
 		}
-	} else { // datetime
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
 		ui.lValue->setVisible(false);
 		ui.leValue->setVisible(false);
 		auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
@@ -182,6 +188,11 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 				break;
 			}
 		}
+	}
+	case AbstractColumn::ColumnMode::Text:
+		// not supported
+		break;
+	}
 	}
 }
 

@@ -13,7 +13,7 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
-    ${KDEFRONTEND_DIR}/DatasetModel.cpp
+	${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/PlotTemplateDialog.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
@@ -41,7 +41,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
-        ${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
@@ -98,11 +98,13 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
@@ -120,7 +122,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
@@ -190,6 +194,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
@@ -210,6 +215,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
@@ -217,10 +223,12 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/addsubtractvaluewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/flattencolumnswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
@@ -305,7 +313,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
-        ${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
+	${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
@@ -330,6 +338,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/worksheet/Line.cpp
 	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
@@ -367,6 +376,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
 if (Qt5Mqtt_FOUND)
@@ -537,9 +547,11 @@ IF (ENABLE_READSTAT)
 		add_dependencies( labplot2lib 3rdparty_readstat )
 	ENDIF ()
 	# link system readstat with iconv
-	IF (READSTAT_FOUND AND (WIN32 OR APPLE))
+	IF (READSTAT_FOUND)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
-		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
+		IF (ICONV_LIBRARIES)
+			target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
+		ENDIF ()
 	ENDIF ()
         target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
@@ -617,7 +629,7 @@ target_link_libraries( labplot2 labplot2lib )
 install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
-install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
 # if (${ECM_VERSION} STRGREATER "5.58.0")
 # 	install( FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )

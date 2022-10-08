@@ -13,6 +13,7 @@
 #define XYCURVEPRIVATE_H
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
 class Background;
@@ -179,6 +180,8 @@ private:
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	QPointF mousePos;
+
+	friend class RetransformTest;
 };
 
 #endif

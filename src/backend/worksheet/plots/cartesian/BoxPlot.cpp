@@ -1202,7 +1202,11 @@ void BoxPlotPrivate::updateRug() {
 
 	for (int i = 0; i < q->dataColumns().count(); ++i) {
 		const auto* column = static_cast<const Column*>(q->dataColumns().at(i));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
 		rugPath.clear();
+#else
+		rugPath = QPainterPath();
+#endif
 		points.clear();
 
 		if (orientation == BoxPlot::Orientation::Horizontal) {
@@ -1959,6 +1963,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 
 	// box filling
 	d->background->loadThemeConfig(group);
+	d->background->setFirstColor(themeColor);
 
 	// median line
 	setMedianLinePen(p);

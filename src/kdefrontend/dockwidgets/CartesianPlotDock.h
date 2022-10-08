@@ -58,15 +58,12 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in CartesianPlotDock
 	//"General"-tab
 	void visibilityChanged(bool);
-	void geometryChanged();
-	void layoutChanged(Worksheet::Layout);
 
 	void rangeTypeChanged(int);
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
-	void autoScaleChanged(const QObject* sender, const Dimension, bool);
-	void rangeChanged(const QObject* sender, const Dimension, const Range<double>&);
+	void autoScaleChanged(const Dimension, const int rangeIndex, bool);
 	void minDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
 	void maxDateTimeChanged(const QObject* sender, const Dimension, const QDateTime&);
 	// void xRangeDateTimeChanged(const Range<quint64>&);
@@ -79,12 +76,22 @@ private Q_SLOTS:
 	void removeYRange();
 	void addPlotRange();
 	void removePlotRange();
+	void PlotRangeChanged(const int cSystemIndex, const Dimension, const int index);
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void minChanged(const QObject* sender, const Dimension dim, const QString& value);
-	void maxChanged(const QObject* sender, const Dimension dim, const QString& value);
+	void minChanged(const Dimension dim, const int index, const QString& value);
+	void maxChanged(const Dimension dim, const int index, const QString& value);
 	// void yRangeDateTimeChanged(const Range<quint64>&);
+
+	// "Layout"-tab
+	void geometryChanged();
+	void layoutChanged(Worksheet::Layout);
+	void symmetricPaddingChanged(bool);
+	void horizontalPaddingChanged(double);
+	void rightPaddingChanged(double);
+	void verticalPaddingChanged(double);
+	void bottomPaddingChanged(double);
 
 	//"Range Breaks"-tab
 	void toggleXBreak(bool);
@@ -112,11 +119,6 @@ private Q_SLOTS:
 	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
-	void symmetricPaddingChanged(bool);
-	void horizontalPaddingChanged(double);
-	void rightPaddingChanged(double);
-	void verticalPaddingChanged(double);
-	void bottomPaddingChanged(double);
 
 	// "Cursor"-tab
 	void cursorLineWidthChanged(int);
@@ -127,7 +129,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in CartesianPlot
 	// general
-	void plotRectChanged(QRectF&);
+
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
@@ -145,6 +147,14 @@ private Q_SLOTS:
 
 	void plotVisibleChanged(bool);
 
+	// layout
+	void plotRectChanged(QRectF&);
+	void plotHorizontalPaddingChanged(double);
+	void plotVerticalPaddingChanged(double);
+	void plotRightPaddingChanged(double);
+	void plotBottomPaddingChanged(double);
+	void plotSymmetricPaddingChanged(bool);
+
 	// range breaks
 	void plotXRangeBreakingEnabledChanged(bool);
 	void plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
@@ -156,11 +166,6 @@ private Q_SLOTS:
 	void plotBorderPenChanged(QPen&);
 	void plotBorderCornerRadiusChanged(double);
 	void plotBorderOpacityChanged(double);
-	void plotHorizontalPaddingChanged(double);
-	void plotVerticalPaddingChanged(double);
-	void plotRightPaddingChanged(double);
-	void plotBottomPaddingChanged(double);
-	void plotSymmetricPaddingChanged(bool);
 
 	// Cursor
 	void plotCursorPenChanged(const QPen&);
@@ -177,6 +182,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class RetransformTest;
 };
 
 #endif

@@ -18,6 +18,7 @@
 
 class Column;
 class Background;
+class Value;
 
 extern "C" {
 #include <gsl/gsl_histogram.h>
@@ -81,28 +82,9 @@ public:
 	QPen linePen;
 	qreal lineOpacity;
 
-	// symbols
 	Symbol* symbol{nullptr};
-
-	// values
-	int value{0};
-	Histogram::ValuesType valuesType{Histogram::NoValues};
-	const AbstractColumn* valuesColumn{nullptr};
-	QString valuesColumnPath;
-	Histogram::ValuesPosition valuesPosition{Histogram::ValuesAbove};
-	qreal valuesDistance;
-	qreal valuesRotationAngle;
-	qreal valuesOpacity;
-	char valuesNumericFormat{'f'}; // 'f', 'g', 'e', 'E', etc. for numeric values
-	int valuesPrecision{2}; // number of digits for numeric values
-	QString valuesDateTimeFormat;
-	QString valuesPrefix;
-	QString valuesSuffix;
-	QFont valuesFont;
-	QColor valuesColor;
-
-	// filling
 	Background* background{nullptr};
+	Value* value{nullptr};
 
 	// error bars
 	Histogram::ErrorType errorType{Histogram::NoError};
@@ -163,7 +145,6 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void histogramValue(double& value, int bin) const;
-	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 };

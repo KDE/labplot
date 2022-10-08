@@ -85,6 +85,8 @@ protected Q_SLOTS:
 
 private:
 	bool m_suppressPlotRetransform{false};
+
+	friend class RetransformTest;
 };
 
 #endif

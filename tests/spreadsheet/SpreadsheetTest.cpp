@@ -13,6 +13,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -1149,6 +1150,344 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 
 	// sort
 	QBENCHMARK { sheet.sortColumns(col0, {col0, col1}, true); }
+}
+
+void SpreadsheetTest::testFlatten00() {
+	Project project;
+	auto* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(5);
+	sheet->setRowCount(4);
+
+	// "Year"
+	auto* col1 = sheet->column(0);
+	col1->setName("Year");
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setTextAt(0, "2021");
+	col1->setTextAt(1, "2022");
+	col1->setTextAt(2, "2021");
+	col1->setTextAt(3, "2022");
+
+	// "Country"
+	auto* col2 = sheet->column(1);
+	col2->setName("Country");
+	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col2->setTextAt(0, "Germany");
+	col2->setTextAt(1, "Germany");
+	col2->setTextAt(2, "Poland");
+	col2->setTextAt(3, "Poland");
+
+	// "Sales for Product 1"
+	auto* col3 = sheet->column(2);
+	col3->setName("Product 1");
+	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col3->setIntegerAt(0, 1);
+	col3->setIntegerAt(1, 10);
+	col3->setIntegerAt(2, 4);
+	col3->setIntegerAt(3, 40);
+
+	// "Sales for Product 2"
+	auto* col4 = sheet->column(3);
+	col4->setName("Product 2");
+	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col4->setIntegerAt(0, 2);
+	col4->setIntegerAt(1, 20);
+	col4->setIntegerAt(2, 5);
+	col4->setIntegerAt(3, 50);
+
+	// "Sales for Product 3"
+	auto* col5 = sheet->column(4);
+	col5->setName("Product 3");
+	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col5->setIntegerAt(0, 3);
+	col5->setIntegerAt(1, 30);
+	col5->setIntegerAt(2, 6);
+	col5->setIntegerAt(3, 60);
+
+	// flatten the product columns relatively to year and country
+	FlattenColumnsDialog dlg(sheet);
+	QVector<Column*> referenceColumns;
+	referenceColumns << col1;
+	referenceColumns << col2;
+
+	QVector<Column*> valueColumns;
+	valueColumns << col3;
+	valueColumns << col4;
+	valueColumns << col5;
+
+	dlg.flatten(sheet, valueColumns, referenceColumns);
+
+	// checks
+	// make sure a new target spreadsheet with the flattened data was created
+	const auto& sheets = project.children<Spreadsheet>();
+	QCOMPARE(sheets.count(), 2);
+	auto* targetSheet = sheets.at(1);
+	QCOMPARE(targetSheet->columnCount(), 4); // two reference columns, column "Category" and column "Value"
+	QCOMPARE(targetSheet->rowCount(), 12);
+
+	// check values
+	col1 = targetSheet->column(0);
+	QCOMPARE(col1->textAt(0), "2021");
+	QCOMPARE(col1->textAt(1), "2021");
+	QCOMPARE(col1->textAt(2), "2021");
+	QCOMPARE(col1->textAt(3), "2022");
+	QCOMPARE(col1->textAt(4), "2022");
+	QCOMPARE(col1->textAt(5), "2022");
+	QCOMPARE(col1->textAt(6), "2021");
+	QCOMPARE(col1->textAt(7), "2021");
+	QCOMPARE(col1->textAt(8), "2021");
+	QCOMPARE(col1->textAt(9), "2022");
+	QCOMPARE(col1->textAt(10), "2022");
+	QCOMPARE(col1->textAt(11), "2022");
+
+	col4 = targetSheet->column(3);
+	QCOMPARE(col4->integerAt(0), 1);
+	QCOMPARE(col4->integerAt(1), 2);
+	QCOMPARE(col4->integerAt(2), 3);
+	QCOMPARE(col4->integerAt(3), 10);
+	QCOMPARE(col4->integerAt(4), 20);
+	QCOMPARE(col4->integerAt(5), 30);
+	QCOMPARE(col4->integerAt(6), 4);
+	QCOMPARE(col4->integerAt(7), 5);
+	QCOMPARE(col4->integerAt(8), 6);
+	QCOMPARE(col4->integerAt(9), 40);
+	QCOMPARE(col4->integerAt(10), 50);
+	QCOMPARE(col4->integerAt(11), 60);
+}
+
+// test with a missing value in one of the reference columns
+void SpreadsheetTest::testFlatten01() {
+	Project project;
+	auto* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(5);
+	sheet->setRowCount(2);
+
+	// "Year"
+	auto* col1 = sheet->column(0);
+	col1->setName("Year");
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setTextAt(0, "2021");
+	col1->setTextAt(1, "2022");
+
+	// "Country"
+	auto* col2 = sheet->column(1);
+	col2->setName("Country");
+	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col2->setTextAt(0, "Germany");
+	// missing value in the second row
+
+	// "Sales for Product 1"
+	auto* col3 = sheet->column(2);
+	col3->setName("Product 1");
+	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col3->setIntegerAt(0, 1);
+	col3->setIntegerAt(1, 10);
+
+	// "Sales for Product 2"
+	auto* col4 = sheet->column(3);
+	col4->setName("Product 2");
+	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col4->setIntegerAt(0, 2);
+	col4->setIntegerAt(1, 20);
+
+	// "Sales for Product 3"
+	auto* col5 = sheet->column(4);
+	col5->setName("Product 3");
+	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col5->setIntegerAt(0, 3);
+	col5->setIntegerAt(1, 30);
+
+	// flatten the product columns relatively to year and country
+	FlattenColumnsDialog dlg(sheet);
+	QVector<Column*> referenceColumns;
+	referenceColumns << col1;
+	referenceColumns << col2;
+
+	QVector<Column*> valueColumns;
+	valueColumns << col3;
+	valueColumns << col4;
+	valueColumns << col5;
+
+	dlg.flatten(sheet, valueColumns, referenceColumns);
+
+	// checks
+	// make sure a new target spreadsheet with the flattened data was created
+	const auto& sheets = project.children<Spreadsheet>();
+	QCOMPARE(sheets.count(), 2);
+	auto* targetSheet = sheets.at(1);
+	QCOMPARE(targetSheet->columnCount(), 4); // two reference columns, column "Category" and column "Value"
+	QCOMPARE(targetSheet->rowCount(), 6);
+
+	// check values
+	col1 = targetSheet->column(0);
+	QCOMPARE(col1->textAt(0), "2021");
+	QCOMPARE(col1->textAt(1), "2021");
+	QCOMPARE(col1->textAt(2), "2021");
+	QCOMPARE(col1->textAt(3), "2022");
+	QCOMPARE(col1->textAt(4), "2022");
+	QCOMPARE(col1->textAt(5), "2022");
+
+	col1 = targetSheet->column(1);
+	QCOMPARE(col1->textAt(0), "Germany");
+	QCOMPARE(col1->textAt(1), "Germany");
+	QCOMPARE(col1->textAt(2), "Germany");
+	QCOMPARE(col1->textAt(3), "");
+	QCOMPARE(col1->textAt(4), "");
+	QCOMPARE(col1->textAt(5), "");
+
+	col4 = targetSheet->column(3);
+	QCOMPARE(col4->integerAt(0), 1);
+	QCOMPARE(col4->integerAt(1), 2);
+	QCOMPARE(col4->integerAt(2), 3);
+	QCOMPARE(col4->integerAt(3), 10);
+	QCOMPARE(col4->integerAt(4), 20);
+	QCOMPARE(col4->integerAt(5), 30);
+}
+
+// test with missing values in the reference columns - no result should be produced for these rows
+void SpreadsheetTest::testFlatten02() {
+	Project project;
+	auto* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(5);
+	sheet->setRowCount(2);
+
+	// "Year"
+	auto* col1 = sheet->column(0);
+	col1->setName("Year");
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col1->setTextAt(0, "2021");
+	// missing value in the second row
+
+	// "Country"
+	auto* col2 = sheet->column(1);
+	col2->setName("Country");
+	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col2->setTextAt(0, "Germany");
+	// missing value in the second rows
+
+	// "Sales for Product 1"
+	auto* col3 = sheet->column(2);
+	col3->setName("Product 1");
+	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col3->setIntegerAt(0, 1);
+	col3->setIntegerAt(1, 10);
+
+	// "Sales for Product 2"
+	auto* col4 = sheet->column(3);
+	col4->setName("Product 2");
+	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col4->setIntegerAt(0, 2);
+	col4->setIntegerAt(1, 20);
+
+	// "Sales for Product 3"
+	auto* col5 = sheet->column(4);
+	col5->setName("Product 3");
+	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col5->setIntegerAt(0, 3);
+	col5->setIntegerAt(1, 30);
+
+	// flatten the product columns relatively to year and country
+	FlattenColumnsDialog dlg(sheet);
+	QVector<Column*> referenceColumns;
+	referenceColumns << col1;
+	referenceColumns << col2;
+
+	QVector<Column*> valueColumns;
+	valueColumns << col3;
+	valueColumns << col4;
+	valueColumns << col5;
+
+	dlg.flatten(sheet, valueColumns, referenceColumns);
+
+	// checks
+	// make sure a new target spreadsheet with the flattened data was created
+	const auto& sheets = project.children<Spreadsheet>();
+	QCOMPARE(sheets.count(), 2);
+	auto* targetSheet = sheets.at(1);
+	QCOMPARE(targetSheet->columnCount(), 4); // two reference columns, column "Category" and column "Value"
+	QCOMPARE(targetSheet->rowCount(), 3);
+
+	// check values
+	col1 = targetSheet->column(0);
+	QCOMPARE(col1->textAt(0), "2021");
+	QCOMPARE(col1->textAt(1), "2021");
+	QCOMPARE(col1->textAt(2), "2021");
+
+	col1 = targetSheet->column(1);
+	QCOMPARE(col1->textAt(0), "Germany");
+	QCOMPARE(col1->textAt(1), "Germany");
+	QCOMPARE(col1->textAt(2), "Germany");
+
+	col4 = targetSheet->column(3);
+	QCOMPARE(col4->integerAt(0), 1);
+	QCOMPARE(col4->integerAt(1), 2);
+	QCOMPARE(col4->integerAt(2), 3);
+}
+
+// test with missing no reference columns
+void SpreadsheetTest::testFlatten03() {
+	Project project;
+	auto* sheet = new Spreadsheet("test", false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(2);
+
+	// "Sales for Product 1"
+	auto* col1 = sheet->column(0);
+	col1->setName("Product 1");
+	col1->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col1->setIntegerAt(0, 1);
+	col1->setIntegerAt(1, 10);
+
+	// "Sales for Product 2"
+	auto* col2 = sheet->column(1);
+	col2->setName("Product 2");
+	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col2->setIntegerAt(0, 2);
+	col2->setIntegerAt(1, 20);
+
+	// "Sales for Product 3"
+	auto* col3 = sheet->column(2);
+	col3->setName("Product 3");
+	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	col3->setIntegerAt(0, 3);
+	col3->setIntegerAt(1, 30);
+
+	// flatten the product columns without any reference columns
+	QVector<Column*> valueColumns;
+	valueColumns << col1;
+	valueColumns << col2;
+	valueColumns << col3;
+
+	FlattenColumnsDialog dlg(sheet);
+	dlg.flatten(sheet, valueColumns, QVector<Column*>());
+
+	// checks
+	// make sure a new target spreadsheet with the flattened data was created
+	const auto& sheets = project.children<Spreadsheet>();
+	QCOMPARE(sheets.count(), 2);
+	auto* targetSheet = sheets.at(1);
+	QCOMPARE(targetSheet->columnCount(), 2); // no reference columns, only column "Category" and column "Value"
+	QCOMPARE(targetSheet->rowCount(), 6);
+
+	// check values
+	col1 = targetSheet->column(0);
+	QCOMPARE(col1->textAt(0), "Product 1");
+	QCOMPARE(col1->textAt(1), "Product 2");
+	QCOMPARE(col1->textAt(2), "Product 3");
+	QCOMPARE(col1->textAt(3), "Product 1");
+	QCOMPARE(col1->textAt(4), "Product 2");
+	QCOMPARE(col1->textAt(5), "Product 3");
+
+	col2 = targetSheet->column(1);
+	QCOMPARE(col2->integerAt(0), 1);
+	QCOMPARE(col2->integerAt(1), 2);
+	QCOMPARE(col2->integerAt(2), 3);
+	QCOMPARE(col2->integerAt(3), 10);
+	QCOMPARE(col2->integerAt(4), 20);
+	QCOMPARE(col2->integerAt(5), 30);
 }
 
 QTEST_MAIN(SpreadsheetTest)

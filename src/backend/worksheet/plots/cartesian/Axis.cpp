@@ -420,6 +420,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsFormatAuto, labelsFormatAuto)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsAutoPrecision, labelsAutoPrecision)
 BASIC_SHARED_D_READER_IMPL(Axis, int, labelsPrecision, labelsPrecision)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsDateTimeFormat, labelsDateTimeFormat)
@@ -435,6 +436,10 @@ QString& Axis::labelsTextColumnPath() const {
 QVector<double> Axis::tickLabelValues() const {
 	D(Axis);
 	return d->tickLabelValues;
+}
+QVector<QString> Axis::tickLabelStrings() const {
+	D(Axis);
+	return d->tickLabelStrings;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor)
 BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont)
@@ -529,16 +534,21 @@ void Axis::setRange(Range<double> range) {
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
-	Range<double> range{min, d->range.end()};
+	Range<double> range = d->range;
+	range.setStart(min);
 	setRange(range);
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
-	Range<double> range{d->range.start(), max};
+	Range<double> range = d->range;
+	range.setEnd(max);
 	setRange(range);
 }
 void Axis::setRange(double min, double max) {
-	Range<double> range{min, max};
+	Q_D(Axis);
+	Range<double> range = d->range;
+	range.setStart(min);
+	range.setEnd(max);
 	setRange(range);
 }
 
@@ -810,12 +820,15 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat,
 void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat))
 	Q_D(Axis);
-	if (labelsFormat != d->labelsFormat) {
-		// TODO: this part is not undo/redo-aware
-		d->labelsFormatOverruled = true; // keep format
-
+	if (labelsFormat != d->labelsFormat)
 		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
-	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormatAuto, bool, labelsFormatAuto, retransformTicks)
+void Axis::setLabelsFormatAuto(bool automatic) {
+	Q_D(Axis);
+	if (automatic != d->labelsFormatAuto)
+		exec(new AxisSetLabelsFormatAutoCmd(d, automatic, ki18n("%1: set labels format automatic")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsAutoPrecision, bool, labelsAutoPrecision, retransformTickLabelStrings)
@@ -1720,32 +1733,21 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	// automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	// and back to decimal when the numbers get smaller after the auto-switch
-	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", format overruled = " << labelsFormatOverruled)
-	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatOverruled) {
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat))
+	if (labelsFormatAuto) {
+		bool largeValue = false;
 		for (auto value : tickLabelValues) {
-			// switch to Scientific for large and small values
+			// switch to Scientific for large and small values if at least one is
 			if (qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4)) {
-				labelsFormat = Axis::LabelsFormat::Scientific;
-				Q_EMIT q->labelsFormatChanged(labelsFormat);
-				labelsFormatAutoChanged = true;
+				largeValue = true;
 				break;
 			}
 		}
-	} else if (labelsFormatAutoChanged) {
-		// check whether we still have large or small numbers
-		bool changeBack = true;
-		for (auto value : tickLabelValues) {
-			if (qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1.e-4)) {
-				changeBack = false;
-				break;
-			}
-		}
-
-		if (changeBack) {
-			labelsFormatAutoChanged = false;
+		if (largeValue)
+			labelsFormat = Axis::LabelsFormat::Scientific;
+		else
 			labelsFormat = Axis::LabelsFormat::Decimal;
-			Q_EMIT q->labelsFormatChanged(labelsFormat);
-		}
+		Q_EMIT q->labelsFormatChanged(labelsFormat);
 	}
 
 	// determine labels precision
@@ -1756,7 +1758,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			labelsPrecision = newPrecision;
 			Q_EMIT q->labelsPrecisionChanged(labelsPrecision);
 		} else {
-			// can we can reduce the current precision?
+			// can we reduce the current precision?
 			newPrecision = lowerLabelsPrecision(labelsPrecision, labelsFormat);
 			if (newPrecision != labelsPrecision) {
 				labelsPrecision = newPrecision;
@@ -1802,11 +1804,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
-				if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2
-					|| scale == RangeT::Scale::Ln) // don't use same precision for all label on log scales
-					str = numberLocale.toString(value, 'f', qMax(0, nsl_math_rounded_decimals(value)));
+				if (RangeT::isLogScale(scale)) // don't use same precision for all label on log scales
+					str = numberLocale.toString(value, 'f', qMax(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == "-" + nullStr)
@@ -1818,7 +1819,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 		case Axis::LabelsFormat::ScientificE: {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1835,7 +1836,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers10: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1849,7 +1850,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Powers2: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1864,7 +1865,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::PowersE: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
@@ -1879,7 +1880,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::MultipliesPi: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
@@ -1893,7 +1894,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			break;
 		}
 		case Axis::LabelsFormat::Scientific: {
-			for (const auto value : tickLabelValues) {
+			for (const auto value : qAsConst(tickLabelValues)) {
 				// DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1906,7 +1907,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 						// DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						//  only round fraction
 						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision), 'f', labelsPrecision);
-						str = str + "×10<sup>" + numberLocale.toString(e) + "</sup>";
+						str = createScientificRepresentation(str, numberLocale.toString(e));
 					}
 				}
 				str = labelsPrefix + str + labelsSuffix;
@@ -1917,7 +1918,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 		}
 	} else if (datetime) {
-		for (const auto value : tickLabelValues) {
+		for (const auto value : qAsConst(tickLabelValues)) {
 			QDateTime dateTime;
 			dateTime.setTimeSpec(Qt::UTC);
 			dateTime.setMSecsSinceEpoch(value);
@@ -2762,6 +2763,10 @@ bool AxisPrivate::isHovered() const {
 	return m_hovered;
 }
 
+QString AxisPrivate::createScientificRepresentation(const QString& mantissa, const QString& exponent) {
+	return mantissa + "×10<sup>" + exponent + "</sup>";
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -2843,6 +2848,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("textType", QString::number(static_cast<int>(d->labelsTextType)));
 	WRITE_COLUMN(d->labelsTextColumn, labelsTextColumn);
 	writer->writeAttribute("format", QString::number(static_cast<int>(d->labelsFormat)));
+	writer->writeAttribute("formatAuto", QString::number(static_cast<int>(d->labelsFormatAuto)));
 	writer->writeAttribute("precision", QString::number(d->labelsPrecision));
 	writer->writeAttribute("autoPrecision", QString::number(d->labelsAutoPrecision));
 	writer->writeAttribute("dateTimeFormat", d->labelsDateTimeFormat);
@@ -2981,7 +2987,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("textType", labelsTextType, Axis::LabelsTextType);
 			READ_COLUMN(labelsTextColumn);
 			READ_INT_VALUE("format", labelsFormat, Axis::LabelsFormat);
-			d->labelsFormatOverruled = true; // keep decimal format when saved
+			READ_INT_VALUE("formatAuto", labelsFormatAuto, bool);
 			READ_INT_VALUE("precision", labelsPrecision, int);
 			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
 			d->labelsDateTimeFormat = attribs.value("dateTimeFormat").toString();

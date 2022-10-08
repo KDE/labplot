@@ -19,6 +19,10 @@
 #include "Faddeeva.h"
 #endif
 
+double nsl_sf_dummy(double x) {
+	return x;
+}
+
 /* stdlib.h */
 double nsl_sf_rand(void) {
 	return rand();

@@ -246,7 +246,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		break;
 	}
 	case AspectType::CartesianPlot: {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Plot Area"));
 		raiseDockConnect(m_mainWindow->cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
 		break;

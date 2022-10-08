@@ -14,9 +14,10 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class AbstractColumn;
-class Background;
 class HistogramPrivate;
+class Background;
 class Symbol;
+class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -72,24 +73,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 
 	Symbol* symbol() const;
-
-	// values
-	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-	QString& valuesColumnPath() const;
-	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
-	BASIC_D_ACCESSOR_DECL(char, valuesNumericFormat, ValuesNumericFormat)
-	BASIC_D_ACCESSOR_DECL(int, valuesPrecision, ValuesPrecision)
-	CLASS_D_ACCESSOR_DECL(QString, valuesDateTimeFormat, ValuesDateTimeFormat)
-	CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
-	CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
-	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
-	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
-
-	// filling
+	Value* value() const;
 	Background* background() const;
 
 	// error bars
@@ -129,7 +113,6 @@ private Q_SLOTS:
 	void updateValues();
 	void updateErrorBars();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
 	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 
@@ -161,21 +144,6 @@ Q_SIGNALS:
 	void lineTypeChanged(Histogram::LineType);
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
-
-	// Values-Tab
-	void valuesTypeChanged(Histogram::ValuesType);
-	void valuesColumnChanged(const AbstractColumn*);
-	void valuesPositionChanged(Histogram::ValuesPosition);
-	void valuesDistanceChanged(qreal);
-	void valuesRotationAngleChanged(qreal);
-	void valuesOpacityChanged(qreal);
-	void valuesNumericFormatChanged(char);
-	void valuesPrecisionChanged(int);
-	void valuesDateTimeFormatChanged(QString);
-	void valuesPrefixChanged(QString);
-	void valuesSuffixChanged(QString);
-	void valuesFontChanged(QFont);
-	void valuesColorChanged(QColor);
 
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);

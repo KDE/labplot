@@ -15,7 +15,9 @@
 #include <QPen>
 
 class Background;
+class Line;
 class CartesianCoordinateSystem;
+class Value;
 
 typedef QVector<QPointF> Points;
 
@@ -26,7 +28,12 @@ public:
 	void retransform() override;
 	void recalc();
 	virtual void recalcShapeAndBoundingRect() override;
+	void updateValues();
 	void updatePixmap();
+
+	Background* addBackground(const KConfigGroup&);
+	Line* addBorderLine(const KConfigGroup&);
+	void addValue(const KConfigGroup&);
 
 	bool m_suppressRecalc{false};
 
@@ -56,11 +63,10 @@ public:
 
 	// bar properties
 	QVector<Background*> backgrounds;
-	QVector<double> widthFactors;
+	QVector<Line*> borderLines;
 
-	// box border
-	QPen borderPen;
-	qreal borderOpacity;
+	// values
+	Value* value{nullptr};
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -80,6 +86,11 @@ private:
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_barPlotShape;
+
+	QVector<QPointF> m_valuesPoints;
+	QVector<QPointF> m_valuesPointsLogical;
+	QVector<QString> m_valuesStrings;
+	QPainterPath m_valuesPath;
 
 	QVector<QVector<QVector<QLineF>>> m_barLines; // QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	QVector<QVector<QPolygonF>> m_fillPolygons; // polygons used for the filling (clipped versions of the boxes)

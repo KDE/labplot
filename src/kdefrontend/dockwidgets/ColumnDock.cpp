@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for column properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,6 +12,7 @@
 #include "ColumnDock.h"
 
 #include "backend/core/AbstractFilter.h"
+#include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
@@ -430,7 +431,7 @@ void ColumnDock::plotDesignationChanged(int index) {
 // value labels
 void ColumnDock::addLabel() {
 	auto mode = m_column->columnMode();
-	auto* dlg = new AddValueLabelDialog(this, mode);
+	auto* dlg = new AddValueLabelDialog(this, m_column);
 
 	if (mode == AbstractColumn::ColumnMode::Month || mode == AbstractColumn::ColumnMode::Day || mode == AbstractColumn::ColumnMode::DateTime)
 		dlg->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
@@ -484,6 +485,7 @@ void ColumnDock::addLabel() {
 		ui.twLabels->setItem(count, 1, new QTableWidgetItem(label));
 	}
 	delete dlg;
+	m_column->project()->setChanged(true);
 }
 
 void ColumnDock::removeLabel() {
@@ -497,6 +499,7 @@ void ColumnDock::removeLabel() {
 		col->removeValueLabel(value);
 
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
+	m_column->project()->setChanged(true);
 }
 
 void ColumnDock::batchEditLabels() {
@@ -506,6 +509,7 @@ void ColumnDock::batchEditLabels() {
 		showValueLabels(); // new value labels were saved in the dialog, show them here
 
 	delete dlg;
+	m_column->project()->setChanged(true);
 }
 
 //*************************************************************

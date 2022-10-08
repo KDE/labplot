@@ -155,6 +155,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
+	BASIC_D_ACCESSOR_DECL(bool, labelsFormatAuto, LabelsFormatAuto)
 	BASIC_D_ACCESSOR_DECL(bool, labelsAutoPrecision, LabelsAutoPrecision)
 	BASIC_D_ACCESSOR_DECL(int, labelsPrecision, LabelsPrecision)
 	CLASS_D_ACCESSOR_DECL(QString, labelsDateTimeFormat, LabelsDateTimeFormat)
@@ -165,6 +166,7 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
 	QString& labelsTextColumnPath() const;
 	QVector<double> tickLabelValues() const;
+	QVector<QString> tickLabelStrings() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
 	BASIC_D_ACCESSOR_DECL(LabelsBackgroundType, labelsBackgroundType, LabelsBackgroundType)
@@ -276,6 +278,7 @@ Q_SIGNALS:
 
 	// labels
 	void labelsFormatChanged(LabelsFormat);
+	void labelsFormatAutoChanged(bool);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
 	void labelsDateTimeFormatChanged(const QString&);
@@ -296,6 +299,8 @@ Q_SIGNALS:
 	void majorGridOpacityChanged(qreal);
 	void minorGridPenChanged(QPen);
 	void minorGridOpacityChanged(qreal);
+
+	friend class RetransformTest;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

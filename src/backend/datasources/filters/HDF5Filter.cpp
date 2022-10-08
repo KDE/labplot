@@ -87,8 +87,8 @@ HDF5Filter::~HDF5Filter() = default;
 /*!
   parses the content of the file \c fileName.
 */
-void HDF5Filter::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
-	d->parse(fileName, rootItem);
+int HDF5Filter::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
+	return d->parse(fileName, rootItem);
 }
 
 /*!
@@ -1470,20 +1470,21 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char* groupName, QTreeWidgetIte
 
 /*!
 	parses the content of the file \c fileName and fill the tree using rootItem.
+	returns -1 on error
 */
-void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
+int HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
 #ifdef HAVE_HDF5
 	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 
 	// check file type first
 	htri_t isHdf5 = H5Fis_hdf5(qPrintable(fileName));
-	if (isHdf5 == 0) {
+	if (isHdf5 == 0) { // not an HDF5 file
 		DEBUG(qPrintable(fileName) << " is not a HDF5 file! Giving up.");
-		return;
+		return -1;
 	}
-	if (isHdf5 < 0) {
+	if (isHdf5 < 0) { // failing on file (like not found)
 		DEBUG("H5Fis_hdf5() failed on " << qPrintable(fileName) << "! Giving up.");
-		return;
+		return -1;
 	}
 
 	// open file
@@ -1491,7 +1492,7 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
 	handleError((int)file, "H5Fopen", fileName);
 	if (file < 0) {
 		DEBUG("Opening file " << qPrintable(fileName) << " failed! Giving up.");
-		return;
+		return -1;
 	}
 	char rootName[] = "/";
 	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
@@ -1507,6 +1508,7 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
 #endif
+	return 0;
 }
 
 /*!

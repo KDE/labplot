@@ -195,6 +195,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
 	void retransformScales();
+	void retransformScale(Dimension, int index);
 
 	QString theme() const;
 

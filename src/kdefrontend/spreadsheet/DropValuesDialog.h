@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for droping and masking values in columns
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,12 +29,14 @@ private:
 	Ui::DropValuesWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet;
-	bool m_mask;
+	QPushButton* m_okButton;
+	bool m_mask{false};
+	bool m_hasNumeric{false};
+	bool m_hasText{false};
 
 	void dropValues() const;
 	void maskValues() const;
 
-	QPushButton* m_okButton;
 private Q_SLOTS:
 	void operatorChanged(int) const;
 	void okClicked() const;

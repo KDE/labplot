@@ -1488,7 +1488,12 @@ CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 }
 
 void CartesianPlot::addCoordinateSystem() {
-	addCoordinateSystem(new CartesianCoordinateSystem(this));
+	auto cSystem = new CartesianCoordinateSystem(this);
+	addCoordinateSystem(cSystem);
+	// retransform scales, because otherwise the CartesianCoordinateSystem
+	// does not have any scales
+	retransformScale(Dimension::X, cSystem->index(Dimension::X));
+	retransformScale(Dimension::Y, cSystem->index(Dimension::Y));
 }
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	m_coordinateSystems.append(s);
@@ -1620,6 +1625,7 @@ void CartesianPlot::retransform() {
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
+	addChild(axis);
 	axis->setSuppressRetransform(true); // retransformTicks() needs plot
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->rangeType() == Axis::RangeType::Auto) {
@@ -1629,7 +1635,6 @@ void CartesianPlot::addHorizontalAxis() {
 		axis->setMajorTicksNumber(range(Dimension::X).autoTickCount());
 		axis->setUndoAware(true);
 	}
-	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
 }
@@ -1637,6 +1642,7 @@ void CartesianPlot::addHorizontalAxis() {
 void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
 	axis->setSuppressRetransform(true); // retransformTicks() needs plot
+	addChild(axis);
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
@@ -1645,7 +1651,6 @@ void CartesianPlot::addVerticalAxis() {
 		axis->setMajorTicksNumber(range(Dimension::Y).autoTickCount());
 		axis->setUndoAware(true);
 	}
-	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
 }
@@ -2383,15 +2388,15 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 
 	if (xIndex == -1) {
 		for (int i = 0; i < rangeCount(Dimension::X); i++)
-			d->xRanges[i].dirty = true;
+			d->setRangeDirty(Dimension::X, i, true);
 	} else
-		d->xRanges[xIndex].dirty = true;
+		d->setRangeDirty(Dimension::X, xIndex, true);
 
 	if (yIndex == -1) {
 		for (int i = 0; i < rangeCount(Dimension::Y); i++)
-			d->yRanges[i].dirty = true;
+			d->setRangeDirty(Dimension::Y, i, true);
 	} else
-		d->yRanges[yIndex].dirty = true;
+		d->setRangeDirty(Dimension::Y, yIndex, true);
 
 	bool updated = false;
 	if (autoScale(Dimension::X, xIndex) && autoScale(Dimension::Y, yIndex))
@@ -2598,7 +2603,7 @@ void CartesianPlot::scaleAutoTriggered() {
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index << ", full range = " << fullRange)
+	DEBUG(Q_FUNC_INFO << ", dim = " << int(dim) << ", index = " << index << ", full range = " << fullRange)
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) { // all ranges
@@ -2657,7 +2662,14 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 	}
 
 	if (update) {
-		DEBUG(Q_FUNC_INFO << ", set new x range = " << r.toStdString())
+		switch (dim) {
+		case Dimension::X:
+			DEBUG(Q_FUNC_INFO << ", set new x range = " << r.toStdString())
+			break;
+		case Dimension::Y:
+			DEBUG(Q_FUNC_INFO << ", set new y range = " << r.toStdString())
+			break;
+		}
 		// in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (r.isZero()) {
 			const double value{r.start()};
@@ -2764,7 +2776,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 
 		if (range.end() > d->dataRange(dim, index).end())
 			d->dataRange(dim, index).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString())
+		DEBUG(Q_FUNC_INFO << ", curves range i = " << d->dataRange(dim, index).toStdString(false))
 	}
 
 	// loop over all histograms and determine the maximum and minimum x-value
@@ -2813,12 +2825,17 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 	if (d->dataRange(dim, index).scale() != RangeT::Scale::Linear)
 		d->dataRange(dim, index) = d->checkRange(d->dataRange(dim, index));
 
-	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << d->dataRange(dim, index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", data " << CartesianCoordinateSystem::dimensionToString(dim).toStdString()
+					  << " range = " << d->dataRange(dim, index).toStdString(false))
 }
 
 void CartesianPlot::retransformScales() {
 	Q_D(CartesianPlot);
 	d->retransformScales(-1, -1);
+}
+void CartesianPlot::retransformScale(Dimension dim, int index) {
+	Q_D(CartesianPlot);
+	d->retransformScale(dim, index);
 }
 
 // zoom
@@ -3258,6 +3275,7 @@ void CartesianPlotPrivate::retransform() {
 /*!
  * \brief CartesianPlotPrivate::retransformScale
  * Sets new Scales to coordinate systems and updates the ranges of the axis
+ * Needed when the range (xRange/yRange) changed
  * \param index
  */
 void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
@@ -4534,8 +4552,8 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->restore();
 	}
 
-	const bool hovered = (m_hovered && !isSelected());
 	const bool selected = isSelected();
+	const bool hovered = (m_hovered && !selected);
 	if ((hovered || selected) && !m_printing) {
 		static double penWidth = 2.; // why static?
 		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
@@ -4543,7 +4561,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		const qreal height = br.height();
 		const QRectF rect = QRectF(-width / 2 + penWidth / 2, -height / 2 + penWidth / 2, width - penWidth, height - penWidth);
 
-		if (m_hovered)
+		if (hovered)
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
 		else
 			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));

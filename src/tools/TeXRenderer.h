@@ -34,8 +34,8 @@ public:
 		QString errorMessage;
 	};
 
-	static QByteArray renderImageLaTeX(const QString&, Result* success, const TeXRenderer::Formatting&);
-	static QByteArray imageFromPDF(const QTemporaryFile&, const int dpi, const QString& engine, Result*);
+	static QByteArray renderImageLaTeX(const QString&, Result*, const TeXRenderer::Formatting&);
+	static QByteArray imageFromPDF(const QTemporaryFile&, const QString& engine, Result*);
 	static QByteArray imageFromDVI(const QTemporaryFile&, const int dpi, Result*);
 	static bool enabled();
 	static bool executableExists(const QString&);

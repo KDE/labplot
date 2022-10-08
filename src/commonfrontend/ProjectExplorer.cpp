@@ -314,6 +314,10 @@ void ProjectExplorer::setProject(Project* project) {
 	// for projects loaded from a file, this function will be called laterto fit the sizes
 	// of the content once the project is loaded
 	resizeHeader();
+
+	// remove all error messages from the previous project, if any are visible
+	if (m_messageWidget && m_messageWidget->isVisible())
+		m_messageWidget->close();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -481,31 +485,30 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 	} else if (event->matches(QKeySequence::Paste)) {
 		// paste
 		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
 		if (!name.isEmpty()) {
-			auto t = AbstractAspect::clipboardAspectType(name);
 			if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1) {
 				aspect->paste();
 				showErrorMessage(QString());
 			} else {
-				QString msg = i18n("The data cannot be pasted into %2.", name, aspect->name());
+				QString msg = i18n("'%1' cannot be pasted into '%2'.", name, aspect->name());
 				showErrorMessage(msg);
 			}
 		} else {
 			// no name is available, we are copy&pasting the content of a columm ("the data") and not the column itself
-			const QMimeData* mimeData = QApplication::clipboard()->mimeData();
+			const auto* mimeData = QApplication::clipboard()->mimeData();
 			if (!mimeData->hasFormat("text/plain"))
 				return;
 
 			// pasting is allowed into spreadsheet columns only
-			if (aspect->type() == AspectType::Column || aspect->parentAspect()->type() == AspectType::Spreadsheet) {
+			if (aspect->type() == AspectType::Column && aspect->parentAspect()->type() == AspectType::Spreadsheet) {
 				auto* column = static_cast<Column*>(aspect);
 				column->pasteData();
 			} else {
-				QString msg = i18n("Data cannot be pasted into %2 directly. Select a spreadsheet column for this.", name, aspect->name());
+				QString msg = i18n("Data cannot be pasted into '%1' directly. Select a spreadsheet column for this.", aspect->name());
 				showErrorMessage(msg);
 			}
 		}
-
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
 		// duplicate
 		if (aspect != m_project) {
@@ -650,14 +653,16 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		caseSensitiveAction->setCheckable(true);
 		caseSensitiveAction->setChecked(false);
 		connect(caseSensitiveAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 		matchCompleteWordAction->setCheckable(true);
 		matchCompleteWordAction->setChecked(false);
 		connect(matchCompleteWordAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 #if HAS_FUZZY_MATCHER
@@ -668,7 +673,8 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 			bool enabled = !fuzzyMatchingAction->isChecked();
 			caseSensitiveAction->setEnabled(enabled);
 			matchCompleteWordAction->setEnabled(enabled);
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 		caseSensitiveAction->setEnabled(false);
 		matchCompleteWordAction->setEnabled(false);
@@ -702,6 +708,20 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	const auto* model = index.model();
+	const int rows = model->rowCount(index);
+
+	// if the filter string is empty, just traverse the whole model and make every index visible
+	if (text.isEmpty()) {
+		for (int i = 0; i < rows; ++i) {
+			m_treeView->setRowHidden(i, index, false);
+			const auto& child = model->index(i, 0, index);
+			if (model->hasChildren(child))
+				filter(child, text);
+		}
+		return true;
+	}
+
 #if HAS_FUZZY_MATCHER
 	bool fuzzyFiltering = true;
 	if (fuzzyMatchingAction && !fuzzyMatchingAction->isChecked())
@@ -709,42 +729,34 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 #endif
 
 	bool childVisible = false;
-	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		const auto& child = index.model()->index(i, 0, index);
+		const auto& child = model->index(i, 0, index);
 		auto* aspect = static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if (text.isEmpty())
-			visible = true;
-		else {
 #if HAS_FUZZY_MATCHER
-			if (fuzzyFiltering)
-				visible = KFuzzyMatcher::matchSimple(text, aspect->name());
-			else
+		if (fuzzyFiltering)
+			visible = KFuzzyMatcher::matchSimple(text, aspect->name());
+		else
 #endif
-			{
-				bool matchCompleteWord = false;
-				if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
-					matchCompleteWord = true;
+		{
+			bool matchCompleteWord = false;
+			if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
+				matchCompleteWord = true;
 
-				Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
-				if (caseSensitiveAction && caseSensitiveAction->isChecked())
-					sensitivity = Qt::CaseSensitive;
+			Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+			if (caseSensitiveAction && caseSensitiveAction->isChecked())
+				sensitivity = Qt::CaseSensitive;
 
-				if (matchCompleteWord)
-					visible = aspect->name().startsWith(text, sensitivity);
-				else
-					visible = aspect->name().contains(text, sensitivity);
-			}
+			if (matchCompleteWord)
+				visible = aspect->name().startsWith(text, sensitivity);
+			else
+				visible = aspect->name().contains(text, sensitivity);
 		}
 
 		if (visible) {
 			// current item is visible -> make all its children visible without applying the filter
-			for (int j = 0; j < child.model()->rowCount(child); ++j) {
+			for (int j = 0; j < model->rowCount(child); ++j)
 				m_treeView->setRowHidden(j, child, false);
-				if (text.isEmpty())
-					filter(child, text);
-			}
 
 			childVisible = true;
 		} else {
