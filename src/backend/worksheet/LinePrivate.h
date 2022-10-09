@@ -21,6 +21,9 @@ public:
 	void update();
 	void updatePixmap();
 
+	bool histogramLineTypeAvailable{false};
+
+	Histogram::LineType histogramLineType{Histogram::Bars};
 	QString prefix{QLatin1String("Line")};
 	QPen pen;
 	double opacity{1.0};

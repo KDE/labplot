@@ -18,6 +18,7 @@
 
 class Column;
 class Background;
+class Line;
 class Value;
 
 extern "C" {
@@ -77,11 +78,7 @@ public:
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};
 
-	// line
-	Histogram::LineType lineType{Histogram::Bars};
-	QPen linePen;
-	qreal lineOpacity;
-
+	Line* line{nullptr};
 	Symbol* symbol{nullptr};
 	Background* background{nullptr};
 	Value* value{nullptr};

@@ -25,6 +25,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/Value.h"
@@ -75,13 +76,23 @@ void Histogram::init() {
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
 
-	d->lineType = (Histogram::LineType)group.readEntry("LineType", (int)Histogram::Bars);
-	d->linePen.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	d->linePen.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	d->linePen.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+	// line
+	d->line = new Line(QString());
+	d->line->setHistogramLineTypeAvailable(true);
+	d->line->setHidden(true);
+	addChild(d->line);
+	d->line->init(group);
+	connect(d->line, &Line::histogramLineTypeChanged, [=] {
+		d->updateLines();
+	});
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
-	// initialize the symbol
+	// symbol
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
@@ -272,9 +283,10 @@ QString& Histogram::dataColumnPath() const {
 }
 
 // line
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::LineType, lineType, lineType)
-BASIC_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
+Line* Histogram::line() const {
+	Q_D(const Histogram);
+	return d->line;
+}
 
 // symbols
 Symbol* Histogram::symbol() const {
@@ -473,28 +485,6 @@ void Histogram::setBinRangesMax(double binRangesMax) {
 	Q_D(Histogram);
 	if (binRangesMax != d->binRangesMax)
 		exec(new HistogramSetBinRangesMaxCmd(d, binRangesMax, ki18n("%1: set bin ranges end")));
-}
-
-// Line
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineType, Histogram::LineType, lineType, updateLines)
-void Histogram::setLineType(LineType type) {
-	Q_D(Histogram);
-	if (type != d->lineType)
-		exec(new HistogramSetLineTypeCmd(d, type, ki18n("%1: line type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
-void Histogram::setLinePen(const QPen& pen) {
-	Q_D(Histogram);
-	if (pen != d->linePen)
-		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineOpacity, qreal, lineOpacity, updatePixmap)
-void Histogram::setLineOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->lineOpacity)
-		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
 // Error bars
@@ -1085,6 +1075,7 @@ void HistogramPrivate::verticalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
 	double value = 0.;
+	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -1145,6 +1136,7 @@ void HistogramPrivate::horizontalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin) / m_bins;
 	double value = 0.;
+	const auto lineType = line->histogramLineType();
 	switch (lineType) {
 	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
@@ -1360,6 +1352,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygon.clear();
 
+	const auto lineType = line->histogramLineType();
 	if (!background->enabled() || lineType == Histogram::DropLines || lineType == Histogram::HalfBars) {
 		recalcShapeAndBoundingRect();
 		return;
@@ -1594,8 +1587,8 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();
-	if (lineType != Histogram::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
+	if (line->histogramLineType() != Histogram::NoLine)
+		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
@@ -1607,9 +1600,9 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
 
 	curveShape.addPath(rugPath);
+	curveShape.addPolygon(fillPolygon);
 
 	boundingRectangle = curveShape.boundingRect();
-
 	boundingRectangle = boundingRectangle.united(fillPolygon.boundingRect());
 
 	// TODO: when the selection is painted, line intersections are visible.
@@ -1624,9 +1617,9 @@ void HistogramPrivate::draw(QPainter* painter) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
 	// drawing line
-	if (lineType != Histogram::NoLine) {
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
+	if (line->histogramLineType() != Histogram::NoLine) {
+		painter->setOpacity(line->opacity());
+		painter->setPen(line->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(linePath);
 	}
@@ -1655,10 +1648,10 @@ void HistogramPrivate::draw(QPainter* painter) {
 	// draw rug
 	if (rugEnabled) {
 		QPen pen;
-		pen.setColor(linePen.color());
+		pen.setColor(line->pen().color());
 		pen.setWidthF(rugWidth);
 		painter->setPen(pen);
-		painter->setOpacity(lineOpacity);
+		painter->setOpacity(line->opacity());
 		painter->drawPath(rugPath);
 	}
 }
@@ -1908,21 +1901,10 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("visible", QString::number(d->isVisible()));
 	writer->writeEndElement();
 
-	// Line
-	writer->writeStartElement("line");
-	writer->writeAttribute("type", QString::number(d->lineType));
-	WRITE_QPEN(d->linePen);
-	writer->writeAttribute("opacity", QString::number(d->lineOpacity));
-	writer->writeEndElement();
-
-	// Symbols
-	d->symbol->save(writer);
-
-	// Values
-	d->value->save(writer);
-
-	// Filling
 	d->background->save(writer);
+	d->line->save(writer);
+	d->symbol->save(writer);
+	d->value->save(writer);
 
 	// Error bars
 	writer->writeStartElement("errorBars");
@@ -1990,11 +1972,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "line") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", lineType, Histogram::LineType);
-			READ_QPEN(d->linePen);
-			READ_DOUBLE_VALUE("opacity", lineOpacity);
+			d->line->load(reader, preview);
 		} else if (!preview && reader->name() == "symbols")
 			d->symbol->load(reader, preview);
 		else if (!preview && reader->name() == "values")
@@ -2043,12 +2021,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = true;
 
 	// Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", static_cast<int>(Qt::SolidLine)));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setWidthF(group.readEntry("LineWidth", d->linePen.widthF()));
-	p.setColor(themeColor);
-	setLinePen(p);
-	setLineOpacity(group.readEntry("LineOpacity", 1.0));
+	d->line->loadThemeConfig(group, themeColor);
 
 	// Symbol
 	d->symbol->loadThemeConfig(group, themeColor);
@@ -2068,7 +2041,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", d->errorBarsOpacity));
 
 	if (plot->theme() == QLatin1String("Tufte")) {
-		setLineType(Histogram::LineType::HalfBars);
+		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
 		if (d->dataColumn && d->dataColumn->rowCount() < 100)
 			setRugEnabled(true);
 	} else
@@ -2083,9 +2056,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Histogram");
 
 	// Line
-	group.writeEntry("LineOpacity", d->lineOpacity);
-	group.writeEntry("LineStyle", static_cast<int>(d->linePen.style()));
-	group.writeEntry("LineWidth", d->linePen.widthF());
+	d->line->saveThemeConfig(group);
 
 	// Error Bars
 	group.writeEntry("ErrorBarsCapSize", d->errorBarsCapSize);
@@ -2108,7 +2079,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 		KConfigGroup themeGroup = config.group("Theme");
 		for (int i = index; i < 5; i++) {
 			QString s = "ThemePaletteColor" + QString::number(i + 1);
-			themeGroup.writeEntry(s, d->linePen.color());
+			themeGroup.writeEntry(s, d->line->pen().color());
 		}
 	}
 }

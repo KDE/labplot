@@ -40,12 +40,14 @@ private:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget
+	void typeChanged(int);
 	void styleChanged(int) const;
 	void colorChanged(const QColor&);
 	void widthChanged(double) const;
 	void opacityChanged(int) const;
 
 	// SLOTs for changes triggered in Line
+	void histogramLineTypeChanged(Histogram::LineType);
 	void linePenChanged(QPen&);
 	void lineOpacityChanged(double);
 };

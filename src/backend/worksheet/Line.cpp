@@ -39,6 +39,9 @@ void Line::setPrefix(const QString& prefix) {
 void Line::init(const KConfigGroup& group) {
 	Q_D(Line);
 
+	if (d->histogramLineTypeAvailable)
+		d->histogramLineType = (Histogram::LineType)group.readEntry(d->prefix + "Type", (int)Histogram::Bars);
+
 	d->pen = QPen(group.readEntry(d->prefix + "Color", QColor(Qt::black)),
 				  group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
@@ -48,12 +51,26 @@ void Line::init(const KConfigGroup& group) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+BASIC_SHARED_D_READER_IMPL(Line, bool, histogramLineTypeAvailable, histogramLineTypeAvailable)
+BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogramLineType)
 BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+void Line::setHistogramLineTypeAvailable(bool available) {
+	Q_D(Line);
+	d->histogramLineTypeAvailable = available;
+}
+
+STD_SETTER_CMD_IMPL_S(Line, SetHistogramLineType, Histogram::LineType, histogramLineType)
+void Line::setHistogramLineType(Histogram::LineType type) {
+	Q_D(Line);
+	if (type != d->histogramLineType)
+		exec(new LineSetHistogramLineTypeCmd(d, type, ki18n("%1: line type changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Line, SetPen, QPen, pen, update)
 void Line::setPen(const QPen& pen) {
 	Q_D(Line);
@@ -95,6 +112,9 @@ void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
 
 	writer->writeStartElement(d->prefix.toLower());
+	if (d->histogramLineTypeAvailable)
+		writer->writeAttribute("type", QString::number(d->histogramLineType));
+
 	WRITE_QPEN(d->pen);
 	writer->writeAttribute("opacity", QString::number(d->opacity));
 	writer->writeEndElement();
@@ -110,6 +130,9 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 	QString str;
 
 	auto attribs = reader->attributes();
+
+	if (d->histogramLineTypeAvailable)
+		READ_INT_VALUE("type", histogramLineType, Histogram::LineType);
 
 	READ_QPEN(d->pen);
 	READ_DOUBLE_VALUE("opacity", opacity);

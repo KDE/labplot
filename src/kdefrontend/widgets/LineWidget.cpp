@@ -27,6 +27,7 @@ LineWidget::LineWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
 
+	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::typeChanged);
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::styleChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChanged);
 	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LineWidget::widthChanged);
@@ -37,8 +38,25 @@ void LineWidget::setLines(QList<Line*> lines) {
 	m_lines = lines;
 	m_line = m_lines.first();
 
+	if (m_line->histogramLineTypeAvailable()) {
+		ui.lType->show();
+		ui.cbType->show();
+
+		Lock lock(m_initializing);
+		ui.cbType->clear();
+		ui.cbType->addItem(i18n("None"));
+		ui.cbType->addItem(i18n("Bars"));
+		ui.cbType->addItem(i18n("Envelope"));
+		ui.cbType->addItem(i18n("Drop Lines"));
+		ui.cbType->addItem(i18n("Half-Bars"));
+	} else {
+		ui.lType->hide();
+		ui.cbType->hide();
+	}
+
 	load();
 
+	connect(m_line, &Line::histogramLineTypeChanged, this, &LineWidget::histogramLineTypeChanged);
 	connect(m_line, &Line::penChanged, this, &LineWidget::linePenChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
 
@@ -62,6 +80,9 @@ void LineWidget::adjustLayout() {
 		return;
 
 	auto* parentWidget = parentGridLayout->itemAtPosition(0, 0)->widget();
+	if (!parentWidget)
+		return;
+
 	auto* gridLayout = static_cast<QGridLayout*>(layout());
 	auto* widget = gridLayout->itemAtPosition(2, 0)->widget(); // use the third line, the first two are optional and not always visible
 
@@ -89,8 +110,30 @@ void LineWidget::updateLocale() {
 }
 
 //*************************************************************
-//******** SLOTs for changes triggered in LineWidget ****
+//******** SLOTs for changes triggered in LineWidget **********
 //*************************************************************
+void LineWidget::typeChanged(int index) {
+	bool enabled = true;
+	if (m_line->histogramLineTypeAvailable()) {
+		const auto lineType = Histogram::LineType(index);
+		enabled = (lineType != Histogram::NoLine);
+
+		if (!m_initializing) {
+			for (auto* line : m_lines)
+				line->setHistogramLineType(lineType);
+		}
+	}
+
+	ui.cbStyle->setEnabled(enabled);
+	ui.kcbColor->setEnabled(enabled);
+	ui.sbWidth->setEnabled(enabled);
+	ui.sbOpacity->setEnabled(enabled);
+
+	// TODO
+	// const bool fillingEnabled = (lineType == Histogram::LineType::Bars || lineType == Histogram::LineType::Envelope);
+	// backgroundWidget->setEnabled(fillingEnabled);
+}
+
 void LineWidget::styleChanged(int index) const {
 	if (m_initializing)
 		return;
@@ -125,9 +168,10 @@ void LineWidget::widthChanged(double value) const {
 		return;
 
 	QPen pen;
+	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* line : m_lines) {
 		pen = line->pen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		pen.setWidthF(width);
 		line->setPen(pen);
 	}
 }
@@ -142,8 +186,14 @@ void LineWidget::opacityChanged(int value) const {
 }
 
 //*************************************************************
-//********* SLOTs for changes triggered in Line *********
+//*********** SLOTs for changes triggered in Line *************
 //*************************************************************
+void LineWidget::histogramLineTypeChanged(Histogram::LineType type) {
+	m_initializing = true;
+	ui.cbType->setCurrentIndex((int)type);
+	m_initializing = false;
+}
+
 void LineWidget::linePenChanged(QPen& pen) {
 	Lock lock(m_initializing);
 	if (ui.cbStyle->currentIndex() != pen.style())
@@ -165,6 +215,10 @@ void LineWidget::lineOpacityChanged(double value) {
 //**********************************************************
 void LineWidget::load() {
 	const Lock lock(m_initializing);
+
+	if (m_line->histogramLineTypeAvailable())
+		ui.cbType->setCurrentIndex(static_cast<int>(m_line->histogramLineType()));
+
 	const QPen& penBorder = m_line->pen();
 	ui.cbStyle->setCurrentIndex(static_cast<int>(penBorder.style()));
 	ui.kcbColor->setColor(penBorder.color());
@@ -175,6 +229,10 @@ void LineWidget::load() {
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
+
+	if (m_line->histogramLineTypeAvailable())
+		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->histogramLineType())));
+
 	const QPen& penBorder = m_line->pen();
 	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(penBorder.style())));
 	ui.kcbColor->setColor(group.readEntry(m_prefix + "Color", penBorder.color()));
@@ -184,6 +242,9 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 }
 
 void LineWidget::saveConfig(KConfigGroup& group) const {
+	if (m_line->histogramLineTypeAvailable())
+		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
+
 	group.writeEntry(m_prefix + "Style", ui.cbStyle->currentIndex());
 	group.writeEntry(m_prefix + "Color", ui.kcbColor->color());
 	group.writeEntry(m_prefix + "Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));

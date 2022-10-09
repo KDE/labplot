@@ -20,6 +20,7 @@ class AspectTreeModel;
 class Column;
 class Histogram;
 class BackgroundWidget;
+class LineWidget;
 class SymbolWidget;
 class ValueWidget;
 class TreeViewComboBox;
@@ -48,6 +49,7 @@ private:
 protected:
 	Ui::HistogramDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
 
@@ -77,13 +79,6 @@ private Q_SLOTS:
 	void binRangesMaxChanged(const QString&);
 	void binRangesMinDateTimeChanged(const QDateTime&);
 	void binRangesMaxDateTimeChanged(const QDateTime&);
-
-	// Lines-Tab
-	void lineTypeChanged(int);
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
 
 	//"Error bars"-Tab
 	void errorTypeChanged(int) const;
@@ -115,11 +110,6 @@ private Q_SLOTS:
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
 	void curveVisibilityChanged(bool);
-
-	// Line-tab
-	void curveLineTypeChanged(Histogram::LineType);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

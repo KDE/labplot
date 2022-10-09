@@ -20,6 +20,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
@@ -624,9 +625,9 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			const Histogram* hist = dynamic_cast<Histogram*>(curvesList.at(index));
 			if (hist) {
 				// use line's pen (histogram bars, envelope or drop lines) if available,
-				if (hist->lineType() != Histogram::NoLine && hist->linePen() != Qt::NoPen) {
-					painter->setOpacity(hist->lineOpacity());
-					painter->setPen(hist->linePen());
+				if (hist->line()->histogramLineType() != Histogram::NoLine && hist->line()->pen() != Qt::NoPen) {
+					painter->setOpacity(hist->line()->opacity());
+					painter->setPen(hist->line()->pen());
 				}
 
 				// for the brush, use the histogram filling or symbols filling or no brush

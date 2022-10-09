@@ -16,6 +16,7 @@
 class AbstractColumn;
 class HistogramPrivate;
 class Background;
+class Line;
 class Symbol;
 class Value;
 
@@ -68,13 +69,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
 	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
-	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
-
+	Line* line() const;
+	Background* background() const;
 	Symbol* symbol() const;
 	Value* value() const;
-	Background* background() const;
 
 	// error bars
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
@@ -139,11 +137,6 @@ Q_SIGNALS:
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
-
-	// Line-Tab
-	void lineTypeChanged(Histogram::LineType);
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);

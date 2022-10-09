@@ -23,6 +23,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 #include "kdefrontend/widgets/ValueWidget.h"
 
@@ -55,6 +56,11 @@ HistogramDock::HistogramDock(QWidget* parent)
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
 
+	// Tab "Shape"
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	layout->insertWidget(0, lineWidget);
+
 	// Tab "Symbols"
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
@@ -70,7 +76,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 	hboxLayout->setSpacing(2);
 
 	// Tab "Filling"
-	auto* layout = static_cast<QHBoxLayout*>(ui.tabAreaFilling->layout());
+	layout = static_cast<QHBoxLayout*>(ui.tabAreaFilling->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabAreaFilling);
 	layout->insertWidget(0, backgroundWidget);
 
@@ -117,13 +123,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
-
-	// Line
-	connect(ui.cbLineType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);
-	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::lineStyleChanged);
-	connect(ui.kcbLineColor, &KColorButton::changed, this, &HistogramDock::lineColorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::lineWidthChanged);
-	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::lineOpacityChanged);
 
 	// Error bars
 	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
@@ -189,16 +188,6 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability"));
 	ui.cbNormalization->addItem(i18n("Count Density"));
 	ui.cbNormalization->addItem(i18n("Probability Density"));
-
-	// Line
-	ui.cbLineType->addItem(i18n("None"));
-	ui.cbLineType->addItem(i18n("Bars"));
-	ui.cbLineType->addItem(i18n("Envelope"));
-	ui.cbLineType->addItem(i18n("Drop Lines"));
-	ui.cbLineType->addItem(i18n("Half-Bars"));
-
-	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
-	m_initializing = false;
 
 	// Error-bars
 	ui.cbErrorType->addItem(i18n("No Errors"));
@@ -273,6 +262,12 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
+	// lines
+	QList<Line*> lines;
+	for (auto* curve : m_curvesList)
+		lines << curve->line();
+	lineWidget->setLines(lines);
+
 	// symbols
 	QList<Symbol*> symbols;
 	for (auto* curve : m_curvesList)
@@ -292,9 +287,9 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	valueWidget->setValues(values);
 
 	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
 	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbErrorBarsWidth->setLocale(numberLocale);
+	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
@@ -384,10 +379,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
 	connect(m_curve, &Histogram::visibleChanged, this, &HistogramDock::curveVisibilityChanged);
-
-	// Line-tab
-	connect(m_curve, &Histogram::linePenChanged, this, &HistogramDock::curveLinePenChanged);
-	connect(m_curve, &Histogram::lineOpacityChanged, this, &HistogramDock::curveLineOpacityChanged);
 
 	//"Error bars"-Tab
 	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
@@ -595,80 +586,7 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 }
 
 // Line tab
-void HistogramDock::lineTypeChanged(int index) {
-	auto lineType = Histogram::LineType(index);
 
-	if (lineType == Histogram::NoLine) {
-		ui.cbLineStyle->setEnabled(false);
-		ui.kcbLineColor->setEnabled(false);
-		ui.sbLineWidth->setEnabled(false);
-		ui.sbLineOpacity->setEnabled(false);
-	} else {
-		ui.cbLineStyle->setEnabled(true);
-		ui.kcbLineColor->setEnabled(true);
-		ui.sbLineWidth->setEnabled(true);
-		ui.sbLineOpacity->setEnabled(true);
-	}
-
-	const bool fillingEnabled = (lineType == Histogram::LineType::Bars || lineType == Histogram::LineType::Envelope);
-	backgroundWidget->setEnabled(fillingEnabled);
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setLineType(lineType);
-}
-
-void HistogramDock::lineStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setStyle(penStyle);
-		curve->setLinePen(pen);
-	}
-}
-
-void HistogramDock::lineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setColor(color);
-		curve->setLinePen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, color);
-	m_initializing = false;
-}
-
-void HistogramDock::lineWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		curve->setLinePen(pen);
-	}
-}
-
-void HistogramDock::lineOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = static_cast<qreal>(value) / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setLineOpacity(opacity);
-}
 
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) const {
@@ -918,26 +836,6 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
-// Line-Tab
-void HistogramDock::curveLineTypeChanged(Histogram::LineType type) {
-	m_initializing = true;
-	ui.cbLineType->setCurrentIndex((int)type);
-	m_initializing = false;
-}
-void HistogramDock::curveLinePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbLineStyle->setCurrentIndex((int)pen.style());
-	ui.kcbLineColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void HistogramDock::curveLineOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbLineOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
-
 void HistogramDock::curveVisibilityChanged(bool on) {
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
@@ -1017,20 +915,9 @@ void HistogramDock::loadConfig(KConfig& config) {
 	// It doesn't make sense to load/save them in the template.
 	// This data is read in HistogramDock::setCurves().
 
-	// Line
-	ui.cbLineType->setCurrentIndex(group.readEntry("LineType", (int)m_curve->lineType()));
-	ui.cbLineStyle->setCurrentIndex(group.readEntry("LineStyle", (int)m_curve->linePen().style()));
-	ui.kcbLineColor->setColor(group.readEntry("LineColor", m_curve->linePen().color()));
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Unit::Point));
-	ui.sbLineOpacity->setValue(round(group.readEntry("LineOpacity", m_curve->lineOpacity()) * 100.0));
-
-	// Symbols
+	lineWidget->loadConfig(group);
 	symbolWidget->loadConfig(group);
-
-	// Values
 	valueWidget->loadConfig(group);
-
-	// Filling
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
@@ -1050,7 +937,6 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
 
 	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 }
 
@@ -1077,20 +963,9 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("Histogram");
 
-	// Line
-	group.writeEntry("LineType", ui.cbLineType->currentIndex());
-	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
-	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("LineOpacity", ui.sbLineOpacity->value() / 100.0);
-
-	// Symbols
+	lineWidget->saveConfig(group);
 	symbolWidget->saveConfig(group);
-
-	// Values
 	valueWidget->saveConfig(group);
-
-	// Filling
 	backgroundWidget->saveConfig(group);
 
 	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
