@@ -32,10 +32,18 @@ public:
 	void loadThemeConfig(const KConfigGroup&, const QColor&);
 	void saveThemeConfig(KConfigGroup&) const;
 
+	// histogram specific parameters
 	BASIC_D_ACCESSOR_DECL(bool, histogramLineTypeAvailable, HistogramLineTypeAvailable)
 	BASIC_D_ACCESSOR_DECL(Histogram::LineType, histogramLineType, HistogramLineType)
+
+	// error bars specific parameters
+	BASIC_D_ACCESSOR_DECL(bool, errorBarsTypeAvailable, ErrorBarsTypeAvailable)
+	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
+	BASIC_D_ACCESSOR_DECL(double, errorBarsCapSize, ErrorBarsCapSize)
+
+	// common parameters
 	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
-	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
+	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 
 	typedef LinePrivate Private;
 
@@ -47,6 +55,8 @@ private:
 
 Q_SIGNALS:
 	void histogramLineTypeChanged(Histogram::LineType);
+	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
+	void errorBarsCapSizeChanged(double);
 	void penChanged(QPen&);
 	void opacityChanged(float);
 

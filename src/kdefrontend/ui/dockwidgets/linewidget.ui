@@ -29,7 +29,7 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="1" column="2">
+   <item row="2" column="2">
     <widget class="KComboBox" name="cbStyle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -39,7 +39,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -55,14 +55,24 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="lStyle">
      <property name="text">
       <string>Style:</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
+   <item row="0" column="2">
+    <widget class="KComboBox" name="cbType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
     <widget class="QDoubleSpinBox" name="sbWidth">
      <property name="suffix">
       <string> pt</string>
@@ -72,7 +82,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
+   <item row="5" column="2">
     <widget class="QSpinBox" name="sbOpacity">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -100,21 +110,28 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lType">
+     <property name="text">
+      <string>Type:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
     <widget class="QLabel" name="lWidth">
      <property name="text">
       <string>Width:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="lColor">
      <property name="text">
       <string>Color:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item row="3" column="2">
     <widget class="KColorButton" name="kcbColor">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -124,27 +141,33 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="lOpacity">
      <property name="text">
       <string>Opacity:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lType">
-     <property name="text">
-      <string>Type:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="KComboBox" name="cbType">
+   <item row="1" column="0">
+    <widget class="QLabel" name="lErrorBarsCapSize">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Cap size:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QDoubleSpinBox" name="sbErrorBarsCapSize">
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="singleStep">
+      <double>0.500000000000000</double>
      </property>
     </widget>
    </item>

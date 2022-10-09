@@ -132,12 +132,24 @@ void Histogram::init() {
 
 	// error bars
 	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
-	d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
-	d->errorBarsCapSize = group.readEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	d->errorBarsPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
-	d->errorBarsPen.setColor(group.readEntry("ErrorBarsColor", QColor(Qt::black)));
-	d->errorBarsPen.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+	d->errorBarsLine = new Line(QString());
+	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setErrorBarsTypeAvailable(true);
+	d->errorBarsLine->setHidden(true);
+	addChild(d->errorBarsLine);
+	d->errorBarsLine->init(group);
+	connect(d->errorBarsLine, &Line::errorBarsTypeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::errorBarsCapSizeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->errorBarsLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry("RugEnabled", false);
@@ -312,10 +324,11 @@ BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorPlusColumn, er
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, errorMinusColumn, errorMinusColumn)
 BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorPlusColumnPath, errorPlusColumnPath)
 BASIC_SHARED_D_READER_IMPL(Histogram, QString, errorMinusColumnPath, errorMinusColumnPath)
-BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
-BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
+
+Line* Histogram::errorBarsLine() const {
+	Q_D(const Histogram);
+	return d->errorBarsLine;
+}
 
 // margin plots
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, rugEnabled, rugEnabled)
@@ -523,34 +536,6 @@ void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
 void Histogram::setErrorMinusColumnPath(const QString& path) {
 	Q_D(Histogram);
 	d->errorMinusColumnPath = path;
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
-void Histogram::setErrorBarsCapSize(qreal size) {
-	Q_D(Histogram);
-	if (size != d->errorBarsCapSize)
-		exec(new HistogramSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
-void Histogram::setErrorBarsType(XYCurve::ErrorBarsType type) {
-	Q_D(Histogram);
-	if (type != d->errorBarsType)
-		exec(new HistogramSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
-void Histogram::setErrorBarsPen(const QPen& pen) {
-	Q_D(Histogram);
-	if (pen != d->errorBarsPen)
-		exec(new HistogramSetErrorBarsPenCmd(d, pen, ki18n("%1: set error bar style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorBarsOpacity, qreal, errorBarsOpacity, updatePixmap)
-void Histogram::setErrorBarsOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->errorBarsOpacity)
-		exec(new HistogramSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
 }
 
 // margin plots
@@ -1505,6 +1490,8 @@ void HistogramPrivate::updateErrorBars() {
 	}
 
 	// add caps for error bars
+	const auto errorBarsType = errorBarsLine->errorBarsType();
+	const auto errorBarsCapSize = errorBarsLine->errorBarsCapSize();
 	if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
 		if (orientation == Histogram::Vertical) {
 			for (const auto& line : qAsConst(elines)) {
@@ -1597,7 +1584,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(valuesPath);
 
 	if (errorType != Histogram::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
 	curveShape.addPath(rugPath);
 	curveShape.addPolygon(fillPolygon);
@@ -1639,8 +1626,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 
 	// draw error bars
 	if (errorType != Histogram::ErrorType::NoError) {
-		painter->setOpacity(errorBarsOpacity);
-		painter->setPen(errorBarsPen);
+		painter->setOpacity(errorBarsLine->opacity());
+		painter->setPen(errorBarsLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(errorBarsPath);
 	}
@@ -1911,10 +1898,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("errorType", QString::number(static_cast<int>(d->errorType)));
 	WRITE_COLUMN(d->errorPlusColumn, errorPlusColumn);
 	WRITE_COLUMN(d->errorMinusColumn, errorMinusColumn);
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
-	writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
-	WRITE_QPEN(d->errorBarsPen);
-	writer->writeAttribute("opacity", QString::number(d->errorBarsOpacity));
+	d->errorBarsLine->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -1985,10 +1969,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("errorType", errorType, ErrorType);
 			READ_COLUMN(errorPlusColumn);
 			READ_COLUMN(errorMinusColumn);
-			READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
-			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
-			READ_QPEN(d->errorBarsPen);
-			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
+			d->errorBarsLine->load(reader, preview);
 		} else if (!preview && reader->name() == "margins") {
 			attribs = reader->attributes();
 
@@ -2020,25 +2001,12 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	Q_D(Histogram);
 	d->m_suppressRecalc = true;
 
-	// Line
 	d->line->loadThemeConfig(group, themeColor);
-
-	// Symbol
 	d->symbol->loadThemeConfig(group, themeColor);
-
-	// Values
 	d->value->loadThemeConfig(group, themeColor);
-
-	// Filling
 	d->background->loadThemeConfig(group);
 	d->background->setFirstColor(themeColor);
-
-	// Error Bars
-	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style())));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", d->errorBarsPen.widthF()));
-	p.setColor(themeColor);
-	setErrorBarsPen(p);
-	setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", d->errorBarsOpacity));
+	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		d->line->setHistogramLineType(Histogram::LineType::HalfBars);
@@ -2055,24 +2023,11 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	Q_D(const Histogram);
 	KConfigGroup group = config.group("Histogram");
 
-	// Line
 	d->line->saveThemeConfig(group);
-
-	// Error Bars
-	group.writeEntry("ErrorBarsCapSize", d->errorBarsCapSize);
-	group.writeEntry("ErrorBarsOpacity", d->errorBarsOpacity);
-	group.writeEntry("ErrorBarsColor", d->errorBarsPen.color());
-	group.writeEntry("ErrorBarsStyle", static_cast<int>(d->errorBarsPen.style()));
-	group.writeEntry("ErrorBarsWidth", d->errorBarsPen.widthF());
-
-	// Symbol
 	d->symbol->saveThemeConfig(group);
-
-	// Values
 	d->value->saveThemeConfig(group);
-
-	// Filling
 	d->background->saveThemeConfig(group);
+	d->errorBarsLine->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	if (index < 5) {

@@ -52,6 +52,7 @@ protected:
 	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
+	LineWidget* errorBarsLineWidget{nullptr};
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
@@ -84,12 +85,6 @@ private Q_SLOTS:
 	void errorTypeChanged(int) const;
 	void errorPlusColumnChanged(const QModelIndex&) const;
 	void errorMinusColumnChanged(const QModelIndex&) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool) const;
@@ -115,10 +110,6 @@ private Q_SLOTS:
 	void curveErrorTypeChanged(Histogram::ErrorType);
 	void curveErrorPlusColumnChanged(const AbstractColumn*);
 	void curveErrorMinusColumnChanged(const AbstractColumn*);
-	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(const QPen&);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsOpacityChanged(qreal);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

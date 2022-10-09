@@ -89,10 +89,7 @@ public:
 	QString errorPlusColumnPath;
 	const AbstractColumn* errorMinusColumn{nullptr};
 	QString errorMinusColumnPath;
-	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize{1};
-	QPen errorBarsPen;
-	qreal errorBarsOpacity;
+	Line* errorBarsLine{nullptr};
 
 	// rug
 	bool rugEnabled{false};

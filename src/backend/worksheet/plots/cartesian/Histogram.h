@@ -80,10 +80,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, errorPlusColumnPath, ErrorPlusColumnPath)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorMinusColumn, ErrorMinusColumn)
 	CLASS_D_ACCESSOR_DECL(QString, errorMinusColumnPath, ErrorMinusColumnPath)
-	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+	Line* errorBarsLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -142,10 +139,6 @@ Q_SIGNALS:
 	void errorTypeChanged(Histogram::ErrorType);
 	void errorPlusColumnChanged(const AbstractColumn*);
 	void errorMinusColumnChanged(const AbstractColumn*);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsPenChanged(QPen);
-	void errorBarsCapSizeChanged(qreal);
-	void errorBarsOpacityChanged(qreal);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

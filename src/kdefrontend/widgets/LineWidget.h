@@ -41,6 +41,8 @@ private:
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget
 	void typeChanged(int);
+	void capSizeChanged(double) const;
+
 	void styleChanged(int) const;
 	void colorChanged(const QColor&);
 	void widthChanged(double) const;
@@ -48,6 +50,9 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in Line
 	void histogramLineTypeChanged(Histogram::LineType);
+	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
+	void errorBarsCapSizeChanged(double);
+
 	void linePenChanged(QPen&);
 	void lineOpacityChanged(double);
 };

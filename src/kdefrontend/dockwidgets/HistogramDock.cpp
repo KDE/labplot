@@ -28,9 +28,6 @@
 #include "kdefrontend/widgets/ValueWidget.h"
 
 #include <QCompleter>
-#include <QDir>
-#include <QDirModel>
-#include <QPainter>
 
 #include <KConfig>
 #include <KLocalizedString>
@@ -80,6 +77,20 @@ HistogramDock::HistogramDock(QWidget* parent)
 	backgroundWidget = new BackgroundWidget(ui.tabAreaFilling);
 	layout->insertWidget(0, backgroundWidget);
 
+	// Tab "Error Bars"
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
+
+	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorPlusColumn, 2, 2, 1, 1);
+
+	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
+	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
+
+	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
+	gridLayout->addWidget(errorBarsLineWidget, 6, 0, 1, 3);
+	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	gridLayout->addItem(spacer, 7, 0, 1, 1);
+
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -90,15 +101,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
-
-	// Tab "Error Bars"
-	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
-
-	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorPlusColumn, 2, 2, 1, 1);
-
-	cbErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
-	gridLayout->addWidget(cbErrorMinusColumn, 3, 2, 1, 1);
 
 	// validators
 	ui.leBinWidth->setValidator(new QDoubleValidator(ui.leBinWidth));
@@ -128,12 +130,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 	connect(ui.cbErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorTypeChanged);
 	connect(cbErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorPlusColumnChanged);
 	connect(cbErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &HistogramDock::errorMinusColumnChanged);
-	connect(ui.cbErrorBarsType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsTypeChanged);
-	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsCapSizeChanged);
-	connect(ui.cbErrorBarsStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::errorBarsStyleChanged);
-	connect(ui.kcbErrorBarsColor, &KColorButton::changed, this, &HistogramDock::errorBarsColorChanged);
-	connect(ui.sbErrorBarsWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::errorBarsWidthChanged);
-	connect(ui.sbErrorBarsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &HistogramDock::errorBarsOpacityChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
@@ -194,34 +190,6 @@ void HistogramDock::init() {
 	ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
 	ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
 	ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
-
-	QPainter pa;
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3, 10, 17, 10); // vert. line
-	pa.drawLine(10, 3, 10, 17); // hor. line
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("Bars"));
-	ui.cbErrorBarsType->setItemIcon(0, pm);
-
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10); // vert. line
-	pa.drawLine(10, 3, 10, 17); // hor. line
-	pa.drawLine(7, 3, 13, 3); // upper cap
-	pa.drawLine(7, 17, 13, 17); // bottom cap
-	pa.drawLine(3, 7, 3, 13); // left cap
-	pa.drawLine(17, 7, 17, 13); // right cap
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
-	ui.cbErrorBarsType->setItemIcon(1, pm);
-
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
 
 void HistogramDock::setModel() {
@@ -262,35 +230,29 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
-	// lines
+	// initialize widgets for common properties
 	QList<Line*> lines;
-	for (auto* curve : m_curvesList)
-		lines << curve->line();
-	lineWidget->setLines(lines);
-
-	// symbols
 	QList<Symbol*> symbols;
-	for (auto* curve : m_curvesList)
-		symbols << curve->symbol();
-	symbolWidget->setSymbols(symbols);
-
-	// backgrounds
 	QList<Background*> backgrounds;
-	for (auto* hist : m_curvesList)
-		backgrounds << hist->background();
-	backgroundWidget->setBackgrounds(backgrounds);
-
-	// symbols
 	QList<Value*> values;
-	for (auto* curve : m_curvesList)
-		values << curve->value();
+	QList<Line*> errorBarLines;
+	for (auto* hist : m_curvesList) {
+		lines << hist->line();
+		symbols << hist->symbol();
+		backgrounds << hist->background();
+		values << hist->value();
+		errorBarLines << hist->errorBarsLine();
+	}
+	lineWidget->setLines(lines);
+	symbolWidget->setSymbols(symbols);
+	backgroundWidget->setBackgrounds(backgrounds);
 	valueWidget->setValues(values);
+	errorBarsLineWidget->setLines(errorBarLines);
 
 	SET_NUMBER_LOCALE
-	ui.sbErrorBarsCapSize->setLocale(numberLocale);
-	ui.sbErrorBarsWidth->setLocale(numberLocale);
 	lineWidget->updateLocale();
 	symbolWidget->updateLocale();
+	errorBarsLineWidget->updateLocale();
 
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
@@ -384,10 +346,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::errorTypeChanged, this, &HistogramDock::curveErrorTypeChanged);
 	connect(m_curve, &Histogram::errorPlusColumnChanged, this, &HistogramDock::curveErrorPlusColumnChanged);
 	connect(m_curve, &Histogram::errorMinusColumnChanged, this, &HistogramDock::curveErrorMinusColumnChanged);
-	connect(m_curve, &Histogram::errorBarsCapSizeChanged, this, &HistogramDock::curveErrorBarsCapSizeChanged);
-	connect(m_curve, &Histogram::errorBarsTypeChanged, this, &HistogramDock::curveErrorBarsTypeChanged);
-	connect(m_curve, &Histogram::errorBarsPenChanged, this, &HistogramDock::curveErrorBarsPenChanged);
-	connect(m_curve, &Histogram::errorBarsOpacityChanged, this, &HistogramDock::curveErrorBarsOpacityChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_curve, &Histogram::rugEnabledChanged, this, &HistogramDock::curveRugEnabledChanged);
@@ -585,9 +543,6 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 		hist->setBinRangesMax(max);
 }
 
-// Line tab
-
-
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) const {
 	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
@@ -614,16 +569,7 @@ void HistogramDock::errorTypeChanged(int index) const {
 
 	const bool b = (index != 0);
 	ui.lErrorFormat->setVisible(b);
-	ui.lErrorBarsType->setVisible(b);
-	ui.cbErrorBarsType->setVisible(b);
-	ui.lErrorBarsStyle->setVisible(b);
-	ui.cbErrorBarsStyle->setVisible(b);
-	ui.lErrorBarsColor->setVisible(b);
-	ui.kcbErrorBarsColor->setVisible(b);
-	ui.lErrorBarsWidth->setVisible(b);
-	ui.sbErrorBarsWidth->setVisible(b);
-	ui.lErrorBarsOpacity->setVisible(b);
-	ui.sbErrorBarsOpacity->setVisible(b);
+	errorBarsLineWidget->setVisible(b);
 
 	if (m_initializing)
 		return;
@@ -654,78 +600,6 @@ void HistogramDock::errorMinusColumnChanged(const QModelIndex& index) const {
 
 	for (auto* curve : m_curvesList)
 		curve->setErrorMinusColumn(column);
-}
-
-void HistogramDock::errorBarsTypeChanged(int index) const {
-	auto type{XYCurve::ErrorBarsType(index)};
-	bool b = (type == XYCurve::ErrorBarsType::WithEnds);
-	ui.lErrorBarsCapSize->setVisible(b);
-	ui.sbErrorBarsCapSize->setVisible(b);
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsType(type);
-}
-
-void HistogramDock::errorBarsCapSizeChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsCapSize(size);
-}
-
-void HistogramDock::errorBarsStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setStyle(penStyle);
-		curve->setErrorBarsPen(pen);
-	}
-}
-
-void HistogramDock::errorBarsColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setColor(color);
-		curve->setErrorBarsPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, color);
-	m_initializing = false;
-}
-
-void HistogramDock::errorBarsWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		curve->setErrorBarsPen(pen);
-	}
-}
-
-void HistogramDock::errorBarsOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsOpacity(opacity);
 }
 
 //"Margin Plots"-Tab
@@ -858,29 +732,6 @@ void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
 	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
 	m_initializing = false;
 }
-void HistogramDock::curveErrorBarsCapSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void HistogramDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
-	m_initializing = true;
-	ui.cbErrorBarsType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
-}
-void HistogramDock::curveErrorBarsPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbErrorBarsStyle->setCurrentIndex((int)pen.style());
-	ui.kcbErrorBarsColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
-	ui.sbErrorBarsWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void HistogramDock::curveErrorBarsOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbErrorBarsOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
 
 //"Margin Plot"-Tab
 void HistogramDock::curveRugEnabledChanged(bool status) {
@@ -922,22 +773,13 @@ void HistogramDock::loadConfig(KConfig& config) {
 
 	// Error bars
 	ui.cbErrorType->setCurrentIndex(group.readEntry("ErrorType", (int)m_curve->errorType()));
-	ui.cbErrorBarsType->setCurrentIndex(group.readEntry("ErrorBarsType", (int)m_curve->errorBarsType()));
-	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Unit::Point));
-	ui.cbErrorBarsStyle->setCurrentIndex(group.readEntry("ErrorBarsStyle", (int)m_curve->errorBarsPen().style()));
-	ui.kcbErrorBarsColor->setColor(group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()));
-	ui.sbErrorBarsWidth->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()), Worksheet::Unit::Point));
-	ui.sbErrorBarsOpacity->setValue(round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity()) * 100.0));
+	errorBarsLineWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
-
-	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
@@ -967,14 +809,7 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 	backgroundWidget->saveConfig(group);
-
 	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
-	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
-	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
-	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
-	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
-	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value() / 100.0);
 
 	config.sync();
 }

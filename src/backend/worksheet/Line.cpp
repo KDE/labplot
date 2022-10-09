@@ -42,6 +42,11 @@ void Line::init(const KConfigGroup& group) {
 	if (d->histogramLineTypeAvailable)
 		d->histogramLineType = (Histogram::LineType)group.readEntry(d->prefix + "Type", (int)Histogram::Bars);
 
+	if (d->errorBarsTypeAvailable) {
+		d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry(d->prefix + "Type", static_cast<int>(XYCurve::ErrorBarsType::Simple));
+		d->errorBarsCapSize = group.readEntry(d->prefix + "CapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+	}
+
 	d->pen = QPen(group.readEntry(d->prefix + "Color", QColor(Qt::black)),
 				  group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
@@ -53,6 +58,11 @@ void Line::init(const KConfigGroup& group) {
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(Line, bool, histogramLineTypeAvailable, histogramLineTypeAvailable)
 BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogramLineType)
+
+BASIC_SHARED_D_READER_IMPL(Line, bool, errorBarsTypeAvailable, errorBarsTypeAvailable)
+BASIC_SHARED_D_READER_IMPL(Line, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
+BASIC_SHARED_D_READER_IMPL(Line, double, errorBarsCapSize, errorBarsCapSize)
+
 BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
 
@@ -69,6 +79,25 @@ void Line::setHistogramLineType(Histogram::LineType type) {
 	Q_D(Line);
 	if (type != d->histogramLineType)
 		exec(new LineSetHistogramLineTypeCmd(d, type, ki18n("%1: line type changed")));
+}
+
+void Line::setErrorBarsTypeAvailable(bool available) {
+	Q_D(Line);
+	d->errorBarsTypeAvailable = available;
+}
+
+STD_SETTER_CMD_IMPL_S(Line, SetErrorBarsCapSize, double, errorBarsCapSize)
+void Line::setErrorBarsCapSize(qreal size) {
+	Q_D(Line);
+	if (size != d->errorBarsCapSize)
+		exec(new LineSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
+}
+
+STD_SETTER_CMD_IMPL_S(Line, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType)
+void Line::setErrorBarsType(XYCurve::ErrorBarsType type) {
+	Q_D(Line);
+	if (type != d->errorBarsType)
+		exec(new LineSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetPen, QPen, pen, update)
@@ -111,13 +140,23 @@ void LinePrivate::updatePixmap() {
 void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
 
-	writer->writeStartElement(d->prefix.toLower());
+	// no need to create a XML element for error bars, the line attributes are part
+	// of the same XML element together with other error bars properties
+	if (!d->errorBarsTypeAvailable)
+		writer->writeStartElement(d->prefix.toLower());
+
 	if (d->histogramLineTypeAvailable)
 		writer->writeAttribute("type", QString::number(d->histogramLineType));
+	else if (d->errorBarsTypeAvailable) {
+		writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
+		writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
+	}
 
 	WRITE_QPEN(d->pen);
 	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeEndElement();
+
+	if (!d->errorBarsTypeAvailable)
+		writer->writeEndElement();
 }
 
 //! Load from XML
@@ -133,6 +172,11 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 
 	if (d->histogramLineTypeAvailable)
 		READ_INT_VALUE("type", histogramLineType, Histogram::LineType);
+
+	if (d->errorBarsTypeAvailable) {
+		READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
+		READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
+	}
 
 	READ_QPEN(d->pen);
 	READ_DOUBLE_VALUE("opacity", opacity);

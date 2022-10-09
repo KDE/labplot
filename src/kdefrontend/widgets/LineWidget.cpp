@@ -12,9 +12,7 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <KConfigGroup>
-#include <QCompleter>
-#include <QDirModel>
-#include <QFile>
+#include <QPainter>
 #include <QTimer>
 
 /*!
@@ -28,6 +26,8 @@ LineWidget::LineWidget(QWidget* parent)
 	ui.setupUi(this);
 
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::typeChanged);
+	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LineWidget::capSizeChanged);
+
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::styleChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChanged);
 	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LineWidget::widthChanged);
@@ -41,22 +41,64 @@ void LineWidget::setLines(QList<Line*> lines) {
 	if (m_line->histogramLineTypeAvailable()) {
 		ui.lType->show();
 		ui.cbType->show();
+		ui.lErrorBarsCapSize->hide();
+		ui.sbErrorBarsCapSize->hide();
 
-		Lock lock(m_initializing);
-		ui.cbType->clear();
-		ui.cbType->addItem(i18n("None"));
-		ui.cbType->addItem(i18n("Bars"));
-		ui.cbType->addItem(i18n("Envelope"));
-		ui.cbType->addItem(i18n("Drop Lines"));
-		ui.cbType->addItem(i18n("Half-Bars"));
+		if (ui.cbType->count() == 0) {
+			Lock lock(m_initializing);
+			ui.cbType->addItem(i18n("None"));
+			ui.cbType->addItem(i18n("Bars"));
+			ui.cbType->addItem(i18n("Envelope"));
+			ui.cbType->addItem(i18n("Drop Lines"));
+			ui.cbType->addItem(i18n("Half-Bars"));
+		}
+	} else if (m_line->errorBarsTypeAvailable()) {
+		ui.lType->show();
+		ui.cbType->show();
+		ui.lErrorBarsCapSize->show();
+		ui.sbErrorBarsCapSize->show();
+
+		if (ui.cbType->count() == 0) {
+			Lock lock(m_initializing);
+			QPainter pa;
+			int iconSize = 20;
+			QPixmap pm(iconSize, iconSize);
+			pm.fill(Qt::transparent);
+			pa.begin(&pm);
+			pa.setRenderHint(QPainter::Antialiasing);
+			pa.drawLine(3, 10, 17, 10); // vert. line
+			pa.drawLine(10, 3, 10, 17); // hor. line
+			pa.end();
+			ui.cbType->addItem(i18n("Bars"));
+			ui.cbType->setItemIcon(0, pm);
+
+			pm.fill(Qt::transparent);
+			pa.begin(&pm);
+			pa.setRenderHint(QPainter::Antialiasing);
+			pa.setBrush(Qt::SolidPattern);
+			pa.drawLine(3, 10, 17, 10); // vert. line
+			pa.drawLine(10, 3, 10, 17); // hor. line
+			pa.drawLine(7, 3, 13, 3); // upper cap
+			pa.drawLine(7, 17, 13, 17); // bottom cap
+			pa.drawLine(3, 7, 3, 13); // left cap
+			pa.drawLine(17, 7, 17, 13); // right cap
+			pa.end();
+			ui.cbType->addItem(i18n("Bars with Ends"));
+			ui.cbType->setItemIcon(1, pm);
+		}
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
+		ui.lErrorBarsCapSize->hide();
+		ui.sbErrorBarsCapSize->hide();
 	}
 
 	load();
 
 	connect(m_line, &Line::histogramLineTypeChanged, this, &LineWidget::histogramLineTypeChanged);
+	connect(m_line, &Line::errorBarsTypeChanged, this, &LineWidget::errorBarsTypeChanged);
+	connect(m_line, &Line::errorBarsCapSizeChanged, this, &LineWidget::errorBarsCapSizeChanged);
+
 	connect(m_line, &Line::penChanged, this, &LineWidget::linePenChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
 
@@ -106,6 +148,7 @@ void LineWidget::setEnabled(bool enabled) {
 
 void LineWidget::updateLocale() {
 	SET_NUMBER_LOCALE
+	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbWidth->setLocale(numberLocale);
 }
 
@@ -115,13 +158,24 @@ void LineWidget::updateLocale() {
 void LineWidget::typeChanged(int index) {
 	bool enabled = true;
 	if (m_line->histogramLineTypeAvailable()) {
-		const auto lineType = Histogram::LineType(index);
-		enabled = (lineType != Histogram::NoLine);
+		const auto type = Histogram::LineType(index);
+		enabled = (type != Histogram::NoLine);
 
 		if (!m_initializing) {
 			for (auto* line : m_lines)
-				line->setHistogramLineType(lineType);
+				line->setHistogramLineType(type);
 		}
+	} else if (m_line->errorBarsTypeAvailable()) {
+		auto type = XYCurve::ErrorBarsType(index);
+		bool b = (type == XYCurve::ErrorBarsType::WithEnds);
+		ui.lErrorBarsCapSize->setVisible(b);
+		ui.sbErrorBarsCapSize->setVisible(b);
+
+		if (m_initializing)
+			return;
+
+		for (auto* line : m_lines)
+			line->setErrorBarsType(type);
 	}
 
 	ui.cbStyle->setEnabled(enabled);
@@ -132,6 +186,15 @@ void LineWidget::typeChanged(int index) {
 	// TODO
 	// const bool fillingEnabled = (lineType == Histogram::LineType::Bars || lineType == Histogram::LineType::Envelope);
 	// backgroundWidget->setEnabled(fillingEnabled);
+}
+
+void LineWidget::capSizeChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* line : m_lines)
+		line->setErrorBarsCapSize(size);
 }
 
 void LineWidget::styleChanged(int index) const {
@@ -194,6 +257,18 @@ void LineWidget::histogramLineTypeChanged(Histogram::LineType type) {
 	m_initializing = false;
 }
 
+void LineWidget::errorBarsTypeChanged(XYCurve::ErrorBarsType type) {
+	m_initializing = true;
+	ui.cbType->setCurrentIndex(static_cast<int>(type));
+	m_initializing = false;
+}
+
+void LineWidget::errorBarsCapSizeChanged(double size) {
+	m_initializing = true;
+	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+
 void LineWidget::linePenChanged(QPen& pen) {
 	Lock lock(m_initializing);
 	if (ui.cbStyle->currentIndex() != pen.style())
@@ -218,11 +293,16 @@ void LineWidget::load() {
 
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->histogramLineType()));
+	else if (m_line->errorBarsTypeAvailable()) {
+		ui.cbType->setCurrentIndex(static_cast<int>(m_line->errorBarsType()));
+		const double size = Worksheet::convertFromSceneUnits(m_line->errorBarsCapSize(), Worksheet::Unit::Point);
+		ui.sbErrorBarsCapSize->setValue(size);
+	}
 
-	const QPen& penBorder = m_line->pen();
-	ui.cbStyle->setCurrentIndex(static_cast<int>(penBorder.style()));
-	ui.kcbColor->setColor(penBorder.color());
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(penBorder.widthF(), Worksheet::Unit::Point));
+	const QPen& pen = m_line->pen();
+	ui.cbStyle->setCurrentIndex(static_cast<int>(pen.style()));
+	ui.kcbColor->setColor(pen.color());
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(m_line->opacity() * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
@@ -232,11 +312,16 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->histogramLineType())));
+	else if (m_line->errorBarsTypeAvailable()) {
+		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->errorBarsType())));
+		const double size = Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "CapSize", m_line->errorBarsCapSize()), Worksheet::Unit::Point);
+		ui.sbErrorBarsCapSize->setValue(size);
+	}
 
-	const QPen& penBorder = m_line->pen();
-	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(penBorder.style())));
-	ui.kcbColor->setColor(group.readEntry(m_prefix + "Color", penBorder.color()));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "Width", penBorder.widthF()), Worksheet::Unit::Point));
+	const QPen& pen = m_line->pen();
+	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(pen.style())));
+	ui.kcbColor->setColor(group.readEntry(m_prefix + "Color", pen.color()));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "Width", pen.widthF()), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + "Opacity", m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
@@ -244,6 +329,10 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 void LineWidget::saveConfig(KConfigGroup& group) const {
 	if (m_line->histogramLineTypeAvailable())
 		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
+	else if (m_line->errorBarsTypeAvailable()) {
+		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
+		group.writeEntry(m_prefix + "CapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
+	}
 
 	group.writeEntry(m_prefix + "Style", ui.cbStyle->currentIndex());
 	group.writeEntry(m_prefix + "Color", ui.kcbColor->color());
