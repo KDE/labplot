@@ -675,15 +675,15 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// error bars
 			if ((curve->xErrorType() != XYCurve::ErrorType::NoError && curve->xErrorPlusColumn())
 				|| (curve->yErrorType() != XYCurve::ErrorType::NoError && curve->yErrorPlusColumn())) {
-				painter->setOpacity(curve->errorBarsOpacity());
-				painter->setPen(curve->errorBarsPen());
+				painter->setOpacity(curve->errorBarsLine()->opacity());
+				painter->setPen(curve->errorBarsLine()->pen());
 
 				// curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 				if (curve->symbol()->style() != Symbol::Style::NoSymbols && errorBarsSize < curve->symbol()->size() * 1.4)
 					errorBarsSize = curve->symbol()->size() * 1.4;
 
-				switch (curve->errorBarsType()) {
+				switch (curve->errorBarsLine()->errorBarsType()) {
 				case XYCurve::ErrorBarsType::Simple:
 					// horiz. line
 					if (curve->xErrorType() != XYCurve::ErrorType::NoError)

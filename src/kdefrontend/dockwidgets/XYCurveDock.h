@@ -21,6 +21,7 @@
 
 class AspectTreeModel;
 class BackgroundWidget;
+class LineWidget;
 class Column;
 class SymbolWidget;
 class TreeViewComboBox;
@@ -62,6 +63,7 @@ protected:
 	Ui::XYCurveDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
+	LineWidget* errorBarsLineWidget{nullptr};
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -116,12 +118,6 @@ private Q_SLOTS:
 	void xErrorMinusColumnChanged(const QModelIndex&) const;
 	void yErrorPlusColumnChanged(const QModelIndex&) const;
 	void yErrorMinusColumnChanged(const QModelIndex&) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool) const;
@@ -171,10 +167,6 @@ private Q_SLOTS:
 	void curveYErrorTypeChanged(XYCurve::ErrorType);
 	void curveYErrorPlusColumnChanged(const AbstractColumn*);
 	void curveYErrorMinusColumnChanged(const AbstractColumn*);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(const QPen&);
-	void curveErrorBarsOpacityChanged(qreal);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

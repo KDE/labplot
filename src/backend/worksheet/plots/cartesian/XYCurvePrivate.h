@@ -130,10 +130,7 @@ public:
 	const AbstractColumn* yErrorMinusColumn{nullptr};
 	QString yErrorMinusColumnPath;
 
-	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize;
-	QPen errorBarsPen;
-	qreal errorBarsOpacity;
+	Line* errorBarsLine{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;

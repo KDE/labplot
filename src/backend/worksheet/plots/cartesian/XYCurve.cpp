@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : A xy-curve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,6 +27,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -106,6 +107,7 @@ void XYCurve::init() {
 		d->updatePixmap();
 	});
 
+	// values
 	d->valuesType = (ValuesType)group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
 	d->valuesPosition = (ValuesPosition)group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
 	d->valuesDistance = group.readEntry("ValuesDistance", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
@@ -134,14 +136,27 @@ void XYCurve::init() {
 		d->updateFilling();
 	});
 
+	// error bars
 	d->xErrorType = (ErrorType)group.readEntry("XErrorType", static_cast<int>(ErrorType::NoError));
 	d->yErrorType = (ErrorType)group.readEntry("YErrorType", static_cast<int>(ErrorType::NoError));
-	d->errorBarsType = (ErrorBarsType)group.readEntry("ErrorBarsType", static_cast<int>(ErrorBarsType::Simple));
-	d->errorBarsCapSize = group.readEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
-	d->errorBarsPen.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
-	d->errorBarsPen.setColor(group.readEntry("ErrorBarsColor", QColor(Qt::black)));
-	d->errorBarsPen.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+	d->errorBarsLine = new Line(QString());
+	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setErrorBarsTypeAvailable(true);
+	d->errorBarsLine->setHidden(true);
+	addChild(d->errorBarsLine);
+	d->errorBarsLine->init(group);
+	connect(d->errorBarsLine, &Line::errorBarsTypeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::errorBarsCapSizeChanged, [=] {
+		d->updateErrorBars();
+	});
+	connect(d->errorBarsLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->errorBarsLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// marginal plots (rug, histogram, boxplot)
 	d->rugEnabled = group.readEntry("RugEnabled", false);
@@ -308,10 +323,10 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xErrorMinusColumnPath, xErrorMinusC
 BASIC_SHARED_D_READER_IMPL(XYCurve, QString, yErrorPlusColumnPath, yErrorPlusColumnPath)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QString, yErrorMinusColumnPath, yErrorMinusColumnPath)
 
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
+Line* XYCurve::errorBarsLine() const {
+	Q_D(const XYCurve);
+	return d->errorBarsLine;
+}
 
 // margin plots
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, rugEnabled, rugEnabled)
@@ -620,34 +635,6 @@ void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 void XYCurve::setYErrorMinusColumnPath(const QString& path) {
 	Q_D(XYCurve);
 	d->yErrorMinusColumnPath = path;
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsCapSize, qreal, errorBarsCapSize, updateErrorBars)
-void XYCurve::setErrorBarsCapSize(qreal size) {
-	Q_D(XYCurve);
-	if (size != d->errorBarsCapSize)
-		exec(new XYCurveSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType, updateErrorBars)
-void XYCurve::setErrorBarsType(ErrorBarsType type) {
-	Q_D(XYCurve);
-	if (type != d->errorBarsType)
-		exec(new XYCurveSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsPen, QPen, errorBarsPen, recalcShapeAndBoundingRect)
-void XYCurve::setErrorBarsPen(const QPen& pen) {
-	Q_D(XYCurve);
-	if (pen != d->errorBarsPen)
-		exec(new XYCurveSetErrorBarsPenCmd(d, pen, ki18n("%1: set error bar style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetErrorBarsOpacity, qreal, errorBarsOpacity, updatePixmap)
-void XYCurve::setErrorBarsOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->errorBarsOpacity)
-		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
 }
 
 // margin plots
@@ -2687,6 +2674,7 @@ void XYCurvePrivate::updateErrorBars() {
 	QVector<QLineF> elines;
 	QVector<QPointF> pointsErrorBarAnchorX;
 	QVector<QPointF> pointsErrorBarAnchorY;
+	const auto errorBarsType = errorBarsLine->errorBarsType();
 
 	for (int i = 0; i < m_logicalPoints.size(); ++i) {
 		if (!m_pointVisible.at(i))
@@ -2767,6 +2755,7 @@ void XYCurvePrivate::updateErrorBars() {
 	}
 
 	// add caps for x error bars
+	const auto errorBarsCapSize = errorBarsLine->errorBarsCapSize();
 	if (!pointsErrorBarAnchorX.isEmpty()) {
 		pointsErrorBarAnchorX = q->cSystem->mapLogicalToScene(pointsErrorBarAnchorX);
 		for (const auto& point : qAsConst(pointsErrorBarAnchorX)) {
@@ -2816,7 +2805,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 		curveShape.addPath(valuesPath);
 
 	if (xErrorType != XYCurve::ErrorType::NoError || yErrorType != XYCurve::ErrorType::NoError)
-		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsPen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(errorBarsPath, errorBarsLine->pen()));
 
 	boundingRectangle = curveShape.boundingRect();
 
@@ -2871,8 +2860,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 
 	// draw error bars
 	if ((xErrorType != XYCurve::ErrorType::NoError) || (yErrorType != XYCurve::ErrorType::NoError)) {
-		painter->setOpacity(errorBarsOpacity);
-		painter->setPen(errorBarsPen);
+		painter->setOpacity(errorBarsLine->opacity());
+		painter->setPen(errorBarsLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(errorBarsPath);
 	}
@@ -3201,10 +3190,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("yErrorType", QString::number(static_cast<int>(d->yErrorType)));
 	writer->writeAttribute("yErrorPlusColumn", d->yErrorPlusColumnPath);
 	writer->writeAttribute("yErrorMinusColumn", d->yErrorMinusColumnPath);
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
-	writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
-	WRITE_QPEN(d->errorBarsPen);
-	writer->writeAttribute("opacity", QString::number(d->errorBarsOpacity));
+	d->errorBarsLine->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -3310,12 +3296,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yErrorPlusColumn);
 			READ_COLUMN(yErrorMinusColumn);
 
-			READ_INT_VALUE("type", errorBarsType, ErrorBarsType);
-			READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
-
-			READ_QPEN(d->errorBarsPen);
-
-			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
+			d->errorBarsLine->load(reader, preview);
 		} else if (!preview && reader->name() == "margins") {
 			attribs = reader->attributes();
 
@@ -3372,11 +3353,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	d->background->loadThemeConfig(group);
 
 	// Error Bars
-	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	this->setErrorBarsPen(p);
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));
+	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {
 		if (d->xColumn && d->xColumn->rowCount() < 100) {
@@ -3392,6 +3369,12 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 void XYCurve::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
+	Q_D(const XYCurve);
+
+	// Line
+	group.writeEntry("LineOpacity", this->lineOpacity());
+	group.writeEntry("LineStyle", (int)this->linePen().style());
+	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	// Drop line
 	group.writeEntry("DropLineColor", (QColor)this->dropLinePen().color());
@@ -3399,29 +3382,14 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
 	group.writeEntry("DropLineOpacity", this->dropLineOpacity());
 
-	// Error Bars
-	group.writeEntry("ErrorBarsCapSize", this->errorBarsCapSize());
-	group.writeEntry("ErrorBarsOpacity", this->errorBarsOpacity());
-	group.writeEntry("ErrorBarsColor", (QColor)this->errorBarsPen().color());
-	group.writeEntry("ErrorBarsStyle", (int)this->errorBarsPen().style());
-	group.writeEntry("ErrorBarsWidth", this->errorBarsPen().widthF());
-
-	// Filling
-	Q_D(const XYCurve);
-	d->background->saveThemeConfig(group);
-
-	// Line
-	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineStyle", (int)this->linePen().style());
-	group.writeEntry("LineWidth", this->linePen().widthF());
-
-	// Symbol
-	d->symbol->saveThemeConfig(group);
-
 	// Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
 	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
+
+	d->background->saveThemeConfig(group);
+	d->symbol->saveThemeConfig(group);
+	d->errorBarsLine->saveThemeConfig(group);
 
 	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if (index < 5) {

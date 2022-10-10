@@ -21,6 +21,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
 #include <QPainter>
@@ -87,6 +88,11 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
 	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
 
+	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
+	gridLayout->addWidget(errorBarsLineWidget, 11, 0, 1, 3);
+	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	gridLayout->addItem(spacer, 12, 0, 1, 1);
+
 	// Tab "Margin Plots"
 	ui.cbRugOrientation->addItem(i18n("Vertical"));
 	ui.cbRugOrientation->addItem(i18n("Horizontal"));
@@ -145,12 +151,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.cbYErrorType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::yErrorTypeChanged);
 	connect(cbYErrorPlusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yErrorPlusColumnChanged);
 	connect(cbYErrorMinusColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::yErrorMinusColumnChanged);
-	connect(ui.cbErrorBarsType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::errorBarsTypeChanged);
-	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::errorBarsCapSizeChanged);
-	connect(ui.cbErrorBarsStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::errorBarsStyleChanged);
-	connect(ui.kcbErrorBarsColor, &KColorButton::changed, this, &XYCurveDock::errorBarsColorChanged);
-	connect(ui.sbErrorBarsWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::errorBarsWidthChanged);
-	connect(ui.sbErrorBarsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::errorBarsOpacityChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
@@ -377,30 +377,7 @@ void XYCurveDock::init() {
 	ui.cbValuesPosition->addItem(i18n("Left"));
 	ui.cbValuesPosition->addItem(i18n("Right"));
 
-	// Error-bars
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3, 10, 17, 10); // vert. line
-	pa.drawLine(10, 3, 10, 17); // hor. line
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("Bars"));
-	ui.cbErrorBarsType->setItemIcon(0, pm);
-
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10); // vert. line
-	pa.drawLine(10, 3, 10, 17); // hor. line
-	pa.drawLine(7, 3, 13, 3); // upper cap
-	pa.drawLine(7, 17, 13, 17); // bottom cap
-	pa.drawLine(3, 7, 3, 13); // left cap
-	pa.drawLine(17, 7, 17, 13); // right cap
-	pa.end();
-	ui.cbErrorBarsType->addItem(i18n("Bars with Ends"));
-	ui.cbErrorBarsType->setItemIcon(1, pm);
-
+	// Error Bars
 	ui.cbXErrorType->addItem(i18n("No"));
 	ui.cbXErrorType->addItem(i18n("Symmetric"));
 	ui.cbXErrorType->addItem(i18n("Asymmetric"));
@@ -408,8 +385,6 @@ void XYCurveDock::init() {
 	ui.cbYErrorType->addItem(i18n("No"));
 	ui.cbYErrorType->addItem(i18n("Symmetric"));
 	ui.cbYErrorType->addItem(i18n("Asymmetric"));
-
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, Qt::black);
 }
 
 void XYCurveDock::setModel() {
@@ -510,17 +485,17 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 	// symbols
 	QList<Symbol*> symbols;
-	for (auto* curve : curves)
+	QList<Background*> backgrounds;
+	QList<Line*> errorBarLines;
+	for (auto* curve : curves) {
 		symbols << curve->symbol();
+		backgrounds << curve->background();
+		errorBarLines << curve->errorBarsLine();
+	}
 
 	symbolWidget->setSymbols(symbols);
-
-	// backgrounds
-	QList<Background*> backgrounds;
-	for (auto* legend : m_curvesList)
-		backgrounds << legend->background();
-
 	backgroundWidget->setBackgrounds(backgrounds);
+	errorBarsLineWidget->setLines(errorBarLines);
 }
 
 void XYCurveDock::initGeneralTab() {
@@ -614,10 +589,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, &XYCurve::yErrorTypeChanged, this, &XYCurveDock::curveYErrorTypeChanged);
 	connect(m_curve, &XYCurve::yErrorPlusColumnChanged, this, &XYCurveDock::curveYErrorPlusColumnChanged);
 	connect(m_curve, &XYCurve::yErrorMinusColumnChanged, this, &XYCurveDock::curveYErrorMinusColumnChanged);
-	connect(m_curve, &XYCurve::errorBarsCapSizeChanged, this, &XYCurveDock::curveErrorBarsCapSizeChanged);
-	connect(m_curve, &XYCurve::errorBarsTypeChanged, this, &XYCurveDock::curveErrorBarsTypeChanged);
-	connect(m_curve, &XYCurve::errorBarsPenChanged, this, &XYCurveDock::curveErrorBarsPenChanged);
-	connect(m_curve, &XYCurve::errorBarsOpacityChanged, this, &XYCurveDock::curveErrorBarsOpacityChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_curve, &XYCurve::rugEnabledChanged, this, &XYCurveDock::curveRugEnabledChanged);
@@ -632,9 +603,8 @@ void XYCurveDock::updateLocale() {
 	ui.sbLineWidth->setLocale(numberLocale);
 	ui.sbDropLineWidth->setLocale(numberLocale);
 	ui.sbValuesDistance->setLocale(numberLocale);
-	ui.sbErrorBarsCapSize->setLocale(numberLocale);
-	ui.sbErrorBarsWidth->setLocale(numberLocale);
 	symbolWidget->updateLocale();
+	errorBarsLineWidget->updateLocale();
 }
 
 void XYCurveDock::updatePlotRanges() {
@@ -1147,16 +1117,7 @@ void XYCurveDock::xErrorTypeChanged(int index) const {
 
 	bool b = (index != 0 || ui.cbYErrorType->currentIndex() != 0);
 	ui.lErrorFormat->setVisible(b);
-	ui.lErrorBarsType->setVisible(b);
-	ui.cbErrorBarsType->setVisible(b);
-	ui.lErrorBarsStyle->setVisible(b);
-	ui.cbErrorBarsStyle->setVisible(b);
-	ui.lErrorBarsColor->setVisible(b);
-	ui.kcbErrorBarsColor->setVisible(b);
-	ui.lErrorBarsWidth->setVisible(b);
-	ui.sbErrorBarsWidth->setVisible(b);
-	ui.lErrorBarsOpacity->setVisible(b);
-	ui.sbErrorBarsOpacity->setVisible(b);
+	errorBarsLineWidget->setVisible(b);
 
 	if (m_initializing)
 		return;
@@ -1214,16 +1175,7 @@ void XYCurveDock::yErrorTypeChanged(int index) const {
 
 	bool b = (index != 0 || ui.cbXErrorType->currentIndex() != 0);
 	ui.lErrorFormat->setVisible(b);
-	ui.lErrorBarsType->setVisible(b);
-	ui.cbErrorBarsType->setVisible(b);
-	ui.lErrorBarsStyle->setVisible(b);
-	ui.cbErrorBarsStyle->setVisible(b);
-	ui.lErrorBarsColor->setVisible(b);
-	ui.kcbErrorBarsColor->setVisible(b);
-	ui.lErrorBarsWidth->setVisible(b);
-	ui.sbErrorBarsWidth->setVisible(b);
-	ui.lErrorBarsOpacity->setVisible(b);
-	ui.sbErrorBarsOpacity->setVisible(b);
+	errorBarsLineWidget->setVisible(b);
 
 	if (m_initializing)
 		return;
@@ -1254,78 +1206,6 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 
 	for (auto* curve : m_curvesList)
 		curve->setYErrorMinusColumn(column);
-}
-
-void XYCurveDock::errorBarsTypeChanged(int index) const {
-	const auto type{XYCurve::ErrorBarsType(index)};
-	bool b = (type == XYCurve::ErrorBarsType::WithEnds);
-	ui.lErrorBarsCapSize->setVisible(b);
-	ui.sbErrorBarsCapSize->setVisible(b);
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsType(type);
-}
-
-void XYCurveDock::errorBarsCapSizeChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsCapSize(size);
-}
-
-void XYCurveDock::errorBarsStyleChanged(int index) const {
-	if (index == -1 || m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setStyle(penStyle);
-		curve->setErrorBarsPen(pen);
-	}
-}
-
-void XYCurveDock::errorBarsColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setColor(color);
-		curve->setErrorBarsPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, color);
-	m_initializing = false;
-}
-
-void XYCurveDock::errorBarsWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->errorBarsPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		curve->setErrorBarsPen(pen);
-	}
-}
-
-void XYCurveDock::errorBarsOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setErrorBarsOpacity(opacity);
 }
 
 //"Margin Plots"-Tab
@@ -1565,29 +1445,6 @@ void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
 	m_initializing = false;
 }
-void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void XYCurveDock::curveErrorBarsTypeChanged(XYCurve::ErrorBarsType type) {
-	m_initializing = true;
-	ui.cbErrorBarsType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
-}
-void XYCurveDock::curveErrorBarsPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbErrorBarsStyle->setCurrentIndex((int)pen.style());
-	ui.kcbErrorBarsColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, pen.color());
-	ui.sbErrorBarsWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbErrorBarsOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
 
 //"Margin Plot"-Tab
 void XYCurveDock::curveRugEnabledChanged(bool status) {
@@ -1659,12 +1516,6 @@ void XYCurveDock::load() {
 	// Error bars
 	ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorType());
 	ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorType());
-	ui.cbErrorBarsType->setCurrentIndex((int)m_curve->errorBarsType());
-	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(m_curve->errorBarsCapSize(), Worksheet::Unit::Point));
-	ui.cbErrorBarsStyle->setCurrentIndex((int)m_curve->errorBarsPen().style());
-	ui.kcbErrorBarsColor->setColor(m_curve->errorBarsPen().color());
-	ui.sbErrorBarsWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->errorBarsPen().widthF(), Worksheet::Unit::Point));
-	ui.sbErrorBarsOpacity->setValue(round(m_curve->errorBarsOpacity() * 100.0));
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -1676,7 +1527,6 @@ void XYCurveDock::load() {
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 	m_initializing = false;
 }
 
@@ -1746,18 +1596,11 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	// Error bars
 	ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
 	ui.cbYErrorType->setCurrentIndex(group.readEntry("YErrorType", (int)m_curve->yErrorType()));
-	ui.cbErrorBarsType->setCurrentIndex(group.readEntry("ErrorBarsType", (int)m_curve->errorBarsType()));
-	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsCapSize", m_curve->errorBarsCapSize()), Worksheet::Unit::Point));
-	ui.cbErrorBarsStyle->setCurrentIndex(group.readEntry("ErrorBarsStyle", (int)m_curve->errorBarsPen().style()));
-	ui.kcbErrorBarsColor->setColor(group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()));
-	ui.sbErrorBarsWidth->setValue(
-		Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()), Worksheet::Unit::Point));
-	ui.sbErrorBarsOpacity->setValue(round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity()) * 100.0));
+	errorBarsLineWidget->loadConfig(group);
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
-	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 	m_initializing = false;
 }
 
@@ -1806,12 +1649,7 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	// Error bars
 	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
 	group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
-	group.writeEntry("ErrorBarsType", ui.cbErrorBarsType->currentIndex());
-	group.writeEntry("ErrorBarsCapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
-	group.writeEntry("ErrorBarsStyle", ui.cbErrorBarsStyle->currentIndex());
-	group.writeEntry("ErrorBarsColor", ui.kcbErrorBarsColor->color());
-	group.writeEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(ui.sbErrorBarsWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("ErrorBarsOpacity", ui.sbErrorBarsOpacity->value() / 100.0);
+	errorBarsLineWidget->saveConfig(group);
 
 	config.sync();
 }
