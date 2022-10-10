@@ -20,7 +20,11 @@
 #endif
 
 double nsl_sf_dummy(double x) {
-	return x;
+	return 0;
+}
+
+double nsl_sf_dummy2(double p, double x) {
+	return 0;
 }
 
 /* stdlib.h */

@@ -22,6 +22,7 @@
 
 class AbstractColumn;
 class Background;
+class Line;
 class Symbol;
 class XYCurvePrivate;
 
@@ -134,11 +135,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, xErrorMinusColumnPath, XErrorMinusColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yErrorPlusColumnPath, YErrorPlusColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yErrorMinusColumnPath, YErrorMinusColumnPath)
-
-	BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+	Line* errorBarsLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -248,10 +245,6 @@ Q_SIGNALS:
 	void yErrorTypeChanged(XYCurve::ErrorType);
 	void yErrorPlusColumnChanged(const AbstractColumn*);
 	void yErrorMinusColumnChanged(const AbstractColumn*);
-	void errorBarsCapSizeChanged(qreal);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsPenChanged(QPen);
-	void errorBarsOpacityChanged(qreal);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

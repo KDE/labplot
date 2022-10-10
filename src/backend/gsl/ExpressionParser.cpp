@@ -178,8 +178,10 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Skewness");
 	m_functionsNames << i18n("Kurtosis");
 	m_functionsNames << i18n("Entropy");
+	m_functionsNames << i18n("Quantile");
+	m_functionsNames << i18n("Percentile");
 	index++;
-	for (int i = 0; i < 27; i++)
+	for (int i = 0; i < 29; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives

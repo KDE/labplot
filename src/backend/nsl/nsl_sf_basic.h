@@ -16,6 +16,7 @@
 
 /* dummy function for parsing statistical methods */
 double nsl_sf_dummy(double x);
+double nsl_sf_dummy2(double p, double x);
 
 /* random functions */
 double nsl_sf_rand(void);

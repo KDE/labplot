@@ -16,6 +16,7 @@
 class AbstractColumn;
 class HistogramPrivate;
 class Background;
+class Line;
 class Symbol;
 class Value;
 
@@ -68,13 +69,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
 	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
-	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
-
+	Line* line() const;
+	Background* background() const;
 	Symbol* symbol() const;
 	Value* value() const;
-	Background* background() const;
 
 	// error bars
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
@@ -82,10 +80,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, errorPlusColumnPath, ErrorPlusColumnPath)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorMinusColumn, ErrorMinusColumn)
 	CLASS_D_ACCESSOR_DECL(QString, errorMinusColumnPath, ErrorMinusColumnPath)
-	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+	Line* errorBarsLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -140,19 +135,10 @@ Q_SIGNALS:
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
 
-	// Line-Tab
-	void lineTypeChanged(Histogram::LineType);
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
-
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);
 	void errorPlusColumnChanged(const AbstractColumn*);
 	void errorMinusColumnChanged(const AbstractColumn*);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsPenChanged(QPen);
-	void errorBarsCapSizeChanged(qreal);
-	void errorBarsOpacityChanged(qreal);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

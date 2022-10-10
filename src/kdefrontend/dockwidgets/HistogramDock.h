@@ -20,6 +20,7 @@ class AspectTreeModel;
 class Column;
 class Histogram;
 class BackgroundWidget;
+class LineWidget;
 class SymbolWidget;
 class ValueWidget;
 class TreeViewComboBox;
@@ -48,8 +49,10 @@ private:
 protected:
 	Ui::HistogramDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	ValueWidget* valueWidget{nullptr};
+	LineWidget* errorBarsLineWidget{nullptr};
 
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
@@ -78,23 +81,10 @@ private Q_SLOTS:
 	void binRangesMinDateTimeChanged(const QDateTime&);
 	void binRangesMaxDateTimeChanged(const QDateTime&);
 
-	// Lines-Tab
-	void lineTypeChanged(int);
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
-
 	//"Error bars"-Tab
 	void errorTypeChanged(int) const;
 	void errorPlusColumnChanged(const QModelIndex&) const;
 	void errorMinusColumnChanged(const QModelIndex&) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool) const;
@@ -116,19 +106,10 @@ private Q_SLOTS:
 	void curveBinRangesMaxChanged(double);
 	void curveVisibilityChanged(bool);
 
-	// Line-tab
-	void curveLineTypeChanged(Histogram::LineType);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
-
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);
 	void curveErrorPlusColumnChanged(const AbstractColumn*);
 	void curveErrorMinusColumnChanged(const AbstractColumn*);
-	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(const QPen&);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsOpacityChanged(qreal);
 
 	//"Margin Plots"-Tab
 	void curveRugEnabledChanged(bool);

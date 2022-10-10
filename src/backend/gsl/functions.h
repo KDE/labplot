@@ -85,6 +85,8 @@ struct funs _functions[] = {
 	{"skew", (func_t)nsl_sf_dummy, 1},
 	{"kurt", (func_t)nsl_sf_dummy, 1},
 	{"entropy", (func_t)nsl_sf_dummy, 1},
+	{"quantile", (func_t)nsl_sf_dummy2, 2},
+	{"percentile", (func_t)nsl_sf_dummy2, 2},
 	/* GSL special functions: see https://www.gnu.org/software/gsl/doc/html/specfunc.html */
 	/* Airy Functions and Derivatives */
 	{"Ai", (func_t)nsl_sf_airy_Ai, 1},

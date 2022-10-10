@@ -22,6 +22,17 @@ public:
 	void updatePixmap();
 
 	QString prefix{QLatin1String("Line")};
+
+	// histogram specific parameters
+	bool histogramLineTypeAvailable{false};
+	Histogram::LineType histogramLineType{Histogram::Bars};
+
+	// error bars specific parameters
+	bool errorBarsTypeAvailable{false};
+	XYCurve::ErrorBarsType errorBarsType{XYCurve::ErrorBarsType::Simple};
+	double errorBarsCapSize{1.};
+
+	// common parameters
 	QPen pen;
 	double opacity{1.0};
 
