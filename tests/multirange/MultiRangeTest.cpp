@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"

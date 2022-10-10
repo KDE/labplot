@@ -3035,13 +3035,12 @@ void FitTest::testHistogramFit() {
 
 	auto* aspect = project.child<AbstractAspect>(0);
 	QVERIFY(aspect != nullptr);
-	if (aspect)
-		QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
+	QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Spreadsheet);
 	aspect = project.child<AbstractAspect>(1);
 	QVERIFY(aspect != nullptr);
-	if (aspect)
-		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
+
+	QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
 	QVERIFY(aspect->type() == AspectType::Worksheet);
 	auto w = dynamic_cast<Worksheet*>(aspect);
 	if (!w)
@@ -3049,22 +3048,19 @@ void FitTest::testHistogramFit() {
 
 	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0));
 	QVERIFY(plot != nullptr);
-	if (plot)
-		QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet"));
 
+	QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet"));
 	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
 	QVERIFY(hist != nullptr);
-	if (hist)
-		QCOMPARE(hist->name(), QLatin1String("2"));
 
+	QCOMPARE(hist->name(), QLatin1String("2"));
 	// Do the fit
 	plot->addHistogramFit(hist, nsl_sf_stats_gaussian);
 
 	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
 	QVERIFY(fit != nullptr);
-	if (fit)
-		QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
 
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
 	// get results
 	const XYFitCurve::FitResult& fitResult = fit->fitResult();
 

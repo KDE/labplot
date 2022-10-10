@@ -11,6 +11,7 @@
 
 #include "AsciiFilterTest.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {

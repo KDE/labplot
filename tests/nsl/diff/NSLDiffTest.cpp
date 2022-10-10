@@ -20,31 +20,31 @@ extern "C" {
 //##############################################################################
 
 const int N = 7;
-double xdata[] = {1, 2, 4, 8, 16, 32, 64};
+double dxdata[] = {1, 2, 4, 8, 16, 32, 64};
 
 void NSLDiffTest::testFirst_order2() {
 	double ydata[] = {1, 4, 16, 64, 256, 1024, 4096};
 
-	int status = nsl_diff_first_deriv(xdata, ydata, N, 2);
+	int status = nsl_diff_first_deriv(dxdata, ydata, N, 2);
 	QCOMPARE(status, 0);
 	for (unsigned int i = 0; i < N; i++)
-		QCOMPARE(ydata[i], 2 * xdata[i]);
+		QCOMPARE(ydata[i], 2 * dxdata[i]);
 }
 
 void NSLDiffTest::testFirst_order4() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_first_deriv(xdata, ydata, N, 4);
+	int status = nsl_diff_first_deriv(dxdata, ydata, N, 4);
 	QCOMPARE(status, 0);
 	for (unsigned int i = 0; i < N; i++)
-		QCOMPARE(ydata[i], 3 * xdata[i] * xdata[i]);
+		QCOMPARE(ydata[i], 3 * dxdata[i] * dxdata[i]);
 }
 
 void NSLDiffTest::testFirst_avg() {
 	double ydata[] = {1, 4, 16, 64, 256, 1024, 4096};
-	double result[] = {3, 4.5, 9, 18, 36, 72, 96};
+	const double result[] = {3, 4.5, 9, 18, 36, 72, 96};
 
-	int status = nsl_diff_first_deriv_avg(xdata, ydata, N);
+	int status = nsl_diff_first_deriv_avg(dxdata, ydata, N);
 	QCOMPARE(status, 0);
 	for (unsigned int i = 0; i < N; i++)
 		QCOMPARE(ydata[i], result[i]);
@@ -57,7 +57,7 @@ void NSLDiffTest::testFirst_avg() {
 void NSLDiffTest::testSecond_order1() {
 	double ydata[] = {1, 4, 16, 64, 256, 1024, 4096};
 
-	int status = nsl_diff_second_deriv(xdata, ydata, N, 1);
+	int status = nsl_diff_second_deriv(dxdata, ydata, N, 1);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d, 2.);
@@ -66,7 +66,7 @@ void NSLDiffTest::testSecond_order1() {
 void NSLDiffTest::testSecond_order2() {
 	double ydata[] = {1, 4, 16, 64, 256, 1024, 4096};
 
-	int status = nsl_diff_second_deriv(xdata, ydata, N, 2);
+	int status = nsl_diff_second_deriv(dxdata, ydata, N, 2);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d, 2.);
@@ -75,10 +75,10 @@ void NSLDiffTest::testSecond_order2() {
 void NSLDiffTest::testSecond_order3() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_second_deriv(xdata, ydata, N, 3);
+	int status = nsl_diff_second_deriv(dxdata, ydata, N, 3);
 	QCOMPARE(status, 0);
 	for (unsigned int i = 0; i < N; i++)
-		QCOMPARE(ydata[i], 6. * xdata[i]);
+		QCOMPARE(ydata[i], 6. * dxdata[i]);
 }
 
 //##############################################################################
@@ -88,7 +88,7 @@ void NSLDiffTest::testSecond_order3() {
 void NSLDiffTest::testThird_order2() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_third_deriv(xdata, ydata, N, 2);
+	int status = nsl_diff_third_deriv(dxdata, ydata, N, 2);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d, 6.);
@@ -97,7 +97,7 @@ void NSLDiffTest::testThird_order2() {
 void NSLDiffTest::testFourth_order1() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_fourth_deriv(xdata, ydata, N, 1);
+	int status = nsl_diff_fourth_deriv(dxdata, ydata, N, 1);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d, 0.);
@@ -106,7 +106,7 @@ void NSLDiffTest::testFourth_order1() {
 void NSLDiffTest::testFourth_order3() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_fourth_deriv(xdata, ydata, N, 3);
+	int status = nsl_diff_fourth_deriv(dxdata, ydata, N, 3);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d + 1., 1.);
@@ -115,7 +115,7 @@ void NSLDiffTest::testFourth_order3() {
 void NSLDiffTest::testFifth_order2() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_fifth_deriv(xdata, ydata, N, 2);
+	int status = nsl_diff_fifth_deriv(dxdata, ydata, N, 2);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d + 1., 1.);
@@ -124,7 +124,7 @@ void NSLDiffTest::testFifth_order2() {
 void NSLDiffTest::testSixth_order1() {
 	double ydata[] = {1, 8, 64, 512, 4096, 32768, 262144};
 
-	int status = nsl_diff_sixth_deriv(xdata, ydata, N, 1);
+	int status = nsl_diff_sixth_deriv(dxdata, ydata, N, 1);
 	QCOMPARE(status, 0);
 	for (double d : ydata)
 		QCOMPARE(d + 1., 1.);

@@ -673,7 +673,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//	//	}
 }
 
-void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
+void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, const int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
 		maxY = qMax(p.y(), maxY);
 		minY = qMin(p.y(), minY);
@@ -693,7 +693,13 @@ void addUniqueLine01(QPointF p, double& minY, double& maxY, QPointF& lastPoint, 
 	}
 }
 
-void addUniqueLine_double_vector(double* p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
+void addUniqueLine_double_vector(double* p,
+								 double& minY,
+								 double& maxY,
+								 QPointF& lastPoint,
+								 const int& pixelDiff,
+								 QVector<QLineF>& lines,
+								 bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
 		maxY = qMax(p[1], maxY);
 		minY = qMin(p[1], minY);
@@ -717,7 +723,7 @@ void addUniqueLine_double_vector_last_point_vector(double* p,
 												   double& minY,
 												   double& maxY,
 												   double* lastPoint,
-												   int& pixelDiff,
+												   const int& pixelDiff,
 												   QVector<QLineF>& lines,
 												   bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
@@ -746,7 +752,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector(double* p,
 																double& minY,
 																double& maxY,
 																double* lastPoint,
-																int& pixelDiff,
+																const int& pixelDiff,
 																double* lines,
 																bool& prevPixelDiffZero,
 																int& numberLines) {
@@ -795,7 +801,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4(double* p,
 																	 double& minY,
 																	 double& maxY,
 																	 double* lastPoint,
-																	 int& pixelDiff,
+																	 const int& pixelDiff,
 																	 double* lines,
 																	 bool& prevPixelDiffZero,
 																	 int& numberLines) {
@@ -844,7 +850,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 																						  double& minY,
 																						  double& maxY,
 																						  double** lastPoint,
-																						  int& pixelDiff,
+																						  const int& pixelDiff,
 																						  double* lines,
 																						  bool& prevPixelDiffZero,
 																						  int& numberLines) {
@@ -853,7 +859,7 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 		minY = qMin(p[1], minY);
 		prevPixelDiffZero = true;
 		// lastPoint = QPointF(p[0], p[1]);
-		lastPoint = &p;
+		// lastPoint = &p;
 	} else {
 		if (prevPixelDiffZero) {
 			if (maxY != minY) {
@@ -883,19 +889,19 @@ void addUniqueLine_double_vector_last_point_vector_lines_vector_add4_dont_copy_l
 		prevPixelDiffZero = false;
 		minY = p[1];
 		maxY = p[1];
-		lastPoint = &p;
+		// lastPoint = &p;
 	}
 }
 
-void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines) {
+void addUniqueLine02(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, const int& pixelDiff, QVector<QLineF>& lines) {
 	static bool prevPixelDiffZero = false;
-	static int i = 0;
 	if (pixelDiff == 0) {
 		maxY = qMax(p.y(), maxY);
 		minY = qMin(p.y(), minY);
 		lastPoint = p; // save last point
 		prevPixelDiffZero = true;
 	} else {
+		static int i = 0;
 		if (prevPixelDiffZero) {
 			lines[i] = QLineF(x, maxY, x, minY);
 			i++;

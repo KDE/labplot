@@ -68,7 +68,7 @@ void ParserTest::testBasics() {
 
 	const QVector<QPair<QString, double>> testsFuzzy{{"(sin(pi))", 0.}};
 
-	for (auto& expr : testsFuzzy)
+	for (const auto& expr : testsFuzzy)
 		FuzzyCompare(parse(qPrintable(expr.first), "C"), expr.second, 1.e-15);
 }
 

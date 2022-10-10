@@ -10,6 +10,7 @@
 
 #include "FITSFilterTest.h"
 #include "backend/datasources/filters/FITSFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {

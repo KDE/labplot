@@ -10,6 +10,7 @@
 
 #include "NetCDFFilterTest.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {

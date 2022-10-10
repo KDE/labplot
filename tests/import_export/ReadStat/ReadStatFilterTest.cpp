@@ -9,6 +9,7 @@
 
 #include "ReadStatFilterTest.h"
 #include "backend/datasources/filters/ReadStatFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
