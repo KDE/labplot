@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-10 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-10-08 12:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -76,7 +76,7 @@ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:406
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:318
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:296
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3229
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3215
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:312
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:273
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:185
@@ -1368,8 +1368,8 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:321
 #: src/backend/datasources/filters/MatioFilter.cpp:587
 #: src/backend/datasources/filters/MatioFilter.cpp:591
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:404
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:408
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:381
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:385
 #, kde-format
 msgid "No"
 msgstr "Hayır"
@@ -6378,7 +6378,7 @@ msgstr "%1: arkaplan görüntü rengini ayarla"
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:84
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:164
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:87
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:155
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:170
 #: src/backend/worksheet/TextLabel.cpp:257
 #: src/kdefrontend/ui/datapickercurvewidget.ui:179
 #: src/kdefrontend/ui/datapickerimagewidget.ui:637
@@ -6513,19 +6513,17 @@ msgid "%1: set connection line opacity"
 msgstr "%1: en küçük x'i ayarla"
 
 #: src/backend/worksheet/Line.cpp:81
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:374
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:389
 #, kde-format
 msgid "%1: line type changed"
 msgstr "%1: satır türü değişti"
 
 #: src/backend/worksheet/Line.cpp:93
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:629
 #, kde-format
 msgid "%1: set error bar cap size"
 msgstr "%1: hata çubuğu kap boyutunu ayarla"
 
 #: src/backend/worksheet/Line.cpp:100
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:636
 #, kde-format
 msgid "%1: error bar type changed"
 msgstr "%1: hata çubuğu türü değişti"
@@ -6539,7 +6537,7 @@ msgstr "%1: çizgi stilini ayarla"
 #: src/backend/worksheet/Line.cpp:114
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:630
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:212
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:409
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:424
 #, kde-format
 msgid "%1: set line opacity"
 msgstr "%1: çizgi matlığını ayarla"
@@ -6578,7 +6576,7 @@ msgstr "%1: yatay boşluğu ayarla"
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:92
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:98
 #, kde-format
 msgid "Horizontal"
 msgstr "Yatay"
@@ -6596,7 +6594,7 @@ msgstr "Yatay"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:869
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:29
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:97
 #, kde-format
 msgid "Vertical"
 msgstr "Dikey"
@@ -6723,7 +6721,7 @@ msgstr "%1: başlık konumunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:623
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:205
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:402
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:417
 #, kde-format
 msgid "%1: set line style"
 msgstr "%1: çizgi stilini ayarla"
@@ -7123,7 +7121,7 @@ msgstr "%1: dolgu türü değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:658
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, fuzzy, kde-format
 #| msgid "%1: x-range breaking enabled"
 msgid "%1: change rug enabled"
@@ -7131,7 +7129,7 @@ msgstr "%1: x-aralık kırma etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:672
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:659
 #, fuzzy, kde-format
 #| msgid "%1: change line+symbol width"
 msgid "%1: change rug width"
@@ -7139,7 +7137,7 @@ msgstr "%1: satır+sembol genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:679
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:666
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change rug length"
@@ -7147,7 +7145,7 @@ msgstr "%1: açıklamayı değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:567
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:686
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:673
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: change rug offset"
@@ -7978,7 +7976,7 @@ msgid "%1: set bin ranges end"
 msgstr "%1: aralık türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:508
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:558
 #, kde-format
 msgid "%1: x-error type changed"
 msgstr "%1: x-hata türü değişti"
@@ -8358,82 +8356,82 @@ msgid "club"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:107
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:439
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:454
 #, kde-format
 msgid "%1: set values type"
 msgstr "%1: değer türlerini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:461
 #, kde-format
 msgid "%1: set values column"
 msgstr "%1: değer sütunlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:126
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:465
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:480
 #, kde-format
 msgid "%1: set values position"
 msgstr "%1: değer konumlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:133
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:472
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:487
 #, kde-format
 msgid "%1: set values distance"
 msgstr "%1: değer uzaklıklarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:140
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:479
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:494
 #, kde-format
 msgid "%1: rotate values"
 msgstr "%1: değerleri döndür"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:147
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:486
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:501
 #, kde-format
 msgid "%1: set values opacity"
 msgstr "%1: değerlerin matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:154
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:508
 #, fuzzy, kde-format
 #| msgid "%1: set values font"
 msgid "%1: set values numeric format"
 msgstr "%1: değerler yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:161
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:515
 #, fuzzy, kde-format
 #| msgid "%1: set labels precision"
 msgid "%1: set values precision"
 msgstr "%1: etiketlerin keskinliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:168
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:522
 #, fuzzy, kde-format
 #| msgid "%1: set labels format"
 msgid "%1: set values datetime format"
 msgstr "%1: etiketlerin biçemini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:175
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:529
 #, kde-format
 msgid "%1: set values prefix"
 msgstr "%1: değer önekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:182
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:536
 #, kde-format
 msgid "%1: set values suffix"
 msgstr "%1: değerlar sonekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:189
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: set values font"
 msgstr "%1: değerler yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:196
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
 #, kde-format
 msgid "%1: set values color"
 msgstr "%1: değerler rengini ayarla"
@@ -8487,107 +8485,97 @@ msgstr "Yeterli veri noktası yok."
 msgid "%1: set options and perform the correlation"
 msgstr "%1: seçenekleri ayarla ve enterpolasyonu gerçekleştir"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:203
 #, kde-format
 msgid "Navigate to \"%1\""
 msgstr "\"%1\"e rotayı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:342
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:357
 #, kde-format
 msgid "%1: x-data source changed"
 msgstr "%1: x-veri kaynağı değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:349
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:364
 #, kde-format
 msgid "%1: y-data source changed"
 msgstr "%1: y-veri kaynağı değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:366
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:381
 #, fuzzy, kde-format
 #| msgid "%1 CustomPoints: visibility changed"
 msgid "%1: legend visibility changed"
 msgstr "%1 ÖzelNoktala: görünebilirlik değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:381
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:396
 #, kde-format
 msgid "%1: set skip line gaps"
 msgstr "%1: atlama satırı boşluklarını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:388
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:403
 #, fuzzy, kde-format
 #| msgid "%1: set range"
 msgid "%1: set increasing X"
 msgstr "%1: aralığı ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:395
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:410
 #, kde-format
 msgid "%1: set the number of interpolation points"
 msgstr "%1: enterpolasyon noktalarının sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:417
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:432
 #, kde-format
 msgid "%1: drop line type changed"
 msgstr "%1: damla satır türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:424
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:439
 #, kde-format
 msgid "%1: set drop line style"
 msgstr "%1: damla satır biçemini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:431
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
 #, kde-format
 msgid "%1: set drop line opacity"
 msgstr "%1: damla satır matlığını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:565
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:583
 #, kde-format
 msgid "%1: set x-error column"
 msgstr "%1: x-hata sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:586
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:601
 #, kde-format
 msgid "%1: y-error type changed"
 msgstr "%1: y-hata türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:593
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:608
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:626
 #, kde-format
 msgid "%1: set y-error column"
 msgstr "%1: y-hata sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:643
-#, kde-format
-msgid "%1: set error bar style"
-msgstr "%1: hata çubuğu türünü ayarla"
-
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:650
-#, kde-format
-msgid "%1: set error bar opacity"
-msgstr "%1: hata çubuğu matlığını ayarla"
-
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:665
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:652
 #, fuzzy, kde-format
 #| msgid "%1: set axis orientation"
 msgid "%1: set rug orientation"
 msgstr "%1: eksen yönlendirmeyi ayarla"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1551
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1538
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Hata: Akima spline interpolasyonu minimum 5 puan gerektirir."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1553
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1540
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Hata: Spline işlevi başlatılamadı."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1566
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1553
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "x değerleri monoton olarak artmalıdır."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1569
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1556
 #, kde-format
 msgid "Error: %1"
 msgstr "Hata: %1"
@@ -12114,7 +12102,7 @@ msgid "Right"
 msgstr "Sağ"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:372
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:93
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:99
 #, kde-format
 msgid "Both"
 msgstr "Her ikisi de"
@@ -12269,7 +12257,7 @@ msgstr "%1 eksenleri: şablon \"%2\" yüklendi"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:322
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:182
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:641
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1696
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1546
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: \"%2\" şablonu yüklendi"
@@ -12336,7 +12324,7 @@ msgstr "Sütun:"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:540
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1016
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:796
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1694
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1544
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 xy-eğrileri: \"%2\" şablonu yüklendi"
@@ -12638,7 +12626,7 @@ msgstr "%1 kartezyen çizim efsaneleri: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:42
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:32
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:58
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:59
 #: src/kdefrontend/widgets/ValueWidget.cpp:41
 #, kde-format
 msgid "Decimal"
@@ -12646,7 +12634,7 @@ msgstr "Ondalık"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:43
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:33
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:59
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:60
 #: src/kdefrontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
@@ -12654,21 +12642,21 @@ msgstr "Bilimsel (e)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:44
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:34
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:60
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:61
 #: src/kdefrontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
 msgstr "Bilimsel (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:45
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:61
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:62
 #: src/kdefrontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
 msgstr "Otomatik (e)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:46
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:62
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:63
 #: src/kdefrontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
@@ -12823,8 +12811,8 @@ msgid "Custom Error Values, asymmetric"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:560
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1138
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1205
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1108
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1166
 #, fuzzy, kde-format
 #| msgid "Data, +-"
 msgid "Data, +-:"
@@ -12834,11 +12822,11 @@ msgstr "Veri, +-"
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:567
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1145
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1212
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1115
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1173
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:430
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:762
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:815
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:768
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:775
 #, kde-format
 msgid "Data, +:"
 msgstr "Veri, +:"
@@ -13233,48 +13221,32 @@ msgstr "Yukarı"
 msgid "Below"
 msgstr "aşağı"
 
-#. i18n: ectx: attribute (title), widget (QWidget, tabBars)
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:387
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:236
-#: src/kdefrontend/widgets/LineWidget.cpp:50
-#: src/kdefrontend/widgets/LineWidget.cpp:72
-#, kde-format
-msgid "Bars"
-msgstr "Çubuklar"
-
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:401
-#: src/kdefrontend/widgets/LineWidget.cpp:86
-#, fuzzy, kde-format
-#| msgid "bars with ends"
-msgid "Bars with Ends"
-msgstr "sonlu çubuklar"
-
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:405
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:409
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:382
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:386
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:32
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:36
 #, kde-format
 msgid "Symmetric"
 msgstr "Simetrik"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:406
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:410
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:383
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:387
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:33
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:37
 #, kde-format
 msgid "Asymmetric"
 msgstr "Asimetrik"
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:648
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:649
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:618
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:619
 #, kde-format
 msgid ""
 "If checked, connect neighbour points with lines even if there are gaps "
 "(invalid or masked values) between them"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:650
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:651
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:620
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:621
 #, kde-format
 msgid ""
 "If checked, connect data points only for strictly increasing values of X"
@@ -16633,9 +16605,8 @@ msgstr "Boyut:"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbDistance)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbDropLineWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbValuesDistance)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsCapSize)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWidth)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarsCapSize)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:230
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:447
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:580
@@ -16668,11 +16639,9 @@ msgstr "Boyut:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:139
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:264
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:561
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:885
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:919
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1023
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1047
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1087
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:901
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:925
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:965
 #: src/kdefrontend/ui/labelwidget.ui:53 src/kdefrontend/ui/labelwidget.ui:193
 #: src/kdefrontend/ui/labelwidget.ui:373 src/kdefrontend/ui/symbolwidget.ui:88
 #: src/kdefrontend/ui/symbolwidget.ui:287
@@ -16699,7 +16668,6 @@ msgstr " pt"
 #. i18n: ectx: property (text), widget (QLabel, lMajorGridStyle)
 #. i18n: ectx: property (text), widget (QLabel, lMinorGridStyle)
 #. i18n: ectx: property (text), widget (QLabel, lDropLineStyle)
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarsStyle)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineStyle)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineStyle)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:240
@@ -16727,7 +16695,6 @@ msgstr " pt"
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:206
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:233
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:868
 #: src/kdefrontend/ui/labelwidget.ui:331 src/kdefrontend/ui/symbolwidget.ui:45
 #: src/kdefrontend/ui/symbolwidget.ui:197
 #: src/kdefrontend/ui/symbolwidget.ui:253
@@ -16751,7 +16718,6 @@ msgstr "Biçim:"
 #. i18n: ectx: property (text), widget (QLabel, lColor)
 #. i18n: ectx: property (text), widget (QLabel, lDropLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColor)
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarsColor)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
@@ -16778,7 +16744,6 @@ msgstr "Biçim:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:125
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:250
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:534
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:895
 #: src/kdefrontend/ui/labelwidget.ui:85 src/kdefrontend/ui/symbolwidget.ui:207
 #: src/kdefrontend/ui/symbolwidget.ui:263
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:207
@@ -16804,7 +16769,6 @@ msgstr "Resim:"
 #. i18n: ectx: property (text), widget (QLabel, lLineType)
 #. i18n: ectx: property (text), widget (QLabel, lDropLineType)
 #. i18n: ectx: property (text), widget (QLabel, lValuesType)
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarsType)
 #. i18n: ectx: property (text), widget (QLabel, lErrorType)
 #. i18n: ectx: property (text), widget (QLabel, lLayout)
 #. i18n: ectx: property (text), widget (QLabel, lFileType)
@@ -16829,7 +16793,6 @@ msgstr "Resim:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:48
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:223
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:682
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:858
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:292
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:246
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:221
@@ -16938,7 +16901,7 @@ msgstr "Bölümler:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1123
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:999
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:490
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1033
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:911
 #, kde-format
 msgid "Length:"
 msgstr "Uzunluk:"
@@ -18134,7 +18097,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:41
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:220
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:118
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1067
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:945
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "Orientation:"
@@ -18154,7 +18117,6 @@ msgstr "Yönlendirme"
 #. i18n: ectx: property (text), widget (QLabel, lMajorGridWidth)
 #. i18n: ectx: property (text), widget (QLabel, lMinorGridWidth)
 #. i18n: ectx: property (text), widget (QLabel, lDropLineWidth)
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarsWidth)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineWidth)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineWidth)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:440
@@ -18181,8 +18143,7 @@ msgstr "Yönlendirme"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:125
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:132
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:257
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:912
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1060
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:938
 #: src/kdefrontend/ui/labelwidget.ui:186 src/kdefrontend/ui/symbolwidget.ui:280
 #, kde-format
 msgid "Width:"
@@ -18201,7 +18162,6 @@ msgstr "Genişlik:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorGridOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lDropLineOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarsOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:463
@@ -18227,7 +18187,6 @@ msgstr "Genişlik:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:149
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:274
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:427
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:929
 #: src/kdefrontend/ui/labelwidget.ui:109 src/kdefrontend/ui/symbolwidget.ui:133
 #: src/kdefrontend/worksheet/GridDialog.cpp:72
 #, kde-format
@@ -18248,7 +18207,6 @@ msgstr "Matlık:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbMinorGridOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbDropLineOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbErrorBarsOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:476
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:577
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:926
@@ -18270,7 +18228,6 @@ msgstr "Matlık:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:162
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:287
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:473
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:942
 #: src/kdefrontend/ui/labelwidget.ui:280 src/kdefrontend/ui/symbolwidget.ui:146
 #, kde-format
 msgid ""
@@ -18294,7 +18251,6 @@ msgstr ""
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinorGridOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbDropLineOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbErrorBarsOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:479
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:929
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1156
@@ -18318,7 +18274,6 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:165
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:290
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:476
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:945
 #: src/kdefrontend/ui/labelwidget.ui:283 src/kdefrontend/ui/symbolwidget.ui:149
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
@@ -18533,7 +18488,7 @@ msgstr "Son ek"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1360
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1033
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:573
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1040
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:918
 #, fuzzy, kde-format
 #| msgid "Offset X"
 msgid "Offset:"
@@ -18597,7 +18552,7 @@ msgstr "Yan ızgara:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:966
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:973
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:536
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1000
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:878
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:346
 #, kde-format
 msgid "Enabled:"
@@ -18668,6 +18623,14 @@ msgstr "x:"
 #, kde-format
 msgid "y:"
 msgstr "y:"
+
+#. i18n: ectx: attribute (title), widget (QWidget, tabBars)
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:236
+#: src/kdefrontend/widgets/LineWidget.cpp:50
+#: src/kdefrontend/widgets/LineWidget.cpp:72
+#, kde-format
+msgid "Bars"
+msgstr "Çubuklar"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
@@ -18823,7 +18786,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:752
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:484
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:507
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:981
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:859
 #, fuzzy, kde-format
 #| msgid "Margin:"
 msgid "Margins"
@@ -18832,7 +18795,7 @@ msgstr "Kenar boşluğu:"
 #. i18n: ectx: property (text), widget (QLabel, lRug)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:956
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:566
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:1080
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:958
 #, fuzzy, kde-format
 #| msgid "Plot"
 msgid "Rug Plot"
@@ -19345,12 +19308,12 @@ msgstr "Şekil:"
 msgid "Error Bars"
 msgstr "Hata Çubukları"
 
-#. i18n: ectx: property (text), widget (QLabel, lXErrorDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataMinus)
+#. i18n: ectx: property (text), widget (QLabel, lXErrorDataMinus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataMinus)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:476
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:769
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:822
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:729
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:802
 #, kde-format
 msgid "Data, -:"
 msgstr "Veri, -:"
@@ -19446,7 +19409,6 @@ msgstr "Bağlantı başarısız"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarsCapSize)
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:160
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:878
 #, fuzzy, kde-format
 #| msgid "Cap size"
 msgid "Cap size:"
@@ -19812,26 +19774,26 @@ msgstr "Satırları bırak:"
 msgid "Monoton incr. X:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
+#. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:722
-#, fuzzy, kde-format
-#| msgid "x-error:"
-msgid "x-error"
-msgstr "x-hatası:"
+#, kde-format
+msgid "y-error"
+msgstr "y-hatası"
 
-#. i18n: ectx: property (text), widget (QLabel, lXErrorType)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorType)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:729
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:805
+#. i18n: ectx: property (text), widget (QLabel, lXErrorType)
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:795
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:838
 #, kde-format
 msgid "Error type:"
 msgstr "Hata türü:"
 
-#. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:798
-#, kde-format
-msgid "y-error"
-msgstr "y-hatası"
+#. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:831
+#, fuzzy, kde-format
+#| msgid "x-error:"
+msgid "x-error"
+msgstr "x-hatası:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -22009,6 +21971,12 @@ msgstr "Satırları bırak:"
 msgid "Half-Bars"
 msgstr "Çubuklar"
 
+#: src/kdefrontend/widgets/LineWidget.cpp:86
+#, fuzzy, kde-format
+#| msgid "bars with ends"
+msgid "Bars with Ends"
+msgstr "sonlu çubuklar"
+
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:51
 #, fuzzy, kde-format
 #| msgid "Close the dialog and import the data."
@@ -22242,6 +22210,12 @@ msgstr ""
 #| msgid "Failed to open the device."
 msgid "Unable to open file:"
 msgstr "Aygıt açılamadı."
+
+#~ msgid "%1: set error bar style"
+#~ msgstr "%1: hata çubuğu türünü ayarla"
+
+#~ msgid "%1: set error bar opacity"
+#~ msgstr "%1: hata çubuğu matlığını ayarla"
 
 #, fuzzy
 #~| msgid "Bars"
