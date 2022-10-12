@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-11 00:41+0000\n"
-"PO-Revision-Date: 2022-10-08 11:01+0100\n"
+"PO-Revision-Date: 2022-10-11 17:13+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -2898,16 +2898,14 @@ msgid "Entropy"
 msgstr "Entropia"
 
 #: src/backend/gsl/ExpressionParser.cpp:181
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "Quantile"
-msgstr "Quartis da Amostra"
+msgstr "Quartil"
 
 #: src/backend/gsl/ExpressionParser.cpp:182
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "Percentile"
-msgstr "Percentil:"
+msgstr "Percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:188
 #, kde-format
@@ -21394,9 +21392,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "%1: set error bar style"
-#~ msgstr "%1: mudar o estilo da barra de erros"
-
-#~ msgid "%1: set error bar opacity"
-#~ msgstr "%1: mudar a opacidade da barra de erros"
