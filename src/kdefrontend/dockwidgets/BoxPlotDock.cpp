@@ -16,6 +16,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
 #include <QPushButton>
@@ -71,6 +72,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	ui.leWhiskersRangeParameter->setToolTip(msg);
 
 	// Tab "Box"
+	QFont font;
+	font.setBold(true);
+	font.setWeight(75);
+
 	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
@@ -78,13 +83,26 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// filling
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
-	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 5);
+	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
+	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
+	gridLayout->addItem(spacer, 4, 0, 1, 1);
 
-	// box border
-	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
+	// lines
+	auto* label = new QLabel(i18n("Border"));
+	label->setFont(font);
+	gridLayout->addWidget(label, 5, 0, 1, 1);
+	borderLineWidget = new LineWidget(ui.tabBox);
+	gridLayout->addWidget(borderLineWidget, 6, 0, 1, 3);
+	spacer = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
+	gridLayout->addItem(spacer, 7, 0, 1, 1);
 
-	// median line
-	GuiTools::updatePenStyles(ui.cbMedianLineStyle, Qt::black);
+	label = new QLabel(i18n("Median Line"));
+	label->setFont(font);
+	gridLayout->addWidget(label, 8, 0, 1, 1);
+	medianLineWidget = new LineWidget(ui.tabBox);
+	gridLayout->addWidget(medianLineWidget, 9, 0, 1, 3);
+	spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    gridLayout->addItem(spacer, 10, 0, 1, 1);
 
 	// Tab "Markers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
@@ -92,7 +110,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
 	// Tab "Whiskers"
-	GuiTools::updatePenStyles(ui.cbWhiskersStyle, Qt::black);
+	gridLayout = static_cast<QGridLayout*>(ui.tabWhiskers->layout());
+	whiskersLineWidget = new LineWidget(ui.tabBox);
+	gridLayout->addWidget(whiskersLineWidget, 1, 0, 1, 3);
+
 	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, Qt::black);
 
 	// adjust layouts in the tabs
@@ -122,18 +143,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// Tab "Box"
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::widthFactorChanged);
 
-	// box border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &BoxPlotDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::borderWidthChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::borderOpacityChanged);
-
-	// median line
-	connect(ui.cbMedianLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::medianLineStyleChanged);
-	connect(ui.kcbMedianLineColor, &KColorButton::changed, this, &BoxPlotDock::medianLineColorChanged);
-	connect(ui.sbMedianLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::medianLineWidthChanged);
-	connect(ui.sbMedianLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::medianLineOpacityChanged);
-
 	// Tab "Markers"
 	connect(ui.rbMean, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbMedian, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
@@ -146,10 +155,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	// Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
 	connect(ui.leWhiskersRangeParameter, &QLineEdit::textChanged, this, &BoxPlotDock::whiskersRangeParameterChanged);
-	connect(ui.cbWhiskersStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersStyleChanged);
-	connect(ui.kcbWhiskersColor, &KColorButton::changed, this, &BoxPlotDock::whiskersColorChanged);
-	connect(ui.sbWhiskersWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersWidthChanged);
-	connect(ui.sbWhiskersOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersOpacityChanged);
 	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
 	connect(ui.cbWhiskersCapStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersCapStyleChanged);
 	connect(ui.kcbWhiskersCapColor, &KColorButton::changed, this, &BoxPlotDock::whiskersCapColorChanged);
@@ -208,12 +213,20 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
 
-	// backgrounds
 	QList<Background*> backgrounds;
-	for (auto* plot : m_boxPlots)
+	QList<Line*> borderLines;
+	QList<Line*> medianLines;
+	QList<Line*> whiskersLines;
+	for (auto* plot : m_boxPlots) {
 		backgrounds << plot->background();
-
+		borderLines << plot->borderLine();
+		medianLines << plot->medianLine();
+		whiskersLines << plot->whiskersLine();
+	}
 	backgroundWidget->setBackgrounds(backgrounds);
+	borderLineWidget->setLines(borderLines);
+	medianLineWidget->setLines(medianLines);
+	whiskersLineWidget->setLines(whiskersLines);
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
@@ -235,22 +248,12 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	connect(m_boxPlot, &BoxPlot::widthFactorChanged, this, &BoxPlotDock::plotWidthFactorChanged);
 
-	// box border
-	connect(m_boxPlot, &BoxPlot::borderPenChanged, this, &BoxPlotDock::plotBorderPenChanged);
-	connect(m_boxPlot, &BoxPlot::borderOpacityChanged, this, &BoxPlotDock::plotBorderOpacityChanged);
-
-	// median line
-	connect(m_boxPlot, &BoxPlot::medianLinePenChanged, this, &BoxPlotDock::plotMedianLinePenChanged);
-	connect(m_boxPlot, &BoxPlot::medianLineOpacityChanged, this, &BoxPlotDock::plotMedianLineOpacityChanged);
-
 	// symbols
 	connect(m_boxPlot, &BoxPlot::jitteringEnabledChanged, this, &BoxPlotDock::plotJitteringEnabledChanged);
 
 	// whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersRangeParameterChanged, this, &BoxPlotDock::plotWhiskersRangeParameterChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersPenChanged, this, &BoxPlotDock::plotWhiskersPenChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersOpacityChanged, this, &BoxPlotDock::plotWhiskersOpacityChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapPenChanged, this, &BoxPlotDock::plotWhiskersCapPenChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapOpacityChanged, this, &BoxPlotDock::plotWhiskersCapOpacityChanged);
@@ -275,7 +278,9 @@ void BoxPlotDock::setModel() {
  */
 void BoxPlotDock::updateLocale() {
 	SET_NUMBER_LOCALE
-	ui.sbBorderWidth->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
+	medianLineWidget->updateLocale();
+	whiskersLineWidget->updateLocale();
 	ui.leWhiskersRangeParameter->setLocale(numberLocale);
 
 	// 	Lock lock(m_initializing);
@@ -472,108 +477,6 @@ void BoxPlotDock::widthFactorChanged(int value) const {
 		boxPlot->setWidthFactor(factor);
 }
 
-// box border
-void BoxPlotDock::borderStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->borderPen();
-		pen.setStyle(penStyle);
-		boxPlot->setBorderPen(pen);
-	}
-}
-
-void BoxPlotDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->borderPen();
-		pen.setColor(color);
-		boxPlot->setBorderPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
-}
-
-void BoxPlotDock::borderWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		boxPlot->setBorderPen(pen);
-	}
-}
-
-void BoxPlotDock::borderOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setBorderOpacity(opacity);
-}
-
-// median line
-void BoxPlotDock::medianLineStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->medianLinePen();
-		pen.setStyle(penStyle);
-		boxPlot->setMedianLinePen(pen);
-	}
-}
-
-void BoxPlotDock::medianLineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->medianLinePen();
-		pen.setColor(color);
-		boxPlot->setMedianLinePen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbMedianLineStyle, color);
-	m_initializing = false;
-}
-
-void BoxPlotDock::medianLineWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->medianLinePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		boxPlot->setMedianLinePen(pen);
-	}
-}
-
-void BoxPlotDock::medianLineOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setMedianLineOpacity(opacity);
-}
-
 // markers
 void BoxPlotDock::symbolCategoryChanged() {
 	QList<Symbol*> symbols;
@@ -622,19 +525,6 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 		boxPlot->setWhiskersType(type);
 }
 
-void BoxPlotDock::whiskersStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersPen();
-		pen.setStyle(penStyle);
-		boxPlot->setWhiskersPen(pen);
-	}
-}
-
 void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
 	if (m_initializing)
 		return;
@@ -647,43 +537,6 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersRangeParameter(value);
-}
-
-void BoxPlotDock::whiskersColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersPen();
-		pen.setColor(color);
-		boxPlot->setWhiskersPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbWhiskersStyle, color);
-	m_initializing = false;
-}
-
-void BoxPlotDock::whiskersWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		boxPlot->setWhiskersPen(pen);
-	}
-}
-
-void BoxPlotDock::whiskersOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setWhiskersOpacity(opacity);
 }
 
 // whiskers cap
@@ -830,38 +683,6 @@ void BoxPlotDock::plotWidthFactorChanged(double factor) {
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
-// box border
-void BoxPlotDock::plotBorderPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BoxPlotDock::plotBorderOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
-}
-
-// median line
-void BoxPlotDock::plotMedianLinePenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbMedianLineStyle->currentIndex() != pen.style())
-		ui.cbMedianLineStyle->setCurrentIndex(pen.style());
-	if (ui.kcbMedianLineColor->color() != pen.color())
-		ui.kcbMedianLineColor->setColor(pen.color());
-	if (ui.sbMedianLineWidth->value() != pen.widthF())
-		ui.sbMedianLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BoxPlotDock::plotMedianLineOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbMedianLineOpacity->setValue(v);
-}
-
 // symbols
 void BoxPlotDock::plotJitteringEnabledChanged(bool status) {
 	Lock lock(m_initializing);
@@ -877,20 +698,6 @@ void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
 	Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
-}
-void BoxPlotDock::plotWhiskersPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbWhiskersStyle->currentIndex() != pen.style())
-		ui.cbWhiskersStyle->setCurrentIndex(pen.style());
-	if (ui.kcbWhiskersColor->color() != pen.color())
-		ui.kcbWhiskersColor->setColor(pen.color());
-	if (ui.sbWhiskersWidth->value() != pen.widthF())
-		ui.sbWhiskersWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BoxPlotDock::plotWhiskersOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbWhiskersOpacity->setValue(v);
 }
 
 // whiskers cap
@@ -949,37 +756,19 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 
 	// box
 	ui.sbWidthFactor->setValue(round(group.readEntry("WidthFactor", m_boxPlot->widthFactor()) * 100));
-
-	// box filling
 	backgroundWidget->loadConfig(group);
-
-	// box border
-	const QPen& penBorder = m_boxPlot->borderPen();
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)penBorder.style()));
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", penBorder.color()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", penBorder.widthF()), Worksheet::Unit::Point));
-	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", m_boxPlot->borderOpacity()) * 100);
-
-	// median line
-	const QPen& penMedian = m_boxPlot->medianLinePen();
-	ui.cbMedianLineStyle->setCurrentIndex(group.readEntry("MedianLineStyle", (int)penMedian.style()));
-	ui.kcbMedianLineColor->setColor(group.readEntry("MedianLineColor", penMedian.color()));
-	ui.sbMedianLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MedianLineWidth", penMedian.widthF()), Worksheet::Unit::Point));
-	ui.sbMedianLineOpacity->setValue(group.readEntry("MedianLineOpacity", m_boxPlot->borderOpacity()) * 100);
+	borderLineWidget->loadConfig(group);
+	medianLineWidget->loadConfig(group);
 
 	// symbols
 	symbolCategoryChanged();
 	ui.chkJitteringEnabled->setChecked(group.readEntry("JitteringEnabled", m_boxPlot->jitteringEnabled()));
 
 	// whiskers
-	const QPen& penWhiskers = m_boxPlot->whiskersPen();
 	ui.cbWhiskersType->setCurrentIndex(group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()));
 	SET_NUMBER_LOCALE
 	ui.leWhiskersRangeParameter->setText(numberLocale.toString(m_boxPlot->whiskersRangeParameter()));
-	ui.cbWhiskersStyle->setCurrentIndex(group.readEntry("WhiskersStyle", (int)penWhiskers.style()));
-	ui.kcbWhiskersColor->setColor(group.readEntry("WhiskersColor", penWhiskers.color()));
-	ui.sbWhiskersWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", penWhiskers.widthF()), Worksheet::Unit::Point));
-	ui.sbWhiskersOpacity->setValue(group.readEntry("WhiskersOpacity", m_boxPlot->whiskersOpacity()) * 100);
+	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
 	const QPen& penCap = m_boxPlot->whiskersCapPen();
@@ -996,9 +785,6 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
 
 	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	GuiTools::updatePenStyles(ui.cbMedianLineStyle, ui.kcbMedianLineColor->color());
-	GuiTools::updatePenStyles(ui.cbWhiskersStyle, ui.kcbWhiskersColor->color());
 	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, ui.kcbWhiskersCapColor->color());
 }
 
@@ -1033,21 +819,9 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// box
 	group.writeEntry("WidthFactor", ui.sbWidthFactor->value() / 100.0);
-
-	// box filling
 	backgroundWidget->saveConfig(group);
-
-	// box border
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
-
-	// median line
-	group.writeEntry("MedianLineStyle", ui.cbMedianLineStyle->currentIndex());
-	group.writeEntry("MedianLineColor", ui.kcbMedianLineColor->color());
-	group.writeEntry("MedianLineWidth", Worksheet::convertToSceneUnits(ui.sbMedianLineWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("MedianLineOpacity", ui.sbMedianLineOpacity->value() / 100.0);
+	borderLineWidget->saveConfig(group);
+	medianLineWidget->saveConfig(group);
 
 	// symbols
 	// TODO: save symbol properties for outliers, etc.?
@@ -1057,10 +831,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
 	SET_NUMBER_LOCALE
 	group.writeEntry("WhiskersRangeParameter", numberLocale.toDouble(ui.leWhiskersRangeParameter->text()));
-	group.writeEntry("WhiskersStyle", ui.cbWhiskersStyle->currentIndex());
-	group.writeEntry("WhiskersColor", ui.kcbWhiskersColor->color());
-	group.writeEntry("WhiskersWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("WhiskersOpacity", ui.sbWhiskersOpacity->value() / 100.0);
+	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap
 	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));

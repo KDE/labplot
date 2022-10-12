@@ -18,6 +18,7 @@
 class BoxPlotPrivate;
 class AbstractColumn;
 class Background;
+class Line;
 class Symbol;
 
 #ifdef SDK
@@ -57,16 +58,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
-	// box filling
+	// box
 	Background* background() const;
-
-	// box border
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
-
-	// median line
-	CLASS_D_ACCESSOR_DECL(QPen, medianLinePen, MedianLinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
+	Line* borderLine() const;
+	Line* medianLine() const;
 
 	// symbols
 	Symbol* symbolMean() const;
@@ -80,8 +75,7 @@ public:
 	// whiskers
 	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
 	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
-	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
-	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
+	Line* whiskersLine() const;
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
@@ -135,22 +129,12 @@ Q_SIGNALS:
 	void widthFactorChanged(double);
 	void notchesEnabledChanged(bool);
 
-	// box border
-	void borderPenChanged(QPen&);
-	void borderOpacityChanged(float);
-
-	// median line
-	void medianLinePenChanged(QPen&);
-	void medianLineOpacityChanged(float);
-
 	// symbols
 	void jitteringEnabledChanged(bool);
 
 	// whiskers
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void whiskersRangeParameterChanged(double);
-	void whiskersPenChanged(QPen&);
-	void whiskersOpacityChanged(float);
 	void whiskersCapSizeChanged(double);
 	void whiskersCapPenChanged(QPen&);
 	void whiskersCapOpacityChanged(float);

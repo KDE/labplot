@@ -809,7 +809,6 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	symbolWidget->saveConfig(group);
 	valueWidget->saveConfig(group);
 	backgroundWidget->saveConfig(group);
-	errorBarsLineWidget->saveConfig(group);
 	group.writeEntry("ErrorType", ui.cbErrorType->currentIndex());
 
 	config.sync();

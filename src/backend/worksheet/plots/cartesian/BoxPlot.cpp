@@ -18,6 +18,7 @@
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -68,6 +69,19 @@ void BoxPlot::init() {
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
+	// box border line
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	// box filling
 	d->background = new Background(QString());
 	d->background->setPrefix(QLatin1String("Filling"));
@@ -80,16 +94,17 @@ void BoxPlot::init() {
 	});
 
 	// median line
-	d->medianLinePen = QPen(group.readEntry("MedianLineColor", QColor(Qt::black)),
-							group.readEntry("MedianLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-							(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->medianLineOpacity = group.readEntry("BorderOpacity", 1.0);
-
-	// box border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
+	d->medianLine = new Line(QString());
+	d->medianLine->setPrefix(QLatin1String("MedianLine"));
+	d->medianLine->setHidden(true);
+	addChild(d->medianLine);
+	d->medianLine->init(group);
+	connect(d->medianLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->medianLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// markers
 	d->symbolMean = new Symbol("symbolMean");
@@ -167,10 +182,18 @@ void BoxPlot::init() {
 	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 
 	// whiskers
-	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
-						  group.readEntry("WhiskersWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						  (Qt::PenStyle)group.readEntry("WhiskersStyle", (int)Qt::SolidLine));
-	d->whiskersOpacity = group.readEntry("WhiskersOpacity", 1.0);
+	d->whiskersLine = new Line(QString());
+	d->whiskersLine->setPrefix(QLatin1String("Whiskers"));
+	d->whiskersLine->setHidden(true);
+	addChild(d->whiskersLine);
+	d->whiskersLine->init(group);
+	connect(d->whiskersLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->whiskersLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
 	d->whiskersCapPen = QPen(group.readEntry("WhiskersCapColor", QColor(Qt::black)),
 							 group.readEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
@@ -347,13 +370,17 @@ Background* BoxPlot::background() const {
 	return d->background;
 }
 
-// border
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
+// box border line
+Line* BoxPlot::borderLine() const {
+	Q_D(const BoxPlot);
+	return d->borderLine;
+}
 
 // median line
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
+Line* BoxPlot::medianLine() const {
+	Q_D(const BoxPlot);
+	return d->medianLine;
+}
 
 // markers
 Symbol* BoxPlot::symbolMean() const {
@@ -391,11 +418,14 @@ Symbol* BoxPlot::symbolWhiskerEnd() const {
 // whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersRangeParameter, whiskersRangeParameter)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
+
+Line* BoxPlot::whiskersLine() const {
+	Q_D(const BoxPlot);
+	return d->whiskersLine;
+}
 
 // margin plots
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, rugEnabled, rugEnabled)
@@ -488,36 +518,6 @@ void BoxPlot::setNotchesEnabled(bool notchesEnabled) {
 		exec(new BoxPlotSetNotchesEnabledCmd(d, notchesEnabled, ki18n("%1: changed notches")));
 }
 
-// box border
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetBorderPen, QPen, borderPen, recalcShapeAndBoundingRect)
-void BoxPlot::setBorderPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->borderPen)
-		exec(new BoxPlotSetBorderPenCmd(d, pen, ki18n("%1: set border pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetBorderOpacity, qreal, borderOpacity, updatePixmap)
-void BoxPlot::setBorderOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->borderOpacity)
-		exec(new BoxPlotSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
-}
-
-// median line
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetMedianLinePen, QPen, medianLinePen, updatePixmap)
-void BoxPlot::setMedianLinePen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->medianLinePen)
-		exec(new BoxPlotSetMedianLinePenCmd(d, pen, ki18n("%1: set median line pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetMedianLineOpacity, qreal, medianLineOpacity, updatePixmap)
-void BoxPlot::setMedianLineOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->medianLineOpacity)
-		exec(new BoxPlotSetMedianLineOpacityCmd(d, opacity, ki18n("%1: set median line opacity")));
-}
-
 // whiskers
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
 void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
@@ -531,20 +531,6 @@ void BoxPlot::setWhiskersRangeParameter(double k) {
 	Q_D(BoxPlot);
 	if (k != d->whiskersRangeParameter)
 		exec(new BoxPlotSetWhiskersRangeParameterCmd(d, k, ki18n("%1: set whiskers range parameter")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersPen, QPen, whiskersPen, recalcShapeAndBoundingRect)
-void BoxPlot::setWhiskersPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->whiskersPen)
-		exec(new BoxPlotSetWhiskersPenCmd(d, pen, ki18n("%1: set whiskers pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersOpacity, qreal, whiskersOpacity, updatePixmap)
-void BoxPlot::setWhiskersOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->whiskersOpacity)
-		exec(new BoxPlotSetWhiskersOpacityCmd(d, opacity, ki18n("%1: set whiskers opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapSize, double, whiskersCapSize, recalc)
@@ -1388,12 +1374,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLine->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapPen));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLine->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1528,28 +1514,28 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 			}
 
 			// draw the border
-			if (borderPen.style() != Qt::NoPen) {
-				painter->setPen(borderPen);
+			if (borderLine->pen().style() != Qt::NoPen) {
+				painter->setPen(borderLine->pen());
 				painter->setBrush(Qt::NoBrush);
-				painter->setOpacity(borderOpacity);
+				painter->setOpacity(borderLine->opacity());
 				for (const auto& line : m_boxRect.at(i))
 					painter->drawLine(line);
 			}
 
 			// draw the median line
-			if (medianLinePen.style() != Qt::NoPen) {
-				painter->setPen(medianLinePen);
+			if (medianLine->pen().style() != Qt::NoPen) {
+				painter->setPen(medianLine->pen());
 				painter->setBrush(Qt::NoBrush);
-				painter->setOpacity(medianLineOpacity);
+				painter->setOpacity(medianLine->opacity());
 				painter->drawLine(m_medianLine.at(i));
 			}
 		}
 
 		// draw the whiskers
-		if (whiskersPen.style() != Qt::NoPen && !m_whiskersPath.at(i).isEmpty()) {
-			painter->setPen(whiskersPen);
+		if (whiskersLine->pen().style() != Qt::NoPen && !m_whiskersPath.at(i).isEmpty()) {
+			painter->setPen(whiskersLine->pen());
 			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(whiskersOpacity);
+			painter->setOpacity(whiskersLine->opacity());
 			painter->drawPath(m_whiskersPath.at(i));
 		}
 
@@ -1564,10 +1550,10 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		// draw rug
 		if (rugEnabled && !m_rugPath.at(i).isEmpty()) {
 			QPen pen;
-			pen.setColor(borderPen.color());
+			pen.setColor(borderLine->pen().color());
 			pen.setWidthF(rugWidth);
 			painter->setPen(pen);
-			painter->setOpacity(borderOpacity);
+			painter->setOpacity(borderLine->opacity());
 			painter->drawPath(m_rugPath.at(i));
 		}
 
@@ -1786,20 +1772,10 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	}
 	writer->writeEndElement();
 
-	// box filling
+	// box
 	d->background->save(writer);
-
-	// box border
-	writer->writeStartElement("border");
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("opacity", QString::number(d->borderOpacity));
-	writer->writeEndElement();
-
-	// median line
-	writer->writeStartElement("medianLine");
-	WRITE_QPEN(d->medianLinePen);
-	writer->writeAttribute("opacity", QString::number(d->medianLineOpacity));
-	writer->writeEndElement();
+	d->borderLine->save(writer);
+	d->medianLine->save(writer);
 
 	// symbols for the outliers, mean, far out and jitter values
 	d->symbolMean->save(writer);
@@ -1813,8 +1789,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("whiskers");
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
 	writer->writeAttribute("rangeParameter", QString::number(d->whiskersRangeParameter));
-	WRITE_QPEN(d->whiskersPen);
-	writer->writeAttribute("opacity", QString::number(d->whiskersOpacity));
+	d->whiskersLine->save(writer);
 	writer->writeEndElement();
 
 	writer->writeStartElement("whiskersCap");
@@ -1881,15 +1856,9 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "filling")
 			d->background->load(reader, preview);
 		else if (!preview && reader->name() == "border") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("opacity", borderOpacity);
+			d->borderLine->load(reader, preview);
 		} else if (!preview && reader->name() == "medianLine") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->medianLinePen);
-			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
+			d->medianLine->load(reader, preview);
 		} else if (!preview && reader->name() == "symbolMean")
 			d->symbolMean->load(reader, preview);
 		else if (!preview && reader->name() == "symbolMedian")
@@ -1907,9 +1876,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("type", whiskersType, BoxPlot::WhiskersType);
 			READ_DOUBLE_VALUE("rangeParameter", whiskersRangeParameter);
-			READ_QPEN(d->whiskersPen);
-			READ_DOUBLE_VALUE("opacity", whiskersOpacity);
-			READ_DOUBLE_VALUE("capSize", whiskersCapSize);
+			d->whiskersLine->load(reader, preview);
 		} else if (!preview && reader->name() == "whiskersCap") {
 			attribs = reader->attributes();
 
@@ -1955,23 +1922,17 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	d->m_suppressRecalc = false;
 
 	// box border
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	setBorderPen(p);
-	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
+	d->borderLine->loadThemeConfig(group, themeColor);
 
 	// box filling
 	d->background->loadThemeConfig(group);
 	d->background->setFirstColor(themeColor);
 
 	// median line
-	setMedianLinePen(p);
-	setMedianLineOpacity(group.readEntry("LineOpacity", 1.0));
+	d->medianLine->loadThemeConfig(group, themeColor);
 
 	// whiskers
-	setWhiskersPen(p);
-	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
+	d->whiskersLine->loadThemeConfig(group, themeColor);
 	setWhiskersCapPen(p);
 	setWhiskersCapOpacity(group.readEntry("LineOpacity", 1.0));
 
@@ -1987,8 +1948,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	// for all other themes, we add here a special handling for "Tufte".
 	if (plot->theme() == QLatin1String("Tufte")) {
 		p.setStyle(Qt::NoPen);
-		setBorderPen(p);
-		setMedianLinePen(p);
+		d->borderLine->setPen(p);
+		d->medianLine->setPen(p);
 		d->background->setEnabled(false);
 		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
 		d->symbolMedian->setStyle(Symbol::Style::Circle);

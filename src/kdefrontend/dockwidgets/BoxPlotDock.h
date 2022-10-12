@@ -18,6 +18,7 @@ class AbstractAspect;
 class AspectTreeModel;
 class BoxPlot;
 class BackgroundWidget;
+class LineWidget;
 class SymbolWidget;
 class TreeViewComboBox;
 class KConfig;
@@ -34,6 +35,9 @@ private:
 	Ui::BoxPlotDock ui;
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
+	LineWidget* borderLineWidget{nullptr};
+	LineWidget* medianLineWidget{nullptr};
+	LineWidget* whiskersLineWidget{nullptr};
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
@@ -66,18 +70,6 @@ private Q_SLOTS:
 	//"Box"-tab
 	void widthFactorChanged(int) const;
 
-	// box border
-	void borderStyleChanged(int) const;
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double) const;
-	void borderOpacityChanged(int) const;
-
-	// median line
-	void medianLineStyleChanged(int) const;
-	void medianLineColorChanged(const QColor&);
-	void medianLineWidthChanged(double) const;
-	void medianLineOpacityChanged(int) const;
-
 	// symbols
 	void symbolCategoryChanged();
 	void jitteringEnabledChanged(bool) const;
@@ -85,10 +77,6 @@ private Q_SLOTS:
 	// whiskers
 	void whiskersTypeChanged(int) const;
 	void whiskersRangeParameterChanged(const QString&) const;
-	void whiskersStyleChanged(int) const;
-	void whiskersColorChanged(const QColor&);
-	void whiskersWidthChanged(double) const;
-	void whiskersOpacityChanged(int) const;
 	void whiskersCapSizeChanged(double) const;
 	void whiskersCapStyleChanged(int) const;
 	void whiskersCapColorChanged(const QColor&);
@@ -112,22 +100,12 @@ private Q_SLOTS:
 	void plotNotchesEnabledChanged(bool);
 	void plotVisibilityChanged(bool);
 
-	// box border
-	void plotBorderPenChanged(QPen&);
-	void plotBorderOpacityChanged(float);
-
-	// median line
-	void plotMedianLinePenChanged(QPen&);
-	void plotMedianLineOpacityChanged(float);
-
 	// symbols
 	void plotJitteringEnabledChanged(bool);
 
 	// whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersRangeParameterChanged(double);
-	void plotWhiskersPenChanged(QPen&);
-	void plotWhiskersOpacityChanged(float);
 	void plotWhiskersCapSizeChanged(double);
 	void plotWhiskersCapPenChanged(QPen&);
 	void plotWhiskersCapOpacityChanged(float);

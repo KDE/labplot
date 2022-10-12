@@ -61,13 +61,9 @@ public:
 	// box filling
 	Background* background{nullptr};
 
-	// box border
-	QPen borderPen;
-	qreal borderOpacity;
-
-	// median line
-	QPen medianLinePen;
-	qreal medianLineOpacity;
+	// lines
+	Line* borderLine{nullptr};
+	Line* medianLine{nullptr};
 
 	// markers
 	Symbol* symbolMean{nullptr};
@@ -81,8 +77,7 @@ public:
 	// whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	double whiskersRangeParameter; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
-	QPen whiskersPen;
-	qreal whiskersOpacity;
+	Line* whiskersLine{nullptr};
 	double whiskersCapSize;
 	QPen whiskersCapPen;
 	qreal whiskersCapOpacity;

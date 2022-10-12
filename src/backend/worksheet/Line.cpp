@@ -140,10 +140,15 @@ void LinePrivate::updatePixmap() {
 void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
 
-	// no need to create a XML element for error bars, the line attributes are part
-	// of the same XML element together with other error bars properties
-	if (!d->errorBarsTypeAvailable)
-		writer->writeStartElement(d->prefix.toLower());
+	// no need to create a XML element for error bars and whiskers, the line attributes are part
+	// of the same XML element together with other error bars and whiskers properties
+	if (!d->errorBarsTypeAvailable || d->prefix == "Whiskers") {
+		// for names in the XML file, the first letter is lower case but the camel case still remains.
+		// so, we just convert the first character for lower case. e.g. MedianLine -> medianLine.
+		QString newPrefix = d->prefix;
+		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
+		writer->writeStartElement(newPrefix);
+	}
 
 	if (d->histogramLineTypeAvailable)
 		writer->writeAttribute("type", QString::number(d->histogramLineType));
@@ -155,7 +160,7 @@ void Line::save(QXmlStreamWriter* writer) const {
 	WRITE_QPEN(d->pen);
 	writer->writeAttribute("opacity", QString::number(d->opacity));
 
-	if (!d->errorBarsTypeAvailable)
+	if (!d->errorBarsTypeAvailable || d->prefix == "Whiskers")
 		writer->writeEndElement();
 }
 
