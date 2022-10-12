@@ -102,7 +102,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	medianLineWidget = new LineWidget(ui.tabBox);
 	gridLayout->addWidget(medianLineWidget, 9, 0, 1, 3);
 	spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    gridLayout->addItem(spacer, 10, 0, 1, 1);
+	gridLayout->addItem(spacer, 10, 0, 1, 1);
 
 	// Tab "Markers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
