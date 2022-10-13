@@ -903,6 +903,8 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 }
 
 void XYCurvePrivate::calculateScenePoints() {
+	if (!m_scenePointsDirty)
+		return;
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name());
 #endif
@@ -997,6 +999,7 @@ void XYCurvePrivate::calculateScenePoints() {
 		}
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
+	m_scenePointsDirty = false;
 }
 
 /*!
@@ -1011,7 +1014,7 @@ void XYCurvePrivate::retransform() {
 	if (suppressed)
 		return;
 
-	calculateScenePoints();
+	m_scenePointsDirty = false;
 
 	m_suppressRecalc = true;
 	updateLines();
@@ -1729,7 +1732,7 @@ void XYCurvePrivate::updateSymbols() {
 			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
-
+		calculateScenePoints();
 		for (const auto& point : qAsConst(m_scenePoints)) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
@@ -1955,6 +1958,9 @@ void XYCurvePrivate::updateValues() {
 	QFontMetrics fm(valuesFont);
 	const int h{fm.ascent()};
 
+	if (m_valueStrings.count())
+		calculateScenePoints();
+
 	i = 0;
 	for (const auto& string : qAsConst(m_valueStrings)) {
 		// catch case with more label strings than scene points (should not happen even with custom column)
@@ -2012,6 +2018,7 @@ void XYCurvePrivate::updateFilling() {
 	//  - the number of visible points on the scene is too high
 	//  - no scene points available, everything outside of the plot region or no scene points calculated yet
 	auto fillingPosition = background->position();
+	calculateScenePoints(); // TODO: find other way
 	if (fillingPosition == Background::Position::No || m_scenePoints.size() > 1000 || m_scenePoints.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
@@ -2471,9 +2478,10 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	int rowCount{0};
 	if (lineType != XYCurve::LineType::NoLine)
 		rowCount = m_lines.count();
-	else if (symbol->style() != Symbol::Style::NoSymbols)
+	else if (symbol->style() != Symbol::Style::NoSymbols) {
+		calculateScenePoints();
 		rowCount = m_scenePoints.size();
-	else
+	} else
 		return false;
 
 	if (rowCount == 0)
@@ -2488,6 +2496,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (lineType == XYCurve::LineType::NoLine) {
+			calculateScenePoints();
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
 			QPointF curvePosScene = curvePosPrevScene;
 			for (int row = 0; row < rowCount; row++) {
@@ -2517,6 +2526,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		QPointF curvePosPrevScene;
 
 		if (lineType == XYCurve::LineType::NoLine) {
+			calculateScenePoints();
 			curvePosScene = m_scenePoints.at(index);
 			curvePosPrevScene = curvePosScene;
 			index = Column::indexForValue(x, m_scenePoints, static_cast<AbstractColumn::Properties>(properties));
@@ -2555,6 +2565,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 				index--;
 
 			if (lineType == XYCurve::LineType::NoLine) {
+				calculateScenePoints();
 				curvePosPrevScene = curvePosScene;
 				curvePosScene = m_scenePoints.at(index);
 			}
@@ -2868,7 +2879,10 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	// draw symbols
-	symbol->draw(painter, m_scenePoints);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		calculateScenePoints();
+		symbol->draw(painter, m_scenePoints);
+	}
 
 	// draw values
 	if (valuesType != XYCurve::ValuesType::NoValues) {

@@ -162,6 +162,7 @@ private:
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
+	bool m_scenePointsDirty{true}; // true whenever the scenepoints have to be recalculated before using
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)
 	QVector<QPointF> m_valuePoints; // points for showing value
 	QVector<QString> m_valueStrings; // strings for showing value
