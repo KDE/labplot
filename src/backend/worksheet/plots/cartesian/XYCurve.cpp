@@ -2019,8 +2019,12 @@ void XYCurvePrivate::updateFilling() {
 	//  - the number of visible points on the scene is too high
 	//  - no scene points available, everything outside of the plot region or no scene points calculated yet
 	auto fillingPosition = background->position();
+	if (fillingPosition == Background::Position::No) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
 	calculateScenePoints(); // TODO: find other way
-	if (fillingPosition == Background::Position::No || m_scenePoints.size() > 1000 || m_scenePoints.isEmpty()) {
+	if (m_scenePoints.size() > 1000 || m_scenePoints.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
