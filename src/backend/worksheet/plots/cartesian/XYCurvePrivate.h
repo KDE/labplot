@@ -150,6 +150,7 @@ private:
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
+	void calculateScenePoints();
 
 	// TODO: add m_
 	QPainterPath linePath;

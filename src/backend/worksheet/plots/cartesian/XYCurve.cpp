@@ -902,6 +902,103 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	QGraphicsItem::contextMenuEvent(event);
 }
 
+void XYCurvePrivate::calculateScenePoints() {
+#ifdef PERFTRACE_CURVES
+	PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name());
+#endif
+
+	m_scenePoints.clear();
+
+	DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
+	// Q_ASSERT(xColumn != nullptr);
+	if (!xColumn || !yColumn) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
+		linePath = QPainterPath();
+		dropLinePath = QPainterPath();
+		symbolsPath = QPainterPath();
+		valuesPath = QPainterPath();
+		errorBarsPath = QPainterPath();
+		rugPath = QPainterPath();
+		curveShape = QPainterPath();
+		m_lines.clear();
+		m_valuePoints.clear();
+		m_valueStrings.clear();
+		m_fillPolygons.clear();
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	// calculate the scene coordinates
+	//  This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()
+	//  TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
+	// if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
+	{
+#ifdef PERFTRACE_CURVES
+		PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name() + QLatin1String(", map logical points to scene coordinates"));
+#endif
+
+		const int numberOfPoints = m_logicalPoints.size();
+		DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
+		// for (auto p : m_logicalPoints)
+		//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+
+		if (numberOfPoints > 0) {
+			const auto dataRect{plot()->dataRect()};
+			// this is the old method considering DPI
+			DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
+			DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
+			DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
+
+			// new method
+			const int numberOfPixelX = dataRect.width();
+			const int numberOfPixelY = dataRect.height();
+
+			if (numberOfPixelX <= 0 || numberOfPixelY <= 0) {
+				DEBUG(Q_FUNC_INFO << ", number of pixel X <= 0 or number of pixel Y <= 0!")
+				return;
+			}
+			DEBUG("	numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
+
+			// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1)) TODO: why "+1"
+			QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
+			for (auto& col : scenePointsUsed)
+				col.resize(numberOfPixelY + 1);
+
+			const auto columnProperties = xColumn->properties();
+			int startIndex, endIndex;
+			if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
+				DEBUG(Q_FUNC_INFO << ", column monotonic")
+				double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
+				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
+				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
+
+				startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
+				endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
+
+				if (startIndex > endIndex && endIndex >= 0)
+					std::swap(startIndex, endIndex);
+
+				if (startIndex < 0)
+					startIndex = 0;
+				if (endIndex < 0)
+					endIndex = numberOfPoints - 1;
+
+			} else {
+				DEBUG(Q_FUNC_INFO << ", column not monotonic")
+				startIndex = 0;
+				endIndex = numberOfPoints - 1;
+			}
+			//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
+
+			m_pointVisible.resize(numberOfPoints);
+			q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
+			// for (auto p : m_logicalPoints)
+			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
+		}
+	}
+	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
+}
+
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
@@ -914,103 +1011,7 @@ void XYCurvePrivate::retransform() {
 	if (suppressed)
 		return;
 
-	{
-#ifdef PERFTRACE_CURVES
-		PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name());
-#endif
-
-		m_scenePoints.clear();
-
-		DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
-		// Q_ASSERT(xColumn != nullptr);
-		if (!xColumn || !yColumn) {
-			DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
-			linePath = QPainterPath();
-			dropLinePath = QPainterPath();
-			symbolsPath = QPainterPath();
-			valuesPath = QPainterPath();
-			errorBarsPath = QPainterPath();
-			rugPath = QPainterPath();
-			curveShape = QPainterPath();
-			m_lines.clear();
-			m_valuePoints.clear();
-			m_valueStrings.clear();
-			m_fillPolygons.clear();
-			recalcShapeAndBoundingRect();
-			return;
-		}
-
-		// calculate the scene coordinates
-		//  This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()
-		//  TODO: check updateErrorBars() and updateDropLines() and if they aren't available don't calculate this part
-		// if (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues ) {
-		{
-#ifdef PERFTRACE_CURVES
-			PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name() + QLatin1String(", map logical points to scene coordinates"));
-#endif
-
-			const int numberOfPoints = m_logicalPoints.size();
-			DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
-			// for (auto p : m_logicalPoints)
-			//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
-
-			if (numberOfPoints > 0) {
-				const auto dataRect{plot()->dataRect()};
-				// this is the old method considering DPI
-				DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/' << dataRect.height());
-				DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
-				DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
-
-				// new method
-				const int numberOfPixelX = dataRect.width();
-				const int numberOfPixelY = dataRect.height();
-
-				if (numberOfPixelX <= 0 || numberOfPixelY <= 0) {
-					DEBUG(Q_FUNC_INFO << ", number of pixel X <= 0 or number of pixel Y <= 0!")
-					return;
-				}
-				DEBUG("	numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
-
-				// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1)) TODO: why "+1"
-				QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
-				for (auto& col : scenePointsUsed)
-					col.resize(numberOfPixelY + 1);
-
-				const auto columnProperties = xColumn->properties();
-				int startIndex, endIndex;
-				if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing
-					|| columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
-					DEBUG(Q_FUNC_INFO << ", column monotonic")
-					double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
-					double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
-					DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
-
-					startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
-					endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
-
-					if (startIndex > endIndex && endIndex >= 0)
-						std::swap(startIndex, endIndex);
-
-					if (startIndex < 0)
-						startIndex = 0;
-					if (endIndex < 0)
-						endIndex = numberOfPoints - 1;
-
-				} else {
-					DEBUG(Q_FUNC_INFO << ", column not monotonic")
-					startIndex = 0;
-					endIndex = numberOfPoints - 1;
-				}
-				//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
-
-				m_pointVisible.resize(numberOfPoints);
-				q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
-				// for (auto p : m_logicalPoints)
-				//	QDEBUG(Q_FUNC_INFO << ", logical points: " << QString::number(p.x(), 'g', 12) << " = " << QDateTime::fromMSecsSinceEpoch(p.x(), Qt::UTC))
-			}
-		}
-		//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
-	}
+	calculateScenePoints();
 
 	m_suppressRecalc = true;
 	updateLines();
