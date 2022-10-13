@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-11 00:41+0000\n"
-"PO-Revision-Date: 2022-10-08 12:48+0300\n"
+"POT-Creation-Date: 2022-10-13 00:42+0000\n"
+"PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -62,10 +62,10 @@ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:218
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1150
-#: src/backend/worksheet/Line.cpp:168
+#: src/backend/worksheet/Line.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2887
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1382
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1844
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1819
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4710
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:857
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:274
@@ -111,7 +111,7 @@ msgstr "'%1' özniteliği eksik veya boş, öntanımlı değer kullanılacak"
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3026
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1440
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1927
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1894
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:300
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:459
 #: src/backend/worksheet/plots/PlotArea.cpp:414
@@ -258,7 +258,7 @@ msgstr "'%1' için geçersiz oluşturma zamanı. Mevcut zaman kullanılıyor."
 #: src/backend/core/AbstractColumn.cpp:123
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:374
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:386
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:220
 #: src/kdefrontend/GuiTools.cpp:145
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:118
@@ -847,7 +847,7 @@ msgstr "geçersiz veri seçme ögesi '%1'"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:371
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:379
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:70
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:601
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:372
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:224
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:171
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:69
@@ -976,7 +976,7 @@ msgstr "%1: düzenleyici ayarlarını ayarla"
 #: src/backend/datapicker/DatapickerImage.cpp:272
 #, kde-format
 msgid "%1: set minimum segment length"
-msgstr "%1: asgari dilim uzunluğunu ayarla"
+msgstr "%1: En düşük bölüt uzunluğunu ayarla"
 
 #: src/backend/datapicker/DatapickerImage.cpp:298
 #, kde-format
@@ -1025,7 +1025,7 @@ msgstr "%1: -delta_Y konumunu ayarla"
 #: src/backend/datapicker/Segment.cpp:168
 #, kde-format
 msgid "%1: draw points over segment"
-msgstr "%1: dilimler üzerinden çiz"
+msgstr "%1: Noktaları, bölütler üzerinden çiz"
 
 #: src/backend/datasources/DatasetHandler.cpp:68
 #: src/backend/datasources/DatasetHandler.cpp:156
@@ -1611,7 +1611,7 @@ msgid "Valid JSON document"
 msgstr "geçerli XML belgesi bulunamadı"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:276
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:318
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:341
 #, kde-format
 msgid "index"
 msgstr "dizin"
@@ -2748,7 +2748,7 @@ msgstr "Aritmetik ortalama"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:158
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:119
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:351
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
 msgid "Median"
@@ -6372,7 +6372,7 @@ msgstr "%1: arkaplan görüntü rengini ayarla"
 #: src/backend/worksheet/InfoElement.cpp:150
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:211
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:218
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:241
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:516
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:124
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:84
@@ -6420,7 +6420,6 @@ msgid "%1: embed image"
 msgstr "%1: görüntü ayarla"
 
 #: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:253
 #: src/backend/worksheet/TextLabel.cpp:373
 #, kde-format
@@ -6569,11 +6568,11 @@ msgstr "%1: yatay boşluğu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:220
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:227
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:250
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:96
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:275
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:56
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:52
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:28
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:98
@@ -6585,11 +6584,11 @@ msgstr "Yatay"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:223
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:230
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:253
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:99
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:276
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:53
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:869
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
@@ -6601,7 +6600,7 @@ msgstr "Dikey"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:243
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:238
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:261
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:116
 #, kde-format
 msgid "Orientation"
@@ -6616,7 +6615,7 @@ msgstr "Yönlendirme"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:221
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:371
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:383
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:686
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:481
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1433
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:102
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:29
@@ -6955,7 +6954,7 @@ msgid "%1: set x column"
 msgstr "%1: +delta_X sütunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:440
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:470
 #, fuzzy, kde-format
 #| msgid "%1: set +delta_X column"
 msgid "%1: set data columns"
@@ -6968,7 +6967,7 @@ msgid "%1: set type"
 msgstr "%1: ok türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:467
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:497
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:186
 #, fuzzy, kde-format
 #| msgid "%1: set axis orientation"
@@ -6976,13 +6975,13 @@ msgid "%1: set orientation"
 msgstr "%1: eksen yönlendirmeyi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:481
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
 #, fuzzy, kde-format
 #| msgid "%1: x-start changed"
 msgid "%1: width factor changed"
 msgstr "%1: x-başlangıç değişti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:313
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:336
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:177
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, fuzzy, kde-format
@@ -6990,86 +6989,68 @@ msgstr "%1: x-başlangıç değişti"
 msgid "%1 - Data"
 msgstr "Veri Yok"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:319
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:342
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "1st quartile"
 msgstr "türev"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:320
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:343
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "3rd quartile"
 msgstr "türev"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:321
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:344
 #, fuzzy, kde-format
 #| msgid "Median"
 msgid "median"
 msgstr "Orta"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:322
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:345
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "whiskers min"
 msgstr "%1: eksen bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:346
 #, kde-format
 msgid "whiskers max"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:324
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:347
 #, kde-format
 msgid "data points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:325
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:348
 #, fuzzy, kde-format
 #| msgid "Euler constant"
 msgid "outliers count"
 msgstr "Euler sabiti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:326
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:349
 #, kde-format
 msgid "far out points count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:460
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:490
 #, fuzzy, kde-format
 #| msgid "%1: set border style"
 msgid "%1: set ordering"
 msgstr "%1: kenarlık biçemini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:474
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:504
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: variable width changed"
 msgstr "%1: satır türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:488
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:518
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
 msgid "%1: changed notches"
 msgstr "%1: açıklamayı değiştir"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
-msgid "%1: set border pen"
-msgstr "%1: kenarlık biçemini ayarla"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:511
-#, fuzzy, kde-format
-#| msgid "%1: set vertical alignment"
-msgid "%1: set median line pen"
-msgstr "%1: dikey hizalamayı ayarla"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:518
-#, fuzzy, kde-format
-#| msgid "%1: set vertical alignment"
-msgid "%1: set median line opacity"
-msgstr "%1: dikey hizalamayı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:526
 #, fuzzy, kde-format
@@ -7086,40 +7067,28 @@ msgstr "%1: eksen bitişini ayarla"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:540
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
-msgid "%1: set whiskers pen"
-msgstr "%1: eksen bitişini ayarla"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
-#, fuzzy, kde-format
-#| msgid "%1: set line opacity"
-msgid "%1: set whiskers opacity"
-msgstr "%1: çizgi matlığını ayarla"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:554
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
 msgid "%1: set whiskers cap size"
 msgstr "%1: eksen bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:561
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "%1: set whiskers cap pen"
 msgstr "%1: eksen bitişini ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:568
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:554
 #, fuzzy, kde-format
 #| msgid "%1: set line opacity"
 msgid "%1: set whiskers cap opacity"
 msgstr "%1: çizgi matlığını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:562
 #, fuzzy, kde-format
 #| msgid "%1: filling type changed"
 msgid "%1: jitterring changed"
 msgstr "%1: dolgu türü değişti"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:570
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:645
 #, fuzzy, kde-format
@@ -7127,7 +7096,7 @@ msgstr "%1: dolgu türü değişti"
 msgid "%1: change rug enabled"
 msgstr "%1: x-aralık kırma etkinleştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:577
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:659
 #, fuzzy, kde-format
@@ -7135,7 +7104,7 @@ msgstr "%1: x-aralık kırma etkinleştir"
 msgid "%1: change rug width"
 msgstr "%1: satır+sembol genişliğini değiştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:598
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:584
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:666
 #, fuzzy, kde-format
@@ -7143,7 +7112,7 @@ msgstr "%1: satır+sembol genişliğini değiştir"
 msgid "%1: change rug length"
 msgstr "%1: açıklamayı değiştir"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:605
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:591
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:567
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:673
 #, fuzzy, kde-format
@@ -9001,7 +8970,7 @@ msgstr "Eğri Noktalarını Ayarla"
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:145
 #, kde-format
 msgid "Select Curve Segments"
-msgstr "Eğri Bölümlerini Seç"
+msgstr "Eğri Bölütlerini Seç"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:149
 #, kde-format
@@ -12249,7 +12218,7 @@ msgstr "%1 eksenleri: şablon \"%2\" yüklendi"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2566
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1018
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:804
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2030
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:441
@@ -12294,8 +12263,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:403
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:378
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:403
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:383
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:408
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:113
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
@@ -12310,7 +12279,7 @@ msgstr "Sütunlar:"
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:405
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:407
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:412
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:805
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1049
@@ -12322,7 +12291,7 @@ msgid "Column:"
 msgstr "Sütun:"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:540
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:1016
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:802
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:796
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1544
 #, kde-format
@@ -12336,73 +12305,90 @@ msgstr "%1 xy-eğrileri: \"%2\" şablonu yüklendi"
 msgid "Please choose another name, because this is already in use."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:48
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "10/90 percentiles"
 msgstr "persantil"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "5/95 percentiles"
 msgstr "persantil"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:51
 #, fuzzy, kde-format
 #| msgid "percentile"
 msgid "1/99 percentiles"
 msgstr "persantil"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #, fuzzy, kde-format
 #| msgid "Ascending"
 msgid "By Median, Ascending"
 msgstr "Artan"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
 #, fuzzy, kde-format
 #| msgid "Descending"
 msgid "By Median, Descending"
 msgstr "Azalan"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
 #, fuzzy, kde-format
 #| msgid "Ascending"
 msgid "By Mean, Ascending"
 msgstr "Artan"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:60
 #, fuzzy, kde-format
 #| msgid "Descending"
 msgid "By Mean, Descending"
 msgstr "Azalan"
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:61
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:62
 #, kde-format
 msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
 "'None' to keep the original order."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:65
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:66
 #, kde-format
 msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:69
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:70
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:74
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:79
 #, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, lBorder)
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:91
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1197
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
+#: src/kdefrontend/ui/labelwidget.ui:736 src/kdefrontend/ui/symbolwidget.ui:246
+#, kde-format
+msgid "Border"
+msgstr "Kenarlık"
+
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:99
+#, fuzzy, kde-format
+#| msgid "Median"
+msgid "Median Line"
+msgstr "Orta"
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
@@ -13119,12 +13105,12 @@ msgstr "yat. ortanokta"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
 #, kde-format
 msgid "2-segments"
-msgstr ""
+msgstr "2 bölütlü"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
 msgid "3-segments"
-msgstr ""
+msgstr "3 bölütlü"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
 #, fuzzy, kde-format
@@ -13187,10 +13173,9 @@ msgid "Drop Lines, X, Min Baseline"
 msgstr "satırları bırka, X, en küçük taban"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:362
-#, fuzzy, kde-format
-#| msgid "drop lines, X, max baseline"
+#, kde-format
 msgid "Drop Lines, X, Max Baseline"
-msgstr "damla satırları, X, en büyük anahat"
+msgstr "Damla Satırları, X, En Büyük Taban"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:368
 #: src/kdefrontend/widgets/ValueWidget.cpp:31
@@ -15765,7 +15750,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:182
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:545
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:316
 #, kde-format
 msgid "Category"
 msgstr "Kategori"
@@ -16573,7 +16558,7 @@ msgstr "Hata çubukları"
 #. i18n: ectx: property (text), widget (QLabel, lSizeType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:198
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:564
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:824
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:592
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:201
 #: src/kdefrontend/ui/labelwidget.ui:552 src/kdefrontend/ui/symbolwidget.ui:78
 #, kde-format
@@ -16587,10 +16572,8 @@ msgstr "Boyut:"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarSize)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbCursorLineWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbLineWidth)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbMedianLineWidth)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersWidth)
-#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersCapSize)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersCapWidth)
+#. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersCapSize)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbRugLength)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbRugWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbRugOffset)
@@ -16617,14 +16600,11 @@ msgstr "Boyut:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1517
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1707
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1791
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:302
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:337
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:750
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:831
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:882
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1006
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1023
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1040
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:451
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:549
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:691
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:708
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:725
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1217
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1411
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
@@ -16660,8 +16640,6 @@ msgstr " pt"
 #. i18n: ectx: property (text), widget (QLabel, lImageStyle)
 #. i18n: ectx: property (text), widget (QLabel, lBrushStyle)
 #. i18n: ectx: property (text), widget (QLabel, lLineStyle)
-#. i18n: ectx: property (text), widget (QLabel, lMedianLineStyle)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersStyle)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapStyle)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksLineStyle)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksLineStyle)
@@ -16679,10 +16657,7 @@ msgstr " pt"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:484
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:512
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:693
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:841
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:468
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:936
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1063
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1370
@@ -16708,8 +16683,6 @@ msgstr "Biçim:"
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lLineColor)
-#. i18n: ectx: property (text), widget (QLabel, lMedianLineColor)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersColor)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapColor)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColor)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColor)
@@ -16727,10 +16700,7 @@ msgstr "Biçim:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1089
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1690
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:477
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:505
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:726
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:858
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:461
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1317
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1475
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:162
@@ -16887,10 +16857,9 @@ msgstr "x+y+z="
 
 #. i18n: ectx: property (text), widget (QLabel, lSegments)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:447
-#, fuzzy, kde-format
-#| msgid "Segments:"
+#, kde-format
 msgid "Segments"
-msgstr "Bölümler:"
+msgstr "Bölütler:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugLength)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
@@ -16899,7 +16868,7 @@ msgstr "Bölümler:"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:454
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:896
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1123
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:999
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:684
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:490
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:911
 #, kde-format
@@ -18108,8 +18077,6 @@ msgstr "Yönlendirme"
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, lLineWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
-#. i18n: ectx: property (text), widget (QLabel, lMedianLineWidth)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapWidth)
 #. i18n: ectx: property (text), widget (QLabel, lRugWidth)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksWidth)
@@ -18124,11 +18091,8 @@ msgstr "Yönlendirme"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1106
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1700
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1784
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:463
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:498
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:743
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:875
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1016
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:575
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:701
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:595
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1387
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1488
@@ -18152,8 +18116,6 @@ msgstr "Genişlik:"
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lLineOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lMedianLineOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksOpacity)
@@ -18171,10 +18133,7 @@ msgstr "Genişlik:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1634
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1801
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:470
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:491
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:760
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:892
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:532
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1171
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:574
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:321
@@ -18196,8 +18155,6 @@ msgstr "Matlık:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLineOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbMedianLineOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbWhiskersOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbWhiskersCapOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbArrowSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbMajorTicksOpacity)
@@ -18215,10 +18172,7 @@ msgstr "Matlık:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1723
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1814
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:270
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:363
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:773
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:905
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:494
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1146
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
@@ -18241,8 +18195,6 @@ msgstr ""
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLineOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMedianLineOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbWhiskersOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbWhiskersCapOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMajorTicksOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbMinorTicksOpacity)
@@ -18258,10 +18210,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1726
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1817
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:273
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:366
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:776
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:908
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:497
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:943
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1080
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1149
@@ -18486,7 +18435,7 @@ msgstr "Son ek"
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1360
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:1033
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:718
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:573
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:918
 #, fuzzy, kde-format
@@ -18548,7 +18497,7 @@ msgstr "Yan ızgara:"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:42
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:963
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:648
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:966
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:973
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:536
@@ -18632,20 +18581,9 @@ msgstr "y:"
 msgid "Bars"
 msgstr "Çubuklar"
 
-#. i18n: ectx: property (text), widget (QLabel, lBorder)
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:525
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1197
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
-#: src/kdefrontend/ui/labelwidget.ui:736 src/kdefrontend/ui/symbolwidget.ui:246
-#, kde-format
-msgid "Border"
-msgstr "Kenarlık"
-
 #. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:271
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:398
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:251
 #, fuzzy, kde-format
 #| msgid "Width:"
 msgid "Width"
@@ -18662,7 +18600,7 @@ msgstr "Sütun"
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:301
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:391
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:296
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:368
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:690
 #: src/kdefrontend/ui/symbolwidget.ui:190
@@ -18675,7 +18613,7 @@ msgstr "Doldurma"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbVerticalLineOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbConnectionLineOpacity)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:346
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:321
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:235
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:297
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:354
 #: src/kdefrontend/ui/fitoptionswidget.ui:245
@@ -18721,68 +18659,62 @@ msgstr ""
 msgid "Box"
 msgstr "Kutu"
 
-#. i18n: ectx: property (text), widget (QLabel, lReferenceLine)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:456
-#, fuzzy, kde-format
-#| msgid "Median"
-msgid "Median Line"
-msgstr "Orta"
-
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:533
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:304
 #, kde-format
 msgid "Markers"
 msgstr "İşaretleyiciler"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:570
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:341
 #, fuzzy, kde-format
 #| msgid "Mean"
 msgid "Mean"
 msgstr "Ortalama"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:587
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:358
 #, kde-format
 msgid "Outlier"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbFarOut)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:594
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:365
 #, kde-format
 msgid "Far Out"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:608
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:379
 #, fuzzy, kde-format
 #| msgid "%1: set axis end"
 msgid "Whisker End"
 msgstr "%1: eksen bitişini ayarla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:631
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:402
 #, fuzzy, kde-format
 #| msgid "Letter"
 msgid "Jitter"
 msgstr "Mektup"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:674
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:445
 #, kde-format
 msgid "Whiskers"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCap)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:817
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:605
 #, kde-format
 msgid "Cap"
 msgstr ""
 
-#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: ectx: attribute (title), widget (QWidget, tabMargins)
 #. i18n: ectx: attribute (title), widget (QWidget, tabMarginalPlots)
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), widget (QLabel, lMargin)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:944
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:629
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:752
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:484
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:507
@@ -18793,7 +18725,7 @@ msgid "Margins"
 msgstr "Kenar boşluğu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRug)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:956
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:641
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:566
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:958
 #, fuzzy, kde-format
@@ -22210,6 +22142,31 @@ msgstr ""
 #| msgid "Failed to open the device."
 msgid "Unable to open file:"
 msgstr "Aygıt açılamadı."
+
+#, fuzzy
+#~| msgid "%1: set border style"
+#~ msgid "%1: set border pen"
+#~ msgstr "%1: kenarlık biçemini ayarla"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line pen"
+#~ msgstr "%1: dikey hizalamayı ayarla"
+
+#, fuzzy
+#~| msgid "%1: set vertical alignment"
+#~ msgid "%1: set median line opacity"
+#~ msgstr "%1: dikey hizalamayı ayarla"
+
+#, fuzzy
+#~| msgid "%1: set axis end"
+#~ msgid "%1: set whiskers pen"
+#~ msgstr "%1: eksen bitişini ayarla"
+
+#, fuzzy
+#~| msgid "%1: set line opacity"
+#~ msgid "%1: set whiskers opacity"
+#~ msgstr "%1: çizgi matlığını ayarla"
 
 #~ msgid "%1: set error bar style"
 #~ msgstr "%1: hata çubuğu türünü ayarla"
