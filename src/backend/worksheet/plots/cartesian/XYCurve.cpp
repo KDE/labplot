@@ -1015,6 +1015,7 @@ void XYCurvePrivate::retransform() {
 		return;
 
 	m_scenePointsDirty = false;
+    m_scenePoints.clear(); // free memory
 
 	m_suppressRecalc = true;
 	updateLines();
