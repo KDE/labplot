@@ -46,7 +46,7 @@ BackgroundWidget::BackgroundWidget(QWidget* parent)
 	retranslateUi();
 }
 
-void BackgroundWidget::setBackgrounds(QList<Background*> backgrounds) {
+void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	m_backgrounds = backgrounds;
 	m_background = m_backgrounds.first();
 

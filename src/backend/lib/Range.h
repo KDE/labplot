@@ -139,7 +139,7 @@ public:
 	void setScale(Scale scale) {
 		m_scale = scale;
 	}
-	void setDateTimeFormat(QString format) {
+	void setDateTimeFormat(const QString& format) {
 		m_dateTimeFormat = format;
 	}
 	void setAutoScale(bool b) {

@@ -9,6 +9,7 @@
 */
 
 #include "AxisDock.h"
+#include "backend/lib/macros.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"

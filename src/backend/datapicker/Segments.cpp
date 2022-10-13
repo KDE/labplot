@@ -105,7 +105,7 @@ void Segments::scrollSegment(Segment** left, Segment** right, int height) {
 /*!
 	identify the runs in a column, and connect them to segments
 */
-void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** lastSegment, bool* currBool, Segment** currSegment, bool* nextBool) {
+void Segments::matchRunsToSegments(int x, int height, bool* lastBool, Segment** lastSegment, const bool* currBool, Segment** currSegment, bool* nextBool) {
 	loadSegment(currSegment, height);
 
 	int yStart = 0;
@@ -225,7 +225,7 @@ void Segments::finishRun(bool* lastBool, bool* nextBool, Segment** lastSegment, 
 /*!
 	return the number of runs adjacent to the pixels from yStart to yStop (inclusive)
 */
-int Segments::adjacentRuns(bool* columnBool, int yStart, int yStop, int height) {
+int Segments::adjacentRuns(const bool* columnBool, int yStart, int yStop, int height) {
 	int runs = 0;
 	bool inRun = false;
 	for (int y = yStart - 1; y <= yStop + 1; ++y) {

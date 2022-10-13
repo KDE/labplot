@@ -1063,10 +1063,9 @@ void MatrixView::print(QPrinter* printer) const {
 		painter.drawLine(margin, height, right - 1, height);
 
 		// print table values
-		QString cellText;
 		for (i = 0; i < rows; ++i) {
 			right = margin;
-			cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString() + '\t';
+			QString cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString() + '\t';
 			tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 			painter.drawLine(right, height, right, height + tr.height());
 

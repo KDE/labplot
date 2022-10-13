@@ -304,8 +304,8 @@ void QxtSpanSliderPrivate::triggerAction(QAbstractSlider::SliderAction action, b
 }
 
 void QxtSpanSliderPrivate::swapControls() {
-	qSwap(lower, upper);
-	qSwap(lowerPressed, upperPressed);
+	std::swap(lower, upper);
+	std::swap(lowerPressed, upperPressed);
 	lastPressed = (lastPressed == QxtSpanSlider::LowerHandle ? QxtSpanSlider::UpperHandle : QxtSpanSlider::LowerHandle);
 	mainControl = (mainControl == QxtSpanSlider::LowerHandle ? QxtSpanSlider::UpperHandle : QxtSpanSlider::LowerHandle);
 }

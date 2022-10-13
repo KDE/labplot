@@ -168,10 +168,8 @@ bool DateTimeSpinBox::increaseValue(DateTimeSpinBox::Type type, int step) {
 	switch (type) {
 	case Type::year: {
 		if (m_year + step < 0 && step < 0) {
-			if (m_year + step < 0) {
-				m_year = 0;
-				return false;
-			}
+			m_year = 0;
+			return false;
 		}
 		m_year += step;
 		return true;

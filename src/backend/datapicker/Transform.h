@@ -24,12 +24,12 @@ private:
 	QVector3D mapCartesianToType(QPointF, const DatapickerImage::ReferencePoints&) const;
 
 	// logical coordinates
-	double x[4];
-	double y[4];
+	double x[4]{0};
+	double y[4]{0};
 
 	// Scene coordinates
-	double X[4];
-	double Y[4];
+	double X[4]{0};
+	double Y[4]{0};
 };
 
 #endif // TRANSFORM_H

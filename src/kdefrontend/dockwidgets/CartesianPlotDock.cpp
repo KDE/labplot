@@ -10,6 +10,7 @@
 */
 
 #include "CartesianPlotDock.h"
+#include "backend/lib/macros.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"

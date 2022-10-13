@@ -20,7 +20,7 @@ class BackgroundWidget : public QWidget {
 public:
 	explicit BackgroundWidget(QWidget*);
 
-	void setBackgrounds(QList<Background*>);
+	void setBackgrounds(const QList<Background*>&);
 	void setPrefix(const QString&);
 	void adjustLayout();
 	void setEnabled(bool);

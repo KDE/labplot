@@ -73,7 +73,7 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.kcbColor, &KColorButton::changed, this, &ValueWidget::colorChanged);
 }
 
-void ValueWidget::setValues(QList<Value*> values) {
+void ValueWidget::setValues(const QList<Value*>& values) {
 	m_values = values;
 	m_value = m_values.first();
 

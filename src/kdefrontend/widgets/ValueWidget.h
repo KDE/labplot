@@ -23,7 +23,7 @@ class ValueWidget : public QWidget {
 public:
 	explicit ValueWidget(QWidget*);
 
-	void setValues(QList<Value*>);
+	void setValues(const QList<Value*>&);
 
 	void load();
 	void loadConfig(const KConfigGroup&);

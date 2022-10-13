@@ -15,9 +15,9 @@
 
 class CopyThroughFilter : public AbstractFilter {
 public:
-	virtual int inputCount() const;
-	virtual int outputCount() const;
-	virtual AbstractColumn* output(int port) const;
+	virtual int inputCount() const override;
+	virtual int outputCount() const override;
+	virtual AbstractColumn* output(int port) const override;
 };
 
 #endif // ifndef COPY_THROUGH_FILTER_H

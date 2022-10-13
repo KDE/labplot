@@ -565,7 +565,6 @@ void LiveDataSource::read() {
 		m_prepared = true;
 	}
 
-	qint64 bytes = 0;
 
 	switch (m_sourceType) {
 	case SourceType::FileOrPipe:
@@ -575,7 +574,7 @@ void LiveDataSource::read() {
 			if (m_readingType == LiveDataSource::ReadingType::WholeFile) {
 				static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, 0);
 			} else {
-				bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
+				qint64 bytes = static_cast<AsciiFilter*>(m_filter)->readFromLiveDevice(*m_device, this, m_bytesRead);
 				m_bytesRead += bytes;
 				DEBUG("Read " << bytes << " bytes, in total: " << m_bytesRead);
 			}

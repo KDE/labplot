@@ -64,7 +64,7 @@ BatchEditValueLabelsDialog::~BatchEditValueLabelsDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void BatchEditValueLabelsDialog::setColumns(QList<Column*> columns) {
+void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 	m_columns = columns;
 
 	if (m_columns.isEmpty())

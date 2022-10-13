@@ -34,7 +34,6 @@
 #include <KLocalizedString>
 
 #include <algorithm> //for min_element and max_element
-#include <cmath>
 
 extern "C" {
 #include "backend/nsl/nsl_kde.h"

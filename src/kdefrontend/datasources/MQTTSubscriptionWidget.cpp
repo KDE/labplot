@@ -253,7 +253,6 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 	do {
 		foundEqual = false;
 		QMap<QString, QVector<QString>> equalTopicsMap;
-		QVector<QString> equalTopics;
 
 		// compare the subscriptions present in the TreeWidget
 		for (int i = 0; i < ui.twSubscriptions->topLevelItemCount() - 1; ++i) {
@@ -323,9 +322,12 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 						lowestLevel = level;
 					}
 				}
-				QDEBUG("Manage: " << commonTopics[topicIdx]);
-				if (topicIdx != -1)
+
+				QVector<QString> equalTopics;
+				if (topicIdx != -1) {
+					QDEBUG("Manage: " << commonTopics[topicIdx]);
 					equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
+				}
 
 				// Add the common topic ("merging")
 				QString commonTopic;

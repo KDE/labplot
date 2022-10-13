@@ -54,12 +54,11 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	}
 
 	const QString& themeImgPath = themeImgPathList.first();
-	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
 		auto* listItem = new QStandardItem();
 
-		tempPath = themeImgPath + themeList.at(i) + ".png";
+		QString tempPath = themeImgPath + themeList.at(i) + ".png";
 		if (!QFile::exists(tempPath))
 			tempPath = themeImgPath + "Unavailable.png";
 
