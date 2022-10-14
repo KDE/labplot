@@ -478,38 +478,44 @@ void CartesianPlot::initActions() {
 	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
 	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
 
-	connect(scaleAutoAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
-	connect(scaleAutoXAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
-	connect(scaleAutoYAction, &QAction::triggered, this, &CartesianPlot::scaleAutoTriggered);
+	connect(scaleAutoAction, &QAction::triggered, [this] {
+		navigate(-1, NavigationOperation::ScaleAuto);
+	});
+	connect(scaleAutoXAction, &QAction::triggered, [this] {
+		navigate(-1, NavigationOperation::ScaleAutoX);
+	});
+	connect(scaleAutoYAction, &QAction::triggered, [this] {
+		navigate(-1, NavigationOperation::ScaleAutoY);
+	});
 	connect(zoomInAction, &QAction::triggered, [this] {
-		zoomIn();
+		navigate(-1, NavigationOperation::ZoomIn);
 	});
 	connect(zoomOutAction, &QAction::triggered, [this] {
-		zoomOut();
+		navigate(-1, NavigationOperation::ZoomOut);
 	});
 	connect(zoomInXAction, &QAction::triggered, [this] {
-		zoomInX();
+		navigate(-1, NavigationOperation::ZoomInX);
 	});
 	connect(zoomOutXAction, &QAction::triggered, [this] {
-		zoomOutX();
+		navigate(-1, NavigationOperation::ZoomOutX);
 	});
 	connect(zoomInYAction, &QAction::triggered, [this] {
-		zoomInY();
+		navigate(-1, NavigationOperation::ZoomInY);
 	});
 	connect(zoomOutYAction, &QAction::triggered, [this] {
-		zoomOutY();
+		navigate(-1, NavigationOperation::ZoomOutY);
 	});
 	connect(shiftLeftXAction, &QAction::triggered, [this] {
-		shiftLeftX();
+		navigate(-1, NavigationOperation::ShiftLeftX);
 	});
 	connect(shiftRightXAction, &QAction::triggered, [this] {
-		shiftRightX();
+		navigate(-1, NavigationOperation::ShiftRightX);
 	});
 	connect(shiftUpYAction, &QAction::triggered, [this] {
-		shiftUpY();
+		navigate(-1, NavigationOperation::ShiftUpY);
 	});
 	connect(shiftDownYAction, &QAction::triggered, [this] {
-		shiftDownY();
+		navigate(-1, NavigationOperation::ShiftDownY);
 	});
 
 	// visibility action
@@ -2584,25 +2590,6 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 }
 
 BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
-
-// auto scale
-
-void CartesianPlot::scaleAutoTriggered() {
-	QAction* action = qobject_cast<QAction*>(QObject::sender());
-	if (!action)
-		return;
-
-	bool updated = false;
-	if (action == scaleAutoAction)
-		updated = scaleAuto();
-	else if (action == scaleAutoXAction)
-		updated = scaleAuto(Dimension::X);
-	else if (action == scaleAutoYAction)
-		updated = scaleAuto(Dimension::Y);
-
-	if (updated)
-		WorksheetElementContainer::retransform();
-}
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
 bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bool suppressRetransformScale) {

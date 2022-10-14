@@ -321,7 +321,6 @@ public Q_SLOTS:
 	void addReferenceLine();
 	void addInfoElement();
 
-	void scaleAutoTriggered();
 	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true, bool suppressRetransformScale = false);
 	bool scaleAuto(const Dimension, int index = -1, bool fullRange = true, bool suppressRetransformScale = false);
 
