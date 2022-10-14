@@ -39,5 +39,9 @@ private Q_SLOTS:
 	void undoInfoElement();
 
 	void axisFormat();
+	void shiftLeftAutoScale();
+	void shiftRightAutoScale();
+	void shiftUpAutoScale();
+	void shiftDownAutoScale();
 };
 #endif

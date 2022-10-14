@@ -156,7 +156,7 @@ void CartesianPlotTest::initTestCase() {
 	CHECK_RANGE(plot, curve1, Dimension::X, -4, 4);                                                                                                            \
 	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 1);
 
-#define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
+#define VALUES_EQUAL(v1, ref) QVERIFY2(nsl_math_approximately_equal(v1, ref) == true, qPrintable(QString("v1:%1, ref:%2").arg(v1).arg(ref)))
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
@@ -461,6 +461,138 @@ void CartesianPlotTest::axisFormat() {
 		QCOMPARE(xAxis->name(), "x");
 		QCOMPARE(xAxis->labelsDateTimeFormat(), "yyyy-MM-dd hh:mm");
 	}
+}
+
+void CartesianPlotTest::shiftLeftAutoScale() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve("f(x)")};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = "1";
+	data.max = "2";
+	data.count = 1000;
+	data.expression1 = "x";
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	p->shiftLeftX();
+
+	// Autoscale of the y range was done
+	CHECK_RANGE(p, curve, Dimension::X, 1.1, 2.1);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.1, 2.0); // changed range
+}
+
+void CartesianPlotTest::shiftRightAutoScale() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve("f(x)")};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = "1";
+	data.max = "2";
+	data.count = 1000;
+	data.expression1 = "x";
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	p->shiftRightX();
+
+	// Autoscale of the y range was done
+	CHECK_RANGE(p, curve, Dimension::X, 0.9, 1.9);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 1.9); // changed range
+}
+
+void CartesianPlotTest::shiftUpAutoScale() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve("f(x)")};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = "1";
+	data.max = "2";
+	data.count = 1000;
+	data.expression1 = "x";
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	p->shiftUpY();
+
+	// Autoscale of the y range was done
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 1.9);
+	CHECK_RANGE(p, curve, Dimension::Y, 0.9, 1.9); // changed range
+}
+
+void CartesianPlotTest::shiftDownAutoScale() {
+	Project project;
+	auto* ws = new Worksheet("worksheet");
+	QVERIFY(ws != nullptr);
+	project.addChild(ws);
+
+	auto* p = new CartesianPlot("plot");
+	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	QVERIFY(p != nullptr);
+	ws->addChild(p);
+
+	auto* curve{new XYEquationCurve("f(x)")};
+	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
+	p->addChild(curve);
+
+	XYEquationCurve::EquationData data;
+	data.min = "1";
+	data.max = "2";
+	data.count = 1000;
+	data.expression1 = "x";
+	curve->setEquationData(data);
+	curve->recalculate();
+
+	CHECK_RANGE(p, curve, Dimension::X, 1.0, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.0, 2.0);
+
+	p->shiftDownY();
+
+	// Autoscale of the y range was done
+	CHECK_RANGE(p, curve, Dimension::X, 1.1, 2.0);
+	CHECK_RANGE(p, curve, Dimension::Y, 1.1, 2.1); // changed range
 }
 
 QTEST_MAIN(CartesianPlotTest)
