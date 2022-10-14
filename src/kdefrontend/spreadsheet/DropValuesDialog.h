@@ -33,12 +33,14 @@ private:
 	bool m_mask{false};
 	bool m_hasNumeric{false};
 	bool m_hasText{false};
+	bool m_hasDateTime{false};
 
 	void dropValues() const;
 	void maskValues() const;
 
 private Q_SLOTS:
 	void operatorChanged(int) const;
+	void operatorDateTimeChanged(int) const;
 	void okClicked() const;
 };
 

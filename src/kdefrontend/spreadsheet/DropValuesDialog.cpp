@@ -9,6 +9,7 @@
 
 #include "DropValuesDialog.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -39,14 +40,18 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	ui.cbOperator->addItem(i18n("Equal to"));
-	ui.cbOperator->addItem(i18n("Not Equal to"));
-	ui.cbOperator->addItem(i18n("Between (Incl. End Points)"));
-	ui.cbOperator->addItem(i18n("Between (Excl. End Points)"));
-	ui.cbOperator->addItem(i18n("Greater than"));
-	ui.cbOperator->addItem(i18n("Greater than or Equal to"));
-	ui.cbOperator->addItem(i18n("Less than"));
-	ui.cbOperator->addItem(i18n("Less than or Equal to"));
+	QStringList items;
+	items << i18n("Equal to");
+	items << i18n("Not Equal to");
+	items << i18n("Between (Incl. End Points)");
+	items << i18n("Between (Excl. End Points)");
+	items << i18n("Greater than");
+	items << i18n("Greater than or Equal to");
+	items << i18n("Less than");
+	items << i18n("Less than or Equal to");
+
+	ui.cbOperator->addItems(items);
+	ui.cbOperatorDateTime->addItems(items);
 
 	ui.cbOperatorText->addItem(i18n("Equal To"));
 	ui.cbOperatorText->addItem(i18n("Not Equal To"));
@@ -67,27 +72,34 @@ DropValuesDialog::DropValuesDialog(Spreadsheet* s, bool mask, QWidget* parent)
 	if (m_mask) {
 		m_okButton->setText(i18n("&Mask"));
 		m_okButton->setToolTip(i18n("Mask values in the specified region"));
-		ui.lNumeric->setText(i18n("Mask Numeric Values"));
-		ui.lText->setText(i18n("Mask Text Values"));
 		setWindowTitle(i18nc("@title:window", "Mask Values"));
 	} else {
 		m_okButton->setText(i18n("&Drop"));
 		m_okButton->setToolTip(i18n("Drop values in the specified region"));
-		ui.lNumeric->setText(i18n("Drop Numeric Values"));
-		ui.lText->setText(i18n("Drop Text Values"));
 		setWindowTitle(i18nc("@title:window", "Drop Values"));
 	}
 
 	connect(ui.cbOperator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorChanged);
+	connect(ui.cbOperatorDateTime, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DropValuesDialog::operatorDateTimeChanged);
 	connect(m_okButton, &QPushButton::clicked, this, &DropValuesDialog::okClicked);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &DropValuesDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &DropValuesDialog::reject);
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
+	ui.leValue1->setText(conf.readEntry("Value1", QString()));
+	ui.leValue2->setText(conf.readEntry("Value2", QString()));
 	ui.cbOperator->setCurrentIndex(conf.readEntry("Operator", 0));
 	operatorChanged(ui.cbOperator->currentIndex());
+
+	ui.leValueText->setText(conf.readEntry("ValueText", QString()));
 	ui.cbOperatorText->setCurrentIndex(conf.readEntry("OperatorText", 0));
+
+	qint64 now = QDateTime::currentDateTime().toMSecsSinceEpoch();
+	ui.dteValue1->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value1DateTime", now)));
+	ui.dteValue2->setDateTime(QDateTime::fromMSecsSinceEpoch(conf.readEntry("Value2DateTime", now)));
+	ui.cbOperatorDateTime->setCurrentIndex(conf.readEntry("OperatorDateTime", 0));
+	operatorDateTimeChanged(ui.cbOperatorDateTime->currentIndex());
 
 	create(); // ensure there's a window created
 	if (conf.exists()) {
@@ -101,7 +113,13 @@ DropValuesDialog::~DropValuesDialog() {
 	// save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("DropValuesDialog"));
 	conf.writeEntry("Operator", ui.cbOperator->currentIndex());
+	conf.writeEntry("Value1", ui.leValue1->text());
+	conf.writeEntry("Value2", ui.leValue2->text());
 	conf.writeEntry("OperatorText", ui.cbOperatorText->currentIndex());
+	conf.writeEntry("ValueText", ui.leValueText->text());
+	conf.writeEntry("OperatorDateTime", ui.cbOperatorDateTime->currentIndex());
+	conf.writeEntry("Value1DateTime", ui.dteValue1->dateTime().toMSecsSinceEpoch());
+	conf.writeEntry("Value2DateTime", ui.dteValue2->dateTime().toMSecsSinceEpoch());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -122,8 +140,23 @@ void DropValuesDialog::setColumns(const QVector<Column*>& columns) {
 		}
 	}
 
+	QString dateTimeFormat;
+	for (auto* col : m_columns) {
+		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+			m_hasDateTime= true;
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			dateTimeFormat = filter->format();
+			break;
+		}
+	}
+
 	ui.frameNumeric->setVisible(m_hasNumeric);
 	ui.frameText->setVisible(m_hasText);
+	ui.frameDateTime->setVisible(m_hasDateTime);
+	if (m_hasDateTime) {
+		ui.dteValue1->setDisplayFormat(dateTimeFormat);
+		ui.dteValue2->setDisplayFormat(dateTimeFormat);
+	}
 
 	// resize the dialog to have the minimum height
 	layout()->activate();
@@ -136,6 +169,14 @@ void DropValuesDialog::operatorChanged(int index) const {
 	ui.lMax->setVisible(value2);
 	ui.lAnd->setVisible(value2);
 	ui.leValue2->setVisible(value2);
+}
+
+void DropValuesDialog::operatorDateTimeChanged(int index) const {
+	bool value2 = (index == 2) || (index == 3);
+	ui.lMinDateTime->setVisible(value2);
+	ui.lMaxDateTime->setVisible(value2);
+	ui.lAndDateTime->setVisible(value2);
+	ui.dteValue2->setVisible(value2);
 }
 
 void DropValuesDialog::okClicked() const {
@@ -162,6 +203,7 @@ public:
 		auto* data = static_cast<QVector<double>*>(m_column->data());
 		auto* data_int = static_cast<QVector<int>*>(m_column->data());
 		auto* data_bigint = static_cast<QVector<qint64>*>(m_column->data());
+		auto* data_datetime = static_cast<QVector<QDateTime>*>(m_column->data());
 		const int rows = m_column->rowCount();
 
 		auto mode = m_column->columnMode();
@@ -184,6 +226,13 @@ public:
 			} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i) {
 					if (data_bigint->at(i) == m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() == m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -212,6 +261,13 @@ public:
 						changed = true;
 					}
 				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() != m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
 			}
 			break;
 		case Operator::BetweenIncl:
@@ -232,6 +288,13 @@ public:
 			} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i) {
 					if (data_bigint->at(i) >= m_value1 && data_bigint->at(i) <= m_value2) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() >= m_value1 && data_datetime->at(i).toMSecsSinceEpoch() <= m_value2) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -260,6 +323,13 @@ public:
 						changed = true;
 					}
 				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() > m_value1 && data_datetime->at(i).toMSecsSinceEpoch() < m_value2) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
 			}
 			break;
 		case Operator::GreaterThan:
@@ -280,6 +350,13 @@ public:
 			} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i) {
 					if (data_bigint->at(i) > m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() > m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -308,6 +385,13 @@ public:
 						changed = true;
 					}
 				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() >= m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
 			}
 			break;
 		case Operator::LessThan:
@@ -332,6 +416,13 @@ public:
 						changed = true;
 					}
 				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() < m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
 			}
 			break;
 		case Operator::LessThanEqualTo:
@@ -352,6 +443,13 @@ public:
 			} else if (mode == AbstractColumn::ColumnMode::BigInt) {
 				for (int i = 0; i < rows; ++i) {
 					if (data_bigint->at(i) <= m_value1) {
+						m_column->setMasked(i, true);
+						changed = true;
+					}
+				}
+			} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				for (int i = 0; i < rows; ++i) {
+					if (data_datetime->at(i).toMSecsSinceEpoch() <= m_value1) {
 						m_column->setMasked(i, true);
 						changed = true;
 					}
@@ -601,6 +699,78 @@ public:
 
 			if (changed)
 				m_column->replaceBigInt(0, new_data);
+		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
+				auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
+				QVector<QDateTime> new_data(*data);
+
+				switch (m_operator) {
+				case Operator::EqualTo:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() == m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::NotEqualTo:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() != m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::BetweenIncl:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() >= m_value1 && d.toMSecsSinceEpoch() <= m_value2) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::BetweenExcl:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() > m_value1 && d.toMSecsSinceEpoch() < m_value2) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::GreaterThan:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() > m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::GreaterThanEqualTo:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() >= m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::LessThan:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() < m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+					break;
+				case Operator::LessThanEqualTo:
+					for (auto& d : new_data) {
+						if (d.toMSecsSinceEpoch() <= m_value1) {
+							d = QDateTime();
+							changed = true;
+						}
+					}
+				}
+
+				if (changed)
+					m_column->replaceDateTimes(0, new_data);
 		}
 	}
 
@@ -772,14 +942,14 @@ void DropValuesDialog::maskValues() const {
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
 	if (!ok && m_hasNumeric) {
-		KMessageBox::error(nullptr, i18n("Invalid value."));
+		KMessageBox::error(nullptr, i18n("Invalid numeric value."));
 		ui.leValue1->setFocus();
 		return;
 	}
 
 	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
 	if (ui.leValue2->isVisible() && !ok) {
-		KMessageBox::error(nullptr, i18n("Invalid value."));
+		KMessageBox::error(nullptr, i18n("Invalid numeric value."));
 		ui.leValue2->setFocus();
 		return;
 	}
@@ -787,6 +957,11 @@ void DropValuesDialog::maskValues() const {
 	// settings for text columns
 	const auto opText = static_cast<OperatorText>(ui.cbOperatorText->currentIndex());
 	const auto& valueText = ui.leValueText->text();
+
+	// settings for DateTime columns;
+	const auto opDateTime = static_cast<Operator>(ui.cbOperatorDateTime->currentIndex());
+	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
+	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
@@ -796,6 +971,10 @@ void DropValuesDialog::maskValues() const {
 			task->run();
 			// TODO: writing to the undo-stack in Column::setMasked() is not tread-safe -> redesign
 			// 		QThreadPool::globalInstance()->start(task);
+			delete task;
+		} else if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+			auto* task = new MaskValuesTask(col, opDateTime, value1DateTime, value2DateTime);
+			task->run();
 			delete task;
 		} else {
 			auto* task = new MaskTextValuesTask(col, opText, valueText);
@@ -820,13 +999,13 @@ void DropValuesDialog::dropValues() const {
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
 	if (!ok && m_hasNumeric) {
-		KMessageBox::error(nullptr, i18n("Invalid value."));
+		KMessageBox::error(nullptr, i18n("Invalid numeric value."));
 		ui.leValue1->setFocus();
 		return;
 	}
 	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
 	if (ui.leValue2->isVisible() && !ok && m_hasNumeric) {
-		KMessageBox::error(nullptr, i18n("Invalid value."));
+		KMessageBox::error(nullptr, i18n("Invalid numeric value."));
 		ui.leValue2->setFocus();
 		return;
 	}
@@ -835,12 +1014,20 @@ void DropValuesDialog::dropValues() const {
 	const auto opText = static_cast<OperatorText>(ui.cbOperatorText->currentIndex());
 	const auto& valueText = ui.leValueText->text();
 
+	// settings for DateTime columns;
+	const auto opDateTime = static_cast<Operator>(ui.cbOperatorDateTime->currentIndex());
+	double value1DateTime = ui.dteValue1->dateTime().toMSecsSinceEpoch();
+	double value2DateTime = ui.dteValue2->dateTime().toMSecsSinceEpoch();
+
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
 	for (auto* col : m_columns) {
 		if (col->isNumeric()) {
 			auto* task = new DropValuesTask(col, op, value1, value2);
+			QThreadPool::globalInstance()->start(task);
+		} else if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+			auto* task = new DropValuesTask(col, opDateTime, value1DateTime, value2DateTime);
 			QThreadPool::globalInstance()->start(task);
 		} else {
 			auto* task = new DropTextValuesTask(col, opText, valueText);

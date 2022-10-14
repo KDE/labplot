@@ -1560,8 +1560,8 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 	action_multiply_value->setEnabled(numeric);
 	action_divide_value->setEnabled(numeric);
 	action_reverse_columns->setEnabled(numeric);
-	action_drop_values->setEnabled(numeric || text);
-	action_mask_values->setEnabled(numeric || text);
+	action_drop_values->setEnabled(numeric || text || datetime);
+	action_mask_values->setEnabled(numeric || text || datetime);
 	m_columnNormalizeMenu->setEnabled(numeric);
 	m_columnLadderOfPowersMenu->setEnabled(numeric);
 
