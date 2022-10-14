@@ -2324,7 +2324,7 @@ int Column::indexForValue(double x) const {
 
 /*!
  * Finds the minimal and maximal index which are between v1 and v2
- * \brief Column::indicesForX
+ * \brief Column::indicesMinMax
  * \param v1
  * \param v2
  * \param start
