@@ -143,7 +143,7 @@ void DropValuesDialog::setColumns(const QVector<Column*>& columns) {
 	QString dateTimeFormat;
 	for (auto* col : m_columns) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-			m_hasDateTime= true;
+			m_hasDateTime = true;
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			dateTimeFormat = filter->format();
 			break;
@@ -700,77 +700,77 @@ public:
 			if (changed)
 				m_column->replaceBigInt(0, new_data);
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
-				auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
-				QVector<QDateTime> new_data(*data);
+			auto* data = static_cast<QVector<QDateTime>*>(m_column->data());
+			QVector<QDateTime> new_data(*data);
 
-				switch (m_operator) {
-				case Operator::EqualTo:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() == m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::NotEqualTo:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() != m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::BetweenIncl:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() >= m_value1 && d.toMSecsSinceEpoch() <= m_value2) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::BetweenExcl:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() > m_value1 && d.toMSecsSinceEpoch() < m_value2) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::GreaterThan:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() > m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::GreaterThanEqualTo:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() >= m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::LessThan:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() < m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
-					}
-					break;
-				case Operator::LessThanEqualTo:
-					for (auto& d : new_data) {
-						if (d.toMSecsSinceEpoch() <= m_value1) {
-							d = QDateTime();
-							changed = true;
-						}
+			switch (m_operator) {
+			case Operator::EqualTo:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() == m_value1) {
+						d = QDateTime();
+						changed = true;
 					}
 				}
+				break;
+			case Operator::NotEqualTo:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() != m_value1) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::BetweenIncl:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() >= m_value1 && d.toMSecsSinceEpoch() <= m_value2) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::BetweenExcl:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() > m_value1 && d.toMSecsSinceEpoch() < m_value2) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::GreaterThan:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() > m_value1) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::GreaterThanEqualTo:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() >= m_value1) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::LessThan:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() < m_value1) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+				break;
+			case Operator::LessThanEqualTo:
+				for (auto& d : new_data) {
+					if (d.toMSecsSinceEpoch() <= m_value1) {
+						d = QDateTime();
+						changed = true;
+					}
+				}
+			}
 
-				if (changed)
-					m_column->replaceDateTimes(0, new_data);
+			if (changed)
+				m_column->replaceDateTimes(0, new_data);
 		}
 	}
 

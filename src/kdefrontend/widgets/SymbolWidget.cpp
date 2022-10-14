@@ -43,7 +43,7 @@ SymbolWidget::SymbolWidget(QWidget* parent)
 	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
 }
 
-void SymbolWidget::setSymbols(QList<Symbol*> symbols) {
+void SymbolWidget::setSymbols(const QList<Symbol*>& symbols) {
 	m_symbols = symbols;
 	m_symbol = m_symbols.first();
 

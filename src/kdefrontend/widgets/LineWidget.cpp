@@ -34,7 +34,7 @@ LineWidget::LineWidget(QWidget* parent)
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LineWidget::opacityChanged);
 }
 
-void LineWidget::setLines(QList<Line*> lines) {
+void LineWidget::setLines(const QList<Line*>& lines) {
 	m_lines = lines;
 	m_line = m_lines.first();
 

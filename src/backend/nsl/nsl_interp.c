@@ -25,7 +25,7 @@ const char* nsl_interp_type_name[] = {i18n("linear"),
 const char* nsl_interp_pch_variant_name[] = {i18n("finite differences"), i18n("Catmull-Rom"), i18n("cardinal"), i18n("Kochanek-Bartels (TCB)")};
 const char* nsl_interp_evaluate_name[] = {i18n("function"), i18n("derivative"), i18n("second derivative"), i18n("integral")};
 
-int nsl_interp_ratint(double* x, double* y, int n, double xn, double* v, double* dv) {
+int nsl_interp_ratint(const double* x, const double* y, int n, double xn, double* v, double* dv) {
 	int i, a = 0, b = n - 1;
 	while (b - a > 1) { /* find interval using bisection */
 		int j = (int)floor((a + b) / 2.);

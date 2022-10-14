@@ -202,7 +202,7 @@ int nsl_conv_deconvolution(double s[],
 	return nsl_conv_fft_type(s, n, r, m, nsl_conv_direction_backward, type, normalize, wrap, out);
 }
 
-int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
+int nsl_conv_linear_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = n + m - 1, wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean) {
@@ -235,7 +235,7 @@ int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_
 	return 0;
 }
 
-int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
+int nsl_conv_circular_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]) {
 	size_t i, j, size = GSL_MAX(n, m), wi = 0;
 	double norm = 1;
 	if (normalize == nsl_conv_norm_euclidean) {
@@ -270,7 +270,7 @@ int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_con
 	return 0;
 }
 
-int nsl_conv_fft_type(double s[],
+int nsl_conv_fft_type(const double s[],
 					  size_t n,
 					  double r[],
 					  size_t m,

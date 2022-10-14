@@ -93,12 +93,12 @@ int nsl_conv_deconvolution(double s[], size_t n, double r[], size_t m, nsl_conv_
 /* linear/circular convolution using direct method
  * s and r are untouched
  */
-int nsl_conv_linear_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
-int nsl_conv_circular_direct(double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_linear_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
+int nsl_conv_circular_direct(const double s[], size_t n, double r[], size_t m, nsl_conv_norm_type normalize, nsl_conv_wrap_type wrap, double out[]);
 /* linear/circular convolution/deconvolution using FFT method
  * s and r are untouched
  */
-int nsl_conv_fft_type(double s[],
+int nsl_conv_fft_type(const double s[],
 					  size_t n,
 					  double r[],
 					  size_t m,

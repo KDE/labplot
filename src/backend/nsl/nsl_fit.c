@@ -144,7 +144,7 @@ double nsl_fit_model_power2_param_deriv(unsigned int param, double x, double b, 
 
 	return 0;
 }
-double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, double* p, double weight) {
+double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, const double* p, double weight) {
 	if (param % 2 == 0)
 		return sqrt(weight) * exp(p[param + 1] * x);
 	else

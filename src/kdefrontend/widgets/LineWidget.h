@@ -21,7 +21,7 @@ class LineWidget : public QWidget {
 public:
 	explicit LineWidget(QWidget*);
 
-	void setLines(QList<Line*>);
+	void setLines(const QList<Line*>&);
 	void setPrefix(const QString&);
 	void adjustLayout();
 	void setEnabled(bool);

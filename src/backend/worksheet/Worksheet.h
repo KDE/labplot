@@ -13,6 +13,7 @@
 #define WORKSHEET_H
 
 #include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;

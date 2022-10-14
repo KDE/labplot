@@ -36,26 +36,26 @@ gsl_complex nsl_sf_poly_reversed_bessel_theta(int n, gsl_complex x);
 	6 - sixth order (7-point) and derivatives
 	TODO: barycentric form (https://en.wikipedia.org/wiki/Lagrange_polynomial)
 */
-double nsl_sf_poly_interp_lagrange_0_int(double* x, double y);
-double nsl_sf_poly_interp_lagrange_1(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_1_deriv(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_1_int(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_1_absint(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_2(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_2_deriv(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_2_deriv2(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_2_int(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_3(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_3_deriv(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_3_deriv2(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_3_deriv3(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_3_int(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_4(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_4_deriv(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_4_deriv2(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_4_deriv3(double v, double* x, double* y);
-double nsl_sf_poly_interp_lagrange_4_deriv4(double* x, double* y);
-double nsl_sf_poly_interp_lagrange_6_deriv4(double v, double* x, double* y);
+double nsl_sf_poly_interp_lagrange_0_int(const double* x, double y);
+double nsl_sf_poly_interp_lagrange_1(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_1_deriv(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_1_int(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_1_absint(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_2(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_2_deriv(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_2_deriv2(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_2_int(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_3(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_3_deriv(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_3_deriv2(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_3_deriv3(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_3_int(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_4(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_4_deriv(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_4_deriv2(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_4_deriv3(double v, const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_4_deriv4(const double* x, const double* y);
+double nsl_sf_poly_interp_lagrange_6_deriv4(double v, const double* x, const double* y);
 double nsl_sf_poly_interp_lagrange_6_deriv5(double v, const double* x, const double* y);
 double nsl_sf_poly_interp_lagrange_6_deriv6(const double* x, const double* y);
 
