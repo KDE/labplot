@@ -2033,8 +2033,10 @@ void SpreadsheetView::plotAnalysisData() {
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	int first = firstSelectedRow();
 	if (first < 0)
 		return;
@@ -2042,7 +2044,7 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with row numbers", m_spreadsheet->name()));
-	for (auto* col_ptr : selectedColumns()) {
+	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -2101,11 +2103,12 @@ void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
 }
 
 void SpreadsheetView::fillWithRowNumbers() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
 
 	WAIT_CURSOR;
-	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers", "%1: fill columns with row numbers", m_spreadsheet->name(), selectedColumnCount()));
+	m_spreadsheet->beginMacro(i18np("%1: fill column with row numbers", "%1: fill columns with row numbers", m_spreadsheet->name(), columns.count()));
 
 	const int rows = m_spreadsheet->rowCount();
 
@@ -2113,7 +2116,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 	for (int i = 0; i < rows; ++i)
 		int_data[i] = i + 1;
 
-	for (auto* col : selectedColumns()) {
+	for (auto* col : columns) {
 		switch (col->columnMode()) {
 		case AbstractColumn::ColumnMode::Integer:
 			col->replaceInteger(0, int_data);
@@ -2137,8 +2140,10 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 // TODO: this function is not used currently.
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if (first < 0)
@@ -2151,7 +2156,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 #else
 	qsrand(QTime::currentTime().msec());
 #endif
-	for (auto* col_ptr : selectedColumns()) {
+	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -2242,32 +2247,40 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 }
 
 void SpreadsheetView::fillWithRandomValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new RandomValuesDialog(m_spreadsheet);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::fillWithEquidistantValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new EquidistantValuesDialog(m_spreadsheet);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::fillWithFunctionValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new FunctionValuesDialog(m_spreadsheet);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::fillSelectedCellsWithConstValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	int first = firstSelectedRow();
 	int last = lastSelectedRow();
 	if (first < 0)
@@ -2283,7 +2296,7 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 	QString stringValue;
 
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with const values", m_spreadsheet->name()));
-	for (auto* col_ptr : selectedColumns()) {
+	for (auto* col_ptr : columns) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
 		switch (col_ptr->columnMode()) {
@@ -2645,21 +2658,25 @@ void SpreadsheetView::setSelectionAs() {
  * add, subtract, multiply, divide
  */
 void SpreadsheetView::modifyValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
 
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
 	auto* dlg = new AddSubtractValueDialog(m_spreadsheet, op);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::reverseColumns() {
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
+		return;
+
 	WAIT_CURSOR;
-	QVector<Column*> cols = selectedColumns();
-	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns", m_spreadsheet->name(), cols.size()));
-	for (auto* col : cols) {
+	m_spreadsheet->beginMacro(i18np("%1: reverse column", "%1: reverse columns", m_spreadsheet->name(), columns.size()));
+	for (auto* col : columns) {
 		if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 			// determine the last row containing a valid value,
 			// ignore all following empty rows when doing the reverse
@@ -2693,26 +2710,32 @@ void SpreadsheetView::reverseColumns() {
 }
 
 void SpreadsheetView::dropColumnValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new DropValuesDialog(m_spreadsheet);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::maskColumnValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new DropValuesDialog(m_spreadsheet, true);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
 void SpreadsheetView::sampleColumnValues() {
-	if (selectedColumnCount() < 1)
+	const auto& columns = selectedColumns();
+	if (columns.isEmpty())
 		return;
+
 	auto* dlg = new SampleValuesDialog(m_spreadsheet, this);
-	dlg->setColumns(selectedColumns());
+	dlg->setColumns(columns);
 	dlg->exec();
 }
 
