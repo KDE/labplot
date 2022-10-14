@@ -15,7 +15,12 @@
 
 #include <QCompleter>
 #include <QDesktopWidget>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QFileDialog>
 #include <QWindow>
 
@@ -50,7 +55,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 

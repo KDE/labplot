@@ -15,7 +15,12 @@
 
 #include <QCompleter>
 #include <QDialogButtonBox>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QFileDialog>
 #include <QSqlDatabase>
 #include <QStandardItemModel>
@@ -48,7 +53,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	ui->cbFormat->addItem("ASCII", static_cast<int>(Format::ASCII));
 	ui->cbFormat->addItem("LaTeX", static_cast<int>(Format::LaTeX));

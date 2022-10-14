@@ -18,7 +18,12 @@
 
 #include <QCompleter>
 #include <QDir>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QGraphicsScene>
 #include <QPainter>
 
@@ -114,7 +119,11 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	//"Symbol"-tab
 	symbolWidget = new SymbolWidget(ui.tSymbol);
