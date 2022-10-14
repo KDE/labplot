@@ -770,6 +770,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->xColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
+		d->m_logicalPoints.clear();
 		d->retransform();
 	}
 }
@@ -779,6 +780,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (aspect == d->yColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
+		d->m_logicalPoints.clear();
 		d->retransform();
 	}
 }
@@ -903,32 +905,13 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 }
 
 void XYCurvePrivate::calculateScenePoints() {
-	if (!m_scenePointsDirty)
+	if (!m_scenePointsDirty || !xColumn)
 		return;
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name());
 #endif
 
 	m_scenePoints.clear();
-
-	DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
-	// Q_ASSERT(xColumn != nullptr);
-	if (!xColumn || !yColumn) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
-		linePath = QPainterPath();
-		dropLinePath = QPainterPath();
-		symbolsPath = QPainterPath();
-		valuesPath = QPainterPath();
-		errorBarsPath = QPainterPath();
-		rugPath = QPainterPath();
-		curveShape = QPainterPath();
-		m_lines.clear();
-		m_valuePoints.clear();
-		m_valueStrings.clear();
-		m_fillPolygons.clear();
-		recalcShapeAndBoundingRect();
-		return;
-	}
 
 	// calculate the scene coordinates
 	//  This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()
@@ -1016,6 +999,25 @@ void XYCurvePrivate::retransform() {
 
 	m_scenePointsDirty = true;
 	m_scenePoints.clear(); // free memory
+
+	DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
+	// Q_ASSERT(xColumn != nullptr);
+	if (!xColumn || !yColumn) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
+		linePath = QPainterPath();
+		dropLinePath = QPainterPath();
+		symbolsPath = QPainterPath();
+		valuesPath = QPainterPath();
+		errorBarsPath = QPainterPath();
+		rugPath = QPainterPath();
+		curveShape = QPainterPath();
+		m_lines.clear();
+		m_valuePoints.clear();
+		m_valueStrings.clear();
+		m_fillPolygons.clear();
+		recalcShapeAndBoundingRect();
+		return;
+	}
 
 	m_suppressRecalc = true;
 	updateLines();
