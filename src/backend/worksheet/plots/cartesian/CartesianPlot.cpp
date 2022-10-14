@@ -3112,7 +3112,7 @@ void CartesianPlot::shiftLeftX(int index) {
 		if ((index == -1 || index == cs->index(Dimension::X))) {
 			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
 				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y));
+				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
 			}
 			retrans = true;
 		}
@@ -3134,7 +3134,7 @@ void CartesianPlot::shiftRightX(int index) {
 		if ((index == -1 || index == cs->index(Dimension::X))) {
 			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
 				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y));
+				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
 			}
 			retrans = true;
 		}
@@ -3156,7 +3156,7 @@ void CartesianPlot::shiftUpY(int index) {
 		if ((index == -1 || index == cs->index(Dimension::Y))) {
 			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
 				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X));
+				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
 			}
 			retrans = true;
 		}
@@ -3178,7 +3178,7 @@ void CartesianPlot::shiftDownY(int index) {
 		if ((index == -1 || index == cs->index(Dimension::Y))) {
 			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
 				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X));
+				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
 			}
 			retrans = true;
 		}
