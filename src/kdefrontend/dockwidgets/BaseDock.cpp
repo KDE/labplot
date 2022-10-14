@@ -11,9 +11,9 @@
 
 #include "BaseDock.h"
 #include "AxisDock.h"
-#include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"

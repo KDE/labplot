@@ -108,7 +108,8 @@ void SampleValuesDialog::methodChanged(int index) const {
 
 class SampleValuesTask : public QRunnable {
 public:
-	SampleValuesTask(Column* source, Column* target, const QVector<int>& rows) : m_rows(rows) {
+	SampleValuesTask(Column* source, Column* target, const QVector<int>& rows)
+		: m_rows(rows) {
 		m_source = source;
 		m_target = target;
 	}

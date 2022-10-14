@@ -9,10 +9,10 @@
 */
 
 #include "AxisDock.h"
-#include "backend/lib/macros.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/DateTimeSpinBox.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
