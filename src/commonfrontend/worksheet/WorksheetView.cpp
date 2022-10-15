@@ -2582,7 +2582,8 @@ void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
 		return;
 	if (t == AspectType::CartesianPlot) {
 		// actions.at(0) is the menu title
-		menu->insertMenu(menu->actions().at(1), m_cartesianPlotZoomMenu);
+		// actions.at(1) is the "new" menu
+		menu->insertMenu(menu->actions().at(2), m_cartesianPlotZoomMenu);
 	}
 	menu->exec(QCursor::pos());
 }
