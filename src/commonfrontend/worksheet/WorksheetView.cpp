@@ -2178,7 +2178,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	}
 
 	m_cartesianPlotAddNewMenu->setEnabled(plot);
-	m_cartesianPlotZoomMenu->setEnabled(plot);
+	m_cartesianPlotZoomMenu->setEnabled(m_selectedElement);
 	m_cartesianPlotMouseModeMenu->setEnabled(plot);
 
 	// analysis menu
