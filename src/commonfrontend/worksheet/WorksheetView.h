@@ -274,6 +274,7 @@ public Q_SLOTS:
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode); // from cartesian plot
+	void childContextMenuRequested(AspectType, QMenu*);
 	void cartesianPlotMouseModeChanged(QAction*);
 
 private Q_SLOTS:

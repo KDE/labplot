@@ -2577,6 +2577,16 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 	}
 }
 
+void WorksheetView::childContextMenuRequested(AspectType t, QMenu* menu) {
+	if (!menu)
+		return;
+	if (t == AspectType::CartesianPlot) {
+		// actions.at(0) is the menu title
+		menu->insertMenu(menu->actions().at(1), m_cartesianPlotZoomMenu);
+	}
+	menu->exec(QCursor::pos());
+}
+
 void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 	DEBUG("WorksheetView::cartesianPlotAdd()");
 	if (action == addCurveAction)

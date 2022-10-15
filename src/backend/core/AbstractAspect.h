@@ -416,6 +416,7 @@ Q_SIGNALS:
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);
 	void renameRequested();
+	void contextMenuRequested(AspectType, QMenu*);
 
 	// selection/deselection in model (project explorer)
 	void selected(const AbstractAspect*);

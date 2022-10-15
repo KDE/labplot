@@ -34,6 +34,7 @@
 #include <QDir>
 #include <QGraphicsItem>
 #include <QIcon>
+#include <QMenu>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -167,6 +168,7 @@ QWidget* Worksheet::view() const {
 		connect(m_view, &WorksheetView::statusInfo, this, &Worksheet::statusInfo);
 		connect(m_view, &WorksheetView::propertiesExplorerRequested, this, &Worksheet::propertiesExplorerRequested);
 		connect(this, &Worksheet::cartesianPlotMouseModeChanged, m_view, &WorksheetView::cartesianPlotMouseModeChangedSlot);
+		connect(this, &Worksheet::childContextMenuRequested, m_view, &WorksheetView::childContextMenuRequested);
 	}
 	return m_partView;
 }
@@ -253,6 +255,8 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 	auto* item = addedElement->graphicsItem();
 	d->m_scene->addItem(item);
+
+	connect(aspect, &AbstractAspect::contextMenuRequested, this, &Worksheet::childContextMenuRequested);
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {

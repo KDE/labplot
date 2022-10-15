@@ -159,6 +159,7 @@ Q_SIGNALS:
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
+	void childContextMenuRequested(AspectType, QMenu*);
 
 	void scaleContentChanged(bool);
 	void useViewSizeChanged(bool);

@@ -77,7 +77,6 @@ CartesianPlot::CartesianPlot(const QString& name, CartesianPlotPrivate* dd)
 CartesianPlot::~CartesianPlot() {
 	if (m_menusInitialized) {
 		delete addNewMenu;
-		delete zoomMenu;
 		delete themeMenu;
 	}
 
@@ -463,61 +462,6 @@ void CartesianPlot::initActions() {
 	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
 	connect(addHilbertTransformAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
 
-	// zoom/navigate actions
-	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
-	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), this);
-	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("Auto Scale Y"), this);
-	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), this);
-	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), this);
-	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("Zoom In X"), this);
-	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("Zoom Out X"), this);
-	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("Zoom In Y"), this);
-	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("Zoom Out Y"), this);
-	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("Shift Left X"), this);
-	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), this);
-	shiftUpYAction = new QAction(QIcon::fromTheme("labplot-shift-up-y"), i18n("Shift Up Y"), this);
-	shiftDownYAction = new QAction(QIcon::fromTheme("labplot-shift-down-y"), i18n("Shift Down Y"), this);
-
-	connect(scaleAutoAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ScaleAuto);
-	});
-	connect(scaleAutoXAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ScaleAutoX);
-	});
-	connect(scaleAutoYAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ScaleAutoY);
-	});
-	connect(zoomInAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomIn);
-	});
-	connect(zoomOutAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomOut);
-	});
-	connect(zoomInXAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomInX);
-	});
-	connect(zoomOutXAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomOutX);
-	});
-	connect(zoomInYAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomInY);
-	});
-	connect(zoomOutYAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ZoomOutY);
-	});
-	connect(shiftLeftXAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ShiftLeftX);
-	});
-	connect(shiftRightXAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ShiftRightX);
-	});
-	connect(shiftUpYAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ShiftUpY);
-	});
-	connect(shiftDownYAction, &QAction::triggered, [this] {
-		navigate(-1, NavigationOperation::ShiftDownY);
-	});
-
 	// visibility action
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
@@ -567,27 +511,6 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
-
-	zoomMenu = new QMenu(i18n("Zoom/Navigate"));
-	zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
-	zoomMenu->addAction(scaleAutoAction);
-	zoomMenu->addAction(scaleAutoXAction);
-	zoomMenu->addAction(scaleAutoYAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInAction);
-	zoomMenu->addAction(zoomOutAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInXAction);
-	zoomMenu->addAction(zoomOutXAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(zoomInYAction);
-	zoomMenu->addAction(zoomOutYAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(shiftLeftXAction);
-	zoomMenu->addAction(shiftRightXAction);
-	zoomMenu->addSeparator();
-	zoomMenu->addAction(shiftUpYAction);
-	zoomMenu->addAction(shiftDownYAction);
 
 	// Data manipulation menu
 	// 	QMenu* dataManipulationMenu = new QMenu(i18n("Data Manipulation"));
@@ -664,8 +587,6 @@ QMenu* CartesianPlot::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1);
 
 	menu->insertMenu(firstAction, addNewMenu);
-	menu->insertSeparator(firstAction);
-	menu->insertMenu(firstAction, zoomMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, themeMenu);
 	menu->insertSeparator(firstAction);
@@ -3640,7 +3561,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
-	menu->exec(event->screenPos());
+	emit q->contextMenuRequested(q->AbstractAspect::type(), menu);
 }
 
 /*!

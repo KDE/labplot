@@ -96,7 +96,7 @@ public:
 	Type type() const;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
+	QMenu* createContextMenu();
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
@@ -251,21 +251,6 @@ private:
 	QAction* addCustomPointAction;
 	QAction* addReferenceLineAction;
 
-	// scaling, zooming, navigation actions
-	QAction* scaleAutoXAction;
-	QAction* scaleAutoYAction;
-	QAction* scaleAutoAction;
-	QAction* zoomInAction;
-	QAction* zoomOutAction;
-	QAction* zoomInXAction;
-	QAction* zoomOutXAction;
-	QAction* zoomInYAction;
-	QAction* zoomOutYAction;
-	QAction* shiftLeftXAction;
-	QAction* shiftRightXAction;
-	QAction* shiftUpYAction;
-	QAction* shiftDownYAction;
-
 	// analysis menu actions
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
@@ -282,7 +267,6 @@ private:
 
 	QMenu* addNewMenu{nullptr};
 	QMenu* addNewAnalysisMenu{nullptr};
-	QMenu* zoomMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
 
