@@ -1332,8 +1332,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				if (!isColumnSelected(col, true)) {
 					auto* sel_model = m_tableView->selectionModel();
 					sel_model->clearSelection();
-					sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex())),
-									QItemSelectionModel::Select);
+					QItemSelection selection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex()));
+					sel_model->select(selection, QItemSelectionModel::Select);
 				}
 			}
 
