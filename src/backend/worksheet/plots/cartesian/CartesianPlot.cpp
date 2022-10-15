@@ -2138,7 +2138,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
-		if (curveTotalCount() == 1) {
+		if (curveTotalCount() == 1 && !isLoading()) {
 			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}

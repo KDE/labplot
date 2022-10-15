@@ -9,6 +9,7 @@
 */
 
 #include "CartesianPlotTest.h"
+#include "tests/CommonTest.h"
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
@@ -380,6 +381,86 @@ void CartesianPlotTest::undoInfoElement() {
 	// redo
 	project->undoStack()->redo();
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
+}
+
+void CartesianPlotTest::axisFormat() {
+	// testing #74
+
+	QString savePath;
+	{
+		Project project;
+
+		Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+		project.addChild(sheet);
+
+		sheet->setColumnCount(2);
+		sheet->setRowCount(3);
+
+		sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+		sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+		sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+		sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
+		sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+
+		QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+
+		sheet->column(1)->setValueAt(0, 0);
+		sheet->column(1)->setValueAt(1, 1);
+		sheet->column(1)->setValueAt(2, 2);
+
+		auto* worksheet = new Worksheet("Worksheet");
+		project.addChild(worksheet);
+
+		auto* plot = new CartesianPlot("plot");
+		worksheet->addChild(plot);
+		plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+		auto* curve = new XYCurve("curve");
+		plot->addChild(curve);
+
+		curve->setXColumn(sheet->column(0));
+		curve->setYColumn(sheet->column(1));
+
+		auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));
+		QVERIFY(xAxis);
+		QCOMPARE(xAxis->name(), "x");
+
+		const auto original = xAxis->labelsDateTimeFormat();
+		const auto newFormat = "yyyy-MM-dd hh:mm";
+		QVERIFY(original != newFormat);
+		xAxis->setLabelsDateTimeFormat(newFormat);
+
+		SAVE_PROJECT("TestAxisDateTimeFormat.lml");
+	}
+
+	{
+		Project project;
+		project.load(savePath);
+
+		/* check the project tree for the imported project */
+		/* Spreadsheet */
+		auto* aspect = project.child<AbstractAspect>(0);
+		QVERIFY(aspect);
+		QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
+		QVERIFY(aspect->type() == AspectType::Spreadsheet);
+
+		/* Worksheet */
+		aspect = project.child<AbstractAspect>(1);
+		QVERIFY(aspect);
+		QCOMPARE(aspect->name(), QLatin1String("Worksheet"));
+		QVERIFY(aspect->type() == AspectType::Worksheet);
+		auto* w = dynamic_cast<Worksheet*>(aspect);
+		QVERIFY(w);
+
+		auto* plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0));
+		QVERIFY(plot);
+
+		auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));
+		QVERIFY(xAxis);
+		QCOMPARE(xAxis->name(), "x");
+		QCOMPARE(xAxis->labelsDateTimeFormat(), "yyyy-MM-dd hh:mm");
+	}
 }
 
 QTEST_MAIN(CartesianPlotTest)
