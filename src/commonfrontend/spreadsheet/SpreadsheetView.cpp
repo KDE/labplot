@@ -1145,9 +1145,9 @@ int SpreadsheetView::selectedColumnCount(AbstractColumn::PlotDesignation pd) con
 */
 bool SpreadsheetView::isColumnSelected(int col, bool full) const {
 	if (full)
-		return m_tableView->selectionModel()->isColumnSelected(col, QModelIndex());
+		return m_tableView->selectionModel()->isColumnSelected(col);
 	else
-		return m_tableView->selectionModel()->columnIntersectsSelection(col, QModelIndex());
+		return m_tableView->selectionModel()->columnIntersectsSelection(col);
 }
 
 /*!
@@ -1170,9 +1170,9 @@ QVector<Column*> SpreadsheetView::selectedColumns(bool full) const {
 */
 bool SpreadsheetView::isRowSelected(int row, bool full) const {
 	if (full)
-		return m_tableView->selectionModel()->isRowSelected(row, QModelIndex());
+		return m_tableView->selectionModel()->isRowSelected(row);
 	else
-		return m_tableView->selectionModel()->rowIntersectsSelection(row, QModelIndex());
+		return m_tableView->selectionModel()->rowIntersectsSelection(row);
 }
 
 /*!
@@ -1295,6 +1295,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 		auto* cm_event = static_cast<QContextMenuEvent*>(event);
 		const QPoint global_pos = cm_event->globalPos();
+
 		if (watched == m_tableView->verticalHeader()) {
 			bool numeric = true;
 			bool hasValues = false;
@@ -1324,16 +1325,20 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			action_statistics_rows->setEnabled(numeric && hasValues);
 			m_rowMenu->exec(global_pos);
-		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader())) {
-			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
-			if (!isColumnSelected(col, true)) {
-				auto* sel_model = m_tableView->selectionModel();
-				sel_model->clearSelection();
-				sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex())),
-								  QItemSelectionModel::Select);
+		} else if ((watched == m_horizontalHeader) || (m_frozenTableView && watched == m_frozenTableView->horizontalHeader()) || !selectedColumns().isEmpty()) {
+			// if the horizondal header was clicked, select the column under the cursor if not selected yet
+			if (watched == m_horizontalHeader) {
+				const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
+				if (!isColumnSelected(col, true)) {
+					auto* sel_model = m_tableView->selectionModel();
+					sel_model->clearSelection();
+					sel_model->select(QItemSelection(m_model->index(0, col, QModelIndex()), m_model->index(m_model->rowCount() - 1, col, QModelIndex())),
+									QItemSelectionModel::Select);
+				}
 			}
 
-			if (selectedColumns().size() == 1) {
+			const auto& columns = selectedColumns();
+			if (columns.size() == 1) {
 				action_sort_columns->setVisible(false);
 				action_sort_asc_column->setVisible(true);
 				action_sort_desc_column->setVisible(true);
@@ -1350,9 +1355,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool text = false;
 			bool hasValues = false;
 			bool hasFormat = false;
-			const auto& columns = selectedColumns();
 
-			for (const Column* col : columns) {
+			for (const auto* col : columns) {
 				if (!col->isNumeric()) {
 					datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
 					if (!datetime)
@@ -1363,21 +1367,21 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			for (const Column* col : columns) {
+			for (const auto* col : columns) {
 				if (col->columnMode() == AbstractColumn::ColumnMode::Text) {
 					text = true;
 					break;
 				}
 			}
 
-			for (const Column* col : columns) {
+			for (const auto* col : columns) {
 				if (col->hasValues()) {
 					hasValues = true;
 					break;
 				}
 			}
 
-			for (const Column* col : columns) {
+			for (const auto* col : columns) {
 				if (col->hasHeatmapFormat()) {
 					hasFormat = true;
 					break;
@@ -1397,6 +1401,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 
 			m_columnMenu->exec(global_pos);
 		} else if (watched == this) {
+			// the cursor position is in one of the cells and no full columns are selected,
+			// show the global spreadsheet context menu in this case
 			checkSpreadsheetMenu();
 			m_spreadsheetMenu->exec(global_pos);
 		}
@@ -1476,7 +1482,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 
 	const auto& columns = m_spreadsheet->children<Column>();
 
-	// deactive "Statictis" action if no numeric data is available
+	// deactivate "Statistics" action if no numeric data is available
 	bool hasNumericValues = false;
 	for (auto* column : columns) {
 		if (column->isNumeric() && column->hasValues()) {
@@ -1951,7 +1957,7 @@ void SpreadsheetView::maskSelection() {
 
 	QVector<CartesianPlot*> plots;
 	// determine the dependent plots
-	for (auto* column : selectedColumns())
+	for (auto* column : selectedColumns(false))
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -1959,7 +1965,7 @@ void SpreadsheetView::maskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// mask the selected cells
-	for (auto* column : selectedColumns()) {
+	for (auto* column : selectedColumns(false)) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
@@ -1991,7 +1997,7 @@ void SpreadsheetView::unmaskSelection() {
 
 	QVector<CartesianPlot*> plots;
 	// determine the dependent plots
-	for (auto* column : selectedColumns())
+	for (auto* column : selectedColumns(false))
 		column->addUsedInPlots(plots);
 
 	// suppress retransform in the dependent plots
@@ -1999,7 +2005,7 @@ void SpreadsheetView::unmaskSelection() {
 		plot->setSuppressRetransform(true);
 
 	// unmask the selected cells
-	for (auto* column : selectedColumns()) {
+	for (auto* column : selectedColumns(false)) {
 		int col = m_spreadsheet->indexOfChild<Column>(column);
 		for (int row = first; row <= last; row++)
 			if (isCellSelected(row, col))
@@ -2033,7 +2039,7 @@ void SpreadsheetView::plotAnalysisData() {
 }
 
 void SpreadsheetView::fillSelectedCellsWithRowNumbers() {
-	const auto& columns = selectedColumns();
+	const auto& columns = selectedColumns(false);
 	if (columns.isEmpty())
 		return;
 
@@ -2140,7 +2146,7 @@ void SpreadsheetView::fillWithRowNumbers() {
 
 // TODO: this function is not used currently.
 void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
-	const auto& columns = selectedColumns();
+	const auto& columns = selectedColumns(false);
 	if (columns.isEmpty())
 		return;
 
@@ -2277,7 +2283,7 @@ void SpreadsheetView::fillWithFunctionValues() {
 }
 
 void SpreadsheetView::fillSelectedCellsWithConstValues() {
-	const auto& columns = selectedColumns();
+	const auto& columns = selectedColumns(false);
 	if (columns.isEmpty())
 		return;
 
@@ -2394,7 +2400,7 @@ void SpreadsheetView::sortSpreadsheet() {
 }
 
 void SpreadsheetView::formatHeatmap() {
-	auto columns = selectedColumns(true);
+	auto columns = selectedColumns();
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
@@ -2418,7 +2424,7 @@ void SpreadsheetView::formatHeatmap() {
 }
 
 void SpreadsheetView::removeFormat() {
-	auto columns = selectedColumns(true);
+	auto columns = selectedColumns();
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
@@ -3496,7 +3502,7 @@ void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const
 	if (m_suppressSelectionChangedEvent)
 		return;
 
-	QItemSelectionModel* selModel = m_tableView->selectionModel();
+	auto* selModel = m_tableView->selectionModel();
 	for (int i = 0; i < m_spreadsheet->columnCount(); i++)
 		m_spreadsheet->setColumnSelectedInView(i, selModel->isColumnSelected(i, QModelIndex()));
 }
@@ -3514,7 +3520,7 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 	}
-	if (selectedColumnCount() == 0)
+	if (selectedColumnCount(false /* partial selection */) == 0)
 		dlg->setExportSelection(false);
 
 	bool ret;
@@ -3809,7 +3815,7 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 		for (int col = 0; col < cols; ++col)
 			toExport << m_spreadsheet->column(col);
 	} else {
-		cols = const_cast<SpreadsheetView*>(this)->selectedColumnCount();
+		cols = const_cast<SpreadsheetView*>(this)->selectedColumnCount(false /* partial selection */);
 		const int firtsSelectedCol = const_cast<SpreadsheetView*>(this)->firstSelectedColumn();
 		bool rowsCalculated = false;
 		for (int col = firtsSelectedCol; col < firtsSelectedCol + cols; ++col) {

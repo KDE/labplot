@@ -51,10 +51,10 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
-	int selectedColumnCount(bool full = false) const;
+	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
 	bool isColumnSelected(int col, bool full = false) const;
-	QVector<Column*> selectedColumns(bool full = false) const;
+	QVector<Column*> selectedColumns(bool full = true) const;
 	int firstSelectedColumn(bool full = false) const;
 	int lastSelectedColumn(bool full = false) const;
 
