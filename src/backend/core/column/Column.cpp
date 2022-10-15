@@ -464,10 +464,9 @@ void Column::invalidateProperties() {
 void Column::handleRowInsertion(int before, int count) {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(d, before, count));
+	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
-
-	invalidateProperties();
 }
 
 /**
@@ -476,10 +475,9 @@ void Column::handleRowInsertion(int before, int count) {
 void Column::handleRowRemoval(int first, int count) {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(d, first, count));
+	invalidateProperties();
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT dataChanged(this);
-
-	invalidateProperties();
 }
 
 /**
