@@ -2094,7 +2094,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
-			if (curveTotalCount() == 1) // first curve addded
+			if (curveTotalCount() == 1 && !isLoading()) // first curve addded
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
