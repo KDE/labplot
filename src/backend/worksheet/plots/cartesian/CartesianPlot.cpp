@@ -2094,7 +2094,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
-			if (curveTotalCount() == 1 && !isLoading()) // first curve addded
+			if (curveTotalCount() == 1) // first curve addded
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
@@ -2138,7 +2138,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
-		if (curveTotalCount() == 1 && !isLoading()) {
+		if (curveTotalCount() == 1) {
 			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
@@ -2252,6 +2252,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 // set format of axis from data column
 void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
+	if (isLoading())
+		return;
+
 	const auto* col = qobject_cast<const Column*>(column);
 	if (!col)
 		return;
