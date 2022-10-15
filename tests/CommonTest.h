@@ -56,7 +56,8 @@ extern "C" {
 	do {                                                                                                                                                       \
 		auto* tempFile = new QTemporaryFile(QString("XXXXXX_") + QString(project_name), this);                                                                 \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
-		QFile file(tempFile->fileName());                                                                                                                      \
+		savePath = tempFile->fileName();                                                                                                                       \
+		QFile file(savePath);                                                                                                                                  \
 		QCOMPARE(file.open(QIODevice::WriteOnly), true);                                                                                                       \
                                                                                                                                                                \
 		project.setFileName(tempFile->fileName());                                                                                                             \
