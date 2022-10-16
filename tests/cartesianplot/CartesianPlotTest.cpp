@@ -595,4 +595,94 @@ void CartesianPlotTest::shiftDownAutoScale() {
 	CHECK_RANGE(p, curve, Dimension::Y, 1.1, 2.1); // changed range
 }
 
+void CartesianPlotTest::rangeFormatYDataChanged() {
+	Project project;
+
+	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+
+	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+
+	sheet->column(1)->setValueAt(0, 0);
+	sheet->column(1)->setValueAt(1, 1);
+	sheet->column(1)->setValueAt(2, 2);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot("plot");
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+	auto* curve = new XYCurve("curve");
+	plot->addChild(curve);
+
+	curve->setXColumn(sheet->column(0));
+	curve->setYColumn(sheet->column(1));
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::DateTime);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+
+	// simulate data change
+	plot->dataChanged(curve, Dimension::Y);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::DateTime);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+}
+
+void CartesianPlotTest::rangeFormatXDataChanged() {
+	Project project;
+
+	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(2);
+	sheet->setRowCount(3);
+
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+
+	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+
+	sheet->column(1)->setValueAt(0, 0);
+	sheet->column(1)->setValueAt(1, 1);
+	sheet->column(1)->setValueAt(2, 2);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot("plot");
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+	auto* curve = new XYCurve("curve");
+	plot->addChild(curve);
+
+	curve->setXColumn(sheet->column(1));
+	curve->setYColumn(sheet->column(0));
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::DateTime);
+
+	// simulate data change
+	plot->dataChanged(curve, Dimension::X);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::DateTime);
+}
+
 QTEST_MAIN(CartesianPlotTest)

@@ -1004,11 +1004,13 @@ public:
 		m_formatOld = m_private->rangeConst(m_dimension, m_index).format();
 		m_private->setFormat(m_dimension, m_index, m_format);
 		Q_EMIT m_private->q->rangeFormatChanged(m_dimension, m_index, m_format);
+		m_private->rangeFormatChanged(m_dimension);
 	}
 
 	void undo() override {
 		m_private->setFormat(m_dimension, m_index, m_formatOld);
 		Q_EMIT m_private->q->rangeFormatChanged(m_dimension, m_index, m_formatOld);
+		m_private->rangeFormatChanged(m_dimension);
 	}
 
 private:
@@ -1059,7 +1061,6 @@ void CartesianPlot::setRangeFormat(const Dimension dim, const int index, const R
 	}
 	if (format != rangeFormat(dim, index)) {
 		exec(new CartesianPlotSetRangeFormatIndexCmd(d, dim, format, index));
-		Q_EMIT d->rangeFormatChanged(dim); // TODO: must be inside UndoCommand!
 		if (project())
 			project()->setChanged(true);
 	}
@@ -2435,7 +2436,7 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		const auto* col = curve->xColumn();
+		const auto* col = curve->column(dim);
 		const auto rangeFormat{range(dim).format()};
 		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);

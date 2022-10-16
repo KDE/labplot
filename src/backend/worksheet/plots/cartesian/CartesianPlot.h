@@ -389,6 +389,7 @@ Q_SIGNALS:
 	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
 
 	friend CartesianPlotDock;
+	friend class CartesianPlotTest;
 };
 
 #endif
