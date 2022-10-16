@@ -96,7 +96,7 @@ public:
 	Type type() const;
 
 	QIcon icon() const override;
-	QMenu* createContextMenu();
+	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
