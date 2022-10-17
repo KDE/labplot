@@ -685,4 +685,87 @@ void CartesianPlotTest::rangeFormatXDataChanged() {
 	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::DateTime);
 }
 
+void CartesianPlotTest::rangeFormatNonDefaultRange() {
+	Project project;
+
+	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	project.addChild(sheet);
+
+	sheet->setColumnCount(4);
+	sheet->setRowCount(3);
+
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+	sheet->column(2)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+	sheet->column(3)->setColumnMode(AbstractColumn::ColumnMode::Integer);
+
+	sheet->column(0)->setValueAt(0, 0);
+	sheet->column(0)->setValueAt(1, 1);
+	sheet->column(0)->setValueAt(2, 2);
+
+	sheet->column(1)->setValueAt(0, 5);
+	sheet->column(1)->setValueAt(1, 6);
+	sheet->column(1)->setValueAt(2, 7);
+
+	sheet->column(2)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	sheet->column(2)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
+	sheet->column(2)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+
+	QCOMPARE(sheet->column(2)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+
+	sheet->column(3)->setValueAt(0, 8);
+	sheet->column(3)->setValueAt(1, 10);
+	sheet->column(3)->setValueAt(2, 9);
+
+	auto* worksheet = new Worksheet("Worksheet");
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot("plot");
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+
+	// Create new cSystem
+	Range<double> xRange;
+	xRange.setFormat(RangeT::Format::Numeric);
+	Range<double> yRange;
+	yRange.setFormat(RangeT::Format::Numeric);
+	plot->addXRange(xRange);
+	plot->addYRange(yRange);
+	CartesianCoordinateSystem* cSystem = new CartesianCoordinateSystem(plot);
+	cSystem->setIndex(Dimension::X, 1);
+	cSystem->setIndex(Dimension::Y, 1);
+	plot->addCoordinateSystem(cSystem);
+
+	auto* curve2 = new XYCurve("curve2");
+	plot->addChild(curve2);
+
+	curve2->setCoordinateSystemIndex(1);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	curve2->setXColumn(sheet->column(2));
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::DateTime);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	curve2->setYColumn(sheet->column(3));
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::DateTime);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	plot->dataChanged(curve2, Dimension::X);
+
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::X, 1), RangeT::Format::DateTime);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+}
+
 QTEST_MAIN(CartesianPlotTest)

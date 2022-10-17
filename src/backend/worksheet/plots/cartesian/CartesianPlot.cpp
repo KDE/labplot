@@ -2021,9 +2021,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		});
 
 		// x data
-		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
+		connect(curve, &XYCurve::xColumnChanged, this, [this, curve](const AbstractColumn* column) {
 			if (curveTotalCount() == 1) // first curve addded
-				checkAxisFormat(column, Axis::Orientation::Horizontal);
+				checkAxisFormat(curve->coordinateSystemIndex(), column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::X);
@@ -2039,9 +2039,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		});
 
 		// y data
-		connect(curve, &XYCurve::yColumnChanged, this, [this](const AbstractColumn* column) {
+		connect(curve, &XYCurve::yColumnChanged, this, [this, curve](const AbstractColumn* column) {
 			if (curveTotalCount() == 1)
-				checkAxisFormat(column, Axis::Orientation::Vertical);
+				checkAxisFormat(curve->coordinateSystemIndex(), column, Axis::Orientation::Vertical);
 		});
 		connect(curve, &XYCurve::yDataChanged, [this, curve]() {
 			this->dataChanged(const_cast<XYCurve*>(curve), Dimension::Y);
@@ -2067,8 +2067,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
-			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
-			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
+			checkAxisFormat(curve->coordinateSystemIndex(), curve->xColumn(), Axis::Orientation::Horizontal);
+			checkAxisFormat(curve->coordinateSystemIndex(), curve->yColumn(), Axis::Orientation::Vertical);
 		}
 
 		Q_EMIT curveAdded(curve);
@@ -2088,7 +2088,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			checkRanges = true;
 
 			if (curveTotalCount() == 1)
-				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
+				checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
 		}
 
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
@@ -2101,7 +2101,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
 				boxPlotOrientationChanged(boxPlot->orientation());
 				if (!boxPlot->dataColumns().isEmpty())
-					checkAxisFormat(boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+					checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
 			}
 		}
 
@@ -2179,7 +2179,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 }
 
 // set format of axis from data column
-void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
+void CartesianPlot::checkAxisFormat(const int cSystemIndex, const AbstractColumn* column, Axis::Orientation orientation) {
 	if (isLoading())
 		return;
 
@@ -2187,13 +2187,16 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 	if (!col)
 		return;
 
+	const int xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
+	const int yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
+
 	Q_D(CartesianPlot);
 	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 		setUndoAware(false);
 		if (orientation == Axis::Orientation::Horizontal)
-			setXRangeFormat(RangeT::Format::DateTime);
+			setXRangeFormat(xIndex, RangeT::Format::DateTime);
 		else
-			setYRangeFormat(RangeT::Format::DateTime);
+			setYRangeFormat(yIndex, RangeT::Format::DateTime);
 		setUndoAware(true);
 
 		// set column's datetime format for all horizontal axis
@@ -2203,16 +2206,16 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				d->xRanges[cSystem ? cSystem->index(Dimension::X) : 0].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
-				axis->setLabelsDateTimeFormat(rangeDateTimeFormat(Dimension::X));
+				axis->setLabelsDateTimeFormat(rangeDateTimeFormat(Dimension::X, xIndex));
 				axis->setUndoAware(true);
 			}
 		}
 	} else {
 		setUndoAware(false);
 		if (orientation == Axis::Orientation::Horizontal)
-			setXRangeFormat(RangeT::Format::Numeric);
+			setXRangeFormat(xIndex, RangeT::Format::Numeric);
 		else
-			setYRangeFormat(RangeT::Format::Numeric);
+			setYRangeFormat(yIndex, RangeT::Format::Numeric);
 
 		setUndoAware(true);
 	}
@@ -2437,10 +2440,10 @@ void CartesianPlot::dataChanged(XYCurve* curve, const Dimension dim) {
 	// in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
 		const auto* col = curve->column(dim);
-		const auto rangeFormat{range(dim).format()};
+		const auto rangeFormat{range(dim, index).format()};
 		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && rangeFormat != RangeT::Format::DateTime) {
 			setUndoAware(false);
-			setRangeFormat(dim, RangeT::Format::DateTime);
+			setRangeFormat(dim, index, RangeT::Format::DateTime);
 			setUndoAware(true);
 		}
 	}

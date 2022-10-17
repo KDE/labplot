@@ -213,7 +213,7 @@ private:
 	const XYCurve* currentCurve() const;
 	void shift(int index, const Dimension, bool leftOrDown);
 	void zoom(int index, const Dimension, bool in);
-	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
+	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
 	int curveTotalCount() const;
 
