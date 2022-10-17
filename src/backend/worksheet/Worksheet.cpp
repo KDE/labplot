@@ -988,7 +988,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	TreeModel* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
-	bool isDatetime = sender->xRangeFormat() == RangeT::Format::DateTime;
+	bool isDatetime = sender->xRangeFormatDefault() == RangeT::Format::DateTime;
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// x values
 		int rowPlot = 1;

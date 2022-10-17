@@ -148,7 +148,7 @@ public:
 
 	int rangeCount(const Dimension) const;
 	const Range<double>& range(const Dimension, int index = -1) const; // get range of (default) plot range
-	void setRange(const Dimension, const Range<double>); // set range of default plot range
+	void setRangeDefault(const Dimension, const Range<double>); // set range of default plot range
 	void setRange(const Dimension, const int index, const Range<double>& range);
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
@@ -168,9 +168,9 @@ public:
 	void setRangeFormat(const Dimension, const int, const RangeT::Format);
 	RangeT::Format rangeFormat(const Dimension, const int) const;
 	RangeT::Scale rangeScale(const Dimension, const int index) const;
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // x range format of default cSystem
+	RangeT::Format xRangeFormatDefault() const; // range format of default cSystem
+	RangeT::Format yRangeFormatDefault() const; // range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
-	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // y range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
 	void setRangeScale(const Dimension, const int index, const RangeT::Scale scale);
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // x range scale of default cSystem

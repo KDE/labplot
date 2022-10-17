@@ -309,7 +309,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMin()));
 	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMax()));
 
-	bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+	bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 
 	ui.lBinRangesMin->setVisible(numeric);
 	ui.lBinRangesMax->setVisible(numeric);

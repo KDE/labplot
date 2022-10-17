@@ -167,7 +167,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, ui->kcbConnectionLineColor->color());
 
 	SET_NUMBER_LOCALE
-	if (m_element->plot()->xRangeFormat() == RangeT::Format::Numeric) {
+	if (m_element->plot()->xRangeFormatDefault() == RangeT::Format::Numeric) {
 		ui->lePosition->setText(numberLocale.toString(m_element->positionLogical()));
 		ui->lPosition->show();
 		ui->lePosition->show();

@@ -1082,8 +1082,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			Range<double> yRange(originYAxis.min, originYAxis.max);
 			xRange.setAutoScale(false);
 			yRange.setAutoScale(false);
-			plot->setRange(Dimension::X, xRange);
-			plot->setRange(Dimension::Y, yRange);
+			plot->setRangeDefault(Dimension::X, xRange);
+			plot->setRangeDefault(Dimension::Y, yRange);
 
 			// scales
 			switch (originXAxis.scale) {

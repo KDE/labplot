@@ -428,7 +428,7 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 
 	// widgets for positioning using logical plot coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(m_legend->parent(AspectType::CartesianPlot));
-	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
+	if (plot && plot->xRangeFormatDefault() == RangeT::Format::DateTime) {
 		ui.lPositionXLogicalDateTime->setVisible(checked);
 		ui.dtePositionXLogical->setVisible(checked);
 
@@ -738,7 +738,7 @@ void CartesianPlotLegendDock::load() {
 
 	if (allowLogicalCoordinates) {
 		const auto* plot = static_cast<const CartesianPlot*>(m_legend->plot());
-		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
 			ui.lPositionXLogical->show();
 			ui.lePositionXLogical->show();
 			ui.lPositionXLogicalDateTime->hide();

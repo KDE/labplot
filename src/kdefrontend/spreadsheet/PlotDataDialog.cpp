@@ -844,11 +844,13 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		// the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
 		// manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
 		// to make sure we have every tick precisely under the middle of the box plot
+		const auto xIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::X);
+		const auto yIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::Y);
 		Range<double> range(0.5, count + 0.5);
 		if (orientation == WorksheetElement::Orientation::Vertical)
-			plot->setRange(Dimension::X, range);
+			plot->setRange(Dimension::X, xIndex, range);
 		else
-			plot->setRange(Dimension::Y, range);
+			plot->setRange(Dimension::Y, yIndex, range);
 
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {

@@ -1021,10 +1021,10 @@ private:
 	RangeT::Format m_formatOld{RangeT::Format::Numeric};
 };
 
-RangeT::Format CartesianPlot::xRangeFormat() const {
+RangeT::Format CartesianPlot::xRangeFormatDefault() const {
 	return rangeFormat(Dimension::X, defaultCoordinateSystem()->index(Dimension::X));
 }
-RangeT::Format CartesianPlot::yRangeFormat() const {
+RangeT::Format CartesianPlot::yRangeFormatDefault() const {
 	return rangeFormat(Dimension::Y, defaultCoordinateSystem()->index(Dimension::Y));
 }
 RangeT::Format CartesianPlot::rangeFormat(const Dimension dim, const int index) const {
@@ -1044,13 +1044,6 @@ RangeT::Format CartesianPlot::yRangeFormat(const int index) const {
 
 void CartesianPlot::setRangeFormat(const Dimension dim, const RangeT::Format format) {
 	setRangeFormat(dim, defaultCoordinateSystem()->index(dim), format);
-}
-
-void CartesianPlot::setXRangeFormat(const RangeT::Format format) {
-	setRangeFormat(Dimension::X, defaultCoordinateSystem()->index(Dimension::X), format);
-}
-void CartesianPlot::setYRangeFormat(const RangeT::Format format) {
-	setRangeFormat(Dimension::Y, defaultCoordinateSystem()->index(Dimension::Y), format);
 }
 
 void CartesianPlot::setRangeFormat(const Dimension dim, const int index, const RangeT::Format format) {
@@ -1158,7 +1151,7 @@ const Range<double>& CartesianPlot::range(const Dimension dim, int index) const 
 	return d->rangeConst(dim, index);
 }
 
-void CartesianPlot::setRange(const Dimension dim, const Range<double> range) {
+void CartesianPlot::setRangeDefault(const Dimension dim, const Range<double> range) {
 	const int index{defaultCoordinateSystem()->index(dim)};
 	setRange(dim, index, range);
 }

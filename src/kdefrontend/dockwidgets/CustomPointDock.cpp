@@ -302,7 +302,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
 	if (plot) {
 		// x
-		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 		if (numeric) {
 			ui.lPositionXLogical->setVisible(checked);
 			ui.lePositionXLogical->setVisible(checked);
@@ -312,7 +312,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 		}
 
 		// y
-		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
+		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 		if (numeric) {
 			ui.lPositionYLogical->setVisible(checked);
 			ui.lePositionYLogical->setVisible(checked);
@@ -386,7 +386,7 @@ void CustomPointDock::load() {
 		const auto* plot = static_cast<const CartesianPlot*>(m_point->plot());
 
 		// x
-		bool numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+		bool numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 		ui.lPositionXLogical->setVisible(numeric);
 		ui.lePositionXLogical->setVisible(numeric);
 		ui.lPositionXLogicalDateTime->setVisible(!numeric);
@@ -399,7 +399,7 @@ void CustomPointDock::load() {
 		}
 
 		// y
-		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
+		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 		ui.lPositionYLogical->setVisible(numeric);
 		ui.lePositionYLogical->setVisible(numeric);
 		ui.lPositionYLogicalDateTime->setVisible(!numeric);

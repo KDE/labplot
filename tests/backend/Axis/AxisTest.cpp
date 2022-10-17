@@ -409,7 +409,7 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
-	p->setRange(Dimension::Y, Range<double>(0, 1e6));
+	p->setRangeDefault(Dimension::Y, Range<double>(0, 1e6));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Scientific);
@@ -424,7 +424,7 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
-	p->setRange(Dimension::Y, Range<double>(0, 1));
+	p->setRangeDefault(Dimension::Y, Range<double>(0, 1));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
@@ -475,7 +475,7 @@ void AxisTest::tickLabelRepresentationManual() {
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
-	p->setRange(Dimension::Y, Range<double>(0, 1e6));
+	p->setRangeDefault(Dimension::Y, Range<double>(0, 1e6));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
@@ -483,7 +483,7 @@ void AxisTest::tickLabelRepresentationManual() {
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
-	p->setRange(Dimension::Y, Range<double>(0, 1));
+	p->setRangeDefault(Dimension::Y, Range<double>(0, 1));
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);

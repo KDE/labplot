@@ -109,10 +109,10 @@ void ReferenceLineDock::updateLocale() {
 	Lock lock(m_initializing);
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
-		if (plot->yRangeFormat() == RangeT::Format::Numeric)
+		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().y()));
 	} else {
-		if (plot->xRangeFormat() == RangeT::Format::Numeric)
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().x()));
 	}
 }
@@ -132,11 +132,11 @@ void ReferenceLineDock::orientationChanged(int index) {
 	if (orientation == ReferenceLine::Orientation::Horizontal) {
 		ui.lPosition->setText(QLatin1String("y:"));
 		ui.lPositionDateTime->setText(QLatin1String("y:"));
-		numeric = (plot->yRangeFormat() == RangeT::Format::Numeric);
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
 	} else {
 		ui.lPosition->setText(QLatin1String("x:"));
 		ui.lPositionDateTime->setText(QLatin1String("x:"));
-		numeric = (plot->xRangeFormat() == RangeT::Format::Numeric);
+		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 	}
 
 	ui.lPosition->setVisible(numeric);
@@ -304,14 +304,14 @@ void ReferenceLineDock::load() {
 	// position
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (orientation == ReferenceLine::Orientation::Horizontal) {
-		if (plot->yRangeFormat() == RangeT::Format::Numeric)
+		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().y()));
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::Y));
 			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().y()));
 		}
 	} else {
-		if (plot->xRangeFormat() == RangeT::Format::Numeric)
+		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric)
 			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().x()));
 		else { // DateTime
 			ui.dtePosition->setDisplayFormat(plot->rangeDateTimeFormat(Dimension::X));
