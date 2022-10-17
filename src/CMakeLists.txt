@@ -441,6 +441,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
+        ${COMMONFRONTEND_DIR}/widgets/NumberSpinBox.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )

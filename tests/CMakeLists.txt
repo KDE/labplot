@@ -13,6 +13,7 @@ add_subdirectory(nsl)
 add_subdirectory(spreadsheet)
 add_subdirectory(matrix)
 add_subdirectory(multirange)
+add_subdirectory(commonfrontend)
 
 IF (Cantor_FOUND)
 	add_subdirectory(notebook)
