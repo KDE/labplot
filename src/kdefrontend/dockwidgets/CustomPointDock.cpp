@@ -312,7 +312,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 		}
 
 		// y
-		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
 		if (numeric) {
 			ui.lPositionYLogical->setVisible(checked);
 			ui.lePositionYLogical->setVisible(checked);
@@ -399,7 +399,7 @@ void CustomPointDock::load() {
 		}
 
 		// y
-		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
+		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
 		ui.lPositionYLogical->setVisible(numeric);
 		ui.lePositionYLogical->setVisible(numeric);
 		ui.lPositionYLogicalDateTime->setVisible(!numeric);
