@@ -156,22 +156,6 @@ void CartesianPlotTest::initTestCase() {
 	CHECK_RANGE(plot, curve1, Dimension::X, -4, 4);                                                                                                            \
 	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 1);
 
-#define CHECK_RANGE(plot, aspect, dim, start_, end_)                                                                                                           \
-	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dim)), start_, end_)
-
-#define DEBUG_RANGE(plot, aspect)                                                                                                                              \
-	{                                                                                                                                                          \
-		int cSystem = aspect->coordinateSystemIndex();                                                                                                         \
-		WARN(Q_FUNC_INFO << ", csystem index = " << cSystem)                                                                                                   \
-		int xIndex = plot->coordinateSystem(cSystem)->index(Dimension::X);                                                                                     \
-		int yIndex = plot->coordinateSystem(cSystem)->index(Dimension::Y);                                                                                     \
-                                                                                                                                                               \
-		auto xrange = plot->range(Dimension::X, xIndex);                                                                                                       \
-		auto yrange = plot->range(Dimension::Y, yIndex);                                                                                                       \
-		WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end())                                              \
-		WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end())                                              \
-	}
-
 /*!
  * \brief CartesianPlotTest::changeData1: add data point
  *
