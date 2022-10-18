@@ -16,7 +16,7 @@ NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	setValue(initValue);
 	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
-	setDecimals(100); // TODO: why this is still important?
+	setDecimals(std::numeric_limits<int>::max()); // Important, because in QDoubleSpinBox round() with decimals will be done
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
