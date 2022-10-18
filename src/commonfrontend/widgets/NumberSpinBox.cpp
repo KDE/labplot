@@ -14,8 +14,9 @@ NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	: QDoubleSpinBox(parent) {
 	setInvalid(false, tr("No number"));
 	setValue(initValue);
-	setMinimum(std::numeric_limits<double>::min());
+	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
+	setDecimals(100); // TODO: why this is still important?
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
@@ -133,7 +134,7 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, const NumberProperties& p) const {
 	QString number;
 	if (p.fraction) {
-		number = QString("%L1").arg(integerFraction, 0, 'f', p.fractionDigits);
+		number = locale().toString(integerFraction, 'f', p.fractionDigits);
 		if (p.fractionDigits == 0)
 			number.append(locale().decimalPoint());
 	} else {

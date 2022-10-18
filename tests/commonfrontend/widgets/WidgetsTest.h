@@ -17,8 +17,13 @@ class WidgetsTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
+	void initTestCase() {
+		QLocale::setDefault(QLocale(QLocale::Language::English));
+	}
 	void numberSpinBoxProperties();
 	void numberSpinBoxCreateStringNumber();
 	void numberSpinBoxChangingValueKeyPress();
+	void numberSpinBoxLimit();
+	void numberSpinBoxPrefixSuffix();
 };
 #endif // WIDGETSTEST_H

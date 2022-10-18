@@ -56,6 +56,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 	{
 		NumberSpinBox sb;
 		NumberSpinBox::NumberProperties p;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		QCOMPARE(sb.properties("123.348", p), true);
 		QCOMPARE(p.integerSign, QChar::Null);
 		QCOMPARE(p.integer, 123);
@@ -69,6 +70,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283", p), true);
 		QCOMPARE(p.integerSign, '+');
@@ -83,6 +85,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283", p), true);
 		QCOMPARE(p.integerSign, '-');
@@ -98,6 +101,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 	// without any number after comma
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("14323.", p), true);
 		QCOMPARE(p.integerSign, QChar::Null);
@@ -112,6 +116,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+1334832.", p), true);
 		QCOMPARE(p.integerSign, '+');
@@ -126,6 +131,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13823432.", p), true);
 		QCOMPARE(p.integerSign, '-');
@@ -141,6 +147,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 	// exponent
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("123.348E001", p), true);
 		QCOMPARE(p.integerSign, QChar::Null);
@@ -158,6 +165,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283E012", p), true);
 		QCOMPARE(p.integerSign, '+');
@@ -175,6 +183,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283E99", p), true);
 		QCOMPARE(p.integerSign, '-');
@@ -192,6 +201,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("123.348e-001", p), true);
 		QCOMPARE(p.integerSign, QChar::Null);
@@ -209,6 +219,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283e-012", p), true);
 		QCOMPARE(p.integerSign, '+');
@@ -226,6 +237,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283e-123", p), true);
 		QCOMPARE(p.integerSign, '-');
@@ -243,6 +255,7 @@ void WidgetsTest::numberSpinBoxProperties() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283e0", p), true);
 		QCOMPARE(p.integerSign, '-');
@@ -283,6 +296,7 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("123.348", p), true);
 		QCOMPARE(sb.createStringNumber(23.348345, 0, p), "23.348");
@@ -290,21 +304,24 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283", p), true);
-		QCOMPARE(sb.createStringNumber(+13732.28, 0, p), "+13732.280");
+		QCOMPARE(sb.createStringNumber(+13732.28, 0, p), "+13,732.280");
 	}
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283", p), true);
-		QCOMPARE(sb.createStringNumber(-13812.28, 0, p), "-13812.280");
+		QCOMPARE(sb.createStringNumber(-13812.28, 0, p), "-13,812.280");
 	}
 
 	// without any number after comma
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("14323.", p), true);
 		QCOMPARE(sb.createStringNumber(345., 0, p), "345.");
@@ -312,6 +329,7 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+1334832.", p), true);
 		QCOMPARE(sb.createStringNumber(+345., 0, p), "+345.");
@@ -319,6 +337,7 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13823432.", p), true);
 		QCOMPARE(sb.createStringNumber(-45., 0, p), "-45.");
@@ -327,13 +346,15 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 	// exponent
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("999.348E001", p), true);
-		QCOMPARE(sb.createStringNumber(1000.348, 12, p), "1000.348E012");
+		QCOMPARE(sb.createStringNumber(1000.348, 12, p), "1,000.348E012");
 	}
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283E012", p), true);
 		QCOMPARE(sb.createStringNumber(+123.283, 2, p), "+123.283E002");
@@ -341,13 +362,15 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283E99", p), true);
-		QCOMPARE(sb.createStringNumber(-13832.283, 99, p), "-13832.283E99");
+		QCOMPARE(sb.createStringNumber(-13832.283, 99, p), "-13,832.283E99");
 	}
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("123.348e-001", p), true);
 		QCOMPARE(sb.createStringNumber(123.348, -12, p), "123.348e-012");
@@ -355,13 +378,15 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("+13832.283e-012", p), true);
-		QCOMPARE(sb.createStringNumber(+13832.283, -12, p), "+13832.283e-012");
+		QCOMPARE(sb.createStringNumber(+13832.283, -12, p), "+13,832.283e-012");
 	}
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283e-123", p), true);
 		QCOMPARE(sb.createStringNumber(-123.283, -3, p), "-123.283e-003");
@@ -369,6 +394,7 @@ void WidgetsTest::numberSpinBoxCreateStringNumber() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		NumberSpinBox::NumberProperties p;
 		QCOMPARE(sb.properties("-13832.283e00", p), true);
 		QCOMPARE(sb.createStringNumber(-123.283, 0, p), "-123.283e00");
@@ -445,6 +471,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("5.5e+300");
 		sb.lineEdit()->setCursorPosition(7);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
@@ -454,6 +481,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("1.6e+300");
 		sb.lineEdit()->setCursorPosition(7);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
@@ -463,6 +491,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("5.5e-300");
 		sb.lineEdit()->setCursorPosition(7);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
@@ -472,6 +501,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("1.6e-300");
 		sb.lineEdit()->setCursorPosition(7);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
@@ -481,6 +511,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("3.133");
 		sb.lineEdit()->setCursorPosition(4);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
@@ -512,6 +543,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 	// Even if it crosses an integer it should still lower with the position set
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("4.1");
 		sb.lineEdit()->setCursorPosition(4);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
@@ -523,6 +555,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 	{
 		NumberSpinBox sb;
+		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("3.34890823e-03");
 		sb.lineEdit()->setCursorPosition(1);
 		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
@@ -580,6 +613,76 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -2);
 	}
+}
+
+void WidgetsTest::numberSpinBoxLimit() {
+	NumberSpinBox sb(5);
+	sb.setMaximum(7);
+	sb.setMinimum(3);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+		lastValue = value;
+		valueChangedCounter++;
+	});
+
+	sb.lineEdit()->setCursorPosition(1);
+	sb.increaseValue();
+	VALUES_EQUAL(sb.value(), 6);
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(lastValue, 6);
+	sb.increaseValue();
+	VALUES_EQUAL(sb.value(), 7);
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(lastValue, 7);
+	sb.increaseValue();
+	VALUES_EQUAL(sb.value(), 7); // unable to go beyond
+	QCOMPARE(valueChangedCounter, 2);
+
+	sb.setValue(4);
+	sb.lineEdit()->setCursorPosition(1);
+	VALUES_EQUAL(sb.value(), 4);
+	QCOMPARE(valueChangedCounter, 2);
+	sb.decreaseValue();
+	VALUES_EQUAL(sb.value(), 3);
+	QCOMPARE(valueChangedCounter, 3);
+	QCOMPARE(lastValue, 3);
+	sb.decreaseValue();
+	VALUES_EQUAL(sb.value(), 3);
+	QCOMPARE(valueChangedCounter, 3);
+
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_1, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+	QCOMPARE(valueChangedCounter, 3);
+	VALUES_EQUAL(sb.value(), 3);
+}
+
+void WidgetsTest::numberSpinBoxPrefixSuffix() {
+	NumberSpinBox sb(5);
+	sb.setMaximum(7);
+	sb.setMinimum(3);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+		lastValue = value;
+		valueChangedCounter++;
+	});
+
+	sb.setPrefix("Prefix ");
+	sb.setSuffix(" Suffix");
+
+	QCOMPARE(sb.lineEdit()->text(), "Prefix 5 Suffix");
+
+	sb.lineEdit()->setCursorPosition(10); // In suffix text
+	QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.value(), 6);
+	QCOMPARE(sb.lineEdit()->text(), "Prefix 6 Suffix");
 }
 
 QTEST_MAIN(WidgetsTest)
