@@ -22,6 +22,9 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QStandardPaths>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QNetworkInformation>
+#endif
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -529,7 +532,12 @@ void ImportDatasetWidget::datasetChanged() {
 		info += m_datasetObject[QLatin1String("name")].toString();
 		info += QLatin1String("<br><br>");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+		if (m_datasetObject.contains(QLatin1String("description_url"))
+			&& QNetworkInformation::instance()->reachability() == QNetworkInformation::Reachability::Online) {
+#else
 		if (m_datasetObject.contains(QLatin1String("description_url")) && m_networkManager->networkAccessible() == QNetworkAccessManager::Accessible) {
+#endif
 			WAIT_CURSOR;
 			m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 		} else {
