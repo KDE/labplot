@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-17 00:42+0000\n"
+"POT-Creation-Date: 2022-10-18 00:41+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2887
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1382
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1819
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4621
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4618
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:857
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1922
@@ -186,7 +186,7 @@ msgstr "Para cima"
 
 #: src/backend/core/AbstractAspect.cpp:500 src/backend/core/aspectcommands.h:91
 #: src/backend/datapicker/Datapicker.cpp:213
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1919
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1913
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: adicionar %2"
@@ -7210,7 +7210,7 @@ msgstr "Não há pontos de dados disponíveis."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:101
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4978
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4975
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:366
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:528
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:415
@@ -7532,246 +7532,246 @@ msgstr "%1: definir o ângulo da rotação"
 msgid "%1: change %2-range %3 format"
 msgstr "%1: definir o formato das legendas"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1097
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1091
 #, fuzzy, kde-format
 #| msgid "%1: change x-range auto scaling"
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: alterar a escala automática do intervalo em X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1331
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1325
 #, fuzzy, kde-format
 #| msgid "%1: change x-range auto scaling"
 msgid "%1: change x-range %2 scale"
 msgstr "%1: alterar a escala automática do intervalo em X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1450
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1444
 #, fuzzy, kde-format
 #| msgid "%1: set rotation angle"
 msgid "%1: set default plot range"
 msgstr "%1: definir o ângulo da rotação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1463
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1457
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: quebra de escala em X ativa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1472
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1466
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: quebras de escala em X alteradas"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1481
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1475
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: quebra de escala em Y ativa"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1490
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1501
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1484
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1495
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: quebras de escala em Y alteradas"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1512
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1506
 #, fuzzy, kde-format
 #| msgid "%1: drop values"
 msgid "%1: Cursor0 enable"
 msgstr "%1: soltar os valores"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1524
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1518
 #, fuzzy, kde-format
 #| msgid "%1: drop values"
 msgid "%1: Cursor1 enable"
 msgstr "%1: soltar os valores"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1535
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1529
 #: src/backend/worksheet/Worksheet.cpp:753
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load theme %2"
 msgstr "%1: adicionar %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1537
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1531
 #: src/backend/worksheet/Worksheet.cpp:755
 #, fuzzy, kde-format
 #| msgid "%1: add %2."
 msgid "%1: load default theme"
 msgstr "%1: adicionar %2."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1539
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5246
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1533
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5243
 #: src/backend/worksheet/Worksheet.cpp:757
 #, fuzzy, kde-format
 #| msgid "%1: set cell value"
 msgid "%1: set theme"
 msgstr "%1: definir o valor da célula"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1610
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1604
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: distribution fit to '%2'"
 msgstr "Orientação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1611
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1605
 #, fuzzy, kde-format
 #| msgid "Distribution"
 msgid "Distribution Fit to '%1'"
 msgstr "Distribuição"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1658
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1652
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: reduce '%2'"
 msgstr "%1: remover %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1659
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1653
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:643
 #, fuzzy, kde-format
 #| msgid "Smooth"
 msgid "Reduction of '%1'"
 msgstr "Suave"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1666
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1660
 #, fuzzy, kde-format
 #| msgid "no xy equation curve element found"
 msgid "%1: add data reduction curve"
 msgstr "não foi encontrado nenhum elemento da curva da equação em XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1678
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1672
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: differentiate '%2'"
 msgstr "Orientação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1679
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1673
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:646
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "Derivative of '%1'"
 msgstr "derivada"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1686
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1680
 #, fuzzy, kde-format
 #| msgid "no xy equation curve element found"
 msgid "%1: add differentiation curve"
 msgstr "não foi encontrado nenhum elemento da curva da equação em XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1698
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: integrate '%2'"
 msgstr "Orientação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1699
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1693
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "Integral of '%1'"
 msgstr "derivada"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1700
 #, fuzzy, kde-format
 #| msgid "no xy equation curve element found"
 msgid "%1: add integration curve"
 msgstr "não foi encontrado nenhum elemento da curva da equação em XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1718
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1712
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: interpolate '%2'"
 msgstr "Orientação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1719
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1713
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
 #, fuzzy, kde-format
 #| msgid "Interpolation"
 msgid "Interpolation of '%1'"
 msgstr "Interpolação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1726
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1720
 #, fuzzy, kde-format
 #| msgid "no xy equation curve element found"
 msgid "%1: add interpolation curve"
 msgstr "não foi encontrado nenhum elemento da curva da equação em XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1738
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1732
 #, fuzzy, kde-format
 #| msgid "%1: remove %2"
 msgid "%1: smooth '%2'"
 msgstr "%1: remover %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1739
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1733
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
 #, fuzzy, kde-format
 #| msgid "Smooth"
 msgid "Smoothing of '%1'"
 msgstr "Suave"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1746
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1740
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "%1: add smoothing curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1758
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1752
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgid "%1: fit to '%2'"
 msgstr "Orientação"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1759
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:668
 #, fuzzy, kde-format
 #| msgid "derivative"
 msgid "Fit to '%1'"
 msgstr "derivada"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "%1: add fit curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1799
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1793
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgid "%1: Fourier filtering of '%2'"
 msgstr "Filtro de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1800
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
 #, fuzzy, kde-format
 #| msgid "Fourier filter"
 msgid "Fourier filtering of '%1'"
 msgstr "Filtro de Fourier"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1798
 #, fuzzy, kde-format
 #| msgid "%1: add new curve."
 msgid "%1: add Fourier filter curve"
 msgstr "%1: adicionar nova curva."
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3717
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3940
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3961
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3958
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3948
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3974
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3971
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3993
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3990
 #, kde-format
 msgid "x=%1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5193
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5190
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "o elemento de gráfico cartesiano '%1' é desconhecido"
@@ -16134,47 +16134,47 @@ msgstr "Área do gráfico"
 msgid "Fourier Filter of '%1'"
 msgstr "Filtro de Fourier"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:901
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:903
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in an existing worksheet"
 msgstr "Criar um novo projeto com folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:902
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:904
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in a new worksheet"
 msgstr "Criar um novo projeto com folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:909
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in an existing worksheet"
 msgstr "Criar um novo projeto com folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:908
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in a new worksheet"
 msgstr "Criar um novo projeto com folha de trabalho"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:932
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data selected to plot."
 msgstr "&Normalizar a seleção"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:944
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:948
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:950
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""
