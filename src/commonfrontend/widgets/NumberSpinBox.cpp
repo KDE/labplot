@@ -88,8 +88,8 @@ void NumberSpinBox::stepBy(int steps) {
 
         v += increase * qPow(10, exponential_value);
     } else if (comma >= 0 && (exponentialIndex == -1 || before_exponent)) {
-        increase = qPow(10, - (cursorPos -1 - comma));
-        v += steps * increase;
+        increase = steps * qPow(10, - (cursorPos -1 - comma));
+        v += increase * qPow(10, exponential_value);
     } else {
         increase = textLenght - cursorPos;
         const auto calc = steps * qPow(10, increase);
