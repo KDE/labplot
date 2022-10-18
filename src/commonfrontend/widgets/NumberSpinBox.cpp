@@ -6,27 +6,19 @@
 
 #include <QKeyEvent>
 #include <QLineEdit>
+#include <QLocale>
 #include <QString>
 #include <QtMath>
 
-NumberSpinBox::NumberSpinBox(QWidget* parent)
-	: QAbstractSpinBox(parent) {
-	setInvalid(true, tr("No number"));
+NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
+	: QDoubleSpinBox(parent) {
+	setInvalid(false, tr("No number"));
+	setValue(initValue);
+	setMinimum(std::numeric_limits<double>::min());
+	setMaximum(std::numeric_limits<double>::max());
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
-	lineEdit()->cursorPosition();
-
-	if (mInvalid) {
-		QAbstractSpinBox::keyPressEvent(event);
-		bool ok;
-		double v = value(&ok);
-		setInvalid(!ok, tr("Invalid number"));
-		if (ok)
-			emit valueChanged(v);
-		return;
-	}
-
 	switch (event->key()) {
 	case Qt::Key_Down:
 		setInvalid(!decreaseValue(), tr("Invalid number"));
@@ -35,14 +27,20 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 		setInvalid(!increaseValue(), tr("Invalid number"));
 		return;
 	default:
-		QAbstractSpinBox::keyPressEvent(event);
+		QDoubleSpinBox::keyPressEvent(event);
 		break;
 	}
-	bool ok;
-	double v = value(&ok);
-	setInvalid(!ok, tr("Invalid number"));
-	if (ok)
-		emit valueChanged(v);
+	QString text = lineEdit()->text();
+	double v;
+	QString valueStr;
+	QValidator::State s = validate(text, v, valueStr);
+	bool valid = s == QValidator::State::Acceptable;
+	setInvalid(!valid, tr("Invalid number"));
+	if (valid) {
+		mValueStr = valueStr;
+		qDebug() << "Value: " << value();
+		emit valueChanged(value());
+	}
 }
 
 void NumberSpinBox::stepBy(int steps) {
@@ -66,15 +64,12 @@ bool NumberSpinBox::decreaseValue() {
  * \param p properties of the value
  * \return
  */
-bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) {
-	p.fractionPos = v_str.indexOf('.'); // TODO: locale??
+bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const {
+	p.fractionPos = v_str.indexOf(locale().decimalPoint());
 	p.exponentPos = v_str.indexOf('e', p.fractionPos > 0 ? p.fractionPos : 0, Qt::CaseInsensitive);
 	const auto number_length = v_str.length();
 
 	bool ok;
-	p.value = v_str.toDouble(&ok);
-	if (!ok)
-		return false;
 
 	if (v_str.at(0) == '+' || v_str.at(0) == '-') {
 		p.integerSign = v_str.at(0);
@@ -135,18 +130,18 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) {
  * \param p value properties
  * \return
  */
-QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, const NumberProperties& p) {
+QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, const NumberProperties& p) const {
 	QString number;
 	if (p.fraction) {
-		number = QString("%1").arg(integerFraction, 0, 'f', p.fractionDigits);
+		number = QString("%L1").arg(integerFraction, 0, 'f', p.fractionDigits);
 		if (p.fractionDigits == 0)
-			number.append('.');
+			number.append(locale().decimalPoint());
 	} else {
 		number = QString("%1").arg(int(integerFraction));
 	}
 
 	if (p.exponentLetter != QChar::Null) {
-		const auto e = QString("%1").arg(exponent, p.exponentDigits + (p.exponentSign == '-'), 10, QLatin1Char('0'));
+		const auto e = QString("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == '-'), 10, QLatin1Char('0'));
 		QString sign = "";
 		if (exponent >= 0 && !p.exponentSign.isNull())
 			sign = "+";
@@ -159,16 +154,65 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 	return number;
 }
 
+QString NumberSpinBox::strip(const QString& t) const {
+	// Copied from QAbstractSpinBox.cpp
+	QStringRef text(&t);
+
+	int size = text.size();
+	const QString p = prefix();
+	const QString s = suffix();
+	bool changed = false;
+	int from = 0;
+	if (p.size() && text.startsWith(p)) {
+		from += p.size();
+		size -= from;
+		changed = true;
+	}
+	if (s.size() && text.endsWith(s)) {
+		size -= s.size();
+		changed = true;
+	}
+	if (changed)
+		text = text.mid(from, size);
+	text = text.trimmed();
+	return text.toString();
+}
+
+QString NumberSpinBox::textFromValue(double value) const {
+	Q_UNUSED(value);
+	return mValueStr;
+}
+
+/*!
+ * \brief NumberSpinBox::valueFromText
+ * Will be called when value() is called
+ * \param text
+ * \return
+ */
+double NumberSpinBox::valueFromText(const QString& text) const {
+	QString t = strip(text);
+	double v = locale().toDouble(t);
+	return v;
+}
+
 bool NumberSpinBox::step(int steps) {
-	int cursorPos = lineEdit()->cursorPosition();
-	int textLenght = lineEdit()->text().length();
+	int cursorPos = lineEdit()->cursorPosition() - prefix().size();
+	if (cursorPos < 0)
+		cursorPos = 0;
+	int end = lineEdit()->text().length() - suffix().size() - prefix().size();
+	if (cursorPos > end)
+		cursorPos = end;
 
 	if (cursorPos == 0)
 		return true;
 
-	QString v_str = lineEdit()->text().trimmed();
+	QString v_str = strip(lineEdit()->text());
 
 	NumberProperties p;
+	bool ok;
+	locale().toDouble(v_str, &ok);
+	if (!ok)
+		return false;
 	if (!properties(v_str, p))
 		return false;
 
@@ -188,7 +232,7 @@ bool NumberSpinBox::step(int steps) {
 
 	const auto& l = v_str.split('e', 0, Qt::CaseInsensitive);
 
-	double integerFraction = l.at(0).toDouble();
+	double integerFraction = locale().toDouble(l.at(0));
 	int exponent = 0;
 	if (l.length() > 1)
 		exponent = l.at(1).toInt();
@@ -202,7 +246,7 @@ bool NumberSpinBox::step(int steps) {
 		else if (exponentialIndex >= 0)
 			initial = exponentialIndex;
 		else
-			initial = textLenght;
+			initial = end;
 		increase = steps * qPow(10, initial - cursorPos);
 
 		// from 0.1 with step -1 the desired result shall be -1.1 not -0.9
@@ -218,7 +262,7 @@ bool NumberSpinBox::step(int steps) {
 		integerFraction += increase;
 	} else {
 		// exponent
-		increase = textLenght - cursorPos;
+		increase = end - cursorPos;
 		const auto calc = steps * qPow(10, increase);
 		exponent += calc;
 
@@ -235,20 +279,65 @@ bool NumberSpinBox::step(int steps) {
 	else if (integerFraction < std::numeric_limits<int>::min())
 		integerFraction = std::numeric_limits<int>::min();
 
-	QString number = createStringNumber(integerFraction, exponent, p);
+	double v = integerFraction * qPow(10, exponent);
 
-	lineEdit()->setText(number);
+	if (v > maximum() || v < minimum())
+		return true; // limit reached, but value is valid
+
+	QString number = createStringNumber(integerFraction, exponent, p);
+	setValue(v);
+	setText(number);
 
 	// Set cursor position
-	auto newPos = number.length() - (textLenght - cursorPos);
+	auto newPos = number.length() - (end - cursorPos);
 	if ((newPos == 0 && number.length() > 0))
 		newPos = 1;
 	if (newPos == 1 && !p.integerSign.isNull() && number.length() > 1)
 		newPos = 2;
-	lineEdit()->setCursorPosition(newPos);
+
+	lineEdit()->setCursorPosition(newPos + prefix().size());
 
 	emit valueChanged(value());
 	return true;
+}
+
+QValidator::State NumberSpinBox::validate(QString& input, double& value, QString& valueStr) const {
+	valueStr = strip(input);
+	NumberProperties p;
+	bool ok;
+	value = locale().toDouble(valueStr, &ok);
+	if (!ok)
+		return QValidator::State::Intermediate;
+	if (!properties(valueStr, p))
+		return QValidator::State::Intermediate;
+
+	if (value <= maximum() && value >= minimum())
+		return QValidator::State::Acceptable;
+	return QValidator::State::Intermediate;
+}
+
+/*!
+ * \brief NumberSpinBox::validate
+ * Function which validates the user input. Reimplemented from QDoubleSpinBox
+ * \param input
+ * \param pos
+ * \return
+ */
+QValidator::State NumberSpinBox::validate(QString& input, int& pos) const {
+	Q_UNUSED(pos);
+	double value;
+	QString valueStr;
+	return validate(input, value, valueStr);
+}
+
+void NumberSpinBox::setText(const QString& text) {
+	mValueStr = text;
+	lineEdit()->setText(prefix() + text + suffix());
+}
+
+void NumberSpinBox::setValue(double value) {
+	setText(QString("%L1").arg(value));
+	QDoubleSpinBox::setValue(value);
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
@@ -256,7 +345,6 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 }
 
 void NumberSpinBox::setInvalid(bool invalid, const QString& tooltip) {
-	mInvalid = invalid;
 	if (invalid) {
 		SET_WARNING_PALETTE
 
@@ -265,10 +353,4 @@ void NumberSpinBox::setInvalid(bool invalid, const QString& tooltip) {
 		setPalette(qApp->palette());
 		setToolTip("");
 	}
-}
-
-double NumberSpinBox::value(bool* ok) const {
-	const auto t = lineEdit()->text();
-	const double v = t.toDouble(ok);
-	return v;
 }

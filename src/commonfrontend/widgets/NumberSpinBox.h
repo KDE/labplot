@@ -9,9 +9,9 @@
 #ifndef NUMBERSPINBOX_H
 #define NUMBERSPINBOX_H
 
-#include <QAbstractSpinBox>
+#include <QDoubleSpinBox>
 
-class NumberSpinBox : public QAbstractSpinBox {
+class NumberSpinBox : public QDoubleSpinBox {
 	Q_OBJECT
 
 public:
@@ -29,22 +29,26 @@ public:
 		QChar exponentSign;
 		int exponent;
 		int exponentDigits;
-
-		double value;
 	};
 
 public:
-	NumberSpinBox(QWidget* parent);
+	NumberSpinBox(double initValue = 0, QWidget* parent = nullptr);
 
 private:
 	void keyPressEvent(QKeyEvent*) override;
 	void setInvalid(bool invalid, const QString& tooltip);
-	double value(bool* ok = nullptr) const;
-	static bool properties(const QString& value, NumberProperties& p);
-	static QString createStringNumber(double integerFraction, int exponent, const NumberProperties& p);
+	bool properties(const QString& value, NumberProperties& p) const;
+	QString createStringNumber(double integerFraction, int exponent, const NumberProperties&) const;
 	void stepBy(int steps) override;
 	bool step(int steps);
+	QString strip(const QString& t) const;
+	virtual QString textFromValue(double value) const override;
+	virtual double valueFromText(const QString&) const override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
+	virtual QValidator::State validate(QString& input, int& pos) const override;
+	QValidator::State validate(QString& input, double& value, QString& valueStr) const;
+	void setText(const QString&);
+	void setValue(double);
 
 	bool increaseValue();
 	bool decreaseValue();
@@ -53,7 +57,7 @@ Q_SIGNALS:
 	void valueChanged(double value);
 
 private:
-	bool mInvalid{false};
+	QString mValueStr;
 
 	friend class WidgetsTest;
 };
