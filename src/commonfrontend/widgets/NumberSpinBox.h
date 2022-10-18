@@ -15,7 +15,23 @@ class NumberSpinBox : public QAbstractSpinBox {
 	Q_OBJECT
 
 public:
-	enum class Representation { Decimal, Scientific };
+	struct NumberProperties {
+		QChar integerSign;
+		int integer;
+		int intergerDigits;
+
+		bool fraction; // 5. is a valid number, so just setting fractionDigits to 0 is not correct
+		int fractionPos;
+		int fractionDigits;
+
+		QChar exponentLetter;
+		int exponentPos;
+		QChar exponentSign;
+		int exponent;
+		int exponentDigits;
+
+		double value;
+	};
 
 public:
 	NumberSpinBox(QWidget* parent);
@@ -24,12 +40,14 @@ private:
 	void keyPressEvent(QKeyEvent*) override;
 	void setInvalid(bool invalid, const QString& tooltip);
 	double value(bool* ok) const;
+	static bool properties(const QString& value, NumberProperties& p);
+	static QString createStringNumber(double integerFraction, int exponent, const NumberProperties& p);
 	void stepBy(int steps) override;
+	bool step(int steps);
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
-	NumberSpinBox::Representation representation(const QString& value) const;
 
-	void increaseValue();
-	void decreaseValue();
+	bool increaseValue();
+	bool decreaseValue();
 
 Q_SIGNALS:
 	void valueChanged(double value);

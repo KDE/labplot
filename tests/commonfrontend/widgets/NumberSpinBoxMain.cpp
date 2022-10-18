@@ -17,9 +17,9 @@ public:
 		QLineEdit* le = new QLineEdit(w);
 		QVBoxLayout* l = new QVBoxLayout();
 
-        connect(nb, &NumberSpinBox::valueChanged, [le] (double value) {
-            le->setText(QString::number(value));
-        });
+		connect(nb, &NumberSpinBox::valueChanged, [le](double value) {
+			le->setText(QString::number(value));
+		});
 
 		l->addWidget(nb);
 		l->addWidget(le);

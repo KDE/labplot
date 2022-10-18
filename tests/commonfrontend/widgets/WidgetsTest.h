@@ -17,7 +17,9 @@ class WidgetsTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void test1();
-	void testChangingValueKeyPress();
+	void numberSpinBoxTest1();
+	void numberSpinBoxProperties();
+	void numberSpinBoxCreateStringNumber();
+	void numberSpinBoxChangingValueKeyPress();
 };
 #endif // WIDGETSTEST_H
