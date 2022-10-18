@@ -39,7 +39,7 @@ public:
 private:
 	void keyPressEvent(QKeyEvent*) override;
 	void setInvalid(bool invalid, const QString& tooltip);
-	double value(bool* ok) const;
+	double value(bool* ok = nullptr) const;
 	static bool properties(const QString& value, NumberProperties& p);
 	static QString createStringNumber(double integerFraction, int exponent, const NumberProperties& p);
 	void stepBy(int steps) override;

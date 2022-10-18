@@ -45,6 +45,20 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 		emit valueChanged(v);
 }
 
+void NumberSpinBox::stepBy(int steps) {
+	// used when scrolling
+
+	setInvalid(!step(steps), tr("Invalid number"));
+}
+
+bool NumberSpinBox::increaseValue() {
+	return step(1);
+}
+
+bool NumberSpinBox::decreaseValue() {
+	return step(-1);
+}
+
 /*!
  * \brief NumberSpinBox::properties
  * Determine the properties of a numeric value represented in a string
@@ -145,12 +159,6 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 	return number;
 }
 
-void NumberSpinBox::stepBy(int steps) {
-	// used when scrolling
-
-	setInvalid(!step(steps), tr("Invalid number"));
-}
-
 bool NumberSpinBox::step(int steps) {
 	int cursorPos = lineEdit()->cursorPosition();
 	int textLenght = lineEdit()->text().length();
@@ -238,15 +246,9 @@ bool NumberSpinBox::step(int steps) {
 	if (newPos == 1 && !p.integerSign.isNull() && number.length() > 1)
 		newPos = 2;
 	lineEdit()->setCursorPosition(newPos);
+
+	emit valueChanged(value());
 	return true;
-}
-
-bool NumberSpinBox::increaseValue() {
-	return step(1);
-}
-
-bool NumberSpinBox::decreaseValue() {
-	return step(-1);
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
