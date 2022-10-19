@@ -12,20 +12,35 @@
 
 NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	: QDoubleSpinBox(parent) {
-	setInvalid(false, tr("No number"));
 	setValue(initValue);
+	setInvalid(Errors::NoError);
 	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
 	setDecimals(std::numeric_limits<int>::max()); // Important, because in QDoubleSpinBox round() with decimals will be done
 }
 
+QString NumberSpinBox::errorToString(Errors e) {
+	switch (e) {
+	case Errors::Min:
+		return tr("Value lower than minimum allowed: %1").arg(QString::number(minimum()));
+	case Errors::Max:
+		return tr("Value higher than maximum allowed: %1").arg(QString::number(maximum()));
+	case Errors::Invalid:
+		return tr("The value does not represent a valid number");
+	case Errors::NoNumber:
+		return tr("No number entered");
+	case Errors::NoError:
+		return QStringLiteral("");
+	}
+}
+
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	switch (event->key()) {
 	case Qt::Key_Down:
-		setInvalid(!decreaseValue(), tr("Invalid number"));
+		setInvalid(decreaseValue());
 		return;
 	case Qt::Key_Up:
-		setInvalid(!increaseValue(), tr("Invalid number"));
+		setInvalid(increaseValue());
 		return;
 	default:
 		QDoubleSpinBox::keyPressEvent(event);
@@ -34,10 +49,9 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	QString text = lineEdit()->text();
 	double v;
 	QString valueStr;
-	QValidator::State s = validate(text, v, valueStr);
-	bool valid = s == QValidator::State::Acceptable;
-	setInvalid(!valid, tr("Invalid number"));
-	if (valid) {
+	Errors e = validate(text, v, valueStr);
+	setInvalid(e);
+	if (e == Errors::NoError) {
 		mValueStr = valueStr;
 		qDebug() << "Value: " << value();
 		emit valueChanged(value());
@@ -47,14 +61,14 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 void NumberSpinBox::stepBy(int steps) {
 	// used when scrolling
 
-	setInvalid(!step(steps), tr("Invalid number"));
+	setInvalid(step(steps));
 }
 
-bool NumberSpinBox::increaseValue() {
+NumberSpinBox::Errors NumberSpinBox::increaseValue() {
 	return step(1);
 }
 
-bool NumberSpinBox::decreaseValue() {
+NumberSpinBox::Errors NumberSpinBox::decreaseValue() {
 	return step(-1);
 }
 
@@ -196,7 +210,7 @@ double NumberSpinBox::valueFromText(const QString& text) const {
 	return v;
 }
 
-bool NumberSpinBox::step(int steps) {
+NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	int cursorPos = lineEdit()->cursorPosition() - prefix().size();
 	if (cursorPos < 0)
 		cursorPos = 0;
@@ -205,7 +219,7 @@ bool NumberSpinBox::step(int steps) {
 		cursorPos = end;
 
 	if (cursorPos == 0)
-		return true;
+		return Errors::NoError;
 
 	QString v_str = strip(lineEdit()->text());
 
@@ -213,9 +227,9 @@ bool NumberSpinBox::step(int steps) {
 	bool ok;
 	locale().toDouble(v_str, &ok);
 	if (!ok)
-		return false;
+		return Errors::Invalid;
 	if (!properties(v_str, p))
-		return false;
+		return Errors::Invalid;
 
 	const auto comma = p.fractionPos;
 	const auto exponentialIndex = p.exponentPos;
@@ -226,7 +240,7 @@ bool NumberSpinBox::step(int steps) {
 	// cursor behind the exponent sign
 	if ((cursorPos == 1 && !p.integerSign.isNull()) || (comma >= 0 && cursorPos - 1 == comma)
 		|| (exponentialIndex > 0 && (cursorPos - 1 == exponentialIndex || (cursorPos - 1 == exponentialIndex + 1 && !p.exponentSign.isNull()))))
-		return true;
+		return Errors::NoError;
 
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
@@ -282,8 +296,11 @@ bool NumberSpinBox::step(int steps) {
 
 	double v = integerFraction * qPow(10, exponent);
 
-	if (v > maximum() || v < minimum())
-		return true; // limit reached, but value is valid
+	if (v > maximum())
+		return Errors::Max;
+
+	if (v < minimum())
+		return Errors::Min;
 
 	QString number = createStringNumber(integerFraction, exponent, p);
 	setValue(v);
@@ -299,22 +316,27 @@ bool NumberSpinBox::step(int steps) {
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
 	emit valueChanged(value());
-	return true;
+	return Errors::NoError;
 }
 
-QValidator::State NumberSpinBox::validate(QString& input, double& value, QString& valueStr) const {
+NumberSpinBox::Errors NumberSpinBox::validate(QString& input, double& value, QString& valueStr) const {
 	valueStr = strip(input);
+	if (valueStr.isEmpty())
+		return Errors::NoNumber;
 	NumberProperties p;
 	bool ok;
 	value = locale().toDouble(valueStr, &ok);
 	if (!ok)
-		return QValidator::State::Intermediate;
+		return Errors::Invalid;
 	if (!properties(valueStr, p))
-		return QValidator::State::Intermediate;
+		return Errors::Invalid;
 
-	if (value <= maximum() && value >= minimum())
-		return QValidator::State::Acceptable;
-	return QValidator::State::Intermediate;
+	if (value > maximum())
+		return Errors::Max;
+
+	if (value < minimum())
+		return Errors::Min;
+	return Errors::NoError;
 }
 
 /*!
@@ -328,7 +350,8 @@ QValidator::State NumberSpinBox::validate(QString& input, int& pos) const {
 	Q_UNUSED(pos);
 	double value;
 	QString valueStr;
-	return validate(input, value, valueStr);
+	const auto e = validate(input, value, valueStr);
+	return e == Errors::NoError ? QValidator::State::Acceptable : QValidator::State::Intermediate;
 }
 
 void NumberSpinBox::setText(const QString& text) {
@@ -345,11 +368,11 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 	return QAbstractSpinBox::StepEnabledFlag::StepUpEnabled | QAbstractSpinBox::StepEnabledFlag::StepDownEnabled; // for testing
 }
 
-void NumberSpinBox::setInvalid(bool invalid, const QString& tooltip) {
-	if (invalid) {
+void NumberSpinBox::setInvalid(Errors e) {
+	if (e != Errors::NoError) {
 		SET_WARNING_PALETTE
 
-		setToolTip(tooltip);
+		setToolTip(errorToString(e));
 	} else {
 		setPalette(qApp->palette());
 		setToolTip("");

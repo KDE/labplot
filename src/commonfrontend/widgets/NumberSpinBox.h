@@ -31,27 +31,36 @@ public:
 		int exponentDigits;
 	};
 
+	enum class Errors {
+		NoError,
+		NoNumber,
+		Invalid,
+		Min, // value smaller than min
+		Max, // value larger than max
+	};
+
 public:
 	NumberSpinBox(double initValue = 0, QWidget* parent = nullptr);
+	QString errorToString(Errors);
 
 private:
 	void keyPressEvent(QKeyEvent*) override;
-	void setInvalid(bool invalid, const QString& tooltip);
+	void setInvalid(Errors e);
 	bool properties(const QString& value, NumberProperties& p) const;
 	QString createStringNumber(double integerFraction, int exponent, const NumberProperties&) const;
 	void stepBy(int steps) override;
-	bool step(int steps);
+	Errors step(int steps);
 	QString strip(const QString& t) const;
 	virtual QString textFromValue(double value) const override;
 	virtual double valueFromText(const QString&) const override;
 	QAbstractSpinBox::StepEnabled stepEnabled() const override;
 	virtual QValidator::State validate(QString& input, int& pos) const override;
-	QValidator::State validate(QString& input, double& value, QString& valueStr) const;
+	Errors validate(QString& input, double& value, QString& valueStr) const;
 	void setText(const QString&);
 	void setValue(double);
 
-	bool increaseValue();
-	bool decreaseValue();
+	Errors increaseValue();
+	Errors decreaseValue();
 
 Q_SIGNALS:
 	void valueChanged(double value);
