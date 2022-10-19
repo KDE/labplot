@@ -45,6 +45,7 @@ public:
 	QString errorToString(Errors);
 	bool setValue(double);
 	void setFeedback(bool enable);
+	void setStrongFocus(bool);
 
 Q_SIGNALS:
 	void valueChanged(double);
@@ -52,6 +53,7 @@ Q_SIGNALS:
 private:
 	void init(double initValue, bool feedback);
 	void keyPressEvent(QKeyEvent*) override;
+	void wheelEvent(QWheelEvent* event) override;
 	void setInvalid(Errors e);
 	void setInvalid(const QString& str);
 	bool properties(const QString& value, NumberProperties& p) const;
@@ -76,6 +78,8 @@ private:
 	// for explanation of the feature
 	bool mFeedback{false}; // defines if the spinbox expects a feedback
 	bool mWaitFeedback{false};
+
+	bool mStrongFocus{true};
 
 	friend class WidgetsTest;
 };

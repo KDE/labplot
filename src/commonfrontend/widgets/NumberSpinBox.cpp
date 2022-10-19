@@ -21,6 +21,7 @@ NumberSpinBox::NumberSpinBox(double initValue, bool feedback, QWidget* parent)
 }
 
 void NumberSpinBox::init(double initValue, bool feedback) {
+	setFocusPolicy(Qt::StrongFocus);
 	setValue(initValue);
 	mFeedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
@@ -65,6 +66,13 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 		mValueStr = valueStr;
 		valueChanged();
 	}
+}
+
+void NumberSpinBox::wheelEvent(QWheelEvent* event) {
+	if (mStrongFocus && !hasFocus())
+		event->ignore();
+	else
+		QDoubleSpinBox::wheelEvent(event);
 }
 
 void NumberSpinBox::stepBy(int steps) {
@@ -385,6 +393,14 @@ bool NumberSpinBox::setValue(double v) {
 
 void NumberSpinBox::setFeedback(bool enable) {
 	mFeedback = enable;
+}
+
+void NumberSpinBox::setStrongFocus(bool enable) {
+	mStrongFocus = enable;
+	if (enable)
+		setFocusPolicy(Qt::StrongFocus);
+	else
+		setFocusPolicy(Qt::WheelFocus);
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
