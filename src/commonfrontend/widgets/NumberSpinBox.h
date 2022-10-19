@@ -41,6 +41,7 @@ public:
 
 public:
 	NumberSpinBox(double initValue = 0, QWidget* parent = nullptr);
+	NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
 	QString errorToString(Errors);
 	bool setValue(double);
 	void setFeedback(bool enable);
@@ -49,6 +50,7 @@ Q_SIGNALS:
 	void valueChanged(double);
 
 private:
+	void init(double initValue, bool feedback);
 	void keyPressEvent(QKeyEvent*) override;
 	void setInvalid(Errors e);
 	void setInvalid(const QString& str);

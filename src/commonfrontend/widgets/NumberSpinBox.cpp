@@ -12,7 +12,17 @@
 
 NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	: QDoubleSpinBox(parent) {
+	init(initValue, false);
+}
+
+NumberSpinBox::NumberSpinBox(double initValue, bool feedback, QWidget* parent)
+	: QDoubleSpinBox(parent) {
+	init(initValue, feedback);
+}
+
+void NumberSpinBox::init(double initValue, bool feedback) {
 	setValue(initValue);
+	mFeedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
 	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
