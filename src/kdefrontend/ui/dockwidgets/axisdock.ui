@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
+    <width>448</width>
     <height>1142</height>
    </rect>
   </property>
@@ -199,32 +199,9 @@
         </widget>
        </item>
        <item row="4" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="hblPosition">
          <item>
           <widget class="KComboBox" name="cbPosition"/>
-         </item>
-         <item>
-          <widget class="QDoubleSpinBox" name="sbPosition">
-           <property name="suffix">
-            <string> cm</string>
-           </property>
-           <property name="minimum">
-            <double>-100.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>100.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDoubleSpinBox" name="sbPositionLogical">
-           <property name="minimum">
-            <double>-10000.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>10000.000000000000000</double>
-           </property>
-          </widget>
          </item>
         </layout>
        </item>
@@ -388,7 +365,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -494,7 +470,36 @@
          </property>
         </spacer>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
+        <widget class="QLabel" name="lArrow">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Arrow</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lArrowType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="KComboBox" name="cbArrowType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
         <widget class="QLabel" name="lArrowPosition">
          <property name="text">
           <string>Position:</string>
@@ -541,7 +546,6 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -886,7 +890,6 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1181,7 +1184,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1240,7 +1242,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1365,7 +1367,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1378,7 +1379,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1490,7 +1490,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1549,10 +1548,22 @@
        <string>Grid</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7">
-       <item row="5" column="0">
-        <spacer name="verticalSpacer_16">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lMajorGridOpacity">
+         <property name="text">
+          <string>Opacity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2" rowspan="2">
+        <widget class="KComboBox" name="cbMinorGridStyle"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lMajorGrid">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -1611,7 +1622,6 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/DateTimeSpinBox.h"
+#include "commonfrontend/widgets/NumberSpinBox.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -58,6 +59,12 @@ AxisDock::AxisDock(QWidget* parent)
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.5 * m_leName->height());
+
+	mSbPosition = new NumberSpinBox(0, true, this);
+	mSbPosition->setSuffix(" cm");
+	mSbPositionLogical = new NumberSpinBox(0, true, this);
+	ui.hblPosition->addWidget(mSbPosition);
+	ui.hblPosition->addWidget(mSbPositionLogical);
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -121,8 +128,8 @@ AxisDock::AxisDock(QWidget* parent)
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
-	connect(ui.sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
-	connect(ui.sbPositionLogical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
+	connect(mSbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
+	connect(mSbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
@@ -564,7 +571,7 @@ void AxisDock::updateLocale() {
 
 	// update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
-	ui.sbPosition->setLocale(numberLocale);
+	mSbPosition->setLocale(numberLocale);
 	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
 	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
 
@@ -602,7 +609,7 @@ void AxisDock::updatePlotRanges() {
 		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
 	else
 		logicalRange = m_axis->plot()->range(Dimension::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::X));
-	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
+	spinBoxCalculateMinMax(mSbPositionLogical, logicalRange, mSbPositionLogical->value());
 }
 
 void AxisDock::updateAutoScale() {
@@ -712,8 +719,8 @@ void AxisDock::positionChanged(int index) {
 		}
 	}
 
-	ui.sbPosition->setVisible(!logical);
-	ui.sbPositionLogical->setVisible(logical);
+	mSbPosition->setVisible(!logical);
+	mSbPositionLogical->setVisible(logical);
 
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
@@ -1794,12 +1801,12 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 
 void AxisDock::axisPositionChanged(double value) {
 	const Lock lock(m_initializing);
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
+	mSbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void AxisDock::axisLogicalPositionChanged(double value) {
 	const Lock lock(m_initializing);
-	ui.sbPositionLogical->setValue(value);
+	mSbPositionLogical->setValue(value);
 }
 
 void AxisDock::axisScaleChanged(RangeT::Scale scale) {
@@ -2161,14 +2168,14 @@ void AxisDock::load() {
 		logical = true;
 	}
 
-	ui.sbPositionLogical->setVisible(logical);
-	ui.sbPosition->setVisible(!logical);
+	mSbPositionLogical->setVisible(logical);
+	mSbPosition->setVisible(!logical);
 
 	SET_NUMBER_LOCALE
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
+	mSbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
 
-	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
-	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
+	spinBoxCalculateMinMax(mSbPositionLogical, logicalRange, m_axis->logicalPosition());
+	mSbPositionLogical->setValue(m_axis->logicalPosition());
 
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
@@ -2322,8 +2329,8 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.cbPosition->setCurrentIndex(index);
 
 	SET_NUMBER_LOCALE
-	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
-	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
+	mSbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
+	mSbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
 	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
 	ui.leStart->setText(numberLocale.toString(group.readEntry("Start", m_axis->range().start())));
@@ -2436,8 +2443,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	}
 
 	SET_NUMBER_LOCALE
-	group.writeEntry("LogicalPosition", ui.sbPositionLogical->value());
-	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
+	group.writeEntry("LogicalPosition", mSbPositionLogical->value());
+	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(mSbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
 	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
 	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));

@@ -11,6 +11,7 @@
 #ifndef AXISDOCK_H
 #define AXISDOCK_H
 
+#include "commonfrontend/widgets/NumberSpinBox.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_axisdock.h"
 
@@ -21,6 +22,7 @@ class TreeViewComboBox;
 class AspectTreeModel;
 class AbstractColumn;
 class DateTimeSpinBox;
+class NumberSpinBox;
 class KConfig;
 
 class AxisDock : public BaseDock {
@@ -40,6 +42,8 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
+	NumberSpinBox* mSbPosition;
+	NumberSpinBox* mSbPositionLogical;
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
