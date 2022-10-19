@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-18 00:41+0000\n"
+"POT-Creation-Date: 2022-10-19 00:42+0000\n"
 "PO-Revision-Date: 2019-07-03 21:10+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@euskalnet.net>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -1809,7 +1809,7 @@ msgid "No variable selected"
 msgstr ""
 
 #: src/backend/datasources/filters/MatioFilter.cpp:657
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:167
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
 #: src/kdefrontend/examples/ExamplesManager.cpp:175
 #: src/tools/ColorMapsManager.cpp:152
 #, fuzzy, kde-format
@@ -9676,7 +9676,7 @@ msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3385
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
 #, kde-format
 msgid "Search..."
@@ -10085,7 +10085,7 @@ msgid "Switch between icon and list views"
 msgstr ""
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:48
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:50
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
 #: src/kdefrontend/examples/ExamplesWidget.cpp:50
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -10379,28 +10379,28 @@ msgid "Dataset imported in %1 seconds."
 msgstr ""
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:160
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:228
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:231
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:759
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:208
 #, fuzzy, kde-format
 msgid "All"
 msgstr "Guztiak"
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:168
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:171
 #, kde-format
 msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
 "installation."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #, fuzzy, kde-format
 msgid "Dataset"
 msgstr "Datu multzoa"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:536
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:544
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, fuzzy, kde-format
 msgid "Description"

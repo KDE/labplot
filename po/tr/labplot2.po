@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-18 00:41+0000\n"
+"POT-Creation-Date: 2022-10-19 00:42+0000\n"
 "PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1848,7 +1848,7 @@ msgid "No variable selected"
 msgstr "Değişken seçilmedi"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:657
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:167
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
 #: src/kdefrontend/examples/ExamplesManager.cpp:175
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
@@ -9990,7 +9990,7 @@ msgstr "%1: seçilen hücreleri temizle"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3385
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
 #, kde-format
 msgid "Search..."
@@ -10435,7 +10435,7 @@ msgid "Switch between icon and list views"
 msgstr ""
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:48
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:50
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
 #: src/kdefrontend/examples/ExamplesWidget.cpp:50
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -10802,15 +10802,15 @@ msgid "Dataset imported in %1 seconds."
 msgstr "%1 saniyede veri içe aktarıldı."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:160
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:228
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:231
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:759
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:208
 #, kde-format
 msgid "All"
 msgstr "Tümü"
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:168
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:171
 #, fuzzy, kde-format
 #| msgid ""
 #| "Failed to connect to the database '%1'. Please check the connection "
@@ -10822,13 +10822,13 @@ msgstr ""
 "'%1' veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını kontrol "
 "edin."
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #, kde-format
 msgid "Dataset"
 msgstr "Veri kümesi"
 
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:536
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:544
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-18 00:41+0000\n"
+"POT-Creation-Date: 2022-10-19 00:42+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -1843,7 +1843,7 @@ msgid "No variable selected"
 msgstr "Переменная не выбрана"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:657
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:167
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
 #: src/kdefrontend/examples/ExamplesManager.cpp:175
 #: src/tools/ColorMapsManager.cpp:152
 #, kde-format
@@ -9895,7 +9895,7 @@ msgstr "%1: очистка содержимого выбранных ячеек"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3385
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
 #, kde-format
 msgid "Search..."
@@ -10317,7 +10317,7 @@ msgid "Switch between icon and list views"
 msgstr "Переключение между преставлением в виде значков или списка"
 
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:48
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:50
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:53
 #: src/kdefrontend/examples/ExamplesWidget.cpp:50
 #, kde-format
 msgid "Enter the keyword you want to search for"
@@ -10675,15 +10675,15 @@ msgid "Dataset imported in %1 seconds."
 msgstr "Набор данных импортирован за %1 секунд."
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, sbKeepNValues)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:160
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:228
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:163
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:231
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:759
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:208
 #, kde-format
 msgid "All"
 msgstr "Все"
 
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:168
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:171
 #, kde-format
 msgid ""
 "Couldn't open the dataset collections file %1. Please check your "
@@ -10693,14 +10693,14 @@ msgstr ""
 "установки."
 
 # BUGME: please add ctxt --aspotashev
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:528
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:531
 #, kde-format
 msgid "Dataset"
 msgstr "Набор данных"
 
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lDescription)
-#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:536
+#: src/kdefrontend/datasources/ImportDatasetWidget.cpp:544
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:210
 #, kde-format
 msgid "Description"
