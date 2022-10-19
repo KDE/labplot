@@ -27,5 +27,6 @@ private Q_SLOTS:
 	void numberSpinBoxPrefixSuffix();
 	void numberSpinBoxEnterNumber();
 	void numberSpinBoxFeedback();
+	void numberSpinBoxFeedback2();
 };
 #endif // WIDGETSTEST_H

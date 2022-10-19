@@ -826,4 +826,27 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	QCOMPARE(sb.mWaitFeedback, false);
 }
 
+// set value called directly when valueChanged() is called. This can happen if the other side directly sets another
+// value, because the received value is invalid.
+void WidgetsTest::numberSpinBoxFeedback2() {
+	NumberSpinBox sb(5);
+	sb.setFeedback(true);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+		valueChangedCounter++;
+		lastValue = value;
+		QVERIFY(5 != value);
+		sb.setValue(5); // Important other value
+	});
+
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(5));
+}
+
 QTEST_MAIN(WidgetsTest)

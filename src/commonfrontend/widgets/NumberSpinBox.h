@@ -68,8 +68,8 @@ private:
 	Errors validate(QString& input, double& value, QString& valueStr) const;
 	void setText(const QString&);
 
-	Errors increaseValue();
-	Errors decreaseValue();
+	void increaseValue();
+	void decreaseValue();
 	void valueChanged();
 
 private:

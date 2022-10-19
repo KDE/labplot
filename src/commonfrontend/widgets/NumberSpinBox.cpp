@@ -48,10 +48,10 @@ QString NumberSpinBox::errorToString(Errors e) {
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	switch (event->key()) {
 	case Qt::Key_Down:
-		setInvalid(decreaseValue());
+		decreaseValue();
 		return;
 	case Qt::Key_Up:
-		setInvalid(increaseValue());
+		increaseValue();
 		return;
 	default:
 		QDoubleSpinBox::keyPressEvent(event);
@@ -77,16 +77,18 @@ void NumberSpinBox::wheelEvent(QWheelEvent* event) {
 
 void NumberSpinBox::stepBy(int steps) {
 	// used when scrolling
-
-	setInvalid(step(steps));
+	Errors e = step(steps);
+	setInvalid(e);
+	if (e == Errors::NoError)
+		valueChanged();
 }
 
-NumberSpinBox::Errors NumberSpinBox::increaseValue() {
-	return step(1);
+void NumberSpinBox::increaseValue() {
+	stepBy(1);
 }
 
-NumberSpinBox::Errors NumberSpinBox::decreaseValue() {
-	return step(-1);
+void NumberSpinBox::decreaseValue() {
+	stepBy(-1);
 }
 
 /*!
@@ -332,7 +334,6 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
 	QDoubleSpinBox::setValue(v);
-	valueChanged();
 	return Errors::NoError;
 }
 
