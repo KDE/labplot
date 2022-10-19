@@ -497,6 +497,8 @@ void AxisDock::initConnections() {
 							 QOverload<Axis::Position>::of(&Axis::positionChanged),
 							 this,
 							 QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
+	m_connections << connect(m_axis, QOverload<double>::of(&Axis::positionChanged), this, QOverload<double>::of(&AxisDock::axisPositionChanged));
+	m_connections << connect(m_axis, &Axis::logicalPositionChanged, this, &AxisDock::axisLogicalPositionChanged);
 	m_connections << connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
 	m_connections << connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
 	m_connections << connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
