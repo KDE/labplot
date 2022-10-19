@@ -42,10 +42,16 @@ public:
 public:
 	NumberSpinBox(double initValue = 0, QWidget* parent = nullptr);
 	QString errorToString(Errors);
+	bool setValue(double);
+	void setFeedback(bool enable);
+
+Q_SIGNALS:
+	void valueChanged(double);
 
 private:
 	void keyPressEvent(QKeyEvent*) override;
 	void setInvalid(Errors e);
+	void setInvalid(const QString& str);
 	bool properties(const QString& value, NumberProperties& p) const;
 	QString createStringNumber(double integerFraction, int exponent, const NumberProperties&) const;
 	void stepBy(int steps) override;
@@ -57,16 +63,17 @@ private:
 	virtual QValidator::State validate(QString& input, int& pos) const override;
 	Errors validate(QString& input, double& value, QString& valueStr) const;
 	void setText(const QString&);
-	void setValue(double);
 
 	Errors increaseValue();
 	Errors decreaseValue();
-
-Q_SIGNALS:
-	void valueChanged(double value);
+	void valueChanged();
 
 private:
 	QString mValueStr;
+	// See https://invent.kde.org/education/labplot/-/merge_requests/167
+	// for explanation of the feature
+	bool mFeedback{false}; // defines if the spinbox expects a feedback
+	bool mWaitFeedback{false};
 
 	friend class WidgetsTest;
 };

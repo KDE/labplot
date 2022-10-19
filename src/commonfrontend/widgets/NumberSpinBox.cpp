@@ -53,8 +53,7 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	setInvalid(e);
 	if (e == Errors::NoError) {
 		mValueStr = valueStr;
-		qDebug() << "Value: " << value();
-		emit valueChanged(value());
+		valueChanged();
 	}
 }
 
@@ -303,7 +302,6 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		return Errors::Min;
 
 	QString number = createStringNumber(integerFraction, exponent, p);
-	setValue(v);
 	setText(number);
 
 	// Set cursor position
@@ -315,7 +313,8 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
-	emit valueChanged(value());
+	QDoubleSpinBox::setValue(v);
+	valueChanged();
 	return Errors::NoError;
 }
 
@@ -359,22 +358,44 @@ void NumberSpinBox::setText(const QString& text) {
 	lineEdit()->setText(prefix() + text + suffix());
 }
 
-void NumberSpinBox::setValue(double value) {
-	setText(QString("%L1").arg(value));
-	QDoubleSpinBox::setValue(value);
+bool NumberSpinBox::setValue(double v) {
+	if (mFeedback && mWaitFeedback) {
+		mWaitFeedback = false;
+		if (!qFuzzyCompare(v, value())) {
+			setInvalid(tr("Invalid value entered. Valid value: %1").arg(v));
+			return false;
+		}
+		return true;
+	}
+
+	setText(QString("%L1").arg(v));
+	QDoubleSpinBox::setValue(v);
+	return true;
+}
+
+void NumberSpinBox::setFeedback(bool enable) {
+	mFeedback = enable;
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 	return QAbstractSpinBox::StepEnabledFlag::StepUpEnabled | QAbstractSpinBox::StepEnabledFlag::StepDownEnabled; // for testing
 }
 
-void NumberSpinBox::setInvalid(Errors e) {
-	if (e != Errors::NoError) {
-		SET_WARNING_PALETTE
+void NumberSpinBox::valueChanged() {
+	if (mFeedback)
+		mWaitFeedback = true;
+	qDebug() << "Value: " << value();
+	emit valueChanged(value());
+}
 
-		setToolTip(errorToString(e));
-	} else {
+void NumberSpinBox::setInvalid(const QString& str) {
+	if (!str.isEmpty())
+		SET_WARNING_PALETTE
+	else
 		setPalette(qApp->palette());
-		setToolTip("");
-	}
+	setToolTip(str);
+}
+
+void NumberSpinBox::setInvalid(Errors e) {
+	setInvalid(errorToString(e));
 }

@@ -77,7 +77,7 @@ public:
 
 		QLineEdit* le = new QLineEdit(w);
 
-		connect(nb, &NumberSpinBox::valueChanged, [le](double value) {
+		connect(nb, QOverload<double>::of(&NumberSpinBox::valueChanged), [le](double value) {
 			le->setText(QString::number(value));
 		});
 

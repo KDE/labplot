@@ -622,7 +622,7 @@ void WidgetsTest::numberSpinBoxLimit() {
 
 	int valueChangedCounter = 0;
 	double lastValue = NAN;
-	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&valueChangedCounter, &lastValue](double value) {
 		lastValue = value;
 		valueChangedCounter++;
 	});
@@ -668,7 +668,7 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 
 	int valueChangedCounter = 0;
 	double lastValue = NAN;
-	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&valueChangedCounter, &lastValue](double value) {
 		lastValue = value;
 		valueChangedCounter++;
 	});
@@ -694,7 +694,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 
 	int valueChangedCounter = 0;
 	double lastValue = NAN;
-	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&valueChangedCounter, &lastValue](double value) {
 		lastValue = value;
 		valueChangedCounter++;
 	});
@@ -784,6 +784,46 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
 	QCOMPARE(sb.value(), -5e-3);
 	QCOMPARE(valueChangedCounter, 5);
+}
+
+// Testing feedback feature
+void WidgetsTest::numberSpinBoxFeedback() {
+	NumberSpinBox sb(5);
+	sb.setFeedback(true);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&valueChangedCounter, &lastValue](double value) {
+		lastValue = value;
+		valueChangedCounter++;
+	});
+
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(lastValue, 6);
+	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.setValue(6), true);
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.mWaitFeedback, false);
+
+	sb.keyPressEvent(&event);
+	QCOMPARE(valueChangedCounter, 2);
+	QCOMPARE(lastValue, 7);
+	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.setValue(0), false);
+	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(0));
+	QCOMPARE(sb.mWaitFeedback, false);
+
+	sb.keyPressEvent(&event);
+	QCOMPARE(valueChangedCounter, 3);
+	QCOMPARE(lastValue, 8);
+	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.setValue(8), true);
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.mWaitFeedback, false);
 }
 
 QTEST_MAIN(WidgetsTest)
