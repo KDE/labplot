@@ -66,6 +66,11 @@ AxisDock::AxisDock(QWidget* parent)
 	ui.hblPosition->addWidget(mSbPosition);
 	ui.hblPosition->addWidget(mSbPositionLogical);
 
+	mSbZeroOffset = new NumberSpinBox(0, true, this);
+	ui.hblZeroOffset->insertWidget(0, mSbZeroOffset);
+	mSbScalingFactor = new NumberSpinBox(1, true, this);
+	ui.hblScalingFactor->insertWidget(0, mSbScalingFactor);
+
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
@@ -137,12 +142,12 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leEnd, &QLineEdit::textChanged, this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
-	connect(ui.leZeroOffset, &KLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
+	connect(mSbZeroOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::zeroOffsetChanged);
 	connect(ui.tbOffsetLeft, &QToolButton::clicked, this, &AxisDock::setLeftOffset);
 	connect(ui.tbOffsetCenter, &QToolButton::clicked, this, &AxisDock::setCenterOffset);
 	connect(ui.tbOffsetRight, &QToolButton::clicked, this, &AxisDock::setRightOffset);
 
-	connect(ui.leScalingFactor, &KLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
+	connect(mSbScalingFactor, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::scalingFactorChanged);
 	connect(ui.tbUnityScale, &QToolButton::clicked, this, &AxisDock::setUnityScale);
 	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
 
@@ -237,8 +242,6 @@ void AxisDock::init() {
 	// Validators
 	ui.leStart->setValidator(new QDoubleValidator(ui.leStart));
 	ui.leEnd->setValidator(new QDoubleValidator(ui.leEnd));
-	ui.leScalingFactor->setValidator(new QDoubleValidator(ui.leScalingFactor));
-	ui.leZeroOffset->setValidator(new QDoubleValidator(ui.leZeroOffset));
 	ui.leMajorTickStartOffset->setValidator(new QDoubleValidator(ui.leMajorTickStartOffset));
 	ui.leMajorTickStartValue->setValidator(new QDoubleValidator(ui.leMajorTickStartValue));
 
@@ -843,32 +846,20 @@ void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
 		axis->setEnd(value);
 }
 
-void AxisDock::zeroOffsetChanged() {
+void AxisDock::zeroOffsetChanged(double offset) {
 	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
-	if (ui.leZeroOffset->text().isEmpty()) // default value
-		ui.leZeroOffset->setText(QStringLiteral("0"));
+	// TODO: check for negative values and log scales? (Move this check into the axis it self!)
 
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double offset{numberLocale.toDouble(ui.leZeroOffset->text(), &ok)};
-	if (!ok)
-		return;
-
-	ui.leZeroOffset->setClearButtonEnabled(offset != 0);
-
-	// TODO: check for negative values and log scales?
-
-	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
 }
 
 void AxisDock::setOffset(double offset) {
 	SET_NUMBER_LOCALE
-	ui.leZeroOffset->setText(numberLocale.toString(-offset));
+	mSbZeroOffset->setValue(-offset);
 }
 void AxisDock::setLeftOffset() {
 	setOffset(m_axis->range().start());
@@ -880,38 +871,22 @@ void AxisDock::setRightOffset() {
 	setOffset(m_axis->range().end());
 }
 
-void AxisDock::scalingFactorChanged() {
+void AxisDock::scalingFactorChanged(double value) {
 	if (m_initializing)
 		return;
 
-	if (ui.leScalingFactor->text().isEmpty()) // default value
-		ui.leScalingFactor->setText(QStringLiteral("1"));
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double scalingFactor{numberLocale.toDouble(ui.leScalingFactor->text(), &ok)};
-	if (!ok)
-		return;
-
-	ui.leScalingFactor->setClearButtonEnabled(scalingFactor != 1);
-
-	// TODO: check negative values and log-scales?
-
-	if (scalingFactor != 0.0) {
-		const Lock lock(m_initializing);
-		for (auto* axis : m_axesList)
-			axis->setScalingFactor(scalingFactor);
-	}
+	for (auto* axis : m_axesList)
+		axis->setScalingFactor(value);
 }
 void AxisDock::setUnityScale() {
 	SET_NUMBER_LOCALE
-	ui.leScalingFactor->setText(numberLocale.toString(1. / m_axis->range().size()));
+	mSbScalingFactor->setValue(1. / m_axis->range().size());
 }
 // set scale and offset to get a range of 0 .. 1
 void AxisDock::setUnityRange() {
 	SET_NUMBER_LOCALE
-	ui.leScalingFactor->setText(numberLocale.toString(1. / m_axis->range().size()));
-	ui.leZeroOffset->setText(numberLocale.toString(-m_axis->range().start() / m_axis->range().size()));
+	mSbScalingFactor->setValue(1. / m_axis->range().size());
+	mSbZeroOffset->setValue(-m_axis->range().start() / m_axis->range().size());
 }
 
 void AxisDock::showScaleOffsetChanged(bool state) {
@@ -1023,7 +998,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-		ui.leZeroOffset->show();
+		mSbZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
 		updateMajorTicksStartType(true);
@@ -1049,7 +1024,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-		ui.leZeroOffset->show();
+		mSbZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
 		updateMajorTicksStartType(true);
@@ -1066,7 +1041,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksStartType->hide();
 		ui.cbMajorTicksStartType->hide();
-		ui.leZeroOffset->hide();
+		mSbZeroOffset->hide();
 		ui.tbFirstTickAuto->hide();
 		ui.tbFirstTickData->hide();
 
@@ -1859,18 +1834,12 @@ void AxisDock::axisEndChanged(double value) {
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
 	DEBUG(Q_FUNC_INFO)
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leZeroOffset->setText(numberLocale.toString(value));
+	mSbZeroOffset->setValue(value);
 }
 void AxisDock::axisScalingFactorChanged(qreal value) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leScalingFactor->setText(numberLocale.toString(value));
+	mSbScalingFactor->setValue(value);
 }
 void AxisDock::axisShowScaleOffsetChanged(bool b) {
 	if (m_initializing)
@@ -2220,8 +2189,8 @@ void AxisDock::load() {
 		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
 	}
 
-	ui.leZeroOffset->setText(numberLocale.toString(m_axis->zeroOffset()));
-	ui.leScalingFactor->setText(numberLocale.toString(m_axis->scalingFactor()));
+	mSbZeroOffset->setValue(m_axis->zeroOffset());
+	mSbScalingFactor->setValue(m_axis->scalingFactor());
 	ui.chkShowScaleOffset->setChecked(m_axis->showScaleOffset());
 
 	// Line
@@ -2337,8 +2306,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
 	ui.leStart->setText(numberLocale.toString(group.readEntry("Start", m_axis->range().start())));
 	ui.leEnd->setText(numberLocale.toString(group.readEntry("End", m_axis->range().end())));
-	ui.leZeroOffset->setText(numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())));
-	ui.leScalingFactor->setText(numberLocale.toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())));
+	mSbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
+	mSbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
 	ui.chkShowScaleOffset->setChecked(group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
@@ -2451,8 +2420,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
 	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
 	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
-	group.writeEntry("ZeroOffset", numberLocale.toDouble(ui.leZeroOffset->text()));
-	group.writeEntry("ScalingFactor", numberLocale.toDouble(ui.leScalingFactor->text()));
+	group.writeEntry("ZeroOffset", mSbZeroOffset->value());
+	group.writeEntry("ScalingFactor", mSbScalingFactor->value());
 	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
 
 	// Title

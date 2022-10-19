@@ -609,6 +609,11 @@ void Axis::setMajorTickStartValue(qreal offset) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
 void Axis::setScalingFactor(qreal scalingFactor) {
 	Q_D(Axis);
+	// TODO: check negative values and log-scales?
+	if (scalingFactor == 0) {
+		emit scalingFactorChanged(d->scalingFactor); // return current scalingfactor as feedback for the spinbox
+		return;
+	}
 	if (scalingFactor != d->scalingFactor)
 		exec(new AxisSetScalingFactorCmd(d, scalingFactor, ki18n("%1: set axis scaling factor")));
 }

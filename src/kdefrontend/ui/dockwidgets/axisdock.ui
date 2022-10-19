@@ -109,10 +109,7 @@
         <widget class="KComboBox" name="cbOrientation"/>
        </item>
        <item row="15" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="KLineEdit" name="leZeroOffset"/>
-         </item>
+        <layout class="QHBoxLayout" name="hblZeroOffset">
          <item>
           <widget class="QToolButton" name="tbOffsetLeft">
            <property name="toolTip">
@@ -265,10 +262,7 @@
         </widget>
        </item>
        <item row="17" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="KLineEdit" name="leScalingFactor"/>
-         </item>
+        <layout class="QHBoxLayout" name="hblScalingFactor">
          <item>
           <widget class="QToolButton" name="tbUnityScale">
            <property name="toolTip">

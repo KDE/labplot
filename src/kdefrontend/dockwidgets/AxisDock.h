@@ -44,6 +44,8 @@ private:
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 	NumberSpinBox* mSbPosition;
 	NumberSpinBox* mSbPositionLogical;
+	NumberSpinBox* mSbZeroOffset;
+	NumberSpinBox* mSbScalingFactor;
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
@@ -86,8 +88,8 @@ private Q_SLOTS:
 	void endChanged();
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
-	void zeroOffsetChanged();
-	void scalingFactorChanged();
+	void zeroOffsetChanged(double value);
+	void scalingFactorChanged(double value);
 	void showScaleOffsetChanged(bool);
 	void setLeftOffset();
 	void setCenterOffset();
