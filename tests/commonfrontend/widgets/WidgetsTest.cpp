@@ -406,7 +406,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		NumberSpinBox sb;
 		sb.lineEdit()->setText("3");
 		sb.lineEdit()->setCursorPosition(1);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 2);
 		sb.keyPressEvent(&event);
@@ -418,7 +418,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -2);
 
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -1);
 		sb.keyPressEvent(&event);
@@ -431,7 +431,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		NumberSpinBox sb;
 		sb.lineEdit()->setText("3000");
 		sb.lineEdit()->setCursorPosition(2);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 2900);
 		sb.keyPressEvent(&event);
@@ -439,7 +439,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 2700);
 
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 2800);
 		sb.keyPressEvent(&event);
@@ -454,7 +454,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		NumberSpinBox sb;
 		sb.lineEdit()->setText("5e1");
 		sb.lineEdit()->setCursorPosition(3);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 5e0);
 		sb.keyPressEvent(&event);
@@ -462,7 +462,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 5e-2);
 
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 5e-1);
 		sb.keyPressEvent(&event);
@@ -474,7 +474,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("5.5e+300");
 		sb.lineEdit()->setCursorPosition(7);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 5.5e+307);
 	}
@@ -484,7 +484,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("1.6e+300");
 		sb.lineEdit()->setCursorPosition(7);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 1.6e+308);
 	}
@@ -494,7 +494,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("5.5e-300");
 		sb.lineEdit()->setCursorPosition(7);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 5.5e-307);
 	}
@@ -504,7 +504,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("1.6e-300");
 		sb.lineEdit()->setCursorPosition(7);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 1.6e-308);
 	}
@@ -514,7 +514,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("3.133");
 		sb.lineEdit()->setCursorPosition(4);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3.123);
 		sb.keyPressEvent(&event);
@@ -524,18 +524,18 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3.093);
 
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3.103);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3.113);
 
 		sb.lineEdit()->setCursorPosition(1);
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 4.113);
 
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3.113);
 	}
@@ -546,7 +546,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("4.1");
 		sb.lineEdit()->setCursorPosition(4);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 4.0);
 		sb.keyPressEvent(&event);
@@ -558,7 +558,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		sb.setLocale(QLocale(QLocale::Language::English));
 		sb.lineEdit()->setText("3.34890823e-03");
 		sb.lineEdit()->setCursorPosition(1);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 2.34890823e-3);
 		sb.keyPressEvent(&event);
@@ -570,18 +570,18 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 
 		// e selected do nothing!
 		sb.lineEdit()->setCursorPosition(12);
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -1.34890823e-3);
 
 		// Minus selected do nothing!
 		sb.lineEdit()->setCursorPosition(13);
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -1.34890823e-3);
 
 		sb.lineEdit()->setCursorPosition(14);
-		event = QKeyEvent(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -1.34890823e-13);
 		sb.keyPressEvent(&event);
@@ -594,7 +594,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		NumberSpinBox sb;
 		sb.lineEdit()->setText("13");
 		sb.lineEdit()->setCursorPosition(1);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), 3);
 		sb.keyPressEvent(&event);
@@ -607,7 +607,7 @@ void WidgetsTest::numberSpinBoxChangingValueKeyPress() {
 		NumberSpinBox sb;
 		sb.lineEdit()->setText("-13");
 		sb.lineEdit()->setCursorPosition(2);
-		QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 		sb.keyPressEvent(&event);
 		VALUES_EQUAL(sb.value(), -3);
 		sb.keyPressEvent(&event);
@@ -679,12 +679,111 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	QCOMPARE(sb.lineEdit()->text(), "Prefix 5 Suffix");
 
 	sb.lineEdit()->setCursorPosition(10); // In suffix text
-	QKeyEvent event(QKeyEvent::Type::Enter, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.value(), 6);
 	QCOMPARE(sb.lineEdit()->text(), "Prefix 6 Suffix");
+}
+
+void WidgetsTest::numberSpinBoxEnterNumber() {
+	NumberSpinBox sb(5);
+	sb.setMaximum(100);
+	sb.setMinimum(0);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, &NumberSpinBox::valueChanged, [&valueChangedCounter, &lastValue](double value) {
+		lastValue = value;
+		valueChangedCounter++;
+	});
+
+	QCOMPARE(sb.toolTip(), "");
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, "1");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.toolTip(), "");
+	QCOMPARE(sb.value(), 51);
+	QCOMPARE(valueChangedCounter, 1);
+
+	// 511
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::Max));
+	QCOMPARE(sb.value(), 51);
+	QCOMPARE(sb.lineEdit()->text(), "511");
+	QCOMPARE(valueChangedCounter, 1);
+
+	// 51
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, "");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 2);
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.value(), 51);
+	QCOMPARE(valueChangedCounter, 2);
+
+	// 5
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, "");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.value(), 5);
+	QCOMPARE(valueChangedCounter, 3);
+
+	// nothing
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, "");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 0);
+	QCOMPARE(sb.lineEdit()->text(), "");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoNumber));
+	QCOMPARE(sb.value(), 5);
+	QCOMPARE(valueChangedCounter, 3);
+
+	// -
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Minus, Qt::KeyboardModifier::NoModifier, "-");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
+	QCOMPARE(sb.lineEdit()->text(), "-");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::Invalid));
+	QCOMPARE(sb.value(), 5);
+	QCOMPARE(valueChangedCounter, 3);
+
+	// -5
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_5, Qt::KeyboardModifier::NoModifier, "5");
+	sb.setMinimum(-100);
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 2);
+	QCOMPARE(sb.lineEdit()->text(), "-5");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.value(), -5);
+	QCOMPARE(valueChangedCounter, 4);
+
+	// -5e
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_E, Qt::KeyboardModifier::NoModifier, "e");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
+	QCOMPARE(sb.lineEdit()->text(), "-5e");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::Invalid));
+	QCOMPARE(sb.value(), -5);
+	QCOMPARE(valueChangedCounter, 4);
+
+	// -5e-
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Minus, Qt::KeyboardModifier::NoModifier, "-");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 4);
+	QCOMPARE(sb.lineEdit()->text(), "-5e-");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::Invalid));
+	QCOMPARE(sb.value(), -5);
+	QCOMPARE(valueChangedCounter, 4);
+
+	// -5e-3
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_3, Qt::KeyboardModifier::NoModifier, "3");
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 5);
+	QCOMPARE(sb.lineEdit()->text(), "-5e-3");
+	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
+	QCOMPARE(sb.value(), -5e-3);
+	QCOMPARE(valueChangedCounter, 5);
 }
 
 QTEST_MAIN(WidgetsTest)
