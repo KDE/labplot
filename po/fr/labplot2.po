@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:42+0000\n"
-"PO-Revision-Date: 2022-10-10 21:26+0200\n"
+"PO-Revision-Date: 2022-10-19 07:17+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -29,7 +29,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Vincent Pinon, Maxime Corteel, Thomas Vergnaud, Xavier Besnardpendant"
+msgstr "Vincent Pinon, Maxime Corteel, Thomas Vergnaud, Xavier Besnard"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -6465,10 +6465,9 @@ msgid "%1: error bar type changed"
 msgstr "%1 : le type de la barre d'erreur a changé"
 
 #: src/backend/worksheet/Line.cpp:107
-#, fuzzy, kde-format
-#| msgid "%1: set line style"
+#, kde-format
 msgid "%1: set line pen"
-msgstr "%1 : définir le style de ligne"
+msgstr "%1 : définir le crayon en ligne pleine"
 
 #: src/backend/worksheet/Line.cpp:114
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:630
@@ -11926,25 +11925,22 @@ msgid "Stacked 100%"
 msgstr "Empilé à 100 %"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
-#, fuzzy, kde-format
-#| msgid "Specify bar number which properties should be shown and edited"
+#, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
-"Spécifiez le nombre de barres dont les propriétés devraient être affichées "
-"et modifiées"
+"Sélectionnez la colonne de données dont les propriétés devraient être "
+"affichées et modifiées"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the factor in percent to control the width of the bar relative to "
-#| "its default value"
+#, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
-"Spécifier le facteur en pourcentage pour contrôler la largeur de la barre, "
-"relativement à sa valeur par défaut."
+"Sélectionnez le facteur en pourcentage pour contrôler la largeur de la "
+"barre, relativement à sa valeur par défaut, devant s'appliquer à toutes les "
+"barres."
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
@@ -15083,10 +15079,9 @@ msgstr "Abandonner des valeurs"
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:952
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1002
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1008
-#, fuzzy, kde-format
-#| msgid "Invalid value."
+#, kde-format
 msgid "Invalid numeric value."
-msgstr "Valeur non valable."
+msgstr "Valeur numérique on valable."
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:967
 #, kde-format
@@ -15378,8 +15373,7 @@ msgid "Add Bar Plot to"
 msgstr "Ajouter un tracé en barres à"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:355
-#, fuzzy, kde-format
-#| msgid "All histograms in one plot"
+#, kde-format
 msgid "All histograms in one plot area"
 msgstr "Tous les histogrammes dans un tracé"
 
@@ -15409,8 +15403,7 @@ msgid "Add Box Plots to"
 msgstr "Ajouter des tracés en boîte à"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:363
-#, fuzzy, kde-format
-#| msgid "All bar plots in one plot"
+#, kde-format
 msgid "All bar plots in one plot area"
 msgstr "Tous les tracés en barres dans un seul tracé"
 
@@ -20308,10 +20301,9 @@ msgstr "Heure"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Mask Numeric Values"
+#, kde-format
 msgid "Numeric Values"
-msgstr "Masquer les valeurs numériques"
+msgstr "Valeurs numériques"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -20333,17 +20325,15 @@ msgstr "max."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Mask Text Values"
+#, kde-format
 msgid "Text Values"
-msgstr "Masquer les valeurs textuelles"
+msgstr "Valeurs textuelles"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
-#, fuzzy, kde-format
-#| msgid "Sample Values"
+#, kde-format
 msgid "DateTime Values"
-msgstr "Échantillonner les valeurs"
+msgstr "Valeurs de date et d'heure"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
@@ -20421,10 +20411,9 @@ msgstr "Commentaires comme unités de colonnes"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:26
-#, fuzzy, kde-format
-#| msgid "%1: clear selected columns"
+#, kde-format
 msgid "Flatten selected columns relative to:"
-msgstr "%1 : effacer les colonnes sélectionnées"
+msgstr "Aplatir les colonnes sélectionnées par rapport à :"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:108
@@ -20506,10 +20495,9 @@ msgstr "Zone de tracé e&xistante"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
-#, fuzzy, kde-format
-#| msgid "&New plot in an existing worksheet"
+#, kde-format
 msgid "&New plot area in an existing worksheet"
-msgstr "&Nouveau tracé dans une feuille de travail existante"
+msgstr "&Nouvelle zone de tracé dans une feuille de travail existante"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203

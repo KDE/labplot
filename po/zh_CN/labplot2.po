@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-19 00:42+0000\n"
-"PO-Revision-Date: 2022-10-02 15:49\n"
+"PO-Revision-Date: 2022-10-19 13:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2272,16 +2272,14 @@ msgid "End of file"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Standard Mathematical Functions"
-msgstr "标准差"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Statistics"
+#, kde-format
 msgid "Statistical Methods (of column)"
-msgstr "详情"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:43
 #, kde-format
@@ -2719,10 +2717,9 @@ msgid "Mode"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:165
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "First quartile"
-msgstr "方形"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:166
 #, kde-format
@@ -2730,10 +2727,9 @@ msgid "Third quartile"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:167
-#, fuzzy, kde-format
-#| msgid "Interactive"
+#, kde-format
 msgid "Interquartile range"
-msgstr "交互"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:168
 #, kde-format
@@ -2772,10 +2768,9 @@ msgid "Trimean"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#, fuzzy, kde-format
-#| msgid "Standard deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "标准差"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:160
@@ -2819,10 +2814,9 @@ msgid "Quantile"
 msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:182
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Percentile"
-msgstr "微分"
+msgstr ""
 
 #: src/backend/gsl/ExpressionParser.cpp:188
 #, kde-format
@@ -6354,10 +6348,9 @@ msgid "%1: error bar type changed"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:107
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set line pen"
-msgstr "%1：设置字体"
+msgstr ""
 
 #: src/backend/worksheet/Line.cpp:114
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:630
@@ -9094,16 +9087,14 @@ msgid "Equidistant Values"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:285
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Sample Values"
-msgstr "数值"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
-#, fuzzy, kde-format
-#| msgid "Columns"
+#, kde-format
 msgid "Flatten Columns"
-msgstr "列"
+msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1094
@@ -14779,24 +14770,20 @@ msgid "Export to File"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "&Flatten"
-msgstr "模式"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
-#, fuzzy, kde-format
-#| msgid "Delete selected object"
-#| msgid_plural "Delete selected objects"
+#, kde-format
 msgid "Flatten selected columns"
-msgstr "删除所选对象"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Delete Selected"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatten Selected Columns"
-msgstr "删除选中页面"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:55
 #, kde-format
@@ -14804,17 +14791,14 @@ msgid "Add additional reference column"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "Remo&ve Columns"
+#, kde-format
 msgid "Remove reference column"
-msgstr "删除列(&V)"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "%1 value"
-#| msgid_plural "%1 values"
+#, kde-format
 msgid "%1: flatten values"
-msgstr "%1 个值"
+msgstr ""
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:168
 #, kde-format
@@ -17527,11 +17511,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:278
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Column"
+#, kde-format
 msgid "Column"
-msgstr "列"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
@@ -19848,10 +19830,9 @@ msgstr "时间"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Numeric Values"
-msgstr "数值"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -19873,17 +19854,15 @@ msgstr "最大."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "Text Values"
-msgstr "数值"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
-#, fuzzy, kde-format
-#| msgid "Values"
+#, kde-format
 msgid "DateTime Values"
-msgstr "数值"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
@@ -20874,12 +20853,3 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
-
-#~ msgid "Top margin:"
-#~ msgstr "上边距:"
-
-#~ msgid "Left margin:"
-#~ msgstr "左边距:"
-
-#~ msgid "Margin"
-#~ msgstr "边距"
