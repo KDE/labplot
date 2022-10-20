@@ -676,19 +676,21 @@ void WidgetsTest::numberSpinBoxPrefixSuffix() {
 	sb.setPrefix("Prefix ");
 	sb.setSuffix(" Suffix");
 
-	QCOMPARE(sb.lineEdit()->text(), "Prefix 5 Suffix");
+	QCOMPARE(sb.lineEdit()->text(), "Prefix 5.00 Suffix");
 
-	sb.lineEdit()->setCursorPosition(10); // In suffix text
+	sb.lineEdit()->setCursorPosition(14); // In suffix text
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.value(), 6);
-	QCOMPARE(sb.lineEdit()->text(), "Prefix 6 Suffix");
+	QCOMPARE(sb.value(), 5.01);
+	QCOMPARE(sb.lineEdit()->text(), "Prefix 5.01 Suffix");
 }
 
 void WidgetsTest::numberSpinBoxEnterNumber() {
-	NumberSpinBox sb(5);
+	NumberSpinBox sb;
+	sb.setDecimals(0);
+	sb.setValue(5);
 	sb.setMaximum(100);
 	sb.setMinimum(0);
 
@@ -836,7 +838,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	double lastValue = NAN;
 	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
 		valueChangedCounter++;
-		lastValue = value;
+		lastValue = value; // value is 6
 		QVERIFY(5 != value);
 		sb.setValue(5); // Important other value
 	});
@@ -847,6 +849,43 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(5));
+}
+
+void WidgetsTest::numberSpinBoxDecimals() {
+	{
+		NumberSpinBox sb(5);
+		QCOMPARE(sb.lineEdit()->text(), "5.00");
+		sb.setDecimals(3);
+		QCOMPARE(sb.lineEdit()->text(), "5.00"); // does not change
+
+		sb.setValue(6);
+		QCOMPARE(sb.lineEdit()->text(), "6.000");
+	}
+
+	{
+		NumberSpinBox sb(5);
+		sb.setFeedback(true);
+
+		int valueChangedCounter = 0;
+		double lastValue = NAN;
+		connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+			valueChangedCounter++;
+			lastValue = value; // value is 6
+			QVERIFY(5 != value);
+			sb.setValue(5); // Important other value
+		});
+
+		QCOMPARE(sb.lineEdit()->text(), "5.00");
+		sb.setDecimals(3);
+
+		sb.lineEdit()->setCursorPosition(1);
+		QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+		sb.keyPressEvent(&event);
+
+		QCOMPARE(valueChangedCounter, 1);
+		QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(5));
+		QCOMPARE(sb.lineEdit()->text(), "6.00"); // not 3 decimals!
+	}
 }
 
 QTEST_MAIN(WidgetsTest)

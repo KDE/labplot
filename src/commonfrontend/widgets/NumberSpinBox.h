@@ -46,6 +46,7 @@ public:
 	bool setValue(double);
 	void setFeedback(bool enable);
 	void setStrongFocus(bool);
+	double value();
 
 Q_SIGNALS:
 	void valueChanged(double);
@@ -80,6 +81,10 @@ private:
 	bool mWaitFeedback{false};
 
 	bool mStrongFocus{true};
+
+	// The value stored in QAbstractSpinBox is rounded to
+	// decimals and this is not desired
+	double mValue{0};
 
 	friend class WidgetsTest;
 };

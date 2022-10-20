@@ -27,7 +27,7 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	setInvalid(Errors::NoError);
 	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
-	setDecimals(std::numeric_limits<int>::max()); // Important, because in QDoubleSpinBox round() with decimals will be done
+	setDecimals(2);
 }
 
 QString NumberSpinBox::errorToString(Errors e) {
@@ -41,7 +41,7 @@ QString NumberSpinBox::errorToString(Errors e) {
 	case Errors::NoNumber:
 		return tr("No number entered");
 	case Errors::NoError:
-		return QStringLiteral("");
+		return QLatin1String("");
 	}
 }
 
@@ -64,6 +64,7 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	setInvalid(e);
 	if (e == Errors::NoError) {
 		mValueStr = valueStr;
+		mValue = v;
 		valueChanged();
 	}
 }
@@ -333,7 +334,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
-	QDoubleSpinBox::setValue(v);
+	mValue = v;
 	return Errors::NoError;
 }
 
@@ -387,8 +388,8 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	setText(QString("%L1").arg(v));
-	QDoubleSpinBox::setValue(v);
+	setText(locale().toString(v, 'f', decimals()));
+	mValue = v;
 	return true;
 }
 
@@ -402,6 +403,10 @@ void NumberSpinBox::setStrongFocus(bool enable) {
 		setFocusPolicy(Qt::StrongFocus);
 	else
 		setFocusPolicy(Qt::WheelFocus);
+}
+
+double NumberSpinBox::value() {
+	return mValue;
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
