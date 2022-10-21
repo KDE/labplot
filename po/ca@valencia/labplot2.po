@@ -15512,7 +15512,7 @@ msgstr "diagrames nous en un full de càlcul nou"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
 #, kde-format
 msgid "No data selected to plot."
-msgstr "No s'ha seleccionat cap dada a dibuixar-ne el diagrama."
+msgstr "No s'ha seleccionat cap dada que s'haja de dibuixar en el diagrama."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
