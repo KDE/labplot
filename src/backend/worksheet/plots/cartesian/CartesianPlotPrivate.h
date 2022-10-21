@@ -249,7 +249,7 @@ public:
 	QPointF cursor0Pos{QPointF(qQNaN(), qQNaN())};
 	bool cursor1Enable{false};
 	QPointF cursor1Pos{QPointF(qQNaN(), qQNaN())};
-	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
+	Line* cursorLine{nullptr};
 
 	// other mouse cursor modes
 	QPen zoomSelectPen{Qt::black, 3, Qt::SolidLine};

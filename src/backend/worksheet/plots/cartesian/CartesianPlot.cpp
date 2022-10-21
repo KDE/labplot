@@ -34,6 +34,7 @@
 #include "backend/lib/trace.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -110,6 +111,20 @@ void CartesianPlot::init() {
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->bottomPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->symmetricPadding = true;
+
+	// cursor line
+	d->cursorLine = new Line(QString());
+	d->cursorLine->setPrefix(QLatin1String("Cursor"));
+	d->cursorLine->setHidden(true);
+	addChild(d->cursorLine);
+	QPen pen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
+	d->cursorLine->setPen(pen); // TODO: use theme specific initial settings
+	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->cursorLine, &Line::updateRequested, [=] {
+		d->update();
+	});
 
 	connect(this, &AbstractAspect::aspectAdded, this, &CartesianPlot::childAdded);
 	connect(this, &AbstractAspect::aspectRemoved, this, &CartesianPlot::childRemoved);
@@ -856,10 +871,14 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBrea
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
+
+Line* CartesianPlot::cursorLine() const {
+	Q_D(const CartesianPlot);
+	return d->cursorLine;
+}
 
 /*!
 	returns the actual bounding rectangular of the plot area showing data (plot's rectangular minus padding)
@@ -1487,14 +1506,6 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 }
 
 // cursor
-
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursorPen, QPen, cursorPen, update)
-void CartesianPlot::setCursorPen(const QPen& pen) {
-	Q_D(CartesianPlot);
-	if (pen != d->cursorPen)
-		exec(new CartesianPlotSetCursorPenCmd(d, pen, ki18n("%1: y-range breaks changed")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursor0Enable, bool, cursor0Enable, updateCursor)
 void CartesianPlot::setCursor0Enable(const bool& enable) {
 	Q_D(CartesianPlot);
@@ -3591,7 +3602,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 		setCursor(Qt::SizeHorCursor);
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
-		double cursorPenWidth2 = cursorPen.width() / 2.;
+		double cursorPenWidth2 = cursorLine->pen().width() / 2.;
 		if (cursorPenWidth2 < 10.)
 			cursorPenWidth2 = 10.;
 
@@ -4302,7 +4313,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x(), Qt::UTC).toString(xRangeDateTimeFormat);
 
-			double cursorPenWidth2 = cursorPen.width() / 2.;
+			double cursorPenWidth2 = cursorLine->pen().width() / 2.;
 			if (cursorPenWidth2 < 10.)
 				cursorPenWidth2 = 10.;
 
@@ -4426,7 +4437,8 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	// draw cursor lines if available
 	if (cursor0Enable || cursor1Enable) {
 		painter->save();
-		painter->setPen(cursorPen);
+		painter->setPen(cursorLine->pen());
+		painter->setOpacity(cursorLine->opacity());
 		QFont font = painter->font();
 		font.setPointSize(font.pointSize() * 4);
 		painter->setFont(font);
@@ -4498,9 +4510,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	}
 
 	// cursor
-	writer->writeStartElement("cursor");
-	WRITE_QPEN(d->cursorPen);
-	writer->writeEndElement();
+	d->cursorLine->save(writer);
+
 	// geometry
 	writer->writeStartElement("geometry");
 	writer->writeAttribute("x", QString::number(d->rect.x()));
@@ -4636,16 +4647,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			d->theme = attribs.value("name").toString();
 		} else if (!preview && reader->name() == "cursor") {
-			attribs = reader->attributes();
-			QPen pen;
-			pen.setWidth(attribs.value("width").toInt());
-			pen.setStyle(static_cast<Qt::PenStyle>(attribs.value("style").toInt()));
-			QColor color;
-			color.setRed(attribs.value("color_r").toInt());
-			color.setGreen(attribs.value("color_g").toInt());
-			color.setBlue(attribs.value("color_b").toInt());
-			pen.setColor(color);
-			d->cursorPen = pen;
+			d->cursorLine->load(reader, preview);
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 

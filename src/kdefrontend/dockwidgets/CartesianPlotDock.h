@@ -23,6 +23,7 @@ template<class T>
 class QList;
 class BackgroundWidget;
 class LabelWidget;
+class LineWidget;
 class ThemeHandler;
 
 class CartesianPlotDock : public BaseDock {
@@ -43,6 +44,7 @@ private:
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
+	LineWidget* cursorLineWidget{nullptr};
 	ThemeHandler* m_themeHandler;
 	QButtonGroup* m_bgDefaultPlotRange{nullptr};
 	bool m_autoScale{false};
@@ -120,11 +122,6 @@ private Q_SLOTS:
 	void borderCornerRadiusChanged(double);
 	void borderOpacityChanged(int);
 
-	// "Cursor"-tab
-	void cursorLineWidthChanged(int);
-	void cursorLineColorChanged(const QColor&);
-	void cursorLineStyleChanged(int);
-
 	void exportPlotTemplate();
 
 	// SLOTs for changes triggered in CartesianPlot
@@ -166,9 +163,6 @@ private Q_SLOTS:
 	void plotBorderPenChanged(QPen&);
 	void plotBorderCornerRadiusChanged(double);
 	void plotBorderOpacityChanged(double);
-
-	// Cursor
-	void plotCursorPenChanged(const QPen&);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

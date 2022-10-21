@@ -28,6 +28,7 @@ class CartesianCoordinateSystem;
 class CartesianPlotDock;
 class Histogram;
 class InfoElementDialog;
+class Line;
 class XYCurve;
 class KConfig;
 
@@ -160,8 +161,8 @@ public:
 	void addXRange(const Range<double>&); // add x range
 	void addYRange(const Range<double>&); // add y range
 	void removeRange(const Dimension, int index); // remove selected range
-	// convenience methods
 
+	// convenience methods
 	void setMin(const Dimension, int index, double); // set x min of range index
 	void setMax(const Dimension, int index, double); // set x max of range index
 	void setRangeFormat(const Dimension, const RangeT::Format);
@@ -178,11 +179,14 @@ public:
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // y range scale of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // range scale of x range index
 
+	// range breaks
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
-	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen)
+
+	// cursor
+	Line* cursorLine() const;
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
 	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable)
 

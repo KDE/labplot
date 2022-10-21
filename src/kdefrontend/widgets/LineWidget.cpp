@@ -300,11 +300,11 @@ void LineWidget::load() {
 	}
 
 	const QPen& pen = m_line->pen();
-	ui.cbStyle->setCurrentIndex(static_cast<int>(pen.style()));
 	ui.kcbColor->setColor(pen.color());
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(m_line->opacity() * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
+	ui.cbStyle->setCurrentIndex(static_cast<int>(pen.style()));
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {

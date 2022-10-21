@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/PlotTemplateDialog.h"
@@ -141,10 +142,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	}
 
 	// "Cursor"-tab
-	QStringList list = {i18n("NoPen"), i18n("SolidLine"), i18n("DashLine"), i18n("DotLine"), i18n("DashDotLine"), i18n("DashDotDotLine")};
-	ui.cbCursorLineStyle->clear();
-	for (int i = 0; i < list.count(); i++)
-		ui.cbCursorLineStyle->addItem(list[i], i);
+	auto* vboxLayout = static_cast<QVBoxLayout*>(ui.tabCursor->layout());
+	cursorLineWidget = new LineWidget(ui.tabCursor);
+	cursorLineWidget->setPrefix(QLatin1String("Cursor"));
+	vboxLayout->insertWidget(1, cursorLineWidget);
 
 	// Validators
 	ui.leRangePoints->setValidator(new QIntValidator(ui.leRangePoints));
@@ -203,11 +204,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::borderOpacityChanged);
 
-	// Cursor
-	connect(ui.sbCursorLineWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::cursorLineWidthChanged);
-	connect(ui.kcbCursorLineColor, &KColorButton::changed, this, &CartesianPlotDock::cursorLineColorChanged);
-	connect(ui.cbCursorLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::cursorLineStyleChanged);
-
 	// theme and template handlers
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
@@ -245,8 +241,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 
 void CartesianPlotDock::init() {
 	this->retranslateUi();
-
-	GuiTools::updatePenStyles(ui.cbCursorLineStyle, Qt::black);
 
 	// draw the icons for the border sides
 	QPainter pa;
@@ -1408,17 +1402,6 @@ void CartesianPlotDock::bottomPaddingChanged(double value) {
 		plot->setBottomPadding(padding);
 }
 
-void CartesianPlotDock::cursorLineWidthChanged(int width) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList) {
-		QPen pen = plot->cursorPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(width, Worksheet::Unit::Point));
-		plot->setCursorPen(pen);
-	}
-}
-
 // "Range Breaks"-tab
 
 // x-range breaks
@@ -1735,36 +1718,6 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
-// cursor
-void CartesianPlotDock::cursorLineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	for (auto* plot : m_plotList) {
-		QPen pen = plot->cursorPen();
-		pen.setColor(color);
-		plot->setCursorPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbCursorLineStyle, color);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::cursorLineStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	if (index > 5)
-		return;
-
-	for (auto* plot : m_plotList) {
-		QPen pen = plot->cursorPen();
-		pen.setStyle(static_cast<Qt::PenStyle>(index));
-		plot->setCursorPen(pen);
-	}
-}
-
 void CartesianPlotDock::exportPlotTemplate() {
 	KConfig config;
 	KConfigGroup group = config.group(QLatin1String("PlotTemplate"));
@@ -1971,14 +1924,6 @@ void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotCursorPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.sbCursorLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	ui.kcbCursorLineColor->setColor(pen.color());
-	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
-	m_initializing = false;
-}
-
 // border
 void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
 	Lock lock(m_initializing);
@@ -2083,12 +2028,16 @@ void CartesianPlotDock::load() {
 	//"Plot Area"-tab
 	const auto* plotArea = m_plot->plotArea();
 
-	// Background
+	// Background and Cursor Lines
 	QList<Background*> backgrounds;
-	for (auto* plot : m_plotList)
+	QList<Line*> cursorLines;
+	for (auto* plot : m_plotList) {
 		backgrounds << plot->plotArea()->background();
+		cursorLines << plot->cursorLine();
+	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
+	cursorLineWidget->setLines(cursorLines);
 
 	// Padding
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit));
@@ -2108,13 +2057,6 @@ void CartesianPlotDock::load() {
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(plotArea->borderCornerRadius(), m_worksheetUnit));
 	ui.sbBorderOpacity->setValue(round(plotArea->borderOpacity() * 100));
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-
-	// Cursor
-	QPen pen = m_plot->cursorPen();
-	ui.cbCursorLineStyle->setCurrentIndex(pen.style());
-	ui.kcbCursorLineColor->setColor(pen.color());
-	ui.sbCursorLineWidth->setValue(pen.width());
-	GuiTools::updatePenStyles(ui.cbCursorLineStyle, pen.color());
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -2157,7 +2099,6 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	GuiTools::updatePenStyles(ui.cbCursorLineStyle, m_plot->cursorPen().color());
 	m_initializing = false;
 }
 
