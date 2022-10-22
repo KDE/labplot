@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-19 00:42+0000\n"
+"POT-Creation-Date: 2022-10-22 00:41+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -72,7 +72,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2887
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1382
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1819
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4618
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4629
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:857
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1922
@@ -190,7 +190,7 @@ msgstr "Вниз"
 
 #: src/backend/core/AbstractAspect.cpp:500 src/backend/core/aspectcommands.h:91
 #: src/backend/datapicker/Datapicker.cpp:213
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1913
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1924
 #, kde-format
 msgid "%1: add %2"
 msgstr "%1: добавление %2"
@@ -320,7 +320,7 @@ msgstr "Большое целое число"
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
 #: src/backend/core/AbstractColumn.cpp:175
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:362
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:377
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
 #: src/commonfrontend/worksheet/WorksheetView.cpp:352
@@ -1051,7 +1051,7 @@ msgstr "В файле метаданных отсутствует URL-адрес
 
 # BUGME: please add ctxt --aspotashev
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:201
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:378
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
 #: src/commonfrontend/matrix/MatrixView.cpp:132
 #: src/commonfrontend/worksheet/WorksheetView.cpp:201
@@ -4683,7 +4683,7 @@ msgid "Stefan-Boltzmann constant"
 msgstr "Постоянная Стефана-Больцмана"
 
 #: src/backend/gsl/ExpressionParser.cpp:970
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Gauss"
@@ -5127,7 +5127,7 @@ msgstr "Энергия в 1 эрг"
 
 # "Тип шкалы: [...]" --aspotashev
 #: src/backend/lib/Range.cpp:12
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:404
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #, kde-format
 msgid "Linear"
@@ -5506,7 +5506,7 @@ msgid "imaginary part"
 msgstr "мнимая часть"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:408
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:423
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:475
 #, kde-format
 msgid "Power"
@@ -5666,7 +5666,7 @@ msgid "Statistics (distributions)"
 msgstr "Статистика (распределение)"
 
 #: src/backend/nsl/nsl_fit.c:24
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:459
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:143
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1058
@@ -5679,7 +5679,7 @@ msgid "Custom"
 msgstr "Другое"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:420
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:435
 #, kde-format
 msgid "Inverse exponential"
 msgstr "Обратная экспоненциальная"
@@ -5705,7 +5705,7 @@ msgid "Gaussian (normal)"
 msgstr "Гаусса (нормальное распределение)"
 
 #: src/backend/nsl/nsl_fit.c:31
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:428
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:443
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:495
 #, kde-format
 msgid "Cauchy-Lorentz"
@@ -5796,7 +5796,7 @@ msgstr "По величине радиуса"
 #. i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
 #: src/backend/nsl/nsl_geom_linesim.c:23
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:347
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:362
 #: src/commonfrontend/worksheet/WorksheetView.cpp:343
 #: src/commonfrontend/worksheet/WorksheetView.cpp:373
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:269
@@ -6421,7 +6421,7 @@ msgstr "%1: задание фонового изображения"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:211
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:241
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:466
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:481
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:124
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:164
@@ -6579,13 +6579,13 @@ msgstr "%1: задание степени непрозрачности лини�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1365
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1359
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: задание горизонтального отступа"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1392
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1386
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: задание вертикального отступа"
@@ -6623,8 +6623,8 @@ msgstr "Горизонтальный"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:277
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:866
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:870
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:860
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:29
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:97
@@ -6652,7 +6652,7 @@ msgstr "Ориентация"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:371
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:383
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:481
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1433
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1417
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:102
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:29
 #, kde-format
@@ -7129,8 +7129,8 @@ msgstr "информация недоступна"
 
 # BUGME: please split strings --aspotashev
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:101
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4977
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:366
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:528
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:415
@@ -7139,12 +7139,12 @@ msgstr "информация недоступна"
 msgid "Title"
 msgstr "Заголовок"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:338
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:353
 #, kde-format
 msgid "xy-curve"
 msgstr "Кривая XY"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:339
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
 #: src/commonfrontend/worksheet/WorksheetView.cpp:325
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:82
@@ -7153,7 +7153,7 @@ msgstr "Кривая XY"
 msgid "Histogram"
 msgstr "Гистограмма"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:340
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:453
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:255
@@ -7161,7 +7161,7 @@ msgstr "Гистограмма"
 msgid "Bar Plot"
 msgstr "Ящик с усами"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:341
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #: src/commonfrontend/worksheet/WorksheetView.cpp:326
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
@@ -7171,7 +7171,7 @@ msgid "Box Plot"
 msgstr "Ящик с усами"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:342
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:357
 #, kde-format
 msgid "xy-curve from a Formula"
 msgstr "Кривая XY по формуле"
@@ -7179,8 +7179,8 @@ msgstr "Кривая XY по формуле"
 # BUGME: please add context --aspotashev
 #. i18n("Data Operation"), cartesianPlotAddNewActionGroup);
 #. i18n("Data Operation"), this);
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:344
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:396
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:359
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:411
 #: src/commonfrontend/worksheet/WorksheetView.cpp:331
 #: src/commonfrontend/worksheet/WorksheetView.cpp:360
 #, kde-format
@@ -7190,7 +7190,7 @@ msgstr "Приведение данных"
 # BUGME: please split --aspotashev
 #. i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
 #. i18n: ectx: property (text), widget (QLabel, lDifferentiation)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:360
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:143
 #: src/commonfrontend/worksheet/WorksheetView.cpp:333
 #: src/commonfrontend/worksheet/WorksheetView.cpp:362
@@ -7203,7 +7203,7 @@ msgstr "Дифференцирование"
 #. cartesianPlotAddNewActionGroup);
 #. i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 #. i18n: ectx: property (text), widget (QLabel, lIntegration)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:361
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:149
 #: src/commonfrontend/worksheet/WorksheetView.cpp:336
 #: src/commonfrontend/worksheet/WorksheetView.cpp:364
@@ -7213,8 +7213,8 @@ msgid "Integration"
 msgstr "Интегрирование"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:348
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:400
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:363
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:415
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:468
 #: src/commonfrontend/worksheet/WorksheetView.cpp:344
 #: src/commonfrontend/worksheet/WorksheetView.cpp:374
@@ -7229,8 +7229,8 @@ msgstr "Сглаживание"
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. Data fit menu
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:349
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:522
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:364
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:537
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:568
 #: src/commonfrontend/worksheet/WorksheetView.cpp:345
 #: src/commonfrontend/worksheet/WorksheetView.cpp:375
@@ -7239,8 +7239,8 @@ msgstr "Сглаживание"
 msgid "Fit"
 msgstr "Подбор"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:350
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:365
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:463
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:515
 #: src/commonfrontend/worksheet/WorksheetView.cpp:346
 #: src/commonfrontend/worksheet/WorksheetView.cpp:376
@@ -7248,16 +7248,16 @@ msgstr "Подбор"
 msgid "Fourier Filter"
 msgstr "Фильтр Фурье"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:351
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:449
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:366
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:464
 #: src/commonfrontend/worksheet/WorksheetView.cpp:348
 #: src/commonfrontend/worksheet/WorksheetView.cpp:377
 #, kde-format
 msgid "Fourier Transform"
 msgstr "Трансформация Фурье"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:352
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:450
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:367
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:465
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Трансформация Гилберта"
@@ -7265,7 +7265,7 @@ msgstr "Трансформация Гилберта"
 # BUGME: please add context --aspotashev
 #. i18n("Integration"), cartesianPlotAddNewActionGroup);
 #. i18n: ectx: property (text), widget (QLabel, lConvolution)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:353
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
 #: src/commonfrontend/worksheet/WorksheetView.cpp:338
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:325
 #, kde-format
@@ -7275,8 +7275,8 @@ msgstr "(Обратная) Свёртка"
 # BUGME: please add context --aspotashev
 #. i18n("(De-)Convolution"), cartesianPlotAddNewActionGroup);
 #. i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:354
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:402
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:369
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:417
 #: src/commonfrontend/worksheet/WorksheetView.cpp:340
 #: src/commonfrontend/worksheet/WorksheetView.cpp:368
 #, kde-format
@@ -7284,7 +7284,7 @@ msgid "Auto-/Cross-Correlation"
 msgstr "Авто-/Перекрёстная корреляция"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:371
 #: src/commonfrontend/worksheet/WorksheetView.cpp:349
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
 #, kde-format
@@ -7292,92 +7292,92 @@ msgid "Legend"
 msgstr "Легенда"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:360
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:375
 #: src/commonfrontend/worksheet/WorksheetView.cpp:350
 #, kde-format
 msgid "Horizontal Axis"
 msgstr "Горизонтальная ось"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:361
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:376
 #: src/commonfrontend/worksheet/WorksheetView.cpp:351
 #, kde-format
 msgid "Vertical Axis"
 msgstr "Вертикальная ось"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:364
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:379
 #, kde-format
 msgid "Info Element"
 msgstr "Информационный элемент"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:365
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:380
 #: src/commonfrontend/worksheet/WorksheetView.cpp:354
 #, kde-format
 msgid "Custom Point"
 msgstr "Настраиваемая точка"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:366
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:381
 #, kde-format
 msgid "Reference Line"
 msgstr "Контрольная линия"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:397
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Differentiate"
 msgstr "Дифференцирование"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:398
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:413
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #, kde-format
 msgid "Integrate"
 msgstr "Интегрирование"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:399
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:414
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, kde-format
 msgid "Interpolate"
 msgstr "Интерполирование"
 
 # BUGME: please add context --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:401
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
 #, kde-format
 msgid "Convolute/Deconvolute"
 msgstr "Свёртка/Обратная свёртка"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:412
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:427
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
 #, kde-format
 msgid "Exponential (degree 1)"
 msgstr "Экспоненциальное (степень 1)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:431
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:483
 #, kde-format
 msgid "Exponential (degree 2)"
 msgstr "Экспоненциальное (степень 2)"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:432
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:447
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
 msgid "Arc Tangent"
 msgstr "Арктангенс"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:451
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:503
 #, kde-format
 msgid "Hyperbolic Tangent"
 msgstr "Гиперболический тангенс"
 
 # BUGME: please add context --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:455
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:507
 #, kde-format
 msgid "Error Function"
 msgstr "Функция ошибок"
 
 # BUGME: please add ctxt --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:474
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:489
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:162
 #: src/commonfrontend/workbook/WorkbookView.cpp:136
 #: src/commonfrontend/worksheet/WorksheetView.cpp:450
@@ -7387,272 +7387,271 @@ msgstr "Функция ошибок"
 msgid "Add New"
 msgstr "Добавить элемент"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:483
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:498
 #: src/commonfrontend/worksheet/WorksheetView.cpp:525
 #, kde-format
 msgid "Analysis Curve"
 msgstr "Кривая анализа"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:540
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:555
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:204
 #, kde-format
 msgid "Analysis"
 msgstr "Анализ"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:560
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:575
 #: src/commonfrontend/worksheet/WorksheetView.cpp:603
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
 #, kde-format
 msgid "Theme"
 msgstr "Тема"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:899
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:933
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:918
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:952
 #, kde-format
 msgid "%1: change geometry rect"
 msgstr "%1: изменение геометрии прямоугольника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:968
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:987
 #, kde-format
 msgid "%1: set range type"
 msgstr "%1: задание типа интервала"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:975
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:994
 #, kde-format
 msgid "%1: set nice extend"
 msgstr "%1: задание интервала в круглых числах"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:982
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:989
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1001
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1008
 #, kde-format
 msgid "%1: set range"
 msgstr "%1: задание интервала"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1000
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1019
 #, fuzzy, kde-format
 msgid "%1: change %2-range %3 format"
 msgstr "%1: изменение формата интервала %2 по X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1091
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1110
 #, fuzzy, kde-format
 msgid "%1: change %2-range %3 auto scaling"
 msgstr "%1: изменение автомасштабирования интервала %2 по X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1325
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1344
 #, kde-format
 msgid "%1: change x-range %2 scale"
 msgstr "%1: изменение масштаба интервала %2 по X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1444
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1463
 #, kde-format
 msgid "%1: set default plot range"
 msgstr "%1: задание интервала графика по умолчанию"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1457
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1476
 #, kde-format
 msgid "%1: x-range breaking enabled"
 msgstr "%1: включение разрыва шкалы по X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1466
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1485
 #, kde-format
 msgid "%1: x-range breaks changed"
 msgstr "%1: изменение разрывов шкалы по X"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1475
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1494
 #, kde-format
 msgid "%1: y-range breaking enabled"
 msgstr "%1: включение разрыва шкалы по Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1484
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1495
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1503
 #, kde-format
 msgid "%1: y-range breaks changed"
 msgstr "%1: изменение разрывов шкалы по Y"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1506
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1517
 #, kde-format
 msgid "%1: Cursor0 enable"
 msgstr "%1: включение Cursor0"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1518
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1529
 #, kde-format
 msgid "%1: Cursor1 enable"
 msgstr "%1: включение Cursor1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1529
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1540
 #: src/backend/worksheet/Worksheet.cpp:753
 #, kde-format
 msgid "%1: load theme %2"
 msgstr "%1: загрузка темы %2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1531
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1542
 #: src/backend/worksheet/Worksheet.cpp:755
 #, kde-format
 msgid "%1: load default theme"
 msgstr "%1: загрузка темы по умолчанию"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1533
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5243
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1544
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5245
 #: src/backend/worksheet/Worksheet.cpp:757
 #, kde-format
 msgid "%1: set theme"
 msgstr "%1: задание темы"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1604
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1615
 #, kde-format
 msgid "%1: distribution fit to '%2'"
 msgstr "%1: приближение распределения к «%2»"
 
 # BUGME: please add colon --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1605
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1616
 #, kde-format
 msgid "Distribution Fit to '%1'"
 msgstr "Приближение распределения к «%1»"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1652
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1663
 #, kde-format
 msgid "%1: reduce '%2'"
 msgstr "%1: приведение «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1653
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1664
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:643
 #, kde-format
 msgid "Reduction of '%1'"
 msgstr "Приведение кривой «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1660
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1671
 #, kde-format
 msgid "%1: add data reduction curve"
 msgstr "%1: добавка кривой приведения данных"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1672
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1683
 #, kde-format
 msgid "%1: differentiate '%2'"
 msgstr "%1: дифференцирование «%2»"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1673
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1684
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:646
 #, kde-format
 msgid "Derivative of '%1'"
 msgstr "Производная кривой «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1680
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1691
 #, kde-format
 msgid "%1: add differentiation curve"
 msgstr "%1: добавка кривой дифференцирования"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1692
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1703
 #, kde-format
 msgid "%1: integrate '%2'"
 msgstr "%1: интегрировать «%2»"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1693
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1704
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
 #, kde-format
 msgid "Integral of '%1'"
 msgstr "Интеграл кривой «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1700
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1711
 #, kde-format
 msgid "%1: add integration curve"
 msgstr "%1: добавка кривой интегрирования"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1712
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1723
 #, kde-format
 msgid "%1: interpolate '%2'"
 msgstr "%1: интерполирование «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1713
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1724
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
 #, kde-format
 msgid "Interpolation of '%1'"
 msgstr "Интерполирование кривой «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1720
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1731
 #, kde-format
 msgid "%1: add interpolation curve"
 msgstr "%1: добавка кривой интерполирования"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1732
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1743
 #, kde-format
 msgid "%1: smooth '%2'"
 msgstr "%1: сглаживание «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1733
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1744
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
 #, kde-format
 msgid "Smoothing of '%1'"
 msgstr "Сглаживание кривой «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1740
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1751
 #, kde-format
 msgid "%1: add smoothing curve"
 msgstr "%1: добавка кривой сглаживания"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1752
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1763
 #, kde-format
 msgid "%1: fit to '%2'"
 msgstr "%1: приближение к «%2»"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1753
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1764
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Fit to '%1'"
 msgstr "Приближение к «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1782
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1793
 #, kde-format
 msgid "%1: add fit curve"
 msgstr "%1: добавка кривой приближения"
 
 # BUGME: please split --aspotashev
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1793
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1804
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
 msgstr "%1: Применение фильтра Фурье к «%2»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1794
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1805
 #, kde-format
 msgid "Fourier filtering of '%1'"
 msgstr "Применение фильтра Фурье к «%1»"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1798
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1809
 #, kde-format
 msgid "%1: add Fourier filter curve"
 msgstr "%1: добавка кривой фильтра Фурье"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3717
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3728
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "За пределами ограничивающего прямоугольника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3958
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3948
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3969
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "от x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3945
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3971
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3956
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3982
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "от y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3990
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4001
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5190
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5192
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "Неизвестный элемент «%1» внутри элемента «cartesianPlot»."
@@ -12085,7 +12084,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2567
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:804
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2031
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1976
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:441
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:798
@@ -12262,83 +12261,52 @@ msgstr "Линия медианы"
 msgid "File Browser"
 msgstr "Обозреватель файлов"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "NoPen"
-msgstr "Без линии"
-
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "SolidLine"
-msgstr "Сплошная линия"
-
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "DashLine"
-msgstr "Штриховая линия"
-
-# BUGME: please split --aspotashev
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "DotLine"
-msgstr "Пунктирная линия"
-
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "DashDotLine"
-msgstr "Штрихпунктирная линия"
-
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:144
-#, kde-format
-msgid "DashDotDotLine"
-msgstr "Штрихпунктирная линия с двумя точками"
-
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:234
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:230
 #, fuzzy, kde-format
 msgid "Save current plot definition as template"
 msgstr "Сохранить текущие свойства как шаблон"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:643
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:637
 #, fuzzy, kde-format
 msgid "%1-Ranges:"
 msgstr "Диапазоны по оси X:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:645
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:639
 #, fuzzy, kde-format
 msgid "%1-Range:"
 msgstr "Диапазон по оси X:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:668
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:662
 #, kde-format
 msgid "Numeric"
 msgstr "Числовой"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:763
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:757
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Диапазоны графика:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:765
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:759
 #, kde-format
 msgid "Plot Range:"
 msgstr "Диапазон графика:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:840
 #, kde-format
 msgid "Free"
 msgstr "Свободный"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
 #, kde-format
 msgid "Last Points"
 msgstr "Последние точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
 #, kde-format
 msgid "First Points"
 msgstr "Первые точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:851
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12349,37 +12317,37 @@ msgstr ""
 "li><li>Последние точки — отображается указанное число последних точек</"
 "li><li>Первые точки — отображается указанное число первых точек</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:860
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:854
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "При включении параметра диапазон графика автоматически расширяется до "
 "круглых чисел"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:869
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:859
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
 #, kde-format
 msgid "Simple"
 msgstr "Простой"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:867
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:871
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:861
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
 #, kde-format
 msgid "Sloped"
 msgstr "Наклонный"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1186
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1180
 #, fuzzy, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "Диапазон %1 по оси X используется в диапазоне графика %2. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1187
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1235
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1181
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1229
 #, kde-format
 msgid "Really remove it?"
 msgstr "Удалить его?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1235
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1229
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Диапазон графика %1 применяется в элементе «%2». "
@@ -12387,7 +12355,7 @@ msgstr "Диапазон графика %1 применяется в элеме�
 # BUGME: please split --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1336
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1330
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:581
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:690
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
@@ -12397,7 +12365,7 @@ msgstr "По-горизонтали:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1337
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1331
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:636
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:710
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:494
@@ -12407,7 +12375,7 @@ msgstr "По-вертикали:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1339
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1333
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:615
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:663
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:464
@@ -12417,7 +12385,7 @@ msgstr "Слева:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1340
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1334
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:763
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:617
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:418
@@ -12425,18 +12393,18 @@ msgstr "Слева:"
 msgid "Top:"
 msgstr "Сверху:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1773
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1726
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1775
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1728
 #, fuzzy, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "Проекты LabPlot (%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:2029
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1974
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Графики в декартовых координатах (%1): загрузка шаблона «%2»"
@@ -16265,7 +16233,6 @@ msgstr "Размер:"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbOffsetY)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbOffsetX)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbErrorBarSize)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbCursorLineWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbLineWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersCapWidth)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbWhiskersCapSize)
@@ -16301,7 +16268,6 @@ msgstr "Размер:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:708
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:725
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1217
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1411
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:526
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:543
@@ -16331,7 +16297,6 @@ msgstr " пт"
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingStyle)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakStyle)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakStyle)
-#. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lColorStyle)
 #. i18n: ectx: property (text), widget (QLabel, lImageStyle)
 #. i18n: ectx: property (text), widget (QLabel, lBrushStyle)
@@ -16357,7 +16322,6 @@ msgstr " пт"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:936
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1063
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1370
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1446
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:567
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:501
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:233
@@ -16378,7 +16342,6 @@ msgstr "Стиль:"
 #. i18n: ectx: property (text), widget (QLabel, lFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, lBorderColor)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingColor)
-#. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapColor)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksColor)
@@ -16399,7 +16362,6 @@ msgstr "Стиль:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:461
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1317
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1475
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:162
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:492
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
@@ -17741,7 +17703,6 @@ msgstr "Ориентация:"
 # BUGME: please disambiguate (add ctxt) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, lLineWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWidth)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapWidth)
@@ -17762,7 +17723,6 @@ msgstr "Ориентация:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:701
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:595
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1387
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1488
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:452
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:553
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:400
@@ -21733,6 +21693,25 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "Unable to open file:"
 msgstr "Не удалось открыть файл «%1»."
+
+#~ msgid "NoPen"
+#~ msgstr "Без линии"
+
+#~ msgid "SolidLine"
+#~ msgstr "Сплошная линия"
+
+#~ msgid "DashLine"
+#~ msgstr "Штриховая линия"
+
+# BUGME: please split --aspotashev
+#~ msgid "DotLine"
+#~ msgstr "Пунктирная линия"
+
+#~ msgid "DashDotLine"
+#~ msgstr "Штрихпунктирная линия"
+
+#~ msgid "DashDotDotLine"
+#~ msgstr "Штрихпунктирная линия с двумя точками"
 
 # BUGME: please split (need a ellipsis for the action that opens a dialog) --aspotashev
 #, fuzzy
