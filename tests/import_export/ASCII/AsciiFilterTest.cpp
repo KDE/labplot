@@ -233,10 +233,7 @@ void AsciiFilterTest::testHeader02() {
 	QCOMPARE(spreadsheet.rowCount(), 2); // out of 3 rows one row is used for the column names (header)
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("1"));
-
-	// TODO: we start with the names "1" and "2" in the spreadsheet and try to rename them to "1" and "1" (names coming from the file)
-	//-> the second column with the name "2" will be renamed to "3" because of the current logic in AbstractAspect::uniqueNameFor().
-	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("3"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
 }
 
 void AsciiFilterTest::testHeader03() {
@@ -424,6 +421,43 @@ void AsciiFilterTest::testHeader08() {
 
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 3);
 	QCOMPARE(spreadsheet.column(1)->integerAt(1), 4);
+}
+
+/*!
+ * test the handling of duplicated columns names provided by the user.
+ */
+void AsciiFilterTest::testHeader09() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
+
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(false);
+	filter.setVectorNames(QStringList{"x", "x"});
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("x 1")); // the duplicated name was renamed
+}
+
+/*!
+ * test the handling of duplicated columns in the file to be imported.
+ */
+void AsciiFilterTest::testHeader10() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header_duplicated_names.txt"));
+
+	filter.setSeparatingCharacter(";");
+	filter.setHeaderEnabled(true);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("x"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("x 1")); // the duplicated name was renamed
 }
 
 //##############################################################################

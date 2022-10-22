@@ -39,6 +39,8 @@ private Q_SLOTS:
 	void testHeader07();
 	void testHeader07a();
 	void testHeader08();
+	void testHeader09();
+	void testHeader10();
 
 	// read ranges
 	void testColumnRange00();

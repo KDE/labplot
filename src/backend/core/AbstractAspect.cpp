@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1071,15 +1071,23 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 /**
  * \brief Make the specified name unique among my children by incrementing a trailing number.
  */
-QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
-	QStringList child_names;
+QString AbstractAspect::uniqueNameFor(const QString& name) const {
+	QStringList names;
 	for (auto* child : children())
-		child_names << child->name();
+		names << child->name();
 
-	if (!child_names.contains(current_name))
-		return current_name;
+	return uniqueNameFor(name, names);
+}
 
-	QString base = current_name;
+/*!
+ * static helper function that makes the string \c name unique and avoids duplicates
+ * in the list of strings \c names.
+ */
+QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& names) {
+	if (!names.contains(name))
+		return name;
+
+	QString base = name;
 	int last_non_digit;
 	for (last_non_digit = base.size() - 1; last_non_digit >= 0; --last_non_digit) {
 		if (base[last_non_digit].category() == QChar::Number_DecimalDigit) {
@@ -1093,7 +1101,7 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 				// the form "data_2020.06". In this case we don't use anything
 				// from the original name to increment the number
 				last_non_digit = 0;
-				base = current_name;
+				base = name;
 				break;
 			}
 		}
@@ -1102,11 +1110,11 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");
 
-	int new_nr = current_name.rightRef(current_name.size() - base.size()).toInt();
+	int new_nr = name.rightRef(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);
-	while (child_names.contains(new_name));
+	while (names.contains(new_name));
 
 	return new_name;
 }
