@@ -905,7 +905,7 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 }
 
 void XYCurvePrivate::calculateScenePoints() {
-	if (!m_scenePointsDirty || !xColumn)
+	if (!q->plot() || !m_scenePointsDirty || !xColumn)
 		return;
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(Q_FUNC_INFO + QLatin1String(", curve ") + name());
