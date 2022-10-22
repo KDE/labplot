@@ -724,7 +724,10 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 	}
 
 	// adjust the size of the table widget
+	tw->resizeColumnToContents(0);
 	tw->resizeColumnToContents(1);
+	tw->resizeColumnToContents(2);
+	tw->resizeColumnToContents(3);
 	int height = tw->verticalHeader()->sectionSize(0) * tw->verticalHeader()->count();
 	height +=
 		tw->horizontalHeader()->height() + 2; // TODO: offset of 2 is required, otherwise too much is cut off. figure out who to get this offset from QStyle
