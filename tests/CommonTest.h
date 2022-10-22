@@ -19,11 +19,11 @@ extern "C" {
 
 ///////////////////////// macros ///////////
 
-#define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true);
+#define VALUES_EQUAL(v1, ref) QVERIFY2(nsl_math_approximately_equal(v1, ref) == true, qPrintable(QString("v1:%1, ref:%2").arg(v1).arg(ref)))
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \
-	VALUES_EQUAL(range.start(), start_)                                                                                                                        \
-	VALUES_EQUAL(range.end(), end_)
+	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
+	VALUES_EQUAL(range.end(), end_);
 
 #define CHECK_RANGE(plot, aspect, dim, start_, end_)                                                                                                           \
 	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dim)), start_, end_)
