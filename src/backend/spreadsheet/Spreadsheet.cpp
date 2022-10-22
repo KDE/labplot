@@ -1016,15 +1016,26 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	resize data source to cols columns
 	returns column offset depending on import mode
 */
-int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, int cols) {
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
 	emit aboutToResize();
 
-	for (int k = colNameList.size(); k < cols; k++)
-		colNameList.append("Column " + QString::number(k + 1));
+	// make sure the column names provided by the user don't have any duplicates
+	QStringList uniqueNames;
+	if (names.count() > 1) {
+		uniqueNames << names.at(0);
+		for (int i = 1; i < names.count(); ++i)
+			uniqueNames << AbstractAspect::uniqueNameFor(names.at(i), uniqueNames);
+	} else
+		uniqueNames = names;
+
+	// if the number of provided column names is smaller than the number of columns to be created,
+	// create standard names
+	for (int k = uniqueNames.size(); k < cols; k++)
+		uniqueNames.append("Column " + QString::number(k + 1));
 
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
@@ -1033,7 +1044,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1042,7 +1053,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1061,7 +1072,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
 			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 			for (int i = columns; i < cols; i++) {
-				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
+				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
 				newColumn->resizeTo(rows);
@@ -1079,7 +1090,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(colNameList.at(i));
+			child<Column>(i)->setName(uniqueNames.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
