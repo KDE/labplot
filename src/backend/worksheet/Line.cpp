@@ -47,6 +47,9 @@ void Line::init(const KConfigGroup& group) {
 		d->errorBarsCapSize = group.readEntry(d->prefix + "CapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 	}
 
+	if (d->prefix == QLatin1String("DropLine"))
+		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + "Type", (int)XYCurve::DropLineType::NoDropLine);
+
 	d->pen = QPen(group.readEntry(d->prefix + "Color", QColor(Qt::black)),
 				  group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
@@ -62,6 +65,8 @@ BASIC_SHARED_D_READER_IMPL(Line, Histogram::LineType, histogramLineType, histogr
 BASIC_SHARED_D_READER_IMPL(Line, bool, errorBarsTypeAvailable, errorBarsTypeAvailable)
 BASIC_SHARED_D_READER_IMPL(Line, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(Line, double, errorBarsCapSize, errorBarsCapSize)
+
+BASIC_SHARED_D_READER_IMPL(Line, XYCurve::DropLineType, dropLineType, dropLineType)
 
 BASIC_SHARED_D_READER_IMPL(Line, QPen, pen, pen)
 BASIC_SHARED_D_READER_IMPL(Line, double, opacity, opacity)
@@ -98,6 +103,13 @@ void Line::setErrorBarsType(XYCurve::ErrorBarsType type) {
 	Q_D(Line);
 	if (type != d->errorBarsType)
 		exec(new LineSetErrorBarsTypeCmd(d, type, ki18n("%1: error bar type changed")));
+}
+
+STD_SETTER_CMD_IMPL_S(Line, SetDropLineType, XYCurve::DropLineType, dropLineType)
+void Line::setDropLineType(XYCurve::DropLineType type) {
+	Q_D(Line);
+	if (type != d->dropLineType)
+		exec(new LineSetDropLineTypeCmd(d, type, ki18n("%1: drop line type changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetPen, QPen, pen, update)
@@ -145,9 +157,12 @@ void Line::save(QXmlStreamWriter* writer) const {
 	if (!d->errorBarsTypeAvailable || d->prefix == "Whiskers") {
 		// for names in the XML file, the first letter is lower case but the camel case still remains.
 		// so, we just convert the first character for lower case. e.g. MedianLine -> medianLine.
-		QString newPrefix = d->prefix;
-		newPrefix.replace(0, 1, d->prefix.at(0).toLower());
-		writer->writeStartElement(newPrefix);
+		if (d->prefix != QLatin1String("DropLine")) {
+			QString newPrefix = d->prefix;
+			newPrefix.replace(0, 1, d->prefix.at(0).toLower());
+			writer->writeStartElement(newPrefix);
+		} else
+			writer->writeStartElement(QLatin1String("dropLines")); // use "dropLines" for backward compatibility in XYCurve
 	}
 
 	if (d->histogramLineTypeAvailable)
@@ -155,7 +170,8 @@ void Line::save(QXmlStreamWriter* writer) const {
 	else if (d->errorBarsTypeAvailable) {
 		writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
 		writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
-	}
+	} else if (d->prefix == QLatin1String("DropLine"))
+		writer->writeAttribute("type", QString::number(static_cast<int>(d->dropLineType)));
 
 	WRITE_QPEN(d->pen);
 	writer->writeAttribute("opacity", QString::number(d->opacity));
@@ -182,6 +198,9 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 		READ_INT_VALUE("type", errorBarsType, XYCurve::ErrorBarsType);
 		READ_DOUBLE_VALUE("capSize", errorBarsCapSize);
 	}
+
+	if (d->prefix == QLatin1String("DropLine"))
+		READ_INT_VALUE("type", dropLineType, XYCurve::DropLineType);
 
 	READ_QPEN(d->pen);
 	READ_DOUBLE_VALUE("opacity", opacity);

@@ -52,6 +52,7 @@ private Q_SLOTS:
 	void histogramLineTypeChanged(Histogram::LineType);
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsCapSizeChanged(double);
+	void dropLineTypeChanged(XYCurve::DropLineType);
 
 	void linePenChanged(QPen&);
 	void lineOpacityChanged(double);

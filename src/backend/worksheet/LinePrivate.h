@@ -32,6 +32,8 @@ public:
 	XYCurve::ErrorBarsType errorBarsType{XYCurve::ErrorBarsType::Simple};
 	double errorBarsCapSize{1.};
 
+	XYCurve::DropLineType dropLineType{XYCurve::DropLineType::NoDropLine};
+
 	// common parameters
 	QPen pen;
 	double opacity{1.0};
