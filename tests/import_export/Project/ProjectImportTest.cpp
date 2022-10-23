@@ -18,6 +18,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
@@ -457,7 +458,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
 
@@ -513,7 +514,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
 
@@ -581,7 +582,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties
 
@@ -625,7 +626,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
 	QCOMPARE(curve->lineOpacity(), 1);
-	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties
 
