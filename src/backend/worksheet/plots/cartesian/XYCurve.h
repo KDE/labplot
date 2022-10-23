@@ -103,10 +103,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 
 	Symbol* symbol() const;
-
-	BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType)
-	CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
+	Line* dropLine() const;
+	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
@@ -123,7 +121,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
-	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
@@ -220,8 +217,6 @@ Q_SIGNALS:
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
 	void dropLineTypeChanged(XYCurve::DropLineType);
-	void dropLinePenChanged(const QPen&);
-	void dropLineOpacityChanged(qreal);
 
 	// Values-Tab
 	void valuesTypeChanged(XYCurve::ValuesType);

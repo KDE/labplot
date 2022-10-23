@@ -83,9 +83,7 @@ public:
 	qreal lineOpacity;
 
 	// drop lines
-	XYCurve::DropLineType dropLineType;
-	QPen dropLinePen;
-	qreal dropLineOpacity;
+	Line* dropLine{nullptr};
 
 	// symbols
 	Symbol* symbol{nullptr};

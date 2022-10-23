@@ -86,6 +86,22 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 			ui.cbType->addItem(i18n("Bars with Ends"));
 			ui.cbType->setItemIcon(1, pm);
 		}
+	} else if (m_prefix == QLatin1String("DropLine")) {
+		ui.lType->show();
+		ui.cbType->show();
+		ui.lErrorBarsCapSize->hide();
+		ui.sbErrorBarsCapSize->hide();
+
+		if (ui.cbType->count() == 0) {
+			Lock lock(m_initializing);
+			ui.cbType->addItem(i18n("No Drop Lines"));
+			ui.cbType->addItem(i18n("Drop Lines, X"));
+			ui.cbType->addItem(i18n("Drop Lines, Y"));
+			ui.cbType->addItem(i18n("Drop Lines, XY"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Zero Baseline"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Min Baseline"));
+			ui.cbType->addItem(i18n("Drop Lines, X, Max Baseline"));
+		}
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
@@ -98,6 +114,7 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 	connect(m_line, &Line::histogramLineTypeChanged, this, &LineWidget::histogramLineTypeChanged);
 	connect(m_line, &Line::errorBarsTypeChanged, this, &LineWidget::errorBarsTypeChanged);
 	connect(m_line, &Line::errorBarsCapSizeChanged, this, &LineWidget::errorBarsCapSizeChanged);
+	connect(m_line, &Line::dropLineTypeChanged, this, &LineWidget::dropLineTypeChanged);
 
 	connect(m_line, &Line::penChanged, this, &LineWidget::linePenChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
@@ -171,11 +188,18 @@ void LineWidget::typeChanged(int index) {
 		ui.lErrorBarsCapSize->setVisible(b);
 		ui.sbErrorBarsCapSize->setVisible(b);
 
-		if (m_initializing)
-			return;
+		if (!m_initializing) {
+			for (auto* line : m_lines)
+				line->setErrorBarsType(type);
+		}
+	} else if (m_prefix == QLatin1String("DropLine")) {
+		auto type = XYCurve::DropLineType(index);
+		enabled = (type != XYCurve::DropLineType::NoDropLine);
 
-		for (auto* line : m_lines)
-			line->setErrorBarsType(type);
+		if (!m_initializing) {
+			for (auto* line : m_lines)
+				line->setDropLineType(type);
+		}
 	}
 
 	ui.cbStyle->setEnabled(enabled);
@@ -253,7 +277,7 @@ void LineWidget::opacityChanged(int value) const {
 //*************************************************************
 void LineWidget::histogramLineTypeChanged(Histogram::LineType type) {
 	m_initializing = true;
-	ui.cbType->setCurrentIndex((int)type);
+	ui.cbType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
@@ -266,6 +290,12 @@ void LineWidget::errorBarsTypeChanged(XYCurve::ErrorBarsType type) {
 void LineWidget::errorBarsCapSizeChanged(double size) {
 	m_initializing = true;
 	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+
+void LineWidget::dropLineTypeChanged(XYCurve::DropLineType type) {
+	m_initializing = true;
+	ui.cbType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
@@ -297,7 +327,8 @@ void LineWidget::load() {
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->errorBarsType()));
 		const double size = Worksheet::convertFromSceneUnits(m_line->errorBarsCapSize(), Worksheet::Unit::Point);
 		ui.sbErrorBarsCapSize->setValue(size);
-	}
+	} else if (m_prefix == QLatin1String("DropLine"))
+		ui.cbType->setCurrentIndex(static_cast<int>(m_line->dropLineType()));
 
 	const QPen& pen = m_line->pen();
 	ui.kcbColor->setColor(pen.color());
@@ -316,7 +347,8 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->errorBarsType())));
 		const double size = Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "CapSize", m_line->errorBarsCapSize()), Worksheet::Unit::Point);
 		ui.sbErrorBarsCapSize->setValue(size);
-	}
+	} else if (m_prefix == QLatin1String("DropLine"))
+		ui.cbType->setCurrentIndex(group.readEntry("DropLineType", static_cast<int>(m_line->dropLineType())));
 
 	const QPen& pen = m_line->pen();
 	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(pen.style())));
@@ -327,7 +359,7 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 }
 
 void LineWidget::saveConfig(KConfigGroup& group) const {
-	if (m_line->histogramLineTypeAvailable())
+	if (m_line->histogramLineTypeAvailable() || m_prefix == QLatin1String("DropLine"))
 		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
 	else if (m_line->errorBarsTypeAvailable()) {
 		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());

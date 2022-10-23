@@ -89,11 +89,20 @@ void XYCurve::init() {
 	d->linePen.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->dropLineType = (DropLineType)group.readEntry("DropLineType", static_cast<int>(LineType::NoLine));
-	d->dropLinePen.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle", (int)Qt::SolidLine));
-	d->dropLinePen.setColor(group.readEntry("DropLineColor", QColor(Qt::black)));
-	d->dropLinePen.setWidthF(group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
+	d->dropLine = new Line(QString());
+	d->dropLine->setPrefix(QLatin1String("DropLine"));
+	d->dropLine->setHidden(true);
+	addChild(d->dropLine);
+	d->dropLine->init(group);
+	connect(d->dropLine, &Line::dropLineTypeChanged, [=] {
+		d->updateDropLines();
+	});
+	connect(d->dropLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->dropLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// initialize the symbol
 	d->symbol = new Symbol(QString());
@@ -277,9 +286,10 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
 
 // droplines
-BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DropLineType, dropLineType, dropLineType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
+Line* XYCurve::dropLine() const {
+	Q_D(const XYCurve);
+	return d->dropLine;
+}
 
 // symbols
 Symbol* XYCurve::symbol() const {
@@ -422,28 +432,6 @@ void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)
 		exec(new XYCurveSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
-}
-
-// Drop lines
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineType, XYCurve::DropLineType, dropLineType, updateDropLines)
-void XYCurve::setDropLineType(DropLineType type) {
-	Q_D(XYCurve);
-	if (type != d->dropLineType)
-		exec(new XYCurveSetDropLineTypeCmd(d, type, ki18n("%1: drop line type changed")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLinePen, QPen, dropLinePen, recalcShapeAndBoundingRect)
-void XYCurve::setDropLinePen(const QPen& pen) {
-	Q_D(XYCurve);
-	if (pen != d->dropLinePen)
-		exec(new XYCurveSetDropLinePenCmd(d, pen, ki18n("%1: set drop line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetDropLineOpacity, qreal, dropLineOpacity, updatePixmap)
-void XYCurve::setDropLineOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->dropLineOpacity)
-		exec(new XYCurveSetDropLineOpacityCmd(d, opacity, ki18n("%1: set drop line opacity")));
 }
 
 // Values-Tab
@@ -1646,7 +1634,7 @@ void XYCurvePrivate::updateLines() {
 */
 void XYCurvePrivate::updateDropLines() {
 	dropLinePath = QPainterPath();
-	if (dropLineType == XYCurve::DropLineType::NoDropLine) {
+	if (dropLine->dropLineType() == XYCurve::DropLineType::NoDropLine) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1658,7 +1646,7 @@ void XYCurvePrivate::updateDropLines() {
 	const double yMin = plot()->range(Dimension::Y, cs->index(Dimension::Y)).start();
 
 	int i = 0;
-	switch (dropLineType) {
+	switch (dropLine->dropLineType()) {
 	case XYCurve::DropLineType::NoDropLine:
 		break;
 	case XYCurve::DropLineType::X:
@@ -2812,8 +2800,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (lineType != XYCurve::LineType::NoLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 
-	if (dropLineType != XYCurve::DropLineType::NoDropLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
+	if (dropLine->dropLineType() != XYCurve::DropLineType::NoDropLine)
+		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
@@ -2870,9 +2858,9 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	// draw drop lines
-	if (dropLineType != XYCurve::DropLineType::NoDropLine) {
-		painter->setOpacity(dropLineOpacity);
-		painter->setPen(dropLinePen);
+	if (dropLine->dropLineType() != XYCurve::DropLineType::NoDropLine) {
+		painter->setOpacity(dropLine->opacity());
+		painter->setPen(dropLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(dropLinePath);
 	}
@@ -3175,11 +3163,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// Drop lines
-	writer->writeStartElement("dropLines");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->dropLineType)));
-	WRITE_QPEN(d->dropLinePen);
-	writer->writeAttribute("opacity", QString::number(d->dropLineOpacity));
-	writer->writeEndElement();
+	d->dropLine->save(writer);
 
 	// Symbols
 	d->symbol->save(writer);
@@ -3271,12 +3255,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);
 		} else if (!preview && reader->name() == "dropLines") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("type", dropLineType, DropLineType);
-			READ_QPEN(d->dropLinePen);
-			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
-
+			d->dropLine->load(reader, preview);
 		} else if (!preview && reader->name() == "symbols") {
 			d->symbol->load(reader, preview);
 		} else if (!preview && reader->name() == "values") {
@@ -3358,11 +3337,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	// Drop line
-	p.setStyle((Qt::PenStyle)group.readEntry("DropLineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	this->setDropLinePen(p);
-	this->setDropLineOpacity(group.readEntry("DropLineOpacity", 1.0));
+	d->dropLine->loadThemeConfig(group, themeColor);
 
 	// Symbol
 	d->symbol->loadThemeConfig(group, themeColor);
@@ -3398,17 +3373,12 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("LineStyle", (int)this->linePen().style());
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
-	// Drop line
-	group.writeEntry("DropLineColor", (QColor)this->dropLinePen().color());
-	group.writeEntry("DropLineStyle", (int)this->dropLinePen().style());
-	group.writeEntry("DropLineWidth", this->dropLinePen().widthF());
-	group.writeEntry("DropLineOpacity", this->dropLineOpacity());
-
 	// Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
 	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
 
+	d->dropLine->saveThemeConfig(group);
 	d->background->saveThemeConfig(group);
 	d->symbol->saveThemeConfig(group);
 	d->errorBarsLine->saveThemeConfig(group);

@@ -43,7 +43,15 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	: BaseDock(parent) {
 	ui.setupUi(this);
 
-	//"Symbol"-tab
+	// Tab "Line"
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
+	dropLineWidget = new LineWidget(ui.tabLine);
+	dropLineWidget->setPrefix(QLatin1String("DropLine"));
+	gridLayout->addWidget(dropLineWidget, 11, 0, 1, 3);
+	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	gridLayout->addItem(spacer, 12, 0, 1, 1);
+
+	// Tab "Symbol"
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
 	symbolWidget = new SymbolWidget(ui.tabSymbol);
 	hboxLayout->addWidget(symbolWidget);
@@ -51,7 +59,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	hboxLayout->setSpacing(2);
 
 	// Tab "Values"
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
 	gridLayout->addWidget(cbValuesColumn, 2, 2, 1, 1);
 
@@ -90,7 +98,7 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
 	gridLayout->addWidget(errorBarsLineWidget, 11, 0, 1, 3);
-	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	gridLayout->addItem(spacer, 12, 0, 1, 1);
 
 	// Tab "Margin Plots"
@@ -122,12 +130,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.kcbLineColor, &KColorButton::changed, this, &XYCurveDock::lineColorChanged);
 	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::lineWidthChanged);
 	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::lineOpacityChanged);
-
-	connect(ui.cbDropLineType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::dropLineTypeChanged);
-	connect(ui.cbDropLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::dropLineStyleChanged);
-	connect(ui.kcbDropLineColor, &KColorButton::changed, this, &XYCurveDock::dropLineColorChanged);
-	connect(ui.sbDropLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::dropLineWidthChanged);
-	connect(ui.sbDropLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::dropLineOpacityChanged);
 
 	// Values
 	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesTypeChanged);
@@ -352,16 +354,6 @@ void XYCurveDock::init() {
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 
-	// Drop lines
-	ui.cbDropLineType->addItem(i18n("No Drop Lines"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, Y"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, XY"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Zero Baseline"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Min Baseline"));
-	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Max Baseline"));
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
-
 	m_initializing = false;
 
 	// Values
@@ -486,15 +478,18 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 	// symbols
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
+	QList<Line*> dropLines;
 	QList<Line*> errorBarLines;
 	for (auto* curve : curves) {
 		symbols << curve->symbol();
 		backgrounds << curve->background();
+		dropLines << curve->dropLine();
 		errorBarLines << curve->errorBarsLine();
 	}
 
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
+	dropLineWidget->setLines(dropLines);
 	errorBarsLineWidget->setLines(errorBarLines);
 }
 
@@ -563,9 +558,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, &XYCurve::lineInterpolationPointsCountChanged, this, &XYCurveDock::curveLineInterpolationPointsCountChanged);
 	connect(m_curve, &XYCurve::linePenChanged, this, &XYCurveDock::curveLinePenChanged);
 	connect(m_curve, &XYCurve::lineOpacityChanged, this, &XYCurveDock::curveLineOpacityChanged);
-	connect(m_curve, &XYCurve::dropLineTypeChanged, this, &XYCurveDock::curveDropLineTypeChanged);
-	connect(m_curve, &XYCurve::dropLinePenChanged, this, &XYCurveDock::curveDropLinePenChanged);
-	connect(m_curve, &XYCurve::dropLineOpacityChanged, this, &XYCurveDock::curveDropLineOpacityChanged);
 
 	// Values-Tab
 	connect(m_curve, &XYCurve::valuesTypeChanged, this, &XYCurveDock::curveValuesTypeChanged);
@@ -601,7 +593,6 @@ void XYCurveDock::initTabs() {
 void XYCurveDock::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbDropLineWidth->setLocale(numberLocale);
 	ui.sbValuesDistance->setLocale(numberLocale);
 	symbolWidget->updateLocale();
 	errorBarsLineWidget->updateLocale();
@@ -791,78 +782,6 @@ void XYCurveDock::lineOpacityChanged(int value) {
 	qreal opacity = (float)value / 100.;
 	for (auto* curve : m_curvesList)
 		curve->setLineOpacity(opacity);
-}
-
-void XYCurveDock::dropLineTypeChanged(int index) {
-	const auto dropLineType = XYCurve::DropLineType(index);
-
-	if (dropLineType == XYCurve::DropLineType::NoDropLine) {
-		ui.cbDropLineStyle->setEnabled(false);
-		ui.kcbDropLineColor->setEnabled(false);
-		ui.sbDropLineWidth->setEnabled(false);
-		ui.sbDropLineOpacity->setEnabled(false);
-	} else {
-		ui.cbDropLineStyle->setEnabled(true);
-		ui.kcbDropLineColor->setEnabled(true);
-		ui.sbDropLineWidth->setEnabled(true);
-		ui.sbDropLineOpacity->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setDropLineType(dropLineType);
-}
-
-void XYCurveDock::dropLineStyleChanged(int index) {
-	if (index == -1 || m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->dropLinePen();
-		pen.setStyle(penStyle);
-		curve->setDropLinePen(pen);
-	}
-}
-
-void XYCurveDock::dropLineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->dropLinePen();
-		pen.setColor(color);
-		curve->setDropLinePen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, color);
-	m_initializing = false;
-}
-
-void XYCurveDock::dropLineWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->dropLinePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		curve->setDropLinePen(pen);
-	}
-}
-
-void XYCurveDock::dropLineOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setDropLineOpacity(opacity);
 }
 
 // Values-tab
@@ -1327,24 +1246,6 @@ void XYCurveDock::curveLineOpacityChanged(qreal opacity) {
 	ui.sbLineOpacity->setValue(round(opacity * 100.0));
 	m_initializing = false;
 }
-void XYCurveDock::curveDropLineTypeChanged(XYCurve::DropLineType type) {
-	m_initializing = true;
-	ui.cbDropLineType->setCurrentIndex((int)type);
-	m_initializing = false;
-}
-void XYCurveDock::curveDropLinePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbDropLineStyle->setCurrentIndex((int)pen.style());
-	ui.kcbDropLineColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, pen.color());
-	ui.sbDropLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbDropLineOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
 
 // Values-Tab
 void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
@@ -1489,13 +1390,6 @@ void XYCurveDock::load() {
 	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->linePen().widthF(), Worksheet::Unit::Point));
 	ui.sbLineOpacity->setValue(round(m_curve->lineOpacity() * 100.0));
 
-	// Drop lines
-	ui.cbDropLineType->setCurrentIndex((int)m_curve->dropLineType());
-	ui.cbDropLineStyle->setCurrentIndex((int)m_curve->dropLinePen().style());
-	ui.kcbDropLineColor->setColor(m_curve->dropLinePen().color());
-	ui.sbDropLineWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->dropLinePen().widthF(), Worksheet::Unit::Point));
-	ui.sbDropLineOpacity->setValue(round(m_curve->dropLineOpacity() * 100.0));
-
 	// Values
 	ui.cbValuesType->setCurrentIndex((int)m_curve->valuesType());
 	ui.cbValuesPosition->setCurrentIndex((int)m_curve->valuesPosition());
@@ -1526,7 +1420,6 @@ void XYCurveDock::load() {
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
 	m_initializing = false;
 }
 
@@ -1567,13 +1460,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Unit::Point));
 	ui.sbLineOpacity->setValue(round(group.readEntry("LineOpacity", m_curve->lineOpacity()) * 100.0));
 
-	// Drop lines
-	ui.cbDropLineType->setCurrentIndex(group.readEntry("DropLineType", (int)m_curve->dropLineType()));
-	ui.cbDropLineStyle->setCurrentIndex(group.readEntry("DropLineStyle", (int)m_curve->dropLinePen().style()));
-	ui.kcbDropLineColor->setColor(group.readEntry("DropLineColor", m_curve->dropLinePen().color()));
-	ui.sbDropLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("DropLineWidth", m_curve->dropLinePen().widthF()), Worksheet::Unit::Point));
-	ui.sbDropLineOpacity->setValue(round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity()) * 100.0));
-
 	// Symbols
 	symbolWidget->loadConfig(group);
 
@@ -1600,7 +1486,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
 	m_initializing = false;
 }
 
@@ -1618,13 +1503,6 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
 	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value() / 100.0);
-
-	// Drop Line
-	group.writeEntry("DropLineType", ui.cbDropLineType->currentIndex());
-	group.writeEntry("DropLineStyle", ui.cbDropLineStyle->currentIndex());
-	group.writeEntry("DropLineColor", ui.kcbDropLineColor->color());
-	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value() / 100.0);
 
 	// Symbols
 	symbolWidget->saveConfig(group);

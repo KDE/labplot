@@ -61,6 +61,7 @@ protected:
 	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;
+	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
 	LineWidget* errorBarsLineWidget{nullptr};
@@ -89,12 +90,6 @@ private Q_SLOTS:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
-
-	void dropLineTypeChanged(int);
-	void dropLineStyleChanged(int);
-	void dropLineColorChanged(const QColor&);
-	void dropLineWidthChanged(double);
-	void dropLineOpacityChanged(int);
 
 	// Values-Tab
 	void valuesTypeChanged(int);
@@ -141,9 +136,6 @@ private Q_SLOTS:
 	void curveLineInterpolationPointsCountChanged(int);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
-	void curveDropLineTypeChanged(XYCurve::DropLineType);
-	void curveDropLinePenChanged(const QPen&);
-	void curveDropLineOpacityChanged(qreal);
 
 	// Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);

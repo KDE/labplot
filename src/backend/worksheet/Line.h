@@ -41,6 +41,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
 	BASIC_D_ACCESSOR_DECL(double, errorBarsCapSize, ErrorBarsCapSize)
 
+	// drop line specific parameters for XYCurve
+	BASIC_D_ACCESSOR_DECL(XYCurve::DropLineType, dropLineType, DropLineType)
+
 	// common parameters
 	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
@@ -57,6 +60,7 @@ Q_SIGNALS:
 	void histogramLineTypeChanged(Histogram::LineType);
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsCapSizeChanged(double);
+	void dropLineTypeChanged(XYCurve::DropLineType);
 	void penChanged(QPen&);
 	void opacityChanged(float);
 
