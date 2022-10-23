@@ -1209,15 +1209,9 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	Q_D(CartesianPlot);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 
-	Dimension dim_other;
-	switch (dim) {
-	case Dimension::X:
-		dim_other = Dimension::Y;
-		break;
-	case Dimension::Y:
+	Dimension dim_other = Dimension::Y;
+	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
-		break;
-	}
 
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
@@ -2806,15 +2800,9 @@ void CartesianPlot::zoomOutY(int index) {
 }
 
 void CartesianPlot::zoomInOut(const int index, const Dimension dim, const bool zoomIn) {
-	Dimension dim_other;
-	switch (dim) {
-	case Dimension::X:
-		dim_other = Dimension::Y;
-		break;
-	case Dimension::Y:
+	Dimension dim_other = Dimension::Y;
+	if (dim == Dimension::Y)
 		dim_other = Dimension::X;
-		break;
-	}
 
 	setUndoAware(false);
 	enableAutoScale(dim, index, false);
