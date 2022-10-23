@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-22 00:41+0000\n"
+"POT-Creation-Date: 2022-10-23 00:40+0000\n"
 "PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -6247,7 +6247,7 @@ msgstr "%1: %2 sütununu %3'ten %4'e taşı."
 msgid "%1: sort columns"
 msgstr "%1: sütunları sırala"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1122
+#: src/backend/spreadsheet/Spreadsheet.cpp:1133
 #, fuzzy, kde-format
 #| msgid "numerical data, %1 element"
 #| msgid_plural "numerical data, %1 elements"
@@ -6256,14 +6256,14 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "sayısal veri, %1 öge"
 msgstr[1] "sayısal veri, %1 öge"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1125
+#: src/backend/spreadsheet/Spreadsheet.cpp:1136
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
 msgstr[0] "tamsayı verisi, %1 eleman"
 msgstr[1] "tamsayı verisi, %1 elemanlar"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1128
+#: src/backend/spreadsheet/Spreadsheet.cpp:1139
 #, fuzzy, kde-format
 #| msgid "integer data, %1 element"
 #| msgid_plural "integer data, %1 elements"
@@ -6272,28 +6272,28 @@ msgid_plural "big integer data, %1 elements"
 msgstr[0] "tamsayı verisi, %1 eleman"
 msgstr[1] "tamsayı verisi, %1 elemanlar"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1131
+#: src/backend/spreadsheet/Spreadsheet.cpp:1142
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
 msgstr[0] "metin verisi, %1 eleman"
 msgstr[1] "metin verisi, %1 elemanlar"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1134
+#: src/backend/spreadsheet/Spreadsheet.cpp:1145
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
 msgstr[0] "ay verisi, %1 eleman"
 msgstr[1] "ay verisi, %1 elemanlar"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1137
+#: src/backend/spreadsheet/Spreadsheet.cpp:1148
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
 msgstr[0] "gün verisi, %1 eleman"
 msgstr[1] "gün verisi %1 elemanlar"
 
-#: src/backend/spreadsheet/Spreadsheet.cpp:1140
+#: src/backend/spreadsheet/Spreadsheet.cpp:1151
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
@@ -6386,7 +6386,7 @@ msgstr "%1: arkaplan görüntü rengini ayarla"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:637
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:90
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:47
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:425
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:440
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:33
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:230
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:52
@@ -6545,13 +6545,13 @@ msgstr "%1: çizgi matlığını ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1359
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1362
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: yatay boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1386
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1389
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: dikey boşluğu ayarla"
@@ -6591,8 +6591,8 @@ msgstr "Yatay"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:277
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:860
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:867
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:29
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:97
@@ -6618,7 +6618,7 @@ msgstr "Yönlendirme"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:371
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:383
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:481
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1417
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1435
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:102
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:29
 #, kde-format
@@ -7132,7 +7132,7 @@ msgstr "Veri noktaları uygun değil."
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4977
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:366
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:528
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:415
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:209
 #, kde-format
@@ -10250,7 +10250,7 @@ msgstr "Y-bölgesini seçin ve yakınlaştırın."
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:317
 #: src/kdefrontend/MainWin.cpp:2331
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1405
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1423
 #, kde-format
 msgid "Cursor"
 msgstr "İmleç"
@@ -10359,7 +10359,7 @@ msgstr "Yakınlaş"
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:481
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:533
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:551
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:582
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:247
 #, kde-format
@@ -10891,8 +10891,8 @@ msgstr "Yeni veri kabı ekle"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:42
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:547
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1303
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:926
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1090
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:944
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1108
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:184
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:88
@@ -11941,9 +11941,9 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1019
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1242
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1615
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:195
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:329
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:370
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:201
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:341
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:382
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:34
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:43
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:40
@@ -12206,7 +12206,7 @@ msgstr "%1 eksenleri: şablon \"%2\" yüklendi"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2567
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:804
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1976
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1979
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:441
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:798
@@ -12363,7 +12363,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:91
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1197
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1215
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:445
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
 #: src/kdefrontend/ui/labelwidget.ui:736 src/kdefrontend/ui/symbolwidget.ui:246
@@ -12405,36 +12405,36 @@ msgstr "x-Aralığı:"
 msgid "Numeric"
 msgstr "Numerik"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:757
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:760
 #, fuzzy, kde-format
 #| msgid "Bin Settings:"
 msgid "Plot Ranges:"
 msgstr "Çöp kutusu Ayarları:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:759
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:762
 #, fuzzy, kde-format
 #| msgid "Bin Settings:"
 msgid "Plot Range:"
 msgstr "Çöp kutusu Ayarları:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:840
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
 #, kde-format
 msgid "Free"
 msgstr "Boş"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:844
 #, fuzzy, kde-format
 #| msgid "Move Last Point"
 msgid "Last Points"
 msgstr "Son Noktayı Taşı"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:842
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
 #, fuzzy, kde-format
 #| msgid "Set Axis Points"
 msgid "First Points"
 msgstr "Eksen Noktalarını Ayarla"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12442,43 +12442,43 @@ msgid ""
 "number of first points is plotted</li></ul>"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:854
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:857
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:859
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:863
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:862
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:866
 #, kde-format
 msgid "Simple"
 msgstr "Basit"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:861
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:865
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:864
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:868
 #, kde-format
 msgid "Sloped"
 msgstr "Eğimli"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1180
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1183
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1181
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1229
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1184
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1232
 #, kde-format
 msgid "Really remove it?"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1229
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1232
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1330
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:581
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1333
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:599
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:690
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
@@ -12487,8 +12487,8 @@ msgstr "Yatay:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1331
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:636
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1334
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:654
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:710
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:494
 #, kde-format
@@ -12497,8 +12497,8 @@ msgstr "Dikey:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1333
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:615
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1336
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:633
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:663
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:464
 #, kde-format
@@ -12507,26 +12507,26 @@ msgstr "Sol:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1334
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:763
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1337
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:781
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:617
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:418
 #, kde-format
 msgid "Top:"
 msgstr "Üst:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1726
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1729
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1728
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1731
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr ""
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1974
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1977
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "%1 kartezyen çizimleri: \"%2\" şablonu yüklendi"
@@ -14899,7 +14899,7 @@ msgstr "Şuradan yükle"
 #: src/kdefrontend/PlotTemplateDialog.cpp:57
 #: src/kdefrontend/SettingsWorksheetPage.cpp:62
 #: src/kdefrontend/SettingsWorksheetPage.cpp:72
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:98
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:101
 #: src/kdefrontend/widgets/ThemesComboBox.cpp:72
 #: src/kdefrontend/widgets/ThemesWidget.cpp:67
 #, kde-format
@@ -15705,7 +15705,7 @@ msgstr "Biçim"
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:58
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1465
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1184
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1202
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:420
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:505
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:212
@@ -16374,7 +16374,7 @@ msgstr "Y-Hata Tipi"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:172
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:54
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:65
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:432
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:447
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:191
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:27
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:68
@@ -16419,7 +16419,7 @@ msgstr "Açıklama:"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:120
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:96
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:442
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:457
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:269
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:40
@@ -16532,7 +16532,7 @@ msgstr "Boyut:"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:691
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:708
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:725
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1217
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1235
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:541
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:526
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:543
@@ -16583,9 +16583,9 @@ msgstr " pt"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:468
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:936
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1063
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1370
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:954
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1081
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1388
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:567
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:501
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:233
@@ -16624,7 +16624,7 @@ msgstr "Biçim:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1690
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1774
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:461
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1317
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1335
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:162
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:492
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
@@ -16672,7 +16672,7 @@ msgstr "Resim:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:990
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:34
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1347
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1365
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:233
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:394
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:116
@@ -17921,15 +17921,15 @@ msgstr "Ölçekleme çarpanı"
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbLayoutVerticalSpacing)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, sbLayoutLeftMargin)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:209
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:542
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:555
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:568
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:602
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:665
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:678
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:737
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:750
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1394
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:560
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:573
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:586
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:620
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:683
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:696
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:755
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:768
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1412
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:43
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:290
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:319
@@ -18014,8 +18014,8 @@ msgstr "Yönlendirme"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1784
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:575
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:701
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:595
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1387
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:613
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1405
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:452
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:553
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:400
@@ -18054,7 +18054,7 @@ msgstr "Genişlik:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1801
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:532
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1171
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1189
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:574
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:321
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:407
@@ -18093,7 +18093,7 @@ msgstr "Matlık:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1814
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:494
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1146
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1164
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:94
@@ -18131,9 +18131,9 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1817
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:497
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:943
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1080
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1149
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:961
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1098
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1167
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:512
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:91
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
@@ -18418,8 +18418,8 @@ msgstr "Yan ızgara:"
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:42
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:648
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:966
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:973
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:984
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:991
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:536
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:878
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:346
@@ -18667,21 +18667,21 @@ msgid "List of plot ranges"
 msgstr "Otomatik x-Aralığı"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:88
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:91
 #, fuzzy, kde-format
 #| msgid "X range"
 msgid "X Range"
 msgstr "X aralığı"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:93
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:96
 #, fuzzy, kde-format
 #| msgid "y-Range:"
 msgid "Y Range"
 msgstr "y-Aralığı:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twYRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:173
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:176
 #, fuzzy, kde-format
 #| msgid "X range:"
 msgid "list of y ranges"
@@ -18693,8 +18693,8 @@ msgstr "X aralığı:"
 #. i18n: ectx: property (text), widget (QLabel, lValuesFormat)
 #. i18n: ectx: property (text), widget (QLabel, lErrorFormat)
 #. i18n: ectx: property (text), widget (QLabel, lFormat_2)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:200
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:334
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:206
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:346
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:357
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:69
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:443
@@ -18709,24 +18709,24 @@ msgstr "Biçim"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:205
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:339
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:211
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:351
 #, kde-format
 msgid "Start"
 msgstr "Başlat"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:210
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:344
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:216
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:356
 #, kde-format
 msgid "End"
 msgstr "Son"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:215
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:349
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:221
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:361
 #, kde-format
 msgid "Scale"
 msgstr "Ölçekle"
@@ -18734,7 +18734,7 @@ msgstr "Ölçekle"
 #. i18n: ectx: property (text), widget (QLabel, lRangePoints)
 #. i18n: ectx: property (text), widget (QLabel, lPoints)
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:239
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:245
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:17
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:412
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:156
@@ -18743,13 +18743,13 @@ msgid "Points:"
 msgstr "Noktalar:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddXRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:261
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:270
 #, kde-format
 msgid "<html><head/><body><p>Add a new x range</p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveXRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:272
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:281
 #, fuzzy, kde-format
 #| msgid "Save the current filter settings"
 msgid "Remove the current selected x range"
@@ -18758,64 +18758,64 @@ msgstr "Mevcut filtre ayarlarını kaydet"
 #. i18n: ectx: property (text), widget (QToolButton, tbRemoveXRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbAddPlotRange)
 #. i18n: ectx: property (text), widget (QToolButton, tbRemovePlotRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:275
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:398
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:412
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:284
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:413
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:427
 #, kde-format
 msgid "..."
 msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:291
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:300
 #, fuzzy, kde-format
 #| msgid "Data range:"
 msgid "Data Range:"
 msgstr "Veri aralığı:"
 
 #. i18n: ectx: property (toolTip), widget (QTableWidget, twXRanges)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:304
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:313
 #, fuzzy, kde-format
 #| msgid "right triangle"
 msgid "List of x ranges"
 msgstr "sağ üçgen"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddPlotRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:395
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:410
 #, fuzzy, kde-format
 #| msgid "Add new scale breaking"
 msgid "Add new plot range"
 msgstr "Yeni ölçekleme kesmesi eklendi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemovePlotRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:409
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:424
 #, fuzzy, kde-format
 #| msgid "Remove Current Entry"
 msgid "Remove current plot range"
 msgstr "Mevcut Girdiyi Kaldır"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbAddYRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:480
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:498
 #, fuzzy, kde-format
 #| msgid "Add new scale breaking"
 msgid "Add a new y range"
 msgstr "Yeni ölçekleme kesmesi eklendi"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbRemoveYRange)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:491
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:509
 #, fuzzy, kde-format
 #| msgid "Save the current filter settings"
 msgid "remove the current selected y range"
 msgstr "Mevcut filtre ayarlarını kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:504
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:522
 #, fuzzy, kde-format
 #| msgid "No Data"
 msgid "Extend"
 msgstr "Veri Yok"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:622
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:640
 #, fuzzy, kde-format
 #| msgid "symmetric"
 msgid "Symmetric:"
@@ -18823,7 +18823,7 @@ msgstr "simetrik"
 
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:629
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:647
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:17
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:43
 #, kde-format
@@ -18832,7 +18832,7 @@ msgstr "Yükseklik:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontalRight)
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:691
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:709
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:670
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:365
 #, kde-format
@@ -18841,7 +18841,7 @@ msgstr "Sağ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lGeometry)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:720
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:738
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:178
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:69
 #: src/kdefrontend/ui/labelwidget.ui:159
@@ -18851,7 +18851,7 @@ msgstr "Geometri"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVerticalDown)
 #. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:727
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:745
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:643
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:325
 #, kde-format
@@ -18859,13 +18859,13 @@ msgid "Bottom:"
 msgstr "Alt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPadding)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:776
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:794
 #, kde-format
 msgid "Padding"
 msgstr "Doldurma"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScales)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:800
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:818
 #, kde-format
 msgid "Range Breaks"
 msgstr "Aralık Kesmeleri"
@@ -18873,8 +18873,8 @@ msgstr "Aralık Kesmeleri"
 #. i18n: ectx: property (text), widget (QLabel, lTo)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakEnd)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakEnd)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:806
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:842
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:824
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:860
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:57
 #, fuzzy, kde-format
 #| msgid "To"
@@ -18883,30 +18883,30 @@ msgstr "Şuraya"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bAddYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:896
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1010
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:914
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1028
 #, kde-format
 msgid "Add new scale breaking"
 msgstr "Yeni ölçekleme kesmesi eklendi"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveXBreak)
 #. i18n: ectx: property (toolTip), widget (QPushButton, bRemoveYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:906
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1020
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:924
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1038
 #, kde-format
 msgid "Remove scale breaking"
 msgstr "Ölçekleme kesmesi kaldırıldı"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbXBreak)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbYBreak)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:916
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1030
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:934
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1048
 #, kde-format
 msgid "Current scale breaking"
 msgstr "Mevcut ölçekleme kesmesi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:959
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:977
 #, fuzzy, kde-format
 #| msgid "y-Range:"
 msgid "y-Range"
@@ -18915,8 +18915,8 @@ msgstr "y-Aralığı:"
 #. i18n: ectx: property (text), widget (QLabel, lFrom)
 #. i18n: ectx: property (text), widget (QLabel, lXBreakStart)
 #. i18n: ectx: property (text), widget (QLabel, lYBreakStart)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1040
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1097
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1058
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1115
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:47
 #, fuzzy, kde-format
 #| msgid "From"
@@ -18924,20 +18924,20 @@ msgid "From:"
 msgstr "Şundan"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1053
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1071
 #, kde-format
 msgid "x-Range"
 msgstr "x-Aralığı"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1134
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1152
 #, fuzzy, kde-format
 #| msgid "Plot Area"
 msgid "Area"
 msgstr "Çizim Alanı"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1340
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1358
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:485
 #, fuzzy, kde-format
 #| msgid "Corner radius"
