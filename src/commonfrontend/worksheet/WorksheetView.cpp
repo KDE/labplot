@@ -2223,8 +2223,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		printer.setPaperSize(QSizeF(w, h), QPrinter::Millimeter);
-		printer.setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
+		printer.setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
+		printer.setPageMargins(QMarginsF(0, 0, 0, 0), QPageLayout::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
 		printer.setCreator(QLatin1String("LabPlot ") + LVERSION);
 
@@ -2393,7 +2393,7 @@ void WorksheetView::print(QPrinter* printer) {
 	painter.setRenderHint(QPainter::Antialiasing);
 
 	// draw background
-	const auto& page_rect = printer->pageRect();
+	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
 	float scale = qMax(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));

@@ -765,8 +765,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		printer.setOutputFileName(path);
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
-		printer.setPaperSize(QSizeF(w, h), QPrinter::Millimeter);
-		printer.setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
+		printer.setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
+		printer.setPageMargins(QMarginsF(0, 0, 0, 0), QPageLayout::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
 		printer.setCreator(QLatin1String("LabPlot ") + LVERSION);
 
@@ -857,8 +857,8 @@ void DatapickerImageView::print(QPrinter* printer) {
 	const QRectF scene_rect = sceneRect();
 	int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
 	int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
-	printer->setPaperSize(QSizeF(w, h), QPrinter::Millimeter);
-	printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
+	printer->setPageSize(QPageSize(QSizeF(w, h), QPageSize::Millimeter));
+	printer->setPageMargins(QMarginsF(0, 0, 0, 0), QPageLayout::Millimeter);
 	printer->setPrintRange(QPrinter::PageRange);
 	printer->setCreator(QString("LabPlot ") + LVERSION);
 

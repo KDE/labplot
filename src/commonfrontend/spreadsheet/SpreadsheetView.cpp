@@ -3599,6 +3599,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	const int cols = m_spreadsheet->columnCount();
 	int height = margin;
 	const int vertHeaderWidth = vHeader->width();
+	const int width = printer->pageLayout().paintRectPixels(printer->resolution()).width() - 2 * margin;
 
 	int columnsPerTable = 0;
 	int headerStringWidth = 0;
@@ -3607,7 +3608,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 	for (int col = 0; col < cols; ++col) {
 		headerStringWidth += m_tableView->columnWidth(col);
 		firstRowStringWidth += m_spreadsheet->column(col)->asStringColumn()->textAt(0).length();
-		if ((headerStringWidth >= printer->pageRect().width() - 2 * margin) || (firstRowStringWidth >= printer->pageRect().width() - 2 * margin)) {
+		if ((headerStringWidth >= width) || (firstRowStringWidth >= width)) {
 			tablesNeeded = true;
 			break;
 		}

@@ -1008,11 +1008,12 @@ void MatrixView::print(QPrinter* printer) const {
 		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(data->at(i)[0]) + '\t');
 		firstRowCeilSizes[i] = br.width() > m_tableView->columnWidth(i) ? br.width() : m_tableView->columnWidth(i);
 	}
+	const int width = printer->pageLayout().paintRectPixels(printer->resolution()).width() - 2 * margin;
 	for (int col = 0; col < cols; ++col) {
 		headerStringWidth += m_tableView->columnWidth(col);
 		br = painter.boundingRect(br, Qt::AlignCenter, QString::number(data->at(col)[0]) + '\t');
 		firstRowStringWidth += br.width();
-		if ((headerStringWidth >= printer->pageRect().width() - 2 * margin) || (firstRowStringWidth >= printer->pageRect().width() - 2 * margin)) {
+		if ((headerStringWidth >= width) || (firstRowStringWidth >= width)) {
 			tablesNeeded = true;
 			break;
 		}
