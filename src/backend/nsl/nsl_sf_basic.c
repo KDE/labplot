@@ -20,11 +20,11 @@
 #endif
 
 double nsl_sf_dummy(double x) {
-	return 0 * x;	// "use" parameter
+	return 0 * x; // "use" parameter
 }
 
 double nsl_sf_dummy2(double p, double x) {
-	return 0 * p * x;	// "use" parameter
+	return 0 * p * x; // "use" parameter
 }
 
 /* stdlib.h */
