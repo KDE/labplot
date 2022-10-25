@@ -303,7 +303,7 @@ void AxisDock::init() {
 	ui.cbRangeType->setToolTip(msg);
 
 	// scales
-	for (const auto& name: RangeT::scaleNames)
+	for (const auto& name : RangeT::scaleNames())
 		ui.cbScale->addItem(name);
 
 	ui.cbOrientation->addItem( i18n("Horizontal") );
@@ -602,7 +602,11 @@ void AxisDock::updateLocale() {
 
 	// scales
 	ui.cbScale->clear();
+<<<<<<< HEAD
 	for (const auto& name: RangeT::scaleNames)
+=======
+	for (const auto& name : RangeT::scaleNames())
+>>>>>>> 1489bfec0 (Fix i18n usage)
 		ui.cbScale->addItem(name);
 
 	//update the title label

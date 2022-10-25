@@ -686,9 +686,10 @@ void CartesianPlotDock::updateXRangeList() {
 		}
 
 		// scale
-		cb = new ComboBoxIgnoreWheel(ui.twXRanges);
-		//TODO: -> updateLocale()
-		for (const auto& name: RangeT::scaleNames)
+		cb = new ComboBoxIgnoreWheel(tw);
+		cb->setFrame(false);
+		// TODO: -> updateLocale()
+		for (const auto& name : RangeT::scaleNames())
 			cb->addItem(name);
 
 		cb->setCurrentIndex(static_cast<int>(scale));
