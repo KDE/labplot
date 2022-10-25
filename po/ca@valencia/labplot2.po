@@ -3,7 +3,7 @@
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Antoni Bella Pérez <antonibella5@yahoo.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Josep M. Ferrer <txemaq@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Orestes Mas <orestes@tsc.upc.edu>, 2018.
 msgid ""
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-24 00:44+0000\n"
-"PO-Revision-Date: 2022-10-15 10:24+0200\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-10-24 15:02+0200\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -309,13 +309,13 @@ msgstr "Doble"
 #: src/backend/core/AbstractColumn.cpp:171
 #, kde-format
 msgid "Integer"
-msgstr "Sencer"
+msgstr "Enter"
 
 # Nota: https://ca.wikipedia.org/wiki/Integer_(tipus_de_dada)
 #: src/backend/core/AbstractColumn.cpp:173
 #, kde-format
 msgid "Big Integer"
-msgstr "Sencer gran"
+msgstr "Enter gran"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
@@ -13855,7 +13855,7 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
-"No s'ha pogut obrir el fitxer «%1». Feu clic a «Continua» per a seguir amb "
+"No s'ha pogut obrir el fitxer «%1». Feu clic en «Continua» per a seguir amb "
 "l'inici o «Cancel·la» per a eixir de l'aplicació."
 
 #: src/kdefrontend/LabPlot.cpp:142
@@ -15085,7 +15085,7 @@ msgstr "Exporta la selecció"
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:87
 #, kde-format
 msgid "This option determines how the convert numbers to strings."
-msgstr "Esta opció determina com s'ha de convertir els nombres a cadenes."
+msgstr "Esta opció determina com s'han de convertir els nombres a cadenes."
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:97
 #, kde-format
@@ -16447,7 +16447,7 @@ msgstr "Noms personalitzats:"
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:17
 #, kde-format
 msgid "Skip Bytes:"
-msgstr "Bytes a ometre:"
+msgstr "Bytes que s'han d'ometre:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, niVectors)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:24
@@ -16485,7 +16485,7 @@ msgstr "Vectors:"
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:90
 #, kde-format
 msgid "Skip start bytes:"
-msgstr "Bytes inicials a ometre:"
+msgstr "Bytes inicials que s'han d'ometre:"
 
 #. i18n: ectx: property (text), widget (QLabel, lByteOrder)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:97
@@ -18944,7 +18944,7 @@ msgstr "Monòtona creixent de X:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:157
 #, kde-format
 msgid "intermediate points to evaluate between each two points"
-msgstr "Punts intermedis a avaluar entre dos punts"
+msgstr "Punts intermedis que s'han d'avaluar entre dos punts"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:188
@@ -19298,7 +19298,7 @@ msgstr "Graus del model d'ajust"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:665
 #, kde-format
 msgid "Data to fit"
-msgstr "Dades a ajustar"
+msgstr "Dades que s'han d'ajustar"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lModel)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:691
@@ -19316,7 +19316,7 @@ msgstr "Model:"
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:729
 #, kde-format
 msgid "Function to fit and options"
-msgstr "Funció a ajustar i opcions"
+msgstr "Funció per a ajustar i opcions"
 
 #. i18n: ectx: property (text), widget (QToolButton, lFit)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:738
@@ -21331,27 +21331,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1: set drop line style"
-#~ msgstr "%1: establix l'estil de derivació de la línia"
-
-#~ msgid "%1: set drop line opacity"
-#~ msgstr "%1: establix l'opacitat de derivació de la línia"
-
-#~ msgid "NoPen"
-#~ msgstr "Sense línia"
-
-#~ msgid "SolidLine"
-#~ msgstr "Línia contínua"
-
-#~ msgid "DashLine"
-#~ msgstr "Línia de guions"
-
-#~ msgid "DotLine"
-#~ msgstr "Línia de punts"
-
-#~ msgid "DashDotLine"
-#~ msgstr "Línia de guió-punt"
-
-#~ msgid "DashDotDotLine"
-#~ msgstr "Línia de guió-punt-punt"
