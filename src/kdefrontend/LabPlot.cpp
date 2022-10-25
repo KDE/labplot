@@ -110,8 +110,6 @@ int main(int argc, char* argv[]) {
 	// TODO: add library information (GSL version, etc.) in about dialog
 
 	QCommandLineParser parser;
-	parser.addHelpOption();
-	parser.addVersionOption();
 
 	QCommandLineOption nosplashOption("no-splash", i18n("Disable splash screen"));
 	parser.addOption(nosplashOption);
