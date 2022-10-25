@@ -44,7 +44,7 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
-	const static QStringList scaleNames; // see Range.cpp
+	static const QStringList& scaleNames(); // see Range.cpp
 	// TODO: when we have C++17: use inline initialization
 	//	const static inline QStringList scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
 	static bool isLogScale(Scale scale) {
