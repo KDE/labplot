@@ -602,11 +602,7 @@ void AxisDock::updateLocale() {
 
 	// scales
 	ui.cbScale->clear();
-<<<<<<< HEAD
-	for (const auto& name: RangeT::scaleNames)
-=======
 	for (const auto& name : RangeT::scaleNames())
->>>>>>> 1489bfec0 (Fix i18n usage)
 		ui.cbScale->addItem(name);
 
 	//update the title label
