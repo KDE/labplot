@@ -19,6 +19,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
@@ -1483,7 +1484,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	// major grid
 	const Origin::GraphGrid& majorGrid = originAxis.majorGrid;
-	QPen gridPen = axis->majorGridPen();
+	QPen gridPen = axis->majorGridLine()->pen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (!majorGrid.hidden) {
 		switch (majorGrid.style) {
@@ -1514,11 +1515,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	gridColor.regular = majorGrid.color;
 	gridPen.setColor(OriginProjectParser::color(gridColor));
 	gridPen.setWidthF(Worksheet::convertToSceneUnits(majorGrid.width, Worksheet::Unit::Point));
-	axis->setMajorGridPen(gridPen);
+	axis->majorGridLine()->setPen(gridPen);
 
 	// minor grid
 	const Origin::GraphGrid& minorGrid = originAxis.minorGrid;
-	gridPen = axis->minorGridPen();
+	gridPen = axis->minorGridLine()->pen();
 	penStyle = Qt::NoPen;
 	if (!minorGrid.hidden) {
 		switch (minorGrid.style) {
@@ -1547,7 +1548,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	gridColor.regular = minorGrid.color;
 	gridPen.setColor(OriginProjectParser::color(gridColor));
 	gridPen.setWidthF(Worksheet::convertToSceneUnits(minorGrid.width, Worksheet::Unit::Point));
-	axis->setMinorGridPen(gridPen);
+	axis->minorGridLine()->setPen(gridPen);
 
 	// process Origin::GraphAxisFormat
 	const Origin::GraphAxisFormat& axisFormat = originAxis.formatAxis[index];
@@ -1558,7 +1559,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	color.regular = axisFormat.color;
 	pen.setColor(OriginProjectParser::color(color));
 	pen.setWidthF(Worksheet::convertToSceneUnits(axisFormat.thickness, Worksheet::Unit::Point));
-	axis->setLinePen(pen);
+	axis->line()->setPen(pen);
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);

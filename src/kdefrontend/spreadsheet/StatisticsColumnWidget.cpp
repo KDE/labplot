@@ -13,6 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Background.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
@@ -364,7 +365,7 @@ void StatisticsColumnWidget::showHistogram() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
-			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
 		} else
 			axis->title()->setText(i18n("Frequency"));
 
@@ -549,8 +550,8 @@ void StatisticsColumnWidget::showBoxPlot() {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
-			axis->setMajorGridPen(QPen(Qt::NoPen));
-			axis->setMinorGridPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
+			axis->minorGridLine()->setPen(QPen(Qt::NoPen));
 			axis->title()->setText(QString());
 		} else
 			axis->title()->setText(m_column->name());
@@ -622,7 +623,7 @@ void StatisticsColumnWidget::showBarPlot() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
@@ -757,7 +758,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);

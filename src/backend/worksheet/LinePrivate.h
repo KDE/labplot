@@ -22,6 +22,7 @@ public:
 	void updatePixmap();
 
 	QString prefix{QLatin1String("Line")};
+	bool createXmlElement{true};
 
 	// histogram specific parameters
 	bool histogramLineTypeAvailable{false};

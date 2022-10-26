@@ -36,6 +36,16 @@ void Line::setPrefix(const QString& prefix) {
 	d->prefix = prefix;
 }
 
+/*!
+ * defines whether an XML element needs to be create in write(). For objects where the line
+ * properties are serialized together with some other properties, the XML element is created
+ * in objects's save() already and there is not need to create it once more in Line::save():
+*/
+void Line::setCreateXmlElement(bool create) {
+	Q_D(Line);
+	d->createXmlElement = create;
+}
+
 void Line::init(const KConfigGroup& group) {
 	Q_D(Line);
 
@@ -152,9 +162,7 @@ void LinePrivate::updatePixmap() {
 void Line::save(QXmlStreamWriter* writer) const {
 	Q_D(const Line);
 
-	// no need to create a XML element for error bars and whiskers, the line attributes are part
-	// of the same XML element together with other error bars and whiskers properties
-	if (!d->errorBarsTypeAvailable || d->prefix == "Whiskers") {
+	if (d->createXmlElement) {
 		// for names in the XML file, the first letter is lower case but the camel case still remains.
 		// so, we just convert the first character for lower case. e.g. MedianLine -> medianLine.
 		if (d->prefix != QLatin1String("DropLine")) {
@@ -176,7 +184,7 @@ void Line::save(QXmlStreamWriter* writer) const {
 	WRITE_QPEN(d->pen);
 	writer->writeAttribute("opacity", QString::number(d->opacity));
 
-	if (!d->errorBarsTypeAvailable || d->prefix == "Whiskers")
+	if (d->createXmlElement)
 		writer->writeEndElement();
 }
 

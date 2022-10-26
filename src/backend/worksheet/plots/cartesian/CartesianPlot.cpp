@@ -173,12 +173,12 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		QPen pen = axis->minorGridPen();
+		QPen pen = axis->majorGridLine()->pen();
 		pen.setStyle(Qt::NoPen);
-		axis->setMajorGridPen(pen);
-		pen = axis->minorGridPen();
+		axis->majorGridLine()->setPen(pen);
+		pen = axis->minorGridLine()->pen();
 		pen.setStyle(Qt::NoPen);
-		axis->setMinorGridPen(pen);
+		axis->minorGridLine()->setPen(pen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
@@ -203,12 +203,12 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		pen = axis->minorGridPen();
+		pen = axis->majorGridLine()->pen();
 		pen.setStyle(Qt::NoPen);
-		axis->setMajorGridPen(pen);
-		pen = axis->minorGridPen();
+		axis->majorGridLine()->setPen(pen);
+		pen = axis->minorGridLine()->pen();
 		pen.setStyle(Qt::NoPen);
-		axis->setMinorGridPen(pen);
+		axis->minorGridLine()->setPen(pen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 

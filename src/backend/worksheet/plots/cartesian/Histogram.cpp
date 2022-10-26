@@ -134,6 +134,7 @@ void Histogram::init() {
 	d->errorType = (Histogram::ErrorType)group.readEntry("ErrorType", (int)Histogram::NoError);
 	d->errorBarsLine = new Line(QString());
 	d->errorBarsLine->setPrefix(QLatin1String("ErrorBars"));
+	d->errorBarsLine->setCreateXmlElement(false); // errorBars element is created in Histogram::save()
 	d->errorBarsLine->setErrorBarsTypeAvailable(true);
 	d->errorBarsLine->setHidden(true);
 	addChild(d->errorBarsLine);

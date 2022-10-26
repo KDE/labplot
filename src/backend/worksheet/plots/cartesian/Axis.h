@@ -4,7 +4,7 @@
 	Description          : Axis for cartesian coordinate systems.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -17,6 +17,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 class CartesianPlot;
+class Line;
 class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
@@ -122,8 +123,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetY, TitleOffsetY)
 
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+	Line* line() const;
 	BASIC_D_ACCESSOR_DECL(ArrowType, arrowType, ArrowType)
 	BASIC_D_ACCESSOR_DECL(ArrowPosition, arrowPosition, ArrowPosition)
 	BASIC_D_ACCESSOR_DECL(double, arrowSize, ArrowSize)
@@ -175,10 +175,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
 
-	CLASS_D_ACCESSOR_DECL(QPen, majorGridPen, MajorGridPen)
-	BASIC_D_ACCESSOR_DECL(qreal, majorGridOpacity, MajorGridOpacity)
-	CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
-	BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
+	Line* majorGridLine() const;
+	Line* minorGridLine() const;
 
 	bool isNumeric() const;
 
@@ -245,8 +243,6 @@ Q_SIGNALS:
 	void titleOffsetYChanged(qreal);
 
 	// line
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 	void arrowTypeChanged(ArrowType);
 	void arrowPositionChanged(ArrowPosition);
 	void arrowSizeChanged(qreal);
@@ -294,11 +290,6 @@ Q_SIGNALS:
 	void labelsPrefixChanged(QString);
 	void labelsSuffixChanged(QString);
 	void labelsOpacityChanged(qreal);
-
-	void majorGridPenChanged(QPen);
-	void majorGridOpacityChanged(qreal);
-	void minorGridPenChanged(QPen);
-	void minorGridOpacityChanged(qreal);
 
 	friend class RetransformTest;
 };

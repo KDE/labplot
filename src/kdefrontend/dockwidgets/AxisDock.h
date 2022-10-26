@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,7 @@
 #include "ui_axisdock.h"
 
 class AbstractAspect;
+class LineWidget;
 class LabelWidget;
 class TreeViewComboBox;
 class AspectTreeModel;
@@ -43,6 +44,9 @@ private:
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
+	LineWidget* lineWidget{nullptr};
+	LineWidget* majorGridLineWidget{nullptr};
+	LineWidget* minorGridLineWidget{nullptr};
 	bool m_dataChanged{false};
 
 	void setModel();
@@ -88,10 +92,6 @@ private Q_SLOTS:
 	void setUnityRange();
 
 	// Line-Tab
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
 	void arrowPositionChanged(int);
 	void arrowTypeChanged(int);
 	void arrowSizeChanged(int);
@@ -150,17 +150,6 @@ private Q_SLOTS:
 	void labelsSuffixChanged();
 	void labelsOpacityChanged(int);
 
-	//"Grid"-tab
-	void majorGridStyleChanged(int);
-	void majorGridColorChanged(const QColor&);
-	void majorGridWidthChanged(double);
-	void majorGridOpacityChanged(int);
-
-	void minorGridStyleChanged(int);
-	void minorGridColorChanged(const QColor&);
-	void minorGridWidthChanged(double);
-	void minorGridOpacityChanged(int);
-
 	// SLOTs for changes triggered in Axis
 	// General-Tab
 	void axisOrientationChanged(Axis::Orientation);
@@ -176,8 +165,6 @@ private Q_SLOTS:
 	void axisShowScaleOffsetChanged(bool);
 
 	// line
-	void axisLinePenChanged(const QPen&);
-	void axisLineOpacityChanged(qreal);
 	void axisArrowTypeChanged(Axis::ArrowType);
 	void axisArrowPositionChanged(Axis::ArrowPosition);
 	void axisArrowSizeChanged(qreal);
@@ -224,12 +211,6 @@ private Q_SLOTS:
 	void axisLabelsPrefixChanged(const QString&);
 	void axisLabelsSuffixChanged(const QString&);
 	void axisLabelsOpacityChanged(qreal);
-
-	// grids
-	void axisMajorGridPenChanged(const QPen&);
-	void axisMajorGridOpacityChanged(qreal);
-	void axisMinorGridPenChanged(const QPen&);
-	void axisMinorGridOpacityChanged(qreal);
 
 	void axisVisibilityChanged(bool);
 

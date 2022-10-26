@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of Axis.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
+class Line;
 class TextLabel;
 
 class AxisPrivate : public WorksheetElementPrivate {
@@ -63,8 +64,7 @@ public:
 
 	// line
 	QVector<QLineF> lines;
-	QPen linePen;
-	qreal lineOpacity;
+	Line* line{nullptr};
 	Axis::ArrowType arrowType;
 	Axis::ArrowPosition arrowPosition;
 	qreal arrowSize;
@@ -119,10 +119,8 @@ public:
 
 	// Grid
 	AxisGrid* gridItem{nullptr};
-	QPen majorGridPen;
-	qreal majorGridOpacity;
-	QPen minorGridPen;
-	qreal minorGridOpacity;
+	Line* majorGridLine{nullptr};
+	Line* minorGridLine{nullptr};
 
 	Axis* const q{nullptr};
 

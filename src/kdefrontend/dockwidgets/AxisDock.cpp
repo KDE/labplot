@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : axes widget class
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,6 +19,7 @@
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
 #include <KLineEdit>
 #include <KLocalizedString>
@@ -66,28 +67,43 @@ AxisDock::AxisDock(QWidget* parent)
 	hboxLayout->setContentsMargins(0, 0, 0, 0);
 	hboxLayout->setSpacing(0);
 
+	// "Line"-tab
+	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	gridLayout->addWidget(lineWidget, 1, 0, 1, 3);
+
 	//"Ticks"-tab
 	// major ticks
-	auto* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	gridLayout = static_cast<QGridLayout*>(ui.tabTicks->layout());
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMajorTicksColumn, 9, 3);
+	gridLayout->addWidget(cbMajorTicksColumn, 9, 3);
 
 	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbLabelsTextColumn, 9, 3);
+	gridLayout->addWidget(cbLabelsTextColumn, 9, 3);
 
 	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	layout->addWidget(dtsbMajorTicksIncrement, 5, 3);
+	gridLayout->addWidget(dtsbMajorTicksIncrement, 5, 3);
 
 	// minor ticks
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbMinorTicksColumn, 25, 3);
+	gridLayout->addWidget(cbMinorTicksColumn, 25, 3);
 
 	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	layout->addWidget(dtsbMinorTicksIncrement, 24, 3);
+	gridLayout->addWidget(dtsbMinorTicksIncrement, 24, 3);
+
+	// "Grid"-tab
+	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
+	majorGridLineWidget = new LineWidget(ui.tabLine);
+	majorGridLineWidget->setPrefix(QLatin1String("MajorGrid"));
+	gridLayout->addWidget(majorGridLineWidget, 1, 0, 1, 3);
+
+	minorGridLineWidget = new LineWidget(ui.tabLine);
+	minorGridLineWidget->setPrefix(QLatin1String("MinorGrid"));
+	gridLayout->addWidget(minorGridLineWidget, 4, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
-		layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
+		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
 		if (!layout)
 			continue;
 
@@ -95,20 +111,6 @@ AxisDock::AxisDock(QWidget* parent)
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
-
-	// set the current locale
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMajorTicksWidth->setLocale(numberLocale);
-	ui.sbMajorTicksLength->setLocale(numberLocale);
-	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMinorTicksWidth->setLocale(numberLocale);
-	ui.sbMinorTicksLength->setLocale(numberLocale);
-	ui.sbLabelsOffset->setLocale(numberLocale);
-	ui.sbMajorGridWidth->setLocale(numberLocale);
-	ui.sbMinorGridWidth->setLocale(numberLocale);
-	labelWidget->updateLocale();
 
 	//**********************************  Slots **********************************************
 
@@ -142,10 +144,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
-	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::lineStyleChanged);
-	connect(ui.kcbLineColor, &KColorButton::changed, this, &AxisDock::lineColorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::lineWidthChanged);
-	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::lineOpacityChanged);
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowPositionChanged);
 	connect(ui.cbArrowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowTypeChanged);
 	connect(ui.sbArrowSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::arrowSizeChanged);
@@ -204,17 +202,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
-
-	//"Grid"-tab
-	connect(ui.cbMajorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorGridStyleChanged);
-	connect(ui.kcbMajorGridColor, &KColorButton::changed, this, &AxisDock::majorGridColorChanged);
-	connect(ui.sbMajorGridWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorGridWidthChanged);
-	connect(ui.sbMajorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorGridOpacityChanged);
-
-	connect(ui.cbMinorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorGridStyleChanged);
-	connect(ui.kcbMinorGridColor, &KColorButton::changed, this, &AxisDock::minorGridColorChanged);
-	connect(ui.sbMinorGridWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::minorGridWidthChanged);
-	connect(ui.sbMinorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorGridOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -393,11 +380,8 @@ void AxisDock::init() {
 	ui.cbMinorTicksType->addItem(i18n("Spacing"));
 	ui.cbMinorTicksType->addItem(i18n("Custom column"));
 
-	GuiTools::updatePenStyles(ui.cbLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, QColor(Qt::black));
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, QColor(Qt::black));
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, QColor(Qt::black));
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, QColor(Qt::black));
 
 	// labels
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
@@ -478,6 +462,19 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	// show the properties of the first axis
 	this->load();
 
+	QList<Line*> lines;
+	QList<Line*> majorGridLines;
+	QList<Line*> minorGridLines;
+	for (auto* axis : m_axesList) {
+		lines << axis->line();
+		majorGridLines << axis->majorGridLine();
+		minorGridLines << axis->minorGridLine();
+	}
+
+	lineWidget->setLines(lines);
+	majorGridLineWidget->setLines(majorGridLines);
+	minorGridLineWidget->setLines(minorGridLines);
+
 	updatePlotRanges();
 	initConnections();
 }
@@ -503,8 +500,6 @@ void AxisDock::initConnections() {
 	m_connections << connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
-	m_connections << connect(m_axis, &Axis::linePenChanged, this, &AxisDock::axisLinePenChanged);
-	m_connections << connect(m_axis, &Axis::lineOpacityChanged, this, &AxisDock::axisLineOpacityChanged);
 	m_connections << connect(m_axis, &Axis::arrowTypeChanged, this, &AxisDock::axisArrowTypeChanged);
 	m_connections << connect(m_axis, &Axis::arrowPositionChanged, this, &AxisDock::axisArrowPositionChanged);
 	m_connections << connect(m_axis, &Axis::arrowSizeChanged, this, &AxisDock::axisArrowSizeChanged);
@@ -551,12 +546,6 @@ void AxisDock::initConnections() {
 	m_connections << connect(m_axis, &Axis::labelsSuffixChanged, this, &AxisDock::axisLabelsSuffixChanged);
 	m_connections << connect(m_axis, &Axis::labelsOpacityChanged, this, &AxisDock::axisLabelsOpacityChanged);
 
-	// grids
-	m_connections << connect(m_axis, &Axis::majorGridPenChanged, this, &AxisDock::axisMajorGridPenChanged);
-	m_connections << connect(m_axis, &Axis::majorGridOpacityChanged, this, &AxisDock::axisMajorGridOpacityChanged);
-	m_connections << connect(m_axis, &Axis::minorGridPenChanged, this, &AxisDock::axisMinorGridPenChanged);
-	m_connections << connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
-
 	m_connections << connect(m_axis, &Axis::visibleChanged, this, &AxisDock::axisVisibilityChanged);
 }
 
@@ -565,7 +554,6 @@ void AxisDock::initConnections() {
  */
 void AxisDock::updateLocale() {
 	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
 	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
 	ui.sbMajorTicksWidth->setLocale(numberLocale);
 	ui.sbMajorTicksLength->setLocale(numberLocale);
@@ -573,8 +561,6 @@ void AxisDock::updateLocale() {
 	ui.sbMinorTicksWidth->setLocale(numberLocale);
 	ui.sbMinorTicksLength->setLocale(numberLocale);
 	ui.sbLabelsOffset->setLocale(numberLocale);
-	ui.sbMajorGridWidth->setLocale(numberLocale);
-	ui.sbMinorGridWidth->setLocale(numberLocale);
 
 	// update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
@@ -587,8 +573,10 @@ void AxisDock::updateLocale() {
 	for (const auto& name : RangeT::scaleNames())
 		ui.cbScale->addItem(name);
 
-	// update the title label
 	labelWidget->updateLocale();
+	lineWidget->updateLocale();
+	majorGridLineWidget->updateLocale();
+	minorGridLineWidget->updateLocale();
 }
 
 void AxisDock::activateTitleTab() {
@@ -928,68 +916,6 @@ void AxisDock::showScaleOffsetChanged(bool state) {
 }
 
 // "Line"-tab
-void AxisDock::lineStyleChanged(int index) {
-	if (index == -1)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-
-	bool b = (penStyle != Qt::NoPen);
-	ui.lLineColor->setEnabled(b);
-	ui.kcbLineColor->setEnabled(b);
-	ui.lLineWidth->setEnabled(b);
-	ui.sbLineWidth->setEnabled(b);
-	ui.lLineOpacity->setEnabled(b);
-	ui.sbLineOpacity->setEnabled(b);
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->linePen();
-		pen.setStyle(penStyle);
-		axis->setLinePen(pen);
-	}
-}
-
-void AxisDock::lineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->linePen();
-		pen.setColor(color);
-		axis->setLinePen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, color);
-	m_initializing = false;
-}
-
-void AxisDock::lineWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->linePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		axis->setLinePen(pen);
-	}
-}
-
-void AxisDock::lineOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value / 100.;
-	for (auto* axis : m_axesList)
-		axis->setLineOpacity(opacity);
-}
-
 void AxisDock::arrowTypeChanged(int index) {
 	auto type = (Axis::ArrowType)index;
 	if (type == Axis::ArrowType::NoArrow) {
@@ -1833,133 +1759,6 @@ void AxisDock::labelsOpacityChanged(int value) {
 		axis->setLabelsOpacity(opacity);
 }
 
-// "Grid"-tab
-// major grid
-void AxisDock::majorGridStyleChanged(int index) {
-	if (index == -1)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-
-	bool b = (penStyle != Qt::NoPen);
-	ui.lMajorGridColor->setEnabled(b);
-	ui.kcbMajorGridColor->setEnabled(b);
-	ui.lMajorGridWidth->setEnabled(b);
-	ui.sbMajorGridWidth->setEnabled(b);
-	ui.lMajorGridOpacity->setEnabled(b);
-	ui.sbMajorGridOpacity->setEnabled(b);
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->majorGridPen();
-		pen.setStyle(penStyle);
-		axis->setMajorGridPen(pen);
-	}
-}
-
-void AxisDock::majorGridColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->majorGridPen();
-		pen.setColor(color);
-		axis->setMajorGridPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, color);
-	m_initializing = false;
-}
-
-void AxisDock::majorGridWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->majorGridPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		axis->setMajorGridPen(pen);
-	}
-}
-
-void AxisDock::majorGridOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity{value / 100.};
-	for (auto* axis : m_axesList)
-		axis->setMajorGridOpacity(opacity);
-}
-
-// minor grid
-void AxisDock::minorGridStyleChanged(int index) {
-	if (index == -1)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-
-	bool b = (penStyle != Qt::NoPen);
-	ui.lMinorGridColor->setEnabled(b);
-	ui.kcbMinorGridColor->setEnabled(b);
-	ui.lMinorGridWidth->setEnabled(b);
-	ui.sbMinorGridWidth->setEnabled(b);
-	ui.lMinorGridOpacity->setEnabled(b);
-	ui.sbMinorGridOpacity->setEnabled(b);
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->minorGridPen();
-		pen.setStyle(penStyle);
-		axis->setMinorGridPen(pen);
-	}
-}
-
-void AxisDock::minorGridColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->minorGridPen();
-		pen.setColor(color);
-		axis->setMinorGridPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, color);
-	m_initializing = false;
-}
-
-void AxisDock::minorGridWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* axis : m_axesList) {
-		pen = axis->minorGridPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		axis->setMinorGridPen(pen);
-	}
-}
-
-void AxisDock::minorGridOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity{value / 100.};
-	for (auto* axis : m_axesList)
-		axis->setMinorGridOpacity(opacity);
-}
-
 //*************************************************************
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
@@ -2072,24 +1871,9 @@ void AxisDock::axisShowScaleOffsetChanged(bool b) {
 }
 
 // line
-void AxisDock::axisLinePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbLineStyle->setCurrentIndex(pen.style());
-	ui.kcbLineColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-
 void AxisDock::axisArrowTypeChanged(Axis::ArrowType type) {
 	m_initializing = true;
 	ui.cbArrowType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
-}
-
-void AxisDock::axisLineOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbLineOpacity->setValue(round(opacity * 100.0));
 	m_initializing = false;
 }
 
@@ -2314,34 +2098,6 @@ void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-// grid
-void AxisDock::axisMajorGridPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbMajorGridStyle->setCurrentIndex((int)pen.style());
-	ui.kcbMajorGridColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, pen.color());
-	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void AxisDock::axisMajorGridOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbMajorGridOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
-void AxisDock::axisMinorGridPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbMinorGridStyle->setCurrentIndex(static_cast<int>(pen.style()));
-	ui.kcbMinorGridColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, pen.color());
-	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbMinorGridOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
-
 void AxisDock::updateMajorTicksStartType(bool visible) {
 	const bool absoluteValue = (ui.cbMajorTicksStartType->currentIndex() == 0);
 
@@ -2460,10 +2216,6 @@ void AxisDock::load() {
 	ui.chkShowScaleOffset->setChecked(m_axis->showScaleOffset());
 
 	// Line
-	ui.cbLineStyle->setCurrentIndex((int)m_axis->linePen().style());
-	ui.kcbLineColor->setColor(m_axis->linePen().color());
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(), Worksheet::Unit::Point));
-	ui.sbLineOpacity->setValue(round(m_axis->lineOpacity() * 100.0));
 	ui.cbArrowType->setCurrentIndex((int)m_axis->arrowType());
 	ui.cbArrowPosition->setCurrentIndex((int)m_axis->arrowPosition());
 	ui.sbArrowSize->setValue((int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Unit::Point));
@@ -2529,24 +2281,10 @@ void AxisDock::load() {
 	ui.leLabelsSuffix->setText(m_axis->labelsSuffix());
 	ui.sbLabelsOpacity->setValue(round(m_axis->labelsOpacity() * 100.0));
 
-	// Grid
-	ui.cbMajorGridStyle->setCurrentIndex((int)m_axis->majorGridPen().style());
-	ui.kcbMajorGridColor->setColor(m_axis->majorGridPen().color());
-	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(m_axis->majorGridPen().widthF(), Worksheet::Unit::Point));
-	ui.sbMajorGridOpacity->setValue(round(m_axis->majorGridOpacity() * 100.0));
-
-	ui.cbMinorGridStyle->setCurrentIndex((int)m_axis->minorGridPen().style());
-	ui.kcbMinorGridColor->setColor(m_axis->minorGridPen().color());
-	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(), Worksheet::Unit::Point));
-	ui.sbMinorGridOpacity->setValue(round(m_axis->minorGridOpacity() * 100.0));
-
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
 	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
 	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
 	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
 }
@@ -2599,10 +2337,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	labelWidget->loadConfig(axisLabelGroup);
 
 	// Line
-	ui.cbLineStyle->setCurrentIndex(group.readEntry("LineStyle", (int)m_axis->linePen().style()));
-	ui.kcbLineColor->setColor(group.readEntry("LineColor", m_axis->linePen().color()));
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_axis->linePen().widthF()), Worksheet::Unit::Point));
-	ui.sbLineOpacity->setValue(round(group.readEntry("LineOpacity", m_axis->lineOpacity()) * 100.0));
+	lineWidget->loadConfig(group);
 	ui.cbArrowType->setCurrentIndex(group.readEntry("ArrowType", (int)m_axis->arrowType()));
 	ui.cbArrowPosition->setCurrentIndex(group.readEntry("ArrowPosition", (int)m_axis->arrowPosition()));
 	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Unit::Point));
@@ -2672,24 +2407,14 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbLabelsOpacity->setValue(round(group.readEntry("LabelsOpacity", m_axis->labelsOpacity()) * 100.0));
 
 	// Grid
-	ui.cbMajorGridStyle->setCurrentIndex(group.readEntry("MajorGridStyle", (int)m_axis->majorGridPen().style()));
-	ui.kcbMajorGridColor->setColor(group.readEntry("MajorGridColor", m_axis->majorGridPen().color()));
-	ui.sbMajorGridWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MajorGridWidth", m_axis->majorGridPen().widthF()), Worksheet::Unit::Point));
-	ui.sbMajorGridOpacity->setValue(round(group.readEntry("MajorGridOpacity", m_axis->majorGridOpacity()) * 100.0));
-
-	ui.cbMinorGridStyle->setCurrentIndex(group.readEntry("MinorGridStyle", (int)m_axis->minorGridPen().style()));
-	ui.kcbMinorGridColor->setColor(group.readEntry("MinorGridColor", m_axis->minorGridPen().color()));
-	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("MinorGridWidth", m_axis->minorGridPen().widthF()), Worksheet::Unit::Point));
-	ui.sbMinorGridOpacity->setValue(round(group.readEntry("MinorGridOpacity", m_axis->minorGridOpacity()) * 100.0));
+	majorGridLineWidget->loadConfig(group);
+	minorGridLineWidget->loadConfig(group);
 
 	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
 	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
-	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
-	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
 	m_initializing = false;
 }
 
@@ -2726,10 +2451,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	labelWidget->saveConfig(axisLabelGroup);
 
 	// Line
-	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
-	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("LineOpacity", ui.sbLineOpacity->value() / 100.);
+	lineWidget->saveConfig(group);
 
 	// Major ticks
 	group.writeEntry("MajorTicksDirection", ui.cbMajorTicksDirection->currentIndex());
@@ -2782,14 +2504,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value() / 100.);
 
 	// Grid
-	group.writeEntry("MajorGridStyle", ui.cbMajorGridStyle->currentIndex());
-	group.writeEntry("MajorGridColor", ui.kcbMajorGridColor->color());
-	group.writeEntry("MajorGridWidth", Worksheet::convertToSceneUnits(ui.sbMajorGridWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("MajorGridOpacity", ui.sbMajorGridOpacity->value() / 100.);
+	majorGridLineWidget->saveConfig(group);
+	minorGridLineWidget->saveConfig(group);
 
-	group.writeEntry("MinorGridStyle", ui.cbMinorGridStyle->currentIndex());
-	group.writeEntry("MinorGridColor", ui.kcbMinorGridColor->color());
-	group.writeEntry("MinorGridWidth", Worksheet::convertToSceneUnits(ui.sbMinorGridWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("MinorGridOpacity", ui.sbMinorGridOpacity->value() / 100.);
 	config.sync();
 }

@@ -14,6 +14,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 // #include "backend/lib/trace.h"
@@ -57,8 +58,8 @@ public:
 
 	QRectF boundingRect() const override {
 		QPainterPath gridShape;
-		gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridPen));
-		gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridPen));
+		gridShape.addPath(WorksheetElement::shapeFromPath(axis->majorGridPath, axis->majorGridLine->pen()));
+		gridShape.addPath(WorksheetElement::shapeFromPath(axis->minorGridPath, axis->minorGridLine->pen()));
 		QRectF boundingRectangle = gridShape.boundingRect();
 		return boundingRectangle;
 	}
@@ -68,17 +69,17 @@ public:
 			return;
 
 		// draw major grid
-		if (axis->majorGridPen.style() != Qt::NoPen) {
-			painter->setOpacity(axis->majorGridOpacity);
-			painter->setPen(axis->majorGridPen);
+		if (axis->majorGridLine->pen().style() != Qt::NoPen) {
+			painter->setOpacity(axis->majorGridLine->opacity());
+			painter->setPen(axis->majorGridLine->pen());
 			painter->setBrush(Qt::NoBrush);
 			painter->drawPath(axis->majorGridPath);
 		}
 
 		// draw minor grid
-		if (axis->minorGridPen.style() != Qt::NoPen) {
-			painter->setOpacity(axis->minorGridOpacity);
-			painter->setPen(axis->minorGridPen);
+		if (axis->minorGridLine->pen().style() != Qt::NoPen) {
+			painter->setOpacity(axis->minorGridLine->opacity());
+			painter->setPen(axis->minorGridLine->pen());
 			painter->setBrush(Qt::NoBrush);
 			painter->drawPath(axis->minorGridPath);
 		}
@@ -123,9 +124,18 @@ void Axis::init(Orientation orientation) {
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
 
-	d->linePen.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	d->linePen.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+	// line
+	d->line = new Line(QString());
+	d->line->setHidden(true);
+	d->line->setCreateXmlElement(false); // line properties are written out together with arrow properties in Axis::save()
+	addChild(d->line);
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->arrowType = (Axis::ArrowType)group.readEntry("ArrowType", static_cast<int>(ArrowType::NoArrow));
 	d->arrowPosition = (Axis::ArrowPosition)group.readEntry("ArrowPosition", static_cast<int>(ArrowPosition::Right));
 	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
@@ -186,16 +196,28 @@ void Axis::init(Orientation orientation) {
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 
 	// major grid
-	d->majorGridPen.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
-	d->majorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
-	d->majorGridPen.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
+	d->majorGridLine = new Line(QString());
+	d->majorGridLine->setPrefix(QLatin1String("MajorGrid"));
+	d->majorGridLine->setHidden(true);
+	addChild(d->majorGridLine);
+	connect(d->majorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+	});
+	connect(d->majorGridLine, &Line::updateRequested, [=] {
+		d->retransformMajorGrid();
+	});
 
 	// minor grid
-	d->minorGridPen.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
-	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-	d->minorGridPen.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
+	d->minorGridLine = new Line(QString());
+	d->minorGridLine->setPrefix(QLatin1String("MinorGrid"));
+	d->minorGridLine->setHidden(true);
+	addChild(d->minorGridLine);
+	connect(d->minorGridLine, &Line::updatePixmapRequested, [=] {
+		d->updateGrid();
+	});
+	connect(d->minorGridLine, &Line::updateRequested, [=] {
+		d->retransformMinorGrid();
+	});
 
 	connect(this, &WorksheetElement::coordinateSystemIndexChanged, [this]() {
 		Q_D(Axis);
@@ -279,10 +301,10 @@ QMenu* Axis::createContextMenu() {
 	menu->insertMenu(firstAction, orientationMenu);
 
 	// Line styles
-	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->linePen.color());
-	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->linePen.style());
+	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->line->pen().color());
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->line->pen().style());
 
-	GuiTools::selectColorAction(lineColorActionGroup, d->linePen.color());
+	GuiTools::selectColorAction(lineColorActionGroup, d->line->pen().color());
 
 	menu->insertMenu(firstAction, lineMenu);
 	menu->insertSeparator(firstAction);
@@ -355,9 +377,9 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 	else
 		ratio = qMin(horizontalRatio, verticalRatio);
 
-	QPen pen = d->linePen;
+	QPen pen = d->line->pen();
 	pen.setWidthF(pen.widthF() * ratio);
-	d->linePen = pen;
+	d->line->setPen(pen);
 
 	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
 	d->minorTicksLength *= ratio;
@@ -381,12 +403,18 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, showScaleOffset, showScaleOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, double, logicalPosition, logicalPosition)
 
+// title
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetX, titleOffsetX)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetY, titleOffsetY)
 
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
+
+// line
+Line* Axis::line() const {
+	Q_D(const Axis);
+	return d->line;
+}
+
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowType, arrowType, arrowType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowPosition, arrowPosition, arrowPosition)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, arrowSize, arrowSize)
@@ -449,10 +477,16 @@ BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix)
 BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity)
 
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorGridPen, majorGridPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorGridOpacity, majorGridOpacity)
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
+// grid
+Line* Axis::majorGridLine() const {
+	Q_D(const Axis);
+	return d->majorGridLine;
+}
+
+Line* Axis::minorGridLine() const {
+	Q_D(const Axis);
+	return d->minorGridLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F(Axis, SetRangeType, Axis::RangeType, rangeType, retransformRange)
@@ -616,20 +650,6 @@ void Axis::setTitleOffsetY(qreal offset) {
 }
 
 // Line
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
-void Axis::setLinePen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->linePen)
-		exec(new AxisSetLinePenCmd(d, pen, ki18n("%1: set line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLineOpacity, qreal, lineOpacity, update)
-void Axis::setLineOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->lineOpacity)
-		exec(new AxisSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetArrowType, Axis::ArrowType, arrowType, retransformArrow)
 void Axis::setArrowType(ArrowType type) {
 	Q_D(Axis);
@@ -943,36 +963,6 @@ void Axis::setLabelsOpacity(qreal opacity) {
 		exec(new AxisSetLabelsOpacityCmd(d, opacity, ki18n("%1: set labels opacity")));
 }
 
-// Major grid
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridPen, QPen, majorGridPen, retransformMajorGrid)
-void Axis::setMajorGridPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->majorGridPen)
-		exec(new AxisSetMajorGridPenCmd(d, pen, ki18n("%1: set major grid style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, updateGrid)
-void Axis::setMajorGridOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->majorGridOpacity)
-		exec(new AxisSetMajorGridOpacityCmd(d, opacity, ki18n("%1: set major grid opacity")));
-}
-
-// Minor grid
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridPen, QPen, minorGridPen, retransformMinorGrid)
-void Axis::setMinorGridPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->minorGridPen)
-		exec(new AxisSetMinorGridPenCmd(d, pen, ki18n("%1: set minor grid style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, updateGrid)
-void Axis::setMinorGridOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->minorGridOpacity)
-		exec(new AxisSetMinorGridOpacityCmd(d, opacity, ki18n("%1: set minor grid opacity")));
-}
-
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################
@@ -1014,16 +1004,16 @@ void Axis::orientationChangedSlot(QAction* action) {
 
 void Axis::lineStyleChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->linePen;
+	QPen pen = d->line->pen();
 	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	this->setLinePen(pen);
+	d->line->setPen(pen);
 }
 
 void Axis::lineColorChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->linePen;
+	QPen pen = d->line->pen();
 	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	this->setLinePen(pen);
+	d->line->setPen(pen);
 }
 
 void Axis::visibilityChangedSlot() {
@@ -2332,7 +2322,7 @@ void AxisPrivate::retransformMajorGrid() {
 		return;
 
 	majorGridPath = QPainterPath();
-	if (majorGridPen.style() == Qt::NoPen || majorTickPoints.size() == 0) {
+	if (majorGridLine->pen().style() == Qt::NoPen || majorTickPoints.size() == 0) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -2414,7 +2404,7 @@ void AxisPrivate::retransformMinorGrid() {
 		return;
 
 	minorGridPath = QPainterPath();
-	if (minorGridPen.style() == Qt::NoPen) {
+	if (minorGridLine->pen().style() == Qt::NoPen) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -2478,6 +2468,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		title->setPositionInvalid(false);
 	}
 
+	const auto& linePen = line->pen();
 	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
 	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
 	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
@@ -2554,9 +2545,9 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		return;
 
 	// draw the line
-	if (linePen.style() != Qt::NoPen) {
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
+	if (line->pen().style() != Qt::NoPen) {
+		painter->setOpacity(line->opacity());
+		painter->setPen(line->pen());
 		painter->setBrush(Qt::SolidPattern);
 		painter->drawPath(linePath);
 
@@ -2805,8 +2796,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 	// line
 	writer->writeStartElement("line");
-	WRITE_QPEN(d->linePen);
-	writer->writeAttribute("opacity", QString::number(d->lineOpacity));
+	d->line->save(writer);
 	writer->writeAttribute("arrowType", QString::number(static_cast<int>(d->arrowType)));
 	writer->writeAttribute("arrowPosition", QString::number(static_cast<int>(d->arrowPosition)));
 	writer->writeAttribute("arrowSize", QString::number(d->arrowSize));
@@ -2864,15 +2854,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// grid
-	writer->writeStartElement("majorGrid");
-	WRITE_QPEN(d->majorGridPen);
-	writer->writeAttribute("opacity", QString::number(d->majorGridOpacity));
-	writer->writeEndElement();
-
-	writer->writeStartElement("minorGrid");
-	WRITE_QPEN(d->minorGridPen);
-	writer->writeAttribute("opacity", QString::number(d->minorGridOpacity));
-	writer->writeEndElement();
+	d->majorGridLine->save(writer);
+	d->minorGridLine->save(writer);
 
 	writer->writeEndElement(); // close "axis" section
 }
@@ -2948,9 +2931,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			d->title->load(reader, preview);
 		} else if (!preview && reader->name() == "line") {
 			attribs = reader->attributes();
-
-			READ_QPEN(d->linePen);
-			READ_DOUBLE_VALUE("opacity", lineOpacity);
+			d->line->load(reader, preview);
 			READ_INT_VALUE("arrowType", arrowType, Axis::ArrowType);
 			READ_INT_VALUE("arrowPosition", arrowPosition, Axis::ArrowPosition);
 			READ_DOUBLE_VALUE("arrowSize", arrowSize);
@@ -3013,15 +2994,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			if (!str.isEmpty())
 				d->labelsBackgroundColor.setBlue(str.toInt());
 		} else if (!preview && reader->name() == "majorGrid") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->majorGridPen);
-			READ_DOUBLE_VALUE("opacity", majorGridOpacity);
+			d->majorGridLine->load(reader, preview);
 		} else if (!preview && reader->name() == "minorGrid") {
-			attribs = reader->attributes();
-
-			READ_QPEN(d->minorGridPen);
-			READ_DOUBLE_VALUE("opacity", minorGridOpacity);
+			d->minorGridLine->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -3036,6 +3011,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
+	Q_D(Axis);
 	const KConfigGroup& group = config.group("Axis");
 
 	// we don't want to show the major and minor grid lines for non-first horizontal/vertical axes
@@ -3063,7 +3039,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setLabelsBackgroundColor(groupPlot.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 
 	// Line
-	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
+	d->line->setOpacity(group.readEntry("LineOpacity", 1.0));
 
 	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
@@ -3081,7 +3057,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
 	}
 
-	this->setLinePen(p);
+	d->line->setPen(p);
 
 	// Major grid
 	if (firstAxis) {
@@ -3090,8 +3066,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	} else
 		p.setStyle(Qt::NoPen);
-	this->setMajorGridPen(p);
-	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", 1.0));
+	d->majorGridLine->setPen(p);
+	d->majorGridLine->setOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	// Major ticks
 	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
@@ -3099,6 +3075,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorTicksPen(p);
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
+
 	this->setMajorTicksDirection((Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksIn));
 	this->setMajorTicksLength(group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
 
@@ -3109,8 +3086,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	} else
 		p.setStyle(Qt::NoPen);
-	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", 1.0));
-	this->setMinorGridPen(p);
+	d->minorGridLine->setOpacity(group.readEntry("MinorGridOpacity", 1.0));
+	d->minorGridLine->setPen(p);
 
 	// Minor ticks
 	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
@@ -3122,11 +3099,11 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
 
 	// load the theme for the title label
-	Q_D(Axis);
 	d->title->loadThemeConfig(config);
 }
 
 void Axis::saveThemeConfig(const KConfig& config) {
+	Q_D(Axis);
 	KConfigGroup group = config.group("Axis");
 
 	// Tick label
@@ -3135,16 +3112,9 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("LabelsBackgroundColor", this->labelsBackgroundColor());
 
 	// Line
-	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineColor", this->linePen().color());
-	group.writeEntry("LineStyle", (int)this->linePen().style());
-	group.writeEntry("LineWidth", this->linePen().widthF());
+	d->line->saveThemeConfig(group);
 
 	// Major ticks
-	group.writeEntry("MajorGridOpacity", this->majorGridOpacity());
-	group.writeEntry("MajorGridColor", this->majorGridPen().color());
-	group.writeEntry("MajorGridStyle", (int)this->majorGridPen().style());
-	group.writeEntry("MajorGridWidth", this->majorGridPen().widthF());
 	group.writeEntry("MajorTicksColor", this->majorTicksPen().color());
 	group.writeEntry("MajorTicksLineStyle", (int)this->majorTicksPen().style());
 	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
@@ -3152,17 +3122,16 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("MajorTicksType", (int)this->majorTicksType());
 
 	// Minor ticks
-	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
-	group.writeEntry("MinorGridColor", this->minorGridPen().color());
-	group.writeEntry("MinorGridStyle", (int)this->minorGridPen().style());
-	group.writeEntry("MinorGridWidth", this->minorGridPen().widthF());
 	group.writeEntry("MinorTicksColor", this->minorTicksPen().color());
 	group.writeEntry("MinorTicksLineStyle", (int)this->minorTicksPen().style());
 	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
-	// same the theme config for the title label
-	Q_D(Axis);
+	// grid
+	d->majorGridLine->saveThemeConfig(group);
+	d->minorGridLine->saveThemeConfig(group);
+
+	// title labe
 	d->title->saveThemeConfig(config);
 }

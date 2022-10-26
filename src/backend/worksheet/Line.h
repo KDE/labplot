@@ -25,6 +25,7 @@ public:
 	~Line() override;
 
 	void setPrefix(const QString&);
+	void setCreateXmlElement(bool);
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;

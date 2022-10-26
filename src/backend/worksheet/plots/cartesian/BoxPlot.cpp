@@ -184,6 +184,7 @@ void BoxPlot::init() {
 	// whiskers
 	d->whiskersLine = new Line(QString());
 	d->whiskersLine->setPrefix(QLatin1String("Whiskers"));
+	d->whiskersLine->setCreateXmlElement(false); // whiskers element is created in BoxPlot::save()
 	d->whiskersLine->setHidden(true);
 	addChild(d->whiskersLine);
 	d->whiskersLine->init(group);
