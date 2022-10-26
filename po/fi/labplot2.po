@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-24 00:44+0000\n"
+"POT-Creation-Date: 2022-10-26 00:42+0000\n"
 "PO-Revision-Date: 2022-07-27 16:51+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -5263,39 +5263,39 @@ msgstr "Energian SI-yksikkö"
 msgid "Energy 1 erg"
 msgstr "1 ergin energia"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #, kde-format
 msgid "Linear"
 msgstr "Lineaarinen"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Log10"
 msgstr "Log10"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Log2"
 msgstr "Log2"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Ln"
 msgstr "Ln"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Sqrt"
 msgstr "Sqrt"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Square"
 msgstr "Neliö"
 
-#: src/backend/lib/Range.cpp:12
+#: src/backend/lib/Range.cpp:13
 #, fuzzy, kde-format
 #| msgid "Inverse Exponential"
 msgid "Inverse"
@@ -14311,24 +14311,24 @@ msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:116
+#: src/kdefrontend/LabPlot.cpp:114
 #, fuzzy, kde-format
 #| msgid "disable splash screen"
 msgid "Disable splash screen"
 msgstr "älä näytä tervetuloikkunaa"
 
-#: src/kdefrontend/LabPlot.cpp:119
+#: src/kdefrontend/LabPlot.cpp:117
 #, kde-format
 msgid "Start in the presenter mode"
 msgstr ""
 
-#: src/kdefrontend/LabPlot.cpp:122
+#: src/kdefrontend/LabPlot.cpp:120
 #, fuzzy, kde-format
 #| msgid "open a project file"
 msgid "Open a project file."
 msgstr "avaa projektitiedosto"
 
-#: src/kdefrontend/LabPlot.cpp:141
+#: src/kdefrontend/LabPlot.cpp:139
 #, kde-format
 msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
@@ -14337,7 +14337,7 @@ msgstr ""
 "Ei voitu avata tiedostoa ”%1”. Jatka käynnistämistä napsauttamalla ”Jatka” "
 "tai lopeta sovellus napsauttamalla ”Peru”."
 
-#: src/kdefrontend/LabPlot.cpp:142
+#: src/kdefrontend/LabPlot.cpp:140
 #, kde-format
 msgid "Failed to Open"
 msgstr "Avaaminen epäonnistui"
