@@ -888,4 +888,24 @@ void WidgetsTest::numberSpinBoxDecimals() {
 	}
 }
 
+void WidgetsTest::numberSpinBoxScrollingNegToPos() {
+	NumberSpinBox sb;
+	sb.setMinimum(-10);
+	sb.setValue(-1);
+	QCOMPARE(sb.lineEdit()->text(), "-1.00");
+
+	sb.lineEdit()->setCursorPosition(2);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), "0.00");
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 1); // cursor should not be at position of the comma but behind the 0
+
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), "-1.00");
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
+}
+
 QTEST_MAIN(WidgetsTest)

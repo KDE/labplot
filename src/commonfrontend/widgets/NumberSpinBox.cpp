@@ -253,7 +253,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	NumberProperties p;
 	bool ok;
-	locale().toDouble(v_str, &ok);
+	double origValue = locale().toDouble(v_str, &ok);
 	if (!ok)
 		return Errors::Invalid;
 	if (!properties(v_str, p))
@@ -337,7 +337,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	auto newPos = number.length() - (end - cursorPos);
 	if ((newPos == 0 && number.length() > 0))
 		newPos = 1;
-	if (newPos == 1 && !p.integerSign.isNull() && number.length() > 1)
+	if (newPos == 1 && !p.integerSign.isNull() && number.length() > 1 && origValue < 0 && v < 0)
 		newPos = 2;
 
 	lineEdit()->setCursorPosition(newPos + prefix().size());

@@ -29,5 +29,6 @@ private Q_SLOTS:
 	void numberSpinBoxFeedback();
 	void numberSpinBoxFeedback2();
 	void numberSpinBoxDecimals();
+	void numberSpinBoxScrollingNegToPos();
 };
 #endif // WIDGETSTEST_H
