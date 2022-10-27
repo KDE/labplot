@@ -209,7 +209,6 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 	}
 }
 
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################

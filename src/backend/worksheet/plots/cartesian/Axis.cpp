@@ -408,7 +408,6 @@ BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetX, titleOffsetX)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetY, titleOffsetY)
 
-
 // line
 Line* Axis::line() const {
 	Q_D(const Axis);

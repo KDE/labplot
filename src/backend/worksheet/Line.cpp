@@ -40,7 +40,7 @@ void Line::setPrefix(const QString& prefix) {
  * defines whether an XML element needs to be create in write(). For objects where the line
  * properties are serialized together with some other properties, the XML element is created
  * in objects's save() already and there is not need to create it once more in Line::save():
-*/
+ */
 void Line::setCreateXmlElement(bool create) {
 	Q_D(Line);
 	d->createXmlElement = create;

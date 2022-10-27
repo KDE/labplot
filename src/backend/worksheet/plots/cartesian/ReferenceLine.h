@@ -10,9 +10,6 @@
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-
-#include <QPen>
-
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
