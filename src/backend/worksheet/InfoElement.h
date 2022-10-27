@@ -97,6 +97,7 @@ public Q_SLOTS:
 	void moveElementBegin();
 	void moveElementEnd();
 	void curveVisibilityChanged();
+	void curveDataChanged();
 	void curveCoordinateSystemIndexChanged(int);
 
 private:

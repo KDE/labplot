@@ -159,6 +159,7 @@ void InfoElement::initMenus() {
 void InfoElement::initCurveConnections(const XYCurve* curve) {
 	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
+	connect(curve, &XYCurve::dataChanged, this, &InfoElement::curveDataChanged);
 	connect(curve, &XYCurve::moveBegin, this, [this]() {
 		m_curveGetsMoved = true;
 	});
@@ -540,6 +541,17 @@ void InfoElement::curveVisibilityChanged() {
 	else
 		m_title->setVisible(true);
 	m_title->setUndoAware(true);
+}
+
+void InfoElement::curveDataChanged() {
+	Q_D(InfoElement);
+	setMarkerpointPosition(d->positionLogical);
+	m_setTextLabelText = true;
+	m_title->setUndoAware(false);
+	m_title->setText(createTextLabelText());
+	m_title->setUndoAware(true);
+	m_setTextLabelText = false;
+	retransform();
 }
 
 void InfoElement::labelBorderShapeChanged() {
