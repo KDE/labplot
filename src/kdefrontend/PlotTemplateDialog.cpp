@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/trace.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 
@@ -308,6 +309,9 @@ TemplateListModel::TemplateListModel(const QString& searchPath, QObject* parent)
 }
 
 void TemplateListModel::setSearchPath(const QString& searchPath) {
+#ifdef PERFTRACE_PLOTTEMPLATE
+	PERFTRACE(Q_FUNC_INFO);
+#endif
 	beginResetModel();
 	mSearchPath = searchPath;
 	mFiles.clear();
@@ -318,8 +322,10 @@ void TemplateListModel::setSearchPath(const QString& searchPath) {
 		QFileInfo f(it.next());
 		File file{f.absoluteFilePath(), sPath.relativeFilePath(f.absoluteFilePath()).split(PlotTemplateDialog::format).at(0)};
 		mFiles << file;
+		qDebug() << file.path;
 	}
 	endResetModel();
+	qDebug() << "Files count: " << mFiles.count();
 }
 
 int TemplateListModel::rowCount(const QModelIndex& parent) const {
