@@ -1,14 +1,22 @@
 #include "NumberSpinBox.h"
 
-#include "backend/lib/macros.h"
+#include "backend/lib/macrosWarningStyle.h"
 
 #include <limits>
 
+#include <QApplication>
+#include <QDebug>
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QLocale>
 #include <QString>
+#include <QStringRef>
 #include <QtMath>
+
+NumberSpinBox::NumberSpinBox(QWidget* parent)
+	: QDoubleSpinBox(parent) {
+	init(0, false);
+}
 
 NumberSpinBox::NumberSpinBox(double initValue, QWidget* parent)
 	: QDoubleSpinBox(parent) {
@@ -395,6 +403,10 @@ bool NumberSpinBox::setValue(double v) {
 
 void NumberSpinBox::setFeedback(bool enable) {
 	mFeedback = enable;
+}
+
+bool NumberSpinBox::feedback() {
+	return mFeedback;
 }
 
 void NumberSpinBox::setStrongFocus(bool enable) {

@@ -39,17 +39,22 @@ public:
 		Max, // value larger than max
 	};
 
+	Q_PROPERTY(bool feedback READ feedback WRITE setFeedback NOTIFY feedbackChanged);
+
 public:
-	NumberSpinBox(double initValue = 0, QWidget* parent = nullptr);
+	NumberSpinBox(QWidget* parent = nullptr);
+	NumberSpinBox(double initValue, QWidget* parent = nullptr);
 	NumberSpinBox(double initValue, bool feedback, QWidget* parent = nullptr);
 	QString errorToString(Errors);
 	bool setValue(double);
 	void setFeedback(bool enable);
+	bool feedback();
 	void setStrongFocus(bool);
 	double value();
 
 Q_SIGNALS:
 	void valueChanged(double);
+	void feedbackChanged(bool);
 
 private:
 	void init(double initValue, bool feedback);
