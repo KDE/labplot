@@ -82,8 +82,8 @@ private Q_SLOTS:
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void minChanged(const Dimension dim, const int index, const QString& value);
-	void maxChanged(const Dimension dim, const int index, const QString& value);
+	void minChanged(const Dimension dim, const int index, double min);
+	void maxChanged(const Dimension dim, const int index, double max);
 	// void yRangeDateTimeChanged(const Range<quint64>&);
 
 	// "Layout"-tab

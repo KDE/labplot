@@ -1194,7 +1194,7 @@ public:
 		redo();
 	}
 	virtual void finalize() {
-		m_target->retransformScale(m_dimension, m_index);
+		m_target->retransformScale(m_dimension, m_index, true);
 		Q_EMIT m_target->q->rangeChanged(m_dimension, m_index, m_target->rangeConst(m_dimension, m_index));
 	}
 
@@ -3185,7 +3185,7 @@ void CartesianPlotPrivate::retransform() {
  * Needed when the range (xRange/yRange) changed
  * \param index
  */
-void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
+void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool suppressSignals) {
 	if (index == -1) {
 		for (int i = 0; i < rangeCount(dim); i++)
 			retransformScale(dim, i);
@@ -3267,16 +3267,16 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index) {
 
 		switch (dim) {
 		case Dimension::X: {
-			if (!qFuzzyIsNull(deltaMin))
+			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
 				Q_EMIT q->xMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax))
+			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
 				Q_EMIT q->xMaxChanged(i, rangep.range.end());
 			break;
 		}
 		case Dimension::Y: {
-			if (!qFuzzyIsNull(deltaMin))
+			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
 				Q_EMIT q->yMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax))
+			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
 				Q_EMIT q->yMaxChanged(i, rangep.range.end());
 			break;
 		}

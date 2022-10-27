@@ -28,7 +28,7 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformScale(const Dimension, int index);
+	void retransformScale(const Dimension, int index, bool suppressSignals = false);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();

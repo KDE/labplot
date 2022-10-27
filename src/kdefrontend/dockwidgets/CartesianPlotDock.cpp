@@ -164,14 +164,14 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
 
 	// Layout
-	connect(ui.sbLeft, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbTop, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
-	connect(ui.sbPaddingHorizontal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::horizontalPaddingChanged);
-	connect(ui.sbPaddingVertical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::verticalPaddingChanged);
-	connect(ui.sbPaddingRight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
-	connect(ui.sbPaddingBottom, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
+	connect(ui.sbLeft, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbTop, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbHeight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
+	connect(ui.sbPaddingHorizontal, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::horizontalPaddingChanged);
+	connect(ui.sbPaddingVertical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::verticalPaddingChanged);
+	connect(ui.sbPaddingRight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::rightPaddingChanged);
+	connect(ui.sbPaddingBottom, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::bottomPaddingChanged);
 	connect(ui.cbPaddingSymmetric, &QCheckBox::toggled, this, &CartesianPlotDock::symmetricPaddingChanged);
 
 	// Range breaks
@@ -200,8 +200,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderWidthChanged);
-	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderWidthChanged);
+	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::borderOpacityChanged);
 
 	// theme and template handlers
@@ -496,15 +496,10 @@ void CartesianPlotDock::updateLocale() {
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = xRange.relativePrecision();
-				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
-				// save cursor position
-				int pos = le->cursorPosition();
-				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', relPrec)));
-				le->setCursorPosition(pos);
-				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
-				pos = le->cursorPosition();
-				CELLWIDGET(Dimension::X, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', relPrec)));
-				le->setCursorPosition(pos);
+				auto* sb = qobject_cast<NumberSpinBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
+				sb->setLocale(numberLocale);
+				sb = qobject_cast<NumberSpinBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
+				sb->setLocale(numberLocale);
 
 			} else {
 				CELLWIDGET(Dimension::X, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start(), Qt::UTC)));
@@ -528,15 +523,10 @@ void CartesianPlotDock::updateLocale() {
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				const int relPrec = yRange.relativePrecision();
-				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
-				// save cursor position
-				int pos = le->cursorPosition();
-				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', relPrec)));
-				le->setCursorPosition(pos);
-				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
-				pos = le->cursorPosition();
-				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', relPrec)));
-				le->setCursorPosition(pos);
+				auto* sb = qobject_cast<NumberSpinBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
+				sb->setLocale(numberLocale);
+				sb = qobject_cast<NumberSpinBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
+				sb->setLocale(numberLocale);
 			} else {
 				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.start(), Qt::UTC)));
 				CELLWIDGET(Dimension::Y, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(yRange.end(), Qt::UTC)));
@@ -670,20 +660,21 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
-			auto* le = new QLineEdit(tw);
-			le->setValidator(new QDoubleValidator(le));
-			le->setProperty("row", i);
-			tw->setCellWidget(i, TwRangesColumn::Min, le);
-			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
-				this->minChanged(dim, le->property("row").toInt(), text);
+			auto* sb = new NumberSpinBox(tw);
+			sb->setProperty("row", i);
+			sb->setFeedback(true);
+			sb->setValue(r.start());
+			tw->setCellWidget(i, TwRangesColumn::Min, sb);
+			connect(sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [this, dim, sb](double value) {
+				this->minChanged(dim, sb->property("row").toInt(), value);
 			});
-			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
-			le = new QLineEdit(tw);
-			le->setValidator(new QDoubleValidator(le));
-			le->setProperty("row", i);
-			tw->setCellWidget(i, TwRangesColumn::Max, le);
-			connect(le, &QLineEdit::textChanged, [this, dim, le](const QString& text) {
-				this->maxChanged(dim, le->property("row").toInt(), text);
+			sb = new NumberSpinBox(tw);
+			sb->setProperty("row", i);
+			sb->setFeedback(true);
+			sb->setValue(r.end());
+			tw->setCellWidget(i, TwRangesColumn::Max, sb);
+			connect(sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [this, dim, sb](double value) {
+				this->maxChanged(dim, sb->property("row").toInt(), value);
 			});
 		} else {
 			auto* dte = new QDateTimeEdit(tw);
@@ -994,8 +985,8 @@ void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, boo
 	updateRangeList(dim); // see range changes
 }
 
-void CartesianPlotDock::minChanged(const Dimension dim, const int index, const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
+void CartesianPlotDock::minChanged(const Dimension dim, const int index, double min) {
+	DEBUG(Q_FUNC_INFO << ", value = " << min);
 	if (m_initializing)
 		return;
 
@@ -1008,27 +999,21 @@ void CartesianPlotDock::minChanged(const Dimension dim, const int index, const Q
 		break;
 	}
 
-	const Lock lock(m_initializing);
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double min = numberLocale.toDouble(value, &ok);
-	if (ok) {
-		// selected x/y range
-		DEBUG(Q_FUNC_INFO << ", x range index: " << index)
-		bool changed = false;
-		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(min, plot->range(dim, index).start())) {
-				plot->setMin(dim, index, min);
-				changed = true;
-			}
+	// selected x/y range
+	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
+	bool changed = false;
+	for (auto* plot : m_plotList)
+		if (!qFuzzyCompare(min, plot->range(dim, index).start())) {
+			plot->setMin(dim, index, min);
+			changed = true;
+		}
 
-		if (changed)
-			updateRangeList(dim_other); // plot is auto scaled
-	}
+	// if (changed)
+	//     updateRangeList(dim_other); // plot is auto scaled
 }
 
-void CartesianPlotDock::maxChanged(const Dimension dim, const int index, const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
+void CartesianPlotDock::maxChanged(const Dimension dim, const int index, double max) {
+	DEBUG(Q_FUNC_INFO << ", value = " << max);
 	if (m_initializing)
 		return;
 
@@ -1041,22 +1026,16 @@ void CartesianPlotDock::maxChanged(const Dimension dim, const int index, const Q
 		break;
 	}
 
-	const Lock lock(m_initializing);
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double max = numberLocale.toDouble(value, &ok);
-	if (ok) {
-		// selected x/y range
-		bool changed = false;
-		for (auto* plot : m_plotList)
-			if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
-				plot->setMax(dim, index, max);
-				changed = true;
-			}
+	// selected x/y range
+	bool changed = false;
+	for (auto* plot : m_plotList)
+		if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
+			plot->setMax(dim, index, max);
+			changed = true;
+		}
 
-		if (changed)
-			updateRangeList(dim_other); // plot is auto scaled
-	}
+	// if (changed)
+	//     updateRangeList(dim_other); // plot is auto scaled
 }
 
 void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
@@ -1782,8 +1761,8 @@ void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, boo
 
 	CELLWIDGET(dim, index, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
 	CELLWIDGET(dim, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
-	CELLWIDGET(dim, index, TwRangesColumn::Min, QLineEdit, setEnabled(!checked));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Min, QWidget, setEnabled(!checked));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, QWidget, setEnabled(!checked));
 	CELLWIDGET(dim, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
@@ -1792,8 +1771,8 @@ void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
+
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
 	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
@@ -1801,8 +1780,8 @@ void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(value)));
+
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
 	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
@@ -1811,8 +1790,8 @@ void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
+
+	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
 	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
@@ -1820,8 +1799,8 @@ void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(value)));
+
+	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
 	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
@@ -1831,10 +1810,10 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 		return;
 
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	CELLWIDGET(dim, index, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(range.start())));
+
+	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
 	CELLWIDGET(dim, index, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
-	CELLWIDGET(dim, index, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(range.end())));
+	CELLWIDGET(dim, index, TwRangesColumn::Max, NumberSpinBox, setValue(range.end()));
 	CELLWIDGET(dim, index, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.end(), Qt::UTC)));
 }
 
