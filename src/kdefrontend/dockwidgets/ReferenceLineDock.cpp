@@ -43,7 +43,6 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ReferenceLineDock::widthChanged);
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {

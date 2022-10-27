@@ -145,10 +145,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
-	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::lineStyleChanged);
-	connect(ui.kcbLineColor, &KColorButton::changed, this, &AxisDock::lineColorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::lineWidthChanged);
-	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::lineOpacityChanged);
+
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowPositionChanged);
 	connect(ui.cbArrowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowTypeChanged);
 	connect(ui.sbArrowSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::arrowSizeChanged);
@@ -207,17 +204,6 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
-
-	//"Grid"-tab
-	connect(ui.cbMajorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorGridStyleChanged);
-	connect(ui.kcbMajorGridColor, &KColorButton::changed, this, &AxisDock::majorGridColorChanged);
-	connect(ui.sbMajorGridWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorGridWidthChanged);
-	connect(ui.sbMajorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorGridOpacityChanged);
-
-	connect(ui.cbMinorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorGridStyleChanged);
-	connect(ui.kcbMinorGridColor, &KColorButton::changed, this, &AxisDock::minorGridColorChanged);
-	connect(ui.sbMinorGridWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::minorGridWidthChanged);
-	connect(ui.sbMinorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorGridOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
