@@ -649,7 +649,8 @@ bool Project::load(const QString& filename, bool preview) {
 	// parse XML
 	XmlStreamReader reader(file);
 	setIsLoading(true);
-	Private::mXmlVersion = 0; // set the version temporarily to 0, the actual project version will be read in the file, if available, and used in load() functions
+	Private::mXmlVersion =
+		0; // set the version temporarily to 0, the actual project version will be read in the file, if available, and used in load() functions
 	rc = this->load(&reader, preview);
 	Private::mXmlVersion = buildXmlVersion; // set the version back to the current XML version
 	setIsLoading(false);
