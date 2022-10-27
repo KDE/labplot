@@ -70,7 +70,7 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	QString valueStr;
 	Errors e = validate(text, v, valueStr);
 	setInvalid(e);
-	if (e == Errors::NoError) {
+	if (e == Errors::NoError && v != mValue && mValueStr != valueStr) {
 		mValueStr = valueStr;
 		mValue = v;
 		valueChanged();
@@ -293,7 +293,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		increase = steps * qPow(10, initial - cursorPos);
 
 		// from 0.1 with step -1 the desired result shall be -1.1 not -0.9
-		if (integerFraction + increase > 0)
+		if ((integerFraction > 0 && integerFraction + increase > 0) || (integerFraction < 0 && integerFraction + increase < 0))
 			integerFraction += increase;
 		else {
 			int integer = static_cast<int>(integerFraction);
