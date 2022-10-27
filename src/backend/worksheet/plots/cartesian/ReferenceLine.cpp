@@ -13,6 +13,7 @@
 #include "ReferenceLinePrivate.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -70,10 +71,16 @@ void ReferenceLine::init() {
 	d->positionLogical = QPointF(x, y);
 	d->updatePosition(); // To update also scene coordinates
 
-	d->pen.setStyle((Qt::PenStyle)group.readEntry("Style", (int)Qt::SolidLine));
-	d->pen.setColor(group.readEntry("Color", QColor(Qt::black)));
-	d->pen.setWidthF(group.readEntry("Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->opacity = group.readEntry("Opacity", 1.0);
+	// line
+	d->line = new Line(QString());
+	d->line->setHidden(true);
+	addChild(d->line);
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 }
 
 /*!
@@ -151,9 +158,10 @@ QMenu* ReferenceLine::createContextMenu() {
 	menu->insertMenu(firstAction, orientationMenu);
 
 	// Line styles
-	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, d->pen.color());
-	GuiTools::selectPenStyleAction(lineStyleActionGroup, d->pen.style());
-	GuiTools::selectColorAction(lineColorActionGroup, d->pen.color());
+	const auto& pen = d->line->pen();
+	GuiTools::updatePenStyles(lineStyleMenu, lineStyleActionGroup, pen.color());
+	GuiTools::selectPenStyleAction(lineStyleActionGroup, pen.style());
+	GuiTools::selectColorAction(lineColorActionGroup, pen.color());
 
 	menu->insertMenu(firstAction, lineMenu);
 	menu->insertSeparator(firstAction);
@@ -175,8 +183,11 @@ void ReferenceLine::handleResize(double /*horizontalRatio*/, double /*verticalRa
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(ReferenceLine, ReferenceLine::Orientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(ReferenceLine, QPen, pen, pen)
-BASIC_SHARED_D_READER_IMPL(ReferenceLine, qreal, opacity, opacity)
+
+Line* ReferenceLine::line() const {
+	Q_D(const ReferenceLine);
+	return d->line;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, ReferenceLine::Orientation, orientation, retransform)
@@ -198,19 +209,6 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetPen, QPen, pen, recalcShapeAndBoundingRect)
-void ReferenceLine::setPen(const QPen& pen) {
-	Q_D(ReferenceLine);
-	if (pen != d->pen)
-		exec(new ReferenceLineSetPenCmd(d, pen, ki18n("%1: set line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOpacity, qreal, opacity, update)
-void ReferenceLine::setOpacity(qreal opacity) {
-	Q_D(ReferenceLine);
-	if (opacity != d->opacity)
-		exec(new ReferenceLineSetOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
-}
 
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
@@ -224,16 +222,16 @@ void ReferenceLine::orientationChangedSlot(QAction* action) {
 
 void ReferenceLine::lineStyleChanged(QAction* action) {
 	Q_D(const ReferenceLine);
-	QPen pen = d->pen;
+	QPen pen = d->line->pen();
 	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	this->setPen(pen);
+	d->line->setPen(pen);
 }
 
 void ReferenceLine::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceLine);
-	QPen pen = d->pen;
+	QPen pen = d->line->pen();
 	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	this->setPen(pen);
+	d->line->setPen(pen);
 }
 
 void ReferenceLine::visibilityChangedSlot() {
@@ -332,7 +330,7 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 			path.moveTo(0, length / 2);
 			path.lineTo(0, -length / 2);
 		}
-		lineShape.addPath(WorksheetElement::shapeFromPath(path, pen));
+		lineShape.addPath(WorksheetElement::shapeFromPath(path, line->pen()));
 		boundingRectangle = lineShape.boundingRect();
 	}
 }
@@ -341,8 +339,8 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if (!m_visible)
 		return;
 
-	painter->setOpacity(opacity);
-	painter->setPen(pen);
+	painter->setOpacity(line->opacity());
+	painter->setPen(line->pen());
 	if (orientation == ReferenceLine::Orientation::Horizontal)
 		painter->drawLine(-length / 2, 0, length / 2, 0);
 	else
@@ -395,10 +393,7 @@ void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeEndElement();
 
-	writer->writeStartElement("line");
-	WRITE_QPEN(d->pen);
-	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeEndElement();
+	d->line->save(writer);
 
 	writer->writeEndElement(); // close "ReferenceLine" section
 }
@@ -452,9 +447,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == "line") {
-			attribs = reader->attributes();
-			READ_QPEN(d->pen);
-			READ_DOUBLE_VALUE("opacity", opacity);
+			d->line->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -468,12 +461,10 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void ReferenceLine::loadThemeConfig(const KConfig& config) {
+	Q_D(ReferenceLine);
+
 	// for the properties of the line read the properties of the axis line
 	const KConfigGroup& group = config.group("Axis");
-	QPen p;
-	this->setOpacity(group.readEntry("LineOpacity", 1.0));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setPen(p);
+	const auto& themeColor = group.readEntry("LineColor", QColor(Qt::black));
+	d->line->loadThemeConfig(group, themeColor);
 }

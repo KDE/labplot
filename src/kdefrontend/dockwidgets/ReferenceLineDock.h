@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,7 @@
 #include "ui_referencelinedock.h"
 
 class AbstractAspect;
+class LineWidget;
 class ReferenceLine;
 class KConfig;
 
@@ -31,6 +32,7 @@ private:
 	Ui::ReferenceLineDock ui;
 	QList<ReferenceLine*> m_linesList;
 	ReferenceLine* m_line{nullptr};
+	LineWidget* lineWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -44,12 +46,6 @@ private Q_SLOTS:
 	void positionLogicalChanged(const QString&);
 	void positionLogicalDateTimeChanged(const QDateTime&);
 
-	// Line
-	void styleChanged(int);
-	void colorChanged(const QColor&);
-	void widthChanged(double);
-	void opacityChanged(int);
-
 	// SLOTs for changes triggered in ReferenceLine
 	void updatePlotRanges() override;
 	void lineVisibilityChanged(bool);
@@ -57,10 +53,6 @@ private Q_SLOTS:
 	// Position
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
-
-	// Line
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 };
 
 #endif
