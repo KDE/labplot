@@ -67,13 +67,13 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
 	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::labelOrderChanged);
-	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
+	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
 
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CartesianPlotLegendDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::customPositionYChanged);
 
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::verticalAlignmentChanged);
@@ -82,17 +82,17 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	// Border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotLegendDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderWidthChanged);
-	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderWidthChanged);
+	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderOpacityChanged);
 
 	// Layout
-	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutTopMarginChanged);
-	connect(ui.sbLayoutBottomMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutBottomMarginChanged);
-	connect(ui.sbLayoutLeftMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutLeftMarginChanged);
-	connect(ui.sbLayoutRightMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutRightMarginChanged);
-	connect(ui.sbLayoutHorizontalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
-	connect(ui.sbLayoutVerticalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutVerticalSpacingChanged);
+	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutTopMarginChanged);
+	connect(ui.sbLayoutBottomMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutBottomMarginChanged);
+	connect(ui.sbLayoutLeftMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutLeftMarginChanged);
+	connect(ui.sbLayoutRightMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutRightMarginChanged);
+	connect(ui.sbLayoutHorizontalSpacing, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
+	connect(ui.sbLayoutVerticalSpacing, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutVerticalSpacingChanged);
 	connect(ui.sbLayoutColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutColumnCountChanged);
 
 	// template handler
@@ -187,8 +187,8 @@ void CartesianPlotLegendDock::updateLocale() {
 	ui.sbLineSymbolWidth->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
-	ui.lePositionXLogical->setLocale(numberLocale);
-	ui.lePositionYLogical->setLocale(numberLocale);
+	ui.sbPositionXLogical->setLocale(numberLocale);
+	ui.sbPositionYLogical->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
 	ui.sbBorderCornerRadius->setLocale(numberLocale);
 	ui.sbLayoutTopMargin->setLocale(numberLocale);
@@ -433,17 +433,17 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 		ui.dtePositionXLogical->setVisible(checked);
 
 		ui.lPositionXLogical->setVisible(false);
-		ui.lePositionXLogical->setVisible(false);
+		ui.sbPositionXLogical->setVisible(false);
 	} else {
 		ui.lPositionXLogicalDateTime->setVisible(false);
 		ui.dtePositionXLogical->setVisible(false);
 
 		ui.lPositionXLogical->setVisible(checked);
-		ui.lePositionXLogical->setVisible(checked);
+		ui.sbPositionXLogical->setVisible(checked);
 	}
 
 	ui.lPositionYLogical->setVisible(checked);
-	ui.lePositionYLogical->setVisible(checked);
+	ui.sbPositionYLogical->setVisible(checked);
 
 	if (m_initializing)
 		return;
@@ -613,9 +613,9 @@ void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::Vertical
 void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	ui.lePositionXLogical->setText(numberLocale.toString(pos.x()));
+	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
-	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
+	ui.sbPositionYLogical->setValue(pos.y());
 }
 
 void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
@@ -740,15 +740,15 @@ void CartesianPlotLegendDock::load() {
 		const auto* plot = static_cast<const CartesianPlot*>(m_legend->plot());
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
 			ui.lPositionXLogical->show();
-			ui.lePositionXLogical->show();
+			ui.sbPositionXLogical->show();
 			ui.lPositionXLogicalDateTime->hide();
 			ui.dtePositionXLogical->hide();
 
-			ui.lePositionXLogical->setText(numberLocale.toString(m_legend->positionLogical().x()));
-			ui.lePositionYLogical->setText(numberLocale.toString(m_legend->positionLogical().y()));
+			ui.sbPositionXLogical->setValue(m_legend->positionLogical().x());
+			ui.sbPositionYLogical->setValue(m_legend->positionLogical().y());
 		} else { // DateTime
 			ui.lPositionXLogical->hide();
-			ui.lePositionXLogical->hide();
+			ui.sbPositionXLogical->hide();
 			ui.lPositionXLogicalDateTime->show();
 			ui.dtePositionXLogical->show();
 
@@ -760,9 +760,9 @@ void CartesianPlotLegendDock::load() {
 		bindingChanged(m_legend->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();
-		ui.lePositionXLogical->hide();
+		ui.sbPositionXLogical->hide();
 		ui.lPositionYLogical->hide();
-		ui.lePositionYLogical->hide();
+		ui.sbPositionYLogical->hide();
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
 	}
