@@ -34,7 +34,7 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void gluePointChanged(int index);
 	void curveChanged();
-	void positionChanged(const QString&);
+	void positionChanged(double);
 	void positionDateTimeChanged(const QDateTime&);
 	void curveSelectionChanged(bool);
 	void visibilityChanged(bool);

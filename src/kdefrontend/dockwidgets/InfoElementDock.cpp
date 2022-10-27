@@ -24,8 +24,6 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	m_teComment = ui->teComment;
 	m_teComment->setFixedHeight(m_leName->height());
 
-	ui->lePosition->setValidator(new QDoubleValidator(ui->lePosition));
-
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
 	m_labelWidget = new LabelWidget(ui->tabTitle);
@@ -35,7 +33,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 
 	// set the current locale
 	SET_NUMBER_LOCALE
-	ui->lePosition->setLocale(numberLocale);
+	ui->sbPosition->setLocale(numberLocale);
 	m_labelWidget->updateLocale();
 
 	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, Qt::black);
@@ -45,7 +43,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	// general
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
-	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
+	connect(ui->sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 	connect(ui->dateTimeEditPosition, &QDateTimeEdit::dateTimeChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
@@ -168,16 +166,16 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 
 	SET_NUMBER_LOCALE
 	if (m_element->plot()->xRangeFormatDefault() == RangeT::Format::Numeric) {
-		ui->lePosition->setText(numberLocale.toString(m_element->positionLogical()));
+		ui->sbPosition->setValue(m_element->positionLogical());
 		ui->lPosition->show();
-		ui->lePosition->show();
+		ui->sbPosition->show();
 		ui->lPositionDateTime->hide();
 		ui->dateTimeEditPosition->hide();
 	} else {
 		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->rangeDateTimeFormat(Dimension::X));
 		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical()));
 		ui->lPosition->hide();
-		ui->lePosition->hide();
+		ui->sbPosition->hide();
 		ui->lPositionDateTime->show();
 		ui->dateTimeEditPosition->show();
 	}
@@ -217,18 +215,13 @@ InfoElementDock::~InfoElementDock() {
 }
 
 // general tab
-void InfoElementDock::positionChanged(const QString& value) {
+void InfoElementDock::positionChanged(double pos) {
 	if (m_initializing)
 		return;
 
 	const Lock lock(m_initializing);
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double pos = numberLocale.toDouble(value, &ok);
-	if (ok) {
-		for (auto* element : m_elements)
-			element->setPositionLogical(pos);
-	}
+	for (auto* element : m_elements)
+		element->setPositionLogical(pos);
 }
 
 void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
@@ -454,11 +447,8 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui->lePosition->setText(numberLocale.toString(pos));
+	ui->sbPosition->setValue(pos);
 	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos));
 }
 

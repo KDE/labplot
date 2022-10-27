@@ -21,14 +21,10 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="3">
-        <widget class="QLineEdit" name="lePosition"/>
-       </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lCurves">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -202,6 +198,19 @@
        <item row="9" column="3">
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
+       <item row="3" column="3">
+        <widget class="NumberSpinBox" name="sbPosition">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle">
@@ -218,7 +227,6 @@
         <widget class="QLabel" name="lVerticalLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -400,7 +408,6 @@
         <widget class="QLabel" name="lConnectionLines">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -425,6 +432,11 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
