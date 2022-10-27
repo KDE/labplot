@@ -90,8 +90,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.5 * m_leName->height());
 
-	// set the minimum size of the text edit widget to one row of a QLineEdit
-	ui.teLabel->setMinimumHeight(ui.lePositionXLogical->height());
+	// set the minimum size of the text edit widget to one row of a QLabel
+	ui.teLabel->setMinimumHeight(ui.lName->height());
 
 	// adjust the layout margins
 	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
@@ -249,14 +249,14 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// geometry
 	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 
-	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &LabelWidget::positionXLogicalChanged);
+	connect(ui.sbPositionXLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
-	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &LabelWidget::positionYLogicalChanged);
+	connect(ui.sbPositionYLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::positionYLogicalChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
 	connect(ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
 	connect(ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
@@ -531,8 +531,6 @@ void LabelWidget::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
-	ui.lePositionXLogical->setLocale(numberLocale);
-	ui.lePositionYLogical->setLocale(numberLocale);
 	ui.sbOffsetX->setLocale(numberLocale);
 	ui.sbOffsetY->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
@@ -1004,20 +1002,14 @@ void LabelWidget::customPositionYChanged(double value) {
 }
 
 // positioning using logical plot coordinates
-void LabelWidget::positionXLogicalChanged(const QString& value) {
+void LabelWidget::positionXLogicalChanged(double value) {
 	if (m_initializing)
 		return;
 
-	const Lock lock(m_initializing);
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double x = numberLocale.toDouble(value, &ok);
-	if (ok) {
-		QPointF pos = m_label->positionLogical();
-		pos.setX(x);
-		for (auto* label : m_labelsList)
-			label->setPositionLogical(pos);
-	}
+	QPointF pos = m_label->positionLogical();
+	pos.setX(value);
+	for (auto* label : m_labelsList)
+		label->setPositionLogical(pos);
 }
 
 void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
@@ -1031,20 +1023,14 @@ void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
 		label->setPositionLogical(pos);
 }
 
-void LabelWidget::positionYLogicalChanged(const QString& value) {
+void LabelWidget::positionYLogicalChanged(double value) {
 	if (m_initializing)
 		return;
 
-	const Lock lock(m_initializing);
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double y = numberLocale.toDouble(value, &ok);
-	if (ok) {
-		QPointF pos = m_label->positionLogical();
-		pos.setY(y);
-		for (auto* label : m_labelsList)
-			label->setPositionLogical(pos);
-	}
+	QPointF pos = m_label->positionLogical();
+	pos.setY(value);
+	for (auto* label : m_labelsList)
+		label->setPositionLogical(pos);
 }
 
 void LabelWidget::rotationChanged(int value) {
@@ -1173,17 +1159,17 @@ void LabelWidget::bindingChanged(bool checked) {
 		ui.dtePositionXLogical->setVisible(checked);
 
 		ui.lPositionXLogical->setVisible(false);
-		ui.lePositionXLogical->setVisible(false);
+		ui.sbPositionXLogical->setVisible(false);
 	} else {
 		ui.lPositionXLogicalDateTime->setVisible(false);
 		ui.dtePositionXLogical->setVisible(false);
 
 		ui.lPositionXLogical->setVisible(checked);
-		ui.lePositionXLogical->setVisible(checked);
+		ui.sbPositionXLogical->setVisible(checked);
 	}
 
 	ui.lPositionYLogical->setVisible(checked);
-	ui.lePositionYLogical->setVisible(checked);
+	ui.sbPositionYLogical->setVisible(checked);
 
 	if (m_initializing)
 		return;
@@ -1300,10 +1286,9 @@ void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
 
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.lePositionXLogical->setText(numberLocale.toString(pos.x()));
+	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
-	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
+	ui.sbPositionYLogical->setValue(pos.y());
 }
 
 // this function is only called when the theme is changed. Otherwise the color is coded in the html text.
@@ -1455,15 +1440,15 @@ void LabelWidget::load() {
 		const auto* plot = static_cast<const CartesianPlot*>(m_label->plot());
 		if (plot->xRangeFormatDefault() == RangeT::Format::Numeric) {
 			ui.lPositionXLogical->show();
-			ui.lePositionXLogical->show();
+			ui.sbPositionXLogical->show();
 			ui.lPositionXLogicalDateTime->hide();
 			ui.dtePositionXLogical->hide();
 
-			ui.lePositionXLogical->setText(numberLocale.toString(m_label->positionLogical().x()));
-			ui.lePositionYLogical->setText(numberLocale.toString(m_label->positionLogical().y()));
+			ui.sbPositionXLogical->setValue(m_label->positionLogical().x());
+			ui.sbPositionYLogical->setValue(m_label->positionLogical().y());
 		} else { // DateTime
 			ui.lPositionXLogical->hide();
-			ui.lePositionXLogical->hide();
+			ui.sbPositionXLogical->hide();
 			ui.lPositionXLogicalDateTime->show();
 			ui.dtePositionXLogical->show();
 
@@ -1474,9 +1459,9 @@ void LabelWidget::load() {
 		bindingChanged(m_label->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();
-		ui.lePositionXLogical->hide();
+		ui.sbPositionXLogical->hide();
 		ui.lPositionYLogical->hide();
-		ui.lePositionYLogical->hide();
+		ui.sbPositionYLogical->hide();
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
 	}

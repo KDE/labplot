@@ -489,6 +489,7 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
 # static library
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(labplot2lib PRIVATE ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 target_link_libraries( labplot2lib
 	KF5::Archive

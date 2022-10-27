@@ -102,9 +102,9 @@ private Q_SLOTS:
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 
-	void positionXLogicalChanged(const QString&);
+	void positionXLogicalChanged(double);
 	void positionXLogicalDateTimeChanged(const QDateTime&);
-	void positionYLogicalChanged(const QString&);
+	void positionYLogicalChanged(double);
 
 	void rotationChanged(int);
 	void offsetXChanged(double);
