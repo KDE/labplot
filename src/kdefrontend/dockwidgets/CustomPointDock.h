@@ -47,9 +47,9 @@ private Q_SLOTS:
 	void visibilityChanged(bool);
 	void bindingChanged(bool checked);
 
-	void positionXLogicalChanged(const QString&);
+	void positionXLogicalChanged(double);
 	void positionXLogicalDateTimeChanged(const QDateTime&);
-	void positionYLogicalChanged(const QString&);
+	void positionYLogicalChanged(double);
 	void positionYLogicalDateTimeChanged(const QDateTime&);
 
 	// SLOTs for changes triggered in CustomPoint

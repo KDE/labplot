@@ -60,17 +60,6 @@ AxisDock::AxisDock(QWidget* parent)
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.5 * m_leName->height());
 
-	mSbPosition = new NumberSpinBox(0, true, this);
-	mSbPosition->setSuffix(" cm");
-	mSbPositionLogical = new NumberSpinBox(0, true, this);
-	ui.hblPosition->addWidget(mSbPosition);
-	ui.hblPosition->addWidget(mSbPositionLogical);
-
-	mSbZeroOffset = new NumberSpinBox(0, true, this);
-	ui.hblZeroOffset->insertWidget(0, mSbZeroOffset);
-	mSbScalingFactor = new NumberSpinBox(1, true, this);
-	ui.hblScalingFactor->insertWidget(0, mSbScalingFactor);
-
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
@@ -133,8 +122,8 @@ AxisDock::AxisDock(QWidget* parent)
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
-	connect(mSbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
-	connect(mSbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
+	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
+	connect(ui.sbPositionLogical, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
@@ -142,12 +131,12 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leEnd, &QLineEdit::textChanged, this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
-	connect(mSbZeroOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::zeroOffsetChanged);
+	connect(ui.sbZeroOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::zeroOffsetChanged);
 	connect(ui.tbOffsetLeft, &QToolButton::clicked, this, &AxisDock::setLeftOffset);
 	connect(ui.tbOffsetCenter, &QToolButton::clicked, this, &AxisDock::setCenterOffset);
 	connect(ui.tbOffsetRight, &QToolButton::clicked, this, &AxisDock::setRightOffset);
 
-	connect(mSbScalingFactor, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::scalingFactorChanged);
+	connect(ui.sbScalingFactor, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::scalingFactorChanged);
 	connect(ui.tbUnityScale, &QToolButton::clicked, this, &AxisDock::setUnityScale);
 	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
 
@@ -156,6 +145,10 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
+	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::lineStyleChanged);
+	connect(ui.kcbLineColor, &KColorButton::changed, this, &AxisDock::lineColorChanged);
+	connect(ui.sbLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::lineWidthChanged);
+	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::lineOpacityChanged);
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowPositionChanged);
 	connect(ui.cbArrowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowTypeChanged);
 	connect(ui.sbArrowSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::arrowSizeChanged);
@@ -165,7 +158,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbMajorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksTypeChanged);
 	connect(ui.cbMajorTicksAutoNumber, &QCheckBox::stateChanged, this, &AxisDock::majorTicksAutoNumberChanged);
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorTicksNumberChanged);
-	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
+	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
 	connect(ui.cbMajorTicksStartType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksStartTypeChanged);
 	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTicksStartOffsetChanged);
@@ -175,8 +168,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::majorTicksColumnChanged);
 	connect(ui.cbMajorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksLineStyleChanged);
 	connect(ui.kcbMajorTicksColor, &KColorButton::changed, this, &AxisDock::majorTicksColorChanged);
-	connect(ui.sbMajorTicksWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksWidthChanged);
-	connect(ui.sbMajorTicksLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::majorTicksLengthChanged);
+	connect(ui.sbMajorTicksWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksWidthChanged);
+	connect(ui.sbMajorTicksLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksLengthChanged);
 	connect(ui.sbMajorTicksOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorTicksOpacityChanged);
 
 	//"Minor ticks"-tab
@@ -184,13 +177,13 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbMinorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorTicksTypeChanged);
 	connect(ui.cbMinorTicksAutoNumber, &QCheckBox::stateChanged, this, &AxisDock::minorTicksAutoNumberChanged);
 	connect(ui.sbMinorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorTicksNumberChanged);
-	connect(ui.sbMinorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::minorTicksSpacingChanged);
+	connect(ui.sbMinorTicksSpacingNumeric, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::minorTicksSpacingChanged);
 	connect(dtsbMinorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::minorTicksSpacingChanged);
 	connect(cbMinorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::minorTicksColumnChanged);
 	connect(ui.cbMinorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorTicksLineStyleChanged);
 	connect(ui.kcbMinorTicksColor, &KColorButton::changed, this, &AxisDock::minorTicksColorChanged);
-	connect(ui.sbMinorTicksWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::minorTicksWidthChanged);
-	connect(ui.sbMinorTicksLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::minorTicksLengthChanged);
+	connect(ui.sbMinorTicksWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::minorTicksWidthChanged);
+	connect(ui.sbMinorTicksLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::minorTicksLengthChanged);
 	connect(ui.sbMinorTicksOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorTicksOpacityChanged);
 
 	//"Extra ticks"-tab
@@ -203,7 +196,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbLabelsDateTimeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsDateTimeFormat, &QComboBox::currentTextChanged, this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::labelsPositionChanged);
-	connect(ui.sbLabelsOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &AxisDock::labelsOffsetChanged);
+	connect(ui.sbLabelsOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::labelsOffsetChanged);
 	connect(ui.sbLabelsRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsRotationChanged);
 	connect(ui.cbLabelsTextType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::labelsTextTypeChanged);
 	connect(cbLabelsTextColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::labelsTextColumnChanged);
@@ -214,6 +207,17 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::labelsOpacityChanged);
+
+	//"Grid"-tab
+	connect(ui.cbMajorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorGridStyleChanged);
+	connect(ui.kcbMajorGridColor, &KColorButton::changed, this, &AxisDock::majorGridColorChanged);
+	connect(ui.sbMajorGridWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorGridWidthChanged);
+	connect(ui.sbMajorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::majorGridOpacityChanged);
+
+	connect(ui.cbMinorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::minorGridStyleChanged);
+	connect(ui.kcbMinorGridColor, &KColorButton::changed, this, &AxisDock::minorGridColorChanged);
+	connect(ui.sbMinorGridWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::minorGridWidthChanged);
+	connect(ui.sbMinorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::minorGridOpacityChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);
@@ -576,7 +580,7 @@ void AxisDock::updateLocale() {
 
 	// update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
-	mSbPosition->setLocale(numberLocale);
+	ui.sbPosition->setLocale(numberLocale);
 	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
 	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
 
@@ -614,7 +618,7 @@ void AxisDock::updatePlotRanges() {
 		logicalRange = m_axis->plot()->range(Dimension::Y, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::Y));
 	else
 		logicalRange = m_axis->plot()->range(Dimension::X, m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->index(Dimension::X));
-	spinBoxCalculateMinMax(mSbPositionLogical, logicalRange, mSbPositionLogical->value());
+	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
 }
 
 void AxisDock::updateAutoScale() {
@@ -724,8 +728,8 @@ void AxisDock::positionChanged(int index) {
 		}
 	}
 
-	mSbPosition->setVisible(!logical);
-	mSbPositionLogical->setVisible(logical);
+	ui.sbPosition->setVisible(!logical);
+	ui.sbPositionLogical->setVisible(logical);
 
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
@@ -859,7 +863,7 @@ void AxisDock::zeroOffsetChanged(double offset) {
 
 void AxisDock::setOffset(double offset) {
 	SET_NUMBER_LOCALE
-	mSbZeroOffset->setValue(-offset);
+	ui.sbZeroOffset->setValue(-offset);
 }
 void AxisDock::setLeftOffset() {
 	setOffset(m_axis->range().start());
@@ -879,14 +883,12 @@ void AxisDock::scalingFactorChanged(double value) {
 		axis->setScalingFactor(value);
 }
 void AxisDock::setUnityScale() {
-	SET_NUMBER_LOCALE
-	mSbScalingFactor->setValue(1. / m_axis->range().size());
+	ui.sbScalingFactor->setValue(1. / m_axis->range().size());
 }
 // set scale and offset to get a range of 0 .. 1
 void AxisDock::setUnityRange() {
-	SET_NUMBER_LOCALE
-	mSbScalingFactor->setValue(1. / m_axis->range().size());
-	mSbZeroOffset->setValue(-m_axis->range().start() / m_axis->range().size());
+	ui.sbScalingFactor->setValue(1. / m_axis->range().size());
+	ui.sbZeroOffset->setValue(-m_axis->range().start() / m_axis->range().size());
 }
 
 void AxisDock::showScaleOffsetChanged(bool state) {
@@ -998,7 +1000,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-		mSbZeroOffset->show();
+		ui.sbZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
 		updateMajorTicksStartType(true);
@@ -1024,7 +1026,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
-		mSbZeroOffset->show();
+		ui.sbZeroOffset->show();
 		ui.tbFirstTickAuto->show();
 		ui.tbFirstTickData->show();
 		updateMajorTicksStartType(true);
@@ -1041,7 +1043,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksStartType->hide();
 		ui.cbMajorTicksStartType->hide();
-		mSbZeroOffset->hide();
+		ui.sbZeroOffset->hide();
 		ui.tbFirstTickAuto->hide();
 		ui.tbFirstTickData->hide();
 
@@ -1778,12 +1780,12 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 
 void AxisDock::axisPositionChanged(double value) {
 	const Lock lock(m_initializing);
-	mSbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void AxisDock::axisLogicalPositionChanged(double value) {
 	const Lock lock(m_initializing);
-	mSbPositionLogical->setValue(value);
+	ui.sbPositionLogical->setValue(value);
 }
 
 void AxisDock::axisScaleChanged(RangeT::Scale scale) {
@@ -1835,11 +1837,11 @@ void AxisDock::axisEndChanged(double value) {
 void AxisDock::axisZeroOffsetChanged(qreal value) {
 	DEBUG(Q_FUNC_INFO)
 	const Lock lock(m_initializing);
-	mSbZeroOffset->setValue(value);
+	ui.sbZeroOffset->setValue(value);
 }
 void AxisDock::axisScalingFactorChanged(qreal value) {
 	const Lock lock(m_initializing);
-	mSbScalingFactor->setValue(value);
+	ui.sbScalingFactor->setValue(value);
 }
 void AxisDock::axisShowScaleOffsetChanged(bool b) {
 	if (m_initializing)
@@ -2139,14 +2141,14 @@ void AxisDock::load() {
 		logical = true;
 	}
 
-	mSbPositionLogical->setVisible(logical);
-	mSbPosition->setVisible(!logical);
+	ui.sbPositionLogical->setVisible(logical);
+	ui.sbPosition->setVisible(!logical);
 
 	SET_NUMBER_LOCALE
-	mSbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
 
-	spinBoxCalculateMinMax(mSbPositionLogical, logicalRange, m_axis->logicalPosition());
-	mSbPositionLogical->setValue(m_axis->logicalPosition());
+	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
+	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
@@ -2189,8 +2191,8 @@ void AxisDock::load() {
 		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
 	}
 
-	mSbZeroOffset->setValue(m_axis->zeroOffset());
-	mSbScalingFactor->setValue(m_axis->scalingFactor());
+	ui.sbZeroOffset->setValue(m_axis->zeroOffset());
+	ui.sbScalingFactor->setValue(m_axis->scalingFactor());
 	ui.chkShowScaleOffset->setChecked(m_axis->showScaleOffset());
 
 	// Line
@@ -2300,14 +2302,14 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.cbPosition->setCurrentIndex(index);
 
 	SET_NUMBER_LOCALE
-	mSbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
-	mSbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
+	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
 	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
 	ui.leStart->setText(numberLocale.toString(group.readEntry("Start", m_axis->range().start())));
 	ui.leEnd->setText(numberLocale.toString(group.readEntry("End", m_axis->range().end())));
-	mSbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
-	mSbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
+	ui.sbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
+	ui.sbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
 	ui.chkShowScaleOffset->setChecked(group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())));
 
 	// Title
@@ -2414,14 +2416,14 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	}
 
 	SET_NUMBER_LOCALE
-	group.writeEntry("LogicalPosition", mSbPositionLogical->value());
-	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(mSbPosition->value(), m_worksheetUnit));
+	group.writeEntry("LogicalPosition", ui.sbPositionLogical->value());
+	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
 	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
 	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
 	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
-	group.writeEntry("ZeroOffset", mSbZeroOffset->value());
-	group.writeEntry("ScalingFactor", mSbScalingFactor->value());
+	group.writeEntry("ZeroOffset", ui.sbZeroOffset->value());
+	group.writeEntry("ScalingFactor", ui.sbScalingFactor->value());
 	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
 
 	// Title

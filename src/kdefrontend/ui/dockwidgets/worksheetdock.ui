@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>581</height>
+    <width>406</width>
+    <height>650</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -26,16 +26,6 @@
       <layout class="QGridLayout" name="gridLayout">
        <item row="5" column="2">
         <widget class="KComboBox" name="cbPage"/>
-       </item>
-       <item row="8" column="2">
-        <widget class="QDoubleSpinBox" name="sbHeight">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-        </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lHeight">
@@ -126,16 +116,6 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="QDoubleSpinBox" name="sbWidth">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="2">
         <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
@@ -205,6 +185,38 @@
        <item row="4" column="2">
         <widget class="QComboBox" name="cbSizeType"/>
        </item>
+       <item row="7" column="2">
+        <widget class="NumberSpinBox" name="sbWidth">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="NumberSpinBox" name="sbHeight">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabBackground">
@@ -247,35 +259,34 @@
        <string>Layout</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="13" column="2">
-        <widget class="QSpinBox" name="sbLayoutRowCount">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lGrid">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Grid</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <spacer name="verticalSpacer_4">
+       <item row="7" column="0">
+        <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>24</width>
-           <height>284</height>
+           <width>20</width>
+           <height>13</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>13</height>
           </size>
          </property>
         </spacer>
@@ -287,137 +298,21 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutRightMargin">
-         <property name="suffix">
-          <string> cm</string>
+       <item row="1" column="0">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutTopMargin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lBottomMargin">
-         <property name="text">
-          <string>Bottom:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lColumnCount">
-         <property name="text">
-          <string>Columns:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lSpacing">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Spacing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutLeftMargin">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lRightMargin">
-         <property name="text">
-          <string>Right:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutHorizontalSpacing">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutBottomMargin">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="2">
-        <widget class="QSpinBox" name="sbLayoutColumnCount">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QDoubleSpinBox" name="sbLayoutVerticalSpacing">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lTopMargin">
-         <property name="text">
-          <string>Top:</string>
-         </property>
-        </widget>
+        </spacer>
        </item>
        <item row="3" column="1">
         <spacer name="horizontalSpacer_4">
@@ -442,56 +337,10 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lLeftMargin">
+       <item row="4" column="0">
+        <widget class="QLabel" name="lBottomMargin">
          <property name="text">
-          <string>Left:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>13</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lRowCount">
-         <property name="text">
-          <string>Rows:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lVerticalSpacing">
-         <property name="text">
-          <string>Vertical:</string>
+          <string>Bottom:</string>
          </property>
         </widget>
        </item>
@@ -508,24 +357,199 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
+       <item row="6" column="0">
+        <widget class="QLabel" name="lRightMargin">
+         <property name="text">
+          <string>Right:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="3">
+        <widget class="QSpinBox" name="sbLayoutColumnCount">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
         <widget class="QComboBox" name="cbLayout"/>
        </item>
-       <item row="1" column="0">
-        <spacer name="verticalSpacer_7">
+       <item row="13" column="3">
+        <widget class="QSpinBox" name="sbLayoutRowCount">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lRowCount">
+         <property name="text">
+          <string>Rows:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lTopMargin">
+         <property name="text">
+          <string>Top:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lLeftMargin">
+         <property name="text">
+          <string>Left:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lColumnCount">
+         <property name="text">
+          <string>Columns:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lVerticalSpacing">
+         <property name="text">
+          <string>Vertical:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="lGrid">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Grid</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lSpacing">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Spacing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>20</height>
+           <width>24</width>
+           <height>284</height>
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="4" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutBottomMargin">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutTopMargin">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutLeftMargin">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutRightMargin">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutHorizontalSpacing">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="3">
+        <widget class="NumberSpinBox" name="sbLayoutVerticalSpacing">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -540,6 +564,11 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
@@ -551,16 +580,8 @@
   <tabstop>teComment</tabstop>
   <tabstop>cbPage</tabstop>
   <tabstop>cbOrientation</tabstop>
-  <tabstop>sbWidth</tabstop>
-  <tabstop>sbHeight</tabstop>
   <tabstop>chScaleContent</tabstop>
   <tabstop>cbLayout</tabstop>
-  <tabstop>sbLayoutTopMargin</tabstop>
-  <tabstop>sbLayoutBottomMargin</tabstop>
-  <tabstop>sbLayoutLeftMargin</tabstop>
-  <tabstop>sbLayoutRightMargin</tabstop>
-  <tabstop>sbLayoutHorizontalSpacing</tabstop>
-  <tabstop>sbLayoutVerticalSpacing</tabstop>
   <tabstop>sbLayoutRowCount</tabstop>
   <tabstop>sbLayoutColumnCount</tabstop>
  </tabstops>

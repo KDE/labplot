@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>563</height>
+    <width>480</width>
+    <height>654</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -54,9 +54,15 @@
           <widget class="KComboBox" name="cbPositionX"/>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="sbPositionX">
-           <property name="minimum">
-            <double>-100.000000000000000</double>
+          <widget class="NumberSpinBox" name="sbPositionX">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -90,9 +96,6 @@
        </item>
        <item row="12" column="3">
         <widget class="QComboBox" name="cbPlotRanges"/>
-       </item>
-       <item row="7" column="3">
-        <widget class="QLineEdit" name="lePositionXLogical"/>
        </item>
        <item row="0" column="3">
         <widget class="QLineEdit" name="leName">
@@ -176,9 +179,15 @@
           <widget class="KComboBox" name="cbPositionY"/>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="sbPositionY">
-           <property name="minimum">
-            <double>-100.000000000000000</double>
+          <widget class="NumberSpinBox" name="sbPositionY">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
@@ -214,9 +223,6 @@
          </property>
         </spacer>
        </item>
-       <item row="10" column="3">
-        <widget class="QLineEdit" name="lePositionYLogical"/>
-       </item>
        <item row="6" column="3">
         <widget class="QDateTimeEdit" name="dtePositionXLogical">
          <property name="calendarPopup">
@@ -248,6 +254,32 @@
        <item row="9" column="3">
         <widget class="QDateTimeEdit" name="dtePositionYLogical"/>
        </item>
+       <item row="10" column="3">
+        <widget class="NumberSpinBox" name="sbPositionYLogical">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3">
+        <widget class="NumberSpinBox" name="sbPositionXLogical">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabSymbol">
@@ -266,6 +298,11 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
@@ -277,12 +314,8 @@
   <tabstop>teComment</tabstop>
   <tabstop>chbBindLogicalPos</tabstop>
   <tabstop>cbPositionX</tabstop>
-  <tabstop>sbPositionX</tabstop>
   <tabstop>dtePositionXLogical</tabstop>
-  <tabstop>lePositionXLogical</tabstop>
   <tabstop>cbPositionY</tabstop>
-  <tabstop>sbPositionY</tabstop>
-  <tabstop>lePositionYLogical</tabstop>
   <tabstop>cbPlotRanges</tabstop>
   <tabstop>chkVisible</tabstop>
  </tabstops>

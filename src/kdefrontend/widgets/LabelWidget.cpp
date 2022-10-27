@@ -269,7 +269,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	connect(ui.cbBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &LabelWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
 
 	// TODO: https://bugreports.qt.io/browse/QTBUG-25420
@@ -1121,7 +1121,12 @@ void LabelWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* label : m_labelsList) {
 		pen = label->borderPen();
+		const int w = pen.width();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
+		if (w == pen.width() && value < 0) {
+			// to notifiy the numberSpinBox that value got invalid
+			labelBorderPenChanged(pen);
+		}
 		label->setBorderPen(pen);
 	}
 }
@@ -1338,8 +1343,8 @@ void LabelWidget::labelBorderPenChanged(const QPen& pen) {
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	// Feedback needed therefore no condition
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 }
 
 void LabelWidget::labelBorderOpacityChanged(float value) {

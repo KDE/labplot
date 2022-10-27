@@ -42,10 +42,6 @@ private:
 	QList<Axis*> m_axesList;
 	Axis* m_axis{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	NumberSpinBox* mSbPosition;
-	NumberSpinBox* mSbPositionLogical;
-	NumberSpinBox* mSbZeroOffset;
-	NumberSpinBox* mSbScalingFactor;
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
