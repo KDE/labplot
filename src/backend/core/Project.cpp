@@ -159,7 +159,7 @@ public:
 
 int Project::Private::m_versionNumber = 0;
 QString Project::Private::versionString = "";
-int Project::Private::mXmlVersion = 0;
+int Project::Private::mXmlVersion = buildXmlVersion;
 
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
@@ -649,7 +649,9 @@ bool Project::load(const QString& filename, bool preview) {
 	// parse XML
 	XmlStreamReader reader(file);
 	setIsLoading(true);
+	Private::mXmlVersion = 0; // set the version temporarily to 0, the actual project version will be read in the file, if available, and used in load() functions
 	rc = this->load(&reader, preview);
+	Private::mXmlVersion = buildXmlVersion; // set the version back to the current XML version
 	setIsLoading(false);
 	if (rc == false) {
 		RESET_CURSOR;
