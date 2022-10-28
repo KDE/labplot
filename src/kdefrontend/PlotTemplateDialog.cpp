@@ -85,7 +85,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	m_worksheetView->hide();
 
 	mTemplateListModelDefault = new TemplateListModel(defaultTemplateInstallPath(), this);
-	mTemplateListModelCustom = new TemplateListModel(conf.readEntry(lastDirConfigEntry, QStandardPaths::writableLocation(QStandardPaths::HomeLocation)), this);
+	mTemplateListModelCustom = new TemplateListModel(conf.readEntry(lastDirConfigEntry, defaultTemplateInstallPath()), this);
 	ui->leCustomFolder->setText(mTemplateListModelCustom->searchPath());
 
 	connect(ui->pbCustomFolder, &QPushButton::pressed, this, &PlotTemplateDialog::chooseTemplateSearchPath);
