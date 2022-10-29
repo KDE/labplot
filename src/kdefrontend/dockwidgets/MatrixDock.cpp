@@ -47,22 +47,22 @@ MatrixDock::MatrixDock(QWidget* parent)
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &MatrixDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &MatrixDock::commentChanged);
-	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
-	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
-	connect(ui.leXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
-	connect(ui.leXEnd, SIGNAL(returnPressed()), this, SLOT(xEndChanged()));
-	connect(ui.leYStart, SIGNAL(returnPressed()), this, SLOT(yStartChanged()));
-	connect(ui.leYEnd, SIGNAL(returnPressed()), this, SLOT(yEndChanged()));
-	connect(ui.cbFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(numericFormatChanged(int)));
-	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
-	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
+	connect(ui.sbColumnCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::columnCountChanged);
+	connect(ui.sbRowCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::rowCountChanged);
+	connect(ui.leXStart, &QLineEdit::textChanged, this, &MatrixDock::xStartChanged);
+	connect(ui.leXEnd, &QLineEdit::textChanged, this, &MatrixDock::xEndChanged);
+	connect(ui.leYStart, &QLineEdit::textChanged, this, &MatrixDock::yStartChanged);
+	connect(ui.leYEnd, &QLineEdit::textChanged, this, &MatrixDock::yEndChanged);
+	connect(ui.cbFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MatrixDock::numericFormatChanged);
+	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &MatrixDock::precisionChanged);
+	connect(ui.cbHeader, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MatrixDock::headerFormatChanged);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
-	templateHandler->show();
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	//templateHandler->show();
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &MatrixDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &MatrixDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &MatrixDock::info);
 }
 
 void MatrixDock::setMatrices(QList<Matrix*> list) {
@@ -94,17 +94,17 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	// undo functions
 	connect(m_matrix, &Matrix::aspectDescriptionChanged, this, &MatrixDock::aspectDescriptionChanged);
 
-	connect(m_matrix, SIGNAL(rowCountChanged(int)), this, SLOT(matrixRowCountChanged(int)));
-	connect(m_matrix, SIGNAL(columnCountChanged(int)), this, SLOT(matrixColumnCountChanged(int)));
+	connect(m_matrix, &Matrix::rowCountChanged, this, &MatrixDock::matrixRowCountChanged);
+	connect(m_matrix, &Matrix::columnCountChanged, this, &MatrixDock::matrixColumnCountChanged);
 
-	connect(m_matrix, SIGNAL(xStartChanged(double)), this, SLOT(matrixXStartChanged(double)));
-	connect(m_matrix, SIGNAL(xEndChanged(double)), this, SLOT(matrixXEndChanged(double)));
-	connect(m_matrix, SIGNAL(yStartChanged(double)), this, SLOT(matrixYStartChanged(double)));
-	connect(m_matrix, SIGNAL(yEndChanged(double)), this, SLOT(matrixYEndChanged(double)));
+	connect(m_matrix, &Matrix::xStartChanged, this, &MatrixDock::matrixXStartChanged);
+	connect(m_matrix, &Matrix::xEndChanged, this, &MatrixDock::matrixXEndChanged);
+	connect(m_matrix, &Matrix::yStartChanged, this, &MatrixDock::matrixYStartChanged);
+	connect(m_matrix, &Matrix::yEndChanged, this, &MatrixDock::matrixYEndChanged);
 
-	connect(m_matrix, SIGNAL(numericFormatChanged(char)), this, SLOT(matrixNumericFormatChanged(char)));
-	connect(m_matrix, SIGNAL(precisionChanged(int)), this, SLOT(matrixPrecisionChanged(int)));
-	connect(m_matrix, SIGNAL(headerFormatChanged(Matrix::HeaderFormat)), this, SLOT(matrixHeaderFormatChanged(Matrix::HeaderFormat)));
+	connect(m_matrix, &Matrix::numericFormatChanged, this, &MatrixDock::matrixNumericFormatChanged);
+	connect(m_matrix, &Matrix::precisionChanged, this, &MatrixDock::matrixPrecisionChanged);
+	connect(m_matrix, &Matrix::headerFormatChanged, this, &MatrixDock::matrixHeaderFormatChanged);
 
 	m_initializing = false;
 }
@@ -113,11 +113,11 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 //****** SLOTs for changes triggered in MatrixDock *******
 //*************************************************************
 // mapping to the logical coordinates
-void MatrixDock::xStartChanged() {
+void MatrixDock::xStartChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
-	QString str = ui.leXStart->text().trimmed();
+	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
@@ -129,11 +129,11 @@ void MatrixDock::xStartChanged() {
 	}
 }
 
-void MatrixDock::xEndChanged() {
+void MatrixDock::xEndChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
-	QString str = ui.leXEnd->text().trimmed();
+	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
@@ -145,11 +145,11 @@ void MatrixDock::xEndChanged() {
 	}
 }
 
-void MatrixDock::yStartChanged() {
+void MatrixDock::yStartChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
-	QString str = ui.leYStart->text().trimmed();
+	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
@@ -161,11 +161,11 @@ void MatrixDock::yStartChanged() {
 	}
 }
 
-void MatrixDock::yEndChanged() {
+void MatrixDock::yEndChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
-	QString str = ui.leYEnd->text().trimmed();
+	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
@@ -199,7 +199,7 @@ void MatrixDock::headerFormatChanged(int value) {
 	if (m_initializing)
 		return;
 
-	auto format = (Matrix::HeaderFormat)value;
+	auto format = static_cast<Matrix::HeaderFormat>(value);
 	for (auto* matrix : m_matrixList)
 		matrix->setHeaderFormat(format);
 }

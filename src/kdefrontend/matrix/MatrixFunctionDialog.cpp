@@ -156,13 +156,13 @@ public:
 		, m_yStart(yStart)
 		, m_xStep(xStep)
 		, m_yStep(yStep)
-		, m_func(func){};
+		, m_func(func){}
 
 	void run() override {
 		const int rows = m_matrixData[m_startCol].size();
 		double x = m_xStart;
 		double y = m_yStart;
-		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows);
+		DEBUG("FILL col" << m_startCol << "-" << m_endCol << " x/y =" << x << '/' << y << " steps =" << m_xStep << '/' << m_yStep << " rows =" << rows)
 
 		parser_var vars[] = {{"x", x}, {"y", y}};
 		SET_NUMBER_LOCALE
@@ -237,14 +237,17 @@ void MatrixFunctionDialog::generate() {
 		}
 		pool->waitForDone();
 	*/
-	double x = 0, y = 0;
+	double x = m_matrix->xStart();
+	double y = m_matrix->yStart();
 	parser_var vars[] = {{"x", x}, {"y", y}};
 	SET_NUMBER_LOCALE
+	const char* expr = qPrintable(ui.teEquation->toPlainText());
+	const auto& name = qPrintable(numberLocale.name());
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(new_data->operator[](col))[row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(numberLocale.name()));
+			(new_data->operator[](col))[row] = parse_with_vars(expr, vars, 2, name);
 			y += yStep;
 		}
 		y = m_matrix->yStart();
@@ -253,7 +256,7 @@ void MatrixFunctionDialog::generate() {
 
 	// Timing
 #ifndef NDEBUG
-	DEBUG("elapsed time =" << timer.elapsed() << "ms");
+	DEBUG("elapsed time =" << timer.elapsed() << "ms")
 #endif
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());

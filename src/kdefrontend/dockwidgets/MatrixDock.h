@@ -39,10 +39,10 @@ private Q_SLOTS:
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 
-	void xStartChanged();
-	void xEndChanged();
-	void yStartChanged();
-	void yEndChanged();
+	void xStartChanged(const QString&);
+	void xEndChanged(const QString&);
+	void yStartChanged(const QString&);
+	void yEndChanged(const QString&);
 
 	void numericFormatChanged(int);
 	void precisionChanged(int);
