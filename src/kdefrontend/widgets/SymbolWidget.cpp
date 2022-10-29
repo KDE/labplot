@@ -90,14 +90,24 @@ void SymbolWidget::styleChanged(int index) {
 		ui.sbOpacity->setEnabled(true);
 
 		// enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-			ui.cbFillingStyle->setEnabled(true);
+		bool hasFilling = (style != Symbol::Style::Line && style != Symbol::Style::Cross
+				&& style != Symbol::Style::X && style != Symbol::Style::Asterisk
+				&& style != Symbol::Style::Tri && style != Symbol::Style::XPlus
+				&& style != Symbol::Style::TallPlus && style != Symbol::Style::LatinCross
+				&& style != Symbol::Style::DotPlus && style != Symbol::Style::Hash);
+
+		ui.lFilling->setEnabled(hasFilling);
+		ui.lFillingStyle->setEnabled(hasFilling);
+		ui.cbFillingStyle->setEnabled(hasFilling);
+		ui.lFillingColor->setEnabled(hasFilling);
+		ui.kcbFillingColor->setEnabled(hasFilling);
+
+		if (hasFilling) {
+			ui.lBorder->setText(i18n("Border"));
 			bool noBrush = (Qt::BrushStyle(ui.cbFillingStyle->currentIndex()) == Qt::NoBrush);
 			ui.kcbFillingColor->setEnabled(!noBrush);
-		} else {
-			ui.kcbFillingColor->setEnabled(false);
-			ui.cbFillingStyle->setEnabled(false);
-		}
+		} else
+			ui.lBorder->setText(i18n("Line"));
 
 		ui.cbBorderStyle->setEnabled(true);
 		bool noLine = (Qt::PenStyle(ui.cbBorderStyle->currentIndex()) == Qt::NoPen);
