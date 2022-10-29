@@ -59,7 +59,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
-	//templateHandler->show();
+	// templateHandler->show();
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &MatrixDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &MatrixDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &MatrixDock::info);

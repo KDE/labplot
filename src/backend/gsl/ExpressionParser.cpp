@@ -180,8 +180,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Entropy");
 	m_functionsNames << i18n("Quantile");
 	m_functionsNames << i18n("Percentile");
+	m_functionsNames << i18n("Cell");
 	index++;
-	for (int i = 0; i < 29; i++)
+	for (int i = 0; i < 30; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives

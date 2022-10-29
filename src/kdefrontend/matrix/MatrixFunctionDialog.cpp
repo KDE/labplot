@@ -156,7 +156,8 @@ public:
 		, m_yStart(yStart)
 		, m_xStep(xStep)
 		, m_yStep(yStep)
-		, m_func(func){}
+		, m_func(func) {
+	}
 
 	void run() override {
 		const int rows = m_matrixData[m_startCol].size();

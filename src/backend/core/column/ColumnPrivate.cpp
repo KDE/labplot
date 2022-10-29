@@ -1382,8 +1382,26 @@ void ColumnPrivate::updateFormula() {
 		for (auto m : methodList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
 
-		// methods with options: get option and calculate value to replace method
-		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")};
+		// methods with options like method(a, b): get a and b and calculate value to replace method
+		// TODO: cell(a, b)
+		/*QRegExp reg(QLatin1String("cell\\((\\d+)[\\.\\,](\\d+)\\)"));
+		reg.setMinimal(true);	// match only one method at a time
+		int pos = 0;
+		while ((pos = reg.indexIn(formula, pos)) != -1) { // all method calls
+			const int row = numberLocale.toInt(reg.cap(1));	// a
+			const int col = numberLocale.toInt(reg.cap(2));	// b
+			DEBUG("FOUND: " << row << ", " << col)
+
+			//TODO: get value of cell (row, col)
+			//TODO: all column modes
+			double value = row + col;
+			formula.replace(reg.cap(0), numberLocale.toString(value));
+		}*/
+
+		// methods with options like method(p, x): get option p and calculate value to replace method
+		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"),
+										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)"),
+										QLatin1String("cell\\((\\d+).*%1\\)")};
 
 		for (auto m : optionMethodList) {
 			QRegExp rx(m.arg(varName));
@@ -1392,40 +1410,58 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				double p = numberLocale.toDouble(rx.cap(1));
+				double p = numberLocale.toDouble(rx.cap(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
 				if (m.startsWith(QLatin1String("percentile")))
 					p /= 100.;
 
-				// all types
+				const int index = qRound64(p) - 1;
+				bool indexInRange = true;
+				if (index < 0 || index > column->rowCount() - 1)
+					indexInRange = false;
+
 				double value = 0.0;
-				switch (column->columnMode()) {
+				switch (column->columnMode()) { // all types
 				case AbstractColumn::ColumnMode::Double: {
 					auto data = reinterpret_cast<QVector<double>*>(column->data());
-					value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					if (m.startsWith(QLatin1String("cell"))) {
+						if (indexInRange)
+							value = data->at(index);
+					} else
+						value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
 					break;
 				}
 				case AbstractColumn::ColumnMode::Integer: {
 					auto* intData = reinterpret_cast<QVector<int>*>(column->data());
-					QVector<double> data = QVector<double>();
-					data.reserve(column->rowCount());
-					for (auto v : *intData)
-						data << static_cast<double>(v);
-					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					if (m.startsWith(QLatin1String("cell"))) {
+						if (indexInRange)
+							value = static_cast<double>(intData->at(index));
+					} else {
+						QVector<double> data = QVector<double>(); // copy data to double
+						data.reserve(column->rowCount());
+						for (auto v : *intData)
+							data << static_cast<double>(v);
+						value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					}
 					break;
 				}
 				case AbstractColumn::ColumnMode::BigInt: {
 					auto* bigIntData = reinterpret_cast<QVector<qint64>*>(column->data());
-					QVector<double> data = QVector<double>();
-					data.reserve(column->rowCount());
-					for (auto v : *bigIntData)
-						data << static_cast<double>(v);
-					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					if (m.startsWith(QLatin1String("cell"))) {
+						if (indexInRange)
+							value = static_cast<double>(bigIntData->at(index));
+					} else {
+						QVector<double> data = QVector<double>(); // copy data to double
+						data.reserve(column->rowCount());
+						for (auto v : *bigIntData)
+							data << static_cast<double>(v);
+						value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					}
 					break;
 				}
-				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::DateTime: // not supported yet
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Text:
@@ -1442,7 +1478,7 @@ void ColumnPrivate::updateFormula() {
 			// convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
 			for (int i = 0; i < column->rowCount(); ++i)
-				xVector->operator[](i) = column->valueAt(i);
+				(*xVector)[i] = column->valueAt(i);
 
 			xNewVectors << xVector;
 			xVectors << xVector;
@@ -1478,12 +1514,12 @@ void ColumnPrivate::updateFormula() {
 			QVector<double> emptyRows(remainingRows, NAN);
 			replaceValues(maxRowCount, emptyRows);
 		}
-	} else {
+	} else { // not valid
 		QVector<double> new_data(rowCount(), NAN);
 		replaceValues(0, new_data);
 	}
 
-	// delete help vectors created for the conversion from int to double
+	// delete helper vectors created for the conversion from int to double
 	for (auto* vector : xNewVectors)
 		delete vector;
 

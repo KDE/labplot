@@ -90,11 +90,9 @@ void SymbolWidget::styleChanged(int index) {
 		ui.sbOpacity->setEnabled(true);
 
 		// enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		bool hasFilling = (style != Symbol::Style::Line && style != Symbol::Style::Cross
-				&& style != Symbol::Style::X && style != Symbol::Style::Asterisk
-				&& style != Symbol::Style::Tri && style != Symbol::Style::XPlus
-				&& style != Symbol::Style::TallPlus && style != Symbol::Style::LatinCross
-				&& style != Symbol::Style::DotPlus && style != Symbol::Style::Hash);
+		bool hasFilling = (style != Symbol::Style::Line && style != Symbol::Style::Cross && style != Symbol::Style::X && style != Symbol::Style::Asterisk
+						   && style != Symbol::Style::Tri && style != Symbol::Style::XPlus && style != Symbol::Style::TallPlus
+						   && style != Symbol::Style::LatinCross && style != Symbol::Style::DotPlus && style != Symbol::Style::Hash);
 
 		ui.lFilling->setEnabled(hasFilling);
 		ui.lFillingStyle->setEnabled(hasFilling);
