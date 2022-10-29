@@ -84,25 +84,13 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
 	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
-	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
-	gridLayout->addItem(spacer, 4, 0, 1, 1);
 
 	// lines
-	auto* label = new QLabel(i18n("Border"));
-	label->setFont(font);
-	gridLayout->addWidget(label, 5, 0, 1, 1);
 	borderLineWidget = new LineWidget(ui.tabBox);
 	gridLayout->addWidget(borderLineWidget, 6, 0, 1, 3);
-	spacer = new QSpacerItem(20, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
-	gridLayout->addItem(spacer, 7, 0, 1, 1);
 
-	label = new QLabel(i18n("Median Line"));
-	label->setFont(font);
-	gridLayout->addWidget(label, 8, 0, 1, 1);
 	medianLineWidget = new LineWidget(ui.tabBox);
 	gridLayout->addWidget(medianLineWidget, 9, 0, 1, 3);
-	spacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(spacer, 10, 0, 1, 1);
 
 	// Tab "Markers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());

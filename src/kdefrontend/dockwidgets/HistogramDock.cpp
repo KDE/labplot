@@ -88,8 +88,6 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
 	gridLayout->addWidget(errorBarsLineWidget, 6, 0, 1, 3);
-	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(spacer, 7, 0, 1, 1);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
