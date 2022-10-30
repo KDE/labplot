@@ -530,12 +530,12 @@ bool MatrixView::eventFilter(QObject* watched, QEvent* event) {
 			auto* menu = new QMenu(this);
 			createContextMenu(menu);
 			menu->exec(global_pos);
-		}
-		else
+		} else
 			return QWidget::eventFilter(watched, event);
 		return true;
-	} else
-		return QWidget::eventFilter(watched, event);
+	}
+
+	return QWidget::eventFilter(watched, event);
 }
 
 void MatrixView::keyPressEvent(QKeyEvent* event) {
