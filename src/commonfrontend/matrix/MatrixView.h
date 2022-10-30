@@ -79,6 +79,7 @@ private:
 	MatrixModel* m_model;
 	QImage m_image;
 	bool m_imageIsDirty{true};
+	double m_zoomFactor{1.};
 
 	// Actions
 	QAction* action_cut_selection;
@@ -122,12 +123,19 @@ private:
 	QAction* action_fill_function;
 	QAction* action_fill_const;
 
+	QAction* zoomInAction{nullptr};
+	QAction* zoomOutAction{nullptr};
+	QAction* zoomOriginAction{nullptr};
+
 	// Menus
 	QMenu* m_selectionMenu{nullptr};
 	QMenu* m_columnMenu{nullptr};
 	QMenu* m_rowMenu{nullptr};
-	QMenu* m_matrixMenu{nullptr};
 	QMenu* m_headerFormatMenu{nullptr};
+	QMenu* m_generateDataMenu{nullptr};
+	QMenu* m_manipulateDataMenu{nullptr};
+	QMenu* m_viewMenu{nullptr};
+	QMenu* m_zoomMenu{nullptr};
 
 private Q_SLOTS:
 	void goToCell();
@@ -161,6 +169,8 @@ private Q_SLOTS:
 
 	void showColumnStatistics();
 	void showRowStatistics();
+
+	void changeZoom(QAction*);
 };
 
 #endif

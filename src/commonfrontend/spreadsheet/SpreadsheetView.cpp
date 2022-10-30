@@ -1589,7 +1589,6 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool text, b
 		}
 	} else
 		action_freeze_columns->setVisible(false);
-	;
 }
 
 bool SpreadsheetView::formulaModeActive() const {
