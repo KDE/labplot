@@ -45,7 +45,7 @@ private Q_SLOTS:
 
 	void styleChanged(int) const;
 	void colorChanged(const QColor&);
-	void widthChanged(double) const;
+	void widthChanged(double);
 	void opacityChanged(int) const;
 
 	// SLOTs for changes triggered in Line

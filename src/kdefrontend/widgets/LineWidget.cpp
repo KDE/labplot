@@ -250,7 +250,7 @@ void LineWidget::colorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void LineWidget::widthChanged(double value) const {
+void LineWidget::widthChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -259,6 +259,10 @@ void LineWidget::widthChanged(double value) const {
 	for (auto* line : m_lines) {
 		pen = line->pen();
 		pen.setWidthF(width);
+		if (value == pen.width() && value < 0) {
+			// to notifiy the numberSpinBox that value got invalid
+			linePenChanged(pen);
+		}
 		line->setPen(pen);
 	}
 }
