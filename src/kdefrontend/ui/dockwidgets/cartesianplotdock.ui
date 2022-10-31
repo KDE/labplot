@@ -20,7 +20,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="sizePolicy">
@@ -40,7 +40,6 @@
         <widget class="QLabel" name="lPlotRanges">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -50,7 +49,6 @@
         <widget class="QLabel" name="lYRanges">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -139,7 +137,6 @@
         <widget class="QLabel" name="lXRanges">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -576,7 +573,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -585,7 +582,6 @@
         <widget class="QLabel" name="lGeometry">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -605,8 +601,8 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -614,7 +610,6 @@
         <widget class="QLabel" name="lPadding">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -655,7 +650,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -671,8 +666,8 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -687,8 +682,8 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -739,7 +734,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -792,7 +787,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -808,8 +803,8 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -978,7 +973,6 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1072,7 +1066,6 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1203,7 +1196,6 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1216,7 +1208,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1416,7 +1407,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1432,7 +1423,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1448,7 +1439,6 @@
         <widget class="QLabel" name="label_9">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1616,4 +1606,12 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>addPlotRange()</slot>
+  <slot>removePlotRange()</slot>
+  <slot>addXRange()</slot>
+  <slot>removeXRange()</slot>
+  <slot>addYRange()</slot>
+  <slot>removeYRange()</slot>
+ </slots>
 </ui>

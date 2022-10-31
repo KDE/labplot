@@ -1877,27 +1877,23 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 }
 
 void CartesianPlotDock::plotHorizontalPaddingChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotVerticalPaddingChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRightPaddingChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotBottomPaddingChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
