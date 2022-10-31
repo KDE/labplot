@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:42+0000\n"
+"POT-Creation-Date: 2022-10-31 00:42+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -386,13 +386,13 @@ msgid "%1: unmask cells"
 msgstr ""
 
 #: src/backend/core/abstractcolumncommands.cpp:239
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2416
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2415
 #, fuzzy, kde-format
 msgid "%1: set heatmap format"
 msgstr "設定佈局"
 
 #: src/backend/core/abstractcolumncommands.cpp:266
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2433
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2432
 #, fuzzy, kde-format
 msgid "%1: remove heatmap format"
 msgstr "設定佈局"
@@ -627,7 +627,7 @@ msgid "%1: change cell values"
 msgstr ""
 
 #: src/backend/core/column/columncommands.cpp:510
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2650
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2649
 #, kde-format
 msgid "%1: set plot designation"
 msgstr ""
@@ -1165,11 +1165,11 @@ msgstr ""
 #: src/backend/datasources/filters/AsciiFilter.cpp:1545
 #: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:602
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2313
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2334
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2352
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2368
+#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:191
@@ -1954,7 +1954,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
 #: src/backend/datasources/filters/NetCDFFilter.cpp:635
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:23
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:85
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:91
 #, fuzzy, kde-format
 msgid "Dimensions"
@@ -5187,13 +5187,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3515
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3514
 #, fuzzy, kde-format
 msgid "FITS image"
 msgstr "image"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3515
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3514
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -8639,6 +8639,7 @@ msgstr "開啟失敗"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:48
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:116
+#: src/commonfrontend/matrix/MatrixView.cpp:189
 #: src/commonfrontend/worksheet/WorksheetView.cpp:140
 #: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, fuzzy, kde-format
@@ -8648,6 +8649,7 @@ msgstr "放大"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:52
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:119
+#: src/commonfrontend/matrix/MatrixView.cpp:190
 #: src/commonfrontend/worksheet/WorksheetView.cpp:141
 #: src/commonfrontend/worksheet/WorksheetView.cpp:398
 #, fuzzy, kde-format
@@ -8780,6 +8782,7 @@ msgid "Ready"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:122
+#: src/commonfrontend/matrix/MatrixView.cpp:191
 #: src/commonfrontend/worksheet/WorksheetView.cpp:142
 #, fuzzy, kde-format
 #| msgid "Original size"
@@ -8941,8 +8944,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3752
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3806
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3751
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3805
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2308
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -8950,8 +8953,8 @@ msgid "Failed to export"
 msgstr "開啟失敗"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:840
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3752
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3806
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3751
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3805
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2308
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9000,9 +9003,10 @@ msgid "Const Values"
 msgstr "數值"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:138
-#, kde-format
-msgid "Clear Matrix"
-msgstr ""
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
+#, fuzzy, kde-format
+msgid "Clear Content"
+msgstr "密度"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:139
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:293
@@ -9112,102 +9116,105 @@ msgstr "移除列"
 msgid "Clea&r Rows"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:231
+#: src/commonfrontend/matrix/MatrixView.cpp:243
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:525
 #, fuzzy, kde-format
 msgid "Selection"
 msgstr "選擇"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:258
-#: src/commonfrontend/matrix/MatrixView.cpp:324
+#: src/commonfrontend/matrix/MatrixView.cpp:265
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:618
 #, fuzzy, kde-format
 msgid "Generate Data"
 msgstr "一般"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:265
-#: src/commonfrontend/matrix/MatrixView.cpp:331
+#: src/commonfrontend/matrix/MatrixView.cpp:270
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:633
 #, fuzzy, kde-format
 msgid "Manipulate Data"
 msgstr "一般"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:279
-#: src/commonfrontend/matrix/MatrixView.cpp:343
+#: src/commonfrontend/matrix/MatrixView.cpp:281
 #, kde-format
 msgid "View"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:290
+#: src/commonfrontend/matrix/MatrixView.cpp:286
 #, fuzzy, kde-format
 msgid "Header Format"
 msgstr "資料格式"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:570
-#: src/commonfrontend/matrix/MatrixView.cpp:574
+#: src/commonfrontend/matrix/MatrixView.cpp:292
+#: src/commonfrontend/worksheet/WorksheetView.cpp:464
+#, fuzzy, kde-format
+msgid "Zoom"
+msgstr "縮放"
+
+#: src/commonfrontend/matrix/MatrixView.cpp:569
+#: src/commonfrontend/matrix/MatrixView.cpp:573
 #, kde-format
 msgid "Go to Cell"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:570
+#: src/commonfrontend/matrix/MatrixView.cpp:569
 #, kde-format
 msgid "Enter column"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:574
+#: src/commonfrontend/matrix/MatrixView.cpp:573
 #, kde-format
 msgid "Enter row"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:602
+#: src/commonfrontend/matrix/MatrixView.cpp:601
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:621
+#: src/commonfrontend/matrix/MatrixView.cpp:620
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:673
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1713
+#: src/commonfrontend/matrix/MatrixView.cpp:672
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, fuzzy, kde-format
 msgid "%1: paste from clipboard"
 msgstr "貼上剪貼簿內容"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:743
+#: src/commonfrontend/matrix/MatrixView.cpp:742
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:869
+#: src/commonfrontend/matrix/MatrixView.cpp:876
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:893
+#: src/commonfrontend/matrix/MatrixView.cpp:900
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:910
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
 msgid "%1: clear selected column(s)"
 msgstr "%1：移除 %2 欄"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:929
+#: src/commonfrontend/matrix/MatrixView.cpp:936
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:953
+#: src/commonfrontend/matrix/MatrixView.cpp:960
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:968
+#: src/commonfrontend/matrix/MatrixView.cpp:975
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr ""
@@ -9424,11 +9431,6 @@ msgstr "刪除選取的物件"
 #, fuzzy, kde-format
 msgid "Remove Columns"
 msgstr "移除欄"
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:304
-#, fuzzy, kde-format
-msgid "Clear Content"
-msgstr "密度"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1581
@@ -9652,66 +9654,66 @@ msgstr ""
 msgid "Unfreeze Column"
 msgstr "刪除選取的物件"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1632
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1631
 #, kde-format
 msgid "%1: cut selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1956
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1955
 #, kde-format
 msgid "%1: mask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1996
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1995
 #, kde-format
 msgid "%1: unmask selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2052
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2051
 #, kde-format
 msgid "%1: fill cells with row numbers"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2117
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2116
 #, kde-format
 msgid "%1: fill column with row numbers"
 msgid_plural "%1: fill columns with row numbers"
 msgstr[0] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2159
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2158
 #, kde-format
 msgid "%1: fill cells with random values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2304
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2303
 #, kde-format
 msgid "%1: fill cells with const values"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2334
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2352
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2311
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2351
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2367
 #, kde-format
 msgid "Fill the selection with constant value"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2453
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2487
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2452
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2486
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "Insert empty columns"
 msgstr "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2454
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2453
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2487
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of columns to insert"
 msgstr "過濾器名稱："
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2506
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2505
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
@@ -9719,17 +9721,17 @@ msgid "%1: insert empty column"
 msgid_plural "%1: insert empty columns"
 msgstr[0] "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2567
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2566
 #, kde-format
 msgid "%1: remove selected columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2578
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2577
 #, kde-format
 msgid "%1: clear selected columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2684
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1: remove 1 column"
 #| msgid_plural "%1: remove %2 columns"
@@ -9737,131 +9739,131 @@ msgid "%1: reverse column"
 msgid_plural "%1: reverse columns"
 msgstr[0] "%1：移除 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2757
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2756
 #, kde-format
 msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2795
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2794
 #, kde-format
 msgid "%1: normalize columns"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2815
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2814
 #, kde-format
 msgid "Sum = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2826
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2825
 #, kde-format
 msgid "Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2837
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2836
 #, kde-format
 msgid "Max = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2848
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2847
 #, fuzzy, kde-format
 msgid "Count = 0"
 msgstr "圓心"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2859
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2858
 #, kde-format
 msgid "Mean = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2870
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2869
 #, fuzzy, kde-format
 #| msgid "StandardDev"
 msgid "Median = 0"
 msgstr "標準差"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2882
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2881
 #, kde-format
 msgid "Mode = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2884
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2883
 #, kde-format
 msgid "'Mode not defined'"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2895
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2894
 #, fuzzy, kde-format
 msgid "Range = 0"
 msgstr "X 範圍"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2906
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2940
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2905
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2939
 #, kde-format
 msgid "SD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2917
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2952
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2916
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2951
 #, kde-format
 msgid "MAD = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2928
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2964
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2927
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2963
 #, kde-format
 msgid "IQR = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2976
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2975
 #, kde-format
 msgid "Max - Min = 0"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2995
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
 msgid "Normalization not possible"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3007
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3006
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
 msgid "%1: power transform columns"
 msgstr "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3129
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3128
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: column statistics"
 msgstr "統計"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3152
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3151
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "統計"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3162
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3226
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3186
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3225
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3188
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3227
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3226
 #, fuzzy, kde-format
 #| msgid "Filter name:"
 msgid "Enter the number of rows to insert"
 msgstr "過濾器名稱："
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3207
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3246
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3206
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3245
 #, fuzzy, kde-format
 #| msgid "%1: insert 1 column"
 #| msgid_plural "%1: insert %2 columns"
@@ -9869,22 +9871,22 @@ msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1：插入 %2 欄"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3262
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3261
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3275
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3274
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3326
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3325
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3385
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3384
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9892,29 +9894,29 @@ msgstr ""
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3395
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3394
 #, fuzzy, kde-format
 msgid "End Search"
 msgstr "搜尋過濾器"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3569
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3568
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "工作表"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4164
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4163
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4196
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4195
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "開啟失敗"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4249
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4248
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -10224,11 +10226,6 @@ msgstr ""
 #, kde-format
 msgid "Plot Area"
 msgstr "繪製區域"
-
-#: src/commonfrontend/worksheet/WorksheetView.cpp:464
-#, fuzzy, kde-format
-msgid "Zoom"
-msgstr "縮放"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout_2)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLayout)
@@ -11968,7 +11965,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:371
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:396
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:113
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:332
 #, fuzzy, kde-format
@@ -15874,7 +15871,7 @@ msgstr "格式"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:223
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:279
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:87
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:30
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:63
@@ -15920,7 +15917,7 @@ msgstr "註解："
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:376
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:357
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:153
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:30
@@ -16147,7 +16144,7 @@ msgstr "影像"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:421
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:116
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:92
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:174
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:268
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:48
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:286
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:296
@@ -17708,7 +17705,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrecision)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:96
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:218
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:285
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:221
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:262
 #, fuzzy, kde-format
@@ -18115,7 +18112,7 @@ msgstr "橘"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:357
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:69
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:479
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:154
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:204
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:504
@@ -18708,14 +18705,8 @@ msgstr ""
 msgid "Read Whole File"
 msgstr "匯出到檔案"
 
-#. i18n: ectx: property (text), widget (QLabel, lYStart)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:70
-#, fuzzy, kde-format
-msgid "y-Start:"
-msgstr "開始"
-
 #. i18n: ectx: property (text), widget (QLabel, lRowCount)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:146
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:92
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:98
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:487
 #, fuzzy, kde-format
@@ -18723,36 +18714,42 @@ msgstr "開始"
 msgid "Rows:"
 msgstr "列"
 
-#. i18n: ectx: property (text), widget (QLabel, lYEnd)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
-#, kde-format
-msgid "y-End:"
-msgstr ""
+#. i18n: ectx: property (text), widget (QLabel, lMapping)
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:160
+#, fuzzy, kde-format
+#| msgid "Padding:"
+msgid "Mapping"
+msgstr "填補："
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
 #, fuzzy, kde-format
 msgid "x-Start:"
 msgstr "開始"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:195
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
 #, kde-format
 msgid "x-End:"
 msgstr ""
 
+#. i18n: ectx: property (text), widget (QLabel, lYStart)
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
+#, fuzzy, kde-format
+msgid "y-Start:"
+msgstr "開始"
+
+#. i18n: ectx: property (text), widget (QLabel, lYEnd)
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
+#, kde-format
+msgid "y-End:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:267
+#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:305
 #, fuzzy, kde-format
 msgid "Header:"
 msgstr "資料格式"
-
-#. i18n: ectx: property (text), widget (QLabel, lMapping)
-#: src/kdefrontend/ui/dockwidgets/matrixdock.ui:283
-#, fuzzy, kde-format
-#| msgid "Padding:"
-msgid "Mapping"
-msgstr "填補："
 
 #. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
