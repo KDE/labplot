@@ -551,6 +551,19 @@ void MatrixView::keyPressEvent(QKeyEvent* event) {
 		changeZoom(zoomOriginAction);
 }
 
+void MatrixView::wheelEvent(QWheelEvent* event) {
+	if (m_stackedWidget->currentIndex() == 1 && (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+		// TODO: implement https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView also for the resize in QLabel?
+		QPoint numDegrees = event->angleDelta() / 8;
+		int numSteps = numDegrees.y() / 15; // see QWheelEvent documentation
+		if (numSteps > 0)
+			changeZoom(zoomInAction);
+		else
+			changeZoom(zoomOutAction);
+	} else
+		QWidget::wheelEvent(event);
+}
+
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################

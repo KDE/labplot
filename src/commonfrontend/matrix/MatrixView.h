@@ -71,6 +71,7 @@ private:
 
 	bool eventFilter(QObject*, QEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
+	void wheelEvent(QWheelEvent*) override;
 
 	QStackedWidget* m_stackedWidget;
 	QTableView* m_tableView;
