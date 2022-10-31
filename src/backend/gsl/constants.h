@@ -70,7 +70,7 @@ struct cons _constants[] = {
 	{"pD", GSL_CONST_MKSA_DEBYE},
 
 	/* Measurement of Time */
-	{"min", GSL_CONST_MKSA_MINUTE},
+	{"minute", GSL_CONST_MKSA_MINUTE},
 	{"hour", GSL_CONST_MKSA_HOUR},
 	{"day", GSL_CONST_MKSA_DAY},
 	{"week", GSL_CONST_MKSA_WEEK},
