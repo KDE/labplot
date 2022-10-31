@@ -1333,7 +1333,6 @@ void ColumnPrivate::updateFormula() {
 	DEBUG(Q_FUNC_INFO)
 	// determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
-	QVector<QVector<double>*> xNewVectors;
 	QString formula = m_formula;
 
 	bool valid = true;
@@ -1382,26 +1381,10 @@ void ColumnPrivate::updateFormula() {
 		for (auto m : methodList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
 
-		// methods with options like method(a, b): get a and b and calculate value to replace method
-		// TODO: cell(a, b)
-		/*QRegExp reg(QLatin1String("cell\\((\\d+)[\\.\\,](\\d+)\\)"));
-		reg.setMinimal(true);	// match only one method at a time
-		int pos = 0;
-		while ((pos = reg.indexIn(formula, pos)) != -1) { // all method calls
-			const int row = numberLocale.toInt(reg.cap(1));	// a
-			const int col = numberLocale.toInt(reg.cap(2));	// b
-			DEBUG("FOUND: " << row << ", " << col)
-
-			//TODO: get value of cell (row, col)
-			//TODO: all column modes
-			double value = row + col;
-			formula.replace(reg.cap(0), numberLocale.toString(value));
-		}*/
-
 		// methods with options like method(p, x): get option p and calculate value to replace method
-		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"),
-										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)"),
-										QLatin1String("cell\\((\\d+).*%1\\)")};
+		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
+										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // percentile(p, x)
+										QLatin1String("cell\\((.*),.*%1\\)")}; // cell(f(i), x)
 
 		for (auto m : optionMethodList) {
 			QRegExp rx(m.arg(varName));
@@ -1410,7 +1393,9 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				double p = numberLocale.toDouble(rx.cap(1)); // option
+				if (m.startsWith(QLatin1String("cell")))
+					QDEBUG("ARG = " << rx.cap(1))
+				double p = numberLocale.toDouble(rx.cap(1)); // option (if cell() index contains i: p=0 -> index < 0)
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
@@ -1468,7 +1453,11 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				formula.replace(rx.cap(0), numberLocale.toString(value));
+				// only replace when not cell() or when index of cell() does not contain i (index==-1)
+				if (!m.startsWith(QLatin1String("cell")) || indexInRange)
+					formula.replace(rx.cap(0), numberLocale.toString(value));
+				else // avoid endless loop
+					pos++;
 			}
 		}
 
@@ -1480,7 +1469,6 @@ void ColumnPrivate::updateFormula() {
 			for (int i = 0; i < column->rowCount(); ++i)
 				(*xVector)[i] = column->valueAt(i);
 
-			xNewVectors << xVector;
 			xVectors << xVector;
 		} else
 			xVectors << static_cast<QVector<double>*>(column->data());
@@ -1502,7 +1490,7 @@ void ColumnPrivate::updateFormula() {
 		QVector<double> new_data(rowCount(), NAN);
 
 		// evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
-		ExpressionParser* parser = ExpressionParser::getInstance();
+		auto* parser = ExpressionParser::getInstance();
 		QDEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian(). formula: " << m_formula << ", var names: " << formulaVariableNames)
 		parser->evaluateCartesian(formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
@@ -1518,10 +1506,6 @@ void ColumnPrivate::updateFormula() {
 		QVector<double> new_data(rowCount(), NAN);
 		replaceValues(0, new_data);
 	}
-
-	// delete helper vectors created for the conversion from int to double
-	for (auto* vector : xNewVectors)
-		delete vector;
 
 	DEBUG(Q_FUNC_INFO << " DONE")
 }

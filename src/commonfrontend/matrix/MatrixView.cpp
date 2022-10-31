@@ -15,8 +15,8 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
-#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
+#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 #include "tools/ColorMapsManager.h"
 
@@ -766,7 +766,13 @@ void MatrixView::clearSelectedCells() {
 class UpdateImageTask : public QRunnable {
 public:
 	UpdateImageTask(int start, int end, QImage& image, const void* data, double min, double max, const QVector<QColor>& colors)
-		:m_start(start), m_end(end), m_min(min), m_max(max), m_data(data), m_image(image), m_colors(colors) {
+		: m_start(start)
+		, m_end(end)
+		, m_min(min)
+		, m_max(max)
+		, m_data(data)
+		, m_image(image)
+		, m_colors(colors) {
 	}
 
 	void run() override {
@@ -778,13 +784,13 @@ public:
 
 			for (int col = 0; col < m_image.width(); ++col) {
 				double value = static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row);
-				int index = (value - m_min)/range;
+				int index = (value - m_min) / range;
 
 				QColor color;
 				if (index < m_colors.count())
 					color = m_colors.at(index);
 				else
-					color =  m_colors.constLast();
+					color = m_colors.constLast();
 				line[col] = qRgb(color.red(), color.green(), color.blue());
 			}
 		}

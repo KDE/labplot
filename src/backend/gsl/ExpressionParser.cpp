@@ -1442,6 +1442,10 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	for (const auto& var : vars)
 		assign_symbol(qPrintable(var), 0);
 
+	// cell() supports index i: make i valid
+	if (expr.contains(QLatin1String("cell")))
+		assign_symbol("i", 0);
+
 	SET_NUMBER_LOCALE
 	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
 	parse(qPrintable(expr), qPrintable(numberLocale.name()));
@@ -1638,15 +1642,11 @@ bool ExpressionParser::evaluateCartesian(const QString& expr,
 /*!
 	evaluates multivariate function y=f(x_1, x_2, ...).
 	Variable names (x_1, x_2, ...) are stored in \c vars.
-	Data is stored in \c dataVectors.
+	Data is stored in \c xVectors.
  */
-bool ExpressionParser::evaluateCartesian(const QString& expression,
-										 const QStringList& vars,
-										 const QVector<QVector<double>*>& xVectors,
-										 QVector<double>* yVector) {
+bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
 	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
-	QString expr = expression;
 	gsl_set_error_handler_off();
 
 	// determine the minimal size of involved vectors
@@ -1661,25 +1661,48 @@ bool ExpressionParser::evaluateCartesian(const QString& expression,
 	// calculate values
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < minSize; i++) {
-		// assign vars
-		for (int n = 0; n < vars.size(); ++n)
+		QString tmpExpr = expr;
+
+		// assign vars with value from xVectors
+		for (int n = 0; n < vars.size(); ++n) {
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+			// if expr contains cell(f(i), vars.at(n)):
+			// replace this with xVectors.at(n)->at(f(i))
+			QRegExp rx(QLatin1String("cell\\((.*),.*%1\\)").arg(vars.at(n)));
+			rx.setMinimal(true); // only match one method call at a time
+
+			int pos = 0;
+			while ((pos = rx.indexIn(tmpExpr, pos)) != -1) {
+				const QString arg = rx.cap(1);
+				// QDEBUG("ARG = " << arg)
+				assign_symbol("i", i + 1); // row number i = 1 .. minSize
+				int index = parse(qPrintable(arg), qPrintable(numberLocale.name()));
+				// DEBUG("INDEX = " << index)
+
+				if (index > 0 && index <= xVectors.at(n)->size())
+					tmpExpr.replace(rx.cap(0), numberLocale.toString(xVectors.at(n)->at(index - 1)));
+				else
+					tmpExpr.replace(rx.cap(0), numberLocale.toString(qQNaN()));
+			}
+		}
+
+		double y = parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) // try default locale if failing
-			y = parse(qPrintable(expr), "en_US");
-		if (parse_errors() > 0)
-			return false;
+			y = parse(qPrintable(tmpExpr), "en_US");
+		// continue with next value
+		// if (parse_errors() > 0)
+		//	return false;
 
 		if (std::isnan(y))
-			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated to NAN")
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(tmpExpr) << " evaluated to NAN")
 
 		(*yVector)[i] = y;
 	}
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = std::numeric_limits<double>::quiet_NaN();
+		(*yVector)[i] = qQNaN();
 
 	return true;
 }
