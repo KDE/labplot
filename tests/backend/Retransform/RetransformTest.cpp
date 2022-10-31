@@ -867,8 +867,8 @@ void RetransformTest::TestChangePlotRange() {
 	dock.autoScaleChanged(Dimension::X, 1, false);
 	QCOMPARE(plot->autoScale(Dimension::X, 1), false);
 
-	dock.minChanged(Dimension::X, 1, QStringLiteral("10"));
-	dock.maxChanged(Dimension::X, 1, QStringLiteral("20"));
+	dock.minChanged(Dimension::X, 1, 10);
+	dock.maxChanged(Dimension::X, 1, 20);
 
 	// check axis ranges
 	auto axes = project.children(AspectType::Axis, AbstractAspect::ChildIndexFlag::Recursive);
@@ -1003,8 +1003,8 @@ void RetransformTest::TestChangePlotRangeElement() {
 
 	dock.autoScaleChanged(Dimension::Y, 1, false);
 	QCOMPARE(plot->autoScale(Dimension::Y, 1), false);
-	dock.minChanged(Dimension::Y, 1, QStringLiteral("10"));
-	dock.maxChanged(Dimension::Y, 1, QStringLiteral("20"));
+	dock.minChanged(Dimension::Y, 1, 10);
+	dock.maxChanged(Dimension::Y, 1, 20);
 
 	// Csystem1:
 	// x 0..1

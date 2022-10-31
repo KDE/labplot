@@ -246,6 +246,8 @@ Q_SIGNALS:
 	void rugLengthChanged(double);
 	void rugWidthChanged(double);
 	void rugOffsetChanged(double);
+
+	friend class XYCurveTest;
 };
 
 #endif

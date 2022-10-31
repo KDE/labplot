@@ -179,6 +179,7 @@ private:
 	QPointF mousePos;
 
 	friend class RetransformTest;
+	friend class XYCurveTest;
 };
 
 #endif

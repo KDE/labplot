@@ -10,11 +10,8 @@
 
 #include "XYCurveTest.h"
 
-// To be able to access the private of the curve
-#define private public
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#undef private
 
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
