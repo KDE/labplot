@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>230</width>
-    <height>159</height>
+    <width>238</width>
+    <height>252</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,16 +69,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QDoubleSpinBox" name="sbWidth">
-     <property name="suffix">
-      <string> pt</string>
-     </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
      </property>
     </widget>
    </item>
@@ -171,18 +161,39 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="2">
+    <widget class="NumberSpinBox" name="sbWidth">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="feedback" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

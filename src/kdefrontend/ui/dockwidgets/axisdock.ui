@@ -118,7 +118,7 @@
            <property name="whatsThis">
             <string>Spinbox for numbers.</string>
            </property>
-           <property name="feedback">
+           <property name="feedback" stdset="0">
             <bool>false</bool>
            </property>
           </widget>
@@ -224,7 +224,7 @@
            <property name="whatsThis">
             <string>Spinbox for numbers.</string>
            </property>
-           <property name="feedback">
+           <property name="feedback" stdset="0">
             <bool>false</bool>
            </property>
           </widget>
@@ -237,7 +237,7 @@
            <property name="whatsThis">
             <string>Spinbox for numbers.</string>
            </property>
-           <property name="feedback">
+           <property name="feedback" stdset="0">
             <bool>false</bool>
            </property>
           </widget>
@@ -313,7 +313,7 @@
            <property name="whatsThis">
             <string>Spinbox for numbers.</string>
            </property>
-           <property name="feedback">
+           <property name="feedback" stdset="0">
             <bool>false</bool>
            </property>
           </widget>
@@ -417,7 +417,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -534,7 +533,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -570,7 +568,6 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -879,7 +876,6 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1080,8 +1076,8 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1096,7 +1092,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1109,7 +1105,7 @@
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1125,8 +1121,8 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
-          <bool>false</bool>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1141,7 +1137,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1154,7 +1150,7 @@
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1237,7 +1233,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1296,7 +1291,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1421,7 +1416,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1434,7 +1428,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1527,7 +1520,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1587,7 +1579,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -1635,7 +1627,6 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1664,7 +1655,6 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1697,24 +1687,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
    <class>NumberSpinBox</class>
@@ -1725,6 +1700,21 @@
    <class>ResizableTextEdit</class>
    <extends>QTextEdit</extends>
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

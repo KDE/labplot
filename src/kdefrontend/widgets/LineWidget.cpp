@@ -30,7 +30,7 @@ LineWidget::LineWidget(QWidget* parent)
 
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::styleChanged);
 	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChanged);
-	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LineWidget::widthChanged);
+	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LineWidget::widthChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LineWidget::opacityChanged);
 }
 
@@ -305,8 +305,8 @@ void LineWidget::linePenChanged(QPen& pen) {
 		ui.cbStyle->setCurrentIndex(pen.style());
 	if (ui.kcbColor->color() != pen.color())
 		ui.kcbColor->setColor(pen.color());
-	if (ui.sbWidth->value() != pen.widthF())
-		ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	// Feedback needed, so do not check if not equal
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 }
 
 void LineWidget::lineOpacityChanged(double value) {
