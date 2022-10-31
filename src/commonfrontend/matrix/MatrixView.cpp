@@ -4,21 +4,21 @@
 	Description          : View class for Matrix
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "commonfrontend/matrix/MatrixView.h"
 #include "backend/core/column/Column.h"
+#include "backend/datasources/filters/FITSFilter.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
-
-#include "backend/datasources/filters/FITSFilter.h"
-#include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
+#include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "tools/ColorMapsManager.h"
 
 #include <KLocalizedString>
 
@@ -86,12 +86,12 @@ void MatrixView::init() {
 	m_stackedWidget->addWidget(m_tableView);
 
 	// horizontal header
-	QHeaderView* h_header = m_tableView->horizontalHeader();
+	auto* h_header = m_tableView->horizontalHeader();
 	h_header->setSectionsMovable(false);
 	h_header->installEventFilter(this);
 
 	// vertical header
-	QHeaderView* v_header = m_tableView->verticalHeader();
+	auto* v_header = m_tableView->verticalHeader();
 	v_header->setSectionsMovable(false);
 	v_header->installEventFilter(this);
 
@@ -752,35 +752,40 @@ void MatrixView::clearSelectedCells() {
 
 class UpdateImageTask : public QRunnable {
 public:
-	UpdateImageTask(int start, int end, QImage& image, const void* data, double scaleFactor, double min)
-		: m_image(image)
-		, m_data(data) {
-		m_start = start;
-		m_end = end;
-		m_scaleFactor = scaleFactor;
-		m_min = min;
+	UpdateImageTask(int start, int end, QImage& image, const void* data, double min, double max, const QVector<QColor>& colors)
+		:m_start(start), m_end(end), m_min(min), m_max(max), m_data(data), m_image(image), m_colors(colors) {
 	}
 
 	void run() override {
+		double range = (m_max - m_min) / m_colors.count();
 		for (int row = m_start; row < m_end; ++row) {
 			m_mutex.lock();
 			QRgb* line = reinterpret_cast<QRgb*>(m_image.scanLine(row));
 			m_mutex.unlock();
+
 			for (int col = 0; col < m_image.width(); ++col) {
-				const int gray = (static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row) - m_min) * m_scaleFactor;
-				line[col] = qRgb(gray, gray, gray);
+				double value = static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row);
+				int index = (value - m_min)/range;
+
+				QColor color;
+				if (index < m_colors.count())
+					color = m_colors.at(index);
+				else
+					color =  m_colors.constLast();
+				line[col] = qRgb(color.red(), color.green(), color.blue());
 			}
 		}
 	}
 
 private:
-	QMutex m_mutex;
-	QImage& m_image;
 	int m_start;
 	int m_end;
 	double m_min;
-	double m_scaleFactor;
+	double m_max;
 	const void* m_data;
+	QMutex m_mutex;
+	QImage& m_image;
+	QVector<QColor> m_colors;
 };
 
 void MatrixView::updateImage() {
@@ -803,15 +808,18 @@ void MatrixView::updateImage() {
 	}
 
 	// update the image
-	const double scaleFactor = 255.0 / (dmax - dmin);
-	QThreadPool* pool = QThreadPool::globalInstance();
+	auto* manager = ColorMapsManager::instance();
+	QPixmap pix;
+	manager->render(pix, QLatin1String("viridis100")); // dummy render to get the color vector initialized
+	const auto& colors = manager->colors();
+	auto* pool = QThreadPool::globalInstance();
 	int range = ceil(double(m_image.height()) / pool->maxThreadCount());
 	for (int i = 0; i < pool->maxThreadCount(); ++i) {
 		const int start = i * range;
 		int end = (i + 1) * range;
 		if (end > m_image.height())
 			end = m_image.height();
-		auto* task = new UpdateImageTask(start, end, m_image, data, scaleFactor, dmin);
+		auto* task = new UpdateImageTask(start, end, m_image, data, dmin, dmax, colors);
 		pool->start(task);
 	}
 	pool->waitForDone();
