@@ -766,7 +766,7 @@
   <customwidget>
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>NumberSpinBox.h</header>
+   <header>src/commonfrontend/widgets/NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>
