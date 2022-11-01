@@ -495,7 +495,7 @@ void CartesianPlotDock::updateLocale() {
 			const auto xRange{m_plot->range(Dimension::X, row)};
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
-				//const int relPrec = xRange.relativePrecision();
+				// const int relPrec = xRange.relativePrecision();
 				auto* sb = qobject_cast<NumberSpinBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				sb->setLocale(numberLocale);
 				sb = qobject_cast<NumberSpinBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
@@ -522,7 +522,7 @@ void CartesianPlotDock::updateLocale() {
 			const auto yRange{m_plot->range(Dimension::Y, row)};
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
-				//const int relPrec = yRange.relativePrecision();
+				// const int relPrec = yRange.relativePrecision();
 				auto* sb = qobject_cast<NumberSpinBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				sb->setLocale(numberLocale);
 				sb = qobject_cast<NumberSpinBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
@@ -1001,11 +1001,11 @@ void CartesianPlotDock::minChanged(const Dimension dim, const int index, double 
 
 	// selected x/y range
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
-	//bool changed = false;
+	// bool changed = false;
 	for (auto* plot : m_plotList)
 		if (!qFuzzyCompare(min, plot->range(dim, index).start())) {
 			plot->setMin(dim, index, min);
-			//changed = true;
+			// changed = true;
 		}
 
 	// if (changed)
@@ -1027,11 +1027,11 @@ void CartesianPlotDock::maxChanged(const Dimension dim, const int index, double 
 	}*/
 
 	// selected x/y range
-	//bool changed = false;
+	// bool changed = false;
 	for (auto* plot : m_plotList)
 		if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
 			plot->setMax(dim, index, max);
-			//changed = true;
+			// changed = true;
 		}
 
 	// if (changed)
