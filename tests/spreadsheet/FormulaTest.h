@@ -20,6 +20,16 @@ private Q_SLOTS:
 	void initTestCase();
 
 	void formula1();
+	void formulax();
+	void formulaxp1();
+
+	void formulaCell1();
+	void formulaCelli();
+	void formulaCellip1();
+	void formulaCellim1();
+	void formulaCell2i();
+	void formulaCellip1im1();
+	void formulaCellsqrtip1();
 };
 
 #endif
