@@ -1463,7 +1463,8 @@ void ColumnPrivate::updateFormula() {
 		}
 
 		// C) simple replacements
-		QVector<QPair<QString, QString>> replaceList = {{"mr", QLatin1String("fabs(cell(i, %1) - cell(i-1, %1))")}};
+		QVector<QPair<QString, QString>> replaceList = {{"mr", QLatin1String("fabs(cell(i, %1) - cell(i-1, %1))")},
+														{"sma", QLatin1String("(cell(i-1, %1) + cell(i, %1))/2.")}};
 		for (auto m : replaceList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
 

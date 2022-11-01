@@ -89,6 +89,7 @@ struct funs _functions[] = {
 	{"percentile", (func_t)nsl_sf_dummy2, 2},
 	/* TODO: own category? */
 	{"cell", (func_t)nsl_sf_dummy2, 2},
+	{"sma", (func_t)nsl_sf_dummy, 1},
 	{"mr", (func_t)nsl_sf_dummy, 1},
 	/* GSL special functions: see https://www.gnu.org/software/gsl/doc/html/specfunc.html */
 	/* Airy Functions and Derivatives */
