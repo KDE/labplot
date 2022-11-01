@@ -87,7 +87,7 @@ struct funs _functions[] = {
 	{"entropy", (func_t)nsl_sf_dummy, 1},
 	{"quantile", (func_t)nsl_sf_dummy2, 2},
 	{"percentile", (func_t)nsl_sf_dummy2, 2},
-	/* TODO: own category? */
+	/* Moving statistics */
 	{"cell", (func_t)nsl_sf_dummy2, 2},
 	{"sma", (func_t)nsl_sf_dummy, 1},
 	{"mr", (func_t)nsl_sf_dummy, 1},

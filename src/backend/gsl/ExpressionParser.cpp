@@ -38,7 +38,8 @@ void ExpressionParser::initFunctions() {
 		m_functions << _functions[i].name;
 
 	m_functionsGroups << i18n("Standard Mathematical Functions");
-	m_functionsGroups << i18n("Statistical Methods (of column)"); // column statistics
+	m_functionsGroups << i18n("Column Statistics");
+	m_functionsGroups << i18n("Moving Statistics");
 	// https://www.gnu.org/software/gsl/doc/html/specfunc.html
 	m_functionsGroups << i18n("Airy Functions and Derivatives");
 	m_functionsGroups << i18n("Bessel Functions");
@@ -150,7 +151,7 @@ void ExpressionParser::initFunctions() {
 		m_functionsGroupIndex << index;
 	index++;
 
-	// statistical methods for columns
+	// Column statistics
 	m_functionsNames << i18n("Size");
 	m_functionsNames << i18n("Minimum");
 	m_functionsNames << i18n("Maximum");
@@ -180,11 +181,18 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Entropy");
 	m_functionsNames << i18n("Quantile");
 	m_functionsNames << i18n("Percentile");
+
+	index++;
+	for (int i = 0; i < 29; i++)
+		m_functionsGroupIndex << index;
+
+	// Moving statistics
 	m_functionsNames << i18n("Cell");
 	m_functionsNames << i18n("Simple Moving Average");
 	m_functionsNames << i18n("Moving Range");
+
 	index++;
-	for (int i = 0; i < 32; i++)
+	for (int i = 0; i < 3; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
