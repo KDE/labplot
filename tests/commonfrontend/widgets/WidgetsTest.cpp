@@ -953,4 +953,37 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
 
+void WidgetsTest::numberSpinBoxMinimumFeedback() {
+	// Limit to min/max when stepping in the spinbox
+	// instead of raising an error
+	NumberSpinBox sb;
+	sb.setMinimum(0);
+	sb.setValue(1);
+	sb.setFeedback(true);
+
+	int valueChangedCounter = 0;
+	double lastValue = NAN;
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+		valueChangedCounter++;
+		lastValue = value;
+	});
+
+	QCOMPARE(sb.lineEdit()->text(), "1.00");
+
+	sb.lineEdit()->setCursorPosition(1);
+	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
+	sb.keyPressEvent(&event);
+
+	QCOMPARE(sb.lineEdit()->text(), "0.00");
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.toolTip(), "");
+
+	sb.keyPressEvent(&event);
+	QCOMPARE(sb.lineEdit()->text(), "0.00");
+	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
+	QCOMPARE(valueChangedCounter, 1);
+	QCOMPARE(sb.toolTip(), "");
+}
+
 QTEST_MAIN(WidgetsTest)

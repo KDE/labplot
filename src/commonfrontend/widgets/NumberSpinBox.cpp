@@ -87,9 +87,13 @@ void NumberSpinBox::wheelEvent(QWheelEvent* event) {
 void NumberSpinBox::stepBy(int steps) {
 	// used when scrolling
 	Errors e = step(steps);
-	setInvalid(e);
-	if (e == Errors::NoError)
+	if (e == Errors::Min || e == Errors::Max)
+		setInvalid(Errors::NoError);
+	else if (e == Errors::NoError) {
+		setInvalid(e);
 		valueChanged();
+	} else
+		setInvalid(e);
 }
 
 void NumberSpinBox::increaseValue() {
