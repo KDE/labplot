@@ -51,6 +51,7 @@ QString NumberSpinBox::errorToString(Errors e) {
 	case Errors::NoError:
 		return QLatin1String("");
 	}
+	return QLatin1String("Unhandled error");
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
