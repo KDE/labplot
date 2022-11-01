@@ -227,7 +227,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		return false;
 
 	int row = index.row();
-	Column* column = m_spreadsheet->column(index.column());
+	auto* column = m_spreadsheet->column(index.column());
 
 	SET_NUMBER_LOCALE
 	// DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))

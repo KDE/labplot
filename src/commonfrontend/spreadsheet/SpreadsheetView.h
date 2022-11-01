@@ -227,7 +227,12 @@ public Q_SLOTS:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
+
 	void pasteIntoSelection();
+
+	void fillWithRowNumbers();
+	void selectColumn(int);
+	void deselectColumn(int);
 
 private Q_SLOTS:
 	void goToCell(int row, int col);
@@ -254,7 +259,6 @@ private Q_SLOTS:
 	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
-	void fillWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
@@ -306,8 +310,6 @@ private Q_SLOTS:
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
-	void selectColumn(int);
-	void deselectColumn(int);
 	void columnClicked(int);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();
