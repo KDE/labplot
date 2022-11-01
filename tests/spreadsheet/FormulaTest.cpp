@@ -216,4 +216,41 @@ void FormulaTest::formulaCellsqrtip1() {
 	}
 }
 
+/*!
+   formula "mr(x)"
+*/
+void FormulaTest::formulamr() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("mr(x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		if (i > 0)
+			QCOMPARE(sheet.column(1)->valueAt(i), 1);
+		else
+			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+	}
+}
+/*!
+   formula "sma(x)"
+*/
+void FormulaTest::formulasma() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("sma(x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		if (i > 0)
+			QCOMPARE(sheet.column(1)->valueAt(i), i + .5);
+		else
+			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+	}
+}
+
 QTEST_MAIN(FormulaTest)
