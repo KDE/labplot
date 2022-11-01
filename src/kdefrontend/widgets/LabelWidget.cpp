@@ -111,6 +111,8 @@ LabelWidget::LabelWidget(QWidget* parent)
 	ui.lBindLogicalPos->setToolTip(msg);
 	ui.chbBindLogicalPos->setToolTip(msg);
 
+	ui.sbBorderWidth->setMinimum(0);
+
 	// Icons
 	ui.tbFontBold->setIcon(QIcon::fromTheme(QLatin1String("format-text-bold")));
 	ui.tbFontItalic->setIcon(QIcon::fromTheme(QLatin1String("format-text-italic")));
@@ -1121,12 +1123,7 @@ void LabelWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* label : m_labelsList) {
 		pen = label->borderPen();
-		const int w = pen.width();
 		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		if (w == pen.width() && value < 0) {
-			// to notifiy the numberSpinBox that value got invalid
-			labelBorderPenChanged(pen);
-		}
 		label->setBorderPen(pen);
 	}
 }

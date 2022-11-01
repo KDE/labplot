@@ -25,6 +25,8 @@ LineWidget::LineWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
 
+	ui.sbWidth->setMinimum(0);
+
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::typeChanged);
 	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LineWidget::capSizeChanged);
 
@@ -259,10 +261,6 @@ void LineWidget::widthChanged(double value) {
 	for (auto* line : m_lines) {
 		pen = line->pen();
 		pen.setWidthF(width);
-		if (value == pen.width() && value < 0) {
-			// to notifiy the numberSpinBox that value got invalid
-			linePenChanged(pen);
-		}
 		line->setPen(pen);
 	}
 }
