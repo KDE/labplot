@@ -278,7 +278,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
 
-	const auto& l = v_str.split('e', 0, Qt::CaseInsensitive);
+	const auto& l = v_str.split('e', nullptr, Qt::CaseInsensitive);
 
 	double integerFraction = locale().toDouble(l.at(0));
 	int exponent = 0;

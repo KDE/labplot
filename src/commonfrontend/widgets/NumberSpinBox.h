@@ -39,7 +39,7 @@ public:
 		Max, // value larger than max
 	};
 
-	Q_PROPERTY(bool feedback READ feedback WRITE setFeedback NOTIFY feedbackChanged);
+	Q_PROPERTY(bool feedback READ feedback WRITE setFeedback NOTIFY feedbackChanged)
 
 public:
 	NumberSpinBox(QWidget* parent = nullptr);
