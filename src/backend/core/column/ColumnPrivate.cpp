@@ -1299,9 +1299,9 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames, const QStringList& variableColumnPaths, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaData.clear();
-	for (int i = 0; i < variableNames.count(); i++) {
+	for (int i = 0; i < variableNames.count(); i++)
 		m_formulaData.append(Column::FormulaData(variableNames.at(i), variableColumnPaths.at(i)));
-	}
+
 	m_formulaAutoUpdate = autoUpdate;
 }
 
@@ -1347,7 +1347,8 @@ void ColumnPrivate::updateFormula() {
 		auto varName = formulaData.variableName();
 		formulaVariableNames << varName;
 
-		// replace statistical values
+		// care about special expressions
+		// A) replace statistical values
 		// list of available statistical methods (see AbstractColumn.h)
 		QVector<QPair<QString, double>> methodList = {{"size", static_cast<double>(column->statistics().size)},
 													  {"min", column->minimum()},
@@ -1381,7 +1382,7 @@ void ColumnPrivate::updateFormula() {
 		for (auto m : methodList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
 
-		// methods with options like method(p, x): get option p and calculate value to replace method
+		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
 										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // percentile(p, x)
 										QLatin1String("cell\\((.*),.*%1\\)")}; // cell(f(i), x)
@@ -1461,6 +1462,11 @@ void ColumnPrivate::updateFormula() {
 			}
 		}
 
+		// C) simple replacements
+		QVector<QPair<QString, QString>> replaceList = {{"mr", QLatin1String("fabs(cell(i, %1) - cell(i-1, %1))")}};
+		for (auto m : replaceList)
+			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
+
 		QDEBUG("FORMULA: " << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
@@ -1480,6 +1486,8 @@ void ColumnPrivate::updateFormula() {
 	if (valid) {
 		// resize the spreadsheet if one of the data vectors from
 		// other spreadsheet(s) has more elements than the parent spreadsheet
+		// TODO: maybe it's better to not extend the spreadsheet (see #31)
+
 		auto* spreadsheet = static_cast<Spreadsheet*>(m_owner->parentAspect());
 		if (spreadsheet->rowCount() < maxRowCount)
 			spreadsheet->setRowCount(maxRowCount);

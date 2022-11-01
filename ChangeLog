@@ -20,7 +20,7 @@ New features:
 		* Data sampling (random and periodic methods)
 		* Data 'flattening' - convert pivoted data to column base format
 		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
-		* Function dialog supports accessing arbitrary cells of columns with cell(index, column)
+		* Function dialog supports accessing arbitrary cells of columns with cell(index, column) and other moving functions
 	* [matrix]
 		* Zooming in the image view
 	* [import]

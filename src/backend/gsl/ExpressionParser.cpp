@@ -181,8 +181,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Quantile");
 	m_functionsNames << i18n("Percentile");
 	m_functionsNames << i18n("Cell");
+	m_functionsNames << i18n("Moving Range");
 	index++;
-	for (int i = 0; i < 30; i++)
+	for (int i = 0; i < 31; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
