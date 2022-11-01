@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:42+0000\n"
+"POT-Creation-Date: 2022-11-01 00:43+0000\n"
 "PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1157,7 +1157,7 @@ msgstr "Dizin"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1545
 #: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2351
@@ -9196,69 +9196,69 @@ msgstr "Başlık biçemi"
 msgid "Zoom"
 msgstr "Yakınlaş"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:582
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Go to Cell"
 msgstr "Hücreye Git"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
+#: src/commonfrontend/matrix/MatrixView.cpp:582
 #, kde-format
 msgid "Enter column"
 msgstr "Sütuna git"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Enter row"
 msgstr "Satıra git"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Matrisi sabit değerle doldur"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:620
+#: src/commonfrontend/matrix/MatrixView.cpp:633
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: seçilen hücreleri kes"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:672
+#: src/commonfrontend/matrix/MatrixView.cpp:685
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: panodan yapıştır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:742
+#: src/commonfrontend/matrix/MatrixView.cpp:755
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: seçilen hücreleri temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:876
+#: src/commonfrontend/matrix/MatrixView.cpp:903
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: boş sütunlar ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:900
+#: src/commonfrontend/matrix/MatrixView.cpp:927
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: seçilen sütun(lar)ı kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:910
+#: src/commonfrontend/matrix/MatrixView.cpp:937
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: seçiken sütun(lar)ı temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:936
+#: src/commonfrontend/matrix/MatrixView.cpp:963
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: boş satır(lar)ı ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:960
+#: src/commonfrontend/matrix/MatrixView.cpp:987
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: seçilen satır(lar)ı kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:975
+#: src/commonfrontend/matrix/MatrixView.cpp:1002
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: seçilen satır(lar)ı temizle"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:42+0000\n"
+"POT-Creation-Date: 2022-11-01 00:43+0000\n"
 "PO-Revision-Date: 2022-10-24 15:02+0200\n"
 "Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -1154,7 +1154,7 @@ msgstr "Índex"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1545
 #: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2351
@@ -9036,69 +9036,69 @@ msgstr "Format de la capçalera"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:582
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Go to Cell"
 msgstr "Ves a la cel·la"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
+#: src/commonfrontend/matrix/MatrixView.cpp:582
 #, kde-format
 msgid "Enter column"
 msgstr "Introdueix una columna"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Enter row"
 msgstr "Introdueix una fila"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Omple la matriu amb un valor constant"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:620
+#: src/commonfrontend/matrix/MatrixView.cpp:633
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: retalla la/es cel·la/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:672
+#: src/commonfrontend/matrix/MatrixView.cpp:685
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: enganxa des del porta-retalls"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:742
+#: src/commonfrontend/matrix/MatrixView.cpp:755
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: neteja la/es cel·la/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:876
+#: src/commonfrontend/matrix/MatrixView.cpp:903
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: insereix una/es columna/es buida/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:900
+#: src/commonfrontend/matrix/MatrixView.cpp:927
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: elimina la/es columna/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:910
+#: src/commonfrontend/matrix/MatrixView.cpp:937
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: neteja la/es columna/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:936
+#: src/commonfrontend/matrix/MatrixView.cpp:963
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: insereix una/es fila/es buida/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:960
+#: src/commonfrontend/matrix/MatrixView.cpp:987
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: elimina la/es fila/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:975
+#: src/commonfrontend/matrix/MatrixView.cpp:1002
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: neteja la/es fila/es seleccionada/es"

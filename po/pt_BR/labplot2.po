@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-31 00:42+0000\n"
+"POT-Creation-Date: 2022-11-01 00:43+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -1146,7 +1146,7 @@ msgstr "Índice"
 #: src/backend/datasources/filters/AsciiFilter.cpp:1545
 #: src/backend/datasources/filters/AsciiFilter.cpp:2089
 #: src/backend/datasources/filters/QJsonModel.cpp:133
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2333
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2351
@@ -9338,69 +9338,69 @@ msgstr "Formato do cabeçalho"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:582
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Go to Cell"
 msgstr "Ir para a célula"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:569
+#: src/commonfrontend/matrix/MatrixView.cpp:582
 #, kde-format
 msgid "Enter column"
 msgstr "Indicar a coluna"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:573
+#: src/commonfrontend/matrix/MatrixView.cpp:586
 #, kde-format
 msgid "Enter row"
 msgstr "Indicar a linha"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:601
+#: src/commonfrontend/matrix/MatrixView.cpp:614
 #, kde-format
 msgid "Fill the matrix with constant value"
 msgstr "Preenche a matriz com o valor constante"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:620
+#: src/commonfrontend/matrix/MatrixView.cpp:633
 #, kde-format
 msgid "%1: cut selected cell(s)"
 msgstr "%1: recortar a(s) célula(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:672
+#: src/commonfrontend/matrix/MatrixView.cpp:685
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1712
 #, kde-format
 msgid "%1: paste from clipboard"
 msgstr "%1: colar da área de transferência"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:742
+#: src/commonfrontend/matrix/MatrixView.cpp:755
 #, kde-format
 msgid "%1: clear selected cell(s)"
 msgstr "%1: limpar a(s) célula(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:876
+#: src/commonfrontend/matrix/MatrixView.cpp:903
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: inserir coluna(s) vazia(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:900
+#: src/commonfrontend/matrix/MatrixView.cpp:927
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: remover a(s) coluna(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:910
+#: src/commonfrontend/matrix/MatrixView.cpp:937
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: limpar a(s) coluna(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:936
+#: src/commonfrontend/matrix/MatrixView.cpp:963
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: inserir linha(s) vazia(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:960
+#: src/commonfrontend/matrix/MatrixView.cpp:987
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: remover a(s) linha(s) selecionada(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:975
+#: src/commonfrontend/matrix/MatrixView.cpp:1002
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: limpar a(s) linha(s) selecionada(s)"
