@@ -93,6 +93,7 @@ struct funs _functions[] = {
 	{"mr", (func_t)nsl_sf_dummy, 1},
 	{"smmin", (func_t)nsl_sf_dummy, 2},
 	{"smmax", (func_t)nsl_sf_dummy, 2},
+	{"smr", (func_t)nsl_sf_dummy, 2},
 	/* GSL special functions: see https://www.gnu.org/software/gsl/doc/html/specfunc.html */
 	/* Airy Functions and Derivatives */
 	{"Ai", (func_t)nsl_sf_airy_Ai, 1},

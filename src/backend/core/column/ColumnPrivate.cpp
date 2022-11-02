@@ -1468,6 +1468,22 @@ void ColumnPrivate::updateFormula() {
 		for (auto m : replaceList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
 
+		// D) advanced replacements
+		QVector<QPair<QString, QString>> advancedReplaceList = {{QLatin1String("smr\\((.*),.*%1\\)"), QLatin1String("smmax(%1, %2) - smmin(%1, %2)")}};
+		for (auto m : advancedReplaceList) {
+			QRegExp rx(m.first.arg(varName));
+			rx.setMinimal(true); // only match one method call at a time
+
+			int pos = 0;
+			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
+				QDEBUG("method call:" << rx.cap(0))
+				const int N = numberLocale.toInt(rx.cap(1));
+				DEBUG("N = " << N)
+
+				formula.replace(rx.cap(0), m.second.arg(numberLocale.toString(N)).arg(varName));
+			}
+		}
+
 		QDEBUG("FORMULA: " << formula);
 
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {

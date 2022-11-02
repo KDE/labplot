@@ -192,9 +192,10 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Moving Range");
 	m_functionsNames << i18n("Simple Moving Minimum");
 	m_functionsNames << i18n("Simple Moving Maximum");
+	m_functionsNames << i18n("Simple Moving Range");
 
 	index++;
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 6; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
