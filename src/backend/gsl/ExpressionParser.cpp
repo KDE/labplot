@@ -190,9 +190,11 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Cell");
 	m_functionsNames << i18n("Simple Moving Average");
 	m_functionsNames << i18n("Moving Range");
+	m_functionsNames << i18n("Simple Moving Minimum");
+	m_functionsNames << i18n("Simple Moving Maximum");
 
 	index++;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
@@ -1677,23 +1679,63 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		for (int n = 0; n < vars.size(); ++n) {
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-			// if expr contains cell(f(i), vars.at(n)):
-			// replace this with xVectors.at(n)->at(f(i))
-			QRegExp rx(QLatin1String("cell\\((.*),.*%1\\)").arg(vars.at(n)));
-			rx.setMinimal(true); // only match one method call at a time
+			// if expr contains cell(f(i), x): replace this with xVectors.at(n)->at(f(i))
+			QRegExp rxcell(QLatin1String("cell\\((.*),.*%1\\)").arg(vars.at(n)));
+			rxcell.setMinimal(true); // only match one method call at a time
 
 			int pos = 0;
-			while ((pos = rx.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rx.cap(1);
+			while ((pos = rxcell.indexIn(tmpExpr, pos)) != -1) {
+				const QString arg = rxcell.cap(1);
 				// QDEBUG("ARG = " << arg)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
-				int index = parse(qPrintable(arg), qPrintable(numberLocale.name()));
+				const int index = parse(qPrintable(arg), qPrintable(numberLocale.name()));
 				// DEBUG("INDEX = " << index)
 
 				if (index > 0 && index <= xVectors.at(n)->size())
-					tmpExpr.replace(rx.cap(0), numberLocale.toString(xVectors.at(n)->at(index - 1)));
+					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(xVectors.at(n)->at(index - 1)));
 				else
-					tmpExpr.replace(rx.cap(0), numberLocale.toString(qQNaN()));
+					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(qQNaN()));
+			}
+
+			// if expr contains smmin(N, x)
+			QRegExp rxmin(QLatin1String("smmin\\((.*),.*%1\\)").arg(vars.at(n)));
+			rxmin.setMinimal(true); // only match one method call at a time
+			pos = 0;
+			while ((pos = rxmin.indexIn(tmpExpr, pos)) != -1) {
+				const QString arg = rxmin.cap(1);
+				// QDEBUG("ARG = " << arg)
+				//  number of points to consider
+				const int N = numberLocale.toDouble(rxmin.cap(1));
+				// DEBUG("N = " << N)
+				//  calculate min of last n points
+				double min = qInf();
+				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+					const double v = xVectors.at(n)->at(index);
+					if (v < min)
+						min = v;
+				}
+
+				tmpExpr.replace(rxmin.cap(0), numberLocale.toString(min));
+			}
+			// if expr contains smmax(N, x)
+			QRegExp rxmax(QLatin1String("smmax\\((.*),.*%1\\)").arg(vars.at(n)));
+			rxmax.setMinimal(true); // only match one method call at a time
+			pos = 0;
+			while ((pos = rxmax.indexIn(tmpExpr, pos)) != -1) {
+				const QString arg = rxmax.cap(1);
+				// QDEBUG("ARG = " << arg)
+				//  number of points to consider
+				const int N = numberLocale.toDouble(rxmax.cap(1));
+				// DEBUG("N = " << N)
+				//  calculate max of last n points
+				double max = -qInf();
+				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+					const double v = xVectors.at(n)->at(index);
+					if (v > max)
+						max = v;
+				}
+
+				tmpExpr.replace(rxmax.cap(0), numberLocale.toString(max));
 			}
 		}
 
