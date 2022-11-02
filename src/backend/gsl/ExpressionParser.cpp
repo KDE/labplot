@@ -188,10 +188,11 @@ void ExpressionParser::initFunctions() {
 
 	// Moving statistics
 	m_functionsNames << i18n("Cell");
-	m_functionsNames << i18n("Simple Moving Average");
+	m_functionsNames << i18n("Moving Average");
 	m_functionsNames << i18n("Moving Range");
 	m_functionsNames << i18n("Simple Moving Minimum");
 	m_functionsNames << i18n("Simple Moving Maximum");
+	m_functionsNames << i18n("Simple Moving Average");
 	m_functionsNames << i18n("Simple Moving Range");
 
 	index++;
@@ -1708,7 +1709,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				//  number of points to consider
 				const int N = numberLocale.toDouble(rxmin.cap(1));
 				// DEBUG("N = " << N)
-				//  calculate min of last n points
+				if (N < 1)
+					continue;
+				// calculate min of last n points
 				double min = qInf();
 				for (int index = qMax(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
@@ -1728,7 +1731,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				//  number of points to consider
 				const int N = numberLocale.toDouble(rxmax.cap(1));
 				// DEBUG("N = " << N)
-				//  calculate max of last n points
+				if (N < 1)
+					continue;
+				// calculate max of last n points
 				double max = -qInf();
 				for (int index = qMax(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
@@ -1737,6 +1742,25 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				}
 
 				tmpExpr.replace(rxmax.cap(0), numberLocale.toString(max));
+			}
+			// if expr contains sma(N, x)
+			QRegExp rxsma(QLatin1String("sma\\((.*),.*%1\\)").arg(vars.at(n)));
+			rxsma.setMinimal(true); // only match one method call at a time
+			pos = 0;
+			while ((pos = rxsma.indexIn(tmpExpr, pos)) != -1) {
+				const QString arg = rxsma.cap(1);
+				QDEBUG("ARG = " << arg)
+				// number of points to consider
+				const int N = numberLocale.toDouble(rxsma.cap(1));
+				DEBUG("N = " << N)
+				if (N < 1)
+					continue;
+				// calculate avg of last n points
+				double sum = 0.;
+				for (int index = qMax(0, i - N + 1); index <= i; index++)
+					sum += xVectors.at(n)->at(index);
+
+				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
 			}
 		}
 
