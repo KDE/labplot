@@ -9,6 +9,7 @@
 */
 
 #include "FormulaTest.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
@@ -217,6 +218,24 @@ void FormulaTest::formulaCellsqrtip1() {
 }
 
 /*!
+   formula "ma(x)"
+*/
+void FormulaTest::formulama() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("ma(x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		if (i > 0)
+			QCOMPARE(sheet.column(1)->valueAt(i), i + .5);
+		else
+			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+	}
+}
+/*!
    formula "mr(x)"
 */
 void FormulaTest::formulamr() {
@@ -235,21 +254,40 @@ void FormulaTest::formulamr() {
 	}
 }
 /*!
-   formula "sma(x)"
+   formula "sma(n, x)"
 */
 void FormulaTest::formulasma() {
 	INIT_SPREADSHEET
 
-	sheet.column(1)->setFormula(QLatin1String("sma(x)"), variableNames, variableColumns, true);
+	sheet.column(1)->setFormula(QLatin1String("sma(4, x)"), variableNames, variableColumns, true);
 	sheet.column(1)->updateFormula();
 
 	// values
+	const int N = 4;
 	for (int i = 0; i < rows; i++) {
 		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
-		if (i > 0)
-			QCOMPARE(sheet.column(1)->valueAt(i), i + .5);
-		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+		double value = 0.;
+		for (int index = qMax(0, i - N + 1); index <= i; index++)
+			value += sheet.column(0)->valueAt(index);
+		QCOMPARE(sheet.column(1)->valueAt(i), value / N);
+	}
+}
+/*!
+   formula "smr(n, x)"
+*/
+void FormulaTest::formulasmr() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("smr(4, x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	QCOMPARE(sheet.column(1)->valueAt(0), 0);
+	QCOMPARE(sheet.column(1)->valueAt(1), 1);
+	QCOMPARE(sheet.column(1)->valueAt(2), 2);
+	for (int i = 3; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 3);
 	}
 }
 

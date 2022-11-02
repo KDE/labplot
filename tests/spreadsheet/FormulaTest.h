@@ -32,8 +32,10 @@ private Q_SLOTS:
 	void formulaCellsqrtip1();
 
 	// moving statistics
+	void formulama();
 	void formulamr();
 	void formulasma();
+	void formulasmr();
 };
 
 #endif
