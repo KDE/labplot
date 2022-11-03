@@ -52,7 +52,7 @@ PlotTemplateDialog::PlotTemplateDialog(QWidget* parent)
 	ui->setupUi(this);
 
 	setWindowTitle(i18nc("@title:window", "Plot Templates"));
-	setWindowIcon(QIcon::fromTheme("document-new-from-template"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("document-new-from-template")));
 
 	ui->cbLocation->addItem(i18n("Default"));
 	ui->cbLocation->addItem(i18n("Custom Folder"));
@@ -187,14 +187,14 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	}
 
 	reader.readNext();
-	if (!reader.isStartElement() || reader.name() != "PlotTemplate") {
+	if (!reader.isStartElement() || reader.name() != QLatin1String("PlotTemplate")) {
 		DEBUG("XML error: No PlotTemplate found");
 		updateErrorMessage(i18n("Failed to load the selected plot template"));
 		return nullptr;
 	}
 
 	bool ok;
-	int xmlVersion = reader.readAttributeInt("xmlVersion", &ok);
+	int xmlVersion = reader.readAttributeInt(QLatin1String("xmlVersion"), &ok);
 	if (!ok) {
 		DEBUG("XML error: xmlVersion found");
 		updateErrorMessage(i18n("Failed to load the selected plot template"));
@@ -203,7 +203,7 @@ CartesianPlot* PlotTemplateDialog::generatePlot() {
 	Project::setXmlVersion(xmlVersion);
 	reader.readNext();
 
-	while (!((reader.isStartElement() && reader.name() == "cartesianPlot") || reader.atEnd()))
+	while (!((reader.isStartElement() && reader.name() == QLatin1String("cartesianPlot")) || reader.atEnd()))
 		reader.readNext();
 
 	if (reader.atEnd()) {
@@ -240,7 +240,7 @@ void PlotTemplateDialog::showPreview() {
 	auto* plot = generatePlot();
 	if (plot) {
 		m_worksheet->addChild(plot);
-		updateErrorMessage(""); // hide error text edit
+		updateErrorMessage(QLatin1String("")); // hide error text edit
 	}
 }
 
@@ -311,7 +311,7 @@ void TemplateListModel::setSearchPath(const QString& searchPath) {
 	beginResetModel();
 	mSearchPath = searchPath;
 	mFiles.clear();
-	QStringList filter("*" + PlotTemplateDialog::format);
+	QStringList filter(QLatin1String("*") % PlotTemplateDialog::format);
 	QDirIterator it(searchPath, filter, QDir::AllEntries | QDir::NoSymLinks | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
 	QDir sPath(searchPath);
 	while (it.hasNext()) {

@@ -48,9 +48,9 @@ SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLoc
 	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ", " << locale.language())
 	QChar decimalPoint{locale.decimalPoint()};
 	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)))
-	if (decimalPoint == QChar('.'))
+	if (decimalPoint == QLatin1Char('.'))
 		return DecimalSeparator::Dot;
-	else if (decimalPoint == QChar(','))
+	else if (decimalPoint == QLatin1Char(','))
 		return DecimalSeparator::Comma;
 
 	return DecimalSeparator::Arabic;

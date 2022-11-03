@@ -87,8 +87,8 @@ private:
 		if (!mInfoString.isEmpty())
 			mInfoString += QLatin1String("<br>");
 		mInfoString += line;
-		if (line.at(line.length() - 1) != "\n")
-			mInfoString += "\n";
+		if (line.at(line.length() - 1) != QLatin1Char('\n'))
+			mInfoString += QLatin1String("\n");
 	}
 
 	// LTSpice data;

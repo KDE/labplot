@@ -12,4 +12,4 @@ export CC=pgcc
 export CXX=pgc++
 
 # Debug
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -k -j
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -k -j 6

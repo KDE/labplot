@@ -47,7 +47,7 @@ ThemeHandler::ThemeHandler(QWidget* parent)
 	m_pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(m_pbLoadTheme);
 	m_pbLoadTheme->setText(i18n("Theme"));
-	m_pbLoadTheme->setIcon(QIcon::fromTheme("color-management"));
+	m_pbLoadTheme->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 
 	// 	pbSaveTheme = new QPushButton(this);
 	// 	horizontalLayout->addWidget(pbSaveTheme);
@@ -75,9 +75,9 @@ ThemeHandler::ThemeHandler(QWidget* parent)
  * get list of all theme files (full path)
  */
 QStringList ThemeHandler::themeList() {
-	DEBUG("ThemeHandler::themeList()");
+	DEBUG(Q_FUNC_INFO);
 	// find all available themes files (system wide and user specific local files)
-	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, "themes", QStandardPaths::LocateDirectory);
+	QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QLatin1String("themes"), QStandardPaths::LocateDirectory);
 
 	QStringList themes;
 	for (const auto& dir : dirs) {
@@ -102,7 +102,7 @@ QStringList ThemeHandler::themes() {
 	QStringList themes;
 	for (int i = 0; i < themePaths.size(); ++i) {
 		QFileInfo fileinfo(themePaths.at(i));
-		themes.append(fileinfo.fileName().split('.').at(0));
+		themes.append(fileinfo.fileName().split(QLatin1Char('.')).at(0));
 	}
 
 	if (!themes.isEmpty()) {

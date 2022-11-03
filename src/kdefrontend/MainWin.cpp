@@ -267,7 +267,7 @@ void MainWin::initGUI(const QString& fileName) {
 
 	initMenus();
 
-	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container("main_toolbar", this));
+	auto* mainToolBar = qobject_cast<QToolBar*>(factory()->container(QLatin1String("main_toolbar"), this));
 	if (!mainToolBar) {
 		QMessageBox::critical(this,
 							  i18n("GUI configuration file not found"),
@@ -284,7 +284,7 @@ void MainWin::initGUI(const QString& fileName) {
 		auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
 		mainToolBar->insertWidget(lastAction, tbImport);
 
-		qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
+		qobject_cast<QMenu*>(factory()->container(QLatin1String("import"), this))->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 	}
 
 	// hamburger menu
@@ -295,7 +295,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_hamburgerMenu->setMenuBar(menuBar());
 #endif
 
-	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("LabPlot2"), QGuiApplication::windowIcon()));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	// make the status bar of a fixed size in order to avoid height changes when placing a ProgressBar there.
@@ -517,56 +517,56 @@ void MainWin::initActions() {
 	KStandardAction::quit(this, &MainWin::close, actionCollection());
 
 	// New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
-	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"), i18n("Workbook"), this);
-	actionCollection()->addAction("new_workbook", m_newWorkbookAction);
+	m_newWorkbookAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-workbook-new")), i18n("Workbook"), this);
+	actionCollection()->addAction(QLatin1String("new_workbook"), m_newWorkbookAction);
 	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
 	connect(m_newWorkbookAction, &QAction::triggered, this, &MainWin::newWorkbook);
 
-	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Data Extractor"), this);
+	m_newDatapickerAction = new QAction(QIcon::fromTheme(QLatin1String("color-picker-black")), i18n("Data Extractor"), this);
 	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
-	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
+	actionCollection()->addAction(QLatin1String("new_datapicker"), m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
 
-	m_newSpreadsheetAction = new QAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("Spreadsheet"), this);
+	m_newSpreadsheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet-new")), i18n("Spreadsheet"), this);
 	// 	m_newSpreadsheetAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newSpreadsheetAction->setWhatsThis(i18n("Creates a new spreadsheet for data editing"));
-	actionCollection()->addAction("new_spreadsheet", m_newSpreadsheetAction);
+	actionCollection()->addAction(QLatin1String("new_spreadsheet"), m_newSpreadsheetAction);
 	connect(m_newSpreadsheetAction, &QAction::triggered, this, &MainWin::newSpreadsheet);
 
-	m_newMatrixAction = new QAction(QIcon::fromTheme("labplot-matrix-new"), i18n("Matrix"), this);
+	m_newMatrixAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-matrix-new")), i18n("Matrix"), this);
 	// 	m_newMatrixAction->setShortcut(Qt::CTRL+Qt::Key_Equal);
 	m_newMatrixAction->setWhatsThis(i18n("Creates a new matrix for data editing"));
-	actionCollection()->addAction("new_matrix", m_newMatrixAction);
+	actionCollection()->addAction(QLatin1String("new_matrix"), m_newMatrixAction);
 	connect(m_newMatrixAction, &QAction::triggered, this, &MainWin::newMatrix);
 
-	m_newWorksheetAction = new QAction(QIcon::fromTheme("labplot-worksheet-new"), i18n("Worksheet"), this);
+	m_newWorksheetAction = new QAction(QIcon::fromTheme(QLatin1String("labplot-worksheet-new")), i18n("Worksheet"), this);
 	// 	m_newWorksheetAction->setShortcut(Qt::ALT+Qt::Key_X);
 	m_newWorksheetAction->setWhatsThis(i18n("Creates a new worksheet for data plotting"));
-	actionCollection()->addAction("new_worksheet", m_newWorksheetAction);
+	actionCollection()->addAction(QLatin1String("new_worksheet"), m_newWorksheetAction);
 	connect(m_newWorksheetAction, &QAction::triggered, this, &MainWin::newWorksheet);
 
-	m_newNotesAction = new QAction(QIcon::fromTheme("document-new"), i18n("Note"), this);
+	m_newNotesAction = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18n("Note"), this);
 	m_newNotesAction->setWhatsThis(i18n("Creates a new note for arbitrary text"));
-	actionCollection()->addAction("new_notes", m_newNotesAction);
+	actionCollection()->addAction(QLatin1String("new_notes"), m_newNotesAction);
 	connect(m_newNotesAction, &QAction::triggered, this, &MainWin::newNotes);
 
-	// 	m_newScriptAction = new QAction(QIcon::fromTheme("insert-text"),i18n("Note/Script"),this);
-	// 	actionCollection()->addAction("new_script", m_newScriptAction);
+	// 	m_newScriptAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")),i18n("Note/Script"),this);
+	// 	actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 	// 	connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
 
-	m_newFolderAction = new QAction(QIcon::fromTheme("folder-new"), i18n("Folder"), this);
+	m_newFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Folder"), this);
 	m_newFolderAction->setWhatsThis(i18n("Creates a new folder to collect sheets and other elements"));
-	actionCollection()->addAction("new_folder", m_newFolderAction);
+	actionCollection()->addAction(QLatin1String("new_folder"), m_newFolderAction);
 	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"), i18n("Live Data Source..."), this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme(QLatin1String("application-octet-stream")), i18n("Live Data Source..."), this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
-	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
+	actionCollection()->addAction(QLatin1String("new_live_datasource"), m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSource);
 
 	// Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File..."), this);
+	m_importFileAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL + Qt::SHIFT + Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {
@@ -575,45 +575,45 @@ void MainWin::initActions() {
 
 	// second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
 	// the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
-	m_importFileAction_2 = new QAction(QIcon::fromTheme("document-import"), i18n("From File..."), this);
-	actionCollection()->addAction("import_file", m_importFileAction_2);
+	m_importFileAction_2 = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this);
+	actionCollection()->addAction(QLatin1String("import_file"), m_importFileAction_2);
 	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {
 		importFileDialog();
 	});
 
-	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database..."), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
-	actionCollection()->addAction("import_sql", m_importSqlAction);
+	actionCollection()->addAction(QLatin1String("import_sql"), m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
 	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
 	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
-	actionCollection()->addAction("import_dataset_datasource", m_importDatasetAction);
+	actionCollection()->addAction(QLatin1String("import_dataset_datasource"), m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project..."), this);
+	m_importLabPlotAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("LabPlot Project..."), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
-	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
+	actionCollection()->addAction(QLatin1String("import_labplot"), m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme("project-open"), i18n("Origin Project (OPJ)..."), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme(QLatin1String("project-open")), i18n("Origin Project (OPJ)..."), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
-	actionCollection()->addAction("import_opj", m_importOpjAction);
+	actionCollection()->addAction(QLatin1String("import_opj"), m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 #endif
 
-	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export..."), this);
+	m_exportAction = new QAction(QIcon::fromTheme(QLatin1String("document-export")), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL + Qt::SHIFT + Qt::Key_E);
-	actionCollection()->addAction("export", m_exportAction);
+	actionCollection()->addAction(QLatin1String("export"), m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
 	// Tools
-	auto* action = new QAction(QIcon::fromTheme("color-management"), i18n("Color Maps Browser"), this);
+	auto* action = new QAction(QIcon::fromTheme(QLatin1String("color-management")), i18n("Color Maps Browser"), this);
 	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
-	actionCollection()->addAction("color_maps", action);
+	actionCollection()->addAction(QLatin1String("color_maps"), action);
 	connect(action, &QAction::triggered, this, [=]() {
 		auto* dlg = new ColorMapsDialog(this);
 		dlg->exec();
@@ -621,9 +621,9 @@ void MainWin::initActions() {
 	});
 
 #ifdef HAVE_FITS
-	action = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor..."), this);
+	action = new QAction(QIcon::fromTheme(QLatin1String("editor")), i18n("FITS Metadata Editor..."), this);
 	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
-	actionCollection()->addAction("edit_fits", action);
+	actionCollection()->addAction(QLatin1String("edit_fits"), action);
 	connect(action, &QAction::triggered, this, &MainWin::editFitsFileDialog);
 #endif
 
@@ -631,8 +631,8 @@ void MainWin::initActions() {
 	// Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
 	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
-	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History..."), this);
-	actionCollection()->addAction("history", m_historyAction);
+	m_historyAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18n("Undo/Redo History..."), this);
+	actionCollection()->addAction(QLatin1String("history"), m_historyAction);
 	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
 
 #ifdef Q_OS_MAC
@@ -652,39 +652,40 @@ void MainWin::initActions() {
 	m_closeWindowAction = new QAction(i18n("&Close"), this);
 	actionCollection()->setDefaultShortcut(m_closeWindowAction, QKeySequence::Close);
 	m_closeWindowAction->setStatusTip(i18n("Close the active window"));
-	actionCollection()->addAction("close window", m_closeWindowAction);
+	actionCollection()->addAction(QLatin1String("close window"), m_closeWindowAction);
 
 	m_closeAllWindowsAction = new QAction(i18n("Close &All"), this);
 	m_closeAllWindowsAction->setStatusTip(i18n("Close all the windows"));
-	actionCollection()->addAction("close all windows", m_closeAllWindowsAction);
+	actionCollection()->addAction(QLatin1String("close all windows"), m_closeAllWindowsAction);
 
 	m_tileWindowsAction = new QAction(i18n("&Tile"), this);
 	m_tileWindowsAction->setStatusTip(i18n("Tile the windows"));
-	actionCollection()->addAction("tile windows", m_tileWindowsAction);
+	actionCollection()->addAction(QLatin1String("tile windows"), m_tileWindowsAction);
 
 	m_cascadeWindowsAction = new QAction(i18n("&Cascade"), this);
 	m_cascadeWindowsAction->setStatusTip(i18n("Cascade the windows"));
-	actionCollection()->addAction("cascade windows", m_cascadeWindowsAction);
+	actionCollection()->addAction(QLatin1String("cascade windows"), m_cascadeWindowsAction);
 
-	m_nextWindowAction = new QAction(QIcon::fromTheme("go-next-view"), i18n("Ne&xt"), this);
+	m_nextWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-next-view")), i18n("Ne&xt"), this);
 	actionCollection()->setDefaultShortcut(m_nextWindowAction, QKeySequence::NextChild);
 	m_nextWindowAction->setStatusTip(i18n("Move the focus to the next window"));
-	actionCollection()->addAction("next window", m_nextWindowAction);
+	actionCollection()->addAction(QLatin1String("next window"), m_nextWindowAction);
 
-	m_prevWindowAction = new QAction(QIcon::fromTheme("go-previous-view"), i18n("Pre&vious"), this);
+	m_prevWindowAction = new QAction(QIcon::fromTheme(QLatin1String("go-previous-view")), i18n("Pre&vious"), this);
 	actionCollection()->setDefaultShortcut(m_prevWindowAction, QKeySequence::PreviousChild);
 	m_prevWindowAction->setStatusTip(i18n("Move the focus to the previous window"));
-	actionCollection()->addAction("previous window", m_prevWindowAction);
+	actionCollection()->addAction(QLatin1String("previous window"), m_prevWindowAction);
 
 	// Actions for window visibility
 	auto* windowVisibilityActions = new QActionGroup(this);
 	windowVisibilityActions->setExclusive(true);
 
-	m_visibilityFolderAction = new QAction(QIcon::fromTheme("folder"), i18n("Current &Folder Only"), windowVisibilityActions);
+	m_visibilityFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder")), i18n("Current &Folder Only"), windowVisibilityActions);
 	m_visibilityFolderAction->setCheckable(true);
 	m_visibilityFolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderOnly));
 
-	m_visibilitySubfolderAction = new QAction(QIcon::fromTheme("folder-documents"), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
+	m_visibilitySubfolderAction =
+		new QAction(QIcon::fromTheme(QLatin1String("folder-documents")), i18n("Current Folder and &Subfolders"), windowVisibilityActions);
 	m_visibilitySubfolderAction->setCheckable(true);
 	m_visibilitySubfolderAction->setData(static_cast<int>(Project::MdiWindowVisibility::folderAndSubfolders));
 
@@ -718,15 +719,15 @@ void MainWin::initActions() {
 	auto* docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
 
-	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme("view-list-tree"), i18n("Project Explorer"), docksActions);
+	m_toggleProjectExplorerDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Project Explorer"), docksActions);
 	m_toggleProjectExplorerDockAction->setCheckable(true);
 	m_toggleProjectExplorerDockAction->setChecked(true);
-	actionCollection()->addAction("toggle_project_explorer_dock", m_toggleProjectExplorerDockAction);
+	actionCollection()->addAction(QLatin1String("toggle_project_explorer_dock"), m_toggleProjectExplorerDockAction);
 
-	m_togglePropertiesDockAction = new QAction(QIcon::fromTheme("view-list-details"), i18n("Properties Explorer"), docksActions);
+	m_togglePropertiesDockAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-details")), i18n("Properties Explorer"), docksActions);
 	m_togglePropertiesDockAction->setCheckable(true);
 	m_togglePropertiesDockAction->setChecked(true);
-	actionCollection()->addAction("toggle_properties_explorer_dock", m_togglePropertiesDockAction);
+	actionCollection()->addAction(QLatin1String("toggle_properties_explorer_dock"), m_togglePropertiesDockAction);
 
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
 
@@ -748,7 +749,7 @@ void MainWin::initActions() {
 void MainWin::initMenus() {
 	// add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	// this menu is created automatically when the default "full screen" action is created in initActions().
-	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
+	auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("view"), this));
 	if (menu) {
 		menu->addSeparator();
 		menu->addAction(m_toggleProjectExplorerDockAction);
@@ -756,13 +757,13 @@ void MainWin::initMenus() {
 	}
 
 	// menu in the main toolbar for adding new aspects
-	menu = dynamic_cast<QMenu*>(factory()->container("new", this));
+	menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new"), this));
 	if (menu)
-		menu->setIcon(QIcon::fromTheme("window-new"));
+		menu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
 
 	// menu in the project explorer and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
-	m_newMenu->setIcon(QIcon::fromTheme("window-new"));
+	m_newMenu->setIcon(QIcon::fromTheme(QLatin1String("window-new")));
 	m_newMenu->addAction(m_newFolderAction);
 	m_newMenu->addAction(m_newWorkbookAction);
 	m_newMenu->addAction(m_newSpreadsheetAction);
@@ -775,7 +776,7 @@ void MainWin::initMenus() {
 
 	// import menu
 	m_importMenu = new QMenu(this);
-	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
+	m_importMenu->setIcon(QIcon::fromTheme(QLatin1String("document-import")));
 	m_importMenu->addAction(m_importFileAction_2);
 	m_importMenu->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
@@ -787,7 +788,7 @@ void MainWin::initMenus() {
 
 	// menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
-	m_visibilityMenu->setIcon(QIcon::fromTheme("window-duplicate"));
+	m_visibilityMenu->setIcon(QIcon::fromTheme(QLatin1String("window-duplicate")));
 	m_visibilityMenu->addAction(m_visibilityFolderAction);
 	m_visibilityMenu->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu->addAction(m_visibilityAllAction);
@@ -814,7 +815,7 @@ void MainWin::initMenus() {
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
-	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
+	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("settings"), this));
 	if (settingsMenu) {
 		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
 		settingsMenu->insertMenu(action, schemesMenu->menu());
@@ -916,7 +917,7 @@ void MainWin::updateGUIOnProjectChanges() {
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container("worksheet", this) == nullptr) {
+	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
 		// no worksheet menu found, most probably labplot2ui.rc
 		// was not properly installed -> return here in order not to crash
 		return;
@@ -952,26 +953,26 @@ void MainWin::updateGUIOnProjectChanges() {
 	}
 
 	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("matrix", this)->setEnabled(false);
-		factory->container("worksheet", this)->setEnabled(false);
-		factory->container("analysis", this)->setEnabled(false);
-		factory->container("datapicker", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->hide();
-		factory->container("worksheet_toolbar", this)->hide();
-		factory->container("cartesian_plot_toolbar", this)->hide();
-		// 		factory->container("histogram_toolbar",this)->hide();
-		// 		factory->container("barchart_toolbar",this)->hide();
-		factory->container("datapicker_toolbar", this)->hide();
+		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
+		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
+		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
+		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
+		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
+		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
+		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
+		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
+		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("notebook", this)->setEnabled(false);
-		factory->container("notebook_toolbar", this)->hide();
+		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
+		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
 #endif
 	}
 
-	factory->container("new", this)->setEnabled(hasProject);
-	factory->container("edit", this)->setEnabled(hasProject);
-	factory->container("import", this)->setEnabled(hasProject);
+	factory->container(QLatin1String("new"), this)->setEnabled(hasProject);
+	factory->container(QLatin1String("edit"), this)->setEnabled(hasProject);
+	factory->container(QLatin1String("import"), this)->setEnabled(hasProject);
 
 	updateTitleBar();
 
@@ -1005,7 +1006,7 @@ void MainWin::updateGUI() {
 		return;
 
 	KXMLGUIFactory* factory = this->guiFactory();
-	if (factory->container("worksheet", this) == nullptr) {
+	if (factory->container(QLatin1String("worksheet"), this) == nullptr) {
 		// no worksheet menu found, most probably labplot2ui.rc
 		// was not properly installed -> return here in order not to crash
 		return;
@@ -1021,20 +1022,20 @@ void MainWin::updateGUI() {
 #endif
 
 	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("matrix", this)->setEnabled(false);
-		factory->container("worksheet", this)->setEnabled(false);
-		factory->container("analysis", this)->setEnabled(false);
-		factory->container("datapicker", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->hide();
-		factory->container("worksheet_toolbar", this)->hide();
-		// 		factory->container("histogram_toolbar",this)->hide();
-		// 		factory->container("barchart_toolbar",this)->hide();
-		factory->container("cartesian_plot_toolbar", this)->hide();
-		factory->container("datapicker_toolbar", this)->hide();
+		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
+		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
+		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
+		factory->container(QLatin1String("spreadsheet_toolbar"), this)->hide();
+		factory->container(QLatin1String("worksheet_toolbar"), this)->hide();
+		// 		factory->container(QLatin1String("histogram_toolbar"),this)->hide();
+		// 		factory->container(QLatin1String("barchart_toolbar"),this)->hide();
+		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->hide();
+		factory->container(QLatin1String("datapicker_toolbar"), this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("notebook", this)->setEnabled(false);
-		factory->container("notebook_toolbar", this)->hide();
+		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
+		factory->container(QLatin1String("notebook_toolbar"), this)->hide();
 #endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
@@ -1066,7 +1067,7 @@ void MainWin::updateGUI() {
 
 		// populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("worksheet"), this));
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
@@ -1074,7 +1075,7 @@ void MainWin::updateGUI() {
 		menu->setEnabled(true);
 
 		// populate analysis menu
-		menu = qobject_cast<QMenu*>(factory->container("analysis", this));
+		menu = qobject_cast<QMenu*>(factory->container(QLatin1String("analysis"), this));
 		if (update) {
 			menu->clear();
 			view->createAnalysisMenu(menu);
@@ -1082,7 +1083,7 @@ void MainWin::updateGUI() {
 		menu->setEnabled(true);
 
 		// populate worksheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("worksheet_toolbar"), this));
 		if (update) {
 			toolbar->clear();
 			view->fillToolBar(toolbar);
@@ -1091,7 +1092,7 @@ void MainWin::updateGUI() {
 		toolbar->setEnabled(true);
 
 		// populate the toolbar for cartesian plots
-		toolbar = qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
+		toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("cartesian_plot_toolbar"), this));
 		if (update) {
 			toolbar->clear();
 			view->fillCartesianPlotToolBar(toolbar);
@@ -1104,14 +1105,14 @@ void MainWin::updateGUI() {
 		view->fillTouchBar(m_touchBar);
 #endif
 		// hide the spreadsheet toolbar
-		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+		factory->container(QLatin1String("spreadsheet_toolbar"), this)->setVisible(false);
 	} else {
-		factory->container("worksheet", this)->setEnabled(false);
-		factory->container("worksheet_toolbar", this)->setVisible(false);
-		factory->container("analysis", this)->setEnabled(false);
-		//		factory->container("drawing", this)->setEnabled(false);
-		factory->container("worksheet_toolbar", this)->setEnabled(false);
-		factory->container("cartesian_plot_toolbar", this)->setEnabled(false);
+		factory->container(QLatin1String("worksheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("worksheet_toolbar"), this)->setVisible(false);
+		factory->container(QLatin1String("analysis"), this)->setEnabled(false);
+		//		factory->container(QLatin1String("drawing"), this)->setEnabled(false);
+		factory->container(QLatin1String("worksheet_toolbar"), this)->setEnabled(false);
+		factory->container(QLatin1String("cartesian_plot_toolbar"), this)->setEnabled(false);
 	}
 
 	// Handle the Spreadsheet-object
@@ -1124,7 +1125,7 @@ void MainWin::updateGUI() {
 
 		// populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("spreadsheet"), this));
 		if (update) {
 			menu->clear();
 			view->createContextMenu(menu);
@@ -1132,7 +1133,7 @@ void MainWin::updateGUI() {
 		menu->setEnabled(true);
 
 		// populate spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("spreadsheet_toolbar"), this));
 		if (update) {
 			toolbar->clear();
 			view->fillToolBar(toolbar);
@@ -1149,8 +1150,8 @@ void MainWin::updateGUI() {
 		// spreadsheet has it's own search, unregister the shortcut for the global search here
 		m_searchAction->setShortcut(QKeySequence());
 	} else {
-		factory->container("spreadsheet", this)->setEnabled(false);
-		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+		factory->container(QLatin1String("spreadsheet"), this)->setEnabled(false);
+		factory->container(QLatin1String("spreadsheet_toolbar"), this)->setVisible(false);
 		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 
@@ -1161,7 +1162,7 @@ void MainWin::updateGUI() {
 	if (matrix) {
 		// populate matrix-menu
 		auto* view = qobject_cast<MatrixView*>(matrix->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("matrix", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("matrix"), this));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
@@ -1172,7 +1173,7 @@ void MainWin::updateGUI() {
 		// view->fillTouchBar(m_touchBar);
 #endif
 	} else
-		factory->container("matrix", this)->setEnabled(false);
+		factory->container(QLatin1String("matrix"), this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
 	const auto* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
@@ -1180,19 +1181,19 @@ void MainWin::updateGUI() {
 		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
 	if (cantorworksheet) {
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("notebook", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("notebook"), this));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container("notebook_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("notebook_toolbar"), this));
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 	} else {
 		// no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
-		factory->container("notebook", this)->setEnabled(false);
-		factory->container("notebook_toolbar", this)->setVisible(false);
+		factory->container(QLatin1String("notebook"), this)->setEnabled(false);
+		factory->container(QLatin1String("notebook_toolbar"), this)->setVisible(false);
 	}
 #endif
 
@@ -1207,19 +1208,19 @@ void MainWin::updateGUI() {
 	if (datapicker) {
 		// populate datapicker-menu
 		auto* view = qobject_cast<DatapickerView*>(datapicker->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("datapicker", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container(QLatin1String("datapicker"), this));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
 		// populate spreadsheet-toolbar
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container("datapicker_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container(QLatin1String("datapicker_toolbar"), this));
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 		toolbar->setVisible(true);
 	} else {
-		factory->container("datapicker", this)->setEnabled(false);
-		factory->container("datapicker_toolbar", this)->setVisible(false);
+		factory->container(QLatin1String("datapicker"), this)->setEnabled(false);
+		factory->container(QLatin1String("datapicker_toolbar"), this)->setVisible(false);
 	}
 }
 
@@ -1268,10 +1269,10 @@ bool MainWin::newProject() {
 		group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
 
 		m_projectExplorerDock = new QDockWidget(this);
-		m_projectExplorerDock->setObjectName("projectexplorer");
+		m_projectExplorerDock->setObjectName(QLatin1String("projectexplorer"));
 		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
-		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace("&", QString()));
-		m_projectExplorerDock->toggleViewAction()->setText("");
+		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace(QLatin1String("&"), QString()));
+		m_projectExplorerDock->toggleViewAction()->setText(QLatin1String(""));
 
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
 		m_projectExplorerDock->setWidget(m_projectExplorer);
@@ -1282,9 +1283,9 @@ bool MainWin::newProject() {
 
 		// Properties dock
 		m_propertiesDock = new QDockWidget(this);
-		m_propertiesDock->setObjectName("aspect_properties_dock");
+		m_propertiesDock->setObjectName(QLatin1String("aspect_properties_dock"));
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
-		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace("&", QString()));
+		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace(QLatin1String("&"), QString()));
 
 		// restore the position of the dock widgets:
 		//"WindowState" doesn't always contain the positions of the dock widgets,
@@ -1293,7 +1294,7 @@ bool MainWin::newProject() {
 		// So, we set our default positions first and then read from the saved "WindowState" section
 		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
 		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
-		if (group.keyList().indexOf("WindowState") != -1)
+		if (group.keyList().indexOf(QLatin1String("WindowState")) != -1)
 			restoreState(group.readEntry("WindowState", QByteArray()));
 
 		auto* scrollArea = new QScrollArea(m_propertiesDock);
@@ -1343,7 +1344,7 @@ void MainWin::openProject() {
 
 #ifdef HAVE_LIBORIGIN
 	extensions += QLatin1String(";;") + i18n("Origin Projects (%1)", OriginProjectParser::supportedExtensions());
-	allExtensions += " " + OriginProjectParser::supportedExtensions();
+	allExtensions += QLatin1String(" ") + OriginProjectParser::supportedExtensions();
 	supportOthers = true;
 #endif
 
@@ -1473,11 +1474,12 @@ void MainWin::openProject(const QString& filename) {
 				// determine the backend name
 				QString backendName;
 				// TODO: use doc["metadata"]["kernelspec"], etc. if minimum Qt version is at least 5.10
-				if ((doc["metadata"] != QJsonValue::Undefined && doc["metadata"].isObject())
-					&& (doc["metadata"].toObject()["kernelspec"] != QJsonValue::Undefined && doc["metadata"].toObject()["kernelspec"].isObject())) {
+				if ((doc[QLatin1String("metadata")] != QJsonValue::Undefined && doc[QLatin1String("metadata")].isObject())
+					&& (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")] != QJsonValue::Undefined
+						&& doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].isObject())) {
 					QString kernel;
-					if (doc["metadata"].toObject()["kernelspec"].toObject()["name"] != QJsonValue::Undefined)
-						kernel = doc["metadata"].toObject()["kernelspec"].toObject()["name"].toString();
+					if (doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")] != QJsonValue::Undefined)
+						kernel = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("name")].toString();
 
 					if (!kernel.isEmpty()) {
 						if (kernel.startsWith(QLatin1String("julia")))
@@ -1491,7 +1493,7 @@ void MainWin::openProject(const QString& filename) {
 						else
 							backendName = kernel;
 					} else
-						backendName = doc["metadata"].toObject()["kernelspec"].toObject()["language"].toString();
+						backendName = doc[QLatin1String("metadata")].toObject()[QLatin1String("kernelspec")].toObject()[QLatin1String("language")].toString();
 
 					if (!backendName.isEmpty()) {
 						// create new Cantor worksheet and load the data
@@ -1627,8 +1629,8 @@ bool MainWin::saveProject() {
 		return saveProjectAs();
 	else {
 		// don't overwrite OPJ files
-		if (fileName.endsWith(".opj", Qt::CaseInsensitive))
-			fileName.replace(".opj", ".lml");
+		if (fileName.endsWith(QLatin1String(".opj"), Qt::CaseInsensitive))
+			fileName.replace(QLatin1String(".opj"), QLatin1String(".lml"));
 		return save(fileName);
 	}
 }
@@ -2203,14 +2205,14 @@ void MainWin::updateMdiWindowVisibility() const {
 }
 
 void MainWin::toggleDockWidget(QAction* action) {
-	if (action->objectName() == "toggle_project_explorer_dock") {
+	if (action->objectName() == QLatin1String("toggle_project_explorer_dock")) {
 		if (m_projectExplorerDock->isVisible())
 			m_projectExplorerDock->hide();
 		// 			toggleHideWidget(m_projectExplorerDock, true);
 		else
 			m_projectExplorerDock->show();
 		// 			toggleShowWidget(m_projectExplorerDock, true);
-	} else if (action->objectName() == "toggle_properties_explorer_dock") {
+	} else if (action->objectName() == QLatin1String("toggle_properties_explorer_dock")) {
 		if (m_propertiesDock->isVisible())
 			m_propertiesDock->hide();
 		// 			toggleHideWidget(m_propertiesDock, false);
@@ -2636,7 +2638,7 @@ void MainWin::newLiveDataSource() {
 				addAspectToProject(mqttClient);
 			} else {
 				delete mqttClient;
-				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host!");
+				QMessageBox::warning(this, i18n("Warning"), i18n("There already is a MQTTClient with this host!"));
 			}
 #endif
 		} else {
@@ -2654,9 +2656,9 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 		auto* parent = static_cast<AbstractAspect*>(index.internalPointer());
 #ifdef HAVE_MQTT
 		// doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
-		QString className = parent->metaObject()->className();
+		QString className = QLatin1String(parent->metaObject()->className());
 		auto* clientAncestor = parent->ancestor<MQTTClient>();
-		if (className == "MQTTClient")
+		if (className == QLatin1String("MQTTClient"))
 			parent = parent->parentAspect();
 		else if (clientAncestor != nullptr)
 			parent = clientAncestor->parentAspect();

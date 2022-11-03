@@ -99,6 +99,7 @@ Very short classes can be bundled in one file which then is named using all lowe
 	https://marcmutz.wordpress.com/effective-qt/containers/
 	See also "Hands-On High Performance Programming with Qt5"
 * QVector: size() instead of count(),  resize() for simple types (bool, int, double) and reserve() else, use at() for ro access, to release memory use squeeze()
+* QString: https://wiki.qt.io/Using_QString_Effectively
 * Use range-based loops instead of foreach/Q_FOREACH (but avoid detach: https://www.kdab.com/goodbye-q_foreach/ - "Avoid Detach")
 	https://www.kdab.com/goodbye-q_foreach/
 * The 'auto' keyword should be used in range-based loops and for variables initialized by casting or with the 'new' operator but only for non-basic types (int,double,Spreadsheet). Do not omit '*', '&' and 'const' to keep readability.

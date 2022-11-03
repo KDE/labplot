@@ -16,5 +16,5 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 # Debug
 # cmake -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
-make -j
+make -j 6
 sudo make install

@@ -8,5 +8,5 @@ fi
 
 cd $BUILDDIR
 
-# debug & w/o tests
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j
+# debug w/o tests
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr && make -j 6

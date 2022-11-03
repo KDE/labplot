@@ -185,7 +185,7 @@ void AsciiOptionsWidget::loadSettings() const {
 
 	// TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == '.') ? 0 : 1;
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
 	ui.cbDateTimeFormat->setCurrentText(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
