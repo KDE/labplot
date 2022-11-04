@@ -44,7 +44,7 @@ QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
 	case Dimension::Y:
 		return QLatin1String("y");
 	}
-	return "";
+	return {};
 }
 
 QString CartesianCoordinateSystem::info() const {

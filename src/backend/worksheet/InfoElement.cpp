@@ -80,14 +80,14 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		text.allowPlaceholder = true;
 
 		QString textString;
-		textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + ", ";
-		textString.append(QString(QString(markerpoints[0].curve->name() + ":")));
+		textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + QStringLiteral(", ");
+		textString.append(QString(QString(markerpoints[0].curve->name() + QStringLiteral(":"))));
 		textString.append(QString::number(markerpoints[0].customPoint->positionLogical().y()));
 		text.text = textString;
 
 		// TODO: Find better solution than using textedit
-		QString str =
-			QLatin1String("&(x), ") + markerpoints[0].curve->name() + QLatin1Char(':') + QLatin1String("&(") + markerpoints[0].curve->name() + QLatin1Char(')');
+		QString str = QStringLiteral("&(x), ") + markerpoints[0].curve->name() + QLatin1Char(':') + QLatin1String("&(") + markerpoints[0].curve->name()
+			+ QLatin1Char(')');
 		QTextEdit textedit(str);
 		text.textPlaceholder = textedit.toHtml();
 
@@ -413,17 +413,17 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	}
 
 	if (wrapper.mode == TextLabel::Mode::Text)
-		text.replace("&amp;(x)", xValueStr);
+		text.replace(QStringLiteral("&amp;(x)"), xValueStr);
 	else
-		text.replace("&(x)", xValueStr);
+		text.replace(QStringLiteral("&(x)"), xValueStr);
 
 	// replace the placeholders for curve's y-values
 	for (const auto& markerpoint : qAsConst(markerpoints)) {
 		QString replace;
 		if (wrapper.mode == TextLabel::Mode::Text)
-			replace = QLatin1String("&amp;(");
+			replace = QStringLiteral("&amp;(");
 		else
-			replace = QLatin1String("&(");
+			replace = QStringLiteral("&(");
 
 		replace += markerpoint.curve->name() + QLatin1Char(')');
 		text.replace(replace, QString::number(markerpoint.customPoint->positionLogical().y()));
@@ -1109,29 +1109,29 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent* event) {
 void InfoElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const InfoElement);
 
-	writer->writeStartElement("infoElement");
+	writer->writeStartElement(QStringLiteral("infoElement"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("position", QString::number(d->positionLogical));
-	writer->writeAttribute("curve", d->connectionLineCurveName);
-	writer->writeAttribute("gluePointIndex", QString::number(d->gluePointIndex));
-	writer->writeAttribute("markerIndex", QString::number(d->m_index));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("visible", QString::number(d->visible));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("position"), QString::number(d->positionLogical));
+	writer->writeAttribute(QStringLiteral("curve"), d->connectionLineCurveName);
+	writer->writeAttribute(QStringLiteral("gluePointIndex"), QString::number(d->gluePointIndex));
+	writer->writeAttribute(QStringLiteral("markerIndex"), QString::number(d->m_index));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->visible));
 	writer->writeEndElement();
 
 	// lines
-	writer->writeStartElement("verticalLine");
+	writer->writeStartElement(QStringLiteral("verticalLine"));
 	WRITE_QPEN(d->verticalLinePen);
-	writer->writeAttribute("opacity", QString::number(d->verticalLineOpacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->verticalLineOpacity));
 	writer->writeEndElement();
 
-	writer->writeStartElement("connectionLine");
+	writer->writeStartElement(QStringLiteral("connectionLine"));
 	WRITE_QPEN(d->connectionLinePen);
-	writer->writeAttribute("opacity", QString::number(d->connectionLineOpacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->connectionLineOpacity));
 	writer->writeEndElement();
 
 	// text label
@@ -1139,9 +1139,9 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 
 	// custom points
 	if (!markerpoints.isEmpty()) {
-		writer->writeStartElement("points");
+		writer->writeStartElement(QStringLiteral("points"));
 		for (const auto& custompoint : markerpoints) {
-			writer->writeStartElement("point");
+			writer->writeStartElement(QStringLiteral("point"));
 			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
 			custompoint.customPoint->save(writer);
 			writer->writeEndElement(); // close "point"
@@ -1165,23 +1165,23 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "infoElement")
+		if (reader->isEndElement() && reader->name() == QLatin1String("infoElement"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
-			str = attribs.value("visible").toString();
+			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 			else
 				setVisible(str.toInt());
 
@@ -1189,15 +1189,15 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("gluePointIndex", gluePointIndex, int);
 			READ_INT_VALUE("markerIndex", m_index, int);
 			READ_STRING_VALUE("curve", connectionLineCurveName);
-		} else if (reader->name() == "verticalLine") {
+		} else if (reader->name() == QLatin1String("verticalLine")) {
 			attribs = reader->attributes();
 			READ_QPEN(d->verticalLinePen);
 			READ_DOUBLE_VALUE("opacity", verticalLineOpacity);
-		} else if (reader->name() == "connectionLine") {
+		} else if (reader->name() == QLatin1String("connectionLine")) {
 			attribs = reader->attributes();
 			READ_QPEN(d->connectionLinePen);
 			READ_DOUBLE_VALUE("opacity", connectionLineOpacity);
-		} else if (reader->name() == "textLabel") {
+		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!m_title) {
 				m_title = new TextLabel(i18n("Label"), m_plot);
 				m_title->setIsLoading(true);
@@ -1205,7 +1205,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			}
 			if (!m_title->load(reader, preview))
 				return false;
-		} else if (reader->name() == "customPoint") {
+		} else if (reader->name() == QLatin1String("customPoint")) {
 			if (curvePath.isEmpty()) // safety check in case the xml is broken
 				continue;
 
@@ -1218,9 +1218,9 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			this->addChild(point);
 			addCurvePath(curvePath, point);
 			curvePath.clear();
-		} else if (reader->name() == "point") {
+		} else if (reader->name() == QLatin1String("point")) {
 			attribs = reader->attributes();
-			curvePath = attribs.value("curvepath").toString();
+			curvePath = attribs.value(QStringLiteral("curvepath")).toString();
 		}
 	}
 

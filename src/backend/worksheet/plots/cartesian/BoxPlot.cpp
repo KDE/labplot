@@ -107,7 +107,7 @@ void BoxPlot::init() {
 	});
 
 	// markers
-	d->symbolMean = new Symbol("symbolMean");
+	d->symbolMean = new Symbol(QStringLiteral("symbolMean"));
 	addChild(d->symbolMean);
 	d->symbolMean->setHidden(true);
 	d->symbolMean->init(group);
@@ -119,7 +119,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolMedian = new Symbol("symbolMedian");
+	d->symbolMedian = new Symbol(QStringLiteral("symbolMedian"));
 	addChild(d->symbolMedian);
 	d->symbolMedian->setHidden(true);
 	d->symbolMedian->init(group);
@@ -131,7 +131,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolOutlier = new Symbol("symbolOutlier");
+	d->symbolOutlier = new Symbol(QStringLiteral("symbolOutlier"));
 	addChild(d->symbolOutlier);
 	d->symbolOutlier->setHidden(true);
 	d->symbolOutlier->init(group);
@@ -142,7 +142,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolFarOut = new Symbol("symbolFarOut");
+	d->symbolFarOut = new Symbol(QStringLiteral("symbolFarOut"));
 	addChild(d->symbolFarOut);
 	d->symbolFarOut->setHidden(true);
 	d->symbolFarOut->init(group);
@@ -154,7 +154,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolData = new Symbol("symbolData");
+	d->symbolData = new Symbol(QStringLiteral("symbolData"));
 	addChild(d->symbolData);
 	d->symbolData->setHidden(true);
 	d->symbolData->init(group);
@@ -167,7 +167,7 @@ void BoxPlot::init() {
 		d->updatePixmap();
 	});
 
-	d->symbolWhiskerEnd = new Symbol("symbolWhiskerEnd");
+	d->symbolWhiskerEnd = new Symbol(QStringLiteral("symbolWhiskerEnd"));
 	addChild(d->symbolWhiskerEnd);
 	d->symbolWhiskerEnd->setHidden(true);
 	d->symbolWhiskerEnd->init(group);
@@ -239,7 +239,7 @@ QIcon BoxPlot::staticIcon() {
 }
 
 void BoxPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &BoxPlot::visibilityChangedSlot);
 
@@ -683,7 +683,7 @@ void BoxPlotPrivate::retransform() {
 	if (suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const int count = dataColumns.size();
 	if (!count || m_boxRect.size() != count) {
@@ -725,7 +725,7 @@ void BoxPlotPrivate::retransform() {
 }
 
 void BoxPlotPrivate::recalc() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	// resize the internal containers
 	const int count = dataColumns.size();
@@ -845,7 +845,7 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 }
 
 void BoxPlotPrivate::recalc(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 	if (!column)
 		return;
@@ -998,7 +998,7 @@ void BoxPlotPrivate::recalc(int index) {
 }
 
 void BoxPlotPrivate::verticalBoxPlot(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<QLineF> lines;
 	const double x = index + 1.0;
@@ -1087,7 +1087,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	QVector<QLineF> lines;
 	const double y = index + 1.0;
@@ -1473,7 +1473,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 }
 
 void BoxPlotPrivate::updatePixmap() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
@@ -1496,7 +1496,7 @@ void BoxPlotPrivate::updatePixmap() {
 }
 
 void BoxPlotPrivate::draw(QPainter* painter) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i))
@@ -1586,7 +1586,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 }
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const QPolygonF& polygon = m_fillPolygon.at(index);
 	const QRectF& rect = polygon.boundingRect();
@@ -1749,26 +1749,26 @@ void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void BoxPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BoxPlot);
 
-	writer->writeStartElement("boxPlot");
+	writer->writeStartElement(QStringLiteral("boxPlot"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("ordering", QString::number(static_cast<int>(d->ordering)));
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
-	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
-	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
-	writer->writeAttribute("jitteringEnabled", QString::number(d->jitteringEnabled));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("xMin", QString::number(d->xMin));
-	writer->writeAttribute("xMax", QString::number(d->xMax));
-	writer->writeAttribute("yMin", QString::number(d->yMin));
-	writer->writeAttribute("yMax", QString::number(d->yMax));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("ordering"), QString::number(static_cast<int>(d->ordering)));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute(QStringLiteral("variableWidth"), QString::number(d->variableWidth));
+	writer->writeAttribute(QStringLiteral("widthFactor"), QString::number(d->widthFactor));
+	writer->writeAttribute(QStringLiteral("notches"), QString::number(d->notchesEnabled));
+	writer->writeAttribute(QStringLiteral("jitteringEnabled"), QString::number(d->jitteringEnabled));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
+	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
+	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
+	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 	for (auto* column : d->dataColumns) {
-		writer->writeStartElement("column");
-		writer->writeAttribute("path", column->path());
+		writer->writeStartElement(QStringLiteral("column"));
+		writer->writeAttribute(QStringLiteral("path"), column->path());
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -1787,24 +1787,24 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	d->symbolWhiskerEnd->save(writer);
 
 	// whiskers
-	writer->writeStartElement("whiskers");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
-	writer->writeAttribute("rangeParameter", QString::number(d->whiskersRangeParameter));
+	writer->writeStartElement(QStringLiteral("whiskers"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->whiskersType)));
+	writer->writeAttribute(QStringLiteral("rangeParameter"), QString::number(d->whiskersRangeParameter));
 	d->whiskersLine->save(writer);
 	writer->writeEndElement();
 
-	writer->writeStartElement("whiskersCap");
-	writer->writeAttribute("size", QString::number(d->whiskersCapSize));
+	writer->writeStartElement(QStringLiteral("whiskersCap"));
+	writer->writeAttribute(QStringLiteral("size"), QString::number(d->whiskersCapSize));
 	WRITE_QPEN(d->whiskersCapPen);
-	writer->writeAttribute("opacity", QString::number(d->whiskersCapOpacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->whiskersCapOpacity));
 	writer->writeEndElement();
 
 	// margin plots
-	writer->writeStartElement("margins");
-	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
-	writer->writeAttribute("rugLength", QString::number(d->rugLength));
-	writer->writeAttribute("rugWidth", QString::number(d->rugWidth));
-	writer->writeAttribute("rugOffset", QString::number(d->rugOffset));
+	writer->writeStartElement(QStringLiteral("margins"));
+	writer->writeAttribute(QStringLiteral("rugEnabled"), QString::number(d->rugEnabled));
+	writer->writeAttribute(QStringLiteral("rugLength"), QString::number(d->rugLength));
+	writer->writeAttribute(QStringLiteral("rugWidth"), QString::number(d->rugWidth));
+	writer->writeAttribute(QStringLiteral("rugOffset"), QString::number(d->rugOffset));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "BoxPlot" section
@@ -1823,16 +1823,16 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "boxPlot")
+		if (reader->isEndElement() && reader->name() == QLatin1String("boxPlot"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("ordering", ordering, BoxPlot::Ordering);
@@ -1847,44 +1847,44 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xMax", xMax);
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("path").toString();
+			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
-		} else if (!preview && reader->name() == "filling")
+		} else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "border") {
+		else if (!preview && reader->name() == QLatin1String("border")) {
 			d->borderLine->load(reader, preview);
-		} else if (!preview && reader->name() == "medianLine") {
+		} else if (!preview && reader->name() == QLatin1String("medianLine")) {
 			d->medianLine->load(reader, preview);
-		} else if (!preview && reader->name() == "symbolMean")
+		} else if (!preview && reader->name() == QLatin1String("symbolMean"))
 			d->symbolMean->load(reader, preview);
-		else if (!preview && reader->name() == "symbolMedian")
+		else if (!preview && reader->name() == QLatin1String("symbolMedian"))
 			d->symbolMedian->load(reader, preview);
-		else if (!preview && reader->name() == "symbolOutlier")
+		else if (!preview && reader->name() == QLatin1String("symbolOutlier"))
 			d->symbolOutlier->load(reader, preview);
-		else if (!preview && reader->name() == "symbolFarOut")
+		else if (!preview && reader->name() == QLatin1String("symbolFarOut"))
 			d->symbolFarOut->load(reader, preview);
-		else if (!preview && reader->name() == "symbolData")
+		else if (!preview && reader->name() == QLatin1String("symbolData"))
 			d->symbolData->load(reader, preview);
-		else if (!preview && reader->name() == "symbolWhiskerEnd")
+		else if (!preview && reader->name() == QLatin1String("symbolWhiskerEnd"))
 			d->symbolWhiskerEnd->load(reader, preview);
-		else if (!preview && reader->name() == "whiskers") {
+		else if (!preview && reader->name() == QLatin1String("whiskers")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", whiskersType, BoxPlot::WhiskersType);
 			READ_DOUBLE_VALUE("rangeParameter", whiskersRangeParameter);
 			d->whiskersLine->load(reader, preview);
-		} else if (!preview && reader->name() == "whiskersCap") {
+		} else if (!preview && reader->name() == QLatin1String("whiskersCap")) {
 			attribs = reader->attributes();
 
 			READ_DOUBLE_VALUE("size", whiskersCapSize);
 			READ_QPEN(d->whiskersCapPen);
 			READ_DOUBLE_VALUE("opacity", whiskersCapOpacity);
-		} else if (!preview && reader->name() == "margins") {
+		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("rugEnabled", rugEnabled, bool);

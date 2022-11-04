@@ -106,19 +106,19 @@ void TextLabel::init() {
 	QString groupName;
 	switch (m_type) {
 	case Type::General:
-		groupName = "TextLabel";
+		groupName = QStringLiteral("TextLabel");
 		break;
 	case Type::PlotTitle:
-		groupName = "PlotTitle";
+		groupName = QStringLiteral("PlotTitle");
 		break;
 	case Type::AxisTitle:
-		groupName = "AxisTitle";
+		groupName = QStringLiteral("AxisTitle");
 		break;
 	case Type::PlotLegendTitle:
-		groupName = "PlotLegendTitle";
+		groupName = QStringLiteral("PlotLegendTitle");
 		break;
 	case Type::InfoElementLabel:
-		groupName = "InfoElementLabel";
+		groupName = QStringLiteral("InfoElementLabel");
 	}
 
 	const KConfig config;
@@ -433,7 +433,7 @@ QRectF TextLabelPrivate::size() {
 		//  s.a. TextLabelPrivate::updateBoundingRect()
 		double xShift = 23., yScale = 0.8;
 		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains('\n'))
+		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
 		// see updateBoundingRect()
 		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
@@ -643,7 +643,7 @@ void TextLabelPrivate::updateBoundingRect() {
 		//  s.a. TextLabelPrivate::size()
 		double xShift = 23., yScale = 0.8;
 		// better scaling for multiline Markdown
-		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains('\n'))
+		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains(QLatin1Char('\n')))
 			yScale = 0.95;
 		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
 		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
@@ -681,24 +681,24 @@ void TextLabelPrivate::updateBorder() {
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), "top"));
-		m_gluePoints.append(
-			GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2), "right"));
-		m_gluePoints.append(
-			GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
+									  QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
+									  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Rect): {
 		borderShapePath.addRect(boundingRectangle);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), "top"));
-		m_gluePoints.append(
-			GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2), "right"));
-		m_gluePoints.append(
-			GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y()), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height() / 2),
+									  QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width() / 2, boundingRectangle.y() + boundingRectangle.height()),
+									  QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Ellipse): {
@@ -710,10 +710,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.addEllipse(ellipseRect);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width() / 2, ellipseRect.y()), "top"));
-		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width(), ellipseRect.y() + ellipseRect.height() / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width() / 2, ellipseRect.y() + ellipseRect.height()), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x(), ellipseRect.y() + ellipseRect.height() / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width() / 2, ellipseRect.y()), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width(), ellipseRect.y() + ellipseRect.height() / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width() / 2, ellipseRect.y() + ellipseRect.height()), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x(), ellipseRect.y() + ellipseRect.height() / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::RoundSideRect): {
@@ -728,10 +728,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs - h / 2, ys + h / 2, xs, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w + h / 2, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs - h / 2, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + h / 2, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs - h / 2, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::RoundCornerRect): {
@@ -750,10 +750,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
@@ -772,10 +772,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.3 * h), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.3 * h, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.3 * h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs - 0.3 * h, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.3 * h), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.3 * h, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.3 * h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.3 * h, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::DentedBorderRect): {
@@ -790,10 +790,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.2 * h), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.2 * h), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::Cuboid): {
@@ -814,10 +814,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.1 * h), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.15 * h, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.1 * h), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.15 * h, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::UpPointingRectangle): {
@@ -839,10 +839,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - h * 0.2), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - h * 0.2), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
@@ -864,10 +864,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
@@ -889,10 +889,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
@@ -914,10 +914,10 @@ void TextLabelPrivate::updateBorder() {
 		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
 		m_gluePoints.clear();
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), "top"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), "right"));
-		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys), QStringLiteral("top")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), QStringLiteral("right")));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), QStringLiteral("bottom")));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), QStringLiteral("left")));
 		break;
 	}
 	}
@@ -1070,42 +1070,42 @@ void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void TextLabel::save(QXmlStreamWriter* writer) const {
 	Q_D(const TextLabel);
 
-	writer->writeStartElement("textLabel");
+	writer->writeStartElement(QStringLiteral("textLabel"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
-	writer->writeStartElement("text");
+	writer->writeStartElement(QStringLiteral("text"));
 	writer->writeCharacters(d->textWrapper.text);
 	writer->writeEndElement();
 
 	if (!d->textWrapper.textPlaceholder.isEmpty()) {
-		writer->writeStartElement("textPlaceholder");
+		writer->writeStartElement(QStringLiteral("textPlaceholder"));
 		writer->writeCharacters(d->textWrapper.textPlaceholder);
 		writer->writeEndElement();
 	}
 
-	writer->writeStartElement("format");
-	writer->writeAttribute("placeholder", QString::number(d->textWrapper.allowPlaceholder));
-	writer->writeAttribute("mode", QString::number(static_cast<int>(d->textWrapper.mode)));
+	writer->writeStartElement(QStringLiteral("format"));
+	writer->writeAttribute(QStringLiteral("placeholder"), QString::number(d->textWrapper.allowPlaceholder));
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(d->textWrapper.mode)));
 	WRITE_QFONT(d->teXFont);
 	WRITE_QCOLOR2(d->fontColor, "fontColor");
 	WRITE_QCOLOR2(d->backgroundColor, "backgroundColor");
 	writer->writeEndElement();
 
 	// border
-	writer->writeStartElement("border");
-	writer->writeAttribute("borderShape", QString::number(static_cast<int>(d->borderShape)));
+	writer->writeStartElement(QStringLiteral("border"));
+	writer->writeAttribute(QStringLiteral("borderShape"), QString::number(static_cast<int>(d->borderShape)));
 	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
+	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
 	writer->writeEndElement();
 
 	if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
-		writer->writeStartElement("teXPdfData");
-		writer->writeCharacters(d->teXPdfData.toBase64());
+		writer->writeStartElement(QStringLiteral("teXPdfData"));
+		writer->writeCharacters(QLatin1String(d->teXPdfData.toBase64()));
 		writer->writeEndElement();
 	}
 
@@ -1125,43 +1125,43 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "textLabel")
+		if (reader->isEndElement() && reader->name() == QLatin1String("textLabel"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			WorksheetElement::load(reader, preview);
-		} else if (!preview && reader->name() == "text")
+		} else if (!preview && reader->name() == QLatin1String("text"))
 			d->textWrapper.text = reader->readElementText();
-		else if (!preview && reader->name() == "textPlaceholder")
+		else if (!preview && reader->name() == QLatin1String("textPlaceholder"))
 			d->textWrapper.textPlaceholder = reader->readElementText();
-		else if (!preview && reader->name() == "format") {
+		else if (!preview && reader->name() == QLatin1String("format")) {
 			attribs = reader->attributes();
 
 			if (Project::xmlVersion() < 4) {
-				str = attribs.value("teXUsed").toString();
+				str = attribs.value(QStringLiteral("teXUsed")).toString();
 				d->textWrapper.mode = static_cast<TextLabel::Mode>(str.toInt());
 			} else
 				READ_INT_VALUE("mode", textWrapper.mode, TextLabel::Mode);
 
-			str = attribs.value("placeholder").toString();
+			str = attribs.value(QStringLiteral("placeholder")).toString();
 			if (!str.isEmpty())
 				d->textWrapper.allowPlaceholder = str.toInt();
 
 			READ_QFONT(d->teXFont);
 			READ_QCOLOR2(d->fontColor, "fontColor");
 			READ_QCOLOR2(d->backgroundColor, "backgroundColor");
-		} else if (!preview && reader->name() == "border") {
+		} else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
 			READ_QPEN(d->borderPen);
 			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
-		} else if (!preview && reader->name() == "teXPdfData") {
+		} else if (!preview && reader->name() == QLatin1String("teXPdfData")) {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
 			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());

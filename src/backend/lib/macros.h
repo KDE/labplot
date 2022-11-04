@@ -380,9 +380,9 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define WRITE_QCOLOR2(color, label)                                                                                                                            \
 	{                                                                                                                                                          \
-		writer->writeAttribute(label "_r", QString::number(color.red()));                                                                                      \
-		writer->writeAttribute(label "_g", QString::number(color.green()));                                                                                    \
-		writer->writeAttribute(label "_b", QString::number(color.blue()));                                                                                     \
+		writer->writeAttribute(QStringLiteral(label "_r"), QString::number(color.red()));                                                                      \
+		writer->writeAttribute(QStringLiteral(label "_g"), QString::number(color.green()));                                                                    \
+		writer->writeAttribute(QStringLiteral(label "_b"), QString::number(color.blue()));                                                                     \
 	}
 
 #define READ_QCOLOR(color)                                                                                                                                     \
@@ -408,21 +408,21 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define READ_QCOLOR2(color, label)                                                                                                                             \
 	{                                                                                                                                                          \
-		str = attribs.value(label "_r").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_r")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_r").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_r")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
-		str = attribs.value(label "_g").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_g")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_g").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_g")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value(label "_b").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_b")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_b").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_b")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
@@ -597,7 +597,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	}
 
 #define READ_STRING_VALUE(name, var)                                                                                                                           \
-	{ d->var = attribs.value(name).toString(); }
+	{ d->var = attribs.value(QLatin1String(name)).toString(); }
 
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \

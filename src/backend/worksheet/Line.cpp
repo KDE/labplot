@@ -50,20 +50,20 @@ void Line::init(const KConfigGroup& group) {
 	Q_D(Line);
 
 	if (d->histogramLineTypeAvailable)
-		d->histogramLineType = (Histogram::LineType)group.readEntry(d->prefix + "Type", (int)Histogram::Bars);
+		d->histogramLineType = (Histogram::LineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)Histogram::Bars);
 
 	if (d->errorBarsTypeAvailable) {
-		d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry(d->prefix + "Type", static_cast<int>(XYCurve::ErrorBarsType::Simple));
-		d->errorBarsCapSize = group.readEntry(d->prefix + "CapSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
+		d->errorBarsType = (XYCurve::ErrorBarsType)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(XYCurve::ErrorBarsType::Simple));
+		d->errorBarsCapSize = group.readEntry(d->prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 	}
 
 	if (d->prefix == QLatin1String("DropLine"))
-		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + "Type", (int)XYCurve::DropLineType::NoDropLine);
+		d->dropLineType = (XYCurve::DropLineType)group.readEntry(d->prefix + QStringLiteral("Type"), (int)XYCurve::DropLineType::NoDropLine);
 
-	d->pen = QPen(group.readEntry(d->prefix + "Color", QColor(Qt::black)),
-				  group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+	d->pen = QPen(group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black)),
+				  group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 				  (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	d->opacity = group.readEntry(d->prefix + "Opacity", 1.0);
+	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0);
 }
 
 //##############################################################################
@@ -174,15 +174,15 @@ void Line::save(QXmlStreamWriter* writer) const {
 	}
 
 	if (d->histogramLineTypeAvailable)
-		writer->writeAttribute("type", QString::number(d->histogramLineType));
+		writer->writeAttribute(QStringLiteral("type"), QString::number(d->histogramLineType));
 	else if (d->errorBarsTypeAvailable) {
-		writer->writeAttribute("type", QString::number(static_cast<int>(d->errorBarsType)));
-		writer->writeAttribute("capSize", QString::number(d->errorBarsCapSize));
+		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->errorBarsType)));
+		writer->writeAttribute(QStringLiteral("capSize"), QString::number(d->errorBarsCapSize));
 	} else if (d->prefix == QLatin1String("DropLine"))
-		writer->writeAttribute("type", QString::number(static_cast<int>(d->dropLineType)));
+		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dropLineType)));
 
 	WRITE_QPEN(d->pen);
-	writer->writeAttribute("opacity", QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
 
 	if (d->createXmlElement)
 		writer->writeEndElement();
@@ -223,17 +223,17 @@ void Line::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) 
 	Q_D(const Line);
 
 	QPen p;
-	p.setStyle((Qt::PenStyle)group.readEntry(d->prefix + "Style", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry(d->prefix + "Width", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	p.setStyle((Qt::PenStyle)group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	setPen(p);
-	setOpacity(group.readEntry(d->prefix + "Opacity", 1.0));
+	setOpacity(group.readEntry(d->prefix + QStringLiteral("Opacity"), 1.0));
 }
 
 void Line::saveThemeConfig(KConfigGroup& group) const {
 	Q_D(const Line);
-	group.writeEntry(d->prefix + "Style", static_cast<int>(d->pen.style()));
-	group.writeEntry(d->prefix + "Width", d->pen.widthF());
-	group.writeEntry(d->prefix + "Color", d->pen.color());
-	group.writeEntry(d->prefix + "Opacity", d->opacity);
+	group.writeEntry(d->prefix + QStringLiteral("Style"), static_cast<int>(d->pen.style()));
+	group.writeEntry(d->prefix + QStringLiteral("Width"), d->pen.widthF());
+	group.writeEntry(d->prefix + QStringLiteral("Color"), d->pen.color());
+	group.writeEntry(d->prefix + QStringLiteral("Opacity"), d->opacity);
 }

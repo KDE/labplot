@@ -134,7 +134,7 @@ QStringList FITSFilter::mandatoryTableExtensionKeywords() {
  * \return A list of strings that represent units
  */
 QStringList FITSFilter::units() {
-	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)") << QString("M☉ (Solar mass)")
+	return QStringList() << QLatin1String("m (Metre)") << QLatin1String("kg (Kilogram)") << QLatin1String("s (Second)") << QString::fromUtf8("M☉ (Solar mass)")
 						 << QLatin1String("AU (Astronomical unit") << QLatin1String("l.y (Light year)") << QLatin1String("km (Kilometres")
 						 << QLatin1String("pc (Parsec)") << QLatin1String("K (Kelvin)") << QLatin1String("mol (Mole)") << QLatin1String("cd (Candela)");
 }
@@ -341,7 +341,7 @@ FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSou
 		// TODO: other types
 		if (fits_read_img(m_fitsFile, TDOUBLE, 1, pixelCount, nullptr, data, nullptr, &status)) {
 			printError(status);
-			return dataStrings << (QStringList() << QString("Error"));
+			return dataStrings << (QStringList() << QLatin1String("Error"));
 		}
 
 		int ii = 0;
@@ -1438,13 +1438,13 @@ void FITSFilterPrivate::parseHeader(const QString& fileName, QTableWidget* heade
 		QString commentFieldText;
 		if (!keyword.unit.isEmpty()) {
 			if (keyword.updates.unitUpdated) {
-				const QString& comment = keyword.comment.right(keyword.comment.size() - keyword.comment.indexOf(QChar(']')) - 1);
+				const QString& comment = keyword.comment.right(keyword.comment.size() - keyword.comment.indexOf(QLatin1Char(']')) - 1);
 				commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + comment;
 			} else {
 				if (keyword.comment.at(0) == QLatin1Char('['))
 					commentFieldText = keyword.comment;
 				else
-					commentFieldText = QLatin1String("[") + keyword.unit + QLatin1String("] ") + keyword.comment;
+					commentFieldText = QStringLiteral("[") + keyword.unit + QStringLiteral("] ") + keyword.comment;
 			}
 		} else
 			commentFieldText = keyword.comment;
@@ -1537,7 +1537,7 @@ void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw
 	}
 	if (imageExtensionItem->childCount() > 0) {
 		treeNameItem->addChild(imageExtensionItem);
-		imageExtensionItem->setIcon(0, QIcon::fromTheme("view-preview"));
+		imageExtensionItem->setIcon(0, QIcon::fromTheme(QStringLiteral("view-preview")));
 		imageExtensionItem->setExpanded(true);
 		imageExtensionItem->child(0)->setSelected(true);
 
@@ -1555,7 +1555,7 @@ void FITSFilterPrivate::parseExtensions(const QString& fileName, QTreeWidget* tw
 		}
 		if (tableExtensionItem->childCount() > 0) {
 			treeNameItem->addChild(tableExtensionItem);
-			tableExtensionItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
+			tableExtensionItem->setIcon(0, QIcon::fromTheme(QStringLiteral("x-office-spreadsheet")));
 			tableExtensionItem->setExpanded(true);
 			if (noImage) {
 				tableExtensionItem->child(0)->setSelected(true);

@@ -106,7 +106,7 @@ void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, b
 	Returns an icon to be used in the project explorer.
 */
 QIcon Image::icon() const {
-	return QIcon::fromTheme("viewimage");
+	return QIcon::fromTheme(QStringLiteral("viewimage"));
 }
 
 QMenu* Image::createContextMenu() {
@@ -212,7 +212,7 @@ ImagePrivate::ImagePrivate(Image* owner)
 	setAcceptHoverEvents(true);
 
 	// initial placeholder image
-	image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
+	image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
 	m_image = image;
 }
 
@@ -246,7 +246,7 @@ void ImagePrivate::updateImage() {
 	} else {
 		width = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 		height = Worksheet::convertToSceneUnits(3, Worksheet::Unit::Centimeter);
-		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
+		image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
 	}
 
 	m_image = image;
@@ -392,45 +392,45 @@ void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void Image::save(QXmlStreamWriter* writer) const {
 	Q_D(const Image);
 
-	writer->writeStartElement("image");
+	writer->writeStartElement(QStringLiteral("image"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 	if (d->embedded) {
 		QFileInfo fi(d->fileName);
-		writer->writeAttribute("fileName", fi.fileName()); // save the actual file name only and not the whole path
+		writer->writeAttribute(QStringLiteral("fileName"), fi.fileName()); // save the actual file name only and not the whole path
 	} else
-		writer->writeAttribute("fileName", d->fileName);
+		writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
 
-	writer->writeAttribute("embedded", QString::number(d->embedded));
-	writer->writeAttribute("opacity", QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("embedded"), QString::number(d->embedded));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
 	writer->writeEndElement();
 
 	// image data
 	if (d->embedded && !d->image.isNull()) {
-		writer->writeStartElement("data");
+		writer->writeStartElement(QStringLiteral("data"));
 		QByteArray data;
 		QBuffer buffer(&data);
 		buffer.open(QIODevice::WriteOnly);
 		d->image.save(&buffer, "PNG");
-		writer->writeCharacters(data.toBase64());
+		writer->writeCharacters(QLatin1String(data.toBase64()));
 		writer->writeEndElement();
 	}
 
 	// geometry
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
-	writer->writeAttribute("width", QString::number(d->width));
-	writer->writeAttribute("height", QString::number(d->height));
-	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
+	writer->writeAttribute(QStringLiteral("width"), QString::number(d->width));
+	writer->writeAttribute(QStringLiteral("height"), QString::number(d->height));
+	writer->writeAttribute(QStringLiteral("keepRatio"), QString::number(d->keepRatio));
 	writer->writeEndElement();
 
 	// border
-	writer->writeStartElement("border");
+	writer->writeStartElement(QStringLiteral("border"));
 	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
+	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "image" section
@@ -448,25 +448,25 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "image")
+		if (reader->isEndElement() && reader->name() == QLatin1String("image"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
-			d->fileName = attribs.value("fileName").toString();
+			d->fileName = attribs.value(QStringLiteral("fileName")).toString();
 			READ_INT_VALUE("embedded", embedded, bool);
 			READ_DOUBLE_VALUE("opacity", opacity);
-		} else if (reader->name() == "data") {
+		} else if (reader->name() == QLatin1String("data")) {
 			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());
 			if (!d->image.loadFromData(ba))
 				reader->raiseWarning(i18n("Failed to read image data"));
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("width", width, int);
@@ -474,7 +474,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("keepRatio", keepRatio, bool);
 
 			WorksheetElement::load(reader, preview);
-		} else if (!preview && reader->name() == "border") {
+		} else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 			READ_QPEN(d->borderPen);
 			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);

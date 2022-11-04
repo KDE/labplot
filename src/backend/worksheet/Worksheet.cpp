@@ -142,7 +142,7 @@ double Worksheet::convertFromSceneUnits(const double value, const Worksheet::Uni
 }
 
 QIcon Worksheet::icon() const {
-	return QIcon::fromTheme("labplot-worksheet");
+	return QIcon::fromTheme(QStringLiteral("labplot-worksheet"));
 }
 
 /**
@@ -942,30 +942,30 @@ QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1) {
 	qint64 msecs = diff;
 
 	if (negative)
-		result += "- ";
+		result += QStringLiteral("- ");
 
 	if (days > 0)
-		result += QString::number(days) + " " + QObject::tr("days") + " ";
+		result += QString::number(days) + QStringLiteral(" ") + QObject::tr("days") + QStringLiteral(" ");
 
 	if (hours > 0)
-		result += QString::number(hours) + ":";
+		result += QString::number(hours) + QStringLiteral(":");
 	else
-		result += "00:";
+		result += QStringLiteral("00:");
 
 	if (minutes > 0)
-		result += QString::number(minutes) + ":";
+		result += QString::number(minutes) + QStringLiteral(":");
 	else
-		result += "00:";
+		result += QStringLiteral("00:");
 
 	if (seconds > 0)
-		result += QString::number(seconds) + ".";
+		result += QString::number(seconds) + QStringLiteral(".");
 	else
-		result += "00.";
+		result += QStringLiteral("00.");
 
 	if (msecs > 0)
 		result += QString::number(msecs);
 	else
-		result += "000";
+		result += QStringLiteral("000");
 
 	return result;
 }
@@ -993,7 +993,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		// x values
 		int rowPlot = 1;
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
-		treeModel->setData(xName, QVariant("X"));
+		treeModel->setData(xName, QVariant(QStringLiteral("X")));
 		double valueCursor[2];
 		QDateTime datetime[2];
 		for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
@@ -1059,7 +1059,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 				continue;
 
 			// x values (first row always exist)
-			treeModel->setTreeData(QVariant("X"), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
+			treeModel->setTreeData(QVariant(QStringLiteral("X")), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
 				valueCursor[i] = sender->cursorPos(i);
@@ -1291,7 +1291,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 
 		// set X data
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
-		treeModel->setData(xName, QVariant("X"));
+		treeModel->setData(xName, QVariant(QStringLiteral("X")));
 		auto* plot0 = plot(0);
 		if (plot0) {
 			double valueCursor[2];
@@ -1331,7 +1331,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 			treeModel->insertRows(0, 1, plotName); // one, because the first row are the x values
 
 			QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
-			treeModel->setData(xName, QVariant("X"));
+			treeModel->setData(xName, QVariant(QStringLiteral("X")));
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) {
 				valueCursor[i] = p->cursorPos(i);
@@ -1378,7 +1378,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 WorksheetPrivate::WorksheetPrivate(Worksheet* owner)
 	: q(owner)
 	, m_scene(new QGraphicsScene()) {
-	QStringList headers = {i18n("Curves"), "V1", "V2", "V2-V1"};
+	QStringList headers = {i18n("Curves"), QStringLiteral("V1"), QStringLiteral("V2"), QStringLiteral("V2-V1")};
 	cursorData = new TreeModel(headers, nullptr);
 }
 
@@ -1526,48 +1526,48 @@ void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double 
 
 //! Save as XML
 void Worksheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("worksheet");
+	writer->writeStartElement(QStringLiteral("worksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// applied theme
 	if (!d->theme.isEmpty()) {
-		writer->writeStartElement("theme");
-		writer->writeAttribute("name", d->theme);
+		writer->writeStartElement(QStringLiteral("theme"));
+		writer->writeAttribute(QStringLiteral("name"), d->theme);
 		writer->writeEndElement();
 	}
 
 	// geometry
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	QRectF rect = d->m_scene->sceneRect();
-	writer->writeAttribute("x", QString::number(rect.x()));
-	writer->writeAttribute("y", QString::number(rect.y()));
-	writer->writeAttribute("width", QString::number(rect.width()));
-	writer->writeAttribute("height", QString::number(rect.height()));
-	writer->writeAttribute("useViewSize", QString::number(d->useViewSize));
+	writer->writeAttribute(QStringLiteral("x"), QString::number(rect.x()));
+	writer->writeAttribute(QStringLiteral("y"), QString::number(rect.y()));
+	writer->writeAttribute(QStringLiteral("width"), QString::number(rect.width()));
+	writer->writeAttribute(QStringLiteral("height"), QString::number(rect.height()));
+	writer->writeAttribute(QStringLiteral("useViewSize"), QString::number(d->useViewSize));
 	writer->writeEndElement();
 
 	// layout
-	writer->writeStartElement("layout");
-	writer->writeAttribute("layout", QString::number(static_cast<int>(d->layout)));
-	writer->writeAttribute("topMargin", QString::number(d->layoutTopMargin));
-	writer->writeAttribute("bottomMargin", QString::number(d->layoutBottomMargin));
-	writer->writeAttribute("leftMargin", QString::number(d->layoutLeftMargin));
-	writer->writeAttribute("rightMargin", QString::number(d->layoutRightMargin));
-	writer->writeAttribute("verticalSpacing", QString::number(d->layoutVerticalSpacing));
-	writer->writeAttribute("horizontalSpacing", QString::number(d->layoutHorizontalSpacing));
-	writer->writeAttribute("columnCount", QString::number(d->layoutColumnCount));
-	writer->writeAttribute("rowCount", QString::number(d->layoutRowCount));
+	writer->writeStartElement(QStringLiteral("layout"));
+	writer->writeAttribute(QStringLiteral("layout"), QString::number(static_cast<int>(d->layout)));
+	writer->writeAttribute(QStringLiteral("topMargin"), QString::number(d->layoutTopMargin));
+	writer->writeAttribute(QStringLiteral("bottomMargin"), QString::number(d->layoutBottomMargin));
+	writer->writeAttribute(QStringLiteral("leftMargin"), QString::number(d->layoutLeftMargin));
+	writer->writeAttribute(QStringLiteral("rightMargin"), QString::number(d->layoutRightMargin));
+	writer->writeAttribute(QStringLiteral("verticalSpacing"), QString::number(d->layoutVerticalSpacing));
+	writer->writeAttribute(QStringLiteral("horizontalSpacing"), QString::number(d->layoutHorizontalSpacing));
+	writer->writeAttribute(QStringLiteral("columnCount"), QString::number(d->layoutColumnCount));
+	writer->writeAttribute(QStringLiteral("rowCount"), QString::number(d->layoutRowCount));
 	writer->writeEndElement();
 
 	// background properties
 	d->background->save(writer);
 
 	// cartesian properties
-	writer->writeStartElement("plotProperties");
-	writer->writeAttribute("plotsLocked", QString::number(d->plotsLocked));
-	writer->writeAttribute("cartesianPlotActionMode", QString::number(static_cast<int>(d->cartesianPlotActionMode)));
-	writer->writeAttribute("cartesianPlotCursorMode", QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
+	writer->writeStartElement(QStringLiteral("plotProperties"));
+	writer->writeAttribute(QStringLiteral("plotsLocked"), QString::number(d->plotsLocked));
+	writer->writeAttribute(QStringLiteral("cartesianPlotActionMode"), QString::number(static_cast<int>(d->cartesianPlotActionMode)));
+	writer->writeAttribute(QStringLiteral("cartesianPlotCursorMode"), QString::number(static_cast<int>(d->cartesianPlotCursorMode)));
 	writer->writeEndElement();
 
 	// serialize all children
@@ -1591,47 +1591,47 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "worksheet")
+		if (reader->isEndElement() && reader->name() == QLatin1String("worksheet"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "theme") {
+		} else if (!preview && reader->name() == QLatin1String("theme")) {
 			attribs = reader->attributes();
-			d->theme = attribs.value("name").toString();
-		} else if (!preview && reader->name() == "geometry") {
+			d->theme = attribs.value(QStringLiteral("name")).toString();
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("x").toString();
+			str = attribs.value(QStringLiteral("x")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 			else
 				d->pageRect.setX(str.toDouble());
 
-			str = attribs.value("y").toString();
+			str = attribs.value(QStringLiteral("y")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
 			else
 				d->pageRect.setY(str.toDouble());
 
-			str = attribs.value("width").toString();
+			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("width").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 			else
 				d->pageRect.setWidth(str.toDouble());
 
-			str = attribs.value("height").toString();
+			str = attribs.value(QStringLiteral("height")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("height").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
 			else
 				d->pageRect.setHeight(str.toDouble());
 
 			READ_INT_VALUE("useViewSize", useViewSize, int);
-		} else if (!preview && reader->name() == "layout") {
+		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("layout", layout, Worksheet::Layout);
@@ -1643,15 +1643,15 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
 			READ_INT_VALUE("columnCount", layoutColumnCount, int);
 			READ_INT_VALUE("rowCount", layoutRowCount, int);
-		} else if (!preview && reader->name() == "background")
+		} else if (!preview && reader->name() == QLatin1String("background"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "plotProperties") {
+		else if (!preview && reader->name() == QLatin1String("plotProperties")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("plotsLocked", plotsLocked, bool);
 			READ_INT_VALUE("cartesianPlotActionMode", cartesianPlotActionMode, Worksheet::CartesianPlotActionMode);
 			READ_INT_VALUE("cartesianPlotCursorMode", cartesianPlotCursorMode, Worksheet::CartesianPlotActionMode);
-		} else if (reader->name() == "cartesianPlot") {
+		} else if (reader->name() == QLatin1String("cartesianPlot")) {
 			auto* plot = new CartesianPlot(QString());
 			plot->setIsLoading(true);
 			if (!plot->load(reader, preview)) {
@@ -1659,7 +1659,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(plot);
-		} else if (!preview && reader->name() == "textLabel") {
+		} else if (!preview && reader->name() == QLatin1String("textLabel")) {
 			auto* label = new TextLabel(QString());
 			label->setIsLoading(true);
 			if (!label->load(reader, preview)) {
@@ -1667,7 +1667,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(label);
-		} else if (!preview && reader->name() == "image") {
+		} else if (!preview && reader->name() == QLatin1String("image")) {
 			Image* image = new Image(QString());
 			image->setIsLoading(true);
 			if (!image->load(reader, preview)) {

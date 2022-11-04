@@ -59,7 +59,7 @@ QString ExcelFilter::fileInfoString(const QString& fileName) {
 #else
 	Q_UNUSED(fileName)
 #endif
-	return "";
+	return {};
 }
 
 QStringList ExcelFilter::sheets() const {
@@ -667,14 +667,14 @@ void ExcelFilterPrivate::parse(const QString& fileName, QTreeWidgetItem* parentI
 		const auto regionsForSheet = dataRegions(fileName, sheet);
 
 		auto* sheetItem = new QTreeWidgetItem(QStringList() << sheet);
-		sheetItem->setIcon(0, QIcon::fromTheme("folder"));
+		sheetItem->setIcon(0, QIcon::fromTheme(QStringLiteral("folder")));
 		sheetItem->setFlags(sheetItem->flags() & ~Qt::ItemIsSelectable);
 
 		fileNameItem->addChild(sheetItem);
 
 		for (const auto& region : regionsForSheet) {
 			auto* regionItem = new QTreeWidgetItem(QStringList() << QString(region.toString()));
-			regionItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
+			regionItem->setIcon(0, QIcon::fromTheme(QStringLiteral("x-office-spreadsheet")));
 			regionItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
 			sheetItem->addChild(regionItem);
@@ -746,8 +746,6 @@ QString ExcelFilter::convertFromNumberToExcelColumn(int n) {
 	// main code from https://www.geeksforgeeks.org/find-excel-column-name-given-number/
 	// Function to print Excel column name for a given column number
 
-	QString string;
-
 	char str[1000]; // To store result (Excel column name)
 	int i = 0; // To store current index in str which is result
 
@@ -770,6 +768,5 @@ QString ExcelFilter::convertFromNumberToExcelColumn(int n) {
 	// Reverse the string and print result
 	std::reverse(str, str + strlen(str));
 
-	string = str;
-	return string;
+	return QLatin1String(str);
 }

@@ -77,7 +77,7 @@ QIcon BarPlot::icon() const {
 }
 
 void BarPlot::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &BarPlot::visibilityChangedSlot);
 
@@ -399,7 +399,7 @@ void BarPlotPrivate::retransform() {
 	if (suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const int count = dataColumns.size();
 	if (!count || m_barLines.size() != count) {
@@ -436,7 +436,7 @@ void BarPlotPrivate::retransform() {
  * to trigger the retransform in the parent plot
  */
 void BarPlotPrivate::recalc() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const int newSize = dataColumns.size();
 	// resize the internal containers
@@ -632,7 +632,7 @@ void BarPlotPrivate::recalc() {
 }
 
 void BarPlotPrivate::verticalBarPlot(int columnIndex) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
@@ -758,7 +758,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 }
 
 void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const auto* column = static_cast<const Column*>(dataColumns.at(columnIndex));
 	QVector<QLineF> lines; // four lines for one bar in logical coordinates
@@ -1106,7 +1106,7 @@ void BarPlotPrivate::recalcShapeAndBoundingRect() {
 }
 
 void BarPlotPrivate::updatePixmap() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0. || m_boundingRectangle.height() == 0.) {
 		m_pixmap = pixmap;
@@ -1129,7 +1129,7 @@ void BarPlotPrivate::updatePixmap() {
 }
 
 void BarPlotPrivate::draw(QPainter* painter) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	int columnIndex = 0;
 	for (const auto& columnBarLines : m_barLines) { // loop over the different data columns
@@ -1168,7 +1168,7 @@ void BarPlotPrivate::draw(QPainter* painter) {
 }
 
 void BarPlotPrivate::drawFilling(QPainter* painter, int columnIndex, int valueIndex) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	const QPolygonF& polygon = m_fillPolygons.at(columnIndex).at(valueIndex);
 	const QRectF& rect = polygon.boundingRect();
@@ -1333,27 +1333,27 @@ void BarPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void BarPlot::save(QXmlStreamWriter* writer) const {
 	Q_D(const BarPlot);
 
-	writer->writeStartElement("barPlot");
+	writer->writeStartElement(QStringLiteral("barPlot"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->type)));
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("xMin", QString::number(d->xMin));
-	writer->writeAttribute("xMax", QString::number(d->xMax));
-	writer->writeAttribute("yMin", QString::number(d->yMin));
-	writer->writeAttribute("yMax", QString::number(d->yMax));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute(QStringLiteral("widthFactor"), QString::number(d->widthFactor));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("xMin"), QString::number(d->xMin));
+	writer->writeAttribute(QStringLiteral("xMax"), QString::number(d->xMax));
+	writer->writeAttribute(QStringLiteral("yMin"), QString::number(d->yMin));
+	writer->writeAttribute(QStringLiteral("yMax"), QString::number(d->yMax));
 
 	if (d->xColumn)
-		writer->writeAttribute("xColumn", d->xColumn->path());
+		writer->writeAttribute(QStringLiteral("xColumn"), d->xColumn->path());
 
 	for (auto* column : d->dataColumns) {
-		writer->writeStartElement("column");
-		writer->writeAttribute("path", column->path());
+		writer->writeStartElement(QStringLiteral("column"));
+		writer->writeAttribute(QStringLiteral("path"), column->path());
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -1387,16 +1387,16 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "barPlot")
+		if (reader->isEndElement() && reader->name() == QLatin1String("barPlot"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", type, BarPlot::Type);
@@ -1409,14 +1409,14 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("yMin", yMin);
 			READ_DOUBLE_VALUE("yMax", yMax);
 			READ_COLUMN(xColumn);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("path").toString();
+			str = attribs.value(QStringLiteral("path")).toString();
 			if (!str.isEmpty())
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
-		} else if (!preview && reader->name() == "filling") {
+		} else if (!preview && reader->name() == QLatin1String("filling")) {
 			if (!firstBackgroundRead) {
 				auto* background = d->backgrounds.at(0);
 				background->load(reader, preview);
@@ -1425,7 +1425,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 				auto* background = d->addBackground(KConfigGroup());
 				background->load(reader, preview);
 			}
-		} else if (!preview && reader->name() == "border") {
+		} else if (!preview && reader->name() == QLatin1String("border")) {
 			if (!firstBorderLineRead) {
 				auto* line = d->borderLines.at(0);
 				line->load(reader, preview);
@@ -1434,7 +1434,7 @@ bool BarPlot::load(XmlStreamReader* reader, bool preview) {
 				auto* line = d->addBorderLine(KConfigGroup());
 				line->load(reader, preview);
 			}
-		} else if (!preview && reader->name() == "values") {
+		} else if (!preview && reader->name() == QLatin1String("values")) {
 			d->value->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

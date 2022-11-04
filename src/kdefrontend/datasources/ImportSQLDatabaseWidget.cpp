@@ -356,7 +356,8 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			numeric = false;
 
 		// header item
-		auto* item = new QTableWidgetItem(m_columnNames[i] + QStringLiteral(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QStringLiteral("}"));
+		auto* item = new QTableWidgetItem(m_columnNames[i] + QStringLiteral(" {") + QLatin1String(ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
+										  + QStringLiteral("}"));
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::modeIcon(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);

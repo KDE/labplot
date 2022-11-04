@@ -19,7 +19,7 @@ void SpiceFileReader::init() {
 	bool ok;
 
 	mInitialized = true;
-	mInfoString = "";
+	mInfoString = QStringLiteral("");
 
 	if (!mFile.isOpen() && !open())
 		return;
@@ -29,7 +29,7 @@ void SpiceFileReader::init() {
 	// Determine if ltspice or ngspice or none of both
 	QByteArray l = mFile.readLine();
 	int pos = l.count();
-	if (!QString(l).startsWith(QLatin1String("Title:"))) {
+	if (!QLatin1String(l).startsWith(QLatin1String("Title:"))) {
 		if (!convertLTSpiceBinary(l).startsWith(QLatin1String("Title:")))
 			return;
 		mNgspice = false;
@@ -37,7 +37,7 @@ void SpiceFileReader::init() {
 		stream.setCodec(QTextCodec::codecForMib(1015));
 		pos++;
 	} else // title: removed trailing '\r' and '\n'
-		addInfoStringLine(QString(l).trimmed());
+		addInfoStringLine(QLatin1String(l).trimmed());
 
 	QString line = stream.readLine();
 	if (!line.startsWith(QLatin1String("Date:")))
@@ -116,7 +116,7 @@ void SpiceFileReader::init() {
 	}
 
 	line = stream.readLine();
-	mBinary = line.startsWith("Binary");
+	mBinary = line.startsWith(QStringLiteral("Binary"));
 
 	pos += stream.pos();
 	// mFile must be reset and then seeked, because above the stream is used to read and then QFile fails

@@ -126,9 +126,9 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
-				return {"-"};
+				return {QStringLiteral("-")};
 			else if (std::isinf(value))
-				return {QLatin1String("inf")};
+				return {QStringLiteral("inf")};
 			else
 				return {col_ptr->asStringColumn()->textAt(row)};
 		}
@@ -145,7 +145,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
-				return {"-"};
+				return {QStringLiteral("-")};
 			else if (std::isinf(value))
 				return {UTF8_QSTRING("∞")};
 			else
@@ -153,7 +153,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		}
 
 		if (!col_ptr->isValid(row))
-			return {"-"};
+			return {QStringLiteral("-")};
 
 		// m_formula_mode is not used at the moment
 		// if (m_formula_mode)

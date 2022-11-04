@@ -114,12 +114,12 @@ void SpiceFilterPrivate::generateVectorNamesColumnModes(const SpiceFileReader& r
 	columnModes.clear();
 	for (const auto& variable : reader.variables()) {
 		if (!reader.isReal()) {
-			vectorNames << variable.variableName + ", " + variable.type + QLatin1String(" REAL");
-			vectorNames << variable.variableName + ", " + variable.type + QLatin1String(" IMAGINARY");
+			vectorNames << variable.variableName + QStringLiteral(", ") + variable.type + QStringLiteral(" REAL");
+			vectorNames << variable.variableName + QStringLiteral(", ") + variable.type + QStringLiteral(" IMAGINARY");
 			columnModes << AbstractColumn::ColumnMode::Double;
 			columnModes << AbstractColumn::ColumnMode::Double;
 		} else {
-			vectorNames << variable.variableName + ", " + variable.type;
+			vectorNames << variable.variableName + QStringLiteral(", ") + variable.type;
 			columnModes << AbstractColumn::ColumnMode::Double;
 		}
 	}

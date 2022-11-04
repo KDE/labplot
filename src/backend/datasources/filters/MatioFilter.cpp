@@ -322,8 +322,8 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	int version = Mat_GetVersion(matfp);
 	const char* header = Mat_GetHeader(matfp);
 	DEBUG(Q_FUNC_INFO << ", Header: " << header)
-	info += header;
-	info += QLatin1String("<br>");
+	info += QLatin1String(header);
+	info += QStringLiteral("<br>");
 	switch (version) {
 	case MAT_FT_MAT73:
 		info += i18n("Matlab version 7.3");
@@ -342,15 +342,16 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	size_t n;
 	char** dir = Mat_GetDir(matfp, &n);
 	info += i18n("Number of variables: ") + QString::number(n);
-	info += QLatin1String("<br>");
+	info += QStringLiteral("<br>");
 	if (dir && n < 10) { // only show variable info when there are not too many
 		info += i18n("Variables:");
 		for (size_t i = 0; i < n; ++i) {
 			if (dir[i]) {
-				info += " \"" + QString(dir[i]) + "\"";
+				info += QStringLiteral(" \"") + QLatin1String(dir[i]) + QStringLiteral("\"");
 				matvar_t* var = Mat_VarReadInfo(matfp, dir[i]);
 				if (var)
-					info += " (" + QString::number(Mat_VarGetNumberOfFields(var)) + " fields, " + QString::number(Mat_VarGetSize(var)) + " byte)";
+					info += QStringLiteral(" (") + QString::number(Mat_VarGetNumberOfFields(var)) + QStringLiteral(" fields, ")
+						+ QString::number(Mat_VarGetSize(var)) + QStringLiteral(" byte)");
 				Mat_VarFree(var);
 			}
 		}
@@ -556,7 +557,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 			QStringList info;
 
 			// name
-			info << QString(dir[i]);
+			info << QLatin1String(dir[i]);
 			// Mat_VarReadInfo() does not determine the data type of sparse
 			// Don't use Mat_VarRead(matfp, dir[i]). It searches the whole file for every var
 			matvar_t* var = Mat_VarReadNext(matfp);
@@ -569,7 +570,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 			QString dims;
 			for (int j = 0; j < rank; j++) {
 				if (j > 0)
-					dims += ", ";
+					dims += QStringLiteral(", ");
 				dims += QString::number(var->dims[j]);
 			}
 			info << dims;
@@ -606,7 +607,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 	Uses the settings defined in the data source.
 */
 void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
@@ -638,7 +639,7 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 */
 QVector<QStringList>
 MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
@@ -658,7 +659,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 
 	// read info and data
 	matvar_t* var = Mat_VarReadNext(matfp); // try next first (faster)
-	if (QString(var->name) != currentVarName)
+	if (QLatin1String(var->name) != currentVarName)
 		var = Mat_VarRead(matfp, qPrintable(currentVarName));
 	// else
 	//	DEBUG(Q_FUNC_INFO << ", was NEXT!")
@@ -759,7 +760,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 						rows = cell->dims[1];
 
 					if (cell->name)
-						vectorNames << cell->name;
+						vectorNames << QLatin1String(cell->name);
 					else
 						vectorNames << QLatin1String("Column ") + QString::number(i + 1);
 
@@ -816,9 +817,9 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 				if (fields[i]->name) {
 					// TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)
-						vectorNames << fields[i]->name + QLatin1String(" - Re") << fields[i]->name + QLatin1String(" - Im");
+						vectorNames << QLatin1String(fields[i]->name) + QStringLiteral(" - Re") << QLatin1String(fields[i]->name) + QStringLiteral(" - Im");
 					else
-						vectorNames << fields[i]->name;
+						vectorNames << QLatin1String(fields[i]->name);
 				} else
 					vectorNames << QLatin1String("Column ") + QString::number(i);
 			}
@@ -939,7 +940,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 				// cell->name can be NULL
 				QString dims;
 				for (int j = 0; j < cell->rank; j++)
-					dims += QString::number(cell->dims[j]) + " ";
+					dims += QString::number(cell->dims[j]) + QStringLiteral(" ");
 				DEBUG(Q_FUNC_INFO << ", cell " << i + 1 << " : class = " << STDSTRING(className(cell->class_type))
 								  << ", type = " << STDSTRING(typeName(cell->data_type)) << ", rank = " << cell->rank << ", dims = " << STDSTRING(dims)
 								  << ", nbytes = " << cell->nbytes << ", size = " << cell->data_size)
@@ -965,7 +966,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 									else if (cell->data_type == MAT_T_UTF8)
 										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString::fromUtf8((const char*)cell->data);
 									else
-										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QString((const char*)cell->data);
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0) = QLatin1String((const char*)cell->data);
 								}
 							} else { // preview
 								if (i == 0) { // first line
@@ -974,7 +975,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 									else if (cell->data_type == MAT_T_UTF8)
 										row << QString::fromUtf8((const char*)cell->data);
 									else
-										row << QString((const char*)cell->data);
+										row << QLatin1String((const char*)cell->data);
 								} else
 									row << QString();
 							}
@@ -1192,9 +1193,9 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << STDSTRING(QString(data)) << "\"")
 							// TODO: row
 							if (dataSource)
-								(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = QString(data);
+								(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = QLatin1String(data);
 							else
-								dataStrings[1][colIndex] = QString(data);
+								dataStrings[1][colIndex] = QLatin1String(data);
 						}
 					}
 					break;
@@ -1256,7 +1257,7 @@ void MatioFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
   Saves as XML.
  */
 void MatioFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("matioFilter");
+	writer->writeStartElement(QStringLiteral("matioFilter"));
 	writer->writeEndElement();
 }
 

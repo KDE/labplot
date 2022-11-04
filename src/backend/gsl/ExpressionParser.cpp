@@ -35,7 +35,7 @@ ExpressionParser::ExpressionParser() {
 // initialize function list	(sync with functions.h and FunctionsWidget.cpp!)
 void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != nullptr; i++)
-		m_functions << _functions[i].name;
+		m_functions << QLatin1String(_functions[i].name);
 
 	m_functionsGroups << i18n("Standard Mathematical Functions");
 	m_functionsGroups << i18n("Column Statistics");
@@ -131,17 +131,17 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Round to the nearest integer");
 	m_functionsNames << i18n("Round to the nearest integer");
 #endif
-	m_functionsNames << QString("log(1+x)");
-	m_functionsNames << QString("x * 2^e");
-	m_functionsNames << QString("x^n");
-	m_functionsNames << QString("x^2");
-	m_functionsNames << QString("x^3");
-	m_functionsNames << QString("x^4");
-	m_functionsNames << QString("x^5");
-	m_functionsNames << QString("x^6");
-	m_functionsNames << QString("x^7");
-	m_functionsNames << QString("x^8");
-	m_functionsNames << QString("x^9");
+	m_functionsNames << QStringLiteral("log(1+x)");
+	m_functionsNames << QStringLiteral("x * 2^e");
+	m_functionsNames << QStringLiteral("x^n");
+	m_functionsNames << QStringLiteral("x^2");
+	m_functionsNames << QStringLiteral("x^3");
+	m_functionsNames << QStringLiteral("x^4");
+	m_functionsNames << QStringLiteral("x^5");
+	m_functionsNames << QStringLiteral("x^6");
+	m_functionsNames << QStringLiteral("x^7");
+	m_functionsNames << QStringLiteral("x^8");
+	m_functionsNames << QStringLiteral("x^9");
 
 #ifndef HAVE_WINDOWS
 	for (int i = 0; i < 27; i++)
@@ -349,9 +349,9 @@ void ExpressionParser::initFunctions() {
 	// Exponential Functions
 	m_functionsNames << i18n("Exponential function");
 	m_functionsNames << i18n("exponentiate x and multiply by y");
-	m_functionsNames << QString("exp(x) - 1");
-	m_functionsNames << QString("(exp(x)-1)/x");
-	m_functionsNames << QString("2(exp(x)-1-x)/x^2");
+	m_functionsNames << QStringLiteral("exp(x) - 1");
+	m_functionsNames << QStringLiteral("(exp(x)-1)/x");
+	m_functionsNames << QStringLiteral("2(exp(x)-1-x)/x^2");
 	m_functionsNames << i18n("n-relative exponential");
 
 	index++;
@@ -512,8 +512,8 @@ void ExpressionParser::initFunctions() {
 	// Logarithm and Related Functions
 	m_functionsNames << i18n("Logarithm");
 	m_functionsNames << i18n("Logarithm of the magnitude");
-	m_functionsNames << QString("log(1+x)");
-	m_functionsNames << QString("log(1+x) - x");
+	m_functionsNames << QStringLiteral("log(1+x)");
+	m_functionsNames << QStringLiteral("log(1+x) - x");
 
 	index++;
 	for (int i = 0; i < 4; i++)
@@ -595,8 +595,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Inverse hyperbolic cosecant");
 	m_functionsNames << i18n("Inverse hyperbolic cotangent");
 	m_functionsNames << i18n("Sinc function sin(x)/x");
-	m_functionsNames << QString("log(sinh(x))");
-	m_functionsNames << QString("log(cosh(x))");
+	m_functionsNames << QStringLiteral("log(sinh(x))");
+	m_functionsNames << QStringLiteral("log(cosh(x))");
 	m_functionsNames << i18n("Hypotenuse function");
 	m_functionsNames << i18n("Three component hypotenuse function");
 	m_functionsNames << i18n("restrict to [-pi,pi]");
@@ -914,7 +914,7 @@ void ExpressionParser::initFunctions() {
 // TODO: decide whether we want to have i18n here in the backend part of the code
 void ExpressionParser::initConstants() {
 	for (int i = 0; _constants[i].name != nullptr; i++)
-		m_constants << _constants[i].name;
+		m_constants << QLatin1String(_constants[i].name);
 
 	// groups
 	m_constantsGroups << i18n("Mathematical constants");
@@ -951,40 +951,40 @@ void ExpressionParser::initConstants() {
 	// Fundamental constants
 	m_constantsNames << i18n("Speed of light");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_SPEED_OF_LIGHT, 'g', 15);
-	m_constantsUnits << "m / s";
+	m_constantsUnits << QStringLiteral("m / s");
 	m_constantsNames << i18n("Vacuum permeability");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMEABILITY, 'g', 15);
-	m_constantsUnits << "kg m / A^2 s^2";
+	m_constantsUnits << QStringLiteral("kg m / A^2 s^2");
 	m_constantsNames << i18n("Vacuum permittivity");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_VACUUM_PERMITTIVITY, 'g', 15);
-	m_constantsUnits << "A^2 s^4 / kg m^3";
+	m_constantsUnits << QStringLiteral("A^2 s^4 / kg m^3");
 	m_constantsNames << i18n("Planck constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_H, 'g', 15);
-	m_constantsUnits << "kg m^2 / s";
+	m_constantsUnits << QStringLiteral("kg m^2 / s");
 	m_constantsNames << i18n("Reduced Planck constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR, 'g', 15);
-	m_constantsUnits << "kg m^2 / s";
+	m_constantsUnits << QStringLiteral("kg m^2 / s");
 	m_constantsNames << i18n("Avogadro constant");
 	m_constantsValues << QString::number(GSL_CONST_NUM_AVOGADRO, 'g', 15);
-	m_constantsUnits << "1 / mol";
+	m_constantsUnits << QStringLiteral("1 / mol");
 	m_constantsNames << i18n("Faraday");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FARADAY, 'g', 15);
-	m_constantsUnits << "A s / mol";
+	m_constantsUnits << QStringLiteral("A s / mol");
 	m_constantsNames << i18n("Boltzmann constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BOLTZMANN, 'g', 15);
-	m_constantsUnits << "kg m^2 / K s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / K s^2");
 	m_constantsNames << i18n("Molar gas");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MOLAR_GAS, 'g', 15);
-	m_constantsUnits << "kg m^2 / K mol s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / K mol s^2");
 	m_constantsNames << i18n("Standard gas volume");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STANDARD_GAS_VOLUME, 'g', 15);
-	m_constantsUnits << "m^3 / mol";
+	m_constantsUnits << QStringLiteral("m^3 / mol");
 	m_constantsNames << i18n("Stefan-Boltzmann constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STEFAN_BOLTZMANN_CONSTANT, 'g', 15);
-	m_constantsUnits << "kg / K^4 s^3";
+	m_constantsUnits << QStringLiteral("kg / K^4 s^3");
 	m_constantsNames << i18n("Gauss");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GAUSS, 'g', 15);
-	m_constantsUnits << "kg / A s^2";
+	m_constantsUnits << QStringLiteral("kg / A s^2");
 
 	for (int i = 0; i < 12; i++)
 		m_constantsGroupIndex << 1;
@@ -992,22 +992,22 @@ void ExpressionParser::initConstants() {
 	// Astronomy and Astrophysics
 	m_constantsNames << i18n("Astronomical unit");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ASTRONOMICAL_UNIT, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Gravitational constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAVITATIONAL_CONSTANT, 'g', 15);
-	m_constantsUnits << "m^3 / kg s^2";
+	m_constantsUnits << QStringLiteral("m^3 / kg s^2");
 	m_constantsNames << i18n("Light year");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_LIGHT_YEAR, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Parsec");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PARSEC, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Gravitational acceleration");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAV_ACCEL, 'g', 15);
-	m_constantsUnits << "m / s^2";
+	m_constantsUnits << QStringLiteral("m / s^2");
 	m_constantsNames << i18n("Solar mass");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_SOLAR_MASS, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 
 	for (int i = 0; i < 6; i++)
 		m_constantsGroupIndex << 2;
@@ -1015,58 +1015,58 @@ void ExpressionParser::initConstants() {
 	// Atomic and Nuclear Physics;
 	m_constantsNames << i18n("Charge of the electron");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_CHARGE, 'g', 15);
-	m_constantsUnits << "A s";
+	m_constantsUnits << QStringLiteral("A s");
 	m_constantsNames << i18n("Energy of 1 electron volt");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_VOLT, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Unified atomic mass");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_UNIFIED_ATOMIC_MASS, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of the electron");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_ELECTRON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of the muon");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_MUON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of the proton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_PROTON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of the neutron");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MASS_NEUTRON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Electromagnetic fine structure constant");
 	m_constantsValues << QString::number(GSL_CONST_NUM_FINE_STRUCTURE, 'g', 15);
 	m_constantsUnits << QString();
 	m_constantsNames << i18n("Rydberg constant");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_RYDBERG, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Bohr radius");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_RADIUS, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1 angstrom");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ANGSTROM, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Area of 1 barn");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BARN, 'g', 15);
-	m_constantsUnits << "m^2";
+	m_constantsUnits << QStringLiteral("m^2");
 	m_constantsNames << i18n("Bohr Magneton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BOHR_MAGNETON, 'g', 15);
-	m_constantsUnits << "A m^2";
+	m_constantsUnits << QStringLiteral("A m^2");
 	m_constantsNames << i18n("Nuclear Magneton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_NUCLEAR_MAGNETON, 'g', 15);
-	m_constantsUnits << "A m^2";
+	m_constantsUnits << QStringLiteral("A m^2");
 	m_constantsNames << i18n("Magnetic moment of the electron [absolute value]");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ELECTRON_MAGNETIC_MOMENT, 'g', 15);
-	m_constantsUnits << "A m^2";
+	m_constantsUnits << QStringLiteral("A m^2");
 	m_constantsNames << i18n("Magnetic moment of the proton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PROTON_MAGNETIC_MOMENT, 'g', 15);
-	m_constantsUnits << "A m^2";
+	m_constantsUnits << QStringLiteral("A m^2");
 	m_constantsNames << i18n("Thomson cross section");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_THOMSON_CROSS_SECTION, 'g', 15);
-	m_constantsUnits << "m^2";
+	m_constantsUnits << QStringLiteral("m^2");
 	m_constantsNames << i18n("Electric dipole moment of 1 Debye");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_DEBYE, 'g', 15);
-	m_constantsUnits << "A s^2 / m^2";
+	m_constantsUnits << QStringLiteral("A s^2 / m^2");
 
 	for (int i = 0; i < 18; i++)
 		m_constantsGroupIndex << 3;
@@ -1074,16 +1074,16 @@ void ExpressionParser::initConstants() {
 	// Measurement of Time
 	m_constantsNames << i18n("Number of seconds in 1 minute");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MINUTE, 'g', 15);
-	m_constantsUnits << "s";
+	m_constantsUnits << QStringLiteral("s");
 	m_constantsNames << i18n("Number of seconds in 1 hour");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_HOUR, 'g', 15);
-	m_constantsUnits << "s";
+	m_constantsUnits << QStringLiteral("s");
 	m_constantsNames << i18n("Number of seconds in 1 day");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_DAY, 'g', 15);
-	m_constantsUnits << "s";
+	m_constantsUnits << QStringLiteral("s");
 	m_constantsNames << i18n("Number of seconds in 1 week");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_WEEK, 'g', 15);
-	m_constantsUnits << "s";
+	m_constantsUnits << QStringLiteral("s");
 
 	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 4;
@@ -1091,19 +1091,19 @@ void ExpressionParser::initConstants() {
 	// Imperial Units
 	m_constantsNames << i18n("Length of 1 inch");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1 foot");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOT, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1 yard");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_YARD, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1 mile");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MILE, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1/1000th of an inch");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MIL, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 
 	for (int i = 0; i < 5; i++)
 		m_constantsGroupIndex << 5;
@@ -1111,19 +1111,19 @@ void ExpressionParser::initConstants() {
 	// Speed and Nautical Units
 	m_constantsNames << i18n("Speed of 1 kilometer per hour");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOMETERS_PER_HOUR, 'g', 15);
-	m_constantsUnits << "m / s";
+	m_constantsUnits << QStringLiteral("m / s");
 	m_constantsNames << i18n("Speed of 1 mile per hour");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MILES_PER_HOUR, 'g', 15);
-	m_constantsUnits << "m / s";
+	m_constantsUnits << QStringLiteral("m / s");
 	m_constantsNames << i18n("Length of 1 nautical mile");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_NAUTICAL_MILE, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Length of 1 fathom");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FATHOM, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Speed of 1 knot");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_KNOT, 'g', 15);
-	m_constantsUnits << "m / s";
+	m_constantsUnits << QStringLiteral("m / s");
 
 	for (int i = 0; i < 5; i++)
 		m_constantsGroupIndex << 6;
@@ -1131,10 +1131,10 @@ void ExpressionParser::initConstants() {
 	// Printers Units
 	m_constantsNames << i18n("length of 1 printer's point [1/72 inch]");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POINT, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("length of 1 TeX point [1/72.27 inch]");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TEXPOINT, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 
 	for (int i = 0; i < 2; i++)
 		m_constantsGroupIndex << 7;
@@ -1142,31 +1142,31 @@ void ExpressionParser::initConstants() {
 	// Volume, Area and Length
 	m_constantsNames << i18n("Length of 1 micron");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_MICRON, 'g', 15);
-	m_constantsUnits << "m";
+	m_constantsUnits << QStringLiteral("m");
 	m_constantsNames << i18n("Area of 1 hectare");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_HECTARE, 'g', 15);
-	m_constantsUnits << "m^2";
+	m_constantsUnits << QStringLiteral("m^2");
 	m_constantsNames << i18n("Area of 1 acre");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ACRE, 'g', 15);
-	m_constantsUnits << "m^2";
+	m_constantsUnits << QStringLiteral("m^2");
 	m_constantsNames << i18n("Volume of 1 liter");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_LITER, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 	m_constantsNames << i18n("Volume of 1 US gallon");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_US_GALLON, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 	m_constantsNames << i18n("Volume of 1 Canadian gallon");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_CANADIAN_GALLON, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 	m_constantsNames << i18n("Volume of 1 UK gallon");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_GALLON, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 	m_constantsNames << i18n("Volume of 1 quart");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_QUART, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 	m_constantsNames << i18n("Volume of 1 pint");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PINT, 'g', 15);
-	m_constantsUnits << "m^3";
+	m_constantsUnits << QStringLiteral("m^3");
 
 	for (int i = 0; i < 9; i++)
 		m_constantsGroupIndex << 8;
@@ -1174,37 +1174,37 @@ void ExpressionParser::initConstants() {
 	// Mass and Weight
 	m_constantsNames << i18n("Mass of 1 pound");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_MASS, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 ounce");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_OUNCE_MASS, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 ton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 metric ton [1000 kg]");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_METRIC_TON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 UK ton");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_UK_TON, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 troy ounce");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TROY_OUNCE, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Mass of 1 carat");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_CARAT, 'g', 15);
-	m_constantsUnits << "kg";
+	m_constantsUnits << QStringLiteral("kg");
 	m_constantsNames << i18n("Force of 1 gram weight");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_GRAM_FORCE, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 	m_constantsNames << i18n("Force of 1 pound weight");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POUND_FORCE, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 	m_constantsNames << i18n("Force of 1 kilopound weight");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_KILOPOUND_FORCE, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 	m_constantsNames << i18n("Force of 1 poundal");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POUNDAL, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 
 	for (int i = 0; i < 11; i++)
 		m_constantsGroupIndex << 9;
@@ -1212,16 +1212,16 @@ void ExpressionParser::initConstants() {
 	// Thermal Energy and Power
 	m_constantsNames << i18n("Energy of 1 calorie");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_CALORIE, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Energy of 1 British Thermal Unit");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BTU, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Energy of 1 Therm");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_THERM, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Power of 1 horsepower");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_HORSEPOWER, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^3";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^3");
 
 	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 10;
@@ -1229,25 +1229,25 @@ void ExpressionParser::initConstants() {
 	// Pressure
 	m_constantsNames << i18n("Pressure of 1 bar");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_BAR, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 standard atmosphere");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STD_ATMOSPHERE, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 torr");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_TORR, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 meter of mercury");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_METER_OF_MERCURY, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 inch of mercury");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_MERCURY, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 inch of water");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_INCH_OF_WATER, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 	m_constantsNames << i18n("Pressure of 1 pound per square inch");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PSI, 'g', 15);
-	m_constantsUnits << "kg / m s^2";
+	m_constantsUnits << QStringLiteral("kg / m s^2");
 
 	for (int i = 0; i < 7; i++)
 		m_constantsGroupIndex << 11;
@@ -1255,10 +1255,10 @@ void ExpressionParser::initConstants() {
 	// Viscosity
 	m_constantsNames << i18n("Dynamic viscosity of 1 poise");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_POISE, 'g', 15);
-	m_constantsUnits << "kg / m s";
+	m_constantsUnits << QStringLiteral("kg / m s");
 	m_constantsNames << i18n("Kinematic viscosity of 1 stokes");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STOKES, 'g', 15);
-	m_constantsUnits << "m^2 / s";
+	m_constantsUnits << QStringLiteral("m^2 / s");
 
 	for (int i = 0; i < 2; i++)
 		m_constantsGroupIndex << 12;
@@ -1266,25 +1266,25 @@ void ExpressionParser::initConstants() {
 	// Light and Illumination
 	m_constantsNames << i18n("Luminance of 1 stilb");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_STILB, 'g', 15);
-	m_constantsUnits << "cd / m^2";
+	m_constantsUnits << QStringLiteral("cd / m^2");
 	m_constantsNames << i18n("Luminous flux of 1 lumen");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_LUMEN, 'g', 15);
-	m_constantsUnits << "cd sr";
+	m_constantsUnits << QStringLiteral("cd sr");
 	m_constantsNames << i18n("Illuminance of 1 lux");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_LUX, 'g', 15);
-	m_constantsUnits << "cd sr / m^2";
+	m_constantsUnits << QStringLiteral("cd sr / m^2");
 	m_constantsNames << i18n("Illuminance of 1 phot");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_PHOT, 'g', 15);
-	m_constantsUnits << "cd sr / m^2";
+	m_constantsUnits << QStringLiteral("cd sr / m^2");
 	m_constantsNames << i18n("Illuminance of 1 footcandle");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTCANDLE, 'g', 15);
-	m_constantsUnits << "cd sr / m^2";
+	m_constantsUnits << QStringLiteral("cd sr / m^2");
 	m_constantsNames << i18n("Luminance of 1 lambert");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_LAMBERT, 'g', 15);
-	m_constantsUnits << "cd sr / m^2";
+	m_constantsUnits << QStringLiteral("cd sr / m^2");
 	m_constantsNames << i18n("Luminance of 1 footlambert");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_FOOTLAMBERT, 'g', 15);
-	m_constantsUnits << "cd sr / m^2";
+	m_constantsUnits << QStringLiteral("cd sr / m^2");
 
 	for (int i = 0; i < 7; i++)
 		m_constantsGroupIndex << 13;
@@ -1292,13 +1292,13 @@ void ExpressionParser::initConstants() {
 	// Radioactivity
 	m_constantsNames << i18n("Activity of 1 curie");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_CURIE, 'g', 15);
-	m_constantsUnits << "1 / s";
+	m_constantsUnits << QStringLiteral("1 / s");
 	m_constantsNames << i18n("Exposure of 1 roentgen");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ROENTGEN, 'g', 15);
-	m_constantsUnits << "A s / kg";
+	m_constantsUnits << QStringLiteral("A s / kg");
 	m_constantsNames << i18n("Absorbed dose of 1 rad");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_RAD, 'g', 15);
-	m_constantsUnits << "m^2 / s^2";
+	m_constantsUnits << QStringLiteral("m^2 / s^2");
 
 	for (int i = 0; i < 3; i++)
 		m_constantsGroupIndex << 14;
@@ -1306,16 +1306,16 @@ void ExpressionParser::initConstants() {
 	// Force and Energy
 	m_constantsNames << i18n("SI unit of force");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_NEWTON, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 	m_constantsNames << i18n("Force of 1 Dyne");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_DYNE, 'g', 15);
-	m_constantsUnits << "kg m / s^2";
+	m_constantsUnits << QStringLiteral("kg m / s^2");
 	m_constantsNames << i18n("SI unit of energy");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_JOULE, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 	m_constantsNames << i18n("Energy 1 erg");
 	m_constantsValues << QString::number(GSL_CONST_MKSA_ERG, 'g', 15);
-	m_constantsUnits << "kg m^2 / s^2";
+	m_constantsUnits << QStringLiteral("kg m^2 / s^2");
 
 	for (int i = 0; i < 4; i++)
 		m_constantsGroupIndex << 15;
@@ -1356,7 +1356,7 @@ const QVector<int>& ExpressionParser::functionsGroupIndices() {
  */
 int ExpressionParser::functionArgumentCount(const QString& functionName) {
 	int index = 0;
-	while (functionName != QString(_functions[index].name) && _functions[index].name != nullptr)
+	while (functionName != QLatin1String(_functions[index].name) && _functions[index].name != nullptr)
 		index++;
 
 	DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
@@ -1367,62 +1367,62 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
 	switch (functionArgumentCount(functionName)) {
 	case 0:
-		return {"()"};
+		return QStringLiteral("()");
 	case 1:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return {"(x)"};
+			return QStringLiteral("(x)");
 		case XYEquationCurve::EquationType::Polar:
-			return {"(phi)"};
+			return QStringLiteral("(phi)");
 		case XYEquationCurve::EquationType::Parametric:
-			return {"(t)"};
+			return QStringLiteral("(t)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return {"(x)"};
+			return QStringLiteral("(x)");
 		}
 		break;
 	case 2:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return {"(x, y)"};
+			return QStringLiteral("(x, y)");
 		case XYEquationCurve::EquationType::Polar:
-			return {"(phi, theta)"};
+			return QStringLiteral("(phi, theta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return {"(u, v)"};
+			return QStringLiteral("(u, v)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return {"(x, y)"};
+			return QStringLiteral("(x, y)");
 		}
 		break;
 	case 3:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return {"(x, y, z)"};
+			return QStringLiteral("(x, y, z)");
 		case XYEquationCurve::EquationType::Polar:
-			return {"(alpha, beta, gamma)"};
+			return QStringLiteral("(alpha, beta, gamma)");
 		case XYEquationCurve::EquationType::Parametric:
-			return {"(u, v, w)"};
+			return QStringLiteral("(u, v, w)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return {"(x, y, z)"};
+			return QStringLiteral("(x, y, z)");
 		}
 		break;
 	case 4:
 		switch (type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return {"(a, b, c, d)"};
+			return QStringLiteral("(a, b, c, d)");
 		case XYEquationCurve::EquationType::Polar:
-			return {"(alpha, beta, gamma, delta)"};
+			return QStringLiteral("(alpha, beta, gamma, delta)");
 		case XYEquationCurve::EquationType::Parametric:
-			return {"(a, b, c, d)"};
+			return QStringLiteral("(a, b, c, d)");
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return {"(a, b, c, d)"};
+			return QStringLiteral("(a, b, c, d)");
 		}
 		break;
 	}
 
-	return {"(...)"};
+	return QStringLiteral("(...)");
 }
 
 const QStringList& ExpressionParser::constants() {

@@ -46,11 +46,11 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 void WorksheetElement::init() {
 	d_ptr->setData(0, static_cast<quint64>(type()));
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
-	m_drawingOrderMenu->setIcon(QIcon::fromTheme("layer-bottom"));
+	m_drawingOrderMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
-	m_moveBehindMenu->setIcon(QIcon::fromTheme("draw-arrow-down"));
+	m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
 	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
-	m_moveInFrontOfMenu->setIcon(QIcon::fromTheme("draw-arrow-up"));
+	m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
@@ -214,14 +214,14 @@ QMenu* WorksheetElement::createContextMenu() {
 
 		if (w->layout() != Worksheet::Layout::NoLayout) {
 			m_moveBehindMenu->setTitle(i18n("Move in &front of"));
-			m_moveBehindMenu->setIcon(QIcon::fromTheme("draw-arrow-up"));
+			m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
 			m_moveInFrontOfMenu->setTitle(i18n("Move &behind"));
-			m_moveInFrontOfMenu->setIcon(QIcon::fromTheme("draw-arrow-down"));
+			m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
 		} else {
 			m_moveBehindMenu->setTitle(i18n("Move &behind"));
-			m_moveBehindMenu->setIcon(QIcon::fromTheme("draw-arrow-down"));
+			m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
 			m_moveInFrontOfMenu->setTitle(i18n("Move in &front of"));
-			m_moveInFrontOfMenu->setIcon(QIcon::fromTheme("draw-arrow-up"));
+			m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
 		}
 	}
 
@@ -433,18 +433,18 @@ QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const
 
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const WorksheetElement);
-	writer->writeAttribute("x", QString::number(d->position.point.x()));
-	writer->writeAttribute("y", QString::number(d->position.point.y()));
-	writer->writeAttribute("horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)));
-	writer->writeAttribute("verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)));
-	writer->writeAttribute("horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)));
-	writer->writeAttribute("verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)));
-	writer->writeAttribute("rotationAngle", QString::number(d->rotationAngle));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
-	writer->writeAttribute("coordinateBinding", QString::number(d->coordinateBindingEnabled));
-	writer->writeAttribute("logicalPosX", QString::number(d->positionLogical.x()));
-	writer->writeAttribute("logicalPosY", QString::number(d->positionLogical.y()));
+	writer->writeAttribute(QStringLiteral("x"), QString::number(d->position.point.x()));
+	writer->writeAttribute(QStringLiteral("y"), QString::number(d->position.point.y()));
+	writer->writeAttribute(QStringLiteral("horizontalPosition"), QString::number(static_cast<int>(d->position.horizontalPosition)));
+	writer->writeAttribute(QStringLiteral("verticalPosition"), QString::number(static_cast<int>(d->position.verticalPosition)));
+	writer->writeAttribute(QStringLiteral("horizontalAlignment"), QString::number(static_cast<int>(d->horizontalAlignment)));
+	writer->writeAttribute(QStringLiteral("verticalAlignment"), QString::number(static_cast<int>(d->verticalAlignment)));
+	writer->writeAttribute(QStringLiteral("rotationAngle"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("coordinateBinding"), QString::number(d->coordinateBindingEnabled));
+	writer->writeAttribute(QStringLiteral("logicalPosX"), QString::number(d->positionLogical.x()));
+	writer->writeAttribute(QStringLiteral("logicalPosY"), QString::number(d->positionLogical.y()));
 }
 
 bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
@@ -455,15 +455,15 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	auto attribs = reader->attributes();
 
-	auto str = attribs.value("x").toString();
+	auto str = attribs.value(QStringLiteral("x")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("x").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 	else
 		d->position.point.setX(str.toDouble());
 
-	str = attribs.value("y").toString();
+	str = attribs.value(QStringLiteral("y")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("y").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
 	else
 		d->position.point.setY(str.toDouble());
 
@@ -503,23 +503,23 @@ bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
 	READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 	READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
-	str = attribs.value("visible").toString();
+	str = attribs.value(QStringLiteral("visible")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("visible").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 	else
 		d->setVisible(str.toInt());
 
 	READ_INT_VALUE("coordinateBinding", coordinateBindingEnabled, bool);
 
-	str = attribs.value("logicalPosX").toString();
+	str = attribs.value(QStringLiteral("logicalPosX")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("logicalPosX").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosX")).toString());
 	else
 		d->positionLogical.setX(str.toDouble());
 
-	str = attribs.value("logicalPosY").toString();
+	str = attribs.value(QStringLiteral("logicalPosY")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("logicalPosY").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("logicalPosY")).toString());
 	else
 		d->positionLogical.setY(str.toDouble());
 

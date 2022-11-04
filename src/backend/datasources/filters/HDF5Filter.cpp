@@ -188,7 +188,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 
 	// open file
 	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
-	HDF5FilterPrivate::handleError((int)file, "H5Fopen", fileName);
+	HDF5FilterPrivate::handleError((int)file, QStringLiteral("H5Fopen"), fileName);
 	if (file < 0) {
 		DEBUG("Opening file " << qPrintable(fileName) << " failed! Giving up.");
 		return i18n("Failed opening HDF5 file");
@@ -363,15 +363,15 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 
 	QProcess proc;
 	QStringList args;
-	args << "-H" << fileName;
+	args << QStringLiteral("-H") << fileName;
 	proc.start(h5dumpFullPath, args);
 
 	if (proc.waitForReadyRead(1000) == false)
 		DDLString += i18n("Reading from file %1 failed.", fileName);
 	else {
-		DDLString += proc.readAll();
-		DDLString.replace('\n', "<br>\n");
-		DDLString.replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+		DDLString += QLatin1String(proc.readAll());
+		DDLString.replace(QLatin1Char('\n'), QLatin1String("<br>\n"));
+		DDLString.replace(QLatin1Char('\t'), QLatin1String("&nbsp;&nbsp;&nbsp;&nbsp;"));
 		// DEBUG("	DDL string: " << STDSTRING(DDLString));
 	}
 #else // TODO: h5dump on Win, Mac
@@ -409,22 +409,22 @@ QString HDF5FilterPrivate::translateHDF5Order(H5T_order_t o) {
 	QString order;
 	switch (o) {
 	case H5T_ORDER_LE:
-		order = "LE";
+		order = QStringLiteral("LE");
 		break;
 	case H5T_ORDER_BE:
-		order = "BE";
+		order = QStringLiteral("BE");
 		break;
 	case H5T_ORDER_VAX:
-		order = "VAX";
+		order = QStringLiteral("VAX");
 		break;
 	case H5T_ORDER_MIXED:
-		order = "MIXED";
+		order = QStringLiteral("MIXED");
 		break;
 	case H5T_ORDER_NONE:
-		order = "NONE";
+		order = QStringLiteral("NONE");
 		break;
 	case H5T_ORDER_ERROR:
-		order = "ERROR";
+		order = QStringLiteral("ERROR");
 		break;
 	}
 
@@ -435,33 +435,33 @@ QString HDF5FilterPrivate::translateHDF5Type(hid_t t) {
 	QString type;
 
 	if (H5Tequal(t, H5T_STD_I8LE) || H5Tequal(t, H5T_STD_I8BE))
-		type = "CHAR";
+		type = QStringLiteral("CHAR");
 	else if (H5Tequal(t, H5T_STD_U8LE) || H5Tequal(t, H5T_STD_U8BE))
-		type = "UCHAR";
+		type = QStringLiteral("UCHAR");
 	else if (H5Tequal(t, H5T_STD_I16LE) || H5Tequal(t, H5T_STD_I16BE))
-		type = "SHORT";
+		type = QStringLiteral("SHORT");
 	else if (H5Tequal(t, H5T_STD_U16LE) || H5Tequal(t, H5T_STD_U16BE))
-		type = "USHORT";
+		type = QStringLiteral("USHORT");
 	else if (H5Tequal(t, H5T_STD_I32LE) || H5Tequal(t, H5T_STD_I32BE))
-		type = "INT";
+		type = QStringLiteral("INT");
 	else if (H5Tequal(t, H5T_STD_U32LE) || H5Tequal(t, H5T_STD_U32BE))
-		type = "UINT";
+		type = QStringLiteral("UINT");
 	else if (H5Tequal(t, H5T_NATIVE_LONG))
-		type = "LONG";
+		type = QStringLiteral("LONG");
 	else if (H5Tequal(t, H5T_NATIVE_ULONG))
-		type = "ULONG";
+		type = QStringLiteral("ULONG");
 	else if (H5Tequal(t, H5T_STD_I64LE) || H5Tequal(t, H5T_STD_I64BE))
-		type = "LLONG";
+		type = QStringLiteral("LLONG");
 	else if (H5Tequal(t, H5T_STD_U64LE) || H5Tequal(t, H5T_STD_U64BE))
-		type = "ULLONG";
+		type = QStringLiteral("ULLONG");
 	else if (H5Tequal(t, H5T_IEEE_F32LE) || H5Tequal(t, H5T_IEEE_F32BE))
-		type = "FLOAT";
+		type = QStringLiteral("FLOAT");
 	else if (H5Tequal(t, H5T_IEEE_F64LE) || H5Tequal(t, H5T_IEEE_F64BE))
-		type = "DOUBLE";
+		type = QStringLiteral("DOUBLE");
 	else if (H5Tequal(t, H5T_NATIVE_LDOUBLE))
-		type = "LDOUBLE";
+		type = QStringLiteral("LDOUBLE");
 	else
-		type = "UNKNOWN";
+		type = QStringLiteral("UNKNOWN");
 
 	return type;
 }
@@ -470,43 +470,43 @@ QString HDF5FilterPrivate::translateHDF5Class(H5T_class_t c) {
 	QString dclass;
 	switch (c) {
 	case H5T_INTEGER:
-		dclass = "INTEGER";
+		dclass = QStringLiteral("INTEGER");
 		break;
 	case H5T_FLOAT:
-		dclass = "FLOAT";
+		dclass = QStringLiteral("FLOAT");
 		break;
 	case H5T_STRING:
-		dclass = "STRING";
+		dclass = QStringLiteral("STRING");
 		break;
 	case H5T_BITFIELD:
-		dclass = "BITFIELD";
+		dclass = QStringLiteral("BITFIELD");
 		break;
 	case H5T_OPAQUE:
-		dclass = "OPAQUE";
+		dclass = QStringLiteral("OPAQUE");
 		break;
 	case H5T_COMPOUND:
-		dclass = "COMPOUND";
+		dclass = QStringLiteral("COMPOUND");
 		break;
 	case H5T_ARRAY:
-		dclass = "ARRAY";
+		dclass = QStringLiteral("ARRAY");
 		break;
 	case H5T_ENUM:
-		dclass = "ENUM";
+		dclass = QStringLiteral("ENUM");
 		break;
 	case H5T_REFERENCE:
-		dclass = "REFERENCE";
+		dclass = QStringLiteral("REFERENCE");
 		break;
 	case H5T_VLEN:
-		dclass = "VLEN";
+		dclass = QStringLiteral("VLEN");
 		break;
 	case H5T_TIME:
-		dclass = "TIME";
+		dclass = QStringLiteral("TIME");
 		break;
 	case H5T_NCLASSES:
-		dclass = "NCLASSES";
+		dclass = QStringLiteral("NCLASSES");
 		break;
 	case H5T_NO_CLASS:
-		dclass = "NOCLASS";
+		dclass = QStringLiteral("NOCLASS");
 		break;
 	}
 	return dclass;
@@ -531,24 +531,25 @@ QStringList HDF5FilterPrivate::readHDF5Compound(hid_t tid) {
 	QString line;
 	line += QLatin1String("COMPOUND(") + QString::number(typeSize) + QLatin1String(") : (");
 	int members = H5Tget_nmembers(tid);
-	handleError(members, "H5Tget_nmembers");
+	handleError(members, QStringLiteral("H5Tget_nmembers"));
 	for (int i = 0; i < members; ++i) {
 		H5T_class_t mclass = H5Tget_member_class(tid, i);
-		handleError((int)mclass, "H5Tget_member_class");
+		handleError((int)mclass, QStringLiteral("H5Tget_member_class"));
 		hid_t mtype = H5Tget_member_type(tid, i);
-		handleError((int)mtype, "H5Tget_member_type");
+		handleError((int)mtype, QStringLiteral("H5Tget_member_type"));
 		size_t size = H5Tget_size(mtype);
-		handleError((int)size, "H5Tget_size");
+		handleError((int)size, QStringLiteral("H5Tget_size"));
 		QString typeString = translateHDF5Class(mclass);
 		if (mclass == H5T_INTEGER || mclass == H5T_FLOAT)
 			typeString = translateHDF5Type(mtype);
-		line += H5Tget_member_name(tid, i) + QLatin1String("[") + typeString + QLatin1String("(") + QString::number(size) + QLatin1String(")]");
+		line +=
+			QLatin1String(H5Tget_member_name(tid, i)) + QStringLiteral("[") + typeString + QStringLiteral("(") + QString::number(size) + QStringLiteral(")]");
 		if (i == members - 1)
 			line += QLatin1String(")");
 		else
 			line += QLatin1String(",");
 		m_status = H5Tclose(mtype);
-		handleError(m_status, "H5Tclose");
+		handleError(m_status, QStringLiteral("H5Tclose"));
 	}
 
 	QStringList dataString;
@@ -566,12 +567,12 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t dtype, int ro
 	T* data = new T[rows];
 
 	m_status = H5Dread(dataset, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-	handleError(m_status, "H5Dread");
+	handleError(m_status, QStringLiteral("H5Dread"));
 	DEBUG(Q_FUNC_INFO << ", startRow = " << startRow << ", endRow = " << endRow);
 	DEBUG(Q_FUNC_INFO << ", dataContainer = " << dataContainer);
 
 	H5T_class_t dclass = H5Tget_class(dtype);
-	handleError((int)dclass, "H5Dget_class");
+	handleError((int)dclass, QStringLiteral("H5Dget_class"));
 	if (dclass == H5T_INTEGER) {
 		if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG) || H5Tequal(dtype, H5T_STD_U64LE)
 			|| H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG)) {
@@ -590,26 +591,26 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 	DEBUG(Q_FUNC_INFO << ", data container size = " << dataContainer.size());
 	int members = H5Tget_nmembers(tid);
 	bool preview = !dataContainer[0];
-	handleError(members, "H5Tget_nmembers");
+	handleError(members, QStringLiteral("H5Tget_nmembers"));
 	// DEBUG(" # members = " << members);
 
 	QStringList dataString;
 	if (preview) {
 		for (int i = 0; i < qMin(rows, lines); ++i)
-			dataString << QLatin1String("(");
+			dataString << QStringLiteral("(");
 		dataContainer.resize(members); // avoid "index out of range" for preview
 	}
 
 	for (int m = 0; m < members; ++m) {
 		// DEBUG(Q_FUNC_INFO << ", member " << m)
 		hid_t mtype = H5Tget_member_type(tid, m);
-		handleError((int)mtype, "H5Tget_member_type");
+		handleError((int)mtype, QStringLiteral("H5Tget_member_type"));
 		size_t msize = H5Tget_size(mtype);
-		handleError((int)msize, "H5Tget_size");
+		handleError((int)msize, QStringLiteral("H5Tget_size"));
 		hid_t ctype = H5Tcreate(H5T_COMPOUND, msize);
-		handleError((int)ctype, "H5Tcreate");
+		handleError((int)ctype, QStringLiteral("H5Tcreate"));
 		m_status = H5Tinsert(ctype, H5Tget_member_name(tid, m), 0, mtype);
-		handleError(m_status, "H5Tinsert");
+		handleError(m_status, QStringLiteral("H5Tinsert"));
 
 		QStringList mdataString;
 		if (H5Tequal(mtype, H5T_STD_I8LE) || H5Tequal(mtype, H5T_STD_I8BE))
@@ -674,10 +675,10 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 					static_cast<QVector<double>*>(dataContainer[m])->operator[](row - startRow + 1) = 0;
 			} else {
 				for (int i = 0; i < qMin(rows, lines); ++i)
-					mdataString << QLatin1String("_");
+					mdataString << QStringLiteral("_");
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
-			handleError((int)mclass, "H5Tget_member_class");
+			handleError((int)mclass, QStringLiteral("H5Tget_member_class"));
 			DEBUG(Q_FUNC_INFO << ", unsupported type of class " << STDSTRING(translateHDF5Class(mclass)));
 		}
 
@@ -715,10 +716,10 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t dtyp
 		data[i] = data[0] + i * cols;
 
 	m_status = H5Dread(dataset, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data[0][0]);
-	handleError(m_status, "H5Dread");
+	handleError(m_status, QStringLiteral("H5Dread"));
 
 	H5T_class_t dclass = H5Tget_class(dtype);
-	handleError((int)dclass, "H5Dget_class");
+	handleError((int)dclass, QStringLiteral("H5Dget_class"));
 	if (dclass == H5T_INTEGER) {
 		if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG) || H5Tequal(dtype, H5T_STD_U64LE)
 			|| H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG)) {
@@ -739,27 +740,27 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 	DEBUG(Q_FUNC_INFO << ", rows =" << rows << "cols = " << cols << "lines = " << lines);
 
 	int members = H5Tget_nmembers(tid);
-	handleError(members, "H5Tget_nmembers");
+	handleError(members, QStringLiteral("H5Tget_nmembers"));
 	DEBUG(" # members =" << members);
 
 	QVector<QStringList> dataStrings;
 	for (int i = 0; i < qMin(rows, lines); ++i) {
 		QStringList lineStrings;
 		for (int j = 0; j < cols; ++j)
-			lineStrings << QLatin1String("(");
+			lineStrings << QStringLiteral("(");
 		dataStrings << lineStrings;
 	}
 
 	// QStringList* data = new QStringList[members];
 	for (int m = 0; m < members; ++m) {
 		hid_t mtype = H5Tget_member_type(tid, m);
-		handleError((int)mtype, "H5Tget_member_type");
+		handleError((int)mtype, QStringLiteral("H5Tget_member_type"));
 		size_t msize = H5Tget_size(mtype);
-		handleError((int)msize, "H5Tget_size");
+		handleError((int)msize, QStringLiteral("H5Tget_size"));
 		hid_t ctype = H5Tcreate(H5T_COMPOUND, msize);
-		handleError((int)ctype, "H5Tcreate");
+		handleError((int)ctype, QStringLiteral("H5Tcreate"));
 		m_status = H5Tinsert(ctype, H5Tget_member_name(tid, m), 0, mtype);
-		handleError(m_status, "H5Tinsert");
+		handleError(m_status, QStringLiteral("H5Tinsert"));
 
 		// dummy container for all data columns
 		// initially contains one pointer set to NULL
@@ -825,7 +826,7 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 			for (int i = 0; i < qMin(rows, lines); ++i) {
 				QStringList lineString;
 				for (int j = 0; j < cols; ++j)
-					lineString << QLatin1String("_");
+					lineString << QStringLiteral("_");
 				mdataStrings << lineString;
 			}
 #ifndef NDEBUG
@@ -835,20 +836,20 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 		}
 
 		m_status = H5Tclose(ctype);
-		handleError(m_status, "H5Tclose");
+		handleError(m_status, QStringLiteral("H5Tclose"));
 
 		for (int i = 0; i < qMin(rows, lines); i++) {
 			for (int j = 0; j < cols; j++) {
 				dataStrings[i][j] += mdataStrings[i][j];
 				if (m < members - 1)
-					dataStrings[i][j] += QLatin1String(",");
+					dataStrings[i][j] += QStringLiteral(",");
 			}
 		}
 	}
 
 	for (int i = 0; i < qMin(rows, lines); ++i) {
 		for (int j = 0; j < cols; ++j)
-			dataStrings[i][j] += QLatin1String(")");
+			dataStrings[i][j] += QStringLiteral(")");
 	}
 
 	// QDEBUG("dataStrings =" << dataStrings);
@@ -860,76 +861,76 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 
 	char name[MAXNAMELENGTH];
 	m_status = H5Aget_name(aid, MAXNAMELENGTH, name);
-	handleError(m_status, "H5Aget_name");
-	attr << QString(name);
+	handleError(m_status, QStringLiteral("H5Aget_name"));
+	attr << QLatin1String(name);
 	// DEBUG(Q_FUNC_INFO << ", name =" << name);
 
 	hid_t aspace = H5Aget_space(aid); // the dimensions of the attribute data
-	handleError((int)aspace, "H5Aget_space");
+	handleError((int)aspace, QStringLiteral("H5Aget_space"));
 	hid_t atype = H5Aget_type(aid);
-	handleError((int)atype, "H5Aget_type");
+	handleError((int)atype, QStringLiteral("H5Aget_type"));
 	hid_t aclass = H5Tget_class(atype);
-	handleError((int)aclass, "H5Aget_class");
+	handleError((int)aclass, QStringLiteral("H5Aget_class"));
 
 	if (aclass == H5T_STRING) {
 		hid_t amem = H5Tget_native_type(atype, H5T_DIR_DEFAULT);
-		handleError((int)amem, "H5Aget_native_type");
+		handleError((int)amem, QStringLiteral("H5Aget_native_type"));
 		htri_t isVariable = H5Tis_variable_str(amem);
-		handleError((int)isVariable, "H5Tis_variable_str");
+		handleError((int)isVariable, QStringLiteral("H5Tis_variable_str"));
 		// DEBUG("variable string: " << isVariable)
 		char* buf = nullptr; // buffer to read attr value
 		if (!isVariable) { // fixed length
 			hsize_t sz = H5Tget_size(atype);
-			handleError((int)sz, "H5Aget_storage_size");
+			handleError((int)sz, QStringLiteral("H5Aget_storage_size"));
 			// DEBUG("variable string = " << isVariable << ", storage size = " << sz)
 			buf = new char[sz + 1];
 			m_status = H5Aread(aid, amem, buf);
 			buf[sz] = '\0';
 		} else
 			m_status = H5Aread(aid, amem, &buf);
-		handleError(m_status, "H5Aread");
-		attr << QLatin1String("=") << QString(buf);
+		handleError(m_status, QStringLiteral("H5Aread"));
+		attr << QLatin1String("=") << QLatin1String(buf);
 		// DEBUG(Q_FUNC_INFO << ", value = " << buf)
 		m_status = H5Tclose(amem);
-		handleError(m_status, "H5Tclose");
+		handleError(m_status, QStringLiteral("H5Tclose"));
 	} else if (aclass == H5T_INTEGER) {
 		if (H5Tequal(atype, H5T_STD_I8LE)) {
 			qint8 value;
 			m_status = H5Aread(aid, H5T_STD_I8LE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_I8BE)) {
 			qint8 value;
 			m_status = H5Aread(aid, H5T_STD_I8BE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_CHAR)) {
 			switch (sizeof(H5T_NATIVE_CHAR)) {
 			case 1: {
 				qint8 value;
 				m_status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 2: {
 				qint16 value;
 				m_status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 4: {
 				qint32 value;
 				m_status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 8: {
 				qint64 value;
 				m_status = H5Aread(aid, H5T_NATIVE_CHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
@@ -940,40 +941,40 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 		} else if (H5Tequal(atype, H5T_STD_U8LE)) {
 			uint8_t value;
 			m_status = H5Aread(aid, H5T_STD_U8LE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_U8BE)) {
 			uint8_t value;
 			m_status = H5Aread(aid, H5T_STD_U8BE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_UCHAR)) {
 			switch (sizeof(H5T_NATIVE_UCHAR)) {
 			case 1: {
 				uint8_t value;
 				m_status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 2: {
 				uint16_t value;
 				m_status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 4: {
 				uint32_t value;
 				m_status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
 			case 8: {
 				uint64_t value;
 				m_status = H5Aread(aid, H5T_NATIVE_UCHAR, &value);
-				handleError(m_status, "H5Aread");
+				handleError(m_status, QStringLiteral("H5Aread"));
 				attr << QLatin1String("=") << QString::number(value);
 				break;
 			}
@@ -984,69 +985,69 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 		} else if (H5Tequal(atype, H5T_STD_I16LE) || H5Tequal(atype, H5T_STD_I16BE) || H5Tequal(atype, H5T_NATIVE_SHORT)) {
 			short value;
 			m_status = H5Aread(aid, H5T_NATIVE_SHORT, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_U16LE) || H5Tequal(atype, H5T_STD_U16BE) || H5Tequal(atype, H5T_NATIVE_USHORT)) {
 			unsigned short value;
 			m_status = H5Aread(aid, H5T_NATIVE_USHORT, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_I32LE) || H5Tequal(atype, H5T_STD_I32BE) || H5Tequal(atype, H5T_NATIVE_INT)) {
 			int value;
 			m_status = H5Aread(aid, H5T_NATIVE_INT, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_U32LE) || H5Tequal(atype, H5T_STD_U32BE) || H5Tequal(atype, H5T_NATIVE_UINT)) {
 			unsigned int value;
 			m_status = H5Aread(aid, H5T_NATIVE_UINT, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_LONG)) {
 			long value;
 			m_status = H5Aread(aid, H5T_NATIVE_LONG, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_ULONG)) {
 			unsigned long value;
 			m_status = H5Aread(aid, H5T_NATIVE_ULONG, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_I64LE) || H5Tequal(atype, H5T_STD_I64BE) || H5Tequal(atype, H5T_NATIVE_LLONG)) {
 			long long value;
 			m_status = H5Aread(aid, H5T_NATIVE_LLONG, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_STD_U64LE) || H5Tequal(atype, H5T_STD_U64BE) || H5Tequal(atype, H5T_NATIVE_ULLONG)) {
 			unsigned long long value;
 			m_status = H5Aread(aid, H5T_NATIVE_ULLONG, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else
-			attr << " (unknown integer)";
+			attr << QStringLiteral(" (unknown integer)");
 	} else if (aclass == H5T_FLOAT) {
 		if (H5Tequal(atype, H5T_IEEE_F32LE) || H5Tequal(atype, H5T_IEEE_F32BE)) {
 			float value;
 			m_status = H5Aread(aid, H5T_NATIVE_FLOAT, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_IEEE_F64LE) || H5Tequal(atype, H5T_IEEE_F64BE)) {
 			double value;
 			m_status = H5Aread(aid, H5T_NATIVE_DOUBLE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number(value);
 		} else if (H5Tequal(atype, H5T_NATIVE_LDOUBLE)) {
 			long double value;
 			m_status = H5Aread(aid, H5T_NATIVE_LDOUBLE, &value);
-			handleError(m_status, "H5Aread");
+			handleError(m_status, QStringLiteral("H5Aread"));
 			attr << QLatin1String("=") << QString::number((double)value);
 		} else
-			attr << " (unknown float)";
+			attr << QStringLiteral(" (unknown float)");
 	}
 
 	m_status = H5Tclose(atype);
-	handleError(m_status, "H5Tclose");
+	handleError(m_status, QStringLiteral("H5Tclose"));
 	m_status = H5Sclose(aspace);
-	handleError(m_status, "H5Sclose");
+	handleError(m_status, QStringLiteral("H5Sclose"));
 
 	return attr;
 }
@@ -1055,17 +1056,17 @@ QStringList HDF5FilterPrivate::scanHDF5Attrs(hid_t oid) {
 	QStringList attrList;
 
 	int numAttr = H5Aget_num_attrs(oid);
-	handleError(numAttr, "H5Aget_num_attrs");
+	handleError(numAttr, QStringLiteral("H5Aget_num_attrs"));
 	// DEBUG(Q_FUNC_INFO << ", number of attr = " << numAttr);
 
 	for (int i = 0; i < numAttr; ++i) {
 		hid_t aid = H5Aopen_idx(oid, i);
-		handleError((int)aid, "H5Aopen_idx");
+		handleError((int)aid, QStringLiteral("H5Aopen_idx"));
 		attrList << readHDF5Attr(aid);
 		if (i < numAttr - 1)
 			attrList << QLatin1String(", ");
 		m_status = H5Aclose(aid);
-		handleError(m_status, "H5Aclose");
+		handleError(m_status, QStringLiteral("H5Aclose"));
 	}
 
 	return attrList;
@@ -1073,7 +1074,7 @@ QStringList HDF5FilterPrivate::scanHDF5Attrs(hid_t oid) {
 
 QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 	H5T_class_t typeClass = H5Tget_class(tid);
-	handleError((int)typeClass, "H5Tget_class");
+	handleError((int)typeClass, QStringLiteral("H5Tget_class"));
 
 	QStringList typeProps;
 	QString typeString = translateHDF5Class(typeClass);
@@ -1085,14 +1086,14 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 	typeProps << QLatin1String(" (") << QString::number(size) << QLatin1String(") ");
 
 	H5T_order_t order = H5Tget_order(tid);
-	handleError((int)order, "H5Tget_order");
+	handleError((int)order, QStringLiteral("H5Tget_order"));
 	typeProps << translateHDF5Order(order);
 
 	// type specific props
 	switch (typeClass) {
 	case H5T_STRING: {
 		H5T_cset_t cset = H5Tget_cset(tid);
-		handleError((int)cset, "H5Tget_cset");
+		handleError((int)cset, QStringLiteral("H5Tget_cset"));
 		switch (cset) {
 		case H5T_CSET_ASCII:
 			typeProps << QLatin1String(", ASCII");
@@ -1121,7 +1122,7 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 			break;
 		}
 		H5T_str_t strpad = H5Tget_strpad(tid);
-		handleError((int)strpad, "H5Tget_strpad");
+		handleError((int)strpad, QStringLiteral("H5Tget_strpad"));
 		switch (strpad) {
 		case H5T_STR_NULLTERM:
 			typeProps << QLatin1String(" NULLTERM");
@@ -1202,13 +1203,13 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 	hsize_t chunk_dims_out[2];
 	if (H5D_CHUNKED == H5Pget_layout(pid)) {
 		int rank_chunk = H5Pget_chunk(pid, 2, chunk_dims_out);
-		handleError(rank_chunk, "H5Pget_chunk");
+		handleError(rank_chunk, QStringLiteral("H5Pget_chunk"));
 		props << QLatin1String("chunk rank=") << QString::number(rank_chunk) << QLatin1String(", dimension=") << QString::number(chunk_dims_out[0])
 			  << QString::number(chunk_dims_out[1]);
 	}
 
 	int nfilters = H5Pget_nfilters(pid);
-	handleError(nfilters, "H5Pget_nfilters");
+	handleError(nfilters, QStringLiteral("H5Pget_nfilters"));
 	props << QLatin1String(" ") << QString::number(nfilters) << QLatin1String(" filter");
 	for (int i = 0; i < nfilters; ++i) {
 		size_t cd_nelmts = 32;
@@ -1216,7 +1217,7 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 		unsigned int cd_values[32];
 		char f_name[MAXNAMELENGTH];
 		H5Z_filter_t filtn = H5Pget_filter(pid, (unsigned)i, &filt_flags, &cd_nelmts, cd_values, (size_t)MAXNAMELENGTH, f_name, &filt_conf);
-		handleError((int)filtn, "H5Pget_filter");
+		handleError((int)filtn, QStringLiteral("H5Pget_filter"));
 
 		switch (filtn) {
 		case H5Z_FILTER_DEFLATE: /* AKA GZIP compression */
@@ -1244,7 +1245,7 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 	props << QLatin1String(", ALLOC_TIME:");
 	H5D_alloc_time_t at;
 	m_status = H5Pget_alloc_time(pid, &at);
-	handleError(m_status, "H5Pget_alloc_time");
+	handleError(m_status, QStringLiteral("H5Pget_alloc_time"));
 
 	switch (at) {
 	case H5D_ALLOC_TIME_EARLY:
@@ -1267,7 +1268,7 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 	props << QLatin1String(", FILL_TIME:");
 	H5D_fill_time_t ft;
 	m_status = H5Pget_fill_time(pid, &ft);
-	handleError(m_status, "H5Pget_fill_time");
+	handleError(m_status, QStringLiteral("H5Pget_fill_time"));
 	switch (ft) {
 	case H5D_FILL_TIME_ALLOC:
 		props << QLatin1String(" ALLOW");
@@ -1285,7 +1286,7 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 
 	H5D_fill_value_t fvstatus;
 	m_status = H5Pfill_value_defined(pid, &fvstatus);
-	handleError(m_status, "H5Pfill_value_defined");
+	handleError(m_status, QStringLiteral("H5Pfill_value_defined"));
 	if (fvstatus == H5D_FILL_VALUE_UNDEFINED)
 		props << QLatin1String(" No fill value defined");
 	else {
@@ -1301,14 +1302,15 @@ QStringList HDF5FilterPrivate::readHDF5PropertyList(hid_t pid) {
 void HDF5FilterPrivate::scanHDF5DataType(hid_t tid, char* dataSetName, QTreeWidgetItem* parentItem) {
 	QStringList typeProps = readHDF5DataType(tid);
 
-	QString attr = scanHDF5Attrs(tid).join(" ");
+	QString attr = scanHDF5Attrs(tid).join(QLatin1Char(' '));
 
 	char link[MAXNAMELENGTH];
 	m_status = H5Iget_name(tid, link, MAXNAMELENGTH);
-	handleError(m_status, "H5Iget_name");
+	handleError(m_status, QStringLiteral("H5Iget_name"));
 
-	auto* dataTypeItem = new QTreeWidgetItem(QStringList() << QString(dataSetName) << QString(link) << i18n("data type") << typeProps.join(QString()) << attr);
-	dataTypeItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
+	auto* dataTypeItem =
+		new QTreeWidgetItem(QStringList() << QLatin1String(dataSetName) << QLatin1String(link) << i18n("data type") << typeProps.join(QString()) << attr);
+	dataTypeItem->setIcon(0, QIcon::fromTheme(QStringLiteral("accessories-calculator")));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
 }
@@ -1318,32 +1320,32 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char* dataSetName, QTreeWidge
 
 	char link[MAXNAMELENGTH];
 	m_status = H5Iget_name(did, link, MAXNAMELENGTH);
-	handleError(m_status, "H5Iget_name");
+	handleError(m_status, QStringLiteral("H5Iget_name"));
 
 	QStringList dataSetProps;
 	hsize_t size = H5Dget_storage_size(did);
-	handleError((int)size, "H5Dget_storage_size");
+	handleError((int)size, QStringLiteral("H5Dget_storage_size"));
 	hid_t datatype = H5Dget_type(did);
-	handleError((int)datatype, "H5Dget_type");
+	handleError((int)datatype, QStringLiteral("H5Dget_type"));
 	size_t typeSize = H5Tget_size(datatype);
-	handleError((int)typeSize, "H5Dget_size");
+	handleError((int)typeSize, QStringLiteral("H5Dget_size"));
 
 	dataSetProps << readHDF5DataType(datatype);
 
 	hid_t dataspace = H5Dget_space(did);
 	int rank = H5Sget_simple_extent_ndims(dataspace);
-	handleError(rank, "H5Sget_simple_extent_ndims");
+	handleError(rank, QStringLiteral("H5Sget_simple_extent_ndims"));
 	unsigned int rows = 1, cols = 1, regs = 1;
 	if (rank == 1) {
 		hsize_t dims_out[1];
 		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
-		handleError(m_status, "H5Sget_simple_extent_dims");
+		handleError(m_status, QStringLiteral("H5Sget_simple_extent_dims"));
 		rows = dims_out[0];
 		dataSetProps << QLatin1String(", ") << QString::number(rows) << QLatin1String(" (") << QString::number(size / typeSize) << QLatin1String(")");
 	} else if (rank == 2) {
 		hsize_t dims_out[2];
 		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
-		handleError(m_status, "H5Sget_simple_extent_dims");
+		handleError(m_status, QStringLiteral("H5Sget_simple_extent_dims"));
 		rows = dims_out[0];
 		cols = dims_out[1];
 		dataSetProps << QLatin1String(", ") << QString::number(rows) << QLatin1String("x") << QString::number(cols) << QLatin1String(" (")
@@ -1351,7 +1353,7 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char* dataSetName, QTreeWidge
 	} else if (rank == 3) {
 		hsize_t dims_out[3];
 		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
-		handleError(m_status, "H5Sget_simple_extent_dims");
+		handleError(m_status, QStringLiteral("H5Sget_simple_extent_dims"));
 		rows = dims_out[0];
 		cols = dims_out[1];
 		regs = dims_out[2];
@@ -1361,11 +1363,12 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char* dataSetName, QTreeWidge
 		dataSetProps << QLatin1String(", ") << i18n("rank %1 not supported yet", rank);
 
 	hid_t pid = H5Dget_create_plist(did);
-	handleError((int)pid, "H5Dget_create_plist");
-	dataSetProps << ", " << readHDF5PropertyList(pid).join(QString());
+	handleError((int)pid, QStringLiteral("H5Dget_create_plist"));
+	dataSetProps << QStringLiteral(", ") << readHDF5PropertyList(pid).join(QString());
 
-	auto* dataSetItem = new QTreeWidgetItem(QStringList() << QString(dataSetName) << QString(link) << i18n("data set") << dataSetProps.join(QString()) << attr);
-	dataSetItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
+	auto* dataSetItem =
+		new QTreeWidgetItem(QStringList() << QLatin1String(dataSetName) << QLatin1String(link) << i18n("data set") << dataSetProps.join(QString()) << attr);
+	dataSetItem->setIcon(0, QIcon::fromTheme(QStringLiteral("x-office-spreadsheet")));
 	for (int i = 0; i < dataSetItem->columnCount(); ++i) {
 		if (rows > 0 && cols > 0 && regs > 0) {
 			dataSetItem->setBackground(i, QColor(192, 255, 192));
@@ -1380,10 +1383,10 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char* dataSetName, QTreeWidge
 void HDF5FilterPrivate::scanHDF5Link(hid_t gid, char* linkName, QTreeWidgetItem* parentItem) {
 	char target[MAXNAMELENGTH];
 	m_status = H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target);
-	handleError(m_status, "H5Gget_linkval");
+	handleError(m_status, QStringLiteral("H5Gget_linkval"));
 
-	auto* linkItem = new QTreeWidgetItem(QStringList() << QString(linkName) << i18n("symbolic link") << i18n("link to %1", QFile::decodeName(target)));
-	linkItem->setIcon(0, QIcon::fromTheme("emblem-symbolic-link"));
+	auto* linkItem = new QTreeWidgetItem(QStringList() << QLatin1String(linkName) << i18n("symbolic link") << i18n("link to %1", QFile::decodeName(target)));
+	linkItem->setIcon(0, QIcon::fromTheme(QStringLiteral("emblem-symbolic-link")));
 	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
 }
@@ -1392,11 +1395,11 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char* groupName, QTreeWidgetIte
 	// check for hard link
 	H5G_stat_t statbuf;
 	m_status = H5Gget_objinfo(gid, ".", true, &statbuf);
-	handleError(m_status, "H5Gget_objinfo");
+	handleError(m_status, QStringLiteral("H5Gget_objinfo"));
 	if (statbuf.nlink > 1) {
 		if (m_multiLinkList.contains(statbuf.objno[0])) {
-			auto* objectItem = new QTreeWidgetItem(QStringList() << QString(groupName) << i18n("hard link"));
-			objectItem->setIcon(0, QIcon::fromTheme("link"));
+			auto* objectItem = new QTreeWidgetItem(QStringList() << QLatin1String(groupName) << i18n("hard link"));
+			objectItem->setIcon(0, QIcon::fromTheme(QStringLiteral("link")));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(objectItem);
 			return;
@@ -1408,27 +1411,27 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char* groupName, QTreeWidgetIte
 
 	char link[MAXNAMELENGTH];
 	m_status = H5Iget_name(gid, link, MAXNAMELENGTH);
-	handleError(m_status, "H5Iget_name");
+	handleError(m_status, QStringLiteral("H5Iget_name"));
 
-	QString attr = scanHDF5Attrs(gid).join(" ");
+	QString attr = scanHDF5Attrs(gid).join(QLatin1Char(' '));
 
-	auto* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ") << attr);
-	groupItem->setIcon(0, QIcon::fromTheme("folder"));
+	auto* groupItem = new QTreeWidgetItem(QStringList() << QLatin1String(groupName) << QLatin1String(link) << QStringLiteral("group ") << attr);
+	groupItem->setIcon(0, QIcon::fromTheme(QStringLiteral("folder")));
 	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);
 
 	hsize_t numObj;
 	m_status = H5Gget_num_objs(gid, &numObj);
-	handleError(m_status, "H5Gget_num_objs");
+	handleError(m_status, QStringLiteral("H5Gget_num_objs"));
 	// DEBUG(Q_FUNC_INFO << ", # of objects = " << numObj)
 
 	for (unsigned int i = 0; i < numObj; ++i) {
 		char memberName[MAXNAMELENGTH];
 		m_status = H5Gget_objname_by_idx(gid, (hsize_t)i, memberName, (size_t)MAXNAMELENGTH);
-		handleError(m_status, "H5Gget_objname_by_idx");
+		handleError(m_status, QStringLiteral("H5Gget_objname_by_idx"));
 
 		int otype = H5Gget_objtype_by_idx(gid, (size_t)i);
-		handleError(otype, "H5Gget_objtype_by_idx");
+		handleError(otype, QStringLiteral("H5Gget_objtype_by_idx"));
 		switch (otype) {
 		case H5G_LINK: {
 			scanHDF5Link(gid, memberName, groupItem);
@@ -1436,30 +1439,30 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char* groupName, QTreeWidgetIte
 		}
 		case H5G_GROUP: {
 			hid_t grpid = H5Gopen(gid, memberName, H5P_DEFAULT);
-			handleError((int)grpid, "H5Gopen");
+			handleError((int)grpid, QStringLiteral("H5Gopen"));
 			scanHDF5Group(grpid, memberName, groupItem);
 			m_status = H5Gclose(grpid);
-			handleError(m_status, "H5Gclose");
+			handleError(m_status, QStringLiteral("H5Gclose"));
 			break;
 		}
 		case H5G_DATASET: {
 			hid_t dsid = H5Dopen(gid, memberName, H5P_DEFAULT);
-			handleError((int)dsid, "H5Dopen");
+			handleError((int)dsid, QStringLiteral("H5Dopen"));
 			scanHDF5DataSet(dsid, memberName, groupItem);
 			m_status = H5Dclose(dsid);
-			handleError(m_status, "H5Dclose");
+			handleError(m_status, QStringLiteral("H5Dclose"));
 			break;
 		}
 		case H5G_TYPE: {
 			hid_t tid = H5Topen(gid, memberName, H5P_DEFAULT);
-			handleError((int)tid, "H5Topen");
+			handleError((int)tid, QStringLiteral("H5Topen"));
 			scanHDF5DataType(tid, memberName, groupItem);
 			m_status = H5Tclose(tid);
-			handleError(m_status, "H5Tclose");
+			handleError(m_status, QStringLiteral("H5Tclose"));
 			break;
 		}
 		default:
-			auto* objectItem = new QTreeWidgetItem(QStringList() << QString(memberName) << i18n("unknown"));
+			auto* objectItem = new QTreeWidgetItem(QStringList() << QLatin1String(memberName) << i18n("unknown"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			groupItem->addChild(objectItem);
 			break;
@@ -1489,20 +1492,20 @@ int HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem)
 
 	// open file
 	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
-	handleError((int)file, "H5Fopen", fileName);
+	handleError((int)file, QStringLiteral("H5Fopen"), fileName);
 	if (file < 0) {
 		DEBUG("Opening file " << qPrintable(fileName) << " failed! Giving up.");
 		return -1;
 	}
 	char rootName[] = "/";
 	hid_t group = H5Gopen(file, rootName, H5P_DEFAULT);
-	handleError((int)group, "H5Gopen", rootName);
+	handleError((int)group, QStringLiteral("H5Gopen"), QLatin1String(rootName));
 	// multiLinkList.clear(); crashes
 	scanHDF5Group(group, rootName, rootItem);
 	m_status = H5Gclose(group);
-	handleError(m_status, "H5Gclose", QString());
+	handleError(m_status, QStringLiteral("H5Gclose"), QString());
 	m_status = H5Fclose(file);
-	handleError(m_status, "H5Fclose", QString());
+	handleError(m_status, QStringLiteral("H5Fclose"), QString());
 #else
 	DEBUG(Q_FUNC_INFO << ", HDF5 not available");
 	Q_UNUSED(fileName)
@@ -1519,7 +1522,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	QVector<QStringList> dataStrings;
 
 	if (currentDataSetName.isEmpty()) {
-		// return QString("No data set selected").replace(' ',QChar::Nbsp);
+		// return QString("No data set selected").replace(QLatin1Char(' '),QChar::Nbsp);
 		ok = false;
 		return dataStrings << (QStringList() << i18n("No data set selected"));
 	}
@@ -1527,24 +1530,24 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 #ifdef HAVE_HDF5
 	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
-	handleError((int)file, "H5Fopen", fileName);
+	handleError((int)file, QStringLiteral("H5Fopen"), fileName);
 	hid_t dataset = H5Dopen2(file, qPrintable(currentDataSetName), H5P_DEFAULT);
-	handleError((int)file, "H5Dopen2", currentDataSetName);
+	handleError((int)file, QStringLiteral("H5Dopen2"), currentDataSetName);
 
 	// Get datatype and dataspace
 	hid_t dtype = H5Dget_type(dataset);
-	handleError((int)dtype, "H5Dget_type");
+	handleError((int)dtype, QStringLiteral("H5Dget_type"));
 	DEBUG(Q_FUNC_INFO << ", type = " << STDSTRING(translateHDF5Type(dtype)))
 	H5T_class_t dclass = H5Tget_class(dtype);
-	handleError((int)dclass, "H5Dget_class");
+	handleError((int)dclass, QStringLiteral("H5Dget_class"));
 	DEBUG(Q_FUNC_INFO << ", class = " << STDSTRING(translateHDF5Class(dclass)))
 	size_t typeSize = H5Tget_size(dtype);
-	handleError((int)(typeSize - 1), "H5Dget_size");
+	handleError((int)(typeSize - 1), QStringLiteral("H5Dget_size"));
 
 	hid_t dataspace = H5Dget_space(dataset);
-	handleError((int)dataspace, "H5Dget_space");
+	handleError((int)dataspace, QStringLiteral("H5Dget_space"));
 	int rank = H5Sget_simple_extent_ndims(dataspace);
-	handleError(rank, "H5Dget_simple_extent_ndims");
+	handleError(rank, QStringLiteral("H5Dget_simple_extent_ndims"));
 	DEBUG(Q_FUNC_INFO << ", rank = " << rank);
 
 	int columnOffset = 0; // offset to import data
@@ -1565,13 +1568,13 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_STRING: {
 			char* data = (char*)malloc(typeSize * sizeof(char));
 			hid_t memtype = H5Tcopy(H5T_C_S1);
-			handleError((int)memtype, "H5Tcopy");
+			handleError((int)memtype, QStringLiteral("H5Tcopy"));
 			m_status = H5Tset_size(memtype, typeSize);
-			handleError(m_status, "H5Tset_size");
+			handleError(m_status, QStringLiteral("H5Tset_size"));
 
 			m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-			handleError(m_status, "H5Tread");
-			dataStrings << (QStringList() << data);
+			handleError(m_status, QStringLiteral("H5Tread"));
+			dataStrings << (QStringList() << QLatin1String(data));
 			free(data);
 			break;
 		}
@@ -1599,7 +1602,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	case 1: { // 1D data
 		hsize_t size, maxSize;
 		m_status = H5Sget_simple_extent_dims(dataspace, &size, &maxSize);
-		handleError(m_status, "H5Sget_simple_extent_dims");
+		handleError(m_status, QStringLiteral("H5Sget_simple_extent_dims"));
 		int rows = size;
 		if (endRow == -1 && dclass != H5T_VLEN)
 			endRow = rows;
@@ -1609,7 +1612,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		actualCols = 1; // data is only one column (if not VLEN)
 #ifndef NDEBUG
 		H5T_order_t order = H5Tget_order(dtype);
-		handleError((int)order, "H5Sget_order");
+		handleError((int)order, QStringLiteral("H5Sget_order"));
 #endif
 		QDEBUG(Q_FUNC_INFO << ": " << translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << ", rows:" << rows
 						   << " max:" << maxSize);
@@ -1631,7 +1634,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		}
 
 		// use current data set name (without path) for column name
-		QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1)};
+		QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf(QLatin1Char('/')) + 1)};
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
 		if (dataSource && dclass != H5T_VLEN && dclass != H5T_COMPOUND)
@@ -1642,29 +1645,29 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_STRING: {
 			DEBUG("rank 1 H5T_STRING");
 			hid_t memtype = H5Tcopy(H5T_C_S1);
-			handleError((int)memtype, "H5Tcopy");
+			handleError((int)memtype, QStringLiteral("H5Tcopy"));
 
 			char** data = (char**)malloc(rows * sizeof(char*));
 
 			if (H5Tis_variable_str(dtype)) {
 				m_status = H5Tset_size(memtype, H5T_VARIABLE);
-				handleError((int)memtype, "H5Tset_size");
+				handleError((int)memtype, QStringLiteral("H5Tset_size"));
 				m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-				handleError(m_status, "H5Dread");
+				handleError(m_status, QStringLiteral("H5Dread"));
 			} else {
 				data[0] = (char*)malloc(rows * typeSize * sizeof(char));
 				for (int i = 1; i < rows; ++i)
 					data[i] = data[0] + i * typeSize;
 
 				m_status = H5Tset_size(memtype, typeSize);
-				handleError((int)memtype, "H5Tset_size");
+				handleError((int)memtype, QStringLiteral("H5Tset_size"));
 
 				m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
-				handleError(m_status, "H5Dread");
+				handleError(m_status, QStringLiteral("H5Dread"));
 			}
 
 			for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i)
-				dataString << data[i];
+				dataString << QLatin1String(data[i]);
 
 			free(data);
 			break;
@@ -1743,7 +1746,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		}
 		case H5T_COMPOUND: {
 			int members = H5Tget_nmembers(dtype);
-			handleError(members, "H5Tget_nmembers");
+			handleError(members, QStringLiteral("H5Tget_nmembers"));
 			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
 			columnModes.resize(members);
 			if (dataSource) // create data pointer here
@@ -1788,7 +1791,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 					const QString datasetName = vectorNames.at(0);
 					vectorNames.clear();
 					for (int i = startColumn; i <= endColumn; i++)
-						vectorNames << datasetName + "_" + QString::number(i);
+						vectorNames << datasetName + QStringLiteral("_") + QString::number(i);
 				}
 				// create data pointer here
 				dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
@@ -1898,7 +1901,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	case 2: { // 2D data
 		hsize_t dims_out[2];
 		m_status = H5Sget_simple_extent_dims(dataspace, dims_out, nullptr);
-		handleError(m_status, "H5Sget_simple_extent_dims");
+		handleError(m_status, QStringLiteral("H5Sget_simple_extent_dims"));
 		int rows = dims_out[0];
 		int cols = dims_out[1];
 
@@ -1913,7 +1916,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 #ifndef NDEBUG
 		H5T_order_t order = H5Tget_order(dtype);
-		handleError((int)order, "H5Tget_order");
+		handleError((int)order, QStringLiteral("H5Tget_order"));
 #endif
 		// QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << "," << rows << "x" << cols);
 		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << "/" << endRow);
@@ -1939,7 +1942,7 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 
 		// use current data set name (without path) append by "_" and column number for column names
 		QStringList vectorNames;
-		QString colName = currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1);
+		QString colName = currentDataSetName.mid(currentDataSetName.lastIndexOf(QLatin1Char('/')) + 1);
 		for (int i = 0; i < actualCols; i++)
 			vectorNames << colName + QLatin1String("_") + QString::number(i + 1);
 		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
@@ -2034,38 +2037,39 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 		case H5T_STRING: {
 			DEBUG("rank 2 H5T_STRING");
 			hid_t memtype = H5Tcopy(H5T_C_S1);
-			handleError((int)memtype, "H5Tcopy");
+			handleError((int)memtype, QStringLiteral("H5Tcopy"));
 
 			char** data = (char**)malloc(rows * cols * sizeof(char*));
 
 			if (H5Tis_variable_str(dtype)) {
 				m_status = H5Tset_size(memtype, H5T_VARIABLE);
-				handleError((int)memtype, "H5Tset_size");
+				handleError((int)memtype, QStringLiteral("H5Tset_size"));
 				m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
-				handleError(m_status, "H5Dread");
+				handleError(m_status, QStringLiteral("H5Dread"));
 			} else {
 				data[0] = (char*)malloc(rows * cols * typeSize * sizeof(char));
 				for (int i = 1; i < rows * cols; ++i)
 					data[i] = data[0] + i * typeSize;
 
 				m_status = H5Tset_size(memtype, typeSize);
-				handleError((int)memtype, "H5Tset_size");
+				handleError((int)memtype, QStringLiteral("H5Tset_size"));
 
 				m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
-				handleError(m_status, "H5Dread");
+				handleError(m_status, QStringLiteral("H5Dread"));
 			}
 
 			if (dataSource) {
 				for (int i = 0; i < actualRows; ++i) {
 					for (int j = 0; j < actualCols; ++j) {
-						static_cast<QVector<QString>*>(dataContainer[(int)(j)])->operator[](i) = data[(j + startColumn - 1) + (i + startRow - 1) * cols];
+						static_cast<QVector<QString>*>(dataContainer[(int)(j)])->operator[](i) =
+							QLatin1String(data[(j + startColumn - 1) + (i + startRow - 1) * cols]);
 					}
 				}
 			} else {
 				for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
 					QStringList row;
 					for (int j = startColumn - 1; j < endColumn; ++j)
-						row << data[j + i * cols];
+						row << QLatin1String(data[j + i * cols]);
 					dataStrings << row;
 				}
 			}
@@ -2099,13 +2103,13 @@ HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSourc
 	}
 
 	m_status = H5Sclose(dataspace);
-	handleError(m_status, "H5Sclose");
+	handleError(m_status, QStringLiteral("H5Sclose"));
 	m_status = H5Tclose(dtype);
-	handleError(m_status, "H5Tclose");
+	handleError(m_status, QStringLiteral("H5Tclose"));
 	m_status = H5Dclose(dataset);
-	handleError(m_status, "H5Dclose");
+	handleError(m_status, QStringLiteral("H5Dclose"));
 	m_status = H5Fclose(file);
-	handleError(m_status, "H5Fclose");
+	handleError(m_status, QStringLiteral("H5Fclose"));
 
 	if (!dataSource)
 		return dataStrings;
@@ -2153,7 +2157,7 @@ void HDF5FilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /
   Saves as XML.
  */
 void HDF5Filter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("hdfFilter");
+	writer->writeStartElement(QStringLiteral("hdfFilter"));
 	writer->writeEndElement();
 }
 

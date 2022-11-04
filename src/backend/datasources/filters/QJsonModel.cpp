@@ -203,7 +203,7 @@ bool QJsonModel::loadJson(const QByteArray& json) {
 }
 
 bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
-	PERFTRACE("load json document into the model");
+	PERFTRACE(QStringLiteral("load json document into the model"));
 	if (!jdoc.isNull()) {
 		beginResetModel();
 		delete mHeadItem;
@@ -212,7 +212,7 @@ bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
 
 		if (jdoc.isArray()) {
 			{
-				PERFTRACE("load json tree items");
+				PERFTRACE(QStringLiteral("load json tree items"));
 				mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()), mHeadItem);
 			}
 			mRootItem->setType(QJsonValue::Array);
@@ -243,7 +243,7 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 		else if (index.column() == 1) {
 			// in case the value is very long, cut it so the preview tree tree view doesn't explode
 			if (item->value().length() > 200)
-				return QString(item->value().left(200) + QLatin1String(" ..."));
+				return QString(item->value().left(200) + QStringLiteral(" ..."));
 			else
 				return item->value();
 		} else {

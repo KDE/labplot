@@ -151,36 +151,36 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 		QString compress;
 		switch (metadata.compression) {
 		case READSTAT_COMPRESS_NONE:
-			compress = "none";
+			compress = QStringLiteral("none");
 			break;
 		case READSTAT_COMPRESS_ROWS:
-			compress = "rows";
+			compress = QStringLiteral("rows");
 			break;
 		case READSTAT_COMPRESS_BINARY:
-			compress = "binary";
+			compress = QStringLiteral("binary");
 			break;
 		}
 		info += i18n("Compression: %1", compress);
-		info += QLatin1String("<br>");
+		info += QStringLiteral("<br>");
 		QString endian;
 		switch (metadata.endianness) {
 		case READSTAT_ENDIAN_NONE:
-			endian = "none";
+			endian = QStringLiteral("none");
 			break;
 		case READSTAT_ENDIAN_LITTLE:
-			endian = "little";
+			endian = QStringLiteral("little");
 			break;
 		case READSTAT_ENDIAN_BIG:
-			endian = "big";
+			endian = QStringLiteral("big");
 			break;
 		}
 		info += i18n("Endianess: %1", endian);
 		info += QLatin1String("<br>");
-		info += i18n("Table name: %1", QString(metadata.table_name));
+		info += i18n("Table name: %1", QLatin1String(metadata.table_name));
 		info += QLatin1String("<br>");
-		info += i18n("File label: %1", QString(metadata.file_label));
+		info += i18n("File label: %1", QLatin1String(metadata.file_label));
 		info += QLatin1String("<br>");
-		info += i18n("File encoding: %1", QString(metadata.file_encoding));
+		info += i18n("File encoding: %1", QLatin1String(metadata.file_encoding));
 		info += QLatin1String("<br>");
 		info += i18n("64bit: %1", QString::number((unsigned int)metadata.is64bit));
 		info += QLatin1String("<br>");
@@ -232,10 +232,10 @@ int ReadStatFilterPrivate::getVarName(int /*index*/, readstat_variable_t* variab
 
 	if (val_labels) {
 		DEBUG(Q_FUNC_INFO << ", val_labels of col " << col << " : " << val_labels)
-		m_valueLabels[col] = QString(val_labels);
-		m_varNames << QString(readstat_variable_get_name(variable)) + " : " + QString(val_labels);
+		m_valueLabels[col] = QLatin1String(val_labels);
+		m_varNames << QLatin1String(readstat_variable_get_name(variable)) + QStringLiteral(" : ") + QLatin1String(val_labels);
 	} else
-		m_varNames << readstat_variable_get_name(variable);
+		m_varNames << QLatin1String(readstat_variable_get_name(variable));
 
 	return READSTAT_HANDLER_OK;
 }
@@ -303,7 +303,7 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t* variab
 			break;
 		case READSTAT_TYPE_STRING:
 		case READSTAT_TYPE_STRING_REF:
-			m_lineString << readstat_string_value(value);
+			m_lineString << QLatin1String(readstat_string_value(value));
 		}
 	}
 
@@ -362,7 +362,7 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t* variable, rea
 		case READSTAT_TYPE_STRING:
 		case READSTAT_TYPE_STRING_REF: {
 			QVector<QString>& container = *static_cast<QVector<QString>*>(m_dataContainer[colIndex]);
-			container[rowIndex] = readstat_string_value(value);
+			container[rowIndex] = QLatin1String(readstat_string_value(value));
 		}
 		}
 	}
@@ -372,7 +372,7 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t* variable, rea
 int ReadStatFilterPrivate::getNotes(int index, const char* note, void*) {
 	Q_UNUSED(index)
 	DEBUG(Q_FUNC_INFO << " note " << index << ": " << note)
-	m_notes << note;
+	m_notes << QLatin1String(note);
 
 	return READSTAT_HANDLER_OK;
 }
@@ -388,32 +388,32 @@ int ReadStatFilterPrivate::getValueLabels(const char* val_label, readstat_value_
 	// see https://github.com/tidyverse/haven/blob/master/src/DfReader.cpp
 	DEBUG(Q_FUNC_INFO << ", value label = " << val_label << " label = " << label << ", type = " << value.type)
 
-	LabelSet& labelSet = m_labelSets[val_label];
+	LabelSet& labelSet = m_labelSets[QLatin1String(val_label)];
 	switch (value.type) {
 	case READSTAT_TYPE_STRING:
 	case READSTAT_TYPE_STRING_REF:
 		// DEBUG(Q_FUNC_INFO << ", string value label")
-		labelSet.add(readstat_string_value(value), QString(label));
+		labelSet.add(QLatin1String(readstat_string_value(value)), QLatin1String(label));
 		break;
 	case READSTAT_TYPE_INT8:
 		// DEBUG(Q_FUNC_INFO << ", int8 value label")
-		labelSet.add(readstat_int8_value(value), QString(label));
+		labelSet.add(readstat_int8_value(value), QLatin1String(label));
 		break;
 	case READSTAT_TYPE_INT16:
 		// DEBUG(Q_FUNC_INFO << ", int16 value label")
-		labelSet.add(readstat_int16_value(value), QString(label));
+		labelSet.add(readstat_int16_value(value), QLatin1String(label));
 		break;
 	case READSTAT_TYPE_INT32:
 		// DEBUG(Q_FUNC_INFO << ", int32 value label")
-		labelSet.add(readstat_int32_value(value), QString(label));
+		labelSet.add(readstat_int32_value(value), QLatin1String(label));
 		break;
 	case READSTAT_TYPE_FLOAT:
 		// DEBUG(Q_FUNC_INFO << ", float value label")
-		labelSet.add(readstat_float_value(value), QString(label));
+		labelSet.add(readstat_float_value(value), QLatin1String(label));
 		break;
 	case READSTAT_TYPE_DOUBLE:
 		// DEBUG(Q_FUNC_INFO << ", double value label")
-		labelSet.add(readstat_double_value(value), QString(label));
+		labelSet.add(readstat_double_value(value), QLatin1String(label));
 		break;
 	}
 
@@ -586,7 +586,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 		}
 	}
 
-	dataSource->setComment(m_notes.join("\n"));
+	dataSource->setComment(m_notes.join(QLatin1Char('\n')));
 #endif
 }
 
@@ -605,7 +605,7 @@ void ReadStatFilterPrivate::write(const QString& /*fileName*/, AbstractDataSourc
   Saves as XML.
  */
 void ReadStatFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("readstatFilter");
+	writer->writeStartElement(QStringLiteral("readstatFilter"));
 	writer->writeEndElement();
 }
 

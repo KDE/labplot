@@ -351,7 +351,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 void PlotArea::save(QXmlStreamWriter* writer) const {
 	Q_D(const PlotArea);
 
-	writer->writeStartElement("plotArea");
+	writer->writeStartElement(QStringLiteral("plotArea"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -359,11 +359,11 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 	d->background->save(writer);
 
 	// border
-	writer->writeStartElement("border");
+	writer->writeStartElement(QStringLiteral("border"));
 	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("borderType", QString::number(d->borderType));
-	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
-	writer->writeAttribute("borderCornerRadius", QString::number(d->borderCornerRadius));
+	writer->writeAttribute(QStringLiteral("borderType"), QString::number(d->borderType));
+	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
 	writer->writeEndElement();
@@ -382,32 +382,32 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "plotArea")
+		if (reader->isEndElement() && reader->name() == QLatin1String("plotArea"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "background")
+		} else if (!preview && reader->name() == QLatin1String("background"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "border") {
+		else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("borderType", borderType, PlotArea::BorderType);
 			READ_QPEN(d->borderPen);
 
-			str = attribs.value("borderOpacity").toString();
+			str = attribs.value(QStringLiteral("borderOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderOpacity")).toString());
 			else
 				d->borderOpacity = str.toDouble();
 
-			str = attribs.value("borderCornerRadius").toString();
+			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("borderCornerRadius").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderCornerRadius")).toString());
 			else
 				d->borderCornerRadius = str.toDouble();
 		} else { // unknown element

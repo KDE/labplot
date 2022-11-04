@@ -257,7 +257,7 @@ void ImageFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* 
   Saves as XML.
  */
 void ImageFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("imageFilter");
+	writer->writeStartElement(QStringLiteral("imageFilter"));
 	writer->writeEndElement();
 }
 

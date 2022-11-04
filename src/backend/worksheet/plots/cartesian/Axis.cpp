@@ -230,7 +230,7 @@ void Axis::init(Orientation orientation) {
  * For some ActionGroups the actual actions are created in \c GuiTool,
  */
 void Axis::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Axis::visibilityChangedSlot);
 
@@ -239,10 +239,10 @@ void Axis::initActions() {
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &Axis::orientationChangedSlot);
 
-	orientationHorizontalAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal"), orientationActionGroup);
+	orientationHorizontalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")), i18n("Horizontal"), orientationActionGroup);
 	orientationHorizontalAction->setCheckable(true);
 
-	orientationVerticalAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical"), orientationActionGroup);
+	orientationVerticalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-axis-vertical")), i18n("Vertical"), orientationActionGroup);
 	orientationVerticalAction->setCheckable(true);
 
 	// Line
@@ -263,20 +263,20 @@ void Axis::initMenus() {
 
 	// Orientation
 	orientationMenu = new QMenu(i18n("Orientation"));
-	orientationMenu->setIcon(QIcon::fromTheme("labplot-axis-horizontal"));
+	orientationMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal")));
 	orientationMenu->addAction(orientationHorizontalAction);
 	orientationMenu->addAction(orientationVerticalAction);
 
 	// Line
 	lineMenu = new QMenu(i18n("Line"));
-	lineMenu->setIcon(QIcon::fromTheme("draw-line"));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineStyleMenu = new QMenu(i18n("Style"), lineMenu);
-	lineStyleMenu->setIcon(QIcon::fromTheme("object-stroke-style"));
-	lineMenu->setIcon(QIcon::fromTheme("draw-line"));
+	lineStyleMenu->setIcon(QIcon::fromTheme(QStringLiteral("object-stroke-style")));
+	lineMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-line")));
 	lineMenu->addMenu(lineStyleMenu);
 
 	lineColorMenu = new QMenu(i18n("Color"), lineMenu);
-	lineColorMenu->setIcon(QIcon::fromTheme("fill-color"));
+	lineColorMenu->setIcon(QIcon::fromTheme(QStringLiteral("fill-color")));
 	GuiTools::fillColorMenu(lineColorMenu, lineColorActionGroup);
 	lineMenu->addMenu(lineColorMenu);
 }
@@ -319,9 +319,9 @@ QIcon Axis::icon() const {
 	Q_D(const Axis);
 	QIcon icon;
 	if (d->orientation == Orientation::Horizontal)
-		icon = QIcon::fromTheme("labplot-axis-horizontal");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-axis-horizontal"));
 	else
-		icon = QIcon::fromTheme("labplot-axis-vertical");
+		icon = QIcon::fromTheme(QStringLiteral("labplot-axis-vertical"));
 
 	return icon;
 }
@@ -1799,7 +1799,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', qMax(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
-				if (str == "-" + nullStr)
+				if (str == QLatin1String("-") + nullStr)
 					str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1817,7 +1817,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					// DEBUG(Q_FUNC_INFO << ", rounded frac * pow (10, e) = " << nsl_math_round_places(frac, labelsPrecision) * pow(10, e))
 					str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'e', labelsPrecision);
 				}
-				if (str == "-" + nullStr)
+				if (str == QLatin1String("-") + nullStr)
 					str = nullStr; // avoid "-O"
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1829,9 +1829,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = "10<sup>" + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</sup>";
+					str = QStringLiteral("10<sup>") + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ QStringLiteral("</sup>");
 					if (value < 0)
-						str.prepend("-");
+						str.prepend(QLatin1Char('-'));
 				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1843,10 +1844,11 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = "2<span style=\"vertical-align:super\">"
-						+ numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</spanlabelsPrecision)>";
+					str = QStringLiteral("2<span style=\"vertical-align:super\">")
+						+ numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ QStringLiteral("</spanlabelsPrecision)>");
 					if (value < 0)
-						str.prepend("-");
+						str.prepend(QLatin1Char('-'));
 				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1858,10 +1860,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = "e<span style=\"vertical-align:super\">"
-						+ numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</span>";
+					str = QStringLiteral("e<span style=\"vertical-align:super\">")
+						+ numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
 					if (value < 0)
-						str.prepend("-");
+						str.prepend(QLatin1Char('-'));
 				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1875,8 +1877,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
 					str = QChar(0x03C0);
 				else
-					str = "<span>" + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision) + "</span>"
-						+ QChar(0x03C0);
+					str = QStringLiteral("<span>") + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision)
+						+ QStringLiteral("</span>") + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -2597,9 +2599,9 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 					}
 					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				} else {
-					const QString style("p {color: %1;}");
+					const QString style(QStringLiteral("p {color: %1;}"));
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
-					doc.setHtml("<p>" + tickLabelStrings.at(i) + "</p>");
+					doc.setHtml(QStringLiteral("<p>") + tickLabelStrings.at(i) + QStringLiteral("</p>"));
 					QSizeF size = doc.size();
 					int height = size.height();
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
@@ -2754,7 +2756,7 @@ bool AxisPrivate::isHovered() const {
 }
 
 QString AxisPrivate::createScientificRepresentation(const QString& mantissa, const QString& exponent) {
-	return mantissa + "×10<sup>" + exponent + "</sup>";
+	return mantissa + QStringLiteral("×10<sup>") + exponent + QStringLiteral("</sup>");
 }
 
 //##############################################################################
@@ -2764,92 +2766,92 @@ QString AxisPrivate::createScientificRepresentation(const QString& mantissa, con
 void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
 
-	writer->writeStartElement("axis");
+	writer->writeStartElement(QStringLiteral("axis"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("rangeType", QString::number(static_cast<int>(d->rangeType)));
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
-	writer->writeAttribute("scale", QString::number(static_cast<int>(d->scale)));
-	writer->writeAttribute("offset", QString::number(d->offset));
-	writer->writeAttribute("logicalPosition", QString::number(d->logicalPosition));
-	writer->writeAttribute("start", QString::number(d->range.start(), 'g', 12));
-	writer->writeAttribute("end", QString::number(d->range.end(), 'g', 12));
-	writer->writeAttribute("majorTicksStartType", QString::number(static_cast<int>(d->majorTicksStartType)));
-	writer->writeAttribute("majorTickStartOffset", QString::number(d->majorTickStartOffset));
-	writer->writeAttribute("majorTickStartValue", QString::number(d->majorTickStartValue));
-	writer->writeAttribute("scalingFactor", QString::number(d->scalingFactor));
-	writer->writeAttribute("zeroOffset", QString::number(d->zeroOffset));
-	writer->writeAttribute("showScaleOffset", QString::number(d->showScaleOffset));
-	writer->writeAttribute("titleOffsetX", QString::number(d->titleOffsetX));
-	writer->writeAttribute("titleOffsetY", QString::number(d->titleOffsetY));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("rangeType"), QString::number(static_cast<int>(d->rangeType)));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->position)));
+	writer->writeAttribute(QStringLiteral("scale"), QString::number(static_cast<int>(d->scale)));
+	writer->writeAttribute(QStringLiteral("offset"), QString::number(d->offset));
+	writer->writeAttribute(QStringLiteral("logicalPosition"), QString::number(d->logicalPosition));
+	writer->writeAttribute(QStringLiteral("start"), QString::number(d->range.start(), 'g', 12));
+	writer->writeAttribute(QStringLiteral("end"), QString::number(d->range.end(), 'g', 12));
+	writer->writeAttribute(QStringLiteral("majorTicksStartType"), QString::number(static_cast<int>(d->majorTicksStartType)));
+	writer->writeAttribute(QStringLiteral("majorTickStartOffset"), QString::number(d->majorTickStartOffset));
+	writer->writeAttribute(QStringLiteral("majorTickStartValue"), QString::number(d->majorTickStartValue));
+	writer->writeAttribute(QStringLiteral("scalingFactor"), QString::number(d->scalingFactor));
+	writer->writeAttribute(QStringLiteral("zeroOffset"), QString::number(d->zeroOffset));
+	writer->writeAttribute(QStringLiteral("showScaleOffset"), QString::number(d->showScaleOffset));
+	writer->writeAttribute(QStringLiteral("titleOffsetX"), QString::number(d->titleOffsetX));
+	writer->writeAttribute(QStringLiteral("titleOffsetY"), QString::number(d->titleOffsetY));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	// label
 	d->title->save(writer);
 
 	// line
-	writer->writeStartElement("line");
+	writer->writeStartElement(QStringLiteral("line"));
 	d->line->save(writer);
-	writer->writeAttribute("arrowType", QString::number(static_cast<int>(d->arrowType)));
-	writer->writeAttribute("arrowPosition", QString::number(static_cast<int>(d->arrowPosition)));
-	writer->writeAttribute("arrowSize", QString::number(d->arrowSize));
+	writer->writeAttribute(QStringLiteral("arrowType"), QString::number(static_cast<int>(d->arrowType)));
+	writer->writeAttribute(QStringLiteral("arrowPosition"), QString::number(static_cast<int>(d->arrowPosition)));
+	writer->writeAttribute(QStringLiteral("arrowSize"), QString::number(d->arrowSize));
 	writer->writeEndElement();
 
 	// major ticks
-	writer->writeStartElement("majorTicks");
-	writer->writeAttribute("direction", QString::number(d->majorTicksDirection));
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->majorTicksType)));
-	writer->writeAttribute("numberAuto", QString::number(d->majorTicksAutoNumber));
-	writer->writeAttribute("number", QString::number(d->majorTicksNumber));
-	writer->writeAttribute("increment", QString::number(d->majorTicksSpacing));
+	writer->writeStartElement(QStringLiteral("majorTicks"));
+	writer->writeAttribute(QStringLiteral("direction"), QString::number(d->majorTicksDirection));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->majorTicksType)));
+	writer->writeAttribute(QStringLiteral("numberAuto"), QString::number(d->majorTicksAutoNumber));
+	writer->writeAttribute(QStringLiteral("number"), QString::number(d->majorTicksNumber));
+	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->majorTicksSpacing));
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
-	writer->writeAttribute("length", QString::number(d->majorTicksLength));
+	writer->writeAttribute(QStringLiteral("length"), QString::number(d->majorTicksLength));
 	WRITE_QPEN(d->majorTicksPen);
-	writer->writeAttribute("opacity", QString::number(d->majorTicksOpacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->majorTicksOpacity));
 	writer->writeEndElement();
 
 	// minor ticks
-	writer->writeStartElement("minorTicks");
-	writer->writeAttribute("direction", QString::number(d->minorTicksDirection));
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->minorTicksType)));
-	writer->writeAttribute("numberAuto", QString::number(d->minorTicksAutoNumber));
-	writer->writeAttribute("number", QString::number(d->minorTicksNumber));
-	writer->writeAttribute("increment", QString::number(d->minorTicksIncrement));
+	writer->writeStartElement(QStringLiteral("minorTicks"));
+	writer->writeAttribute(QStringLiteral("direction"), QString::number(d->minorTicksDirection));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->minorTicksType)));
+	writer->writeAttribute(QStringLiteral("numberAuto"), QString::number(d->minorTicksAutoNumber));
+	writer->writeAttribute(QStringLiteral("number"), QString::number(d->minorTicksNumber));
+	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->minorTicksIncrement));
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
-	writer->writeAttribute("length", QString::number(d->minorTicksLength));
+	writer->writeAttribute(QStringLiteral("length"), QString::number(d->minorTicksLength));
 	WRITE_QPEN(d->minorTicksPen);
-	writer->writeAttribute("opacity", QString::number(d->minorTicksOpacity));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->minorTicksOpacity));
 	writer->writeEndElement();
 
 	// extra ticks
 
 	// labels
-	writer->writeStartElement("labels");
-	writer->writeAttribute("position", QString::number(static_cast<int>(d->labelsPosition)));
-	writer->writeAttribute("offset", QString::number(d->labelsOffset));
-	writer->writeAttribute("rotation", QString::number(d->labelsRotationAngle));
-	writer->writeAttribute("textType", QString::number(static_cast<int>(d->labelsTextType)));
+	writer->writeStartElement(QStringLiteral("labels"));
+	writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->labelsPosition)));
+	writer->writeAttribute(QStringLiteral("offset"), QString::number(d->labelsOffset));
+	writer->writeAttribute(QStringLiteral("rotation"), QString::number(d->labelsRotationAngle));
+	writer->writeAttribute(QStringLiteral("textType"), QString::number(static_cast<int>(d->labelsTextType)));
 	WRITE_COLUMN(d->labelsTextColumn, labelsTextColumn);
-	writer->writeAttribute("format", QString::number(static_cast<int>(d->labelsFormat)));
-	writer->writeAttribute("formatAuto", QString::number(static_cast<int>(d->labelsFormatAuto)));
-	writer->writeAttribute("precision", QString::number(d->labelsPrecision));
-	writer->writeAttribute("autoPrecision", QString::number(d->labelsAutoPrecision));
-	writer->writeAttribute("dateTimeFormat", d->labelsDateTimeFormat);
+	writer->writeAttribute(QStringLiteral("format"), QString::number(static_cast<int>(d->labelsFormat)));
+	writer->writeAttribute(QStringLiteral("formatAuto"), QString::number(static_cast<int>(d->labelsFormatAuto)));
+	writer->writeAttribute(QStringLiteral("precision"), QString::number(d->labelsPrecision));
+	writer->writeAttribute(QStringLiteral("autoPrecision"), QString::number(d->labelsAutoPrecision));
+	writer->writeAttribute(QStringLiteral("dateTimeFormat"), d->labelsDateTimeFormat);
 	WRITE_QCOLOR(d->labelsColor);
 	WRITE_QFONT(d->labelsFont);
-	writer->writeAttribute("prefix", d->labelsPrefix);
-	writer->writeAttribute("suffix", d->labelsSuffix);
-	writer->writeAttribute("opacity", QString::number(d->labelsOpacity));
-	writer->writeAttribute("backgroundType", QString::number(static_cast<int>(d->labelsBackgroundType)));
-	writer->writeAttribute("backgroundColor_r", QString::number(d->labelsBackgroundColor.red()));
-	writer->writeAttribute("backgroundColor_g", QString::number(d->labelsBackgroundColor.green()));
-	writer->writeAttribute("backgroundColor_b", QString::number(d->labelsBackgroundColor.blue()));
+	writer->writeAttribute(QStringLiteral("prefix"), d->labelsPrefix);
+	writer->writeAttribute(QStringLiteral("suffix"), d->labelsSuffix);
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->labelsOpacity));
+	writer->writeAttribute(QStringLiteral("backgroundType"), QString::number(static_cast<int>(d->labelsBackgroundType)));
+	writer->writeAttribute(QStringLiteral("backgroundColor_r"), QString::number(d->labelsBackgroundColor.red()));
+	writer->writeAttribute(QStringLiteral("backgroundColor_g"), QString::number(d->labelsBackgroundColor.green()));
+	writer->writeAttribute(QStringLiteral("backgroundColor_b"), QString::number(d->labelsBackgroundColor.blue()));
 	writer->writeEndElement();
 
 	// grid
@@ -2872,19 +2874,19 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "axis")
+		if (reader->isEndElement() && reader->name() == QLatin1String("axis"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 			if (Project::xmlVersion() < 5) {
-				bool autoScale = attribs.value("autoScale").toInt();
+				bool autoScale = attribs.value(QStringLiteral("autoScale")).toInt();
 				if (autoScale)
 					d->rangeType = Axis::RangeType::Auto;
 				else
@@ -2921,20 +2923,20 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 					d->offset = 0.0;
 			}
 
-			str = attribs.value("visible").toString();
+			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (reader->name() == "textLabel") {
+		} else if (reader->name() == QLatin1String("textLabel")) {
 			d->title->load(reader, preview);
-		} else if (!preview && reader->name() == "line") {
+		} else if (!preview && reader->name() == QLatin1String("line")) {
 			attribs = reader->attributes();
 			d->line->load(reader, preview);
 			READ_INT_VALUE("arrowType", arrowType, Axis::ArrowType);
 			READ_INT_VALUE("arrowPosition", arrowPosition, Axis::ArrowPosition);
 			READ_DOUBLE_VALUE("arrowSize", arrowSize);
-		} else if (!preview && reader->name() == "majorTicks") {
+		} else if (!preview && reader->name() == QLatin1String("majorTicks")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("direction", majorTicksDirection, Axis::TicksDirection);
@@ -2946,7 +2948,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("length", majorTicksLength);
 			READ_QPEN(d->majorTicksPen);
 			READ_DOUBLE_VALUE("opacity", majorTicksOpacity);
-		} else if (!preview && reader->name() == "minorTicks") {
+		} else if (!preview && reader->name() == QLatin1String("minorTicks")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("direction", minorTicksDirection, Axis::TicksDirection);
@@ -2958,7 +2960,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("length", minorTicksLength);
 			READ_QPEN(d->minorTicksPen);
 			READ_DOUBLE_VALUE("opacity", minorTicksOpacity);
-		} else if (!preview && reader->name() == "labels") {
+		} else if (!preview && reader->name() == QLatin1String("labels")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("position", labelsPosition, Axis::LabelsPosition);
@@ -2970,31 +2972,31 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("formatAuto", labelsFormatAuto, bool);
 			READ_INT_VALUE("precision", labelsPrecision, int);
 			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
-			d->labelsDateTimeFormat = attribs.value("dateTimeFormat").toString();
+			d->labelsDateTimeFormat = attribs.value(QStringLiteral("dateTimeFormat")).toString();
 			READ_QCOLOR(d->labelsColor);
 			READ_QFONT(d->labelsFont);
 
 			// don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
-			d->labelsPrefix = attribs.value("prefix").toString();
-			d->labelsSuffix = attribs.value("suffix").toString();
+			d->labelsPrefix = attribs.value(QStringLiteral("prefix")).toString();
+			d->labelsSuffix = attribs.value(QStringLiteral("suffix")).toString();
 
 			READ_DOUBLE_VALUE("opacity", labelsOpacity);
 
 			READ_INT_VALUE("backgroundType", labelsBackgroundType, Axis::LabelsBackgroundType);
-			str = attribs.value("backgroundColor_r").toString();
+			str = attribs.value(QStringLiteral("backgroundColor_r")).toString();
 			if (!str.isEmpty())
 				d->labelsBackgroundColor.setRed(str.toInt());
 
-			str = attribs.value("backgroundColor_g").toString();
+			str = attribs.value(QStringLiteral("backgroundColor_g")).toString();
 			if (!str.isEmpty())
 				d->labelsBackgroundColor.setGreen(str.toInt());
 
-			str = attribs.value("backgroundColor_b").toString();
+			str = attribs.value(QStringLiteral("backgroundColor_b")).toString();
 			if (!str.isEmpty())
 				d->labelsBackgroundColor.setBlue(str.toInt());
-		} else if (!preview && reader->name() == "majorGrid") {
+		} else if (!preview && reader->name() == QLatin1String("majorGrid")) {
 			d->majorGridLine->load(reader, preview);
-		} else if (!preview && reader->name() == "minorGrid") {
+		} else if (!preview && reader->name() == QLatin1String("minorGrid")) {
 			d->minorGridLine->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

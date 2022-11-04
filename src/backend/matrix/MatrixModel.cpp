@@ -123,7 +123,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 					step = diff / double(m_matrix->columnCount() - 1);
 				result += numberLocale.toString(m_matrix->xStart() + double(section) * step, m_matrix->numericFormat(), m_matrix->precision());
 
-				result += ')';
+				result += QLatin1Char(')');
 			}
 			return {result};
 		}
@@ -145,14 +145,14 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 				// 									m_matrix->numericFormat(), m_matrix->displayedDigits());
 				result += numberLocale.toString(m_matrix->yStart() + double(section) * step, m_matrix->numericFormat(), m_matrix->precision());
 			} else {
-				result = QString::number(section + 1) + QString(" (");
+				result = QString::number(section + 1) + QStringLiteral(" (");
 				double diff = m_matrix->yEnd() - m_matrix->yStart();
 				double step = 0.0;
 				if (m_matrix->rowCount() > 1)
 					step = diff / double(m_matrix->rowCount() - 1);
 
 				result += numberLocale.toString(m_matrix->yStart() + double(section) * step, m_matrix->numericFormat(), m_matrix->precision());
-				result += ')';
+				result += QLatin1Char(')');
 			}
 			return {result};
 		}

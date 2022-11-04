@@ -39,26 +39,26 @@ void Background::setPrefix(const QString& prefix) {
 void Background::init(const KConfigGroup& group) {
 	Q_D(Background);
 
-	d->type = (Type)group.readEntry(d->prefix + "Type", static_cast<int>(Type::Color));
-	d->colorStyle = (ColorStyle)group.readEntry(d->prefix + "ColorStyle", static_cast<int>(ColorStyle::SingleColor));
-	d->imageStyle = (ImageStyle)group.readEntry(d->prefix + "ImageStyle", static_cast<int>(ImageStyle::Scaled));
-	d->brushStyle = (Qt::BrushStyle)group.readEntry(d->prefix + "BrushStyle", static_cast<int>(Qt::SolidPattern));
-	d->fileName = group.readEntry(d->prefix + "FileName", QString());
-	d->firstColor = group.readEntry(d->prefix + "FirstColor", QColor(Qt::white));
-	d->secondColor = group.readEntry(d->prefix + "SecondColor", QColor(Qt::black));
+	d->type = (Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Color));
+	d->colorStyle = (ColorStyle)group.readEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(ColorStyle::SingleColor));
+	d->imageStyle = (ImageStyle)group.readEntry(d->prefix + QStringLiteral("ImageStyle"), static_cast<int>(ImageStyle::Scaled));
+	d->brushStyle = (Qt::BrushStyle)group.readEntry(d->prefix + QStringLiteral("BrushStyle"), static_cast<int>(Qt::SolidPattern));
+	d->fileName = group.readEntry(d->prefix + QStringLiteral("FileName"), QString());
+	d->firstColor = group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white));
+	d->secondColor = group.readEntry(d->prefix + QStringLiteral("SecondColor"), QColor(Qt::black));
 
 	double defaultOpacity = 1.0;
 	auto type = parentAspect()->type();
 	if (type == AspectType::Histogram || type == AspectType::BoxPlot)
 		defaultOpacity = 0.5;
-	d->opacity = group.readEntry(d->prefix + "Opacity", defaultOpacity);
+	d->opacity = group.readEntry(d->prefix + QStringLiteral("Opacity"), defaultOpacity);
 
 	// optional parameters
 	if (d->enabledAvailable)
-		d->enabled = group.readEntry(d->prefix + "Enabled", true);
+		d->enabled = group.readEntry(d->prefix + QStringLiteral("Enabled"), true);
 
 	if (d->positionAvailable)
-		d->position = (Position)group.readEntry(d->prefix + "Position", static_cast<int>(Position::No));
+		d->position = (Position)group.readEntry(d->prefix + QStringLiteral("Position"), static_cast<int>(Position::No));
 }
 
 //##############################################################################
@@ -189,23 +189,23 @@ void Background::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(d->prefix.toLower());
 	if (d->enabledAvailable)
-		writer->writeAttribute("enabled", QString::number(d->enabled));
+		writer->writeAttribute(QStringLiteral("enabled"), QString::number(d->enabled));
 
 	if (d->positionAvailable)
-		writer->writeAttribute("position", QString::number(static_cast<int>(d->position)));
+		writer->writeAttribute(QStringLiteral("position"), QString::number(static_cast<int>(d->position)));
 
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->type)));
-	writer->writeAttribute("colorStyle", QString::number(static_cast<int>(d->colorStyle)));
-	writer->writeAttribute("imageStyle", QString::number(static_cast<int>(d->imageStyle)));
-	writer->writeAttribute("brushStyle", QString::number(d->brushStyle));
-	writer->writeAttribute("firstColor_r", QString::number(d->firstColor.red()));
-	writer->writeAttribute("firstColor_g", QString::number(d->firstColor.green()));
-	writer->writeAttribute("firstColor_b", QString::number(d->firstColor.blue()));
-	writer->writeAttribute("secondColor_r", QString::number(d->secondColor.red()));
-	writer->writeAttribute("secondColor_g", QString::number(d->secondColor.green()));
-	writer->writeAttribute("secondColor_b", QString::number(d->secondColor.blue()));
-	writer->writeAttribute("fileName", d->fileName);
-	writer->writeAttribute("opacity", QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->type)));
+	writer->writeAttribute(QStringLiteral("colorStyle"), QString::number(static_cast<int>(d->colorStyle)));
+	writer->writeAttribute(QStringLiteral("imageStyle"), QString::number(static_cast<int>(d->imageStyle)));
+	writer->writeAttribute(QStringLiteral("brushStyle"), QString::number(d->brushStyle));
+	writer->writeAttribute(QStringLiteral("firstColor_r"), QString::number(d->firstColor.red()));
+	writer->writeAttribute(QStringLiteral("firstColor_g"), QString::number(d->firstColor.green()));
+	writer->writeAttribute(QStringLiteral("firstColor_b"), QString::number(d->firstColor.blue()));
+	writer->writeAttribute(QStringLiteral("secondColor_r"), QString::number(d->secondColor.red()));
+	writer->writeAttribute(QStringLiteral("secondColor_g"), QString::number(d->secondColor.green()));
+	writer->writeAttribute(QStringLiteral("secondColor_b"), QString::number(d->secondColor.blue()));
+	writer->writeAttribute(QStringLiteral("fileName"), d->fileName);
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
 	writer->writeEndElement();
 }
 
@@ -231,43 +231,43 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 	READ_INT_VALUE("imageStyle", imageStyle, Background::ImageStyle);
 	READ_INT_VALUE("brushStyle", brushStyle, Qt::BrushStyle);
 
-	str = attribs.value("firstColor_r").toString();
+	str = attribs.value(QStringLiteral("firstColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("firstColor_r").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_r")).toString());
 	else
 		d->firstColor.setRed(str.toInt());
 
-	str = attribs.value("firstColor_g").toString();
+	str = attribs.value(QStringLiteral("firstColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("firstColor_g").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_g")).toString());
 	else
 		d->firstColor.setGreen(str.toInt());
 
-	str = attribs.value("firstColor_b").toString();
+	str = attribs.value(QStringLiteral("firstColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("firstColor_b").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("firstColor_b")).toString());
 	else
 		d->firstColor.setBlue(str.toInt());
 
-	str = attribs.value("secondColor_r").toString();
+	str = attribs.value(QStringLiteral("secondColor_r")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("secondColor_r").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_r")).toString());
 	else
 		d->secondColor.setRed(str.toInt());
 
-	str = attribs.value("secondColor_g").toString();
+	str = attribs.value(QStringLiteral("secondColor_g")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("secondColor_g").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_g")).toString());
 	else
 		d->secondColor.setGreen(str.toInt());
 
-	str = attribs.value("secondColor_b").toString();
+	str = attribs.value(QStringLiteral("secondColor_b")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("secondColor_b").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("secondColor_b")).toString());
 	else
 		d->secondColor.setBlue(str.toInt());
 
-	str = attribs.value("fileName").toString();
+	str = attribs.value(QStringLiteral("fileName")).toString();
 	d->fileName = str;
 
 	READ_DOUBLE_VALUE("opacity", opacity);
@@ -280,27 +280,27 @@ bool Background::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 void Background::loadThemeConfig(const KConfigGroup& group) {
 	Q_D(const Background);
-	setType((Type)group.readEntry(d->prefix + "Type", static_cast<int>(Type::Color)));
-	setColorStyle((ColorStyle)group.readEntry(d->prefix + "ColorStyle", static_cast<int>(ColorStyle::SingleColor)));
-	setImageStyle((ImageStyle)group.readEntry(d->prefix + "ImageStyle", static_cast<int>(ImageStyle::Scaled)));
-	setBrushStyle((Qt::BrushStyle)group.readEntry(d->prefix + "BrushStyle", static_cast<int>(Qt::SolidPattern)));
-	setFirstColor(group.readEntry(d->prefix + "FirstColor", QColor(Qt::white)));
-	setSecondColor(group.readEntry(d->prefix + "SecondColor", QColor(Qt::black)));
+	setType((Type)group.readEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(Type::Color)));
+	setColorStyle((ColorStyle)group.readEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(ColorStyle::SingleColor)));
+	setImageStyle((ImageStyle)group.readEntry(d->prefix + QStringLiteral("ImageStyle"), static_cast<int>(ImageStyle::Scaled)));
+	setBrushStyle((Qt::BrushStyle)group.readEntry(d->prefix + QStringLiteral("BrushStyle"), static_cast<int>(Qt::SolidPattern)));
+	setFirstColor(group.readEntry(d->prefix + QStringLiteral("FirstColor"), QColor(Qt::white)));
+	setSecondColor(group.readEntry(d->prefix + QStringLiteral("SecondColor"), QColor(Qt::black)));
 
 	double defaultOpacity = 1.0;
 	auto type = parentAspect()->type();
 	if (type == AspectType::Histogram || type == AspectType::BoxPlot || type == AspectType::BarPlot)
 		defaultOpacity = 0.8;
-	setOpacity(group.readEntry(d->prefix + "Opacity", defaultOpacity));
+	setOpacity(group.readEntry(d->prefix + QStringLiteral("Opacity"), defaultOpacity));
 }
 
 void Background::saveThemeConfig(KConfigGroup& group) const {
 	Q_D(const Background);
-	group.writeEntry(d->prefix + "Type", static_cast<int>(d->type));
-	group.writeEntry(d->prefix + "ColorStyle", static_cast<int>(d->colorStyle));
-	group.writeEntry(d->prefix + "BrushStyle", static_cast<int>(d->brushStyle));
-	group.writeEntry(d->prefix + "ImageStyle", static_cast<int>(d->imageStyle));
-	group.writeEntry(d->prefix + "FirstColor", d->firstColor);
-	group.writeEntry(d->prefix + "SecondColor", d->secondColor);
-	group.writeEntry(d->prefix + "Opacity", d->opacity);
+	group.writeEntry(d->prefix + QStringLiteral("Type"), static_cast<int>(d->type));
+	group.writeEntry(d->prefix + QStringLiteral("ColorStyle"), static_cast<int>(d->colorStyle));
+	group.writeEntry(d->prefix + QStringLiteral("BrushStyle"), static_cast<int>(d->brushStyle));
+	group.writeEntry(d->prefix + QStringLiteral("ImageStyle"), static_cast<int>(d->imageStyle));
+	group.writeEntry(d->prefix + QStringLiteral("FirstColor"), d->firstColor);
+	group.writeEntry(d->prefix + QStringLiteral("SecondColor"), d->secondColor);
+	group.writeEntry(d->prefix + QStringLiteral("Opacity"), d->opacity);
 }
