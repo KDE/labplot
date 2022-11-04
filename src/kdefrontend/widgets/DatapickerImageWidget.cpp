@@ -118,7 +118,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 #else
@@ -183,9 +183,9 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ui.cbPlotImageType->addItem(i18n("Original Image"));
 	ui.cbPlotImageType->addItem(i18n("Processed Image"));
 
-	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_value.xpm");
-	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_hue.xpm");
-	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/colorchooser/colorchooser_saturation.xpm");
+	QString valueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_value.xpm"));
+	QString hueFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_hue.xpm"));
+	QString saturationFile = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("pics/colorchooser/colorchooser_saturation.xpm"));
 
 	gvHue = new HistogramView(ui.tEdit, ImageEditor::colorAttributeMax(DatapickerImage::ColorAttributes::Hue));
 	gvHue->setToolTip(i18n("Select the range for the hue.\nEverything outside of this range will be set to white."));

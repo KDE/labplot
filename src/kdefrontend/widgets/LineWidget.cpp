@@ -342,32 +342,33 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
 
 	if (m_line->histogramLineTypeAvailable())
-		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->histogramLineType())));
+		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_line->histogramLineType())));
 	else if (m_line->errorBarsTypeAvailable()) {
-		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", static_cast<int>(m_line->errorBarsType())));
-		const double size = Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "CapSize", m_line->errorBarsCapSize()), Worksheet::Unit::Point);
+		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_line->errorBarsType())));
+		const double size =
+			Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("CapSize"), m_line->errorBarsCapSize()), Worksheet::Unit::Point);
 		ui.sbErrorBarsCapSize->setValue(size);
 	} else if (m_prefix == QLatin1String("DropLine"))
 		ui.cbType->setCurrentIndex(group.readEntry("DropLineType", static_cast<int>(m_line->dropLineType())));
 
 	const QPen& pen = m_line->pen();
-	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + "Style", static_cast<int>(pen.style())));
-	ui.kcbColor->setColor(group.readEntry(m_prefix + "Color", pen.color()));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + "Width", pen.widthF()), Worksheet::Unit::Point));
-	ui.sbOpacity->setValue(group.readEntry(m_prefix + "Opacity", m_line->opacity()) * 100);
+	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(pen.style())));
+	ui.kcbColor->setColor(group.readEntry(m_prefix + QStringLiteral("Color"), pen.color()));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), pen.widthF()), Worksheet::Unit::Point));
+	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
 
 void LineWidget::saveConfig(KConfigGroup& group) const {
 	if (m_line->histogramLineTypeAvailable() || m_prefix == QLatin1String("DropLine"))
-		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
+		group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
 	else if (m_line->errorBarsTypeAvailable()) {
-		group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
-		group.writeEntry(m_prefix + "CapSize", Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
+		group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
+		group.writeEntry(m_prefix + QStringLiteral("CapSize"), Worksheet::convertToSceneUnits(ui.sbErrorBarsCapSize->value(), Worksheet::Unit::Point));
 	}
 
-	group.writeEntry(m_prefix + "Style", ui.cbStyle->currentIndex());
-	group.writeEntry(m_prefix + "Color", ui.kcbColor->color());
-	group.writeEntry(m_prefix + "Width", Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);
+	group.writeEntry(m_prefix + QStringLiteral("Style"), ui.cbStyle->currentIndex());
+	group.writeEntry(m_prefix + QStringLiteral("Color"), ui.kcbColor->color());
+	group.writeEntry(m_prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(ui.sbWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry(m_prefix + QStringLiteral("Opacity"), ui.sbOpacity->value() / 100.0);
 }

@@ -41,7 +41,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 	leRow = new QLineEdit(this);
 	leRow->setValidator(new QIntValidator(leRow));
-	leRow->setText("1");
+	leRow->setText(QStringLiteral("1"));
 	layout->addWidget(leRow, 0, 1);
 
 	// column
@@ -50,7 +50,7 @@ GoToDialog::GoToDialog(QWidget* parent)
 
 	leColumn = new QLineEdit(this);
 	leColumn->setValidator(new QIntValidator(leColumn));
-	leColumn->setText("1");
+	leColumn->setText(QStringLiteral("1"));
 	layout->addWidget(leColumn, 1, 1);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

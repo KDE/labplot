@@ -313,8 +313,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 			ui.leName->setText(QString());
 			ui.teComment->setText(QString());
 		}
-		ui.leName->setStyleSheet("");
-		ui.leName->setToolTip("");
+		ui.leName->setStyleSheet(QStringLiteral(""));
+		ui.leName->setToolTip(QStringLiteral(""));
 	}
 
 	this->load();
@@ -929,7 +929,7 @@ void LabelWidget::dateTimeMenu() {
 }
 
 void LabelWidget::insertDateTime(QAction* action) {
-	ui.teLabel->insertPlainText(action->text().remove('&'));
+	ui.teLabel->insertPlainText(action->text().remove(QLatin1Char('&')));
 }
 
 // positioning using absolute coordinates

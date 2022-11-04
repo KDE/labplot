@@ -24,8 +24,8 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	, m_fitData(fitData)
 	, m_fitCurve(fitCurve) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
+	ui.pbCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 
 	// TODO: show "robust" option when robust fitting is possible
 	// 	ui.cbRobust->addItem(i18n("on"));

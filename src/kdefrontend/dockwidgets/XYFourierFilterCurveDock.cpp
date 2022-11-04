@@ -76,7 +76,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -434,7 +434,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(f);
 		uiGeneralTab.sbCutoff->setSingleStep(0.01 * f);
-		uiGeneralTab.sbCutoff->setSuffix(" Hz");
+		uiGeneralTab.sbCutoff->setSuffix(QStringLiteral(" Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
@@ -511,7 +511,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
 		uiGeneralTab.sbCutoff2->setSingleStep(0.01 * f);
-		uiGeneralTab.sbCutoff2->setSuffix(" Hz");
+		uiGeneralTab.sbCutoff2->setSuffix(QStringLiteral(" Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
@@ -615,7 +615,7 @@ void XYFourierFilterCurveDock::showFilterResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", filterResult.status) + "<br>";
+	QString str = i18n("status: %1", filterResult.status) + QStringLiteral("<br>");
 
 	if (!filterResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -624,11 +624,11 @@ void XYFourierFilterCurveDock::showFilterResult() {
 
 	SET_NUMBER_LOCALE
 	if (filterResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 

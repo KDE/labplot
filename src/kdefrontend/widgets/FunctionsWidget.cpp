@@ -21,8 +21,8 @@
 FunctionsWidget::FunctionsWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
-	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
+	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
 	ui.cbGroup->insertSeparator(1); // functions
@@ -54,7 +54,7 @@ void FunctionsWidget::groupChanged(int index) {
 	ui.lwFunctions->clear();
 	for (int i = 0; i < names.size(); ++i) {
 		if (indices.at(i) == index)
-			ui.lwFunctions->addItem(names.at(i) + " (" + functions.at(i) + ')');
+			ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
 	}
 	ui.lwFunctions->setCurrentRow(0);
 }
@@ -68,7 +68,7 @@ void FunctionsWidget::filterChanged(const QString& filter) {
 		ui.lwFunctions->clear();
 		for (int i = 0; i < names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive) || functions.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwFunctions->addItem(names.at(i) + " (" + functions.at(i) + ')');
+				ui.lwFunctions->addItem(names.at(i) + QStringLiteral(" (") + functions.at(i) + QStringLiteral(")"));
 		}
 
 		if (ui.lwFunctions->count()) {
@@ -89,7 +89,7 @@ void FunctionsWidget::insertClicked() {
 
 	// determine the currently selected constant
 	const QString& text = ui.lwFunctions->currentItem()->text();
-	const QString& name = text.left(text.indexOf(" ("));
+	const QString& name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
 
 	Q_EMIT functionSelected(functions.at(index));

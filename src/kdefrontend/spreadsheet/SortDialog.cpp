@@ -25,7 +25,7 @@
  */
 SortDialog::SortDialog(QWidget* parent)
 	: QDialog(parent) {
-	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 	setWindowTitle(i18nc("@title:window", "Sort Columns"));
 	setSizeGripEnabled(true);
 	setAttribute(Qt::WA_DeleteOnClose);

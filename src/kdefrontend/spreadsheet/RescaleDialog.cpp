@@ -27,7 +27,7 @@
  */
 RescaleDialog::RescaleDialog(QWidget* parent)
 	: QDialog(parent) {
-	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 	setWindowTitle(i18nc("@title:window", "Rescale Interval"));
 	setSizeGripEnabled(true);
 

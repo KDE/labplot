@@ -79,7 +79,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CORR_NORM_COUNT; i++)
 		uiGeneralTab.cbNorm->addItem(i18n(nsl_corr_norm_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -440,7 +440,7 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", correlationResult.status) + "<br>";
+	QString str = i18n("status: %1", correlationResult.status) + QStringLiteral("<br>");
 
 	if (!correlationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -449,11 +449,11 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 
 	SET_NUMBER_LOCALE
 	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 

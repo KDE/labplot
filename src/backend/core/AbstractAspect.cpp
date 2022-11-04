@@ -398,12 +398,12 @@ QMenu* AbstractAspect::createContextMenu() {
 		int count = parent->childCount<AbstractAspect>();
 		if (count > 1) {
 			auto* moveMenu = new QMenu(i18n("Move"));
-			moveMenu->setIcon(QIcon::fromTheme("layer-bottom"));
+			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 			if (parent->indexOfChild<AbstractAspect>(this) != 0)
-				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
 
 			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
-				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}
@@ -713,11 +713,11 @@ void AbstractAspect::copy() const {
 
 	// add LabPlot's copy&paste "identifier"
 	writer.writeDTD(QLatin1String("<!DOCTYPE LabPlotCopyPasteXML>"));
-	writer.writeStartElement("copy_content"); // root element
+	writer.writeStartElement(QStringLiteral("copy_content")); // root element
 
 	// write the type of the copied aspect
-	writer.writeStartElement(QLatin1String("type"));
-	writer.writeAttribute(QLatin1String("value"), QString::number(static_cast<int>(m_type)));
+	writer.writeStartElement(QStringLiteral("type"));
+	writer.writeAttribute(QStringLiteral("value"), QString::number(static_cast<int>(m_type)));
 	writer.writeEndElement();
 
 	// write the aspect itself
@@ -1108,7 +1108,7 @@ QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& na
 	}
 
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
-		base.append(" ");
+		base.append(QLatin1Char(' '));
 
 	int new_nr = name.rightRef(name.size() - base.size()).toInt();
 	QString new_name;

@@ -59,15 +59,15 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 #endif
 
-	ui->cbFormat->addItem("ASCII", static_cast<int>(Format::ASCII));
-	ui->cbFormat->addItem("LaTeX", static_cast<int>(Format::LaTeX));
+	ui->cbFormat->addItem(QStringLiteral("ASCII"), static_cast<int>(Format::ASCII));
+	ui->cbFormat->addItem(QStringLiteral("LaTeX"), static_cast<int>(Format::LaTeX));
 #ifdef HAVE_FITS
-	ui->cbFormat->addItem("FITS", static_cast<int>(Format::FITS));
+	ui->cbFormat->addItem(QStringLiteral("FITS"), static_cast<int>(Format::FITS));
 #endif
 
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
-		ui->cbFormat->addItem("SQLite", static_cast<int>(Format::SQLite));
+		ui->cbFormat->addItem(QStringLiteral("SQLite"), static_cast<int>(Format::SQLite));
 
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
@@ -80,7 +80,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
-	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
 	ui->leFileName->setFocus();
 
@@ -95,7 +95,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
 
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
-	setWindowIcon(QIcon::fromTheme("document-export-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
@@ -106,7 +106,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	// TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == '.') ? 0 : 1;
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
 	ui->chkHeaders->setChecked(conf.readEntry("LaTeXHeaders", true));
@@ -380,14 +380,13 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions << ".txt"
-			   << ".tex";
+	extensions << QStringLiteral(".txt") << QStringLiteral(".tex");
 #ifdef HAVE_FITS
-	extensions << ".fits";
+	extensions << QStringLiteral(".fits");
 #endif
-	extensions << ".db";
+	extensions << QStringLiteral(".db");
 	QString path = ui->leFileName->text();
-	int i = path.indexOf(".");
+	int i = path.indexOf(QLatin1Char('.'));
 	if (index != -1) {
 		if (i == -1)
 			path = path + extensions.at(index);

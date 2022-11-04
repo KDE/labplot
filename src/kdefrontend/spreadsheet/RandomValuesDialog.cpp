@@ -151,7 +151,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	ui.leParameter2->show();
 	ui.lParameter3->hide();
 	ui.leParameter3->hide();
-	ui.lFunc->setText("p(x) =");
+	ui.lFunc->setText(QStringLiteral("p(x) ="));
 
 	SET_NUMBER_LOCALE
 	switch (dist) {
@@ -166,7 +166,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter3->show();
 		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
 		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
-		ui.lParameter3->setText("a =");
+		ui.lParameter3->setText(QStringLiteral("a ="));
 		ui.leParameter1->setText(numberLocale.toString(0.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		ui.leParameter3->setText(numberLocale.toString(0.0));
@@ -188,7 +188,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter3->show();
 		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
 		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
-		ui.lParameter3->setText("b =");
+		ui.lParameter3->setText(QStringLiteral("b ="));
 		ui.leParameter1->setText(numberLocale.toString(0.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		ui.leParameter3->setText(numberLocale.toString(1.0));
@@ -218,7 +218,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->hide();
 		break;
 	case nsl_sf_stats_levy_alpha_stable:
-		ui.lParameter1->setText("c =");
+		ui.lParameter1->setText(QStringLiteral("c ="));
 		ui.lParameter2->setText(UTF8_QSTRING("α ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
@@ -234,21 +234,21 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter3->setText(numberLocale.toString(1.0));
 		break;
 	case nsl_sf_stats_flat:
-		ui.lParameter1->setText("a =");
-		ui.lParameter2->setText("b =");
+		ui.lParameter1->setText(QStringLiteral("a ="));
+		ui.lParameter2->setText(QStringLiteral("b ="));
 		ui.leParameter1->setText(numberLocale.toString(0.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		break;
 	case nsl_sf_stats_gamma:
 		ui.lParameter1->setText(UTF8_QSTRING("θ ="));
-		ui.lParameter2->setText("k =");
+		ui.lParameter2->setText(QStringLiteral("k ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		break;
 	case nsl_sf_stats_weibull:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText("k =");
+		ui.lParameter1->setText(QStringLiteral("k ="));
 		ui.lParameter2->setText(UTF8_QSTRING("λ ="));
 		ui.lParameter3->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
@@ -256,8 +256,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter3->setText(numberLocale.toString(1.0));
 		break;
 	case nsl_sf_stats_beta:
-		ui.lParameter1->setText("a =");
-		ui.lParameter2->setText("b =");
+		ui.lParameter1->setText(QStringLiteral("a ="));
+		ui.lParameter2->setText(QStringLiteral("b ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		break;
@@ -274,16 +274,16 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_gumbel2:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lParameter1->setText("a =");
-		ui.lParameter2->setText("b =");
+		ui.lParameter1->setText(QStringLiteral("a ="));
+		ui.lParameter2->setText(QStringLiteral("b ="));
 		ui.lParameter3->setText(UTF8_QSTRING("μ ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		ui.leParameter3->setText(numberLocale.toString(0.0));
 		break;
 	case nsl_sf_stats_pareto:
-		ui.lParameter1->setText("a =");
-		ui.lParameter2->setText("b =");
+		ui.lParameter1->setText(QStringLiteral("a ="));
+		ui.lParameter2->setText(QStringLiteral("b ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(0.0));
 		break;
@@ -296,7 +296,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_chi_squared:
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
-		ui.lParameter1->setText("n =");
+		ui.lParameter1->setText(QStringLiteral("n ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		break;
 	case nsl_sf_stats_fdist:
@@ -310,7 +310,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->hide();
 		ui.lParameter1->setText(UTF8_QSTRING("ν ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
-		ui.leParameter1->setText("1.0");
+		ui.leParameter1->setText(QStringLiteral("1.0"));
 		break;
 	case nsl_sf_stats_logistic:
 		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
@@ -321,10 +321,10 @@ void RandomValuesDialog::distributionChanged(int index) {
 	case nsl_sf_stats_poisson:
 		ui.lParameter2->hide();
 		ui.leParameter2->hide();
-		ui.lFunc->setText("p(k) =");
+		ui.lFunc->setText(QStringLiteral("p(k) ="));
 		ui.lParameter1->setText(UTF8_QSTRING("λ ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
-		ui.leParameter1->setText("1.0");
+		ui.leParameter1->setText(QStringLiteral("1.0"));
 		break;
 	case nsl_sf_stats_bernoulli:
 	case nsl_sf_stats_geometric:
@@ -334,26 +334,26 @@ void RandomValuesDialog::distributionChanged(int index) {
 		if (dist == nsl_sf_stats_bernoulli)
 			ui.lFunc->setText(QString());
 		else
-			ui.lFunc->setText("p(k) =");
-		ui.lParameter1->setText("p =");
+			ui.lFunc->setText(QStringLiteral("p(k) ="));
+		ui.lParameter1->setText(QStringLiteral("p ="));
 		ui.leParameter1->setText(numberLocale.toString(0.5));
 		break;
 	case nsl_sf_stats_binomial:
 	case nsl_sf_stats_negative_binomial:
 	case nsl_sf_stats_pascal:
-		ui.lFunc->setText("p(k) =");
-		ui.lParameter1->setText("p =");
-		ui.lParameter2->setText("n =");
+		ui.lFunc->setText(QStringLiteral("p(k) ="));
+		ui.lParameter1->setText(QStringLiteral("p ="));
+		ui.lParameter2->setText(QStringLiteral("n ="));
 		ui.leParameter1->setText(numberLocale.toString(0.5));
 		ui.leParameter2->setText(numberLocale.toString(100));
 		break;
 	case nsl_sf_stats_hypergeometric:
 		ui.lParameter3->show();
 		ui.leParameter3->show();
-		ui.lFunc->setText("p(k) =");
-		ui.lParameter1->setText("n1 =");
-		ui.lParameter2->setText("n2 =");
-		ui.lParameter3->setText("t =");
+		ui.lFunc->setText(QStringLiteral("p(k) ="));
+		ui.lParameter1->setText(QStringLiteral("n1 ="));
+		ui.lParameter2->setText(QStringLiteral("n2 ="));
+		ui.lParameter3->setText(QStringLiteral("t ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(2.0));
 		ui.leParameter3->setText(numberLocale.toString(3.0));
@@ -365,8 +365,9 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	}
 
-	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation,
-										  "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + QLatin1String(".pdf"));
+	QString file =
+		QStandardPaths::locate(QStandardPaths::AppDataLocation,
+							   QStringLiteral("pics/gsl_distributions/") + QLatin1String(nsl_sf_stats_distribution_pic_name[dist]) + QStringLiteral(".pdf"));
 	QImage image = GuiTools::importPDFFile(file);
 
 	if (image.isNull()) {

@@ -51,7 +51,7 @@ FlattenColumnsDialog::FlattenColumnsDialog(Spreadsheet* s, QWidget* parent)
 
 	// create "add new reference column" button
 	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	m_buttonNew->setToolTip(i18n("Add additional reference column"));
 	m_gridLayout = static_cast<QGridLayout*>(ui.scrollArea->widget()->layout());
 	m_gridLayout->addWidget(m_buttonNew, 1, 2, 1, 1);
@@ -114,7 +114,7 @@ void FlattenColumnsDialog::addReferenceColumn() {
 
 	// add new "remove" button to the same grid line
 	auto* button = new QPushButton();
-	button->setIcon(QIcon::fromTheme("list-remove"));
+	button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 	button->setToolTip(i18n("Remove reference column"));
 	connect(button, &QPushButton::clicked, this, &FlattenColumnsDialog::removeReferenceColumn);
 	m_gridLayout->addWidget(button, index, 2, 1, 1);

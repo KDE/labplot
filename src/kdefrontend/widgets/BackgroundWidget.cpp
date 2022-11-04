@@ -32,7 +32,7 @@ BackgroundWidget::BackgroundWidget(QWidget* parent)
 	ui.setupUi(this);
 
 	ui.cbColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 #else
@@ -446,37 +446,37 @@ void BackgroundWidget::load() {
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	const Lock lock(m_initializing);
-	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + "Type", (int)m_background->type()));
-	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + "ColorStyle", (int)m_background->colorStyle()));
-	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + "ImageStyle", (int)m_background->imageStyle()));
-	ui.cbBrushStyle->setCurrentIndex(group.readEntry(m_prefix + "BrushStyle", (int)m_background->brushStyle()));
-	ui.leFileName->setText(group.readEntry(m_prefix + "FileName", m_background->fileName()));
-	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + "FirstColor", m_background->firstColor()));
-	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + "SecondColor", m_background->secondColor()));
-	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + "Opacity", m_background->opacity()) * 100));
+	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
+	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));
+	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ImageStyle"), (int)m_background->imageStyle()));
+	ui.cbBrushStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("BrushStyle"), (int)m_background->brushStyle()));
+	ui.leFileName->setText(group.readEntry(m_prefix + QStringLiteral("FileName"), m_background->fileName()));
+	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + QStringLiteral("FirstColor"), m_background->firstColor()));
+	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + QStringLiteral("SecondColor"), m_background->secondColor()));
+	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_background->opacity()) * 100));
 
 	// optional parameters
 	if (m_background->enabledAvailable())
-		ui.chkEnabled->setChecked(group.readEntry(m_prefix + "Enabled", m_background->enabled()));
+		ui.chkEnabled->setChecked(group.readEntry(m_prefix + QStringLiteral("Enabled"), m_background->enabled()));
 
 	if (m_background->positionAvailable())
-		ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + "Position", (int)m_background->position()));
+		ui.cbPosition->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Position"), (int)m_background->position()));
 }
 
 void BackgroundWidget::saveConfig(KConfigGroup& group) const {
-	group.writeEntry(m_prefix + "Type", ui.cbType->currentIndex());
-	group.writeEntry(m_prefix + "ColorStyle", ui.cbColorStyle->currentIndex());
-	group.writeEntry(m_prefix + "ImageStyle", ui.cbImageStyle->currentIndex());
-	group.writeEntry(m_prefix + "BrushStyle", ui.cbBrushStyle->currentIndex());
-	group.writeEntry(m_prefix + "FileName", ui.leFileName->text());
-	group.writeEntry(m_prefix + "FirstColor", ui.kcbFirstColor->color());
-	group.writeEntry(m_prefix + "SecondColor", ui.kcbSecondColor->color());
-	group.writeEntry(m_prefix + "Opacity", ui.sbOpacity->value() / 100.0);
+	group.writeEntry(m_prefix + QStringLiteral("Type"), ui.cbType->currentIndex());
+	group.writeEntry(m_prefix + QStringLiteral("ColorStyle"), ui.cbColorStyle->currentIndex());
+	group.writeEntry(m_prefix + QStringLiteral("ImageStyle"), ui.cbImageStyle->currentIndex());
+	group.writeEntry(m_prefix + QStringLiteral("BrushStyle"), ui.cbBrushStyle->currentIndex());
+	group.writeEntry(m_prefix + QStringLiteral("FileName"), ui.leFileName->text());
+	group.writeEntry(m_prefix + QStringLiteral("FirstColor"), ui.kcbFirstColor->color());
+	group.writeEntry(m_prefix + QStringLiteral("SecondColor"), ui.kcbSecondColor->color());
+	group.writeEntry(m_prefix + QStringLiteral("Opacity"), ui.sbOpacity->value() / 100.0);
 
 	// optional parameters
 	if (m_background->enabledAvailable())
-		group.writeEntry(m_prefix + "Enabled", ui.chkEnabled->isChecked());
+		group.writeEntry(m_prefix + QStringLiteral("Enabled"), ui.chkEnabled->isChecked());
 
 	if (m_background->positionAvailable())
-		group.writeEntry(m_prefix + "Position", ui.cbPosition->currentIndex());
+		group.writeEntry(m_prefix + QStringLiteral("Position"), ui.cbPosition->currentIndex());
 }

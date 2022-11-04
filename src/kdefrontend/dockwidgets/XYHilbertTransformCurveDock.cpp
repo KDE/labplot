@@ -284,7 +284,7 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", transformResult.status) + "<br>";
+	QString str = i18n("status: %1", transformResult.status) + QStringLiteral("<br>");
 
 	if (!transformResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -293,11 +293,11 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 
 	SET_NUMBER_LOCALE
 	if (transformResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 }

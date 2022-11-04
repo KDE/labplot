@@ -73,7 +73,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -570,7 +570,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	// const XYSmoothCurve::SmoothData& smoothData = m_smoothCurve->smoothData();
-	QString str = i18n("status: %1", smoothResult.status) + "<br>";
+	QString str = i18n("status: %1", smoothResult.status) + QStringLiteral("<br>");
 
 	if (!smoothResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -579,11 +579,11 @@ void XYSmoothCurveDock::showSmoothResult() {
 
 	SET_NUMBER_LOCALE
 	if (smoothResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(smoothResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(smoothResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 

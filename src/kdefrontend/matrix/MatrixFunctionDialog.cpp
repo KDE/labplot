@@ -47,22 +47,21 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
-	ui.tbConstants->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	ui.tbFunctions->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	ui.tbConstants->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	ui.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	QStringList vars;
-	vars << "x"
-		 << "y";
+	vars << QStringLiteral("x") << QStringLiteral("y");
 	ui.teEquation->setVariables(vars);
 	ui.teEquation->setFocus();
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 
 	SET_NUMBER_LOCALE
-	QString info = '[' + numberLocale.toString(m_matrix->xStart()) + ", " + numberLocale.toString(m_matrix->xEnd()) + "], "
-		+ i18np("%1 value", "%1 values", m_matrix->columnCount());
+	QString info = QStringLiteral("[") + numberLocale.toString(m_matrix->xStart()) + QStringLiteral(", ") + numberLocale.toString(m_matrix->xEnd())
+		+ QStringLiteral("], ") + i18np("%1 value", "%1 values", m_matrix->columnCount());
 	ui.lXInfo->setText(info);
-	info = '[' + numberLocale.toString(m_matrix->yStart()) + ", " + numberLocale.toString(m_matrix->yEnd()) + "], "
-		+ i18np("%1 value", "%1 values", m_matrix->rowCount());
+	info = QStringLiteral("[") + numberLocale.toString(m_matrix->yStart()) + QStringLiteral(", ") + numberLocale.toString(m_matrix->yEnd())
+		+ QStringLiteral("], ") + i18np("%1 value", "%1 values", m_matrix->rowCount());
 	ui.lYInfo->setText(info);
 
 	ui.teEquation->setPlainText(m_matrix->formula());

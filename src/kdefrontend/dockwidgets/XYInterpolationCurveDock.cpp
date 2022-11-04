@@ -88,7 +88,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.leMin->setValidator(new QDoubleValidator(uiGeneralTab.leMin));
 	uiGeneralTab.leMax->setValidator(new QDoubleValidator(uiGeneralTab.leMax));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -677,7 +677,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", interpolationResult.status) + "<br>";
+	QString str = i18n("status: %1", interpolationResult.status) + QStringLiteral("<br>");
 
 	if (!interpolationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -686,11 +686,11 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 
 	SET_NUMBER_LOCALE
 	if (interpolationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(interpolationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(interpolationResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 

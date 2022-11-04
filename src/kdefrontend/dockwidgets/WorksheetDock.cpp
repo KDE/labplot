@@ -42,10 +42,10 @@ WorksheetDock::WorksheetDock(QWidget* parent)
 	// Layout-tab
 	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
 
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Vertical Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Horizontal Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editbreaklayout")), i18n("No Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-edithlayout")), i18n("Vertical Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editvlayout")), i18n("Horizontal Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme(QStringLiteral("labplot-editgrid")), i18n("Grid Layout"));
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -127,8 +127,8 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first worksheet
 	this->load();

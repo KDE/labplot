@@ -45,7 +45,7 @@ Folder::Folder(const QString& name, AspectType type)
 }
 
 QIcon Folder::icon() const {
-	return QIcon::fromTheme("folder");
+	return QIcon::fromTheme(QStringLiteral("folder"));
 }
 
 /**
@@ -113,7 +113,7 @@ void Folder::processDropEvent(const QVector<quintptr>& vec) {
  * \brief Save as XML
  */
 void Folder::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement(QLatin1String("folder"));
+	writer->writeStartElement(QStringLiteral("folder"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -178,8 +178,8 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 	// check whether we need to skip the loading of the current child aspect
 	if (!m_pathesToLoad.isEmpty()) {
-		const QString& name = reader->attributes().value("name").toString(); // name of the current child aspect
-		const QString childPath = path() + '/' + name; // child's path is not available yet (child not added yet) -> construct it manually
+		const QString& name = reader->attributes().value(QStringLiteral("name")).toString(); // name of the current child aspect
+		const QString childPath = path() + QStringLiteral("/") + name; // child's path is not available yet (child not added yet) -> construct it manually
 
 		// skip the current child aspect it is not in the list of aspects to be loaded
 		if (m_pathesToLoad.indexOf(childPath) == -1) {
@@ -212,7 +212,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			// With this the logic above where it is determined whether to import the child aspect or not works out.
 
 			// manually construct the path of the child folder to be read
-			const QString& curFolderPath = path() + '/' + reader->attributes().value("name").toString();
+			const QString& curFolderPath = path() + QStringLiteral("/") + reader->attributes().value(QStringLiteral("name")).toString();
 
 			// remove the path of the current child folder
 			QStringList pathesToLoadNew;

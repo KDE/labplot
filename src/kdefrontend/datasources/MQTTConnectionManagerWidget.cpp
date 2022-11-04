@@ -594,7 +594,7 @@ QString MQTTConnectionManagerWidget::uniqueName() {
 		base.chop(1);
 
 	if (lastNonDigit >= 0 && base[lastNonDigit].category() != QChar::Separator_Space)
-		base.append(' ');
+		base.append(QLatin1Char(' '));
 
 	int newNr = name.rightRef(name.size() - base.size()).toInt();
 	QString newName;

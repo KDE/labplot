@@ -60,14 +60,13 @@ void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
 	if (type == XYEquationCurve::EquationType::Cartesian)
-		m_variables << "x";
+		m_variables << QStringLiteral("x");
 	else if (type == XYEquationCurve::EquationType::Polar)
-		m_variables << "phi";
+		m_variables << QStringLiteral("phi");
 	else if (type == XYEquationCurve::EquationType::Parametric)
-		m_variables << "t";
+		m_variables << QStringLiteral("t");
 	else if (type == XYEquationCurve::EquationType::Implicit)
-		m_variables << "x"
-					<< "y";
+		m_variables << QStringLiteral("x") << QStringLiteral("y");
 
 	m_highlighter->setVariables(m_variables);
 }
@@ -141,7 +140,7 @@ void ExpressionTextEdit::keyPressEvent(QKeyEvent* e) {
 	if ((ctrlOrShift && e->text().isEmpty()))
 		return;
 
-	static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+	static QString eow(QStringLiteral("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-=")); // end of word
 	const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
 	QTextCursor tc = textCursor();
 	tc.select(QTextCursor::WordUnderCursor);
@@ -179,14 +178,15 @@ void ExpressionTextEdit::mouseMoveEvent(QMouseEvent* e) {
 		static const QStringList& names = ExpressionParser::getInstance()->constantsNames();
 		static const QStringList& values = ExpressionParser::getInstance()->constantsValues();
 		static const QStringList& units = ExpressionParser::getInstance()->constantsUnits();
-		setToolTip(names.at(index) + ": " + constants.at(index) + " = " + values.at(index) + ' ' + units.at(index));
+		setToolTip(names.at(index) + QStringLiteral(": ") + constants.at(index) + QStringLiteral(" = ") + values.at(index) + QStringLiteral(" ")
+				   + units.at(index));
 	} else {
 		// text token was not found in the list of constants -> check functions as next
 		static const QStringList& functions = ExpressionParser::getInstance()->functions();
 		index = functions.indexOf(token);
 		if (index != -1) {
 			static const QStringList& names = ExpressionParser::getInstance()->functionsNames();
-			setToolTip(functions.at(index) + " - " + names.at(index));
+			setToolTip(functions.at(index) + QStringLiteral(" - ") + names.at(index));
 		} else
 			setToolTip(QString());
 	}

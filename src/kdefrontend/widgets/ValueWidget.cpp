@@ -53,7 +53,7 @@ ValueWidget::ValueWidget(QWidget* parent)
 
 	for (const auto& s1 : AbstractColumn::dateFormats()) {
 		for (const auto& s2 : AbstractColumn::timeFormats())
-			ui.cbDateTimeFormat->addItem(s1 + ' ' + s2, QVariant(s1 + ' ' + s2));
+			ui.cbDateTimeFormat->addItem(s1 + QStringLiteral(" ") + s2, QVariant(s1 + QStringLiteral(" ") + s2));
 	}
 
 	ui.cbDateTimeFormat->setEditable(true);

@@ -43,7 +43,7 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::rejected, this, &FITSHeaderEditDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "FITS Metadata Editor"));
-	setWindowIcon(QIcon::fromTheme("document-edit"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
 
 	connect(m_okButton, &QPushButton::clicked, this, &FITSHeaderEditDialog::save);
 	connect(m_headerEditWidget, &FITSHeaderEditWidget::changed, this, &FITSHeaderEditDialog::headersChanged);

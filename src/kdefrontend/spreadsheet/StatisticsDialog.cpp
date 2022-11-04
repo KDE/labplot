@@ -44,7 +44,7 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 	setLayout(layout);
 
 	setWindowTitle(title);
-	setWindowIcon(QIcon::fromTheme("view-statistics"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-statistics")));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	m_columns = columns;

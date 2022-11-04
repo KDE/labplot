@@ -71,31 +71,39 @@ AbstractColumn::~AbstractColumn() {
 }
 
 QStringList AbstractColumn::dateFormats() {
-	static const QStringList dates{"yyyy-MM-dd",
-								   "yyyy.MM.dd",
-								   "yyyy/MM/dd",
-								   "yyyyMMdd",
-								   "dd-MM-yyyy",
-								   "dd.MM.yyyy",
-								   "dd/MM/yyyy",
-								   "ddMMyyyy",
-								   "dd-MM-yy",
-								   "dd.MM.yy",
-								   "dd/MM/yy",
-								   "ddMMyy",
-								   "MM-yyyy",
-								   "MM.yyyy",
-								   "MM/yyyy",
-								   "dd-MM",
-								   "dd.MM",
-								   "dd/MM",
-								   "ddMM"};
+	static const QStringList dates{QStringLiteral("yyyy-MM-dd"),
+								   QStringLiteral("yyyy.MM.dd"),
+								   QStringLiteral("yyyy/MM/dd"),
+								   QStringLiteral("yyyyMMdd"),
+								   QStringLiteral("dd-MM-yyyy"),
+								   QStringLiteral("dd.MM.yyyy"),
+								   QStringLiteral("dd/MM/yyyy"),
+								   QStringLiteral("ddMMyyyy"),
+								   QStringLiteral("dd-MM-yy"),
+								   QStringLiteral("dd.MM.yy"),
+								   QStringLiteral("dd/MM/yy"),
+								   QStringLiteral("ddMMyy"),
+								   QStringLiteral("MM-yyyy"),
+								   QStringLiteral("MM.yyyy"),
+								   QStringLiteral("MM/yyyy"),
+								   QStringLiteral("dd-MM"),
+								   QStringLiteral("dd.MM"),
+								   QStringLiteral("dd/MM"),
+								   QStringLiteral("ddMM")};
 
 	return dates;
 }
 
 QStringList AbstractColumn::timeFormats() {
-	static const QStringList times{"hh", "hh ap", "hh:mm", "hh:mm ap", "hh:mm:ss", "hh:mm:ss.zzz", "hh:mm:ss:zzz", "mm:ss.zzz", "hhmmss"};
+	static const QStringList times{QStringLiteral("hh"),
+								   QStringLiteral("hh ap"),
+								   QStringLiteral("hh:mm"),
+								   QStringLiteral("hh:mm ap"),
+								   QStringLiteral("hh:mm:ss"),
+								   QStringLiteral("hh:mm:ss.zzz"),
+								   QStringLiteral("hh:mm:ss:zzz"),
+								   QStringLiteral("mm:ss.zzz"),
+								   QStringLiteral("hhmmss")};
 
 	return times;
 }
@@ -106,7 +114,7 @@ QStringList AbstractColumn::dateTimeFormats() {
 	// any combination of date and times
 	for (const auto& d : dateFormats())
 		for (const auto& t : timeFormats())
-			dateTimes << d + ' ' + t;
+			dateTimes << d + QLatin1Char(' ') + t;
 
 	return dateTimes;
 }
@@ -123,13 +131,13 @@ QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBracke
 		s = i18n("None");
 		break;
 	case PlotDesignation::X:
-		s = QLatin1String("X");
+		s = QStringLiteral("X");
 		break;
 	case PlotDesignation::Y:
-		s = QLatin1String("Y");
+		s = QStringLiteral("Y");
 		break;
 	case PlotDesignation::Z:
-		s = QLatin1String("Z");
+		s = QStringLiteral("Z");
 		break;
 	case PlotDesignation::XError:
 		s = i18n("X-error");
@@ -154,7 +162,7 @@ QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBracke
 	}
 
 	if (withBrackets)
-		s = QLatin1String("[") + s + QLatin1Char(']');
+		s = QStringLiteral("[") + s + QLatin1Char(']');
 
 	return s;
 }
@@ -194,14 +202,14 @@ QIcon AbstractColumn::modeIcon(ColumnMode mode) {
 	case ColumnMode::BigInt:
 		break;
 	case ColumnMode::Text:
-		return QIcon::fromTheme("draw-text");
+		return QIcon::fromTheme(QStringLiteral("draw-text"));
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day:
-		return QIcon::fromTheme("chronometer");
+		return QIcon::fromTheme(QStringLiteral("chronometer"));
 	}
 
-	return QIcon::fromTheme("x-shape-text");
+	return QIcon::fromTheme(QStringLiteral("x-shape-text"));
 }
 
 /**
@@ -267,7 +275,7 @@ bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/
  */
 void AbstractColumn::insertRows(int before, int count) {
 	beginMacro(i18np("%1: insert 1 row", "%1: insert %2 rows", name(), count));
-	exec(new SignallingUndoCommand("pre-signal",
+	exec(new SignallingUndoCommand(QStringLiteral("pre-signal"),
 								   this,
 								   "rowsAboutToBeInserted",
 								   "rowsRemoved",
@@ -277,7 +285,7 @@ void AbstractColumn::insertRows(int before, int count) {
 
 	handleRowInsertion(before, count);
 
-	exec(new SignallingUndoCommand("post-signal",
+	exec(new SignallingUndoCommand(QStringLiteral("post-signal"),
 								   this,
 								   "rowsInserted",
 								   "rowsAboutToBeRemoved",
@@ -296,7 +304,7 @@ void AbstractColumn::handleRowInsertion(int before, int count) {
  */
 void AbstractColumn::removeRows(int first, int count) {
 	beginMacro(i18np("%1: remove 1 row", "%1: remove %2 rows", name(), count));
-	exec(new SignallingUndoCommand("change signal",
+	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
 								   this,
 								   "rowsAboutToBeRemoved",
 								   "rowsInserted",
@@ -306,7 +314,7 @@ void AbstractColumn::removeRows(int first, int count) {
 
 	handleRowRemoval(first, count);
 
-	exec(new SignallingUndoCommand("change signal",
+	exec(new SignallingUndoCommand(QStringLiteral("change signal"),
 								   this,
 								   "rowsRemoved",
 								   "rowsAboutToBeInserted",
@@ -818,12 +826,12 @@ int AbstractColumn::indexForValue(double /*x*/) const {
  * \brief Read XML mask element
  */
 bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() && reader->name() == "mask");
+	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("mask"));
 
 	bool ok1, ok2;
 	int start, end;
-	start = reader->readAttributeInt("start_row", &ok1);
-	end = reader->readAttributeInt("end_row", &ok2);
+	start = reader->readAttributeInt(QStringLiteral("start_row"), &ok1);
+	end = reader->readAttributeInt(QStringLiteral("end_row"), &ok2);
 	if (!ok1 || !ok2) {
 		reader->raiseError(i18n("invalid or missing start or end row"));
 		return false;
@@ -840,9 +848,9 @@ bool AbstractColumn::XmlReadMask(XmlStreamReader* reader) {
  */
 void AbstractColumn::XmlWriteMask(QXmlStreamWriter* writer) const {
 	for (const auto& interval : maskedIntervals()) {
-		writer->writeStartElement("mask");
-		writer->writeAttribute("start_row", QString::number(interval.start()));
-		writer->writeAttribute("end_row", QString::number(interval.end()));
+		writer->writeStartElement(QStringLiteral("mask"));
+		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
+		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
 		writer->writeEndElement();
 	}
 }

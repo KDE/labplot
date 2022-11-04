@@ -83,7 +83,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -542,7 +542,7 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", convolutionResult.status) + "<br>";
+	QString str = i18n("status: %1", convolutionResult.status) + QStringLiteral("<br>");
 
 	if (!convolutionResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -551,11 +551,11 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 
 	SET_NUMBER_LOCALE
 	if (convolutionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 
