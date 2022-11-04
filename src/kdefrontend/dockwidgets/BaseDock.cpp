@@ -27,7 +27,7 @@ extern "C" {
 
 BaseDock::BaseDock(QWidget* parent)
 	: QWidget(parent) {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
 	if (m_units == Units::Imperial)
@@ -60,7 +60,7 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	m_suppressPlotRetransform = true;
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)
-		cb->addItem(QString::number(i + 1) + QLatin1String(" : ") + element->coordinateSystemInfo(i));
+		cb->addItem(QString::number(i + 1) + QStringLiteral(" : ") + element->coordinateSystemInfo(i));
 	m_suppressPlotRetransform = false;
 	cb->setCurrentIndex(cSystemIndex);
 	// disable when there is only on plot range
@@ -150,8 +150,8 @@ void BaseDock::nameChanged() {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 	} else {
-		m_leName->setStyleSheet("");
-		m_leName->setToolTip("");
+		m_leName->setStyleSheet(QStringLiteral(""));
+		m_leName->setToolTip(QStringLiteral(""));
 	}
 }
 

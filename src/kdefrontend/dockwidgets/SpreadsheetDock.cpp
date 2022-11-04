@@ -80,8 +80,8 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first Spreadsheet in the list
 	this->load();
@@ -169,7 +169,7 @@ void SpreadsheetDock::load() {
 void SpreadsheetDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
-	const int index = config.name().lastIndexOf(QLatin1String("/"));
+	const int index = config.name().lastIndexOf(QLatin1Char('/'));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

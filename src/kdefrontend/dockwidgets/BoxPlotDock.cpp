@@ -33,7 +33,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 
 	// Tab "General"
 	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	connect(m_buttonNew, &QPushButton::clicked, this, &BoxPlotDock::addDataColumn);
 
 	m_gridLayout = new QGridLayout(ui.frameDataColumns);
@@ -42,10 +42,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
-	ui.cbWhiskersType->addItem(QLatin1String("min/max"));
-	ui.cbWhiskersType->addItem(QLatin1String("Tukey"));
-	ui.cbWhiskersType->addItem(QString("mean ∓ k*SD"));
-	ui.cbWhiskersType->addItem(QString("median ∓ k*MAD"));
+	ui.cbWhiskersType->addItem(QStringLiteral("min/max"));
+	ui.cbWhiskersType->addItem(QStringLiteral("Tukey"));
+	ui.cbWhiskersType->addItem(QStringLiteral("mean ∓ k*SD"));
+	ui.cbWhiskersType->addItem(QStringLiteral("median ∓ k*MAD"));
 	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
 	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
 	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
@@ -198,8 +198,8 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 		ui.lDataColumn->setEnabled(false);
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	QList<Background*> backgrounds;
 	QList<Line*> borderLines;
@@ -355,7 +355,7 @@ void BoxPlotDock::addDataColumn() {
 		cb->setSizePolicy(sizePolicy1);
 	} else {
 		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme("list-remove"));
+		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
@@ -734,7 +734,7 @@ void BoxPlotDock::plotRugOffsetChanged(double value) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void BoxPlotDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group(QLatin1String("BoxPlot"));
+	KConfigGroup group = config.group(QStringLiteral("BoxPlot"));
 
 	// general
 	ui.cbOrdering->setCurrentIndex(group.readEntry("Ordering", (int)m_boxPlot->ordering()));
@@ -779,7 +779,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
+	int index = config.name().lastIndexOf(QLatin1Char('/'));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

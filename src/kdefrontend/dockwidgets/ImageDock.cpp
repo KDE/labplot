@@ -41,7 +41,7 @@ ImageDock::ImageDock(QWidget* parent)
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
-	ui.bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	ui.leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
 #else
@@ -70,9 +70,9 @@ ImageDock::ImageDock(QWidget* parent)
 
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
-		suffix = QLatin1String(" cm");
+		suffix = QStringLiteral(" cm");
 	else
-		suffix = QLatin1String(" in");
+		suffix = QStringLiteral(" in");
 
 	ui.sbWidth->setSuffix(suffix);
 	ui.sbHeight->setSuffix(suffix);
@@ -153,8 +153,8 @@ void ImageDock::setImages(QList<Image*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first image
 	this->load();
@@ -196,7 +196,7 @@ void ImageDock::updateLocale() {
 }
 
 void ImageDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -207,7 +207,7 @@ void ImageDock::updateUnits() {
 	if (m_units == BaseDock::Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String(" cm");
+		suffix = QStringLiteral(" cm");
 		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value() * 2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value() * 2.54);
@@ -215,7 +215,7 @@ void ImageDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String(" in");
+		suffix = QStringLiteral(" in");
 		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
 		ui.sbHeight->setValue(ui.sbHeight->value() / 2.54);
 		ui.sbPositionX->setValue(ui.sbPositionX->value() / 2.54);
@@ -235,7 +235,7 @@ void ImageDock::updateUnits() {
 	opens a file dialog and lets the user select the image file.
 */
 void ImageDock::selectFile() {
-	const QString& path = GuiTools::openImageFile(QLatin1String("ImageDock"));
+	const QString& path = GuiTools::openImageFile(QStringLiteral("ImageDock"));
 	if (path.isEmpty())
 		return;
 

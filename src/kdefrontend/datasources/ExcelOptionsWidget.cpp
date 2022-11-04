@@ -33,7 +33,7 @@ ExcelOptionsWidget::ExcelOptionsWidget(QWidget* parent, ImportFileWidget* fileWi
 	ui.twDataRegions->setAlternatingRowColors(true);
 	ui.twDataRegions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &ExcelOptionsWidget::dataRegionSelectionChanged);

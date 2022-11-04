@@ -47,8 +47,8 @@ void ProjectDock::setProject(Project* project) {
 
 	Lock lock(m_initializing);
 	ui.leFileName->setText(project->fileName());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 	ui.leName->setText(m_project->name());
 	ui.leAuthor->setText(m_project->author());
 

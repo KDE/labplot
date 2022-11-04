@@ -94,11 +94,11 @@ AxisDock::AxisDock(QWidget* parent)
 	// "Grid"-tab
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
 	majorGridLineWidget = new LineWidget(ui.tabLine);
-	majorGridLineWidget->setPrefix(QLatin1String("MajorGrid"));
+	majorGridLineWidget->setPrefix(QStringLiteral("MajorGrid"));
 	gridLayout->addWidget(majorGridLineWidget, 1, 0, 1, 3);
 
 	minorGridLineWidget = new LineWidget(ui.tabLine);
-	minorGridLineWidget->setPrefix(QLatin1String("MinorGrid"));
+	minorGridLineWidget->setPrefix(QStringLiteral("MinorGrid"));
 	gridLayout->addWidget(minorGridLineWidget, 4, 0, 1, 3);
 
 	// adjust layouts in the tabs
@@ -456,8 +456,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbLabelsTextColumn->setCurrentModelIndex(QModelIndex());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first axis
 	this->load();
@@ -840,7 +840,7 @@ void AxisDock::zeroOffsetChanged() {
 		return;
 
 	if (ui.leZeroOffset->text().isEmpty()) // default value
-		ui.leZeroOffset->setText("0");
+		ui.leZeroOffset->setText(QStringLiteral("0"));
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -876,7 +876,7 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	if (ui.leScalingFactor->text().isEmpty()) // default value
-		ui.leScalingFactor->setText("1");
+		ui.leScalingFactor->setText(QStringLiteral("1"));
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -1143,7 +1143,7 @@ void AxisDock::majorTicksStartOffsetChanged() {
 		return;
 
 	if (ui.leMajorTickStartOffset->text().isEmpty()) // default value
-		ui.leMajorTickStartOffset->setText("0");
+		ui.leMajorTickStartOffset->setText(QStringLiteral("0"));
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -1162,7 +1162,7 @@ void AxisDock::majorTicksStartValueChanged() {
 		return;
 
 	if (ui.leMajorTickStartValue->text().isEmpty()) // default value
-		ui.leMajorTickStartValue->setText("0");
+		ui.leMajorTickStartValue->setText(QStringLiteral("0"));
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -2292,7 +2292,7 @@ void AxisDock::load() {
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
+	int index = config.name().lastIndexOf(QLatin1Char('/'));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else

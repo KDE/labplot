@@ -70,8 +70,8 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first reference line
 	this->load();
@@ -124,12 +124,12 @@ void ReferenceLineDock::orientationChanged(int index) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	bool numeric;
 	if (orientation == ReferenceLine::Orientation::Horizontal) {
-		ui.lPosition->setText(QLatin1String("y:"));
-		ui.lPositionDateTime->setText(QLatin1String("y:"));
+		ui.lPosition->setText(QStringLiteral("y:"));
+		ui.lPositionDateTime->setText(QStringLiteral("y:"));
 		numeric = (plot->yRangeFormatDefault() == RangeT::Format::Numeric);
 	} else {
-		ui.lPosition->setText(QLatin1String("x:"));
-		ui.lPositionDateTime->setText(QLatin1String("x:"));
+		ui.lPosition->setText(QStringLiteral("x:"));
+		ui.lPositionDateTime->setText(QStringLiteral("x:"));
 		numeric = (plot->xRangeFormatDefault() == RangeT::Format::Numeric);
 	}
 

@@ -240,8 +240,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 	const LiveDataSource::SourceType sourceType = source->sourceType();
 	const LiveDataSource::ReadingType readingType = source->readingType();
 	const LiveDataSource::UpdateType updateType = source->updateType();
@@ -376,8 +376,8 @@ void LiveDataDock::nameChanged(const QString& name) {
 		}
 	}
 #endif
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 }
 
 /*!
@@ -695,7 +695,7 @@ void LiveDataDock::mqttMessageReceived(const QByteArray& /*message*/, const QMqt
  */
 void LiveDataDock::addTopicToTree(const QString& topicName) {
 	QStringList name;
-	QChar sep = '/';
+	QChar sep = QLatin1Char('/');
 	QString rootName;
 	if (topicName.contains(sep)) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -767,9 +767,9 @@ void LiveDataDock::addTopicToTree(const QString& topicName) {
 	// if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', Qt::SkipEmptyParts);
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 		if (rootName == subscriptionName[0]) {
 			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
@@ -832,9 +832,9 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
  */
 bool LiveDataDock::testSubscribe(const QString& topic) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList topicList = topic.split('/', Qt::SkipEmptyParts);
+	QStringList topicList = topic.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
+	QStringList topicList = topic.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 	QTreeWidgetItem* currentItem = nullptr;
 	for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
@@ -846,7 +846,7 @@ bool LiveDataDock::testSubscribe(const QString& topic) {
 
 	if (currentItem) {
 		for (int i = 1; i < topicList.size(); ++i) {
-			if (topicList[i] == '#')
+			if (topicList[i] == QLatin1Char('#'))
 				break;
 
 			for (int j = 0; j < currentItem->childCount(); ++j) {

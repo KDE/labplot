@@ -358,10 +358,10 @@ void XYCurveDock::init() {
 
 	// Values
 	ui.cbValuesType->addItem(i18n("No Values"));
-	ui.cbValuesType->addItem("x");
-	ui.cbValuesType->addItem("y");
-	ui.cbValuesType->addItem("x, y");
-	ui.cbValuesType->addItem("(x, y)");
+	ui.cbValuesType->addItem(QStringLiteral("x"));
+	ui.cbValuesType->addItem(QStringLiteral("y"));
+	ui.cbValuesType->addItem(QStringLiteral("x, y"));
+	ui.cbValuesType->addItem(QStringLiteral("(x, y)"));
 	ui.cbValuesType->addItem(i18n("Custom Column"));
 
 	ui.cbValuesPosition->addItem(i18n("Above"));

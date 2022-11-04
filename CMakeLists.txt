@@ -165,7 +165,7 @@ endif ()
 add_definitions(
     -DQT_NO_CAST_TO_ASCII
 # TODO: enable and fix problems
-#    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_FROM_ASCII
 #    -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_USE_FAST_CONCATENATION

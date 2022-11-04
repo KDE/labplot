@@ -73,7 +73,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	else
 		setWindowTitle(i18nc("@title:window", "Add New Live Data Source"));
 
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import-database")));
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -252,7 +252,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					// HDF5 variable names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
 					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -266,7 +266,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				// HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
 				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())

@@ -25,7 +25,7 @@ FITSOptionsWidget::FITSOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twExtensions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	connect(ui.twExtensions, &QTreeWidget::itemSelectionChanged, this, &FITSOptionsWidget::fitsTreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -77,14 +77,14 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 	if (extType == 0) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr)
-				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + item->text(column) + QLatin1String("]");
+				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + item->text(column) + QStringLiteral("]");
 		}
 	} else if (extType == 1) {
 		if (item->parent() != nullptr) {
 			if (item->parent()->parent() != nullptr) {
 				bool ok;
 				int hduNum = itemText.rightRef(1).toInt(&ok);
-				selectedExtension = item->parent()->parent()->text(0) + QLatin1String("[") + QString::number(hduNum - 1) + QLatin1String("]");
+				selectedExtension = item->parent()->parent()->text(0) + QStringLiteral("[") + QString::number(hduNum - 1) + QStringLiteral("]");
 			}
 		}
 	} else {

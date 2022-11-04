@@ -63,7 +63,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 // access enums in Q_OBJECT/Q_GADGET classes
 #define ENUM_TO_STRING(class, enum, index)                                                                                                                     \
-	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
+	QLatin1String(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
 // define number locale from setting (using system locale when QLocale::AnyLanguage)

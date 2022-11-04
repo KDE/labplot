@@ -85,8 +85,8 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first Matrix in the list, if there are >1 matrixs
 	this->load();
@@ -309,7 +309,7 @@ void MatrixDock::load() {
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
-	const int index = config.name().lastIndexOf(QLatin1String("/"));
+	const int index = config.name().lastIndexOf(QLatin1Char('/'));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
@@ -344,7 +344,7 @@ void MatrixDock::loadConfig(KConfig& config) {
 	ui.leYEnd->setText(numberLocale.toString(group.readEntry("YEnd", m_matrix->yEnd())));
 
 	// format
-	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))));
+	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData(group.readEntry("NumericFormat", (int)(m_matrix->numericFormat()))));
 	ui.sbPrecision->setValue(group.readEntry("Precision", m_matrix->precision()));
 	ui.cbHeader->setCurrentIndex(group.readEntry("HeaderFormat", (int)m_matrix->headerFormat()));
 }

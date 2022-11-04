@@ -110,13 +110,13 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	ui.twPlotRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 
 	//"Range breaks"-tab
-	ui.bAddXBreak->setIcon(QIcon::fromTheme("list-add"));
-	ui.bRemoveXBreak->setIcon(QIcon::fromTheme("list-remove"));
-	ui.cbXBreak->addItem("1");
+	ui.bAddXBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	ui.bRemoveXBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+	ui.cbXBreak->addItem(QStringLiteral("1"));
 
-	ui.bAddYBreak->setIcon(QIcon::fromTheme("list-add"));
-	ui.bRemoveYBreak->setIcon(QIcon::fromTheme("list-remove"));
-	ui.cbYBreak->addItem("1");
+	ui.bAddYBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+	ui.bRemoveYBreak->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+	ui.cbYBreak->addItem(QStringLiteral("1"));
 
 	//"Background"-tab
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabPlotArea->layout());
@@ -144,7 +144,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// "Cursor"-tab
 	auto* vboxLayout = static_cast<QVBoxLayout*>(ui.tabCursor->layout());
 	cursorLineWidget = new LineWidget(ui.tabCursor);
-	cursorLineWidget->setPrefix(QLatin1String("Cursor"));
+	cursorLineWidget->setPrefix(QStringLiteral("Cursor"));
 	vboxLayout->insertWidget(1, cursorLineWidget);
 
 	// Validators
@@ -226,7 +226,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	auto* tbExportTemplate = new QToolButton;
 	int size = KIconLoader::global()->currentSize(KIconLoader::MainToolbar);
 	tbExportTemplate->setIconSize(QSize(size, size));
-	tbExportTemplate->setIcon(QIcon::fromTheme(QLatin1String("document-save-as-template")));
+	tbExportTemplate->setIcon(QIcon::fromTheme(QStringLiteral("document-save-as-template")));
 	tbExportTemplate->setToolTip(i18n("Save current plot definition as template"));
 	connect(tbExportTemplate, &QToolButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
 	layout->addWidget(tbExportTemplate);
@@ -397,8 +397,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first plot
 	this->load();
@@ -559,7 +559,7 @@ void CartesianPlotDock::updateLocale() {
 }
 
 void CartesianPlotDock::updateUnits() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 	if (units == m_units)
 		return;
@@ -570,7 +570,7 @@ void CartesianPlotDock::updateUnits() {
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
 		m_worksheetUnit = Worksheet::Unit::Centimeter;
-		suffix = QLatin1String(" cm");
+		suffix = QStringLiteral(" cm");
 		ui.sbLeft->setValue(ui.sbLeft->value() * 2.54);
 		ui.sbTop->setValue(ui.sbTop->value() * 2.54);
 		ui.sbWidth->setValue(ui.sbWidth->value() * 2.54);
@@ -583,7 +583,7 @@ void CartesianPlotDock::updateUnits() {
 	} else {
 		// convert from metric to imperial
 		m_worksheetUnit = Worksheet::Unit::Inch;
-		suffix = QLatin1String(" in");
+		suffix = QStringLiteral(" in");
 		ui.sbLeft->setValue(ui.sbLeft->value() / 2.54);
 		ui.sbTop->setValue(ui.sbTop->value() / 2.54);
 		ui.sbWidth->setValue(ui.sbWidth->value() / 2.54);
@@ -776,13 +776,13 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->rangeCount(Dimension::X) > 1) {
 			for (int index = 0; index < m_plot->rangeCount(Dimension::X); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Dimension::X, index).toLocaleString());
+				cb->addItem(QString::number(index + 1) + QStringLiteral(" : ") + m_plot->range(Dimension::X, index).toLocaleString());
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
 			cb->addItem(xRange.toLocaleString());
-			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}"); // hide arrow if there is only one range
+			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
 
@@ -792,13 +792,13 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->rangeCount(Dimension::Y) > 1) {
 			for (int index = 0; index < m_plot->rangeCount(Dimension::Y); index++)
-				cb->addItem(QString::number(index + 1) + QLatin1String(" : ") + m_plot->range(Dimension::Y, index).toLocaleString());
+				cb->addItem(QString::number(index + 1) + QStringLiteral(" : ") + m_plot->range(Dimension::Y, index).toLocaleString());
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
 		} else {
 			cb->addItem(yRange.toLocaleString());
-			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}"); // hide arrow if there is only one range
+			cb->setStyleSheet(QStringLiteral("QComboBox::drop-down {border-width: 0px;}")); // hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::YRange, cb);
 	}
@@ -824,7 +824,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		if (i == m_plot->defaultCoordinateSystemIndex())
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);
-		rb->setStyleSheet("margin-left:50%; margin-right:50%;"); // center button
+		rb->setStyleSheet(QStringLiteral("margin-left:50%; margin-right:50%;")); // center button
 		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::Default, rb);
 		m_bgDefaultPlotRange->setId(rb, i);
 	}
@@ -872,9 +872,9 @@ void CartesianPlotDock::retranslateUi() {
 
 	QString suffix;
 	if (m_units == Units::Metric)
-		suffix = QLatin1String(" cm");
+		suffix = QStringLiteral(" cm");
 	else
-		suffix = QLatin1String(" in");
+		suffix = QStringLiteral(" in");
 
 	ui.sbLeft->setSuffix(suffix);
 	ui.sbTop->setSuffix(suffix);
@@ -1171,7 +1171,7 @@ void CartesianPlotDock::removeRange(const Dimension dim) {
 
 		if (cSystem->index(dim) == currentRow) {
 			if (msg.size() > 0)
-				msg += ", ";
+				msg += QStringLiteral(", ");
 			msg += QString::number(i + 1);
 		}
 	}
@@ -1723,8 +1723,8 @@ void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 
 void CartesianPlotDock::exportPlotTemplate() {
 	KConfig config;
-	KConfigGroup group = config.group(QLatin1String("PlotTemplate"));
-	const QString dir = group.readEntry(QLatin1String("ExportPath"), PlotTemplateDialog::defaultTemplateInstallPath());
+	KConfigGroup group = config.group(QStringLiteral("PlotTemplate"));
+	const QString dir = group.readEntry(QStringLiteral("ExportPath"), PlotTemplateDialog::defaultTemplateInstallPath());
 	QString path = QFileDialog::getSaveFileName(nullptr,
 												i18nc("@title:window", "Choose Template Save File"),
 												dir,
@@ -1740,9 +1740,9 @@ void CartesianPlotDock::exportPlotTemplate() {
 	QXmlStreamWriter writer(&file);
 	writer.setAutoFormatting(true);
 	writer.writeStartDocument();
-	writer.writeDTD("<!DOCTYPE LabPlotXML>");
-	writer.writeStartElement("PlotTemplate");
-	writer.writeAttribute("xmlVersion", QString::number(Project::currentBuildXmlVersion()));
+	writer.writeDTD(QStringLiteral("<!DOCTYPE LabPlotXML>"));
+	writer.writeStartElement(QStringLiteral("PlotTemplate"));
+	writer.writeAttribute(QStringLiteral("xmlVersion"), QString::number(Project::currentBuildXmlVersion()));
 	m_plot->save(&writer);
 	writer.writeEndElement();
 	writer.writeEndDocument();
@@ -1966,7 +1966,7 @@ void CartesianPlotDock::plotBorderOpacityChanged(double value) {
 void CartesianPlotDock::loadConfigFromTemplate(KConfig& config) {
 	// extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QLatin1String("/"));
+	int index = config.name().lastIndexOf(QLatin1Char('/'));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
@@ -2013,7 +2013,7 @@ void CartesianPlotDock::load() {
 		for (int i = 1; i <= m_plot->xRangeBreaks().list.size(); ++i)
 			ui.cbXBreak->addItem(QString::number(i));
 	} else
-		ui.cbXBreak->addItem("1");
+		ui.cbXBreak->addItem(QStringLiteral("1"));
 	ui.cbXBreak->setCurrentIndex(0);
 
 	// y-range breaks, show the first break
@@ -2025,7 +2025,7 @@ void CartesianPlotDock::load() {
 		for (int i = 1; i <= m_plot->yRangeBreaks().list.size(); ++i)
 			ui.cbYBreak->addItem(QString::number(i));
 	} else
-		ui.cbYBreak->addItem("1");
+		ui.cbYBreak->addItem(QStringLiteral("1"));
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab

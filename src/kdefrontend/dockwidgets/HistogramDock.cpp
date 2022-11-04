@@ -283,8 +283,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		ui.teComment->setText(QString());
 	}
 
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// show the properties of the first curve
 	ui.cbType->setCurrentIndex(m_curve->type());

@@ -120,7 +120,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 				bool ok = false;
 				if (l.count() > 1) {
 					QString index(l.back());
-					if (index.at(0) == '[' && index.at(index.size() - 1) == ']') {
+					if (index.at(0) == QLatin1Char('[') && index.at(index.size() - 1) == QLatin1Char(']')) {
 						size_t elements = index.midRef(1, index.length() - 2).toUInt(&ok);
 						if (ok) {
 							leaf->setFlags(Qt::ItemIsEnabled);
@@ -129,7 +129,7 @@ void ROOTOptionsWidget::rootObjectSelectionChanged() {
 							if (l.count() > 2)
 								eldata.prepend(l.front());
 							for (size_t i = 0; i < elements; ++i) {
-								eldata.last() = elname.last() = QString("[%1]").arg(i);
+								eldata.last() = elname.last() = QStringLiteral("[%1]").arg(i);
 								auto el = new QTreeWidgetItem(leaf, elname);
 								el->setData(0, Qt::UserRole, eldata);
 							}
@@ -161,10 +161,10 @@ const QStringList ROOTOptionsWidget::selectedNames() const {
 	for (QTreeWidgetItem* item : ui.twContent->selectedItems()) {
 		QString path;
 		while (item && item != histItem && item != treeItem) {
-			path.prepend('/' + item->text(0));
+			path.prepend(QLatin1Char('/') + item->text(0));
 			item = item->parent();
 		}
-		path[0] = ':';
+		path[0] = QLatin1Char(':');
 		if (item == histItem)
 			names << QStringLiteral("Hist") + path;
 		else if (item == treeItem)

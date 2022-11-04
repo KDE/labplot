@@ -34,7 +34,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
-	const QString textNumberFormat = textNumberFormatShort + "<br><br>"
+	const QString textNumberFormat = textNumberFormatShort + QStringLiteral("<br><br>")
 		+ i18n("When point character is used for the decimal separator, the valid number representations are:"
 			   "<ul>"
 			   "<li>1234.56</li>"
@@ -59,7 +59,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent)
 	const QString textDateTimeFormatShort = i18n(
 		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
 		"and to time.");
-	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>"
+	const QString textDateTimeFormat = textDateTimeFormatShort + QStringLiteral("<br><br>")
 		+ i18n("Expressions that may be used for the date part of format string:"
 			   "<table>"
 			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"

@@ -37,11 +37,11 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	cbXColumn->setSizePolicy(sizePolicy);
 	static_cast<QVBoxLayout*>(ui.frameXColumn->layout())->insertWidget(0, cbXColumn);
-	ui.bRemoveXColumn->setIcon(QIcon::fromTheme("edit-clear"));
+	ui.bRemoveXColumn->setIcon(QIcon::fromTheme(QStringLiteral("edit-clear")));
 
 	// y-data
 	m_buttonNew = new QPushButton();
-	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	m_buttonNew->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 
 	m_gridLayout = new QGridLayout(ui.frameDataColumns);
 	m_gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -157,8 +157,8 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 		ui.lDataColumn->setEnabled(false);
 	}
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QStringLiteral(""));
+	ui.leName->setToolTip(QStringLiteral(""));
 
 	// backgrounds
 	QList<Background*> backgrounds;
@@ -364,7 +364,7 @@ void BarPlotDock::addDataColumn() {
 		cb->setSizePolicy(sizePolicy1);
 	} else {
 		auto* button = new QPushButton();
-		button->setIcon(QIcon::fromTheme("list-remove"));
+		button->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 		connect(button, &QPushButton::clicked, this, &BarPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;

@@ -62,11 +62,11 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 		return fileName;
 
 #ifdef HAVE_WINDOWS
-	if (fileName.size() == 1 || (fileName.at(0) != QChar('/') && fileName.at(1) != QChar(':')))
+	if (fileName.size() == 1 || (fileName.at(0) != QLatin1Char('/') && fileName.at(1) != QLatin1Char(':')))
 #else
-	if (fileName.at(0) != QChar('/'))
+	if (fileName.at(0) != QLatin1Char('/'))
 #endif
-		return QDir::homePath() + QLatin1String("/") + fileName;
+		return QDir::homePath() + QLatin1Char('/') + fileName;
 
 	return fileName;
 }
@@ -150,11 +150,11 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 	ui.cbReadingType->addItem(i18n("Whole File"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
-	ui.bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
-	ui.bFileInfo->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
-	ui.bManageFilters->setIcon(QIcon::fromTheme(QLatin1String("configure")));
-	ui.bSaveFilter->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
+	ui.bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
+	ui.bFileInfo->setIcon(QIcon::fromTheme(QStringLiteral("help-about")));
+	ui.bManageFilters->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
+	ui.bSaveFilter->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	ui.tvJson->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.tvJson->setAlternatingRowColors(true);
@@ -217,8 +217,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.lExcelFirstRowAsColNames->setToolTip(info);
 	ui.chbExcelFirstRowAsColName->setToolTip(info);
 #ifdef HAVE_MQTT
-	ui.cbSourceType->addItem(QLatin1String("MQTT"));
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QLatin1String("MQTT_connections");
+	ui.cbSourceType->addItem(QStringLiteral("MQTT"));
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("MQTT_connections");
 
 	// add subscriptions widget
 	layout = new QHBoxLayout;
@@ -227,7 +227,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	layout->addWidget(m_subscriptionWidget);
 	ui.frameSubscriptions->setLayout(layout);
 
-	ui.bManageConnections->setIcon(QIcon::fromTheme(QLatin1String("network-server")));
+	ui.bManageConnections->setIcon(QIcon::fromTheme(QStringLiteral("network-server")));
 	ui.bManageConnections->setToolTip(i18n("Manage MQTT connections"));
 
 	info = i18n("Specify the 'Last Will and Testament' message (LWT). At least one topic has to be subscribed.");
@@ -248,9 +248,9 @@ void ImportFileWidget::loadSettings() {
 	// load last used settings
 	QString confName;
 	if (m_liveDataSource)
-		confName = QLatin1String("LiveDataImport");
+		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QLatin1String("FileImport");
+		confName = QStringLiteral("FileImport");
 	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	// read the source type first since settings in fileNameChanged() depend on this
@@ -313,9 +313,9 @@ void ImportFileWidget::loadSettings() {
 
 	const QString& willStatistics = conf.readEntry("mqttWillStatistics", "");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	const QStringList& statisticsList = willStatistics.split('|', Qt::SkipEmptyParts);
+	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), Qt::SkipEmptyParts);
 #else
-	const QStringList& statisticsList = willStatistics.split('|', QString::SkipEmptyParts);
+	const QStringList& statisticsList = willStatistics.split(QLatin1Char('|'), QString::SkipEmptyParts);
 #endif
 	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
@@ -348,9 +348,9 @@ ImportFileWidget::~ImportFileWidget() {
 	// save current settings
 	QString confName;
 	if (m_liveDataSource)
-		confName = QLatin1String("LiveDataImport");
+		confName = QStringLiteral("LiveDataImport");
 	else
-		confName = QLatin1String("FileImport");
+		confName = QStringLiteral("FileImport");
 	KConfigGroup conf(KSharedConfig::openConfig(), confName);
 
 	// general settings
@@ -480,11 +480,11 @@ QString ImportFileWidget::selectedObject() const {
 	const QString& path = fileName();
 
 	// determine the file name only
-	QString name = path.right(path.length() - path.lastIndexOf('/') - 1);
+	QString name = path.right(path.length() - path.lastIndexOf(QLatin1Char('/')) - 1);
 
 	// strip away the extension if available
-	if (name.indexOf('.') != -1)
-		name = name.left(name.lastIndexOf('.'));
+	if (name.indexOf(QLatin1Char('.')) != -1)
+		name = name.left(name.lastIndexOf(QLatin1Char('.')));
 
 	// for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
 	const auto format = currentFileType();
@@ -818,19 +818,19 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 */
 void ImportFileWidget::selectFile() {
 	DEBUG(Q_FUNC_INFO)
-	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
-	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
+	KConfigGroup conf(KSharedConfig::openConfig(), QStringLiteral("ImportFileWidget"));
+	const QString& dir = conf.readEntry(QStringLiteral("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
 	DEBUG("	dir = " << STDSTRING(dir))
 	DEBUG("	path = " << STDSTRING(path))
 	if (path.isEmpty()) // cancel was clicked in the file-dialog
 		return;
 
-	int pos = path.lastIndexOf('/');
+	int pos = path.lastIndexOf(QLatin1Char('/'));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
-			conf.writeEntry(QLatin1String("LastDir"), newDir);
+			conf.writeEntry(QStringLiteral("LastDir"), newDir);
 	}
 
 	// process all events after the FileDialog was closed to repaint the widget
@@ -1246,23 +1246,23 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 	if (file->open(QIODevice::ReadOnly)) {
 		QStringList infoStrings;
 
-		infoStrings << "<u><b>" + fileName + "</b></u><br>";
+		infoStrings << QStringLiteral("<u><b>") + fileName + QStringLiteral("</b></u><br>");
 
 		// File type given by "file"
 #ifdef Q_OS_LINUX
-		const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
+		const QString fileFullPath = QStandardPaths::findExecutable(QStringLiteral("file"));
 		if (fileFullPath.isEmpty())
 			return i18n("file command not found");
 
 		QProcess proc;
 		QStringList args;
-		args << "-b" << fileName;
+		args << QStringLiteral("-b") << fileName;
 		proc.start(fileFullPath, args);
 
 		if (proc.waitForReadyRead(1000) == false)
 			infoStrings << i18n("Reading from file %1 failed.", fileName);
 		else {
-			fileTypeString = proc.readLine();
+			fileTypeString = QLatin1String(proc.readLine());
 			if (fileTypeString.contains(i18n("cannot open")))
 				fileTypeString.clear();
 			else
@@ -1273,7 +1273,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 
 		// General:
 		fileInfo.setFile(fileName);
-		infoStrings << "<b>" << i18n("General:") << "</b>";
+		infoStrings << QStringLiteral("<b>") << i18n("General:") << QStringLiteral("</b>");
 
 		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
 		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
@@ -1292,7 +1292,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
 
 		// Summary:
-		infoStrings << "<b>" << i18n("Summary:") << "</b>";
+		infoStrings << QStringLiteral("<b>") << i18n("Summary:") << QStringLiteral("</b>");
 		// depending on the file type, generate summary and content information about the file
 		// TODO: content information (in BNF) for more types
 		// TODO: introduce a function in the base class and work with infoStrings << currentFileFilter()->fileInfoString(fileName);
@@ -1312,12 +1312,12 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		case AbstractFileFilter::FileType::HDF5:
 			infoStrings << HDF5Filter::fileInfoString(fileName);
-			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << QStringLiteral("<b>") << i18n("Content:") << QStringLiteral("</b>");
 			infoStrings << HDF5Filter::fileDDLString(fileName);
 			break;
 		case AbstractFileFilter::FileType::NETCDF:
 			infoStrings << NetCDFFilter::fileInfoString(fileName);
-			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << QStringLiteral("<b>") << i18n("Content:") << QStringLiteral("</b>");
 			infoStrings << NetCDFFilter::fileCDLString(fileName);
 			break;
 		case AbstractFileFilter::FileType::FITS:
@@ -1340,7 +1340,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			break;
 		}
 
-		infoString += infoStrings.join("<br>");
+		infoString += infoStrings.join(QLatin1String("<br>"));
 	} else
 		infoString += i18n("Could not open file %1 for reading.", fileName);
 
@@ -1496,7 +1496,7 @@ void ImportFileWidget::refreshPreview() {
 				const QString& topicName = item->text(0);
 				auto i = m_lastMessage.find(topicName);
 				if (i != m_lastMessage.end())
-					importedStrings = filter->preview(i.value().payload().data());
+					importedStrings = filter->preview(QLatin1String(i.value().payload().data()));
 				else
 					importedStrings << QStringList{i18n("No data arrived yet for the selected topic")};
 			}
@@ -1674,8 +1674,8 @@ void ImportFileWidget::refreshPreview() {
 					if (i < vectorNameList.size())
 						columnName = vectorNameList[i];
 
-					auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i])
-													  + QLatin1String("}"));
+					auto* item = new QTableWidgetItem(columnName + QStringLiteral(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i])
+													  + QStringLiteral("}"));
 					item->setTextAlignment(Qt::AlignLeft);
 					item->setIcon(AbstractColumn::modeIcon(columnModes[i]));
 
@@ -2147,7 +2147,7 @@ void ImportFileWidget::onMqttConnect() {
 			ui.lTopics->show();
 		}
 	} else
-		Q_EMIT error("on mqtt connect error " + QString::number(m_client->error()));
+		Q_EMIT error(QStringLiteral("on mqtt connect error ") + QString::number(m_client->error()));
 
 	Q_EMIT subscriptionsChanged();
 	RESET_CURSOR;
@@ -2241,7 +2241,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const 
 	m_subscriptionWidget->setTopicTreeText(i18n("Available (%1)", m_addedTopics.size()));
 	QStringList name;
 	QString rootName;
-	const QChar sep = '/';
+	const QChar sep = QLatin1Char('/');
 
 	if (topic.name().contains(sep)) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))

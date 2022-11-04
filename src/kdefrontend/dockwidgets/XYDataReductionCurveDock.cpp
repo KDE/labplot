@@ -75,7 +75,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	uiGeneralTab.sbTolerance->setRange(0.0, std::numeric_limits<double>::max());
 	uiGeneralTab.sbTolerance2->setRange(0.0, std::numeric_limits<double>::max());
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -642,7 +642,7 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", dataReductionResult.status) + "<br>";
+	QString str = i18n("status: %1", dataReductionResult.status) + QStringLiteral("<br>");
 
 	if (!dataReductionResult.valid) {
 		uiGeneralTab.teResult->setText(str);
@@ -651,15 +651,15 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 
 	SET_NUMBER_LOCALE
 	if (dataReductionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(dataReductionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(dataReductionResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br>";
+	str += QStringLiteral("<br>");
 
-	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(dataReductionResult.npoints))) + "<br>";
-	str += i18n("positional squared error: %1", numberLocale.toString(dataReductionResult.posError)) + "<br>";
-	str += i18n("area error: %1", numberLocale.toString(dataReductionResult.areaError)) + "<br>";
+	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(dataReductionResult.npoints))) + QStringLiteral("<br>");
+	str += i18n("positional squared error: %1", numberLocale.toString(dataReductionResult.posError)) + QStringLiteral("<br>");
+	str += i18n("area error: %1", numberLocale.toString(dataReductionResult.areaError)) + QStringLiteral("<br>");
 
 	uiGeneralTab.teResult->setText(str);
 }

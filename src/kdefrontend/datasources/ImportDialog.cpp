@@ -46,9 +46,9 @@ ImportDialog::ImportDialog(MainWin* parent)
 	, m_aspectTreeModel(new AspectTreeModel(parent->project())) {
 	// menu for new data container
 	m_newDataContainerMenu = new QMenu(this);
-	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-workbook-new"), i18n("New Workbook"));
-	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-spreadsheet-new"), i18n("New Spreadsheet"));
-	m_newDataContainerMenu->addAction(QIcon::fromTheme("labplot-matrix-new"), i18n("New Matrix"));
+	m_newDataContainerMenu->addAction(QIcon::fromTheme(QStringLiteral("labplot-workbook-new")), i18n("New Workbook"));
+	m_newDataContainerMenu->addAction(QIcon::fromTheme(QStringLiteral("labplot-spreadsheet-new")), i18n("New Spreadsheet"));
+	m_newDataContainerMenu->addAction(QIcon::fromTheme(QStringLiteral("labplot-matrix-new")), i18n("New Matrix"));
 	connect(m_newDataContainerMenu, &QMenu::triggered, this, &ImportDialog::newDataContainer);
 }
 
@@ -92,7 +92,7 @@ void ImportDialog::setModel() {
 
 	tbNewDataContainer = new QToolButton(frameAddTo);
 	tbNewDataContainer->setText(i18n("New"));
-	tbNewDataContainer->setIcon(QIcon::fromTheme("list-add"));
+	tbNewDataContainer->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	tbNewDataContainer->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 	tbNewDataContainer->setToolTip(i18n("Add new data container to the project"));
 	grid->addWidget(tbNewDataContainer, 0, 2);
@@ -129,7 +129,7 @@ void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 void ImportDialog::newDataContainer(QAction* action) {
 	DEBUG(Q_FUNC_INFO);
 	QString name = selectedObject();
-	QString type = action->iconText().split(' ').at(1);
+	QString type = action->iconText().split(QLatin1Char(' ')).at(1);
 	if (name.isEmpty())
 		name = action->iconText();
 

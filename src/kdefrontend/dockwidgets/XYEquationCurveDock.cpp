@@ -64,18 +64,18 @@ void XYEquationCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	uiGeneralTab.tbFunctions1->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	uiGeneralTab.tbConstants1->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	uiGeneralTab.tbFunctions1->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
-	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme("labplot-format-text-symbol"));
-	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme("preferences-desktop-font"));
+	uiGeneralTab.tbConstants2->setIcon(QIcon::fromTheme(QStringLiteral("labplot-format-text-symbol")));
+	uiGeneralTab.tbFunctions2->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 
 	uiGeneralTab.cbType->addItem(i18n("Cartesian"));
 	uiGeneralTab.cbType->addItem(i18n("Polar"));
 	uiGeneralTab.cbType->addItem(i18n("Parametric"));
 	// 	uiGeneralTab.cbType->addItem(i18n("Implicit"));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	uiGeneralTab.teEquation2->setExpressionType(XYEquationCurve::EquationType::Parametric);
 
@@ -174,7 +174,7 @@ void XYEquationCurveDock::updatePlotRanges() {
 void XYEquationCurveDock::typeChanged(int index) {
 	const auto type{XYEquationCurve::EquationType(index)};
 	if (type == XYEquationCurve::EquationType::Cartesian) {
-		uiGeneralTab.lEquation1->setText("y=f(x)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("y=f(x)"));
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();
@@ -198,8 +198,8 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMin->setText(i18n("φ, min"));
 		uiGeneralTab.lMax->setText(i18n("φ, max"));
 	} else if (type == XYEquationCurve::EquationType::Parametric) {
-		uiGeneralTab.lEquation1->setText("x=f(t)");
-		uiGeneralTab.lEquation2->setText("y=f(t)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("x=f(t)"));
+		uiGeneralTab.lEquation2->setText(QStringLiteral("y=f(t)"));
 		uiGeneralTab.lEquation2->show();
 		uiGeneralTab.teEquation2->show();
 		uiGeneralTab.tbFunctions2->show();
@@ -211,7 +211,7 @@ void XYEquationCurveDock::typeChanged(int index) {
 		uiGeneralTab.lMin->setText(i18n("t, min"));
 		uiGeneralTab.lMax->setText(i18n("t, max"));
 	} else if (type == XYEquationCurve::EquationType::Implicit) {
-		uiGeneralTab.lEquation1->setText("f(x,y)");
+		uiGeneralTab.lEquation1->setText(QStringLiteral("f(x,y)"));
 		uiGeneralTab.lEquation2->hide();
 		uiGeneralTab.teEquation2->hide();
 		uiGeneralTab.tbFunctions2->hide();

@@ -38,7 +38,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	ui.cbImportFrom->addItem(i18n("Table"));
 	ui.cbImportFrom->addItem(i18n("Custom Query"));
 
-	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
+	ui.bDatabaseManager->setIcon(QIcon::fromTheme(QStringLiteral("network-server-database")));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
@@ -47,7 +47,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
-	const QString textNumberFormat = textNumberFormatShort + "<br><br>"
+	const QString textNumberFormat = textNumberFormatShort + QStringLiteral("<br><br>")
 		+ i18n("When point character is used for the decimal separator, the valid number representations are:"
 			   "<ul>"
 			   "<li>1234.56</li>"
@@ -69,7 +69,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	const QString textDateTimeFormatShort = i18n(
 		"This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar "
 		"and to time.");
-	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>"
+	const QString textDateTimeFormat = textDateTimeFormatShort + QStringLiteral("<br><br>")
 		+ i18n("Expressions that may be used for the date part of format string:"
 			   "<table>"
 			   "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"
@@ -114,12 +114,12 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
-	m_highlighter->setDefinition(m_repository.definitionForName("SQL"));
+	m_highlighter->setDefinition(m_repository.definitionForName(QStringLiteral("SQL")));
 	m_highlighter->setTheme((palette().color(QPalette::Base).lightness() < 128) ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
 																				: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 #endif
 
-	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + "sql_connections";
+	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() + QStringLiteral("sql_connections");
 
 	connect(ui.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportSQLDatabaseWidget::connectionChanged);
 	connect(ui.cbImportFrom, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportSQLDatabaseWidget::importFromChanged);
@@ -145,7 +145,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 
 	// TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == '.') ? 0 : 1;
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
 
 	ui.cbDateTimeFormat->setCurrentText(config.readEntry("DateTimeFormat", "yyyy-dd-MM hh:mm:ss:zzz"));
@@ -267,7 +267,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		RESET_CURSOR;
 		KMessageBox::error(this,
 						   i18n("Failed to connect to the database '%1'. Please check the connection settings.", ui.cbConnection->currentText())
-							   + QLatin1String("\n\n") + m_db.lastError().databaseText(),
+							   + QStringLiteral("\n\n") + m_db.lastError().databaseText(),
 						   i18n("Connection Failed"));
 		setInvalid();
 		return;
@@ -278,7 +278,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 		ui.lwTables->addItems(m_db.tables());
 		ui.lwTables->setCurrentRow(0);
 		for (int i = 0; i < ui.lwTables->count(); ++i)
-			ui.lwTables->item(i)->setIcon(QIcon::fromTheme("view-form-table"));
+			ui.lwTables->item(i)->setIcon(QIcon::fromTheme(QStringLiteral("view-form-table")));
 	} else
 		setInvalid();
 
@@ -356,7 +356,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			numeric = false;
 
 		// header item
-		auto* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
+		auto* item = new QTableWidgetItem(m_columnNames[i] + QStringLiteral(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QStringLiteral("}"));
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::modeIcon(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
@@ -439,7 +439,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	int rows = 0;
 	if (!customQuery) {
 		const QString& tableName = ui.lwTables->currentItem()->text();
-		QSqlQuery countQuery(QLatin1String("SELECT COUNT(*) FROM ") + tableName);
+		QSqlQuery countQuery(QStringLiteral("SELECT COUNT(*) FROM ") + tableName);
 		while (countQuery.next())
 			rows = countQuery.value(0).toInt();
 	} else {
@@ -535,23 +535,23 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	if (!customQuery) {
 		const QString& tableName = ui.lwTables->currentItem()->text();
 		if (!preview) {
-			query = QLatin1String("SELECT * FROM ") + tableName;
+			query = QStringLiteral("SELECT * FROM ") + tableName;
 		} else {
 			// preview the content of the currently selected table
 			const QString& driver = m_db.driverName();
 			const QString& limit = QString::number(ui.sbPreviewLines->value());
 			if ((driver == QLatin1String("QSQLITE3")) || (driver == QLatin1String("QSQLITE")) || (driver == QLatin1String("QMYSQL3"))
 				|| (driver == QLatin1String("QMYSQL")) || (driver == QLatin1String("QPSQL")))
-				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" LIMIT ") + limit;
+				query = QStringLiteral("SELECT * FROM ") + tableName + QStringLiteral(" LIMIT ") + limit;
 			else if (driver == QLatin1String("QOCI"))
-				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWNUM<=") + limit;
+				query = QStringLiteral("SELECT * FROM ") + tableName + QStringLiteral(" ROWNUM<=") + limit;
 			else if (driver == QLatin1String("QDB2"))
-				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" FETCH FIRST ") + limit + QLatin1String(" ROWS ONLY");
+				query = QStringLiteral("SELECT * FROM ") + tableName + QStringLiteral(" FETCH FIRST ") + limit + QStringLiteral(" ROWS ONLY");
 			else if (driver == QLatin1String("QIBASE"))
-				query = QLatin1String("SELECT * FROM ") + tableName + QLatin1String(" ROWS ") + limit;
+				query = QStringLiteral("SELECT * FROM ") + tableName + QStringLiteral(" ROWS ") + limit;
 			else
 				// for ODBC the DBMS is not known and it's not clear what syntax to use -> select all rows
-				query = QLatin1String("SELECT * FROM ") + tableName;
+				query = QStringLiteral("SELECT * FROM ") + tableName;
 		}
 	} else {
 		// preview the result of a custom query

@@ -7,9 +7,10 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"
+#include "kdefrontend/datasources/DatasetMetadataManagerWidget.h"
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "src/kdefrontend/DatasetModel.h"
+#include "kdefrontend/DatasetModel.h"
+#include "backend/lib/macros.h"
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -38,8 +39,8 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.setupUi(this);
 	m_datasetModel = new DatasetModel(datasetMap);
 
-	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#5f5f5f") : QLatin1String("#ffffff");
-	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QLatin1String("#ffffff") : QLatin1String("#000000");
+	m_baseColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#5f5f5f") : QStringLiteral("#ffffff");
+	m_textColor = (palette().color(QPalette::Base).lightness() < 128) ? QStringLiteral("#ffffff") : QStringLiteral("#000000");
 
 	ui.cbCollection->addItems(m_datasetModel->collections());
 	ui.cbCategory->addItems(m_datasetModel->categories(ui.cbCollection->currentText()));
@@ -129,35 +130,35 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 	const QString fileName = ui.leFileName->text();
 
 	// check whether it contains only digits, letters, -, _ or not
-	const QRegularExpression re("^[\\w\\d-]+$");
+	const QRegularExpression re(QLatin1String("^[\\w\\d-]+$"));
 	const QRegularExpressionMatch match = re.match(fileName);
 	bool hasMatch = match.hasMatch();
 
 	if (!hasMatch || fileName.isEmpty()) {
-		qDebug("File name invalid");
+		DEBUG("File name invalid");
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		ui.leFileName->setPalette(palette);
-		ui.leFileName->setToolTip("Invalid name for a file (it can contain:digits, letters, -, _)");
+		ui.leFileName->setToolTip(QStringLiteral("Invalid name for a file (it can contain:digits, letters, -, _)"));
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leFileName->setPalette(palette);
-		ui.leFileName->setToolTip("");
+		ui.leFileName->setToolTip(QStringLiteral(""));
 	}
 
 	// check whether there already is a file named like this or not.
 	bool found = false;
 
 	if (m_datasetModel->allDatasetsList().toStringList().contains(fileName)) {
-		qDebug("There already is a metadata file with this name");
+		DEBUG("There already is a metadata file with this name");
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		ui.leFileName->setPalette(palette);
-		ui.leFileName->setToolTip("There already is a dataset metadata file with this name!");
+		ui.leFileName->setToolTip(QStringLiteral("There already is a dataset metadata file with this name!"));
 		found = true;
 	} else {
 		if (hasMatch) {
@@ -165,7 +166,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 			palette.setColor(QPalette::Base, m_baseColor);
 			palette.setColor(QPalette::Text, m_textColor);
 			ui.leFileName->setPalette(palette);
-			ui.leFileName->setToolTip("");
+			ui.leFileName->setToolTip(QStringLiteral(""));
 		}
 	}
 
@@ -177,7 +178,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
  */
 bool DatasetMetadataManagerWidget::urlExists() {
 	// Check whether the given url is acceptable syntactically
-	const QRegularExpression re(R"(^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$)");
+	const QRegularExpression re(QLatin1String(R"(^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$)"));
 	const QRegularExpressionMatch match = re.match(ui.leDownloadURL->text());
 	bool hasMatch = match.hasMatch();
 	const bool urlExists = hasMatch && !ui.leDownloadURL->text().isEmpty();
@@ -187,13 +188,13 @@ bool DatasetMetadataManagerWidget::urlExists() {
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		ui.leDownloadURL->setPalette(palette);
-		ui.leDownloadURL->setToolTip("The URL is invalid!");
+		ui.leDownloadURL->setToolTip(QStringLiteral("The URL is invalid!"));
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDownloadURL->setPalette(palette);
-		ui.leDownloadURL->setToolTip("");
+		ui.leDownloadURL->setToolTip(QStringLiteral(""));
 	}
 	return urlExists;
 }
@@ -208,13 +209,13 @@ bool DatasetMetadataManagerWidget::checkDatasetName() {
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		ui.leDatasetName->setPalette(palette);
-		ui.leDatasetName->setToolTip("Please fill this out!");
+		ui.leDatasetName->setToolTip(QStringLiteral("Please fill this out!"));
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDatasetName->setPalette(palette);
-		ui.leDatasetName->setToolTip("");
+		ui.leDatasetName->setToolTip(QStringLiteral(""));
 	}
 
 	return longNameOk;
@@ -230,13 +231,13 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		ui.teDescription->setPalette(palette);
-		ui.teDescription->setToolTip("Please fill this out!");
+		ui.teDescription->setToolTip(QStringLiteral("Please fill this out!"));
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		ui.teDescription->setPalette(palette);
-		ui.teDescription->setToolTip("");
+		ui.teDescription->setToolTip(QStringLiteral(""));
 	}
 
 	return descriptionOk;
@@ -248,23 +249,23 @@ bool DatasetMetadataManagerWidget::checkDescription() {
 bool DatasetMetadataManagerWidget::checkCategories(QComboBox* comboBox) {
 	// Check whether it is a word or not (might contain digits)
 	const QString fileName = comboBox->currentText();
-	const QRegularExpression re("^[\\w\\d]+$");
+	const QRegularExpression re(QLatin1String("^[\\w\\d]+$"));
 	const QRegularExpressionMatch match = re.match(fileName);
 	const bool hasMatch = match.hasMatch();
 
 	if (!hasMatch || fileName.isEmpty()) {
-		qDebug("category/subcategory name invalid");
+		DEBUG("category/subcategory name invalid");
 		QPalette palette;
 		palette.setColor(QPalette::Base, Qt::red);
 		palette.setColor(QPalette::Text, Qt::black);
 		comboBox->setPalette(palette);
-		comboBox->setToolTip("Invalid or empty name for a category/subcategory (only digits and letters)");
+		comboBox->setToolTip(QStringLiteral("Invalid or empty name for a category/subcategory (only digits and letters)"));
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
 		palette.setColor(QPalette::Text, m_textColor);
 		comboBox->setPalette(palette);
-		comboBox->setToolTip("");
+		comboBox->setToolTip(QStringLiteral(""));
 	}
 
 	return hasMatch;
@@ -334,13 +335,13 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 	if (checkDataValidity()) {
 		// Check whether the current collection already exists, if yes update it
 		if (m_datasetModel->collections().contains(ui.cbCollection->currentText())) {
-			QString fileName = dirPath + ui.cbCollection->currentText() + ".json";
+			QString fileName = dirPath + ui.cbCollection->currentText() + QStringLiteral(".json");
 			qDebug() << "Updating: " << fileName;
 			QFile file(fileName);
 			if (file.open(QIODevice::ReadWrite)) {
 				QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 				QJsonObject rootObject = document.object();
-				QJsonValueRef categoryArrayRef = rootObject.find("categories").value();
+				QJsonValueRef categoryArrayRef = rootObject.find(QStringLiteral("categories")).value();
 				QJsonArray categoryArray = categoryArrayRef.toArray();
 
 				// Check whether the current category already exists
@@ -348,12 +349,12 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 				for (int i = 0; i < categoryArray.size(); ++i) {
 					QJsonValueRef categoryRef = categoryArray[i];
 					QJsonObject currentCategory = categoryRef.toObject();
-					QString categoryName = currentCategory.value("category_name").toString();
+					QString categoryName = currentCategory.value(QStringLiteral("category_name")).toString();
 
 					// If we find the category we have to update that QJsonObject
 					if (categoryName.compare(ui.cbCategory->currentText()) == 0) {
 						foundCategory = true;
-						QJsonValueRef subcategoryArrayRef = currentCategory.find("subcategories").value();
+						QJsonValueRef subcategoryArrayRef = currentCategory.find(QStringLiteral("subcategories")).value();
 						QJsonArray subcategoryArray = subcategoryArrayRef.toArray();
 
 						// Check whether the current subcategory already exists
@@ -361,12 +362,12 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 						for (int j = 0; j < subcategoryArray.size(); ++j) {
 							QJsonValueRef subcategoryRef = subcategoryArray[j];
 							QJsonObject currentSubcategory = subcategoryRef.toObject();
-							QString subcategoryName = currentSubcategory.value("subcategory_name").toString();
+							QString subcategoryName = currentSubcategory.value(QStringLiteral("subcategory_name")).toString();
 
 							// If we find the subcategory we have to update that QJsonObject
 							if (subcategoryName.compare(ui.cbSubcategory->currentText()) == 0) {
 								subcategoryFound = true;
-								QJsonValueRef datasetsRef = currentSubcategory.find("datasets").value();
+								QJsonValueRef datasetsRef = currentSubcategory.find(QStringLiteral("datasets")).value();
 								QJsonArray datasets = datasetsRef.toArray();
 
 								datasets.append(createDatasetObject());
@@ -385,12 +386,12 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 						if (!subcategoryFound) {
 							qDebug() << "Subcategory not found";
 							QJsonObject newSubcategory;
-							newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+							newSubcategory.insert(QStringLiteral("subcategory_name"), ui.cbSubcategory->currentText());
 
 							QJsonArray datasets;
 							datasets.append(createDatasetObject());
 
-							newSubcategory.insert("datasets", datasets);
+							newSubcategory.insert(QStringLiteral("datasets"), datasets);
 							subcategoryArray.append(newSubcategory);
 
 							subcategoryArrayRef = subcategoryArray;
@@ -406,19 +407,19 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 				if (!foundCategory) {
 					qDebug() << "Category not found";
 					QJsonObject newCategory;
-					newCategory.insert("category_name", ui.cbCategory->currentText());
+					newCategory.insert(QStringLiteral("category_name"), ui.cbCategory->currentText());
 
 					QJsonArray subcategoryArray;
 
 					QJsonObject newSubcategory;
-					newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+					newSubcategory.insert(QStringLiteral("subcategory_name"), ui.cbSubcategory->currentText());
 
 					QJsonArray datasets;
 					datasets.append(createDatasetObject());
-					newSubcategory.insert("datasets", datasets);
+					newSubcategory.insert(QStringLiteral("datasets"), datasets);
 
 					subcategoryArray.append(newSubcategory);
-					newCategory.insert("subcategories", subcategoryArray);
+					newCategory.insert(QStringLiteral("subcategories"), subcategoryArray);
 
 					categoryArray.append(newCategory);
 					categoryArrayRef = categoryArray;
@@ -436,7 +437,7 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 		}
 		// If the collection doesn't exist we have to create a new json file for it.
 		else {
-			QString fileName = dirPath + "DatasetCollections.json";
+			QString fileName = dirPath + QStringLiteral("DatasetCollections.json");
 			qDebug() << "creating: " << fileName;
 			QFile file(fileName);
 			if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
@@ -455,30 +456,30 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
 
 			QJsonObject rootObject;
 
-			rootObject.insert("collection_name", ui.cbCollection->currentText());
+			rootObject.insert(QStringLiteral("collection_name"), ui.cbCollection->currentText());
 
 			QJsonArray categoryArray;
 			QJsonObject newCategory;
-			newCategory.insert("category_name", ui.cbCategory->currentText());
+			newCategory.insert(QStringLiteral("category_name"), ui.cbCategory->currentText());
 
 			QJsonArray subcategoryArray;
 
 			QJsonObject newSubcategory;
-			newSubcategory.insert("subcategory_name", ui.cbSubcategory->currentText());
+			newSubcategory.insert(QStringLiteral("subcategory_name"), ui.cbSubcategory->currentText());
 
 			QJsonArray datasets;
 			datasets.append(createDatasetObject());
-			newSubcategory.insert("datasets", datasets);
+			newSubcategory.insert(QStringLiteral("datasets"), datasets);
 
 			subcategoryArray.append(newSubcategory);
-			newCategory.insert("subcategories", subcategoryArray);
+			newCategory.insert(QStringLiteral("subcategories"), subcategoryArray);
 			categoryArray.append(newCategory);
-			rootObject.insert("categories", categoryArray);
+			rootObject.insert(QStringLiteral("categories"), categoryArray);
 
 			QJsonDocument document;
 			document.setObject(rootObject);
 
-			QFile collectionFile(dirPath + ui.cbCollection->currentText() + ".json");
+			QFile collectionFile(dirPath + ui.cbCollection->currentText() + QStringLiteral(".json"));
 			if (collectionFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
 				collectionFile.write(document.toJson());
 				collectionFile.close();
@@ -492,19 +493,19 @@ void DatasetMetadataManagerWidget::updateDocument(const QString& dirPath) {
  */
 QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
 	QJsonObject rootObject;
-	rootObject.insert("filename", ui.leFileName->text());
-	rootObject.insert("name", ui.leDatasetName->text());
-	rootObject.insert("download", ui.leDownloadURL->text());
-	rootObject.insert("description", ui.teDescription->toPlainText());
-	rootObject.insert("separator", ui.cbSeparatingCharacter->currentText());
-	rootObject.insert("comment_character", ui.cbCommentCharacter->currentText());
-	rootObject.insert("DateTime_format", ui.cbDateTimeFormat->currentText());
-	rootObject.insert("number_format", ui.cbNumberFormat->currentIndex());
-	rootObject.insert("create_index_column", ui.chbCreateIndex->isChecked());
-	rootObject.insert("skip_empty_parts", ui.chbSkipEmptyParts->isChecked());
-	rootObject.insert("simplify_whitespaces", ui.chbSimplifyWhitespaces->isChecked());
-	rootObject.insert("remove_quotes", ui.chbRemoveQuotes->isChecked());
-	rootObject.insert("use_first_row_for_vectorname", ui.chbHeader->isChecked());
+	rootObject.insert(QStringLiteral("filename"), ui.leFileName->text());
+	rootObject.insert(QStringLiteral("name"), ui.leDatasetName->text());
+	rootObject.insert(QStringLiteral("download"), ui.leDownloadURL->text());
+	rootObject.insert(QStringLiteral("description"), ui.teDescription->toPlainText());
+	rootObject.insert(QStringLiteral("separator"), ui.cbSeparatingCharacter->currentText());
+	rootObject.insert(QStringLiteral("comment_character"), ui.cbCommentCharacter->currentText());
+	rootObject.insert(QStringLiteral("DateTime_format"), ui.cbDateTimeFormat->currentText());
+	rootObject.insert(QStringLiteral("number_format"), ui.cbNumberFormat->currentIndex());
+	rootObject.insert(QStringLiteral("create_index_column"), ui.chbCreateIndex->isChecked());
+	rootObject.insert(QStringLiteral("skip_empty_parts"), ui.chbSkipEmptyParts->isChecked());
+	rootObject.insert(QStringLiteral("simplify_whitespaces"), ui.chbSimplifyWhitespaces->isChecked());
+	rootObject.insert(QStringLiteral("remove_quotes"), ui.chbRemoveQuotes->isChecked());
+	rootObject.insert(QStringLiteral("use_first_row_for_vectorname"), ui.chbHeader->isChecked());
 
 	for (int i = 0; i < m_columnDescriptions.size(); ++i)
 		rootObject.insert(i18n("column_description_%1", i), m_columnDescriptions[i]);
@@ -528,7 +529,7 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 		m_columnDescriptions[layoutIndex - 1] = text;
 	});
 
-	m_columnDescriptions.append("");
+	m_columnDescriptions.append(QStringLiteral(""));
 }
 
 /**
