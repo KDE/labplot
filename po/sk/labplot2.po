@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-03 00:42+0000\n"
+"POT-Creation-Date: 2022-11-04 00:42+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -1867,7 +1867,7 @@ msgstr "neznáme"
 #: src/backend/datasources/filters/MatioFilter.cpp:445
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:161
-#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1870
+#: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1872
 #, kde-format
 msgid "Matrix"
 msgstr "Matica"
@@ -7619,7 +7619,7 @@ msgstr "Funkcie"
 #: src/commonfrontend/workbook/WorkbookView.cpp:136
 #: src/commonfrontend/worksheet/WorksheetView.cpp:450
 #: src/commonfrontend/worksheet/WorksheetView.cpp:517
-#: src/kdefrontend/MainWin.cpp:764
+#: src/kdefrontend/MainWin.cpp:765
 #, kde-format
 msgid "Add New"
 msgstr "Pridať nový"
@@ -10335,7 +10335,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:61
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:54
 #: src/kdefrontend/labplot2ui.rc:28 src/kdefrontend/MainWin.cpp:530
-#: src/kdefrontend/MainWin.cpp:1852 src/kdefrontend/SettingsDialog.cpp:65
+#: src/kdefrontend/MainWin.cpp:1854 src/kdefrontend/SettingsDialog.cpp:65
 #, kde-format
 msgid "Spreadsheet"
 msgstr "Zošit"
@@ -10520,7 +10520,7 @@ msgstr "Vybrané stĺpce"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:317
-#: src/kdefrontend/MainWin.cpp:2331
+#: src/kdefrontend/MainWin.cpp:2333
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1423
 #, kde-format
 msgid "Cursor"
@@ -11699,7 +11699,7 @@ msgid "Open LabPlot Project"
 msgstr "Otvoriť projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:373
-#: src/kdefrontend/MainWin.cpp:1340
+#: src/kdefrontend/MainWin.cpp:1341
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "LabPlot Projects (%1)"
@@ -11713,7 +11713,7 @@ msgid "Open Origin Project"
 msgstr "Otvoriť projekt"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
-#: src/kdefrontend/MainWin.cpp:1345
+#: src/kdefrontend/MainWin.cpp:1346
 #, fuzzy, kde-format
 #| msgid "Open project"
 msgid "Origin Projects (%1)"
@@ -11956,6 +11956,7 @@ msgstr ""
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
+#: src/kdefrontend/MainWin.cpp:2641
 #, fuzzy, kde-format
 msgid "Warning"
 msgstr "Upozornenie"
@@ -13600,7 +13601,7 @@ msgid ""
 "installation."
 msgstr ""
 
-#: src/kdefrontend/GuiObserver.cpp:175 src/kdefrontend/MainWin.cpp:1286
+#: src/kdefrontend/GuiObserver.cpp:175 src/kdefrontend/MainWin.cpp:1287
 #, kde-format
 msgctxt "@title:window"
 msgid "Properties"
@@ -14378,14 +14379,14 @@ msgstr "Nepodarilo sa otvoriť"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:542
-#: src/kdefrontend/MainWin.cpp:1888 src/kdefrontend/SettingsDialog.cpp:60
+#: src/kdefrontend/MainWin.cpp:1890 src/kdefrontend/SettingsDialog.cpp:60
 #, kde-format
 msgid "Worksheet"
 msgstr "List"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:525
-#: src/kdefrontend/MainWin.cpp:1844
+#: src/kdefrontend/MainWin.cpp:1846
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data Extractor"
@@ -14516,7 +14517,7 @@ msgstr ""
 msgid "&Open Example"
 msgstr "Otvoriť súbor"
 
-#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1836
+#: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1838
 #, kde-format
 msgid "Workbook"
 msgstr ""
@@ -14546,7 +14547,7 @@ msgstr ""
 msgid "Creates a new worksheet for data plotting"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1896
+#: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1898
 #, kde-format
 msgid "Note"
 msgstr "Poznámka"
@@ -14557,9 +14558,9 @@ msgid "Creates a new note for arbitrary text"
 msgstr ""
 
 #. i18n("Note/Script"),this);
-#. actionCollection()->addAction("new_script", m_newScriptAction);
+#. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
-#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1828
+#: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1830
 #, kde-format
 msgid "Folder"
 msgstr "Priečinok"
@@ -14727,226 +14728,231 @@ msgstr ""
 msgid "Current &Folder Only"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:687
+#: src/kdefrontend/MainWin.cpp:688
 #, kde-format
 msgid "Current Folder and &Subfolders"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:691
+#: src/kdefrontend/MainWin.cpp:692
 #, kde-format
 msgid "&All"
 msgstr "&Všetko"
 
-#: src/kdefrontend/MainWin.cpp:713
+#: src/kdefrontend/MainWin.cpp:714
 #, fuzzy, kde-format
 #| msgid "Show file info"
 msgid "Show Memory Usage"
 msgstr "Zobraziť informácie o súbore"
 
-#: src/kdefrontend/MainWin.cpp:721
+#: src/kdefrontend/MainWin.cpp:722
 #, kde-format
 msgid "Project Explorer"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:726
+#: src/kdefrontend/MainWin.cpp:727
 #, fuzzy, kde-format
 #| msgid "Properties"
 msgid "Properties Explorer"
 msgstr "Vlastnosti"
 
-#: src/kdefrontend/MainWin.cpp:789
+#: src/kdefrontend/MainWin.cpp:790
 #, kde-format
 msgid "Window Visibility"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:813
+#: src/kdefrontend/MainWin.cpp:814
 #, fuzzy, kde-format
 #| msgid "Color map"
 msgid "Color Scheme"
 msgstr "Farebná téma"
 
-#: src/kdefrontend/MainWin.cpp:860
+#: src/kdefrontend/MainWin.cpp:861
 #, kde-format
 msgid "Configure CAS..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:895
+#: src/kdefrontend/MainWin.cpp:896
 #, fuzzy, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
 msgstr "Aktuálny projekt bol zmenený. Chcete ho uložiť?"
 
-#: src/kdefrontend/MainWin.cpp:896
+#: src/kdefrontend/MainWin.cpp:897
 #, kde-format
 msgid "Save Project"
 msgstr "Uloženie projektu"
 
-#: src/kdefrontend/MainWin.cpp:1272
+#: src/kdefrontend/MainWin.cpp:1273
 #, fuzzy, kde-format
 #| msgid "Project properties"
 msgctxt "@title:window"
 msgid "Project Explorer"
 msgstr "Vlastnosti projektu"
 
-#: src/kdefrontend/MainWin.cpp:1331
+#: src/kdefrontend/MainWin.cpp:1332
 #, fuzzy, kde-format
 #| msgid "%1: clear"
 msgid "%1: created"
 msgstr "Vytvorené"
 
-#: src/kdefrontend/MainWin.cpp:1351
+#: src/kdefrontend/MainWin.cpp:1352
 #, fuzzy, kde-format
 #| msgid "Close Project"
 msgid "Cantor Projects (*.cws)"
 msgstr "Zatvoriť projekt"
 
-#: src/kdefrontend/MainWin.cpp:1352
+#: src/kdefrontend/MainWin.cpp:1353
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1359
+#: src/kdefrontend/MainWin.cpp:1360
 #, kde-format
 msgid "All supported files (%1)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1363
+#: src/kdefrontend/MainWin.cpp:1364
 #, fuzzy, kde-format
 #| msgid "Open Project"
 msgctxt "@title:window"
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/kdefrontend/MainWin.cpp:1380
+#: src/kdefrontend/MainWin.cpp:1381
 #, kde-format
 msgid "The project file %1 is already opened."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1380
+#: src/kdefrontend/MainWin.cpp:1381
 #, kde-format
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
-#: src/kdefrontend/MainWin.cpp:1393
+#: src/kdefrontend/MainWin.cpp:1394
 #, kde-format
 msgid "Loading %1..."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1443 src/kdefrontend/MainWin.cpp:1447
-#: src/kdefrontend/MainWin.cpp:1452 src/kdefrontend/MainWin.cpp:1457
-#: src/kdefrontend/MainWin.cpp:1461 src/kdefrontend/MainWin.cpp:1507
-#: src/kdefrontend/MainWin.cpp:1512 src/kdefrontend/MainWin.cpp:1517
-#: src/kdefrontend/MainWin.cpp:1523
+#: src/kdefrontend/MainWin.cpp:1444 src/kdefrontend/MainWin.cpp:1448
+#: src/kdefrontend/MainWin.cpp:1453 src/kdefrontend/MainWin.cpp:1458
+#: src/kdefrontend/MainWin.cpp:1462 src/kdefrontend/MainWin.cpp:1509
+#: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
+#: src/kdefrontend/MainWin.cpp:1525
 #, fuzzy, kde-format
 #| msgid "Failed to Open"
 msgid "Failed to open project"
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/kdefrontend/MainWin.cpp:1443 src/kdefrontend/MainWin.cpp:1452
-#: src/kdefrontend/MainWin.cpp:1457 src/kdefrontend/MainWin.cpp:1507
-#: src/kdefrontend/MainWin.cpp:1512 src/kdefrontend/MainWin.cpp:1517
+#: src/kdefrontend/MainWin.cpp:1444 src/kdefrontend/MainWin.cpp:1453
+#: src/kdefrontend/MainWin.cpp:1458 src/kdefrontend/MainWin.cpp:1509
+#: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to process the content of the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/kdefrontend/MainWin.cpp:1447 src/kdefrontend/MainWin.cpp:1461
-#: src/kdefrontend/MainWin.cpp:1523
+#: src/kdefrontend/MainWin.cpp:1448 src/kdefrontend/MainWin.cpp:1462
+#: src/kdefrontend/MainWin.cpp:1525
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to open the file '%1'."
 msgstr "Nepodarilo sa otvoriť"
 
-#: src/kdefrontend/MainWin.cpp:1537
+#: src/kdefrontend/MainWin.cpp:1539
 #, fuzzy, kde-format
 msgid "%1: opened"
 msgstr "Otvorené"
 
-#: src/kdefrontend/MainWin.cpp:1546
+#: src/kdefrontend/MainWin.cpp:1548
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1640
+#: src/kdefrontend/MainWin.cpp:1642
 #, fuzzy, kde-format
 #| msgid "Save Project As"
 msgctxt "@title:window"
 msgid "Save Project As"
 msgstr "Uložiť projekt ako"
 
-#: src/kdefrontend/MainWin.cpp:1642
+#: src/kdefrontend/MainWin.cpp:1644
 #, kde-format
 msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1668
+#: src/kdefrontend/MainWin.cpp:1670
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the temporary file for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/kdefrontend/MainWin.cpp:1720
+#: src/kdefrontend/MainWin.cpp:1722
 #, kde-format
 msgid "Project saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1736
+#: src/kdefrontend/MainWin.cpp:1738
 #, kde-format
 msgid "Couldn't save the file '%1'."
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1741
+#: src/kdefrontend/MainWin.cpp:1743
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Couldn't open the file '%1' for writing."
 msgstr "Nepodarilo sa otvoriť súbor %1 pre čítanie."
 
-#: src/kdefrontend/MainWin.cpp:1786
+#: src/kdefrontend/MainWin.cpp:1788
 #, fuzzy, kde-format
 #| msgid "%1    [Changed]"
 msgid "Changed"
 msgstr "%1    [zmenené]"
 
-#: src/kdefrontend/MainWin.cpp:1802 src/kdefrontend/MainWin.cpp:1815
+#: src/kdefrontend/MainWin.cpp:1804 src/kdefrontend/MainWin.cpp:1817
 #, kde-format
 msgid "Preparing printing of %1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:1804 src/kdefrontend/MainWin.cpp:1817
+#: src/kdefrontend/MainWin.cpp:1806 src/kdefrontend/MainWin.cpp:1819
 #, fuzzy, kde-format
 msgid "%1 printed"
 msgstr "tlačené: %1"
 
-#: src/kdefrontend/MainWin.cpp:2571
+#: src/kdefrontend/MainWin.cpp:2573
 #: src/kdefrontend/welcomescreen/WelcomeScreenHelper.cpp:115
 #, fuzzy, kde-format
 #| msgid "Dataset"
 msgid "Dataset%1"
 msgstr "Dátová sada"
 
-#: src/kdefrontend/MainWin.cpp:2602
+#: src/kdefrontend/MainWin.cpp:2604
 #, kde-format
 msgid "%1 exported"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2609
+#: src/kdefrontend/MainWin.cpp:2611
 #, kde-format
 msgid "FITS files saved"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2621
+#: src/kdefrontend/MainWin.cpp:2623
 #, kde-format
 msgid "MQTT Client%1"
 msgstr ""
 
-#: src/kdefrontend/MainWin.cpp:2643
+#: src/kdefrontend/MainWin.cpp:2641
+#, kde-format
+msgid "There already is a MQTTClient with this host!"
+msgstr ""
+
+#: src/kdefrontend/MainWin.cpp:2645
 #, fuzzy, kde-format
 #| msgid "Add new variable"
 msgid "Live data source%1"
 msgstr "Pridať novú premennú"
 
-#: src/kdefrontend/MainWin.cpp:2687
+#: src/kdefrontend/MainWin.cpp:2689
 #, kde-format
 msgid "No Cantor backends found. Please install the ones you want to use."
 msgstr ""
@@ -16263,102 +16269,102 @@ msgstr "Veľkosť vzorky"
 msgid "Cumulative Percentage"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:137
+#: src/kdefrontend/TemplateHandler.cpp:131
 #, kde-format
 msgid "Load"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:138
+#: src/kdefrontend/TemplateHandler.cpp:132
 #, kde-format
 msgid "Load properties from a template"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:139
+#: src/kdefrontend/TemplateHandler.cpp:133
 #, fuzzy, kde-format
 #| msgid "&Save"
 msgid "Save"
 msgstr "&Uložiť"
 
-#: src/kdefrontend/TemplateHandler.cpp:140
+#: src/kdefrontend/TemplateHandler.cpp:134
 #, kde-format
 msgid "Save current properties as a template"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:141
+#: src/kdefrontend/TemplateHandler.cpp:135
 #, kde-format
 msgid "Save Default"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:142
+#: src/kdefrontend/TemplateHandler.cpp:136
 #, kde-format
 msgid "Save current properties as default"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:155
+#: src/kdefrontend/TemplateHandler.cpp:149
 #, fuzzy, kde-format
 msgid "Toolbar Settings"
 msgstr "Nastavenia"
 
-#: src/kdefrontend/TemplateHandler.cpp:161
+#: src/kdefrontend/TemplateHandler.cpp:155
 #, fuzzy, kde-format
 #| msgid "Tab position:"
 msgid "Text position"
 msgstr "Pozícia kariet:"
 
-#: src/kdefrontend/TemplateHandler.cpp:163
+#: src/kdefrontend/TemplateHandler.cpp:157
 #, kde-format
 msgid "Icons only"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:170
+#: src/kdefrontend/TemplateHandler.cpp:164
 #, fuzzy, kde-format
 #| msgid "Text color:"
 msgid "Text only"
 msgstr "Farba textu:"
 
-#: src/kdefrontend/TemplateHandler.cpp:177
+#: src/kdefrontend/TemplateHandler.cpp:171
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:184
+#: src/kdefrontend/TemplateHandler.cpp:178
 #, kde-format
 msgid "Text Under Icons"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:224
+#: src/kdefrontend/TemplateHandler.cpp:218
 #, fuzzy, kde-format
 #| msgid "Load from"
 msgid "Load From Template"
 msgstr "Zdroj načítania"
 
-#: src/kdefrontend/TemplateHandler.cpp:244
+#: src/kdefrontend/TemplateHandler.cpp:238
 #, kde-format
 msgid "Template \"%1\" was loaded."
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:249
+#: src/kdefrontend/TemplateHandler.cpp:243
 #, fuzzy, kde-format
 #| msgid "Save as"
 msgid "Save As Template"
 msgstr "Uložiť ako"
 
-#: src/kdefrontend/TemplateHandler.cpp:267
+#: src/kdefrontend/TemplateHandler.cpp:261
 #, fuzzy, kde-format
 msgid "New:"
 msgstr "&Nový"
 
-#: src/kdefrontend/TemplateHandler.cpp:295
+#: src/kdefrontend/TemplateHandler.cpp:289
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:308
+#: src/kdefrontend/TemplateHandler.cpp:302
 #, kde-format
 msgid "Template \"%1\" was saved."
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:318
+#: src/kdefrontend/TemplateHandler.cpp:312
 #, kde-format
 msgid "New default template was saved."
 msgstr ""
