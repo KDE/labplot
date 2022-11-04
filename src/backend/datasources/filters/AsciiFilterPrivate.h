@@ -58,7 +58,7 @@ public:
 
 	const AsciiFilter* q;
 
-	QString commentCharacter{'#'};
+	QString commentCharacter{QStringLiteral("#")};
 	QString separatingCharacter{QStringLiteral("auto")};
 	QString dateTimeFormat;
 	QLocale::Language numberFormat{QLocale::C};

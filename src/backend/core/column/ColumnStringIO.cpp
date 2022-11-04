@@ -79,6 +79,6 @@ bool ColumnStringIO::copy(const AbstractColumn* source, int source_start, int de
 }
 
 void ColumnStringIO::replaceTexts(int start_row, const QVector<QString>& texts) {
-	Column tmp("tmp", texts);
+	Column tmp(QStringLiteral("tmp"), texts);
 	copy(&tmp, 0, start_row, texts.size());
 }

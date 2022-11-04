@@ -83,7 +83,7 @@ void DatapickerCurve::init() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon DatapickerCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
 Column* DatapickerCurve::appendColumn(const QString& name) {
@@ -433,12 +433,12 @@ void DatapickerCurvePrivate::retransform() {
 void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const DatapickerCurve);
 
-	writer->writeStartElement("datapickerCurve");
+	writer->writeStartElement(QStringLiteral("datapickerCurve"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->posXColumn, posXColumn);
 	WRITE_COLUMN(d->posYColumn, posYColumn);
 	WRITE_COLUMN(d->posZColumn, posZColumn);
@@ -446,17 +446,17 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->minusDeltaXColumn, minusDeltaXColumn);
 	WRITE_COLUMN(d->plusDeltaYColumn, plusDeltaYColumn);
 	WRITE_COLUMN(d->minusDeltaYColumn, minusDeltaYColumn);
-	writer->writeAttribute("curveErrorType_X", QString::number(static_cast<int>(d->curveErrorTypes.x)));
-	writer->writeAttribute("curveErrorType_Y", QString::number(static_cast<int>(d->curveErrorTypes.y)));
-	writer->writeAttribute("vibible", QString::number(d->pointVisibility));
+	writer->writeAttribute(QStringLiteral("curveErrorType_X"), QString::number(static_cast<int>(d->curveErrorTypes.x)));
+	writer->writeAttribute(QStringLiteral("curveErrorType_Y"), QString::number(static_cast<int>(d->curveErrorTypes.y)));
+	writer->writeAttribute(QStringLiteral("vibible"), QString::number(d->pointVisibility));
 	writer->writeEndElement();
 
 	// Symbols
 	d->symbol->save(writer);
 
 	// error bar properties
-	writer->writeStartElement("errorBarProperties");
-	writer->writeAttribute("pointErrorBarSize", QString::number(d->pointErrorBarSize));
+	writer->writeStartElement(QStringLiteral("errorBarProperties"));
+	writer->writeAttribute(QStringLiteral("pointErrorBarSize"), QString::number(d->pointErrorBarSize));
 	WRITE_QBRUSH(d->pointErrorBarBrush);
 	WRITE_QPEN(d->pointErrorBarPen);
 	writer->writeEndElement();
@@ -481,16 +481,16 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "datapickerCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("datapickerCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("visible", pointVisibility, bool);
@@ -504,60 +504,60 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(minusDeltaXColumn);
 			READ_COLUMN(plusDeltaYColumn);
 			READ_COLUMN(minusDeltaYColumn);
-		} else if (!preview && reader->name() == "symbolProperties") {
+		} else if (!preview && reader->name() == QLatin1String("symbolProperties")) {
 			// old serialization that was used before the switch to Symbol::load().
 			// in the old serialization the symbol properties and "point visibility" where saved
 			// under "symbolProperties".
 			attribs = reader->attributes();
 
-			str = attribs.value("pointRotationAngle").toString();
+			str = attribs.value(QStringLiteral("pointRotationAngle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointRotationAngle")).toString());
 			else
 				d->symbol->setRotationAngle(str.toDouble());
 
-			str = attribs.value("pointOpacity").toString();
+			str = attribs.value(QStringLiteral("pointOpacity")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointOpacity")).toString());
 			else
 				d->symbol->setOpacity(str.toDouble());
 
-			str = attribs.value("pointSize").toString();
+			str = attribs.value(QStringLiteral("pointSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointSize")).toString());
 			else
 				d->symbol->setSize(str.toDouble());
 
-			str = attribs.value("pointStyle").toString();
+			str = attribs.value(QStringLiteral("pointStyle")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("pointStyle")).toString());
 			else
 				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
 
 			// brush
 			QBrush brush;
-			str = attribs.value("brush_style").toString();
+			str = attribs.value(QStringLiteral("brush_style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brush_style").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());
 			else
 				brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));
 
 			QColor color;
-			str = attribs.value("brush_color_r").toString();
+			str = attribs.value(QStringLiteral("brush_color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());
 			else
 				color.setRed(str.toInt());
 
-			str = attribs.value("brush_color_g").toString();
+			str = attribs.value(QStringLiteral("brush_color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());
 			else
 				color.setGreen(str.toInt());
 
-			str = attribs.value("brush_color_b").toString();
+			str = attribs.value(QStringLiteral("brush_color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());
 			else
 				color.setBlue(str.toInt());
 
@@ -566,50 +566,50 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 
 			// pen
 			QPen pen;
-			str = attribs.value("style").toString();
+			str = attribs.value(QStringLiteral("style")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("style").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());
 			else
 				pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));
 
-			str = attribs.value("color_r").toString();
+			str = attribs.value(QStringLiteral("color_r")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("color_r").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());
 			else
 				color.setRed(str.toInt());
 
-			str = attribs.value("color_g").toString();
+			str = attribs.value(QStringLiteral("color_g")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("color_g").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());
 			else
 				color.setGreen(str.toInt());
 
-			str = attribs.value("color_b").toString();
+			str = attribs.value(QStringLiteral("color_b")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("color_b").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());
 			else
 				color.setBlue(str.toInt());
 
 			pen.setColor(color);
 
-			str = attribs.value("width").toString();
+			str = attribs.value(QStringLiteral("width")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("width").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 			else
 				pen.setWidthF(str.toDouble());
 
 			d->symbol->setPen(pen);
 
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
-		} else if (!preview && reader->name() == "symbols") {
+		} else if (!preview && reader->name() == QLatin1String("symbols")) {
 			d->symbol->load(reader, preview);
-		} else if (!preview && reader->name() == "errorBarProperties") {
+		} else if (!preview && reader->name() == QLatin1String("errorBarProperties")) {
 			attribs = reader->attributes();
 
 			READ_DOUBLE_VALUE("pointErrorBarSize", pointErrorBarSize);
 			READ_QBRUSH(d->pointErrorBarBrush);
 			READ_QPEN(d->pointErrorBarPen);
-		} else if (reader->name() == "datapickerPoint") {
+		} else if (reader->name() == QLatin1String("datapickerPoint")) {
 			auto* curvePoint = new DatapickerPoint(QString());
 			curvePoint->setHidden(true);
 			if (!curvePoint->load(reader, preview)) {
@@ -619,8 +619,8 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				addChild(curvePoint);
 				curvePoint->initErrorBar(curveErrorTypes());
 			}
-		} else if (reader->name() == "spreadsheet") {
-			auto* datasheet = new Spreadsheet("spreadsheet", true);
+		} else if (reader->name() == QLatin1String("spreadsheet")) {
+			auto* datasheet = new Spreadsheet(QStringLiteral("spreadsheet"), true);
 			if (!datasheet->load(reader, preview)) {
 				delete datasheet;
 				return false;

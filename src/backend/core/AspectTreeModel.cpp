@@ -194,18 +194,18 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return {};
 		}
 		case 1:
-			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
+			if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CantorWorksheet"))
 				return QLatin1String("Notebook");
-			else if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("Datapicker"))
 				return QLatin1String("DataExtractor");
-			else if (aspect->metaObject()->className() == QLatin1String("CartesianPlot"))
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CartesianPlot"))
 				return QLatin1String("Plot Area");
 			else
-				return aspect->metaObject()->className();
+				return QLatin1String(aspect->metaObject()->className());
 		case 2:
 			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:
-			return aspect->comment().replace('\n', ' ').simplified();
+			return aspect->comment().replace(QLatin1Char('\n'), QLatin1Char(' ')).simplified();
 		default:
 			return {};
 		}
@@ -230,7 +230,7 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 			// about the formula and parameters
 			if (!col->formula().isEmpty()) {
 				toolTip += QLatin1String("<br><br>") + i18n("Formula:");
-				QString f("f(");
+				QString f(QStringLiteral("f("));
 				QString parameters;
 				for (int i = 0; i < col->formulaData().size(); ++i) {
 					auto& data = col->formulaData().at(i);
@@ -238,22 +238,22 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 					// string for the function definition like f(x,y), etc.
 					f += data.variableName();
 					if (i != col->formulaData().size() - 1)
-						f += QLatin1String(", ");
+						f += QStringLiteral(", ");
 
 					// string for the parameters and the references to the used columns for them
 					if (!parameters.isEmpty())
 						parameters += QLatin1String("<br>");
 					parameters += data.variableName();
 					if (data.column())
-						parameters += " = " + data.column()->path();
+						parameters += QStringLiteral(" = ") + data.column()->path();
 				}
 
-				toolTip += QLatin1String("<br>") + f + QLatin1String(") = ") + col->formula();
-				toolTip += QLatin1String("<br>") + parameters;
+				toolTip += QStringLiteral("<br>") + f + QStringLiteral(") = ") + col->formula();
+				toolTip += QStringLiteral("<br>") + parameters;
 				if (col->formulaAutoUpdate())
-					toolTip += QLatin1String("<br>") + i18n("auto update: true");
+					toolTip += QStringLiteral("<br>") + i18n("auto update: true");
 				else
-					toolTip += QLatin1String("<br>") + i18n("auto update: false");
+					toolTip += QStringLiteral("<br>") + i18n("auto update: false");
 			}
 		}
 

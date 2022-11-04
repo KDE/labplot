@@ -80,35 +80,35 @@ void DatasetHandler::configureFilter() {
 
 	// read properties specified in the dataset description
 	if (!m_object->isEmpty()) {
-		if (m_object->contains("separator"))
-			m_filter->setSeparatingCharacter(m_object->value("separator").toString());
+		if (m_object->contains(QLatin1String("separator")))
+			m_filter->setSeparatingCharacter(m_object->value(QStringLiteral("separator")).toString());
 
-		if (m_object->contains("comment_character"))
-			m_filter->setCommentCharacter(m_object->value("comment_character").toString());
+		if (m_object->contains(QLatin1String("comment_character")))
+			m_filter->setCommentCharacter(m_object->value(QStringLiteral("comment_character")).toString());
 
-		if (m_object->contains("create_index_column"))
-			m_filter->setCreateIndexEnabled(m_object->value("create_index_column").toBool());
+		if (m_object->contains(QLatin1String("create_index_column")))
+			m_filter->setCreateIndexEnabled(m_object->value(QStringLiteral("create_index_column")).toBool());
 
-		if (m_object->contains("skip_empty_parts"))
-			m_filter->setSkipEmptyParts(m_object->value("skip_empty_parts").toBool());
+		if (m_object->contains(QLatin1String("skip_empty_parts")))
+			m_filter->setSkipEmptyParts(m_object->value(QStringLiteral("skip_empty_parts")).toBool());
 
-		if (m_object->contains("simplify_whitespaces"))
-			m_filter->setSimplifyWhitespacesEnabled(m_object->value("simplify_whitespaces").toBool());
+		if (m_object->contains(QLatin1String("simplify_whitespaces")))
+			m_filter->setSimplifyWhitespacesEnabled(m_object->value(QStringLiteral("simplify_whitespaces")).toBool());
 
-		if (m_object->contains("remove_quotes"))
-			m_filter->setRemoveQuotesEnabled(m_object->value("remove_quotes").toBool());
+		if (m_object->contains(QLatin1String("remove_quotes")))
+			m_filter->setRemoveQuotesEnabled(m_object->value(QStringLiteral("remove_quotes")).toBool());
 
-		if (m_object->contains("use_first_row_for_vectorname"))
-			m_filter->setHeaderEnabled(m_object->value("use_first_row_for_vectorname").toBool());
+		if (m_object->contains(QLatin1String("use_first_row_for_vectorname")))
+			m_filter->setHeaderEnabled(m_object->value(QStringLiteral("use_first_row_for_vectorname")).toBool());
 
-		if (m_object->contains("number_format"))
-			m_filter->setNumberFormat(QLocale::Language(m_object->value("number_format").toInt()));
+		if (m_object->contains(QLatin1String("number_format")))
+			m_filter->setNumberFormat(QLocale::Language(m_object->value(QStringLiteral("number_format")).toInt()));
 
-		if (m_object->contains("DateTime_format"))
-			m_filter->setDateTimeFormat(m_object->value("DateTime_format").toString());
+		if (m_object->contains(QLatin1String("DateTime_format")))
+			m_filter->setDateTimeFormat(m_object->value(QStringLiteral("DateTime_format")).toString());
 
-		if (m_object->contains("columns")) {
-			const QJsonArray& columnsArray = m_object->value("columns").toArray();
+		if (m_object->contains(QLatin1String("columns"))) {
+			const QJsonArray& columnsArray = m_object->value(QStringLiteral("columns")).toArray();
 			QStringList columnNames;
 			for (const auto& col : columnsArray)
 				columnNames << col.toString();
@@ -127,8 +127,8 @@ void DatasetHandler::configureFilter() {
 void DatasetHandler::configureSpreadsheet(const QString& description) {
 	DEBUG("Start preparing spreadsheet");
 	if (!m_object->isEmpty()) {
-		if (m_object->contains("name"))
-			m_spreadsheet->setName(m_object->value("name").toString());
+		if (m_object->contains(QLatin1String("name")))
+			m_spreadsheet->setName(m_object->value(QStringLiteral("name")).toString());
 		else
 			markMetadataAsInvalid();
 
@@ -149,8 +149,8 @@ void DatasetHandler::configureSpreadsheet(const QString& description) {
 void DatasetHandler::prepareForDataset() {
 	DEBUG("Start downloading dataset");
 	if (!m_object->isEmpty()) {
-		if (m_object->contains("url")) {
-			const QString& url = m_object->value("url").toString();
+		if (m_object->contains(QLatin1String("url"))) {
+			const QString& url = m_object->value(QStringLiteral("url")).toString();
 			doDownload(QUrl(url));
 		} else {
 			QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("There is no download URL present in the metadata file!"));
@@ -221,15 +221,15 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 
 	// get the extension of the downloaded file
 	const QString downloadFileName = QFileInfo(path).fileName();
-	int lastIndex = downloadFileName.lastIndexOf(".");
-	const QString fileExtension = lastIndex >= 0 ? downloadFileName.right(downloadFileName.length() - lastIndex) : "";
+	int lastIndex = downloadFileName.lastIndexOf(QLatin1Char('.'));
+	const QString fileExtension = lastIndex >= 0 ? downloadFileName.right(downloadFileName.length() - lastIndex) : QString();
 
-	QString basename = m_object->value("filename").toString() + fileExtension;
+	QString basename = m_object->value(QStringLiteral("filename")).toString() + fileExtension;
 
 	if (basename.isEmpty())
-		basename = "url";
+		basename = QStringLiteral("url");
 
-	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/datasets_local/"));
+	QDir downloadDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QStringLiteral("/datasets_local/"));
 	if (!downloadDir.exists()) {
 		if (!downloadDir.mkpath(downloadDir.path())) {
 			qDebug() << "Failed to create the directory " << downloadDir.path();

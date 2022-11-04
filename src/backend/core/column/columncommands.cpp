@@ -223,7 +223,7 @@ ColumnFullCopyCmd::~ColumnFullCopyCmd() {
  */
 void ColumnFullCopyCmd::redo() {
 	if (m_backup == nullptr) {
-		m_backup_owner = new Column("temp", m_src->columnMode());
+		m_backup_owner = new Column(QStringLiteral("temp"), m_src->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_src->columnMode());
 		m_backup->copy(m_col);
 		m_col->copy(m_src);
@@ -337,10 +337,10 @@ ColumnPartialCopyCmd::~ColumnPartialCopyCmd() {
 void ColumnPartialCopyCmd::redo() {
 	if (m_src_backup == nullptr) {
 		// copy the relevant rows of source and destination column into backup columns
-		m_src_backup_owner = new Column("temp", m_col->columnMode());
+		m_src_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_src_backup = new ColumnPrivate(m_src_backup_owner, m_col->columnMode());
 		m_src_backup->copy(m_src, m_src_start, 0, m_num_rows);
-		m_col_backup_owner = new Column("temp", m_col->columnMode());
+		m_col_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_col_backup = new ColumnPrivate(m_col_backup_owner, m_col->columnMode());
 		m_col_backup->copy(m_col, m_dest_start, 0, m_num_rows);
 		m_old_row_count = m_col->rowCount();
@@ -462,7 +462,7 @@ void ColumnRemoveRowsCmd::redo() {
 			m_data_row_count = m_count;
 
 		m_old_size = m_col->rowCount();
-		m_backup_owner = new Column("temp", m_col->columnMode());
+		m_backup_owner = new Column(QStringLiteral("temp"), m_col->columnMode());
 		m_backup = new ColumnPrivate(m_backup_owner, m_col->columnMode());
 		m_backup->copy(m_col, m_first, 0, m_data_row_count);
 		m_formulas = m_col->formulaAttribute();

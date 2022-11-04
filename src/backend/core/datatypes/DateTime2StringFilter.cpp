@@ -69,7 +69,7 @@ void DateTime2StringFilterSetFormatCmd::undo() {
 }
 
 void DateTime2StringFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
-	writer->writeAttribute("format", format());
+	writer->writeAttribute(QStringLiteral("format"), format());
 }
 
 bool DateTime2StringFilter::load(XmlStreamReader* reader, bool preview) {
@@ -77,7 +77,7 @@ bool DateTime2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "format").toString();
+	QString str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("format")).toString();
 
 	if (AbstractSimpleFilter::load(reader, preview))
 		setFormat(str);

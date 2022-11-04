@@ -384,13 +384,13 @@ QIcon LiveDataSource::icon() const {
 
 	switch (m_fileType) {
 	case AbstractFileFilter::FileType::Ascii:
-		icon = QIcon::fromTheme("text-plain");
+		icon = QIcon::fromTheme(QStringLiteral("text-plain"));
 		break;
 	case AbstractFileFilter::FileType::Binary:
-		icon = QIcon::fromTheme("application-octet-stream");
+		icon = QIcon::fromTheme(QStringLiteral("application-octet-stream"));
 		break;
 	case AbstractFileFilter::FileType::Image:
-		icon = QIcon::fromTheme("image-x-generic");
+		icon = QIcon::fromTheme(QStringLiteral("image-x-generic"));
 		break;
 	// TODO: missing icons
 	case AbstractFileFilter::FileType::HDF5:
@@ -398,19 +398,19 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::Excel:
 		break;
 	case AbstractFileFilter::FileType::FITS:
-		icon = QIcon::fromTheme("kstars_fitsviewer");
+		icon = QIcon::fromTheme(QStringLiteral("kstars_fitsviewer"));
 		break;
 	case AbstractFileFilter::FileType::JSON:
-		icon = QIcon::fromTheme("application-json");
+		icon = QIcon::fromTheme(QStringLiteral("application-json"));
 		break;
 	case AbstractFileFilter::FileType::MATIO:
-		icon = QIcon::fromTheme("matlab");
+		icon = QIcon::fromTheme(QStringLiteral("matlab"));
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
-		icon = QIcon::fromTheme("view-statistics");
+		icon = QIcon::fromTheme(QStringLiteral("view-statistics"));
 		break;
 	case AbstractFileFilter::FileType::ROOT:
-		icon = QIcon::fromTheme("application-x-root");
+		icon = QIcon::fromTheme(QStringLiteral("application-x-root"));
 		break;
 	case AbstractFileFilter::FileType::Spice:
 		break;
@@ -430,7 +430,7 @@ QMenu* LiveDataSource::createContextMenu() {
 		firstAction = menu->actions().at(1);
 
 	if (!m_plotDataAction) {
-		m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+		m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
 		connect(m_plotDataAction, &QAction::triggered, this, &LiveDataSource::plotData);
 	}
 
@@ -755,35 +755,35 @@ void LiveDataSource::plotData() {
   Saves as XML.
  */
 void LiveDataSource::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("liveDataSource");
+	writer->writeStartElement(QStringLiteral("liveDataSource"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 
 	switch (m_sourceType) {
 	case SourceType::FileOrPipe:
-		writer->writeAttribute("fileType", QString::number(static_cast<int>(m_fileType)));
-		writer->writeAttribute("fileLinked", QString::number(m_fileLinked));
-		writer->writeAttribute("relativePath", QString::number(m_relativePath));
+		writer->writeAttribute(QStringLiteral("fileType"), QString::number(static_cast<int>(m_fileType)));
+		writer->writeAttribute(QStringLiteral("fileLinked"), QString::number(m_fileLinked));
+		writer->writeAttribute(QStringLiteral("relativePath"), QString::number(m_relativePath));
 		if (m_relativePath) {
 			// convert from the absolute to the relative path and save it
 			const Project* p = const_cast<LiveDataSource*>(this)->project();
 			QFileInfo fi(p->fileName());
-			writer->writeAttribute("fileName", fi.dir().relativeFilePath(m_fileName));
+			writer->writeAttribute(QStringLiteral("fileName"), fi.dir().relativeFilePath(m_fileName));
 		} else
-			writer->writeAttribute("fileName", m_fileName);
+			writer->writeAttribute(QStringLiteral("fileName"), m_fileName);
 
 		break;
 	case SourceType::SerialPort:
-		writer->writeAttribute("baudRate", QString::number(m_baudRate));
-		writer->writeAttribute("serialPortName", m_serialPortName);
+		writer->writeAttribute(QStringLiteral("baudRate"), QString::number(m_baudRate));
+		writer->writeAttribute(QStringLiteral("serialPortName"), m_serialPortName);
 		break;
 	case SourceType::NetworkTCPSocket:
 	case SourceType::NetworkUDPSocket:
-		writer->writeAttribute("host", m_host);
-		writer->writeAttribute("port", QString::number(m_port));
+		writer->writeAttribute(QStringLiteral("host"), m_host);
+		writer->writeAttribute(QStringLiteral("port"), QString::number(m_port));
 		break;
 	case SourceType::LocalSocket:
 		break;
@@ -791,16 +791,16 @@ void LiveDataSource::save(QXmlStreamWriter* writer) const {
 		break;
 	}
 
-	writer->writeAttribute("updateType", QString::number(static_cast<int>(m_updateType)));
-	writer->writeAttribute("readingType", QString::number(static_cast<int>(m_readingType)));
-	writer->writeAttribute("sourceType", QString::number(static_cast<int>(m_sourceType)));
-	writer->writeAttribute("keepNValues", QString::number(m_keepNValues));
+	writer->writeAttribute(QStringLiteral("updateType"), QString::number(static_cast<int>(m_updateType)));
+	writer->writeAttribute(QStringLiteral("readingType"), QString::number(static_cast<int>(m_readingType)));
+	writer->writeAttribute(QStringLiteral("sourceType"), QString::number(static_cast<int>(m_sourceType)));
+	writer->writeAttribute(QStringLiteral("keepNValues"), QString::number(m_keepNValues));
 
 	if (m_updateType == UpdateType::TimeInterval)
-		writer->writeAttribute("updateInterval", QString::number(m_updateInterval));
+		writer->writeAttribute(QStringLiteral("updateInterval"), QString::number(m_updateInterval));
 
 	if (m_readingType != ReadingType::TillEnd)
-		writer->writeAttribute("sampleSize", QString::number(m_sampleSize));
+		writer->writeAttribute(QStringLiteral("sampleSize"), QString::number(m_sampleSize));
 	writer->writeEndElement(); // general
 
 	// filter
@@ -833,102 +833,103 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 		if (reader->isEndElement()
-			&& (reader->name() == "liveDataSource" || reader->name() == "LiveDataSource")) // TODO: remove "LiveDataSources" in couple of releases
+			&& (reader->name() == QLatin1String("liveDataSource")
+				|| reader->name() == QLatin1String("LiveDataSource"))) // TODO: remove "LiveDataSources" in couple of releases
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("fileName").toString();
+			str = attribs.value(QStringLiteral("fileName")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fileName").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileName")).toString());
 			else
 				m_fileName = str;
 
-			str = attribs.value("fileType").toString();
+			str = attribs.value(QStringLiteral("fileType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fileType").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileType")).toString());
 			else
 				m_fileType = (AbstractFileFilter::FileType)str.toInt();
 
-			str = attribs.value("fileLinked").toString();
+			str = attribs.value(QStringLiteral("fileLinked")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fileLinked").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("fileLinked")).toString());
 			else
 				m_fileLinked = str.toInt();
 
-			str = attribs.value("relativePath").toString();
+			str = attribs.value(QStringLiteral("relativePath")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("relativePath").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("relativePath")).toString());
 			else
 				m_relativePath = str.toInt();
 
-			str = attribs.value("updateType").toString();
+			str = attribs.value(QStringLiteral("updateType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("updateType").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateType")).toString());
 			else
 				m_updateType = static_cast<UpdateType>(str.toInt());
 
-			str = attribs.value("sourceType").toString();
+			str = attribs.value(QStringLiteral("sourceType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("sourceType").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("sourceType")).toString());
 			else
 				m_sourceType = static_cast<SourceType>(str.toInt());
 
-			str = attribs.value("readingType").toString();
+			str = attribs.value(QStringLiteral("readingType")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("readingType").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("readingType")).toString());
 			else
 				m_readingType = static_cast<ReadingType>(str.toInt());
 
 			if (m_updateType == UpdateType::TimeInterval) {
-				str = attribs.value("updateInterval").toString();
+				str = attribs.value(QStringLiteral("updateInterval")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("updateInterval").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("updateInterval")).toString());
 				else
 					m_updateInterval = str.toInt();
 			}
 
 			if (m_readingType != ReadingType::TillEnd) {
-				str = attribs.value("sampleSize").toString();
+				str = attribs.value(QStringLiteral("sampleSize")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("sampleSize").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("sampleSize")).toString());
 				else
 					m_sampleSize = str.toInt();
 			}
 
 			switch (m_sourceType) {
 			case SourceType::SerialPort:
-				str = attribs.value("baudRate").toString();
+				str = attribs.value(QStringLiteral("baudRate")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("baudRate").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("baudRate")).toString());
 				else
 					m_baudRate = str.toInt();
 
-				str = attribs.value("serialPortName").toString();
+				str = attribs.value(QStringLiteral("serialPortName")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("serialPortName").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("serialPortName")).toString());
 				else
 					m_serialPortName = str;
 
 				break;
 			case SourceType::NetworkTCPSocket:
 			case SourceType::NetworkUDPSocket:
-				str = attribs.value("host").toString();
+				str = attribs.value(QStringLiteral("host")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("host").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("host")).toString());
 				else
 					m_host = str;
 
-				str = attribs.value("port").toString();
+				str = attribs.value(QStringLiteral("port")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("port").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("port")).toString());
 				else
 					m_port = str.toInt();
 				break;
@@ -940,11 +941,11 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				break;
 			}
 
-		} else if (reader->name() == "asciiFilter") {
+		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			setFilter(new AsciiFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "rootFilter") {
+		} else if (reader->name() == QLatin1String("rootFilter")) {
 			setFilter(new ROOTFilter);
 			if (!m_filter->load(reader))
 				return false;
@@ -952,7 +953,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 			setFilter(new SpiceFilter);
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;

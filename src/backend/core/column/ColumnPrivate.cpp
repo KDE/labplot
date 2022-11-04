@@ -113,12 +113,12 @@ void ColumnPrivate::initIOFilters() {
 	case AbstractColumn::ColumnMode::Month:
 		m_inputFilter = new String2MonthFilter();
 		m_outputFilter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter*>(m_outputFilter)->setFormat("MMMM");
+		static_cast<DateTime2StringFilter*>(m_outputFilter)->setFormat(QStringLiteral("MMMM"));
 		break;
 	case AbstractColumn::ColumnMode::Day:
 		m_inputFilter = new String2DayOfWeekFilter();
 		m_outputFilter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter*>(m_outputFilter)->setFormat("dddd");
+		static_cast<DateTime2StringFilter*>(m_outputFilter)->setFormat(QStringLiteral("dddd"));
 		break;
 	}
 
@@ -189,7 +189,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<int>();
 			}
 			break;
@@ -197,7 +197,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2BigIntFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<qint64>();
 			}
 			break;
@@ -205,7 +205,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = outputFilter();
 			filter_is_temporary = false;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<QString>();
 			}
 			break;
@@ -213,7 +213,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -221,7 +221,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2MonthFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -229,7 +229,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Double2DayOfWeekFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<double>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<double>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -246,7 +246,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Integer2BigIntFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<qint64>();
 			}
 			break;
@@ -254,7 +254,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Integer2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<double>();
 			}
 			break;
@@ -262,7 +262,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = outputFilter();
 			filter_is_temporary = false;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QString>();
 			}
 			break;
@@ -270,7 +270,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Integer2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -278,7 +278,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Integer2MonthFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -286,7 +286,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new Integer2DayOfWeekFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<int>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -303,7 +303,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new BigInt2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<int>();
 			}
 			break;
@@ -311,7 +311,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new BigInt2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<double>();
 			}
 			break;
@@ -319,7 +319,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = outputFilter();
 			filter_is_temporary = false;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<QString>();
 			}
 			break;
@@ -327,7 +327,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new BigInt2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -335,7 +335,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new BigInt2MonthFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -343,7 +343,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new BigInt2DayOfWeekFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<qint64>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<qint64>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -360,7 +360,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<double>();
 			}
 			break;
@@ -369,7 +369,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<int>();
 			}
 			break;
@@ -378,7 +378,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<qint64>();
 			}
 			break;
@@ -386,7 +386,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new String2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -394,7 +394,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new String2MonthFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -402,7 +402,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = new String2DayOfWeekFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)));
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
 			break;
@@ -423,7 +423,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			filter = outputFilter();
 			filter_is_temporary = false;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
 				m_data = new QStringList();
 			}
 			break;
@@ -436,7 +436,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new DateTime2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
 				m_data = new QVector<double>();
 			}
 			break;
@@ -449,7 +449,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new DateTime2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
 				m_data = new QVector<int>();
 			}
 			break;
@@ -462,7 +462,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new DateTime2BigIntFilter();
 			filter_is_temporary = true;
 			if (m_data) {
-				temp_col = new Column("temp_col", *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
+				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QDateTime>*>(old_data)), m_columnMode);
 				m_data = new QVector<qint64>();
 			}
 			break;
@@ -507,14 +507,14 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	case AbstractColumn::ColumnMode::Month:
 		new_in_filter = new String2MonthFilter();
 		new_out_filter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat("MMMM");
+		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat(QStringLiteral("MMMM"));
 		// DEBUG("	Month out_filter format: " << STDSTRING(static_cast<DateTime2StringFilter*>(new_out_filter)->format()));
 		connect(static_cast<DateTime2StringFilter*>(new_out_filter), &DateTime2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Day:
 		new_in_filter = new String2DayOfWeekFilter();
 		new_out_filter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat("dddd");
+		static_cast<DateTime2StringFilter*>(new_out_filter)->setFormat(QStringLiteral("dddd"));
 		connect(static_cast<DateTime2StringFilter*>(new_out_filter), &DateTime2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	} // switch(mode)
@@ -1350,37 +1350,37 @@ void ColumnPrivate::updateFormula() {
 		// care about special expressions
 		// A) replace statistical values
 		// list of available statistical methods (see AbstractColumn.h)
-		QVector<QPair<QString, double>> methodList = {{"size", static_cast<double>(column->statistics().size)},
-													  {"min", column->minimum()},
-													  {"max", column->maximum()},
-													  {"mean", column->statistics().arithmeticMean},
-													  {"median", column->statistics().median},
-													  {"stdev", column->statistics().standardDeviation},
-													  {"var", column->statistics().variance},
-													  {"gm", column->statistics().geometricMean},
-													  {"hm", column->statistics().harmonicMean},
-													  {"chm", column->statistics().contraharmonicMean},
-													  {"mode", column->statistics().mode},
-													  {"quartile1", column->statistics().firstQuartile},
-													  {"quartile3", column->statistics().thirdQuartile},
-													  {"iqr", column->statistics().iqr},
-													  {"percentile1", column->statistics().percentile_1},
-													  {"percentile5", column->statistics().percentile_5},
-													  {"percentile10", column->statistics().percentile_10},
-													  {"percentile90", column->statistics().percentile_90},
-													  {"percentile95", column->statistics().percentile_95},
-													  {"percentile99", column->statistics().percentile_99},
-													  {"trimean", column->statistics().trimean},
-													  {"meandev", column->statistics().meanDeviation},
-													  {"meandevmedian", column->statistics().meanDeviationAroundMedian},
-													  {"mediandev", column->statistics().medianDeviation},
-													  {"skew", column->statistics().skewness},
-													  {"kurt", column->statistics().kurtosis},
-													  {"entropy", column->statistics().entropy}};
+		QVector<QPair<QString, double>> methodList = {{QStringLiteral("size"), static_cast<double>(column->statistics().size)},
+													  {QStringLiteral("min"), column->minimum()},
+													  {QStringLiteral("max"), column->maximum()},
+													  {QStringLiteral("mean"), column->statistics().arithmeticMean},
+													  {QStringLiteral("median"), column->statistics().median},
+													  {QStringLiteral("stdev"), column->statistics().standardDeviation},
+													  {QStringLiteral("var"), column->statistics().variance},
+													  {QStringLiteral("gm"), column->statistics().geometricMean},
+													  {QStringLiteral("hm"), column->statistics().harmonicMean},
+													  {QStringLiteral("chm"), column->statistics().contraharmonicMean},
+													  {QStringLiteral("mode"), column->statistics().mode},
+													  {QStringLiteral("quartile1"), column->statistics().firstQuartile},
+													  {QStringLiteral("quartile3"), column->statistics().thirdQuartile},
+													  {QStringLiteral("iqr"), column->statistics().iqr},
+													  {QStringLiteral("percentile1"), column->statistics().percentile_1},
+													  {QStringLiteral("percentile5"), column->statistics().percentile_5},
+													  {QStringLiteral("percentile10"), column->statistics().percentile_10},
+													  {QStringLiteral("percentile90"), column->statistics().percentile_90},
+													  {QStringLiteral("percentile95"), column->statistics().percentile_95},
+													  {QStringLiteral("percentile99"), column->statistics().percentile_99},
+													  {QStringLiteral("trimean"), column->statistics().trimean},
+													  {QStringLiteral("meandev"), column->statistics().meanDeviation},
+													  {QStringLiteral("meandevmedian"), column->statistics().meanDeviationAroundMedian},
+													  {QStringLiteral("mediandev"), column->statistics().medianDeviation},
+													  {QStringLiteral("skew"), column->statistics().skewness},
+													  {QStringLiteral("kurt"), column->statistics().kurtosis},
+													  {QStringLiteral("entropy"), column->statistics().entropy}};
 
 		SET_NUMBER_LOCALE
 		for (auto m : methodList)
-			formula.replace(m.first + QLatin1String("(%1)").arg(varName), numberLocale.toString(m.second));
+			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), numberLocale.toString(m.second));
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
@@ -1463,13 +1463,13 @@ void ColumnPrivate::updateFormula() {
 		}
 
 		// C) simple replacements
-		QVector<QPair<QString, QString>> replaceList = {{"mr", QLatin1String("fabs(cell(i, %1) - cell(i-1, %1))")},
-														{"ma", QLatin1String("(cell(i-1, %1) + cell(i, %1))/2.")}};
+		QVector<QPair<QString, QString>> replaceList = {{QStringLiteral("mr"), QStringLiteral("fabs(cell(i, %1) - cell(i-1, %1))")},
+														{QStringLiteral("ma"), QStringLiteral("(cell(i-1, %1) + cell(i, %1))/2.")}};
 		for (auto m : replaceList)
 			formula.replace(m.first + QLatin1String("(%1)").arg(varName), m.second.arg(varName));
 
 		// D) advanced replacements
-		QVector<QPair<QString, QString>> advancedReplaceList = {{QLatin1String("smr\\((.*),.*%1\\)"), QLatin1String("smmax(%1, %2) - smmin(%1, %2)")}};
+		QVector<QPair<QString, QString>> advancedReplaceList = {{QStringLiteral("smr\\((.*),.*%1\\)"), QStringLiteral("smmax(%1, %2) - smmin(%1, %2)")}};
 		for (auto m : advancedReplaceList) {
 			QRegExp rx(m.first.arg(varName));
 			rx.setMinimal(true); // only match one method call at a time
@@ -1554,7 +1554,7 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 }
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	const auto& path = aspect->path();
 	int index = -1;
 	for (int i = 0; i < formulaData().count(); i++) {
@@ -2378,7 +2378,7 @@ void ColumnPrivate::replaceFormulas(const IntervalAttribute<QString>& formulas) 
 }
 
 void ColumnPrivate::calculateStatistics() {
-	PERFTRACE("calculate column statistics");
+	PERFTRACE(QStringLiteral("calculate column statistics"));
 	statistics = AbstractColumn::ColumnStatistics();
 
 	if (m_owner->columnMode() == AbstractColumn::ColumnMode::Text) {

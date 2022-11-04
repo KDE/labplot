@@ -149,35 +149,18 @@ QStringList AsciiFilter::predefinedFilters() {
   returns the list of all predefined separator characters.
 */
 QStringList AsciiFilter::separatorCharacters() {
-	return (QStringList() << "auto"
-						  << "TAB"
-						  << "SPACE"
-						  << ","
-						  << ";"
-						  << ":"
-						  << ",TAB"
-						  << ";TAB"
-						  << ":TAB"
-						  << ",SPACE"
-						  << ";SPACE"
-						  << ":SPACE"
-						  << "2xSPACE"
-						  << "3xSPACE"
-						  << "4xSPACE"
-						  << "2xTAB");
+	return (QStringList() << QStringLiteral("auto") << QStringLiteral("TAB") << QStringLiteral("SPACE") << QStringLiteral(",") << QStringLiteral(";")
+						  << QStringLiteral(":") << QStringLiteral(",TAB") << QStringLiteral(";TAB") << QStringLiteral(":TAB") << QStringLiteral(",SPACE")
+						  << QStringLiteral(";SPACE") << QStringLiteral(":SPACE") << QStringLiteral("2xSPACE") << QStringLiteral("3xSPACE")
+						  << QStringLiteral("4xSPACE") << QStringLiteral("2xTAB"));
 }
 
 /*!
 returns the list of all predefined comment characters.
 */
 QStringList AsciiFilter::commentCharacters() {
-	return (QStringList() << "#"
-						  << "!"
-						  << "//"
-						  << "+"
-						  << "c"
-						  << ":"
-						  << ";");
+	return (QStringList() << QStringLiteral("#") << QStringLiteral("!") << QStringLiteral("//") << QStringLiteral("+") << QStringLiteral("c")
+						  << QStringLiteral(":") << QStringLiteral(";"));
 }
 
 /*!

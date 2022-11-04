@@ -92,7 +92,7 @@ public:
 	explicit Private(Project* owner)
 		: modificationTime(QDateTime::currentDateTime())
 		, q(owner) {
-		setVersion(LVERSION);
+		setVersion(QStringLiteral(LVERSION));
 	}
 	QString name() const {
 		return q->name();
@@ -100,7 +100,7 @@ public:
 
 	bool setVersion(const QString& v) const {
 		versionString = v;
-		auto l = v.split(".");
+		auto l = v.split(QLatin1Char('.'));
 		const int count = l.count();
 		int major = 0;
 		int minor = 0;
@@ -158,7 +158,7 @@ public:
 };
 
 int Project::Private::m_versionNumber = 0;
-QString Project::Private::versionString = "";
+QString Project::Private::versionString = QString();
 int Project::Private::mXmlVersion = buildXmlVersion;
 
 Project::Project()
@@ -514,7 +514,7 @@ bool Project::isLabPlotProject(const QString& fileName) {
 }
 
 QString Project::supportedExtensions() {
-	static const QString extensions = "*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ";
+	static const QString extensions = QStringLiteral("*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ");
 	return extensions;
 }
 
@@ -539,19 +539,19 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	// set the version and the modification time to the current values
-	d->setVersion(LVERSION);
+	d->setVersion(QStringLiteral(LVERSION));
 	d->modificationTime = QDateTime::currentDateTime();
 
 	writer->setAutoFormatting(true);
 	writer->writeStartDocument();
-	writer->writeDTD("<!DOCTYPE LabPlotXML>");
+	writer->writeDTD(QStringLiteral("<!DOCTYPE LabPlotXML>"));
 
-	writer->writeStartElement("project");
-	writer->writeAttribute("version", version());
-	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
-	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
-	writer->writeAttribute("author", author());
-	writer->writeAttribute("saveCalculations", QString::number(d->saveCalculations));
+	writer->writeStartElement(QStringLiteral("project"));
+	writer->writeAttribute(QStringLiteral("version"), version());
+	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
+	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
+	writer->writeAttribute(QStringLiteral("author"), author());
+	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -563,7 +563,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 		image = QString::fromLatin1(bArray.toBase64().data());
 	}
 
-	writer->writeAttribute("thumbnail", image);
+	writer->writeAttribute(QStringLiteral("thumbnail"), image);
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 	save(writer);
@@ -576,7 +576,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	// save all children
 	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children) {
-		writer->writeStartElement("child_aspect");
+		writer->writeStartElement(QStringLiteral("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement();
 	}
@@ -710,14 +710,14 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->skipToNextTag())
 			return false;
 
-		if (reader->name() == "project") {
-			QString version = reader->attributes().value("version").toString();
+		if (reader->name() == QLatin1String("project")) {
+			QString version = reader->attributes().value(QStringLiteral("version")).toString();
 			if (version.isEmpty())
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
 			else
 				d->setVersion(version);
 
-			QString c = reader->attributes().value("xmlVersion").toString();
+			QString c = reader->attributes().value(QStringLiteral("xmlVersion")).toString();
 			if (c.isEmpty())
 				d->mXmlVersion = 0;
 			else
@@ -735,13 +735,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					break;
 
 				if (reader->isStartElement()) {
-					if (reader->name() == "comment") {
+					if (reader->name() == QLatin1String("comment")) {
 						if (!readCommentElement(reader))
 							return false;
-					} else if (reader->name() == "child_aspect") {
+					} else if (reader->name() == QLatin1String("child_aspect")) {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (!preview && reader->name() == "state") {
+					} else if (!preview && reader->name() == QLatin1String("state")) {
 						// load the state of the views (visible, maximized/minimized/geometry)
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
@@ -1054,16 +1054,16 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	const auto& attribs = reader->attributes();
-	auto str = attribs.value("modificationTime").toString();
-	auto modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+	auto str = attribs.value(QStringLiteral("modificationTime")).toString();
+	auto modificationTime = QDateTime::fromString(str, QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz"));
 	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else
 		d->modificationTime = modificationTime;
 
-	d->author = attribs.value("author").toString();
-	d->saveCalculations = attribs.value("saveCalculations").toInt();
+	d->author = attribs.value(QStringLiteral("author")).toString();
+	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
 
 	return true;
 }

@@ -308,7 +308,7 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 
 //! Save as XML
 void Datapicker::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("datapicker");
+	writer->writeStartElement(QStringLiteral("datapicker"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -326,16 +326,16 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "datapicker")
+		if (reader->isEndElement() && reader->name() == QLatin1String("datapicker"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "datapickerImage") {
+		} else if (reader->name() == QLatin1String("datapickerImage")) {
 			auto* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
@@ -345,7 +345,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 				addChild(plot);
 				m_image = plot;
 			}
-		} else if (reader->name() == "datapickerCurve") {
+		} else if (reader->name() == QLatin1String("datapickerCurve")) {
 			auto* curve = new DatapickerCurve(QString());
 			if (!curve->load(reader, preview)) {
 				delete curve;

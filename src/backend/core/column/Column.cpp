@@ -112,10 +112,10 @@ Column::~Column() {
 QMenu* Column::createContextMenu() {
 	// initialize the actions if not done yet
 	if (!m_copyDataAction) {
-		m_copyDataAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy Data"), this);
+		m_copyDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Data"), this);
 		connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
 
-		m_pasteDataAction = new QAction(QIcon::fromTheme("edit-paste"), i18n("Paste Data"), this);
+		m_pasteDataAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Paste Data"), this);
 		connect(m_pasteDataAction, &QAction::triggered, this, &Column::pasteData);
 
 		m_usedInActionGroup = new QActionGroup(this);
@@ -145,7 +145,7 @@ QMenu* Column::createContextMenu() {
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
-	usedInMenu->setIcon(QIcon::fromTheme("go-next-view"));
+	usedInMenu->setIcon(QIcon::fromTheme(QStringLiteral("go-next-view")));
 
 	// remove previously added actions
 	for (auto* action : m_usedInActionGroup->actions())
@@ -265,7 +265,7 @@ QMenu* Column::createContextMenu() {
 	// pasting of data is only possible for spreadsheet columns
 	if (parentAspect()->type() == AspectType::Spreadsheet) {
 		const auto* mimeData = QApplication::clipboard()->mimeData();
-		if (mimeData->hasFormat("text/plain")) {
+		if (mimeData->hasFormat(QStringLiteral("text/plain"))) {
 			menu->insertAction(firstAction, m_pasteDataAction);
 			menu->insertSeparator(firstAction);
 		}
@@ -299,19 +299,19 @@ void Column::copyData() {
 		for (int r = 0; r < rows; r++) {
 			output += numberLocale.toString(valueAt(r), format, 16); // copy with max. precision
 			if (r < rows - 1)
-				output += '\n';
+				output += QLatin1Char('\n');
 		}
 	} else if (columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) {
 		for (int r = 0; r < rowCount(); r++) {
 			output += numberLocale.toString(valueAt(r));
 			if (r < rows - 1)
-				output += '\n';
+				output += QLatin1Char('\n');
 		}
 	} else {
 		for (int r = 0; r < rowCount(); r++) {
 			output += asStringColumn()->textAt(r);
 			if (r < rows - 1)
-				output += '\n';
+				output += QLatin1Char('\n');
 		}
 	}
 
@@ -1029,19 +1029,19 @@ QIcon Column::icon() const {
  * \brief Save the column as XML
  */
 void Column::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("column");
+	writer->writeStartElement(QStringLiteral("column"));
 	writeBasicAttributes(writer);
 
-	writer->writeAttribute("rows", QString::number(rowCount()));
-	writer->writeAttribute("designation", QString::number(static_cast<int>(plotDesignation())));
-	writer->writeAttribute("mode", QString::number(static_cast<int>(columnMode())));
-	writer->writeAttribute("width", QString::number(width()));
+	writer->writeAttribute(QStringLiteral("rows"), QString::number(rowCount()));
+	writer->writeAttribute(QStringLiteral("designation"), QString::number(static_cast<int>(plotDesignation())));
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(static_cast<int>(columnMode())));
+	writer->writeAttribute(QStringLiteral("width"), QString::number(width()));
 
 	// save the formula used to generate column values, if available
 	if (!formula().isEmpty()) {
-		writer->writeStartElement("formula");
-		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
-		writer->writeTextElement("text", formula());
+		writer->writeStartElement(QStringLiteral("formula"));
+		writer->writeAttribute(QStringLiteral("autoUpdate"), QString::number(d->formulaAutoUpdate()));
+		writer->writeTextElement(QStringLiteral("text"), formula());
 
 		QStringList formulaVariableNames;
 		QStringList formulaVariableColumnPaths;
@@ -1050,14 +1050,14 @@ void Column::save(QXmlStreamWriter* writer) const {
 			formulaVariableColumnPaths << d.columnName();
 		}
 
-		writer->writeStartElement("variableNames");
+		writer->writeStartElement(QStringLiteral("variableNames"));
 		for (const auto& name : formulaVariableNames)
-			writer->writeTextElement("name", name);
+			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 
-		writer->writeStartElement("columnPathes");
+		writer->writeStartElement(QStringLiteral("columnPathes"));
 		for (const auto& path : formulaVariableColumnPaths)
-			writer->writeTextElement("path", path);
+			writer->writeTextElement(QStringLiteral("path"), path);
 		writer->writeEndElement();
 
 		writer->writeEndElement();
@@ -1065,11 +1065,11 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 	writeCommentElement(writer);
 
-	writer->writeStartElement("input_filter");
+	writer->writeStartElement(QStringLiteral("input_filter"));
 	d->inputFilter()->save(writer);
 	writer->writeEndElement();
 
-	writer->writeStartElement("output_filter");
+	writer->writeStartElement(QStringLiteral("output_filter"));
 	d->outputFilter()->save(writer);
 	writer->writeEndElement();
 
@@ -1078,24 +1078,24 @@ void Column::save(QXmlStreamWriter* writer) const {
 	// TODO: formula in cells is not implemented yet
 	//  	QVector< Interval<int> > formulas = formulaIntervals();
 	//  	foreach(const Interval<int>& interval, formulas) {
-	//  		writer->writeStartElement("formula");
-	//  		writer->writeAttribute("start_row", QString::number(interval.start()));
-	//  		writer->writeAttribute("end_row", QString::number(interval.end()));
+	//  		writer->writeStartElement(QStringLiteral("formula"));
+	//  		writer->writeAttribute(QStringLiteral("start_row"), QString::number(interval.start()));
+	//  		writer->writeAttribute(QStringLiteral("end_row"), QString::number(interval.end()));
 	//  		writer->writeCharacters(formula(interval.start()));
 	//  		writer->writeEndElement();
 	//  	}
 
 	// value labels
 	if (hasValueLabels()) {
-		writer->writeStartElement("valueLabels");
+		writer->writeStartElement(QStringLiteral("valueLabels"));
 		switch (columnMode()) {
 		case AbstractColumn::ColumnMode::Double: {
 			const auto& labels = const_cast<Column*>(this)->valueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
-				writer->writeStartElement("valueLabel");
-				writer->writeAttribute("value", QString::number(it.key()));
-				writer->writeAttribute("label", it.value());
+				writer->writeStartElement(QStringLiteral("valueLabel"));
+				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+				writer->writeAttribute(QStringLiteral("label"), it.value());
 				writer->writeEndElement();
 				++it;
 			}
@@ -1105,9 +1105,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 			const auto& labels = const_cast<Column*>(this)->intValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
-				writer->writeStartElement("valueLabel");
-				writer->writeAttribute("value", QString::number(it.key()));
-				writer->writeAttribute("label", it.value());
+				writer->writeStartElement(QStringLiteral("valueLabel"));
+				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+				writer->writeAttribute(QStringLiteral("label"), it.value());
 				writer->writeEndElement();
 				++it;
 			}
@@ -1117,9 +1117,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 			const auto& labels = const_cast<Column*>(this)->bigIntValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
-				writer->writeStartElement("valueLabel");
-				writer->writeAttribute("value", QString::number(it.key()));
-				writer->writeAttribute("label", it.value());
+				writer->writeStartElement(QStringLiteral("valueLabel"));
+				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key()));
+				writer->writeAttribute(QStringLiteral("label"), it.value());
 				writer->writeEndElement();
 				++it;
 			}
@@ -1129,9 +1129,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 			const auto& labels = const_cast<Column*>(this)->textValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
-				writer->writeStartElement("valueLabel");
-				writer->writeAttribute("value", it.key());
-				writer->writeAttribute("label", it.value());
+				writer->writeStartElement(QStringLiteral("valueLabel"));
+				writer->writeAttribute(QStringLiteral("value"), it.key());
+				writer->writeAttribute(QStringLiteral("label"), it.value());
 				writer->writeEndElement();
 				++it;
 			}
@@ -1143,9 +1143,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 			const auto& labels = const_cast<Column*>(this)->dateTimeValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
-				writer->writeStartElement("valueLabel");
-				writer->writeAttribute("value", QString::number(it.key().toMSecsSinceEpoch()));
-				writer->writeAttribute("label", it.value());
+				writer->writeStartElement(QStringLiteral("valueLabel"));
+				writer->writeAttribute(QStringLiteral("value"), QString::number(it.key().toMSecsSinceEpoch()));
+				writer->writeAttribute(QStringLiteral("label"), it.value());
 				writer->writeEndElement();
 				++it;
 			}
@@ -1158,14 +1158,14 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 	// conditional formatting
 	if (hasHeatmapFormat()) {
-		writer->writeStartElement("heatmapFormat");
+		writer->writeStartElement(QStringLiteral("heatmapFormat"));
 		const auto& format = heatmapFormat();
-		writer->writeAttribute("min", QString::number(format.min));
-		writer->writeAttribute("max", QString::number(format.max));
-		writer->writeAttribute("name", format.name);
-		writer->writeAttribute("type", QString::number(static_cast<int>(format.type)));
+		writer->writeAttribute(QStringLiteral("min"), QString::number(format.min));
+		writer->writeAttribute(QStringLiteral("max"), QString::number(format.max));
+		writer->writeAttribute(QStringLiteral("name"), format.name);
+		writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(format.type)));
 		for (const auto& color : format.colors) {
-			writer->writeStartElement("color");
+			writer->writeStartElement(QStringLiteral("color"));
 			WRITE_QCOLOR(color)
 			writer->writeEndElement(); // "color"
 		}
@@ -1178,25 +1178,25 @@ void Column::save(QXmlStreamWriter* writer) const {
 	case ColumnMode::Double: {
 		const char* data = reinterpret_cast<const char*>(static_cast<QVector<double>*>(d->data())->constData());
 		size_t size = d->rowCount() * sizeof(double);
-		writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
 		break;
 	}
 	case ColumnMode::Integer: {
 		const char* data = reinterpret_cast<const char*>(static_cast<QVector<int>*>(d->data())->constData());
 		size_t size = d->rowCount() * sizeof(int);
-		writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
 		break;
 	}
 	case ColumnMode::BigInt: {
 		const char* data = reinterpret_cast<const char*>(static_cast<QVector<qint64>*>(d->data())->constData());
 		size_t size = d->rowCount() * sizeof(qint64);
-		writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
+		writer->writeCharacters(QLatin1String(QByteArray::fromRawData(data, (int)size).toBase64()));
 		break;
 	}
 	case ColumnMode::Text:
 		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement("row");
-			writer->writeAttribute("index", QString::number(i));
+			writer->writeStartElement(QStringLiteral("row"));
+			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
 			writer->writeCharacters(textAt(i));
 			writer->writeEndElement();
 		}
@@ -1205,9 +1205,9 @@ void Column::save(QXmlStreamWriter* writer) const {
 	case ColumnMode::Month:
 	case ColumnMode::Day:
 		for (i = 0; i < rowCount(); ++i) {
-			writer->writeStartElement("row");
-			writer->writeAttribute("index", QString::number(i));
-			writer->writeCharacters(dateTimeAt(i).toString("yyyy-dd-MM hh:mm:ss:zzz"));
+			writer->writeStartElement(QStringLiteral("row"));
+			writer->writeAttribute(QStringLiteral("index"), QString::number(i));
+			writer->writeCharacters(dateTimeAt(i).toString(QLatin1String("yyyy-dd-MM hh:mm:ss:zzz")));
 			writer->writeEndElement();
 		}
 		break;
@@ -1255,27 +1255,27 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
 
-	QString str = attribs.value("rows").toString();
+	QString str = attribs.value(QStringLiteral("rows")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("rows").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("rows")).toString());
 	else
 		d->resizeTo(str.toInt());
 
-	str = attribs.value("designation").toString();
+	str = attribs.value(QStringLiteral("designation")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("designation").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("designation")).toString());
 	else
 		d->setPlotDesignation(AbstractColumn::PlotDesignation(str.toInt()));
 
-	str = attribs.value("mode").toString();
+	str = attribs.value(QStringLiteral("mode")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("mode").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("mode")).toString());
 	else
 		setColumnModeFast(AbstractColumn::ColumnMode(str.toInt()));
 
-	str = attribs.value("width").toString();
+	str = attribs.value(QStringLiteral("width")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("width").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 	else
 		d->setWidth(str.toInt());
 
@@ -1286,82 +1286,82 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement() && reader->name() == "column")
+		if (reader->isEndElement() && reader->name() == QLatin1String("column"))
 			break;
 
 		if (reader->isStartElement()) {
 			bool ret_val = true;
-			if (reader->name() == "comment")
+			if (reader->name() == QLatin1String("comment"))
 				ret_val = readCommentElement(reader);
-			else if (reader->name() == "input_filter")
+			else if (reader->name() == QLatin1String("input_filter"))
 				ret_val = XmlReadInputFilter(reader);
-			else if (reader->name() == "output_filter")
+			else if (reader->name() == QLatin1String("output_filter"))
 				ret_val = XmlReadOutputFilter(reader);
-			else if (reader->name() == "mask")
+			else if (reader->name() == QLatin1String("mask"))
 				ret_val = XmlReadMask(reader);
-			else if (reader->name() == "formula")
+			else if (reader->name() == QLatin1String("formula"))
 				ret_val = XmlReadFormula(reader);
-			else if (reader->name() == "heatmapFormat") {
+			else if (reader->name() == QLatin1String("heatmapFormat")) {
 				attribs = reader->attributes();
 
 				auto& format = heatmapFormat();
-				str = attribs.value("min").toString();
+				str = attribs.value(QStringLiteral("min")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("min").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("min")).toString());
 				else
 					format.min = str.toDouble();
 
-				str = attribs.value("max").toString();
+				str = attribs.value(QStringLiteral("max")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("max").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
 				else
 					format.max = str.toDouble();
 
-				str = attribs.value("name").toString();
+				str = attribs.value(QStringLiteral("name")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("name").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("name")).toString());
 				else
 					format.name = str;
 
-				str = attribs.value("type").toString();
+				str = attribs.value(QStringLiteral("type")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("max").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("max")).toString());
 				else
 					format.type = static_cast<Formatting>(str.toInt());
 
 				ret_val = true;
-			} else if (reader->name() == "color") {
+			} else if (reader->name() == QLatin1String("color")) {
 				attribs = reader->attributes();
 				QColor color;
 				READ_QCOLOR(color);
 				auto& format = heatmapFormat();
 				format.colors << color;
 				ret_val = true;
-			} else if (reader->name() == "valueLabels") {
+			} else if (reader->name() == QLatin1String("valueLabels")) {
 				continue;
-			} else if (reader->name() == "valueLabel") {
+			} else if (reader->name() == QLatin1String("valueLabel")) {
 				attribs = reader->attributes();
-				const QString& label = attribs.value("label").toString();
+				const QString& label = attribs.value(QLatin1String("label")).toString();
 				switch (columnMode()) {
 				case AbstractColumn::ColumnMode::Double:
-					addValueLabel(attribs.value("value").toDouble(), label);
+					addValueLabel(attribs.value(QLatin1String("value")).toDouble(), label);
 					break;
 				case AbstractColumn::ColumnMode::Integer:
-					addValueLabel(attribs.value("value").toInt(), label);
+					addValueLabel(attribs.value(QLatin1String("value")).toInt(), label);
 					break;
 				case AbstractColumn::ColumnMode::BigInt:
-					addValueLabel(attribs.value("value").toLongLong(), label);
+					addValueLabel(attribs.value(QLatin1String("value")).toLongLong(), label);
 					break;
 				case AbstractColumn::ColumnMode::Text:
-					addValueLabel(attribs.value("value").toString(), label);
+					addValueLabel(attribs.value(QLatin1String("value")).toString(), label);
 					break;
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
-					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value("value").toLongLong()), label);
+					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value(QLatin1String("value")).toLongLong()), label);
 					break;
 				}
-			} else if (reader->name() == "row") {
+			} else if (reader->name() == QLatin1String("row")) {
 				// Assumption: the next elements are all rows
 				switch (columnMode()) {
 				case Column::ColumnMode::Double:
@@ -1372,7 +1372,8 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				case Column::ColumnMode::DateTime:
 				case Column::ColumnMode::Month:
 				case Column::ColumnMode::Day: {
-					dateTimeVector << QDateTime::fromString(reader->readElementText() + "Z", "yyyy-dd-MM hh:mm:ss:zzzt"); // timezone is important
+					dateTimeVector << QDateTime::fromString(reader->readElementText() + QStringLiteral("Z"),
+															QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // timezone is important
 					break;
 				}
 				case Column::ColumnMode::Text: {
@@ -1426,14 +1427,14 @@ void Column::finalizeLoad() {
  * \brief Read XML input filter element
  */
 bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "input_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("input_filter"));
 	if (!reader->skipToNextTag())
 		return false;
 	if (!d->inputFilter()->load(reader, false))
 		return false;
 	if (!reader->skipToNextTag())
 		return false;
-	Q_ASSERT(reader->isEndElement() == true && reader->name() == "input_filter");
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == QLatin1String("input_filter"));
 	return true;
 }
 
@@ -1441,14 +1442,14 @@ bool Column::XmlReadInputFilter(XmlStreamReader* reader) {
  * \brief Read XML output filter element
  */
 bool Column::XmlReadOutputFilter(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "output_filter");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("output_filter"));
 	if (!reader->skipToNextTag())
 		return false;
 	if (!d->outputFilter()->load(reader, false))
 		return false;
 	if (!reader->skipToNextTag())
 		return false;
-	Q_ASSERT(reader->isEndElement() == true && reader->name() == "output_filter");
+	Q_ASSERT(reader->isEndElement() == true && reader->name() == QLatin1String("output_filter"));
 	return true;
 }
 
@@ -1462,26 +1463,26 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 
 	// read the autoUpdate attribute if available (older project files created with <2.8 don't have it)
 	bool autoUpdate = false;
-	if (reader->attributes().hasAttribute("autoUpdate"))
-		autoUpdate = reader->attributes().value("autoUpdate").toInt();
+	if (reader->attributes().hasAttribute(QStringLiteral("autoUpdate")))
+		autoUpdate = reader->attributes().value(QStringLiteral("autoUpdate")).toInt();
 
 	while (reader->readNext()) {
 		if (reader->isEndElement())
 			break;
 
-		if (reader->name() == "text")
+		if (reader->name() == QLatin1String("text"))
 			formula = reader->readElementText();
-		else if (reader->name() == "variableNames") {
+		else if (reader->name() == QLatin1String("variableNames")) {
 			while (reader->readNext()) {
-				if (reader->name() == "variableNames" && reader->isEndElement())
+				if (reader->name() == QLatin1String("variableNames") && reader->isEndElement())
 					break;
 
 				if (reader->isStartElement())
 					variableNames << reader->readElementText();
 			}
-		} else if (reader->name() == "columnPathes") {
+		} else if (reader->name() == QLatin1String("columnPathes")) {
 			while (reader->readNext()) {
-				if (reader->name() == "columnPathes" && reader->isEndElement())
+				if (reader->name() == QLatin1String("columnPathes") && reader->isEndElement())
 					break;
 
 				if (reader->isStartElement())
@@ -1498,7 +1499,7 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
 // TODO: read cell formula, not implemented yet
 //  bool Column::XmlReadFormula(XmlStreamReader* reader)
 //  {
-//  	Q_ASSERT(reader->isStartElement() && reader->name() == "formula");
+//  	Q_ASSERT(reader->isStartElement() && reader->name() == QLatin1String("formula"));
 //
 //  	bool ok1, ok2;
 //  	int start, end;
@@ -1518,12 +1519,12 @@ bool Column::XmlReadFormula(XmlStreamReader* reader) {
  * \brief Read XML row element
  */
 bool Column::XmlReadRow(XmlStreamReader* reader) {
-	Q_ASSERT(reader->isStartElement() == true && reader->name() == "row");
+	Q_ASSERT(reader->isStartElement() == true && reader->name() == QLatin1String("row"));
 
 	//	QXmlStreamAttributes attribs = reader->attributes();
 
 	bool ok;
-	int index = reader->readAttributeInt("index", &ok);
+	int index = reader->readAttributeInt(QStringLiteral("index"), &ok);
 	if (!ok) {
 		reader->raiseError(i18n("invalid or missing row index"));
 		return false;
@@ -1567,7 +1568,8 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	case ColumnMode::Day:
 		// Same as in the Variable Parser. UTC must be used, otherwise
 		// some dates are not valid. For example (2017-03-26)
-		QDateTime date_time = QDateTime::fromString(str + "Z", "yyyy-dd-MM hh:mm:ss:zzzt"); // last t is important. It is the timezone
+		QDateTime date_time =
+			QDateTime::fromString(str + QStringLiteral("Z"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzzt")); // last t is important. It is the timezone
 		setDateTimeAt(index, date_time);
 		break;
 	}
@@ -1718,7 +1720,7 @@ double Column::minimum(int count) const {
  */
 double Column::minimum(int startIndex, int endIndex) const {
 #ifdef PERFTRACE_AUTOSCALE
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
 	double min = qInf();
 
@@ -1844,7 +1846,7 @@ double Column::minimum(int startIndex, int endIndex) const {
  */
 double Column::maximum(int count) const {
 #ifdef PERFTRACE_AUTOSCALE
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 #endif
 	if (count == 0 && d->available.max)
 		return d->statistics.maximum;

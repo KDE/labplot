@@ -90,17 +90,20 @@ QMenu* AbstractPart::createContextMenu() {
 	// import actions for spreadsheet and matrix
 	if ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && type != AspectType::LiveDataSource && type != AspectType::MQTTTopic) {
 		QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File..."), this, &AbstractPart::importFromFileRequested);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database..."), this, &AbstractPart::importFromSQLDatabaseRequested);
+		subMenu->addAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("From File..."), this, &AbstractPart::importFromFileRequested);
+		subMenu->addAction(QIcon::fromTheme(QLatin1String("document-import")),
+						   i18n("From SQL Database..."),
+						   this,
+						   &AbstractPart::importFromSQLDatabaseRequested);
 		menu->addMenu(subMenu);
 		menu->addSeparator();
 	}
 
 	// export/print actions
 	if (type != AspectType::CantorWorksheet)
-		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
-	menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, &AbstractPart::printRequested);
-	menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
+		menu->addAction(QIcon::fromTheme(QLatin1String("document-export-database")), i18n("Export"), this, &AbstractPart::exportRequested);
+	menu->addAction(QIcon::fromTheme(QLatin1String("document-print")), i18n("Print"), this, &AbstractPart::printRequested);
+	menu->addAction(QIcon::fromTheme(QLatin1String("document-print-preview")), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();
 
 	// window state related actions
