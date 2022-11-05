@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -143,120 +143,90 @@ const QString& CantorWorksheet::error() const {
 
 // SLots
 void CantorWorksheet::dataChanged(const QModelIndex& index) {
-	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
-	Column* col = child<Column>(name);
-	if (!col)
-		return;
-
-	QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257); // Cantor::DefaultVariableModel::DataRole == 257
-	if (dataValue.isNull())
-		dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
-
-	const QString& value = dataValue.toString();
-	VariableParser parser(m_backendName, value);
-	if (parser.isParsed()) {
-		switch (parser.dataType()) {
-		case AbstractColumn::ColumnMode::Integer:
-			col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-			col->replaceInteger(0, parser.integers());
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-			col->replaceBigInt(0, parser.bigInt());
-			break;
-		case AbstractColumn::ColumnMode::Double:
-			col->setColumnMode(AbstractColumn::ColumnMode::Double);
-			col->replaceValues(0, parser.doublePrecision());
-			break;
-		case AbstractColumn::ColumnMode::Month:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::DateTime:
-			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-			col->replaceDateTimes(0, parser.dateTime());
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			col->replaceTexts(0, parser.text());
-			break;
-		}
-	}
+	parseData(index.row());
 }
 
 void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
-	for (int i = first; i <= last; ++i) {
-		const QString& name = m_variableModel->data(m_variableModel->index(i, 0)).toString();
-		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
-		if (dataValue.isNull())
-			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
-
-		const QString& value = dataValue.toString();
-		VariableParser parser(m_backendName, value);
-
-		if (parser.isParsed()) {
-			Column* col = child<Column>(name);
-			if (col) {
-				switch (parser.dataType()) {
-				case AbstractColumn::ColumnMode::Integer:
-					col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-					col->replaceInteger(0, parser.integers());
-					break;
-				case AbstractColumn::ColumnMode::BigInt:
-					col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-					col->replaceBigInt(0, parser.bigInt());
-					break;
-				case AbstractColumn::ColumnMode::Double:
-					col->setColumnMode(AbstractColumn::ColumnMode::Double);
-					col->replaceValues(0, parser.doublePrecision());
-					break;
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime:
-					col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-					col->replaceDateTimes(0, parser.dateTime());
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					col->setColumnMode(AbstractColumn::ColumnMode::Text);
-					col->replaceTexts(0, parser.text());
-					break;
-				}
-			} else {
-				switch (parser.dataType()) {
-				case AbstractColumn::ColumnMode::Integer:
-					col = new Column(name, parser.integers());
-					break;
-				case AbstractColumn::ColumnMode::BigInt:
-					col = new Column(name, parser.bigInt());
-					break;
-				case AbstractColumn::ColumnMode::Double:
-					col = new Column(name, parser.doublePrecision());
-					break;
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-				case AbstractColumn::ColumnMode::DateTime:
-					col = new Column(name, parser.dateTime(), parser.dataType());
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					col = new Column(name, parser.text());
-					break;
-				}
-				col->setUndoAware(false);
-				col->setFixed(true);
-				addChild(col);
-
-				// TODO: Cantor currently ignores the order of variables in the worksheets
-				// and adds new variables at the last position in the model.
-				// Fix this in Cantor and switch to insertChildBefore here later.
-				// insertChildBefore(col, child<Column>(i));
-			}
-		} else {
-			// the already existing variable doesn't contain any numerical values -> remove it
-			Column* col = child<Column>(name);
-			if (col)
-				removeChild(col);
-		}
-	}
+	for (int i = first; i <= last; ++i)
+		parseData(i);
 
 	project()->setChanged(true);
+}
+
+void CantorWorksheet::parseData(int row) {
+	const QString& name = m_variableModel->data(m_variableModel->index(row, 0)).toString();
+	QVariant dataValue = m_variableModel->data(m_variableModel->index(row, 1), 257);
+	if (dataValue.isNull())
+		dataValue = m_variableModel->data(m_variableModel->index(row, 1));
+
+	const QString& value = dataValue.toString();
+	VariableParser parser(m_backendName, value);
+
+	if (parser.isParsed()) {
+		auto* col = child<Column>(name);
+		if (col) {
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+				col->replaceInteger(0, parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+				col->replaceBigInt(0, parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->replaceValues(0, parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+				col->replaceDateTimes(0, parser.dateTime());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col->setColumnMode(AbstractColumn::ColumnMode::Text);
+				col->replaceTexts(0, parser.text());
+				break;
+			}
+		} else {
+			// Column doesn't exist for this variable yet either because it was not defined yet or
+			// because its values was changed now to an array-like structure after the initial definition.
+			// -> create a new column for the current variable
+			switch (parser.dataType()) {
+			case AbstractColumn::ColumnMode::Integer:
+				col = new Column(name, parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col = new Column(name, parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col = new Column(name, parser.doublePrecision());
+				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col = new Column(name, parser.dateTime(), parser.dataType());
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				col = new Column(name, parser.text());
+				break;
+			}
+			col->setUndoAware(false);
+			col->setFixed(true);
+			addChild(col);
+
+			// TODO: Cantor currently ignores the order of variables in the worksheets
+			// and adds new variables at the last position in the model.
+			// Fix this in Cantor and switch to insertChildBefore here later.
+			// insertChildBefore(col, child<Column>(i));
+		}
+	} else {
+		// the already existing variable doesn't contain any numerical values -> remove it
+		Column* col = child<Column>(name);
+		if (col)
+			removeChild(col);
+	}
 }
 
 void CantorWorksheet::modified() {

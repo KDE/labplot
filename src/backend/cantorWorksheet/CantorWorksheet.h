@@ -4,7 +4,7 @@
 	Description          : Aspect providing a Cantor Worksheets for Multiple backends
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-	SPDX-FileCopyrightText: 2016 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -64,6 +64,8 @@ private:
 	bool m_pluginsLoaded{false};
 	QAbstractItemModel* m_variableModel{nullptr};
 	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
+
+	void parseData(int row);
 
 private Q_SLOTS:
 	void dataChanged(const QModelIndex&);
