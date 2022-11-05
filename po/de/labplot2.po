@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-04 00:42+0000\n"
-"PO-Revision-Date: 2022-07-24 14:55+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"POT-Creation-Date: 2022-11-05 00:42+0000\n"
+"PO-Revision-Date: 2022-11-03 13:04+0100\n"
+"Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.07.70\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -57,9 +57,9 @@ msgstr ""
 #: src/backend/datapicker/DatapickerCurve.cpp:478
 #: src/backend/datapicker/DatapickerImage.cpp:495
 #: src/backend/datapicker/DatapickerPoint.cpp:488
-#: src/backend/datasources/filters/AsciiFilter.cpp:1996
-#: src/backend/datasources/filters/BinaryFilter.cpp:567
-#: src/backend/datasources/filters/JsonFilter.cpp:779
+#: src/backend/datasources/filters/AsciiFilter.cpp:1979
+#: src/backend/datasources/filters/BinaryFilter.cpp:562
+#: src/backend/datasources/filters/JsonFilter.cpp:777
 #: src/backend/datasources/filters/ROOTFilter.cpp:118
 #: src/backend/datasources/LiveDataSource.cpp:829
 #: src/backend/datasources/MQTTClient.cpp:1199
@@ -68,7 +68,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1162
 #: src/backend/worksheet/Line.cpp:197
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2869
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2871
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1382
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4617
@@ -104,18 +104,18 @@ msgstr ""
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:460
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1384 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1385 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:636
 #: src/backend/datapicker/DatapickerImage.cpp:738
 #: src/backend/datapicker/DatapickerPoint.cpp:565
-#: src/backend/datasources/LiveDataSource.cpp:965
+#: src/backend/datasources/LiveDataSource.cpp:966
 #: src/backend/datasources/MQTTClient.cpp:1375
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1286
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3000
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3002
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1440
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
@@ -158,10 +158,9 @@ msgstr "'%1' Einfügen"
 #: src/backend/core/AbstractAspect.cpp:351
 #: src/backend/core/AbstractAspect.cpp:357
 #: src/backend/core/AbstractAspect.cpp:363
-#, fuzzy, kde-format
-#| msgid "Clear Spreadsheet"
+#, kde-format
 msgid "Create Data Spreadsheet"
-msgstr "Tabelleninhalt löschen"
+msgstr "Datentabellen anlegen"
 
 #: src/backend/core/AbstractAspect.cpp:390
 #, kde-format
@@ -260,7 +259,7 @@ msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
 "Ungültige Erstellungszeit für „%1“. Es wird die aktuelle Zeit verwendet."
 
-#: src/backend/core/AbstractColumn.cpp:123
+#: src/backend/core/AbstractColumn.cpp:131
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:362
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:374
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:56
@@ -272,49 +271,49 @@ msgstr ""
 msgid "None"
 msgstr "Kein"
 
-#: src/backend/core/AbstractColumn.cpp:135
+#: src/backend/core/AbstractColumn.cpp:143
 #, kde-format
 msgid "X-error"
 msgstr "X-Fehler"
 
-#: src/backend/core/AbstractColumn.cpp:138
+#: src/backend/core/AbstractColumn.cpp:146
 #, kde-format
 msgid "X-error +"
 msgstr "X-Fehler +"
 
-#: src/backend/core/AbstractColumn.cpp:141
+#: src/backend/core/AbstractColumn.cpp:149
 #, kde-format
 msgid "X-error -"
 msgstr "X-Fehler -"
 
-#: src/backend/core/AbstractColumn.cpp:144
+#: src/backend/core/AbstractColumn.cpp:152
 #, kde-format
 msgid "Y-error"
 msgstr "Y-Fehler"
 
-#: src/backend/core/AbstractColumn.cpp:147
+#: src/backend/core/AbstractColumn.cpp:155
 #, kde-format
 msgid "Y-error +"
 msgstr "Y-Fehler +"
 
-#: src/backend/core/AbstractColumn.cpp:150
+#: src/backend/core/AbstractColumn.cpp:158
 #, kde-format
 msgid "Y-error -"
 msgstr "Y-Fehler -"
 
-#: src/backend/core/AbstractColumn.cpp:169
-#: src/backend/datasources/filters/MatioFilter.cpp:393
-#: src/backend/datasources/filters/MatioFilter.cpp:439
+#: src/backend/core/AbstractColumn.cpp:177
+#: src/backend/datasources/filters/MatioFilter.cpp:394
+#: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
 msgid "Double"
 msgstr "Double"
 
-#: src/backend/core/AbstractColumn.cpp:171
+#: src/backend/core/AbstractColumn.cpp:179
 #, kde-format
 msgid "Integer"
 msgstr "Ganzzahlig"
 
-#: src/backend/core/AbstractColumn.cpp:173
+#: src/backend/core/AbstractColumn.cpp:181
 #, kde-format
 msgid "Big Integer"
 msgstr "Große Ganzzahl"
@@ -322,7 +321,7 @@ msgstr "Große Ganzzahl"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
-#: src/backend/core/AbstractColumn.cpp:175
+#: src/backend/core/AbstractColumn.cpp:183
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:377
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
@@ -335,27 +334,27 @@ msgstr "Große Ganzzahl"
 msgid "Text"
 msgstr "Text"
 
-#: src/backend/core/AbstractColumn.cpp:177
+#: src/backend/core/AbstractColumn.cpp:185
 #, kde-format
 msgid "Date & Time"
 msgstr "Datum & Zeit"
 
-#: src/backend/core/AbstractColumn.cpp:179
+#: src/backend/core/AbstractColumn.cpp:187
 #, kde-format
 msgid "Month Names"
 msgstr "Monatsnamen"
 
-#: src/backend/core/AbstractColumn.cpp:181
+#: src/backend/core/AbstractColumn.cpp:189
 #, kde-format
 msgid "Day Names"
 msgstr "Tagesnamen"
 
-#: src/backend/core/AbstractColumn.cpp:184
+#: src/backend/core/AbstractColumn.cpp:192
 #, kde-format
 msgid "UNDEFINED"
 msgstr "UNDEFINIERT"
 
-#: src/backend/core/AbstractColumn.cpp:269
+#: src/backend/core/AbstractColumn.cpp:277
 #: src/backend/spreadsheet/Spreadsheet.cpp:185
 #, kde-format
 msgid "%1: insert 1 row"
@@ -363,7 +362,7 @@ msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: 1 Zeile einfügen"
 msgstr[1] "%1: %2 Zeilen einfügen"
 
-#: src/backend/core/AbstractColumn.cpp:298
+#: src/backend/core/AbstractColumn.cpp:306
 #: src/backend/spreadsheet/Spreadsheet.cpp:174
 #, kde-format
 msgid "%1: remove 1 row"
@@ -371,7 +370,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: 1 Zeile entfernen"
 msgstr[1] "%1: %2 Zeilen entfernen"
 
-#: src/backend/core/AbstractColumn.cpp:828
+#: src/backend/core/AbstractColumn.cpp:836
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "Ungültige oder fehlende erste oder letzte Zeile"
@@ -421,13 +420,13 @@ msgstr "Daten importieren"
 msgid "From File..."
 msgstr "Aus Datei..."
 
-#: src/backend/core/AbstractPart.cpp:94 src/kdefrontend/MainWin.cpp:585
+#: src/backend/core/AbstractPart.cpp:95 src/kdefrontend/MainWin.cpp:585
 #, kde-format
 msgid "From SQL Database..."
 msgstr "Aus SQL-Datenbank..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbExport)
-#: src/backend/core/AbstractPart.cpp:101
+#: src/backend/core/AbstractPart.cpp:104
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:300
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:23
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:17
@@ -436,32 +435,32 @@ msgstr "Aus SQL-Datenbank..."
 msgid "Export"
 msgstr "Exportieren"
 
-#: src/backend/core/AbstractPart.cpp:102
+#: src/backend/core/AbstractPart.cpp:105
 #, kde-format
 msgid "Print"
 msgstr "Drucken"
 
-#: src/backend/core/AbstractPart.cpp:103
+#: src/backend/core/AbstractPart.cpp:106
 #, kde-format
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
-#: src/backend/core/AbstractPart.cpp:110
+#: src/backend/core/AbstractPart.cpp:113
 #, kde-format
 msgid "&Restore"
 msgstr "&Wiederherstellen"
 
-#: src/backend/core/AbstractPart.cpp:115
+#: src/backend/core/AbstractPart.cpp:118
 #, kde-format
 msgid "Mi&nimize"
 msgstr "&Minimieren"
 
-#: src/backend/core/AbstractPart.cpp:120
+#: src/backend/core/AbstractPart.cpp:123
 #, kde-format
 msgid "Ma&ximize"
 msgstr "Ma&ximieren"
 
-#: src/backend/core/AbstractPart.cpp:132
+#: src/backend/core/AbstractPart.cpp:135
 #, kde-format
 msgid "Show"
 msgstr "Anzeigen"
@@ -544,16 +543,14 @@ msgid "Formula:"
 msgstr "Formel:"
 
 #: src/backend/core/AspectTreeModel.cpp:254
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "auto update: true"
-msgstr "Automatisch aktualisieren"
+msgstr "Automatisch aktualisieren: An"
 
 #: src/backend/core/AspectTreeModel.cpp:256
-#, fuzzy, kde-format
-#| msgid "auto update"
+#, kde-format
 msgid "auto update: false"
-msgstr "Automatisch aktualisieren"
+msgstr "Automatisch aktualisieren: Aus"
 
 #: src/backend/core/AspectTreeModel.cpp:403
 #, kde-format
@@ -611,14 +608,14 @@ msgstr "%1: Spaltentyp ändern"
 msgid "%1: clear column"
 msgstr "%1: Spalte löschen"
 
-#: src/backend/core/column/Column.cpp:1528
+#: src/backend/core/column/Column.cpp:1529
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "Ungültiger oder fehlender Zeilenindex"
 
-#: src/backend/core/column/Column.cpp:1537
-#: src/backend/core/column/Column.cpp:1546
-#: src/backend/core/column/Column.cpp:1555
+#: src/backend/core/column/Column.cpp:1538
+#: src/backend/core/column/Column.cpp:1547
+#: src/backend/core/column/Column.cpp:1556
 #, kde-format
 msgid "invalid row value"
 msgstr "Ungültiger Zeilenwert"
@@ -1043,7 +1040,7 @@ msgstr "Die Metadatendatei des ausgewählten Datensatzes ist ungültig."
 msgid "There is no download URL present in the metadata file!"
 msgstr "Es gibt keine Dowload-URL in der Metadatendatei!"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:201
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:378
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:104
 #: src/commonfrontend/matrix/MatrixView.cpp:132
@@ -1056,91 +1053,91 @@ msgstr "Es gibt keine Dowload-URL in der Metadatendatei!"
 msgid "Image"
 msgstr "Bild"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:201
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
 msgstr "Hierarchical Data Format 5 (HDF5)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:201
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:126
 #, kde-format
 msgid "ASCII Data"
 msgstr "ASCII-Daten"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:201
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:127
 #, kde-format
 msgid "Binary Data"
 msgstr "Binärdaten"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:201
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #, kde-format
 msgid "Excel"
 msgstr "Excel"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:202
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:102
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
 msgstr "Network Common Data Format (NetCDF)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:202
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
 #, kde-format
 msgid "Flexible Image Transport System Data Format (FITS)"
 msgstr "Flexible Image Transport System Data Format (FITS)"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:202
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:205
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:107
 #, kde-format
 msgid "JSON Data"
 msgstr "JSON-Daten"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:203
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:111
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:131
 #, kde-format
 msgid "Spice"
 msgstr "Spice"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:203
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:113
 #, kde-format
 msgid "SAS, Stata or SPSS"
 msgstr "SAS, Stata oder SPSS"
 
-#: src/backend/datasources/filters/AbstractFileFilter.cpp:203
+#: src/backend/datasources/filters/AbstractFileFilter.cpp:206
 #, kde-format
 msgid "ROOT (CERN) Histograms"
 msgstr "ROOT (CERN) Histogramme"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:197
+#: src/backend/datasources/filters/AsciiFilter.cpp:180
 #, kde-format
 msgid "Number of columns: %1"
 msgstr "Anzahl der Spalten: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:199
+#: src/backend/datasources/filters/AsciiFilter.cpp:182
 #, kde-format
 msgid "Number of lines: %1"
 msgstr "Anzahl der Zeilen: %1"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:565
-#: src/backend/datasources/filters/AsciiFilter.cpp:761
-#: src/backend/datasources/filters/AsciiFilter.cpp:968
-#: src/backend/datasources/filters/AsciiFilter.cpp:1526
-#: src/backend/datasources/filters/AsciiFilter.cpp:2076
+#: src/backend/datasources/filters/AsciiFilter.cpp:548
+#: src/backend/datasources/filters/AsciiFilter.cpp:744
+#: src/backend/datasources/filters/AsciiFilter.cpp:951
+#: src/backend/datasources/filters/AsciiFilter.cpp:1509
+#: src/backend/datasources/filters/AsciiFilter.cpp:2059
 #, kde-format
 msgid "Timestamp"
 msgstr "Zeitstempel"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:569
-#: src/backend/datasources/filters/AsciiFilter.cpp:755
-#: src/backend/datasources/filters/AsciiFilter.cpp:966
-#: src/backend/datasources/filters/AsciiFilter.cpp:1521
-#: src/backend/datasources/filters/AsciiFilter.cpp:2070
-#: src/backend/datasources/filters/BinaryFilter.cpp:308
-#: src/backend/datasources/filters/BinaryFilter.cpp:452
+#: src/backend/datasources/filters/AsciiFilter.cpp:552
+#: src/backend/datasources/filters/AsciiFilter.cpp:738
+#: src/backend/datasources/filters/AsciiFilter.cpp:949
+#: src/backend/datasources/filters/AsciiFilter.cpp:1504
+#: src/backend/datasources/filters/AsciiFilter.cpp:2053
+#: src/backend/datasources/filters/BinaryFilter.cpp:303
+#: src/backend/datasources/filters/BinaryFilter.cpp:447
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #, kde-format
 msgid "Index"
@@ -1148,10 +1145,10 @@ msgstr "Index"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
-#: src/backend/datasources/filters/AsciiFilter.cpp:767
-#: src/backend/datasources/filters/AsciiFilter.cpp:973
-#: src/backend/datasources/filters/AsciiFilter.cpp:1545
-#: src/backend/datasources/filters/AsciiFilter.cpp:2089
+#: src/backend/datasources/filters/AsciiFilter.cpp:750
+#: src/backend/datasources/filters/AsciiFilter.cpp:956
+#: src/backend/datasources/filters/AsciiFilter.cpp:1528
+#: src/backend/datasources/filters/AsciiFilter.cpp:2072
 #: src/backend/datasources/filters/QJsonModel.cpp:133
 #: src/commonfrontend/matrix/MatrixView.cpp:614
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2312
@@ -1167,19 +1164,19 @@ msgstr "Index"
 msgid "Value"
 msgstr "Wert"
 
-#: src/backend/datasources/filters/AsciiFilter.cpp:975
-#: src/backend/datasources/filters/AsciiFilter.cpp:1547
-#: src/backend/datasources/filters/AsciiFilter.cpp:2091
+#: src/backend/datasources/filters/AsciiFilter.cpp:958
+#: src/backend/datasources/filters/AsciiFilter.cpp:1530
+#: src/backend/datasources/filters/AsciiFilter.cpp:2074
 #, kde-format
 msgid "Value %1"
 msgstr "Wert %1"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:292
+#: src/backend/datasources/filters/BinaryFilter.cpp:287
 #, kde-format
 msgid "could not open device"
 msgstr "Das Gerät kann nicht geöffnet werden"
 
-#: src/backend/datasources/filters/BinaryFilter.cpp:300
+#: src/backend/datasources/filters/BinaryFilter.cpp:295
 #, kde-format
 msgid "data selection empty"
 msgstr "Leere Datenauswahl"
@@ -1355,8 +1352,8 @@ msgstr "Zwischenspeicher-Konfigurationsversion: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:279
 #: src/backend/datasources/filters/HDF5Filter.cpp:319
 #: src/backend/datasources/filters/HDF5Filter.cpp:321
-#: src/backend/datasources/filters/MatioFilter.cpp:587
-#: src/backend/datasources/filters/MatioFilter.cpp:591
+#: src/backend/datasources/filters/MatioFilter.cpp:588
+#: src/backend/datasources/filters/MatioFilter.cpp:592
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:373
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:377
 #, kde-format
@@ -1366,8 +1363,8 @@ msgstr "Nein"
 #: src/backend/datasources/filters/HDF5Filter.cpp:279
 #: src/backend/datasources/filters/HDF5Filter.cpp:319
 #: src/backend/datasources/filters/HDF5Filter.cpp:321
-#: src/backend/datasources/filters/MatioFilter.cpp:585
-#: src/backend/datasources/filters/MatioFilter.cpp:589
+#: src/backend/datasources/filters/MatioFilter.cpp:586
+#: src/backend/datasources/filters/MatioFilter.cpp:590
 #, kde-format
 msgid "Yes"
 msgstr "Ja"
@@ -1469,84 +1466,84 @@ msgstr "h5dump Kommando nicht gefunden."
 msgid "Reading from file %1 failed."
 msgstr "Leasen aus Datei %1 fehlgeschlagen."
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1310
+#: src/backend/datasources/filters/HDF5Filter.cpp:1312
 #, kde-format
 msgid "data type"
 msgstr "Datentyp"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1361
+#: src/backend/datasources/filters/HDF5Filter.cpp:1363
 #, kde-format
 msgid "rank %1 not supported yet"
 msgstr "Rang %1 noch nicht unterstützt"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1367
+#: src/backend/datasources/filters/HDF5Filter.cpp:1370
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:75
 #, kde-format
 msgid "data set"
 msgstr "Datensatz"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1385
+#: src/backend/datasources/filters/HDF5Filter.cpp:1388
 #, kde-format
 msgid "symbolic link"
 msgstr "Symbolische Verknüpfung"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1385
+#: src/backend/datasources/filters/HDF5Filter.cpp:1388
 #, kde-format
 msgid "link to %1"
 msgstr "Verknüpfung zu %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1398
+#: src/backend/datasources/filters/HDF5Filter.cpp:1401
 #, kde-format
 msgid "hard link"
 msgstr "Verknüpfung"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1462
+#: src/backend/datasources/filters/HDF5Filter.cpp:1465
 #, kde-format
 msgid "unknown"
 msgstr "Unbekannt"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1524
+#: src/backend/datasources/filters/HDF5Filter.cpp:1527
 #, kde-format
 msgid "No data set selected"
 msgstr "Kein Datensatz ausgewählt"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1591
+#: src/backend/datasources/filters/HDF5Filter.cpp:1594
 #, kde-format
 msgid "rank 0 not implemented yet for type %1"
 msgstr "Rang 0 noch nicht implementiert für Typ %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1725
-#: src/backend/datasources/filters/HDF5Filter.cpp:1864
+#: src/backend/datasources/filters/HDF5Filter.cpp:1728
+#: src/backend/datasources/filters/HDF5Filter.cpp:1867
 #, kde-format
 msgid "unsupported integer type for rank 1"
 msgstr "Nicht unterstützter ganzahliger Typ vom Rang 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1739
+#: src/backend/datasources/filters/HDF5Filter.cpp:1742
 #, kde-format
 msgid "unsupported float type for rank 1"
 msgstr "Nicht unterstützter Fließkommatyp vom Rang 1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:1881
+#: src/backend/datasources/filters/HDF5Filter.cpp:1884
 #, kde-format
 msgid "rank 1 not implemented yet for type %1"
 msgstr "Rang 1 nocht nicht implementiert für Typ %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2009
+#: src/backend/datasources/filters/HDF5Filter.cpp:2012
 #, kde-format
 msgid "unsupported integer type for rank 2"
 msgstr "Nicht unterstützter ganzahliger Typ vom Rang 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2023
+#: src/backend/datasources/filters/HDF5Filter.cpp:2026
 #, kde-format
 msgid "unsupported float type for rank 2"
 msgstr "Nicht unterstützter Fließkommatyp vom Rang 2"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2086
+#: src/backend/datasources/filters/HDF5Filter.cpp:2090
 #, kde-format
 msgid "rank 2 not implemented yet for type %1"
 msgstr "Rang 2 noch nicht implementiert für Typ %1"
 
-#: src/backend/datasources/filters/HDF5Filter.cpp:2096
+#: src/backend/datasources/filters/HDF5Filter.cpp:2100
 #, kde-format
 msgid "rank %1 not implemented yet for type %2"
 msgstr "Rang %1 noch nicht implementiert für Typ %2"
@@ -1573,53 +1570,53 @@ msgid_plural "numerical data, %1 elements"
 msgstr[0] "Numerische Daten, %1 Element"
 msgstr[1] "Numerische Daten, %1 Elemente"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:204
+#: src/backend/datasources/filters/JsonFilter.cpp:203
 #, kde-format
 msgid "Open device failed"
 msgstr "Öffnen des Gerätes fehlgeschlagen"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:207
+#: src/backend/datasources/filters/JsonFilter.cpp:206
 #, kde-format
 msgid "Empty file"
 msgstr "Leere Datei"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:213
+#: src/backend/datasources/filters/JsonFilter.cpp:212
 #, kde-format
 msgid "Parse error: %1 at offset %2"
 msgstr "Fehler beim Parsen: %1 beim Offset %2"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:216
+#: src/backend/datasources/filters/JsonFilter.cpp:215
 #, kde-format
 msgid "Valid JSON document"
 msgstr "Gültiges JSON-Dokument"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:276
+#: src/backend/datasources/filters/JsonFilter.cpp:275
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:342
 #, kde-format
 msgid "index"
 msgstr "Index"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:284
+#: src/backend/datasources/filters/JsonFilter.cpp:283
 #, kde-format
 msgid "timestamp"
 msgstr "Zeitstempel"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:286
+#: src/backend/datasources/filters/JsonFilter.cpp:285
 #, kde-format
 msgid "month"
 msgstr "Monat"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:288
+#: src/backend/datasources/filters/JsonFilter.cpp:287
 #, kde-format
 msgid "day"
 msgstr "Tag"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:290
+#: src/backend/datasources/filters/JsonFilter.cpp:289
 #, kde-format
 msgid "name"
 msgstr "Name"
 
-#: src/backend/datasources/filters/JsonFilter.cpp:299
+#: src/backend/datasources/filters/JsonFilter.cpp:298
 #, kde-format
 msgid "Column %1"
 msgstr "Spalte %1"
@@ -1663,117 +1660,117 @@ msgstr "Anzahl der Variablen:"
 msgid "Variables:"
 msgstr "Variablen:"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:381
-#: src/backend/datasources/filters/MatioFilter.cpp:743
+#: src/backend/datasources/filters/MatioFilter.cpp:382
+#: src/backend/datasources/filters/MatioFilter.cpp:744
 #, kde-format
 msgid "Empty"
 msgstr "Leer"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:383
-#: src/backend/datasources/filters/MatioFilter.cpp:457
+#: src/backend/datasources/filters/MatioFilter.cpp:384
+#: src/backend/datasources/filters/MatioFilter.cpp:458
 #: src/backend/gsl/ExpressionParser.cpp:190
 #, kde-format
 msgid "Cell"
 msgstr "Zelle"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:385
-#: src/backend/datasources/filters/MatioFilter.cpp:459
+#: src/backend/datasources/filters/MatioFilter.cpp:386
+#: src/backend/datasources/filters/MatioFilter.cpp:460
 #, kde-format
 msgid "Struct"
 msgstr "Struktur"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:387
+#: src/backend/datasources/filters/MatioFilter.cpp:388
 #, kde-format
 msgid "Object"
 msgstr "Objekt"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:389
+#: src/backend/datasources/filters/MatioFilter.cpp:390
 #, kde-format
 msgid "Char"
 msgstr "Zeichen"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:391
+#: src/backend/datasources/filters/MatioFilter.cpp:392
 #, kde-format
 msgid "Sparse"
 msgstr "Sparse"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:395
-#: src/backend/datasources/filters/MatioFilter.cpp:437
+#: src/backend/datasources/filters/MatioFilter.cpp:396
+#: src/backend/datasources/filters/MatioFilter.cpp:438
 #, kde-format
 msgid "Single"
 msgstr "Single"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:397
-#: src/backend/datasources/filters/MatioFilter.cpp:425
+#: src/backend/datasources/filters/MatioFilter.cpp:398
+#: src/backend/datasources/filters/MatioFilter.cpp:426
 #, kde-format
 msgid "Int8"
 msgstr "Int8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:399
-#: src/backend/datasources/filters/MatioFilter.cpp:427
+#: src/backend/datasources/filters/MatioFilter.cpp:400
+#: src/backend/datasources/filters/MatioFilter.cpp:428
 #, kde-format
 msgid "UInt8"
 msgstr "UInt8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:401
-#: src/backend/datasources/filters/MatioFilter.cpp:429
+#: src/backend/datasources/filters/MatioFilter.cpp:402
+#: src/backend/datasources/filters/MatioFilter.cpp:430
 #, kde-format
 msgid "Int16"
 msgstr "Int16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:403
-#: src/backend/datasources/filters/MatioFilter.cpp:431
+#: src/backend/datasources/filters/MatioFilter.cpp:404
+#: src/backend/datasources/filters/MatioFilter.cpp:432
 #, kde-format
 msgid "UInt16"
 msgstr "UInt16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:405
-#: src/backend/datasources/filters/MatioFilter.cpp:433
+#: src/backend/datasources/filters/MatioFilter.cpp:406
+#: src/backend/datasources/filters/MatioFilter.cpp:434
 #, kde-format
 msgid "Int32"
 msgstr "Int32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:407
-#: src/backend/datasources/filters/MatioFilter.cpp:435
+#: src/backend/datasources/filters/MatioFilter.cpp:408
+#: src/backend/datasources/filters/MatioFilter.cpp:436
 #, kde-format
 msgid "UInt32"
 msgstr "UInt32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:409
-#: src/backend/datasources/filters/MatioFilter.cpp:441
+#: src/backend/datasources/filters/MatioFilter.cpp:410
+#: src/backend/datasources/filters/MatioFilter.cpp:442
 #, kde-format
 msgid "Int64"
 msgstr "Int64"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:411
-#: src/backend/datasources/filters/MatioFilter.cpp:443
+#: src/backend/datasources/filters/MatioFilter.cpp:412
+#: src/backend/datasources/filters/MatioFilter.cpp:444
 #, kde-format
 msgid "UInt64"
 msgstr "UInt64"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:413
-#: src/backend/datasources/filters/MatioFilter.cpp:463
+#: src/backend/datasources/filters/MatioFilter.cpp:414
+#: src/backend/datasources/filters/MatioFilter.cpp:464
 #, kde-format
 msgid "Function"
 msgstr "Funktion"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:415
+#: src/backend/datasources/filters/MatioFilter.cpp:416
 #, kde-format
 msgid "Opaque"
 msgstr "Deckend"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:418
-#: src/backend/datasources/filters/MatioFilter.cpp:466
+#: src/backend/datasources/filters/MatioFilter.cpp:419
+#: src/backend/datasources/filters/MatioFilter.cpp:467
 #, kde-format
 msgid "Undefined"
 msgstr "Nicht definiert"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:423
+#: src/backend/datasources/filters/MatioFilter.cpp:424
 #, kde-format
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:445
+#: src/backend/datasources/filters/MatioFilter.cpp:446
 #: src/commonfrontend/workbook/WorkbookView.cpp:53
 #: src/commonfrontend/workbook/WorkbookView.cpp:161
 #: src/kdefrontend/MainWin.cpp:536 src/kdefrontend/MainWin.cpp:1872
@@ -1781,43 +1778,43 @@ msgstr "Unbekannt"
 msgid "Matrix"
 msgstr "Matrix"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:447
+#: src/backend/datasources/filters/MatioFilter.cpp:448
 #, kde-format
 msgid "Compressed"
 msgstr "Komprimiert"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:449
+#: src/backend/datasources/filters/MatioFilter.cpp:450
 #, kde-format
 msgid "UTF8"
 msgstr "UTF8"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:451
+#: src/backend/datasources/filters/MatioFilter.cpp:452
 #, kde-format
 msgid "UTF16"
 msgstr "UTF16"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:453
+#: src/backend/datasources/filters/MatioFilter.cpp:454
 #, kde-format
 msgid "UTF32"
 msgstr "UTF32"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:455
+#: src/backend/datasources/filters/MatioFilter.cpp:456
 #, kde-format
 msgid "String"
 msgstr "Zeichenfolge"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:461
+#: src/backend/datasources/filters/MatioFilter.cpp:462
 #, kde-format
 msgid "Array"
 msgstr "Feld"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:646
-#: src/backend/datasources/filters/NetCDFFilter.cpp:702
+#: src/backend/datasources/filters/MatioFilter.cpp:647
+#: src/backend/datasources/filters/NetCDFFilter.cpp:703
 #, kde-format
 msgid "No variable selected"
 msgstr "Keine Variable ausgewählt"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:657
+#: src/backend/datasources/filters/MatioFilter.cpp:658
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:170
 #: src/kdefrontend/examples/ExamplesManager.cpp:175
 #: src/tools/ColorMapsManager.cpp:152
@@ -1825,24 +1822,24 @@ msgstr "Keine Variable ausgewählt"
 msgid "File not found"
 msgstr "Datei nicht gefunden"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:666
+#: src/backend/datasources/filters/MatioFilter.cpp:667
 #, kde-format
 msgid "Variable not found"
 msgstr "Variable nicht gefunden"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:668
+#: src/backend/datasources/filters/MatioFilter.cpp:669
 #, kde-format
 msgid "Variable contains no data"
 msgstr "Variable enthält keine Daten"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:802
+#: src/backend/datasources/filters/MatioFilter.cpp:803
 #, kde-format
 msgid "Struct contains no fields"
 msgstr "Struktur hat keine Felder"
 
-#: src/backend/datasources/filters/MatioFilter.cpp:880
-#: src/backend/datasources/filters/MatioFilter.cpp:886
-#: src/backend/datasources/filters/MatioFilter.cpp:1224
+#: src/backend/datasources/filters/MatioFilter.cpp:881
+#: src/backend/datasources/filters/MatioFilter.cpp:887
+#: src/backend/datasources/filters/MatioFilter.cpp:1225
 #, kde-format
 msgid "Not implemented yet"
 msgstr "Noch nicht implementiert"
@@ -1894,46 +1891,46 @@ msgstr "globale Attribute"
 msgid "%1 attribute"
 msgstr "%1 Attribute"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:496
+#: src/backend/datasources/filters/NetCDFFilter.cpp:497
 #, kde-format
 msgid "length"
 msgstr "Länge"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:499
+#: src/backend/datasources/filters/NetCDFFilter.cpp:500
 #, kde-format
 msgid "unlimited"
 msgstr "unbegrenzt"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:500
+#: src/backend/datasources/filters/NetCDFFilter.cpp:501
 #, kde-format
 msgid "dimension"
 msgstr "Dimension"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:536
+#: src/backend/datasources/filters/NetCDFFilter.cpp:537
 #, kde-format
 msgid "variable"
 msgstr "Variable"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:629
+#: src/backend/datasources/filters/NetCDFFilter.cpp:630
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #, kde-format
 msgid "Attributes"
 msgstr "Attribute"
 
 #. i18n: ectx: property (text), widget (QLabel, lDimensions)
-#: src/backend/datasources/filters/NetCDFFilter.cpp:635
+#: src/backend/datasources/filters/NetCDFFilter.cpp:636
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:85
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:91
 #, kde-format
 msgid "Dimensions"
 msgstr "Dimensionen"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:641
+#: src/backend/datasources/filters/NetCDFFilter.cpp:642
 #, kde-format
 msgid "Variables"
 msgstr "Variablen"
 
-#: src/backend/datasources/filters/NetCDFFilter.cpp:1073
+#: src/backend/datasources/filters/NetCDFFilter.cpp:1075
 #, kde-format
 msgid "%1 dimensional data of type %2 not supported yet"
 msgstr "%1 dimensionale Daten vom Typ %2 werden noch nicht unterstützt"
@@ -2131,7 +2128,7 @@ msgid "%1: Import from %2"
 msgstr "%1: Importieren von %2"
 
 #: src/backend/gsl/errors.h:20
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1136
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1140
 #, kde-format
 msgid "Success"
 msgstr "Erfolg"
@@ -2302,10 +2299,9 @@ msgid "End of file"
 msgstr "Dateiende"
 
 #: src/backend/gsl/ExpressionParser.cpp:40
-#, fuzzy, kde-format
-#| msgid "Standard Mathematical functions"
+#, kde-format
 msgid "Standard Mathematical Functions"
-msgstr "Mathematische Standard-Funktionen"
+msgstr "Mathematische Standardfunktionen"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
 #, fuzzy, kde-format
@@ -2676,7 +2672,7 @@ msgstr "Größe"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:156
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:71
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:31
 #, kde-format
 msgid "Minimum"
@@ -2684,7 +2680,7 @@ msgstr "Minimum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:157
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
 msgid "Maximum"
@@ -2692,7 +2688,7 @@ msgstr "Maximum"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:158
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:83
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:63
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:53
 #, kde-format
 msgid "Arithmetic mean"
@@ -2701,7 +2697,7 @@ msgstr "Arithmetisches Mittel"
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:159
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:119
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:470
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
@@ -2710,7 +2706,7 @@ msgstr "Median"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:160
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:149
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:77
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:119
 #, kde-format
 msgid "Standard deviation"
@@ -2718,7 +2714,7 @@ msgstr "Standardabweichung"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:161
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:143
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:75
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:108
 #, kde-format
 msgid "Variance"
@@ -2726,7 +2722,7 @@ msgstr "Varianz"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:162
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:89
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:64
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:64
 #, kde-format
 msgid "Geometric mean"
@@ -2734,7 +2730,7 @@ msgstr "Geometrisches Mittel"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:163
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:95
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:75
 #, kde-format
 msgid "Harmonic mean"
@@ -2742,99 +2738,89 @@ msgstr "Harmonisches Mittel"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:164
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:101
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:66
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:86
 #, kde-format
 msgid "Contraharmonic mean"
 msgstr "Kontraharmonisches Mittel"
 
 #: src/backend/gsl/ExpressionParser.cpp:165
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:107
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:67
 #, kde-format
 msgid "Mode"
 msgstr "Modus"
 
 #: src/backend/gsl/ExpressionParser.cpp:166
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "First quartile"
 msgstr "Erstes Quartil"
 
 #: src/backend/gsl/ExpressionParser.cpp:167
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "Third quartile"
 msgstr "Drittes Quartil"
 
 #: src/backend/gsl/ExpressionParser.cpp:168
-#, fuzzy, kde-format
-#| msgid "Interquartile Range"
+#, kde-format
 msgid "Interquartile range"
-msgstr "Interquatilbereich"
+msgstr "Interquartilbereich"
 
 #: src/backend/gsl/ExpressionParser.cpp:169
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "1st percentile"
-msgstr "Perzentilwert"
+msgstr "1. Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:170
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "5th percentile"
-msgstr "Perzentilwert"
+msgstr "5ter Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:171
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "10th percentile"
-msgstr "10/90 Perzentilwert"
+msgstr "10 Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:172
-#, fuzzy, kde-format
-#| msgid "10/90 percentiles"
+#, kde-format
 msgid "90th percentile"
-msgstr "10/90 Perzentilwert"
+msgstr "90 Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
-#, fuzzy, kde-format
-#| msgid "5/95 percentiles"
+#, kde-format
 msgid "95th percentile"
-msgstr "5/95 Perzentilwert"
+msgstr "95 Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
-#, fuzzy, kde-format
-#| msgid "1/99 percentiles"
+#, kde-format
 msgid "99th percentile"
-msgstr "1/99 Perzentilwert"
+msgstr "99 Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:175
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:131
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
 msgid "Trimean"
 msgstr "Trimittel"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
-#, fuzzy, kde-format
-#| msgid "Median absolute deviation"
+#, kde-format
 msgid "Mean absolute deviation"
-msgstr "Median der absoluten Abweichung"
+msgstr "Mittlere absolute Abweichung"
 
 #: src/backend/gsl/ExpressionParser.cpp:177
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:161
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:79
 #, kde-format
 msgid "Mean absolute deviation around median"
 msgstr "Mittlere absolute Abweichung vom Median"
 
 #: src/backend/gsl/ExpressionParser.cpp:178
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:167
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:81
 #, kde-format
 msgid "Median absolute deviation"
 msgstr "Median der absoluten Abweichung"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:179
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:185
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:85
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:163
 #, kde-format
 msgid "Skewness"
@@ -2842,7 +2828,7 @@ msgstr "Schiefe"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:180
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:191
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:86
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:174
 #, kde-format
 msgid "Kurtosis"
@@ -2850,23 +2836,21 @@ msgstr "Wölbung"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/backend/gsl/ExpressionParser.cpp:181
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:197
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:87
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:185
 #, kde-format
 msgid "Entropy"
 msgstr "Entropie"
 
 #: src/backend/gsl/ExpressionParser.cpp:182
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "Quantile"
-msgstr "Stichproben-Quantile"
+msgstr "Quantile"
 
 #: src/backend/gsl/ExpressionParser.cpp:183
-#, fuzzy, kde-format
-#| msgid "Percentile:"
+#, kde-format
 msgid "Percentile"
-msgstr "Perzentilwert:"
+msgstr "Perzentilwert"
 
 #: src/backend/gsl/ExpressionParser.cpp:191
 #, fuzzy, kde-format
@@ -5505,10 +5489,10 @@ msgstr "unverarbeitet"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:828
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:337
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:370
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:204
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:234
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:496
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:632
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:768
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
 #, kde-format
 msgid "Frequency"
@@ -6342,10 +6326,9 @@ msgid "%1: set background image"
 msgstr "%1: Hintergrundbild festlegen"
 
 #: src/backend/worksheet/Background.cpp:161
-#, fuzzy, kde-format
-#| msgid "%1: set background image"
+#, kde-format
 msgid "%1: set background opacity"
-msgstr "%1: Hintergrundbild festlegen"
+msgstr "%1: Hintergrundstil festlegen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -6503,8 +6486,7 @@ msgid "%1: drop line type changed"
 msgstr "%1: Typ der Verbindungslinie geändert"
 
 #: src/backend/worksheet/Line.cpp:129
-#, fuzzy, kde-format
-#| msgid "%1: set line style"
+#, kde-format
 msgid "%1: set line pen"
 msgstr "%1: Linienstil festlegen"
 
@@ -6643,10 +6625,9 @@ msgid "%1: set axis range"
 msgstr "%1: Achsenbereich festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:592
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks type"
+#, kde-format
 msgid "%1: set major tick start type"
-msgstr "%1: Typ der Hauptstriche festlegen"
+msgstr "%1: Anfangstyp der Hauptstriche festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:599
 #, kde-format
@@ -6654,10 +6635,9 @@ msgid "%1: set major tick start offset"
 msgstr "%1: Startversatz der Hauptstriche festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:606
-#, fuzzy, kde-format
-#| msgid "%1: set major tick start offset"
+#, kde-format
 msgid "%1: set major tick start value"
-msgstr "%1: Startversatz der Hauptstriche festlegen"
+msgstr "%1: Startwert der Hauptstriche festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:613
 #, kde-format
@@ -6713,7 +6693,7 @@ msgstr "%1: Typ der Hauptstriche festlegen"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:693
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: automatische Haupttickzahl aktivieren/deaktivieren"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:695
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:706
@@ -6725,7 +6705,7 @@ msgstr "%1: Gesamtzahl der Hauptstriche festlegen"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:790
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: automatische Haupttickzahl deaktivieren"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:717
 #, kde-format
@@ -6765,7 +6745,7 @@ msgstr "%1: Typ der Nebenstriche festlegen"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:775
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
-msgstr ""
+msgstr "%1: automatische Nebentickzahl aktivieren/deaktivieren"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:778
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:789
@@ -6804,10 +6784,9 @@ msgid "%1: set labels format"
 msgstr "%1: Format der Beschriftung festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:850
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels format automatic"
-msgstr "%1: Format der Beschriftung festlegen"
+msgstr "%1: Format der Beschriftung automatisch festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:857
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:864
@@ -6881,10 +6860,9 @@ msgid "%1: set labels opacity"
 msgstr "%1: Deckkraft der Beschriftung festlegen"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:227
-#, fuzzy, kde-format
-#| msgid "%1: set data column"
+#, kde-format
 msgid "%1: set x column"
-msgstr "%1: Datenspalte festlegen"
+msgstr "%1: x-Spalte festlegen"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:471
@@ -6893,10 +6871,9 @@ msgid "%1: set data columns"
 msgstr "%1: Datenspalten festlegen"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1: set arrow type"
+#, kde-format
 msgid "%1: set type"
-msgstr "%1: Pfeiltyp festlegen"
+msgstr "%1: Typ festlegen"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:498
@@ -6914,57 +6891,49 @@ msgstr "%1: Breitenfaktor geändert"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:337
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
-#, fuzzy, kde-format
-#| msgid "No Data"
+#, kde-format
 msgid "%1 - Data"
-msgstr "Keine Daten"
+msgstr "%1 - Daten"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:343
-#, fuzzy, kde-format
-#| msgid "First Quartile"
+#, kde-format
 msgid "1st quartile"
-msgstr "Erstes Quartil"
+msgstr "1. Quartil"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:344
-#, fuzzy, kde-format
-#| msgid "Third Quartile"
+#, kde-format
 msgid "3rd quartile"
 msgstr "Drittes Quartil"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:345
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "median"
 msgstr "Median"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:346
-#, fuzzy, kde-format
-#| msgid "Whiskers"
+#, kde-format
 msgid "whiskers min"
-msgstr "Haare"
+msgstr "Haarminimum"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:347
-#, fuzzy, kde-format
-#| msgid "Whiskers"
+#, kde-format
 msgid "whiskers max"
-msgstr "Haare"
+msgstr "Haarmaximum"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:348
 #, kde-format
 msgid "data points count"
-msgstr ""
+msgstr "Anzahl Datenpunkte"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:349
-#, fuzzy, kde-format
-#| msgid "Euler's constant"
+#, kde-format
 msgid "outliers count"
-msgstr "Euler-Konstante"
+msgstr "Outlier-Zahl"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:350
-#, fuzzy, kde-format
-#| msgid "Number of points"
+#, kde-format
 msgid "far out points count"
-msgstr "Anzahl der Punkte"
+msgstr "Anzahl entfernter Punkte"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:491
 #, kde-format
@@ -7064,7 +7033,7 @@ msgstr "XY-Kurve"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
 #: src/commonfrontend/worksheet/WorksheetView.cpp:325
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:82
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:250
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:123
 #, kde-format
 msgid "Histogram"
 msgstr "Histogramm"
@@ -7072,17 +7041,16 @@ msgstr "Histogramm"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:453
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:256
-#, fuzzy, kde-format
-#| msgid "Box Plot"
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:129
+#, kde-format
 msgid "Bar Plot"
-msgstr "Box-Diagramm"
+msgstr "Bar-Plot"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #: src/commonfrontend/worksheet/WorksheetView.cpp:326
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:253
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:126
 #, kde-format
 msgid "Box Plot"
 msgstr "Box-Diagramm"
@@ -7138,7 +7106,7 @@ msgid "Smooth"
 msgstr "Glättung"
 
 #. i18n("Data Manipulation"));
-#. dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
+#. dataManipulationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
 #. dataManipulationMenu->addAction(addDataOperationAction);
 #. dataManipulationMenu->addAction(addDataReductionAction);
 #. Data fit menu
@@ -7336,16 +7304,14 @@ msgid "%1: set range"
 msgstr "%1: Bereich festlegen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1019
-#, fuzzy, kde-format
-#| msgid "%1: change x-range %2 format"
+#, kde-format
 msgid "%1: change %2-range %3 format"
-msgstr "%1: Format des x-Bereichs %2 ändern"
+msgstr "%1: Format des %2-Bereichs %3 ändern"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1110
-#, fuzzy, kde-format
-#| msgid "%1: change x-range %2 auto scaling"
+#, kde-format
 msgid "%1: change %2-range %3 auto scaling"
-msgstr "%1: Automatische x-Bereichsskalierung %2 ändern"
+msgstr "%1: %2-Bereichsskalierung %3 ändern"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1338
 #, kde-format
@@ -7635,16 +7601,14 @@ msgid "%1: set layout column count"
 msgstr "%1: Anzahl der Spalten im Layout"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:184
-#, fuzzy, kde-format
-#| msgid "Tab position:"
+#, kde-format
 msgid "bin positions"
-msgstr "Reiterposition:"
+msgstr "Bin-positionen"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
-#, fuzzy, kde-format
-#| msgid "No values"
+#, kde-format
 msgid "bin values"
-msgstr "Keine Werte"
+msgstr "Binwerte"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
 #, kde-format
@@ -7739,10 +7703,9 @@ msgstr "%1: X-Fehlertyp geändert"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
-#, fuzzy, kde-format
-#| msgid "%1: set x-error column"
+#, kde-format
 msgid "%1: set error column"
-msgstr "%1: X-Fehlerspalte festlegen"
+msgstr "%1: Fehlerspalte festlegen"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:878
 #, kde-format
@@ -9145,21 +9108,17 @@ msgid "Show All"
 msgstr "Alle anzeigen"
 
 #: src/commonfrontend/ProjectExplorer.cpp:494
-#, fuzzy, kde-format
-#| msgid "The data cannot be pasted into %2."
+#, kde-format
 msgid "'%1' cannot be pasted into '%2'."
-msgstr "Die Daten können nicht in %2 eingefügt werden."
+msgstr "'%1' kann nicht in %2 eingefügt werden."
 
 #: src/commonfrontend/ProjectExplorer.cpp:508
-#, fuzzy, kde-format
-#| msgid ""
-#| "Data cannot be pasted into %2 directly. Select a spreadsheet column for "
-#| "this."
+#, kde-format
 msgid ""
 "Data cannot be pasted into '%1' directly. Select a spreadsheet column for "
 "this."
 msgstr ""
-"Daten können nicht direkt in %2 eingefügt werden. Bitte dafür ein "
+"Daten können nicht direkt in '%1' eingefügt werden. Bitte dafür ein "
 "Tabellenspalte auswählen."
 
 #: src/commonfrontend/ProjectExplorer.cpp:652
@@ -9243,16 +9202,14 @@ msgid "Equidistant Values"
 msgstr "Äquidistante Werte"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:285
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "Sample Values"
-msgstr "Stichproben-Quantile"
+msgstr "Stichprobenwerte"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:286
-#, fuzzy, kde-format
-#| msgid "Calculated Columns"
+#, kde-format
 msgid "Flatten Columns"
-msgstr "Berechnete Spalten"
+msgstr "Abgeglichene Spalten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:289
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1094
@@ -9337,10 +9294,9 @@ msgid "Divide"
 msgstr "Dividieren"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:347
-#, fuzzy, kde-format
-#| msgid "&Drop"
+#, kde-format
 msgid "Drop"
-msgstr "&Verwerfen"
+msgstr "Verwerfen"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:348
 #, kde-format
@@ -9611,6 +9567,8 @@ msgid ""
 "The selected columns have different data types and cannot be flattened "
 "because of this. "
 msgstr ""
+"Die ausgewählten Spalten haben unterschiedliche Datentypen und können "
+"deshalb nicht abgeglichen werden."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2794
 #, kde-format
@@ -9620,42 +9578,37 @@ msgstr "%1: Spalten normalisieren"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2814
 #, kde-format
 msgid "Sum = 0"
-msgstr ""
+msgstr "Sum = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2825
 #, kde-format
 msgid "Min = 0"
-msgstr ""
+msgstr "Min = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2836
-#, fuzzy, kde-format
-#| msgid "x = "
+#, kde-format
 msgid "Max = 0"
-msgstr "x = "
+msgstr "Max = 0 "
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2847
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgid "Count = 0"
-msgstr "Anzahl"
+msgstr "Anzahl = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2858
-#, fuzzy, kde-format
-#| msgid "Mean"
+#, kde-format
 msgid "Mean = 0"
-msgstr "Mittelwert"
+msgstr "Mittelwert = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2869
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "Median = 0"
-msgstr "Median"
+msgstr "Median = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2881
-#, fuzzy, kde-format
-#| msgid "Mode"
+#, kde-format
 msgid "Mode = 0"
-msgstr "Modus"
+msgstr "Modus = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2883
 #, kde-format
@@ -9663,33 +9616,32 @@ msgid "'Mode not defined'"
 msgstr "Modus nicht angegeben."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2894
-#, fuzzy, kde-format
-#| msgid "Range:"
+#, kde-format
 msgid "Range = 0"
-msgstr "Bereich:"
+msgstr "Bereich = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2905
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2939
 #, kde-format
 msgid "SD = 0"
-msgstr ""
+msgstr "SD = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2916
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2951
 #, kde-format
 msgid "MAD = 0"
-msgstr ""
+msgstr "MAD = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2927
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2963
 #, kde-format
 msgid "IQR = 0"
-msgstr ""
+msgstr "IQR = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2975
 #, kde-format
 msgid "Max - Min = 0"
-msgstr ""
+msgstr "Max - Min = 0"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2994
 #, kde-format
@@ -9702,16 +9654,14 @@ msgid "%1: power transform columns"
 msgstr "%1: Potenztransformationsspalten"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3128
-#, fuzzy, kde-format
-#| msgid "Column Statisti&cs"
+#, kde-format
 msgid "%1: column statistics"
-msgstr "Spalten-Statisti&ken"
+msgstr "%1: Spalten-Statistik"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3151
-#, fuzzy, kde-format
-#| msgid "Row Statisti&cs"
+#, kde-format
 msgid "%1: row statistics"
-msgstr "Zeilen-Statisti&ken"
+msgstr "%1: Reihen-Statistik"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
 #, kde-format
@@ -9949,29 +9899,25 @@ msgstr ""
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:270
 #: src/commonfrontend/worksheet/WorksheetView.cpp:284
-#, fuzzy, kde-format
-#| msgid "Selected Plots"
+#, kde-format
 msgid "Selected Plot Areas"
-msgstr "Ausgewählte Diagramme"
+msgstr "Ausgewählte Plotbereiche"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:272
 #: src/commonfrontend/worksheet/WorksheetView.cpp:286
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "All Plot Areas"
-msgstr "Diagrammbereich"
+msgstr "Alle Plotbereiche"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:274
-#, fuzzy, kde-format
-#| msgid "All Plots X"
+#, kde-format
 msgid "All Plot Areas X"
-msgstr "Alle X-Diagramme"
+msgstr "Alle X-Plotbereiche"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:276
-#, fuzzy, kde-format
-#| msgid "All Plots Y"
+#, kde-format
 msgid "All Plot Areas Y"
-msgstr "Alle Y-Diagramme"
+msgstr "Alle Y-Plotbereiche"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:298
 #, kde-format
@@ -10440,12 +10386,12 @@ msgctxt "@title:window"
 msgid "Dataset metadata manager"
 msgstr "Metadatenmanager"
 
-#: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:510
+#: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:511
 #, kde-format
 msgid "column_description_%1"
 msgstr "Spaltenbechreibung_%1"
 
-#: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:520
+#: src/kdefrontend/datasources/DatasetMetadataManagerWidget.cpp:521
 #, kde-format
 msgid "Description for column %1"
 msgstr "Beschreibung der Spalten %1"
@@ -11037,10 +10983,9 @@ msgid "No data arrived yet for the selected topic"
 msgstr "Bisher keine Daten für das ausgewählte Thema angekommen"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1714
-#, fuzzy, kde-format
-#| msgid "Not a HDF5 file"
+#, kde-format
 msgid "Not a HDF5 file: %1"
-msgstr "Keine HDF5 Datei"
+msgstr "Keine HDF5 Datei: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2142
 #, kde-format
@@ -11253,17 +11198,17 @@ msgstr ""
 "Verbindungseinstellungen überprüfen."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:324
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:432
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:433
 #, kde-format
 msgid "Unable to Execute Query"
 msgstr "Abfrage kann nicht ausgeführt werden"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:400
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:401
 #, kde-format
 msgid "Refresh the data preview of the selected table"
 msgstr "Erneuert die Datenvorschau der ausgewählten Tabelle"
 
-#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:405
+#: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
 msgid "Execute the query and preview its result"
 msgstr "Anfrage ausführen und Ergebnis anzeigen"
@@ -11761,16 +11706,14 @@ msgid "Custom column"
 msgstr "Benutzerdefinierte Spalte"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:371
-#, fuzzy, kde-format
-#| msgid "Absolute value"
+#, kde-format
 msgid "Absolute Value"
 msgstr "Absoluter Wert"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:372
-#, fuzzy, kde-format
-#| msgid "Offset:"
+#, kde-format
 msgid "Offset"
-msgstr "Versatz:"
+msgstr "Versatz"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:387
 #, kde-format
@@ -11877,26 +11820,24 @@ msgid "Stacked"
 msgstr "Gestapelt"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
-#, fuzzy, kde-format
-#| msgid "Stacked"
+#, kde-format
 msgid "Stacked 100%"
-msgstr "Gestapelt"
+msgstr "Gestapelt 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
 msgstr ""
+"Auswahl der Datenspalten, für die die Eigenschaften angezeigt und geändert "
+"werden sollen"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the factor in percent to control the width of the box relative to "
-#| "its default value."
+#, kde-format
 msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
-msgstr "Faktor in Prozent der Breite der Box relativ zum Standardwert angeben."
+msgstr "Faktor in Prozent der Breite der Box relativ zum Standardwert angeben"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
@@ -12016,22 +11957,19 @@ msgid "File Browser"
 msgstr "Dateibrowser"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:230
-#, fuzzy, kde-format
-#| msgid "Save current properties as a template"
+#, kde-format
 msgid "Save current plot definition as template"
-msgstr "Aktuelle Eigenschaften als Vorlage speichern"
+msgstr "Aktuelle Ploteinstellungen als Vorlage speichern"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:637
-#, fuzzy, kde-format
-#| msgid "X-Ranges:"
+#, kde-format
 msgid "%1-Ranges:"
-msgstr "X-Bereiche:"
+msgstr "%1-Bereiche:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:639
-#, fuzzy, kde-format
-#| msgid "X-Range:"
+#, kde-format
 msgid "%1-Range:"
-msgstr "X-Bereich:"
+msgstr "%1-Bereich:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:662
 #, kde-format
@@ -12093,10 +12031,9 @@ msgid "Sloped"
 msgstr "Geneigt"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1183
-#, fuzzy, kde-format
-#| msgid "X range %1 is used in plot range %2. "
+#, kde-format
 msgid "%1 range %2 is used in plot range %3. "
-msgstr "X-Bereich %1 wird im Diagrammbereich %2 verwendet."
+msgstr "%1 Bereich %2 wird in Plotbereich %3 genutzt. "
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1184
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1232
@@ -12153,13 +12090,12 @@ msgstr "Oben:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr ""
+msgstr "Vorlage zum Dateispeichern auswählen"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1731
-#, fuzzy, kde-format
-#| msgid "LabPlot Projects (%1)"
+#, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr "LabPlot-Projekte (%1)"
+msgstr "LabPlot-Vorlagen (*%1)"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1977
 #, kde-format
@@ -12265,17 +12201,17 @@ msgid "Expand all curves"
 msgstr "Alle Kurven ausklappen"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:154
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1263
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1269
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1275
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1267
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1273
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1279
 #, kde-format
 msgid "Copy Selection"
 msgstr "Auswahl kopieren"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:155
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1264
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1270
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1276
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1268
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1274
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1280
 #, kde-format
 msgid "Copy All"
 msgstr "Alles kopieren"
@@ -12336,8 +12272,8 @@ msgid "Cumulative Histogram"
 msgstr "Kummulatives Histogramm"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:65
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:211
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:59
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #, kde-format
 msgid "Count"
 msgstr "Anzahl"
@@ -12363,28 +12299,26 @@ msgid "No Errors"
 msgstr "Keine Fehler"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
-#, fuzzy, kde-format
-#| msgid "Poisson (sqrt(Y))"
+#, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr "Poisson (sqrt(Y))"
+msgstr "Poissonvarianz, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
 #, kde-format
 msgid "Custom Error Values, symmetric"
-msgstr ""
+msgstr "Eigener Fehlerwert, symmetrisch"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
 #, kde-format
 msgid "Custom Error Values, asymmetric"
-msgstr ""
+msgstr "Eigener Fehlerwert, asymmetrisch"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:558
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1027
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1085
-#, fuzzy, kde-format
-#| msgid "Data, +-"
+#, kde-format
 msgid "Data, +-:"
-msgstr "Daten, +-"
+msgstr "Daten, +-:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
@@ -12939,17 +12873,17 @@ msgstr "Grad:"
 msgid "Number of peaks:"
 msgstr "Anzahl der Peaks:"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1137
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1141
 #, kde-format
 msgid "Fit status: %1"
 msgstr "Fit Status: %1"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1310
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1314
 #, kde-format
 msgid "%1 % lower confidence level"
 msgstr "%1 % untere Vertrauensgrenze"
 
-#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1311
+#: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1315
 #, kde-format
 msgid "%1 % upper confidence level"
 msgstr "%1 % obere Vertrauensgrenze"
@@ -13082,11 +13016,10 @@ msgid "Worksheet"
 msgstr "Arbeitsblatt"
 
 #: src/kdefrontend/GuiObserver.cpp:249
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Area"
-msgstr "Diagrammbereich"
+msgstr "Plotbereich"
 
 #: src/kdefrontend/GuiObserver.cpp:255
 #, kde-format
@@ -13185,11 +13118,10 @@ msgid "Histogram Properties"
 msgstr "Histogramm-Eigenschaften"
 
 #: src/kdefrontend/GuiObserver.cpp:346
-#, fuzzy, kde-format
-#| msgid "Box Plot"
+#, kde-format
 msgctxt "@title:window"
 msgid "Bar Plot"
-msgstr "Box-Diagramm"
+msgstr "Bar-Plot"
 
 #: src/kdefrontend/GuiObserver.cpp:351
 #, kde-format
@@ -14343,15 +14275,15 @@ msgctxt "@title:window"
 msgid "Function Values"
 msgstr "Funktionswerte"
 
-#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:62
-#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:65
+#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:61
+#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:64
 #, kde-format
 msgid "%1 value"
 msgid_plural "%1 values"
 msgstr[0] "%1 Wert"
 msgstr[1] "%1 Werte"
 
-#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:78
+#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:77
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:41
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:76
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:52
@@ -14359,23 +14291,22 @@ msgstr[1] "%1 Werte"
 msgid "&Generate"
 msgstr "&Generieren"
 
-#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:79
+#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:78
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:77
 #, kde-format
 msgid "Generate function values"
 msgstr "Generiert Funktionswerte"
 
-#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:199
+#: src/kdefrontend/matrix/MatrixFunctionDialog.cpp:198
 #, kde-format
 msgid "%1: fill matrix with function values"
 msgstr "%1: Matrix mit Funktionswerten füllen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:54
-#, fuzzy, kde-format
-#| msgid "Load From Template"
+#, kde-format
 msgctxt "@title:window"
 msgid "Plot Templates"
-msgstr "Aus Vorlage laden"
+msgstr "Plotvorlagen"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twPlotRanges)
 #: src/kdefrontend/PlotTemplateDialog.cpp:57
@@ -14383,56 +14314,51 @@ msgstr "Aus Vorlage laden"
 #: src/kdefrontend/SettingsWorksheetPage.cpp:72
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:101
 #: src/kdefrontend/widgets/ThemesComboBox.cpp:72
-#: src/kdefrontend/widgets/ThemesWidget.cpp:67
+#: src/kdefrontend/widgets/ThemesWidget.cpp:68
 #, kde-format
 msgid "Default"
 msgstr "Standard"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Custom Query"
+#, kde-format
 msgid "Custom Folder"
-msgstr "Benutzerdefinierte Abfrage"
+msgstr "Benutzerdefiniertes Verzeichnis"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:61
-#, fuzzy, kde-format
-#| msgid "List of plot ranges"
+#, kde-format
 msgid "Location of plot templates"
-msgstr "Liste der Diagramm-Bereiche"
+msgstr "Ort der Plotvorlagen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:65
 #, kde-format
 msgid "Custom folder for the location of plot templates"
-msgstr ""
+msgstr "Eigenes Verzeichnis für Plotvorlagen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:69
 #, kde-format
 msgid "Open the folder for the location of plot templates"
-msgstr ""
+msgstr "Verzeichnis für Plotvorlagen öffnen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:148
 #, kde-format
 msgctxt "@title:window"
 msgid "Select template search path"
-msgstr ""
+msgstr "Vorlagenpfad auswählen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:156
-#, fuzzy, kde-format
-#| msgid "no note element found"
+#, kde-format
 msgid "No templates found."
-msgstr "Kein Notizelement gefunden"
+msgstr "Keine Vorlage gefunden."
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:162
-#, fuzzy, kde-format
-#| msgid "The provided file doesn't exist."
+#, kde-format
 msgid "File does not exist."
-msgstr "Die angegebene Datei existiert nicht."
+msgstr "Datei existiert nicht."
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:167
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Unable to read the file"
-msgstr "Fehler beim Öffnen der Datei '%1'."
+msgstr "Fehler beim Lesen der Datei"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:178
 #: src/kdefrontend/PlotTemplateDialog.cpp:185
@@ -14440,16 +14366,14 @@ msgstr "Fehler beim Öffnen der Datei '%1'."
 #: src/kdefrontend/PlotTemplateDialog.cpp:200
 #: src/kdefrontend/PlotTemplateDialog.cpp:211
 #: src/kdefrontend/PlotTemplateDialog.cpp:219
-#, fuzzy, kde-format
-#| msgid "Failed to reach the specified tolerance"
+#, kde-format
 msgid "Failed to load the selected plot template"
-msgstr "Angegebene Toleranz nicht erreicht"
+msgstr "Laden der ausgewählten Vorlage fehlgeschlagen"
 
 #: src/kdefrontend/PlotTemplateDialog.cpp:210
-#, fuzzy, kde-format
-#| msgid "no cartesianPlot element found"
+#, kde-format
 msgid "XML error: No cartesianPlot found"
-msgstr "Kein Element für ein kartesisches Diagramm gefunden"
+msgstr "XML Fehler: Kein Plot gefunden"
 
 #: src/kdefrontend/SettingsDatasetsPage.cpp:27
 #, kde-format
@@ -14500,7 +14424,7 @@ msgstr "Einstellungen"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #. i18n: ectx: attribute (title), widget (QWidget, tGeneral)
 #: src/kdefrontend/SettingsDialog.cpp:55
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:206
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:91
 #: src/kdefrontend/ui/datapickercurvewidget.ui:27
 #: src/kdefrontend/ui/datapickerimagewidget.ui:27
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:36
@@ -14857,10 +14781,9 @@ msgid "Equal to"
 msgstr "Gleich"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "Not Equal to"
-msgstr "Gleich"
+msgstr "Nicht gleich zu"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:46
 #, kde-format
@@ -14893,39 +14816,34 @@ msgid "Less than or Equal to"
 msgstr "Kleiner als oder gleich"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:56
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "Equal To"
-msgstr "Gleich"
+msgstr "Gleich zu"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:57
-#, fuzzy, kde-format
-#| msgid "Equal to"
+#, kde-format
 msgid "Not Equal To"
-msgstr "Gleich"
+msgstr "Nicht gleich zu"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Start"
+#, kde-format
 msgid "Starts With"
-msgstr "Anfang"
+msgstr "Beginnt mit"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:59
 #, kde-format
 msgid "Ends With"
-msgstr ""
+msgstr "Endet mit"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:60
-#, fuzzy, kde-format
-#| msgid "Content"
+#, kde-format
 msgid "Contains"
-msgstr "Inhalt"
+msgstr "Enthält"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:61
-#, fuzzy, kde-format
-#| msgid "Do Nothing"
+#, kde-format
 msgid "Does Not Contain"
-msgstr "Nichts unternehmen"
+msgstr "Nicht enthalten"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
@@ -14958,10 +14876,9 @@ msgstr "Werte überspringen"
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:952
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1002
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1008
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid numeric value."
-msgstr "Ungültiger Zeilenwert"
+msgstr "Ungültiger Zahlenwert."
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:967
 #, kde-format
@@ -15068,45 +14985,40 @@ msgid "Export to File"
 msgstr "Als Datei exportieren"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgid "&Flatten"
-msgstr "Muster"
+msgstr "Abgleichen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
-#, fuzzy, kde-format
-#| msgid "%1: clear selected columns"
+#, kde-format
 msgid "Flatten selected columns"
-msgstr "%1: Ausgewählte Spalten löschen"
+msgstr "Ausgewählte Spalten abgleichen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:50
-#, fuzzy, kde-format
-#| msgid "Clear Selected Columns"
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatten Selected Columns"
-msgstr "Ausgewählte Spalten löschen"
+msgstr "Ausgewählte Spalten abgleichen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:55
 #, kde-format
 msgid "Add additional reference column"
-msgstr ""
+msgstr "Zusätzliche Referenzspalte hinzufügen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:118
-#, fuzzy, kde-format
-#| msgid "Remove Selected Columns"
+#, kde-format
 msgid "Remove reference column"
-msgstr "Ausgewählte Spalten entfernen"
+msgstr "Referenzspalte entfernen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "%1: rotate values"
+#, kde-format
 msgid "%1: flatten values"
-msgstr "%1: Werte drehen"
+msgstr "%1: Werte abgleichen"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:168
 #, kde-format
 msgid "Flatten of %1"
-msgstr ""
+msgstr "Abgleich von %1"
 
 #. i18n: ectx: property (text), widget (QLabel, lSymbolCategory)
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
@@ -15239,10 +15151,9 @@ msgid "Y-data"
 msgstr "Y-Daten"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:289
-#, fuzzy, kde-format
-#| msgid "Add Box Plot to"
+#, kde-format
 msgid "Add Plot to"
-msgstr "Box-Diagramm hinzufügen zu"
+msgstr "Plot hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:346
 #, kde-format
@@ -15255,22 +15166,19 @@ msgid "Add Box Plot to"
 msgstr "Box-Diagramm hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:350
-#, fuzzy, kde-format
-#| msgid "Add Box Plot to"
+#, kde-format
 msgid "Add Bar Plot to"
-msgstr "Box-Diagramm hinzufügen zu"
+msgstr "Box-Plot hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:355
-#, fuzzy, kde-format
-#| msgid "All histograms in one plot"
+#, kde-format
 msgid "All histograms in one plot area"
-msgstr "Alle Histogramme in einem Diagramm"
+msgstr "Alle Histogramme in einen Plotbereich"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:356
-#, fuzzy, kde-format
-#| msgid "One plot per histogram"
+#, kde-format
 msgid "One plot area per histogram"
-msgstr "Ein Diagramm pro Histogramm"
+msgstr "Ein Plotbereich pro Histogramm"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:357
 #, kde-format
@@ -15278,16 +15186,14 @@ msgid "Add Histograms to"
 msgstr "Histogramm hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:359
-#, fuzzy, kde-format
-#| msgid "All box plots in one plot"
+#, kde-format
 msgid "All box plots in one plot area"
-msgstr "Alle Box-Diagramme in einem Diagramm"
+msgstr "Alle Box-Plots in einen Plotbereich"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:360
-#, fuzzy, kde-format
-#| msgid "One plot per box plot"
+#, kde-format
 msgid "One plot area per box plot"
-msgstr "Ein Diagramm pro Box-Diagramm"
+msgstr "Ein Plotbereich pro Box-Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:361
 #, kde-format
@@ -15295,30 +15201,26 @@ msgid "Add Box Plots to"
 msgstr "Box-Diagramm hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:363
-#, fuzzy, kde-format
-#| msgid "All box plots in one plot"
+#, kde-format
 msgid "All bar plots in one plot area"
-msgstr "Alle Box-Diagramme in einem Diagramm"
+msgstr "Alle Bar-Plots in einen Plotbereich"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:364
-#, fuzzy, kde-format
-#| msgid "One plot per box plot"
+#, kde-format
 msgid "One plot area per bar plot"
-msgstr "Ein Diagramm pro Box-Diagramm"
+msgstr "Ein Plotbereich pro Bar-Plot"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:365
-#, fuzzy, kde-format
-#| msgid "Add Box Plots to"
+#, kde-format
 msgid "Add Bar Plots to"
 msgstr "Box-Diagramm hinzufügen zu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:437
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot Area - %1"
-msgstr "Diagrammbereich"
+msgstr "Plotbereich - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:432
@@ -15334,10 +15236,9 @@ msgstr "Daten grafisch darstellen von %1"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:565
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:580
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:596
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Plot Area %1"
-msgstr "Diagrammbereich"
+msgstr "Plotbereich %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:673
 #, kde-format
@@ -15404,8 +15305,11 @@ msgid ""
 "If no value is specified, the current timestamp will be used to seed the "
 "generator."
 msgstr ""
+"Startwert für den Zufallszahlengenerator\n"
+"Bei gleichem Startwert werden die selben Zufallszahlen generiert.\n"
+"Wird kein Wert angegeben, wird die aktuelle Zeit als Startwert verwendet."
 
-#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:425
+#: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:426
 #, kde-format
 msgid "%1: fill column with non-uniform random numbers"
 msgid_plural "%1: fill columns with non-uniform random numbers"
@@ -15438,16 +15342,14 @@ msgstr ""
 "Spalten angewendet."
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:45
-#, fuzzy, kde-format
-#| msgid "periodic"
+#, kde-format
 msgid "Periodic"
-msgstr "periodisch"
+msgstr "Periodisch"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:46
-#, fuzzy, kde-format
-#| msgid "Random Values"
+#, kde-format
 msgid "Random"
-msgstr "Zufällige Werte"
+msgstr "Zufällig"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:49
 #, kde-format
@@ -15456,50 +15358,47 @@ msgid ""
 "specified interval.</li><li>Random - samples are created randomly based on "
 "the uniform distribution. </li></ul>"
 msgstr ""
+"Auswahlmethoden: <ul><li>Periodisch - Auswahl wird aus dem angegebenen "
+"Intervall erzeugt.</li><li>Zufällig - Auswahl wird zufällig (gleichverteilt) "
+"erzeugt. </li></ul>"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgid "&Sample"
-msgstr "Einfach"
+msgstr "Auswahl"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
-#, fuzzy, kde-format
-#| msgid "Mask values in the specified region"
+#, kde-format
 msgid "Sample values in the selected spreadsheet columns"
-msgstr "Werte in der angegebenen Region maskieren"
+msgstr "Werte in der ausgewählten Spalte abtasten"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:65
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgctxt "@title:window"
 msgid "Sample Values"
-msgstr "Stichproben-Quantile"
+msgstr "Stichprobenwerte"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:104
 #: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:30
-#, fuzzy, kde-format
-#| msgid "Period"
+#, kde-format
 msgid "Period:"
-msgstr "Periode"
+msgstr "Periode:"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:106
-#, fuzzy, kde-format
-#| msgid "Sample size:"
+#, kde-format
 msgid "Sample Size:"
 msgstr "Abtastgröße:"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:206
-#, fuzzy, kde-format
-#| msgid "%1: replace values"
+#, kde-format
 msgid "%1: sample values"
-msgstr "%1: Werte ersetzen"
+msgstr "%1: Werte abtasten"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:209
 #, kde-format
 msgid "Sample of %1"
-msgstr ""
+msgstr "Auswahl von %1"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
@@ -15507,102 +15406,97 @@ msgctxt "@title:window"
 msgid "Sort Columns"
 msgstr "Spalten sortieren"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:60
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:58
 #, kde-format
 msgid "Location Measures"
 msgstr "Lagemaße"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:113
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:69
 #, kde-format
 msgid "First Quartile"
 msgstr "Erstes Quartil"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:125
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:71
 #, kde-format
 msgid "Third Quartile"
 msgstr "Drittes Quartil"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:138
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:74
 #, kde-format
 msgid "Dispersion Measures"
 msgstr "Dispersionsmaße"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:155
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:78
 #, kde-format
 msgid "Mean absolute deviation around mean"
 msgstr "Mittlere absolute Abweichung vom Mittel"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:173
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:82
 #, kde-format
 msgid "Interquartile Range"
 msgstr "Interquatilbereich"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:180
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:84
 #, kde-format
 msgid "Shape Measures"
 msgstr "Formmaße"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:217
-#, fuzzy, kde-format
-#| msgid "Function Values"
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:93
+#, kde-format
 msgid "Unique Values"
-msgstr "Funktionswerte"
+msgstr "Eindeutige Werte"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:227
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
 #, kde-format
 msgid "Overview"
 msgstr "Überblick"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:251
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:124
 #, kde-format
 msgid "KDE Plot"
 msgstr "KDE-Diagramm"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:252
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:125
 #, kde-format
 msgid "Normal Q-Q Plot"
 msgstr "Normale Q-Q-Diagramm"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:257
-#, fuzzy, kde-format
-#| msgid "Box Plot"
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:130
+#, kde-format
 msgid "Pareto Plot"
-msgstr "Box-Diagramm"
+msgstr "Pareto-Diagramm"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:332
-#, fuzzy, kde-format
-#| msgid "Frequency"
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:203
+#, kde-format
 msgid "Frequency Table"
-msgstr "Frequenz"
+msgstr "Frequenztabelle"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:338
-#, fuzzy, kde-format
-#| msgid "Percent "
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:205
+#, kde-format
 msgid "Percent"
-msgstr "Prozentzeichen "
+msgstr "Prozent"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:394
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:258
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
 #, kde-format
 msgid "Density"
 msgstr "Dichte"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:458
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:322
 #, kde-format
 msgid "Theoretical Quantiles"
 msgstr "Theoretische Quantile"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:460
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:324
 #, kde-format
 msgid "Sample Quantiles"
 msgstr "Stichproben-Quantile"
 
-#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:773
-#, fuzzy, kde-format
-#| msgid "Cumulative Histogram"
+#: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:637
+#, kde-format
 msgid "Cumulative Percentage"
-msgstr "Kummulatives Histogramm"
+msgstr "Kummulative Prozente"
 
 #: src/kdefrontend/TemplateHandler.cpp:131
 #, kde-format
@@ -17417,17 +17311,15 @@ msgstr "Schrittweite:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:664
-#, fuzzy, kde-format
-#| msgid "First Tick Offset:"
+#, kde-format
 msgid "First Tick at"
-msgstr "Versatz des ersten Ticks:"
+msgstr "Ersten Tick bei"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:674
-#, fuzzy, kde-format
-#| msgid "First Tick Offset:"
+#, kde-format
 msgid "First Tick Value:"
-msgstr "Versatz des ersten Ticks:"
+msgstr "Wert des ersten Ticks:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:684
@@ -17905,10 +17797,9 @@ msgstr "Entfernt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:498
-#, fuzzy, kde-format
-#| msgid "Whiskers"
+#, kde-format
 msgid "Whisker End"
-msgstr "Haare"
+msgstr "Bartende"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:521
@@ -18211,10 +18102,9 @@ msgstr "X-Bereich:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1152
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Area"
-msgstr "Diagrammbereich"
+msgstr "Fläche"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1358
@@ -18415,10 +18305,9 @@ msgstr "Normierung:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:338
-#, fuzzy, kde-format
-#| msgid "Shape:"
+#, kde-format
 msgid "Shape"
-msgstr "Form:"
+msgstr "Form"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabErrorBars)
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:388
@@ -19880,28 +19769,25 @@ msgstr "Mehrfarbig"
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:14
 #, kde-format
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #. i18n: ectx: property (text), widget (QLabel, lInstalledTemplates)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:33
-#, fuzzy, kde-format
-#| msgid "Save As Template"
+#, kde-format
 msgid "Installed Templates:"
-msgstr "Als Vorlage speichern"
+msgstr "Installierte Vorlagen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:47
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Vorschau"
+msgstr "Vorschau:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLocation)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:102
-#, fuzzy, kde-format
-#| msgid "Rotation:"
+#, kde-format
 msgid "Location:"
-msgstr "Drehung:"
+msgstr "Lage:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCache)
 #: src/kdefrontend/ui/settingsdatasetspage.ui:23
@@ -20145,10 +20031,9 @@ msgstr "Zeit"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
-#, fuzzy, kde-format
-#| msgid "Mask Values"
+#, kde-format
 msgid "Numeric Values"
-msgstr "Werte maskieren"
+msgstr "Numerische Werte"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #. i18n: ectx: property (text), widget (QLabel, lConditionText)
@@ -20156,10 +20041,9 @@ msgstr "Werte maskieren"
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:67
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:128
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:234
-#, fuzzy, kde-format
-#| msgid "Connection:"
+#, kde-format
 msgid "Condition:"
-msgstr "Verbindung:"
+msgstr "Bedingung:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMax)
 #. i18n: ectx: property (text), widget (QLabel, lMaxDateTime)
@@ -20171,17 +20055,15 @@ msgstr "max."
 
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:144
-#, fuzzy, kde-format
-#| msgid "Mask Values"
+#, kde-format
 msgid "Text Values"
-msgstr "Werte maskieren"
+msgstr "Textwerte"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:203
-#, fuzzy, kde-format
-#| msgid "Sample Quantiles"
+#, kde-format
 msgid "DateTime Values"
-msgstr "Stichproben-Quantile"
+msgstr "Datum/Zeit-Werte"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:17
@@ -20259,10 +20141,9 @@ msgstr "Kommentare als Spalteneinheit:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:26
-#, fuzzy, kde-format
-#| msgid "%1: clear selected columns"
+#, kde-format
 msgid "Flatten selected columns relative to:"
-msgstr "%1: Ausgewählte Spalten löschen"
+msgstr "Ausgewählte Spalten abgleichen relativ zu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:108
@@ -20314,59 +20195,51 @@ msgstr "Y-Daten:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
-#, fuzzy, kde-format
-#| msgid "Curve Placement"
+#, kde-format
 msgid "Placement"
-msgstr "Kurvenplatzierung"
+msgstr "Platzierung"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "All box plots in one plot"
+#, kde-format
 msgid "&All plots in one plot area"
-msgstr "Alle Box-Diagramme in einem Diagramm"
+msgstr "Alle Diagramme in ein Diagramm"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "One plot per box plot"
+#, kde-format
 msgid "One p&lot area per plot"
-msgstr "Ein Diagramm pro Box-Diagramm"
+msgstr "Ein Diagramm pro Diagramm"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Add Box Plots to"
+#, kde-format
 msgid "Add plots to"
-msgstr "Box-Diagramm hinzufügen zu"
+msgstr "Diagramme hinzufügen zu"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
-#, fuzzy, kde-format
-#| msgid "E&xisting plot"
+#, kde-format
 msgid "E&xisting plot area"
 msgstr "E&xistierendes Diagramm"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
-#, fuzzy, kde-format
-#| msgid "&New plot in an existing worksheet"
+#, kde-format
 msgid "&New plot area in an existing worksheet"
 msgstr "&Neues Diagramm in existierendem Arbeitsblatt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
-#, fuzzy, kde-format
-#| msgid "New plot in a new wor&ksheet"
+#, kde-format
 msgid "New plot area in a new wor&ksheet"
 msgstr "Neues Diagramm in neuem Arbeitsblatt"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Create curve for original data"
+#, kde-format
 msgid "Create plot for original data"
-msgstr "Erzeuge Kurve für Originaldaten"
+msgstr "Erzeuge Diagramm für Originaldaten"
 
 #. i18n: ectx: property (text), widget (QLabel, lParameter2)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:42
@@ -20416,7 +20289,7 @@ msgstr ""
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:156
 #, kde-format
 msgid "Seed:"
-msgstr ""
+msgstr "Startwert:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMin)
 #: src/kdefrontend/ui/spreadsheet/rescalewidget.ui:69
@@ -20560,10 +20433,9 @@ msgid "Center Tiled"
 msgstr "Zentriert gekachelt"
 
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:285
-#, fuzzy, kde-format
-#| msgid "%1 worksheets: background color style changed"
+#, kde-format
 msgid "%1 elements: background color style changed"
-msgstr "Arbeitsblatt %1: Farbstil des Hintergrunds wurde geändert"
+msgstr "%1 Elemente: Farbstil des Hintergrunds wurde geändert"
 
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:31
 #: src/kdefrontend/widgets/DatapickerCurveWidget.cpp:35
@@ -21204,52 +21076,47 @@ msgstr ""
 #: src/tools/TeXRenderer.cpp:64
 #, kde-format
 msgid "Couldn't find preview.sty."
-msgstr ""
+msgstr "preview.sty wurde nicht gefunden."
 
 #: src/tools/TeXRenderer.cpp:80
-#, fuzzy, kde-format
-#| msgid "Couldn't save the file '%1'."
+#, kde-format
 msgid "Couldn't open the file"
-msgstr "Die Datei '%1' konnte nicht gespeichert werden."
+msgstr "Die Datei konnte nicht geöffnet werden"
 
 #: src/tools/TeXRenderer.cpp:185 src/tools/TeXRenderer.cpp:243
 #, kde-format
 msgid "process failed, exit code ="
-msgstr ""
+msgstr "Prozess fehlgeschlagen, Fehlercode ="
 
 #: src/tools/TeXRenderer.cpp:223
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "latex not found"
-msgstr "Datei nicht gefunden"
+msgstr "LaTeX nicht gefunden"
 
 #: src/tools/TeXRenderer.cpp:257
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "dvips not found"
-msgstr "Datei nicht gefunden"
+msgstr "dvips nicht gefunden"
 
 #: src/tools/TeXRenderer.cpp:264
 #, kde-format
 msgid "dvips process failed, exit code ="
-msgstr ""
+msgstr "dvips fehlgeschlagen, Fehlercode ="
 
 #: src/tools/TeXRenderer.cpp:286
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "convert not found"
-msgstr "Datei nicht gefunden"
+msgstr "convert nicht gefunden"
 
 #: src/tools/TeXRenderer.cpp:294
 #, kde-format
 msgid "convert process failed, exit code ="
-msgstr ""
+msgstr "convert-Prozess fehlgeschlagen, Fehlercode ="
 
 #: src/tools/TeXRenderer.cpp:316
-#, fuzzy, kde-format
-#| msgid "Failed to open the file '%1'."
+#, kde-format
 msgid "Unable to open file:"
-msgstr "Fehler beim Öffnen der Datei '%1'."
+msgstr "Fehler beim Öffnen der Datei:"
 
 #, fuzzy
 #~| msgid "Statistics"
