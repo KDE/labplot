@@ -40,7 +40,6 @@ public:
 
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; // list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
@@ -70,6 +69,11 @@ public:
 	int layoutColumnCount;
 
 private:
+	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QStringList m_names;
+
+	bool translatePainter(QPainter*, int& row, int& col, int height);
+
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

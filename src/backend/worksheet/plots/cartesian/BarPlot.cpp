@@ -346,6 +346,7 @@ Background* BarPlotPrivate::addBackground(const KConfigGroup& group) {
 
 	q->connect(background, &Background::updateRequested, [=] {
 		updatePixmap();
+		Q_EMIT q->updateLegendRequested();
 	});
 
 	backgrounds << background;
@@ -363,6 +364,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updatePixmapRequested, [=] {
 		updatePixmap();
+		Q_EMIT q->updateLegendRequested();
 	});
 
 	q->connect(line, &Line::updateRequested, [=] {

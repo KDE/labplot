@@ -14,8 +14,8 @@
 
   \ingroup kdefrontend
 */
-
 #include "CartesianPlotLegend.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
@@ -23,6 +23,7 @@
 #include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
@@ -379,32 +380,39 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	prepareGeometryChange();
 
-	curvesList.clear();
+	m_curves.clear();
+	m_names.clear();
 
-	// add xy-curves
-	for (auto* curve : plot->children<XYCurve>()) {
-		if (curve && curve->isVisible() && curve->legendVisible())
-			curvesList.push_back(curve);
+	const auto& children = plot->children<WorksheetElement>();
+	for (auto* child : children) {
+		auto* curve = dynamic_cast<XYCurve*>(child);
+		if (curve && curve->isVisible() && curve->legendVisible()) {
+			m_curves << curve;
+			m_names << curve->name();
+			continue;
+		}
+
+		if ((child->type() == AspectType::Histogram || child->type() == AspectType::BoxPlot) && child->isVisible()) {
+			m_curves << child;
+			m_names << child->name();
+			continue;
+		}
+
+		auto* barPlot = dynamic_cast<BarPlot*>(child);
+		if (barPlot && barPlot->isVisible()) {
+			m_curves << barPlot;
+			const auto& columns = barPlot->dataColumns();
+			for (auto* column : columns)
+				m_names << column->name();
+		}
 	}
 
-	// add histograms
-	for (auto* hist : plot->children<Histogram>()) {
-		if (hist && hist->isVisible())
-			curvesList.push_back(hist);
-	}
-
-	// add box plots
-	for (auto* boxPlot : plot->children<BoxPlot>()) {
-		if (boxPlot && boxPlot->isVisible())
-			curvesList.push_back(boxPlot);
-	}
-
-	int curveCount = curvesList.size();
-	columnCount = (curveCount < layoutColumnCount) ? curveCount : layoutColumnCount;
+	int namesCount = m_names.count();
+	columnCount = (namesCount < layoutColumnCount) ? namesCount : layoutColumnCount;
 	if (columnCount == 0) // no curves available
 		rowCount = 0;
 	else
-		rowCount = ceil(double(curveCount) / double(columnCount));
+		rowCount = ceil(double(namesCount) / double(columnCount));
 
 	maxColumnTextWidths.clear();
 
@@ -414,6 +422,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	float h = fm.ascent();
 
 	float legendWidth = 0;
+
 	int index;
 	for (int c = 0; c < columnCount; ++c) {
 		float maxTextWidth = 0;
@@ -423,18 +432,12 @@ void CartesianPlotLegendPrivate::retransform() {
 			else
 				index = r * columnCount + c;
 
-			if (index >= curveCount)
+			if (index >= namesCount)
 				break;
 
-			const auto* curve = curvesList.at(index);
-			if (curve) {
-				if (!curve->isVisible())
-					continue;
-
-				w = fm.boundingRect(curve->name()).width();
-				if (w > maxTextWidth)
-					maxTextWidth = w;
-			}
+			w = fm.boundingRect(m_names.at(index)).width();
+			if (w > maxTextWidth)
+				maxTextWidth = w;
 		}
 		maxColumnTextWidths.append(maxTextWidth);
 		legendWidth += maxTextWidth;
@@ -443,6 +446,8 @@ void CartesianPlotLegendPrivate::retransform() {
 	legendWidth += layoutLeftMargin + layoutRightMargin; // margins
 	legendWidth += columnCount * (lineSymbolWidth + layoutHorizontalSpacing); // width of the columns without the text
 	legendWidth += (columnCount - 1) * 2 * layoutHorizontalSpacing; // spacings between the columns
+
+	// add title width if title is available
 	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth;
 		if (rotationAngle == 0.0)
@@ -503,7 +508,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		return;
 
 	painter->save();
-
 	painter->rotate(-rotationAngle);
 
 	// draw the area
@@ -598,7 +602,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	}
 
 	// draw curve's line+symbol and the names
-	int curveCount = curvesList.size();
 	QFontMetrics fm(labelFont);
 	float h = fm.ascent();
 	painter->setFont(labelFont);
@@ -610,61 +613,16 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 	painter->save();
 
-	int index;
-	for (int c = 0; c < columnCount; ++c) {
-		for (int r = 0; r < rowCount; ++r) {
-			if (labelColumnMajor)
-				index = c * rowCount + r;
-			else
-				index = r * columnCount + c;
+	int col = 0;
+	int row = 0;
+	for (auto* child : m_curves) {
+		// process the curves
+		const auto* curve = dynamic_cast<const XYCurve*>(child);
+		const auto* hist = dynamic_cast<const Histogram*>(child);
+		const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
+		const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 
-			if (index >= curveCount)
-				break;
-
-			// draw the legend item for histogram (simple rectangular with the sizes of the ascent)
-			const Histogram* hist = dynamic_cast<Histogram*>(curvesList.at(index));
-			if (hist) {
-				// use line's pen (histogram bars, envelope or drop lines) if available,
-				if (hist->line()->histogramLineType() != Histogram::NoLine && hist->line()->pen() != Qt::NoPen) {
-					painter->setOpacity(hist->line()->opacity());
-					painter->setPen(hist->line()->pen());
-				}
-
-				// for the brush, use the histogram filling or symbols filling or no brush
-				if (hist->background()->enabled())
-					painter->setBrush(QBrush(hist->background()->firstColor(), hist->background()->brushStyle()));
-				else if (hist->symbol()->style() != Symbol::Style::NoSymbols)
-					painter->setBrush(hist->symbol()->brush());
-				else
-					painter->setBrush(Qt::NoBrush);
-
-				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawRect(QRectF(-h / 2, -h / 2, h, h));
-				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
-
-				// curve's name
-				painter->setPen(QPen(labelColor));
-				painter->setOpacity(1.0);
-				// TODO: support HTML text?
-				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), hist->name());
-				painter->translate(0, layoutVerticalSpacing + h);
-				continue;
-			}
-
-			// draw the legend item for box plot (name only at the moment)
-			const BoxPlot* boxPlot = dynamic_cast<BoxPlot*>(curvesList.at(index));
-			if (boxPlot) {
-				// curve's name
-				painter->setPen(QPen(labelColor));
-				painter->setOpacity(1.0);
-				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), boxPlot->name());
-				painter->translate(0, layoutVerticalSpacing + h);
-				continue;
-			}
-
-			// draw the legend item for xy-curve
-			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
-
+		if (curve) { // draw the legend item for xy-curve
 			// curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::LineType::NoLine) {
 				painter->setPen(curve->linePen());
@@ -699,13 +657,13 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 						// caps for the horiz. line
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2,
-										  h / 2 - errorBarsSize / 4,
-										  lineSymbolWidth / 2 - errorBarsSize / 2,
-										  h / 2 + errorBarsSize / 4);
+											h / 2 - errorBarsSize / 4,
+											lineSymbolWidth / 2 - errorBarsSize / 2,
+											h / 2 + errorBarsSize / 4);
 						painter->drawLine(lineSymbolWidth / 2 + errorBarsSize / 2,
-										  h / 2 - errorBarsSize / 4,
-										  lineSymbolWidth / 2 + errorBarsSize / 2,
-										  h / 2 + errorBarsSize / 4);
+											h / 2 - errorBarsSize / 4,
+											lineSymbolWidth / 2 + errorBarsSize / 2,
+											h / 2 + errorBarsSize / 4);
 					}
 
 					// vert. line
@@ -714,13 +672,13 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 						// caps for the vert. line
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 4,
-										  h / 2 - errorBarsSize / 2,
-										  lineSymbolWidth / 2 + errorBarsSize / 4,
-										  h / 2 - errorBarsSize / 2);
+											h / 2 - errorBarsSize / 2,
+											lineSymbolWidth / 2 + errorBarsSize / 4,
+											h / 2 - errorBarsSize / 2);
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 4,
-										  h / 2 + errorBarsSize / 2,
-										  lineSymbolWidth / 2 + errorBarsSize / 4,
-										  h / 2 + errorBarsSize / 2);
+											h / 2 + errorBarsSize / 2,
+											lineSymbolWidth / 2 + errorBarsSize / 4,
+											h / 2 + errorBarsSize / 2);
 					}
 					break;
 				}
@@ -752,17 +710,70 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			// curve's name
 			painter->setPen(QPen(labelColor));
 			painter->setOpacity(1.0);
-			// TODO: support HTML text?
 			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), curve->name());
-			painter->translate(0, layoutVerticalSpacing + h);
-		}
 
-		// translate to the beginning of the next column
-		painter->restore();
-		int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(c); // the width of the current columns
-		deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
-		painter->translate(deltaX, 0);
-		painter->save();
+			if (!translatePainter(painter, row, col, h))
+				break;
+		} else if (hist) { // draw the legend item for histogram (simple rectangular with the sizes of the ascent)
+			// use line's pen (histogram bars, envelope or drop lines) if available,
+			if (hist->line()->histogramLineType() != Histogram::NoLine && hist->line()->pen() != Qt::NoPen) {
+				painter->setOpacity(hist->line()->opacity());
+				painter->setPen(hist->line()->pen());
+			}
+
+			// for the brush, use the histogram filling or symbols filling or no brush
+			if (hist->background()->enabled())
+				painter->setBrush(QBrush(hist->background()->firstColor(), hist->background()->brushStyle()));
+			else if (hist->symbol()->style() != Symbol::Style::NoSymbols)
+				painter->setBrush(hist->symbol()->brush());
+			else
+				painter->setBrush(Qt::NoBrush);
+
+			painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+			painter->drawRect(QRectF(-h / 2, -h / 2, h, h));
+			painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+			// curve's name
+			painter->setPen(QPen(labelColor));
+			painter->setOpacity(1.0);
+			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), hist->name());
+
+			if (!translatePainter(painter, row, col, h))
+				break;
+		} else if (boxPlot) { // draw the legend item for box plot (name only at the moment)
+			// curve's name
+			painter->setPen(QPen(labelColor));
+			painter->setOpacity(1.0);
+			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), boxPlot->name());
+
+			if (!translatePainter(painter, row, col, h))
+				break;
+		} else if (barPlot) { // draw the legend item for every dataset bar in the bar plot
+			const auto& columns = barPlot->dataColumns();
+			int index = 0;
+			for (auto* column : columns) {
+				// draw the bar
+				auto* background = barPlot->backgroundAt(index);
+				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				auto* line = barPlot->lineAt(index);
+				painter->setPen(line->pen());
+				painter->setOpacity(line->opacity());
+				painter->setBrush(Qt::NoBrush);
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h *0.25, -h / 2, h * 0.5, h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				// draw the name text
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				++index;
+				if (!translatePainter(painter, row, col, h))
+					break;
+			}
+		}
 	}
 
 	painter->restore();
@@ -777,6 +788,46 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
+}
+
+/*!
+ * helper function translating the painter to the next row and column when painting the next legend item in paint().
+ */
+bool CartesianPlotLegendPrivate::translatePainter(QPainter* painter, int& row, int& col, int height) {
+	if (labelColumnMajor) { // column major order
+		++row;
+		if (row != rowCount)
+			painter->translate(0, layoutVerticalSpacing + height);
+		else {
+			++col;
+			if (col == columnCount)
+				return false;
+
+			row = 0;
+			painter->restore();
+			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
+			painter->translate(deltaX, 0);
+			painter->save();
+		}
+	} else { // row major order
+		++col;
+		if (col != columnCount) {
+			int deltaX = lineSymbolWidth + layoutHorizontalSpacing + maxColumnTextWidths.at(col); // the width of the current columns
+			deltaX += 2 * layoutHorizontalSpacing; // spacing between two columns
+			painter->translate(deltaX, 0);
+		} else {
+			++row;
+			if (row == rowCount)
+				return false;
+
+			painter->restore();
+			painter->translate(0, layoutVerticalSpacing + height);
+			painter->save();
+		}
+	}
+
+	return true;
 }
 
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
