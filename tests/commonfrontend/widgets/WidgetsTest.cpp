@@ -806,26 +806,26 @@ void WidgetsTest::numberSpinBoxFeedback() {
 
 	QCOMPARE(valueChangedCounter, 1);
 	QCOMPARE(lastValue, 6);
-	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.m_waitFeedback, true);
 	QCOMPARE(sb.setValue(6), true);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
-	QCOMPARE(sb.mWaitFeedback, false);
+	QCOMPARE(sb.m_waitFeedback, false);
 
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 2);
 	QCOMPARE(lastValue, 7);
-	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.m_waitFeedback, true);
 	QCOMPARE(sb.setValue(0), false);
 	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(0));
-	QCOMPARE(sb.mWaitFeedback, false);
+	QCOMPARE(sb.m_waitFeedback, false);
 
 	sb.keyPressEvent(&event);
 	QCOMPARE(valueChangedCounter, 3);
 	QCOMPARE(lastValue, 8);
-	QCOMPARE(sb.mWaitFeedback, true);
+	QCOMPARE(sb.m_waitFeedback, true);
 	QCOMPARE(sb.setValue(8), true);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
-	QCOMPARE(sb.mWaitFeedback, false);
+	QCOMPARE(sb.m_waitFeedback, false);
 }
 
 // set value called directly when valueChanged() is called. This can happen if the other side directly sets another

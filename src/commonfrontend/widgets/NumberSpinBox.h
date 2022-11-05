@@ -79,17 +79,17 @@ private:
 	void valueChanged();
 
 private:
-	QString mValueStr;
+	QString m_valueStr;
 	// See https://invent.kde.org/education/labplot/-/merge_requests/167
 	// for explanation of the feature
-	bool mFeedback{false}; // defines if the spinbox expects a feedback
-	bool mWaitFeedback{false};
+	bool m_feedback{false}; // defines if the spinbox expects a feedback
+	bool m_waitFeedback{false};
 
-	bool mStrongFocus{true};
+	bool m_strongFocus{true};
 
 	// The value stored in QAbstractSpinBox is rounded to
 	// decimals and this is not desired
-	double mValue{0};
+	double m_value{0};
 
 	friend class WidgetsTest;
 };

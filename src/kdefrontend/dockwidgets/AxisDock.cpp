@@ -848,7 +848,6 @@ void AxisDock::zeroOffsetChanged(double offset) {
 }
 
 void AxisDock::setOffset(double offset) {
-	SET_NUMBER_LOCALE
 	ui.sbZeroOffset->setValue(-offset);
 }
 void AxisDock::setLeftOffset() {

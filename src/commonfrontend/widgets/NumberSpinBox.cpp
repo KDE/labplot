@@ -2,6 +2,8 @@
 
 #include "backend/lib/macrosWarningStyle.h"
 
+#include "klocalizedstring.h"
+
 #include <limits>
 
 #include <QApplication>
@@ -31,7 +33,7 @@ NumberSpinBox::NumberSpinBox(double initValue, bool feedback, QWidget* parent)
 void NumberSpinBox::init(double initValue, bool feedback) {
 	setFocusPolicy(Qt::StrongFocus);
 	setValue(initValue);
-	mFeedback = feedback; // must be after setValue()!
+	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
 	setMinimum(std::numeric_limits<double>::lowest());
 	setMaximum(std::numeric_limits<double>::max());
@@ -41,17 +43,17 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 QString NumberSpinBox::errorToString(Errors e) {
 	switch (e) {
 	case Errors::Min:
-		return tr("Value lower than minimum allowed: %1").arg(QString::number(minimum()));
+		return i18n("Minimum allowed value: %1").arg(QString::number(minimum()));
 	case Errors::Max:
-		return tr("Value higher than maximum allowed: %1").arg(QString::number(maximum()));
+		return i18n("Maximum allowed value: %1").arg(QString::number(maximum()));
 	case Errors::Invalid:
-		return tr("The value does not represent a valid number");
+		return i18n("The value does not represent a valid number");
 	case Errors::NoNumber:
-		return tr("No number entered");
+		return i18n("No number entered");
 	case Errors::NoError:
 		return QLatin1String("");
 	}
-	return QLatin1String("Unhandled error");
+	return i18n("Unhandled error");
 }
 
 void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
@@ -71,15 +73,15 @@ void NumberSpinBox::keyPressEvent(QKeyEvent* event) {
 	QString valueStr;
 	Errors e = validate(text, v, valueStr);
 	setInvalid(e);
-	if (e == Errors::NoError && v != mValue && mValueStr != valueStr) {
-		mValueStr = valueStr;
-		mValue = v;
+	if (e == Errors::NoError && v != m_value && m_valueStr != valueStr) {
+		m_valueStr = valueStr;
+		m_value = v;
 		valueChanged();
 	}
 }
 
 void NumberSpinBox::wheelEvent(QWheelEvent* event) {
-	if (mStrongFocus && !hasFocus())
+	if (m_strongFocus && !hasFocus())
 		event->ignore();
 	else
 		QDoubleSpinBox::wheelEvent(event);
@@ -119,9 +121,8 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 
 	bool ok;
 
-	if (v_str.at(0) == '+' || v_str.at(0) == '-') {
+	if (v_str.at(0) == '+' || v_str.at(0) == '-')
 		p.integerSign = v_str.at(0);
-	}
 
 	p.fraction = false;
 	// integer properties
@@ -190,7 +191,7 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 
 	if (p.exponentLetter != QChar::Null) {
 		const auto e = QString("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == '-'), 10, QLatin1Char('0'));
-		QString sign = "";
+		QString sign;
 		if (exponent >= 0 && !p.exponentSign.isNull())
 			sign = "+";
 		number += p.exponentLetter + sign + e;
@@ -228,7 +229,7 @@ QString NumberSpinBox::strip(const QString& t) const {
 
 QString NumberSpinBox::textFromValue(double value) const {
 	Q_UNUSED(value);
-	return mValueStr;
+	return m_valueStr;
 }
 
 /*!
@@ -347,7 +348,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 
 	lineEdit()->setCursorPosition(newPos + prefix().size());
 
-	mValue = v;
+	m_value = v;
 	return Errors::NoError;
 }
 
@@ -387,35 +388,35 @@ QValidator::State NumberSpinBox::validate(QString& input, int& pos) const {
 }
 
 void NumberSpinBox::setText(const QString& text) {
-	mValueStr = text;
+	m_valueStr = text;
 	lineEdit()->setText(prefix() + text + suffix());
 }
 
 bool NumberSpinBox::setValue(double v) {
-	if (mFeedback && mWaitFeedback) {
-		mWaitFeedback = false;
+	if (m_feedback && m_waitFeedback) {
+		m_waitFeedback = false;
 		if (!qFuzzyCompare(v, value())) {
-			setInvalid(tr("Invalid value entered. Valid value: %1").arg(v));
+			setInvalid(i18n("Invalid value entered. Valid value: %1").arg(v));
 			return false;
 		}
 		return true;
 	}
 
 	setText(locale().toString(v, 'f', decimals()));
-	mValue = v;
+	m_value = v;
 	return true;
 }
 
 void NumberSpinBox::setFeedback(bool enable) {
-	mFeedback = enable;
+	m_feedback = enable;
 }
 
 bool NumberSpinBox::feedback() {
-	return mFeedback;
+	return m_feedback;
 }
 
 void NumberSpinBox::setStrongFocus(bool enable) {
-	mStrongFocus = enable;
+	m_strongFocus = enable;
 	if (enable)
 		setFocusPolicy(Qt::StrongFocus);
 	else
@@ -423,7 +424,7 @@ void NumberSpinBox::setStrongFocus(bool enable) {
 }
 
 double NumberSpinBox::value() {
-	return mValue;
+	return m_value;
 }
 
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
@@ -431,8 +432,8 @@ QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 }
 
 void NumberSpinBox::valueChanged() {
-	if (mFeedback)
-		mWaitFeedback = true;
+	if (m_feedback)
+		m_waitFeedback = true;
 	qDebug() << "Value: " << value();
 	emit valueChanged(value());
 }
