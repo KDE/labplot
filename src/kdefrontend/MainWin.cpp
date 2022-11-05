@@ -865,9 +865,9 @@ void MainWin::initMenus() {
 			settingsMenu->addAction(action);
 	}
 #else
-	delete this->guiFactory()->container("notebook", this);
-	delete this->guiFactory()->container("new_notebook", this);
-	delete this->guiFactory()->container("notebook_toolbar", this);
+	delete this->guiFactory()->container(QStringLiteral("notebook"), this);
+	delete this->guiFactory()->container(QStringLiteral("new_notebook"), this);
+	delete this->guiFactory()->container(QStringLiteral("notebook_toolbar"), this);
 #endif
 }
 
@@ -882,7 +882,7 @@ void MainWin::colorSchemeChanged(QAction* action) {
 
 	// save the selected color scheme
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	group.writeEntry("ColorScheme", schemeName);
+	group.writeEntry(QStringLiteral("ColorScheme"), schemeName);
 	group.sync();
 }
 
