@@ -617,10 +617,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	int row = 0;
 	for (auto* child : m_curves) {
 		// process the curves
-		const auto* curve = dynamic_cast<XYCurve*>(child);
-		const auto* hist = dynamic_cast<Histogram*>(child);
-		const auto* boxPlot = dynamic_cast<BoxPlot*>(child);
-		const auto* barPlot = dynamic_cast<BarPlot*>(child);
+		const auto* curve = dynamic_cast<const XYCurve*>(child);
+		const auto* hist = dynamic_cast<const Histogram*>(child);
+		const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
+		const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 
 		if (curve) { // draw the legend item for xy-curve
 			// curve's line (painted at the half of the ascent size)

@@ -1993,7 +1993,11 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
-	const auto* curve = qobject_cast<const XYCurve*>(child);
+	const auto* curve = dynamic_cast<const XYCurve*>(child);
+	const auto* hist = dynamic_cast<const Histogram*>(child);
+	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
+	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
 
@@ -2070,49 +2074,45 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		Q_EMIT curveAdded(curve);
+	} else if (hist) {
+		DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
+		// TODO: check if all ranges must be updated
+		connect(hist, &Histogram::dataChanged, [this, hist] {
+			this->dataChanged(const_cast<Histogram*>(hist));
+		});
+		connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
+		connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+
+		updateLegend();
+		cSystemIndex = hist->coordinateSystemIndex();
+		checkRanges = true;
+
+		if (curveTotalCount() == 1)
+			checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
+	} else if (boxPlot) {
+		DEBUG(Q_FUNC_INFO << ", BOX PLOT")
+		connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
+			this->dataChanged(const_cast<BoxPlot*>(boxPlot));
+		});
+
+		if (curveTotalCount() == 1) {
+			connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
+			boxPlotOrientationChanged(boxPlot->orientation());
+			if (!boxPlot->dataColumns().isEmpty())
+				checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
+		}
+	} else if (barPlot) {
+		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
+		// TODO: check if all ranges must be updated
+		connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
+			this->dataChanged(const_cast<BarPlot*>(barPlot));
+		});
+
+		// update the legend on data column and formatting changes
+		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
+		connect(barPlot, &BarPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
 	} else {
-		const auto* hist = qobject_cast<const Histogram*>(child);
-		if (hist) {
-			DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
-			// TODO: check if all ranges must be updated
-			connect(hist, &Histogram::dataChanged, [this, hist] {
-				this->dataChanged(const_cast<Histogram*>(hist));
-			});
-			connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-			connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-			updateLegend();
-			cSystemIndex = hist->coordinateSystemIndex();
-			checkRanges = true;
-
-			if (curveTotalCount() == 1)
-				checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
-		}
-
-		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
-		if (boxPlot) {
-			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
-			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
-				this->dataChanged(const_cast<BoxPlot*>(boxPlot));
-			});
-			if (curveTotalCount() == 1) {
-				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
-				boxPlotOrientationChanged(boxPlot->orientation());
-				if (!boxPlot->dataColumns().isEmpty())
-					checkAxisFormat(boxPlot->coordinateSystemIndex(), boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
-			}
-		}
-
-		const auto* barPlot = qobject_cast<const BarPlot*>(child);
-		if (barPlot) {
-			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
-			// TODO: check if all ranges must be updated
-			connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
-				this->dataChanged(const_cast<BarPlot*>(barPlot));
-			});
-		}
-
-		const auto* infoElement = qobject_cast<const InfoElement*>(child);
+		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
 			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
 

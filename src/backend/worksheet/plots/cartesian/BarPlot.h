@@ -105,6 +105,7 @@ Q_SIGNALS:
 	void typeChanged(BarPlot::Type);
 	void orientationChanged(BarPlot::Orientation);
 	void widthFactorChanged(double);
+	void updateLegendRequested();
 
 	// box border
 	void borderPenChanged(QPen&);
