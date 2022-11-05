@@ -123,7 +123,7 @@ void TreeViewComboBox::showPopup() {
 	m_groupBox->move(mapToGlobal(this->rect().topLeft()));
 
 	setEditText(m_lineEditText);
-	m_lineEdit->setText(""); // delete the previous search string
+	m_lineEdit->setText(QString()); // delete the previous search string
 	m_lineEdit->setFocus();
 }
 
@@ -187,7 +187,7 @@ void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 		setToolTip(tooltip);
 	} else {
 		setPalette(qApp->palette());
-		setToolTip("");
+		setToolTip(QString());
 	}
 }
 
@@ -325,7 +325,7 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 
 	// don't make the combobox red for initially created curves
 	if (!column && path.isEmpty()) {
-		setText("");
+		setText(QStringLiteral(""));
 		setInvalid(false);
 		return;
 	}
@@ -337,5 +337,5 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 		useCurrentIndexText(false);
 		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
 	}
-	setText(path.split('/').last());
+	setText(path.split(QLatin1Char('/')).last());
 }

@@ -27,7 +27,7 @@
 #include <QVector>
 
 void MQTTUnitTest::initTestCase() {
-	const QString currentDir = __FILE__;
+	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
@@ -40,8 +40,8 @@ void MQTTUnitTest::initTestCase() {
 //###################  check superior and inferior relations  ##################
 //##############################################################################
 void MQTTUnitTest::testContainFalse() {
-	MQTTClient* client = new MQTTClient("test");
-	const QString fileName = m_dataDir + "contain_false.txt";
+	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	const QString fileName = m_dataDir + QStringLiteral("contain_false.txt");
 	QFile file(fileName);
 
 	if (file.open(QIODevice::ReadOnly)) {
@@ -63,8 +63,8 @@ void MQTTUnitTest::testContainFalse() {
 }
 
 void MQTTUnitTest::testContainTrue() {
-	MQTTClient* client = new MQTTClient("test");
-	const QString fileName = m_dataDir + "contain_true.txt";
+	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	const QString fileName = m_dataDir + QStringLiteral("contain_true.txt");
 	QFile file(fileName);
 
 	if (file.open(QIODevice::ReadOnly)) {
@@ -89,8 +89,8 @@ void MQTTUnitTest::testContainTrue() {
 //############################  check common topics  ###########################
 //##############################################################################
 void MQTTUnitTest::testCommonTrue() {
-	MQTTClient* client = new MQTTClient("test");
-	const QString fileName = m_dataDir + "common_true.txt";
+	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	const QString fileName = m_dataDir + QStringLiteral("common_true.txt");
 	QFile file(fileName);
 
 	if (file.open(QIODevice::ReadOnly)) {
@@ -112,8 +112,8 @@ void MQTTUnitTest::testCommonTrue() {
 }
 
 void MQTTUnitTest::testCommonFalse() {
-	MQTTClient* client = new MQTTClient("test");
-	const QString fileName = m_dataDir + "common_false.txt";
+	MQTTClient* client = new MQTTClient(QStringLiteral("test"));
+	const QString fileName = m_dataDir + QStringLiteral("common_false.txt");
 	QFile file(fileName);
 
 	if (file.open(QIODevice::ReadOnly)) {
@@ -126,7 +126,7 @@ void MQTTUnitTest::testCommonFalse() {
 #else
 			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
 #endif
-			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), "");
+			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), QString());
 		}
 
 		delete client;
@@ -143,22 +143,22 @@ void MQTTUnitTest::testIntegerMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient("test");
+	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
-	QMqttTopicFilter topicFilter{"labplot/mqttUnitTest"};
+	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname("broker.hivemq.com");
+	client->setHostname(QStringLiteral("broker.hivemq.com"));
 	client->setPort(1883);
 	client->connectToHost();
 
@@ -171,7 +171,7 @@ void MQTTUnitTest::testIntegerMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + "integer_message_1.txt";
+		const QString fileName = m_dataDir + QStringLiteral("integer_message_1.txt");
 		QFile file(fileName);
 
 		if (file.open(QIODevice::ReadOnly)) {
@@ -194,7 +194,7 @@ void MQTTUnitTest::testIntegerMessage() {
 		if (timer.isActive()) {
 			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto& top : topic) {
-				if (top->topicName() == "labplot/mqttUnitTest") {
+				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 					testTopic = top;
 					break;
 				}
@@ -208,7 +208,7 @@ void MQTTUnitTest::testIntegerMessage() {
 				QCOMPARE(value->valueAt(1), 2);
 				QCOMPARE(value->valueAt(2), 3);
 
-				const QString fileName2 = m_dataDir + "integer_message_2.txt";
+				const QString fileName2 = m_dataDir + QStringLiteral("integer_message_2.txt");
 				QFile file2(fileName2);
 
 				if (file2.open(QIODevice::ReadOnly)) {
@@ -237,22 +237,22 @@ void MQTTUnitTest::testNumericMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient("test");
+	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
-	QMqttTopicFilter topicFilter{"labplot/mqttUnitTest"};
+	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname("broker.hivemq.com");
+	client->setHostname(QStringLiteral("broker.hivemq.com"));
 	client->setPort(1883);
 	client->connectToHost();
 
@@ -265,7 +265,7 @@ void MQTTUnitTest::testNumericMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + "numeric_message_1.txt";
+		const QString fileName = m_dataDir + QStringLiteral("numeric_message_1.txt");
 		QFile file(fileName);
 
 		if (file.open(QIODevice::ReadOnly)) {
@@ -288,7 +288,7 @@ void MQTTUnitTest::testNumericMessage() {
 		if (timer.isActive()) {
 			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto& top : topic) {
-				if (top->topicName() == "labplot/mqttUnitTest") {
+				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 					testTopic = top;
 					break;
 				}
@@ -302,7 +302,7 @@ void MQTTUnitTest::testNumericMessage() {
 				QCOMPARE(value->valueAt(1), 2.7);
 				QCOMPARE(value->valueAt(2), 3.9);
 
-				const QString fileName2 = m_dataDir + "numeric_message_2.txt";
+				const QString fileName2 = m_dataDir + QStringLiteral("numeric_message_2.txt");
 				QFile file2(fileName2);
 
 				if (file2.open(QIODevice::ReadOnly)) {
@@ -331,22 +331,22 @@ void MQTTUnitTest::testTextMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient("test");
+	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
-	QMqttTopicFilter topicFilter{"labplot/mqttUnitTest"};
+	QMqttTopicFilter topicFilter{QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 	mqttClient->read();
 	mqttClient->ready();
 
 	QMqttClient* client = new QMqttClient();
-	client->setHostname("broker.hivemq.com");
+	client->setHostname(QStringLiteral("broker.hivemq.com"));
 	client->setPort(1883);
 	client->connectToHost();
 
@@ -359,7 +359,7 @@ void MQTTUnitTest::testTextMessage() {
 
 	QMqttSubscription* subscription = client->subscribe(topicFilter, 0);
 	if (subscription) {
-		const QString fileName = m_dataDir + "text_message.txt";
+		const QString fileName = m_dataDir + QStringLiteral("text_message.txt");
 		QFile file(fileName);
 
 		if (file.open(QIODevice::ReadOnly)) {
@@ -382,7 +382,7 @@ void MQTTUnitTest::testTextMessage() {
 		if (timer.isActive()) {
 			QVector<const MQTTTopic*> topic = mqttClient->children<const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (const auto& top : topic) {
-				if (top->topicName() == "labplot/mqttUnitTest") {
+				if (top->topicName() == QLatin1String("labplot/mqttUnitTest")) {
 					testTopic = top;
 					break;
 				}
@@ -392,11 +392,11 @@ void MQTTUnitTest::testTextMessage() {
 				Column* value = testTopic->column(testTopic->columnCount() - 1);
 				QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
 				QCOMPARE(value->rowCount(), 5);
-				QCOMPARE(value->textAt(0), "ball");
-				QCOMPARE(value->textAt(1), "cat");
-				QCOMPARE(value->textAt(2), "dog");
-				QCOMPARE(value->textAt(3), "house");
-				QCOMPARE(value->textAt(4), "Barcelona");
+				QCOMPARE(value->textAt(0), QStringLiteral("ball"));
+				QCOMPARE(value->textAt(1), QStringLiteral("cat"));
+				QCOMPARE(value->textAt(2), QStringLiteral("dog"));
+				QCOMPARE(value->textAt(3), QStringLiteral("house"));
+				QCOMPARE(value->textAt(4), QStringLiteral("Barcelona"));
 			}
 		}
 	}
@@ -411,17 +411,17 @@ void MQTTUnitTest::testTextMessage() {
 
 	Project* project = new Project();
 
-	MQTTClient* mqttClient = new MQTTClient("test");
+	MQTTClient* mqttClient = new MQTTClient(QStringLiteral("test"));
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
 	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
-	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
+	mqttClient->setMQTTClientHostPort(QStringLiteral("broker.hivemq.com"), 1883);
 	mqttClient->setMQTTUseAuthentication(false);
 	mqttClient->setMQTTUseID(false);
 	mqttClient->setMQTTWillUse(false);
-	QMqttTopicFilter topicFilter {"labplot/mqttUnitTest"};
+	QMqttTopicFilter topicFilter {QStringLiteral("labplot/mqttUnitTest")};
 	mqttClient->addInitialMQTTSubscriptions(topicFilter, 0);
 
 	LiveDataDock* liveDock = new LiveDataDock();
@@ -441,7 +441,7 @@ void MQTTUnitTest::testTextMessage() {
 	if(timer.isActive()) {
 		delete loop;
 		QMqttClient* client = new QMqttClient();
-		client->setHostname("broker.hivemq.com");
+		client->setHostname(QStringLiteral("broker.hivemq.com"));
 		client->setPort(1883);
 		client->connectToHost();
 
@@ -450,7 +450,7 @@ void MQTTUnitTest::testTextMessage() {
 		}, 3000);
 		QCOMPARE(wait, true);
 
-		QString fileName = m_dataDir + "subscribe_1.txt";
+		QString fileName = m_dataDir + QStringLiteral("subscribe_1.txt");
 		QFile* file = new QFile(fileName);
 
 		QTest::qWait(1000);

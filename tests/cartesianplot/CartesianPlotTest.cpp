@@ -87,7 +87,7 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(curve != nullptr);                                                                                                                                 \
 	if (!curve)                                                                                                                                                \
 		return;                                                                                                                                                \
-	QCOMPARE(curve->name(), "2");                                                                                                                              \
+	QCOMPARE(curve->name(), QStringLiteral("2"));                                                                                                              \
                                                                                                                                                                \
 	CHECK_RANGE(plot, curve, Dimension::X, 1, 2);                                                                                                              \
 	CHECK_RANGE(plot, curve, Dimension::Y, 1, 2);                                                                                                              \
@@ -139,19 +139,19 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(h != nullptr);                                                                                                                                     \
 	if (!h)                                                                                                                                                    \
 		return;                                                                                                                                                \
-	QCOMPARE(h->name(), "histogram");                                                                                                                          \
+	QCOMPARE(h->name(), QStringLiteral("histogram"));                                                                                                          \
                                                                                                                                                                \
 	/* curves */                                                                                                                                               \
 	auto* curve1 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));                                                                                            \
 	QVERIFY(curve1 != nullptr);                                                                                                                                \
 	if (!curve1)                                                                                                                                               \
 		return;                                                                                                                                                \
-	QCOMPARE(curve1->name(), "fit");                                                                                                                           \
+	QCOMPARE(curve1->name(), QStringLiteral("fit"));                                                                                                           \
 	auto* curve2 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(1));                                                                                            \
 	QVERIFY(curve2 != nullptr);                                                                                                                                \
 	if (!curve2)                                                                                                                                               \
 		return;                                                                                                                                                \
-	QCOMPARE(curve2->name(), "f(x)");                                                                                                                          \
+	QCOMPARE(curve2->name(), QStringLiteral("f(x)"));                                                                                                          \
                                                                                                                                                                \
 	CHECK_RANGE(plot, curve1, Dimension::X, -4, 4);                                                                                                            \
 	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 1);
@@ -325,7 +325,7 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 	auto eqc = static_cast<XYEquationCurve*>(curve2);
 
 	auto equationData = eqc->equationData();
-	equationData.max = "10";
+	equationData.max = QStringLiteral("10");
 	eqc->setEquationData(equationData);
 
 	CHECK_RANGE(plot, curve2, Dimension::X, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
@@ -343,7 +343,7 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	auto eqc = static_cast<XYEquationCurve*>(curve2);
 
 	auto equationData = eqc->equationData();
-	equationData.max = "10";
+	equationData.max = QStringLiteral("10");
 	eqc->setEquationData(equationData);
 
 	CHECK_RANGE(plot, curve2, Dimension::X, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
@@ -354,16 +354,16 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 
 void CartesianPlotTest::undoInfoElement() {
 	auto* project = new Project();
-	auto* worksheet = new Worksheet("ws");
+	auto* worksheet = new Worksheet(QStringLiteral("ws"));
 	project->addChild(worksheet);
 
-	auto* plot = new CartesianPlot("plot");
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
 
-	auto* curve = new XYCurve("curve");
+	auto* curve = new XYCurve(QStringLiteral("curve"));
 	plot->addChild(curve);
 
-	auto* info = new InfoElement("info", plot, curve, 0.);
+	auto* info = new InfoElement(QStringLiteral("info"), plot, curve, 0.);
 	plot->addChild(info);
 
 	QCOMPARE(plot->childCount<InfoElement>(), 1);
@@ -384,7 +384,7 @@ void CartesianPlotTest::axisFormat() {
 	{
 		Project project;
 
-		Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+		Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
 		project.addChild(sheet);
 
 		sheet->setColumnCount(2);
@@ -393,24 +393,24 @@ void CartesianPlotTest::axisFormat() {
 		sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 		sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
 
-		sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
-		sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
-		sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+		sheet->column(0)->setDateTimeAt(0, QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
+		sheet->column(0)->setDateTimeAt(1, QDateTime::fromString(QStringLiteral("2022-02-04 12:23:00"), Qt::ISODate));
+		sheet->column(0)->setDateTimeAt(2, QDateTime::fromString(QStringLiteral("2022-02-05 12:23:00"), Qt::ISODate));
 
-		QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+		QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
 
 		sheet->column(1)->setValueAt(0, 0);
 		sheet->column(1)->setValueAt(1, 1);
 		sheet->column(1)->setValueAt(2, 2);
 
-		auto* worksheet = new Worksheet("Worksheet");
+		auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 		project.addChild(worksheet);
 
-		auto* plot = new CartesianPlot("plot");
+		auto* plot = new CartesianPlot(QStringLiteral("plot"));
 		worksheet->addChild(plot);
 		plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 
-		auto* curve = new XYCurve("curve");
+		auto* curve = new XYCurve(QStringLiteral("curve"));
 		plot->addChild(curve);
 
 		curve->setXColumn(sheet->column(0));
@@ -418,10 +418,10 @@ void CartesianPlotTest::axisFormat() {
 
 		auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));
 		QVERIFY(xAxis);
-		QCOMPARE(xAxis->name(), "x");
+		QCOMPARE(xAxis->name(), QStringLiteral("x"));
 
 		const auto original = xAxis->labelsDateTimeFormat();
-		const auto newFormat = "yyyy-MM-dd hh:mm";
+		const auto newFormat = QStringLiteral("yyyy-MM-dd hh:mm");
 		QVERIFY(original != newFormat);
 		xAxis->setLabelsDateTimeFormat(newFormat);
 
@@ -452,31 +452,31 @@ void CartesianPlotTest::axisFormat() {
 
 		auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0));
 		QVERIFY(xAxis);
-		QCOMPARE(xAxis->name(), "x");
-		QCOMPARE(xAxis->labelsDateTimeFormat(), "yyyy-MM-dd hh:mm");
+		QCOMPARE(xAxis->name(), QStringLiteral("x"));
+		QCOMPARE(xAxis->labelsDateTimeFormat(), QStringLiteral("yyyy-MM-dd hh:mm"));
 	}
 }
 
 void CartesianPlotTest::shiftLeftAutoScale() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* curve{new XYEquationCurve("f(x)")};
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
 	p->addChild(curve);
 
 	XYEquationCurve::EquationData data;
-	data.min = "1";
-	data.max = "2";
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
 	data.count = 1000;
-	data.expression1 = "x";
+	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
 
@@ -492,24 +492,24 @@ void CartesianPlotTest::shiftLeftAutoScale() {
 
 void CartesianPlotTest::shiftRightAutoScale() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* curve{new XYEquationCurve("f(x)")};
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
 	p->addChild(curve);
 
 	XYEquationCurve::EquationData data;
-	data.min = "1";
-	data.max = "2";
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
 	data.count = 1000;
-	data.expression1 = "x";
+	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
 
@@ -525,24 +525,24 @@ void CartesianPlotTest::shiftRightAutoScale() {
 
 void CartesianPlotTest::shiftUpAutoScale() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* curve{new XYEquationCurve("f(x)")};
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
 	p->addChild(curve);
 
 	XYEquationCurve::EquationData data;
-	data.min = "1";
-	data.max = "2";
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
 	data.count = 1000;
-	data.expression1 = "x";
+	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
 
@@ -558,24 +558,24 @@ void CartesianPlotTest::shiftUpAutoScale() {
 
 void CartesianPlotTest::shiftDownAutoScale() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* curve{new XYEquationCurve("f(x)")};
+	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
 	curve->setCoordinateSystemIndex(p->defaultCoordinateSystemIndex());
 	p->addChild(curve);
 
 	XYEquationCurve::EquationData data;
-	data.min = "1";
-	data.max = "2";
+	data.min = QStringLiteral("1");
+	data.max = QStringLiteral("2");
 	data.count = 1000;
-	data.expression1 = "x";
+	data.expression1 = QStringLiteral("x");
 	curve->setEquationData(data);
 	curve->recalculate();
 
@@ -592,7 +592,7 @@ void CartesianPlotTest::shiftDownAutoScale() {
 void CartesianPlotTest::rangeFormatYDataChanged() {
 	Project project;
 
-	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
 	project.addChild(sheet);
 
 	sheet->setColumnCount(2);
@@ -601,24 +601,24 @@ void CartesianPlotTest::rangeFormatYDataChanged() {
 	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
 
-	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
-	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
-	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString(QStringLiteral("2022-02-04 12:23:00"), Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString(QStringLiteral("2022-02-05 12:23:00"), Qt::ISODate));
 
-	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
 
 	sheet->column(1)->setValueAt(0, 0);
 	sheet->column(1)->setValueAt(1, 1);
 	sheet->column(1)->setValueAt(2, 2);
 
-	auto* worksheet = new Worksheet("Worksheet");
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
 
-	auto* plot = new CartesianPlot("plot");
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 
-	auto* curve = new XYCurve("curve");
+	auto* curve = new XYCurve(QStringLiteral("curve"));
 	plot->addChild(curve);
 
 	curve->setXColumn(sheet->column(0));
@@ -637,7 +637,7 @@ void CartesianPlotTest::rangeFormatYDataChanged() {
 void CartesianPlotTest::rangeFormatXDataChanged() {
 	Project project;
 
-	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
 	project.addChild(sheet);
 
 	sheet->setColumnCount(2);
@@ -646,24 +646,24 @@ void CartesianPlotTest::rangeFormatXDataChanged() {
 	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Integer);
 
-	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
-	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
-	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(0, QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(1, QDateTime::fromString(QStringLiteral("2022-02-04 12:23:00"), Qt::ISODate));
+	sheet->column(0)->setDateTimeAt(2, QDateTime::fromString(QStringLiteral("2022-02-05 12:23:00"), Qt::ISODate));
 
-	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	QCOMPARE(sheet->column(0)->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
 
 	sheet->column(1)->setValueAt(0, 0);
 	sheet->column(1)->setValueAt(1, 1);
 	sheet->column(1)->setValueAt(2, 2);
 
-	auto* worksheet = new Worksheet("Worksheet");
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
 
-	auto* plot = new CartesianPlot("plot");
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 
-	auto* curve = new XYCurve("curve");
+	auto* curve = new XYCurve(QStringLiteral("curve"));
 	plot->addChild(curve);
 
 	curve->setXColumn(sheet->column(1));
@@ -682,7 +682,7 @@ void CartesianPlotTest::rangeFormatXDataChanged() {
 void CartesianPlotTest::rangeFormatNonDefaultRange() {
 	Project project;
 
-	Spreadsheet* sheet = new Spreadsheet("Spreadsheet", false);
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
 	project.addChild(sheet);
 
 	sheet->setColumnCount(4);
@@ -701,20 +701,20 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
 	sheet->column(1)->setValueAt(1, 6);
 	sheet->column(1)->setValueAt(2, 7);
 
-	sheet->column(2)->setDateTimeAt(0, QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
-	sheet->column(2)->setDateTimeAt(1, QDateTime::fromString("2022-02-04 12:23:00", Qt::ISODate));
-	sheet->column(2)->setDateTimeAt(2, QDateTime::fromString("2022-02-05 12:23:00", Qt::ISODate));
+	sheet->column(2)->setDateTimeAt(0, QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
+	sheet->column(2)->setDateTimeAt(1, QDateTime::fromString(QStringLiteral("2022-02-04 12:23:00"), Qt::ISODate));
+	sheet->column(2)->setDateTimeAt(2, QDateTime::fromString(QStringLiteral("2022-02-05 12:23:00"), Qt::ISODate));
 
-	QCOMPARE(sheet->column(2)->dateTimeAt(0), QDateTime::fromString("2022-02-03 12:23:00", Qt::ISODate));
+	QCOMPARE(sheet->column(2)->dateTimeAt(0), QDateTime::fromString(QStringLiteral("2022-02-03 12:23:00"), Qt::ISODate));
 
 	sheet->column(3)->setValueAt(0, 8);
 	sheet->column(3)->setValueAt(1, 10);
 	sheet->column(3)->setValueAt(2, 9);
 
-	auto* worksheet = new Worksheet("Worksheet");
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
 
-	auto* plot = new CartesianPlot("plot");
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 
@@ -730,7 +730,7 @@ void CartesianPlotTest::rangeFormatNonDefaultRange() {
 	cSystem->setIndex(Dimension::Y, 1);
 	plot->addCoordinateSystem(cSystem);
 
-	auto* curve2 = new XYCurve("curve2");
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
 	plot->addChild(curve2);
 
 	curve2->setCoordinateSystemIndex(1);

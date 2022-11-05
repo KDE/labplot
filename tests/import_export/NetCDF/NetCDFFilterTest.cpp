@@ -29,7 +29,7 @@ extern "C" {
 void NetCDFFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/madis-hydro.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("lastRecord"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -60,7 +60,7 @@ void NetCDFFilterTest::importFile1() {
 void NetCDFFilterTest::importFile2() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/OMI-Aura_L2-example.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("CovarianceMatrix"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -98,7 +98,7 @@ void NetCDFFilterTest::importFile2() {
 void NetCDFFilterTest::importFile3() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testrh.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("var1"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -125,7 +125,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	file.close(); // only file name is used
 
 	benchDataFileName = file.fileName();
-	benchDataFileName.append(".nc4");
+	benchDataFileName.append(QStringLiteral(".nc4"));
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
@@ -188,7 +188,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 }
 
 void NetCDFFilterTest::benchDoubleImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("paths"));
 

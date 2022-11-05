@@ -16,7 +16,7 @@ extern "C" {
 }
 
 void NSLGeomTest::initTestCase() {
-	const QString currentDir = __FILE__;
+	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 
@@ -213,7 +213,7 @@ void NSLGeomTest::testLineSimMorse() {
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
 
-	const QString fileName = m_dataDir + "morse_code.dat";
+	const QString fileName = m_dataDir + QStringLiteral("morse_code.dat");
 	FILE* file;
 	if ((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());

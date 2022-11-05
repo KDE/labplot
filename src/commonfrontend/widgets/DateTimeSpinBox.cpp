@@ -15,13 +15,13 @@
 
 DateTimeSpinBox::DateTimeSpinBox(QWidget* parent)
 	: QAbstractSpinBox(parent) {
-	lineEdit()->setText("0000.00.00 00:00:00.001");
+	lineEdit()->setText(QStringLiteral("0000.00.00 00:00:00.001"));
 	DateTimeSpinBox::stepEnabled();
 
 	m_regularExpressionValidator = new QRegularExpressionValidator();
 
-	QRegularExpression regExp(
-		R"(([0-9]+)\.(0[0-9]|1[0-2]|[0-9])\.(0[0-9]|[0-2][0-9]|30|[0-9]) ([0-1][0-9]|2[0-3]|[0-9])\:([0-5][0-9]|[0-9])\:([0-5][0-9]|[0-9])\.[0-9]{0,3})");
+	QRegularExpression regExp(QStringLiteral(
+		R"(([0-9]+)\.(0[0-9]|1[0-2]|[0-9])\.(0[0-9]|[0-2][0-9]|30|[0-9]) ([0-1][0-9]|2[0-3]|[0-9])\:([0-5][0-9]|[0-9])\:([0-5][0-9]|[0-9])\.[0-9]{0,3})"));
 	m_regularExpressionValidator->setRegularExpression(regExp);
 
 	lineEdit()->setValidator(m_regularExpressionValidator);
@@ -68,10 +68,11 @@ void DateTimeSpinBox::stepBy(int steps) {
  * Write value to lineEdit of the spinbox
  */
 void DateTimeSpinBox::writeValue() {
-	lineEdit()->setText(QString::number(m_year) + '.' + QString("%1").arg(m_month, 2, 10, QLatin1Char('0')) + QLatin1Char('.')
-						+ QString("%1").arg(m_day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ') + QString("%1").arg(m_hour, 2, 10, QLatin1Char('0'))
-						+ QLatin1Char(':') + QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':')
-						+ QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') + QString("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
+	lineEdit()->setText(
+		QString::number(m_year) + QLatin1Char('.') + QStringLiteral("%1").arg(m_month, 2, 10, QLatin1Char('0')) + QLatin1Char('.')
+		+ QStringLiteral("%1").arg(m_day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ') + QStringLiteral("%1").arg(m_hour, 2, 10, QLatin1Char('0'))
+		+ QLatin1Char(':') + QStringLiteral("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':')
+		+ QStringLiteral("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') + QStringLiteral("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
 	Q_EMIT valueChanged();
 }
 
@@ -113,7 +114,7 @@ void DateTimeSpinBox::getValue() {
 	int counter = 0;
 	int startIndex = 0;
 	for (int i = 0; i < text.length(); i++) {
-		if (text[i] == '.' || text[i] == ':' || text[i] == ' ' || i == text.length() - 1) {
+		if (text[i] == QLatin1Char('.') || text[i] == QLatin1Char(':') || text[i] == QLatin1Char(' ') || i == text.length() - 1) {
 			switch (counter) {
 			case Type::year:
 				m_year = text.midRef(startIndex, i - startIndex).toInt();
@@ -149,7 +150,7 @@ void DateTimeSpinBox::setCursorPosition(Type type) {
 	QString text = lineEdit()->text();
 	int counter = 0;
 	for (int i = 0; i < text.length(); i++) {
-		if (text[i] == '.' || text[i] == ':' || text[i] == ' ')
+		if (text[i] == QLatin1Char('.') || text[i] == QLatin1Char(':') || text[i] == QLatin1Char(' '))
 			counter++;
 
 		if (counter - 1 == type) {
@@ -258,7 +259,7 @@ DateTimeSpinBox::Type DateTimeSpinBox::determineType(int cursorPos) const {
 
 	int counter = 0;
 	for (int i = 0; i < cursorPos; i++) {
-		if (text[i] == '.' || text[i] == ':' || text[i] == ' ')
+		if (text[i] == QLatin1Char('.') || text[i] == QLatin1Char(':') || text[i] == QLatin1Char(' '))
 			counter++;
 	}
 

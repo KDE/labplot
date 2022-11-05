@@ -43,11 +43,11 @@ void SpreadsheetTest::initTestCase() {
    insert two columns with float values into an empty spreadsheet
 */
 void SpreadsheetTest::testCopyPasteColumnMode00() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "10.0 100.0\n20.0 200.0";
+	const QString str = QStringLiteral("10.0 100.0\n20.0 200.0");
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
@@ -73,11 +73,12 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
    the first column has to be converted to integer column, the second to big integer.
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "10 " + QString::number(std::numeric_limits<long long>::min()) + "\n20 " + QString::number(std::numeric_limits<long long>::max());
+	const QString str = QStringLiteral("10 ") + QString::number(std::numeric_limits<long long>::min()) + QStringLiteral("\n20 ")
+		+ QString::number(std::numeric_limits<long long>::max());
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
@@ -103,11 +104,11 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
    the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str = "10 100.0\n20 200.0";
+	const QString str = QStringLiteral("10 100.0\n20 200.0");
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
@@ -132,16 +133,16 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
    Properly handle empty values in the tab separated data.
 */
 void SpreadsheetTest::testCopyPasteColumnMode03() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"1000		1000		1000\n"
 		"985		985		985\n"
 		"970	-7.06562	970		970\n"
 		"955	-5.93881	955		955\n"
-		"940	-4.97594	940	-4.97594	940";
+		"940	-4.97594	940	-4.97594	940");
 
 	QApplication::clipboard()->setText(str);
 
@@ -195,13 +196,13 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	automatically detect the proper format for the datetime columns
  */
 void SpreadsheetTest::testCopyPasteColumnMode04() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"2020-09-20 11:21:40:849	7.7\n"
-		"2020-09-20 11:21:41:830	4.2";
+		"2020-09-20 11:21:41:830	4.2");
 
 	QApplication::clipboard()->setText(str);
 
@@ -231,13 +232,13 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 	automatically detect the proper format for the datetime columns, time part only
  */
 void SpreadsheetTest::testCopyPasteColumnMode05() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"11:21:40	7.7\n"
-		"11:21:41	4.2";
+		"11:21:41	4.2");
 
 	QApplication::clipboard()->setText(str);
 
@@ -267,13 +268,13 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 	automatically detect the proper format for the datetime columns having the format "yyyy-MM-dd hh:mm:ss"
  */
 void SpreadsheetTest::testCopyPasteColumnMode06() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"2018-03-21 10:00:00 1\n"
-		"2018-03-21 10:30:00 2";
+		"2018-03-21 10:30:00 2");
 
 	QApplication::clipboard()->setText(str);
 
@@ -307,18 +308,18 @@ void SpreadsheetTest::testCopyPasteColumnMode06() {
 */
 void SpreadsheetTest::testCopyPasteSizeChange00() {
 	Project project;
-	Spreadsheet* sheet = new Spreadsheet("test", false);
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 	sheet->setColumnCount(2);
 	sheet->setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"0\n"
 		"10 20\n"
 		"11 21 31\n"
 		"12 22 32 42\n"
 		"13 23\n"
-		"14";
+		"14");
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(sheet, false);
@@ -401,13 +402,13 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
    the spreadsheet has to be extended accordingly
 */
 void SpreadsheetTest::testCopyPasteSizeChange01() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(100);
 
-	const QString str =
+	const QString str = QStringLiteral(
 		"1.1 2.2\n"
-		"3.3 4.4";
+		"3.3 4.4");
 	QApplication::clipboard()->setText(str);
 
 	SpreadsheetView view(&sheet, false);
@@ -446,7 +447,7 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 void SpreadsheetTest::testSortSingleNumeric1() {
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -468,7 +469,7 @@ void SpreadsheetTest::testSortSingleNumeric1() {
 void SpreadsheetTest::testSortSingleNumeric2() {
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -491,7 +492,7 @@ void SpreadsheetTest::testSortSingleInteger1() {
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -519,7 +520,7 @@ void SpreadsheetTest::testSortSingleInteger2() {
 	const QVector<int> xData1{4, 5, 2};
 	const QVector<int> xData2{3, 6, -1};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -547,7 +548,7 @@ void SpreadsheetTest::testSortSingleBigInt1() {
 	const QVector<qint64> xData1{40000000000, 50000000000, 20000000000};
 	const QVector<qint64> xData2{30000000000, 60000000000, -10000000000};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -575,7 +576,7 @@ void SpreadsheetTest::testSortSingleBigInt2() {
 	const QVector<qint64> xData1{40000000000, 50000000000, 20000000000};
 	const QVector<qint64> xData2{30000000000, 60000000000, -10000000000};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(7);
 	auto* col = sheet.column(0);
@@ -600,9 +601,14 @@ void SpreadsheetTest::testSortSingleBigInt2() {
  * check sorting single column of text with empty entries ascending
  */
 void SpreadsheetTest::testSortSingleText1() {
-	const QVector<QString> xData{"ben", "amy", "eddy", "", "carl", "dan"};
+	const QVector<QString> xData{QStringLiteral("ben"),
+								 QStringLiteral("amy"),
+								 QStringLiteral("eddy"),
+								 QStringLiteral(""),
+								 QStringLiteral("carl"),
+								 QStringLiteral("dan")};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(8);
 	auto* col = sheet.column(0);
@@ -618,17 +624,18 @@ void SpreadsheetTest::testSortSingleText1() {
 	QCOMPARE(col->textAt(2), QLatin1String("carl"));
 	QCOMPARE(col->textAt(3), QLatin1String("dan"));
 	QCOMPARE(col->textAt(4), QLatin1String("eddy"));
-	QCOMPARE(col->textAt(5), QLatin1String(""));
-	QCOMPARE(col->textAt(6), QLatin1String(""));
+	QCOMPARE(col->textAt(5), QString());
+	QCOMPARE(col->textAt(6), QString());
 }
 
 /*
  * check sorting single column of text with empty entries descending
  */
 void SpreadsheetTest::testSortSingleText2() {
-	const QVector<QString> xData = {"ben", "amy", "eddy", "", "carl", "dan"};
+	const QVector<QString> xData =
+		{QStringLiteral("ben"), QStringLiteral("amy"), QStringLiteral("eddy"), QStringLiteral(""), QStringLiteral("carl"), QStringLiteral("dan")};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(8);
 	auto* col = sheet.column(0);
@@ -644,8 +651,8 @@ void SpreadsheetTest::testSortSingleText2() {
 	QCOMPARE(col->textAt(2), QLatin1String("carl"));
 	QCOMPARE(col->textAt(3), QLatin1String("ben"));
 	QCOMPARE(col->textAt(4), QLatin1String("amy"));
-	QCOMPARE(col->textAt(5), QLatin1String(""));
-	QCOMPARE(col->textAt(6), QLatin1String(""));
+	QCOMPARE(col->textAt(5), QString());
+	QCOMPARE(col->textAt(6), QString());
 }
 
 /*
@@ -661,7 +668,7 @@ void SpreadsheetTest::testSortSingleDateTime1() {
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
 	};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(8);
 	auto* col{sheet.column(0)};
@@ -692,7 +699,7 @@ void SpreadsheetTest::testSortSingleDateTime2() {
 		QDateTime(QDate(2020, 02, 29), QTime(11, 12, 12)),
 	};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(8);
 	auto* col = sheet.column(0);
@@ -718,7 +725,7 @@ void SpreadsheetTest::testSortNumeric1() {
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(10);
 	auto* col0{sheet.column(0)};
@@ -751,7 +758,7 @@ void SpreadsheetTest::testSortNumeric2() {
 	const QVector<double> xData{0.5, -0.2, GSL_NAN, 2.0, -1.0};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(10);
 	auto* col0{sheet.column(0)};
@@ -785,7 +792,7 @@ void SpreadsheetTest::testSortInteger1() {
 	const QVector<int> xData2{3, 6, -1};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
 	auto* col0{sheet.column(0)};
@@ -824,7 +831,7 @@ void SpreadsheetTest::testSortInteger2() {
 	const QVector<int> xData2{3, 6, -1};
 	const QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
 	auto* col0{sheet.column(0)};
@@ -859,7 +866,7 @@ void SpreadsheetTest::testSortInteger2() {
  * check sorting big int values with empty entries ascending as leading column
  */
 void SpreadsheetTest::testSortBigInt1() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
 
@@ -899,7 +906,7 @@ void SpreadsheetTest::testSortBigInt1() {
  * check sorting big int values with empty entries descending as leading column
  */
 void SpreadsheetTest::testSortBigInt2() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(7);
 
@@ -939,11 +946,16 @@ void SpreadsheetTest::testSortBigInt2() {
  * check sorting text with empty entries ascending as leading column
  */
 void SpreadsheetTest::testSortText1() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 
-	QVector<QString> xData{"ben", "amy", "eddy", "", "carl", "dan"};
+	QVector<QString> xData{QStringLiteral("ben"),
+						   QStringLiteral("amy"),
+						   QStringLiteral("eddy"),
+						   QStringLiteral(""),
+						   QStringLiteral("carl"),
+						   QStringLiteral("dan")};
 	QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
 	auto* col0{sheet.column(0)};
@@ -962,8 +974,8 @@ void SpreadsheetTest::testSortText1() {
 	QCOMPARE(col0->textAt(2), QLatin1String("carl"));
 	QCOMPARE(col0->textAt(3), QLatin1String("dan"));
 	QCOMPARE(col0->textAt(4), QLatin1String("eddy"));
-	QCOMPARE(col0->textAt(5), QLatin1String(""));
-	QCOMPARE(col0->textAt(6), QLatin1String(""));
+	QCOMPARE(col0->textAt(5), QString());
+	QCOMPARE(col0->textAt(6), QString());
 	QCOMPARE(col1->integerAt(0), 2);
 	QCOMPARE(col1->integerAt(1), 1);
 	QCOMPARE(col1->integerAt(2), 5);
@@ -977,11 +989,16 @@ void SpreadsheetTest::testSortText1() {
  * check sorting text with empty entries descending as leading column
  */
 void SpreadsheetTest::testSortText2() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 
-	QVector<QString> xData{"ben", "amy", "eddy", "", "carl", "dan"};
+	QVector<QString> xData{QStringLiteral("ben"),
+						   QStringLiteral("amy"),
+						   QStringLiteral("eddy"),
+						   QStringLiteral(""),
+						   QStringLiteral("carl"),
+						   QStringLiteral("dan")};
 	QVector<int> yData{1, 2, 3, 4, 5, 6, 7};
 
 	auto* col0{sheet.column(0)};
@@ -1000,8 +1017,8 @@ void SpreadsheetTest::testSortText2() {
 	QCOMPARE(col0->textAt(2), QLatin1String("carl"));
 	QCOMPARE(col0->textAt(1), QLatin1String("dan"));
 	QCOMPARE(col0->textAt(0), QLatin1String("eddy"));
-	QCOMPARE(col0->textAt(5), QLatin1String(""));
-	QCOMPARE(col0->textAt(6), QLatin1String(""));
+	QCOMPARE(col0->textAt(5), QString());
+	QCOMPARE(col0->textAt(6), QString());
 	QCOMPARE(col1->integerAt(4), 2);
 	QCOMPARE(col1->integerAt(3), 1);
 	QCOMPARE(col1->integerAt(2), 5);
@@ -1015,7 +1032,7 @@ void SpreadsheetTest::testSortText2() {
  * check sorting datetimes with invalid entries ascending as leading column
  */
 void SpreadsheetTest::testSortDateTime1() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 
@@ -1068,7 +1085,7 @@ void SpreadsheetTest::testSortDateTime2() {
 	};
 	const QVector<int> yData = {1, 2, 3, 4, 5, 6, 7};
 
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(8);
 	auto* col0{sheet.column(0)};
@@ -1102,7 +1119,7 @@ void SpreadsheetTest::testSortDateTime2() {
  * check performance of sorting double values in single column
  */
 void SpreadsheetTest::testSortPerformanceNumeric1() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(1);
 	sheet.setRowCount(10000);
 
@@ -1126,7 +1143,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
  * check performance of sorting double values with two columns
  */
 void SpreadsheetTest::testSortPerformanceNumeric2() {
-	Spreadsheet sheet("test", false);
+	Spreadsheet sheet(QStringLiteral("test"), false);
 	sheet.setColumnCount(2);
 	sheet.setRowCount(10000);
 
@@ -1154,32 +1171,32 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 
 void SpreadsheetTest::testFlatten00() {
 	Project project;
-	auto* sheet = new Spreadsheet("test", false);
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 	sheet->setColumnCount(5);
 	sheet->setRowCount(4);
 
 	// "Year"
 	auto* col1 = sheet->column(0);
-	col1->setName("Year");
+	col1->setName(QStringLiteral("Year"));
 	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col1->setTextAt(0, "2021");
-	col1->setTextAt(1, "2022");
-	col1->setTextAt(2, "2021");
-	col1->setTextAt(3, "2022");
+	col1->setTextAt(0, QStringLiteral("2021"));
+	col1->setTextAt(1, QStringLiteral("2022"));
+	col1->setTextAt(2, QStringLiteral("2021"));
+	col1->setTextAt(3, QStringLiteral("2022"));
 
 	// "Country"
 	auto* col2 = sheet->column(1);
-	col2->setName("Country");
+	col2->setName(QStringLiteral("Country"));
 	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col2->setTextAt(0, "Germany");
-	col2->setTextAt(1, "Germany");
-	col2->setTextAt(2, "Poland");
-	col2->setTextAt(3, "Poland");
+	col2->setTextAt(0, QStringLiteral("Germany"));
+	col2->setTextAt(1, QStringLiteral("Germany"));
+	col2->setTextAt(2, QStringLiteral("Poland"));
+	col2->setTextAt(3, QStringLiteral("Poland"));
 
 	// "Sales for Product 1"
 	auto* col3 = sheet->column(2);
-	col3->setName("Product 1");
+	col3->setName(QStringLiteral("Product 1"));
 	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col3->setIntegerAt(0, 1);
 	col3->setIntegerAt(1, 10);
@@ -1188,7 +1205,7 @@ void SpreadsheetTest::testFlatten00() {
 
 	// "Sales for Product 2"
 	auto* col4 = sheet->column(3);
-	col4->setName("Product 2");
+	col4->setName(QStringLiteral("Product 2"));
 	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col4->setIntegerAt(0, 2);
 	col4->setIntegerAt(1, 20);
@@ -1197,7 +1214,7 @@ void SpreadsheetTest::testFlatten00() {
 
 	// "Sales for Product 3"
 	auto* col5 = sheet->column(4);
-	col5->setName("Product 3");
+	col5->setName(QStringLiteral("Product 3"));
 	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col5->setIntegerAt(0, 3);
 	col5->setIntegerAt(1, 30);
@@ -1227,18 +1244,18 @@ void SpreadsheetTest::testFlatten00() {
 
 	// check values
 	col1 = targetSheet->column(0);
-	QCOMPARE(col1->textAt(0), "2021");
-	QCOMPARE(col1->textAt(1), "2021");
-	QCOMPARE(col1->textAt(2), "2021");
-	QCOMPARE(col1->textAt(3), "2022");
-	QCOMPARE(col1->textAt(4), "2022");
-	QCOMPARE(col1->textAt(5), "2022");
-	QCOMPARE(col1->textAt(6), "2021");
-	QCOMPARE(col1->textAt(7), "2021");
-	QCOMPARE(col1->textAt(8), "2021");
-	QCOMPARE(col1->textAt(9), "2022");
-	QCOMPARE(col1->textAt(10), "2022");
-	QCOMPARE(col1->textAt(11), "2022");
+	QCOMPARE(col1->textAt(0), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(3), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(4), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(5), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(6), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(7), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(8), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(9), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(10), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(11), QStringLiteral("2022"));
 
 	col4 = targetSheet->column(3);
 	QCOMPARE(col4->integerAt(0), 1);
@@ -1258,42 +1275,42 @@ void SpreadsheetTest::testFlatten00() {
 // test with a missing value in one of the reference columns
 void SpreadsheetTest::testFlatten01() {
 	Project project;
-	auto* sheet = new Spreadsheet("test", false);
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 	sheet->setColumnCount(5);
 	sheet->setRowCount(2);
 
 	// "Year"
 	auto* col1 = sheet->column(0);
-	col1->setName("Year");
+	col1->setName(QStringLiteral("Year"));
 	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col1->setTextAt(0, "2021");
-	col1->setTextAt(1, "2022");
+	col1->setTextAt(0, QStringLiteral("2021"));
+	col1->setTextAt(1, QStringLiteral("2022"));
 
 	// "Country"
 	auto* col2 = sheet->column(1);
-	col2->setName("Country");
+	col2->setName(QStringLiteral("Country"));
 	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col2->setTextAt(0, "Germany");
+	col2->setTextAt(0, QStringLiteral("Germany"));
 	// missing value in the second row
 
 	// "Sales for Product 1"
 	auto* col3 = sheet->column(2);
-	col3->setName("Product 1");
+	col3->setName(QStringLiteral("Product 1"));
 	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col3->setIntegerAt(0, 1);
 	col3->setIntegerAt(1, 10);
 
 	// "Sales for Product 2"
 	auto* col4 = sheet->column(3);
-	col4->setName("Product 2");
+	col4->setName(QStringLiteral("Product 2"));
 	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col4->setIntegerAt(0, 2);
 	col4->setIntegerAt(1, 20);
 
 	// "Sales for Product 3"
 	auto* col5 = sheet->column(4);
-	col5->setName("Product 3");
+	col5->setName(QStringLiteral("Product 3"));
 	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col5->setIntegerAt(0, 3);
 	col5->setIntegerAt(1, 30);
@@ -1321,20 +1338,20 @@ void SpreadsheetTest::testFlatten01() {
 
 	// check values
 	col1 = targetSheet->column(0);
-	QCOMPARE(col1->textAt(0), "2021");
-	QCOMPARE(col1->textAt(1), "2021");
-	QCOMPARE(col1->textAt(2), "2021");
-	QCOMPARE(col1->textAt(3), "2022");
-	QCOMPARE(col1->textAt(4), "2022");
-	QCOMPARE(col1->textAt(5), "2022");
+	QCOMPARE(col1->textAt(0), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(3), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(4), QStringLiteral("2022"));
+	QCOMPARE(col1->textAt(5), QStringLiteral("2022"));
 
 	col1 = targetSheet->column(1);
-	QCOMPARE(col1->textAt(0), "Germany");
-	QCOMPARE(col1->textAt(1), "Germany");
-	QCOMPARE(col1->textAt(2), "Germany");
-	QCOMPARE(col1->textAt(3), "");
-	QCOMPARE(col1->textAt(4), "");
-	QCOMPARE(col1->textAt(5), "");
+	QCOMPARE(col1->textAt(0), QStringLiteral("Germany"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("Germany"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("Germany"));
+	QCOMPARE(col1->textAt(3), QString());
+	QCOMPARE(col1->textAt(4), QString());
+	QCOMPARE(col1->textAt(5), QString());
 
 	col4 = targetSheet->column(3);
 	QCOMPARE(col4->integerAt(0), 1);
@@ -1348,42 +1365,42 @@ void SpreadsheetTest::testFlatten01() {
 // test with missing values in the reference columns - no result should be produced for these rows
 void SpreadsheetTest::testFlatten02() {
 	Project project;
-	auto* sheet = new Spreadsheet("test", false);
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 	sheet->setColumnCount(5);
 	sheet->setRowCount(2);
 
 	// "Year"
 	auto* col1 = sheet->column(0);
-	col1->setName("Year");
+	col1->setName(QStringLiteral("Year"));
 	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col1->setTextAt(0, "2021");
+	col1->setTextAt(0, QStringLiteral("2021"));
 	// missing value in the second row
 
 	// "Country"
 	auto* col2 = sheet->column(1);
-	col2->setName("Country");
+	col2->setName(QStringLiteral("Country"));
 	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
-	col2->setTextAt(0, "Germany");
+	col2->setTextAt(0, QStringLiteral("Germany"));
 	// missing value in the second rows
 
 	// "Sales for Product 1"
 	auto* col3 = sheet->column(2);
-	col3->setName("Product 1");
+	col3->setName(QStringLiteral("Product 1"));
 	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col3->setIntegerAt(0, 1);
 	col3->setIntegerAt(1, 10);
 
 	// "Sales for Product 2"
 	auto* col4 = sheet->column(3);
-	col4->setName("Product 2");
+	col4->setName(QStringLiteral("Product 2"));
 	col4->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col4->setIntegerAt(0, 2);
 	col4->setIntegerAt(1, 20);
 
 	// "Sales for Product 3"
 	auto* col5 = sheet->column(4);
-	col5->setName("Product 3");
+	col5->setName(QStringLiteral("Product 3"));
 	col5->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col5->setIntegerAt(0, 3);
 	col5->setIntegerAt(1, 30);
@@ -1411,14 +1428,14 @@ void SpreadsheetTest::testFlatten02() {
 
 	// check values
 	col1 = targetSheet->column(0);
-	QCOMPARE(col1->textAt(0), "2021");
-	QCOMPARE(col1->textAt(1), "2021");
-	QCOMPARE(col1->textAt(2), "2021");
+	QCOMPARE(col1->textAt(0), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("2021"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("2021"));
 
 	col1 = targetSheet->column(1);
-	QCOMPARE(col1->textAt(0), "Germany");
-	QCOMPARE(col1->textAt(1), "Germany");
-	QCOMPARE(col1->textAt(2), "Germany");
+	QCOMPARE(col1->textAt(0), QStringLiteral("Germany"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("Germany"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("Germany"));
 
 	col4 = targetSheet->column(3);
 	QCOMPARE(col4->integerAt(0), 1);
@@ -1429,28 +1446,28 @@ void SpreadsheetTest::testFlatten02() {
 // test with missing no reference columns
 void SpreadsheetTest::testFlatten03() {
 	Project project;
-	auto* sheet = new Spreadsheet("test", false);
+	auto* sheet = new Spreadsheet(QStringLiteral("test"), false);
 	project.addChild(sheet);
 	sheet->setColumnCount(3);
 	sheet->setRowCount(2);
 
 	// "Sales for Product 1"
 	auto* col1 = sheet->column(0);
-	col1->setName("Product 1");
+	col1->setName(QStringLiteral("Product 1"));
 	col1->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col1->setIntegerAt(0, 1);
 	col1->setIntegerAt(1, 10);
 
 	// "Sales for Product 2"
 	auto* col2 = sheet->column(1);
-	col2->setName("Product 2");
+	col2->setName(QStringLiteral("Product 2"));
 	col2->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col2->setIntegerAt(0, 2);
 	col2->setIntegerAt(1, 20);
 
 	// "Sales for Product 3"
 	auto* col3 = sheet->column(2);
-	col3->setName("Product 3");
+	col3->setName(QStringLiteral("Product 3"));
 	col3->setColumnMode(AbstractColumn::ColumnMode::Integer);
 	col3->setIntegerAt(0, 3);
 	col3->setIntegerAt(1, 30);
@@ -1474,12 +1491,12 @@ void SpreadsheetTest::testFlatten03() {
 
 	// check values
 	col1 = targetSheet->column(0);
-	QCOMPARE(col1->textAt(0), "Product 1");
-	QCOMPARE(col1->textAt(1), "Product 2");
-	QCOMPARE(col1->textAt(2), "Product 3");
-	QCOMPARE(col1->textAt(3), "Product 1");
-	QCOMPARE(col1->textAt(4), "Product 2");
-	QCOMPARE(col1->textAt(5), "Product 3");
+	QCOMPARE(col1->textAt(0), QStringLiteral("Product 1"));
+	QCOMPARE(col1->textAt(1), QStringLiteral("Product 2"));
+	QCOMPARE(col1->textAt(2), QStringLiteral("Product 3"));
+	QCOMPARE(col1->textAt(3), QStringLiteral("Product 1"));
+	QCOMPARE(col1->textAt(4), QStringLiteral("Product 2"));
+	QCOMPARE(col1->textAt(5), QStringLiteral("Product 3"));
 
 	col2 = targetSheet->column(1);
 	QCOMPARE(col2->integerAt(0), 1);

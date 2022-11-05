@@ -32,19 +32,19 @@
 
 void AxisTest::majorTicksAutoNumberEnableDisable() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), "x");
-	QCOMPARE(axes.at(1)->name(), "y");
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	AxisDock axisDock(nullptr);
 
@@ -132,19 +132,19 @@ void AxisTest::majorTicksAutoNumberEnableDisable() {
 
 void AxisTest::minorTicksAutoNumberEnableDisable() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), "x");
-	QCOMPARE(axes.at(1)->name(), "y");
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	AxisDock axisDock(nullptr);
 
@@ -197,19 +197,19 @@ void AxisTest::minorTicksAutoNumberEnableDisable() {
 
 void AxisTest::majorTicksStartValue() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), "x");
-	QCOMPARE(axes.at(1)->name(), "y");
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 
 	AxisDock axisDock(nullptr);
 
@@ -240,7 +240,7 @@ void AxisTest::majorTicksStartValue() {
 	}
 
 	xAxis->setMajorTickStartValue(0.2);
-	QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), "0.2");
+	QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), QStringLiteral("0.2"));
 
 	{
 		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2
@@ -270,11 +270,11 @@ void AxisTest::majorTicksStartValue() {
 void AxisTest::TestSetCoordinateSystem() {
 	// Test if the range stored in the Axis gets updated when a new coordinatesystemindex is set
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
 
@@ -283,7 +283,7 @@ void AxisTest::TestSetCoordinateSystem() {
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
 	auto yAxis = axes.at(1);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 	{
 		auto range = yAxis->range();
 		QCOMPARE(range.start(), 0);
@@ -311,7 +311,7 @@ void AxisTest::TestSetCoordinateSystem() {
 }
 
 void AxisTest::TestSetRange() {
-	Axis a("x", Axis::Orientation::Horizontal);
+	Axis a(QStringLiteral("x"), Axis::Orientation::Horizontal);
 
 	auto arange = a.range();
 	// different to default values!
@@ -352,11 +352,11 @@ void AxisTest::TestSetRange() {
 
 void AxisTest::TestAddingHorizontalAxis() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
 
@@ -367,11 +367,11 @@ void AxisTest::TestAddingHorizontalAxis() {
 
 void AxisTest::TestAddingVerticalAxis() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axes are created
 	QVERIFY(p != nullptr);
 
@@ -382,19 +382,19 @@ void AxisTest::TestAddingVerticalAxis() {
 
 void AxisTest::tickLabelRepresentationAutomatic() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), "x");
-	QCOMPARE(axes.at(1)->name(), "y");
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
 
 	AxisDock dock(nullptr);
@@ -405,7 +405,12 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		QStringList expectedStrings{QStringLiteral("0.0"),
+									QStringLiteral("0.2"),
+									QStringLiteral("0.4"),
+									QStringLiteral("0.6"),
+									QStringLiteral("0.8"),
+									QStringLiteral("1.0")};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
@@ -414,12 +419,12 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Scientific);
 		QStringList expectedStrings{
-			"0",
-			AxisPrivate::createScientificRepresentation("2", "5"),
-			AxisPrivate::createScientificRepresentation("4", "5"),
-			AxisPrivate::createScientificRepresentation("6", "5"),
-			AxisPrivate::createScientificRepresentation("8", "5"),
-			AxisPrivate::createScientificRepresentation("1", "6"),
+			QStringLiteral("0"),
+			AxisPrivate::createScientificRepresentation(QStringLiteral("2"), QStringLiteral("5")),
+			AxisPrivate::createScientificRepresentation(QStringLiteral("4"), QStringLiteral("5")),
+			AxisPrivate::createScientificRepresentation(QStringLiteral("6"), QStringLiteral("5")),
+			AxisPrivate::createScientificRepresentation(QStringLiteral("8"), QStringLiteral("5")),
+			AxisPrivate::createScientificRepresentation(QStringLiteral("1"), QStringLiteral("6")),
 		};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
@@ -428,26 +433,31 @@ void AxisTest::tickLabelRepresentationAutomatic() {
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		QStringList expectedStrings{QStringLiteral("0.0"),
+									QStringLiteral("0.2"),
+									QStringLiteral("0.4"),
+									QStringLiteral("0.6"),
+									QStringLiteral("0.8"),
+									QStringLiteral("1.0")};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 }
 
 void AxisTest::tickLabelRepresentationManual() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	p->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	auto axes = p->children<Axis>();
 	QCOMPARE(axes.count(), 2);
-	QCOMPARE(axes.at(0)->name(), "x");
-	QCOMPARE(axes.at(1)->name(), "y");
+	QCOMPARE(axes.at(0)->name(), QStringLiteral("x"));
+	QCOMPARE(axes.at(1)->name(), QStringLiteral("y"));
 	auto* yAxis = static_cast<Axis*>(axes.at(1));
 
 	AxisDock dock(nullptr);
@@ -471,7 +481,12 @@ void AxisTest::tickLabelRepresentationManual() {
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		QStringList expectedStrings{QStringLiteral("0.0"),
+									QStringLiteral("0.2"),
+									QStringLiteral("0.4"),
+									QStringLiteral("0.6"),
+									QStringLiteral("0.8"),
+									QStringLiteral("1.0")};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
@@ -479,7 +494,12 @@ void AxisTest::tickLabelRepresentationManual() {
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		QStringList expectedStrings{"0", "200,000", "400,000", "600,000", "800,000", "1,000,000"};
+		QStringList expectedStrings{QStringLiteral("0"),
+									QStringLiteral("200,000"),
+									QStringLiteral("400,000"),
+									QStringLiteral("600,000"),
+									QStringLiteral("800,000"),
+									QStringLiteral("1,000,000")};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 
@@ -487,7 +507,12 @@ void AxisTest::tickLabelRepresentationManual() {
 
 	{
 		QCOMPARE(yAxis->labelsFormat(), Axis::LabelsFormat::Decimal);
-		QStringList expectedStrings{"0.0", "0.2", "0.4", "0.6", "0.8", "1.0"};
+		QStringList expectedStrings{QStringLiteral("0.0"),
+									QStringLiteral("0.2"),
+									QStringLiteral("0.4"),
+									QStringLiteral("0.6"),
+									QStringLiteral("0.8"),
+									QStringLiteral("1.0")};
 		COMPARE_STRING_VECTORS(yAxis->tickLabelStrings(), expectedStrings);
 	}
 }

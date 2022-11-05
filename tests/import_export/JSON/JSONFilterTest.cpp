@@ -21,7 +21,7 @@ void JSONFilterTest::initTestCase() {
 }
 
 void JSONFilterTest::testArrayImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array.json"));
@@ -65,7 +65,7 @@ void JSONFilterTest::testArrayImport() {
  * import objects with an additional column for the index
  */
 void JSONFilterTest::testObjectImport01() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
@@ -110,16 +110,16 @@ void JSONFilterTest::testObjectImport01() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 333.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0.003);
 
-	QCOMPARE(spreadsheet.column(4)->textAt(0), QString("field1"));
-	QCOMPARE(spreadsheet.column(4)->textAt(1), QString("field2"));
-	QCOMPARE(spreadsheet.column(4)->textAt(2), QString("field3"));
+	QCOMPARE(spreadsheet.column(4)->textAt(0), QStringLiteral("field1"));
+	QCOMPARE(spreadsheet.column(4)->textAt(1), QStringLiteral("field2"));
+	QCOMPARE(spreadsheet.column(4)->textAt(2), QStringLiteral("field3"));
 }
 
 /*!
  * import objects with an additional column for the object names
  */
 void JSONFilterTest::testObjectImport02() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
@@ -148,9 +148,9 @@ void JSONFilterTest::testObjectImport02() {
 	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("3"));
 	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("4"));
 
-	QCOMPARE(spreadsheet.column(0)->textAt(0), QString("field1"));
-	QCOMPARE(spreadsheet.column(0)->textAt(1), QString("field2"));
-	QCOMPARE(spreadsheet.column(0)->textAt(2), QString("field3"));
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QStringLiteral("field1"));
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QStringLiteral("field2"));
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QStringLiteral("field3"));
 
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1.234);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 111.);
@@ -164,9 +164,9 @@ void JSONFilterTest::testObjectImport02() {
 	QCOMPARE(spreadsheet.column(3)->valueAt(1), 333.);
 	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0.003);
 
-	QCOMPARE(spreadsheet.column(4)->textAt(0), QString("field1"));
-	QCOMPARE(spreadsheet.column(4)->textAt(1), QString("field2"));
-	QCOMPARE(spreadsheet.column(4)->textAt(2), QString("field3"));
+	QCOMPARE(spreadsheet.column(4)->textAt(0), QStringLiteral("field1"));
+	QCOMPARE(spreadsheet.column(4)->textAt(1), QStringLiteral("field2"));
+	QCOMPARE(spreadsheet.column(4)->textAt(2), QStringLiteral("field3"));
 }
 
 /*!
@@ -174,7 +174,7 @@ void JSONFilterTest::testObjectImport02() {
  * with custom start and end columns
  */
 void JSONFilterTest::testObjectImport03() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
@@ -199,9 +199,9 @@ void JSONFilterTest::testObjectImport03() {
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
 	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("3"));
 
-	QCOMPARE(spreadsheet.column(0)->textAt(0), QString("field1"));
-	QCOMPARE(spreadsheet.column(0)->textAt(1), QString("field2"));
-	QCOMPARE(spreadsheet.column(0)->textAt(2), QString("field3"));
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QStringLiteral("field1"));
+	QCOMPARE(spreadsheet.column(0)->textAt(1), QStringLiteral("field2"));
+	QCOMPARE(spreadsheet.column(0)->textAt(2), QStringLiteral("field3"));
 
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2.345);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 222.);
@@ -216,7 +216,7 @@ void JSONFilterTest::testObjectImport03() {
  * import objects with an additional datetime column for the object names
  */
 void JSONFilterTest::testObjectImport04() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	JsonFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/intraday.json"));
@@ -226,7 +226,7 @@ void JSONFilterTest::testObjectImport04() {
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
 
-	QString dateTimeFormat("yyyy-MM-dd hh:mm:ss");
+	QString dateTimeFormat(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
 	filter.setDateTimeFormat(dateTimeFormat);
 	filter.setStartRow(1);
 	filter.setEndRow(2);
@@ -256,8 +256,8 @@ void JSONFilterTest::testObjectImport04() {
 	QCOMPARE(spreadsheet.column(5)->name(), QLatin1String("5. volume"));
 
 	// TODO: the values are sorted with respect to the names of the objects, i.e. to the timestamp. Why?
-	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0).toString(dateTimeFormat), QString("2018-06-14 15:56:00"));
-	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1).toString(dateTimeFormat), QString("2018-06-14 15:57:00"));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(0).toString(dateTimeFormat), QStringLiteral("2018-06-14 15:56:00"));
+	QCOMPARE(spreadsheet.column(0)->dateTimeAt(1).toString(dateTimeFormat), QStringLiteral("2018-06-14 15:57:00"));
 
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 101.2700);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 101.2700);

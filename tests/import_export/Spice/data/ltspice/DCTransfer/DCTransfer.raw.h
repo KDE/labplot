@@ -1,8 +1,8 @@
 namespace DCTransfer {
 
-const QString filename = "DCTransfer/DCTransfer.raw";
+const QString filename = QStringLiteral("DCTransfer/DCTransfer.raw");
 
-QString refFileInfoString = R"(Title: * C:\users\martin\My Documents\Labplot\ltspice\DCTransfer.asc
+QString refFileInfoString = QLatin1String(R"(Title: * C:\users\martin\My Documents\Labplot\ltspice\DCTransfer.asc
 <br>Date: Thu Mar 31 18:17:29 2022
 <br>Plotname: DC transfer characteristic
 <br>Flags: real forward
@@ -17,10 +17,15 @@ QString refFileInfoString = R"(Title: * C:\users\martin\My Documents\Labplot\lts
 <br>	3	I(R2)	device_current
 <br>	4	I(R1)	device_current
 <br>	5	I(V1)	device_current
-)"; // last \n is important
+)"); // last \n is important
 
 const int refDataRowCount = 5;
 const int numberPreviewData = 3;
 
-QStringList columnNames = {"v1, voltage", "V(n001), voltage", "V(n002), voltage", "I(R2), device_current", "I(R1), device_current", "I(V1), device_current"};
+QStringList columnNames = {QStringLiteral("v1, voltage"),
+						   QStringLiteral("V(n001), voltage"),
+						   QStringLiteral("V(n002), voltage"),
+						   QStringLiteral("I(R2), device_current"),
+						   QStringLiteral("I(R1), device_current"),
+						   QStringLiteral("I(V1), device_current")};
 }

@@ -49,8 +49,8 @@ WorkbookView::WorkbookView(Workbook* workbook)
 	m_initializing = false;
 
 	// Actions
-	action_add_spreadsheet = new QAction(QIcon::fromTheme("labplot-spreadsheet"), i18n("Spreadsheet"), this);
-	action_add_matrix = new QAction(QIcon::fromTheme("labplot-matrix"), i18n("Matrix"), this);
+	action_add_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("labplot-spreadsheet")), i18n("Spreadsheet"), this);
+	action_add_matrix = new QAction(QIcon::fromTheme(QStringLiteral("labplot-matrix")), i18n("Matrix"), this);
 	connect(action_add_spreadsheet, &QAction::triggered, this, &WorkbookView::addSpreadsheet);
 	connect(action_add_matrix, &QAction::triggered, this, &WorkbookView::addMatrix);
 
@@ -134,7 +134,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 		firstAction = menu->actions().at(1);
 
 	auto* addNewMenu = new QMenu(i18n("Add New"));
-	addNewMenu->setIcon(QIcon::fromTheme("list-add"));
+	addNewMenu->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
 	addNewMenu->addAction(action_add_spreadsheet);
 	addNewMenu->addAction(action_add_matrix);
 	menu->insertMenu(firstAction, addNewMenu);

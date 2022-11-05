@@ -15,7 +15,7 @@
 #include <KLocalizedString>
 
 void ReadStatFilterTest::testDTAImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.dta"));
@@ -63,7 +63,7 @@ void ReadStatFilterTest::testDTAImport() {
 }
 
 void ReadStatFilterTest::testSASImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.sas7bdat"));
@@ -107,7 +107,7 @@ void ReadStatFilterTest::testSASImport() {
 }
 
 void ReadStatFilterTest::testSAVImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/iris.sav"));
@@ -156,7 +156,7 @@ void ReadStatFilterTest::testSAVImport() {
 }
 
 void ReadStatFilterTest::testPORImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sample.por"));
@@ -240,7 +240,7 @@ void ReadStatFilterTest::testPORImport() {
 }
 
 void ReadStatFilterTest::testXPTImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ReadStatFilter filter;
 
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sample.xpt"));

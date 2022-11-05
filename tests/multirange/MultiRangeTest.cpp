@@ -59,23 +59,23 @@
 	QVERIFY(sinCurve != nullptr);                                                                                                                              \
 	if (!sinCurve)                                                                                                                                             \
 		return;                                                                                                                                                \
-	QCOMPARE(sinCurve->name(), "sinCurve");                                                                                                                    \
+	QCOMPARE(sinCurve->name(), QStringLiteral("sinCurve"));                                                                                                    \
 	auto tanCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(1));                                                                                             \
 	QVERIFY(tanCurve != nullptr);                                                                                                                              \
 	if (!tanCurve)                                                                                                                                             \
 		return;                                                                                                                                                \
-	QCOMPARE(tanCurve->name(), "tanCurve");                                                                                                                    \
+	QCOMPARE(tanCurve->name(), QStringLiteral("tanCurve"));                                                                                                    \
 	auto logCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(2));                                                                                             \
 	QVERIFY(logCurve != nullptr);                                                                                                                              \
 	if (!logCurve)                                                                                                                                             \
 		return;                                                                                                                                                \
-	QCOMPARE(logCurve->name(), "logx");                                                                                                                        \
+	QCOMPARE(logCurve->name(), QStringLiteral("logx"));                                                                                                        \
                                                                                                                                                                \
 	auto cosCurve = dynamic_cast<XYCurve*>(p2->child<XYCurve>(0));                                                                                             \
 	QVERIFY(cosCurve != nullptr);                                                                                                                              \
 	if (!cosCurve)                                                                                                                                             \
 		return;                                                                                                                                                \
-	QCOMPARE(cosCurve->name(), "cosCurve");                                                                                                                    \
+	QCOMPARE(cosCurve->name(), QStringLiteral("cosCurve"));                                                                                                    \
                                                                                                                                                                \
 	auto horAxisP1 = static_cast<Axis*>(p1->child<Axis>(0));                                                                                                   \
 	QVERIFY(horAxisP1 != nullptr);                                                                                                                             \
@@ -92,7 +92,7 @@
 	auto vertAxis3P1 = static_cast<Axis*>(p1->child<Axis>(3));                                                                                                 \
 	QVERIFY(vertAxis3P1 != nullptr);                                                                                                                           \
 	QCOMPARE(vertAxis3P1->orientation() == Axis::Orientation::Vertical, true);                                                                                 \
-	QCOMPARE(vertAxis3P1->name(), "y-axis 1");
+	QCOMPARE(vertAxis3P1->name(), QStringLiteral("y-axis 1"));
 
 #define SET_CARTESIAN_MOUSE_MODE(mode)                                                                                                                         \
 	QAction a(nullptr);                                                                                                                                        \

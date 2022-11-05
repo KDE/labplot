@@ -19,7 +19,7 @@ extern "C" {
 
 ///////////////////////// macros ///////////
 
-#define VALUES_EQUAL(v1, ref) QVERIFY2(nsl_math_approximately_equal(v1, ref) == true, qPrintable(QString("v1:%1, ref:%2").arg(v1).arg(ref)))
+#define VALUES_EQUAL(v1, ref) QVERIFY2(nsl_math_approximately_equal(v1, ref) == true, qPrintable(QStringLiteral("v1:%1, ref:%2").arg(v1).arg(ref)))
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
@@ -45,16 +45,18 @@ extern "C" {
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
 	for (int i = 0; i < res.length(); i++)                                                                                                                     \
 		QVERIFY2(qFuzzyCompare(res.at(i), ref.at(i)),                                                                                                          \
-				 qPrintable(QString("i=") + QString::number(i) + ", res=" + QString::number(res.at(i)) + ", ref=" + QString::number(ref.at(i))));
+				 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + QString::number(res.at(i)) + QStringLiteral(", ref=")       \
+							+ QString::number(ref.at(i))));
 
 #define COMPARE_STRING_VECTORS(res, ref)                                                                                                                       \
 	QCOMPARE(res.length(), ref.length());                                                                                                                      \
 	for (int i = 0; i < res.length(); i++)                                                                                                                     \
-		QVERIFY2(res.at(i).compare(ref.at(i)) == 0, qPrintable(QString("i=") + QString::number(i) + ", res=" + res.at(i) + ", ref=" + ref.at(i)));
+		QVERIFY2(res.at(i).compare(ref.at(i)) == 0,                                                                                                            \
+				 qPrintable(QStringLiteral("i=") + QString::number(i) + QStringLiteral(", res=") + res.at(i) + QStringLiteral(", ref=") + ref.at(i)));
 
 #define SAVE_PROJECT(project_name)                                                                                                                             \
 	do {                                                                                                                                                       \
-		auto* tempFile = new QTemporaryFile(QString("XXXXXX_") + QString(project_name), this);                                                                 \
+		auto* tempFile = new QTemporaryFile(QStringLiteral("XXXXXX_") + QLatin1String(project_name), this);                                                    \
 		QCOMPARE(tempFile->open(), true);                                                                                                                      \
 		savePath = tempFile->fileName();                                                                                                                       \
 		QFile file(savePath);                                                                                                                                  \

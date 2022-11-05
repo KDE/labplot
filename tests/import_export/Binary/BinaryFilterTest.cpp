@@ -18,7 +18,7 @@ extern "C" {
 }
 
 void BinaryFilterTest::importInt8() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int8.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT8);
@@ -49,7 +49,7 @@ void BinaryFilterTest::importInt8() {
 }
 
 void BinaryFilterTest::importInt16BE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int16.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT16);
@@ -80,7 +80,7 @@ void BinaryFilterTest::importInt16BE() {
 }
 
 void BinaryFilterTest::importInt32LE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int32LE.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT32);
@@ -110,7 +110,7 @@ void BinaryFilterTest::importInt32LE() {
 }
 
 void BinaryFilterTest::importInt32BE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int32.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT32);
@@ -141,7 +141,7 @@ void BinaryFilterTest::importInt32BE() {
 }
 
 void BinaryFilterTest::importInt64BE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/int64.bin"));
 	filter.setDataType(BinaryFilter::DataType::INT64);
@@ -172,7 +172,7 @@ void BinaryFilterTest::importInt64BE() {
 }
 
 void BinaryFilterTest::importFloatBE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/float.bin"));
 	filter.setDataType(BinaryFilter::DataType::REAL32);
@@ -205,7 +205,7 @@ void BinaryFilterTest::importFloatBE() {
 }
 
 void BinaryFilterTest::importDoubleBE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/double.bin"));
 	filter.setDataType(BinaryFilter::DataType::REAL64);
@@ -236,7 +236,7 @@ void BinaryFilterTest::importDoubleBE() {
 }
 
 void BinaryFilterTest::importDoubleLE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/doubleLE.bin"));
 	filter.setDataType(BinaryFilter::DataType::REAL64);
@@ -261,7 +261,7 @@ void BinaryFilterTest::importDoubleLE() {
 }
 
 void BinaryFilterTest::importDoubleMatrixBE() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/matrix_double.bin"));
 	filter.setDataType(BinaryFilter::DataType::REAL64);
@@ -317,7 +317,7 @@ void BinaryFilterTest::benchIntImport_data() {
 }
 
 void BinaryFilterTest::benchIntImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	filter.setDataType(BinaryFilter::DataType::INT32);
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);
@@ -380,7 +380,7 @@ void BinaryFilterTest::benchDoubleImport_data() {
 void BinaryFilterTest::benchDoubleImport() {
 	QFETCH(size_t, lineCount);
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	BinaryFilter filter;
 	filter.setDataType(BinaryFilter::DataType::REAL64);
 	filter.setByteOrder(QDataStream::ByteOrder::BigEndian);

@@ -14,7 +14,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #define INIT_SPREADSHEET                                                                                                                                       \
-	Spreadsheet sheet("test", false);                                                                                                                          \
+	Spreadsheet sheet(QStringLiteral("test"), false);                                                                                                          \
 	const int cols = 2;                                                                                                                                        \
 	const int rows = 100;                                                                                                                                      \
                                                                                                                                                                \

@@ -21,16 +21,16 @@ void CorrelationTest::testLinear() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setXDataColumn(&xDataColumn);
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
@@ -74,16 +74,16 @@ void CorrelationTest::testLinear2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setXDataColumn(&xDataColumn);
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
@@ -123,13 +123,13 @@ void CorrelationTest::testLinear_noX() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -172,16 +172,16 @@ void CorrelationTest::testLinear_swapped() {
 	QVector<double> y2Data = {1., 2., 3., 4.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setXDataColumn(&xDataColumn);
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
@@ -227,16 +227,16 @@ void CorrelationTest::testCircular() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setXDataColumn(&xDataColumn);
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
@@ -280,16 +280,16 @@ void CorrelationTest::testCircular2() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setXDataColumn(&xDataColumn);
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
@@ -332,13 +332,13 @@ void CorrelationTest::testLinear_biased() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -383,13 +383,13 @@ void CorrelationTest::testLinear2_biased() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -430,13 +430,13 @@ void CorrelationTest::testLinear_unbiased() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -481,13 +481,13 @@ void CorrelationTest::testLinear2_unbiased() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -528,13 +528,13 @@ void CorrelationTest::testLinear_coeff() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -580,13 +580,13 @@ void CorrelationTest::testLinear2_coeff() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -628,13 +628,13 @@ void CorrelationTest::testCircular_coeff() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -677,13 +677,13 @@ void CorrelationTest::testCircular2_coeff() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -726,13 +726,13 @@ void CorrelationTest::testLinear_samplingInterval() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -777,13 +777,13 @@ void CorrelationTest::testLinear2_samplingInterval() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -825,13 +825,13 @@ void CorrelationTest::testCircular_samplingInterval() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -872,13 +872,13 @@ void CorrelationTest::testCircular2_samplingInterval() {
 	QVector<double> y2Data = {0, 1., .5};
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 
@@ -926,13 +926,13 @@ void CorrelationTest::testPerformance() {
 	}
 
 	// data source columns
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Double);
+	Column y2DataColumn(QStringLiteral("y2"), AbstractColumn::ColumnMode::Double);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYCorrelationCurve correlationCurve("correlation");
+	XYCorrelationCurve correlationCurve(QStringLiteral("correlation"));
 	correlationCurve.setYDataColumn(&yDataColumn);
 	correlationCurve.setY2DataColumn(&y2DataColumn);
 

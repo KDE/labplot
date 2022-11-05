@@ -27,12 +27,12 @@ struct TextProperties {
 };
 
 QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
-	const QString htmlColorPattern("#[0-9A-Fa-f]{6}");
-	QRegularExpression fontColorPattern(colortype + ":" + htmlColorPattern);
+	const QString htmlColorPattern(QStringLiteral("#[0-9A-Fa-f]{6}"));
+	QRegularExpression fontColorPattern(colortype + QStringLiteral(":") + htmlColorPattern);
 	QRegularExpressionMatch matchColor = fontColorPattern.match(text);
 	// QVERIFY(matchColor.hasMatch());
 	// QCOMPARE(matchColor.capturedTexts().count(), 1);
-	QString color = matchColor.capturedTexts().at(0).split(colortype + ":#").at(1);
+	QString color = matchColor.capturedTexts().at(0).split(colortype + QStringLiteral(":#")).at(1);
 
 	int r = color.leftRef(2).toInt(nullptr, 16);
 	int g = color.midRef(2, 2).toInt(nullptr, 16);
@@ -51,8 +51,8 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 		/* For some reason the two below don't work */                                                                                                         \
 		/* propertyVariable.fontColor = te.textColor(); */                                                                                                     \
 		/* propertyVariable.backgroundColor = te.textBackgroundColor(); */                                                                                     \
-		propertyVariable.fontColor = getColorFromHTMLText(label->text().text, "color");                                                                        \
-		propertyVariable.backgroundColor = getColorFromHTMLText(label->text().text, "background-color");                                                       \
+		propertyVariable.fontColor = getColorFromHTMLText(label->text().text, QStringLiteral("color"));                                                        \
+		propertyVariable.backgroundColor = getColorFromHTMLText(label->text().text, QStringLiteral("background-color"));                                       \
 		propertyVariable.italic = te.fontItalic();                                                                                                             \
 		propertyVariable.underline = te.fontUnderline();                                                                                                       \
 		propertyVariable.plainText = te.toPlainText();                                                                                                         \
@@ -77,23 +77,23 @@ QColor getColorFromHTMLText(const QString& text, const QString& colortype) {
 
 #define VERIFYLABELCOLORS(label, fontcolor_, backgroundColor_)                                                                                                 \
 	{                                                                                                                                                          \
-		QCOMPARE(getColorFromHTMLText(label->text().text, "color"), fontcolor_);                                                                               \
-		QCOMPARE(getColorFromHTMLText(label->text().text, "background-color"), backgroundColor_);                                                              \
+		QCOMPARE(getColorFromHTMLText(label->text().text, QStringLiteral("color")), fontcolor_);                                                               \
+		QCOMPARE(getColorFromHTMLText(label->text().text, QStringLiteral("background-color")), backgroundColor_);                                              \
 	}
 
 void TextLabelTest::addPlot() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* l = new TextLabel("Label");
+	auto* l = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l != nullptr);
-	l->setText(QString("TextLabelText"));
+	l->setText(QStringLiteral("TextLabelText"));
 	ws->addChild(l);
 
 	QCOMPARE(l->text().mode, TextLabel::Mode::Text);
@@ -115,24 +115,24 @@ void TextLabelTest::addPlot() {
  */
 void TextLabelTest::multiLabelEditColorChange() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* l1 = new TextLabel("Label");
+	auto* l1 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l1 != nullptr);
-	l1->setText(QString("Text1"));
+	l1->setText(QStringLiteral("Text1"));
 	ws->addChild(l1);
 
 	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
 
-	auto* l2 = new TextLabel("Label");
+	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
-	l2->setText(QString("Text2"));
+	l2->setText(QStringLiteral("Text2"));
 	ws->addChild(l2);
 
 	STORETEXTPROPERTIES(l1, l1InitProperties);
@@ -170,22 +170,22 @@ void TextLabelTest::multiLabelEditColorChange() {
  */
 void TextLabelTest::multiLabelEditTextChange() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
-	auto* l1 = new TextLabel("Label");
+	auto* l1 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l1 != nullptr);
-	l1->setText(QString("Text1"));
+	l1->setText(QStringLiteral("Text1"));
 	ws->addChild(l1);
 
-	auto* l2 = new TextLabel("Label");
+	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
-	l2->setText(QString("Text2"));
+	l2->setText(QStringLiteral("Text2"));
 	ws->addChild(l2);
 
 	LabelWidget w(nullptr);
@@ -197,43 +197,43 @@ void TextLabelTest::multiLabelEditTextChange() {
 	w.fontUnderlineChanged(true);
 	w.fontItalicChanged(true);
 	w.fontBoldChanged(true);
-	w.fontChanged(QFont("AkrutiTml2"));
+	w.fontChanged(QFont(QStringLiteral("AkrutiTml2")));
 
 	STORETEXTPROPERTIES(l1, l1InitProperties);
 
 	w.setLabels({l1, l2});
-	w.ui.teLabel->setText("New text");
+	w.ui.teLabel->setText(QStringLiteral("New text"));
 
 	TextProperties l1p = l1InitProperties;
-	l1p.plainText = "New text";
+	l1p.plainText = QStringLiteral("New text");
 	COMPARETEXTPROPERTIESLABEL(l1, l1p);
 	COMPARETEXTPROPERTIESLABEL(l2, l1p); // textlabel2 received all properties of the first label, because the text content changes
 }
 
 void TextLabelTest::multiLabelEditColorChangeSelection() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	QVERIFY(ws != nullptr);
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	QVERIFY(p != nullptr);
 	ws->addChild(p);
 
 	LabelWidget w(nullptr);
 
-	auto* l1 = new TextLabel("Label");
+	auto* l1 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l1 != nullptr);
 	ws->addChild(l1);
-	l1->setText(QString("This is the text of label 1"));
+	l1->setText(QStringLiteral("This is the text of label 1"));
 
 	VERIFYLABELCOLORS(l1, Qt::black, Qt::white);
 
-	auto* l2 = new TextLabel("Label");
+	auto* l2 = new TextLabel(QStringLiteral("Label"));
 	QVERIFY(l2 != nullptr);
 	ws->addChild(l2);
 	w.setLabels({l2}); // This setlabels is important, otherwise a specific scenario does not occur
-	l2->setText(QString("Text label 2"));
+	l2->setText(QStringLiteral("Text label 2"));
 
 	STORETEXTPROPERTIES(l1, l1InitProperties);
 	STORETEXTPROPERTIES(l2, l2InitProperties);
@@ -260,7 +260,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 		QCOMPARE(ccf.background().color(), Qt::green);
 		QCOMPARE(te.fontItalic(), true);
 		QCOMPARE(te.fontWeight(), QFont::Bold);
-		QCOMPARE(te.toPlainText(), "This is the text of label 1");
+		QCOMPARE(te.toPlainText(), QStringLiteral("This is the text of label 1"));
 	}
 
 	{
@@ -274,7 +274,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 		QCOMPARE(ccf.background().color(), Qt::green);
 		QCOMPARE(te.fontItalic(), true);
 		QCOMPARE(te.fontWeight(), QFont::Bold);
-		QCOMPARE(te.toPlainText(), "Text label 2");
+		QCOMPARE(te.toPlainText(), QStringLiteral("Text label 2"));
 	}
 
 	w.fontBoldChanged(false);
@@ -291,7 +291,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 		QCOMPARE(ccf.background().color(), Qt::green);
 		QCOMPARE(te.fontItalic(), false);
 		QCOMPARE(te.fontWeight(), QFont::Normal);
-		QCOMPARE(te.toPlainText(), "This is the text of label 1");
+		QCOMPARE(te.toPlainText(), QStringLiteral("This is the text of label 1"));
 	}
 
 	{
@@ -305,7 +305,7 @@ void TextLabelTest::multiLabelEditColorChangeSelection() {
 		QCOMPARE(ccf.background().color(), Qt::green);
 		QCOMPARE(te.fontItalic(), false);
 		QCOMPARE(te.fontWeight(), QFont::Normal);
-		QCOMPARE(te.toPlainText(), "Text label 2");
+		QCOMPARE(te.toPlainText(), QStringLiteral("Text label 2"));
 	}
 }
 

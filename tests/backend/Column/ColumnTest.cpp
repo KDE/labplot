@@ -17,7 +17,7 @@
 #include "backend/lib/trace.h"
 
 void ColumnTest::doubleMinimum() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1.0);
@@ -35,7 +35,7 @@ void ColumnTest::doubleMinimum() {
 }
 
 void ColumnTest::doubleMaximum() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
 	QCOMPARE(c.maximum(0, 2), 5.0);
 	QCOMPARE(c.maximum(1, 1), 2.0);
@@ -50,7 +50,7 @@ void ColumnTest::doubleMaximum() {
 }
 
 void ColumnTest::integerMinimum() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1);
@@ -68,7 +68,7 @@ void ColumnTest::integerMinimum() {
 }
 
 void ColumnTest::integerMaximum() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
 	QCOMPARE(c.maximum(0, 2), 5);
 	QCOMPARE(c.maximum(1, 1), 2);
@@ -83,7 +83,7 @@ void ColumnTest::integerMaximum() {
 }
 
 void ColumnTest::bigIntMinimum() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
 	QCOMPARE(c.minimum(0, 2), -1);
@@ -101,7 +101,7 @@ void ColumnTest::bigIntMinimum() {
 }
 
 void ColumnTest::bigIntMaximum() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
 	QCOMPARE(c.maximum(0, 2), 5);
 	QCOMPARE(c.maximum(0, 1), 2);
@@ -118,7 +118,7 @@ void ColumnTest::bigIntMaximum() {
 /////////////////////////////////////////////////////
 
 void ColumnTest::statisticsDouble() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 1.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -153,7 +153,7 @@ void ColumnTest::statisticsDouble() {
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsDoubleNegative() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-1.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -188,7 +188,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleBigNegative() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({-100.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -223,7 +223,7 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsDoubleZero() {
-	Column c("Double column", Column::ColumnMode::Double);
+	Column c(QStringLiteral("Double column"), Column::ColumnMode::Double);
 	c.setValues({1.0, 0.0, 2.0, 5.0});
 
 	auto& stats = c.statistics();
@@ -259,7 +259,7 @@ void ColumnTest::statisticsDoubleZero() {
 }
 
 void ColumnTest::statisticsInt() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 1, 2, 5});
 
 	auto& stats = c.statistics();
@@ -294,7 +294,7 @@ void ColumnTest::statisticsInt() {
 	QCOMPARE(stats.entropy, 1.5);
 }
 void ColumnTest::statisticsIntNegative() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-1, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -329,7 +329,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntBigNegative() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({-100, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -364,7 +364,7 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntZero() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1, 0, 2, 5});
 
 	auto& stats = c.statistics();
@@ -399,7 +399,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsIntOverflow() {
-	Column c("Integer column", Column::ColumnMode::Integer);
+	Column c(QStringLiteral("Integer column"), Column::ColumnMode::Integer);
 	c.setIntegers({1000000000, 1100000000, 1200000000, 1300000000});
 
 	auto& stats = c.statistics();
@@ -434,7 +434,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.entropy, 2.);
 }
 void ColumnTest::statisticsBigInt() {
-	Column c("BigInt column", Column::ColumnMode::BigInt);
+	Column c(QStringLiteral("BigInt column"), Column::ColumnMode::BigInt);
 	c.setBigInts({-10000000000, 0, 1000000000, 10000000000});
 
 	auto& stats = c.statistics();
@@ -473,12 +473,12 @@ void ColumnTest::statisticsBigInt() {
 }
 
 void ColumnTest::statisticsText() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
-	c.setTextAt(4, "yes");
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
 
 	const auto& stats = c.statistics();
 
@@ -487,12 +487,12 @@ void ColumnTest::statisticsText() {
 }
 
 void ColumnTest::testDictionaryIndex() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
-	c.setTextAt(4, "yes");
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
 
 	// check the position of the distinct values in the dictionary
 	QCOMPARE(c.dictionaryIndex(0), 0);
@@ -502,7 +502,7 @@ void ColumnTest::testDictionaryIndex() {
 	QCOMPARE(c.dictionaryIndex(4), 0);
 
 	// modify a value which will invalidate the dictionary and verify it again
-	c.setTextAt(1, "yes");
+	c.setTextAt(1, QStringLiteral("yes"));
 
 	QCOMPARE(c.dictionaryIndex(0), 0);
 	QCOMPARE(c.dictionaryIndex(1), 0);
@@ -512,30 +512,30 @@ void ColumnTest::testDictionaryIndex() {
 }
 
 void ColumnTest::testTextFrequencies() {
-	Column c("Text column", Column::ColumnMode::Text);
-	c.setTextAt(0, "yes");
-	c.setTextAt(1, "no");
-	c.setTextAt(2, "no");
-	c.setTextAt(3, "yes");
-	c.setTextAt(4, "yes");
+	Column c(QStringLiteral("Text column"), Column::ColumnMode::Text);
+	c.setTextAt(0, QStringLiteral("yes"));
+	c.setTextAt(1, QStringLiteral("no"));
+	c.setTextAt(2, QStringLiteral("no"));
+	c.setTextAt(3, QStringLiteral("yes"));
+	c.setTextAt(4, QStringLiteral("yes"));
 
 	const auto& frequencies = c.frequencies();
 
-	QCOMPARE(frequencies["yes"], 3);
-	QCOMPARE(frequencies["no"], 2);
+	QCOMPARE(frequencies[QStringLiteral("yes")], 3);
+	QCOMPARE(frequencies[QStringLiteral("no")], 2);
 }
 
 //////////////////////////////////////////////////
 
 void ColumnTest::saveLoadDateTime() {
-	Column c("Datetime column", Column::ColumnMode::DateTime);
+	Column c(QStringLiteral("Datetime column"), Column::ColumnMode::DateTime);
 	c.setDateTimes({
 		QDateTime::fromString(
-			"2017-03-26T02:14:34.000Z",
+			QStringLiteral("2017-03-26T02:14:34.000Z"),
 			Qt::DateFormat::ISODateWithMs), // without the timezone declaration it would be invalid (in some regions), because of the daylight time
-		QDateTime::fromString("2018-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs),
-		QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs),
-		QDateTime::fromString("2019-26-03 02:14:34:000", "yyyy-dd-MM hh:mm:ss:zzz"),
+		QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+		QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs),
+		QDateTime::fromString(QStringLiteral("2019-26-03 02:14:34:000"), QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")),
 	});
 
 	QByteArray array;
@@ -544,12 +544,12 @@ void ColumnTest::saveLoadDateTime() {
 
 	QDEBUG(array);
 
-	Column c2("Datetime 2 column", Column::ColumnMode::DateTime);
+	Column c2(QStringLiteral("Datetime 2 column"), Column::ColumnMode::DateTime);
 	XmlStreamReader reader(array);
 	bool found = false;
 	while (!reader.atEnd()) {
 		reader.readNext();
-		if (reader.isStartElement() && reader.name() == "column") {
+		if (reader.isStartElement() && reader.name() == QLatin1String("column")) {
 			found = true;
 			break;
 		}
@@ -559,13 +559,13 @@ void ColumnTest::saveLoadDateTime() {
 
 	QCOMPARE(c2.rowCount(), 4);
 	QCOMPARE(c2.dateTimeAt(0).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString("2017-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString(QStringLiteral("2017-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(1).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromString("2018-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromString(QStringLiteral("2018-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(2).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(3).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
+	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString(QStringLiteral("2019-03-26T02:14:34.000Z"), Qt::DateFormat::ISODateWithMs));
 }
 
 void ColumnTest::loadDoubleFromProject() {
@@ -752,16 +752,16 @@ void ColumnTest::loadTextFromProject() {
 	auto* textColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(textColumn->columnMode(), AbstractColumn::ColumnMode::Text);
 	QCOMPARE(textColumn->rowCount(), 10);
-	QStringList texts = {"first value",
-						 "second value",
-						 "third value",
-						 "fourth value",
-						 "fifth value",
-						 "sixt value",
-						 "sevent value",
-						 "eigth value",
-						 "ninth value",
-						 "tenth value"};
+	QStringList texts = {QStringLiteral("first value"),
+						 QStringLiteral("second value"),
+						 QStringLiteral("third value"),
+						 QStringLiteral("fourth value"),
+						 QStringLiteral("fifth value"),
+						 QStringLiteral("sixt value"),
+						 QStringLiteral("sevent value"),
+						 QStringLiteral("eigth value"),
+						 QStringLiteral("ninth value"),
+						 QStringLiteral("tenth value")};
 	for (int i = 0; i < 10; i++) {
 		QCOMPARE(textColumn->textAt(i), texts.at(i));
 	}

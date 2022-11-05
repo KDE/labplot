@@ -401,25 +401,25 @@ void SpreadsheetView::initActions() {
 	// Tukey's ladder of powers
 	ladderOfPowersActionGroup = new QActionGroup(this);
 
-	QAction* ladderAction = new QAction("x³", ladderOfPowersActionGroup);
+	QAction* ladderAction = new QAction(QStringLiteral("x³"), ladderOfPowersActionGroup);
 	ladderAction->setData(Cube);
 
-	ladderAction = new QAction("x²", ladderOfPowersActionGroup);
+	ladderAction = new QAction(QStringLiteral("x²"), ladderOfPowersActionGroup);
 	ladderAction->setData(Squared);
 
-	ladderAction = new QAction("√x", ladderOfPowersActionGroup);
+	ladderAction = new QAction(QStringLiteral("√x"), ladderOfPowersActionGroup);
 	ladderAction->setData(SquareRoot);
 
 	ladderAction = new QAction(QLatin1String("log(x)"), ladderOfPowersActionGroup);
 	ladderAction->setData(Log);
 
-	ladderAction = new QAction("1/√x", ladderOfPowersActionGroup);
+	ladderAction = new QAction(QStringLiteral("1/√x"), ladderOfPowersActionGroup);
 	ladderAction->setData(InverseSquareRoot);
 
 	ladderAction = new QAction(QLatin1String("1/x"), ladderOfPowersActionGroup);
 	ladderAction->setData(Inverse);
 
-	ladderAction = new QAction("1/x²", ladderOfPowersActionGroup);
+	ladderAction = new QAction(QStringLiteral("1/x²"), ladderOfPowersActionGroup);
 	ladderAction->setData(InverseSquared);
 
 	// sort and statistics
@@ -1005,7 +1005,7 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
 
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	const int index = m_spreadsheet->indexOfChild<Column>(col);
 	// TODO: this makes it slow!
 	if (col->width() == 0)
@@ -1636,7 +1636,7 @@ void SpreadsheetView::cutSelection() {
 }
 
 void SpreadsheetView::copySelection() {
-	PERFTRACE("copy selected cells");
+	PERFTRACE(QStringLiteral("copy selected cells"));
 	const int first_col = firstSelectedColumn();
 	if (first_col == -1)
 		return;
@@ -1680,10 +1680,10 @@ void SpreadsheetView::copySelection() {
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
 			}
 			if (c < cols - 1)
-				output_str += '\t';
+				output_str += QLatin1Char('\t');
 		}
 		if (r < rows - 1)
-			output_str += '\n';
+			output_str += QLatin1Char('\n');
 	}
 
 	QApplication::clipboard()->setText(output_str);
@@ -1704,10 +1704,10 @@ void SpreadsheetView::pasteIntoSelection() {
 		return;
 
 	const QMimeData* mime_data = QApplication::clipboard()->mimeData();
-	if (!mime_data->hasFormat("text/plain"))
+	if (!mime_data->hasFormat(QStringLiteral("text/plain")))
 		return;
 
-	PERFTRACE("paste selected cells");
+	PERFTRACE(QStringLiteral("paste selected cells"));
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: paste from clipboard", m_spreadsheet->name()));
 
@@ -1718,7 +1718,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	int input_row_count = 0;
 	int input_col_count = 0;
 
-	QString input_str = QString(mime_data->data("text/plain")).trimmed();
+	QString input_str = QLatin1String(mime_data->data(QStringLiteral("text/plain"))).trimmed();
 	QVector<QStringList> cellTexts;
 	QString separator;
 	if (input_str.indexOf(QLatin1String("\r\n")) != -1)
@@ -2364,7 +2364,8 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			if (!stringOk)
-				stringValue = QInputDialog::getText(this, i18n("Fill the selection with constant value"), i18n("Value"), QLineEdit::Normal, nullptr, &stringOk);
+				stringValue =
+					QInputDialog::getText(this, i18n("Fill the selection with constant value"), i18n("Value"), QLineEdit::Normal, QString(), &stringOk);
 			if (stringOk && !stringValue.isEmpty()) {
 				WAIT_CURSOR;
 				QVector<QString> results;
@@ -3663,7 +3664,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 		// print table values
 		for (i = 0; i < rows; ++i) {
 			right = margin;
-			QString cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString() + '\t';
+			QString cellText = m_tableView->model()->headerData(i, Qt::Vertical).toString() + QLatin1Char('\t');
 			tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 			painter.drawLine(right, height, right, height + tr.height());
 
@@ -3681,7 +3682,7 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 			for (; j < toJ; j++) {
 				int w = m_tableView->columnWidth(j);
-				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i, j) + QString("\t") : QString("- \t");
+				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i, j) + QStringLiteral("\t") : QStringLiteral("- \t");
 				tr = painter.boundingRect(tr, Qt::AlignCenter, cellText);
 				br.setTopLeft(QPoint(right, height));
 				br.setWidth(w);
@@ -3752,7 +3753,7 @@ void SpreadsheetView::exportToFile(const QString& path, const bool exportHeader,
 		return;
 	}
 
-	PERFTRACE("export spreadsheet to file");
+	PERFTRACE(QStringLiteral("export spreadsheet to file"));
 	QTextStream out(&file);
 
 	int maxRow = maxRowToExport();
@@ -3863,20 +3864,20 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 	}
 
 	QProcess tex;
-	tex.start(latexFullPath, QStringList() << "--version", QProcess::ReadOnly);
+	tex.start(latexFullPath, QStringList() << QStringLiteral("--version"), QProcess::ReadOnly);
 	tex.waitForFinished(500);
-	QString texVersionOutput = QString(tex.readAllStandardOutput());
-	texVersionOutput = texVersionOutput.split('\n')[0];
+	QString texVersionOutput = QLatin1String(tex.readAllStandardOutput());
+	texVersionOutput = texVersionOutput.split(QLatin1Char('\n'))[0];
 
 	int yearidx = -1;
 	for (int i = texVersionOutput.size() - 1; i >= 0; --i) {
-		if (texVersionOutput.at(i) == QChar('2')) {
+		if (texVersionOutput.at(i) == QLatin1Char('2')) {
 			yearidx = i;
 			break;
 		}
 	}
 
-	if (texVersionOutput.at(yearidx + 1) == QChar('/'))
+	if (texVersionOutput.at(yearidx + 1) == QLatin1Char('/'))
 		yearidx -= 3;
 
 	bool ok;
@@ -3904,9 +3905,9 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 		out << QLatin1String("\\date{\\today} \n");
 	}
 
-	QString endTabularTable("\\end{tabular} \n \\end{table} \n");
-	QString tableCaption("\\caption{" + m_spreadsheet->name() + "} \n");
-	QString beginTable("\\begin{table}[ht] \n");
+	QString endTabularTable(QStringLiteral("\\end{tabular} \n \\end{table} \n"));
+	QString tableCaption(QStringLiteral("\\caption{") + m_spreadsheet->name() + QStringLiteral("} \n"));
+	QString beginTable(QStringLiteral("\\begin{table}[ht] \n"));
 
 	int rowCount = 0;
 	const int maxRows = 45;
@@ -4092,9 +4093,9 @@ void SpreadsheetView::exportToLaTeX(const QString& path,
 					notEmpty = true;
 					values << toExport.at(col)->asStringColumn()->textAt(row);
 				} else
-					values << "-";
+					values << QStringLiteral("-");
 				if (col != cols - 1)
-					values << " & ";
+					values << QStringLiteral(" & ");
 			}
 
 			if (notEmpty || !skipEmptyRows) {
@@ -4145,7 +4146,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	if (!file.open(QFile::WriteOnly | QFile::Truncate))
 		return;
 
-	PERFTRACE("export spreadsheet to SQLite database");
+	PERFTRACE(QStringLiteral("export spreadsheet to SQLite database"));
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
 	// create database
@@ -4192,7 +4193,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	QSqlQuery q;
 	if (!q.exec(query)) {
 		RESET_CURSOR;
-		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + '\n' + q.lastError().databaseText());
+		KMessageBox::error(nullptr, i18n("Failed to create table in the SQLite database %1.", path) + QLatin1Char('\n') + q.lastError().databaseText());
 		db.close();
 		return;
 	}
@@ -4205,11 +4206,11 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 
 	// create bulk insert statement in batches of 10k rows
 	{
-		PERFTRACE("Insert the data");
+		PERFTRACE(QStringLiteral("Insert the data"));
 		q.exec(QLatin1String("BEGIN TRANSACTION;"));
 
 		// create the first part of the INSERT-statement without the values
-		QString insertQuery = "INSERT INTO '" + m_spreadsheet->name() + "' (";
+		QString insertQuery = QStringLiteral("INSERT INTO '") + m_spreadsheet->name() + QStringLiteral("' (");
 		for (int i = 0; i < cols; ++i) {
 			if (i != 0)
 				insertQuery += QLatin1String(", ");

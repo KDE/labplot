@@ -19,18 +19,18 @@
  */
 void BarPlotTest::testRange01() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* barPlot = new BarPlot("barplot");
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
 	p->addChild(barPlot);
 
 	// set the data
 	QVector<const AbstractColumn*> dataColumns;
-	auto* c = new Column("data");
+	auto* c = new Column(QStringLiteral("data"));
 	c->setValueAt(0, 3.);
 	c->setValueAt(1, 6.);
 	c->setValueAt(2, 9.);
@@ -51,18 +51,18 @@ void BarPlotTest::testRange01() {
  */
 void BarPlotTest::testRange02() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* barPlot = new BarPlot("barplot");
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
 	p->addChild(barPlot);
 
 	// set the data
 	QVector<const AbstractColumn*> dataColumns;
-	auto* c = new Column("data");
+	auto* c = new Column(QStringLiteral("data"));
 	c->setValueAt(0, 3.);
 	c->setValueAt(1, -6.);
 	c->setValueAt(2, 9.);
@@ -83,27 +83,27 @@ void BarPlotTest::testRange02() {
  */
 void BarPlotTest::testRange03() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* barPlot = new BarPlot("barplot");
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
 	barPlot->setType(BarPlot::Type::Stacked);
 	p->addChild(barPlot);
 
 	// set the data
 	QVector<const AbstractColumn*> dataColumns;
 
-	auto* c1 = new Column("data1");
+	auto* c1 = new Column(QStringLiteral("data1"));
 	c1->setValueAt(0, 3.);
 	c1->setValueAt(1, 6.);
 	c1->setValueAt(2, 9.);
 	c1->setValueAt(3, 12.);
 	dataColumns << c1;
 
-	auto* c2 = new Column("data2");
+	auto* c2 = new Column(QStringLiteral("data2"));
 	c2->setValueAt(0, 2.);
 	c2->setValueAt(1, 5.);
 	c2->setValueAt(2, 8.);
@@ -124,27 +124,27 @@ void BarPlotTest::testRange03() {
  */
 void BarPlotTest::testRange04() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* barPlot = new BarPlot("barplot");
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
 	barPlot->setType(BarPlot::Type::Stacked);
 	p->addChild(barPlot);
 
 	// set the data
 	QVector<const AbstractColumn*> dataColumns;
 
-	auto* c1 = new Column("data1");
+	auto* c1 = new Column(QStringLiteral("data1"));
 	c1->setValueAt(0, 3.);
 	c1->setValueAt(1, 6.);
 	c1->setValueAt(2, 9.);
 	c1->setValueAt(3, 12.);
 	dataColumns << c1;
 
-	auto* c2 = new Column("data2");
+	auto* c2 = new Column(QStringLiteral("data2"));
 	c2->setValueAt(0, 2.);
 	c2->setValueAt(1, 5.);
 	c2->setValueAt(2, 8.);
@@ -165,27 +165,27 @@ void BarPlotTest::testRange04() {
  */
 void BarPlotTest::testRange05() {
 	Project project;
-	auto* ws = new Worksheet("worksheet");
+	auto* ws = new Worksheet(QStringLiteral("worksheet"));
 	project.addChild(ws);
 
-	auto* p = new CartesianPlot("plot");
+	auto* p = new CartesianPlot(QStringLiteral("plot"));
 	ws->addChild(p);
 
-	auto* barPlot = new BarPlot("barplot");
+	auto* barPlot = new BarPlot(QStringLiteral("barplot"));
 	barPlot->setType(BarPlot::Type::Stacked_100_Percent);
 	p->addChild(barPlot);
 
 	// set the data
 	QVector<const AbstractColumn*> dataColumns;
 
-	auto* c1 = new Column("data1");
+	auto* c1 = new Column(QStringLiteral("data1"));
 	c1->setValueAt(0, 3.);
 	c1->setValueAt(1, 6.);
 	c1->setValueAt(2, 9.);
 	c1->setValueAt(3, 12.);
 	dataColumns << c1;
 
-	auto* c2 = new Column("data2");
+	auto* c2 = new Column(QStringLiteral("data2"));
 	c2->setValueAt(0, 2.);
 	c2->setValueAt(1, 5.);
 	c2->setValueAt(2, 8.);

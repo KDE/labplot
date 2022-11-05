@@ -435,18 +435,18 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	auto* yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	auto* legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
@@ -491,18 +491,18 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B");
+	QCOMPARE(curve->name(), QStringLiteral("B"));
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -559,18 +559,18 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	auto* yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	auto* legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
 	CHECK_RANGE(plot, curve, Dimension::X, .5, 5.5);
 	CHECK_RANGE(plot, curve, Dimension::Y, .5, 5.5);
@@ -604,18 +604,18 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
 	QVERIFY(xAxis != nullptr);
-	QCOMPARE(xAxis->name(), "x");
+	QCOMPARE(xAxis->name(), QStringLiteral("x"));
 	yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
 	QVERIFY(yAxis != nullptr);
-	QCOMPARE(yAxis->name(), "y");
+	QCOMPARE(yAxis->name(), QStringLiteral("y"));
 
 	legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
 	QVERIFY(legend != nullptr);
-	QCOMPARE(legend->name(), "legend");
+	QCOMPARE(legend->name(), QStringLiteral("legend"));
 
 	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
 	QVERIFY(curve != nullptr);
-	QCOMPARE(curve->name(), "B"); // TODO: Origin uses Comments as curve name: "Length"
+	QCOMPARE(curve->name(), QStringLiteral("B")); // TODO: Origin uses Comments as curve name: "Length"
 
 	CHECK_RANGE(plot, curve, Dimension::X, 0, 9);
 	CHECK_RANGE(plot, curve, Dimension::Y, 0, 9);
