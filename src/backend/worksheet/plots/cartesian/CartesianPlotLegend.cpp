@@ -657,13 +657,13 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 						// caps for the horiz. line
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 2,
-											h / 2 - errorBarsSize / 4,
-											lineSymbolWidth / 2 - errorBarsSize / 2,
-											h / 2 + errorBarsSize / 4);
+										  h / 2 - errorBarsSize / 4,
+										  lineSymbolWidth / 2 - errorBarsSize / 2,
+										  h / 2 + errorBarsSize / 4);
 						painter->drawLine(lineSymbolWidth / 2 + errorBarsSize / 2,
-											h / 2 - errorBarsSize / 4,
-											lineSymbolWidth / 2 + errorBarsSize / 2,
-											h / 2 + errorBarsSize / 4);
+										  h / 2 - errorBarsSize / 4,
+										  lineSymbolWidth / 2 + errorBarsSize / 2,
+										  h / 2 + errorBarsSize / 4);
 					}
 
 					// vert. line
@@ -672,13 +672,13 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 						// caps for the vert. line
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 4,
-											h / 2 - errorBarsSize / 2,
-											lineSymbolWidth / 2 + errorBarsSize / 4,
-											h / 2 - errorBarsSize / 2);
+										  h / 2 - errorBarsSize / 2,
+										  lineSymbolWidth / 2 + errorBarsSize / 4,
+										  h / 2 - errorBarsSize / 2);
 						painter->drawLine(lineSymbolWidth / 2 - errorBarsSize / 4,
-											h / 2 + errorBarsSize / 2,
-											lineSymbolWidth / 2 + errorBarsSize / 4,
-											h / 2 + errorBarsSize / 2);
+										  h / 2 + errorBarsSize / 2,
+										  lineSymbolWidth / 2 + errorBarsSize / 4,
+										  h / 2 + errorBarsSize / 2);
 					}
 					break;
 				}
@@ -764,7 +764,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setOpacity(line->opacity());
 				painter->setBrush(Qt::NoBrush);
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawRect(QRectF(-h *0.25, -h / 2, h * 0.5, h));
+				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
