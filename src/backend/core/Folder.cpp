@@ -299,7 +299,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 					continue;
 
 				if (reader->name() == QLatin1String("general")) {
-					const QString& backendName = reader->attributes().value("backend_name").toString().trimmed();
+					const QString& backendName = reader->attributes().value(QStringLiteral("backend_name")).toString().trimmed();
 					if (!backendName.isEmpty())
 						reader->raiseMissingCASWarning(backendName);
 				} else
