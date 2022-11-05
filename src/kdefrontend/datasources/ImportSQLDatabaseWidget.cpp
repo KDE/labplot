@@ -215,7 +215,7 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	if (m_initializing)
 		return;
 
-	QDEBUG("ImportSQLDatabaseWidget: connecting to " + ui.cbConnection->currentText());
+	QDEBUG(QStringLiteral("ImportSQLDatabaseWidget: connecting to ") + ui.cbConnection->currentText());
 
 	// clear the previously shown content
 	ui.teQuery->clear();

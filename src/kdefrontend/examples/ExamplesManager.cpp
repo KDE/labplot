@@ -160,7 +160,7 @@ void ExamplesManager::loadCollections() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + fileName)
+			QDEBUG(QStringLiteral("Invalid definition of ") + fileName)
 			return;
 		}
 

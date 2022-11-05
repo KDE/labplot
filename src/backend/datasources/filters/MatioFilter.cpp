@@ -1190,7 +1190,7 @@ MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* 
 							else
 								dataStrings[1][colIndex] = s;
 						} else {
-							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << STDSTRING(QString(data)) << "\"")
+							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << STDSTRING(QString::fromLatin1(data)) << "\"")
 							// TODO: row
 							if (dataSource)
 								(*static_cast<QVector<QString>*>(dataContainer[colIndex]))[0] = QLatin1String(data);

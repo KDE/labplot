@@ -449,7 +449,7 @@ void DatabaseManagerWidget::loadConnections() {
 }
 
 void DatabaseManagerWidget::saveConnections() {
-	QDEBUG("Saving connections to " + m_configPath);
+	QDEBUG(QStringLiteral("Saving connections to ") + m_configPath);
 	// delete saved connections
 	KConfig config(m_configPath, KConfig::SimpleConfig);
 	for (const auto& group : config.groupList())

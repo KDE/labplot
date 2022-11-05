@@ -112,7 +112,7 @@ void ImportDatasetWidget::loadCategories() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + collectionsFileName);
+			QDEBUG(QStringLiteral("Invalid definition of ") + collectionsFileName);
 			return;
 		}
 
@@ -127,7 +127,7 @@ void ImportDatasetWidget::loadCategories() {
 			if (collectionFile.open(QIODevice::ReadOnly)) {
 				QJsonDocument collectionDocument = QJsonDocument::fromJson(collectionFile.readAll());
 				if (!collectionDocument.isObject()) {
-					QDEBUG("Invalid definition of " + path);
+					QDEBUG(QStringLiteral("Invalid definition of ") + path);
 					continue;
 				}
 
