@@ -330,19 +330,19 @@ void WorksheetView::initActions() {
 	// TODO: no own icons yet
 	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
 	//	addDataOperationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
 	//	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 	//	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
 	// cartesianPlotAddNewActionGroup);
 	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
 	//	addIntegrationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("(De-)Convolution"), cartesianPlotAddNewActionGroup);
 	//	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("(De-)Convolution"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addCorrelationCurveAction =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 	//	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Auto-/Cross-Correlation"),
@@ -366,25 +366,25 @@ void WorksheetView::initActions() {
 	// TODO: no own icons yet
 	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
 	//	addDataOperationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-operation-curve")), i18n("Data Operation"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), cartesianPlotAddNewActionGroup);
 	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Data Reduction"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), cartesianPlotAddNewActionGroup);
 	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiation"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integration"), cartesianPlotAddNewActionGroup);
 	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integration"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
 	//	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Convolution/Deconvolution"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 	//	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-correlation-curve")), i18n("Auto-/Cross-Correlation"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
 	//	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-hilbert-curve")), i18n("Hilbert-Transform"),
-	//cartesianPlotAddNewActionGroup);
+	// cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);

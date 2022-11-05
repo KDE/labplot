@@ -67,7 +67,7 @@ extern "C" {
 		QPixmap thumbnail;                                                                                                                                     \
 		project.save(thumbnail, &writer);                                                                                                                      \
 		file.close();                                                                                                                                          \
-		DEBUG(QStringLiteral("File stored as: ").toStdString() << tempFile->fileName().toStdString());                                                                \
+		DEBUG(QStringLiteral("File stored as: ").toStdString() << tempFile->fileName().toStdString());                                                         \
 	} while (0);
 
 ///////////////////////////////////////////////////////
