@@ -61,7 +61,7 @@ bool XYInterpolationCurve::resultAvailable() const {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYInterpolationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-interpolation-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve"));
 }
 
 //##############################################################################
@@ -101,8 +101,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// create interpolation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -436,33 +436,33 @@ void XYInterpolationCurvePrivate::recalculate() {
 void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYInterpolationCurve);
 
-	writer->writeStartElement("xyInterpolationCurve");
+	writer->writeStartElement(QStringLiteral("xyInterpolationCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-interpolation-curve specific information
 	//  interpolation data
-	writer->writeStartElement("interpolationData");
-	writer->writeAttribute("autoRange", QString::number(d->interpolationData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->interpolationData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->interpolationData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->interpolationData.type));
-	writer->writeAttribute("variant", QString::number(d->interpolationData.variant));
-	writer->writeAttribute("tension", QString::number(d->interpolationData.tension));
-	writer->writeAttribute("continuity", QString::number(d->interpolationData.continuity));
-	writer->writeAttribute("bias", QString::number(d->interpolationData.bias));
-	writer->writeAttribute("npoints", QString::number(d->interpolationData.npoints));
-	writer->writeAttribute("pointsMode", QString::number(static_cast<int>(d->interpolationData.pointsMode)));
-	writer->writeAttribute("evaluate", QString::number(d->interpolationData.evaluate));
+	writer->writeStartElement(QStringLiteral("interpolationData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->interpolationData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->interpolationData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->interpolationData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->interpolationData.type));
+	writer->writeAttribute(QStringLiteral("variant"), QString::number(d->interpolationData.variant));
+	writer->writeAttribute(QStringLiteral("tension"), QString::number(d->interpolationData.tension));
+	writer->writeAttribute(QStringLiteral("continuity"), QString::number(d->interpolationData.continuity));
+	writer->writeAttribute(QStringLiteral("bias"), QString::number(d->interpolationData.bias));
+	writer->writeAttribute(QStringLiteral("npoints"), QString::number(d->interpolationData.npoints));
+	writer->writeAttribute(QStringLiteral("pointsMode"), QString::number(static_cast<int>(d->interpolationData.pointsMode)));
+	writer->writeAttribute(QStringLiteral("evaluate"), QString::number(d->interpolationData.evaluate));
 	writer->writeEndElement(); // interpolationData
 
 	// interpolation results (generated columns)
-	writer->writeStartElement("interpolationResult");
-	writer->writeAttribute("available", QString::number(d->interpolationResult.available));
-	writer->writeAttribute("valid", QString::number(d->interpolationResult.valid));
-	writer->writeAttribute("status", d->interpolationResult.status);
-	writer->writeAttribute("time", QString::number(d->interpolationResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("interpolationResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->interpolationResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->interpolationResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->interpolationResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->interpolationResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -484,16 +484,16 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyInterpolationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyInterpolationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "interpolationData") {
+		} else if (!preview && reader->name() == QLatin1String("interpolationData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", interpolationData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", interpolationData.xRange.first());
@@ -506,21 +506,21 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("npoints", interpolationData.npoints, size_t);
 			READ_INT_VALUE("pointsMode", interpolationData.pointsMode, XYInterpolationCurve::PointsMode);
 			READ_INT_VALUE("evaluate", interpolationData.evaluate, nsl_interp_evaluate);
-		} else if (!preview && reader->name() == "interpolationResult") {
+		} else if (!preview && reader->name() == QLatin1String("interpolationResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", interpolationResult.available, int);
 			READ_INT_VALUE("valid", interpolationResult.valid, int);
 			READ_STRING_VALUE("status", interpolationResult.status);
 			READ_INT_VALUE("time", interpolationResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

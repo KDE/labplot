@@ -53,7 +53,7 @@ bool XYDataReductionCurve::resultAvailable() const {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYDataReductionCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-data-reduction-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve"));
 }
 
 //##############################################################################
@@ -93,8 +93,8 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	// create dataReduction result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -244,9 +244,9 @@ void XYDataReductionCurvePrivate::recalculate() {
 	dataReductionResult.available = true;
 	dataReductionResult.valid = true;
 	if (npoints > 0)
-		dataReductionResult.status = QString("OK");
+		dataReductionResult.status = QStringLiteral("OK");
 	else
-		dataReductionResult.status = QString("FAILURE");
+		dataReductionResult.status = QStringLiteral("FAILURE");
 	dataReductionResult.elapsedTime = timer.elapsed();
 	dataReductionResult.npoints = npoints;
 	dataReductionResult.posError = posError;
@@ -267,33 +267,33 @@ void XYDataReductionCurvePrivate::recalculate() {
 void XYDataReductionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYDataReductionCurve);
 
-	writer->writeStartElement("xyDataReductionCurve");
+	writer->writeStartElement(QStringLiteral("xyDataReductionCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-dataReduction-curve specific information
 	//  dataReduction data
-	writer->writeStartElement("dataReductionData");
-	writer->writeAttribute("autoRange", QString::number(d->dataReductionData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->dataReductionData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->dataReductionData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->dataReductionData.type));
-	writer->writeAttribute("autoTolerance", QString::number(d->dataReductionData.autoTolerance));
-	writer->writeAttribute("tolerance", QString::number(d->dataReductionData.tolerance));
-	writer->writeAttribute("autoTolerance2", QString::number(d->dataReductionData.autoTolerance2));
-	writer->writeAttribute("tolerance2", QString::number(d->dataReductionData.tolerance2));
+	writer->writeStartElement(QStringLiteral("dataReductionData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->dataReductionData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->dataReductionData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->dataReductionData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->dataReductionData.type));
+	writer->writeAttribute(QStringLiteral("autoTolerance"), QString::number(d->dataReductionData.autoTolerance));
+	writer->writeAttribute(QStringLiteral("tolerance"), QString::number(d->dataReductionData.tolerance));
+	writer->writeAttribute(QStringLiteral("autoTolerance2"), QString::number(d->dataReductionData.autoTolerance2));
+	writer->writeAttribute(QStringLiteral("tolerance2"), QString::number(d->dataReductionData.tolerance2));
 	writer->writeEndElement(); // dataReductionData
 
 	// dataReduction results (generated columns)
-	writer->writeStartElement("dataReductionResult");
-	writer->writeAttribute("available", QString::number(d->dataReductionResult.available));
-	writer->writeAttribute("valid", QString::number(d->dataReductionResult.valid));
-	writer->writeAttribute("status", d->dataReductionResult.status);
-	writer->writeAttribute("time", QString::number(d->dataReductionResult.elapsedTime));
-	writer->writeAttribute("npoints", QString::number(d->dataReductionResult.npoints));
-	writer->writeAttribute("posError", QString::number(d->dataReductionResult.posError));
-	writer->writeAttribute("areaError", QString::number(d->dataReductionResult.areaError));
+	writer->writeStartElement(QStringLiteral("dataReductionResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->dataReductionResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->dataReductionResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->dataReductionResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->dataReductionResult.elapsedTime));
+	writer->writeAttribute(QStringLiteral("npoints"), QString::number(d->dataReductionResult.npoints));
+	writer->writeAttribute(QStringLiteral("posError"), QString::number(d->dataReductionResult.posError));
+	writer->writeAttribute(QStringLiteral("areaError"), QString::number(d->dataReductionResult.areaError));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -315,16 +315,16 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyDataReductionCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyDataReductionCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "dataReductionData") {
+		} else if (!preview && reader->name() == QLatin1String("dataReductionData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", dataReductionData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", dataReductionData.xRange.first());
@@ -334,7 +334,7 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("tolerance", dataReductionData.tolerance);
 			READ_INT_VALUE("autoTolerance2", dataReductionData.autoTolerance2, int);
 			READ_DOUBLE_VALUE("tolerance2", dataReductionData.tolerance2);
-		} else if (!preview && reader->name() == "dataReductionResult") {
+		} else if (!preview && reader->name() == QLatin1String("dataReductionResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", dataReductionResult.available, int);
 			READ_INT_VALUE("valid", dataReductionResult.valid, int);
@@ -343,15 +343,15 @@ bool XYDataReductionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("npoints", dataReductionResult.npoints, size_t);
 			READ_DOUBLE_VALUE("posError", dataReductionResult.posError);
 			READ_DOUBLE_VALUE("areaError", dataReductionResult.areaError);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

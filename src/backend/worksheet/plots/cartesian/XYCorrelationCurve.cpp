@@ -57,7 +57,7 @@ bool XYCorrelationCurve::resultAvailable() const {
 */
 QIcon XYCorrelationCurve::icon() const {
 	// 	return QIcon::fromTheme("labplot-xy-correlation-curve"); //not available yet
-	return QIcon::fromTheme("labplot-xy-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
 //##############################################################################
@@ -92,14 +92,14 @@ XYCorrelationCurvePrivate::XYCorrelationCurvePrivate(XYCorrelationCurve* owner)
 XYCorrelationCurvePrivate::~XYCorrelationCurvePrivate() = default;
 
 void XYCorrelationCurvePrivate::recalculate() {
-	DEBUG("XYCorrelationCurvePrivate::recalculate()");
+	DEBUG(Q_FUNC_INFO);
 	QElapsedTimer timer;
 	timer.start();
 
 	// create correlation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -255,28 +255,28 @@ void XYCorrelationCurvePrivate::recalculate() {
 void XYCorrelationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYCorrelationCurve);
 
-	writer->writeStartElement("xyCorrelationCurve");
+	writer->writeStartElement(QStringLiteral("xyCorrelationCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-correlation-curve specific information
 	//  correlation data
-	writer->writeStartElement("correlationData");
-	writer->writeAttribute("samplingInterval", QString::number(d->correlationData.samplingInterval));
-	writer->writeAttribute("autoRange", QString::number(d->correlationData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->correlationData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->correlationData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->correlationData.type));
-	writer->writeAttribute("normalize", QString::number(d->correlationData.normalize));
+	writer->writeStartElement(QStringLiteral("correlationData"));
+	writer->writeAttribute(QStringLiteral("samplingInterval"), QString::number(d->correlationData.samplingInterval));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->correlationData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->correlationData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->correlationData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->correlationData.type));
+	writer->writeAttribute(QStringLiteral("normalize"), QString::number(d->correlationData.normalize));
 	writer->writeEndElement(); // correlationData
 
 	// correlation results (generated columns)
-	writer->writeStartElement("correlationResult");
-	writer->writeAttribute("available", QString::number(d->correlationResult.available));
-	writer->writeAttribute("valid", QString::number(d->correlationResult.valid));
-	writer->writeAttribute("status", d->correlationResult.status);
-	writer->writeAttribute("time", QString::number(d->correlationResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("correlationResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->correlationResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->correlationResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->correlationResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->correlationResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -299,16 +299,16 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyCorrelationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyCorrelationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "correlationData") {
+		} else if (!preview && reader->name() == QLatin1String("correlationData")) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("samplingInterval", correlationData.samplingInterval);
 			READ_INT_VALUE("autoRange", correlationData.autoRange, bool);
@@ -316,21 +316,21 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMax", correlationData.xRange.last());
 			READ_INT_VALUE("type", correlationData.type, nsl_corr_type_type);
 			READ_INT_VALUE("normalize", correlationData.normalize, nsl_corr_norm_type);
-		} else if (!preview && reader->name() == "correlationResult") {
+		} else if (!preview && reader->name() == QLatin1String("correlationResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", correlationResult.available, int);
 			READ_INT_VALUE("valid", correlationResult.valid, int);
 			READ_STRING_VALUE("status", correlationResult.status);
 			READ_INT_VALUE("time", correlationResult.elapsedTime, int);
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

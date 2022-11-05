@@ -383,13 +383,13 @@ void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	Q_D(const ReferenceLine);
 
-	writer->writeStartElement("referenceLine");
+	writer->writeStartElement(QStringLiteral("referenceLine"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(static_cast<int>(d->orientation)));
 	writer->writeEndElement();
 
 	d->line->save(writer);
@@ -410,22 +410,22 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "referenceLine")
+		if (reader->isEndElement() && reader->name() == QLatin1String("referenceLine"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			// old logic for the position for xml version < 6
 			Q_D(ReferenceLine);
 			attribs = reader->attributes();
-			auto str = attribs.value("position").toString();
+			auto str = attribs.value(QStringLiteral("position")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("position").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("position")).toString());
 			else {
 				d->positionLogical.setX(str.toDouble());
 				d->positionLogical.setY(str.toDouble());
@@ -435,17 +435,17 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
-			str = attribs.value("visible").toString();
+			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			attribs = reader->attributes();
 			// new logic for the position for xmlVersion >= 6
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			WorksheetElement::load(reader, preview);
-		} else if (!preview && reader->name() == "line") {
+		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

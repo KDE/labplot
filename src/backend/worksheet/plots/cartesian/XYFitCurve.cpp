@@ -483,179 +483,164 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 
 	switch (modelCategory) {
 	case nsl_fit_model_basic:
-		model = nsl_fit_model_basic_equation[fitData.modelType];
+		model = QLatin1String(nsl_fit_model_basic_equation[fitData.modelType]);
 		switch (modelType) {
 		case nsl_fit_model_polynomial:
-			paramNames << "c0"
-					   << "c1";
+			paramNames << QStringLiteral("c0") << QStringLiteral("c1");
 			paramNamesUtf8 << UTF8_QSTRING("c₀") << UTF8_QSTRING("c₁");
 			if (degree == 2) {
-				model += " + c2*x^2";
-				paramNames << "c2";
+				model += QStringLiteral(" + c2*x^2");
+				paramNames << QStringLiteral("c2");
 				paramNamesUtf8 << UTF8_QSTRING("c₂");
 			} else if (degree > 2) {
 				for (int i = 2; i <= degree; ++i) {
 					QString numStr = QString::number(i);
-					model += "+c" + numStr + "*x^" + numStr;
-					paramNames << 'c' + numStr;
-					paramNamesUtf8 << 'c' + indices[i - 1];
+					model += QStringLiteral("+c") + numStr + QStringLiteral("*x^") + numStr;
+					paramNames << QStringLiteral("c") + numStr;
+					paramNamesUtf8 << QStringLiteral("c") + indices[i - 1];
 				}
 			}
 			break;
 		case nsl_fit_model_power:
 			if (degree == 1) {
-				paramNames << "a"
-						   << "b";
+				paramNames << QStringLiteral("a") << QStringLiteral("b");
 			} else {
-				paramNames << "a"
-						   << "b"
-						   << "c";
-				model = "a + b*x^c";
+				paramNames << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("c");
+				model = QStringLiteral("a + b*x^c");
 			}
 			break;
 		case nsl_fit_model_exponential:
 			if (degree == 1) {
-				paramNames << "a"
-						   << "b";
+				paramNames << QStringLiteral("a") << QStringLiteral("b");
 			} else {
 				for (int i = 1; i <= degree; i++) {
 					QString numStr = QString::number(i);
 					if (i == 1)
-						model = "a1*exp(b1*x)";
+						model = QStringLiteral("a1*exp(b1*x)");
 					else
-						model += " + a" + numStr + "*exp(b" + numStr + "*x)";
-					paramNames << 'a' + numStr << 'b' + numStr;
-					paramNamesUtf8 << 'a' + indices[i - 1] << 'b' + indices[i - 1];
+						model += QStringLiteral(" + a") + numStr + QStringLiteral("*exp(b") + numStr + QStringLiteral("*x)");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("b") + numStr;
+					paramNamesUtf8 << QStringLiteral("a") + indices[i - 1] << QStringLiteral("b") + indices[i - 1];
 				}
 			}
 			break;
 		case nsl_fit_model_inverse_exponential:
-			paramNames << "a"
-					   << "b"
-					   << "c";
+			paramNames << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("c");
 			break;
 		case nsl_fit_model_fourier:
-			paramNames << "w"
-					   << "a0"
-					   << "a1"
-					   << "b1";
+			paramNames << QStringLiteral("w") << QStringLiteral("a0") << QStringLiteral("a1") << QStringLiteral("b1");
 			paramNamesUtf8 << UTF8_QSTRING("ω") << UTF8_QSTRING("a₀") << UTF8_QSTRING("a₁") << UTF8_QSTRING("b₁");
 			if (degree > 1) {
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
-					model += "+ (a" + numStr + "*cos(" + numStr + "*w*x) + b" + numStr + "*sin(" + numStr + "*w*x))";
-					paramNames << 'a' + numStr << 'b' + numStr;
-					paramNamesUtf8 << 'a' + indices[i - 1] << 'b' + indices[i - 1];
+					model += QStringLiteral("+ (a") + numStr + QStringLiteral("*cos(") + numStr + QStringLiteral("*w*x) + b") + numStr + QStringLiteral("*sin(")
+						+ numStr + QStringLiteral("*w*x))");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("b") + numStr;
+					paramNamesUtf8 << QStringLiteral("a") + indices[i - 1] << QStringLiteral("b") + indices[i - 1];
 				}
 			}
 			break;
 		}
 		break;
 	case nsl_fit_model_peak:
-		model = nsl_fit_model_peak_equation[fitData.modelType];
+		model = QLatin1String(nsl_fit_model_peak_equation[fitData.modelType]);
 		switch (modelType) {
 		case nsl_fit_model_gaussian:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "s"
-						   << "mu";
-				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+				paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("mu");
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = "1./sqrt(2*pi) * (";
+				model = QStringLiteral("1./sqrt(2*pi) * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + "/s" + numStr + "* exp(-((x-mu" + numStr + ")/s" + numStr + ")^2/2)";
-					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral("/s") + numStr + QStringLiteral("* exp(-((x-mu") + numStr + QStringLiteral(")/s")
+						+ numStr + QStringLiteral(")^2/2)");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("s") + numStr << QStringLiteral("mu") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
-				model += ')';
+				model += QStringLiteral(")");
 			}
 			break;
 		case nsl_fit_model_lorentz:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "g"
-						   << "mu";
-				paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
+				paramNames << QStringLiteral("a") << QStringLiteral("g") << QStringLiteral("mu");
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = "1./pi * (";
+				model = QStringLiteral("1./pi * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + " * g" + numStr + "/(g" + numStr + "^2+(x-mu" + numStr + ")^2)";
-					paramNames << 'a' + numStr << 'g' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("γ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral(" * g") + numStr + QStringLiteral("/(g") + numStr + QStringLiteral("^2+(x-mu")
+						+ numStr + QStringLiteral(")^2)");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("g") + numStr << QStringLiteral("mu") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("γ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
-				model += ')';
+				model += QStringLiteral(")");
 			}
 			break;
 		case nsl_fit_model_sech:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "s"
-						   << "mu";
-				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+				paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("mu");
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = "1/pi * (";
+				model = QStringLiteral("1/pi * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/s" + numStr + ')';
-					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral("/s") + numStr + QStringLiteral("* sech((x-mu") + numStr + QStringLiteral(")/s")
+						+ numStr + QStringLiteral(")");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("s") + numStr << QStringLiteral("mu") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
-				model += ')';
+				model += QStringLiteral(")");
 			}
 			break;
 		case nsl_fit_model_logistic:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "s"
-						   << "mu";
-				paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+				paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("mu");
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 				break;
 			default:
-				model = "1/4 * (";
+				model = QStringLiteral("1/4 * (");
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + "/s" + numStr + "* sech((x-mu" + numStr + ")/2/s" + numStr + ")**2";
-					paramNames << 'a' + numStr << 's' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral("/s") + numStr + QStringLiteral("* sech((x-mu") + numStr + QStringLiteral(")/2/s")
+						+ numStr + QStringLiteral(")**2");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("s") + numStr << QStringLiteral("mu") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
 				}
-				model += ')';
+				model += QStringLiteral(")");
 			}
 			break;
 		case nsl_fit_model_voigt:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "mu"
-						   << "s"
-						   << "g";
-				paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
+				paramNames << QStringLiteral("a") << QStringLiteral("mu") << QStringLiteral("s") << QStringLiteral("g");
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("μ") << UTF8_QSTRING("σ") << UTF8_QSTRING("γ");
 				break;
 			default:
 				model.clear();
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + "*voigt(x-mu" + numStr + ",s" + numStr + ",g" + numStr + ')';
-					paramNames << 'a' + numStr << "mu" + numStr << 's' + numStr << 'g' + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1]
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral("*voigt(x-mu") + numStr + QStringLiteral(",s") + numStr + QStringLiteral(",g")
+						+ numStr + QStringLiteral(")");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("mu") + numStr << QStringLiteral("s") + numStr << QStringLiteral("g") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1] << UTF8_QSTRING("σ") + indices[i - 1]
 								   << UTF8_QSTRING("γ") + indices[i - 1];
 				}
 			}
@@ -663,61 +648,52 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_pseudovoigt1:
 			switch (degree) {
 			case 1:
-				paramNames << "a"
-						   << "et"
-						   << "w"
-						   << "mu"; // eta already exists as function!
-				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
+				paramNames << QStringLiteral("a") << QStringLiteral("et") << QStringLiteral("w") << QStringLiteral("mu"); // eta already exists as function!
+				paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("η") << QStringLiteral("w") << UTF8_QSTRING("μ");
 				break;
 			default:
 				model.clear();
 				for (int i = 1; i <= degree; ++i) {
 					QString numStr = QString::number(i);
 					if (i > 1)
-						model += " + ";
-					model += 'a' + numStr + "*pseudovoigt1(x-mu" + numStr + ",eta" + numStr + ",w" + numStr + ')';
-					paramNames << 'a' + numStr << "eta" + numStr << 'w' + numStr << "mu" + numStr;
-					paramNamesUtf8 << 'A' + indices[i - 1] << UTF8_QSTRING("η") + indices[i - 1] << 'w' + indices[i - 1] << UTF8_QSTRING("μ") + indices[i - 1];
+						model += QStringLiteral(" + ");
+					model += QStringLiteral("a") + numStr + QStringLiteral("*pseudovoigt1(x-mu") + numStr + QStringLiteral(",eta") + numStr
+						+ QStringLiteral(",w") + numStr + QStringLiteral(")");
+					paramNames << QStringLiteral("a") + numStr << QStringLiteral("eta") + numStr << QStringLiteral("w") + numStr
+							   << QStringLiteral("mu") + numStr;
+					paramNamesUtf8 << QStringLiteral("A") + indices[i - 1] << UTF8_QSTRING("η") + indices[i - 1] << QStringLiteral("w") + indices[i - 1]
+								   << UTF8_QSTRING("μ") + indices[i - 1];
 				}
 			}
 			break;
 		}
 		break;
 	case nsl_fit_model_growth:
-		model = nsl_fit_model_growth_equation[fitData.modelType];
+		model = QLatin1String(nsl_fit_model_growth_equation[fitData.modelType]);
 		switch (modelType) {
 		case nsl_fit_model_atan:
 		case nsl_fit_model_tanh:
 		case nsl_fit_model_algebraic_sigmoid:
 		case nsl_fit_model_erf:
 		case nsl_fit_model_gudermann:
-			paramNames << "a"
-					   << "mu"
-					   << "s";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << UTF8_QSTRING("σ");
+			paramNames << QStringLiteral("a") << QStringLiteral("mu") << QStringLiteral("s");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("μ") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_sigmoid:
-			paramNames << "a"
-					   << "mu"
-					   << "k";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("μ") << "k";
+			paramNames << QStringLiteral("a") << QStringLiteral("mu") << QStringLiteral("k");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("μ") << QStringLiteral("k");
 			break;
 		case nsl_fit_model_hill:
-			paramNames << "a"
-					   << "n"
-					   << "a";
-			paramNamesUtf8 << "A"
-						   << "n" << UTF8_QSTRING("σ");
+			paramNames << QStringLiteral("a") << QStringLiteral("n") << QStringLiteral("a");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("n") << UTF8_QSTRING("σ");
 			break;
 		case nsl_fit_model_gompertz:
-			paramNames << "a"
-					   << "b"
-					   << "c";
+			paramNames << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("c");
 			break;
 		}
 		break;
 	case nsl_fit_model_distribution:
-		model = nsl_sf_stats_distribution_equation[fitData.modelType];
+		model = QLatin1String(nsl_sf_stats_distribution_equation[fitData.modelType]);
 		switch (modelType) {
 		case nsl_sf_stats_gaussian:
 		case nsl_sf_stats_laplace:
@@ -725,150 +701,99 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_sf_stats_lognormal:
 		case nsl_sf_stats_logistic:
 		case nsl_sf_stats_sech:
-			paramNames << "a"
-					   << "s"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_gaussian_tail:
-			paramNames << "A"
-					   << "s"
-					   << "a"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << "a" << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("A") << QStringLiteral("s") << QStringLiteral("a") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << QStringLiteral("a") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_exponential:
-			paramNames << "a"
-					   << "l"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("l") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_exponential_power:
-			paramNames << "a"
-					   << "s"
-					   << "b"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << "b" << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("b") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << QStringLiteral("b") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_cauchy_lorentz:
 		case nsl_sf_stats_levy:
-			paramNames << "a"
-					   << "g"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("g") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("γ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_rayleigh:
-			paramNames << "a"
-					   << "s";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ");
+			paramNames << QStringLiteral("a") << QStringLiteral("s");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ");
 			break;
 		case nsl_sf_stats_landau:
-			paramNames << "a";
-			paramNamesUtf8 << "A";
+			paramNames << QStringLiteral("a");
+			paramNamesUtf8 << QStringLiteral("A");
 			break;
 		case nsl_sf_stats_levy_alpha_stable: // unused distributions
 		case nsl_sf_stats_levy_skew_alpha_stable:
 		case nsl_sf_stats_bernoulli:
 			break;
 		case nsl_sf_stats_gamma:
-			paramNames << "a"
-					   << "k"
-					   << "t";
-			paramNamesUtf8 << "A"
-						   << "k" << UTF8_QSTRING("θ");
+			paramNames << QStringLiteral("a") << QStringLiteral("k") << QStringLiteral("t");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("k") << UTF8_QSTRING("θ");
 			break;
 		case nsl_sf_stats_flat:
-			paramNames << "A"
-					   << "b"
-					   << "a";
+			paramNames << QStringLiteral("A") << QStringLiteral("b") << QStringLiteral("a");
 			break;
 		case nsl_sf_stats_chi_squared:
-			paramNames << "a"
-					   << "n";
-			paramNamesUtf8 << "A"
-						   << "n";
+			paramNames << QStringLiteral("a") << QStringLiteral("n");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("n");
 			break;
 		case nsl_sf_stats_fdist:
-			paramNames << "a"
-					   << "n1"
-					   << "n2";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("ν₁") << UTF8_QSTRING("ν₂");
+			paramNames << QStringLiteral("a") << QStringLiteral("n1") << QStringLiteral("n2");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("ν₁") << UTF8_QSTRING("ν₂");
 			break;
 		case nsl_sf_stats_tdist:
-			paramNames << "a"
-					   << "n";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("ν");
+			paramNames << QStringLiteral("a") << QStringLiteral("n");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("ν");
 			break;
 		case nsl_sf_stats_beta:
 		case nsl_sf_stats_pareto:
-			paramNames << "A"
-					   << "a"
-					   << "b";
+			paramNames << QStringLiteral("A") << QStringLiteral("a") << QStringLiteral("b");
 			break;
 		case nsl_sf_stats_weibull:
-			paramNames << "a"
-					   << "k"
-					   << "l"
-					   << "mu";
-			paramNamesUtf8 << "A"
-						   << "k" << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("k") << QStringLiteral("l") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("k") << UTF8_QSTRING("λ") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_gumbel1:
-			paramNames << "a"
-					   << "s"
-					   << "mu"
-					   << "b";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << UTF8_QSTRING("β");
+			paramNames << QStringLiteral("a") << QStringLiteral("s") << QStringLiteral("mu") << QStringLiteral("b");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ") << UTF8_QSTRING("β");
 			break;
 		case nsl_sf_stats_gumbel2:
-			paramNames << "A"
-					   << "a"
-					   << "b"
-					   << "mu";
-			paramNamesUtf8 << "A"
-						   << "a"
-						   << "b" << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("A") << QStringLiteral("a") << QStringLiteral("b") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("a") << QStringLiteral("b") << UTF8_QSTRING("μ");
 			break;
 		case nsl_sf_stats_poisson:
-			paramNames << "a"
-					   << "l";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("λ");
+			paramNames << QStringLiteral("a") << QStringLiteral("l");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("λ");
 			break;
 		case nsl_sf_stats_binomial:
 		case nsl_sf_stats_negative_binomial:
 		case nsl_sf_stats_pascal:
-			paramNames << "a"
-					   << "p"
-					   << "n";
-			paramNamesUtf8 << "A"
-						   << "p"
-						   << "n";
+			paramNames << QStringLiteral("a") << QStringLiteral("p") << QStringLiteral("n");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("p") << QStringLiteral("n");
 			break;
 		case nsl_sf_stats_geometric:
 		case nsl_sf_stats_logarithmic:
-			paramNames << "a"
-					   << "p";
-			paramNamesUtf8 << "A"
-						   << "p";
+			paramNames << QStringLiteral("a") << QStringLiteral("p");
+			paramNamesUtf8 << QStringLiteral("A") << QStringLiteral("p");
 			break;
 		case nsl_sf_stats_hypergeometric:
-			paramNames << "a"
-					   << "n1"
-					   << "n2"
-					   << "t";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("n₁") << UTF8_QSTRING("n₂") << "t";
+			paramNames << QStringLiteral("a") << QStringLiteral("n1") << QStringLiteral("n2") << QStringLiteral("t");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("n₁") << UTF8_QSTRING("n₂") << QStringLiteral("t");
 			break;
 		case nsl_sf_stats_maxwell_boltzmann:
-			paramNames << "a"
-					   << "s";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("σ");
+			paramNames << QStringLiteral("a") << QStringLiteral("s");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("σ");
 			break;
 		case nsl_sf_stats_frechet:
-			paramNames << "a"
-					   << "g"
-					   << "s"
-					   << "mu";
-			paramNamesUtf8 << "A" << UTF8_QSTRING("γ") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
+			paramNames << QStringLiteral("a") << QStringLiteral("g") << QStringLiteral("s") << QStringLiteral("mu");
+			paramNamesUtf8 << QStringLiteral("A") << UTF8_QSTRING("γ") << UTF8_QSTRING("σ") << UTF8_QSTRING("μ");
 			break;
 		}
 		break;
@@ -942,7 +867,7 @@ void XYFitCurve::FitResult::calculateResult(size_t n, unsigned int np) {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFitCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fit-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve"));
 }
 
 //##############################################################################
@@ -1841,9 +1766,9 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	// create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) { // all columns are treated together
 		DEBUG("	Creating columns")
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
-		residualsColumn = new Column("residuals", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
+		residualsColumn = new Column(QStringLiteral("residuals"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 		residualsVector = static_cast<QVector<double>*>(residualsColumn->data());
@@ -2471,14 +2396,14 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 	for (int i = 0; i < fitData.paramNames.size(); ++i) {
 		const double x = gsl_vector_get(s->x, i);
 		// map parameter if bounded
-		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
+		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + QStringLiteral("\t");
 	}
 
 	// current value of chi
 	if (std::isnan(chi))
 		chi = gsl_blas_dnrm2(s->f);
 	state += QString::number(chi * chi);
-	state += ';';
+	state += QStringLiteral(";");
 	DEBUG(Q_FUNC_INFO << ", chi^2 = " << chi * chi);
 
 	fitResult.solverOutput += state;
@@ -2491,7 +2416,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFitCurve);
 
-	writer->writeStartElement("xyFitCurve");
+	writer->writeStartElement(QStringLiteral("xyFitCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
@@ -2499,114 +2424,114 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	// write xy-fit-curve specific information
 
 	// fit data - only save model expression and parameter names for custom model, otherwise they are set in XYFitCurve::initFitData()
-	writer->writeStartElement("fitData");
+	writer->writeStartElement(QStringLiteral("fitData"));
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	WRITE_PATH(d->dataSourceHistogram, dataSourceHistogram);
-	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
-	writer->writeAttribute("fitRangeMin", QString::number(d->fitData.fitRange.start(), 'g', 15));
-	writer->writeAttribute("fitRangeMax", QString::number(d->fitData.fitRange.end(), 'g', 15));
-	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
-	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
-	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
-	writer->writeAttribute("weightsType", QString::number(d->fitData.yWeightsType));
-	writer->writeAttribute("degree", QString::number(d->fitData.degree));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->fitData.autoRange));
+	writer->writeAttribute(QStringLiteral("fitRangeMin"), QString::number(d->fitData.fitRange.start(), 'g', 15));
+	writer->writeAttribute(QStringLiteral("fitRangeMax"), QString::number(d->fitData.fitRange.end(), 'g', 15));
+	writer->writeAttribute(QStringLiteral("modelCategory"), QString::number(d->fitData.modelCategory));
+	writer->writeAttribute(QStringLiteral("modelType"), QString::number(d->fitData.modelType));
+	writer->writeAttribute(QStringLiteral("xWeightsType"), QString::number(d->fitData.xWeightsType));
+	writer->writeAttribute(QStringLiteral("weightsType"), QString::number(d->fitData.yWeightsType));
+	writer->writeAttribute(QStringLiteral("degree"), QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
-		writer->writeAttribute("model", d->fitData.model);
-	writer->writeAttribute("maxIterations", QString::number(d->fitData.maxIterations));
-	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
-	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
-	writer->writeAttribute("autoEvalRange", QString::number(d->fitData.autoEvalRange));
-	writer->writeAttribute("evalRangeMin", QString::number(d->fitData.evalRange.start(), 'g', 15));
-	writer->writeAttribute("evalRangeMax", QString::number(d->fitData.evalRange.end(), 'g', 15));
-	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
-	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
-	writer->writeAttribute("previewEnabled", QString::number(d->fitData.previewEnabled));
-	writer->writeAttribute("confidenceInterval", QString::number(d->fitData.confidenceInterval));
+		writer->writeAttribute(QStringLiteral("model"), d->fitData.model);
+	writer->writeAttribute(QStringLiteral("maxIterations"), QString::number(d->fitData.maxIterations));
+	writer->writeAttribute(QStringLiteral("eps"), QString::number(d->fitData.eps, 'g', 15));
+	writer->writeAttribute(QStringLiteral("evaluatedPoints"), QString::number(d->fitData.evaluatedPoints));
+	writer->writeAttribute(QStringLiteral("autoEvalRange"), QString::number(d->fitData.autoEvalRange));
+	writer->writeAttribute(QStringLiteral("evalRangeMin"), QString::number(d->fitData.evalRange.start(), 'g', 15));
+	writer->writeAttribute(QStringLiteral("evalRangeMax"), QString::number(d->fitData.evalRange.end(), 'g', 15));
+	writer->writeAttribute(QStringLiteral("useDataErrors"), QString::number(d->fitData.useDataErrors));
+	writer->writeAttribute(QStringLiteral("useResults"), QString::number(d->fitData.useResults));
+	writer->writeAttribute(QStringLiteral("previewEnabled"), QString::number(d->fitData.previewEnabled));
+	writer->writeAttribute(QStringLiteral("confidenceInterval"), QString::number(d->fitData.confidenceInterval));
 
 	if (d->fitData.modelCategory == nsl_fit_model_custom) {
-		writer->writeStartElement("paramNames");
+		writer->writeStartElement(QStringLiteral("paramNames"));
 		foreach (const QString& name, d->fitData.paramNames)
-			writer->writeTextElement("name", name);
+			writer->writeTextElement(QStringLiteral("name"), name);
 		writer->writeEndElement();
 	}
 
-	writer->writeStartElement("paramStartValues");
+	writer->writeStartElement(QStringLiteral("paramStartValues"));
 	foreach (const double& value, d->fitData.paramStartValues)
-		writer->writeTextElement("startValue", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("startValue"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// use 16 digits to handle -DBL_MAX
-	writer->writeStartElement("paramLowerLimits");
+	writer->writeStartElement(QStringLiteral("paramLowerLimits"));
 	foreach (const double& limit, d->fitData.paramLowerLimits)
-		writer->writeTextElement("lowerLimit", QString::number(limit, 'g', 16));
+		writer->writeTextElement(QStringLiteral("lowerLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
 	// use 16 digits to handle DBL_MAX
-	writer->writeStartElement("paramUpperLimits");
+	writer->writeStartElement(QStringLiteral("paramUpperLimits"));
 	foreach (const double& limit, d->fitData.paramUpperLimits)
-		writer->writeTextElement("upperLimit", QString::number(limit, 'g', 16));
+		writer->writeTextElement(QStringLiteral("upperLimit"), QString::number(limit, 'g', 16));
 	writer->writeEndElement();
 
-	writer->writeStartElement("paramFixed");
+	writer->writeStartElement(QStringLiteral("paramFixed"));
 	foreach (const double& fixed, d->fitData.paramFixed)
-		writer->writeTextElement("fixed", QString::number(fixed));
+		writer->writeTextElement(QStringLiteral("fixed"), QString::number(fixed));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); //"fitData"
 
 	// fit results (generated columns and goodness of the fit)
-	writer->writeStartElement("fitResult");
-	writer->writeAttribute("available", QString::number(d->fitResult.available));
-	writer->writeAttribute("valid", QString::number(d->fitResult.valid));
-	writer->writeAttribute("status", d->fitResult.status);
-	writer->writeAttribute("iterations", QString::number(d->fitResult.iterations));
-	writer->writeAttribute("time", QString::number(d->fitResult.elapsedTime));
-	writer->writeAttribute("dof", QString::number(d->fitResult.dof));
-	writer->writeAttribute("sse", QString::number(d->fitResult.sse, 'g', 15));
-	writer->writeAttribute("sst", QString::number(d->fitResult.sst, 'g', 15));
-	writer->writeAttribute("rms", QString::number(d->fitResult.rms, 'g', 15));
-	writer->writeAttribute("rsd", QString::number(d->fitResult.rsd, 'g', 15));
-	writer->writeAttribute("mse", QString::number(d->fitResult.mse, 'g', 15));
-	writer->writeAttribute("rmse", QString::number(d->fitResult.rmse, 'g', 15));
-	writer->writeAttribute("mae", QString::number(d->fitResult.mae, 'g', 15));
-	writer->writeAttribute("rsquare", QString::number(d->fitResult.rsquare, 'g', 15));
-	writer->writeAttribute("rsquareAdj", QString::number(d->fitResult.rsquareAdj, 'g', 15));
-	writer->writeAttribute("chisq_p", QString::number(d->fitResult.chisq_p, 'g', 15));
-	writer->writeAttribute("fdist_F", QString::number(d->fitResult.fdist_F, 'g', 15));
-	writer->writeAttribute("fdist_p", QString::number(d->fitResult.fdist_p, 'g', 15));
-	writer->writeAttribute("aic", QString::number(d->fitResult.aic, 'g', 15));
-	writer->writeAttribute("bic", QString::number(d->fitResult.bic, 'g', 15));
-	writer->writeAttribute("solverOutput", d->fitResult.solverOutput);
+	writer->writeStartElement(QStringLiteral("fitResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->fitResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->fitResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->fitResult.status);
+	writer->writeAttribute(QStringLiteral("iterations"), QString::number(d->fitResult.iterations));
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->fitResult.elapsedTime));
+	writer->writeAttribute(QStringLiteral("dof"), QString::number(d->fitResult.dof));
+	writer->writeAttribute(QStringLiteral("sse"), QString::number(d->fitResult.sse, 'g', 15));
+	writer->writeAttribute(QStringLiteral("sst"), QString::number(d->fitResult.sst, 'g', 15));
+	writer->writeAttribute(QStringLiteral("rms"), QString::number(d->fitResult.rms, 'g', 15));
+	writer->writeAttribute(QStringLiteral("rsd"), QString::number(d->fitResult.rsd, 'g', 15));
+	writer->writeAttribute(QStringLiteral("mse"), QString::number(d->fitResult.mse, 'g', 15));
+	writer->writeAttribute(QStringLiteral("rmse"), QString::number(d->fitResult.rmse, 'g', 15));
+	writer->writeAttribute(QStringLiteral("mae"), QString::number(d->fitResult.mae, 'g', 15));
+	writer->writeAttribute(QStringLiteral("rsquare"), QString::number(d->fitResult.rsquare, 'g', 15));
+	writer->writeAttribute(QStringLiteral("rsquareAdj"), QString::number(d->fitResult.rsquareAdj, 'g', 15));
+	writer->writeAttribute(QStringLiteral("chisq_p"), QString::number(d->fitResult.chisq_p, 'g', 15));
+	writer->writeAttribute(QStringLiteral("fdist_F"), QString::number(d->fitResult.fdist_F, 'g', 15));
+	writer->writeAttribute(QStringLiteral("fdist_p"), QString::number(d->fitResult.fdist_p, 'g', 15));
+	writer->writeAttribute(QStringLiteral("aic"), QString::number(d->fitResult.aic, 'g', 15));
+	writer->writeAttribute(QStringLiteral("bic"), QString::number(d->fitResult.bic, 'g', 15));
+	writer->writeAttribute(QStringLiteral("solverOutput"), d->fitResult.solverOutput);
 
-	writer->writeStartElement("paramValues");
+	writer->writeStartElement(QStringLiteral("paramValues"));
 	foreach (const double& value, d->fitResult.paramValues)
-		writer->writeTextElement("value", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("value"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("errorValues");
+	writer->writeStartElement(QStringLiteral("errorValues"));
 	foreach (const double& value, d->fitResult.errorValues)
-		writer->writeTextElement("error", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("error"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("tdist_tValues");
+	writer->writeStartElement(QStringLiteral("tdist_tValues"));
 	foreach (const double& value, d->fitResult.tdist_tValues)
-		writer->writeTextElement("tdist_t", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("tdist_t"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("tdist_pValues");
+	writer->writeStartElement(QStringLiteral("tdist_pValues"));
 	foreach (const double& value, d->fitResult.tdist_pValues)
-		writer->writeTextElement("tdist_p", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("tdist_p"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("tdist_marginValues");
+	writer->writeStartElement(QStringLiteral("tdist_marginValues"));
 	foreach (const double& value, d->fitResult.tdist_marginValues)
-		writer->writeTextElement("tdist_margin", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("tdist_margin"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
-	writer->writeStartElement("correlationMatrix");
+	writer->writeStartElement(QStringLiteral("correlationMatrix"));
 	foreach (const double& value, d->fitResult.correlationMatrix)
-		writer->writeTextElement("correlation", QString::number(value, 'g', 15));
+		writer->writeTextElement(QStringLiteral("correlation"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	// save calculated columns if available
@@ -2630,16 +2555,16 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyFitCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyFitCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "fitData") {
+		} else if (!preview && reader->name() == QLatin1String("fitData")) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(xErrorColumn);
@@ -2679,39 +2604,39 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			// remove default names and start values (will be read from project later)
 			d->fitData.paramStartValues.clear();
 
-		} else if (!preview && reader->name() == "name") { // needed for custom model
+		} else if (!preview && reader->name() == QLatin1String("name")) { // needed for custom model
 			d->fitData.paramNames << reader->readElementText();
-		} else if (!preview && reader->name() == "startValue") {
+		} else if (!preview && reader->name() == QLatin1String("startValue")) {
 			d->fitData.paramStartValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "fixed") {
+		} else if (!preview && reader->name() == QLatin1String("fixed")) {
 			d->fitData.paramFixed << (bool)reader->readElementText().toInt();
-		} else if (!preview && reader->name() == "lowerLimit") {
+		} else if (!preview && reader->name() == QLatin1String("lowerLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok) // -DBL_MAX results in conversion error
 				d->fitData.paramLowerLimits << x;
 			else
 				d->fitData.paramLowerLimits << -std::numeric_limits<double>::max();
-		} else if (!preview && reader->name() == "upperLimit") {
+		} else if (!preview && reader->name() == QLatin1String("upperLimit")) {
 			bool ok;
 			double x = reader->readElementText().toDouble(&ok);
 			if (ok) // DBL_MAX results in conversion error
 				d->fitData.paramUpperLimits << x;
 			else
 				d->fitData.paramUpperLimits << std::numeric_limits<double>::max();
-		} else if (!preview && reader->name() == "value") {
+		} else if (!preview && reader->name() == QLatin1String("value")) {
 			d->fitResult.paramValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "error") {
+		} else if (!preview && reader->name() == QLatin1String("error")) {
 			d->fitResult.errorValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "tdist_t") {
+		} else if (!preview && reader->name() == QLatin1String("tdist_t")) {
 			d->fitResult.tdist_tValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "tdist_p") {
+		} else if (!preview && reader->name() == QLatin1String("tdist_p")) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "tdist_margin") {
+		} else if (!preview && reader->name() == QLatin1String("tdist_margin")) {
 			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "correlation") {
+		} else if (!preview && reader->name() == QLatin1String("correlation")) {
 			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
-		} else if (!preview && reader->name() == "fitResult") {
+		} else if (!preview && reader->name() == QLatin1String("fitResult")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("available", fitResult.available, int);
@@ -2735,18 +2660,18 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("aic", fitResult.aic);
 			READ_DOUBLE_VALUE("bic", fitResult.bic);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
 			DEBUG("############################   reading column " << STDSTRING(column->name()))
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
-			else if (column->name() == "residuals")
+			else if (column->name() == QLatin1String("residuals"))
 				d->residualsColumn = column;
 		}
 	}

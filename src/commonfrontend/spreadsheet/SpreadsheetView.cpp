@@ -264,13 +264,13 @@ void SpreadsheetView::updateFrozenTableGeometry() {
 
 void SpreadsheetView::initActions() {
 	// selection related actions
-	action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
-	action_copy_selection = new QAction(QIcon::fromTheme("edit-copy"), i18n("&Copy"), this);
-	action_paste_into_selection = new QAction(QIcon::fromTheme("edit-paste"), i18n("Past&e"), this);
-	action_mask_selection = new QAction(QIcon::fromTheme("edit-node"), i18n("&Mask"), this);
-	action_unmask_selection = new QAction(QIcon::fromTheme("format-remove-node"), i18n("&Unmask"), this);
-	action_clear_selection = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Content"), this);
-	action_select_all = new QAction(QIcon::fromTheme("edit-select-all"), i18n("Select All"), this);
+	action_cut_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-cut")), i18n("Cu&t"), this);
+	action_copy_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("&Copy"), this);
+	action_paste_into_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-paste")), i18n("Past&e"), this);
+	action_mask_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-node")), i18n("&Mask"), this);
+	action_unmask_selection = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("&Unmask"), this);
+	action_clear_selection = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
+	action_select_all = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this);
 
 	// 	action_set_formula = new QAction(QIcon::fromTheme(QString()), i18n("Assign &Formula"), this);
 	// 	action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -282,26 +282,26 @@ void SpreadsheetView::initActions() {
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 
-	action_sample_values = new QAction(QIcon::fromTheme(QString("view-list-details")), i18n("Sample Values"), this);
-	action_flatten_columns = new QAction(QIcon::fromTheme(QString("gnumeric-object-list")), i18n("Flatten Columns"), this);
+	action_sample_values = new QAction(QIcon::fromTheme(QStringLiteral("view-list-details")), i18n("Sample Values"), this);
+	action_flatten_columns = new QAction(QIcon::fromTheme(QStringLiteral("gnumeric-object-list")), i18n("Flatten Columns"), this);
 
 	// spreadsheet related actions
-	action_toggle_comments = new QAction(QIcon::fromTheme("document-properties"), i18n("Show Comments"), this);
-	action_clear_spreadsheet = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Spreadsheet"), this);
-	action_clear_masks = new QAction(QIcon::fromTheme("format-remove-node"), i18n("Clear Masks"), this);
-	action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
-	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell..."), this);
-	action_search = new QAction(QIcon::fromTheme("edit-find"), i18n("&Search"), this);
+	action_toggle_comments = new QAction(QIcon::fromTheme(QStringLiteral("document-properties")), i18n("Show Comments"), this);
+	action_clear_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Spreadsheet"), this);
+	action_clear_masks = new QAction(QIcon::fromTheme(QStringLiteral("format-remove-node")), i18n("Clear Masks"), this);
+	action_sort_spreadsheet = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Sort Spreadsheet"), this);
+	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
+	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
-	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs..."), this);
+	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Statisti&cs..."), this);
 
 	// column related actions
-	action_insert_column_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
-	action_insert_column_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Column Right"), this);
-	action_insert_columns_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Multiple Columns Left"), this);
-	action_insert_columns_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Multiple Columns Right"), this);
-	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove Columns"), this);
-	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Content"), this);
+	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
+	action_insert_column_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Column Right"), this);
+	action_insert_columns_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Multiple Columns Left"), this);
+	action_insert_columns_right = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-right")), i18n("Insert Multiple Columns Right"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-column")), i18n("Remove Columns"), this);
+	action_clear_columns = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
 	// TODO: action collection?
@@ -344,9 +344,9 @@ void SpreadsheetView::initActions() {
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
 	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QString("delete-table-row")), i18n("Drop"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QString("hide_table_row")), i18n("Mask"), this);
-	action_reverse_columns = new QAction(QIcon::fromTheme(QString("reverse")), i18n("Reverse"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QStringLiteral("delete-table-row")), i18n("Drop"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QStringLiteral("hide_table_row")), i18n("Mask"), this);
+	action_reverse_columns = new QAction(QIcon::fromTheme(QStringLiteral("reverse")), i18n("Reverse"), this);
 	// 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
 	// normalization
@@ -384,16 +384,16 @@ void SpreadsheetView::initActions() {
 	normalizeAction = new QAction(i18n("Divide by IQR"), normalizeColumnActionGroup);
 	normalizeAction->setData(DivideByIQR);
 
-	normalizeAction = new QAction(QLatin1String("(x-Mean)/SD"), normalizeColumnActionGroup);
+	normalizeAction = new QAction(i18n("(x-Mean)/SD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreSD);
 
-	normalizeAction = new QAction(QLatin1String("(x-Median)/MAD"), normalizeColumnActionGroup);
+	normalizeAction = new QAction(i18n("(x-Median)/MAD"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreMAD);
 
-	normalizeAction = new QAction(QLatin1String("(x-Median)/IQR"), normalizeColumnActionGroup);
+	normalizeAction = new QAction(i18n("(x-Median)/IQR"), normalizeColumnActionGroup);
 	normalizeAction->setData(ZScoreIQR);
 
-	normalizeAction = new QAction(QLatin1String("Rescale to [a, b]"), normalizeColumnActionGroup);
+	normalizeAction = new QAction(i18n("Rescale to [a, b]"), normalizeColumnActionGroup);
 	normalizeAction->setData(Rescale);
 
 	// 	action_normalize_selection = new QAction(QIcon::fromTheme(QString()), i18n("&Normalize Selection"), this);
@@ -424,95 +424,95 @@ void SpreadsheetView::initActions() {
 
 	// sort and statistics
 	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
-	action_sort_asc_column = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Ascending"), this);
-	action_sort_desc_column = new QAction(QIcon::fromTheme("view-sort-descending"), i18n("&Descending"), this);
-	action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Column Statisti&cs"), this);
+	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Ascending"), this);
+	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("&Descending"), this);
+	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statisti&cs"), this);
 
 	// conditional formatting
-	action_formatting_heatmap = new QAction(QIcon::fromTheme("color-management"), i18n("Heatmap"), this);
-	action_formatting_remove = new QAction(QIcon::fromTheme("edit-clear"), i18n("Remove"), this);
+	action_formatting_heatmap = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Heatmap"), this);
+	action_formatting_remove = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Remove"), this);
 
 	// row related actions
-	action_insert_row_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("Insert Row Above"), this);
-	action_insert_row_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
+	action_insert_row_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Row Above"), this);
+	action_insert_row_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Row Below"), this);
 	// TODO: setting of the following shortcut collides with the key press handling in the event filter
 	// action_insert_row_below->setShortcut(Qt::Key_Insert);
-	action_insert_rows_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above"), i18n("Insert Multiple Rows Above"), this);
-	action_insert_rows_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Multiple Rows Below"), this);
-	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
-	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Content"), this);
-	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
+	action_insert_rows_above = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-above")), i18n("Insert Multiple Rows Above"), this);
+	action_insert_rows_below = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-row-below")), i18n("Insert Multiple Rows Below"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-delete-row")), i18n("Remo&ve Rows"), this);
+	action_clear_rows = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear")), i18n("Clea&r Content"), this);
+	action_statistics_rows = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Row Statisti&cs"), this);
 
 	// plot data action
-	action_plot_data_xycurve = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), this);
+	action_plot_data_xycurve = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("xy-Curve"), this);
 	action_plot_data_xycurve->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
-	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
+	action_plot_data_histogram = new QAction(QIcon::fromTheme(QStringLiteral("view-object-histogram-linear")), i18n("Histogram"), this);
 	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
 	action_plot_data_boxplot = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	action_plot_data_boxplot->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
-	action_plot_data_barplot = new QAction(QIcon::fromTheme(QLatin1String("office-chart-bar")), i18n("Bar Plot"), this);
+	action_plot_data_barplot = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
 	action_plot_data_barplot->setData(static_cast<int>(PlotDataDialog::PlotType::BarPlot));
 
 	// Analyze and plot menu actions
-	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
-	//	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce Data"), this);
+	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Reduce Data"), this);
+	//	addDataReductionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-data-reduction-curve")), i18n("Reduce Data"), this);
 	addDataReductionAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::DataReduction));
-	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
-	//	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiate"), this);
+	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiate"), this);
+	//	addDifferentiationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-differentiation-curve")), i18n("Differentiate"), this);
 	addDifferentiationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
-	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integrate"), this);
-	//	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integrate"), this);
+	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Integrate"), this);
+	//	addIntegrationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-integration-curve")), i18n("Integrate"), this);
 	addIntegrationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
-	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolate"), this);
+	addInterpolationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolate"), this);
 	addInterpolationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
-	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
+	addSmoothAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve")), i18n("Smooth"), this);
 	addSmoothAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
 
-	QAction* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Linear"), this);
+	QAction* fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Linear"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Power"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Power"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 1)"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 1)"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 2)"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Exponential (degree 2)"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse Exponential"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Inverse Exponential"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Gauss"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Gauss"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Cauchy-Lorentz"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Cauchy-Lorentz"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Arc Tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Arc Tangent"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic Tangent"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Hyperbolic Tangent"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error Function"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Error Function"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
 	addFitAction.append(fitAction);
 
-	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Custom"), this);
+	fitAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Custom"), this);
 	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
 	addFitAction.append(fitAction);
 
-	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
+	addFourierFilterAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve")), i18n("Fourier Filter"), this);
 	addFourierFilterAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
 
 	connectActions();
@@ -523,12 +523,12 @@ void SpreadsheetView::initMenus() {
 
 	// Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
-	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
+	m_selectionMenu->setIcon(QIcon::fromTheme(QStringLiteral("selection")));
 	connect(m_selectionMenu, &QMenu::aboutToShow, this, &SpreadsheetView::checkSpreadsheetSelectionMenu);
 
 	if (!m_readOnly) {
 		// 		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
-		// 		submenu->setIcon(QIcon::fromTheme("select-rectangle"));
+		// 		submenu->setIcon(QIcon::fromTheme(QStringLiteral("select-rectangle")));
 		// 		submenu->addAction(action_fill_sel_row_numbers);
 		// 		submenu->addAction(action_fill_const);
 		// 		m_selectionMenu->addMenu(submenu);
@@ -566,7 +566,7 @@ void SpreadsheetView::initMenus() {
 
 	// Data fit sub-menu
 	QMenu* dataFitMenu = new QMenu(i18n("Fit"), this);
-	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
+	dataFitMenu->setIcon(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")));
 	dataFitMenu->addAction(addFitAction.at(0));
 	dataFitMenu->addAction(addFitAction.at(1));
 	dataFitMenu->addAction(addFitAction.at(2));
@@ -703,7 +703,7 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 
 		m_columnSortMenu = new QMenu(i18n("Sort"), this);
-		m_columnSortMenu->setIcon(QIcon::fromTheme("view-sort-ascending"));
+		m_columnSortMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 		m_columnSortMenu->addAction(action_sort_asc_column);
 		m_columnSortMenu->addAction(action_sort_desc_column);
 		m_columnSortMenu->addAction(action_sort_columns);

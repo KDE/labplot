@@ -162,7 +162,7 @@ void Histogram::init() {
 }
 
 void Histogram::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
 }
@@ -205,43 +205,43 @@ QMenu* Histogram::createContextMenu() {
 	auto* analysisMenu = new QMenu(i18n("Analysis"));
 
 	// TODO: if there are more actions, add a group for all fit types
-	auto* fitGaussianAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Gaussian (Normal) Distribution"));
+	auto* fitGaussianAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Gaussian (Normal) Distribution"));
 	analysisMenu->addAction(fitGaussianAction);
 	connect(fitGaussianAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_gaussian);
 	});
 
-	auto* fitExponentialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Exponential Distribution"));
+	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
 	analysisMenu->addAction(fitGaussianAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
 
-	auto* fitLaplaceAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Laplace Distribution"));
+	auto* fitLaplaceAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Laplace Distribution"));
 	analysisMenu->addAction(fitLaplaceAction);
 	connect(fitLaplaceAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_laplace);
 	});
 
-	auto* fitCauchyAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Cauchy-Lorentz Distribution"));
+	auto* fitCauchyAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Cauchy-Lorentz Distribution"));
 	analysisMenu->addAction(fitCauchyAction);
 	connect(fitCauchyAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz);
 	});
 
-	auto* fitLognormalAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Log-normal Distribution"));
+	auto* fitLognormalAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Log-normal Distribution"));
 	analysisMenu->addAction(fitLognormalAction);
 	connect(fitLognormalAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_lognormal);
 	});
 
-	auto* fitPoissonAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Poisson Distribution"));
+	auto* fitPoissonAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Poisson Distribution"));
 	analysisMenu->addAction(fitPoissonAction);
 	connect(fitPoissonAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_poisson);
 	});
 
-	auto* fitBinomialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Binomial Distribution"));
+	auto* fitBinomialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Binomial Distribution"));
 	analysisMenu->addAction(fitBinomialAction);
 	connect(fitBinomialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_binomial);
@@ -258,7 +258,7 @@ QMenu* Histogram::createContextMenu() {
   Returns an icon to be used in the project explorer.
   */
 QIcon Histogram::icon() const {
-	return QIcon::fromTheme("view-object-histogram-linear");
+	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
 }
 
 QGraphicsItem* Histogram::graphicsItem() const {
@@ -738,7 +738,7 @@ double HistogramPrivate::yMaximum() const {
 
 const AbstractColumn* HistogramPrivate::bins() {
 	if (!m_binsColumn) {
-		m_binsColumn = new Column("bins");
+		m_binsColumn = new Column(QStringLiteral("bins"));
 
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		m_binsColumn->resizeTo(m_bins);
@@ -753,7 +753,7 @@ const AbstractColumn* HistogramPrivate::bins() {
 
 const AbstractColumn* HistogramPrivate::binValues() {
 	if (!m_binValuesColumn) {
-		m_binValuesColumn = new Column("values");
+		m_binValuesColumn = new Column(QStringLiteral("values"));
 
 		m_binValuesColumn->resizeTo(m_bins);
 		double value = 0.;
@@ -772,7 +772,7 @@ const AbstractColumn* HistogramPrivate::binValues() {
  */
 const AbstractColumn* HistogramPrivate::binPDValues() {
 	if (!m_binPDValuesColumn) {
-		m_binPDValuesColumn = new Column("values");
+		m_binPDValuesColumn = new Column(QStringLiteral("values"));
 
 		m_binPDValuesColumn->resizeTo(m_bins);
 		const double width = (binRangesMax - binRangesMin) / m_bins;
@@ -808,7 +808,7 @@ void HistogramPrivate::retransform() {
 	if (!isVisible())
 		return;
 
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (!dataColumn) {
 		linePath = QPainterPath();
@@ -842,7 +842,7 @@ void HistogramPrivate::retransform() {
  * called when the data was changed. recalculates the histogram.
  */
 void HistogramPrivate::recalcHistogram() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	if (m_histogram) {
 		gsl_histogram_free(m_histogram);
@@ -991,7 +991,7 @@ void HistogramPrivate::updateOrientation() {
   Called each time when the type of this connection is changed.
   */
 void HistogramPrivate::updateLines() {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	linePath = QPainterPath();
 	lines.clear();
@@ -1602,7 +1602,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 }
 
 void HistogramPrivate::draw(QPainter* painter) {
-	PERFTRACE(name() + Q_FUNC_INFO);
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
 
 	// drawing line
 	if (line->histogramLineType() != Histogram::NoLine) {
@@ -1869,24 +1869,24 @@ void HistogramPrivate::setHover(bool on) {
 void Histogram::save(QXmlStreamWriter* writer) const {
 	Q_D(const Histogram);
 
-	writer->writeStartElement("Histogram");
+	writer->writeStartElement(QStringLiteral("Histogram"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_COLUMN(d->dataColumn, dataColumn);
-	writer->writeAttribute("type", QString::number(d->type));
-	writer->writeAttribute("orientation", QString::number(d->orientation));
-	writer->writeAttribute("normalization", QString::number(d->normalization));
-	writer->writeAttribute("binningMethod", QString::number(d->binningMethod));
-	writer->writeAttribute("binCount", QString::number(d->binCount));
-	writer->writeAttribute("binWidth", QString::number(d->binWidth));
-	writer->writeAttribute("autoBinRanges", QString::number(d->autoBinRanges));
-	writer->writeAttribute("binRangesMin", QString::number(d->binRangesMin));
-	writer->writeAttribute("binRangesMax", QString::number(d->binRangesMax));
-	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->type));
+	writer->writeAttribute(QStringLiteral("orientation"), QString::number(d->orientation));
+	writer->writeAttribute(QStringLiteral("normalization"), QString::number(d->normalization));
+	writer->writeAttribute(QStringLiteral("binningMethod"), QString::number(d->binningMethod));
+	writer->writeAttribute(QStringLiteral("binCount"), QString::number(d->binCount));
+	writer->writeAttribute(QStringLiteral("binWidth"), QString::number(d->binWidth));
+	writer->writeAttribute(QStringLiteral("autoBinRanges"), QString::number(d->autoBinRanges));
+	writer->writeAttribute(QStringLiteral("binRangesMin"), QString::number(d->binRangesMin));
+	writer->writeAttribute(QStringLiteral("binRangesMax"), QString::number(d->binRangesMax));
+	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	d->background->save(writer);
@@ -1895,19 +1895,19 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	d->value->save(writer);
 
 	// Error bars
-	writer->writeStartElement("errorBars");
-	writer->writeAttribute("errorType", QString::number(static_cast<int>(d->errorType)));
+	writer->writeStartElement(QStringLiteral("errorBars"));
+	writer->writeAttribute(QStringLiteral("errorType"), QString::number(static_cast<int>(d->errorType)));
 	WRITE_COLUMN(d->errorPlusColumn, errorPlusColumn);
 	WRITE_COLUMN(d->errorMinusColumn, errorMinusColumn);
 	d->errorBarsLine->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
-	writer->writeStartElement("margins");
-	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
-	writer->writeAttribute("rugLength", QString::number(d->rugLength));
-	writer->writeAttribute("rugWidth", QString::number(d->rugWidth));
-	writer->writeAttribute("rugOffset", QString::number(d->rugOffset));
+	writer->writeStartElement(QStringLiteral("margins"));
+	writer->writeAttribute(QStringLiteral("rugEnabled"), QString::number(d->rugEnabled));
+	writer->writeAttribute(QStringLiteral("rugLength"), QString::number(d->rugLength));
+	writer->writeAttribute(QStringLiteral("rugWidth"), QString::number(d->rugWidth));
+	writer->writeAttribute(QStringLiteral("rugOffset"), QString::number(d->rugOffset));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "Histogram" section
@@ -1926,16 +1926,16 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "Histogram")
+		if (reader->isEndElement() && reader->name() == QLatin1String("Histogram"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(dataColumn);
@@ -1951,27 +1951,27 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
-			str = attribs.value("visible").toString();
+			str = attribs.value(QStringLiteral("visible")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "line") {
+		} else if (!preview && reader->name() == QLatin1String("line")) {
 			d->line->load(reader, preview);
-		} else if (!preview && reader->name() == "symbols")
+		} else if (!preview && reader->name() == QLatin1String("symbols"))
 			d->symbol->load(reader, preview);
-		else if (!preview && reader->name() == "values")
+		else if (!preview && reader->name() == QLatin1String("values"))
 			d->value->load(reader, preview);
-		else if (!preview && reader->name() == "filling")
+		else if (!preview && reader->name() == QLatin1String("filling"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "errorBars") {
+		else if (!preview && reader->name() == QLatin1String("errorBars")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("errorType", errorType, ErrorType);
 			READ_COLUMN(errorPlusColumn);
 			READ_COLUMN(errorMinusColumn);
 			d->errorBarsLine->load(reader, preview);
-		} else if (!preview && reader->name() == "margins") {
+		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
@@ -2034,7 +2034,7 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
 		for (int i = index; i < 5; i++) {
-			QString s = "ThemePaletteColor" + QString::number(i + 1);
+			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
 			themeGroup.writeEntry(s, d->line->pen().color());
 		}
 	}

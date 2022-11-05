@@ -60,7 +60,7 @@ bool XYSmoothCurve::resultAvailable() const {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYSmoothCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-smoothing-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-smoothing-curve"));
 }
 
 //##############################################################################
@@ -106,8 +106,8 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	// create smooth result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
@@ -130,7 +130,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	}
 
 	if (!roughColumn) {
-		roughColumn = new Column("rough", AbstractColumn::ColumnMode::Double);
+		roughColumn = new Column(QStringLiteral("rough"), AbstractColumn::ColumnMode::Double);
 		roughColumn->setFixed(true); // visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		roughVector = static_cast<QVector<double>*>(roughColumn->data());
 		q->addChild(roughColumn);
@@ -276,33 +276,33 @@ void XYSmoothCurvePrivate::recalculate() {
 void XYSmoothCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYSmoothCurve);
 
-	writer->writeStartElement("xySmoothCurve");
+	writer->writeStartElement(QStringLiteral("xySmoothCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-smooth-curve specific information
 	//  smooth data
-	writer->writeStartElement("smoothData");
-	writer->writeAttribute("autoRange", QString::number(d->smoothData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->smoothData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->smoothData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->smoothData.type));
-	writer->writeAttribute("points", QString::number(d->smoothData.points));
-	writer->writeAttribute("weight", QString::number(d->smoothData.weight));
-	writer->writeAttribute("percentile", QString::number(d->smoothData.percentile));
-	writer->writeAttribute("order", QString::number(d->smoothData.order));
-	writer->writeAttribute("mode", QString::number(d->smoothData.mode));
-	writer->writeAttribute("lvalue", QString::number(d->smoothData.lvalue));
-	writer->writeAttribute("rvalue", QString::number(d->smoothData.rvalue));
+	writer->writeStartElement(QStringLiteral("smoothData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->smoothData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->smoothData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->smoothData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->smoothData.type));
+	writer->writeAttribute(QStringLiteral("points"), QString::number(d->smoothData.points));
+	writer->writeAttribute(QStringLiteral("weight"), QString::number(d->smoothData.weight));
+	writer->writeAttribute(QStringLiteral("percentile"), QString::number(d->smoothData.percentile));
+	writer->writeAttribute(QStringLiteral("order"), QString::number(d->smoothData.order));
+	writer->writeAttribute(QStringLiteral("mode"), QString::number(d->smoothData.mode));
+	writer->writeAttribute(QStringLiteral("lvalue"), QString::number(d->smoothData.lvalue));
+	writer->writeAttribute(QStringLiteral("rvalue"), QString::number(d->smoothData.rvalue));
 	writer->writeEndElement(); // smoothData
 
 	// smooth results (generated columns)
-	writer->writeStartElement("smoothResult");
-	writer->writeAttribute("available", QString::number(d->smoothResult.available));
-	writer->writeAttribute("valid", QString::number(d->smoothResult.valid));
-	writer->writeAttribute("status", d->smoothResult.status);
-	writer->writeAttribute("time", QString::number(d->smoothResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("smoothResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->smoothResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->smoothResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->smoothResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->smoothResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -328,16 +328,16 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xySmoothCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xySmoothCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "smoothData") {
+		} else if (!preview && reader->name() == QLatin1String("smoothData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", smoothData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", smoothData.xRange.first());
@@ -350,21 +350,21 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("mode", smoothData.mode, nsl_smooth_pad_mode);
 			READ_DOUBLE_VALUE("lvalue", smoothData.lvalue);
 			READ_DOUBLE_VALUE("rvalue", smoothData.rvalue);
-		} else if (!preview && reader->name() == "smoothResult") {
+		} else if (!preview && reader->name() == QLatin1String("smoothResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", smoothResult.available, int);
 			READ_INT_VALUE("valid", smoothResult.valid, int);
 			READ_STRING_VALUE("status", smoothResult.status);
 			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 			else
 				d->roughColumn = column;

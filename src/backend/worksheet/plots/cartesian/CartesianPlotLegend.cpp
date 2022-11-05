@@ -121,7 +121,7 @@ void CartesianPlotLegend::init() {
 }
 
 void CartesianPlotLegend::initActions() {
-	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
 	connect(visibilityAction, &QAction::triggered, this, &CartesianPlotLegend::visibilityChangedSlot);
 }
@@ -141,7 +141,7 @@ QMenu* CartesianPlotLegend::createContextMenu() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon CartesianPlotLegend::icon() const {
-	return QIcon::fromTheme("text-field");
+	return QIcon::fromTheme(QStringLiteral("text-field"));
 }
 
 QGraphicsItem* CartesianPlotLegend::graphicsItem() const {
@@ -802,21 +802,21 @@ void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	Q_D(const CartesianPlotLegend);
 
-	writer->writeStartElement("cartesianPlotLegend");
+	writer->writeStartElement(QStringLiteral("cartesianPlotLegend"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
+	writer->writeStartElement(QStringLiteral("general"));
 	WRITE_QCOLOR(d->labelColor);
 	WRITE_QFONT(d->labelFont);
-	writer->writeAttribute("columnMajor", QString::number(d->labelColumnMajor));
-	writer->writeAttribute("lineSymbolWidth", QString::number(d->lineSymbolWidth));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
+	writer->writeAttribute(QStringLiteral("columnMajor"), QString::number(d->labelColumnMajor));
+	writer->writeAttribute(QStringLiteral("lineSymbolWidth"), QString::number(d->lineSymbolWidth));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	// geometry
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
@@ -827,21 +827,21 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	d->background->save(writer);
 
 	// border
-	writer->writeStartElement("border");
+	writer->writeStartElement(QStringLiteral("border"));
 	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
-	writer->writeAttribute("borderCornerRadius", QString::number(d->borderCornerRadius));
+	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
 	// layout
-	writer->writeStartElement("layout");
-	writer->writeAttribute("topMargin", QString::number(d->layoutTopMargin));
-	writer->writeAttribute("bottomMargin", QString::number(d->layoutBottomMargin));
-	writer->writeAttribute("leftMargin", QString::number(d->layoutLeftMargin));
-	writer->writeAttribute("rightMargin", QString::number(d->layoutRightMargin));
-	writer->writeAttribute("verticalSpacing", QString::number(d->layoutVerticalSpacing));
-	writer->writeAttribute("horizontalSpacing", QString::number(d->layoutHorizontalSpacing));
-	writer->writeAttribute("columnCount", QString::number(d->layoutColumnCount));
+	writer->writeStartElement(QStringLiteral("layout"));
+	writer->writeAttribute(QStringLiteral("topMargin"), QString::number(d->layoutTopMargin));
+	writer->writeAttribute(QStringLiteral("bottomMargin"), QString::number(d->layoutBottomMargin));
+	writer->writeAttribute(QStringLiteral("leftMargin"), QString::number(d->layoutLeftMargin));
+	writer->writeAttribute(QStringLiteral("rightMargin"), QString::number(d->layoutRightMargin));
+	writer->writeAttribute(QStringLiteral("verticalSpacing"), QString::number(d->layoutVerticalSpacing));
+	writer->writeAttribute(QStringLiteral("horizontalSpacing"), QString::number(d->layoutHorizontalSpacing));
+	writer->writeAttribute(QStringLiteral("columnCount"), QString::number(d->layoutColumnCount));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "cartesianPlotLegend" section
@@ -860,16 +860,16 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "cartesianPlotLegend")
+		if (reader->isEndElement() && reader->name() == QLatin1String("cartesianPlotLegend"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
 			READ_QCOLOR(d->labelColor);
@@ -878,13 +878,13 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("lineSymbolWidth", lineSymbolWidth);
 
 			if (Project::xmlVersion() < 6) {
-				str = attribs.value("visible").toString();
+				str = attribs.value(QStringLiteral("visible")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("visible").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
 				else
 					d->setVisible(str.toInt());
 			}
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			if (Project::xmlVersion() >= 6)
 				WorksheetElement::load(reader, preview);
 			else {
@@ -892,46 +892,46 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 				// therefore WorksheetElement::load() cannot be used
 				attribs = reader->attributes();
 
-				str = attribs.value("x").toString();
+				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("x").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 				else
 					d->position.point.setX(str.toDouble());
 
-				str = attribs.value("y").toString();
+				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("y").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
 				else
 					d->position.point.setY(str.toDouble());
 
-				str = attribs.value("horizontalPosition").toString();
+				str = attribs.value(QStringLiteral("horizontalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("horizontalPosition")).toString());
 				else
 					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
 
-				str = attribs.value("verticalPosition").toString();
+				str = attribs.value(QStringLiteral("verticalPosition")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("verticalPosition")).toString());
 				else
 					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
 				READ_DOUBLE_VALUE("rotation", rotationAngle);
 			}
-		} else if (reader->name() == "textLabel") {
+		} else if (reader->name() == QLatin1String("textLabel")) {
 			if (!d->title->load(reader, preview)) {
 				delete d->title;
 				d->title = nullptr;
 				return false;
 			}
-		} else if (!preview && reader->name() == "background")
+		} else if (!preview && reader->name() == QLatin1String("background"))
 			d->background->load(reader, preview);
-		else if (!preview && reader->name() == "border") {
+		else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
 			READ_QPEN(d->borderPen);
 			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
 			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
-		} else if (!preview && reader->name() == "layout") {
+		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
 			READ_DOUBLE_VALUE("bottomMargin", layoutBottomMargin);

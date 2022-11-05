@@ -64,7 +64,7 @@ bool XYFourierFilterCurve::resultAvailable() const {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierFilterCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier-filter-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-filter-curve"));
 }
 
 //##############################################################################
@@ -104,8 +104,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -262,32 +262,32 @@ void XYFourierFilterCurvePrivate::recalculate() {
 void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYFourierFilterCurve);
 
-	writer->writeStartElement("xyFourierFilterCurve");
+	writer->writeStartElement(QStringLiteral("xyFourierFilterCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-fourier_filter-curve specific information
 	// filter data
-	writer->writeStartElement("filterData");
-	writer->writeAttribute("autoRange", QString::number(d->filterData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->filterData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->filterData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->filterData.type));
-	writer->writeAttribute("form", QString::number(d->filterData.form));
-	writer->writeAttribute("order", QString::number(d->filterData.order));
-	writer->writeAttribute("cutoff", QString::number(d->filterData.cutoff));
-	writer->writeAttribute("unit", QString::number(d->filterData.unit));
-	writer->writeAttribute("cutoff2", QString::number(d->filterData.cutoff2));
-	writer->writeAttribute("unit2", QString::number(d->filterData.unit2));
+	writer->writeStartElement(QStringLiteral("filterData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->filterData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->filterData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->filterData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->filterData.type));
+	writer->writeAttribute(QStringLiteral("form"), QString::number(d->filterData.form));
+	writer->writeAttribute(QStringLiteral("order"), QString::number(d->filterData.order));
+	writer->writeAttribute(QStringLiteral("cutoff"), QString::number(d->filterData.cutoff));
+	writer->writeAttribute(QStringLiteral("unit"), QString::number(d->filterData.unit));
+	writer->writeAttribute(QStringLiteral("cutoff2"), QString::number(d->filterData.cutoff2));
+	writer->writeAttribute(QStringLiteral("unit2"), QString::number(d->filterData.unit2));
 	writer->writeEndElement(); // filterData
 
 	// filter results (generated columns)
-	writer->writeStartElement("filterResult");
-	writer->writeAttribute("available", QString::number(d->filterResult.available));
-	writer->writeAttribute("valid", QString::number(d->filterResult.valid));
-	writer->writeAttribute("status", d->filterResult.status);
-	writer->writeAttribute("time", QString::number(d->filterResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("filterResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->filterResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->filterResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->filterResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->filterResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn) {
@@ -308,16 +308,16 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyFourierFilterCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyFourierFilterCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "filterData") {
+		} else if (!preview && reader->name() == QLatin1String("filterData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", filterData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", filterData.xRange.first());
@@ -329,22 +329,22 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("unit", filterData.unit, nsl_filter_cutoff_unit);
 			READ_DOUBLE_VALUE("cutoff2", filterData.cutoff2);
 			READ_INT_VALUE("unit2", filterData.unit2, nsl_filter_cutoff_unit);
-		} else if (!preview && reader->name() == "filterResult") {
+		} else if (!preview && reader->name() == QLatin1String("filterResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", filterResult.available, int);
 			READ_INT_VALUE("valid", filterResult.valid, int);
 			READ_STRING_VALUE("status", filterResult.status);
 			READ_INT_VALUE("time", filterResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
 
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

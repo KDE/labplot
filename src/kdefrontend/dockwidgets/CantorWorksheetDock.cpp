@@ -46,8 +46,8 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		++k;
 	}
 
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	if (m_cantorworksheetlist.size() == 1) {
 		// show name/comment

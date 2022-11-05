@@ -374,20 +374,20 @@ void CantorWorksheet::restart() {
 
 //! Save as XML
 void CantorWorksheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("cantorWorksheet");
+	writer->writeStartElement(QStringLiteral("cantorWorksheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("backend_name", m_backendName);
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("backend_name"), m_backendName);
 	// TODO: save worksheet settings
 	writer->writeEndElement();
 
 	// save the content of Cantor's worksheet
 	QByteArray content = m_worksheetAccess->saveWorksheetToByteArray();
-	writer->writeStartElement("worksheet");
-	writer->writeAttribute("content", content.toBase64());
+	writer->writeStartElement(QStringLiteral("worksheet"));
+	writer->writeAttribute(QStringLiteral("content"), QLatin1String(content.toBase64()));
 	writer->writeEndElement();
 
 	// save columns(variables)
@@ -412,27 +412,27 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "cantorWorksheet")
+		if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "general") {
+		} else if (!preview && reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			m_backendName = attribs.value("backend_name").toString().trimmed();
+			m_backendName = attribs.value(QStringLiteral("backend_name")).toString().trimmed();
 			if (m_backendName.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
-		} else if (!preview && reader->name() == "worksheet") {
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("backend_name")).toString());
+		} else if (!preview && reader->name() == QLatin1String("worksheet")) {
 			attribs = reader->attributes();
 
-			QString str = attribs.value("content").toString().trimmed();
+			QString str = attribs.value(QStringLiteral("content")).toString().trimmed();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("content").toString());
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("content")).toString());
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
@@ -447,7 +447,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 				reader->setFailedCASMissing(true);
 				return false;
 			}
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString());
 			column->setUndoAware(false);
 			if (!column->load(reader, preview)) {

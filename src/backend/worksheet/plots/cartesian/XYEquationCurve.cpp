@@ -70,7 +70,7 @@ void XYEquationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYEquationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-equation-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve"));
 }
 
 //##############################################################################
@@ -94,8 +94,8 @@ void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equat
 //##############################################################################
 XYEquationCurvePrivate::XYEquationCurvePrivate(XYEquationCurve* owner)
 	: XYCurvePrivate(owner)
-	, xColumn(new Column("x", AbstractColumn::ColumnMode::Double))
-	, yColumn(new Column("y", AbstractColumn::ColumnMode::Double))
+	, xColumn(new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double))
+	, yColumn(new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double))
 	, xVector(static_cast<QVector<double>*>(xColumn->data()))
 	, yVector(static_cast<QVector<double>*>(yColumn->data()))
 	, q(owner) {
@@ -160,19 +160,19 @@ void XYEquationCurvePrivate::recalculate() {
 void XYEquationCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYEquationCurve);
 
-	writer->writeStartElement("xyEquationCurve");
+	writer->writeStartElement(QStringLiteral("xyEquationCurve"));
 
 	// write xy-curve information
 	XYCurve::save(writer);
 
 	// write xy-equationCurve specific information
-	writer->writeStartElement("equationData");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->equationData.type)));
-	writer->writeAttribute("expression1", d->equationData.expression1);
-	writer->writeAttribute("expression2", d->equationData.expression2);
-	writer->writeAttribute("min", d->equationData.min);
-	writer->writeAttribute("max", d->equationData.max);
-	writer->writeAttribute("count", QString::number(d->equationData.count));
+	writer->writeStartElement(QStringLiteral("equationData"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->equationData.type)));
+	writer->writeAttribute(QStringLiteral("expression1"), d->equationData.expression1);
+	writer->writeAttribute(QStringLiteral("expression2"), d->equationData.expression2);
+	writer->writeAttribute(QStringLiteral("min"), d->equationData.min);
+	writer->writeAttribute(QStringLiteral("max"), d->equationData.max);
+	writer->writeAttribute(QStringLiteral("count"), QString::number(d->equationData.count));
 	writer->writeEndElement();
 
 	writer->writeEndElement();
@@ -188,16 +188,16 @@ bool XYEquationCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyEquationCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyEquationCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
+		if (reader->name() == QLatin1String("xyCurve")) {
 			if (!XYCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "equationData") {
+		} else if (!preview && reader->name() == QLatin1String("equationData")) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", equationData.type, XYEquationCurve::EquationType);

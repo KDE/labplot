@@ -17,7 +17,7 @@
 VariableParser::VariableParser(QString name, QString value)
 	: m_backendName(std::move(name))
 	, m_string(std::move(value)) {
-	PERFTRACE("parsing variable");
+	PERFTRACE(QLatin1String("parsing variable"));
 	if (m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
 	else if ((m_backendName.compare(QStringLiteral("Python"), Qt::CaseInsensitive) == 0)
@@ -79,9 +79,9 @@ void VariableParser::parseMaximaValues() {
  * */
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
-	QString dataType = "float64";
+	QString dataType = QStringLiteral("float64");
 	m_string = m_string.trimmed();
-	if (m_string.startsWith(QStringLiteral("array"))) {
+	if (m_string.startsWith(QLatin1String("array"))) {
 		// parse numpy arrays, string representation like array([1,2,3,4,5]) or
 		//  array([1, 2,3], dtype=uint32)
 
@@ -93,27 +93,27 @@ void VariableParser::parsePythonValues() {
 		QRegularExpressionMatch match;
 		auto numpyDatatypeRegex = QStringLiteral("\\s*,\\s*dtype='{0,1}[a-zA-Z0-9\\[\\]]*'{0,1}");
 		m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);
-		if (match.isValid() && match.captured() != "")
-			dataType = match.captured().replace("'", "").replace(", dtype=", "");
+		if (match.isValid() && match.captured() != QString())
+			dataType = match.captured().replace(QStringLiteral("'"), QString()).replace(QStringLiteral(", dtype="), QString());
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
 		m_string = m_string.replace(QRegExp(numpyDatatypeRegex), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		// parse python's lists
 		if (m_string.startsWith(QLatin1String("['"))) // python uses ' to quote string values in the output
-			dataType = "text";
+			dataType = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("["), QString());
 		m_string = m_string.replace(QStringLiteral("]"), QString());
 	} else if (m_string.startsWith(QStringLiteral("("))) {
 		// parse python's tuples
 		if (m_string.startsWith(QLatin1String("('")))
-			dataType = "text";
+			dataType = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("("), QString());
 		m_string = m_string.replace(QStringLiteral(")"), QString());
 	} else if (m_string.startsWith(QStringLiteral("{"))) {
 		// parse python's sets
 		if (m_string.startsWith(QLatin1String("{'")))
-			dataType = "text";
+			dataType = QStringLiteral("text");
 		m_string = m_string.replace(QStringLiteral("{"), QString());
 		m_string = m_string.replace(QStringLiteral("}"), QString());
 	} else {
@@ -122,7 +122,7 @@ void VariableParser::parsePythonValues() {
 
 	// Fast method to determine the separator. It is assumed if at least one
 	// commas exist, the comma is the separator
-	if (m_string.indexOf(",") != -1)
+	if (m_string.indexOf(QLatin1Char(',')) != -1)
 		valueStringList = m_string.split(QStringLiteral(","));
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
@@ -179,35 +179,35 @@ void VariableParser::clearValues() {
 }
 
 VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) {
-	if (d == "uint8")
+	if (d == QStringLiteral("uint8"))
 		return Datatype::uint8;
-	else if (d == "int8")
+	else if (d == QStringLiteral("int8"))
 		return Datatype::int8;
-	else if (d == "uint16")
+	else if (d == QStringLiteral("uint16"))
 		return Datatype::uint16;
-	else if (d == "int16")
+	else if (d == QStringLiteral("int16"))
 		return Datatype::int16;
-	else if (d == "uint32")
+	else if (d == QStringLiteral("uint32"))
 		return Datatype::uint32;
-	else if (d == "int32")
+	else if (d == QStringLiteral("int32"))
 		return Datatype::int32;
-	else if (d == "uint64")
+	else if (d == QStringLiteral("uint64"))
 		return Datatype::uint64;
-	else if (d == "int64")
+	else if (d == QStringLiteral("int64"))
 		return Datatype::int64;
-	else if (d == "float32")
+	else if (d == QStringLiteral("float32"))
 		return Datatype::float32;
-	else if (d == "float64")
+	else if (d == QStringLiteral("float64"))
 		return Datatype::float64;
-	else if (d == "datetime64[ms]")
+	else if (d == QStringLiteral("datetime64[ms]"))
 		return Datatype::datetime64_ms;
-	else if (d == "datetime64[s]")
+	else if (d == QStringLiteral("datetime64[s]"))
 		return Datatype::datetime64_s;
-	else if (d == "datetime64[m]")
+	else if (d == QStringLiteral("datetime64[m]"))
 		return Datatype::datetime64_m;
-	else if (d == "datetime64[h]")
+	else if (d == QStringLiteral("datetime64[h]"))
 		return Datatype::datetime64_h;
-	else if (d == "datetime64[D]" || d == "datetime64")
+	else if (d == QStringLiteral("datetime64[D]") || d == QStringLiteral("datetime64"))
 		return Datatype::datetime64_D;
 
 	// as default text is used
@@ -215,7 +215,7 @@ VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) 
 }
 
 void VariableParser::parseValues(const QStringList& values, VariableParser::Datatype dataType) {
-	PERFTRACE("parsing variable values string list");
+	PERFTRACE(QStringLiteral("parsing variable values string list"));
 	switch (dataType) {
 	case Datatype::uint8:
 	case Datatype::int8:
@@ -334,9 +334,9 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 	case Datatype::datetime64_D:
 		for (const auto& v : values) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			dateTime()[i] = QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate).startOfDay(Qt::UTC);
+			dateTime()[i] = QDate::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"), Qt::ISODate).startOfDay(Qt::UTC);
 #else
-			dateTime()[i] = QDateTime(QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate));
+			dateTime()[i] = QDateTime(QDate::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"), Qt::ISODate));
 #endif
 			m_parsed = true;
 			i++;
@@ -344,28 +344,30 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 		break;
 	case Datatype::datetime64_h:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", "yyyy-MM-ddThht"); // last t is important. It is the timezone
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"),
+												  QStringLiteral("yyyy-MM-ddThht")); // last t is important. It is the timezone
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_m:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", "yyyy-MM-ddThh:mmt"); // last t is important. It is the timezone
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"),
+												  QStringLiteral("yyyy-MM-ddThh:mmt")); // last t is important. It is the timezone
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_s:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate);
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"), Qt::ISODate);
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_ms:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODateWithMs);
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace(QStringLiteral("'"), QString()) + QStringLiteral("Z"), Qt::ISODateWithMs);
 			m_parsed = true;
 			i++;
 		}

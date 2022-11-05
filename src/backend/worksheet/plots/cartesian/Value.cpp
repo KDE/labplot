@@ -230,18 +230,18 @@ void ValuePrivate::updatePixmap() {
 void Value::save(QXmlStreamWriter* writer) const {
 	Q_D(const Value);
 
-	writer->writeStartElement("values");
-	writer->writeAttribute("type", QString::number(d->type));
+	writer->writeStartElement(QStringLiteral("values"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->type));
 	WRITE_COLUMN(d->column, column);
-	writer->writeAttribute("position", QString::number(d->position));
-	writer->writeAttribute("distance", QString::number(d->distance));
-	writer->writeAttribute("rotation", QString::number(d->rotationAngle));
-	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeAttribute("numericFormat", QString(d->numericFormat));
-	writer->writeAttribute("dateTimeFormat", d->dateTimeFormat);
-	writer->writeAttribute("precision", QString::number(d->precision));
-	writer->writeAttribute("prefix", d->prefix);
-	writer->writeAttribute("suffix", d->suffix);
+	writer->writeAttribute(QStringLiteral("position"), QString::number(d->position));
+	writer->writeAttribute(QStringLiteral("distance"), QString::number(d->distance));
+	writer->writeAttribute(QStringLiteral("rotation"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("numericFormat"), QChar::fromLatin1(d->numericFormat));
+	writer->writeAttribute(QStringLiteral("dateTimeFormat"), d->dateTimeFormat);
+	writer->writeAttribute(QStringLiteral("precision"), QString::number(d->precision));
+	writer->writeAttribute(QStringLiteral("prefix"), d->prefix);
+	writer->writeAttribute(QStringLiteral("suffix"), d->suffix);
 	WRITE_QCOLOR(d->color);
 	WRITE_QFONT(d->font);
 	writer->writeEndElement();
@@ -265,9 +265,9 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 	READ_DOUBLE_VALUE("rotation", rotationAngle);
 	READ_DOUBLE_VALUE("opacity", opacity);
 
-	str = attribs.value("numericFormat").toString();
+	str = attribs.value(QStringLiteral("numericFormat")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
+		reader->raiseWarning(attributeWarning.subs(QStringLiteral("numericFormat")).toString());
 	else
 		d->numericFormat = *(str.toLatin1().data());
 
@@ -275,8 +275,8 @@ bool Value::load(XmlStreamReader* reader, bool preview) {
 	READ_INT_VALUE("precision", precision, int);
 
 	// don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
-	d->prefix = attribs.value("prefix").toString();
-	d->suffix = attribs.value("suffix").toString();
+	d->prefix = attribs.value(QStringLiteral("prefix")).toString();
+	d->suffix = attribs.value(QStringLiteral("suffix")).toString();
 
 	READ_QCOLOR(d->color);
 	READ_QFONT(d->font);

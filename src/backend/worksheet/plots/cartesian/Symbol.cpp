@@ -213,16 +213,16 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 	Q_D(const Symbol);
 
 	if (parentAspect()->type() == AspectType::CustomPoint)
-		writer->writeStartElement("symbol");
+		writer->writeStartElement(QStringLiteral("symbol"));
 	else if (parentAspect()->type() == AspectType::BoxPlot)
 		writer->writeStartElement(name()); // BoxPlot has multiple symbols, differentiated by their names
 	else
-		writer->writeStartElement("symbols"); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
+		writer->writeStartElement(QStringLiteral("symbols")); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
 
-	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->style)));
-	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeAttribute("rotation", QString::number(d->rotationAngle));
-	writer->writeAttribute("size", QString::number(d->size));
+	writer->writeAttribute(QStringLiteral("symbolsStyle"), QString::number(static_cast<int>(d->style)));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("rotation"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("size"), QString::number(d->size));
 	WRITE_QBRUSH(d->brush);
 	WRITE_QPEN(d->pen);
 	writer->writeEndElement(); // close "Symbol" section
@@ -875,12 +875,12 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(.5, -.35);
 		break;
 	case Style::Spade: {
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♠"));
 		break;
 	}
 	case Style::Club:
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♣"));
 		break;
 	}

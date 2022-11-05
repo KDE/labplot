@@ -66,7 +66,7 @@
 				m_private->q->set##cmd_name##ColumnPath(m_column->path());                                                                                     \
 				XYCURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, prefix)                                                                                    \
 			} else                                                                                                                                             \
-				m_private->q->set##cmd_name##ColumnPath("");                                                                                                   \
+				m_private->q->set##cmd_name##ColumnPath(QStringLiteral(""));                                                                                   \
 			finalize();                                                                                                                                        \
 			emit m_private->q->prefix##ColumnChanged(m_column);                                                                                                \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \
@@ -80,7 +80,7 @@
 				m_private->q->set##cmd_name##ColumnPath(m_columnOld->path());                                                                                  \
 				XYCURVE_COLUMN_CONNECT_CALL(m_private->q, m_column, prefix)                                                                                    \
 			} else                                                                                                                                             \
-				m_private->q->set##cmd_name##ColumnPath("");                                                                                                   \
+				m_private->q->set##cmd_name##ColumnPath(QStringLiteral(""));                                                                                   \
 			finalize();                                                                                                                                        \
 			emit m_private->q->prefix##ColumnChanged(m_columnOld);                                                                                             \
 			/* emit DataChanged() in order to notify the plot about the changes */                                                                             \

@@ -93,7 +93,7 @@ AsciiFilter* MQTTTopic::filter() const {
  *\brief Returns the MQTTTopic's icon
  */
 QIcon MQTTTopic::icon() const {
-	return QIcon::fromTheme("text-plain");
+	return QIcon::fromTheme(QStringLiteral("text-plain"));
 }
 
 /*!
@@ -139,7 +139,7 @@ QString MQTTTopic::topicName() const {
  *\brief Initializes the actions of MQTTTopic
  */
 void MQTTTopic::initActions() {
-	m_plotDataAction = new QAction(QIcon::fromTheme("office-chart-line"), i18n("Plot data"), this);
+	m_plotDataAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-line")), i18n("Plot data"), this);
 	connect(m_plotDataAction, &QAction::triggered, this, &MQTTTopic::plotData);
 }
 
@@ -180,18 +180,18 @@ void MQTTTopic::read() {
   Saves as XML.
  */
 void MQTTTopic::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("MQTTTopic");
+	writer->writeStartElement(QStringLiteral("MQTTTopic"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// general
-	writer->writeStartElement("general");
-	writer->writeAttribute("topicName", m_topicName);
-	writer->writeAttribute("filterPrepared", QString::number(m_filter->isPrepared()));
-	writer->writeAttribute("filterSeparator", m_filter->separator());
-	writer->writeAttribute("messagePufferSize", QString::number(m_messagePuffer.size()));
+	writer->writeStartElement(QStringLiteral("general"));
+	writer->writeAttribute(QStringLiteral("topicName"), m_topicName);
+	writer->writeAttribute(QStringLiteral("filterPrepared"), QString::number(m_filter->isPrepared()));
+	writer->writeAttribute(QStringLiteral("filterSeparator"), m_filter->separator());
+	writer->writeAttribute(QStringLiteral("messagePufferSize"), QString::number(m_messagePuffer.size()));
 	for (int i = 0; i < m_messagePuffer.count(); ++i)
-		writer->writeAttribute("message" + QString::number(i), m_messagePuffer[i]);
+		writer->writeAttribute(QStringLiteral("message") + QString::number(i), m_messagePuffer[i]);
 	writer->writeEndElement();
 
 	// filter
@@ -221,57 +221,57 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "MQTTTopic")
+		if (reader->isEndElement() && reader->name() == QLatin1String("MQTTTopic"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "general") {
+		} else if (reader->name() == QLatin1String("general")) {
 			attribs = reader->attributes();
 
-			str = attribs.value("topicName").toString();
+			str = attribs.value(QStringLiteral("topicName")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'topicName'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'topicName'")));
 			else {
 				m_topicName = str;
 				setName(str);
 			}
 
-			str = attribs.value("filterPrepared").toString();
+			str = attribs.value(QStringLiteral("filterPrepared")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'filterPrepared'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'filterPrepared'")));
 			else {
 				isFilterPrepared = str.toInt();
 			}
 
-			str = attribs.value("filterSeparator").toString();
+			str = attribs.value(QStringLiteral("filterSeparator")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'filterSeparator'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'filterSeparator'")));
 			else {
 				separator = str;
 			}
 
 			int pufferSize = 0;
-			str = attribs.value("messagePufferSize").toString();
+			str = attribs.value(QStringLiteral("messagePufferSize")).toString();
 			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.arg("'messagePufferSize'"));
+				reader->raiseWarning(attributeWarning.arg(QStringLiteral("'messagePufferSize'")));
 			else
 				pufferSize = str.toInt();
 			for (int i = 0; i < pufferSize; ++i) {
-				str = attribs.value("message" + QString::number(i)).toString();
+				str = attribs.value(QStringLiteral("message") + QString::number(i)).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'message" + QString::number(i) + '\''));
+					reader->raiseWarning(attributeWarning.arg(QStringLiteral("'message") + QString::number(i) + QLatin1Char('\'')));
 				else
 					m_messagePuffer.push_back(str);
 			}
-		} else if (reader->name() == "asciiFilter") {
+		} else if (reader->name() == QLatin1String("asciiFilter")) {
 			if (!m_filter->load(reader))
 				return false;
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;

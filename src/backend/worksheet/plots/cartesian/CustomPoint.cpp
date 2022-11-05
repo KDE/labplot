@@ -91,7 +91,7 @@ void CustomPoint::initActions() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
-	return QIcon::fromTheme("draw-cross");
+	return QIcon::fromTheme(QStringLiteral("draw-cross"));
 }
 
 QMenu* CustomPoint::createContextMenu() {
@@ -251,12 +251,12 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 void CustomPoint::save(QXmlStreamWriter* writer) const {
 	Q_D(const CustomPoint);
 
-	writer->writeStartElement("customPoint");
+	writer->writeStartElement(QStringLiteral("customPoint"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
 	// geometry
-	writer->writeStartElement("geometry");
+	writer->writeStartElement(QStringLiteral("geometry"));
 	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
@@ -278,16 +278,16 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "customPoint")
+		if (reader->isEndElement() && reader->name() == QLatin1String("customPoint"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (!preview && reader->name() == "comment") {
+		if (!preview && reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (!preview && reader->name() == "geometry") {
+		} else if (!preview && reader->name() == QLatin1String("geometry")) {
 			WorksheetElement::load(reader, preview);
 			if (project()->xmlVersion() < 6) {
 				// Before version 6 the position in the file was always a logical position
@@ -295,7 +295,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 				d->position.point = QPointF(0, 0);
 				d->coordinateBindingEnabled = true;
 			}
-		} else if (!preview && reader->name() == "symbol") {
+		} else if (!preview && reader->name() == QLatin1String("symbol")) {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

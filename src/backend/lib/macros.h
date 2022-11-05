@@ -614,14 +614,14 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define WRITE_PATH(obj, name)                                                                                                                                  \
 	if (obj) {                                                                                                                                                 \
-		writer->writeAttribute(#name, obj->path());                                                                                                            \
+		writer->writeAttribute(QLatin1String(#name), obj->path());                                                                                             \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(#name, QString());                                                                                                              \
+		writer->writeAttribute(QLatin1String(#name), QString());                                                                                               \
 	}
 
 #define READ_PATH(name)                                                                                                                                        \
 	{                                                                                                                                                          \
-		str = attribs.value(#name).toString();                                                                                                                 \
+		str = attribs.value(QLatin1String(#name)).toString();                                                                                                  \
 		d->name##Path = str;                                                                                                                                   \
 	}
 

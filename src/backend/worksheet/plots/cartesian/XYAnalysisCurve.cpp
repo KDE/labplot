@@ -206,7 +206,7 @@ void XYAnalysisCurve::setDataSourceCurve(const XYCurve* curve) {
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetXDataColumn, const AbstractColumn*, xDataColumn)
 void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
-	DEBUG("XYAnalysisCurve::setXDataColumn()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
 	if (column != d->xDataColumn) {
 		exec(new XYAnalysisCurveSetXDataColumnCmd(d, column, ki18n("%1: assign x-data")));
@@ -218,13 +218,13 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setXDataColumnPath("");
+			setXDataColumnPath(QStringLiteral(""));
 	}
 }
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetYDataColumn, const AbstractColumn*, yDataColumn)
 void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
-	DEBUG("XYAnalysisCurve::setYDataColumn()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
 	if (column != d->yDataColumn) {
 		exec(new XYAnalysisCurveSetYDataColumnCmd(d, column, ki18n("%1: assign y-data")));
@@ -236,13 +236,13 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setXDataColumnPath("");
+			setYDataColumnPath(QStringLiteral(""));
 	}
 }
 
 STD_SETTER_CMD_IMPL_S(XYAnalysisCurve, SetY2DataColumn, const AbstractColumn*, y2DataColumn)
 void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
-	DEBUG("XYAnalysisCurve::setY2DataColumn()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(XYAnalysisCurve);
 	if (column != d->y2DataColumn) {
 		exec(new XYAnalysisCurveSetY2DataColumnCmd(d, column, ki18n("%1: assign second y-data")));
@@ -254,7 +254,7 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setXDataColumnPath("");
+			setY2DataColumnPath(QStringLiteral(""));
 	}
 }
 
@@ -382,14 +382,14 @@ XYAnalysisCurvePrivate::~XYAnalysisCurvePrivate() = default;
 void XYAnalysisCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYAnalysisCurve);
 
-	writer->writeStartElement("xyAnalysisCurve");
+	writer->writeStartElement(QStringLiteral("xyAnalysisCurve"));
 
 	// write xy-curve information
 	XYCurve::save(writer);
 
 	// write data source specific information
-	writer->writeStartElement("dataSource");
-	writer->writeAttribute("type", QString::number(static_cast<int>(d->dataSourceType)));
+	writer->writeStartElement(QStringLiteral("dataSource"));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(static_cast<int>(d->dataSourceType)));
 	WRITE_PATH(d->dataSourceCurve, dataSourceCurve);
 	WRITE_COLUMN(d->xDataColumn, xDataColumn);
 	WRITE_COLUMN(d->yDataColumn, yDataColumn);
@@ -409,16 +409,16 @@ bool XYAnalysisCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyAnalysisCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyAnalysisCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyCurve") {
+		if (reader->name() == QLatin1String("xyCurve")) {
 			if (!XYCurve::load(reader, preview))
 				return false;
-		} else if (reader->name() == "dataSource") {
+		} else if (reader->name() == QLatin1String("dataSource")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("type", dataSourceType, XYAnalysisCurve::DataSourceType);
 			READ_PATH(dataSourceCurve);

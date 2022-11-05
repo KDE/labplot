@@ -59,7 +59,7 @@ bool XYHilbertTransformCurve::resultAvailable() const {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYHilbertTransformCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier-transform-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-fourier-transform-curve"));
 }
 
 //##############################################################################
@@ -100,8 +100,8 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 
 	// create transform result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -221,26 +221,26 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYHilbertTransformCurve);
 
-	writer->writeStartElement("xyHilbertTransformCurve");
+	writer->writeStartElement(QStringLiteral("xyHilbertTransformCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-fourier_transform-curve specific information
 	// transform data
-	writer->writeStartElement("transformData");
-	writer->writeAttribute("autoRange", QString::number(d->transformData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->transformData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->transformData.xRange.last()));
-	writer->writeAttribute("type", QString::number(d->transformData.type));
+	writer->writeStartElement(QStringLiteral("transformData"));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->transformData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->transformData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->transformData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->transformData.type));
 	writer->writeEndElement(); // transformData
 
 	// transform results (generated columns)
-	writer->writeStartElement("transformResult");
-	writer->writeAttribute("available", QString::number(d->transformResult.available));
-	writer->writeAttribute("valid", QString::number(d->transformResult.valid));
-	writer->writeAttribute("status", d->transformResult.status);
-	writer->writeAttribute("time", QString::number(d->transformResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("transformResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->transformResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->transformResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->transformResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->transformResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn && d->yColumn) {
@@ -261,37 +261,37 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyHilbertTransformCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyHilbertTransformCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "transformData") {
+		} else if (!preview && reader->name() == QLatin1String("transformData")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("autoRange", transformData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.last());
 			READ_INT_VALUE("type", transformData.type, nsl_hilbert_result_type);
-		} else if (!preview && reader->name() == "transformResult") {
+		} else if (!preview && reader->name() == QLatin1String("transformResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", transformResult.available, int);
 			READ_INT_VALUE("valid", transformResult.valid, int);
 			READ_STRING_VALUE("status", transformResult.status);
 			READ_INT_VALUE("time", transformResult.elapsedTime, int);
-		} else if (reader->name() == "column") {
+		} else if (reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
 
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}

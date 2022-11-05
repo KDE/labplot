@@ -57,7 +57,7 @@ bool XYConvolutionCurve::resultAvailable() const {
 */
 QIcon XYConvolutionCurve::icon() const {
 	// 	return QIcon::fromTheme("labplot-xy-convolution-curve");//not available yet
-	return QIcon::fromTheme("labplot-xy-curve");
+	return QIcon::fromTheme(QStringLiteral("labplot-xy-curve"));
 }
 
 //##############################################################################
@@ -97,8 +97,8 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	// create convolution result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		xColumn = new Column(QStringLiteral("x"), AbstractColumn::ColumnMode::Double);
+		yColumn = new Column(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>*>(xColumn->data());
 		yVector = static_cast<QVector<double>*>(yColumn->data());
 
@@ -272,33 +272,33 @@ void XYConvolutionCurvePrivate::recalculate() {
 void XYConvolutionCurve::save(QXmlStreamWriter* writer) const {
 	Q_D(const XYConvolutionCurve);
 
-	writer->writeStartElement("xyConvolutionCurve");
+	writer->writeStartElement(QStringLiteral("xyConvolutionCurve"));
 
 	// write the base class
 	XYAnalysisCurve::save(writer);
 
 	// write xy-convolution-curve specific information
 	//  convolution data
-	writer->writeStartElement("convolutionData");
-	writer->writeAttribute("samplingInterval", QString::number(d->convolutionData.samplingInterval));
-	writer->writeAttribute("kernel", QString::number(d->convolutionData.kernel));
-	writer->writeAttribute("kernelSize", QString::number(d->convolutionData.kernelSize));
-	writer->writeAttribute("autoRange", QString::number(d->convolutionData.autoRange));
-	writer->writeAttribute("xRangeMin", QString::number(d->convolutionData.xRange.first()));
-	writer->writeAttribute("xRangeMax", QString::number(d->convolutionData.xRange.last()));
-	writer->writeAttribute("direction", QString::number(d->convolutionData.direction));
-	writer->writeAttribute("type", QString::number(d->convolutionData.type));
-	writer->writeAttribute("method", QString::number(d->convolutionData.method));
-	writer->writeAttribute("normalize", QString::number(d->convolutionData.normalize));
-	writer->writeAttribute("wrap", QString::number(d->convolutionData.wrap));
+	writer->writeStartElement(QStringLiteral("convolutionData"));
+	writer->writeAttribute(QStringLiteral("samplingInterval"), QString::number(d->convolutionData.samplingInterval));
+	writer->writeAttribute(QStringLiteral("kernel"), QString::number(d->convolutionData.kernel));
+	writer->writeAttribute(QStringLiteral("kernelSize"), QString::number(d->convolutionData.kernelSize));
+	writer->writeAttribute(QStringLiteral("autoRange"), QString::number(d->convolutionData.autoRange));
+	writer->writeAttribute(QStringLiteral("xRangeMin"), QString::number(d->convolutionData.xRange.first()));
+	writer->writeAttribute(QStringLiteral("xRangeMax"), QString::number(d->convolutionData.xRange.last()));
+	writer->writeAttribute(QStringLiteral("direction"), QString::number(d->convolutionData.direction));
+	writer->writeAttribute(QStringLiteral("type"), QString::number(d->convolutionData.type));
+	writer->writeAttribute(QStringLiteral("method"), QString::number(d->convolutionData.method));
+	writer->writeAttribute(QStringLiteral("normalize"), QString::number(d->convolutionData.normalize));
+	writer->writeAttribute(QStringLiteral("wrap"), QString::number(d->convolutionData.wrap));
 	writer->writeEndElement(); // convolutionData
 
 	// convolution results (generated columns)
-	writer->writeStartElement("convolutionResult");
-	writer->writeAttribute("available", QString::number(d->convolutionResult.available));
-	writer->writeAttribute("valid", QString::number(d->convolutionResult.valid));
-	writer->writeAttribute("status", d->convolutionResult.status);
-	writer->writeAttribute("time", QString::number(d->convolutionResult.elapsedTime));
+	writer->writeStartElement(QStringLiteral("convolutionResult"));
+	writer->writeAttribute(QStringLiteral("available"), QString::number(d->convolutionResult.available));
+	writer->writeAttribute(QStringLiteral("valid"), QString::number(d->convolutionResult.valid));
+	writer->writeAttribute(QStringLiteral("status"), d->convolutionResult.status);
+	writer->writeAttribute(QStringLiteral("time"), QString::number(d->convolutionResult.elapsedTime));
 
 	// save calculated columns if available
 	if (saveCalculations() && d->xColumn) {
@@ -321,16 +321,16 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "xyConvolutionCurve")
+		if (reader->isEndElement() && reader->name() == QLatin1String("xyConvolutionCurve"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "xyAnalysisCurve") {
+		if (reader->name() == QLatin1String("xyAnalysisCurve")) {
 			if (!XYAnalysisCurve::load(reader, preview))
 				return false;
-		} else if (!preview && reader->name() == "convolutionData") {
+		} else if (!preview && reader->name() == QLatin1String("convolutionData")) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("samplingInterval", convolutionData.samplingInterval);
 			READ_INT_VALUE("kernel", convolutionData.kernel, nsl_conv_kernel_type);
@@ -343,21 +343,21 @@ bool XYConvolutionCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("method", convolutionData.method, nsl_conv_method_type);
 			READ_INT_VALUE("normalize", convolutionData.normalize, nsl_conv_norm_type);
 			READ_INT_VALUE("wrap", convolutionData.wrap, nsl_conv_wrap_type);
-		} else if (!preview && reader->name() == "convolutionResult") {
+		} else if (!preview && reader->name() == QLatin1String("convolutionResult")) {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", convolutionResult.available, int);
 			READ_INT_VALUE("valid", convolutionResult.valid, int);
 			READ_STRING_VALUE("status", convolutionResult.status);
 			READ_INT_VALUE("time", convolutionResult.elapsedTime, int);
-		} else if (!preview && reader->name() == "column") {
+		} else if (!preview && reader->name() == QLatin1String("column")) {
 			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
 			}
-			if (column->name() == "x")
+			if (column->name() == QLatin1String("x"))
 				d->xColumn = column;
-			else if (column->name() == "y")
+			else if (column->name() == QLatin1String("y"))
 				d->yColumn = column;
 		}
 	}
