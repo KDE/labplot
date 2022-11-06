@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
-    <height>1083</height>
+    <width>385</width>
+    <height>826</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -20,7 +20,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <property name="sizePolicy">
@@ -40,6 +40,7 @@
         <widget class="QLabel" name="lPlotRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -49,6 +50,7 @@
         <widget class="QLabel" name="lYRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -137,6 +139,7 @@
         <widget class="QLabel" name="lXRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -431,13 +434,6 @@
          </item>
         </layout>
        </item>
-       <item row="23" column="0" colspan="2">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="lComment">
          <property name="text">
@@ -536,6 +532,13 @@
          </property>
         </spacer>
        </item>
+       <item row="23" column="0" colspan="3">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle">
@@ -582,6 +585,7 @@
         <widget class="QLabel" name="lGeometry">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -610,6 +614,7 @@
         <widget class="QLabel" name="lPadding">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -725,6 +730,12 @@
        </item>
        <item row="1" column="2">
         <widget class="NumberSpinBox" name="sbLeft">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -973,6 +984,7 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1066,6 +1078,7 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1196,6 +1209,7 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1208,6 +1222,7 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1439,6 +1454,7 @@
         <widget class="QLabel" name="label_9">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1475,7 +1491,7 @@
   <customwidget>
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>src/commonfrontend/widgets/NumberSpinBox.h</header>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

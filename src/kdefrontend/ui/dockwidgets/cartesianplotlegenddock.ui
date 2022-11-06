@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>621</width>
-    <height>971</height>
+    <width>419</width>
+    <height>845</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -365,7 +365,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -381,7 +381,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -394,7 +394,7 @@
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -407,7 +407,7 @@
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -423,7 +423,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -586,7 +586,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -602,7 +602,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -674,7 +674,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -690,7 +690,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -720,7 +720,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -766,13 +766,19 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
        </item>
        <item row="1" column="3">
         <widget class="NumberSpinBox" name="sbLayoutTopMargin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="toolTip">
           <string/>
          </property>
@@ -782,7 +788,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -818,7 +824,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>

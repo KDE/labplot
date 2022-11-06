@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>652</width>
-    <height>1362</height>
+    <width>387</width>
+    <height>1142</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -417,6 +417,7 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -533,6 +534,7 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -568,6 +570,7 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -876,6 +879,7 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1233,6 +1237,7 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1291,7 +1296,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
+        <widget class="KFontRequester" name="kfrLabelsFont"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1416,6 +1421,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1428,6 +1434,7 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1520,6 +1527,7 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1627,6 +1635,7 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1655,6 +1664,7 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1687,21 +1697,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>NumberSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>src/commonfrontend/widgets/NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ResizableTextEdit</class>
-   <extends>QTextEdit</extends>
-   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -1712,9 +1707,24 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

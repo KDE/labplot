@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -196,7 +196,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -212,7 +212,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -372,7 +372,14 @@
         </widget>
        </item>
        <item row="0" column="3">
-        <widget class="QComboBox" name="cbLayout"/>
+        <widget class="QComboBox" name="cbLayout">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="13" column="3">
         <widget class="QSpinBox" name="sbLayoutRowCount">
@@ -466,7 +473,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -482,7 +489,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -498,7 +505,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -514,7 +521,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -530,7 +537,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -546,7 +553,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>

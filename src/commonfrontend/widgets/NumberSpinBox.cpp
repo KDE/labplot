@@ -116,12 +116,12 @@ void NumberSpinBox::decreaseValue() {
  */
 bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const {
 	p.fractionPos = v_str.indexOf(locale().decimalPoint());
-	p.exponentPos = v_str.indexOf('e', p.fractionPos > 0 ? p.fractionPos : 0, Qt::CaseInsensitive);
+	p.exponentPos = v_str.indexOf(QLatin1Char('e'), p.fractionPos > 0 ? p.fractionPos : 0, Qt::CaseInsensitive);
 	const auto number_length = v_str.length();
 
 	bool ok;
 
-	if (v_str.at(0) == '+' || v_str.at(0) == '-')
+	if (v_str.at(0) == QLatin1Char('+') || v_str.at(0) == QLatin1Char('-'))
 		p.integerSign = v_str.at(0);
 
 	p.fraction = false;
@@ -134,7 +134,7 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 			return false;
 		p.intergerDigits = integer_str.length();
 
-		QString fraction_str = "";
+		QString fraction_str;
 		if (number_length - 1 > p.fractionPos) {
 			int end = number_length;
 			if (p.exponentPos > 0)
@@ -158,7 +158,7 @@ bool NumberSpinBox::properties(const QString& v_str, NumberProperties& p) const 
 
 	if (p.exponentPos > 0) {
 		bool ok;
-		if (v_str.at(p.exponentPos + 1) == '+' || v_str.at(p.exponentPos + 1) == '-')
+		if (v_str.at(p.exponentPos + 1) == QLatin1Char('+') || v_str.at(p.exponentPos + 1) == QLatin1Char('-'))
 			p.exponentSign = v_str.at(p.exponentPos + 1);
 		const QString& e = v_str.mid(p.exponentPos + 1 + !p.exponentSign.isNull(), number_length - (p.exponentPos + 1 + !p.exponentSign.isNull()));
 		p.exponentDigits = e.length();
@@ -186,19 +186,19 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 		if (p.fractionDigits == 0)
 			number.append(locale().decimalPoint());
 	} else {
-		number = QString("%1").arg(int(integerFraction));
+		number = QLatin1String("%1").arg(int(integerFraction));
 	}
 
 	if (p.exponentLetter != QChar::Null) {
-		const auto e = QString("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == '-'), 10, QLatin1Char('0'));
+		const auto e = QLatin1String("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == QLatin1Char('-')), 10, QLatin1Char('0'));
 		QString sign;
 		if (exponent >= 0 && !p.exponentSign.isNull())
-			sign = "+";
+			sign = QLatin1Char('+');
 		number += p.exponentLetter + sign + e;
 	}
 
-	if (p.integerSign == '+')
-		number.prepend('+');
+	if (p.integerSign == QLatin1Char('+'))
+		number.prepend(QLatin1Char('+'));
 
 	return number;
 }
@@ -279,7 +279,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
 
-	const auto& l = v_str.split('e', nullptr, Qt::CaseInsensitive);
+	const auto& l = v_str.split(QLatin1Char('e'), nullptr, Qt::CaseInsensitive);
 
 	double integerFraction = locale().toDouble(l.at(0));
 	int exponent = 0;
