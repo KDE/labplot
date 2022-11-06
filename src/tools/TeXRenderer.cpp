@@ -366,13 +366,13 @@ bool TeXRenderer::enabled() {
 		}
 
 #if defined(_WIN64)
-		if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QStringLiteral("/gs")).exists()
-			&& !QDir(qgetenv("PROGRAMFILES(X86)") + QStringLiteral("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin64c")) && !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("/gs")).exists()
+			&& !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES(X86)")) + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (64bit) does not exist");
 			return false;
 		}
 #elif defined(HAVE_WINDOWS)
-		if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QStringLiteral("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin32c")) && !QDir(QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (32bit) does not exist");
 			return false;
 		}
