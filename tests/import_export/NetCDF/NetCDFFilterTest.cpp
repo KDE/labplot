@@ -129,7 +129,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -138,7 +138,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 
 	// define parameter
 	int status, ncid;
-	if ((status = nc_create(benchDataFileName.toLatin1(), NC_NETCDF4, &ncid)))
+	if ((status = nc_create(qPrintable(benchDataFileName), NC_NETCDF4, &ncid)))
 		ERR(status);
 
 	int xdimid, ydimid;

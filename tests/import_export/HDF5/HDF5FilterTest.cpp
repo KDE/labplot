@@ -280,7 +280,7 @@ void HDF5FilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -289,7 +289,7 @@ void HDF5FilterTest::benchDoubleImport_data() {
 
 	// create file
 	// see https://support.hdfgroup.org/HDF5/Tutor/introductory.html
-	hid_t file_id = H5Fcreate(benchDataFileName.toLatin1(), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+	hid_t file_id = H5Fcreate(qPrintable(benchDataFileName), H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
 	/* Create the data space for the dataset. */
 	hsize_t dims[2];

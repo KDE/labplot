@@ -98,7 +98,7 @@ void FITSFilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -109,7 +109,7 @@ void FITSFilterTest::benchDoubleImport_data() {
 	int status = 0;
 
 	fitsfile* fptr;
-	fits_create_file(&fptr, benchDataFileName.toLatin1(), &status);
+	fits_create_file(&fptr, qPrintable(benchDataFileName), &status);
 
 	long naxis = 2;
 	long naxes[2] = {paths, lines};

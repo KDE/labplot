@@ -61,7 +61,7 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 }
 
 bool OriginProjectParser::hasUnusedObjects() {
-	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
+	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
@@ -160,7 +160,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 
 	// read and parse the m_originFile-file
-	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
+	m_originFile = new OriginFile(qPrintable(m_projectFileName));
 	if (!m_originFile->parse()) {
 		delete m_originFile;
 		m_originFile = nullptr;
@@ -188,7 +188,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	} else { // for older versions put all windows on rootfolder
 		DEBUG(Q_FUNC_INFO << ", no project tree");
 		int pos = m_projectFileName.lastIndexOf(QLatin1Char('/')) + 1;
-		project->setName(QLatin1String((const char*)m_projectFileName.mid(pos).toLocal8Bit()));
+		project->setName(m_projectFileName.mid(pos));
 	}
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);

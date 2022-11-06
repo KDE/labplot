@@ -1122,7 +1122,7 @@ void AsciiFilterTest::benchDoubleImport_data() {
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();

@@ -361,7 +361,7 @@ void BinaryFilterTest::benchDoubleImport_data() {
 	QDataStream out(&file);
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	const double delta = 0.25;
