@@ -279,7 +279,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 #if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
+	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QStringLiteral("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
@@ -366,13 +366,13 @@ bool TeXRenderer::enabled() {
 		}
 
 #if defined(_WIN64)
-		if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()
-			&& !QDir(qgetenv("PROGRAMFILES(X86)") + QString("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin64c")) && !QDir(qgetenv("PROGRAMFILES") + QStringLiteral("/gs")).exists()
+			&& !QDir(qgetenv("PROGRAMFILES(X86)") + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (64bit) does not exist");
 			return false;
 		}
 #elif defined(HAVE_WINDOWS)
-		if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QString("/gs")).exists()) {
+		if (!executableExists(QLatin1String("gswin32c")) && !QDir(qgetenv("PROGRAMFILES") + QStringLiteral("/gs")).exists()) {
 			WARN("ghostscript (32bit) does not exist");
 			return false;
 		}
