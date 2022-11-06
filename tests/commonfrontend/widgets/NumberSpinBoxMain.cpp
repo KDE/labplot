@@ -21,7 +21,7 @@ public:
 
 		{
 			QHBoxLayout* h = new QHBoxLayout();
-			auto* lb = new QLabel("Prefix:", this);
+			auto* lb = new QLabel(QStringLiteral("Prefix:"), this);
 			auto* le = new QLineEdit(this);
 			h->addWidget(lb);
 			h->addWidget(le);
@@ -32,7 +32,7 @@ public:
 
 		{
 			QHBoxLayout* h = new QHBoxLayout();
-			auto* lb = new QLabel("Suffix:", this);
+			auto* lb = new QLabel(QStringLiteral("Suffix:"), this);
 			auto* le = new QLineEdit(this);
 			h->addWidget(lb);
 			h->addWidget(le);
@@ -43,7 +43,7 @@ public:
 
 		{
 			QHBoxLayout* h = new QHBoxLayout();
-			auto* lb = new QLabel("Min:", this);
+			auto* lb = new QLabel(QStringLiteral("Min:"), this);
 			auto* sb = new QSpinBox(this);
 			sb->setMinimum(-1e6);
 			sb->setMaximum(1e6);
@@ -60,7 +60,7 @@ public:
 
 		{
 			QHBoxLayout* h = new QHBoxLayout();
-			auto* lb = new QLabel("Max:", this);
+			auto* lb = new QLabel(QStringLiteral("Max:"), this);
 			auto* sb = new QSpinBox(this);
 			sb->setMinimum(-1e6);
 			sb->setMaximum(1e6);
