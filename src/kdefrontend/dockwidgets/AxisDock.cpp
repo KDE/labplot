@@ -75,21 +75,21 @@ AxisDock::AxisDock(QWidget* parent)
 	//"Ticks"-tab
 	// major ticks
 	gridLayout = static_cast<QGridLayout*>(ui.tabTicks->layout());
+	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
+	gridLayout->addWidget(dtsbMajorTicksIncrement, 5, 3);
+
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	gridLayout->addWidget(cbMajorTicksColumn, 9, 3);
 
 	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbLabelsTextColumn, 9, 3);
-
-	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
-	gridLayout->addWidget(dtsbMajorTicksIncrement, 5, 3);
+	gridLayout->addWidget(cbLabelsTextColumn, 11, 3);
 
 	// minor ticks
-	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
-	gridLayout->addWidget(cbMinorTicksColumn, 25, 3);
-
 	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
 	gridLayout->addWidget(dtsbMinorTicksIncrement, 24, 3);
+
+	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
+	gridLayout->addWidget(cbMinorTicksColumn, 25, 3);
 
 	// "Grid"-tab
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
