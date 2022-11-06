@@ -279,7 +279,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 #if defined(HAVE_WINDOWS)
 	// need to set path to magick coder modules (which are in the labplot2 directory)
 	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QStringLiteral("\\labplot2")));
+	env.insert(QStringLiteral("MAGICK_CODER_MODULE_PATH"), QString::fromLocal8Bit(qgetenv("PROGRAMFILES")) + QStringLiteral("\\labplot2"));
 	convertProcess.setProcessEnvironment(env);
 #endif
 	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
