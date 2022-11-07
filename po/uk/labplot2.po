@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-04 12:57+0200\n"
+"PO-Revision-Date: 2022-11-06 10:04+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -9414,25 +9414,22 @@ msgstr "Поділити на МР"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-Середнє)/СВ"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Медіана"
+msgstr "(x-Медіана)/МАВ"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Медіана"
+msgstr "(x-Медіана)/МР"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Interval [a, b]:"
+#, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Інтервал [a, b]:"
+msgstr "Перемасштабувати до [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format

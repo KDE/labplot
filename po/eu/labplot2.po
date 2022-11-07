@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-05 12:51+0100\n"
+"PO-Revision-Date: 2022-11-06 09:10+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -686,12 +686,12 @@ msgstr "ezarri zenbakizko formatua '%1'-era"
 #: src/backend/core/datatypes/Double2StringFilter.cpp:101
 #, kde-format
 msgid "%1: set decimal digits to %2"
-msgstr "%1: ezarri digitu hamartarrak %2-ra"
+msgstr "%1: ezarri digitu hamartarrak %2(e)ra"
 
 #: src/backend/core/datatypes/Double2StringFilter.cpp:103
 #, kde-format
 msgid "set decimal digits to %1"
-msgstr "ezarri digitu hamartarrak %1-era"
+msgstr "ezarri digitu hamartarrak %1(e)ra"
 
 #: src/backend/core/Folder.cpp:350
 #, kde-format
@@ -7018,9 +7018,9 @@ msgstr "Marraztu"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:327
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:126
-#, fuzzy, kde-format
+#, kde-format
 msgid "Box Plot"
-msgstr "Marraztu"
+msgstr "Kutxa-diagrama"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:357
 #, kde-format
@@ -9211,63 +9211,63 @@ msgid "&Sort Spreadsheet"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Search"
 msgstr "&Bilatu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:296
-#, fuzzy, kde-format
+#, kde-format
 msgid "Statisti&cs..."
-msgstr "Estatistikak"
+msgstr "Estatisti&kak"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Column Left"
 msgstr "Txertatu zutabea ezkerrean"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert Column Right"
 msgstr "Txertatu zutabea eskuinean"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:301
 #, kde-format
 msgid "Insert Multiple Columns Left"
-msgstr ""
+msgstr "Txertatu hainbat zutabe ezkerrean"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:302
 #, kde-format
 msgid "Insert Multiple Columns Right"
-msgstr ""
+msgstr "Txertatu hainbat zutabe eskuinean"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:303
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Columns"
 msgstr "Kendu zutabeak"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:305
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:1581
-#, fuzzy, kde-format
+#, kde-format
 msgid "Freeze Column"
-msgstr "Kendu zutabeak"
+msgstr "Izoztu zutabeak"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add"
 msgstr "Gehitu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:341
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subtract"
 msgstr "Kendu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:343
-#, fuzzy, kde-format
+#, kde-format
 msgid "Multiply"
 msgstr "Biderkatu"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:345
-#, fuzzy, kde-format
+#, kde-format
 msgid "Divide"
 msgstr "Zatitu"
 
@@ -11824,6 +11824,7 @@ msgstr ""
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
 msgstr ""
+"Kutxa-diagramaren barneko hesien barrutia kontrolatzen duen parametroa."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:79
 #, kde-format
@@ -12016,7 +12017,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:32
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:67
 #: src/kdefrontend/widgets/ValueWidget.cpp:41
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decimal"
 msgstr "Hamartarra"
 
@@ -12026,7 +12027,7 @@ msgstr "Hamartarra"
 #: src/kdefrontend/widgets/ValueWidget.cpp:42
 #, kde-format
 msgid "Scientific (e)"
-msgstr ""
+msgstr "Zientifiko (e)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:44
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:34
@@ -12034,31 +12035,31 @@ msgstr ""
 #: src/kdefrontend/widgets/ValueWidget.cpp:43
 #, kde-format
 msgid "Scientific (E)"
-msgstr ""
+msgstr "Zientifikoa (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:45
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:70
 #: src/kdefrontend/widgets/ValueWidget.cpp:44
 #, kde-format
 msgid "Automatic (e)"
-msgstr ""
+msgstr "Automatikoa (e)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:46
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:71
 #: src/kdefrontend/widgets/ValueWidget.cpp:45
 #, kde-format
 msgid "Automatic (E)"
-msgstr ""
+msgstr "Automatikoa (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:322
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add a new value label"
-msgstr "Erantsi aldagai berria"
+msgstr "Gehitu balio-etiketa berri bat"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove the selected value label"
-msgstr "Ezabatu hautatutako objektua"
+msgstr "Kendu hautatutako balio-etiketa"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
 #, kde-format
@@ -12066,20 +12067,20 @@ msgid "Modify multiple values labels in a batch mode"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Collapse all curves"
-msgstr "Tolestu guztiak"
+msgstr "Tolestu kurba guztiak"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "Expand all curves"
-msgstr "Zabaldu guztiak"
+msgstr "Zabaldu kurba guztiak"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:154
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1267
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1273
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1279
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy Selection"
 msgstr "Kopiatu hautapena"
 
@@ -12087,7 +12088,7 @@ msgstr "Kopiatu hautapena"
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1268
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1274
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copy All"
 msgstr "Kopiatu guztia"
 
@@ -12104,15 +12105,15 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:163
 #, kde-format
 msgid "By Number"
-msgstr ""
+msgstr "Zenbakiaren arabera"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:164
 #, kde-format
 msgid "By Width"
-msgstr ""
+msgstr "Zabaleraren arabera"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgid "Square-root"
 msgstr "Erro karratua"
 
@@ -12139,12 +12140,12 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
 #, kde-format
 msgid "Ordinary Histogram"
-msgstr ""
+msgstr "Histograma arrunta"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:173
 #, kde-format
 msgid "Cumulative Histogram"
-msgstr ""
+msgstr "Histograma metatua"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:181
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:59
@@ -12154,7 +12155,7 @@ msgid "Count"
 msgstr "Zenbatu"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "Probability"
 msgstr "Probabilitatea"
 
@@ -12166,7 +12167,7 @@ msgstr "Dentsitatea"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
 #, kde-format
 msgid "Probability Density"
-msgstr ""
+msgstr "Probabilitate dentsitatea"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:187
 #, fuzzy, kde-format
@@ -12176,7 +12177,7 @@ msgstr "Errorerik ez"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr ""
+msgstr "Poisson bariantza, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
 #, kde-format
@@ -12191,9 +12192,9 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:558
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1027
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1085
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data, +-:"
-msgstr "Datuak"
+msgstr "Datuak, +-:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
@@ -12204,9 +12205,9 @@ msgstr "Datuak"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:407
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:659
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:666
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data, +:"
-msgstr "Datuak"
+msgstr "Datuak, +:"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:83
 #: src/kdefrontend/widgets/LabelWidget.cpp:172
@@ -12262,18 +12263,18 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:108
 #, kde-format
 msgid "Continue reading"
-msgstr ""
+msgstr "Jarraitu irakurtzen"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:111
 #, kde-format
 msgid "Pause reading"
-msgstr ""
+msgstr "Eten irakurketa"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:281
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:534
 #, kde-format
 msgid "Continue Reading"
-msgstr ""
+msgstr "Jarraitu irakurtzen"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:284
@@ -12281,7 +12282,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:320
 #, kde-format
 msgid "Pause Reading"
-msgstr ""
+msgstr "Eten irakurketa"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:677
 #, kde-format
@@ -12296,17 +12297,17 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
 msgid "Automatic (g)"
-msgstr ""
+msgstr "Automatikoa (g)"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:36
 #, kde-format
 msgid "Automatic (G)"
-msgstr ""
+msgstr "Automatikoa (G)"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:320
 #, kde-format
 msgid "%1 matrices: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 matrizeak: \"%2\" txantiloia zamatuta"
 
 #: src/kdefrontend/dockwidgets/ProjectDock.cpp:31
 #, kde-format
@@ -12320,7 +12321,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:180
 #, kde-format
 msgid "%1 spreadsheets: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 kalkulu-orriak: \"%2\" txantiloia zamatuta"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:43
 #, kde-format
@@ -12330,29 +12331,29 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "Portrait"
-msgstr "Bertikala"
+msgstr "Erretratua"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:273
-#, fuzzy, kde-format
+#, kde-format
 msgid "Landscape"
-msgstr "Horizontala"
+msgstr "Paisaia"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:291
 #, kde-format
 msgid "View Size"
-msgstr ""
+msgstr "Ikuspegiaren neurria"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgid "Standard Page"
-msgstr "Desbideratze estandarra"
+msgstr "Orri estandarra"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:639
 #, kde-format
 msgid "%1 worksheets: template \"%2\" loaded"
-msgstr ""
+msgstr "%1 lan-orria: \"%2\" txantiloia zamatuta"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:59
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:62
@@ -12365,7 +12366,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:55
 #, kde-format
 msgid "XY-Curve"
-msgstr ""
+msgstr "XY-kurba"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:274
@@ -12411,9 +12412,9 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:467
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:680
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:573
-#, fuzzy, kde-format
+#, kde-format
 msgid "status: %1"
-msgstr "Egoera"
+msgstr "egoera: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:554
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:452
@@ -12427,7 +12428,7 @@ msgstr "Egoera"
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:582
 #, kde-format
 msgid "calculation time: %1 s"
-msgstr ""
+msgstr "kalkulu-denbora: %1 s"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:556
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:454
@@ -12441,7 +12442,7 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:584
 #, kde-format
 msgid "calculation time: %1 ms"
-msgstr ""
+msgstr "kalkulu-denbora: %1 ms"
 
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:403
 #, kde-format
@@ -12469,14 +12470,14 @@ msgid "Vert. Midpoint"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "2-segments"
-msgstr "Segmentuak"
+msgstr "2-segmentu"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:229
-#, fuzzy, kde-format
+#, kde-format
 msgid "3-segments"
-msgstr "Segmentuak"
+msgstr "3-segmentu"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:230
 #, kde-format
@@ -12985,10 +12986,10 @@ msgid "Bar Plot"
 msgstr "Marraztu"
 
 #: src/kdefrontend/GuiObserver.cpp:351
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Box Plot"
-msgstr "Marraztu"
+msgstr "Kutxa-diagrama"
 
 #: src/kdefrontend/GuiObserver.cpp:356
 #, fuzzy, kde-format
@@ -13182,145 +13183,145 @@ msgid "Crossing Diag. Lines"
 msgstr ""
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "White"
 msgstr "Zuria"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Black"
 msgstr "Beltza"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Red"
 msgstr "Gorri iluna"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Red"
 msgstr "Gorria"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Red"
 msgstr "Gorri argia"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Green"
 msgstr "Berde iluna"
 
 #: src/kdefrontend/GuiTools.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "Green"
 msgstr "Berdea"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Green"
 msgstr "Berde argia"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Blue"
 msgstr "Urdin iluna"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blue"
 msgstr "Urdina"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Blue"
 msgstr "Urdin argia"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Yellow"
 msgstr "Hori iluna"
 
 #: src/kdefrontend/GuiTools.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yellow"
 msgstr "Horia"
 
 #: src/kdefrontend/GuiTools.cpp:178
 #, kde-format
 msgid "Light Yellow"
-msgstr ""
+msgstr "Hori argia"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Cyan"
 msgstr "Zian iluna"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cyan"
 msgstr "Zian"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Cyan"
 msgstr "Zian argia"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Dark Magenta"
 msgstr "Magenta iluna"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magenta"
 msgstr "Magenta"
 
 #: src/kdefrontend/GuiTools.cpp:179
-#, fuzzy, kde-format
+#, kde-format
 msgid "Light Magenta"
 msgstr "Magenta argia"
 
 #: src/kdefrontend/GuiTools.cpp:179
 #, kde-format
 msgid "Dark Orange"
-msgstr ""
+msgstr "Laranja iluna"
 
 #: src/kdefrontend/GuiTools.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Orange"
 msgstr "Laranja"
 
 #: src/kdefrontend/GuiTools.cpp:180
 #, kde-format
 msgid "Light Orange"
-msgstr ""
+msgstr "Laranja argia"
 
 #: src/kdefrontend/GuiTools.cpp:180
 #, kde-format
 msgid "Dark Grey"
-msgstr ""
+msgstr "Gris iluna"
 
 #: src/kdefrontend/GuiTools.cpp:180
-#, fuzzy, kde-format
+#, kde-format
 msgid "Grey"
 msgstr "Grisa"
 
 #: src/kdefrontend/GuiTools.cpp:180
 #, kde-format
 msgid "Light Grey"
-msgstr ""
+msgstr "Gris argia"
 
 #: src/kdefrontend/GuiTools.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Image File"
 msgstr "Ireki Irudi Fitxategia"
 
 #: src/kdefrontend/GuiTools.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Images (%1)"
-msgstr "Irudiak"
+msgstr "Irudiak (%1)"
 
 #: src/kdefrontend/HistoryDialog.cpp:38
 #, kde-format
@@ -13328,15 +13329,17 @@ msgid ""
 "List of all performed steps/actions.\n"
 "Select an item in the list to navigate to the corresponding step."
 msgstr ""
+"Egindako urrats/ekintza guztien zerrenda.\n"
+"Hautatu zerrendako elementu bat, dagokion urratsera nabigatzeko."
 
 #: src/kdefrontend/HistoryDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Undo/Redo History"
-msgstr ""
+msgstr "Desegin/berregin historia"
 
 #: src/kdefrontend/HistoryDialog.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Clear"
 msgstr "&Garbitu"
 
@@ -13346,14 +13349,16 @@ msgid ""
 "Clears the undo history. Commands are not undone or redone; the state of the "
 "project remains unchanged."
 msgstr ""
+"Desegiteko historia garbitzen du. Komandoak ez dira desegiten ez berregiten; "
+"proiektuaren egoera aldaketarik gabe gelditzen da."
 
 #: src/kdefrontend/HistoryDialog.cpp:89
 #, kde-format
 msgid "Do you really want to clear the undo history?"
-msgstr ""
+msgstr "Historia benetan garbitu nahi duzu?"
 
 #: src/kdefrontend/HistoryDialog.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clear History"
 msgstr "Garbitu historia"
 
@@ -13363,146 +13368,145 @@ msgid "Release build "
 msgstr ""
 
 #: src/kdefrontend/LabPlot.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Debug build "
 msgstr "Arazteko eraikina"
 
 #: src/kdefrontend/LabPlot.cpp:47 src/kdefrontend/LabPlot.cpp:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decimal point "
-msgstr "Hamartar-bereizlea"
+msgstr "Puntu hamartarra"
 
 #: src/kdefrontend/LabPlot.cpp:48 src/kdefrontend/LabPlot.cpp:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Group separator "
-msgstr "Konexioa"
+msgstr "Talde-bereizlea"
 
 #: src/kdefrontend/LabPlot.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Exponential "
-msgstr "Esponentziala:"
+msgstr "Esponentziala"
 
 #: src/kdefrontend/LabPlot.cpp:54
 #, kde-format
 msgid "Zero digit "
-msgstr ""
+msgstr "Zero digitua "
 
 #: src/kdefrontend/LabPlot.cpp:55
-#, fuzzy, kde-format
+#, kde-format
 msgid "Percent "
 msgstr "Ehunekoa"
 
 #: src/kdefrontend/LabPlot.cpp:56
 #, kde-format
 msgid "Positive/Negative sign "
-msgstr ""
+msgstr "Zeinu positiboa/negatiboa"
 
 #: src/kdefrontend/LabPlot.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "System: "
-msgstr "Sistema"
+msgstr "Sistema: "
 
 #: src/kdefrontend/LabPlot.cpp:72
-#, fuzzy, kde-format
+#, kde-format
 msgid "Locale: "
-msgstr "Tokikoak"
+msgstr "Tokikoak: "
 
 #: src/kdefrontend/LabPlot.cpp:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Number settings:"
-msgstr "Lerro kopurua:"
+msgstr "Zenbaki ezarpenak:"
 
 #: src/kdefrontend/LabPlot.cpp:73
-#, fuzzy, kde-format
-#| msgid "Update Spreadsheet"
+#, kde-format
 msgid "Updated on restart"
-msgstr "Eguneratu kalkulu-orria"
+msgstr "Berrabiarazten eguneratua"
 
 #: src/kdefrontend/LabPlot.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Architecture: "
-msgstr "Arkitektura:"
+msgstr "Arkitektura: "
 
 #: src/kdefrontend/LabPlot.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Kernel: "
-msgstr "Nukleoa"
+msgstr "Muina: "
 
 #: src/kdefrontend/LabPlot.cpp:75
 #, kde-format
 msgid "C++ Compiler: "
-msgstr ""
+msgstr "C++ konpilatzailea: "
 
 #: src/kdefrontend/LabPlot.cpp:76
 #, kde-format
 msgid "C++ Compiler Flags: "
-msgstr ""
+msgstr "C++ konpilatzailearen banderak: "
 
 #: src/kdefrontend/LabPlot.cpp:91
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "LabPlot is a FREE, open-source and cross-platform Data Visualization and "
 "Analysis software accessible to everyone."
 msgstr ""
-"LabPlot is a FREE, open source and cross-platform Data Visualization and "
-"Analysis software accessible to everyone."
+"LabPlot, datuak irudikatzeko eta analizatzeko software ASKE, sorburu "
+"irekikoa eta plataforma-anitzeko bat da, guztiontzako erabilgarri dagoena."
 
 #: src/kdefrontend/LabPlot.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "(c) 2007-2022"
-msgstr "C"
+msgstr "(c) 2007-2022"
 
 #: src/kdefrontend/LabPlot.cpp:96
 #, kde-format
 msgid "Stefan Gerlach"
-msgstr ""
+msgstr "Stefan Gerlach"
 
 #: src/kdefrontend/LabPlot.cpp:96 src/kdefrontend/LabPlot.cpp:97
 #: src/kdefrontend/LabPlot.cpp:98 src/kdefrontend/LabPlot.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:credit"
 msgid "Developer"
 msgstr "Garatzailea"
 
 #: src/kdefrontend/LabPlot.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alexander Semke"
 msgstr "Alexander Semke"
 
 #: src/kdefrontend/LabPlot.cpp:98
 #, kde-format
 msgid "Fábián Kristóf-Szabolcs"
-msgstr ""
+msgstr "Fábián Kristóf-Szabolcs"
 
 #: src/kdefrontend/LabPlot.cpp:99
 #, kde-format
 msgid "Martin Marmsoler"
-msgstr ""
+msgstr "Martin Marmsoler"
 
 #: src/kdefrontend/LabPlot.cpp:100
 #, kde-format
 msgid "Dariusz Laska"
-msgstr ""
+msgstr "Dariusz Laska"
 
 #: src/kdefrontend/LabPlot.cpp:101
 #, kde-format
 msgctxt "@info:credit"
 msgid "Conceptual work, documentation, example projects"
-msgstr ""
+msgstr "Kontzeptu-lana, dokumentazioa, adibide-proiektuak"
 
 #: src/kdefrontend/LabPlot.cpp:104
 #, kde-format
 msgid "Andreas Kainz"
-msgstr ""
+msgstr "Andreas Kainz"
 
 #: src/kdefrontend/LabPlot.cpp:104
 #, kde-format
 msgctxt "@info:credit"
 msgid "Icon designer"
-msgstr ""
+msgstr "Ikono-diseinatzailea"
 
 #: src/kdefrontend/LabPlot.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Yuri Chornoivan"
 msgstr "Yuri Chornoivan"
 
@@ -13513,43 +13517,45 @@ msgid ""
 "Help on many questions about the KDE-infrastructure and translation related "
 "topics"
 msgstr ""
+"KDEren azpiegiturarekin eta itzulpenarekin lotutako gaiei buruzko galdera "
+"askotan laguntza"
 
 #: src/kdefrontend/LabPlot.cpp:109
 #, kde-format
 msgid "Garvit Khatri"
-msgstr ""
+msgstr "Garvit Khatri"
 
 #: src/kdefrontend/LabPlot.cpp:110
 #, kde-format
 msgctxt "@info:credit"
 msgid "Porting LabPlot2 to KF5 and Integration with Cantor"
-msgstr ""
+msgstr "LabPlot2 KF5erako eratorpena eta Cantor-rekin bateratzea"
 
 #: src/kdefrontend/LabPlot.cpp:113
 #, kde-format
 msgid "Christoph Roick"
-msgstr ""
+msgstr "Christoph Roick"
 
 #: src/kdefrontend/LabPlot.cpp:114
 #, kde-format
 msgctxt "@info:credit"
 msgid "Support import of ROOT (CERN) TH1 histograms"
-msgstr ""
+msgstr "ROOT (CERN) TH1 histogramak inportatzeko euskarria"
 
 #: src/kdefrontend/LabPlot.cpp:125
 #, kde-format
 msgid "Disable splash screen"
-msgstr ""
+msgstr "Plast-pantaila ezgaitzea"
 
 #: src/kdefrontend/LabPlot.cpp:128
 #, kde-format
 msgid "Start in the presenter mode"
-msgstr ""
+msgstr "Aurkezle moduan hastea"
 
 #: src/kdefrontend/LabPlot.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open a project file."
-msgstr "Ireki proiektua"
+msgstr "Ireki proiektu-fitxategi bat."
 
 #: src/kdefrontend/LabPlot.cpp:150
 #, kde-format
@@ -13557,114 +13563,116 @@ msgid ""
 "Could not open file '%1'. Click 'Continue' to proceed starting or 'Cancel' "
 "to exit the application."
 msgstr ""
+"Ezin izan du '%1' fitxategia ireki. Egin klik 'Jarraitu' botoian abioarekin "
+"jarraitzeko edo 'Utzi' botoian aplikaziotik irteteko."
 
 #: src/kdefrontend/LabPlot.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to Open"
-msgstr "Huts egin du %1 irekitzean: %2"
+msgstr "Irekitzea huts egin du"
 
 #. i18n: ectx: ToolBar (worksheet_toolbar)
 #: src/kdefrontend/labplot2ui.rc:20 src/kdefrontend/MainWin.cpp:542
 #: src/kdefrontend/MainWin.cpp:1890 src/kdefrontend/SettingsDialog.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Worksheet"
-msgstr "&Lan-orria"
+msgstr "Lan-orria"
 
 #. i18n: ectx: ToolBar (datapicker_toolbar)
 #: src/kdefrontend/labplot2ui.rc:24 src/kdefrontend/MainWin.cpp:525
 #: src/kdefrontend/MainWin.cpp:1846
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Extractor"
-msgstr "&Datu-formatua"
+msgstr "Datu-erauzlea"
 
 #. i18n: ectx: ToolBar (notebook_toolbar)
 #: src/kdefrontend/labplot2ui.rc:32 src/kdefrontend/SettingsDialog.cpp:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "Notebook"
-msgstr "koadernoa"
+msgstr "Koadernoa"
 
 #. i18n: ectx: ToolBar (cartesian_plot_toolbar)
 #: src/kdefrontend/labplot2ui.rc:36
 #, kde-format
 msgid "CartesianPlot"
-msgstr ""
+msgstr "Diagrama kartesiarra"
 
 #. i18n: ectx: Menu (file)
 #: src/kdefrontend/labplot2ui.rc:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "&File"
 msgstr "&Fitxategia"
 
 #. i18n: ectx: Menu (new)
 #: src/kdefrontend/labplot2ui.rc:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Add New"
-msgstr "Gehitu berria..."
+msgstr "&Gehitu berria"
 
 #. i18n: ectx: Menu (new_notebook)
 #. i18n: ectx: Menu (notebook)
 #: src/kdefrontend/labplot2ui.rc:55 src/kdefrontend/labplot2ui.rc:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Notebook"
-msgstr "koadernoa"
+msgstr "Koader&noa"
 
 #. i18n: ectx: Menu (edit)
 #: src/kdefrontend/labplot2ui.rc:71
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edit"
 msgstr "&Editatu"
 
 #. i18n: ectx: Menu (spreadsheet)
 #: src/kdefrontend/labplot2ui.rc:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Spreadsheet"
-msgstr "Kalkulu-orria"
+msgstr "&Kalkulu-orria"
 
 #. i18n: ectx: Menu (matrix)
 #: src/kdefrontend/labplot2ui.rc:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Matrix"
-msgstr "Matrizea"
+msgstr "&Matrizea"
 
 #. i18n: ectx: Menu (worksheet)
 #: src/kdefrontend/labplot2ui.rc:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Worksheet"
 msgstr "&Lan-orria"
 
 #. i18n: ectx: Menu (analysis)
 #: src/kdefrontend/labplot2ui.rc:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Analysis"
-msgstr "Analisia"
+msgstr "&Analisia"
 
 #. i18n: ectx: Menu (datapicker)
 #: src/kdefrontend/labplot2ui.rc:81
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Data Extractor"
-msgstr "&Datu-formatua"
+msgstr "&Datu-erauzlea"
 
 #. i18n: ectx: Menu (drawing)
 #: src/kdefrontend/labplot2ui.rc:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Drawing"
-msgstr "Marraztea"
+msgstr "&Marrazkia"
 
 #. i18n: ectx: Menu (script)
 #: src/kdefrontend/labplot2ui.rc:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Script"
-msgstr "Scripta"
+msgstr "&Gidoia"
 
 #. i18n: ectx: Menu (tools)
 #: src/kdefrontend/labplot2ui.rc:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Tools"
 msgstr "&Tresnak"
 
 #. i18n: ectx: Menu (windows)
 #: src/kdefrontend/labplot2ui.rc:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Windows"
 msgstr "&Leihoak"
 
@@ -13674,327 +13682,332 @@ msgid ""
 "No worksheets are available in the project. The presenter mode will not be "
 "started."
 msgstr ""
+"Proiektuan ez dago lan-orri erabilgarririk. Aurkezle modua ez da hasiko."
 
 #: src/kdefrontend/MainWin.cpp:217
 #, kde-format
 msgctxt "%1 is the LabPlot version"
 msgid "Welcome to LabPlot %1"
-msgstr ""
+msgstr "Ongietorri LabPlot %1(e)ra"
 
 #: src/kdefrontend/MainWin.cpp:273
 #, kde-format
 msgid "GUI configuration file not found"
-msgstr ""
+msgstr "GUI konfigurazio-fitxategia ez da aurkitu"
 
 #: src/kdefrontend/MainWin.cpp:274
 #, kde-format
 msgid "%1 file was not found. Please check your installation."
-msgstr ""
+msgstr "Ez du %1 fitxategia aurkitu. Mesedez, egiaztatu zure instalazioa."
 
 #: src/kdefrontend/MainWin.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Open Example"
 msgstr "&Ireki adibidea"
 
 #: src/kdefrontend/MainWin.cpp:520 src/kdefrontend/MainWin.cpp:1838
 #, kde-format
 msgid "Workbook"
-msgstr ""
+msgstr "Laneko liburua"
 
 #: src/kdefrontend/MainWin.cpp:522
 #, kde-format
 msgid "Creates a new workbook for collection spreadsheets, matrices and plots"
 msgstr ""
+"Laneko liburu berri bat sortzen du bildumako kalkulu-orri, matrize eta "
+"diagrametarako"
 
 #: src/kdefrontend/MainWin.cpp:526
 #, kde-format
 msgid "Creates a data extractor for getting data from a picture"
-msgstr ""
+msgstr "Datu-erauzle bat sortzen du, irudi batetik datuak lortzeko"
 
 #: src/kdefrontend/MainWin.cpp:532
 #, kde-format
 msgid "Creates a new spreadsheet for data editing"
-msgstr ""
+msgstr "Kalkulu-orri berri bat sortzen du, datuak editatzeko"
 
 #: src/kdefrontend/MainWin.cpp:538
 #, kde-format
 msgid "Creates a new matrix for data editing"
-msgstr ""
+msgstr "Matrize berri bat sortzen du, datuak editatzeko"
 
 #: src/kdefrontend/MainWin.cpp:544
 #, kde-format
 msgid "Creates a new worksheet for data plotting"
-msgstr ""
+msgstr "Lan-orri berri bat sortzen du, datuak trazatzeko"
 
 #: src/kdefrontend/MainWin.cpp:548 src/kdefrontend/MainWin.cpp:1898
-#, fuzzy, kde-format
+#, kde-format
 msgid "Note"
 msgstr "Oharra"
 
 #: src/kdefrontend/MainWin.cpp:549
 #, kde-format
 msgid "Creates a new note for arbitrary text"
-msgstr ""
+msgstr "Testu arbitrariorako ohar berri bat sortzen du"
 
 #. i18n("Note/Script"),this);
 #. actionCollection()->addAction(QLatin1String("new_script"), m_newScriptAction);
 #. connect(m_newScriptAction, &QAction::triggered,SLOT(newScript()));
 #: src/kdefrontend/MainWin.cpp:557 src/kdefrontend/MainWin.cpp:1830
-#, fuzzy, kde-format
+#, kde-format
 msgid "Folder"
 msgstr "Karpeta"
 
 #: src/kdefrontend/MainWin.cpp:558
 #, kde-format
 msgid "Creates a new folder to collect sheets and other elements"
-msgstr ""
+msgstr "Sortu karpeta berri bat orriak eta beste elementu batzuk biltzeko"
 
 #: src/kdefrontend/MainWin.cpp:563
-#, fuzzy, kde-format
+#, kde-format
 msgid "Live Data Source..."
-msgstr "Datu-iturburua"
+msgstr "Zuzeneko datu-sorburua..."
 
 #: src/kdefrontend/MainWin.cpp:564
 #, kde-format
 msgid "Creates a live data source to read data from a real time device"
 msgstr ""
+"Zuzeneko datu-sorburu bat sortzen du, denbora errealeko gailu batetik datuak "
+"irakurtzeko"
 
 #: src/kdefrontend/MainWin.cpp:571 src/kdefrontend/MainWin.cpp:580
 #, kde-format
 msgid "Import data from a regular file"
-msgstr ""
+msgstr "Inportatu datuak fitxategi arrunt batetik"
 
 #: src/kdefrontend/MainWin.cpp:586
 #, kde-format
 msgid "Import data from a SQL database"
-msgstr ""
+msgstr "Inportatu datuak SQL datu-base batetik"
 
 #: src/kdefrontend/MainWin.cpp:590
-#, fuzzy, kde-format
+#, kde-format
 msgid "From Dataset Collection..."
-msgstr "&Ezabatu konexioa"
+msgstr "Datu-multzo bildumatik..."
 
 #: src/kdefrontend/MainWin.cpp:591
-#, fuzzy, kde-format
-#| msgid "From SQL Database"
+#, kde-format
 msgid "Imports data from an online dataset"
-msgstr "SQL datu-basetik"
+msgstr "Datuak inportatzen ditu lerroko datu-multzo batetik"
 
 #: src/kdefrontend/MainWin.cpp:595
-#, fuzzy, kde-format
+#, kde-format
 msgid "LabPlot Project..."
-msgstr "Gorde emaitza"
+msgstr "LabPlot proiektua..."
 
 #: src/kdefrontend/MainWin.cpp:596
 #, kde-format
 msgid "Import a project from a LabPlot project file (.lml)"
-msgstr ""
+msgstr "Inportatu proiektu bat LabPlot proiektu-fitxategi batetik (.lml)"
 
 #: src/kdefrontend/MainWin.cpp:601
-#, fuzzy, kde-format
+#, kde-format
 msgid "Origin Project (OPJ)..."
-msgstr "Ireki proiektua"
+msgstr "«Origin» proiektua (OPJ)..."
 
 #: src/kdefrontend/MainWin.cpp:602
 #, kde-format
 msgid "Import a project from an OriginLab Origin project file (.opj)"
 msgstr ""
+"Inportatu proiektu bat «OriginLab» «Origin» proiektu-fitxategi batetik (.opj)"
 
 #: src/kdefrontend/MainWin.cpp:607
-#, fuzzy, kde-format
-#| msgid "Export"
+#, kde-format
 msgid "Export..."
 msgstr "Esportatu..."
 
 #: src/kdefrontend/MainWin.cpp:608
 #, kde-format
 msgid "Export selected element"
-msgstr ""
+msgstr "Esportatu hautatutako elementuak"
 
 #: src/kdefrontend/MainWin.cpp:614
 #, kde-format
 msgid "Color Maps Browser"
-msgstr ""
+msgstr "Kolore-mapa arakatzailea"
 
 #: src/kdefrontend/MainWin.cpp:615
 #, kde-format
 msgid "Open dialog to browse through the available color maps."
 msgstr ""
+"Ireki elkarrizketa-koadroa erabilgarri dauden kolore-mapen artean arakatzeko."
 
 #: src/kdefrontend/MainWin.cpp:624
 #, kde-format
 msgid "FITS Metadata Editor..."
-msgstr ""
+msgstr "FITS meta-datu editorea..."
 
 #: src/kdefrontend/MainWin.cpp:625
 #, kde-format
 msgid "Open editor to edit FITS meta data"
-msgstr ""
+msgstr "Ireki editorea FITS meta-datuak editatzeko"
 
 #: src/kdefrontend/MainWin.cpp:634
 #, kde-format
 msgid "Undo/Redo History..."
-msgstr ""
+msgstr "Desegin/berregin historia..."
 
 #: src/kdefrontend/MainWin.cpp:652
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Close"
 msgstr "It&xi"
 
 #: src/kdefrontend/MainWin.cpp:654
 #, kde-format
 msgid "Close the active window"
-msgstr ""
+msgstr "Itxi leiho aktiboa"
 
 #: src/kdefrontend/MainWin.cpp:657
-#, fuzzy, kde-format
+#, kde-format
 msgid "Close &All"
-msgstr "Itxi guztiak"
+msgstr "Itxi guzti&ak"
 
 #: src/kdefrontend/MainWin.cpp:658
 #, kde-format
 msgid "Close all the windows"
-msgstr ""
+msgstr "Itxi leiho guztiak"
 
 #: src/kdefrontend/MainWin.cpp:661
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Tile"
-msgstr "&Lauza"
+msgstr "&Teilakatu"
 
 #: src/kdefrontend/MainWin.cpp:662
 #, kde-format
 msgid "Tile the windows"
-msgstr ""
+msgstr "Leihoak teilakatu"
 
 #: src/kdefrontend/MainWin.cpp:665
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Cascade"
-msgstr "Turrustan"
+msgstr "T&urrustan"
 
 #: src/kdefrontend/MainWin.cpp:666
 #, kde-format
 msgid "Cascade the windows"
-msgstr ""
+msgstr "Leihoak turrustan ipini"
 
 #: src/kdefrontend/MainWin.cpp:669
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ne&xt"
 msgstr "&Hurrengoa"
 
 #: src/kdefrontend/MainWin.cpp:671
 #, kde-format
 msgid "Move the focus to the next window"
-msgstr ""
+msgstr "Eraman fokua hurrengo leihora"
 
 #: src/kdefrontend/MainWin.cpp:674
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pre&vious"
-msgstr "Aurrekoa"
+msgstr "Aurre&koa"
 
 #: src/kdefrontend/MainWin.cpp:676
 #, kde-format
 msgid "Move the focus to the previous window"
-msgstr ""
+msgstr "Eraman fokua aurreko leihora"
 
 #: src/kdefrontend/MainWin.cpp:683
 #, kde-format
 msgid "Current &Folder Only"
-msgstr ""
+msgstr "Uneko &karpeta bakarrik"
 
 #: src/kdefrontend/MainWin.cpp:688
 #, kde-format
 msgid "Current Folder and &Subfolders"
-msgstr ""
+msgstr "Uneko karpeta eta a&zpikarpetak"
 
 #: src/kdefrontend/MainWin.cpp:692
-#, fuzzy, kde-format
+#, kde-format
 msgid "&All"
-msgstr "Guztiak"
+msgstr "Guzti&ak"
 
 #: src/kdefrontend/MainWin.cpp:714
 #, kde-format
 msgid "Show Memory Usage"
-msgstr ""
+msgstr "Erakutsi memoria-erabilera"
 
 #: src/kdefrontend/MainWin.cpp:722
 #, kde-format
 msgid "Project Explorer"
-msgstr ""
+msgstr "Proiektu esploratzailea"
 
 #: src/kdefrontend/MainWin.cpp:727
 #, kde-format
 msgid "Properties Explorer"
-msgstr ""
+msgstr "Propietateen esploratzailea"
 
 #: src/kdefrontend/MainWin.cpp:790
 #, kde-format
 msgid "Window Visibility"
-msgstr ""
+msgstr "Leihoaren ikusgaitasuna"
 
 #: src/kdefrontend/MainWin.cpp:814
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color Scheme"
-msgstr "Kolore antolaera:"
+msgstr "Kolore-antolaera"
 
 #: src/kdefrontend/MainWin.cpp:861
 #, kde-format
 msgid "Configure CAS..."
-msgstr ""
+msgstr "Konfiguratu CAS..."
 
 #: src/kdefrontend/MainWin.cpp:896
 #, kde-format
 msgid "The current project %1 has been modified. Do you want to save it?"
-msgstr ""
+msgstr "Uneko %1 proiektua aldatu egin da. Gorde nahi duzu?"
 
 #: src/kdefrontend/MainWin.cpp:897
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Project"
-msgstr "Gorde emaitza"
+msgstr "Gorde proiektua"
 
 #: src/kdefrontend/MainWin.cpp:1273
 #, kde-format
 msgctxt "@title:window"
 msgid "Project Explorer"
-msgstr ""
+msgstr "Proiektu esploratzailea"
 
 #: src/kdefrontend/MainWin.cpp:1332
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: created"
-msgstr "Sortua"
+msgstr "%1: sortuta"
 
 #: src/kdefrontend/MainWin.cpp:1352
 #, kde-format
 msgid "Cantor Projects (*.cws)"
-msgstr ""
+msgstr "«Cantor» proiektuak (*.cws)"
 
 #: src/kdefrontend/MainWin.cpp:1353
 #, kde-format
 msgid "Jupyter Notebooks (*.ipynb)"
-msgstr ""
+msgstr "«Jupyter» koadernoak (*.ipynb)"
 
 #: src/kdefrontend/MainWin.cpp:1360
-#, fuzzy, kde-format
+#, kde-format
 msgid "All supported files (%1)"
 msgstr "Onartutako fitxategi guztiak (%1)"
 
 #: src/kdefrontend/MainWin.cpp:1364
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Open Project"
-msgstr "Proiektua ireki"
+msgstr "Ireki proiektua"
 
 #: src/kdefrontend/MainWin.cpp:1381
 #, kde-format
 msgid "The project file %1 is already opened."
-msgstr ""
+msgstr "%1 proiektu-fitxategia dagoeneko irekita dago."
 
 #: src/kdefrontend/MainWin.cpp:1381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Open Project"
-msgstr "Proiektua ireki"
+msgstr "Ireki proiektua"
 
 #: src/kdefrontend/MainWin.cpp:1394
-#, fuzzy, kde-format
+#, kde-format
 msgid "Loading %1..."
 msgstr "%1 zamatzen..."
 
@@ -14003,38 +14016,38 @@ msgstr "%1 zamatzen..."
 #: src/kdefrontend/MainWin.cpp:1462 src/kdefrontend/MainWin.cpp:1509
 #: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
 #: src/kdefrontend/MainWin.cpp:1525
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open project"
-msgstr "Huts egin du %1 irekitzean: %2"
+msgstr "Proiektua irekitzea huts egin du"
 
 #: src/kdefrontend/MainWin.cpp:1444 src/kdefrontend/MainWin.cpp:1453
 #: src/kdefrontend/MainWin.cpp:1458 src/kdefrontend/MainWin.cpp:1509
 #: src/kdefrontend/MainWin.cpp:1514 src/kdefrontend/MainWin.cpp:1519
 #, kde-format
 msgid "Failed to process the content of the file '%1'."
-msgstr ""
+msgstr "'%1' fitxategiko edukia prozesatzea huts egin du."
 
 #: src/kdefrontend/MainWin.cpp:1448 src/kdefrontend/MainWin.cpp:1462
 #: src/kdefrontend/MainWin.cpp:1525
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open the file '%1'."
-msgstr "Ezin da '%1' fitxategia irakurtzeko ireki."
+msgstr "'%1' fitxategia irekitzea huts egin du."
 
 #: src/kdefrontend/MainWin.cpp:1539
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1: opened"
-msgstr "Irekita"
+msgstr "%1: irekita"
 
 #: src/kdefrontend/MainWin.cpp:1548
 #, kde-format
 msgid "Project successfully opened (in %1 seconds)."
-msgstr ""
+msgstr "Proiektua ondo ireki da (%1 segundotan)."
 
 #: src/kdefrontend/MainWin.cpp:1642
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Save Project As"
-msgstr "Gorde emaitza"
+msgstr "Gorde proiektua honela"
 
 #: src/kdefrontend/MainWin.cpp:1644
 #, kde-format
@@ -14042,11 +14055,13 @@ msgid ""
 "LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 "
 "*.LML.XZ)"
 msgstr ""
+"LabPlot proiektuak (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML."
+"BZ2 *.LML.XZ)"
 
 #: src/kdefrontend/MainWin.cpp:1670
-#, fuzzy, kde-format
+#, kde-format
 msgid "Couldn't open the temporary file for writing."
-msgstr "Ezin da '%1' fitxategia irakurtzeko ireki."
+msgstr "Ezin izan du aldi baterako fitxategia idazteko ireki."
 
 #: src/kdefrontend/MainWin.cpp:1722
 #, kde-format
@@ -14368,7 +14383,7 @@ msgstr "Erakutsi proiektuaren izena"
 #: src/kdefrontend/SettingsGeneralPage.cpp:174
 #, kde-format
 msgid "Sub-window View"
-msgstr ""
+msgstr "Azpi-leiho ikuspegia"
 
 #: src/kdefrontend/SettingsGeneralPage.cpp:175
 #, kde-format
@@ -14489,125 +14504,125 @@ msgstr "Ez du Ghostscript aurkitu. LaTeX tipografia-ezarpena ezin da egin."
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:42
 #, kde-format
 msgid "Add the specified value to column values"
-msgstr ""
+msgstr "Gehitu zehaztutako balioa zutabeko balioetara"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:45
 #, kde-format
 msgid "Subtract the specified value from column values"
-msgstr ""
+msgstr "Kendu zehaztutako balioa zutabeko balioetatik"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:48
 #, kde-format
 msgid "Multiply column values by the specified value"
-msgstr ""
+msgstr "Biderkatu zutabeko balioak zehaztutako balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:51
 #, kde-format
 msgid "Divide column values by the specified value"
-msgstr ""
+msgstr "Zatitu zutabeko balioak zehaztutako balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:66
 #, kde-format
 msgid "Add the specified value to matrix values"
-msgstr ""
+msgstr "Gehitu zehaztutako balioa matrizeko balioetara"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:69
 #, kde-format
 msgid "Subtract the specified value from matrix values"
-msgstr ""
+msgstr "Kendu zehaztutako balioa matrizeko balioetatik"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:72
 #, kde-format
 msgid "Multiply matrix values by the specified value"
-msgstr ""
+msgstr "Biderkatu matrizeko balioak zehaztutako balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:75
 #, kde-format
 msgid "Divide matrix values by the specified value"
-msgstr ""
+msgstr "Zatitu matrizeko balioak zehaztutako balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value"
-msgstr ""
+msgstr "Gehitu balioa"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:85
 #, kde-format
 msgctxt "@title:window"
 msgid "Subtract Value"
-msgstr ""
+msgstr "Kendu balioa"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:88
 #, kde-format
 msgctxt "@title:window"
 msgid "Multiply by Value"
-msgstr ""
+msgstr "Biderkatu balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:91
 #, kde-format
 msgctxt "@title:window"
 msgid "Divide by Value"
-msgstr ""
+msgstr "Zatitu balioarekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:104
 #: src/kdefrontend/widgets/FITSHeaderEditAddUnitDialog.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Add"
 msgstr "&Gehitu"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Subtract"
-msgstr "Kendu"
+msgstr "&Kendu"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Multiply"
-msgstr "Biderkatu"
+msgstr "&Biderkatu"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:113
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Divide"
-msgstr "Zatitu"
+msgstr "&Zatitu"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:242
 #, kde-format
 msgid "%1: add %2 to column values"
-msgstr ""
+msgstr "%1: gehitu %2 zutabeko balioetara"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:245
 #, kde-format
 msgid "%1: subtract %2 from column values"
-msgstr ""
+msgstr "%1: kendu %2 zutabeko balioetatik"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:248
 #, kde-format
 msgid "%1: multiply column values by %2"
-msgstr ""
+msgstr "%1: biderkatu zutabeko balioak %2(r)ekin"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:251
 #, kde-format
 msgid "%1: divide column values by %2"
-msgstr ""
+msgstr "%1: zatitu zutabeko balioak %2(r)ekin"
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:36
 #, kde-format
 msgctxt "@title:window"
 msgid "Add Value Label"
-msgstr ""
+msgstr "Gehitu balio-etiketa"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:42
 #: src/kdefrontend/ui/constantswidget.ui:57
 #: src/kdefrontend/ui/datapickerimagewidget.ui:721
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Value:"
 msgstr "Balioa:"
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:82
-#, fuzzy, kde-format
+#, kde-format
 msgid "Label:"
 msgstr "Etiketa:"
 
@@ -14615,98 +14630,98 @@ msgstr "Etiketa:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Edit Value Labels"
-msgstr ""
+msgstr "Editatu balio-etiketak"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Value Labels:"
-msgstr "Etiketak"
+msgstr "Balio-Etiketak:"
 
 #: src/kdefrontend/spreadsheet/BatchEditValueLabelsDialog.cpp:144
 #, kde-format
 msgid "Provide the list of value-label pairs like in the following example:"
-msgstr ""
+msgstr "Eman balio-etiketa bikoteak ondoko adibideari jarraituz:"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Equal to"
-msgstr "%1(r)en berdina"
+msgstr "Honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not Equal to"
-msgstr "%1(r)en ezberdina"
+msgstr "Ez honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:46
 #, kde-format
 msgid "Between (Incl. End Points)"
-msgstr ""
+msgstr "Hauen artean (mugak barne),"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:47
 #, kde-format
 msgid "Between (Excl. End Points)"
-msgstr ""
+msgstr "Hauen artean (mugak kanpoan),"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Greater than"
-msgstr "hau baino handiagoa da:"
+msgstr "Handiagoa baino,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:49
 #, kde-format
 msgid "Greater than or Equal to"
-msgstr ""
+msgstr "Handiago baino edo honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Less than"
-msgstr "hau baino txikiagoa da:"
+msgstr "Txikiagoa baino,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:51
 #, kde-format
 msgid "Less than or Equal to"
-msgstr ""
+msgstr "Txikiagoa baino edo honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Equal To"
-msgstr "berdin"
+msgstr "Honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not Equal To"
-msgstr "%1(r)en ezberdina"
+msgstr "Ez honen berdina,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Starts With"
-msgstr "Hasierako ordua"
+msgstr "Honekin hasten da,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ends With"
-msgstr "honela amaitzen da"
+msgstr "Honekin bukatzen da,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Contains"
-msgstr "Hau du:"
+msgstr "Hau du,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Does Not Contain"
-msgstr "Ez dauka"
+msgstr "Ez du,"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:74
 #, kde-format
 msgid "Mask values in the specified region"
-msgstr ""
+msgstr "Maskaratu zehaztutako eskualdeko balioak"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:75
 #, kde-format
 msgctxt "@title:window"
 msgid "Mask Values"
-msgstr ""
+msgstr "Maskaratu balioak"
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:77
 #, fuzzy, kde-format
@@ -14728,10 +14743,9 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:952
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1002
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:1008
-#, fuzzy, kde-format
-#| msgid "invalid row value"
+#, kde-format
 msgid "Invalid numeric value."
-msgstr "errenkada balio baliogabea"
+msgstr "Zenbakizko balio baliogabea."
 
 #: src/kdefrontend/spreadsheet/DropValuesDialog.cpp:967
 #, kde-format
@@ -14747,15 +14761,15 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Equidistant Values"
-msgstr ""
+msgstr "Balio distantziakideak"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:42
 #, kde-format
 msgid "Generate equidistant values"
-msgstr ""
+msgstr "Sortu balio distantziakideak"
 
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Increment"
 msgstr "Gehikuntza"
 
@@ -14763,64 +14777,62 @@ msgstr "Gehikuntza"
 #, kde-format
 msgid "%1: fill column with equidistant numbers"
 msgid_plural "%1: fill columns with equidistant numbers"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: bete zutabea zenbaki distantziakideekin"
+msgstr[1] "%1: bete zutabeak zenbaki distantziakideekin"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:80
 #, kde-format
 msgid "Export Spreadsheet"
-msgstr ""
+msgstr "Esportatu kalkulu-orria"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:81
 #, kde-format
 msgid "Export Selection"
-msgstr ""
+msgstr "Esportatu hautapena"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:87
 #, kde-format
 msgid "This option determines how the convert numbers to strings."
-msgstr ""
+msgstr "Aukera honek zehazten du zenbakiak kate nola bihurtu."
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:97
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Spreadsheet"
-msgstr ""
+msgstr "Esportatu kalkulu-orria"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:198
 #, kde-format
 msgctxt "@title:window"
 msgid "Export Matrix"
-msgstr ""
+msgstr "Esportatu matrizea"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:212
 #, kde-format
 msgid "Export matrix"
-msgstr ""
+msgstr "Esportatu matrizea"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:300
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgid "The file already exists. Do you really want to overwrite it?"
-msgstr ""
-"Lehendik badago <b>%1</b> fitxategia.\n"
-"Benetan gainidatzi nahi duzu?"
+msgstr "Fitxategia lehendik ere badago. Benetan gainidatzi nahi duzu?"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:347
 #, kde-format
 msgid "Text files (*.txt *.dat *.csv)"
-msgstr ""
+msgstr "Testu fitxategiak (*.txt *.dat *.csv)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:355
 #, kde-format
 msgid "LaTeX files (*.tex)"
-msgstr ""
+msgstr "LaTeX fitxategiak (*.tex)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:358
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:170
 #, kde-format
 msgid "FITS files (*.fits *.fit *.fts)"
-msgstr ""
+msgstr "FITS fitxategiak (*.fits *.fit *.fts)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:361
 #, kde-format
@@ -14828,57 +14840,58 @@ msgid ""
 "SQLite databases files (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *.db3 *."
 "sqlite3 *.sdb3)"
 msgstr ""
+"SQLite datu-base fitxategiak (*.db *.sqlite *.sdb *.db2 *.sqlite2 *.sdb2 *."
+"db3 *.sqlite3 *.sdb3)"
 
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:365
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:276
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Export to File"
-msgstr "&Esportatu fitxategira..."
+msgstr "Esportatu fitxategira"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Flatten"
-msgstr "Berdindu"
+msgstr "&Lautu"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Flatten selected columns"
-msgstr "Zutabe kopurua"
+msgstr "Lautu hautatutako zutabeak"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Flatten Selected Columns"
-msgstr "Zutabe kopurua"
+msgstr "Lautu hautatutako zutabeak"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:55
 #, kde-format
 msgid "Add additional reference column"
-msgstr ""
+msgstr "Gehitu erreferentzia-zutabe osagarria"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:118
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove reference column"
-msgstr "Kendu zutabeak"
+msgstr "Kendu erreferentzia-zutabea"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:149
-#, fuzzy, kde-format
-#| msgid "%1: change cell values"
+#, kde-format
 msgid "%1: flatten values"
-msgstr "%1: aldatu gelaxken balioak"
+msgstr "%1: lautu balioak"
 
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:168
 #, kde-format
 msgid "Flatten of %1"
-msgstr ""
+msgstr "%1 lautzea"
 
 #. i18n: ectx: property (text), widget (QLabel, lSymbolCategory)
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:182
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:435
-#, fuzzy, kde-format
+#, kde-format
 msgid "Category"
 msgstr "Kategoria"
 
@@ -14886,15 +14899,15 @@ msgstr "Kategoria"
 #, kde-format
 msgctxt "@title:window"
 msgid "Conditional Formatting - Heatmap"
-msgstr ""
+msgstr "Baldintzazko formatua - Bero-mapa"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:44
 #, kde-format
 msgid "Format the cells according the level and color settings"
-msgstr ""
+msgstr "Formateatu gelaxkak mailaren eta kolore ezarpenen arabera"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Format"
 msgstr "&Formateatu"
 
@@ -14907,24 +14920,24 @@ msgstr "&Formateatu"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:420
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:505
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:212
-#, fuzzy, kde-format
+#, kde-format
 msgid "Background"
 msgstr "Atzeko planoa"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "Font Color"
-msgstr "Letra-tipoa eta kolorea"
+msgstr "Letra-tipoaren kolorea"
 
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:60
-#, fuzzy, kde-format
+#, kde-format
 msgid "Icon"
 msgstr "Ikonoa"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add new variable"
-msgstr "Erantsi aldagai berria"
+msgstr "Gehitu aldagai berria"
 
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:68
 #, kde-format
@@ -14949,12 +14962,12 @@ msgstr ""
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:294
 #, kde-format
 msgid "Delete variable"
-msgstr ""
+msgstr "Ezabatu aldagaia"
 
 #. i18n: ectx: property (text), widget (QLabel, lVariable)
 #: src/kdefrontend/spreadsheet/FunctionValuesDialog.cpp:320
 #: src/kdefrontend/ui/spreadsheet/functionvalueswidget.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Variable:"
 msgstr "Aldagaia:"
 
@@ -14962,186 +14975,186 @@ msgstr "Aldagaia:"
 #, kde-format
 msgid "%1: fill column with function values"
 msgid_plural "%1: fill columns with function values"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1: bete zutabea funtzioaren balioekin"
+msgstr[1] "%1: bete zutabeak funtzioaren balioekin"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:34
 #, kde-format
 msgctxt "@title:window"
 msgid "Go to Cell"
-msgstr ""
+msgstr "Joan gelaxkara"
 
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Row:"
-msgstr "Errenkada"
+msgstr "Errenkada:"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:64
 #, kde-format
 msgctxt "@title:window"
 msgid "Plot Spreadsheet Data"
-msgstr ""
+msgstr "Trazatu kalkulu-orriko datuak"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:73
 #, kde-format
 msgid "Plot the selected data"
-msgstr ""
+msgstr "Trazatu hautatutako datuak"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Plot"
-msgstr "&Marraztu"
+msgstr "&Trazatu"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:279
 #, kde-format
 msgid "Y-data"
-msgstr ""
+msgstr "Y-datuak"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Plot to"
-msgstr "Marraztu"
+msgstr "Gehitu diagrama honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:346
 #, kde-format
 msgid "Add Histogram to"
-msgstr ""
+msgstr "Gehitu histograma honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Box Plot to"
-msgstr "Marraztu"
+msgstr "Gehitu kutxa-diagrama honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Bar Plot to"
-msgstr "Marraztu"
+msgstr "Gehitu barra-diagrama honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:355
 #, kde-format
 msgid "All histograms in one plot area"
-msgstr ""
+msgstr "Histograma guztiak diagrama-eremu bakarrean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:356
 #, kde-format
 msgid "One plot area per histogram"
-msgstr ""
+msgstr "Diagrama-eremu bat histogramako"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:357
 #, kde-format
 msgid "Add Histograms to"
-msgstr ""
+msgstr "Gehitu histogramak honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:359
 #, kde-format
 msgid "All box plots in one plot area"
-msgstr ""
+msgstr "Kutxa-diagrama guztiak diagrama-eremu bakarrean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:360
 #, kde-format
 msgid "One plot area per box plot"
-msgstr ""
+msgstr "Diagrama-eremu bat kutxa-diagramako"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:361
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Box Plots to"
-msgstr "Marraztu"
+msgstr "Gehitu kutxa-diagramak honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:363
 #, kde-format
 msgid "All bar plots in one plot area"
-msgstr ""
+msgstr "Barra-diagrama guztiak diagrama-eremu bakarrean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:364
 #, kde-format
 msgid "One plot area per bar plot"
-msgstr ""
+msgstr "Diagrama-eremu bat barra-diagramako"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:365
-#, fuzzy, kde-format
+#, kde-format
 msgid "Add Bar Plots to"
-msgstr "Marraztu"
+msgstr "Gehitu barra-diagramak honi"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:399
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:410
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:437
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area - %1"
-msgstr "Grafikaren &area..."
+msgstr "Diagrama-eremua - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:406
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:432
-#, fuzzy, kde-format
+#, kde-format
 msgid "Worksheet - %1"
-msgstr "&Lan-orria"
+msgstr "Lan-orria - %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:431
 #, kde-format
 msgid "Plot data from %1"
-msgstr ""
+msgstr "Diagrama-datuak %1(e)tik"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:565
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:580
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:596
-#, fuzzy, kde-format
+#, kde-format
 msgid "Plot Area %1"
-msgstr "Grafikaren &area..."
+msgstr "Diagrama-eremua %1"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:673
 #, kde-format
 msgid "Fourier Filter of '%1'"
-msgstr ""
+msgstr "'%1'(e)ren Fourierren iragazkia"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:903
 #, kde-format
 msgid "new plot in an existing worksheet"
-msgstr ""
+msgstr "diagrama berria aurretik dagoen lan-orri batean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:904
 #, kde-format
 msgid "new plot in a new worksheet"
-msgstr ""
+msgstr "diagrama berria lan-orri berri batean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:909
 #, kde-format
 msgid "new plots in an existing worksheet"
-msgstr ""
+msgstr "diagrama berriak aurretik dagoen lan-orri batean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
 #, kde-format
 msgid "new plots in a new worksheet"
-msgstr ""
+msgstr "diagrama berriak lan-orri berri batean"
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
 #, kde-format
 msgid "No data selected to plot."
-msgstr ""
+msgstr "Ez da trazatu beharreko daturik hautatu."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
 #, kde-format
 msgid "An already existing plot has to be selected."
-msgstr ""
+msgstr "Aurretik dagoen diagrama bat hautatu behar da."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:944
 #, kde-format
 msgid "An already existing worksheet has to be selected."
-msgstr ""
+msgstr "Aurretik dagoen lan-orri bat hautatu behar da."
 
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:950
 #, kde-format
 msgid "Close the dialog and plot the data."
-msgstr ""
+msgstr "Itxi elkarrizketa-koadroa eta trazatu datuak."
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:42
 #, kde-format
 msgctxt "@title:window"
 msgid "Random Values"
-msgstr ""
+msgstr "Auzazko balioak"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:51
 #, kde-format
 msgid "Generate random values according to the selected distribution"
-msgstr ""
+msgstr "Sortu ausazko balioak hautatutako banaketaren arabera"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:88
 #, kde-format
@@ -15184,12 +15197,12 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgid "Periodic"
 msgstr "Aldizkakoa"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Random"
 msgstr "Ausazkoa"
 
@@ -15202,20 +15215,20 @@ msgid ""
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Sample"
-msgstr "Lagina:"
+msgstr "&Lagina"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:64
 #, kde-format
 msgid "Sample values in the selected spreadsheet columns"
-msgstr ""
+msgstr "kalkulu-orriko zutabeetan hautatutako lagin balioak"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Sample Values"
-msgstr "Lagin-neurria"
+msgstr "Lagin-balioak"
 
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:104
@@ -15225,26 +15238,25 @@ msgid "Period:"
 msgstr "Periodoa:"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:106
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample Size:"
-msgstr "Lagin-neurria"
+msgstr "Laginaren neurria:"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:206
-#, fuzzy, kde-format
-#| msgid "%1: change cell values"
+#, kde-format
 msgid "%1: sample values"
-msgstr "%1: aldatu gelaxken balioak"
+msgstr "%1: lagin-balioak"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:209
 #, kde-format
 msgid "Sample of %1"
-msgstr ""
+msgstr "%1(e)ren lagina"
 
 #: src/kdefrontend/spreadsheet/SortDialog.cpp:29
 #, kde-format
 msgctxt "@title:window"
 msgid "Sort Columns"
-msgstr ""
+msgstr "Sailkatu zutabeak"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:58
 #, fuzzy, kde-format
@@ -15287,14 +15299,14 @@ msgid "Unique Values"
 msgstr "Balioak"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "Overview"
 msgstr "Ikuspegi orokorra"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "KDE Plot"
-msgstr "Marraztu"
+msgstr "KDE diagrama"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:125
 #, kde-format
@@ -15302,24 +15314,24 @@ msgid "Normal Q-Q Plot"
 msgstr ""
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pareto Plot"
-msgstr "Marraztu"
+msgstr "Pareto diagrama"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgid "Frequency Table"
-msgstr "Maiztasuna"
+msgstr "Maiztasun taula"
 
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Percent"
 msgstr "Ehunekoa"
 
 #. i18n: ectx: property (text), widget (QLabel, lDensity)
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:258
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Density"
 msgstr "Dentsitatea"
 
@@ -15336,147 +15348,147 @@ msgstr "Lagin-neurria"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:637
 #, kde-format
 msgid "Cumulative Percentage"
-msgstr ""
+msgstr "Ehuneko metatua"
 
 #: src/kdefrontend/TemplateHandler.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "Load"
-msgstr "Zamatu"
+msgstr "Zama"
 
 #: src/kdefrontend/TemplateHandler.cpp:132
 #, kde-format
 msgid "Load properties from a template"
-msgstr ""
+msgstr "Zama-propietateak txantiloi batetik"
 
 #: src/kdefrontend/TemplateHandler.cpp:133
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save"
 msgstr "Gorde"
 
 #: src/kdefrontend/TemplateHandler.cpp:134
 #, kde-format
 msgid "Save current properties as a template"
-msgstr ""
+msgstr "Gorde uneko propietateak txantiloi gisa"
 
 #: src/kdefrontend/TemplateHandler.cpp:135
 #, kde-format
 msgid "Save Default"
-msgstr ""
+msgstr "Gorde lehenetsia"
 
 #: src/kdefrontend/TemplateHandler.cpp:136
 #, kde-format
 msgid "Save current properties as default"
-msgstr ""
+msgstr "Gorde uneko propietateak lehenespen gisa"
 
 #: src/kdefrontend/TemplateHandler.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toolbar Settings"
 msgstr "Tresna-barraren ezarpenak"
 
 #: src/kdefrontend/TemplateHandler.cpp:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text position"
-msgstr "Testuaren kokapena:"
+msgstr "Testuaren kokapena"
 
 #: src/kdefrontend/TemplateHandler.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "Icons only"
-msgstr "Ikonoak soilik"
+msgstr "Ikonoak bakarrik"
 
 #: src/kdefrontend/TemplateHandler.cpp:164
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text only"
-msgstr "Testua soilik"
+msgstr "Testua bakarrik"
 
 #: src/kdefrontend/TemplateHandler.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Alongside Icons"
 msgstr "Testua ikonoen alboan"
 
 #: src/kdefrontend/TemplateHandler.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgid "Text Under Icons"
 msgstr "Testua ikonoen azpian"
 
 #: src/kdefrontend/TemplateHandler.cpp:218
 #, kde-format
 msgid "Load From Template"
-msgstr ""
+msgstr "Zamatu txantiloitik"
 
 #: src/kdefrontend/TemplateHandler.cpp:238
 #, kde-format
 msgid "Template \"%1\" was loaded."
-msgstr ""
+msgstr "\"%1\" txantiloia zamatu da."
 
 #: src/kdefrontend/TemplateHandler.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save As Template"
-msgstr "Gorde honela"
+msgstr "Gorde txantiloi gisa"
 
 #: src/kdefrontend/TemplateHandler.cpp:261
-#, fuzzy, kde-format
+#, kde-format
 msgid "New:"
-msgstr "Berria"
+msgstr "Berria:"
 
 #: src/kdefrontend/TemplateHandler.cpp:289
 #, kde-format
 msgid "New template \"%1\" was saved."
-msgstr ""
+msgstr "\"%1\" txantiloi berria gorde da."
 
 #: src/kdefrontend/TemplateHandler.cpp:302
 #, kde-format
 msgid "Template \"%1\" was saved."
-msgstr ""
+msgstr "\"%1\" txantiloia gorde da."
 
 #: src/kdefrontend/TemplateHandler.cpp:312
 #, kde-format
 msgid "New default template was saved."
-msgstr ""
+msgstr "Lehenetsitako txantiloi berria gorde da."
 
 #: src/kdefrontend/ThemeHandler.cpp:141
-#, fuzzy, kde-format
+#, kde-format
 msgid "Theme '%1'"
-msgstr "Gaia"
+msgstr "'%1' gaia"
 
 #: src/kdefrontend/ThemeHandler.cpp:142
 #, kde-format
 msgid "Theme '%1' is active. Click on the button to change the theme."
-msgstr ""
+msgstr "'%1' gaia aktibo dago. Egin klik botoian gaia aldatzeko."
 
 #: src/kdefrontend/ThemeHandler.cpp:145
 #, kde-format
 msgid "No theme is active. Click on the button to select a theme."
-msgstr ""
+msgstr "Ez dago gai aktiborik. Egin klik botoian gai bat hautatzeko."
 
 #: src/kdefrontend/ThemeHandler.cpp:156
 #, kde-format
 msgid "Theme \"%1\" was loaded."
-msgstr ""
+msgstr "\"%1\" gaia zamatu da."
 
 #: src/kdefrontend/ThemeHandler.cpp:158
 #, kde-format
 msgid "Theming deactivated."
-msgstr ""
+msgstr "Gaiak ipintzea desaktibatu da."
 
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #. i18n: ectx: property (text), widget (QLabel, lCollections)
 #: src/kdefrontend/ui/colormapswidget.ui:23
 #: src/kdefrontend/ui/datasources/importdatasetwidget.ui:23
 #: src/kdefrontend/ui/exampleswidget.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Collection:"
-msgstr "Bilduma"
+msgstr "Bilduma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColormap)
 #: src/kdefrontend/ui/colormapswidget.ui:73
-#, fuzzy, kde-format
+#, kde-format
 msgid "Colormaps:"
-msgstr "Kolorea"
+msgstr "Kolore-mapak:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bInsert)
 #: src/kdefrontend/ui/constantswidget.ui:90
 #: src/kdefrontend/ui/functionswidget.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Insert"
 msgstr "Txertatu"
 
@@ -15485,7 +15497,7 @@ msgstr "Txertatu"
 #: src/kdefrontend/ui/constantswidget.ui:97
 #: src/kdefrontend/ui/fitoptionswidget.ui:37
 #: src/kdefrontend/ui/functionswidget.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cancel"
 msgstr "Utzi"
 
@@ -15500,13 +15512,13 @@ msgstr "Utzi"
 #: src/kdefrontend/ui/functionswidget.ui:17
 #, kde-format
 msgid "Enter search term here"
-msgstr ""
+msgstr "Sartu hemen bilatzeko terminoa"
 
 #. i18n: ectx: property (text), widget (QLabel, lYErrorType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:39
 #, kde-format
 msgid "Y-error type:"
-msgstr ""
+msgstr "Y-errore mota:"
 
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
@@ -15545,7 +15557,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:46
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:27
 #: src/kdefrontend/ui/labelwidget.ui:416
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comment:"
 msgstr "Iruzkina:"
 
@@ -15590,7 +15602,7 @@ msgstr "Iruzkina:"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:23
 #: src/kdefrontend/ui/labelwidget.ui:386
-#, fuzzy, kde-format
+#, kde-format
 msgid "Name:"
 msgstr "Izena:"
 
@@ -15598,17 +15610,17 @@ msgstr "Izena:"
 #: src/kdefrontend/ui/datapickercurvewidget.ui:101
 #, kde-format
 msgid "Error Type"
-msgstr ""
+msgstr "Errore mota"
 
 #. i18n: ectx: property (text), widget (QLabel, lXErrorType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:114
 #, kde-format
 msgid "X-error type:"
-msgstr ""
+msgstr "X-errore mota:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:187
-#, fuzzy, kde-format
+#, kde-format
 msgid "Symbols"
 msgstr "Ikurrak"
 
@@ -15618,7 +15630,7 @@ msgstr "Ikurrak"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:601
 #, kde-format
 msgid "Error bars"
-msgstr ""
+msgstr "Errore-barrak"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #. i18n: ectx: property (text), widget (QLabel, lFontSize)
@@ -15631,7 +15643,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:580
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:201
 #: src/kdefrontend/ui/labelwidget.ui:552 src/kdefrontend/ui/symbolwidget.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Size:"
 msgstr "Neurria:"
 
@@ -15685,9 +15697,9 @@ msgstr "Neurria:"
 #: src/kdefrontend/ui/labelwidget.ui:53 src/kdefrontend/ui/labelwidget.ui:193
 #: src/kdefrontend/ui/labelwidget.ui:373 src/kdefrontend/ui/symbolwidget.ui:88
 #: src/kdefrontend/ui/symbolwidget.ui:287
-#, fuzzy, kde-format
+#, kde-format
 msgid " pt"
-msgstr "12pt"
+msgstr " pt"
 
 #. i18n: ectx: property (text), widget (QLabel, lStyle)
 #. i18n: ectx: property (text), widget (QLabel, lFillingStyle)
@@ -15724,7 +15736,7 @@ msgstr "12pt"
 #: src/kdefrontend/ui/symbolwidget.ui:197
 #: src/kdefrontend/ui/symbolwidget.ui:253
 #: src/kdefrontend/worksheet/GridDialog.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgid "Style:"
 msgstr "Estiloa:"
 
@@ -15760,15 +15772,15 @@ msgstr "Estiloa:"
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:240
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:271
 #: src/kdefrontend/worksheet/GridDialog.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Color:"
 msgstr "Kolorea:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlot)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:78
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image:"
-msgstr "Irudia"
+msgstr "Irudia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -15806,7 +15818,7 @@ msgstr "Irudia"
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:221
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:276
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Type:"
 msgstr "Mota:"
 
@@ -15820,9 +15832,9 @@ msgstr "Mota:"
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:118
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:445
 #: src/kdefrontend/ui/labelwidget.ui:173 src/kdefrontend/ui/symbolwidget.ui:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rotation:"
-msgstr "Errotazioa:"
+msgstr "Biraketa:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
@@ -15837,13 +15849,13 @@ msgstr "Errotazioa:"
 #: src/kdefrontend/ui/labelwidget.ui:69 src/kdefrontend/ui/symbolwidget.ui:114
 #, kde-format
 msgid "°"
-msgstr ""
+msgstr "°"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:134
 #, kde-format
 msgid "1."
-msgstr ""
+msgstr "1."
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionY3)
 #. i18n: ectx: property (text), widget (QLabel, lPositionY1)
@@ -15851,9 +15863,9 @@ msgstr ""
 #: src/kdefrontend/ui/datapickerimagewidget.ui:191
 #: src/kdefrontend/ui/datapickerimagewidget.ui:253
 #: src/kdefrontend/ui/datapickerimagewidget.ui:357
-#, fuzzy, kde-format
+#, kde-format
 msgid "y="
-msgstr "Y"
+msgstr "y="
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionX2)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX1)
@@ -15861,9 +15873,9 @@ msgstr "Y"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:201
 #: src/kdefrontend/ui/datapickerimagewidget.ui:295
 #: src/kdefrontend/ui/datapickerimagewidget.ui:406
-#, fuzzy, kde-format
+#, kde-format
 msgid "x="
-msgstr "x"
+msgstr "x="
 
 #. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
 #. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
@@ -15871,31 +15883,31 @@ msgstr "x"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:211
 #: src/kdefrontend/ui/datapickerimagewidget.ui:331
 #: src/kdefrontend/ui/datapickerimagewidget.ui:396
-#, fuzzy, kde-format
+#, kde-format
 msgid "z="
-msgstr "<keyword>7z</keyword>"
+msgstr "z="
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:418
 #, kde-format
 msgid "2."
-msgstr ""
+msgstr "2."
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:425
 #, kde-format
 msgid "3."
-msgstr ""
+msgstr "3."
 
 #. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:432
 #, kde-format
 msgid "x+y+z="
-msgstr ""
+msgstr "x+y+z="
 
 #. i18n: ectx: property (text), widget (QLabel, lSegments)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Segments"
 msgstr "Segmentuak"
 
@@ -15909,7 +15921,7 @@ msgstr "Segmentuak"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:819
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:519
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:802
-#, fuzzy, kde-format
+#, kde-format
 msgid "Length:"
 msgstr "Luzera:"
 
@@ -15917,7 +15929,7 @@ msgstr "Luzera:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:467
 #: src/kdefrontend/ui/datapickerimagewidget.ui:503
-#, fuzzy, kde-format
+#, kde-format
 msgid " px"
 msgstr " px"
 
@@ -15925,45 +15937,45 @@ msgstr " px"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:474
 #, kde-format
 msgid "Point separation:"
-msgstr ""
+msgstr "Puntuen bereizketa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:563
 #, kde-format
 msgid "Reference Points"
-msgstr ""
+msgstr "Erreferentzia puntuak"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:602
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
 #, kde-format
 msgid "Specify the name of the image file."
-msgstr ""
+msgstr "Zehaztu irudi-fitxategiaren izena."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:618
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:540
 #, kde-format
 msgid " Select the image file"
-msgstr ""
+msgstr " Hautatu irudi-fitxategia"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:631
 #, kde-format
 msgid "Ref. Points Symbol"
-msgstr ""
+msgstr "Erref. puntuen ikurra"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tEdit)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:658
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Image"
-msgstr "Editatu i&rudia..."
+msgstr "Editatu irudia"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntensity)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:673
-#, fuzzy, kde-format
+#, kde-format
 msgid "Intensity:"
-msgstr "Intensitatea:"
+msgstr "Intentsitatea:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lPositionY)
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
@@ -15979,44 +15991,44 @@ msgstr "Intensitatea:"
 #: src/kdefrontend/ui/labelwidget.ui:709
 #, kde-format
 msgid "Vertical position relative to label's parent"
-msgstr ""
+msgstr "Kokapen bertikala etiketaren gurasoarekiko erlatibo"
 
 #. i18n: ectx: property (text), widget (QLabel, lHue)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:728
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hue:"
 msgstr "Ñabardura:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:748
-#, fuzzy, kde-format
+#, kde-format
 msgid "Current image:"
-msgstr "Egungo irudia"
+msgstr "Uneko irudia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:761
-#, fuzzy, kde-format
+#, kde-format
 msgid "Saturation:"
 msgstr "Asetasuna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lForeground)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:768
-#, fuzzy, kde-format
+#, kde-format
 msgid "Foreground:"
 msgstr "Lehen planoa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:52
-#, fuzzy, kde-format
+#, kde-format
 msgid "Comment Character:"
-msgstr "Iruzkina:"
+msgstr "Iruzkin-karakterea:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSkipEmptyParts)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:59
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:137
 #, kde-format
 msgid "Skip empty parts"
-msgstr ""
+msgstr "Saihestu zati hutsak"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:66
@@ -16026,12 +16038,14 @@ msgid ""
 "Removes the whitespaces from the start and the end, and replaces each "
 "sequence of internal whitespaces with a single space."
 msgstr ""
+"Hasierako eta bukaerako zuriuneak kentzen ditu, eta barneko zuriune "
+"sekuentziak zuriune bakarrarekin ordezkatzen ditu."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbSimplifyWhitespaces)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:69
 #, kde-format
 msgid "Simplify Whitespaces"
-msgstr ""
+msgstr "Sinplifikatu zuriuneak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateTimestamp)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:152
@@ -16041,9 +16055,9 @@ msgstr "Sortu ordu-zigilua"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbRemoveQuotes)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:159
-#, fuzzy, kde-format
+#, kde-format
 msgid "Remove Quotes"
-msgstr "Kendu errenkadak"
+msgstr "Kendu kakotxak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbConvertNaNToZero)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:185
@@ -16060,22 +16074,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbCreateIndex)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:212
-#, fuzzy, kde-format
-#| msgid "Created"
+#, kde-format
 msgid "Create Index"
-msgstr "Sortua"
+msgstr "Sortua indizea"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "DateTime Format:"
-msgstr "Data/Ordua"
+msgstr "Data/Ordua formatua:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDecimalSeparator)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:226
-#, fuzzy, kde-format
+#, kde-format
 msgid "Decimal Separator:"
-msgstr "Hamartarra"
+msgstr "Bereizle hamartarra:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeparatingCharacter)
 #: src/kdefrontend/ui/datasources/asciioptionswidget.ui:233
@@ -16723,7 +16736,7 @@ msgstr "Inportatu hemendik:"
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:152
 #, kde-format
 msgid "Decimal separator:"
-msgstr "Bereizle hamartarrra:"
+msgstr "Bereizle hamartarra:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbQuery)
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:137
@@ -19330,7 +19343,7 @@ msgstr "Itxi fitxategia"
 #: src/kdefrontend/ui/labelwidget.ui:370 src/kdefrontend/ui/labelwidget.ui:619
 #, kde-format
 msgid "Distance to the axis tick labels"
-msgstr ""
+msgstr "Distantzia ardatz-marketako etiketetara"
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
 #: src/kdefrontend/ui/labelwidget.ui:30
@@ -19402,19 +19415,19 @@ msgstr "QoS"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:130
 #, kde-format
 msgid "Mean deviation"
-msgstr ""
+msgstr "Batezbesteko desbideratzea"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:141
 #, kde-format
 msgid "Mean deviation around median"
-msgstr ""
+msgstr "Batezbesteko desbideratzea medianaren inguruan "
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:152
 #, kde-format
 msgid "Median deviation"
-msgstr ""
+msgstr "Medianaren desbideratzea"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:206
@@ -19480,7 +19493,7 @@ msgstr "Estatistikak"
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:286
 #, kde-format
 msgid "Last Message Received"
-msgstr ""
+msgstr "Jasotako azken mezua"
 
 #. i18n: ectx: property (text), widget (QLabel, lUseRetainMessage)
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:301
@@ -19594,7 +19607,7 @@ msgstr "Lerroaren kolorea:"
 #: src/kdefrontend/ui/plotsurfacestylewidget.ui:341
 #, kde-format
 msgid "Multicoloring"
-msgstr ""
+msgstr "Kolore-aniztasuna"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, PlotTemplateDialog)
 #: src/kdefrontend/ui/PlotTemplateDialog.ui:14
@@ -19975,7 +19988,7 @@ msgstr "Iruzkinak zutabeko unitate gisa:"
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:26
 #, kde-format
 msgid "Flatten selected columns relative to:"
-msgstr ""
+msgstr "Hautatutako zutabeak hauen arabera lautu:"
 
 #. i18n: ectx: property (text), widget (QLabel, lColors)
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:108
@@ -20198,9 +20211,9 @@ msgid "Resolution:"
 msgstr "Bereizmena:"
 
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:130
-#, fuzzy, kde-format
+#, kde-format
 msgid "Zero Baseline"
-msgstr "Oinarrizko balioa"
+msgstr "Zero oinarri-lerroa"
 
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:137
 #, kde-format
@@ -20687,52 +20700,52 @@ msgstr "Data eta ordua"
 #: src/kdefrontend/widgets/LineWidget.cpp:52
 #, kde-format
 msgid "Drop Lines"
-msgstr ""
+msgstr "Proiekzio lerroak"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "Half-Bars"
-msgstr "Barrak"
+msgstr "Barra-erdiak"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:86
 #, kde-format
 msgid "Bars with Ends"
-msgstr ""
+msgstr "Muturrak dituzten barrak"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:97
 #, kde-format
 msgid "No Drop Lines"
-msgstr ""
+msgstr "Proiekzio lerrorik gabe"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:98
 #, kde-format
 msgid "Drop Lines, X"
-msgstr ""
+msgstr "Proiekzio lerroak, X"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:99
 #, kde-format
 msgid "Drop Lines, Y"
-msgstr ""
+msgstr "Proiekzio lerroak, Y"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:100
 #, kde-format
 msgid "Drop Lines, XY"
-msgstr ""
+msgstr "Proiekzio lerroak, XY"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:101
 #, kde-format
 msgid "Drop Lines, X, Zero Baseline"
-msgstr ""
+msgstr "Proiekzio lerroak, X, Zero oinarri-lerroa"
 
 #: src/kdefrontend/widgets/LineWidget.cpp:102
 #, kde-format
 msgid "Drop Lines, X, Min Baseline"
-msgstr ""
+msgstr "Proiekzio lerroak, X, oinarri-lerro min."
 
 #: src/kdefrontend/widgets/LineWidget.cpp:103
 #, kde-format
 msgid "Drop Lines, X, Max Baseline"
-msgstr ""
+msgstr "Proiekzio lerroak, X, oinarri-lerro max."
 
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:56
 #, kde-format

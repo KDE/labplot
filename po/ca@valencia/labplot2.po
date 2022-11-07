@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-10-24 15:02+0200\n"
-"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
+"PO-Revision-Date: 2022-11-06 10:37+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -2319,16 +2319,14 @@ msgid "Standard Mathematical Functions"
 msgstr "Funcions matemàtiques estàndard"
 
 #: src/backend/gsl/ExpressionParser.cpp:41
-#, fuzzy, kde-format
-#| msgid "Column Statisti&cs"
+#, kde-format
 msgid "Column Statistics"
-msgstr "Estadístiques de les &columnes"
+msgstr "Estadístiques de les columnes"
 
 #: src/backend/gsl/ExpressionParser.cpp:42
-#, fuzzy, kde-format
-#| msgid "Row Statisti&cs"
+#, kde-format
 msgid "Moving Statistics"
-msgstr "Estadístiques de les &files"
+msgstr "Estadístiques mòbils"
 
 #: src/backend/gsl/ExpressionParser.cpp:44
 #, kde-format
@@ -2881,40 +2879,34 @@ msgid "Percentile"
 msgstr "Percentil"
 
 #: src/backend/gsl/ExpressionParser.cpp:191
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Moving Average"
-msgstr "mitjana mòbil"
+msgstr "Mitjana mòbil"
 
 #: src/backend/gsl/ExpressionParser.cpp:192
-#, fuzzy, kde-format
-#| msgid "Bin Ranges"
+#, kde-format
 msgid "Moving Range"
-msgstr "Intervals del compartiment"
+msgstr "Interval mòbil"
 
 #: src/backend/gsl/ExpressionParser.cpp:193
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Minimum"
-msgstr "mitjana mòbil"
+msgstr "Mínim mòbil simple"
 
 #: src/backend/gsl/ExpressionParser.cpp:194
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Maximum"
-msgstr "mitjana mòbil"
+msgstr "Màxim mòbil simple"
 
 #: src/backend/gsl/ExpressionParser.cpp:195
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Average"
-msgstr "mitjana mòbil"
+msgstr "Mitjana mòbil simple"
 
 #: src/backend/gsl/ExpressionParser.cpp:196
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Range"
-msgstr "mitjana mòbil"
+msgstr "Interval mòbil simple"
 
 #: src/backend/gsl/ExpressionParser.cpp:203
 #, kde-format
@@ -9449,25 +9441,22 @@ msgstr "Dividix per la IQR"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-Mitjana)/Desv. estàndard"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Mediana"
+msgstr "(x-Mediana)/MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Mediana"
+msgstr "(x-Mediana)/IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Interval [a, b]:"
+#, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Interval [a, b]:"
+msgstr "Canvia l'escala a [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
@@ -10002,7 +9991,7 @@ msgid ""
 "If activated, plots on the worksheet don't react on drag and mouse wheel "
 "events."
 msgstr ""
-"Si està activada, els diagrames del full de treball no reaccionen als "
+"Si està activada, els diagrames del full de treball no reaccionaran als "
 "esdeveniments d'arrossegar ni a la roda del ratolí."
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:270
@@ -14436,7 +14425,7 @@ msgstr "Client MQTT %1"
 #: src/kdefrontend/MainWin.cpp:2641
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr ""
+msgstr "Ja hi ha un MQTTClient amb esta màquina!"
 
 #: src/kdefrontend/MainWin.cpp:2645
 #, kde-format
@@ -19718,7 +19707,7 @@ msgstr "Tanca el fitxer"
 #: src/kdefrontend/ui/labelwidget.ui:370 src/kdefrontend/ui/labelwidget.ui:619
 #, kde-format
 msgid "Distance to the axis tick labels"
-msgstr "Distància a les etiquetes de les marques de l'eix"
+msgstr "Distància fins a les etiquetes de les marques de l'eix"
 
 #. i18n: ectx: property (text), widget (QLabel, lOffsetY)
 #: src/kdefrontend/ui/labelwidget.ui:30
@@ -21339,6 +21328,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Statistical Methods (of column)"
-#~ msgstr "Mètodes estadístics (de columna)"

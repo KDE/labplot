@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-04 09:39+0100\n"
+"PO-Revision-Date: 2022-11-06 15:50-0400\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9338,25 +9338,22 @@ msgstr "Delen door IQR"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-gemiddelde)/SD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Mediaan"
+msgstr "(x-mediaan)/MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Mediaan"
+msgstr "(x-mediaan)/IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Interval [a, b]:"
+#, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Interval [a, b]:"
+msgstr "Herschalen naar [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
