@@ -171,7 +171,7 @@ public:
 			for (int row = 0; row < rows; ++row) {
 				vars[1].value = y;
 				double z = parse_with_vars(m_func, vars, 2, qPrintable(numberLocale.name()));
-				// qDebug()<<" z ="<<z;
+				// DEBUG(" z =" << z);
 				m_matrixData[col][row] = z;
 				y += m_yStep;
 			}
@@ -241,13 +241,11 @@ void MatrixFunctionDialog::generate() {
 	double y = m_matrix->yStart();
 	parser_var vars[] = {{"x", x}, {"y", y}};
 	SET_NUMBER_LOCALE
-	const char* expr = qPrintable(ui.teEquation->toPlainText());
-	const auto& name = qPrintable(numberLocale.name());
 	for (int col = 0; col < m_matrix->columnCount(); ++col) {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(new_data->operator[](col))[row] = parse_with_vars(expr, vars, 2, name);
+			(*new_data)[col][row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()), vars, 2, qPrintable(numberLocale.name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();
