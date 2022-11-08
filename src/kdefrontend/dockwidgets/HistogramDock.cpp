@@ -131,9 +131,9 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &HistogramDock::rugEnabledChanged);
-	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugLengthChanged);
-	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugWidthChanged);
-	connect(ui.sbRugOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &HistogramDock::rugOffsetChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &HistogramDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);

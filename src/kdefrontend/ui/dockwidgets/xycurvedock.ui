@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>383</width>
-    <height>661</height>
+    <height>776</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -82,7 +82,6 @@
         <widget class="QLabel" name="lValuesGeneral_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -112,7 +111,6 @@
         <widget class="QLabel" name="lDropLines">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -125,16 +123,6 @@
         <widget class="QLabel" name="lLineIncreasingXOnly">
          <property name="text">
           <string>Monoton incr. X:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QDoubleSpinBox" name="sbLineWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -237,6 +225,25 @@
          </property>
         </widget>
        </item>
+       <item row="7" column="2">
+        <widget class="NumberSpinBox" name="sbLineWidth">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabSymbol">
@@ -296,7 +303,6 @@
         <widget class="QLabel" name="lValuesText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -330,7 +336,6 @@
         <widget class="QLabel" name="lValuesGeneral">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -340,7 +345,7 @@
         </widget>
        </item>
        <item row="16" column="2">
-        <widget class="KFontRequester" name="kfrValuesFont"/>
+        <widget class="KFontRequester" name="kfrValuesFont" native="true"/>
        </item>
        <item row="17" column="2">
         <widget class="KColorButton" name="kcbValuesColor">
@@ -446,16 +451,6 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbValuesDistance">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="14" column="0">
         <widget class="QLabel" name="lValuesPrefix">
          <property name="text">
@@ -496,7 +491,6 @@
         <widget class="QLabel" name="lValuesFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -574,6 +568,25 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="2">
+        <widget class="NumberSpinBox" name="sbValuesDistance">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabAreaFilling">
@@ -605,7 +618,6 @@
         <widget class="QLabel" name="lErrorBarY">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -714,7 +726,6 @@
         <widget class="QLabel" name="lErrorBarX">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -734,7 +745,6 @@
         <widget class="QLabel" name="lErrorFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -786,16 +796,6 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugLength">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lRugLength">
          <property name="text">
@@ -807,19 +807,6 @@
         <widget class="QLabel" name="lRugOffset">
          <property name="text">
           <string>Offset:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugOffset">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="minimum">
-          <double>-99.989999999999995</double>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -841,22 +828,11 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
           <string>Rug Plot</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -875,6 +851,51 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="3" column="2">
+        <widget class="NumberSpinBox" name="sbRugLength">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="NumberSpinBox" name="sbRugWidth">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="NumberSpinBox" name="sbRugOffset">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -897,6 +918,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

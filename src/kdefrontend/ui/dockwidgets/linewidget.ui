@@ -151,16 +151,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QDoubleSpinBox" name="sbErrorBarsCapSize">
-     <property name="suffix">
-      <string> pt</string>
-     </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="2">
     <widget class="NumberSpinBox" name="sbWidth">
      <property name="toolTip">
@@ -172,14 +162,41 @@
      <property name="suffix">
       <string> pt</string>
      </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
      <property name="feedback" stdset="0">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="NumberSpinBox" name="sbErrorBarsCapSize">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="feedback" stdset="0">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
@@ -189,11 +206,6 @@
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>NumberSpinBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

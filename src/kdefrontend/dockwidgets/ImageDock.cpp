@@ -100,15 +100,15 @@ ImageDock::ImageDock(QWidget* parent)
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::opacityChanged);
 
 	// Size
-	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::widthChanged);
-	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::heightChanged);
+	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::widthChanged);
+	connect(ui.sbHeight, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::heightChanged);
 	connect(ui.chbKeepRatio, &QCheckBox::clicked, this, &ImageDock::keepRatioChanged);
 
 	// Position
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::positionYChanged);
-	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
-	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::customPositionYChanged);
 	connect(ui.cbHorizontalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::horizontalAlignmentChanged);
 	connect(ui.cbVerticalAlignment, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::rotationChanged);
@@ -118,7 +118,7 @@ ImageDock::ImageDock(QWidget* parent)
 	// Border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &ImageDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ImageDock::borderWidthChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageDock::borderOpacityChanged);
 }
 

@@ -51,6 +51,7 @@ public:
 	bool feedback();
 	void setStrongFocus(bool);
 	double value();
+	void setClearButtonEnabled(bool);
 
 Q_SIGNALS:
 	void valueChanged(double);

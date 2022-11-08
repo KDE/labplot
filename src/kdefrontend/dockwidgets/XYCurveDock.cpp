@@ -128,14 +128,14 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.chkLineIncreasingXOnly, &QCheckBox::clicked, this, &XYCurveDock::lineIncreasingXOnlyChanged);
 	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::lineStyleChanged);
 	connect(ui.kcbLineColor, &KColorButton::changed, this, &XYCurveDock::lineColorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::lineWidthChanged);
+	connect(ui.sbLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::lineWidthChanged);
 	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::lineOpacityChanged);
 
 	// Values
 	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesTypeChanged);
 	connect(cbValuesColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCurveDock::valuesColumnChanged);
 	connect(ui.cbValuesPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesPositionChanged);
-	connect(ui.sbValuesDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::valuesDistanceChanged);
+	connect(ui.sbValuesDistance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::valuesDistanceChanged);
 	connect(ui.sbValuesRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesRotationChanged);
 	connect(ui.sbValuesOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesOpacityChanged);
 	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesNumericFormatChanged);
@@ -157,9 +157,9 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
 	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
-	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
-	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
-	connect(ui.sbRugOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugOffsetChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::rugOffsetChanged);
 
 	// template handler
 	auto* frame = new QFrame(this);

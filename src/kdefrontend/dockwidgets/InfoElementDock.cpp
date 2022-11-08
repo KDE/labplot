@@ -53,12 +53,12 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	// vertical line
 	connect(ui->cbVerticalLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::verticalLineStyleChanged);
 	connect(ui->kcbVerticalLineColor, &KColorButton::changed, this, &InfoElementDock::verticalLineColorChanged);
-	connect(ui->sbVerticalLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::verticalLineWidthChanged);
+	connect(ui->sbVerticalLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::verticalLineWidthChanged);
 	connect(ui->sbVerticalLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &InfoElementDock::verticalLineOpacityChanged);
 
 	// connection line
 	connect(ui->cbConnectionLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::connectionLineStyleChanged);
-	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
+	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
 	connect(ui->kcbConnectionLineColor, &KColorButton::changed, this, &InfoElementDock::connectionLineColorChanged);
 	connect(ui->sbConnectionLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &InfoElementDock::connectionLineOpacityChanged);
 }

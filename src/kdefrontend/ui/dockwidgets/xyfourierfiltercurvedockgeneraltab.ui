@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>882</height>
+    <width>435</width>
+    <height>915</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -279,9 +279,15 @@
    <item row="15" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QDoubleSpinBox" name="sbCutoff">
-       <property name="decimals">
-        <number>2</number>
+      <widget class="NumberSpinBox" name="sbCutoff">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
+       </property>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -307,7 +313,17 @@
    <item row="16" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QDoubleSpinBox" name="sbCutoff2"/>
+      <widget class="NumberSpinBox" name="sbCutoff2">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
+       </property>
+       <property name="feedback">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="cbUnit2"/>
@@ -420,6 +436,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

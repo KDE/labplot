@@ -80,8 +80,8 @@ private Q_SLOTS:
 	void logicalPositionChanged(double value);
 	void scaleChanged(int);
 	void rangeTypeChanged(int);
-	void startChanged();
-	void endChanged();
+	void startChanged(double);
+	void endChanged(double);
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged(double);
@@ -106,8 +106,8 @@ private Q_SLOTS:
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksStartTypeChanged(int state);
-	void majorTicksStartOffsetChanged();
-	void majorTicksStartValueChanged();
+	void majorTicksStartOffsetChanged(double);
+	void majorTicksStartValueChanged(double);
 	void setTickOffsetData(bool nice = false); // set first tick on first data point (if nice: nice value)
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);

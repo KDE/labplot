@@ -127,8 +127,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::scaleChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
-	connect(ui.leStart, &QLineEdit::textChanged, this, &AxisDock::startChanged);
-	connect(ui.leEnd, &QLineEdit::textChanged, this, &AxisDock::endChanged);
+	connect(ui.sbStart, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::startChanged);
+	connect(ui.sbEnd, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
 	connect(ui.sbZeroOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::zeroOffsetChanged);
@@ -158,8 +158,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged, this, &AxisDock::majorTicksSpacingChanged);
 	connect(ui.cbMajorTicksStartType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::majorTicksStartTypeChanged);
-	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTicksStartOffsetChanged);
-	connect(ui.leMajorTickStartValue, &KLineEdit::textChanged, this, &AxisDock::majorTicksStartValueChanged);
+	connect(ui.sbMajorTickStartOffset, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartOffsetChanged);
+	connect(ui.sbMajorTickStartValue, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &AxisDock::majorTicksStartValueChanged);
 	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
 	connect(ui.tbFirstTickAuto, &QToolButton::clicked, this, &AxisDock::setTickOffsetAuto);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged, this, &AxisDock::majorTicksColumnChanged);
@@ -228,12 +228,6 @@ AxisDock::~AxisDock() {
 
 void AxisDock::init() {
 	Lock lock(m_initializing);
-
-	// Validators
-	ui.leStart->setValidator(new QDoubleValidator(ui.leStart));
-	ui.leEnd->setValidator(new QDoubleValidator(ui.leEnd));
-	ui.leMajorTickStartOffset->setValidator(new QDoubleValidator(ui.leMajorTickStartOffset));
-	ui.leMajorTickStartValue->setValidator(new QDoubleValidator(ui.leMajorTickStartValue));
 
 	// TODO move this stuff to retranslateUI()
 	ui.cbPosition->addItem(i18n("Top")); // Left
@@ -567,8 +561,8 @@ void AxisDock::updateLocale() {
 	// update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
 	ui.sbPosition->setLocale(numberLocale);
-	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
-	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
+	ui.sbStart->setLocale(numberLocale);
+	ui.sbEnd->setLocale(numberLocale);
 
 	// scales
 	ui.cbScale->clear();
@@ -753,8 +747,8 @@ void AxisDock::scaleChanged(int index) {
 void AxisDock::rangeTypeChanged(int index) {
 	auto rangeType = static_cast<Axis::RangeType>(index);
 	bool autoScale = (rangeType != Axis::RangeType::Custom);
-	ui.leStart->setEnabled(!autoScale);
-	ui.leEnd->setEnabled(!autoScale);
+	ui.sbStart->setEnabled(!autoScale);
+	ui.sbEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
 	ui.dateTimeEditEnd->setEnabled(!autoScale);
 
@@ -767,53 +761,18 @@ void AxisDock::rangeTypeChanged(int index) {
 	updateLocale(); // update values
 }
 
-void AxisDock::startChanged() {
+void AxisDock::startChanged(double value) {
 	if (m_initializing)
 		return;
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	double value{numberLocale.toDouble(ui.leStart->text(), &ok)};
-	if (!ok)
-		return;
-
-	// check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
-	const auto scale = RangeT::Scale(ui.cbScale->currentIndex());
-	if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) {
-		if (value <= 0) {
-			KMessageBox::sorry(this,
-							   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
-							   i18n("Wrong lower limit value"));
-			// TODO: why is this a good value?
-			value = 0.01;
-			ui.leStart->setText(numberLocale.toString(value));
-		}
-	} else if (scale == RangeT::Scale::Sqrt) {
-		if (value < 0) {
-			KMessageBox::sorry(this, i18n("The axes lower limit has a negative value. Default minimal value will be used."), i18n("Wrong lower limit value"));
-			value = 0;
-			ui.leStart->setText(numberLocale.toString(value));
-		}
-	}
-
-	const Lock lock(m_initializing);
+	// No lock!
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
 
-void AxisDock::endChanged() {
+void AxisDock::endChanged(double value) {
 	if (m_initializing)
 		return;
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(ui.leEnd->text(), &ok)};
-	if (!ok)
-		return;
-
-	// TODO: also check for negative values and log-scales?
-
-	const Lock lock(m_initializing);
+	// No lock!
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -1109,39 +1068,19 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 		axis->setMajorTicksStartType(type);
 }
 
-void AxisDock::majorTicksStartOffsetChanged() {
+void AxisDock::majorTicksStartOffsetChanged(double value) {
+	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
 	if (m_initializing)
 		return;
-
-	if (ui.leMajorTickStartOffset->text().isEmpty()) // default value
-		ui.leMajorTickStartOffset->setText(QStringLiteral("0"));
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double offset = numberLocale.toDouble(ui.leMajorTickStartOffset->text(), &ok);
-	if (!ok)
-		return;
-
-	ui.leMajorTickStartOffset->setClearButtonEnabled(offset != 0);
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTickStartOffset(offset);
+		axis->setMajorTickStartOffset(value);
 }
 
-void AxisDock::majorTicksStartValueChanged() {
+void AxisDock::majorTicksStartValueChanged(double value) {
+	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
 	if (m_initializing)
 		return;
-
-	if (ui.leMajorTickStartValue->text().isEmpty()) // default value
-		ui.leMajorTickStartValue->setText(QStringLiteral("0"));
-
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double value = numberLocale.toDouble(ui.leMajorTickStartValue->text(), &ok);
-	if (!ok)
-		return;
-
-	ui.leMajorTickStartValue->setClearButtonEnabled(value != 0);
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartValue(value);
@@ -1160,8 +1099,7 @@ void AxisDock::setTickOffsetData(bool nice) {
 	DEBUG(Q_FUNC_INFO << ", data range = " << dataRange.toStdString())
 	const double offset = dataRange.start() - m_axis->range().start();
 
-	SET_NUMBER_LOCALE
-	ui.leMajorTickStartOffset->setText(numberLocale.toString(offset));
+	ui.sbMajorTickStartOffset->setValue(offset);
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {
@@ -1784,12 +1722,11 @@ void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
 }
 
 void AxisDock::axisStartChanged(double value) {
-	if (m_initializing)
-		return;
+	//	if (m_initializing)
+	//		return;
 	const Lock lock(m_initializing);
 
-	SET_NUMBER_LOCALE
-	ui.leStart->setText(numberLocale.toString(value));
+	ui.sbStart->setValue(value);
 	ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 
 	// determine stepsize and number of decimals
@@ -1802,12 +1739,11 @@ void AxisDock::axisStartChanged(double value) {
 }
 
 void AxisDock::axisEndChanged(double value) {
-	if (m_initializing)
-		return;
+	//	if (m_initializing)
+	//		return;
 	const Lock lock(m_initializing);
 
-	SET_NUMBER_LOCALE
-	ui.leEnd->setText(numberLocale.toString(value));
+	ui.sbEnd->setValue(value);
 	ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 
 	// determine stepsize and number of decimals
@@ -1889,15 +1825,13 @@ void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
 }
 void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leMajorTickStartOffset->setText(numberLocale.toString(value));
+	ui.sbMajorTickStartOffset->setValue(value);
 }
 void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leMajorTickStartValue->setText(numberLocale.toString(value));
+	ui.sbMajorTickStartValue->setValue(value);
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
 	Lock lock(m_initializing);
@@ -2067,10 +2001,10 @@ void AxisDock::updateMajorTicksStartType(bool visible) {
 	const bool absoluteValue = (ui.cbMajorTicksStartType->currentIndex() == 0);
 
 	ui.lMajorTickStartOffset->setVisible(visible && !absoluteValue);
-	ui.leMajorTickStartOffset->setVisible(visible && !absoluteValue);
+	ui.sbMajorTickStartOffset->setVisible(visible && !absoluteValue);
 	ui.tbFirstTickData->setVisible(visible && !absoluteValue);
 	ui.tbFirstTickAuto->setVisible(visible && !absoluteValue);
-	ui.leMajorTickStartValue->setVisible(visible && absoluteValue);
+	ui.sbMajorTickStartValue->setVisible(visible && absoluteValue);
 	ui.lMajorTickStartValue->setVisible(visible && absoluteValue);
 }
 
@@ -2137,8 +2071,8 @@ void AxisDock::load() {
 
 	ui.cbScale->setCurrentIndex(static_cast<int>(m_axis->scale()));
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(m_axis->rangeType()));
-	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
-	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
+	ui.sbStart->setValue(m_axis->range().start());
+	ui.sbEnd->setValue(m_axis->range().end());
 
 	// depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	bool numeric = m_axis->isNumeric();
@@ -2146,8 +2080,8 @@ void AxisDock::load() {
 	// ranges
 	ui.lStart->setVisible(numeric);
 	ui.lEnd->setVisible(numeric);
-	ui.leStart->setVisible(numeric);
-	ui.leEnd->setVisible(numeric);
+	ui.sbStart->setVisible(numeric);
+	ui.sbEnd->setVisible(numeric);
 	ui.lStartDateTime->setVisible(!numeric);
 	ui.dateTimeEditStart->setVisible(!numeric);
 	ui.lEndDateTime->setVisible(!numeric);
@@ -2200,8 +2134,8 @@ void AxisDock::load() {
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(m_axis->majorTicksStartType()));
-	ui.leMajorTickStartOffset->setText(numberLocale.toString(m_axis->majorTickStartOffset()));
-	ui.leMajorTickStartValue->setText(numberLocale.toString(m_axis->majorTickStartValue()));
+	ui.sbMajorTickStartOffset->setValue(m_axis->majorTickStartOffset());
+	ui.sbMajorTickStartValue->setValue(m_axis->majorTickStartValue());
 	ui.cbMajorTicksLineStyle->setCurrentIndex((int)m_axis->majorTicksPen().style());
 	ui.kcbMajorTicksColor->setColor(m_axis->majorTicksPen().color());
 	ui.sbMajorTicksWidth->setValue(Worksheet::convertFromSceneUnits(m_axis->majorTicksPen().widthF(), Worksheet::Unit::Point));
@@ -2291,8 +2225,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
 	ui.cbRangeType->setCurrentIndex(group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())));
-	ui.leStart->setText(numberLocale.toString(group.readEntry("Start", m_axis->range().start())));
-	ui.leEnd->setText(numberLocale.toString(group.readEntry("End", m_axis->range().end())));
+	ui.sbStart->setValue(group.readEntry("Start", m_axis->range().start()));
+	ui.sbEnd->setValue(group.readEntry("End", m_axis->range().end()));
 	ui.sbZeroOffset->setValue(group.readEntry("ZeroOffset", m_axis->zeroOffset()));
 	ui.sbScalingFactor->setValue(group.readEntry("ScalingFactor", m_axis->scalingFactor()));
 	ui.chkShowScaleOffset->setChecked(group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())));
@@ -2320,8 +2254,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	} else
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksStartType->setCurrentIndex(group.readEntry("MajorTicksStartType", (int)m_axis->majorTicksStartType()));
-	ui.leMajorTickStartOffset->setText(numberLocale.toString(group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset())));
-	ui.leMajorTickStartValue->setText(numberLocale.toString(group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue())));
+	ui.sbMajorTickStartOffset->setValue(group.readEntry("MajorTickStartOffset", m_axis->majorTickStartOffset()));
+	ui.sbMajorTickStartValue->setValue(group.readEntry("MajorTickStartValue", m_axis->majorTickStartValue()));
 	ui.cbMajorTicksLineStyle->setCurrentIndex(group.readEntry("MajorTicksLineStyle", (int)m_axis->majorTicksPen().style()));
 	ui.kcbMajorTicksColor->setColor(group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()));
 	ui.sbMajorTicksWidth->setValue(
@@ -2405,8 +2339,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
 	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
-	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
-	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
+	group.writeEntry("Start", ui.sbStart->value());
+	group.writeEntry("End", ui.sbEnd->value());
 	group.writeEntry("ZeroOffset", ui.sbZeroOffset->value());
 	group.writeEntry("ScalingFactor", ui.sbScalingFactor->value());
 	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
@@ -2428,8 +2362,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	else
 		group.writeEntry("MajorTicksIncrement", QString::number(dtsbMajorTicksIncrement->value()));
 	group.writeEntry("MajorTicksStartType", ui.cbMajorTicksStartType->currentIndex());
-	group.writeEntry("MajorTickStartOffset", numberLocale.toDouble(ui.leMajorTickStartOffset->text()));
-	group.writeEntry("MajorTickStartValue", numberLocale.toDouble(ui.leMajorTickStartValue->text()));
+	group.writeEntry("MajorTickStartOffset", ui.sbMajorTickStartOffset->value());
+	group.writeEntry("MajorTickStartValue", ui.sbMajorTickStartValue->value());
 	group.writeEntry("MajorTicksLineStyle", ui.cbMajorTicksLineStyle->currentIndex());
 	group.writeEntry("MajorTicksColor", ui.kcbMajorTicksColor->color());
 	group.writeEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(ui.sbMajorTicksWidth->value(), Worksheet::Unit::Point));

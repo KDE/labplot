@@ -107,12 +107,12 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::typeChanged);
 	connect(uiGeneralTab.cbVariant, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::variantChanged);
 	// TODO: use line edits?
-	connect(uiGeneralTab.sbTension, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::tensionChanged);
-	connect(uiGeneralTab.sbContinuity, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::continuityChanged);
-	connect(uiGeneralTab.sbBias, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::biasChanged);
+	connect(uiGeneralTab.sbTension, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYInterpolationCurveDock::tensionChanged);
+	connect(uiGeneralTab.sbContinuity, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYInterpolationCurveDock::continuityChanged);
+	connect(uiGeneralTab.sbBias, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYInterpolationCurveDock::biasChanged);
 	connect(uiGeneralTab.cbEval, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::evaluateChanged);
 	// double?
-	connect(uiGeneralTab.sbPoints, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::numberOfPointsChanged);
+    connect(uiGeneralTab.sbPoints, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::numberOfPointsChanged);
 	connect(uiGeneralTab.cbPointsMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::pointsModeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYInterpolationCurveDock::recalculateClicked);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::plotRangeChanged);

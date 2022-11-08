@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>291</width>
+    <width>537</width>
     <height>705</height>
    </rect>
   </property>
@@ -33,7 +33,6 @@
     <widget class="QLabel" name="lGeneral">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -99,16 +98,6 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QDoubleSpinBox" name="sbDistance">
-     <property name="suffix">
-      <string> pt</string>
-     </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
      </property>
     </widget>
    </item>
@@ -196,7 +185,6 @@
     <widget class="QLabel" name="lFormat">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -271,7 +259,6 @@
     <widget class="QLabel" name="lText">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -322,7 +309,7 @@
     </widget>
    </item>
    <item row="16" column="2">
-    <widget class="KFontRequester" name="kfrFont"/>
+    <widget class="KFontRequester" name="kfrFont" native="true"/>
    </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lColor">
@@ -354,6 +341,22 @@
      </property>
     </spacer>
    </item>
+   <item row="4" column="2">
+    <widget class="NumberSpinBox" name="sbDistance">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="feedback" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -371,6 +374,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

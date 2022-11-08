@@ -31,7 +31,7 @@ SymbolWidget::SymbolWidget(QWidget* parent)
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
 
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::styleChanged);
-	connect(ui.sbSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
+	connect(ui.sbSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &SymbolWidget::sizeChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::rotationChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &SymbolWidget::opacityChanged);
 
@@ -40,7 +40,7 @@ SymbolWidget::SymbolWidget(QWidget* parent)
 
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &SymbolWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &SymbolWidget::borderWidthChanged);
 }
 
 void SymbolWidget::setSymbols(const QList<Symbol*>& symbols) {

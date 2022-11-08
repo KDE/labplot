@@ -94,8 +94,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::typeChanged);
 	connect(uiGeneralTab.cbForm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::formChanged);
 	connect(uiGeneralTab.sbOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFourierFilterCurveDock::orderChanged);
-	connect(uiGeneralTab.sbCutoff, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
-	connect(uiGeneralTab.sbCutoff2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCutoff, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCutoff2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
 	connect(uiGeneralTab.cbUnit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unitChanged);
 	connect(uiGeneralTab.cbUnit2, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unit2Changed);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierFilterCurveDock::recalculateClicked);

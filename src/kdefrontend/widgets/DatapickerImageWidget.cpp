@@ -225,7 +225,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// edit image
 	connect(ui.cbPlotImageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::plotImageTypeChanged);
-	connect(ui.sbRotation, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
+	connect(ui.sbRotation, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::rotationChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, this, &DatapickerImageWidget::intensitySpanChanged);
 	connect(ssIntensity, &SpanSlider::spanChanged, gvIntensity, &HistogramView::setSpan);
 	connect(ssForeground, &SpanSlider::spanChanged, this, &DatapickerImageWidget::foregroundSpanChanged);
@@ -241,16 +241,16 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 
 	// axis point
 	connect(ui.cbGraphType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerImageWidget::graphTypeChanged);
-	connect(ui.sbTernaryScale, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
-	connect(ui.sbPositionX1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionX3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionY3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ1, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
-	connect(ui.sbPositionZ3, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbTernaryScale, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::ternaryScaleChanged);
+	connect(ui.sbPositionX1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionX3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionY3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ1, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ2, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
+	connect(ui.sbPositionZ3, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerImageWidget::logicalPositionChanged);
 
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
 }

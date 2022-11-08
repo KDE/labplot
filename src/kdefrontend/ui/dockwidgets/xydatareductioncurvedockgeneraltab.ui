@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>328</width>
-    <height>891</height>
+    <width>426</width>
+    <height>955</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -335,21 +335,21 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbTolerance">
+      <widget class="NumberSpinBox" name="sbTolerance">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
        <property name="decimals">
         <number>6</number>
        </property>
-       <property name="singleStep">
-        <double>0.010000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -387,21 +387,21 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbTolerance2">
+      <widget class="NumberSpinBox" name="sbTolerance2">
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
        <property name="decimals">
         <number>6</number>
        </property>
-       <property name="singleStep">
-        <double>0.010000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -513,6 +513,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

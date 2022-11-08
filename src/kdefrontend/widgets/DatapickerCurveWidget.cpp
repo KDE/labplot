@@ -64,7 +64,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent)
 	// error bar
 	connect(ui.cbErrorBarFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &DatapickerCurveWidget::errorBarFillingStyleChanged);
 	connect(ui.kcbErrorBarFillingColor, &KColorButton::changed, this, &DatapickerCurveWidget::errorBarFillingColorChanged);
-	connect(ui.sbErrorBarSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
+	connect(ui.sbErrorBarSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &DatapickerCurveWidget::errorBarSizeChanged);
 
 	hideErrorBarWidgets(true);
 }

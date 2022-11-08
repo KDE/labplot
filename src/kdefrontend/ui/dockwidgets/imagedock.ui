@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>379</width>
-    <height>870</height>
+    <width>445</width>
+    <height>994</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -35,6 +35,7 @@
     <widget class="QLabel" name="lBorder">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -143,6 +144,7 @@
     <widget class="QLabel" name="lSize">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -212,16 +214,6 @@
      </property>
     </widget>
    </item>
-   <item row="22" column="5">
-    <widget class="QDoubleSpinBox" name="sbBorderWidth">
-     <property name="suffix">
-      <string> pt</string>
-     </property>
-     <property name="singleStep">
-      <double>0.500000000000000</double>
-     </property>
-    </widget>
-   </item>
    <item row="16" column="5">
     <widget class="QComboBox" name="cbVerticalAlignment"/>
    </item>
@@ -244,24 +236,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbPositionX">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="NumberSpinBox" name="sbPositionX">
        <property name="toolTip">
-        <string>Horizontal position relative to label's parent</string>
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
        <property name="suffix">
         <string> cm</string>
        </property>
-       <property name="minimum">
-        <double>-99.989999999999995</double>
-       </property>
-       <property name="singleStep">
-        <double>0.500000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -349,18 +335,12 @@
     <widget class="QLabel" name="lPosition">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
      <property name="text">
       <string>Position</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="5">
-    <widget class="QDoubleSpinBox" name="sbHeight">
-     <property name="suffix">
-      <string>cm</string>
      </property>
     </widget>
    </item>
@@ -434,24 +414,18 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbPositionY">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="NumberSpinBox" name="sbPositionY">
        <property name="toolTip">
-        <string>Vertical position relative to label's parent</string>
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
        <property name="suffix">
         <string> cm</string>
        </property>
-       <property name="minimum">
-        <double>-99.989999999999995</double>
-       </property>
-       <property name="singleStep">
-        <double>0.500000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -471,13 +445,6 @@
      </property>
      <property name="text">
       <string>Position X:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="5">
-    <widget class="QDoubleSpinBox" name="sbWidth">
-     <property name="suffix">
-      <string>cm</string>
      </property>
     </widget>
    </item>
@@ -546,6 +513,63 @@
      </item>
     </layout>
    </item>
+   <item row="9" column="5">
+    <widget class="NumberSpinBox" name="sbHeight">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> cm</string>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="feedback">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="5">
+    <widget class="NumberSpinBox" name="sbWidth">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> cm</string>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="feedback">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="22" column="5">
+    <widget class="NumberSpinBox" name="sbBorderWidth">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="suffix">
+      <string> pt</string>
+     </property>
+     <property name="minimum">
+      <double>0.000000000000000</double>
+     </property>
+     <property name="feedback">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -553,6 +577,11 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

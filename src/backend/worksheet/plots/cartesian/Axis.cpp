@@ -568,14 +568,24 @@ void Axis::setRange(Range<double> range) {
 void Axis::setStart(double min) {
 	Q_D(Axis);
 	Range<double> range = d->range;
-	range.setStart(min);
-	setRange(range);
+	const auto scale = range.scale();
+	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && min <= 0)
+		  || (scale == RangeT::Scale::Sqrt && min < 0))) {
+		range.setStart(min);
+		setRange(range);
+	}
+	emit startChanged(range.start()); // feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
 	Range<double> range = d->range;
-	range.setEnd(max);
-	setRange(range);
+	const auto scale = range.scale();
+	if (!(((scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) && max <= 0)
+		  || (scale == RangeT::Scale::Sqrt && max < 0))) {
+		range.setEnd(max);
+		setRange(range);
+	}
+	emit endChanged(range.end()); // feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -597,6 +607,8 @@ void Axis::setMajorTickStartOffset(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
+	else
+		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
@@ -604,6 +616,8 @@ void Axis::setMajorTickStartValue(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartValue)
 		exec(new AxisSetMajorTickStartValueCmd(d, offset, ki18n("%1: set major tick start value")));
+	else
+		emit majorTickStartValueChanged(d->majorTickStartValue); // feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)

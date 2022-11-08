@@ -240,7 +240,7 @@ void AxisTest::majorTicksStartValue() {
 	}
 
 	xAxis->setMajorTickStartValue(0.2);
-	QCOMPARE(axisDock.ui.leMajorTickStartValue->text(), QStringLiteral("0.2"));
+	QCOMPARE(axisDock.ui.sbMajorTickStartValue->value(), 0.2);
 
 	{
 		QVector<double> expectedTickValues = {0.2, 0.4, 0.6, 0.8, 1.0}; // starting now from 0.2

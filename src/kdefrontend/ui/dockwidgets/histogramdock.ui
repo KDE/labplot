@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>857</height>
+    <height>956</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -549,30 +549,10 @@
          </property>
         </spacer>
        </item>
-       <item row="3" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lRugEnabled">
          <property name="text">
           <string>Enabled:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugLength">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
@@ -616,16 +596,57 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbRugOffset">
+       <item row="2" column="1">
+        <widget class="NumberSpinBox" name="sbRugLength">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
          <property name="suffix">
           <string> pt</string>
          </property>
          <property name="minimum">
-          <double>-99.989999999999995</double>
+          <double>0.000000000000000</double>
          </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="NumberSpinBox" name="sbRugWidth">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="NumberSpinBox" name="sbRugOffset">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="feedback">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -640,6 +661,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

@@ -61,7 +61,7 @@ ValueWidget::ValueWidget(QWidget* parent)
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::typeChanged);
 	connect(cbColumn, &TreeViewComboBox::currentModelIndexChanged, this, &ValueWidget::columnChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::positionChanged);
-	connect(ui.sbDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ValueWidget::distanceChanged);
+	connect(ui.sbDistance, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &ValueWidget::distanceChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &ValueWidget::rotationChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &ValueWidget::opacityChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ValueWidget::numericFormatChanged);

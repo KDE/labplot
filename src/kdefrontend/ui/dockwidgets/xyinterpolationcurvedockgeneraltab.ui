@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>498</width>
-    <height>1003</height>
+    <width>754</width>
+    <height>1047</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -317,18 +317,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbTension">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbTension">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>0.000000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -343,15 +340,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbContinuity">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbContinuity">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -366,15 +363,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbBias">
-       <property name="minimum">
-        <double>-1.000000000000000</double>
+      <widget class="NumberSpinBox" name="sbBias">
+       <property name="toolTip">
+        <string/>
        </property>
-       <property name="maximum">
-        <double>1.000000000000000</double>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
        </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
+       <property name="feedback">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -555,6 +552,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

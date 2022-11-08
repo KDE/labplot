@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>419</width>
-    <height>1128</height>
+    <width>471</width>
+    <height>1187</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -206,41 +206,10 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="sbRightValue">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="decimals">
-         <number>6</number>
-        </property>
-        <property name="minimum">
-         <double>-1000000000.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000000000.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="sbLeftValue">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="decimals">
-         <number>6</number>
-        </property>
-        <property name="minimum">
-         <double>-1000000000.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000000000.000000000000000</double>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lLeftValue">
+        <property name="text">
+         <string>Left value:</string>
         </property>
        </widget>
       </item>
@@ -251,10 +220,29 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="lLeftValue">
-        <property name="text">
-         <string>Left value:</string>
+      <item row="1" column="1">
+       <widget class="NumberSpinBox" name="sbRightValue">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Spinbox for numbers.</string>
+        </property>
+        <property name="feedback">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="NumberSpinBox" name="sbLeftValue">
+        <property name="toolTip">
+         <string/>
+        </property>
+        <property name="whatsThis">
+         <string>Spinbox for numbers.</string>
+        </property>
+        <property name="feedback">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -376,25 +364,6 @@
      </property>
      <property name="value">
       <number>2</number>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="2" colspan="3">
-    <widget class="QDoubleSpinBox" name="sbPercentile">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximum">
-      <double>1.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.010000000000000</double>
-     </property>
-     <property name="value">
-      <double>0.500000000000000</double>
      </property>
     </widget>
    </item>
@@ -590,6 +559,22 @@
    <item row="23" column="2" colspan="2">
     <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
+   <item row="15" column="2" colspan="3">
+    <widget class="NumberSpinBox" name="sbPercentile">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="whatsThis">
+      <string>Spinbox for numbers.</string>
+     </property>
+     <property name="value">
+      <double>0.500000000000000</double>
+     </property>
+     <property name="feedback">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -597,6 +582,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>1142</height>
+    <width>572</width>
+    <height>1362</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -66,9 +66,6 @@
           <string>Scale:</string>
          </property>
         </widget>
-       </item>
-       <item row="12" column="2">
-        <widget class="QLineEdit" name="leEnd"/>
        </item>
        <item row="11" column="0">
         <widget class="QLabel" name="lStart">
@@ -260,9 +257,6 @@
          </property>
         </spacer>
        </item>
-       <item row="11" column="2">
-        <widget class="QLineEdit" name="leStart"/>
-       </item>
        <item row="19" column="2">
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
@@ -388,6 +382,32 @@
          </property>
         </spacer>
        </item>
+       <item row="12" column="2">
+        <widget class="NumberSpinBox" name="sbEnd">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="NumberSpinBox" name="sbStart">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle">
@@ -417,7 +437,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -534,7 +553,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -570,7 +588,6 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -688,9 +705,6 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="3">
-        <widget class="QLineEdit" name="leMajorTickStartValue"/>
-       </item>
        <item row="8" column="0" colspan="2">
         <widget class="QLabel" name="lMajorTickStartOffset">
          <property name="toolTip">
@@ -704,7 +718,17 @@
        <item row="8" column="3">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="KLineEdit" name="leMajorTickStartOffset"/>
+          <widget class="NumberSpinBox" name="sbMajorTickStartOffset">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QToolButton" name="tbFirstTickData">
@@ -879,7 +903,6 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1159,6 +1182,19 @@
          </property>
         </widget>
        </item>
+       <item row="7" column="3">
+        <widget class="NumberSpinBox" name="sbMajorTickStartValue">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabLabels">
@@ -1237,7 +1273,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1296,7 +1331,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1421,7 +1456,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1434,7 +1468,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1527,7 +1560,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1635,7 +1667,6 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1664,7 +1695,6 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

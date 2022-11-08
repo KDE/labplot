@@ -427,6 +427,10 @@ double NumberSpinBox::value() {
 	return m_value;
 }
 
+void NumberSpinBox::setClearButtonEnabled(bool enable) {
+	lineEdit()->setClearButtonEnabled(enable);
+}
+
 QAbstractSpinBox::StepEnabled NumberSpinBox::stepEnabled() const {
 	return QAbstractSpinBox::StepEnabledFlag::StepUpEnabled | QAbstractSpinBox::StepEnabledFlag::StepDownEnabled; // for testing
 }
