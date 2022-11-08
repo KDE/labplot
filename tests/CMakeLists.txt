@@ -11,6 +11,7 @@ add_subdirectory(cartesianplot)
 add_subdirectory(import_export)
 add_subdirectory(nsl)
 add_subdirectory(spreadsheet)
+add_subdirectory(matrix)
 add_subdirectory(multirange)
 
 IF (Cantor_FOUND)
