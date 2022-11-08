@@ -186,11 +186,11 @@ QString NumberSpinBox::createStringNumber(double integerFraction, int exponent, 
 		if (p.fractionDigits == 0)
 			number.append(locale().decimalPoint());
 	} else {
-		number = QLatin1String("%1").arg(int(integerFraction));
+		number = QStringLiteral("%1").arg(int(integerFraction));
 	}
 
 	if (p.exponentLetter != QChar::Null) {
-		const auto e = QLatin1String("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == QLatin1Char('-')), 10, QLatin1Char('0'));
+		const auto e = QStringLiteral("%L1").arg(exponent, p.exponentDigits + (p.exponentSign == QLatin1Char('-')), 10, QLatin1Char('0'));
 		QString sign;
 		if (exponent >= 0 && !p.exponentSign.isNull())
 			sign = QLatin1Char('+');
@@ -396,7 +396,7 @@ bool NumberSpinBox::setValue(double v) {
 	if (m_feedback && m_waitFeedback) {
 		m_waitFeedback = false;
 		if (!qFuzzyCompare(v, value())) {
-			setInvalid(i18n("Invalid value entered. Valid value: %1").arg(v));
+			setInvalid(i18n("Invalid value entered. Valid value: %1", v));
 			return false;
 		}
 		return true;

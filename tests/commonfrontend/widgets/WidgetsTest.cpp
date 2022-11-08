@@ -816,7 +816,7 @@ void WidgetsTest::numberSpinBoxFeedback() {
 	QCOMPARE(lastValue, 7);
 	QCOMPARE(sb.m_waitFeedback, true);
 	QCOMPARE(sb.setValue(0), false);
-	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(0));
+	QCOMPARE(sb.toolTip(), QStringLiteral("Invalid value entered. Valid value: %1").arg(0));
 	QCOMPARE(sb.m_waitFeedback, false);
 
 	sb.keyPressEvent(&event);
@@ -848,7 +848,7 @@ void WidgetsTest::numberSpinBoxFeedback2() {
 	sb.keyPressEvent(&event);
 
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(5));
+	QCOMPARE(sb.toolTip(), i18n("Invalid value entered. Valid value: %1", 5));
 }
 
 void WidgetsTest::numberSpinBoxDecimals() {
@@ -883,7 +883,7 @@ void WidgetsTest::numberSpinBoxDecimals() {
 		sb.keyPressEvent(&event);
 
 		QCOMPARE(valueChangedCounter, 1);
-		QCOMPARE(sb.toolTip(), tr("Invalid value entered. Valid value: %1").arg(5));
+		QCOMPARE(sb.toolTip(), QStringLiteral("Invalid value entered. Valid value: 5"));
 		QCOMPARE(sb.lineEdit()->text(), QStringLiteral("6.00")); // not 3 decimals!
 	}
 }
