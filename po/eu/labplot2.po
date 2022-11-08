@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-06 09:10+0100\n"
+"PO-Revision-Date: 2022-11-07 06:48+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -3556,12 +3556,12 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:413
 #, kde-format
 msgid "Beta function"
-msgstr ""
+msgstr "Beta funtzioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:415
 #, kde-format
 msgid "Logarithm of the beta function"
-msgstr ""
+msgstr "Beta funtzioaren logaritmoa"
 
 #: src/backend/gsl/ExpressionParser.cpp:416
 #, kde-format
@@ -3802,12 +3802,12 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:513
 #, kde-format
 msgid "Logarithm"
-msgstr ""
+msgstr "Logaritmoa"
 
 #: src/backend/gsl/ExpressionParser.cpp:514
 #, kde-format
 msgid "Logarithm of the magnitude"
-msgstr ""
+msgstr "Magnitudearen logaritmoa"
 
 #: src/backend/gsl/ExpressionParser.cpp:524
 #, kde-format
@@ -3910,22 +3910,22 @@ msgstr "Tangentea"
 #: src/backend/gsl/ExpressionParser.cpp:575
 #, kde-format
 msgid "Inverse sine"
-msgstr ""
+msgstr "Arku sinua"
 
 #: src/backend/gsl/ExpressionParser.cpp:576
 #, kde-format
 msgid "Inverse cosine"
-msgstr ""
+msgstr "Arku kosinua"
 
 #: src/backend/gsl/ExpressionParser.cpp:577 src/backend/nsl/nsl_fit.c:44
 #, kde-format
 msgid "Inverse tangent"
-msgstr ""
+msgstr "Arku tangentea"
 
 #: src/backend/gsl/ExpressionParser.cpp:578
 #, kde-format
 msgid "Inverse tangent using sign"
-msgstr ""
+msgstr "Arku tangentea zeinua erabiliz"
 
 #: src/backend/gsl/ExpressionParser.cpp:579
 #, kde-format
@@ -4025,22 +4025,22 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:600
 #, kde-format
 msgid "Hypotenuse function"
-msgstr ""
+msgstr "Hipotenusa funtzioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:601
 #, kde-format
 msgid "Three component hypotenuse function"
-msgstr ""
+msgstr "Hiru osagailu hipotenusa funtzioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:602
 #, kde-format
 msgid "restrict to [-pi,pi]"
-msgstr ""
+msgstr "murriztu honetara [-pi,pi]"
 
 #: src/backend/gsl/ExpressionParser.cpp:603
 #, kde-format
 msgid "restrict to [0,2 pi]"
-msgstr ""
+msgstr "murriztu honetara [0,2 pi]"
 
 #: src/backend/gsl/ExpressionParser.cpp:610
 #, kde-format
@@ -4060,7 +4060,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:613
 #, kde-format
 msgid "zeta(x)-1"
-msgstr ""
+msgstr "zeta(x)-1"
 
 #: src/backend/gsl/ExpressionParser.cpp:614
 #, kde-format
@@ -4080,7 +4080,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:625
 #, kde-format
 msgid "Gaussian random numbers"
-msgstr ""
+msgstr "Gaussen ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:626
 #, kde-format
@@ -4090,32 +4090,32 @@ msgstr "Ausazko zenbaki esponentzialak"
 #: src/backend/gsl/ExpressionParser.cpp:627
 #, kde-format
 msgid "Laplacian random numbers"
-msgstr ""
+msgstr "Laplacen ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:628
 #, kde-format
 msgid "Cauchy/Lorentz random numbers"
-msgstr ""
+msgstr "Cauchy/Lorentz ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:629
 #, kde-format
 msgid "Rayleigh random numbers"
-msgstr ""
+msgstr "Rayleigh ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:630
 #, kde-format
 msgid "Landau random numbers"
-msgstr ""
+msgstr "Landau ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:631
 #, kde-format
 msgid "Levy alpha-stable random numbers"
-msgstr ""
+msgstr "Levy alpha-stable ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:632
 #, kde-format
 msgid "Gamma random numbers"
-msgstr ""
+msgstr "Gamma ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:633
 #, kde-format
@@ -4145,17 +4145,17 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:639
 #, kde-format
 msgid "Poisson random numbers"
-msgstr ""
+msgstr "Poisson ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:640
 #, kde-format
 msgid "Bernoulli random numbers"
-msgstr ""
+msgstr "Bernoulli ausazko zenbakiak"
 
 #: src/backend/gsl/ExpressionParser.cpp:641
 #, kde-format
 msgid "Binomial random numbers"
-msgstr ""
+msgstr "Ausazko zenbaki binomialak"
 
 #: src/backend/gsl/ExpressionParser.cpp:651
 #, kde-format
@@ -4442,132 +4442,132 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:920
 #, kde-format
 msgid "Mathematical constants"
-msgstr ""
+msgstr "Konstante matematikoak"
 
 #: src/backend/gsl/ExpressionParser.cpp:921
 #, kde-format
 msgid "Fundamental constants"
-msgstr ""
+msgstr "Funtsezko konstanteak"
 
 #: src/backend/gsl/ExpressionParser.cpp:922
-#, fuzzy, kde-format
+#, kde-format
 msgid "Astronomy and Astrophysics"
 msgstr "Astronomia eta astrofisika"
 
 #: src/backend/gsl/ExpressionParser.cpp:923
 #, kde-format
 msgid "Atomic and Nuclear Physics"
-msgstr ""
+msgstr "Fisika atomikoa eta nuklearra"
 
 #: src/backend/gsl/ExpressionParser.cpp:924
 #, kde-format
 msgid "Measurement of Time"
-msgstr ""
+msgstr "Denbora neurtzea"
 
 #: src/backend/gsl/ExpressionParser.cpp:925
-#, fuzzy, kde-format
+#, kde-format
 msgid "Imperial Units"
 msgstr "Unitate inperialak"
 
 #: src/backend/gsl/ExpressionParser.cpp:926
 #, kde-format
 msgid "Speed and Nautical Units"
-msgstr ""
+msgstr "Abiadura eta nautika unitateak"
 
 #: src/backend/gsl/ExpressionParser.cpp:927
 #, kde-format
 msgid "Printers Units"
-msgstr ""
+msgstr "Inprimatze-unitateak"
 
 #: src/backend/gsl/ExpressionParser.cpp:928
 #, kde-format
 msgid "Volume, Area and Length"
-msgstr ""
+msgstr "Bolumena, azalera eta luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:929
 #, kde-format
 msgid "Mass and Weight"
-msgstr ""
+msgstr "Masa eta pisua"
 
 #: src/backend/gsl/ExpressionParser.cpp:930
 #, kde-format
 msgid "Thermal Energy and Power"
-msgstr ""
+msgstr "Energia termikoa eta potentzia"
 
 #: src/backend/gsl/ExpressionParser.cpp:931
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pressure"
 msgstr "Presioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:932
 #, kde-format
 msgid "Viscosity"
-msgstr ""
+msgstr "Biskositatea"
 
 #: src/backend/gsl/ExpressionParser.cpp:933
 #, kde-format
 msgid "Light and Illumination"
-msgstr ""
+msgstr "Argia eta argiztapena"
 
 #: src/backend/gsl/ExpressionParser.cpp:934
 #, kde-format
 msgid "Radioactivity"
-msgstr ""
+msgstr "Erradioaktibitatea"
 
 #: src/backend/gsl/ExpressionParser.cpp:935
 #, kde-format
 msgid "Force and Energy"
-msgstr ""
+msgstr "Indarra eta energia"
 
 #: src/backend/gsl/ExpressionParser.cpp:938
 #, kde-format
 msgid "Base of exponentials"
-msgstr ""
+msgstr "Berretzaileen oinarria"
 
 #: src/backend/gsl/ExpressionParser.cpp:941
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pi"
 msgstr "Pi"
 
 #: src/backend/gsl/ExpressionParser.cpp:944
 #, kde-format
 msgid "Euler's constant"
-msgstr ""
+msgstr "Eulerren konstantea"
 
 #: src/backend/gsl/ExpressionParser.cpp:952
-#, fuzzy, kde-format
+#, kde-format
 msgid "Speed of light"
-msgstr "%1 argiaren abiadura"
+msgstr "Argiaren abiadura"
 
 #: src/backend/gsl/ExpressionParser.cpp:955
 #, kde-format
 msgid "Vacuum permeability"
-msgstr ""
+msgstr "Hutsarekiko iragazkortasuna"
 
 #: src/backend/gsl/ExpressionParser.cpp:958
 #, kde-format
 msgid "Vacuum permittivity"
-msgstr ""
+msgstr "Hutsaren permitibitatea"
 
 #: src/backend/gsl/ExpressionParser.cpp:961
 #, kde-format
 msgid "Planck constant"
-msgstr ""
+msgstr "Plancken konstantea"
 
 #: src/backend/gsl/ExpressionParser.cpp:964
 #, kde-format
 msgid "Reduced Planck constant"
-msgstr ""
+msgstr "Planck-en konstante murriztua"
 
 #: src/backend/gsl/ExpressionParser.cpp:967
 #, kde-format
 msgid "Avogadro constant"
-msgstr ""
+msgstr "Avogadroren konstantea"
 
 #: src/backend/gsl/ExpressionParser.cpp:970
 #, kde-format
 msgid "Faraday"
-msgstr ""
+msgstr "Faraday"
 
 #: src/backend/gsl/ExpressionParser.cpp:973
 #, kde-format
@@ -4577,12 +4577,12 @@ msgstr "Boltzmannen konstantea"
 #: src/backend/gsl/ExpressionParser.cpp:976
 #, kde-format
 msgid "Molar gas"
-msgstr ""
+msgstr "Gas molarra"
 
 #: src/backend/gsl/ExpressionParser.cpp:979
 #, kde-format
 msgid "Standard gas volume"
-msgstr ""
+msgstr "Gasaren bolumen estandarra"
 
 #: src/backend/gsl/ExpressionParser.cpp:982
 #, kde-format
@@ -4594,7 +4594,7 @@ msgstr "Stefan-Boltzmannen konstantea"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:491
 #, kde-format
 msgid "Gauss"
-msgstr ""
+msgstr "Gauss"
 
 #: src/backend/gsl/ExpressionParser.cpp:993
 #, kde-format
@@ -4612,14 +4612,14 @@ msgid "Light year"
 msgstr "Argi-urtea"
 
 #: src/backend/gsl/ExpressionParser.cpp:1002
-#, fuzzy, kde-format
+#, kde-format
 msgid "Parsec"
-msgstr "parsec %1"
+msgstr "Parsec"
 
 #: src/backend/gsl/ExpressionParser.cpp:1005
 #, kde-format
 msgid "Gravitational acceleration"
-msgstr ""
+msgstr "Grabitazio-azelerazioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1008
 #, kde-format
@@ -4634,12 +4634,12 @@ msgstr "Elektroiaren karga"
 #: src/backend/gsl/ExpressionParser.cpp:1019
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr ""
+msgstr "1 elektroi-volteko energia"
 
 #: src/backend/gsl/ExpressionParser.cpp:1022
 #, kde-format
 msgid "Unified atomic mass"
-msgstr ""
+msgstr "Masa atomiko bateratua"
 
 #: src/backend/gsl/ExpressionParser.cpp:1025
 #, kde-format
@@ -4649,7 +4649,7 @@ msgstr "Elektroiaren masa"
 #: src/backend/gsl/ExpressionParser.cpp:1028
 #, kde-format
 msgid "Mass of the muon"
-msgstr ""
+msgstr "Muoiaren masa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1031
 #, kde-format
@@ -4664,172 +4664,172 @@ msgstr "Neutroiaren masa"
 #: src/backend/gsl/ExpressionParser.cpp:1037
 #, kde-format
 msgid "Electromagnetic fine structure constant"
-msgstr ""
+msgstr "Egitura mehe elektromagnetikoaren konstantea"
 
 #: src/backend/gsl/ExpressionParser.cpp:1040
 #, kde-format
 msgid "Rydberg constant"
-msgstr ""
+msgstr "Rydbergen konstantea"
 
 #: src/backend/gsl/ExpressionParser.cpp:1043
 #, kde-format
 msgid "Bohr radius"
-msgstr ""
+msgstr "Bohrren erradioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1046
 #, kde-format
 msgid "Length of 1 angstrom"
-msgstr ""
+msgstr "Angstrom 1ten luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1049
 #, kde-format
 msgid "Area of 1 barn"
-msgstr ""
+msgstr "Barn 1eko azalera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1052
 #, kde-format
 msgid "Bohr Magneton"
-msgstr ""
+msgstr "Bohrren magnetoia"
 
 #: src/backend/gsl/ExpressionParser.cpp:1055
 #, kde-format
 msgid "Nuclear Magneton"
-msgstr ""
+msgstr "Magnetoi nuklearra"
 
 #: src/backend/gsl/ExpressionParser.cpp:1058
 #, kde-format
 msgid "Magnetic moment of the electron [absolute value]"
-msgstr ""
+msgstr "Elektroiaren momentu magnetikoa [balio absolutua]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1061
 #, kde-format
 msgid "Magnetic moment of the proton"
-msgstr ""
+msgstr "Protoiaren momentu magnetikoa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1064
 #, kde-format
 msgid "Thomson cross section"
-msgstr ""
+msgstr "Thomsonen zeharkako sekzioa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1067
 #, kde-format
 msgid "Electric dipole moment of 1 Debye"
-msgstr ""
+msgstr "1 Debye-ren momentu dipolo elektrikoa"
 
 #: src/backend/gsl/ExpressionParser.cpp:1075
 #, kde-format
 msgid "Number of seconds in 1 minute"
-msgstr ""
+msgstr "Segundo kopurua minutu 1ean"
 
 #: src/backend/gsl/ExpressionParser.cpp:1078
 #, kde-format
 msgid "Number of seconds in 1 hour"
-msgstr ""
+msgstr "Segundo kopurua ordu 1ean"
 
 #: src/backend/gsl/ExpressionParser.cpp:1081
 #, kde-format
 msgid "Number of seconds in 1 day"
-msgstr ""
+msgstr "Segundo kopurua egun 1ean"
 
 #: src/backend/gsl/ExpressionParser.cpp:1084
 #, kde-format
 msgid "Number of seconds in 1 week"
-msgstr ""
+msgstr "Segundo kopurua aste 1ean"
 
 #: src/backend/gsl/ExpressionParser.cpp:1092
 #, kde-format
 msgid "Length of 1 inch"
-msgstr "Hazbete 1en luzera"
+msgstr "Hazbete 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1095
 #, kde-format
 msgid "Length of 1 foot"
-msgstr "Oin 1en luzera"
+msgstr "Oin 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1098
 #, kde-format
 msgid "Length of 1 yard"
-msgstr ""
+msgstr "Yarda 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1101
 #, kde-format
 msgid "Length of 1 mile"
-msgstr "Milia 1en luzera"
+msgstr "Milia 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1104
 #, kde-format
 msgid "Length of 1/1000th of an inch"
-msgstr ""
+msgstr "1/1000 hazbeteko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1112
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
-msgstr ""
+msgstr "1 kilometro orduko abiadura"
 
 #: src/backend/gsl/ExpressionParser.cpp:1115
 #, kde-format
 msgid "Speed of 1 mile per hour"
-msgstr ""
+msgstr "Milia 1 orduko abiadura"
 
 #: src/backend/gsl/ExpressionParser.cpp:1118
 #, kde-format
 msgid "Length of 1 nautical mile"
-msgstr ""
+msgstr "Itsas milia 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1121
 #, kde-format
 msgid "Length of 1 fathom"
-msgstr ""
+msgstr "Braza 1eko luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1124
 #, kde-format
 msgid "Speed of 1 knot"
-msgstr ""
+msgstr "Korapilo 1eko abiadura"
 
 #: src/backend/gsl/ExpressionParser.cpp:1132
 #, kde-format
 msgid "length of 1 printer's point [1/72 inch]"
-msgstr ""
+msgstr "Inprimagailuaren puntu 1eko luzera [1/72 hazbete]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1135
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
-msgstr ""
+msgstr "TeX puntu 1eko luzera [1/72.27 hazbete]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1143
 #, kde-format
 msgid "Length of 1 micron"
-msgstr ""
+msgstr "1 mikrako luzera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1146
 #, kde-format
 msgid "Area of 1 hectare"
-msgstr ""
+msgstr "Hektarea 1eko azalera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1149
 #, kde-format
 msgid "Area of 1 acre"
-msgstr ""
+msgstr "Akre 1eko azalera"
 
 #: src/backend/gsl/ExpressionParser.cpp:1152
 #, kde-format
 msgid "Volume of 1 liter"
-msgstr ""
+msgstr "Litro 1eko bolumena"
 
 #: src/backend/gsl/ExpressionParser.cpp:1155
 #, kde-format
 msgid "Volume of 1 US gallon"
-msgstr ""
+msgstr "AEBko galoi 1en bolumena"
 
 #: src/backend/gsl/ExpressionParser.cpp:1158
 #, kde-format
 msgid "Volume of 1 Canadian gallon"
-msgstr ""
+msgstr "Kanadako galoi 1en bolumena"
 
 #: src/backend/gsl/ExpressionParser.cpp:1161
 #, kde-format
 msgid "Volume of 1 UK gallon"
-msgstr ""
+msgstr "EBko galoi 1en bolumena"
 
 #: src/backend/gsl/ExpressionParser.cpp:1164
 #, kde-format
@@ -5034,22 +5034,22 @@ msgstr ""
 #: src/backend/lib/Range.cpp:13
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:419
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
-#, fuzzy, kde-format
+#, kde-format
 msgid "Linear"
 msgstr "Lineala"
 
 #: src/backend/lib/Range.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Log10"
-msgstr "Egunkaria"
+msgstr "Log10"
 
 #: src/backend/lib/Range.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Log2"
-msgstr "Egunkaria"
+msgstr "Log2"
 
 #: src/backend/lib/Range.cpp:13
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ln"
 msgstr "Ln"
 
@@ -5073,15 +5073,15 @@ msgstr "Alderantzikatu"
 #: src/backend/lib/XmlStreamReader.cpp:58
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:74
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:220
-#, fuzzy, kde-format
+#, kde-format
 msgid "and"
 msgstr "eta"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
-#, fuzzy, kde-format
+#, kde-format
 msgid "line %1, column %2: %3"
-msgstr " Lerroa: %1 Zutabea: %2 "
+msgstr "%1 lerroa, %2 zutabea: %3"
 
 #: src/backend/lib/XmlStreamReader.cpp:109
 #: src/backend/lib/XmlStreamReader.cpp:118
@@ -5089,19 +5089,19 @@ msgstr " Lerroa: %1 Zutabea: %2 "
 #: src/backend/lib/XmlStreamReader.cpp:146
 #, kde-format
 msgid "unexpected end of document"
-msgstr ""
+msgstr "dokumentuaren amaiera ustekabekoa"
 
 #: src/backend/matrix/Matrix.cpp:116
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3515
 #, kde-format
 msgid "FITS image"
-msgstr ""
+msgstr "FITS irudia"
 
 #: src/backend/matrix/Matrix.cpp:116
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3515
 #, kde-format
 msgid "FITS table"
-msgstr ""
+msgstr "FITS taula"
 
 #: src/backend/matrix/Matrix.cpp:153
 #, kde-format
@@ -5283,7 +5283,7 @@ msgstr ""
 #: src/backend/nsl/nsl_conv.c:22 src/backend/nsl/nsl_conv.c:23
 #: src/backend/nsl/nsl_corr.c:19 src/backend/nsl/nsl_smooth.c:22
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:283
-#, fuzzy, kde-format
+#, kde-format
 msgid "none"
 msgstr "bat ere ez"
 
@@ -5436,44 +5436,44 @@ msgstr "RAW"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:496
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:632
 #: src/kdefrontend/widgets/ValueWidget.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Frequency"
 msgstr "Maiztasuna"
 
 #: src/backend/nsl/nsl_dft.c:29
-#, fuzzy, kde-format
+#, kde-format
 msgid "Period"
-msgstr "Denboraldia"
+msgstr "Periodoa"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "first"
-msgstr "Lehena"
+msgstr "lehena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "second"
-msgstr "bigarren"
+msgstr "bigarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "third"
-msgstr "hirugarren"
+msgstr "hirugarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "fourth"
-msgstr "Laugarren"
+msgstr "laugarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "fifth"
-msgstr "Bosgarrena"
+msgstr "bosgarrena"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "sixth"
-msgstr "Seigarrena"
+msgstr "seigarrena"
 
 #: src/backend/nsl/nsl_filter.c:20
 #, fuzzy, kde-format
@@ -5498,7 +5498,7 @@ msgstr ""
 #: src/backend/nsl/nsl_filter.c:22
 #, kde-format
 msgid "Ideal"
-msgstr ""
+msgstr "Ideala"
 
 #: src/backend/nsl/nsl_filter.c:22
 #, fuzzy, kde-format
@@ -5526,14 +5526,14 @@ msgid "Bessel (Thomson)"
 msgstr ""
 
 #: src/backend/nsl/nsl_filter.c:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fraction"
 msgstr "Zatikia"
 
 #: src/backend/nsl/nsl_fit.c:20
 #, kde-format
 msgid "Basic functions"
-msgstr ""
+msgstr "Oinarrizko funtzioak"
 
 #: src/backend/nsl/nsl_fit.c:21
 #, kde-format

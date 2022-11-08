@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-04 07:18+0100\n"
+"PO-Revision-Date: 2022-11-07 07:00+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -34,16 +34,19 @@ msgid ""
 "Couldn't find the dynamic library 'cantorpart'. Please check your "
 "installation."
 msgstr ""
+"დინამიკური ბიბლიოთეკა \"cantorpart\" ვერ ვიპოვე. შეამოწმეთ პროგრამის თქვენი "
+"პაკეტი."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:71
 #, kde-format
 msgid "Couldn't find the plugin for %1. Please check your installation."
 msgstr ""
+"%1-სთვის დამატების პოვნა შეუძლებელია. შეამოწმეთ პროგრამის თქვენი პაკეტი."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:261
 #, kde-format
 msgid "Couldn't find panel plugins. Please check your installation."
-msgstr ""
+msgstr "პანელის დამატებები ვერ ვიპოვე. შეამოწმეთ პროგრამის თქვენი პაკეტი."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:379
 #: src/backend/core/column/Column.cpp:1255
@@ -92,7 +95,7 @@ msgstr ""
 #: src/commonfrontend/ProjectExplorer.cpp:1005
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
-msgstr ""
+msgstr "ატრიბუტი '%1' აკლია ან ცარიელია. გამოიყენება ნაგულისხმები მნისვნელობა"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:430
 #: src/backend/core/AbstractSimpleFilter.cpp:362
@@ -361,7 +364,7 @@ msgstr[1] "%1: %2 მწკრივის წაშლა"
 #: src/backend/core/AbstractColumn.cpp:836
 #, kde-format
 msgid "invalid or missing start or end row"
-msgstr ""
+msgstr "საწყისი ან საბოლოო მწკრივის დასაწყისი ან დასასრული არასწორია"
 
 #: src/backend/core/abstractcolumncommands.cpp:41
 #, kde-format
@@ -543,7 +546,7 @@ msgstr "ავტომატური განახლება: არა"
 #: src/backend/core/AspectTreeModel.cpp:403
 #, kde-format
 msgid "The name \"%1\" is already in use. Choose another name."
-msgstr ""
+msgstr "სახელი \"%1\" უკვე გამოიყენება. სხვა აირჩიეთ."
 
 #: src/backend/core/column/Column.cpp:115
 #, kde-format
@@ -717,12 +720,12 @@ msgstr "%1 ავტორის დაყენება"
 #: src/backend/core/Project.cpp:285
 #, kde-format
 msgid "%1: save calculation changed"
-msgstr ""
+msgstr "%1: შეცვლილი გამოთვლის შენახვა"
 
 #: src/backend/core/Project.cpp:601 src/backend/core/Project.cpp:635
 #, kde-format
 msgid "Sorry. Could not open file for reading."
-msgstr ""
+msgstr "უკაცრავად, ფაილის წასაკითხად გახსნა შეუძლებელია."
 
 #: src/backend/core/Project.cpp:612 src/backend/core/Project.cpp:642
 #, kde-format
@@ -779,7 +782,7 @@ msgstr "სწორი XML დოკუმენტის გარეშე"
 #: src/backend/core/Project.cpp:1060
 #, kde-format
 msgid "Invalid project modification time. Using current time."
-msgstr ""
+msgstr "პროექტის მოდიფიკაციის არასწორი დრო. გამოიყენება მიმდნარე დრო."
 
 #: src/backend/core/Workbook.cpp:205
 #, kde-format
@@ -1299,24 +1302,24 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:244
 #, kde-format
 msgid "Total size of free space: %1 bytes"
-msgstr ""
+msgstr "თავისუფალი ადგილის ჯამური ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:246
 #, kde-format
 msgid "Version of shared object header: %1"
-msgstr ""
+msgstr "გაზიარებული ობიექტის თავსართის ვერსია: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:248
 #: src/backend/datasources/filters/HDF5Filter.cpp:261
 #, kde-format
 msgid "Size of shared object header: %1 bytes"
-msgstr ""
+msgstr "გაზიარებული ობიექტის თავსართის ზომა: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:250
 #: src/backend/datasources/filters/HDF5Filter.cpp:263
 #, kde-format
 msgid "Size of all shared object header indexes: %1 bytes"
-msgstr ""
+msgstr "ყველა გაზიარებული ობიექტის თავსართის ინდექსების ჯამური ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:252
 #: src/backend/datasources/filters/HDF5Filter.cpp:265
@@ -1444,7 +1447,7 @@ msgstr "h5dump ვერ ვიპოვე."
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1263
 #, kde-format
 msgid "Reading from file %1 failed."
-msgstr ""
+msgstr "ფაილიდან (%1) წაკითხვის შეცდომა."
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1312
 #, kde-format
@@ -1485,7 +1488,7 @@ msgstr "უცნობი"
 #: src/backend/datasources/filters/HDF5Filter.cpp:1527
 #, kde-format
 msgid "No data set selected"
-msgstr ""
+msgstr "მონაცემების სეტი არჩეული არაა"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:1594
 #, kde-format
@@ -1568,7 +1571,7 @@ msgstr ""
 #: src/backend/datasources/filters/JsonFilter.cpp:215
 #, kde-format
 msgid "Valid JSON document"
-msgstr ""
+msgstr "სწორი JSON დოკუმენტი"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:275
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:342
@@ -1832,7 +1835,7 @@ msgstr "შეცდომა ფაილის გახსნისას"
 #: src/backend/datasources/filters/NetCDFFilter.cpp:234
 #, kde-format
 msgid "Number of global attributes: %1"
-msgstr ""
+msgstr "გლობალური ატრიბუტების რიცხვი: %1"
 
 #: src/backend/datasources/filters/NetCDFFilter.cpp:236
 #, kde-format
@@ -1929,17 +1932,17 @@ msgstr "ზომა ბაიტებში"
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load JSON document"
-msgstr ""
+msgstr "JSON დოკუმენტის ჩატვირთვა შეუძლებელია"
 
 #: src/backend/datasources/filters/QJsonModel.cpp:200
 #, kde-format
 msgid "Failed to load JSON document. Error: %1."
-msgstr ""
+msgstr "JSON დოკუმენტის ჩატვირთვა შეუძლებელია. შეცდომა: %1."
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:136
 #, kde-format
 msgid "Unknown file extension"
-msgstr ""
+msgstr "ფაილის უცნობი გაფართოება"
 
 #: src/backend/datasources/filters/ReadStatFilter.cpp:141
 #, kde-format
@@ -1994,12 +1997,12 @@ msgstr "სვეტი ხელმიუწვდომელია"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1459
 #, kde-format
 msgid "Not a ROOT file"
-msgstr ""
+msgstr "არ წარმოადგენს ROOT ფაილს"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1464
 #, kde-format
 msgid "File format version: %1"
-msgstr ""
+msgstr "ფაილის ფორმატის ვერსია: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1472
 #, kde-format
@@ -2019,12 +2022,12 @@ msgstr ""
 #: src/backend/datasources/filters/ROOTFilter.cpp:1478
 #, kde-format
 msgid "Size of file pointers: %1 bytes"
-msgstr ""
+msgstr "ფაილის მაჩვენებლების ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1483
 #, kde-format
 msgid "Compression level and algorithm: %1"
-msgstr ""
+msgstr "შეკუმშვის დონე და ალგორითმი: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1488
 #, kde-format
@@ -2088,7 +2091,7 @@ msgstr "მოწყობილობასთან კავშირის �
 #: src/backend/datasources/LiveDataSource.cpp:738
 #, kde-format
 msgid "The following error occurred: %1."
-msgstr ""
+msgstr "აღმოჩენილია შემდეგი შეცდომა: %1."
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1056
 #, kde-format
@@ -2124,7 +2127,7 @@ msgstr ""
 #: src/backend/gsl/errors.h:26
 #, kde-format
 msgid "Input domain error, e.g sqrt(-1)"
-msgstr ""
+msgstr "შეყვანის დომენის შეცდომა. მაგ: sqrt(-1)"
 
 #: src/backend/gsl/errors.h:28
 #, kde-format
@@ -2139,7 +2142,7 @@ msgstr "არასწორი მაჩვენებელი"
 #: src/backend/gsl/errors.h:32
 #, kde-format
 msgid "Invalid argument supplied"
-msgstr ""
+msgstr "მიწოდებული არგუმენტი არასწორია"
 
 #: src/backend/gsl/errors.h:34
 #, kde-format
@@ -2164,7 +2167,7 @@ msgstr "მითითებული ფუნქციის შეცდო�
 #: src/backend/gsl/errors.h:42
 #, kde-format
 msgid "Iterative process is out of control"
-msgstr ""
+msgstr "იტერაციის პროცესი უკონტროლოა"
 
 #: src/backend/gsl/errors.h:44
 #, kde-format
@@ -2606,7 +2609,7 @@ msgstr "არაუარყოფითი კვადრატული ფ�
 #: src/backend/gsl/ExpressionParser.cpp:123
 #, kde-format
 msgid "Sign function"
-msgstr ""
+msgstr "ნიშნის ფუნქცია"
 
 #: src/backend/gsl/ExpressionParser.cpp:124
 #, kde-format
@@ -3277,7 +3280,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:327
 #, kde-format
 msgid "Error function"
-msgstr ""
+msgstr "შეცდომის ფუნქცია"
 
 #: src/backend/gsl/ExpressionParser.cpp:328
 #, kde-format
@@ -3354,7 +3357,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:362
 #, kde-format
 msgid "Exponential integral"
-msgstr ""
+msgstr "ექსპონენტური ინტეგრალ"
 
 #: src/backend/gsl/ExpressionParser.cpp:363
 #, kde-format
@@ -3374,12 +3377,12 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:366
 #, kde-format
 msgid "Hyperbolic integral Shi"
-msgstr ""
+msgstr "ჰიპერბოლური ინტეგრალი ში"
 
 #: src/backend/gsl/ExpressionParser.cpp:367
 #, kde-format
 msgid "Hyperbolic integral Chi"
-msgstr ""
+msgstr "ჰიპერბოლური ინტეგრალი ჩი"
 
 #: src/backend/gsl/ExpressionParser.cpp:368
 #, kde-format
@@ -4422,12 +4425,12 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:920
 #, kde-format
 msgid "Mathematical constants"
-msgstr ""
+msgstr "მათემატიკური მუდმივები"
 
 #: src/backend/gsl/ExpressionParser.cpp:921
 #, kde-format
 msgid "Fundamental constants"
-msgstr ""
+msgstr "ფუნდამენტური მუდმივები"
 
 #: src/backend/gsl/ExpressionParser.cpp:922
 #, kde-format
@@ -4452,12 +4455,12 @@ msgstr "იმპერიული ერთეულები"
 #: src/backend/gsl/ExpressionParser.cpp:926
 #, kde-format
 msgid "Speed and Nautical Units"
-msgstr ""
+msgstr "სიჩქარისა და საზღვაო ერთეულები"
 
 #: src/backend/gsl/ExpressionParser.cpp:927
 #, kde-format
 msgid "Printers Units"
-msgstr ""
+msgstr "პრინტერის ერთეულები"
 
 #: src/backend/gsl/ExpressionParser.cpp:928
 #, kde-format
@@ -4502,7 +4505,7 @@ msgstr "ძალა და ენერგია"
 #: src/backend/gsl/ExpressionParser.cpp:938
 #, kde-format
 msgid "Base of exponentials"
-msgstr ""
+msgstr "ექსპონენტების ბაზა"
 
 #: src/backend/gsl/ExpressionParser.cpp:941
 #, kde-format
@@ -4567,7 +4570,7 @@ msgstr "სტანდარტული აირის მოცულობ�
 #: src/backend/gsl/ExpressionParser.cpp:982
 #, kde-format
 msgid "Stefan-Boltzmann constant"
-msgstr ""
+msgstr "შტეფან-ბოლცმანის მუდმივა"
 
 #: src/backend/gsl/ExpressionParser.cpp:985
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:439
@@ -4614,7 +4617,7 @@ msgstr "ელექტრონის მუხტი"
 #: src/backend/gsl/ExpressionParser.cpp:1019
 #, kde-format
 msgid "Energy of 1 electron volt"
-msgstr ""
+msgstr "1 ელექტრონ-ვოლტის ენერგია"
 
 #: src/backend/gsl/ExpressionParser.cpp:1022
 #, kde-format
@@ -4649,7 +4652,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:1040
 #, kde-format
 msgid "Rydberg constant"
-msgstr ""
+msgstr "რიდგბერგის მუდმივა"
 
 #: src/backend/gsl/ExpressionParser.cpp:1043
 #, kde-format
@@ -4719,47 +4722,47 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:1092
 #, kde-format
 msgid "Length of 1 inch"
-msgstr ""
+msgstr "1 ინჩის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1095
 #, kde-format
 msgid "Length of 1 foot"
-msgstr ""
+msgstr "1 ფუტის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1098
 #, kde-format
 msgid "Length of 1 yard"
-msgstr ""
+msgstr "1 იარდის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1101
 #, kde-format
 msgid "Length of 1 mile"
-msgstr ""
+msgstr "1 მილის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1104
 #, kde-format
 msgid "Length of 1/1000th of an inch"
-msgstr ""
+msgstr "1/1000 ინჩის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1112
 #, kde-format
 msgid "Speed of 1 kilometer per hour"
-msgstr ""
+msgstr "1 კმ/სთ-ის სიჩქარე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1115
 #, kde-format
 msgid "Speed of 1 mile per hour"
-msgstr ""
+msgstr "1 მილ/სთ-ის სიჩქარე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1118
 #, kde-format
 msgid "Length of 1 nautical mile"
-msgstr ""
+msgstr "1 საზღვაო მილის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1121
 #, kde-format
 msgid "Length of 1 fathom"
-msgstr ""
+msgstr "1 ფათომის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1124
 #, kde-format
@@ -4779,7 +4782,7 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:1143
 #, kde-format
 msgid "Length of 1 micron"
-msgstr ""
+msgstr "1 მიკრონის სიგრძე"
 
 #: src/backend/gsl/ExpressionParser.cpp:1146
 #, kde-format
@@ -4859,7 +4862,7 @@ msgstr "1 კარატის მასა"
 #: src/backend/gsl/ExpressionParser.cpp:1196
 #, kde-format
 msgid "Force of 1 gram weight"
-msgstr ""
+msgstr "1 გრამი სიმძიმის ძალა"
 
 #: src/backend/gsl/ExpressionParser.cpp:1199
 #, kde-format
@@ -9283,16 +9286,14 @@ msgid "(x-Mean)/SD"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "საშუალო"
+msgstr "(x-Median)/MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "საშუალო"
+msgstr "(x-Median)/IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
 #, kde-format
