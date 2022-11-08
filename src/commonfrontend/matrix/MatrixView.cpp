@@ -777,21 +777,24 @@ public:
 
 	void run() override {
 		double range = (m_max - m_min) / m_colors.count();
+		const auto* data = static_cast<const QVector<QVector<double>>*>(m_data);
 		for (int row = m_start; row < m_end; ++row) {
 			m_mutex.lock();
 			QRgb* line = reinterpret_cast<QRgb*>(m_image.scanLine(row));
 			m_mutex.unlock();
 
 			for (int col = 0; col < m_image.width(); ++col) {
-				double value = static_cast<const QVector<QVector<double>>*>(m_data)->at(col).at(row);
-				int index = (value - m_min) / range;
-
-				QColor color;
-				if (index < m_colors.count())
-					color = m_colors.at(index);
-				else
-					color = m_colors.constLast();
-				line[col] = qRgb(color.red(), color.green(), color.blue());
+				const double value = (data->operator[](col))[row];
+				if (!std::isnan(value) && !std::isinf(value)) {
+					int index = (value - m_min) / range;
+					QColor color;
+					if (index < m_colors.count())
+						color = m_colors.at(index);
+					else
+						color = m_colors.constLast();
+					line[col] = qRgb(color.red(), color.green(), color.blue());
+				} else
+					line[col] = qRgb(0, 0, 0);
 			}
 		}
 	}
