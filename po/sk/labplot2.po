@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:42+0000\n"
+"POT-Creation-Date: 2022-11-09 00:43+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -9528,33 +9528,33 @@ msgstr "%1: vložiť zo schránky"
 msgid "%1: clear selected cell(s)"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:906
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:927
+#: src/commonfrontend/matrix/MatrixView.cpp:930
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:937
+#: src/commonfrontend/matrix/MatrixView.cpp:940
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: clear selected column(s)"
 msgstr "Vybrané stĺpce"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:963
+#: src/commonfrontend/matrix/MatrixView.cpp:966
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:987
+#: src/commonfrontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr ""
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1002
+#: src/commonfrontend/matrix/MatrixView.cpp:1005
 #, fuzzy, kde-format
 #| msgid "&Selected Columns"
 msgid "%1: clear selected rows(s)"

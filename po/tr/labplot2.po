@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:42+0000\n"
+"POT-Creation-Date: 2022-11-09 00:43+0000\n"
 "PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -9271,32 +9271,32 @@ msgstr "%1: panodan yapıştır"
 msgid "%1: clear selected cell(s)"
 msgstr "%1: seçilen hücreleri temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:906
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: boş sütunlar ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:927
+#: src/commonfrontend/matrix/MatrixView.cpp:930
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: seçilen sütun(lar)ı kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:937
+#: src/commonfrontend/matrix/MatrixView.cpp:940
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: seçiken sütun(lar)ı temizle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:963
+#: src/commonfrontend/matrix/MatrixView.cpp:966
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: boş satır(lar)ı ekle"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:987
+#: src/commonfrontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: seçilen satır(lar)ı kaldır"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1002
+#: src/commonfrontend/matrix/MatrixView.cpp:1005
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: seçilen satır(lar)ı temizle"

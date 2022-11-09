@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:42+0000\n"
-"PO-Revision-Date: 2022-11-04 21:41+0100\n"
+"POT-Creation-Date: 2022-11-09 00:43+0000\n"
+"PO-Revision-Date: 2022-11-07 19:16+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
@@ -9064,32 +9064,32 @@ msgstr "%1 : coller depuis le presse-papiers"
 msgid "%1: clear selected cell(s)"
 msgstr "%1 : effacer les cellules sélectionnés"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:906
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1 : insérer des colonnes vides"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:927
+#: src/commonfrontend/matrix/MatrixView.cpp:930
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1 : supprimer les colonnes sélectionnés"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:937
+#: src/commonfrontend/matrix/MatrixView.cpp:940
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1 : effacer les colonnes sélectionnés"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:963
+#: src/commonfrontend/matrix/MatrixView.cpp:966
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1 : insérer des lignes vides"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:987
+#: src/commonfrontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1 : supprimer les lignes sélectionnés"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1002
+#: src/commonfrontend/matrix/MatrixView.cpp:1005
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1 : effacer les lignes sélectionnés"
@@ -9400,25 +9400,22 @@ msgstr "Diviser par « IQR »"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:387
 #, kde-format
 msgid "(x-Mean)/SD"
-msgstr ""
+msgstr "(x-Moyenne) / SD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:390
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/MAD"
-msgstr "Médiane"
+msgstr "(x-Médiane) / MAD"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:393
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "(x-Median)/IQR"
-msgstr "Médiane"
+msgstr "(x-Médiane) / IQR"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Interval [a, b]:"
+#, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Intervalle [a, b] :"
+msgstr "Réaliser à [a, b]"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format

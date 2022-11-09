@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:42+0000\n"
+"POT-Creation-Date: 2022-11-09 00:43+0000\n"
 "PO-Revision-Date: 2022-11-06 10:37+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -9107,32 +9107,32 @@ msgstr "%1: enganxa des del porta-retalls"
 msgid "%1: clear selected cell(s)"
 msgstr "%1: neteja la/es cel·la/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:906
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: insereix una/es columna/es buida/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:927
+#: src/commonfrontend/matrix/MatrixView.cpp:930
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: elimina la/es columna/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:937
+#: src/commonfrontend/matrix/MatrixView.cpp:940
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: neteja la/es columna/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:963
+#: src/commonfrontend/matrix/MatrixView.cpp:966
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: insereix una/es fila/es buida/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:987
+#: src/commonfrontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: elimina la/es fila/es seleccionada/es"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1002
+#: src/commonfrontend/matrix/MatrixView.cpp:1005
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: neteja la/es fila/es seleccionada/es"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-06 00:42+0000\n"
+"POT-Creation-Date: 2022-11-09 00:43+0000\n"
 "PO-Revision-Date: 2022-09-18 12:13+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -9020,32 +9020,32 @@ msgstr "%1: paste from clipboard"
 msgid "%1: clear selected cell(s)"
 msgstr "%1: clear selected cell(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:903
+#: src/commonfrontend/matrix/MatrixView.cpp:906
 #, kde-format
 msgid "%1: insert empty column(s)"
 msgstr "%1: insert empty column(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:927
+#: src/commonfrontend/matrix/MatrixView.cpp:930
 #, kde-format
 msgid "%1: remove selected column(s)"
 msgstr "%1: remove selected column(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:937
+#: src/commonfrontend/matrix/MatrixView.cpp:940
 #, kde-format
 msgid "%1: clear selected column(s)"
 msgstr "%1: clear selected column(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:963
+#: src/commonfrontend/matrix/MatrixView.cpp:966
 #, kde-format
 msgid "%1: insert empty rows(s)"
 msgstr "%1: insert empty rows(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:987
+#: src/commonfrontend/matrix/MatrixView.cpp:990
 #, kde-format
 msgid "%1: remove selected rows(s)"
 msgstr "%1: remove selected rows(s)"
 
-#: src/commonfrontend/matrix/MatrixView.cpp:1002
+#: src/commonfrontend/matrix/MatrixView.cpp:1005
 #, kde-format
 msgid "%1: clear selected rows(s)"
 msgstr "%1: clear selected rows(s)"
