@@ -207,11 +207,6 @@
             ]
         },
         {
-            "name": "cantor",
-            "buildsystem": "cmake-ninja",
-            "sources": [ { "type": "git", "url": "https://invent.kde.org/kde/cantor.git" } ]
-        },
-        {
             "name": "labplot",
             "buildsystem": "cmake-ninja",
             "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
