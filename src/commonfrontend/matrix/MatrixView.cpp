@@ -617,7 +617,7 @@ void MatrixView::fillWithConstValues() {
 		auto* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			for (int row = 0; row < m_matrix->rowCount(); ++row)
-				(newData->operator[](col))[row] = value;
+				(*newData)[col][row] = value;
 		}
 		m_matrix->setData(newData);
 		RESET_CURSOR;

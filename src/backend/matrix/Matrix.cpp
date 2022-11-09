@@ -114,9 +114,8 @@ bool Matrix::exportView() const {
 
 	// TODO FITS filter to decide if it can be exported to both
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
-	if (m_view->selectedColumnCount() == 0) {
+	if (m_view->selectedColumnCount() == 0)
 		dlg->setExportSelection(false);
-	}
 
 	bool ret;
 	if ((ret = (dlg->exec() == QDialog::Accepted))) {

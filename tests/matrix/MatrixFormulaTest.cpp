@@ -12,7 +12,10 @@
 #include "backend/lib/macros.h"
 #include "backend/matrix/Matrix.h"
 
-#define INIT_MATRIX Matrix m(QStringLiteral("test matrix"), false);
+#define INIT_MATRIX                                                                                                                                            \
+	Matrix m(QStringLiteral("test matrix"), false);                                                                                                            \
+	QStringList variableNames;                                                                                                                                 \
+	variableNames << QStringLiteral("x") << QStringLiteral("y");
 
 //**********************************************************
 //********** Check different formulas **********************
@@ -20,19 +23,24 @@
 /*!
    formula "1"
 */
-void MatrixFormulaTest::formula1(){
+void MatrixFormulaTest::formula1() {
 	INIT_MATRIX
 
-	// m.setFormula(QLatin1String("1"), variableNames, variableColumns, true);
+	m.setFormula(QStringLiteral("1"));
+	// TODO: currently only via MatrixFunctionDialog
 	// m.updateFormula();
 
-	// QCOMPARE(m.columnCount(), cols);
-	// QCOMPARE(m.rowCount(), rows);
+	const int rows = 10;
+	const int cols = 10;
+
+	QCOMPARE(m.columnCount(), cols);
+	QCOMPARE(m.rowCount(), rows);
 
 	// values
-	/*for (int i = 0; i < rows; i++) {
-	for (int j = 0; j < cols; j++) {
-		QCOMPARE(m[row][col]->valu11);
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			QCOMPARE(m.cell<double>(i, j), 0);
+		}
 	}
-	}*/
-} QTEST_MAIN(MatrixFormulaTest)
+}
+QTEST_MAIN(MatrixFormulaTest)

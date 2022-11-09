@@ -70,7 +70,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 	case Qt::EditRole:
 	case Qt::DisplayRole: {
 		auto mode = m_matrix->mode();
-		// DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
+		// DEBUG(Q_FUNC_INFO << ", DisplayRole, mode = " << mode);
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Double:
 			return {m_matrix->text<double>(row, col)};
