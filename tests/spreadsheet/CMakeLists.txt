@@ -4,8 +4,8 @@ target_link_libraries(SpreadsheetTest labplot2lib Qt5::Test labplot2test)
 
 add_test(NAME SpreadsheetTest COMMAND SpreadsheetTest)
 
-add_executable (FormulaTest FormulaTest.cpp)
+add_executable (SpreadsheetFormulaTest SpreadsheetFormulaTest.cpp)
 
-target_link_libraries(FormulaTest labplot2lib Qt5::Test labplot2test)
+target_link_libraries(SpreadsheetFormulaTest labplot2lib Qt5::Test labplot2test)
 
-add_test(NAME FormulaTest COMMAND FormulaTest)
+add_test(NAME SpreadsheetFormulaTest COMMAND SpreadsheetFormulaTest)

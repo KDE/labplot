@@ -1,5 +1,5 @@
 /*
-	File                 : FormulaTest.cpp
+	File                 : SpreadsheetFormulaTest.cpp
 	Project              : LabPlot
 	Description          : Tests for formula in spreadsheets
 	--------------------------------------------------------------------
@@ -8,7 +8,7 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "FormulaTest.h"
+#include "SpreadsheetFormulaTest.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -37,7 +37,7 @@
 /*!
    formula "1"
 */
-void FormulaTest::formula1() {
+void SpreadsheetFormulaTest::formula1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("1"), variableNames, variableColumns, true);
@@ -60,7 +60,7 @@ void FormulaTest::formula1() {
 /*!
    formula "x"
 */
-void FormulaTest::formulax() {
+void SpreadsheetFormulaTest::formulax() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("x"), variableNames, variableColumns, true);
@@ -75,7 +75,7 @@ void FormulaTest::formulax() {
 /*!
    formula "x + 1"
 */
-void FormulaTest::formulaxp1() {
+void SpreadsheetFormulaTest::formulaxp1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("x+1"), variableNames, variableColumns, true);
@@ -93,7 +93,7 @@ void FormulaTest::formulaxp1() {
 /*!
    formula "cell(1, x)"
 */
-void FormulaTest::formulaCell1() {
+void SpreadsheetFormulaTest::formulaCell1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(1, x)"), variableNames, variableColumns, true);
@@ -108,7 +108,7 @@ void FormulaTest::formulaCell1() {
 /*!
    formula "cell(i, x)"
 */
-void FormulaTest::formulaCelli() {
+void SpreadsheetFormulaTest::formulaCelli() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(i, x)"), variableNames, variableColumns, true);
@@ -123,7 +123,7 @@ void FormulaTest::formulaCelli() {
 /*!
    formula "cell(i + 1, x)"
 */
-void FormulaTest::formulaCellip1() {
+void SpreadsheetFormulaTest::formulaCellip1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(i + 1, x)"), variableNames, variableColumns, true);
@@ -141,7 +141,7 @@ void FormulaTest::formulaCellip1() {
 /*!
    formula "cell(i - 1, x)"
 */
-void FormulaTest::formulaCellim1() {
+void SpreadsheetFormulaTest::formulaCellim1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(i - 1, x)"), variableNames, variableColumns, true);
@@ -159,7 +159,7 @@ void FormulaTest::formulaCellim1() {
 /*!
    formula "cell(2*i, x)"
 */
-void FormulaTest::formulaCell2i() {
+void SpreadsheetFormulaTest::formulaCell2i() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(2*i, x)"), variableNames, variableColumns, true);
@@ -177,7 +177,7 @@ void FormulaTest::formulaCell2i() {
 /*!
    formula "cell(i+1, x) - cell(i-1, x)"
 */
-void FormulaTest::formulaCellip1im1() {
+void SpreadsheetFormulaTest::formulaCellip1im1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("cell(i+1, x) - cell(i-1, x)"), variableNames, variableColumns, true);
@@ -195,7 +195,7 @@ void FormulaTest::formulaCellip1im1() {
 /*!
    formula "sqrt(cell(i+1, x))"
 */
-void FormulaTest::formulaCellsqrtip1() {
+void SpreadsheetFormulaTest::formulaCellsqrtip1() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("sqrt(cell(i+1, x))"), variableNames, variableColumns, true);
@@ -214,7 +214,7 @@ void FormulaTest::formulaCellsqrtip1() {
 /*!
    formula "ma(x)"
 */
-void FormulaTest::formulama() {
+void SpreadsheetFormulaTest::formulama() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("ma(x)"), variableNames, variableColumns, true);
@@ -232,7 +232,7 @@ void FormulaTest::formulama() {
 /*!
    formula "mr(x)"
 */
-void FormulaTest::formulamr() {
+void SpreadsheetFormulaTest::formulamr() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("mr(x)"), variableNames, variableColumns, true);
@@ -250,7 +250,7 @@ void FormulaTest::formulamr() {
 /*!
    formula "sma(n, x)"
 */
-void FormulaTest::formulasma() {
+void SpreadsheetFormulaTest::formulasma() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("sma(4, x)"), variableNames, variableColumns, true);
@@ -269,7 +269,7 @@ void FormulaTest::formulasma() {
 /*!
    formula "smr(n, x)"
 */
-void FormulaTest::formulasmr() {
+void SpreadsheetFormulaTest::formulasmr() {
 	INIT_SPREADSHEET
 
 	sheet.column(1)->setFormula(QLatin1String("smr(4, x)"), variableNames, variableColumns, true);
@@ -285,4 +285,4 @@ void FormulaTest::formulasmr() {
 	}
 }
 
-QTEST_MAIN(FormulaTest)
+QTEST_MAIN(SpreadsheetFormulaTest)

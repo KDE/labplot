@@ -1,5 +1,5 @@
 /*
-	File                 : FormulaTest.h
+	File                 : SpreadsheetFormulaTest.h
 	Project              : LabPlot
 	Description          : Tests for formula in spreadsheet
 	--------------------------------------------------------------------
@@ -8,12 +8,12 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef FORMULATEST_H
-#define FORMULATEST_H
+#ifndef SPREADSHEETFORMULATEST_H
+#define SPREADSHEETFORMULATEST_H
 
 #include "../CommonTest.h"
 
-class FormulaTest : public CommonTest {
+class SpreadsheetFormulaTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
