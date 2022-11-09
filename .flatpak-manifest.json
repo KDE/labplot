@@ -1,5 +1,5 @@
 {
-    "id": "org.kde.labplot",
+    "id": "org.kde.labplot2",
     "branch": "master",
     "runtime": "org.kde.Platform",
     "runtime-version": "5.15-21.08",
@@ -207,7 +207,7 @@
             ]
         },
         {
-            "name": "labplot",
+            "name": "labplot2",
             "buildsystem": "cmake-ninja",
             "config-opts": [ "-DQt5Mqtt_DIR=/app/qtmqtt/usr/lib/x86_64-linux-gnu/cmake/Qt5Mqtt" ],
 	    "sources": [
