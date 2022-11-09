@@ -33,7 +33,18 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum class GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary };
+	enum class GraphType {
+		Cartesian,
+		PolarInDegree,
+		PolarInRadians,
+		LogarithmicNaturalXY,
+		LogarithmicNaturalX,
+		LogarithmicNaturalY,
+		Logarithmic10XY,
+		Logarithmic10X,
+		Logarithmic10Y,
+		Ternary
+	};
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
 	enum class PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
@@ -79,6 +90,9 @@ public:
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
+
+	static QString graphTypeToString(const GraphType);
+	static GraphType stringToGraphType(const QString&);
 
 	bool isLoaded{false};
 	QImage originalPlotImage;

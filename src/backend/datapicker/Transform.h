@@ -30,6 +30,8 @@ private:
 	// Scene coordinates
 	double X[4]{0};
 	double Y[4]{0};
+
+	friend class DatapickerTest;
 };
 
 #endif // TRANSFORM_H

@@ -20,56 +20,99 @@ extern "C" {
 // Transform::Transform() = default;
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
-	if (axisPoints.type == DatapickerImage::GraphType::LogarithmicX) {
+	switch (axisPoints.type) {
+	case DatapickerImage::GraphType::LogarithmicNaturalX: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
 			x[i] = log(axisPoints.logicalPos[i].x());
 			y[i] = axisPoints.logicalPos[i].y();
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
-	} else if (axisPoints.type == DatapickerImage::GraphType::LogarithmicY) {
+		break;
+	}
+	case DatapickerImage::GraphType::LogarithmicNaturalY: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].y() <= 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x();
 			y[i] = log(axisPoints.logicalPos[i].y());
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
-	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInDegree) {
+		break;
+	}
+	case DatapickerImage::GraphType::LogarithmicNaturalXY: {
+		for (int i = 0; i < 3; ++i) {
+			if (axisPoints.logicalPos[i].x() <= 0)
+				return false;
+			x[i] = log(axisPoints.logicalPos[i].x());
+			y[i] = log(axisPoints.logicalPos[i].y());
+		}
+		break;
+	}
+	case DatapickerImage::GraphType::Logarithmic10X: {
+		for (int i = 0; i < 3; ++i) {
+			if (axisPoints.logicalPos[i].x() <= 0)
+				return false;
+			x[i] = log10(axisPoints.logicalPos[i].x());
+			y[i] = axisPoints.logicalPos[i].y();
+		}
+		break;
+	}
+	case DatapickerImage::GraphType::Logarithmic10Y: {
+		for (int i = 0; i < 3; ++i) {
+			if (axisPoints.logicalPos[i].y() <= 0)
+				return false;
+			x[i] = axisPoints.logicalPos[i].x();
+			y[i] = log10(axisPoints.logicalPos[i].y());
+		}
+		break;
+	}
+	case DatapickerImage::GraphType::Logarithmic10XY: {
+		for (int i = 0; i < 3; ++i) {
+			if (axisPoints.logicalPos[i].x() <= 0)
+				return false;
+			x[i] = log10(axisPoints.logicalPos[i].x());
+			y[i] = log10(axisPoints.logicalPos[i].y());
+		}
+		break;
+	}
+	case DatapickerImage::GraphType::PolarInDegree: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x() * cos(axisPoints.logicalPos[i].y() * M_PI_180);
 			y[i] = axisPoints.logicalPos[i].x() * sin(axisPoints.logicalPos[i].y() * M_PI_180);
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
-	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInRadians) {
+		break;
+	}
+	case DatapickerImage::GraphType::PolarInRadians: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() < 0)
 				return false;
 			x[i] = axisPoints.logicalPos[i].x() * cos(axisPoints.logicalPos[i].y());
 			y[i] = axisPoints.logicalPos[i].x() * sin(axisPoints.logicalPos[i].y());
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
-	} else if (axisPoints.type == DatapickerImage::GraphType::Ternary) {
+		break;
+	}
+	case DatapickerImage::GraphType::Ternary: {
 		for (int i = 0; i < 3; ++i) {
 			x[i] = (2 * axisPoints.logicalPos[i].y() + axisPoints.logicalPos[i].z()) / (2 * axisPoints.ternaryScale);
 			y[i] = (M_SQRT3 * axisPoints.logicalPos[i].z()) / (2 * axisPoints.ternaryScale);
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
-	} else {
+		break;
+	}
+	case DatapickerImage::GraphType::Cartesian: {
 		for (int i = 0; i < 3; ++i) {
 			x[i] = axisPoints.logicalPos[i].x();
 			y[i] = axisPoints.logicalPos[i].y();
-			X[i] = axisPoints.scenePos[i].x();
-			Y[i] = axisPoints.scenePos[i].y();
 		}
+		break;
+	}
+		// Do not add default, because then we don't get a warning if one case is not implemented
+	}
+
+	for (int i = 0; i < 3; i++) {
+		X[i] = axisPoints.scenePos[i].x();
+		Y[i] = axisPoints.scenePos[i].y();
 	}
 
 	return true;
@@ -117,24 +160,36 @@ QVector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const Datapicker
 }
 
 QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::ReferencePoints& axisPoints) const {
-	if (axisPoints.type == DatapickerImage::GraphType::LogarithmicX) {
+	switch (axisPoints.type) {
+	case DatapickerImage::GraphType::Cartesian:
+		return QVector3D(point.x(), point.y(), 0);
+	case DatapickerImage::GraphType::LogarithmicNaturalXY:
+		return QVector3D(exp(point.x()), exp(point.y()), 0);
+	case DatapickerImage::GraphType::LogarithmicNaturalX:
 		return QVector3D(exp(point.x()), point.y(), 0);
-	} else if (axisPoints.type == DatapickerImage::GraphType::LogarithmicY) {
+	case DatapickerImage::GraphType::LogarithmicNaturalY:
 		return QVector3D(point.x(), exp(point.y()), 0);
-	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInDegree) {
+	case DatapickerImage::GraphType::Logarithmic10XY:
+		return QVector3D(pow(10, point.x()), pow(10, point.y()), 0);
+	case DatapickerImage::GraphType::Logarithmic10X:
+		return QVector3D(pow(10, point.x()), point.y(), 0);
+	case DatapickerImage::GraphType::Logarithmic10Y:
+		return QVector3D(point.x(), pow(10, point.y()), 0);
+	case DatapickerImage::GraphType::PolarInDegree: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());
 		double angle = atan(point.y() / point.x() * M_180_PI);
 		return QVector3D(r, angle, 0);
-	} else if (axisPoints.type == DatapickerImage::GraphType::PolarInRadians) {
+	}
+	case DatapickerImage::GraphType::PolarInRadians: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());
 		double angle = atan(point.y() / point.x());
 		return QVector3D(r, angle, 0);
-	} else if (axisPoints.type == DatapickerImage::GraphType::Ternary) {
+	}
+	case DatapickerImage::GraphType::Ternary: {
 		double c = (point.y() * 2 * axisPoints.ternaryScale) / M_SQRT3;
 		double b = (point.x() * 2 * axisPoints.ternaryScale - c) / 2;
 		double a = axisPoints.ternaryScale - b - c;
 		return QVector3D(a, b, c);
-	} else {
-		return QVector3D(point.x(), point.y(), 0);
+	}
 	}
 }

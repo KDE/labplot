@@ -87,7 +87,7 @@ private Q_SLOTS:
 
 	void minSegmentLengthChanged(int);
 	void pointSeparationChanged(int);
-	void graphTypeChanged();
+	void graphTypeChanged(int);
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
