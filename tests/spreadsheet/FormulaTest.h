@@ -11,14 +11,12 @@
 #ifndef FORMULATEST_H
 #define FORMULATEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class FormulaTest : public QObject {
+class FormulaTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	void formula1();
 	void formulax();
 	void formulaxp1();

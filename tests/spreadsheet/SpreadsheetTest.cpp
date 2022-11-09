@@ -4,6 +4,7 @@
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,7 +16,6 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/FlattenColumnsDialog.h"
 
-#include <QApplication>
 #include <QClipboard>
 #include <QUndoStack>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
@@ -24,12 +24,6 @@
 
 extern "C" {
 #include <gsl/gsl_math.h>
-}
-
-void SpreadsheetTest::initTestCase() {
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-	QLocale::setDefault(QLocale(QLocale::C));
 }
 
 //**********************************************************

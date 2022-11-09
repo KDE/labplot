@@ -31,12 +31,6 @@
 	variableColumns << sheet.column(0);                                                                                                                        \
 	sheet.column(1)->setFormulaVariableColumn(sheet.column(0));
 
-void FormulaTest::initTestCase() {
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-	QLocale::setDefault(QLocale(QLocale::C));
-}
-
 //**********************************************************
 //********** Check different formulas **********************
 //**********************************************************
