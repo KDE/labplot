@@ -1384,8 +1384,7 @@ void ColumnPrivate::updateFormula() {
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
-										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // percentile(p, x)
-										QLatin1String("cell\\((.*),.*%1\\)")}; // cell(f(i), x)
+						QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
 
 		for (auto m : optionMethodList) {
 			QRegExp rx(m.arg(varName));
@@ -1394,57 +1393,38 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				if (m.startsWith(QLatin1String("cell")))
-					QDEBUG("ARG = " << rx.cap(1))
-				double p = numberLocale.toDouble(rx.cap(1)); // option (if cell() index contains i: p=0 -> index < 0)
+				double p = numberLocale.toDouble(rx.cap(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
 				if (m.startsWith(QLatin1String("percentile")))
 					p /= 100.;
 
-				const int index = qRound64(p) - 1;
-				bool indexInRange = true;
-				if (index < 0 || index > column->rowCount() - 1)
-					indexInRange = false;
-
 				double value = 0.0;
 				switch (column->columnMode()) { // all types
 				case AbstractColumn::ColumnMode::Double: {
 					auto data = reinterpret_cast<QVector<double>*>(column->data());
-					if (m.startsWith(QLatin1String("cell"))) {
-						if (indexInRange)
-							value = data->at(index);
-					} else
-						value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
+					value = nsl_stats_quantile(data->data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
 					break;
 				}
 				case AbstractColumn::ColumnMode::Integer: {
 					auto* intData = reinterpret_cast<QVector<int>*>(column->data());
-					if (m.startsWith(QLatin1String("cell"))) {
-						if (indexInRange)
-							value = static_cast<double>(intData->at(index));
-					} else {
-						QVector<double> data = QVector<double>(); // copy data to double
-						data.reserve(column->rowCount());
-						for (auto v : *intData)
-							data << static_cast<double>(v);
-						value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
-					}
+
+					QVector<double> data = QVector<double>(); // copy data to double
+					data.reserve(column->rowCount());
+					for (auto v : *intData)
+						data << static_cast<double>(v);
+					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
 					break;
 				}
 				case AbstractColumn::ColumnMode::BigInt: {
 					auto* bigIntData = reinterpret_cast<QVector<qint64>*>(column->data());
-					if (m.startsWith(QLatin1String("cell"))) {
-						if (indexInRange)
-							value = static_cast<double>(bigIntData->at(index));
-					} else {
-						QVector<double> data = QVector<double>(); // copy data to double
-						data.reserve(column->rowCount());
-						for (auto v : *bigIntData)
-							data << static_cast<double>(v);
-						value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
-					}
+
+					QVector<double> data = QVector<double>(); // copy data to double
+					data.reserve(column->rowCount());
+					for (auto v : *bigIntData)
+						data << static_cast<double>(v);
+					value = nsl_stats_quantile(data.data(), 1, column->statistics().size, p, nsl_stats_quantile_type7);
 					break;
 				}
 				case AbstractColumn::ColumnMode::DateTime: // not supported yet
@@ -1454,11 +1434,7 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				// only replace when not cell() or when index of cell() does not contain i (index==-1)
-				if (!m.startsWith(QLatin1String("cell")) || indexInRange)
-					formula.replace(rx.cap(0), numberLocale.toString(value));
-				else // avoid endless loop
-					pos++;
+				formula.replace(rx.cap(0), numberLocale.toString(value));
 			}
 		}
 
