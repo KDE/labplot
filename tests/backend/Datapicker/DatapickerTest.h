@@ -20,6 +20,10 @@ private Q_SLOTS:
 	void mapTypeToCartesian();
 	void mapCartesianToType();
 	void mapSceneToLogical();
+    void cartesianMapping();
+    void logarithmicNaturalXMapping();
+    void logarithmicNaturalYMapping();
+    void logarithmicNaturalXYMapping();
 };
 
 #endif // DATAPICKERTEST_H

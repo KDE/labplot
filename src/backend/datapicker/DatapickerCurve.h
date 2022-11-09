@@ -102,5 +102,7 @@ Q_SIGNALS:
 	void pointErrorBarBrushChanged(QBrush);
 	void pointErrorBarPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
+
+    friend class DatapickerTest;
 };
 #endif // DATAPICKERCURVE_H

@@ -9,13 +9,15 @@
 */
 
 #include "DatapickerTest.h"
-//#include "backend/core/Project.h"
-//#include "backend/lib/trace.h"
-//#include "backend/worksheet/TextLabel.h"
-//#include "backend/worksheet/TextLabelPrivate.h"
-//#include "kdefrontend/widgets/LabelWidget.h"
 #include "backend/datapicker/DatapickerImage.h"
 #include "backend/datapicker/Transform.h"
+#include "kdefrontend/widgets/DatapickerImageWidget.h"
+#include "backend/datapicker/DatapickerImagePrivate.h"
+#include "kdefrontend/widgets/DatapickerCurveWidget.h"
+#include "backend/datapicker/DatapickerCurve.h"
+#include "backend/datapicker/DatapickerCurvePrivate.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/core/AbstractColumn.h"
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
 	VALUES_EQUAL(vec.x(), ref.x());                                                                                                                            \
@@ -25,7 +27,7 @@
 void DatapickerTest::mapTypeToCartesian() {
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Cartesian;
+        points.type = DatapickerImage::GraphType::Linear;
 		points.logicalPos[0].setX(1);
 		points.logicalPos[0].setY(2);
 		points.logicalPos[1].setX(3);
@@ -58,7 +60,7 @@ void DatapickerTest::mapTypeToCartesian() {
 	// ln
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalX;
+        points.type = DatapickerImage::GraphType::LnX;
 		points.logicalPos[0].setX(exp(1));
 		points.logicalPos[0].setY(2);
 		points.logicalPos[1].setX(exp(2));
@@ -90,7 +92,7 @@ void DatapickerTest::mapTypeToCartesian() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalY;
+        points.type = DatapickerImage::GraphType::LnY;
 		points.logicalPos[0].setX(1);
 		points.logicalPos[0].setY(exp(1));
 		points.logicalPos[1].setX(3);
@@ -122,7 +124,7 @@ void DatapickerTest::mapTypeToCartesian() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalXY;
+        points.type = DatapickerImage::GraphType::LnXY;
 		points.logicalPos[0].setX(exp(5));
 		points.logicalPos[0].setY(exp(1));
 		points.logicalPos[1].setX(exp(6));
@@ -155,7 +157,7 @@ void DatapickerTest::mapTypeToCartesian() {
 	// log10
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10X;
+        points.type = DatapickerImage::GraphType::Log10X;
 		points.logicalPos[0].setX(pow(10, 1));
 		points.logicalPos[0].setY(2);
 		points.logicalPos[1].setX(pow(10, 2));
@@ -187,7 +189,7 @@ void DatapickerTest::mapTypeToCartesian() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10Y;
+        points.type = DatapickerImage::GraphType::Log10Y;
 		points.logicalPos[0].setX(1);
 		points.logicalPos[0].setY(pow(10, 1));
 		points.logicalPos[1].setX(3);
@@ -219,7 +221,7 @@ void DatapickerTest::mapTypeToCartesian() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10XY;
+        points.type = DatapickerImage::GraphType::Log10XY;
 		points.logicalPos[0].setX(pow(10, 5));
 		points.logicalPos[0].setY(pow(10, 1));
 		points.logicalPos[1].setX(pow(10, 6));
@@ -318,7 +320,7 @@ void DatapickerTest::mapTypeToCartesian() {
 void DatapickerTest::mapCartesianToType() {
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Cartesian;
+        points.type = DatapickerImage::GraphType::Linear;
 		QPointF point{5, 2343.23};
 
 		Transform t;
@@ -327,7 +329,7 @@ void DatapickerTest::mapCartesianToType() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalX;
+        points.type = DatapickerImage::GraphType::LnX;
 		QPointF point{5, 2343.23};
 
 		Transform t;
@@ -336,7 +338,7 @@ void DatapickerTest::mapCartesianToType() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalY;
+        points.type = DatapickerImage::GraphType::LnY;
 		QPointF point{5, 2.23};
 
 		Transform t;
@@ -345,7 +347,7 @@ void DatapickerTest::mapCartesianToType() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LogarithmicNaturalXY;
+        points.type = DatapickerImage::GraphType::LnXY;
 		QPointF point{5, 2.23};
 
 		Transform t;
@@ -355,7 +357,7 @@ void DatapickerTest::mapCartesianToType() {
 	// log10
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10X;
+        points.type = DatapickerImage::GraphType::Log10X;
 		QPointF point{5, 2343.23};
 
 		Transform t;
@@ -364,7 +366,7 @@ void DatapickerTest::mapCartesianToType() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10Y;
+        points.type = DatapickerImage::GraphType::Log10Y;
 		QPointF point{5, 2.23};
 
 		Transform t;
@@ -373,7 +375,7 @@ void DatapickerTest::mapCartesianToType() {
 
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10XY;
+        points.type = DatapickerImage::GraphType::Log10XY;
 		QPointF point{5, 2.23};
 
 		Transform t;
@@ -404,12 +406,130 @@ void DatapickerTest::mapCartesianToType() {
 void DatapickerTest::mapSceneToLogical() {
 	{
 		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Logarithmic10XY;
+        points.type = DatapickerImage::GraphType::Log10XY;
 		QPointF point{5, 2.23};
 
 		Transform t;
 		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), pow(10, 2.23), 0));
 	}
 }
+
+void DatapickerTest::cartesianMapping() {
+
+    Datapicker datapicker(QStringLiteral("Test"));
+    datapicker.addNewPoint(QPointF(0,1), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(0,0), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(1,0), datapicker.m_image);
+
+    auto ap = datapicker.m_image->axisPoints();
+    ap.type = DatapickerImage::GraphType::Linear;
+    datapicker.m_image->setAxisPoints(ap);
+
+    DatapickerImageWidget w(nullptr);
+    w.setImages({datapicker.m_image});
+    w.ui.sbPositionX1->setValue(0);
+    w.ui.sbPositionY1->setValue(10);
+    w.ui.sbPositionZ1->setValue(0);
+    w.ui.sbPositionX2->setValue(0);
+    w.ui.sbPositionY2->setValue(0);
+    w.ui.sbPositionZ2->setValue(0);
+    w.ui.sbPositionX3->setValue(10);
+    w.ui.sbPositionY3->setValue(0);
+    w.ui.sbPositionZ3->setValue(0);
+    w.logicalPositionChanged();
+
+    auto* curve = new DatapickerCurve(i18n("Curve"));
+    curve->addDatasheet(datapicker.m_image->axisPoints().type);
+    datapicker.addChild(curve);
+
+    datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(0), 5);
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(0), 5);
+
+    datapicker.addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(1), 7);
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(1), 6.5);
+}
+
+void DatapickerTest::logarithmicNaturalXMapping() {
+    Datapicker datapicker(QStringLiteral("Test"));
+    datapicker.addNewPoint(QPointF(3,10), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(3,0), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(13,0), datapicker.m_image);
+
+    auto ap = datapicker.m_image->axisPoints();
+    ap.type = DatapickerImage::GraphType::LnX;
+    datapicker.m_image->setAxisPoints(ap);
+
+    DatapickerImageWidget w(nullptr);
+    w.setImages({datapicker.m_image});
+    w.ui.sbPositionX1->setValue(0);
+    w.ui.sbPositionY1->setValue(100);
+    w.ui.sbPositionZ1->setValue(0);
+    w.ui.sbPositionX2->setValue(0);
+    w.ui.sbPositionY2->setValue(0);
+    w.ui.sbPositionZ2->setValue(0);
+    w.ui.sbPositionX3->setValue(100);
+    w.ui.sbPositionY3->setValue(0);
+    w.ui.sbPositionZ3->setValue(0);
+    w.logicalPositionChanged();
+
+    auto* curve = new DatapickerCurve(i18n("Curve"));
+    curve->addDatasheet(datapicker.m_image->axisPoints().type);
+    datapicker.addChild(curve);
+
+    datapicker.addNewPoint(QPointF(5, 5), curve); // updates the curve data
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+
+    w.ui.sbPositionX1->setValue(1); // axisPointsChanged will call updatePoint()
+    w.ui.sbPositionX2->setValue(1); // axisPointsChanged will call updatePoint()
+
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(0), 50);
+}
+
+void DatapickerTest::logarithmicNaturalYMapping() {
+    Datapicker datapicker(QStringLiteral("Test"));
+    datapicker.addNewPoint(QPointF(3,10), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(3,0), datapicker.m_image);
+    datapicker.addNewPoint(QPointF(13,0), datapicker.m_image);
+
+    auto ap = datapicker.m_image->axisPoints();
+    ap.type = DatapickerImage::GraphType::LnY;
+    datapicker.m_image->setAxisPoints(ap);
+
+    DatapickerImageWidget w(nullptr);
+    w.setImages({datapicker.m_image});
+    w.ui.sbPositionX1->setValue(0);
+    w.ui.sbPositionY1->setValue(100);
+    w.ui.sbPositionZ1->setValue(0);
+    w.ui.sbPositionX2->setValue(0);
+    w.ui.sbPositionY2->setValue(0);
+    w.ui.sbPositionZ2->setValue(0);
+    w.ui.sbPositionX3->setValue(100);
+    w.ui.sbPositionY3->setValue(0);
+    w.ui.sbPositionZ3->setValue(0);
+    w.logicalPositionChanged();
+
+    auto* curve = new DatapickerCurve(i18n("Curve"));
+    curve->addDatasheet(datapicker.m_image->axisPoints().type);
+    datapicker.addChild(curve);
+
+    datapicker.addNewPoint(QPointF( ), curve); // updates the curve data
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+
+    w.ui.sbPositionY2->setValue(1); // axisPointsChanged will call updatePoint()
+    w.ui.sbPositionY3->setValue(1); // axisPointsChanged will call updatePoint()
+
+    QCOMPARE(curve->d_ptr->posXColumn->valueAt(0), 20);
+    QCOMPARE(curve->d_ptr->posYColumn->valueAt(0), 50); // TODO: Value not correct yet
+}
+
+void DatapickerTest::logarithmicNaturalXYMapping() {
+
+}
+
 
 QTEST_MAIN(DatapickerTest)

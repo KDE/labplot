@@ -158,7 +158,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	QString yLabel;
 
 	switch (type) {
-	case DatapickerImage::GraphType::Cartesian: {
+    case DatapickerImage::GraphType::Linear: {
 		xLabel = QLatin1Char('x');
 		yLabel = QLatin1Char('y');
 		break;
@@ -173,32 +173,32 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 		yLabel = QLatin1String("y(rad)");
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicNaturalXY: {
+    case DatapickerImage::GraphType::LnXY: {
 		xLabel = QLatin1String("ln(x)");
 		yLabel = QLatin1String("ln(y)");
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicNaturalX: {
+    case DatapickerImage::GraphType::LnX: {
 		xLabel = QLatin1String("ln(x)");
 		yLabel = QLatin1String("y");
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicNaturalY: {
+    case DatapickerImage::GraphType::LnY: {
 		xLabel = QLatin1String("x");
 		yLabel = QLatin1String("ln(y)");
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10XY: {
+    case DatapickerImage::GraphType::Log10XY: {
 		xLabel = QLatin1String("log(x)");
 		yLabel = QLatin1String("log(y)");
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10X: {
+    case DatapickerImage::GraphType::Log10X: {
 		xLabel = QLatin1String("log(x)");
 		yLabel = QLatin1String("y");
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10Y: {
+    case DatapickerImage::GraphType::Log10Y: {
 		xLabel = QLatin1String("x");
 		yLabel = QLatin1String("log(y)");
 		break;

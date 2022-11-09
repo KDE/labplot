@@ -34,15 +34,15 @@ public:
 	~DatapickerImage() override;
 
 	enum class GraphType {
-		Cartesian,
+        Linear,
 		PolarInDegree,
 		PolarInRadians,
-		LogarithmicNaturalXY,
-		LogarithmicNaturalX,
-		LogarithmicNaturalY,
-		Logarithmic10XY,
-		Logarithmic10X,
-		Logarithmic10Y,
+        LnXY,
+        LnX,
+        LnY,
+        Log10XY,
+        Log10X,
+        Log10Y,
 		Ternary
 	};
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
@@ -50,7 +50,7 @@ public:
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
-		GraphType type{GraphType::Cartesian};
+        GraphType type{GraphType::Linear};
 		QPointF scenePos[3];
 		QVector3D logicalPos[3];
 		double ternaryScale{1.0};

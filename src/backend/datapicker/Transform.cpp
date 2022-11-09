@@ -21,7 +21,7 @@ extern "C" {
 
 bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisPoints) {
 	switch (axisPoints.type) {
-	case DatapickerImage::GraphType::LogarithmicNaturalX: {
+	case DatapickerImage::GraphType::LnX: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
@@ -30,7 +30,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicNaturalY: {
+	case DatapickerImage::GraphType::LnY: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].y() <= 0)
 				return false;
@@ -39,7 +39,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::LogarithmicNaturalXY: {
+	case DatapickerImage::GraphType::LnXY: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
@@ -48,7 +48,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10X: {
+	case DatapickerImage::GraphType::Log10X: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
@@ -57,7 +57,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10Y: {
+	case DatapickerImage::GraphType::Log10Y: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].y() <= 0)
 				return false;
@@ -66,7 +66,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::Logarithmic10XY: {
+	case DatapickerImage::GraphType::Log10XY: {
 		for (int i = 0; i < 3; ++i) {
 			if (axisPoints.logicalPos[i].x() <= 0)
 				return false;
@@ -100,7 +100,7 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-	case DatapickerImage::GraphType::Cartesian: {
+	case DatapickerImage::GraphType::Linear: {
 		for (int i = 0; i < 3; ++i) {
 			x[i] = axisPoints.logicalPos[i].x();
 			y[i] = axisPoints.logicalPos[i].y();
@@ -161,19 +161,19 @@ QVector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const Datapicker
 
 QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::ReferencePoints& axisPoints) const {
 	switch (axisPoints.type) {
-	case DatapickerImage::GraphType::Cartesian:
+	case DatapickerImage::GraphType::Linear:
 		return QVector3D(point.x(), point.y(), 0);
-	case DatapickerImage::GraphType::LogarithmicNaturalXY:
+	case DatapickerImage::GraphType::LnXY:
 		return QVector3D(exp(point.x()), exp(point.y()), 0);
-	case DatapickerImage::GraphType::LogarithmicNaturalX:
+	case DatapickerImage::GraphType::LnX:
 		return QVector3D(exp(point.x()), point.y(), 0);
-	case DatapickerImage::GraphType::LogarithmicNaturalY:
+	case DatapickerImage::GraphType::LnY:
 		return QVector3D(point.x(), exp(point.y()), 0);
-	case DatapickerImage::GraphType::Logarithmic10XY:
+	case DatapickerImage::GraphType::Log10XY:
 		return QVector3D(pow(10, point.x()), pow(10, point.y()), 0);
-	case DatapickerImage::GraphType::Logarithmic10X:
+	case DatapickerImage::GraphType::Log10X:
 		return QVector3D(pow(10, point.x()), point.y(), 0);
-	case DatapickerImage::GraphType::Logarithmic10Y:
+	case DatapickerImage::GraphType::Log10Y:
 		return QVector3D(point.x(), pow(10, point.y()), 0);
 	case DatapickerImage::GraphType::PolarInDegree: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());

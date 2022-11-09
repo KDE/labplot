@@ -163,15 +163,15 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 	ssForeground->setRange(0, 100);
 	editTabLayout->addWidget(ssForeground, 11, 2);
 
-	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"), (int)DatapickerImage::GraphType::Cartesian);
+	ui.cbGraphType->addItem(i18n("Cartesian (x, y)"), (int)DatapickerImage::GraphType::Linear);
 	ui.cbGraphType->addItem(i18n("Polar (x, y°)"), (int)DatapickerImage::GraphType::PolarInDegree);
 	ui.cbGraphType->addItem(i18n("Polar (x, y(rad))"), (int)DatapickerImage::GraphType::PolarInRadians);
-	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), ln(y))"), (int)DatapickerImage::GraphType::LogarithmicNaturalXY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"), (int)DatapickerImage::GraphType::LogarithmicNaturalX);
-	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"), (int)DatapickerImage::GraphType::LogarithmicNaturalY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), log(y))"), (int)DatapickerImage::GraphType::Logarithmic10XY);
-	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), y)"), (int)DatapickerImage::GraphType::Logarithmic10X);
-	ui.cbGraphType->addItem(i18n("Logarithmic (x, log(y))"), (int)DatapickerImage::GraphType::Logarithmic10Y);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), ln(y))"), (int)DatapickerImage::GraphType::LnXY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (ln(x), y)"), (int)DatapickerImage::GraphType::LnX);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, ln(y))"), (int)DatapickerImage::GraphType::LnY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), log(y))"), (int)DatapickerImage::GraphType::Log10XY);
+	ui.cbGraphType->addItem(i18n("Logarithmic (log(x), y)"), (int)DatapickerImage::GraphType::Log10X);
+	ui.cbGraphType->addItem(i18n("Logarithmic (x, log(y))"), (int)DatapickerImage::GraphType::Log10Y);
 	ui.cbGraphType->addItem(i18n("Ternary (x, y, z)"), (int)DatapickerImage::GraphType::Ternary);
 
 	ui.lTernaryScale->setHidden(true);
@@ -383,22 +383,21 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	if (points.type == DatapickerImage::GraphType::LogarithmicNaturalXY || points.type == DatapickerImage::GraphType::LogarithmicNaturalX
-		|| points.type == DatapickerImage::GraphType::Logarithmic10XY || points.type == DatapickerImage::GraphType::Logarithmic10X) {
+    if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX  || points.type  == DatapickerImage::GraphType::Log10XY || points.type == DatapickerImage::GraphType::Log10X) {
 		if (points.logicalPos[0].x() == 0.0f)
-			points.logicalPos[0].setX(0.01f);
+            points.logicalPos[0].setX(0.01f);
 		if (points.logicalPos[1].x() == 0.0f)
-			points.logicalPos[1].setX(0.01f);
+            points.logicalPos[1].setX(0.01f);
 		if (points.logicalPos[2].x() == 0.0f)
 			points.logicalPos[2].setX(0.01f);
 	}
-	if (points.type == DatapickerImage::GraphType::LogarithmicNaturalXY || points.type == DatapickerImage::GraphType::LogarithmicNaturalY
-		|| points.type == DatapickerImage::GraphType::Logarithmic10XY || points.type == DatapickerImage::GraphType::Logarithmic10Y) {
-		if (points.logicalPos[0].y() == 0.0f)
+    if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnY
+        || points.type == DatapickerImage::GraphType::Log10XY || points.type == DatapickerImage::GraphType::Log10Y) {
+        if (points.logicalPos[0].y() == 0.0f)
 			points.logicalPos[0].setY(0.01f);
-		if (points.logicalPos[1].y() == 0.0f)
+        if (points.logicalPos[1].y() == 0.0f)
 			points.logicalPos[1].setY(0.01f);
-		if (points.logicalPos[2].y() == 0.0f)
+        if (points.logicalPos[2].y() == 0.0f)
 			points.logicalPos[2].setY(0.01f);
 	}
 
