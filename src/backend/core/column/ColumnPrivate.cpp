@@ -1384,7 +1384,7 @@ void ColumnPrivate::updateFormula() {
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
-						QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
+										QLatin1String("percentile\\((\\d+[\\.\\,]?\\d+).*%1\\)")}; // percentile(p, x)
 
 		for (auto m : optionMethodList) {
 			QRegExp rx(m.arg(varName));
