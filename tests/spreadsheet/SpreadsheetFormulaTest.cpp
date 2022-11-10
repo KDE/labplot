@@ -14,7 +14,7 @@
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #define INIT_SPREADSHEET                                                                                                                                       \
-	Spreadsheet sheet(QStringLiteral("test"), false);                                                                                                          \
+	Spreadsheet sheet(QStringLiteral("test 2 cols"), false);                                                                                                   \
 	const int cols = 2;                                                                                                                                        \
 	const int rows = 100;                                                                                                                                      \
                                                                                                                                                                \
@@ -30,6 +30,27 @@
 	QVector<Column*> variableColumns;                                                                                                                          \
 	variableColumns << sheet.column(0);                                                                                                                        \
 	sheet.column(1)->setFormulaVariableColumn(sheet.column(0));
+
+#define INIT_SPREADSHEET2                                                                                                                                      \
+	Spreadsheet sheet(QStringLiteral("test 3 cols"), false);                                                                                                   \
+	const int cols = 3;                                                                                                                                        \
+	const int rows = 100;                                                                                                                                      \
+                                                                                                                                                               \
+	sheet.setColumnCount(cols);                                                                                                                                \
+	sheet.setRowCount(rows);                                                                                                                                   \
+                                                                                                                                                               \
+	SpreadsheetView view(&sheet, false);                                                                                                                       \
+	view.selectColumn(0);                                                                                                                                      \
+	view.fillWithRowNumbers();                                                                                                                                 \
+	for (int i = 0; i < rows; i++)                                                                                                                             \
+		sheet.column(1)->setValueAt(i, 1.);                                                                                                                    \
+                                                                                                                                                               \
+	QStringList variableNames;                                                                                                                                 \
+	variableNames << QStringLiteral("x") << QStringLiteral("y");                                                                                               \
+	QVector<Column*> variableColumns;                                                                                                                          \
+	variableColumns << sheet.column(0) << sheet.column(1);                                                                                                     \
+	sheet.column(2)->setFormulaVariableColumn(sheet.column(0));                                                                                                \
+	sheet.column(2)->setFormulaVariableColumn(sheet.column(1));
 
 //**********************************************************
 //********** Check different formulas **********************
@@ -210,6 +231,136 @@ void SpreadsheetFormulaTest::formulaCellsqrtip1() {
 			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
 	}
 }
+
+/*!
+   formula "cell(1, 2*x)"
+*/
+void SpreadsheetFormulaTest::formulaCell1_2x() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("cell(1, 2*x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 2);
+	}
+}
+/*!
+   formula "cell(i, 2*x)"
+*/
+void SpreadsheetFormulaTest::formulaCelli_2x() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("cell(i, 2*x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 2 * (i + 1));
+	}
+}
+/*!
+   formula "cell(1, x+x)"
+*/
+void SpreadsheetFormulaTest::formulaCelli_xpx() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("cell(i, x+x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 2 * (i + 1));
+	}
+}
+/*!
+   formula "cell(i, x + 2*x)"
+*/
+void SpreadsheetFormulaTest::formulaCelli_xp2x() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("cell(i, x + 2 * x)"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 3 * (i + 1));
+	}
+}
+/*!
+   formula "cell(i, sqrt(x))"
+*/
+void SpreadsheetFormulaTest::formulaCelli_sqrtx() {
+	INIT_SPREADSHEET
+
+	sheet.column(1)->setFormula(QLatin1String("cell(i, sqrt(x))"), variableNames, variableColumns, true);
+	sheet.column(1)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), std::sqrt(i + 1));
+	}
+}
+/*!
+   formula "cell(i, x+y)"
+*/
+void SpreadsheetFormulaTest::formulaCelli_xpy() {
+	INIT_SPREADSHEET2
+
+	sheet.column(2)->setFormula(QLatin1String("cell(i, x+y)"), variableNames, variableColumns, true);
+	sheet.column(2)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 1);
+		QCOMPARE(sheet.column(2)->valueAt(i), i + 2);
+	}
+}
+
+/*!
+   formula "cell(2*i, x+y)"
+*/
+void SpreadsheetFormulaTest::formulaCell2i_xpy() {
+	INIT_SPREADSHEET2
+
+	sheet.column(2)->setFormula(QLatin1String("cell(2*i, x+y)"), variableNames, variableColumns, true);
+	sheet.column(2)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 1);
+		if (i < rows / 2)
+			QCOMPARE(sheet.column(2)->valueAt(i), sheet.column(0)->valueAt(2 * i + 1) + sheet.column(1)->valueAt(2 * i + 1));
+		else
+			QCOMPARE(sheet.column(2)->valueAt(i), qQNaN());
+	}
+}
+/*!
+   formula "cell(i, 2*x) + cell (i, 2*y)"
+*/
+void SpreadsheetFormulaTest::formulaCelli_2xpCelli_2y() {
+	INIT_SPREADSHEET2
+
+	sheet.column(2)->setFormula(QLatin1String("cell(i, 2*x) + cell(i, 2*y)"), variableNames, variableColumns, true);
+	sheet.column(2)->updateFormula();
+
+	// values
+	for (int i = 0; i < rows; i++) {
+		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
+		QCOMPARE(sheet.column(1)->valueAt(i), 1);
+		QCOMPARE(sheet.column(2)->valueAt(i), 2 * sheet.column(0)->valueAt(i) + 2 * sheet.column(1)->valueAt(i));
+	}
+}
+
+///////////////////////// more methods /////////////////////
 
 /*!
    formula "ma(x)"

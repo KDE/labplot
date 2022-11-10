@@ -29,6 +29,16 @@ private Q_SLOTS:
 	void formulaCellip1im1();
 	void formulaCellsqrtip1();
 
+	void formulaCell1_2x();
+	void formulaCelli_2x();
+	void formulaCelli_xpx();
+	void formulaCelli_xp2x();
+	void formulaCelli_sqrtx();
+	void formulaCelli_xpy();
+
+	void formulaCell2i_xpy();
+	void formulaCelli_2xpCelli_2y();
+
 	// moving statistics
 	void formulama();
 	void formulamr();
