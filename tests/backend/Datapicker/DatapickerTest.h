@@ -29,6 +29,7 @@ private Q_SLOTS:
 	void logarithmic10XYMapping();
 	void referenceMove();
 	void curvePointMove();
+	void selectReferencePoint();
 };
 
 #endif // DATAPICKERTEST_H

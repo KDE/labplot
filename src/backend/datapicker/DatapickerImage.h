@@ -21,6 +21,7 @@
 
 class DatapickerImagePrivate;
 class DatapickerImageView;
+class DatapickerPoint;
 class Segments;
 
 class QGraphicsScene;
@@ -76,6 +77,7 @@ public:
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
+	int currentSelectedReferencePoint();
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
@@ -108,6 +110,9 @@ public:
 
 	typedef DatapickerImagePrivate Private;
 
+public Q_SLOTS:
+	void referencePointSelected(const DatapickerPoint*);
+
 private:
 	void init();
 
@@ -115,6 +120,7 @@ private:
 	mutable DatapickerImageView* m_view{nullptr};
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
+	int m_currentRefPoint{-1};
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -133,5 +139,6 @@ Q_SIGNALS:
 	void pointBrushChanged(QBrush);
 	void pointPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
+	void referencePointSelected(int index);
 };
 #endif

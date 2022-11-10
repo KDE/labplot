@@ -221,6 +221,7 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 		axisPoints.scenePos[points.count()].setY(pos.y());
 		m_image->setAxisPoints(axisPoints);
 		newPoint->setIsReferencePoint(true);
+		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
 		datapickerCurve->updatePoint(newPoint);

@@ -282,6 +282,10 @@ DatapickerImage::GraphType DatapickerImage::stringToGraphType(const QString& str
 	return GraphType::Linear;
 }
 
+int DatapickerImage::currentSelectedReferencePoint() {
+	return m_currentRefPoint;
+}
+
 DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 	return d->plotImageType;
 }
@@ -386,6 +390,18 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 
 void DatapickerImage::setPointSeparation(const int value) {
 	d->pointSeparation = value;
+}
+
+void DatapickerImage::referencePointSelected(const DatapickerPoint* point) {
+	const auto points = children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	for (int i = 0; i < points.count(); i++) {
+		if (points.at(i) == point) {
+			m_currentRefPoint = i;
+			emit referencePointSelected(i);
+			return;
+		}
+	}
+	m_currentRefPoint = -1;
 }
 
 //##############################################################################

@@ -783,4 +783,41 @@ void DatapickerTest::curvePointMove() {
 	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 9);
 }
 
+void DatapickerTest::selectReferencePoint() {
+	Datapicker datapicker(QStringLiteral("Test"));
+	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+
+	auto ap = datapicker.m_image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	datapicker.m_image->setAxisPoints(ap);
+
+	DatapickerImageWidget w(nullptr);
+	w.setImages({datapicker.m_image});
+
+	QCOMPARE(w.ui.rbRefPoint1->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint3->isChecked(), false);
+
+	auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+
+	QCOMPARE(points.count(), 3);
+
+	points[0]->pointSelected(points[0]);
+	QCOMPARE(w.ui.rbRefPoint1->isChecked(), true);
+	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint3->isChecked(), false);
+
+	points[1]->pointSelected(points[1]);
+	QCOMPARE(w.ui.rbRefPoint1->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint2->isChecked(), true);
+	QCOMPARE(w.ui.rbRefPoint3->isChecked(), false);
+
+	points[2]->pointSelected(points[2]);
+	QCOMPARE(w.ui.rbRefPoint1->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
+	QCOMPARE(w.ui.rbRefPoint3->isChecked(), true);
+}
+
 QTEST_MAIN(DatapickerTest)

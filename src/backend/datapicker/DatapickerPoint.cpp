@@ -416,6 +416,12 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	setCursor(Qt::CrossCursor);
 }
 
+QVariant DatapickerPointPrivate::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) {
+	if (change == QGraphicsItem::GraphicsItemChange::ItemSelectedHasChanged && value.toBool())
+		emit q->pointSelected(q);
+	return QGraphicsItem::itemChange(change, value);
+}
+
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	QPainterPath path = Symbol::stylePath(pointStyle);
 	QTransform trafo;

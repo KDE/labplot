@@ -298,6 +298,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	connect(m_image, &DatapickerImage::settingsChanged, this, &DatapickerImageWidget::imageEditorSettingsChanged);
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
 	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
+	connect(m_image, QOverload<int>::of(&DatapickerImage::referencePointSelected), this, &DatapickerImageWidget::imageReferencePointSelected);
 
 	handleWidgetActions();
 	updateSymbolWidgets();
@@ -601,6 +602,12 @@ void DatapickerImageWidget::symbolVisibleChanged(bool on) {
 	m_initializing = false;
 }
 
+void DatapickerImageWidget::imageReferencePointSelected(int index) {
+	ui.rbRefPoint1->setChecked(index == 0);
+	ui.rbRefPoint2->setChecked(index == 1);
+	ui.rbRefPoint3->setChecked(index == 2);
+}
+
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
@@ -615,6 +622,8 @@ void DatapickerImageWidget::load() {
 	const QString& fileName = m_image->fileName();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
+
+	imageReferencePointSelected(m_image->currentSelectedReferencePoint());
 
 	ui.cbGraphType->setCurrentIndex((int)m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);
