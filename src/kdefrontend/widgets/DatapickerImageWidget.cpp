@@ -383,21 +383,22 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-    if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX  || points.type  == DatapickerImage::GraphType::Log10XY || points.type == DatapickerImage::GraphType::Log10X) {
+	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX || points.type == DatapickerImage::GraphType::Log10XY
+		|| points.type == DatapickerImage::GraphType::Log10X) {
 		if (points.logicalPos[0].x() == 0.0f)
-            points.logicalPos[0].setX(0.01f);
+			points.logicalPos[0].setX(0.01f);
 		if (points.logicalPos[1].x() == 0.0f)
-            points.logicalPos[1].setX(0.01f);
+			points.logicalPos[1].setX(0.01f);
 		if (points.logicalPos[2].x() == 0.0f)
 			points.logicalPos[2].setX(0.01f);
 	}
-    if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnY
-        || points.type == DatapickerImage::GraphType::Log10XY || points.type == DatapickerImage::GraphType::Log10Y) {
-        if (points.logicalPos[0].y() == 0.0f)
+	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnY || points.type == DatapickerImage::GraphType::Log10XY
+		|| points.type == DatapickerImage::GraphType::Log10Y) {
+		if (points.logicalPos[0].y() == 0.0f)
 			points.logicalPos[0].setY(0.01f);
-        if (points.logicalPos[1].y() == 0.0f)
+		if (points.logicalPos[1].y() == 0.0f)
 			points.logicalPos[1].setY(0.01f);
-        if (points.logicalPos[2].y() == 0.0f)
+		if (points.logicalPos[2].y() == 0.0f)
 			points.logicalPos[2].setY(0.01f);
 	}
 

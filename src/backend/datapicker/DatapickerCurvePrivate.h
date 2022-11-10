@@ -46,7 +46,7 @@ public:
 	AbstractColumn* minusDeltaYColumn{nullptr};
 	QString minusDeltaYColumnPath;
 
-    friend class DatapickerTest;
+	friend class DatapickerTest;
 };
 
 #endif

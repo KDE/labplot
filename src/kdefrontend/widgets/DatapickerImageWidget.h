@@ -104,7 +104,7 @@ private Q_SLOTS:
 	void handleWidgetActions();
 	void symbolVisibleChanged(bool);
 
-    friend class DatapickerTest;
+	friend class DatapickerTest;
 };
 
 #endif // DATAPICKERIMAGEWIDGET_H

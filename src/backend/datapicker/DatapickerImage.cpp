@@ -233,23 +233,23 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 
 QString DatapickerImage::graphTypeToString(const GraphType type) {
 	switch (type) {
-    case GraphType::Linear:
+	case GraphType::Linear:
 		return cartesian;
 	case GraphType::PolarInDegree:
 		return polarInDegree;
 	case GraphType::PolarInRadians:
 		return polarInRadians;
-    case GraphType::LnX:
+	case GraphType::LnX:
 		return logarithmicNaturalX;
-    case GraphType::LnY:
+	case GraphType::LnY:
 		return logarithmicNaturalY;
-    case GraphType::LnXY:
+	case GraphType::LnXY:
 		return logarithmicNaturalXY;
-    case GraphType::Log10X:
+	case GraphType::Log10X:
 		return logarithmic10X;
-    case GraphType::Log10Y:
+	case GraphType::Log10Y:
 		return logarithmic10Y;
-    case GraphType::Log10XY:
+	case GraphType::Log10XY:
 		return logarithmic10XY;
 	case GraphType::Ternary:
 		return ternary;
@@ -258,28 +258,28 @@ QString DatapickerImage::graphTypeToString(const GraphType type) {
 
 DatapickerImage::GraphType DatapickerImage::stringToGraphType(const QString& string) {
 	if (string == cartesian)
-        return GraphType::Linear;
+		return GraphType::Linear;
 	else if (string == polarInDegree)
 		return GraphType::PolarInDegree;
 	else if (string == polarInRadians)
 		return GraphType::PolarInRadians;
 	else if (string == logarithmicNaturalX)
-        return GraphType::LnX;
+		return GraphType::LnX;
 	else if (string == logarithmicNaturalY)
-        return GraphType::LnY;
+		return GraphType::LnY;
 	else if (string == logarithmicNaturalXY)
-        return GraphType::LnXY;
+		return GraphType::LnXY;
 	else if (string == logarithmic10X)
-        return GraphType::Log10X;
+		return GraphType::Log10X;
 	else if (string == logarithmic10Y)
-        return GraphType::Log10Y;
+		return GraphType::Log10Y;
 	else if (string == logarithmic10XY)
-        return GraphType::Log10XY;
+		return GraphType::Log10XY;
 	else if (string == ternary)
 		return GraphType::Ternary;
 
 	qDebug() << "Unknown graphtype: " << string;
-    return GraphType::Linear;
+	return GraphType::Linear;
 }
 
 DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
@@ -585,7 +585,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 
 				switch (value) {
 				case 0:
-                    d->axisPoints.type = GraphType::Linear;
+					d->axisPoints.type = GraphType::Linear;
 					break;
 				case 1:
 					d->axisPoints.type = GraphType::PolarInDegree;
@@ -594,16 +594,16 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 					d->axisPoints.type = GraphType::PolarInRadians;
 					break;
 				case 4:
-                    d->axisPoints.type = GraphType::LnX;
+					d->axisPoints.type = GraphType::LnX;
 					break;
 				case 5:
-                    d->axisPoints.type = GraphType::LnY;
+					d->axisPoints.type = GraphType::LnY;
 					break;
 				case 6:
 					d->axisPoints.type = GraphType::Ternary;
 					break;
 				default:
-                    d->axisPoints.type = GraphType::Linear; // should never happen
+					d->axisPoints.type = GraphType::Linear; // should never happen
 				}
 			} else {
 				str = attribs.value(QStringLiteral("graphType")).toString();

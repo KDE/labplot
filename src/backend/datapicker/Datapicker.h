@@ -76,7 +76,7 @@ Q_SIGNALS:
 	void datapickerItemSelected(int);
 	void requestUpdateActions();
 
-    friend class DatapickerTest;
+	friend class DatapickerTest;
 };
 
 #endif
