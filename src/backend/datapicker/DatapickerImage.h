@@ -34,7 +34,7 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnXY, LnX, LnY, Log10XY, Log10X, Log10Y, Ternary };
+	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnX, LnY, Ternary, LnXY, Log10XY, Log10X, Log10Y };
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
 	enum class PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };

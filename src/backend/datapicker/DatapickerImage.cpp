@@ -34,19 +34,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-namespace {
-const QString cartesian = QStringLiteral("cartesian");
-const QString polarInDegree = QStringLiteral("polarindegree");
-const QString polarInRadians = QStringLiteral("polarinradians");
-const QString logarithmicNaturalX = QStringLiteral("logarithmicNaturalX");
-const QString logarithmicNaturalY = QStringLiteral("logarithmicNaturalY");
-const QString logarithmicNaturalXY = QStringLiteral("logarithmicNaturalXY");
-const QString logarithmic10X = QStringLiteral("logarithmic10X");
-const QString logarithmic10Y = QStringLiteral("logarithmic10Y");
-const QString logarithmic10XY = QStringLiteral("logarithmic10XY");
-const QString ternary = QStringLiteral("ternary");
-}
-
 /**
  * \class DatapickerImage
  * \brief container to open image/plot.
@@ -98,7 +85,7 @@ void DatapickerImage::init() {
 	d->rotationAngle = group.readEntry("RotationAngle", 0.0);
 	d->minSegmentLength = group.readEntry("MinSegmentLength", 30);
 	d->pointSeparation = group.readEntry("PointSeparation", 30);
-	d->axisPoints.type = stringToGraphType(group.readEntry("GraphType", cartesian));
+	d->axisPoints.type = static_cast<GraphType>(group.readEntry("GraphType", static_cast<int>(GraphType::Linear)));
 	d->axisPoints.ternaryScale = group.readEntry("TernaryScale", 1);
 
 	// edit image settings
@@ -229,57 +216,6 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 		d->discretize();
 
 	Q_EMIT requestUpdate();
-}
-
-QString DatapickerImage::graphTypeToString(const GraphType type) {
-	switch (type) {
-	case GraphType::Linear:
-		return cartesian;
-	case GraphType::PolarInDegree:
-		return polarInDegree;
-	case GraphType::PolarInRadians:
-		return polarInRadians;
-	case GraphType::LnX:
-		return logarithmicNaturalX;
-	case GraphType::LnY:
-		return logarithmicNaturalY;
-	case GraphType::LnXY:
-		return logarithmicNaturalXY;
-	case GraphType::Log10X:
-		return logarithmic10X;
-	case GraphType::Log10Y:
-		return logarithmic10Y;
-	case GraphType::Log10XY:
-		return logarithmic10XY;
-	case GraphType::Ternary:
-		return ternary;
-	}
-}
-
-DatapickerImage::GraphType DatapickerImage::stringToGraphType(const QString& string) {
-	if (string == cartesian)
-		return GraphType::Linear;
-	else if (string == polarInDegree)
-		return GraphType::PolarInDegree;
-	else if (string == polarInRadians)
-		return GraphType::PolarInRadians;
-	else if (string == logarithmicNaturalX)
-		return GraphType::LnX;
-	else if (string == logarithmicNaturalY)
-		return GraphType::LnY;
-	else if (string == logarithmicNaturalXY)
-		return GraphType::LnXY;
-	else if (string == logarithmic10X)
-		return GraphType::Log10X;
-	else if (string == logarithmic10Y)
-		return GraphType::Log10Y;
-	else if (string == logarithmic10XY)
-		return GraphType::Log10XY;
-	else if (string == ternary)
-		return GraphType::Ternary;
-
-	qDebug() << "Unknown graphtype: " << string;
-	return GraphType::Linear;
 }
 
 int DatapickerImage::currentSelectedReferencePoint() {
@@ -520,7 +456,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("axisPoint"));
-	writer->writeAttribute(QStringLiteral("graphType"), graphTypeToString(d->axisPoints.type));
+	writer->writeAttribute(QStringLiteral("graphType"), QString::number(static_cast<int>(d->axisPoints.type)));
 	writer->writeAttribute(QStringLiteral("ternaryScale"), QString::number(d->axisPoints.ternaryScale));
 	writer->writeAttribute(QStringLiteral("axisPointLogicalX1"), QString::number(d->axisPoints.logicalPos[0].x()));
 	writer->writeAttribute(QStringLiteral("axisPointLogicalY1"), QString::number(d->axisPoints.logicalPos[0].y()));
@@ -594,37 +530,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
 		} else if (!preview && reader->name() == QLatin1String("axisPoint")) {
 			attribs = reader->attributes();
-
-			if (Project::xmlVersion() <= 7) {
-				int value = 0;
-				READ_INT_VALUE_DIRECT("graphType", value, int);
-
-				switch (value) {
-				case 0:
-					d->axisPoints.type = GraphType::Linear;
-					break;
-				case 1:
-					d->axisPoints.type = GraphType::PolarInDegree;
-					break;
-				case 3:
-					d->axisPoints.type = GraphType::PolarInRadians;
-					break;
-				case 4:
-					d->axisPoints.type = GraphType::LnX;
-					break;
-				case 5:
-					d->axisPoints.type = GraphType::LnY;
-					break;
-				case 6:
-					d->axisPoints.type = GraphType::Ternary;
-					break;
-				default:
-					d->axisPoints.type = GraphType::Linear; // should never happen
-				}
-			} else {
-				str = attribs.value(QStringLiteral("graphType")).toString();
-				d->axisPoints.type = stringToGraphType(str);
-			}
+			READ_INT_VALUE_DIRECT("graphType", d->axisPoints.type, GraphType);
 			READ_INT_VALUE("ternaryScale", axisPoints.ternaryScale, int);
 
 			str = attribs.value(QStringLiteral("axisPointLogicalX1")).toString();
