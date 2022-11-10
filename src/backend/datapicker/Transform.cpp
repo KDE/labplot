@@ -192,4 +192,5 @@ QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::Re
 		return QVector3D(a, b, c);
 	}
 	}
+	return QVector3D(point.x(), point.y(), 0); // should never happen
 }
