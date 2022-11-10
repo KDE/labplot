@@ -197,7 +197,7 @@ double BarPlot::minimum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMin;
 	}
-	return NAN;
+	return qQNaN();
 }
 
 double BarPlot::maximum(const Dimension dim) const {
@@ -208,7 +208,7 @@ double BarPlot::maximum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMax;
 	}
-	return NAN;
+	return qQNaN();
 }
 
 // values
