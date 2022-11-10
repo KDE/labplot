@@ -319,8 +319,12 @@ QString DatapickerPointPrivate::name() const {
 void DatapickerPointPrivate::retransform() {
 	if (q->isLoading())
 		return;
-	updatePropeties();
+
 	setPos(position);
+	updatePoint();
+
+	updatePropeties();
+
 	QPainterPath path = Symbol::stylePath(pointStyle);
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();

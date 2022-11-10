@@ -90,6 +90,7 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	auto* col = new Column(name);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setFixed(true);
+	col->setUndoAware(false);
 	m_datasheet->addChild(col);
 
 	return col;
@@ -227,11 +228,13 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	d->posXColumn->setName(xLabel);
 	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::X);
 	d->posXColumn->setFixed(true);
+	d->posXColumn->setUndoAware(false);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
-	d->posXColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
+	d->posYColumn->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 	d->posYColumn->setFixed(true);
+	d->posYColumn->setUndoAware(false);
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)
