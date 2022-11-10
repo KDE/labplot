@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-09 00:43+0000\n"
+"POT-Creation-Date: 2022-11-10 00:42+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -58,7 +58,7 @@ msgstr ""
 #: src/backend/datasources/filters/ROOTFilter.cpp:118
 #: src/backend/datasources/LiveDataSource.cpp:829
 #: src/backend/datasources/MQTTClient.cpp:1200
-#: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1133
+#: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1132
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:218
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1162
@@ -108,7 +108,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:966
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
-#: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1286
+#: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1285
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3002
@@ -5427,61 +5427,61 @@ msgstr "slika"
 msgid "FITS table"
 msgstr ""
 
-#: src/backend/matrix/Matrix.cpp:153
+#: src/backend/matrix/Matrix.cpp:152
 #, fuzzy, kde-format
 #| msgid "Matrix"
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "Matrica"
 
-#: src/backend/matrix/Matrix.cpp:225
+#: src/backend/matrix/Matrix.cpp:224
 #, fuzzy, kde-format
 #| msgid "%1: x-error type changed"
 msgid "%1: x-start changed"
 msgstr "%1: x-greška tip promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:231
+#: src/backend/matrix/Matrix.cpp:230
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: x-end changed"
 msgstr "%1: tip linije promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:237
+#: src/backend/matrix/Matrix.cpp:236
 #, fuzzy, kde-format
 #| msgid "%1: y-error type changed"
 msgid "%1: y-start changed"
 msgstr "%1: y-greška tip promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:243
+#: src/backend/matrix/Matrix.cpp:242
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: y-end changed"
 msgstr "%1: tip linije promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:249
+#: src/backend/matrix/Matrix.cpp:248
 #, fuzzy, kde-format
 #| msgid "%1: error bar type changed"
 msgid "%1: numeric format changed"
 msgstr "%1: greška bar tip promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:255
+#: src/backend/matrix/Matrix.cpp:254
 #, fuzzy, kde-format
 #| msgid "%1: line type changed"
 msgid "%1: precision changed"
 msgstr "%1: tip linije promijenjen"
 
-#: src/backend/matrix/Matrix.cpp:470
+#: src/backend/matrix/Matrix.cpp:469
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: postavi veličinu matrice na %2x%3"
 
-#: src/backend/matrix/Matrix.cpp:490
+#: src/backend/matrix/Matrix.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:356
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: kopiraj %2"
 
-#: src/backend/matrix/Matrix.cpp:554
+#: src/backend/matrix/Matrix.cpp:553
 #, kde-format
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
@@ -5489,7 +5489,7 @@ msgstr[0] "%1: dodaj %2 red"
 msgstr[1] "%1: dodaj %2 reda"
 msgstr[2] "%1: dodaj %2 redova"
 
-#: src/backend/matrix/Matrix.cpp:565
+#: src/backend/matrix/Matrix.cpp:564
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -5497,7 +5497,7 @@ msgstr[0] "%1: dodaj %2 kolonu"
 msgstr[1] "%1: dodaj %2 kolone"
 msgstr[2] "%1: dodaj %2 kolona"
 
-#: src/backend/matrix/Matrix.cpp:679 src/backend/matrix/matrixcommands.h:126
+#: src/backend/matrix/Matrix.cpp:678 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:312
 #, kde-format
 msgid "%1: clear"

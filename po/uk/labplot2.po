@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-09 00:43+0000\n"
+"POT-Creation-Date: 2022-11-10 00:42+0000\n"
 "PO-Revision-Date: 2022-11-06 10:04+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -64,7 +64,7 @@ msgstr ""
 #: src/backend/datasources/filters/ROOTFilter.cpp:118
 #: src/backend/datasources/LiveDataSource.cpp:829
 #: src/backend/datasources/MQTTClient.cpp:1200
-#: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1133
+#: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1132
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:218
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1162
@@ -114,7 +114,7 @@ msgstr ""
 #: src/backend/datasources/LiveDataSource.cpp:966
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
-#: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1286
+#: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1285
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3002
@@ -5174,54 +5174,54 @@ msgstr "Зображення FITS"
 msgid "FITS table"
 msgstr "Таблиця FITS"
 
-#: src/backend/matrix/Matrix.cpp:153
+#: src/backend/matrix/Matrix.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
 msgstr "Друк матриці"
 
-#: src/backend/matrix/Matrix.cpp:225
+#: src/backend/matrix/Matrix.cpp:224
 #, kde-format
 msgid "%1: x-start changed"
 msgstr "%1: змінено початок за x"
 
-#: src/backend/matrix/Matrix.cpp:231
+#: src/backend/matrix/Matrix.cpp:230
 #, kde-format
 msgid "%1: x-end changed"
 msgstr "%1: змінено кінець за x"
 
-#: src/backend/matrix/Matrix.cpp:237
+#: src/backend/matrix/Matrix.cpp:236
 #, kde-format
 msgid "%1: y-start changed"
 msgstr "%1: змінено початок за y"
 
-#: src/backend/matrix/Matrix.cpp:243
+#: src/backend/matrix/Matrix.cpp:242
 #, kde-format
 msgid "%1: y-end changed"
 msgstr "%1: змінено кінець за y"
 
-#: src/backend/matrix/Matrix.cpp:249
+#: src/backend/matrix/Matrix.cpp:248
 #, kde-format
 msgid "%1: numeric format changed"
 msgstr "%1: змінено числовий формат"
 
-#: src/backend/matrix/Matrix.cpp:255
+#: src/backend/matrix/Matrix.cpp:254
 #, kde-format
 msgid "%1: precision changed"
 msgstr "%1: змінено точність"
 
-#: src/backend/matrix/Matrix.cpp:470
+#: src/backend/matrix/Matrix.cpp:469
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
 msgstr "%1: встановити розмір матриці %2⨯%3"
 
-#: src/backend/matrix/Matrix.cpp:490
+#: src/backend/matrix/Matrix.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:356
 #, kde-format
 msgid "%1: copy %2"
 msgstr "%1: копіювання %2"
 
-#: src/backend/matrix/Matrix.cpp:554
+#: src/backend/matrix/Matrix.cpp:553
 #, kde-format
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
@@ -5230,7 +5230,7 @@ msgstr[1] "%1: додати %2 рядки"
 msgstr[2] "%1: додати %2 рядків"
 msgstr[3] "%1: додати %2 рядок"
 
-#: src/backend/matrix/Matrix.cpp:565
+#: src/backend/matrix/Matrix.cpp:564
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
@@ -5239,7 +5239,7 @@ msgstr[1] "%1: додати %2 стовпчики"
 msgstr[2] "%1: додати %2 стовпчиків"
 msgstr[3] "%1: додати %2 стовпчик"
 
-#: src/backend/matrix/Matrix.cpp:679 src/backend/matrix/matrixcommands.h:126
+#: src/backend/matrix/Matrix.cpp:678 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:312
 #, kde-format
 msgid "%1: clear"
