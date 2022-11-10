@@ -14,9 +14,8 @@
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
 #include "backend/datapicker/DatapickerImage.h"
-#include "backend/datapicker/DatapickerImagePrivate.h"
+#include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Transform.h"
-#include "kdefrontend/widgets/DatapickerCurveWidget.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
@@ -690,6 +689,98 @@ void DatapickerTest::logarithmic10XYMapping() {
 	// Values validated manually, not reverse calculated
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
+}
+
+// ALEX uncomment and fix ;)
+void DatapickerTest::referenceMove() {
+	// // Reference points are moved after placement
+	// // Column data is changing respectivetly
+	// Datapicker datapicker(QStringLiteral("Test"));
+	// datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
+	// datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
+	// datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+
+	// auto ap = datapicker.m_image->axisPoints();
+	// ap.type = DatapickerImage::GraphType::Linear;
+	// datapicker.m_image->setAxisPoints(ap);
+
+	// DatapickerImageWidget w(nullptr);
+	// w.setImages({datapicker.m_image});
+	// w.ui.sbPositionX1->setValue(0);
+	// w.ui.sbPositionY1->setValue(10);
+	// w.ui.sbPositionZ1->setValue(0);
+	// w.ui.sbPositionX2->setValue(0);
+	// w.ui.sbPositionY2->setValue(0);
+	// w.ui.sbPositionZ2->setValue(0);
+	// w.ui.sbPositionX3->setValue(10);
+	// w.ui.sbPositionY3->setValue(0);
+	// w.ui.sbPositionZ3->setValue(0);
+	// w.logicalPositionChanged();
+
+	// auto* curve = new DatapickerCurve(i18n("Curve"));
+	// curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	// datapicker.addChild(curve);
+
+	// datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
+	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5);
+	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+
+	// // Points are stored in the image
+	// auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	// QCOMPARE(points.count(), 3);
+
+	// points[0]->setPosition(QPointF(0.1, 1));
+	// points[0]->setPosition(QPointF(0.1, 0));
+	// points[0]->setPosition(QPointF(1.1, 0));
+
+	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5/1.1);
+	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+}
+
+// ALEX uncomment and fix ;)
+void DatapickerTest::curvePointMove() {
+	// // Curve point was moved after placement
+	// // Column data is changing respectivetly
+	//   // Reference points are moved after placement
+	//   // Column data is changing respectivetly
+	//   Datapicker datapicker(QStringLiteral("Test"));
+	//   datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
+	//   datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
+	//   datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+
+	// auto ap = datapicker.m_image->axisPoints();
+	// ap.type = DatapickerImage::GraphType::Linear;
+	// datapicker.m_image->setAxisPoints(ap);
+
+	// DatapickerImageWidget w(nullptr);
+	// w.setImages({datapicker.m_image});
+	// w.ui.sbPositionX1->setValue(0);
+	// w.ui.sbPositionY1->setValue(10);
+	// w.ui.sbPositionZ1->setValue(0);
+	// w.ui.sbPositionX2->setValue(0);
+	// w.ui.sbPositionY2->setValue(0);
+	// w.ui.sbPositionZ2->setValue(0);
+	// w.ui.sbPositionX3->setValue(10);
+	// w.ui.sbPositionY3->setValue(0);
+	// w.ui.sbPositionZ3->setValue(0);
+	// w.logicalPositionChanged();
+
+	// auto* curve = new DatapickerCurve(i18n("Curve"));
+	// curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	// datapicker.addChild(curve);
+
+	// datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
+	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5);
+	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+
+	// // Points are stored in the image
+	// auto points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	// QCOMPARE(points.count(), 1);
+
+	// points[0]->setPosition(QPointF(0.2, 0.9)); // Changing the position of the point
+
+	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2);
+	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 9);
 }
 
 QTEST_MAIN(DatapickerTest)
