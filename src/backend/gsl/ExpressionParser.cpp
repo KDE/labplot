@@ -1681,21 +1681,29 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		for (int n = 0; n < vars.size(); ++n) {
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-			// if expr contains cell(f(i), x): replace this with xVectors.at(n)->at(f(i))
-			QRegExp rxcell(QLatin1String("cell\\((.*),.*%1\\)").arg(vars.at(n)));
+			// if expr contains cell(f(i), g(x,..)): replace this with xVectors.at(n)->at(f(i))
+			QRegExp rxcell(QStringLiteral("cell\\((.*),(.*)\\)"));
 			rxcell.setMinimal(true); // only match one method call at a time
 
 			int pos = 0;
 			while ((pos = rxcell.indexIn(tmpExpr, pos)) != -1) {
-				const QString arg = rxcell.cap(1);
-				// QDEBUG("ARG = " << arg)
+				const QString f = rxcell.cap(1);
+				QString g = rxcell.cap(2);
+				// QDEBUG("f(i) =" << f)
+				// QDEBUG("g(x,..) =" << g)
 				assign_symbol("i", i + 1); // row number i = 1 .. minSize
-				const int index = parse(qPrintable(arg), qPrintable(numberLocale.name()));
+				const int index = parse(qPrintable(f), qPrintable(numberLocale.name()));
 				// DEBUG("INDEX = " << index)
 
-				if (index > 0 && index <= xVectors.at(n)->size())
-					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(xVectors.at(n)->at(index - 1)));
-				else
+				if (index > 0 && index <= xVectors.at(n)->size()) {
+					const QString newg = g.replace(vars.at(n), numberLocale.toString(xVectors.at(n)->at(index - 1)));
+					// QDEBUG("new g(x,..) =" << newg)
+					const QString replace = QStringLiteral("cell(") + f + QStringLiteral(",") + newg + QStringLiteral(")");
+					// QDEBUG("MATCH =" << rxcell.cap(0))
+					// QDEBUG("replacement =" << replace)
+					tmpExpr.replace(rxcell.cap(0), replace);
+					pos++; // avoid endless loop
+				} else
 					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(qQNaN()));
 			}
 
@@ -1749,10 +1757,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 			pos = 0;
 			while ((pos = rxsma.indexIn(tmpExpr, pos)) != -1) {
 				const QString arg = rxsma.cap(1);
-				QDEBUG("ARG = " << arg)
-				// number of points to consider
+				// QDEBUG("ARG = " << arg)
+				//  number of points to consider
 				const int N = numberLocale.toDouble(rxsma.cap(1));
-				DEBUG("N = " << N)
+				// DEBUG("N = " << N)
 				if (N < 1)
 					continue;
 				// calculate avg of last n points
@@ -1763,6 +1771,17 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
 			}
 		}
+
+		// QDEBUG("PRE expression to parse = " << tmpExpr)
+
+		// finally replace all cell() calls with second argument (g)
+		QRegExp rxcellfinal(QLatin1String("cell\\(.*,(.*)\\)"));
+		rxcellfinal.setMinimal(true); // only match one method call at a time
+		int pos = 0;
+		while ((pos = rxcellfinal.indexIn(tmpExpr, pos)) != -1)
+			tmpExpr.replace(rxcellfinal.cap(0), rxcellfinal.cap(1));
+
+		// QDEBUG("FINAL expression to parse = " << tmpExpr)
 
 		double y = parse(qPrintable(tmpExpr), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) // try default locale if failing
