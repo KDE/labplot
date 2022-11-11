@@ -25,6 +25,7 @@ FunctionsWidget::FunctionsWidget(QWidget* parent)
 	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->functionsGroups());
+	//sync with index in ExpressionParser::initFunctions()!
 	ui.cbGroup->insertSeparator(1); // functions
 	ui.cbGroup->insertSeparator(29); // random number generator
 	ui.cbGroup->insertSeparator(31); // distributions

@@ -37,6 +37,8 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << QLatin1String(_functions[i].name);
 
+	///////////////// list of groups ////////////////////////
+
 	m_functionsGroups << i18n("Standard Mathematical Functions");
 	m_functionsGroups << i18n("Column Statistics");
 	m_functionsGroups << i18n("Moving Statistics");
@@ -108,6 +110,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Hypergeometric Distribution");
 	m_functionsGroups << i18n("Logarithmic Distribution");
 
+	////////////////////// list of functions ////////////////////
 	int index = 0;
 
 	// Standard mathematical functions
@@ -149,7 +152,7 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
-	index++;
+	index++;	// separator
 
 	// Column statistics
 	m_functionsNames << i18n("Size");
@@ -196,7 +199,7 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Simple Moving Range");
 
 	index++;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
 
 	// Airy Functions and Derivatives
