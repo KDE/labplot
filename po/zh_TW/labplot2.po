@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-10 00:42+0000\n"
+"POT-Creation-Date: 2022-11-11 00:41+0000\n"
 "PO-Revision-Date: 2014-03-25 11:30+0800\n"
 "Last-Translator: Franklin Weng <franklin at goodhorse dot idv dot tw>\n"
 "Language-Team: Chinese Traditional <kde-tw@googlegroups.com>\n"
@@ -15494,42 +15494,42 @@ msgstr "繪製區域"
 msgid "Fourier Filter of '%1'"
 msgstr "新增過濾器"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:903
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:904
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:909
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
 #, fuzzy, kde-format
 msgid "No data selected to plot."
 msgstr "清除選擇"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:944
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:950
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""

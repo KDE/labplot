@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-10 00:42+0000\n"
+"POT-Creation-Date: 2022-11-11 00:41+0000\n"
 "PO-Revision-Date: 2022-10-12 15:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -15889,43 +15889,43 @@ msgstr "Çizim Alanı"
 msgid "Fourier Filter of '%1'"
 msgstr "'%1'in Fourier Filtresi"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:903
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "varolan bir çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:904
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "yeni çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:909
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "var olan çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "yeni çalışma sayfasındaki yeni çizimler"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No data selected to plot."
 msgstr "Hiç veri kümesi seçilmedi"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Zaten var olan çizim seçilmeli."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:944
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Zaten var olan çalışma dosyası seçilmeli."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:950
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "İletişim penceresini kapat ve veriyi çiz."

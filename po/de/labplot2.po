@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-10 00:42+0000\n"
+"POT-Creation-Date: 2022-11-11 00:41+0000\n"
 "PO-Revision-Date: 2022-11-03 13:04+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
@@ -15269,42 +15269,42 @@ msgstr "Plotbereich %1"
 msgid "Fourier Filter of '%1'"
 msgstr "Fourier-Filter von '%1'"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:903
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "Neues Diagramm in existierenden Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:904
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "Neues Diagramm in neuem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:909
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "Neue Diagramme in existierendem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:910
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "Neue Diagramme in neuem Arbeitsblatt"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:934
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Kein Datensatz zum darstellen ausgewählt."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:939
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Ein existierendes Diagramm muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:944
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Ein existierendes Arbeitsblatt muss ausgewählt sein."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:950
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Schließt den Dialog und zeigt die Daten im Diagramm an."
