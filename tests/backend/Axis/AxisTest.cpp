@@ -15,12 +15,9 @@
 #include "src/backend/worksheet/WorksheetElement.h"
 #include "src/backend/worksheet/plots/cartesian/Axis.h" // already included in CartesianPlot
 #include "src/backend/worksheet/plots/cartesian/AxisPrivate.h"
+#include "src/kdefrontend/dockwidgets/AxisDock.h" // access ui elements
 
 #include <QUndoStack>
-
-#define private public
-#include "src/kdefrontend/dockwidgets/AxisDock.h" // to be able to access the ui elements
-#undef private
 
 #define CHECK_AXIS_LABELS(currentTickValues, expectedTickValues)                                                                                               \
 	{                                                                                                                                                          \

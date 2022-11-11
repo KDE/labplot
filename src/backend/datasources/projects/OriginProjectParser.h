@@ -36,6 +36,9 @@ public:
 	void setImportUnusedObjects(bool);
 	bool hasUnusedObjects();
 
+protected:
+	bool load(Project*, bool) override;
+
 private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
 	bool loadWorkbook(Workbook*, bool preview);
@@ -72,9 +75,6 @@ private:
 	bool m_importUnusedObjects{false};
 
 	friend class ProjectImportTest;
-
-protected:
-	bool load(Project*, bool) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

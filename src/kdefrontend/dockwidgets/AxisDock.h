@@ -68,6 +68,8 @@ private:
 
 	QVector<QMetaObject::Connection> m_connections;
 
+	friend class AxisTest;
+
 private Q_SLOTS:
 	void init();
 

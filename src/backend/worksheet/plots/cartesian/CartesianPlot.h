@@ -281,6 +281,9 @@ private:
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
+	friend CartesianPlotDock;
+	friend class CartesianPlotTest;
+
 public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
@@ -389,11 +392,7 @@ Q_SIGNALS:
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 
-Q_SIGNALS:
 	void scaleRetransformed(const CartesianPlot* plot, const Dimension dim, int index);
-
-	friend CartesianPlotDock;
-	friend class CartesianPlotTest;
 };
 
 #endif
