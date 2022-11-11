@@ -17,10 +17,25 @@ class DatapickerTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void mapTypeToCartesian();
-	void mapCartesianToType();
-	void mapSceneToLogical();
-	void cartesianMapping();
+	void mapCartesianToCartesian();
+	void maplnXToCartesian();
+	void maplnYToCartesian();
+	void maplnXYToCartesian();
+	void maplog10XToCartesian();
+	void maplog10YToCartesian();
+	void maplog10XYToCartesian();
+	void mapPolarInRadiansToCartesian();
+	void mapPolarInDegreeToCartesian();
+	void mapCartesianToLinear();
+	void mapCartesianToLnX();
+	void mapCartesianToLnY();
+	void mapCartesianToLnXY();
+	void mapCartesianToLog10X();
+	void mapCartesianToLog10Y();
+	void mapCartesianToLog10XY();
+	void mapCartesianToPolarInDegree();
+	void mapCartesianToPolarInRadians();
+	void linearMapping();
 	void logarithmicNaturalXMapping();
 	void logarithmicNaturalYMapping();
 	void logarithmicNaturalXYMapping();

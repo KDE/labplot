@@ -23,398 +23,386 @@
 	VALUES_EQUAL(vec.y(), ref.y());                                                                                                                            \
 	VALUES_EQUAL(vec.z(), ref.z());
 
-void DatapickerTest::mapTypeToCartesian() {
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Linear;
-		points.logicalPos[0].setX(1);
-		points.logicalPos[0].setY(2);
-		points.logicalPos[1].setX(3);
-		points.logicalPos[1].setY(4);
-		points.logicalPos[2].setX(5);
-		points.logicalPos[2].setY(6);
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
+void DatapickerTest::mapCartesianToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Linear;
+	points.logicalPos[0].setX(1);
+	points.logicalPos[0].setY(2);
+	points.logicalPos[1].setX(3);
+	points.logicalPos[1].setY(4);
+	points.logicalPos[2].setX(5);
+	points.logicalPos[2].setY(6);
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
 
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 1);
-		VALUES_EQUAL(t.y[0], 2);
-		VALUES_EQUAL(t.x[1], 3);
-		VALUES_EQUAL(t.y[1], 4);
-		VALUES_EQUAL(t.x[2], 5);
-		VALUES_EQUAL(t.y[2], 6);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	// ln
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnX;
-		points.logicalPos[0].setX(exp(1));
-		points.logicalPos[0].setY(2);
-		points.logicalPos[1].setX(exp(2));
-		points.logicalPos[1].setY(4);
-		points.logicalPos[2].setX(exp(3));
-		points.logicalPos[2].setY(6);
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 1);
-		VALUES_EQUAL(t.y[0], 2);
-		VALUES_EQUAL(t.x[1], 2);
-		VALUES_EQUAL(t.y[1], 4);
-		VALUES_EQUAL(t.x[2], 3);
-		VALUES_EQUAL(t.y[2], 6);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnY;
-		points.logicalPos[0].setX(1);
-		points.logicalPos[0].setY(exp(1));
-		points.logicalPos[1].setX(3);
-		points.logicalPos[1].setY(exp(2));
-		points.logicalPos[2].setX(5);
-		points.logicalPos[2].setY(exp(3));
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 1);
-		VALUES_EQUAL(t.y[0], 1);
-		VALUES_EQUAL(t.x[1], 3);
-		VALUES_EQUAL(t.y[1], 2);
-		VALUES_EQUAL(t.x[2], 5);
-		VALUES_EQUAL(t.y[2], 3);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnXY;
-		points.logicalPos[0].setX(exp(5));
-		points.logicalPos[0].setY(exp(1));
-		points.logicalPos[1].setX(exp(6));
-		points.logicalPos[1].setY(exp(2));
-		points.logicalPos[2].setX(exp(7));
-		points.logicalPos[2].setY(exp(3));
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 5);
-		VALUES_EQUAL(t.y[0], 1);
-		VALUES_EQUAL(t.x[1], 6);
-		VALUES_EQUAL(t.y[1], 2);
-		VALUES_EQUAL(t.x[2], 7);
-		VALUES_EQUAL(t.y[2], 3);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	// log10
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10X;
-		points.logicalPos[0].setX(pow(10, 1));
-		points.logicalPos[0].setY(2);
-		points.logicalPos[1].setX(pow(10, 2));
-		points.logicalPos[1].setY(4);
-		points.logicalPos[2].setX(pow(10, 3));
-		points.logicalPos[2].setY(6);
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 1);
-		VALUES_EQUAL(t.y[0], 2);
-		VALUES_EQUAL(t.x[1], 2);
-		VALUES_EQUAL(t.y[1], 4);
-		VALUES_EQUAL(t.x[2], 3);
-		VALUES_EQUAL(t.y[2], 6);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10Y;
-		points.logicalPos[0].setX(1);
-		points.logicalPos[0].setY(pow(10, 1));
-		points.logicalPos[1].setX(3);
-		points.logicalPos[1].setY(pow(10, 2));
-		points.logicalPos[2].setX(5);
-		points.logicalPos[2].setY(pow(10, 3));
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 1);
-		VALUES_EQUAL(t.y[0], 1);
-		VALUES_EQUAL(t.x[1], 3);
-		VALUES_EQUAL(t.y[1], 2);
-		VALUES_EQUAL(t.x[2], 5);
-		VALUES_EQUAL(t.y[2], 3);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10XY;
-		points.logicalPos[0].setX(pow(10, 5));
-		points.logicalPos[0].setY(pow(10, 1));
-		points.logicalPos[1].setX(pow(10, 6));
-		points.logicalPos[1].setY(pow(10, 2));
-		points.logicalPos[2].setX(pow(10, 7));
-		points.logicalPos[2].setY(pow(10, 3));
-		points.scenePos[0].setX(6.21);
-		points.scenePos[0].setY(7.23);
-		points.scenePos[1].setX(-51.2);
-		points.scenePos[1].setY(3234);
-		points.scenePos[2].setX(-23);
-		points.scenePos[2].setY(+5e6);
-
-		Transform t;
-		QCOMPARE(t.mapTypeToCartesian(points), true);
-		VALUES_EQUAL(t.x[0], 5);
-		VALUES_EQUAL(t.y[0], 1);
-		VALUES_EQUAL(t.x[1], 6);
-		VALUES_EQUAL(t.y[1], 2);
-		VALUES_EQUAL(t.x[2], 7);
-		VALUES_EQUAL(t.y[2], 3);
-		VALUES_EQUAL(t.X[0], 6.21);
-		VALUES_EQUAL(t.Y[0], 7.23);
-		VALUES_EQUAL(t.X[1], -51.2);
-		VALUES_EQUAL(t.Y[1], 3234);
-		VALUES_EQUAL(t.X[2], -23);
-		VALUES_EQUAL(t.Y[2], +5e6);
-	}
-
-	// {
-	//     DatapickerImage::ReferencePoints points;
-	//     points.type = DatapickerImage::GraphType::PolarInRadians;
-	//     points.logicalPos[0].setX(1);
-	//     points.logicalPos[0].setY(0);
-	//     points.logicalPos[1].setX(3);
-	//     points.logicalPos[1].setY(2.1);
-	//     points.logicalPos[2].setX(5);
-	//     points.logicalPos[2].setY(3.8);
-	//     points.scenePos[0].setX(6.21);
-	//     points.scenePos[0].setY(7.23);
-	//     points.scenePos[1].setX(-51.2);
-	//     points.scenePos[1].setY(3234);
-	//     points.scenePos[2].setX(-23);
-	//     points.scenePos[2].setY(+5e6);
-
-	// Transform t;
-	// QCOMPARE(t.mapTypeToCartesian(points), true);
-	// VALUES_EQUAL(t.x[0], 1);
-	// VALUES_EQUAL(t.y[0], 0);
-	// VALUES_EQUAL(t.x[1], -1.51454);
-	// VALUES_EQUAL(t.y[1], 2.5896);
-	// VALUES_EQUAL(t.x[2], -3.9548);
-	// VALUES_EQUAL(t.y[2], 3.0593);
-	// VALUES_EQUAL(t.X[0], 6.21);
-	// VALUES_EQUAL(t.Y[0], 7.23);
-	// VALUES_EQUAL(t.X[1], -51.2);
-	// VALUES_EQUAL(t.Y[1], 3234);
-	// VALUES_EQUAL(t.X[2], -23);
-	// VALUES_EQUAL(t.Y[2], +5e6);
-	// }
-
-	// {
-	//     DatapickerImage::ReferencePoints points;
-	//     points.type = DatapickerImage::GraphType::PolarInDegree;
-	//     points.logicalPos[0].setX(1);
-	//     points.logicalPos[0].setY(0);
-	//     points.logicalPos[1].setX(3);
-	//     points.logicalPos[1].setY(30);
-	//     points.logicalPos[2].setX(5);
-	//     points.logicalPos[2].setY(50);
-	//     points.scenePos[0].setX(6.21);
-	//     points.scenePos[0].setY(7.23);
-	//     points.scenePos[1].setX(-51.2);
-	//     points.scenePos[1].setY(3234);
-	//     points.scenePos[2].setX(-23);
-	//     points.scenePos[2].setY(+5e6);
-
-	// Transform t;
-	// QCOMPARE(t.mapTypeToCartesian(points), true);
-	// VALUES_EQUAL(t.x[0], 1);
-	// VALUES_EQUAL(t.y[0], 0);
-	// VALUES_EQUAL(t.x[1], 2.5981);
-	// VALUES_EQUAL(t.y[1], 1.5);
-	// VALUES_EQUAL(t.x[2], 3.2139);
-	// VALUES_EQUAL(t.y[2], 3.8302);
-	// VALUES_EQUAL(t.X[0], 6.21);
-	// VALUES_EQUAL(t.Y[0], 7.23);
-	// VALUES_EQUAL(t.X[1], -51.2);
-	// VALUES_EQUAL(t.Y[1], 3234);
-	// VALUES_EQUAL(t.X[2], -23);
-	// VALUES_EQUAL(t.Y[2], +5e6);
-	// }
-	// TODO: implement ternary
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 2);
+	VALUES_EQUAL(t.x[1], 3);
+	VALUES_EQUAL(t.y[1], 4);
+	VALUES_EQUAL(t.x[2], 5);
+	VALUES_EQUAL(t.y[2], 6);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
 }
 
-void DatapickerTest::mapCartesianToType() {
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Linear;
-		QPointF point{5, 2343.23};
+void DatapickerTest::maplnXToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnX;
+	points.logicalPos[0].setX(exp(1));
+	points.logicalPos[0].setY(2);
+	points.logicalPos[1].setX(exp(2));
+	points.logicalPos[1].setY(4);
+	points.logicalPos[2].setX(exp(3));
+	points.logicalPos[2].setY(6);
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
 
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, 2343.23, 0));
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnX;
-		QPointF point{5, 2343.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), 2343.23, 0));
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnY;
-		QPointF point{5, 2.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, exp(2.23), 0));
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::LnXY;
-		QPointF point{5, 2.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), exp(2.23), 0));
-	}
-
-	// log10
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10X;
-		QPointF point{5, 2343.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), 2343.23, 0));
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10Y;
-		QPointF point{5, 2.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, pow(10, 2.23), 0));
-	}
-
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10XY;
-		QPointF point{5, 2.23};
-
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), pow(10, 2.23), 0));
-	}
-
-	// {
-	//     DatapickerImage::ReferencePoints points;
-	//     points.type = DatapickerImage::GraphType::PolarInDegree;
-	//     QPointF point{5, 30};
-
-	// Transform t;
-	// VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.4138, 0.1651, 0));
-	// }
-
-	// {
-	//     DatapickerImage::ReferencePoints points;
-	//     points.type = DatapickerImage::GraphType::PolarInRadians;
-	//     QPointF point{5, 30};
-
-	// Transform t;
-	// VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(1.4056, 30.414, 0));
-	// }
-
-	// TODO: implement Ternary
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 2);
+	VALUES_EQUAL(t.x[1], 2);
+	VALUES_EQUAL(t.y[1], 4);
+	VALUES_EQUAL(t.x[2], 3);
+	VALUES_EQUAL(t.y[2], 6);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
 }
 
-void DatapickerTest::mapSceneToLogical() {
-	{
-		DatapickerImage::ReferencePoints points;
-		points.type = DatapickerImage::GraphType::Log10XY;
-		QPointF point{5, 2.23};
+void DatapickerTest::maplnYToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnY;
+	points.logicalPos[0].setX(1);
+	points.logicalPos[0].setY(exp(1));
+	points.logicalPos[1].setX(3);
+	points.logicalPos[1].setY(exp(2));
+	points.logicalPos[2].setX(5);
+	points.logicalPos[2].setY(exp(3));
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
 
-		Transform t;
-		VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), pow(10, 2.23), 0));
-	}
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 1);
+	VALUES_EQUAL(t.x[1], 3);
+	VALUES_EQUAL(t.y[1], 2);
+	VALUES_EQUAL(t.x[2], 5);
+	VALUES_EQUAL(t.y[2], 3);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
 }
 
-void DatapickerTest::cartesianMapping() {
+void DatapickerTest::maplnXYToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnXY;
+	points.logicalPos[0].setX(exp(5));
+	points.logicalPos[0].setY(exp(1));
+	points.logicalPos[1].setX(exp(6));
+	points.logicalPos[1].setY(exp(2));
+	points.logicalPos[2].setX(exp(7));
+	points.logicalPos[2].setY(exp(3));
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 5);
+	VALUES_EQUAL(t.y[0], 1);
+	VALUES_EQUAL(t.x[1], 6);
+	VALUES_EQUAL(t.y[1], 2);
+	VALUES_EQUAL(t.x[2], 7);
+	VALUES_EQUAL(t.y[2], 3);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+void DatapickerTest::maplog10XToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10X;
+	points.logicalPos[0].setX(pow(10, 1));
+	points.logicalPos[0].setY(2);
+	points.logicalPos[1].setX(pow(10, 2));
+	points.logicalPos[1].setY(4);
+	points.logicalPos[2].setX(pow(10, 3));
+	points.logicalPos[2].setY(6);
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 2);
+	VALUES_EQUAL(t.x[1], 2);
+	VALUES_EQUAL(t.y[1], 4);
+	VALUES_EQUAL(t.x[2], 3);
+	VALUES_EQUAL(t.y[2], 6);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+void DatapickerTest::maplog10YToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10Y;
+	points.logicalPos[0].setX(1);
+	points.logicalPos[0].setY(pow(10, 1));
+	points.logicalPos[1].setX(3);
+	points.logicalPos[1].setY(pow(10, 2));
+	points.logicalPos[2].setX(5);
+	points.logicalPos[2].setY(pow(10, 3));
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 1);
+	VALUES_EQUAL(t.x[1], 3);
+	VALUES_EQUAL(t.y[1], 2);
+	VALUES_EQUAL(t.x[2], 5);
+	VALUES_EQUAL(t.y[2], 3);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+void DatapickerTest::maplog10XYToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10XY;
+	points.logicalPos[0].setX(pow(10, 5));
+	points.logicalPos[0].setY(pow(10, 1));
+	points.logicalPos[1].setX(pow(10, 6));
+	points.logicalPos[1].setY(pow(10, 2));
+	points.logicalPos[2].setX(pow(10, 7));
+	points.logicalPos[2].setY(pow(10, 3));
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 5);
+	VALUES_EQUAL(t.y[0], 1);
+	VALUES_EQUAL(t.x[1], 6);
+	VALUES_EQUAL(t.y[1], 2);
+	VALUES_EQUAL(t.x[2], 7);
+	VALUES_EQUAL(t.y[2], 3);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+void DatapickerTest::mapPolarInRadiansToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::PolarInRadians;
+	points.logicalPos[0].setX(1);
+	points.logicalPos[0].setY(0);
+	points.logicalPos[1].setX(3);
+	points.logicalPos[1].setY(2.1);
+	points.logicalPos[2].setX(5);
+	points.logicalPos[2].setY(3.8);
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 0);
+	VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
+	VALUES_EQUAL(t.y[1], 2.5896280999466);
+	VALUES_EQUAL(t.x[2], -3.9548385595721);
+	VALUES_EQUAL(t.y[2], -3.0592894547136);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+void DatapickerTest::mapPolarInDegreeToCartesian() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::PolarInDegree;
+	points.logicalPos[0].setX(1);
+	points.logicalPos[0].setY(0);
+	points.logicalPos[1].setX(3);
+	points.logicalPos[1].setY(30);
+	points.logicalPos[2].setX(5);
+	points.logicalPos[2].setY(50);
+	points.scenePos[0].setX(6.21);
+	points.scenePos[0].setY(7.23);
+	points.scenePos[1].setX(-51.2);
+	points.scenePos[1].setY(3234);
+	points.scenePos[2].setX(-23);
+	points.scenePos[2].setY(+5e6);
+
+	Transform t;
+	QCOMPARE(t.mapTypeToCartesian(points), true);
+	VALUES_EQUAL(t.x[0], 1);
+	VALUES_EQUAL(t.y[0], 0);
+	VALUES_EQUAL(t.x[1], 2.5980762113533);
+	VALUES_EQUAL(t.y[1], 1.5);
+	VALUES_EQUAL(t.x[2], 3.2139380484327);
+	VALUES_EQUAL(t.y[2], 3.8302222155949);
+	VALUES_EQUAL(t.X[0], 6.21);
+	VALUES_EQUAL(t.Y[0], 7.23);
+	VALUES_EQUAL(t.X[1], -51.2);
+	VALUES_EQUAL(t.Y[1], 3234);
+	VALUES_EQUAL(t.X[2], -23);
+	VALUES_EQUAL(t.Y[2], +5e6);
+}
+
+// TODO: implement ternary
+
+// Reference calculations done with https://keisan.casio.com/exec/system/1223526375
+
+void DatapickerTest::mapCartesianToLinear() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Linear;
+	QPointF point{5, 2343.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, 2343.23, 0));
+}
+
+void DatapickerTest::mapCartesianToLnX() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnX;
+	QPointF point{5, 2343.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), 2343.23, 0));
+}
+
+void DatapickerTest::mapCartesianToLnY() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnY;
+	QPointF point{5, 2.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, exp(2.23), 0));
+}
+
+void DatapickerTest::mapCartesianToLnXY() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::LnXY;
+	QPointF point{5, 2.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(exp(5), exp(2.23), 0));
+}
+
+void DatapickerTest::mapCartesianToLog10X() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10X;
+	QPointF point{5, 2343.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), 2343.23, 0));
+}
+
+void DatapickerTest::mapCartesianToLog10Y() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10Y;
+	QPointF point{5, 2.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(5, pow(10, 2.23), 0));
+}
+
+void DatapickerTest::mapCartesianToLog10XY() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::Log10XY;
+	QPointF point{5, 2.23};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(pow(10, 5), pow(10, 2.23), 0));
+}
+
+void DatapickerTest::mapCartesianToPolarInDegree() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::PolarInDegree;
+	QPointF point{5, 30};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491, 80.537677791974, 0));
+}
+
+void DatapickerTest::mapCartesianToPolarInRadians() {
+	DatapickerImage::ReferencePoints points;
+	points.type = DatapickerImage::GraphType::PolarInRadians;
+	QPointF point{5, 30};
+
+	Transform t;
+	VECTOR3D_EQUAL(t.mapCartesianToType(point, points), QVector3D(30.413812651491, 1.4056476493803, 0)); // first is radius, second theta
+}
+
+// TODO: implement Ternary
+
+void DatapickerTest::linearMapping() {
+	// Test if setting curve points on the image result in correct values for Linear mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
@@ -450,7 +438,10 @@ void DatapickerTest::cartesianMapping() {
 }
 
 void DatapickerTest::logarithmicNaturalXMapping() {
+	// Test if setting curve points on the image result in correct values for lnX mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -489,7 +480,10 @@ void DatapickerTest::logarithmicNaturalXMapping() {
 }
 
 void DatapickerTest::logarithmicNaturalYMapping() {
+	// Test if setting curve points on the image result in correct values for lnY mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -528,7 +522,10 @@ void DatapickerTest::logarithmicNaturalYMapping() {
 }
 
 void DatapickerTest::logarithmicNaturalXYMapping() {
+	// Test if setting curve points on the image result in correct values for lnXY mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -569,7 +566,10 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 }
 
 void DatapickerTest::logarithmic10XMapping() {
+	// Test if setting curve points on the image result in correct values for logX mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -610,7 +610,10 @@ void DatapickerTest::logarithmic10XMapping() {
 }
 
 void DatapickerTest::logarithmic10YMapping() {
+	// Test if setting curve points on the image result in correct values for logY mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -651,7 +654,10 @@ void DatapickerTest::logarithmic10YMapping() {
 }
 
 void DatapickerTest::logarithmic10XYMapping() {
+	// Test if setting curve points on the image result in correct values for logXY mapping
+
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
@@ -744,6 +750,7 @@ void DatapickerTest::curvePointMove() {
 	//   // Reference points are moved after placement
 	//   // Column data is changing respectivetly
 	//   Datapicker datapicker(QStringLiteral("Test"));
+	//   // Set reference points
 	//   datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
 	//   datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
 	//   datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
@@ -785,6 +792,7 @@ void DatapickerTest::curvePointMove() {
 
 void DatapickerTest::selectReferencePoint() {
 	Datapicker datapicker(QStringLiteral("Test"));
+	// Set reference points
 	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
 	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
@@ -801,9 +809,9 @@ void DatapickerTest::selectReferencePoint() {
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), false);
 
 	auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-
 	QCOMPARE(points.count(), 3);
 
+	// Change reference point selection
 	points[0]->pointSelected(points[0]);
 	QCOMPARE(w.ui.rbRefPoint1->isChecked(), true);
 	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
