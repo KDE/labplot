@@ -19,7 +19,9 @@ extern "C" {
 
 ///////////////////////// macros ///////////
 
-#define VALUES_EQUAL(v1, ref) QVERIFY2(nsl_math_approximately_equal(v1, ref) == true, qPrintable(QStringLiteral("v1:%1, ref:%2").arg(v1).arg(ref)))
+#define VALUES_EQUAL(v1, ref)                                                                                                                                  \
+	QVERIFY2(nsl_math_approximately_equal(v1, ref) == true,                                                                                                    \
+			 qPrintable(QStringLiteral("v1:%1, ref:%2").arg((double)v1, 0, 'g', 15, QLatin1Char(' ')).arg((double)ref, 0, 'g', 15, QLatin1Char(' '))))
 
 #define RANGE_CORRECT(range, start_, end_)                                                                                                                     \
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
