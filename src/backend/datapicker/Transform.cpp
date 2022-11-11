@@ -177,7 +177,7 @@ QVector3D Transform::mapCartesianToType(QPointF point, const DatapickerImage::Re
 		return QVector3D(point.x(), pow(10, point.y()), 0);
 	case DatapickerImage::GraphType::PolarInDegree: {
 		double r = sqrt(point.x() * point.x() + point.y() * point.y());
-		double angle = atan(point.y() / point.x() * M_180_PI);
+		double angle = atan(point.y() / point.x()) * M_180_PI;
 		return QVector3D(r, angle, 0);
 	}
 	case DatapickerImage::GraphType::PolarInRadians: {
