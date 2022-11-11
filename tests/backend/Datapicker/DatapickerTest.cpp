@@ -471,8 +471,9 @@ void DatapickerTest::logarithmicNaturalXMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionX1->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionX2->setValue(1); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
+    w.ui.sbPositionX1->valueChanged(1); // axisPointsChanged will call updatePoint()
 
 	// Value validated manually, not reverse calculated
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
@@ -513,8 +514,9 @@ void DatapickerTest::logarithmicNaturalYMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionY2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY3->setValue(1); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionY2->setValue(1), true); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionY3->setValue(1), true); // axisPointsChanged will call updatePoint()
+    w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 20);
 	// Value validated manually, not reverse calculated
@@ -555,10 +557,11 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionX1->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionX2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY3->setValue(1); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionX1->setValue(1), true); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionX2->setValue(1), true); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionY2->setValue(1), true); // axisPointsChanged will call updatePoint()
+    QCOMPARE(w.ui.sbPositionY3->setValue(1), true); // axisPointsChanged will call updatePoint()
+    w.ui.sbPositionY1->valueChanged(1); // axisPointsChanged will call updatePoint()
 
 	// Values validated manually, not reverse calculated
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
@@ -599,9 +602,9 @@ void DatapickerTest::logarithmic10XMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionX1->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionX2->setValue(1); // axisPointsChanged will call updatePoint()
-
+    QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
+    w.ui.sbPositionX2->valueChanged(1);
 	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10X);
 
 	// Value validated manually, not reverse calculated
@@ -643,9 +646,9 @@ void DatapickerTest::logarithmic10YMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionY2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY3->setValue(1); // axisPointsChanged will call updatePoint()
-
+    QCOMPARE(w.ui.sbPositionY2->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionY3->setValue(1), true);
+    w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10Y);
 
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 20);
@@ -687,11 +690,11 @@ void DatapickerTest::logarithmic10XYMapping() {
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
-	w.ui.sbPositionX1->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionX2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY2->setValue(1); // axisPointsChanged will call updatePoint()
-	w.ui.sbPositionY3->setValue(1); // axisPointsChanged will call updatePoint()
-
+    QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionY2->setValue(1), true);
+    QCOMPARE(w.ui.sbPositionY3->setValue(1), true);
+    w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 	// Values validated manually, not reverse calculated
 	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
 	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
