@@ -1,10 +1,16 @@
+/*
+	File                 : NumberSpinBox.cpp
+	Project              : LabPlot
+	Description          : widget for setting numbers with a spinbox
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "NumberSpinBox.h"
 
 #include "backend/lib/macrosWarningStyle.h"
 
 #include "klocalizedstring.h"
-
-#include <limits>
 
 #include <QApplication>
 #include <QDebug>
@@ -14,6 +20,8 @@
 #include <QString>
 #include <QStringRef>
 #include <QtMath>
+
+#include <limits>
 
 NumberSpinBox::NumberSpinBox(QWidget* parent)
 	: QDoubleSpinBox(parent) {
@@ -51,7 +59,7 @@ QString NumberSpinBox::errorToString(Errors e) {
 	case Errors::NoNumber:
 		return i18n("No number entered");
 	case Errors::NoError:
-		return QLatin1String("");
+		return {};
 	}
 	return i18n("Unhandled error");
 }
@@ -279,7 +287,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 	bool before_comma = comma >= 0 && cursorPos - 1 < comma;
 	bool before_exponent = exponentialIndex >= 0 && cursorPos - 1 < exponentialIndex;
 
-	const auto& l = v_str.split(QLatin1Char('e'), nullptr, Qt::CaseInsensitive);
+	const auto& l = v_str.split(QLatin1Char('e'), Qt::KeepEmptyParts, Qt::CaseInsensitive);
 
 	double integerFraction = locale().toDouble(l.at(0));
 	int exponent = 0;
@@ -316,7 +324,7 @@ NumberSpinBox::Errors NumberSpinBox::step(int steps) {
 		exponent += calc;
 
 		// double max value 1.7976931348623157E+308
-		if (abs(exponent) > 307) {
+		if (std::abs(exponent) > 307) {
 			if (abs(integerFraction) > 1.7976931348623157)
 				exponent = exponent > 0 ? 307 : -307;
 			else

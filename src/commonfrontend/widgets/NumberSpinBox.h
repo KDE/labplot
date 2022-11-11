@@ -1,5 +1,5 @@
 /*
-	File                 : NumberSpinBox.g
+	File                 : NumberSpinBox.h
 	Project              : LabPlot
 	Description          : widget for setting numbers with a spinbox
 	--------------------------------------------------------------------

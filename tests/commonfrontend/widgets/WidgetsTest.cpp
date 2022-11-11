@@ -963,7 +963,7 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 
 	int valueChangedCounter = 0;
 	double lastValue = NAN;
-	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&sb, &valueChangedCounter, &lastValue](double value) {
+	connect(&sb, QOverload<double>::of(&NumberSpinBox::valueChanged), [&valueChangedCounter, &lastValue](double value) {
 		valueChangedCounter++;
 		lastValue = value;
 	});
