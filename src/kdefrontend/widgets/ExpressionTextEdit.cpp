@@ -49,7 +49,6 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	m_completer = new QCompleter(list, this);
 	m_completer->setWidget(this);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
-	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
 	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExpressionTextEdit::insertCompletion);
 	connect(this, &ExpressionTextEdit::textChanged, this, [=]() {
@@ -91,7 +90,7 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 	QTextCursor tc{textCursor()};
 
 	// remove description
-	int nameLength = completion.indexOf(QLatin1Char(' '));
+	int nameLength = completion.indexOf(QLatin1String(" - "));
 	QString name = completion;
 	name.truncate(nameLength);
 
