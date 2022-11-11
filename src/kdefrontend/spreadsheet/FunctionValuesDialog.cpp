@@ -180,8 +180,10 @@ void FunctionValuesDialog::checkValues() {
 
 	// check whether for the variables where a name was provided also a column was selected
 	for (int i = 0; i < m_variableDataColumns.size(); ++i) {
+		auto varName = m_variableLineEdits.at(i)->text().simplified();
 		DEBUG(Q_FUNC_INFO << ", variable " << i + 1)
-		if (m_variableLineEdits.at(i)->text().simplified().isEmpty())
+		// ignore empty or not used variables
+		if (varName.isEmpty() || !ui.teEquation->toPlainText().contains(varName))
 			continue;
 
 		auto* cb = m_variableDataColumns.at(i);
@@ -372,10 +374,11 @@ void FunctionValuesDialog::generate() {
 		variableNames << m_variableLineEdits.at(i)->text().simplified();
 
 		auto* aspect{static_cast<AbstractAspect*>(m_variableDataColumns.at(i)->currentModelIndex().internalPointer())};
-		Q_ASSERT(aspect);
-		auto* column{dynamic_cast<Column*>(aspect)};
-		Q_ASSERT(column);
-		variableColumns << column;
+		if (aspect) {
+			auto* column{dynamic_cast<Column*>(aspect)};
+			if (column)
+				variableColumns << column;
+		}
 	}
 
 	// set the new values and store the expression, variable names and used data columns

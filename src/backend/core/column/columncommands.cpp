@@ -696,7 +696,8 @@ void ColumnSetGlobalFormulaCmd::redo() {
 
 	QVector<Column::FormulaData> formulaData;
 	for (int i = 0; i < m_newVariableNames.count(); i++)
-		formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
+		if (i < m_newVariableColumns.size()) // names may be defined but without column
+			formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
 	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
 }
