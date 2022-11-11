@@ -6,6 +6,7 @@
 	SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
 	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 	SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies) <http://www.qt-project.org/legal>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
 */
@@ -32,7 +33,16 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent)
 	: KTextEdit(parent)
 	, m_highlighter(new EquationHighlighter(this)) {
 	QStringList list = ExpressionParser::getInstance()->functions();
-	list.append(ExpressionParser::getInstance()->constants());
+	// append description
+	for (auto& s : list)
+		s.append(ExpressionParser::functionArgumentString(s, XYEquationCurve::EquationType::Cartesian) + QStringLiteral(" - ")
+				 + ExpressionParser::getInstance()->functionDescription(s));
+	QStringList constants = ExpressionParser::getInstance()->constants();
+	for (auto& s : constants) {
+		if (s != QLatin1String("..."))
+			s.append(QStringLiteral(" - ") + ExpressionParser::getInstance()->constantDescription(s));
+	}
+	list.append(constants);
 
 	setTabChangesFocus(true);
 
@@ -79,10 +89,16 @@ void ExpressionTextEdit::setVariables(const QStringList& vars) {
 
 void ExpressionTextEdit::insertCompletion(const QString& completion) {
 	QTextCursor tc{textCursor()};
-	int extra{completion.length() - m_completer->completionPrefix().length()};
+
+	// remove description
+	int nameLength = completion.indexOf(QLatin1Char(' '));
+	QString name = completion;
+	name.truncate(nameLength);
+
+	int extra = name.length() - m_completer->completionPrefix().length();
 	tc.movePosition(QTextCursor::Left);
 	tc.movePosition(QTextCursor::EndOfWord);
-	tc.insertText(completion.right(extra));
+	tc.insertText(name.right(extra));
 	setTextCursor(tc);
 }
 

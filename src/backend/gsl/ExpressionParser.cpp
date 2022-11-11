@@ -152,7 +152,7 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
-	index++;	// separator
+	index++; // separator
 
 	// Column statistics
 	m_functionsNames << i18n("Size");
@@ -1428,6 +1428,22 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 	return QStringLiteral("(...)");
 }
 
+QString ExpressionParser::functionDescription(const QString& function) {
+	int index = 0;
+	while (function != QLatin1String(_functions[index].name) && _functions[index].name != nullptr)
+		index++;
+
+	return m_functionsNames.at(index);
+}
+QString ExpressionParser::constantDescription(const QString& constant) {
+	int index = 0;
+	while (constant != QLatin1String(_constants[index].name) && _constants[index].name != nullptr)
+		index++;
+
+	return m_constantsNames.at(index) + QStringLiteral(" (") + m_constantsValues.at(index) + QStringLiteral(" ") + m_constantsUnits.at(index)
+		+ QStringLiteral(")");
+}
+
 const QStringList& ExpressionParser::constants() {
 	return m_constants;
 }
@@ -1479,6 +1495,8 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	/* remove temporarily defined symbols */
 	for (const auto& var : vars)
 		remove_symbol(qPrintable(var));
+	if (expr.contains(QLatin1String("cell")))
+		remove_symbol("i");
 
 	return !(parse_errors() > 0);
 }

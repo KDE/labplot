@@ -164,7 +164,7 @@ bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
 	} else {
 		le->setStyleSheet(QString());
-		le->setToolTip(QStringLiteral(""));
+		le->setToolTip(QString());
 		isValid = true;
 	}
 
@@ -353,7 +353,7 @@ void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
 	if (aspect) {
 		auto* cb{dynamic_cast<TreeViewComboBox*>(QObject::sender())};
 		if (cb)
-			cb->setStyleSheet(QStringLiteral(""));
+			cb->setStyleSheet(QString());
 	}
 
 	checkValues();
