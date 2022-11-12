@@ -1,0 +1,22 @@
+dirfile TODO
+------------
+
+* add filter files
+* include in file dialog
+* add tests
+* write filter
+
+API:
+https://getdata.sourceforge.net/getdata.html
+https://getdata.sourceforge.net/bindings.html#cxx
+
+Examples:
+https://getdata.sourceforge.net/dirfile.html#example
+
+Git:
+https://github.com/ketiltrout/getdata/
+
+Distros:
+https://getdata.sourceforge.net/download.html
+
+openSUSE 15.4 dropped it due to Python 2 bindings
