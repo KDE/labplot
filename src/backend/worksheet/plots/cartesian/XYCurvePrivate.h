@@ -79,10 +79,7 @@ public:
 	bool lineSkipGaps;
 	bool lineIncreasingXOnly;
 	int lineInterpolationPointsCount;
-	QPen linePen;
-	qreal lineOpacity;
-
-	// drop lines
+	Line* line{nullptr};
 	Line* dropLine{nullptr};
 
 	// symbols

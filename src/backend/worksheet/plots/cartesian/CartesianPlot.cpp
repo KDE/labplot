@@ -2062,9 +2062,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
 		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
-		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
-		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
-		connect(curve, &XYCurve::lineOpacityChanged, this, &CartesianPlot::updateLegend);
+		connect(curve->line(), &Line::updateRequested, this, &CartesianPlot::updateLegend);
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
