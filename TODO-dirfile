@@ -6,12 +6,15 @@ dirfile TODO
 * add tests
 * write filter
 
+current version of getdata: 0.11.0 (Nov. 12, 2021)
+
 API:
 https://getdata.sourceforge.net/getdata.html
 https://getdata.sourceforge.net/bindings.html#cxx
 
 Examples:
 https://getdata.sourceforge.net/dirfile.html#example
+kst is supporting dirfile
 
 Git:
 https://github.com/ketiltrout/getdata/
