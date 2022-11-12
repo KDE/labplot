@@ -240,6 +240,7 @@ option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
+option(ENABLE_DIRFILE "Build with Dirfile support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
 IF (APPLE)
@@ -527,6 +528,22 @@ IF (ENABLE_DISCOUNT)
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
+### Dirfile via Getdata (optional) #############################
+IF (ENABLE_DIRFILE)
+	FIND_PACKAGE(Getdata)
+	SET_PACKAGE_PROPERTIES (Getdata PROPERTIES
+		DESCRIPTION "Reference implementation of the Dirfile Standards"
+		URL "https://getdata.sourceforge.net/index.html"
+		TYPE OPTIONAL)
+	IF (Getdata_FOUND)
+		add_definitions (-DHAVE_GETDATA)
+	ELSE ()
+		MESSAGE (STATUS "GetData (Dirfile) library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "GetData (Dirfile) DISABLED")
 ENDIF ()
 
 ### Touch bar on macOS (optional) #############################
