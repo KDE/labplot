@@ -665,9 +665,9 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
 
-	QPen pen = plot->plotArea()->borderPen();
+	QPen pen = plot->plotArea()->borderLine()->pen();
 	pen.setStyle(Qt::NoPen);
-	plot->plotArea()->setBorderPen(pen);
+	plot->plotArea()->borderLine()->setPen(pen);
 
 	ws->addChild(plot);
 	plot->setSuppressRetransform(false);

@@ -1071,9 +1071,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)
-				plot->plotArea()->setBorderPen(QPen(Qt::NoPen));
+				plot->plotArea()->borderLine()->setPen(QPen(Qt::NoPen));
 			else
-				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
+				plot->plotArea()->borderLine()->setPen(QPen(Qt::SolidLine));
 
 			// ranges
 			const Origin::GraphAxis& originXAxis = layer.xAxis;

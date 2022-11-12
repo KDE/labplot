@@ -44,6 +44,7 @@ private:
 	QList<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
+	LineWidget* borderLineWidget{nullptr};
 	LineWidget* cursorLineWidget{nullptr};
 	ThemeHandler* m_themeHandler;
 	QButtonGroup* m_bgDefaultPlotRange{nullptr};
@@ -116,11 +117,7 @@ private Q_SLOTS:
 
 	//"Plot area"-tab
 	void borderTypeChanged();
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
 	void borderCornerRadiusChanged(double);
-	void borderOpacityChanged(int);
 
 	void exportPlotTemplate();
 
@@ -160,9 +157,7 @@ private Q_SLOTS:
 
 	// background
 	void plotBorderTypeChanged(PlotArea::BorderType);
-	void plotBorderPenChanged(QPen&);
 	void plotBorderCornerRadiusChanged(double);
-	void plotBorderOpacityChanged(double);
 
 	// save/load template
 	void loadConfigFromTemplate(KConfig&);

@@ -123,6 +123,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	backgroundWidget = new BackgroundWidget(ui.tabPlotArea);
 	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
+	borderLineWidget = new LineWidget(ui.tabPlotArea);
+	borderLineWidget->setPrefix(QStringLiteral("Border"));
+	gridLayout->addWidget(borderLineWidget, 5, 0, 1, 3);
+
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
@@ -198,11 +202,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.tbBorderTypeTop, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeRight, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderWidthChanged);
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotDock::borderCornerRadiusChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::borderOpacityChanged);
 
 	// theme and template handlers
 	auto* frame = new QFrame(this);
@@ -475,7 +475,6 @@ void CartesianPlotDock::updateLocale() {
 	ui.sbTop->setLocale(numberLocale);
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
 	ui.sbBorderCornerRadius->setLocale(numberLocale);
 	ui.sbPaddingHorizontal->setLocale(numberLocale);
 	ui.sbPaddingVertical->setLocale(numberLocale);
@@ -857,9 +856,6 @@ void CartesianPlotDock::retranslateUi() {
 	ui.cbYBreakStyle->addItem(i18n("Simple"));
 	ui.cbYBreakStyle->addItem(i18n("Vertical"));
 	ui.cbYBreakStyle->addItem(i18n("Sloped"));
-
-	// plot area
-	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
 	QString suffix;
 	if (m_units == Units::Metric)
@@ -1293,15 +1289,6 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
 	ui.sbHeight->setEnabled(b);
 }
 
-void CartesianPlotDock::borderOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (double)value / 100.;
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBorderOpacity(opacity);
-}
-
 void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 	ui.lPaddingHorizontalRight->setVisible(!checked);
 	ui.sbPaddingRight->setVisible(!checked);
@@ -1651,47 +1638,6 @@ void CartesianPlotDock::borderTypeChanged() {
 		plot->plotArea()->setBorderType(type);
 }
 
-void CartesianPlotDock::borderStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* plot : m_plotList) {
-		pen = plot->plotArea()->borderPen();
-		pen.setStyle(penStyle);
-		plot->plotArea()->setBorderPen(pen);
-	}
-}
-
-void CartesianPlotDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* plot : m_plotList) {
-		pen = plot->plotArea()->borderPen();
-		pen.setColor(color);
-		plot->plotArea()->setBorderPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
-}
-
-void CartesianPlotDock::borderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* plot : m_plotList) {
-		pen = plot->plotArea()->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		plot->plotArea()->setBorderPen(pen);
-	}
-}
-
 void CartesianPlotDock::borderCornerRadiusChanged(double value) {
 	if (m_initializing)
 		return;
@@ -1911,27 +1857,9 @@ void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 }
 
-void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
-	m_initializing = true;
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-
 void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 	m_initializing = true;
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
-}
-
-void CartesianPlotDock::plotBorderOpacityChanged(double value) {
-	m_initializing = true;
-	float v = (float)value * 100.;
-	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }
 
@@ -2006,15 +1934,18 @@ void CartesianPlotDock::load() {
 	//"Plot Area"-tab
 	const auto* plotArea = m_plot->plotArea();
 
-	// Background and Cursor Lines
+	// Background, border and cursor Lines
 	QList<Background*> backgrounds;
 	QList<Line*> cursorLines;
+	QList<Line*> borderLines;
 	for (auto* plot : m_plotList) {
 		backgrounds << plot->plotArea()->background();
+		borderLines << plot->plotArea()->borderLine();
 		cursorLines << plot->cursorLine();
 	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
+	borderLineWidget->setLines(borderLines);
 	cursorLineWidget->setLines(cursorLines);
 
 	// Padding
@@ -2029,12 +1960,7 @@ void CartesianPlotDock::load() {
 	ui.tbBorderTypeRight->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderBottom));
-	ui.kcbBorderColor->setColor(plotArea->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex((int)plotArea->borderPen().style());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(plotArea->borderPen().widthF(), Worksheet::Unit::Point));
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(plotArea->borderCornerRadius(), m_worksheetUnit));
-	ui.sbBorderOpacity->setValue(round(plotArea->borderOpacity() * 100));
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 }
 
 void CartesianPlotDock::loadConfig(KConfig& config) {
@@ -2069,15 +1995,8 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
 	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", plotArea->borderPen().color()));
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)plotArea->borderPen().style()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", plotArea->borderPen().widthF()), Worksheet::Unit::Point));
+	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", plotArea->borderCornerRadius()), m_worksheetUnit));
-	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", plotArea->borderOpacity()) * 100);
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing = false;
 }
 
 void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
@@ -2099,11 +2018,8 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// Border
 	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
+	borderLineWidget->saveConfig(group);
 	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
 
 	config.sync();
 }
