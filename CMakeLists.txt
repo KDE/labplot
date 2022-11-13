@@ -240,6 +240,7 @@ option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
+option(ENABLE_ORCUS "Build with Orcus support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
 IF (APPLE)
@@ -527,6 +528,22 @@ IF (ENABLE_DISCOUNT)
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
+### Orcus (optional) #############################
+IF (ENABLE_ORCUS)
+	FIND_PACKAGE(Orcus)
+	SET_PACKAGE_PROPERTIES (Orcus PROPERTIES
+		DESCRIPTION "a library that provides a collection of standalone file processing filters"
+		URL "https://gitlab.com/orcus/orcus"
+		TYPE OPTIONAL)
+	IF (Orcus_FOUND)
+		add_definitions (-DHAVE_ORCUS)
+	ELSE ()
+		MESSAGE (STATUS "Orcus library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Orcus DISABLED")
 ENDIF ()
 
 ### Touch bar on macOS (optional) #############################
