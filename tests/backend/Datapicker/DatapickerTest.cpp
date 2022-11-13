@@ -273,7 +273,7 @@ void DatapickerTest::mapPolarInRadiansToCartesian() {
 	// lower precision here since it's not essential.
 	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
 	double v1 = t.x[1];
-	double ref =  -1.5145383137996;
+	double ref = -1.5145383137996;
 	QVERIFY2(nsl_math_approximately_equal_eps(v1, ref, 1.e-5) == true,
 			 qPrintable(QStringLiteral("v1:%1, ref:%2").arg(v1, 0, 'g', 15, QLatin1Char(' ')).arg(ref, 0, 'g', 15, QLatin1Char(' '))));
 
