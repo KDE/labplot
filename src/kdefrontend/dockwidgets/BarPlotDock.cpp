@@ -263,7 +263,8 @@ void BarPlotDock::loadDataColumns() {
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
 
 		for (int i = 0; i < count; ++i)
-			ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
+			if (m_barPlot->dataColumns().at(i))
+				ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
