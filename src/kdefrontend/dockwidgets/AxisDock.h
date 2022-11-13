@@ -47,6 +47,8 @@ private:
 	TreeViewComboBox* cbMinorTicksColumn;
 	TreeViewComboBox* cbLabelsTextColumn;
 	LineWidget* lineWidget{nullptr};
+	LineWidget* majorTicksLineWidget{nullptr};
+	LineWidget* minorTicksLineWidget{nullptr};
 	LineWidget* majorGridLineWidget{nullptr};
 	LineWidget* minorGridLineWidget{nullptr};
 	bool m_dataChanged{false};
@@ -114,11 +116,7 @@ private Q_SLOTS:
 	void setTickOffsetAuto() {
 		setTickOffsetData(true);
 	}
-	void majorTicksLineStyleChanged(int);
-	void majorTicksColorChanged(const QColor&);
-	void majorTicksWidthChanged(double);
 	void majorTicksLengthChanged(double);
-	void majorTicksOpacityChanged(int);
 
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
@@ -127,11 +125,7 @@ private Q_SLOTS:
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
-	void minorTicksLineStyleChanged(int);
-	void minorTicksColorChanged(const QColor&);
-	void minorTicksWidthChanged(double);
 	void minorTicksLengthChanged(double);
-	void minorTicksOpacityChanged(int);
 
 	//"Extra ticks"-tab
 
@@ -183,9 +177,7 @@ private Q_SLOTS:
 	void axisMajorTicksStartOffsetChanged(qreal);
 	void axisMajorTicksStartValueChanged(qreal);
 	void axisMajorTicksColumnChanged(const AbstractColumn*);
-	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
-	void axisMajorTicksOpacityChanged(qreal);
 
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
@@ -193,9 +185,7 @@ private Q_SLOTS:
 	void axisMinorTicksNumberChanged(int);
 	void axisMinorTicksSpacingChanged(qreal);
 	void axisMinorTicksColumnChanged(const AbstractColumn*);
-	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
-	void axisMinorTicksOpacityChanged(qreal);
 
 	// labels
 	void axisLabelsFormatChanged(Axis::LabelsFormat);

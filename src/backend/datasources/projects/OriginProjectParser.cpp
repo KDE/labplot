@@ -1563,10 +1563,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
-	axis->setMajorTicksPen(pen);
+	axis->majorTicksLine()->setPen(pen);
 	axis->setMinorTicksLength(axis->majorTicksLength() / 2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection((Axis::TicksFlags)axisFormat.minorTicksType);
-	axis->setMinorTicksPen(pen);
+	axis->minorTicksLine()->setPen(pen);
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << STDSTRING(titleText));

@@ -83,8 +83,7 @@ public:
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)
-	QPen majorTicksPen;
-	qreal majorTicksOpacity;
+	Line* majorTicksLine{nullptr};
 
 	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 	Axis::TicksType minorTicksType; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
@@ -94,8 +93,7 @@ public:
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
 	qreal minorTicksLength; //!< minor tick length (in page units!)
-	QPen minorTicksPen;
-	qreal minorTicksOpacity;
+	Line* minorTicksLine{nullptr};
 
 	// Tick Label
 	Axis::LabelsFormat labelsFormat;

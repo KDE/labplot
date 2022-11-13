@@ -160,22 +160,37 @@ void Axis::init(Orientation orientation) {
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
 	d->majorTicksSpacing =
 		group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
-
-	d->majorTicksPen.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
-	d->majorTicksPen.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
-	d->majorTicksPen.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
-	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
+
+	d->majorTicksLine = new Line(QString());
+	d->majorTicksLine->setHidden(true);
+	d->majorTicksLine->setPrefix(QStringLiteral("MajorTicks"));
+	d->majorTicksLine->setCreateXmlElement(false);
+	addChild(d->majorTicksLine);
+	connect(d->majorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->majorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	d->minorTicksDirection = (TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksOut);
 	d->minorTicksType = (TicksType)group.readEntry("MinorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
 	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0); // see MajorTicksIncrement
-	d->minorTicksPen.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
-	d->minorTicksPen.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
-	d->minorTicksPen.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
-	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
+
+	d->minorTicksLine = new Line(QString());
+	d->minorTicksLine->setHidden(true);
+	d->minorTicksLine->setPrefix(QStringLiteral("MinorTicks"));
+	d->minorTicksLine->setCreateXmlElement(false);
+	addChild(d->minorTicksLine);
+	connect(d->minorTicksLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->minorTicksLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// Labels
 	d->labelsFormat = (LabelsFormat)group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
@@ -429,8 +444,11 @@ QString& Axis::majorTicksColumnPath() const {
 	return d->majorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
+
+Line* Axis::majorTicksLine() const {
+	Q_D(const Axis);
+	return d->majorTicksLine;
+}
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
@@ -443,8 +461,11 @@ QString& Axis::minorTicksColumnPath() const {
 	return d->minorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
-BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
+
+Line* Axis::minorTicksLine() const {
+	Q_D(const Axis);
+	return d->minorTicksLine;
+}
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, labelsFormatAuto, labelsFormatAuto)
@@ -750,25 +771,11 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, retransformTicks /* need to retransform because of "no line" handling */)
-void Axis::setMajorTicksPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->majorTicksPen)
-		exec(new AxisSetMajorTicksPenCmd(d, pen, ki18n("%1: set major ticks style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksLength, qreal, majorTicksLength, retransformTicks)
 void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, ki18n("%1: set major ticks length")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksOpacity, qreal, majorTicksOpacity, update)
-void Axis::setMajorTicksOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->majorTicksOpacity)
-		exec(new AxisSetMajorTicksOpacityCmd(d, opacity, ki18n("%1: set major ticks opacity")));
 }
 
 // Minor ticks
@@ -832,25 +839,11 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, retransformTicks /* need to retransform because of "no line" handling */)
-void Axis::setMinorTicksPen(const QPen& pen) {
-	Q_D(Axis);
-	if (pen != d->minorTicksPen)
-		exec(new AxisSetMinorTicksPenCmd(d, pen, ki18n("%1: set minor ticks style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksLength, qreal, minorTicksLength, retransformTicks)
 void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, ki18n("%1: set minor ticks length")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksOpacity, qreal, minorTicksOpacity, update)
-void Axis::setMinorTicksOpacity(qreal opacity) {
-	Q_D(Axis);
-	if (opacity != d->minorTicksOpacity)
-		exec(new AxisSetMinorTicksOpacityCmd(d, opacity, ki18n("%1: set minor ticks opacity")));
 }
 
 // Labels
@@ -1618,7 +1611,7 @@ void AxisPrivate::retransformTicks() {
 
 			// add major tick's line to the painter path
 			if (valid) {
-				if (majorTicksPen.style() != Qt::NoPen) {
+				if (majorTicksLine->pen().style() != Qt::NoPen) {
 					majorTicksPath.moveTo(startPoint);
 					majorTicksPath.lineTo(endPoint);
 				}
@@ -1710,7 +1703,7 @@ void AxisPrivate::retransformTicks() {
 
 				// add minor tick's line to the painter path
 				if (valid) {
-					if (minorTicksPen.style() != Qt::NoPen) {
+					if (minorTicksLine->pen().style() != Qt::NoPen) {
 						minorTicksPath.moveTo(startPoint);
 						minorTicksPath.lineTo(endPoint);
 					}
@@ -2491,8 +2484,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	const auto& linePen = line->pen();
 	axisShape = WorksheetElement::shapeFromPath(linePath, linePen);
 	axisShape.addPath(WorksheetElement::shapeFromPath(arrowPath, linePen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
-	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
+	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksLine->pen()));
+	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksLine->pen()));
 
 	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
@@ -2578,16 +2571,16 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 
 	// draw the major ticks
 	if (majorTicksDirection != Axis::noTicks) {
-		painter->setOpacity(majorTicksOpacity);
-		painter->setPen(majorTicksPen);
+		painter->setOpacity(majorTicksLine->opacity());
+		painter->setPen(majorTicksLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(majorTicksPath);
 	}
 
 	// draw the minor ticks
 	if (minorTicksDirection != Axis::noTicks) {
-		painter->setOpacity(minorTicksOpacity);
-		painter->setPen(minorTicksPen);
+		painter->setOpacity(minorTicksLine->opacity());
+		painter->setPen(minorTicksLine->pen());
 		painter->setBrush(Qt::NoBrush);
 		painter->drawPath(minorTicksPath);
 	}
@@ -2831,8 +2824,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->majorTicksSpacing));
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute(QStringLiteral("length"), QString::number(d->majorTicksLength));
-	WRITE_QPEN(d->majorTicksPen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->majorTicksOpacity));
+	d->majorTicksLine->save(writer);
 	writer->writeEndElement();
 
 	// minor ticks
@@ -2844,8 +2836,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("increment"), QString::number(d->minorTicksIncrement));
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
 	writer->writeAttribute(QStringLiteral("length"), QString::number(d->minorTicksLength));
-	WRITE_QPEN(d->minorTicksPen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->minorTicksOpacity));
+	d->minorTicksLine->save(writer);
 	writer->writeEndElement();
 
 	// extra ticks
@@ -2965,8 +2956,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
 			READ_COLUMN(majorTicksColumn);
 			READ_DOUBLE_VALUE("length", majorTicksLength);
-			READ_QPEN(d->majorTicksPen);
-			READ_DOUBLE_VALUE("opacity", majorTicksOpacity);
+			d->majorTicksLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("minorTicks")) {
 			attribs = reader->attributes();
 
@@ -2977,8 +2967,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("increment", minorTicksIncrement);
 			READ_COLUMN(minorTicksColumn);
 			READ_DOUBLE_VALUE("length", minorTicksLength);
-			READ_QPEN(d->minorTicksPen);
-			READ_DOUBLE_VALUE("opacity", minorTicksOpacity);
+			d->minorTicksLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("labels")) {
 			attribs = reader->attributes();
 
@@ -3090,14 +3079,10 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	d->majorGridLine->setOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	// Major ticks
-	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
-	p.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setMajorTicksPen(p);
-	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
-
 	this->setMajorTicksDirection((Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksIn));
 	this->setMajorTicksLength(group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
+	QColor themeColor = group.readEntry("MajorTicksColor", QColor(Qt::black));
+	d->majorTicksLine->loadThemeConfig(group, themeColor);
 
 	// Minor grid
 	if (firstAxis) {
@@ -3110,13 +3095,10 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	d->minorGridLine->setPen(p);
 
 	// Minor ticks
-	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
-	p.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setMinorTicksPen(p);
-	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
+	themeColor = group.readEntry("MinorTicksColor", QColor(Qt::black));
+	d->minorTicksLine->loadThemeConfig(group, themeColor);
 
 	// load the theme for the title label
 	d->title->loadThemeConfig(config);
@@ -3135,18 +3117,14 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	d->line->saveThemeConfig(group);
 
 	// Major ticks
-	group.writeEntry("MajorTicksColor", this->majorTicksPen().color());
-	group.writeEntry("MajorTicksLineStyle", (int)this->majorTicksPen().style());
-	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
-	group.writeEntry("MajorTicksOpacity", this->majorTicksOpacity());
 	group.writeEntry("MajorTicksType", (int)this->majorTicksType());
+	group.writeEntry("MajorTicksLength", d->majorTicksLength);
+	d->majorTicksLine->saveThemeConfig(group);
 
 	// Minor ticks
-	group.writeEntry("MinorTicksColor", this->minorTicksPen().color());
-	group.writeEntry("MinorTicksLineStyle", (int)this->minorTicksPen().style());
-	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
-	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
+	group.writeEntry("MinorTicksLength", d->majorTicksLength);
+	d->minorTicksLine->saveThemeConfig(group);
 
 	// grid
 	d->majorGridLine->saveThemeConfig(group);
