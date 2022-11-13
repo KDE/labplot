@@ -139,9 +139,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartValue, MajorTickStartValue)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
-	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
+	Line* majorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
@@ -150,9 +149,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
 	QString& minorTicksColumnPath() const;
-	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
+	Line* minorTicksLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
-	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
 
 	BASIC_D_ACCESSOR_DECL(LabelsFormat, labelsFormat, LabelsFormat)
 	BASIC_D_ACCESSOR_DECL(bool, labelsFormatAuto, LabelsFormatAuto)
@@ -257,9 +255,7 @@ Q_SIGNALS:
 	void majorTicksStartTypeChanged(TicksStartType);
 	void majorTickStartOffsetChanged(qreal);
 	void majorTickStartValueChanged(qreal);
-	void majorTicksPenChanged(QPen);
 	void majorTicksLengthChanged(qreal);
-	void majorTicksOpacityChanged(qreal);
 
 	// minor ticks
 	void minorTicksDirectionChanged(TicksDirection);
@@ -268,9 +264,7 @@ Q_SIGNALS:
 	void minorTicksNumberChanged(int);
 	void minorTicksIncrementChanged(qreal);
 	void minorTicksColumnChanged(const AbstractColumn*);
-	void minorTicksPenChanged(QPen);
 	void minorTicksLengthChanged(qreal);
-	void minorTicksOpacityChanged(qreal);
 
 	// labels
 	void labelsFormatChanged(LabelsFormat);

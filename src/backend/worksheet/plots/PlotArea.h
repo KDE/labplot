@@ -17,6 +17,7 @@
 
 class Background;
 class CartesianPlot;
+class Line;
 class PlotAreaPrivate;
 
 class PlotArea : public WorksheetElement {
@@ -37,9 +38,8 @@ public:
 
 	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(PlotArea::BorderType, borderType, BorderType)
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
+	Line* borderLine() const;
 	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 	BASIC_D_ACCESSOR_DECL(bool, clippingEnabled, ClippingEnabled)
 	CLASS_D_ACCESSOR_DECL(QRectF, rect, Rect)
@@ -61,7 +61,6 @@ private:
 
 Q_SIGNALS:
 	void borderTypeChanged(PlotArea::BorderType);
-	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
 	void borderOpacityChanged(float);
 

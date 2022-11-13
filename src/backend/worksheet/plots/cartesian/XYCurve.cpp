@@ -84,10 +84,18 @@ void XYCurve::init() {
 	d->lineIncreasingXOnly = group.readEntry("LineIncreasingXOnly", false);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
 	d->lineInterpolationPointsCount = group.readEntry("LineInterpolationPointsCount", 1);
-	d->linePen.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	d->linePen.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	d->linePen.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
+
+	d->line = new Line(QString());
+	d->line->setCreateXmlElement(false);
+	d->line->setHidden(true);
+	addChild(d->line);
+	d->line->init(group);
+	connect(d->line, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->line, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	d->dropLine = new Line(QString());
 	d->dropLine->setPrefix(QLatin1String("DropLine"));
@@ -283,10 +291,12 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineSkipGaps, lineSkipGaps)
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineIncreasingXOnly, lineIncreasingXOnly)
 BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
 
-// droplines
+Line* XYCurve::line() const {
+	Q_D(const XYCurve);
+	return d->line;
+}
+
 Line* XYCurve::dropLine() const {
 	Q_D(const XYCurve);
 	return d->dropLine;
@@ -419,20 +429,6 @@ void XYCurve::setLineInterpolationPointsCount(int count) {
 	Q_D(XYCurve);
 	if (count != d->lineInterpolationPointsCount)
 		exec(new XYCurveSetLineInterpolationPointsCountCmd(d, count, ki18n("%1: set the number of interpolation points")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLinePen, QPen, linePen, recalcShapeAndBoundingRect)
-void XYCurve::setLinePen(const QPen& pen) {
-	Q_D(XYCurve);
-	if (pen != d->linePen)
-		exec(new XYCurveSetLinePenCmd(d, pen, ki18n("%1: set line style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, updatePixmap)
-void XYCurve::setLineOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->lineOpacity)
-		exec(new XYCurveSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
 }
 
 // Values-Tab
@@ -695,9 +691,9 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool /*
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
 	d->symbol->setPen(pen);
 
-	pen = d->linePen;
+	pen = d->line->pen();
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
-	setLinePen(pen);
+	d->line->setPen(pen);
 
 	// setValuesDistance(d->distance*);
 	QFont font = d->valuesFont;
@@ -2484,7 +2480,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		return false;
 
 	if (maxDist < 0)
-		maxDist = (linePen.width() < 10) ? 10. : linePen.width();
+		maxDist = (line->pen().width() < 10) ? 10. : line->pen().width();
 
 	const double maxDistSquare = gsl_pow_2(maxDist);
 
@@ -2799,7 +2795,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	curveShape = QPainterPath();
 	if (lineType != XYCurve::LineType::NoLine)
-		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
+		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, line->pen()));
 
 	if (dropLine->dropLineType() != XYCurve::DropLineType::NoDropLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLine->pen()));
@@ -2842,10 +2838,10 @@ void XYCurvePrivate::draw(QPainter* painter) {
 
 	// draw lines
 	if (lineType != XYCurve::LineType::NoLine) {
-		painter->setOpacity(lineOpacity);
-		painter->setPen(linePen);
+		painter->setOpacity(line->opacity());
+		painter->setPen(line->pen());
 		painter->setBrush(Qt::NoBrush);
-		if (linePen.style() == Qt::SolidLine && !q->isPrinting()) {
+		if (line->pen().style() == Qt::SolidLine && !q->isPrinting()) {
 			// Much fast than drawPath but has problems
 			// with different styles
 			// When exporting to svg or pdf, this creates for every line
@@ -3159,8 +3155,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("skipGaps"), QString::number(d->lineSkipGaps));
 	writer->writeAttribute(QStringLiteral("increasingXOnly"), QString::number(d->lineIncreasingXOnly));
 	writer->writeAttribute(QStringLiteral("interpolationPointsCount"), QString::number(d->lineInterpolationPointsCount));
-	WRITE_QPEN(d->linePen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->lineOpacity));
+	d->line->save(writer);
 	writer->writeEndElement();
 
 	// Drop lines
@@ -3253,8 +3248,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("skipGaps", lineSkipGaps, bool);
 			READ_INT_VALUE("increasingXOnly", lineIncreasingXOnly, bool);
 			READ_INT_VALUE("interpolationPointsCount", lineInterpolationPointsCount, int);
-			READ_QPEN(d->linePen);
-			READ_DOUBLE_VALUE("opacity", lineOpacity);
+			d->line->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("dropLines")) {
 			d->dropLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("symbols")) {
@@ -3322,37 +3316,23 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 	if (!plot)
 		return;
-	int index = plot->curveChildIndex(this);
+	const int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
-
-	QPen p;
 
 	Q_D(XYCurve);
 	d->m_suppressRecalc = true;
 
-	// Line
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setColor(themeColor);
-	this->setLinePen(p);
-	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
-
-	// Drop line
+	d->line->loadThemeConfig(group, themeColor);
 	d->dropLine->loadThemeConfig(group, themeColor);
-
-	// Symbol
 	d->symbol->loadThemeConfig(group, themeColor);
+	d->background->loadThemeConfig(group);
+	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	// Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
 	this->setValuesColor(group.readEntry("ValuesColor", themeColor));
 
-	// Filling
-	d->background->loadThemeConfig(group);
-
-	// Error Bars
-	d->errorBarsLine->loadThemeConfig(group, themeColor);
-
+	// margins
 	if (plot->theme() == QLatin1String("Tufte")) {
 		if (d->xColumn && d->xColumn->rowCount() < 100) {
 			setRugEnabled(true);
@@ -3369,27 +3349,23 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 	Q_D(const XYCurve);
 
-	// Line
-	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineStyle", (int)this->linePen().style());
-	group.writeEntry("LineWidth", this->linePen().widthF());
+	d->line->saveThemeConfig(group);
+	d->dropLine->saveThemeConfig(group);
+	d->background->saveThemeConfig(group);
+	d->symbol->saveThemeConfig(group);
+	d->errorBarsLine->saveThemeConfig(group);
 
 	// Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());
 	group.writeEntry("ValuesColor", (QColor)this->valuesColor());
 	group.writeEntry("ValuesFont", this->valuesFont());
 
-	d->dropLine->saveThemeConfig(group);
-	d->background->saveThemeConfig(group);
-	d->symbol->saveThemeConfig(group);
-	d->errorBarsLine->saveThemeConfig(group);
-
-	int index = parentAspect()->indexOfChild<XYCurve>(this);
+	const int index = parentAspect()->indexOfChild<XYCurve>(this);
 	if (index < 5) {
 		KConfigGroup themeGroup = config.group("Theme");
 		for (int i = index; i < 5; i++) {
 			QString s = QStringLiteral("ThemePaletteColor") + QString::number(i + 1);
-			themeGroup.writeEntry(s, (QColor)this->linePen().color());
+			themeGroup.writeEntry(s, (QColor)d->line->pen().color());
 		}
 	}
 }

@@ -61,6 +61,7 @@ protected:
 	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;
+	LineWidget* lineWidget{nullptr};
 	LineWidget* dropLineWidget{nullptr};
 	BackgroundWidget* backgroundWidget{nullptr};
 	SymbolWidget* symbolWidget{nullptr};
@@ -86,10 +87,6 @@ private Q_SLOTS:
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
 
 	// Values-Tab
 	void valuesTypeChanged(int);
@@ -134,8 +131,6 @@ private Q_SLOTS:
 	void curveLineSkipGapsChanged(bool);
 	void curveLineIncreasingXOnlyChanged(bool);
 	void curveLineInterpolationPointsCountChanged(int);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
 
 	// Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);

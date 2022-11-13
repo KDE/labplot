@@ -299,9 +299,9 @@ void StatisticsColumnWidget::showKDEPlot() {
 	auto* curve = new XYCurve(QStringLiteral(""));
 	curve->setSuppressRetransform(false);
 	plot->addChild(curve);
-	QPen pen = curve->linePen();
+	QPen pen = curve->line()->pen();
 	pen.setStyle(Qt::SolidLine);
-	curve->setLinePen(pen);
+	curve->line()->setPen(pen);
 	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
@@ -357,7 +357,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* curve = new XYCurve(QStringLiteral(""));
 	curve->setSuppressRetransform(true);
 	plot->addChild(curve);
-	curve->setLinePen(Qt::NoPen);
+	curve->line()->setPen(Qt::NoPen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
@@ -391,9 +391,9 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* curve2 = new XYCurve(QStringLiteral("2"));
 	curve2->setSuppressRetransform(true);
 	plot->addChild(curve2);
-	QPen pen = curve2->linePen();
+	QPen pen = curve2->line()->pen();
 	pen.setStyle(Qt::SolidLine);
-	curve2->setLinePen(pen);
+	curve2->line()->setPen(pen);
 	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve2->background()->setPosition(Background::Position::No);
 	curve2->setXColumn(xColumn2);
@@ -600,9 +600,9 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
-	auto pen = curve->linePen();
+	auto pen = curve->line()->pen();
 	pen.setStyle(Qt::SolidLine);
-	curve->setLinePen(pen);
+	curve->line()->setPen(pen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	plot->addChild(curve);
 	curve->setValuesType(XYCurve::ValuesType::Y);
@@ -665,9 +665,9 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
 
-	QPen pen = plot->plotArea()->borderPen();
+	QPen pen = plot->plotArea()->borderLine()->pen();
 	pen.setStyle(Qt::NoPen);
-	plot->plotArea()->setBorderPen(pen);
+	plot->plotArea()->borderLine()->setPen(pen);
 
 	ws->addChild(plot);
 	plot->setSuppressRetransform(false);

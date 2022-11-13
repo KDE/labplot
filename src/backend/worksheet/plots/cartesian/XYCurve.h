@@ -98,11 +98,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, lineSkipGaps, LineSkipGaps)
 	BASIC_D_ACCESSOR_DECL(bool, lineIncreasingXOnly, LineIncreasingXOnly)
 	BASIC_D_ACCESSOR_DECL(int, lineInterpolationPointsCount, LineInterpolationPointsCount)
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
+	Line* line() const;
+	Line* dropLine() const;
 
 	Symbol* symbol() const;
-	Line* dropLine() const;
 	Background* background() const;
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
@@ -211,8 +210,6 @@ Q_SIGNALS:
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
 	void dropLineTypeChanged(XYCurve::DropLineType);
 
 	// Values-Tab

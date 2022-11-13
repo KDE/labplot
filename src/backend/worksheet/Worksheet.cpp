@@ -17,6 +17,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Image.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -1194,7 +1195,7 @@ void Worksheet::curveAdded(const XYCurve* curve) {
 			treeModel->insertRow(row, plotIndex);
 
 			treeModel->setTreeData(QVariant(curve->name()), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex);
-			QColor curveColor = curve->linePen().color();
+			QColor curveColor = curve->line()->pen().color();
 			curveColor.setAlpha(50);
 			treeModel->setTreeData(QVariant(curveColor), row, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotIndex, Qt::BackgroundRole);
 			bool valueFound;
@@ -1357,7 +1358,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 				cursorValue[k] = curve->y(xPos, valueFound);
 			}
 			treeModel->insertRows(rowCurve, 1, plotName);
-			QColor curveColor = curve->linePen().color();
+			QColor curveColor = curve->line()->pen().color();
 			curveColor.setAlpha(50);
 			treeModel->setTreeData(QVariant(curveColor), rowCurve, 0, plotName, Qt::BackgroundRole);
 			treeModel->setTreeData(QVariant(curve->name()), rowCurve, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);

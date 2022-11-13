@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>754</width>
-    <height>1047</height>
+    <width>507</width>
+    <height>953</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -44,7 +44,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -324,7 +324,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -347,7 +347,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -370,7 +370,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>

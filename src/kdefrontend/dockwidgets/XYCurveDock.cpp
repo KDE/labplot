@@ -45,11 +45,12 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// Tab "Line"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	gridLayout->addWidget(lineWidget, 5, 0, 1, 3);
+
 	dropLineWidget = new LineWidget(ui.tabLine);
 	dropLineWidget->setPrefix(QLatin1String("DropLine"));
-	gridLayout->addWidget(dropLineWidget, 11, 0, 1, 3);
-	auto* spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(spacer, 12, 0, 1, 1);
+	gridLayout->addWidget(dropLineWidget, 8, 0, 1, 3);
 
 	// Tab "Symbol"
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -98,8 +99,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	errorBarsLineWidget = new LineWidget(ui.tabErrorBars);
 	gridLayout->addWidget(errorBarsLineWidget, 11, 0, 1, 3);
-	spacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	gridLayout->addItem(spacer, 12, 0, 1, 1);
 
 	// Tab "Margin Plots"
 	ui.cbRugOrientation->addItem(i18n("Vertical"));
@@ -126,10 +125,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	connect(ui.sbLineInterpolationPointsCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::lineInterpolationPointsCountChanged);
 	connect(ui.chkLineSkipGaps, &QCheckBox::clicked, this, &XYCurveDock::lineSkipGapsChanged);
 	connect(ui.chkLineIncreasingXOnly, &QCheckBox::clicked, this, &XYCurveDock::lineIncreasingXOnlyChanged);
-	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::lineStyleChanged);
-	connect(ui.kcbLineColor, &KColorButton::changed, this, &XYCurveDock::lineColorChanged);
-	connect(ui.sbLineWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCurveDock::lineWidthChanged);
-	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::lineOpacityChanged);
 
 	// Values
 	connect(ui.cbValuesType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesTypeChanged);
@@ -352,8 +347,6 @@ void XYCurveDock::init() {
 	ui.cbLineType->setItemIcon(10, pm);
 	ui.cbLineType->setItemIcon(11, pm);
 
-	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
-
 	m_initializing = false;
 
 	// Values
@@ -478,17 +471,20 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 	// symbols
 	QList<Symbol*> symbols;
 	QList<Background*> backgrounds;
+	QList<Line*> lines;
 	QList<Line*> dropLines;
 	QList<Line*> errorBarLines;
 	for (auto* curve : curves) {
 		symbols << curve->symbol();
 		backgrounds << curve->background();
+		lines << curve->line();
 		dropLines << curve->dropLine();
 		errorBarLines << curve->errorBarsLine();
 	}
 
 	symbolWidget->setSymbols(symbols);
 	backgroundWidget->setBackgrounds(backgrounds);
+	lineWidget->setLines(lines);
 	dropLineWidget->setLines(dropLines);
 	errorBarsLineWidget->setLines(errorBarLines);
 }
@@ -556,8 +552,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, &XYCurve::lineSkipGapsChanged, this, &XYCurveDock::curveLineSkipGapsChanged);
 	connect(m_curve, &XYCurve::lineIncreasingXOnlyChanged, this, &XYCurveDock::curveLineIncreasingXOnlyChanged);
 	connect(m_curve, &XYCurve::lineInterpolationPointsCountChanged, this, &XYCurveDock::curveLineInterpolationPointsCountChanged);
-	connect(m_curve, &XYCurve::linePenChanged, this, &XYCurveDock::curveLinePenChanged);
-	connect(m_curve, &XYCurve::lineOpacityChanged, this, &XYCurveDock::curveLineOpacityChanged);
 
 	// Values-Tab
 	connect(m_curve, &XYCurve::valuesTypeChanged, this, &XYCurveDock::curveValuesTypeChanged);
@@ -592,8 +586,9 @@ void XYCurveDock::initTabs() {
 
 void XYCurveDock::updateLocale() {
 	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
 	ui.sbValuesDistance->setLocale(numberLocale);
+	lineWidget->updateLocale();
+	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();
 	errorBarsLineWidget->updateLocale();
 }
@@ -676,18 +671,12 @@ void XYCurveDock::lineTypeChanged(int index) {
 
 	if (lineType == XYCurve::LineType::NoLine) {
 		ui.chkLineSkipGaps->setEnabled(false);
-		ui.cbLineStyle->setEnabled(false);
-		ui.kcbLineColor->setEnabled(false);
-		ui.sbLineWidth->setEnabled(false);
-		ui.sbLineOpacity->setEnabled(false);
+		lineWidget->setEnabled(false);
 		ui.lLineInterpolationPointsCount->hide();
 		ui.sbLineInterpolationPointsCount->hide();
 	} else {
 		ui.chkLineSkipGaps->setEnabled(true);
-		ui.cbLineStyle->setEnabled(true);
-		ui.kcbLineColor->setEnabled(true);
-		ui.sbLineWidth->setEnabled(true);
-		ui.sbLineOpacity->setEnabled(true);
+		lineWidget->setEnabled(true);
 
 		if (lineType == XYCurve::LineType::SplineCubicNatural || lineType == XYCurve::LineType::SplineCubicPeriodic
 			|| lineType == XYCurve::LineType::SplineAkimaNatural || lineType == XYCurve::LineType::SplineAkimaPeriodic) {
@@ -732,56 +721,6 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
 
 	for (auto* curve : m_curvesList)
 		curve->setLineInterpolationPointsCount(count);
-}
-
-void XYCurveDock::lineStyleChanged(int index) {
-	if (index == -1 || m_initializing)
-		return;
-
-	const auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setStyle(penStyle);
-		curve->setLinePen(pen);
-	}
-}
-
-void XYCurveDock::lineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setColor(color);
-		curve->setLinePen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, color);
-	m_initializing = false;
-}
-
-void XYCurveDock::lineWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->linePen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		curve->setLinePen(pen);
-	}
-}
-
-void XYCurveDock::lineOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value / 100.;
-	for (auto* curve : m_curvesList)
-		curve->setLineOpacity(opacity);
 }
 
 // Values-tab
@@ -1233,19 +1172,6 @@ void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
 	ui.sbLineInterpolationPointsCount->setValue(count);
 	m_initializing = false;
 }
-void XYCurveDock::curveLinePenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbLineStyle->setCurrentIndex((int)pen.style());
-	ui.kcbLineColor->setColor(pen.color());
-	GuiTools::updatePenStyles(ui.cbLineStyle, pen.color());
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-void XYCurveDock::curveLineOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbLineOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
-}
 
 // Values-Tab
 void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
@@ -1385,10 +1311,6 @@ void XYCurveDock::load() {
 	ui.cbLineType->setCurrentIndex((int)m_curve->lineType());
 	ui.chkLineSkipGaps->setChecked(m_curve->lineSkipGaps());
 	ui.sbLineInterpolationPointsCount->setValue(m_curve->lineInterpolationPointsCount());
-	ui.cbLineStyle->setCurrentIndex((int)m_curve->linePen().style());
-	ui.kcbLineColor->setColor(m_curve->linePen().color());
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->linePen().widthF(), Worksheet::Unit::Point));
-	ui.sbLineOpacity->setValue(round(m_curve->lineOpacity() * 100.0));
 
 	// Values
 	ui.cbValuesType->setCurrentIndex((int)m_curve->valuesType());
@@ -1417,10 +1339,6 @@ void XYCurveDock::load() {
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	m_initializing = false;
 }
 
 void XYCurveDock::loadConfigFromTemplate(KConfig& config) {
@@ -1455,10 +1373,8 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.cbLineType->setCurrentIndex(group.readEntry("LineType", (int)m_curve->lineType()));
 	ui.chkLineSkipGaps->setChecked(group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()));
 	ui.sbLineInterpolationPointsCount->setValue(group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()));
-	ui.cbLineStyle->setCurrentIndex(group.readEntry("LineStyle", (int)m_curve->linePen().style()));
-	ui.kcbLineColor->setColor(group.readEntry("LineColor", m_curve->linePen().color()));
-	ui.sbLineWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("LineWidth", m_curve->linePen().widthF()), Worksheet::Unit::Point));
-	ui.sbLineOpacity->setValue(round(group.readEntry("LineOpacity", m_curve->lineOpacity()) * 100.0));
+	lineWidget->loadConfig(group);
+	dropLineWidget->loadConfig(group);
 
 	// Symbols
 	symbolWidget->loadConfig(group);
@@ -1483,10 +1399,6 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
 	ui.cbYErrorType->setCurrentIndex(group.readEntry("YErrorType", (int)m_curve->yErrorType()));
 	errorBarsLineWidget->loadConfig(group);
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	m_initializing = false;
 }
 
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
@@ -1499,10 +1411,8 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
 	group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
 	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value());
-	group.writeEntry("LineStyle", ui.cbLineStyle->currentIndex());
-	group.writeEntry("LineColor", ui.kcbLineColor->color());
-	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("LineOpacity", ui.sbLineOpacity->value() / 100.0);
+	lineWidget->saveConfig(group);
+	dropLineWidget->saveConfig(group);
 
 	// Symbols
 	symbolWidget->saveConfig(group);

@@ -625,8 +625,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		if (curve) { // draw the legend item for xy-curve
 			// curve's line (painted at the half of the ascent size)
 			if (curve->lineType() != XYCurve::LineType::NoLine) {
-				painter->setPen(curve->linePen());
-				painter->setOpacity(curve->lineOpacity());
+				painter->setPen(curve->line()->pen());
+				painter->setOpacity(curve->line()->opacity());
 				painter->drawLine(0, h / 2, lineSymbolWidth, h / 2);
 			}
 

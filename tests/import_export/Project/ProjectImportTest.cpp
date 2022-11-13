@@ -457,7 +457,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
@@ -513,7 +513,7 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: check more curve properties
@@ -581,7 +581,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties
@@ -625,7 +625,7 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
 	QCOMPARE(curve->lineSkipGaps(), false);
-	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->line()->opacity(), 1);
 	QCOMPARE(curve->dropLine()->dropLineType(), XYCurve::DropLineType::NoDropLine);
 	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	// TODO: more curve properties

@@ -13,6 +13,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/PlotAreaPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -73,11 +74,20 @@ void PlotArea::init() {
 	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
 	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(type)));
 
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 }
 
 QGraphicsItem* PlotArea::graphicsItem() const {
@@ -118,16 +128,18 @@ Background* PlotArea::background() const {
 }
 
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BorderType, borderType, borderType)
-BASIC_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderCornerRadius, borderCornerRadius)
-BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
+
+Line* PlotArea::borderLine() const {
+	Q_D(const PlotArea);
+	return d->borderLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetClippingEnabled, bool, toggleClipping)
 void PlotArea::setClippingEnabled(bool on) {
 	Q_D(PlotArea);
-
 	if (d->clippingEnabled() != on)
 		exec(new PlotAreaSetClippingEnabledCmd(d, on, ki18n("%1: toggle clipping")));
 }
@@ -148,25 +160,11 @@ void PlotArea::setBorderType(BorderType type) {
 		exec(new PlotAreaSetBorderTypeCmd(d, type, ki18n("%1: border type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderPen, QPen, borderPen, update)
-void PlotArea::setBorderPen(const QPen& pen) {
-	Q_D(PlotArea);
-	if (pen != d->borderPen)
-		exec(new PlotAreaSetBorderPenCmd(d, pen, ki18n("%1: set plot area border")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderCornerRadius, qreal, borderCornerRadius, update)
 void PlotArea::setBorderCornerRadius(qreal radius) {
 	Q_D(PlotArea);
 	if (radius != d->borderCornerRadius)
 		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderOpacity, qreal, borderOpacity, update)
-void PlotArea::setBorderOpacity(qreal opacity) {
-	Q_D(PlotArea);
-	if (opacity != d->borderOpacity)
-		exec(new PlotAreaSetBorderOpacityCmd(d, opacity, ki18n("%1: set plot area border opacity")));
 }
 
 //#####################################################################
@@ -193,10 +191,10 @@ void PlotAreaPrivate::setRect(const QRectF& r) {
 }
 
 QRectF PlotAreaPrivate::boundingRect() const {
-	if (borderPen.style() != Qt::NoPen) {
+	if (borderLine->pen().style() != Qt::NoPen) {
 		const qreal width = rect.width();
 		const qreal height = rect.height();
-		const double penWidth = borderPen.width();
+		const double penWidth = borderLine->pen().width();
 		return QRectF{-width / 2 - penWidth / 2, -height / 2 - penWidth / 2, width + penWidth, height + penWidth};
 	} else
 		return rect;
@@ -307,10 +305,10 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	// draw the border
-	if (borderPen.style() != Qt::NoPen) {
-		painter->setPen(borderPen);
+	if (borderLine->pen().style() != Qt::NoPen) {
+		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderOpacity);
+		painter->setOpacity(borderLine->opacity());
 		if (qFuzzyIsNull(borderCornerRadius)) {
 			const double w = rect.width();
 			const double h = rect.height();
@@ -360,9 +358,8 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
-	WRITE_QPEN(d->borderPen);
 	writer->writeAttribute(QStringLiteral("borderType"), QString::number(d->borderType));
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	d->borderLine->save(writer);
 	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
@@ -397,13 +394,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("borderType", borderType, PlotArea::BorderType);
-			READ_QPEN(d->borderPen);
-
-			str = attribs.value(QStringLiteral("borderOpacity")).toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs(QStringLiteral("borderOpacity")).toString());
-			else
-				d->borderOpacity = str.toDouble();
+			d->borderLine->load(reader, preview);
 
 			str = attribs.value(QStringLiteral("borderCornerRadius")).toString();
 			if (str.isEmpty())
@@ -431,12 +422,10 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 	background()->loadThemeConfig(group);
 
 	// border
-	QPen pen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-					group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-					(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
-	this->setBorderPen(pen);
+	Q_D(PlotArea);
+	QColor themeColor = group.readEntry("BorderColor", QColor(Qt::black));
+	d->borderLine->loadThemeConfig(group, themeColor);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
 }
 
 void PlotArea::saveThemeConfig(const KConfig& config) {
@@ -446,9 +435,7 @@ void PlotArea::saveThemeConfig(const KConfig& config) {
 	background()->saveThemeConfig(group);
 
 	// border
-	group.writeEntry("BorderColor", (QColor)this->borderPen().color());
+	Q_D(PlotArea);
+	d->borderLine->saveThemeConfig(group);
 	group.writeEntry("BorderCornerRadius", this->borderCornerRadius());
-	group.writeEntry("BorderOpacity", this->borderOpacity());
-	group.writeEntry("BorderStyle", (int)this->borderPen().style());
-	group.writeEntry("BorderWidth", this->borderPen().widthF());
 }

@@ -1071,9 +1071,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			// border
 			if (layer.borderType == Origin::BorderType::None)
-				plot->plotArea()->setBorderPen(QPen(Qt::NoPen));
+				plot->plotArea()->borderLine()->setPen(QPen(Qt::NoPen));
 			else
-				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
+				plot->plotArea()->borderLine()->setPen(QPen(Qt::SolidLine));
 
 			// ranges
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
@@ -1563,10 +1563,10 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	axis->setMajorTicksLength(Worksheet::convertToSceneUnits(axisFormat.majorTickLength, Worksheet::Unit::Point));
 	axis->setMajorTicksDirection((Axis::TicksFlags)axisFormat.majorTicksType);
-	axis->setMajorTicksPen(pen);
+	axis->majorTicksLine()->setPen(pen);
 	axis->setMinorTicksLength(axis->majorTicksLength() / 2); // minorTicksLength is half of majorTicksLength
 	axis->setMinorTicksDirection((Axis::TicksFlags)axisFormat.minorTicksType);
-	axis->setMinorTicksPen(pen);
+	axis->minorTicksLine()->setPen(pen);
 
 	QString titleText = parseOriginText(QString::fromLatin1(axisFormat.label.text.c_str()));
 	DEBUG("	axis title text = " << STDSTRING(titleText));
@@ -1620,7 +1620,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
 	DEBUG(Q_FUNC_INFO)
 	// line properties
-	QPen pen = curve->linePen();
+	QPen pen = curve->line()->pen();
 	Qt::PenStyle penStyle(Qt::NoPen);
 	if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		switch (originCurve.lineConnect) {
@@ -1679,12 +1679,12 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		pen.setStyle(penStyle);
 		pen.setWidthF(Worksheet::convertToSceneUnits(originCurve.lineWidth, Worksheet::Unit::Point));
 		pen.setColor(color(originCurve.lineColor));
-		curve->setLineOpacity(1 - originCurve.lineTransparency / 255);
+		curve->line()->setOpacity(1 - originCurve.lineTransparency / 255);
 
 		// TODO: handle unsigned char boxWidth of Origin::GraphCurve
 	}
 	pen.setStyle(penStyle);
-	curve->setLinePen(pen);
+	curve->line()->setPen(pen);
 
 	// symbol properties
 	auto* symbol = curve->symbol();
@@ -1986,7 +1986,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			// DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
 			//"automatic" color -> the color of the line, if available, is used, and black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
-				brush.setColor(curve->linePen().color());
+				brush.setColor(curve->line()->pen().color());
 			else
 				brush.setColor(Qt::black);
 		} else
@@ -2000,7 +2000,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
-				pen.setColor(curve->linePen().color());
+				pen.setColor(curve->line()->pen().color());
 			else
 				pen.setColor(Qt::black);
 		} else
