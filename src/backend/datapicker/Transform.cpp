@@ -107,7 +107,6 @@ bool Transform::mapTypeToCartesian(const DatapickerImage::ReferencePoints& axisP
 		}
 		break;
 	}
-		// Do not add default, because then we don't get a warning if one case is not implemented
 	}
 
 	for (int i = 0; i < 3; i++) {
@@ -136,17 +135,15 @@ QVector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage
 			cos = 0;
 		}
 
-		if ((x[1] - x[0]) != 0) {
+		if ((x[1] - x[0]) != 0)
 			scaleOfX = (x[1] - x[0]) / ((X[1] - X[0]) * cos - (Y[1] - Y[0]) * sin);
-		} else {
+		else
 			scaleOfX = (x[2] - x[0]) / ((X[2] - X[0]) * cos - (Y[2] - Y[0]) * sin);
-		}
 
-		if ((y[1] - y[0]) != 0) {
+		if ((y[1] - y[0]) != 0)
 			scaleOfY = (y[1] - y[0]) / ((X[1] - X[0]) * sin + (Y[1] - Y[0]) * cos);
-		} else {
+		else
 			scaleOfY = (y[2] - y[0]) / ((X[2] - X[0]) * sin + (Y[2] - Y[0]) * cos);
-		}
 
 		x[3] = x[0] + (((X[3] - X[0]) * cos - (Y[3] - Y[0]) * sin) * scaleOfX);
 		y[3] = y[0] + (((X[3] - X[0]) * sin + (Y[3] - Y[0]) * cos) * scaleOfY);

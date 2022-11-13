@@ -35,6 +35,7 @@ private Q_SLOTS:
 	void mapCartesianToLog10XY();
 	void mapCartesianToPolarInDegree();
 	void mapCartesianToPolarInRadians();
+
 	void linearMapping();
 	void logarithmicNaturalXMapping();
 	void logarithmicNaturalYMapping();
@@ -42,6 +43,7 @@ private Q_SLOTS:
 	void logarithmic10XMapping();
 	void logarithmic10YMapping();
 	void logarithmic10XYMapping();
+
 	void referenceMove();
 	void curvePointMove();
 	void selectReferencePoint();

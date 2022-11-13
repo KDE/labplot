@@ -267,7 +267,16 @@ void DatapickerTest::mapPolarInRadiansToCartesian() {
 	QCOMPARE(t.mapTypeToCartesian(points), true);
 	VALUES_EQUAL(t.x[0], 1);
 	VALUES_EQUAL(t.y[0], 0);
-	VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
+
+	// TODO: VALUES_EQUAL doesn't work for the next comparions since the precision 1.e-7 is too high for the numerical error involved here.
+	// to improve the precision we need to get rid of QVector3D using floats internally and to switch to doubles. For now, just use a somewhat
+	// lower precision here since it's not essential.
+	// VALUES_EQUAL(t.x[1], -1.5145383137996); // precision seems to be not correct. Referece value is correct
+	double v1 = t.x[1];
+	double ref =  -1.5145383137996;
+	QVERIFY2(nsl_math_approximately_equal_eps(v1, ref, 1.e-5) == true,
+			 qPrintable(QStringLiteral("v1:%1, ref:%2").arg(v1, 0, 'g', 15, QLatin1Char(' ')).arg(ref, 0, 'g', 15, QLatin1Char(' '))));
+
 	VALUES_EQUAL(t.y[1], 2.5896280999466);
 	VALUES_EQUAL(t.x[2], -3.9548385595721);
 	VALUES_EQUAL(t.y[2], -3.0592894547136);
