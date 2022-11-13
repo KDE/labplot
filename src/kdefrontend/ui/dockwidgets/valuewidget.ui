@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>537</width>
-    <height>705</height>
+    <width>287</width>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -33,6 +33,7 @@
     <widget class="QLabel" name="lGeneral">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -185,6 +186,7 @@
     <widget class="QLabel" name="lFormat">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -259,6 +261,7 @@
     <widget class="QLabel" name="lText">
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -309,7 +312,7 @@
     </widget>
    </item>
    <item row="16" column="2">
-    <widget class="KFontRequester" name="kfrFont" native="true"/>
+    <widget class="KFontRequester" name="kfrFont"/>
    </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lColor">

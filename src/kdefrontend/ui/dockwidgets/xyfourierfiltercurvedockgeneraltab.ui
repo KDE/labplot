@@ -38,7 +38,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -286,7 +286,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -320,7 +320,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>

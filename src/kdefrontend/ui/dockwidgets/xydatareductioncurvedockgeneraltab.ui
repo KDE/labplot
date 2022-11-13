@@ -44,7 +44,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -348,7 +348,7 @@
        <property name="decimals">
         <number>6</number>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>
@@ -400,7 +400,7 @@
        <property name="decimals">
         <number>6</number>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
       </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>306</width>
-    <height>721</height>
+    <width>290</width>
+    <height>503</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -125,7 +125,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>13</width>
+           <width>10</width>
            <height>20</height>
           </size>
          </property>
@@ -266,7 +266,7 @@
          <property name="suffix">
           <string> pt</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>542</width>
-    <height>1378</height>
+    <width>496</width>
+    <height>1213</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -119,7 +119,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -543,7 +543,7 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
-       <property name="feedback">
+       <property name="feedback" stdset="0">
         <bool>true</bool>
        </property>
       </widget>
@@ -632,7 +632,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -679,7 +679,7 @@
      <property name="whatsThis">
       <string>Spinbox for numbers.</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -692,7 +692,7 @@
      <property name="whatsThis">
       <string>Spinbox for numbers.</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -708,7 +708,7 @@
      <property name="suffix">
       <string> pt</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -724,7 +724,7 @@
      <property name="suffix">
       <string> pt</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -740,7 +740,7 @@
      <property name="suffix">
       <string> pt</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -766,7 +766,7 @@
   <customwidget>
    <class>NumberSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>src/commonfrontend/widgets/NumberSpinBox.h</header>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

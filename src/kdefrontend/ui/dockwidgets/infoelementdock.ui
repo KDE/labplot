@@ -14,7 +14,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -159,7 +159,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>17</width>
+           <width>10</width>
            <height>24</height>
           </size>
          </property>
@@ -207,7 +207,7 @@
          <property name="whatsThis">
           <string>Spinbox for numbers.</string>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -254,7 +254,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>17</width>
+           <width>10</width>
            <height>24</height>
           </size>
          </property>
@@ -419,7 +419,7 @@
          <property name="value">
           <double>1.000000000000000</double>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
@@ -438,7 +438,7 @@
          <property name="value">
           <double>1.000000000000000</double>
          </property>
-         <property name="feedback">
+         <property name="feedback" stdset="0">
           <bool>false</bool>
          </property>
         </widget>
