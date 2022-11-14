@@ -190,10 +190,18 @@ void HistogramDock::init() {
 	ui.cbNormalization->addItem(i18n("Probability Density"));
 
 	// Error-bars
-	ui.cbErrorType->addItem(i18n("No Errors"));
-	ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
-	ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
-	ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	if (group.readEntry("GUMTerms", false)) {
+		ui.cbErrorType->addItem(i18n("No Uncertainties"));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
+		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, symmetric"));
+		ui.cbErrorType->addItem(i18n("Custom Uncertainty Values, asymmetric"));
+	} else {
+		ui.cbErrorType->addItem(i18n("No Errors"));
+		ui.cbErrorType->addItem(i18n("Poisson variance, sqrt(N)"));
+		ui.cbErrorType->addItem(i18n("Custom Error Values, symmetric"));
+		ui.cbErrorType->addItem(i18n("Custom Error Values, asymmetric"));
+	}
 }
 
 void HistogramDock::setModel() {

@@ -32,6 +32,8 @@ New features:
 	* [analysis]
 		* guess start values of fit parameter for polynomial models by linear regression
 		* allow to create a spreadsheet with the data steming from the result of the computation
+	* [general]
+		* add settings option for GUM compliant terms
 
 Performance improvements:
 	* reduce the memory consumption during the spreadsheet export to Sqlite
