@@ -11,80 +11,6 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="3">
-    <widget class="QCheckBox" name="chkOmitLeadingZeroInExponent">
-     <property name="text">
-      <string>Omit leading zero in exponent</string>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="3">
-    <widget class="QCheckBox" name="chkOmitGroupSeparator">
-     <property name="text">
-      <string>Omit group separator</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="3">
-    <widget class="QComboBox" name="cbUnits"/>
-   </item>
-   <item row="4" column="3">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
-   </item>
-   <item row="12" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>156</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lDecimalSeparator">
-     <property name="text">
-      <string>Decimal separator:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="lMdiVisibility">
-     <property name="text">
-      <string>Sub-window visibility:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QComboBox" name="cbTitleBar"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lTabPosition">
-     <property name="text">
-      <string>Tab position:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lTitleBar">
-     <property name="text">
-      <string>Title Bar:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lUnits">
-     <property name="text">
-      <string>Units:</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lStartup">
      <property name="text">
@@ -108,10 +34,7 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="3">
-    <widget class="QComboBox" name="cbDecimalSeparator"/>
-   </item>
-   <item row="10" column="1">
+   <item row="11" column="1">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -127,11 +50,42 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="3">
-    <widget class="KComboBox" name="cbInterface"/>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lDecimalSeparator">
+     <property name="text">
+      <string>Decimal separator:</string>
+     </property>
+    </widget>
    </item>
-   <item row="3" column="3">
-    <widget class="KComboBox" name="cbTabPosition"/>
+   <item row="13" column="3">
+    <widget class="QCheckBox" name="chkCompatible">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a compatible format that can be opened in LabPlot versions older than 2.9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Save in compatible format</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lTabPosition">
+     <property name="text">
+      <string>Tab position:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QComboBox" name="cbTitleBar"/>
+   </item>
+   <item row="4" column="3">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="lNumberOptions">
+     <property name="text">
+      <string>Number options:</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lInterface">
@@ -140,14 +94,74 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="lAutoSave">
      <property name="text">
       <string>Auto-save:</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="3">
+   <item row="5" column="3">
+    <widget class="QComboBox" name="cbUnits"/>
+   </item>
+   <item row="13" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>156</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="3" column="3">
+    <widget class="KComboBox" name="cbTabPosition"/>
+   </item>
+   <item row="0" column="3">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
+   </item>
+   <item row="10" column="3">
+    <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
+     <property name="text">
+      <string>Include trailing zeroes after dot</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="KComboBox" name="cbInterface"/>
+   </item>
+   <item row="9" column="3">
+    <widget class="QCheckBox" name="chkOmitLeadingZeroInExponent">
+     <property name="text">
+      <string>Omit leading zero in exponent</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lTitleBar">
+     <property name="text">
+      <string>Title Bar:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="3">
+    <widget class="QCheckBox" name="chkOmitGroupSeparator">
+     <property name="text">
+      <string>Omit group separator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lUnits">
+     <property name="text">
+      <string>Units:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="3">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -224,27 +238,27 @@
      </layout>
     </widget>
    </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lMdiVisibility">
+     <property name="text">
+      <string>Sub-window visibility:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3">
+    <widget class="QComboBox" name="cbDecimalSeparator"/>
+   </item>
    <item row="7" column="0">
-    <widget class="QLabel" name="lNumberOptions">
+    <widget class="QLabel" name="lGUMTerms">
      <property name="text">
-      <string>Number options:</string>
+      <string>Terms:</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="3">
-    <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
+   <item row="7" column="3">
+    <widget class="QCheckBox" name="chkGUMTerms">
      <property name="text">
-      <string>Include trailing zeroes after dot</string>
-     </property>
-    </widget>
-   </item>
-   <item row="12" column="3">
-    <widget class="QCheckBox" name="chkCompatible">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a compatible format that can be opened in LabPlot versions older than 2.9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Save in compatible format</string>
+      <string>GUM compliant</string>
      </property>
     </widget>
    </item>
