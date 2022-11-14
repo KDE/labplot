@@ -86,7 +86,6 @@ AxisDock::AxisDock(QWidget* parent)
 	gridLayout->addWidget(cbLabelsTextColumn, 11, 2);
 
 	majorTicksLineWidget = new LineWidget(ui.tabTicks);
-	majorTicksLineWidget->setPrefix(QStringLiteral("MajorTicks"));
 	gridLayout->addWidget(majorTicksLineWidget, 14, 0, 1, 3);
 
 	// minor ticks
@@ -97,17 +96,14 @@ AxisDock::AxisDock(QWidget* parent)
 	gridLayout->addWidget(cbMinorTicksColumn, 22, 2);
 
 	minorTicksLineWidget = new LineWidget(ui.tabTicks);
-	minorTicksLineWidget->setPrefix(QStringLiteral("MinorTicks"));
 	gridLayout->addWidget(minorTicksLineWidget, 25, 0, 1, 3);
 
 	// "Grid"-tab
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabGrid->layout());
 	majorGridLineWidget = new LineWidget(ui.tabLine);
-	majorGridLineWidget->setPrefix(QStringLiteral("MajorGrid"));
 	gridLayout->addWidget(majorGridLineWidget, 1, 0, 1, 3);
 
 	minorGridLineWidget = new LineWidget(ui.tabLine);
-	minorGridLineWidget->setPrefix(QStringLiteral("MinorGrid"));
 	gridLayout->addWidget(minorGridLineWidget, 4, 0, 1, 3);
 
 	// adjust layouts in the tabs

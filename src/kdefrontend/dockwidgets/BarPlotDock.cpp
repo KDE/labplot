@@ -68,7 +68,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	// filling
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBars->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBars);
-	backgroundWidget->setPrefix(QLatin1String("Filling"));
 	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 	auto* spacer = new QSpacerItem(72, 18, QSizePolicy::Minimum, QSizePolicy::Fixed);
 	gridLayout->addItem(spacer, 6, 0, 1, 1);
@@ -76,7 +75,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	// border lines
 	gridLayout->addWidget(ui.lBorder, 7, 0, 1, 1);
 	lineWidget = new LineWidget(ui.tabBars);
-	lineWidget->setPrefix(QLatin1String("Border"));
 	gridLayout->addWidget(lineWidget, 8, 0, 1, 3);
 	spacer = new QSpacerItem(18, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	gridLayout->addItem(spacer, 9, 0, 1, 1);

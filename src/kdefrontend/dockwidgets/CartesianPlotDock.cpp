@@ -124,7 +124,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
 	borderLineWidget = new LineWidget(ui.tabPlotArea);
-	borderLineWidget->setPrefix(QStringLiteral("Border"));
 	gridLayout->addWidget(borderLineWidget, 5, 0, 1, 3);
 
 	//"Title"-tab
@@ -148,7 +147,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	// "Cursor"-tab
 	auto* vboxLayout = static_cast<QVBoxLayout*>(ui.tabCursor->layout());
 	cursorLineWidget = new LineWidget(ui.tabCursor);
-	cursorLineWidget->setPrefix(QStringLiteral("Cursor"));
 	vboxLayout->insertWidget(1, cursorLineWidget);
 
 	// Validators

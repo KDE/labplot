@@ -36,6 +36,11 @@ void Background::setPrefix(const QString& prefix) {
 	d->prefix = prefix;
 }
 
+const QString& Background::prefix() const {
+	Q_D(const Background);
+	return d->prefix;
+}
+
 void Background::init(const KConfigGroup& group) {
 	Q_D(Background);
 

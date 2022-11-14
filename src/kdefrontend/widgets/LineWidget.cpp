@@ -39,6 +39,7 @@ LineWidget::LineWidget(QWidget* parent)
 void LineWidget::setLines(const QList<Line*>& lines) {
 	m_lines = lines;
 	m_line = m_lines.first();
+	m_prefix = m_line->prefix();
 
 	if (m_line->histogramLineTypeAvailable()) {
 		ui.lType->show();
@@ -124,10 +125,6 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 	QTimer::singleShot(100, this, [=]() {
 		adjustLayout();
 	});
-}
-
-void LineWidget::setPrefix(const QString& prefix) {
-	m_prefix = prefix;
 }
 
 /*!

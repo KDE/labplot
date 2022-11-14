@@ -464,6 +464,5 @@ void ReferenceLine::loadThemeConfig(const KConfig& config) {
 
 	// for the properties of the line read the properties of the axis line
 	const KConfigGroup& group = config.group("Axis");
-	const auto& themeColor = group.readEntry("LineColor", QColor(Qt::black));
-	d->line->loadThemeConfig(group, themeColor);
+	d->line->loadThemeConfig(group);
 }

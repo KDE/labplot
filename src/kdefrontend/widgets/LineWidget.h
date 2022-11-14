@@ -22,7 +22,6 @@ public:
 	explicit LineWidget(QWidget*);
 
 	void setLines(const QList<Line*>&);
-	void setPrefix(const QString&);
 	void adjustLayout();
 	void setEnabled(bool);
 	void updateLocale();
@@ -36,7 +35,7 @@ private:
 	Line* m_line{nullptr};
 	QList<Line*> m_lines;
 	bool m_initializing{false};
-	QString m_prefix{QLatin1String("Line")};
+	QString m_prefix;
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in LineWidget

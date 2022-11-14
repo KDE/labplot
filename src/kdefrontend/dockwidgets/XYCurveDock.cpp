@@ -49,7 +49,6 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	gridLayout->addWidget(lineWidget, 5, 0, 1, 3);
 
 	dropLineWidget = new LineWidget(ui.tabLine);
-	dropLineWidget->setPrefix(QLatin1String("DropLine"));
 	gridLayout->addWidget(dropLineWidget, 8, 0, 1, 3);
 
 	// Tab "Symbol"

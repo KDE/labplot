@@ -36,6 +36,11 @@ void Line::setPrefix(const QString& prefix) {
 	d->prefix = prefix;
 }
 
+const QString& Line::prefix() const {
+	Q_D(const Line);
+	return d->prefix;
+}
+
 /*!
  * defines whether an XML element needs to be create in write(). For objects where the line
  * properties are serialized together with some other properties, the XML element is created
@@ -219,9 +224,14 @@ bool Line::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
+void Line::loadThemeConfig(const KConfigGroup& group) {
+	Q_D(const Line);
+	const auto& themeColor = group.readEntry(d->prefix + QStringLiteral("Color"), QColor(Qt::black));
+	loadThemeConfig(group, themeColor);
+}
+
 void Line::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
 	Q_D(const Line);
-
 	QPen p;
 	p.setStyle((Qt::PenStyle)group.readEntry(d->prefix + QStringLiteral("Style"), (int)Qt::SolidLine));
 	p.setWidthF(group.readEntry(d->prefix + QStringLiteral("Width"), Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));

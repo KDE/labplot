@@ -3081,8 +3081,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	// Major ticks
 	this->setMajorTicksDirection((Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksIn));
 	this->setMajorTicksLength(group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
-	QColor themeColor = group.readEntry("MajorTicksColor", QColor(Qt::black));
-	d->majorTicksLine->loadThemeConfig(group, themeColor);
+	d->majorTicksLine->loadThemeConfig(group);
 
 	// Minor grid
 	if (firstAxis) {
@@ -3097,8 +3096,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	// Minor ticks
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
-	themeColor = group.readEntry("MinorTicksColor", QColor(Qt::black));
-	d->minorTicksLine->loadThemeConfig(group, themeColor);
+	d->minorTicksLine->loadThemeConfig(group);
 
 	// load the theme for the title label
 	d->title->loadThemeConfig(config);

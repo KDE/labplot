@@ -21,7 +21,6 @@ public:
 	explicit BackgroundWidget(QWidget*);
 
 	void setBackgrounds(const QList<Background*>&);
-	void setPrefix(const QString&);
 	void adjustLayout();
 	void setEnabled(bool);
 
@@ -34,7 +33,7 @@ private:
 	Background* m_background{nullptr};
 	QList<Background*> m_backgrounds;
 	bool m_initializing{false};
-	QString m_prefix{QLatin1String("Background")};
+	QString m_prefix;
 
 	void retranslateUi();
 

@@ -58,6 +58,7 @@ BackgroundWidget::BackgroundWidget(QWidget* parent)
 void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	m_backgrounds = backgrounds;
 	m_background = m_backgrounds.first();
+	m_prefix = m_background->prefix();
 
 	load();
 
@@ -75,10 +76,6 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	QTimer::singleShot(100, this, [=]() {
 		adjustLayout();
 	});
-}
-
-void BackgroundWidget::setPrefix(const QString& prefix) {
-	m_prefix = prefix;
 }
 
 /*!

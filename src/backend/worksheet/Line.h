@@ -25,11 +25,13 @@ public:
 	~Line() override;
 
 	void setPrefix(const QString&);
+	const QString& prefix() const;
 	void setCreateXmlElement(bool);
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfigGroup&);
 	void loadThemeConfig(const KConfigGroup&, const QColor&);
 	void saveThemeConfig(KConfigGroup&) const;
 
