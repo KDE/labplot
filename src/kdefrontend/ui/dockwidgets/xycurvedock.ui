@@ -595,7 +595,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="lXErrorType">
          <property name="text">
-          <string>Error Type:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -618,7 +618,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lYErrorType">
          <property name="text">
-          <string>Error Type:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>

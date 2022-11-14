@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
 	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2021-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -78,6 +78,12 @@ HistogramDock::HistogramDock(QWidget* parent)
 	layout->insertWidget(0, backgroundWidget);
 
 	// Tab "Error Bars"
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	if (group.readEntry("GUMTerms", false)) {
+		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
+		ui.lErrorBar->setText(i18n("X Uncertainty"));
+	}
+
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
 
 	cbErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);

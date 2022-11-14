@@ -4,7 +4,7 @@
 	Description          : widget for XYCurve properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+	SPDX-FileCopyrightText: 2012-2022 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -27,7 +27,9 @@
 #include <QPainter>
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 /*!
   \class XYCurveDock
@@ -81,7 +83,14 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 	backgroundWidget = new BackgroundWidget(ui.tabAreaFilling);
 	layout->insertWidget(0, backgroundWidget);
 
-	// Tab "Error bars"
+	// Tab "Error Bars"
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QStringLiteral("Settings_General"));
+	if (group.readEntry("GUMTerms", false)) {
+		ui.tabWidget->setTabText(ui.tabWidget->indexOf(ui.tabErrorBars), i18n("Uncertainty Bars"));
+		ui.lErrorBarX->setText(i18n("X Uncertainty"));
+		ui.lErrorBarY->setText(i18n("Y Uncertainty"));
+	}
+
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabErrorBars->layout());
 
 	cbXErrorPlusColumn = new TreeViewComboBox(ui.tabErrorBars);
@@ -522,7 +531,7 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
 	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
 	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
-	DEBUG("XYCurveDock::initGeneralTab() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void XYCurveDock::initTabs() {
