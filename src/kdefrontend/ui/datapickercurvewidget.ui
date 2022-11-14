@@ -189,7 +189,7 @@
      </widget>
      <widget class="QWidget" name="tabErrorBars_2">
       <attribute name="title">
-       <string>Error bars</string>
+       <string>Error Bars</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="1" column="3">
