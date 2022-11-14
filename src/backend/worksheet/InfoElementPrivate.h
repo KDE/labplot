@@ -4,7 +4,7 @@
 	Description          : Private members of InfoElement
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2020 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,13 +15,8 @@
 #include "backend/worksheet/WorksheetElementPrivate.h"
 
 class InfoElement;
-class TextLabel;
-class CustomPoint;
-class CartesianPlot;
-class CartesianCoordinateSystem;
 class XYCurve;
 class QGraphicsSceneMouseEvent;
-class QPen;
 
 class InfoElementPrivate : public WorksheetElementPrivate {
 public:
@@ -52,10 +47,8 @@ public:
 	QString connectionLineCurveName;
 	double positionLogical;
 
-	QPen verticalLinePen;
-	qreal verticalLineOpacity;
-	QPen connectionLinePen;
-	qreal connectionLineOpacity;
+	Line* verticalLine{nullptr};
+	Line* connectionLine{nullptr};
 
 	// TODO
 	//	CartesianPlot* plot{nullptr};
@@ -67,7 +60,7 @@ private:
 	QPointF sceneDeltaTextLabel;
 
 	QRectF boundingRectangle; // bounding rectangle of the connection line between CustomPoint and TextLabel
-	QLineF connectionLine; // line between CustomPoint and TextLabel
+	QLineF m_connectionLine; // line between CustomPoint and TextLabel
 	QLineF xposLine; // Line which connects all markerpoints, when there are more than 1
 	QPointF oldMousePos;
 	bool m_suppressKeyPressEvents{false};
