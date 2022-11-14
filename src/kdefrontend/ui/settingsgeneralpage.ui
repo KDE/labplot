@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>484</width>
-    <height>501</height>
+    <height>534</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -257,6 +257,9 @@
    </item>
    <item row="7" column="3">
     <widget class="QCheckBox" name="chkGUMTerms">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use terms compliant with the &lt;a href=&quot;http://www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Guide to the Expression of Uncertainty in Measurement (GUM)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="text">
       <string>GUM compliant</string>
      </property>
