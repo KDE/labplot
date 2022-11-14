@@ -852,6 +852,13 @@ void HistogramPrivate::recalcHistogram() {
 	if (!dataColumn)
 		return;
 
+	// in case wrong bin range was specified, call retransform() to reset
+	// all internal containers and paths and exit this function
+	if (binRangesMax <= binRangesMin) {
+		retransform();
+		return;
+	}
+
 	// calculate the number of valid data points
 	int count = 0;
 	for (int row = 0; row < dataColumn->rowCount(); ++row) {
