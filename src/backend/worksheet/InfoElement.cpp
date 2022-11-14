@@ -1232,7 +1232,6 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 	d->verticalLine->loadThemeConfig(group, themeColor);
 	d->connectionLine->loadThemeConfig(group, themeColor);
 
-
 	// load the theme for all the children
 	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children)
