@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-13 00:41+0000\n"
+"POT-Creation-Date: 2022-11-14 00:41+0000\n"
 "PO-Revision-Date: 2022-11-12 04:28+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -50,9 +50,9 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:379
 #: src/backend/core/column/Column.cpp:1255
-#: src/backend/datapicker/DatapickerCurve.cpp:478
-#: src/backend/datapicker/DatapickerImage.cpp:495
-#: src/backend/datapicker/DatapickerPoint.cpp:488
+#: src/backend/datapicker/DatapickerCurve.cpp:498
+#: src/backend/datapicker/DatapickerImage.cpp:511
+#: src/backend/datapicker/DatapickerPoint.cpp:494
 #: src/backend/datasources/filters/AsciiFilter.cpp:1979
 #: src/backend/datasources/filters/BinaryFilter.cpp:562
 #: src/backend/datasources/filters/JsonFilter.cpp:777
@@ -64,7 +64,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1165
 #: src/backend/worksheet/Line.cpp:197
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2890
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2881
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1384
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4615
@@ -101,16 +101,16 @@ msgstr "El atributo «%1» falta o está vacío; se usa el valor por omisión"
 #: src/backend/core/AbstractSimpleFilter.cpp:362
 #: src/backend/core/column/Column.cpp:1385 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
-#: src/backend/datapicker/DatapickerCurve.cpp:636
-#: src/backend/datapicker/DatapickerImage.cpp:738
-#: src/backend/datapicker/DatapickerPoint.cpp:565
+#: src/backend/datapicker/DatapickerCurve.cpp:656
+#: src/backend/datapicker/DatapickerImage.cpp:753
+#: src/backend/datapicker/DatapickerPoint.cpp:571
 #: src/backend/datasources/LiveDataSource.cpp:966
 #: src/backend/datasources/MQTTClient.cpp:1376
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1285
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3021
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3010
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1442
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
@@ -319,8 +319,8 @@ msgstr "Entero grande"
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
 #: src/commonfrontend/worksheet/WorksheetView.cpp:361
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1575
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:266
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1420
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:270
 #: src/kdefrontend/widgets/LabelWidget.cpp:189
 #, kde-format
@@ -482,7 +482,7 @@ msgstr "Nombre"
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:47
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1548
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1393
 #, kde-format
 msgid "Type"
 msgstr "Tipo"
@@ -805,8 +805,8 @@ msgstr "elemento de libro de trabajo «%1» desconocido"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/backend/datapicker/Datapicker.cpp:45
-#: src/backend/datapicker/Datapicker.cpp:339
-#: src/kdefrontend/ui/datapickerimagewidget.ui:547
+#: src/backend/datapicker/Datapicker.cpp:340
+#: src/kdefrontend/ui/datapickerimagewidget.ui:145
 #, kde-format
 msgid "Plot"
 msgstr "Gráfico"
@@ -821,7 +821,7 @@ msgstr "%1, curva activa \"%2\""
 msgid "Point %1"
 msgstr "Punto %1"
 
-#: src/backend/datapicker/Datapicker.cpp:356
+#: src/backend/datapicker/Datapicker.cpp:357
 #, kde-format
 msgid "unknown datapicker element '%1'"
 msgstr "elemento de recogida de datos «%1» desconocido"
@@ -854,64 +854,64 @@ msgstr "elemento de recogida de datos «%1» desconocido"
 msgid "Data"
 msgstr "Datos"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:221
-#: src/backend/datapicker/DatapickerCurve.cpp:222
+#: src/backend/datapicker/DatapickerCurve.cpp:241
+#: src/backend/datapicker/DatapickerCurve.cpp:242
 #, kde-format
 msgid "%1: set xy-error type"
 msgstr "%1: definir tipo de error-xy"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:260
+#: src/backend/datapicker/DatapickerCurve.cpp:280
 #, kde-format
 msgid "%1: set position X column"
 msgstr "%1: definir posición de la columna X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:267
+#: src/backend/datapicker/DatapickerCurve.cpp:287
 #, kde-format
 msgid "%1: set position Y column"
 msgstr "%1: definir posición de la columna Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:274
+#: src/backend/datapicker/DatapickerCurve.cpp:294
 #, kde-format
 msgid "%1: set position Z column"
 msgstr "%1: definir posición de la columna Z"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:281
+#: src/backend/datapicker/DatapickerCurve.cpp:301
 #, kde-format
 msgid "%1: set +delta_X column"
 msgstr "%1: definir columna +delta_X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:288
+#: src/backend/datapicker/DatapickerCurve.cpp:308
 #, kde-format
 msgid "%1: set -delta_X column"
 msgstr "%1: definir columna -delta_X"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:295
+#: src/backend/datapicker/DatapickerCurve.cpp:315
 #, kde-format
 msgid "%1: set +delta_Y column"
 msgstr "%1: definir columna +delta_Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:302
+#: src/backend/datapicker/DatapickerCurve.cpp:322
 #, kde-format
 msgid "%1: set -delta_Y column"
 msgstr "%1: definir columna -delta_Y"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:309
+#: src/backend/datapicker/DatapickerCurve.cpp:329
 #, kde-format
 msgid "%1: set error bar size"
 msgstr "%1: definir tamaño de la barra de error"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:316
+#: src/backend/datapicker/DatapickerCurve.cpp:336
 #, kde-format
 msgid "%1: set error bar filling"
 msgstr "%1: definir relleno de la barra de error"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:323
+#: src/backend/datapicker/DatapickerCurve.cpp:343
 #, kde-format
 msgid "%1: set error bar outline style"
 msgstr "%1: definir estilo del esquema de la barra de error"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:330
-#: src/backend/datapicker/DatapickerImage.cpp:279
+#: src/backend/datapicker/DatapickerCurve.cpp:350
+#: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:792
 #: src/backend/worksheet/WorksheetElement.cpp:142
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
@@ -920,8 +920,8 @@ msgstr "%1: definir estilo del esquema de la barra de error"
 msgid "%1: set visible"
 msgstr "%1: definir como visible"
 
-#: src/backend/datapicker/DatapickerCurve.cpp:330
-#: src/backend/datapicker/DatapickerImage.cpp:279
+#: src/backend/datapicker/DatapickerCurve.cpp:350
+#: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/WorksheetElement.cpp:142
 #: src/backend/worksheet/WorksheetElement.cpp:596
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
@@ -936,38 +936,38 @@ msgctxt "@title:window"
 msgid "Print Datapicker Image"
 msgstr "Imprimir imagen de captura de datos"
 
-#: src/backend/datapicker/DatapickerImage.cpp:245
+#: src/backend/datapicker/DatapickerImage.cpp:249
 #, kde-format
 msgid "%1: upload new image"
 msgstr "%1: cargar nueva imagen"
 
-#: src/backend/datapicker/DatapickerImage.cpp:246
+#: src/backend/datapicker/DatapickerImage.cpp:250
 #, kde-format
 msgid "%1: upload image"
 msgstr "%1: cargar imagen"
 
-#: src/backend/datapicker/DatapickerImage.cpp:254
+#: src/backend/datapicker/DatapickerImage.cpp:258
 #: src/backend/worksheet/WorksheetElement.cpp:633
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: definir ángulo de rotación"
 
-#: src/backend/datapicker/DatapickerImage.cpp:260
+#: src/backend/datapicker/DatapickerImage.cpp:264
 #, kde-format
 msgid "%1: set Axis points"
 msgstr "%1: definir puntos del eje"
 
-#: src/backend/datapicker/DatapickerImage.cpp:266
+#: src/backend/datapicker/DatapickerImage.cpp:270
 #, kde-format
 msgid "%1: set editor settings"
 msgstr "%1: definir preferencias del editor"
 
-#: src/backend/datapicker/DatapickerImage.cpp:272
+#: src/backend/datapicker/DatapickerImage.cpp:276
 #, kde-format
 msgid "%1: set minimum segment length"
 msgstr "%1: definir longitud mínima de segmento"
 
-#: src/backend/datapicker/DatapickerImage.cpp:298
+#: src/backend/datapicker/DatapickerImage.cpp:302
 #, kde-format
 msgid "%1: remove all axis points"
 msgstr "%1: eliminar todos los puntos del eje"
@@ -1150,7 +1150,7 @@ msgstr "Índice"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2368
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:151
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:187
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:191
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:182
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:17
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:62
 #, kde-format
@@ -6309,7 +6309,7 @@ msgstr "%1: definir opacidad del fondo"
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
 #: src/backend/worksheet/Image.cpp:117
 #: src/backend/worksheet/InfoElement.cpp:150
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:233
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:481
@@ -6320,12 +6320,12 @@ msgstr "%1: definir opacidad del fondo"
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
 #: src/backend/worksheet/TextLabel.cpp:257
 #: src/kdefrontend/ui/datapickercurvewidget.ui:179
-#: src/kdefrontend/ui/datapickerimagewidget.ui:620
+#: src/kdefrontend/ui/datapickerimagewidget.ui:647
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:87
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:47
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:538
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:64
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:236
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:276
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:53
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:77
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:226
@@ -6392,7 +6392,7 @@ msgstr "Ha fallado la lectura de datos de la imagen"
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:133
 #: src/backend/worksheet/InfoElement.cpp:1205
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:196
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
 msgstr "Etiqueta"
@@ -6400,7 +6400,7 @@ msgstr "Etiqueta"
 #. i18n: ectx: property (text), widget (QLabel, lGeneral)
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
 #: src/backend/worksheet/InfoElement.cpp:268
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:287
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:300
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:358
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:210
 #: src/kdefrontend/ui/symbolwidget.ui:38
@@ -6492,7 +6492,7 @@ msgstr "%1: definir relleno a la derecha"
 msgid "%1: set bottom padding"
 msgstr "%1: definir relleno inferior"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:242
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:251
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
@@ -6508,7 +6508,7 @@ msgstr "Horizontal"
 
 #. i18n("AvgShifted Histogram"));
 #. Orientation
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:245
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:254
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:106
@@ -6524,7 +6524,7 @@ msgstr "Horizontal"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:265
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:262
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
@@ -6536,7 +6536,7 @@ msgstr "Orientación"
 #. i18n: ectx: property (text), widget (QLabel, lLine)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersFormat)
 #. i18n: ectx: attribute (title), widget (QWidget, tabLine)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:271
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:286
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:129
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:218
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:420
@@ -6550,284 +6550,264 @@ msgstr "Orientación"
 msgid "Line"
 msgstr "Línea"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:273
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:288
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:131
 #, kde-format
 msgid "Style"
 msgstr "Estilo"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:278
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:293
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:399
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1428
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:396
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1273
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:135
 #, kde-format
 msgid "Color"
 msgstr "Color"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:495
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:516
 #, kde-format
 msgid "%1: set axis range type"
 msgstr "%1: definir tipo de intervalo de eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:525
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:659
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:546
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:658
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: definir orientación del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:532
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:553
 #, kde-format
 msgid "%1: set axis position"
 msgstr "%1: definir posición del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:539
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:560
 #, kde-format
 msgid "%1: set axis scale"
 msgstr "%1: definir escala del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:547
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:568
 #, kde-format
 msgid "%1: set axis offset"
 msgstr "%1: definir desplazamiento del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:562
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:583
 #, kde-format
 msgid "%1: set axis range"
 msgstr "%1: definir intervalo de eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:602
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:623
 #, kde-format
 msgid "%1: set major tick start type"
 msgstr "%1: definir tipo de inicio de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:609
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:630
 #, kde-format
 msgid "%1: set major tick start offset"
 msgstr "%1: definir el desplazamiento de inicio de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:618
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:639
 #, kde-format
 msgid "%1: set major tick start value"
 msgstr "%1: definir el valor de inicio de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:632
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:653
 #, kde-format
 msgid "%1: set axis scaling factor"
 msgstr "%1: definir factor de escala del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:639
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:660
 #, kde-format
 msgid "%1: set axis zero offset"
 msgstr "%1: definir desplazamiento cero del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:645
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:666
 #, kde-format
 msgid "%1: show scale and offset"
 msgstr "%1: mostrar escala y desplazamiento"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:652
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:673
 #, kde-format
 msgid "%1: set axis logical position"
 msgstr "%1: definir posición lógica del eje"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:660
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:667
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:681
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:688
 #, kde-format
 msgid "%1: set title offset"
 msgstr "%1: definir desplazamiento del título"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:675
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:696
 #, kde-format
 msgid "%1: set arrow type"
 msgstr "%1: definir tipo de flecha"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:682
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:703
 #, kde-format
 msgid "%1: set arrow position"
 msgstr "%1: definir posición de la flecha"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:689
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:710
 #, kde-format
 msgid "%1: set arrow size"
 msgstr "%1: definir tamaño de la flecha"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:697
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:718
 #, kde-format
 msgid "%1: set major ticks direction"
 msgstr "%1: definir dirección de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:704
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
 #, kde-format
 msgid "%1: set major ticks type"
 msgstr "%1: definir tipo de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:712
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:733
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
 msgstr "%1: activar/desactivar números automáticos de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:714
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:725
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:735
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:746
 #, kde-format
 msgid "%1: set the total number of the major ticks"
 msgstr "%1: definir número total de marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:727
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:809
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:748
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:816
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
 msgstr "%1: desactivar números automáticos de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:736
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
 #, kde-format
 msgid "%1: set the spacing of the major ticks"
 msgstr "%1: definir espacio entre marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:743
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
 #, kde-format
 msgid "%1: assign major ticks' values"
 msgstr "%1: asignar valores de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:757
-#, kde-format
-msgid "%1: set major ticks style"
-msgstr "%1: definir estilo de las marcas mayores"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:764
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:778
 #, kde-format
 msgid "%1: set major ticks length"
 msgstr "%1: definir longitud de las marcas mayores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:771
-#, kde-format
-msgid "%1: set major ticks opacity"
-msgstr "%1: definir opacidad de las marcas mayores"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:779
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:786
 #, kde-format
 msgid "%1: set minor ticks direction"
 msgstr "%1: definir dirección de las marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:786
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:793
 #, kde-format
 msgid "%1: set minor ticks type"
 msgstr "%1: definir tipo de las marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:794
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:801
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
 msgstr "%1: activar/desactivar números automáticos de las marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:797
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:808
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:804
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:815
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
 msgstr "%1: definir número total de marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:818
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:825
 #, kde-format
 msgid "%1: set the spacing of the minor ticks"
 msgstr "%1: definir espacio entre marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:825
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:832
 #, kde-format
 msgid "%1: assign minor ticks' values"
 msgstr "%1: asignar valores de las marcas menores"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:839
-#, kde-format
-msgid "%1: set minor ticks style"
-msgstr "%1: definir estilo de las marcas menores"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:846
 #, kde-format
 msgid "%1: set minor ticks length"
 msgstr "%1: definir longitud de las marcas menores"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:853
-#, kde-format
-msgid "%1: set minor ticks opacity"
-msgstr "%1: definir opacidad de las marcas menores"
-
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:862
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:855
 #, kde-format
 msgid "%1: set labels format"
 msgstr "%1: definir formato de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:869
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:862
 #, kde-format
 msgid "%1: set labels format automatic"
 msgstr "%1: definir formato de las etiquetas automático"
 
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:869
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:876
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
 #, kde-format
 msgid "%1: set labels precision"
 msgstr "%1: definir precisión de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:883
 #, kde-format
 msgid "%1: set labels datetime format"
 msgstr "%1: definir formato de las etiquetas de fecha y hora"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:890
 #, kde-format
 msgid "%1: set labels position"
 msgstr "%1: definir posición de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:904
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:897
 #, kde-format
 msgid "%1: set label offset"
 msgstr "%1: definir desplazamiento de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:904
 #, kde-format
 msgid "%1: set label rotation angle"
 msgstr "%1: definir ángulo de rotación de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:918
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:911
 #, kde-format
 msgid "%1: set labels text type"
 msgstr "%1: definir tipo de texto de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:925
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:918
 #, kde-format
 msgid "%1: set labels text column"
 msgstr "%1: definir columna de texto de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:939
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:932
 #, kde-format
 msgid "%1: set label color"
 msgstr "%1: definir color de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:946
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:939
 #, kde-format
 msgid "%1: set label font"
 msgstr "%1: definir tipo de letra de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:953
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:946
 #, kde-format
 msgid "%1: set labels background type"
 msgstr "%1: definir tipo de fondo de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:960
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:953
 #, kde-format
 msgid "%1: set label background color"
 msgstr "%1: definir color de fondo de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:967
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:960
 #, kde-format
 msgid "%1: set label prefix"
 msgstr "%1: definir prefijo de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:974
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:967
 #, kde-format
 msgid "%1: set label suffix"
 msgstr "%1: definir sufijo de las etiquetas"
 
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:981
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:974
 #, kde-format
 msgid "%1: set labels opacity"
 msgstr "%1: definir opacidad de las etiquetas"
@@ -10069,7 +10049,7 @@ msgstr "Esquema"
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:508
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1642
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1487
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
 msgid "Grid"
@@ -10567,12 +10547,12 @@ msgstr "Añadir nuevo contenedor de datos al proyecto"
 #: src/kdefrontend/datasources/ImportDialog.cpp:100
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:42
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:549
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1320
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1165
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:959
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1123
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:181
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:87
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:88
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:489
 #, kde-format
 msgid "Position:"
@@ -11548,10 +11528,10 @@ msgstr "Tamaño del array"
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:233
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:382
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:626
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:629
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2034
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:379
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:625
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:628
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1850
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
@@ -11565,10 +11545,10 @@ msgid "Top"
 msgstr "Arriba"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:234
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:383
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:627
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:630
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2035
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:380
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:626
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:629
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1851
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:55
@@ -11582,8 +11562,8 @@ msgid "Bottom"
 msgstr "Abajo"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:235
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2036
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2041
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1852
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1857
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:151
 #, kde-format
 msgid "Centered"
@@ -11612,9 +11592,9 @@ msgstr "Lógica"
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:150
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:444
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:674
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:960
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1259
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1613
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:939
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1104
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1458
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:201
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:341
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:382
@@ -11696,9 +11676,9 @@ msgstr "Medio rellena, grande"
 #. i18n("Custom"));
 #. Positioning and alignment
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:352
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:632
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:636
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2039
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:631
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:635
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1855
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
@@ -11716,9 +11696,9 @@ msgstr "Izquierda"
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:353
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:633
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:635
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2040
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:632
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:634
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1856
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -11776,7 +11756,7 @@ msgstr "Espaciado"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:363
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:375
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:385
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:382
 #, kde-format
 msgid "Custom column"
 msgstr "Columna personalizada"
@@ -11791,63 +11771,63 @@ msgstr "Valor absoluto"
 msgid "Offset"
 msgstr "Desplazamiento"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:381
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:378
 #, kde-format
 msgid "No labels"
 msgstr "Sin etiquetas"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:384
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:381
 #, kde-format
 msgid "Position values"
 msgstr "Valores de la posición"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:388
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:385
 #, kde-format
 msgid "Decimal notation"
 msgstr "Notación decimal"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:389
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:386
 #, kde-format
 msgid "Scientific notation"
 msgstr "Notación científica"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:390
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:387
 #, kde-format
 msgid "Scientific E notation"
 msgstr "Notación científica E"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:391
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:388
 #, kde-format
 msgid "Powers of 10"
 msgstr "Potencias de 10"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:392
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:389
 #, kde-format
 msgid "Powers of 2"
 msgstr "Potencias de 2"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:393
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:390
 #, kde-format
 msgid "Powers of e"
 msgstr "Potencias de e"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:394
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:391
 #, kde-format
 msgid "Multiples of π"
 msgstr "Múltiplos de π"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:398
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:395
 #, kde-format
 msgid "Transparent"
 msgstr "Transparente"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2202
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2008
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "%1 ejes: plantilla «%2» cargada"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:2204
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:542
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:2010
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:543
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:792
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1882
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:821
@@ -11893,8 +11873,8 @@ msgstr ""
 "relativa a su valor predeterminado, aplicándolo a todas las barras"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:377
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:403
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:378
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:404
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:371
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:396
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
@@ -11910,19 +11890,19 @@ msgstr "Columnas:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:405
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:406
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:400
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:766
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:983
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:792
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:975
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:37
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:80
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:81
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:221
 #, kde-format
 msgid "Column:"
 msgstr "Columna:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:540
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:541
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:790
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:794
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1355
@@ -14490,11 +14470,11 @@ msgstr "Preferencias"
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:24
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:24
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:21
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:24
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:40
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:41
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:24
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:24
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:304
@@ -14815,7 +14795,7 @@ msgstr "Añadir etiqueta de valor"
 #. i18n: ectx: property (text), widget (QLabel, lValue)
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:42
 #: src/kdefrontend/ui/constantswidget.ui:57
-#: src/kdefrontend/ui/datapickerimagewidget.ui:704
+#: src/kdefrontend/ui/datapickerimagewidget.ui:731
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:54
 #, kde-format
 msgid "Value:"
@@ -15116,7 +15096,7 @@ msgstr "&Formatear"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackground)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:58
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1482
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1327
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1356
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:440
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:515
@@ -15741,7 +15721,7 @@ msgstr "Tipo de error-Y:"
 #. i18n: ectx: property (text), widget (QLabel, lComment)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:49
-#: src/kdefrontend/ui/datapickerimagewidget.ui:524
+#: src/kdefrontend/ui/datapickerimagewidget.ui:258
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:37
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:49
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:172
@@ -15749,8 +15729,8 @@ msgstr "Tipo de error-Y:"
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:65
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:440
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:350
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:27
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:74
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:17
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:223
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:265
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:84
@@ -15783,7 +15763,7 @@ msgstr "Comentario:"
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:88
-#: src/kdefrontend/ui/datapickerimagewidget.ui:570
+#: src/kdefrontend/ui/datapickerimagewidget.ui:182
 #: src/kdefrontend/ui/datasources/databasemanagerwidget.ui:56
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
@@ -15794,8 +15774,8 @@ msgstr "Comentario:"
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:450
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:257
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:17
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:40
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:50
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:356
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:148
@@ -15860,13 +15840,9 @@ msgstr "Barras de error"
 #. i18n: ectx: property (text), widget (QLabel, lImageStyle)
 #. i18n: ectx: property (text), widget (QLabel, lBrushStyle)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapStyle)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLineStyle)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLineStyle)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineStyle)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineStyle)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:201
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:806
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1006
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
@@ -15890,16 +15866,12 @@ msgstr "Estilo:"
 #. i18n: ectx: property (text), widget (QLabel, lBorderColor)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCapColor)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksColor)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksColor)
 #. i18n: ectx: property (text), widget (QLabel, lColor)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColor)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLineColor)
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:237
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:823
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1023
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:669
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:37
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:502
@@ -15907,7 +15879,7 @@ msgstr "Estilo:"
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:276
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:326
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:317
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:391
 #: src/kdefrontend/ui/labelwidget.ui:180 src/kdefrontend/ui/symbolwidget.ui:194
 #: src/kdefrontend/ui/symbolwidget.ui:250
@@ -15966,14 +15938,12 @@ msgstr "Tamaño:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbScalingFactor)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbEnd)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbStart)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTickStartOffset)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksWidth)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksSpacingNumeric)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksWidth)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksLength)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksSpacingNumeric)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTickStartValue)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTickStartOffset)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMajorTicksLength)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksSpacingNumeric)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbMinorTicksLength)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLabelsOffset)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbDistance)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbValuesDistance)
@@ -15996,8 +15966,8 @@ msgstr "Tamaño:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRightValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbLeftValue)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPercentile)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRotation)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTernaryScale)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRotation)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY3)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY1)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ1)
@@ -16008,32 +15978,30 @@ msgstr "Tamaño:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionZ3)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX2)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:264
-#: src/kdefrontend/ui/datapickerimagewidget.ui:52
-#: src/kdefrontend/ui/datapickerimagewidget.ui:75
-#: src/kdefrontend/ui/datapickerimagewidget.ui:298
-#: src/kdefrontend/ui/datapickerimagewidget.ui:321
-#: src/kdefrontend/ui/datapickerimagewidget.ui:334
-#: src/kdefrontend/ui/datapickerimagewidget.ui:347
-#: src/kdefrontend/ui/datapickerimagewidget.ui:360
-#: src/kdefrontend/ui/datapickerimagewidget.ui:383
-#: src/kdefrontend/ui/datapickerimagewidget.ui:429
-#: src/kdefrontend/ui/datapickerimagewidget.ui:462
-#: src/kdefrontend/ui/datapickerimagewidget.ui:485
+#: src/kdefrontend/ui/datapickerimagewidget.ui:59
+#: src/kdefrontend/ui/datapickerimagewidget.ui:215
+#: src/kdefrontend/ui/datapickerimagewidget.ui:335
+#: src/kdefrontend/ui/datapickerimagewidget.ui:358
+#: src/kdefrontend/ui/datapickerimagewidget.ui:371
+#: src/kdefrontend/ui/datapickerimagewidget.ui:384
+#: src/kdefrontend/ui/datapickerimagewidget.ui:397
+#: src/kdefrontend/ui/datapickerimagewidget.ui:420
+#: src/kdefrontend/ui/datapickerimagewidget.ui:466
+#: src/kdefrontend/ui/datapickerimagewidget.ui:499
+#: src/kdefrontend/ui/datapickerimagewidget.ui:522
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:116
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:222
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:235
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:308
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:391
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:404
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:729
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1105
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1121
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1137
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1150
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1166
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1182
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1195
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1625
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:693
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:730
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:755
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:842
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:958
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1008
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1470
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:746
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:765
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:874
@@ -16061,10 +16029,10 @@ msgstr "Tamaño:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:764
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:786
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:822
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:62
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:187
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:263
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:276
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:141
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:177
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:195
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:227
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:605
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:624
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:643
@@ -16079,7 +16047,7 @@ msgstr "Tamaño:"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:160
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:179
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:236
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:350
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:353
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:213
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:477
@@ -16125,9 +16093,7 @@ msgstr "Cuadro giratorio para números."
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRugWidth)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRugLength)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbArrowSize)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbMajorTicksWidth)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbMajorTicksLength)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbMinorTicksWidth)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbMinorTicksLength)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbLabelsOffset)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbDistance)
@@ -16136,11 +16102,9 @@ msgstr "Cuadro giratorio para números."
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbErrorBarsCapSize)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:267
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:504
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1108
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1124
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1153
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1169
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1628
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:845
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1011
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1473
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:749
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:768
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:877
@@ -16153,7 +16117,7 @@ msgstr "Cuadro giratorio para números."
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:563
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:163
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:182
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:353
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:356
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:542
 #: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/labelwidget.ui:725
 #: src/kdefrontend/ui/labelwidget.ui:741 src/kdefrontend/ui/symbolwidget.ui:296
@@ -16162,26 +16126,124 @@ msgstr "Cuadro giratorio para números."
 msgid " pt"
 msgstr " pt"
 
+#. i18n: ectx: property (text), widget (QLabel, lPlot)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:33
+#, kde-format
+msgid "Image:"
+msgstr "Imagen:"
+
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:46
+#: src/kdefrontend/ui/datapickerimagewidget.ui:234
+#, kde-format
+msgid " px"
+msgstr " px"
+
+#. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:69
+#, kde-format
+msgid "x+y+z="
+msgstr "x+y+z="
+
+#. i18n: ectx: property (text), widget (QLabel, lRugLength)
+#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
+#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
+#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:108
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:832
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:998
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:519
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:796
+#, kde-format
+msgid "Length:"
+msgstr "Longitud:"
+
+#. i18n: ectx: property (text), widget (QLabel, lSegments)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:120
+#, kde-format
+msgid "Segments"
+msgstr "Segmentos"
+
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:154
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
+#, kde-format
+msgid "Specify the name of the image file."
+msgstr "Indique el nombre del archivo de imagen."
+
+#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:170
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:507
+#, kde-format
+msgid " Select the image file"
+msgstr "Seleccione el archivo de imagen"
+
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbRotation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsRotation)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:55
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1301
+#: src/kdefrontend/ui/datapickerimagewidget.ui:218
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1146
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:114
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:120
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:473
 #: src/kdefrontend/ui/labelwidget.ui:448 src/kdefrontend/ui/symbolwidget.ui:101
 #, kde-format
 msgid "°"
 msgstr "°"
 
-#. i18n: ectx: property (text), widget (QLabel, lPlot)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:65
+#. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:251
 #, kde-format
-msgid "Image:"
-msgstr "Imagen:"
+msgid "Point separation:"
+msgstr "Separación de punto:"
+
+#. i18n: ectx: property (text), widget (QLabel, lRotation)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
+#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:297
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1172
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:327
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:373
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:411
+#: src/kdefrontend/ui/labelwidget.ui:621 src/kdefrontend/ui/symbolwidget.ui:85
+#, kde-format
+msgid "Rotation:"
+msgstr "Rotación:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
+#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:345
+#: src/kdefrontend/ui/datapickerimagewidget.ui:407
+#: src/kdefrontend/ui/datapickerimagewidget.ui:486
+#, kde-format
+msgid "y="
+msgstr "y="
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
+#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:430
+#: src/kdefrontend/ui/datapickerimagewidget.ui:509
+#: src/kdefrontend/ui/datapickerimagewidget.ui:542
+#, kde-format
+msgid "z="
+msgstr "z="
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
+#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:453
+#: src/kdefrontend/ui/datapickerimagewidget.ui:476
+#: src/kdefrontend/ui/datapickerimagewidget.ui:532
+#, kde-format
+msgid "x="
+msgstr "x="
 
 #. i18n: ectx: property (text), widget (QLabel, lUpdateType)
 #. i18n: ectx: property (text), widget (QLabel, label_10)
@@ -16195,11 +16257,11 @@ msgstr "Imagen:"
 #. i18n: ectx: property (text), widget (QLabel, lLayout)
 #. i18n: ectx: property (text), widget (QLabel, lFileType)
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:98
+#: src/kdefrontend/ui/datapickerimagewidget.ui:554
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:231
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:526
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:638
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:931
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:910
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:34
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1173
@@ -16208,7 +16270,7 @@ msgstr "Imagen:"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:106
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:92
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:268
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:47
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:48
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:303
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:120
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:324
@@ -16223,142 +16285,44 @@ msgstr "Imagen:"
 msgid "Type:"
 msgstr "Tipo:"
 
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:105
-#, kde-format
-msgid "3."
-msgstr "3."
-
-#. i18n: ectx: property (text), widget (QLabel, lRotation)
-#. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
-#. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:112
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1327
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:327
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:373
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:107
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:411
-#: src/kdefrontend/ui/labelwidget.ui:621 src/kdefrontend/ui/symbolwidget.ui:85
-#, kde-format
-msgid "Rotation:"
-msgstr "Rotación:"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinSegmentLength)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbPointSeparation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:125
-#: src/kdefrontend/ui/datapickerimagewidget.ui:596
-#, kde-format
-msgid " px"
-msgstr " px"
-
-#. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:132
-#, kde-format
-msgid "Point separation:"
-msgstr "Separación de punto:"
-
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:170
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:99
-#, kde-format
-msgid "Specify the name of the image file."
-msgstr "Indique el nombre del archivo de imagen."
-
-#. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:186
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:507
-#, kde-format
-msgid " Select the image file"
-msgstr "Seleccione el archivo de imagen"
-
-#. i18n: ectx: property (text), widget (QLabel, lSegments)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:211
-#, kde-format
-msgid "Segments"
-msgstr "Segmentos"
-
-#. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:218
-#, kde-format
-msgid "2."
-msgstr "2."
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionY2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY1)
-#. i18n: ectx: property (text), widget (QLabel, lPositionY3)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:308
-#: src/kdefrontend/ui/datapickerimagewidget.ui:370
-#: src/kdefrontend/ui/datapickerimagewidget.ui:449
-#, kde-format
-msgid "y="
-msgstr "y="
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionZ1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:393
-#: src/kdefrontend/ui/datapickerimagewidget.ui:472
-#: src/kdefrontend/ui/datapickerimagewidget.ui:505
-#, kde-format
-msgid "z="
-msgstr "z="
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX2)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX3)
-#. i18n: ectx: property (text), widget (QLabel, lPositionX1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:416
-#: src/kdefrontend/ui/datapickerimagewidget.ui:439
-#: src/kdefrontend/ui/datapickerimagewidget.ui:495
-#, kde-format
-msgid "x="
-msgstr "x="
-
-#. i18n: ectx: property (text), widget (QLabel, lTernaryScale)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:517
-#, kde-format
-msgid "x+y+z="
-msgstr "x+y+z="
-
-#. i18n: ectx: property (text), widget (QLabel, lRugLength)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
-#. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:534
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:847
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1047
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:519
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:796
-#, kde-format
-msgid "Length:"
-msgstr "Longitud:"
-
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:583
+#: src/kdefrontend/ui/datapickerimagewidget.ui:582
 #, kde-format
 msgid "Reference Points"
 msgstr "Puntos de referencia"
 
 #. i18n: ectx: property (text), widget (QLabel, lRefPoint1)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:606
+#: src/kdefrontend/ui/datapickerimagewidget.ui:589
 #, kde-format
 msgid "1."
 msgstr "1."
 
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint2)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:596
+#, kde-format
+msgid "2."
+msgstr "2."
+
+#. i18n: ectx: property (text), widget (QLabel, lRefPoint3)
+#: src/kdefrontend/ui/datapickerimagewidget.ui:623
+#, kde-format
+msgid "3."
+msgstr "3."
+
 #. i18n: ectx: attribute (title), widget (QWidget, tSymbol)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:614
+#: src/kdefrontend/ui/datapickerimagewidget.ui:641
 #, kde-format
 msgid "Ref. Points Symbol"
 msgstr "Símbolo de puntos de referencia"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tEdit)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:641
+#: src/kdefrontend/ui/datapickerimagewidget.ui:668
 #, kde-format
 msgid "Edit Image"
 msgstr "Editar imagen"
 
 #. i18n: ectx: property (text), widget (QLabel, lIntensity)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:656
+#: src/kdefrontend/ui/datapickerimagewidget.ui:683
 #, kde-format
 msgid "Intensity:"
 msgstr "Intensidad:"
@@ -16367,8 +16331,8 @@ msgstr "Intensidad:"
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionY)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:678
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:90
+#: src/kdefrontend/ui/datapickerimagewidget.ui:705
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:289
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:363
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:412
 #: src/kdefrontend/ui/labelwidget.ui:82 src/kdefrontend/ui/labelwidget.ui:110
@@ -16377,25 +16341,25 @@ msgid "Vertical position relative to label's parent"
 msgstr "Posición vertical relativa al padre de la etiqueta"
 
 #. i18n: ectx: property (text), widget (QLabel, lHue)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:711
+#: src/kdefrontend/ui/datapickerimagewidget.ui:738
 #, kde-format
 msgid "Hue:"
 msgstr "Saturación:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:731
+#: src/kdefrontend/ui/datapickerimagewidget.ui:758
 #, kde-format
 msgid "Current image:"
 msgstr "Imagen actual:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:744
+#: src/kdefrontend/ui/datapickerimagewidget.ui:771
 #, kde-format
 msgid "Saturation:"
 msgstr "Saturación:"
 
 #. i18n: ectx: property (text), widget (QLabel, lForeground)
-#: src/kdefrontend/ui/datapickerimagewidget.ui:751
+#: src/kdefrontend/ui/datapickerimagewidget.ui:778
 #, kde-format
 msgid "Foreground:"
 msgstr "Primer plano:"
@@ -16500,7 +16464,7 @@ msgstr "El número de vectores del archivo"
 #. i18n: ectx: property (text), widget (QLabel, lType)
 #. i18n: ectx: property (text), widget (QLabel, lDataType)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:50
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:76
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:241
 #, kde-format
 msgid "Data type:"
 msgstr "Tipo de datos:"
@@ -17295,7 +17259,7 @@ msgstr "Desplazamiento cero:"
 #. i18n: ectx: property (text), widget (QLabel, lPlotRange)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:101
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:156
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:253
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:306
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:195
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:203
@@ -17400,20 +17364,16 @@ msgstr "Flecha"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbWhiskersCapOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbArrowSize)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbMajorTicksOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbMinorTicksOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:501
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:867
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1067
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1441
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1286
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:682
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:89
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:191
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:149
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:330
 #: src/kdefrontend/ui/labelwidget.ui:36 src/kdefrontend/ui/symbolwidget.ui:133
 #, kde-format
@@ -17442,7 +17402,7 @@ msgstr "Marcas mayores"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksDirection)
 #. i18n: ectx: property (text), widget (QLabel, lDirection)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:605
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:921
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:900
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:35
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:146
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:56
@@ -17454,7 +17414,7 @@ msgstr "Dirección:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksNumber)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:655
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:941
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:920
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #, kde-format
 msgid "Number:"
@@ -17463,7 +17423,7 @@ msgstr "Número:"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:683
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:969
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:948
 #, kde-format
 msgid "Spacing:"
 msgstr "Espaciado:"
@@ -17471,27 +17431,27 @@ msgstr "Espaciado:"
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksIncrementDateTime)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:690
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:976
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:703
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:968
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:37
 #, kde-format
 msgid "Increment:"
 msgstr "Incrementar:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:697
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:710
 #, kde-format
 msgid "First Tick at"
 msgstr "Primera marca en"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:707
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:720
 #, kde-format
 msgid "First Tick Value:"
 msgstr "Valor de la primera marca:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:714
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:740
 #, kde-format
 msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
@@ -17501,13 +17461,13 @@ msgstr ""
 "eje</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:717
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:743
 #, kde-format
 msgid "First Tick Offset:"
 msgstr "Desplazamiento de la primera marca:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:739
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:765
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
@@ -17517,7 +17477,7 @@ msgstr ""
 "primer punto de datos</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:750
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:776
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
@@ -17527,117 +17487,33 @@ msgstr ""
 "redondeado antes del primer punto de datos</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:773
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:799
 #, kde-format
 msgid "Label Type:"
 msgstr "Tipo de etiqueta:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:783
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:809
 #, kde-format
 msgid "Label Column:"
 msgstr "Columna de etiqueta:"
 
-#. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
-#. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#. i18n: ectx: property (text), widget (QLabel, lWidth)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapWidth)
-#. i18n: ectx: property (text), widget (QLabel, lRugWidth)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksWidth)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksWidth)
-#. i18n: ectx: property (text), widget (QLabel, lVerticalLineWidth)
-#. i18n: ectx: property (text), widget (QLabel, lConnectionLineWidth)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:840
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1040
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:704
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:844
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:557
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:472
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:380
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:437
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:286
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:336
-#: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:810
-#: src/kdefrontend/ui/labelwidget.ui:269 src/kdefrontend/ui/symbolwidget.ui:267
-#, kde-format
-msgid "Width:"
-msgstr "Anchura:"
-
-#. i18n: ectx: property (text), widget (QLabel, lOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lMajorTicksOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lMinorTicksOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lLabelsOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lVerticalLineOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lConnectionLineOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:854
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1054
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1414
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:662
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:574
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:307
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:387
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:293
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:343
-#: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:136
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:284
-#: src/kdefrontend/ui/labelwidget.ui:95 src/kdefrontend/ui/symbolwidget.ui:120
-#: src/kdefrontend/worksheet/GridDialog.cpp:72
-#, kde-format
-msgid "Opacity:"
-msgstr "Opacidad:"
-
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbWhiskersCapOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMajorTicksOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbMinorTicksOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsOpacity)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:870
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1070
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1444
-#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:685
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:976
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1113
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:522
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:92
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:194
-#: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:152
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:333
-#: src/kdefrontend/ui/labelwidget.ui:39 src/kdefrontend/ui/symbolwidget.ui:136
-#: src/kdefrontend/worksheet/GridDialog.cpp:80
-#, no-c-format, kde-format
-msgid " %"
-msgstr " %"
-
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:914
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:893
 #, kde-format
 msgid "Minor ticks"
 msgstr "Marcas menores"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1206
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1051
 #, kde-format
 msgid "Labels"
 msgstr "Etiquetas"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1212
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1249
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1057
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1094
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "Número de dígitos tras la coma decimal"
@@ -17645,17 +17521,17 @@ msgstr "Número de dígitos tras la coma decimal"
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1215
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:96
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1060
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:208
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:285
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:209
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:211
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:228
 #, kde-format
 msgid "Precision:"
 msgstr "Precisión:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1256
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1101
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -17665,8 +17541,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lPosition_2)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1285
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:142
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1130
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:102
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:343
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:105
 #, kde-format
@@ -17676,10 +17552,10 @@ msgstr "Posición"
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
 #. i18n: ectx: property (text), widget (QLabel, lValuesFont)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1334
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1179
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:140
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:92
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:307
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:310
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:291
 #: src/kdefrontend/ui/labelwidget.ui:190
 #, kde-format
@@ -17689,8 +17565,8 @@ msgstr "Tipo de letra:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesSuffix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1360
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:290
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1205
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:293
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:277
 #, kde-format
 msgid "Suffix:"
@@ -17698,7 +17574,7 @@ msgstr "Sufijo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1377
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1222
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:851
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:582
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:803
@@ -17706,20 +17582,68 @@ msgstr "Sufijo:"
 msgid "Offset:"
 msgstr "Desplazamiento:"
 
+#. i18n: ectx: property (text), widget (QLabel, lOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lVerticalLineOpacity)
+#. i18n: ectx: property (text), widget (QLabel, lConnectionLineOpacity)
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1259
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:662
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:574
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:307
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:387
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:293
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:343
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:284
+#: src/kdefrontend/ui/labelwidget.ui:95 src/kdefrontend/ui/symbolwidget.ui:120
+#: src/kdefrontend/worksheet/GridDialog.cpp:72
+#, kde-format
+msgid "Opacity:"
+msgstr "Opacidad:"
+
 #. i18n: ectx: property (text), widget (QLabel, lOutputFormat)
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1421
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1528
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1266
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1373
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
 msgid "Format:"
 msgstr "Formato:"
 
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbOpacity)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbWhiskersCapOpacity)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsOpacity)
+#. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1289
+#: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:685
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:976
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1113
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:522
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:92
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:194
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:333
+#: src/kdefrontend/ui/labelwidget.ui:39 src/kdefrontend/ui/symbolwidget.ui:136
+#: src/kdefrontend/worksheet/GridDialog.cpp:80
+#, no-c-format, kde-format
+msgid " %"
+msgstr " %"
+
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1469
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1314
 #, kde-format
 msgid "Font"
 msgstr "Tipo de letra"
@@ -17727,27 +17651,27 @@ msgstr "Tipo de letra"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrefix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1555
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:273
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1400
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:276
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:418
 #, kde-format
 msgid "Prefix:"
 msgstr "Prefijo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1562
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1407
 #, kde-format
 msgid "Font Color:"
 msgstr "Color del texto:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1683
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1528
 #, kde-format
 msgid "Minor grid"
 msgstr "Rejilla menor"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1712
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1557
 #, kde-format
 msgid "Major grid"
 msgstr "Rejilla mayor"
@@ -17807,9 +17731,9 @@ msgstr "visible"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:44
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:267
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:317
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:47
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:149
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:202
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:126
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:153
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:167
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:125
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:132
 #: src/kdefrontend/ui/labelwidget.ui:156 src/kdefrontend/ui/labelwidget.ui:210
@@ -17825,9 +17749,9 @@ msgstr "x:"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:110
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:30
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:71
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:93
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:209
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:250
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:207
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:217
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:292
 #: src/kdefrontend/ui/labelwidget.ui:68 src/kdefrontend/ui/labelwidget.ui:85
 #, kde-format
 msgid "y:"
@@ -17978,6 +17902,30 @@ msgstr "Bigotes"
 msgid "Cap"
 msgstr "Remate"
 
+#. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
+#. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
+#. i18n: ectx: property (text), widget (QLabel, lWidth)
+#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapWidth)
+#. i18n: ectx: property (text), widget (QLabel, lRugWidth)
+#. i18n: ectx: property (text), widget (QLabel, lVerticalLineWidth)
+#. i18n: ectx: property (text), widget (QLabel, lConnectionLineWidth)
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:704
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:844
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:557
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:472
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:380
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:437
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:286
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:336
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:810
+#: src/kdefrontend/ui/labelwidget.ui:269 src/kdefrontend/ui/symbolwidget.ui:267
+#, kde-format
+msgid "Width:"
+msgstr "Anchura:"
+
 #. i18n: ectx: attribute (title), widget (QWidget, tabMargins)
 #. i18n: ectx: attribute (title), widget (QWidget, tabMarginalPlots)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
@@ -18038,11 +17986,11 @@ msgstr "Lista de intervalos de Y"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:206
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:346
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:133
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:69
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:201
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:479
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:261
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:154
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:192
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:194
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:460
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:723
 #, kde-format
@@ -18336,7 +18284,7 @@ msgstr "Alineación horizontal:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:224
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:129
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:109
 #: src/kdefrontend/ui/labelwidget.ui:142
 #, kde-format
 msgid "Logical coordinates"
@@ -18363,35 +18311,35 @@ msgstr "Orden:"
 msgid "Line+Symbol Width:"
 msgstr "Anchura de línea+símbolo:"
 
-#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
-#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:86
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:199
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:496
-#, kde-format
-msgid "Numeric:"
-msgstr "Numérico:"
-
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:110
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:235
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:30
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:237
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:519
 #, kde-format
 msgid "DateTime:"
 msgstr "Fecha y hora:"
 
-#. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:136
-#, kde-format
-msgid "Plot designation:"
-msgstr "Designación del gráfico:"
-
 #. i18n: ectx: property (text), widget (QLabel, lLabels)
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:162
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:153
 #, kde-format
 msgid "Labels:"
 msgstr "Etiquetas:"
+
+#. i18n: ectx: property (text), widget (QLabel, lNumericFormat)
+#. i18n: ectx: property (text), widget (QLabel, lValuesNumericFormat)
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:218
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:201
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:496
+#, kde-format
+msgid "Numeric:"
+msgstr "Numérico:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:315
+#, kde-format
+msgid "Plot designation:"
+msgstr "Designación del gráfico:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
 #: src/kdefrontend/ui/dockwidgets/cursordock.ui:19
@@ -18409,7 +18357,7 @@ msgstr "Cursor 2"
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:199
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:123
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:234
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:444
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:122
@@ -18753,7 +18701,7 @@ msgstr "Comentarios de columnas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDistance)
-#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:97
+#: src/kdefrontend/ui/dockwidgets/valuewidget.ui:98
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:368
 #, kde-format
 msgid "Distance:"
@@ -20653,7 +20601,7 @@ msgstr ""
 "Nota: no es posible modificar este tipo tras haber leído al menos un punto."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:141
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:191
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:195
 #, kde-format
 msgid ""
 "Select the range for the hue.\n"
@@ -20663,7 +20611,7 @@ msgstr ""
 "Cualquier cosa fuera de este intervalo se pondrá a blanco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:146
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:196
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:200
 #, kde-format
 msgid ""
 "Select the range for the saturation.\n"
@@ -20673,7 +20621,7 @@ msgstr ""
 "Cualquier cosa fuera de este intervalo se pondrá a blanco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:151
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:201
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:205
 #, kde-format
 msgid ""
 "Select the range for the value, the degree of lightness of the color.\n"
@@ -20683,7 +20631,7 @@ msgstr ""
 "Cualquier cosa fuera de este intervalo se pondrá en blanco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:156
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:206
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:210
 #, kde-format
 msgid ""
 "Select the range for the intensity.\n"
@@ -20693,7 +20641,7 @@ msgstr ""
 "Cualquier cosa fuera de este intervalo se pondrá a blanco."
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:162
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:212
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:216
 #, kde-format
 msgid ""
 "Select the range for the colors that are not part of the background color.\n"
@@ -20718,31 +20666,55 @@ msgid "Polar (x, y(rad))"
 msgstr "Polar (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, kde-format
-msgid "Logarithmic (ln(x), y)"
+#, fuzzy, kde-format
+#| msgid "Logarithmic (ln(x), y)"
+msgid "Logarithmic (ln(x), ln(y))"
 msgstr "Logarítmica (ln(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
+msgid "Logarithmic (ln(x), y)"
+msgstr "Logarítmica (ln(x), y)"
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:171
+#, kde-format
 msgid "Logarithmic (x, ln(y))"
 msgstr "Logarítmica (x, ln(y))"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:171
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
+#, fuzzy, kde-format
+#| msgid "Logarithmic (ln(x), y)"
+msgid "Logarithmic (log(x), log(y))"
+msgstr "Logarítmica (ln(x), y)"
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
+#, fuzzy, kde-format
+#| msgid "Logarithmic (ln(x), y)"
+msgid "Logarithmic (log(x), y)"
+msgstr "Logarítmica (ln(x), y)"
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
+#, fuzzy, kde-format
+#| msgid "Logarithmic (x, ln(y))"
+msgid "Logarithmic (x, log(y))"
+msgstr "Logarítmica (x, ln(y))"
+
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
 msgid "Ternary (x, y, z)"
 msgstr "Ternaria (x, y, z)"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:182
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:186
 #, kde-format
 msgid "No Image"
 msgstr "Sin imagen"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:183
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:187
 #, kde-format
 msgid "Original Image"
 msgstr "Imagen original"
 
-#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:184
+#: src/kdefrontend/widgets/DatapickerImageWidget.cpp:188
 #, kde-format
 msgid "Processed Image"
 msgstr "Imagen procesada"
@@ -21317,6 +21289,18 @@ msgstr "el proceso «convert» ha fallado, código de salida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
+
+#~ msgid "%1: set major ticks style"
+#~ msgstr "%1: definir estilo de las marcas mayores"
+
+#~ msgid "%1: set major ticks opacity"
+#~ msgstr "%1: definir opacidad de las marcas mayores"
+
+#~ msgid "%1: set minor ticks style"
+#~ msgstr "%1: definir estilo de las marcas menores"
+
+#~ msgid "%1: set minor ticks opacity"
+#~ msgstr "%1: definir opacidad de las marcas menores"
 
 #~ msgid "%1: set line style"
 #~ msgstr "%1: definir estilo de la línea"
