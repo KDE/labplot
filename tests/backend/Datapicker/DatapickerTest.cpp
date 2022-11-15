@@ -438,12 +438,12 @@ void DatapickerTest::linearMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5);
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 5);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 5);
 
 	datapicker.addNewPoint(QPointF(0.7, 0.65), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(1), 7);
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(1), 6.5);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(1), 7);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
 }
 
 void DatapickerTest::logarithmicNaturalXMapping() {
@@ -477,16 +477,16 @@ void DatapickerTest::logarithmicNaturalXMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
 	w.ui.sbPositionX1->valueChanged(1); // axisPointsChanged will call updatePoint()
 
 	// Value validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 60);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2.51188635826);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 60);
 }
 
 void DatapickerTest::logarithmicNaturalYMapping() {
@@ -520,16 +520,16 @@ void DatapickerTest::logarithmicNaturalYMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionY2->setValue(1), true); // axisPointsChanged will call updatePoint()
 	QCOMPARE(w.ui.sbPositionY3->setValue(1), true); // axisPointsChanged will call updatePoint()
 	w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 20);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 20);
 	// Value validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
 void DatapickerTest::logarithmicNaturalXYMapping() {
@@ -563,8 +563,8 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionX1->setValue(1), true); // axisPointsChanged will call updatePoint()
 	QCOMPARE(w.ui.sbPositionX2->setValue(1), true); // axisPointsChanged will call updatePoint()
@@ -573,8 +573,8 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 	w.ui.sbPositionY1->valueChanged(1); // axisPointsChanged will call updatePoint()
 
 	// Values validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2.51188635826);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
 void DatapickerTest::logarithmic10XMapping() {
@@ -608,8 +608,8 @@ void DatapickerTest::logarithmic10XMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
@@ -617,8 +617,8 @@ void DatapickerTest::logarithmic10XMapping() {
 	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10X);
 
 	// Value validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826); // TODO: correct?
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 60);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2.51188635826); // TODO: correct?
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 60);
 }
 
 void DatapickerTest::logarithmic10YMapping() {
@@ -652,17 +652,17 @@ void DatapickerTest::logarithmic10YMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionY2->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionY3->setValue(1), true);
 	w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10Y);
 
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 20);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 20);
 	// Value validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
 void DatapickerTest::logarithmic10XYMapping() {
@@ -696,8 +696,8 @@ void DatapickerTest::logarithmic10XYMapping() {
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 0); // x start is zero, which is not valid therefore the result is 0
 
 	QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
@@ -705,101 +705,103 @@ void DatapickerTest::logarithmic10XYMapping() {
 	QCOMPARE(w.ui.sbPositionY3->setValue(1), true);
 	w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
 	// Values validated manually, not reverse calculated
-	VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2.51188635826);
-	VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 15.8489322662);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2.51188635826);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
-// ALEX uncomment and fix ;)
+/*!
+ * check the correctness of the data points after one of the reference points was moved on the scene.
+ */
+// TODO: this is not implemented yet, moving of axis points is not possible once a curve was added.
+/*
 void DatapickerTest::referenceMove() {
-	// // Reference points are moved after placement
-	// // Column data is changing respectivetly
-	// Datapicker datapicker(QStringLiteral("Test"));
-	// datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	// datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	// datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	Datapicker datapicker(QStringLiteral("Test"));
+	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
 
-	// auto ap = datapicker.m_image->axisPoints();
-	// ap.type = DatapickerImage::GraphType::Linear;
-	// datapicker.m_image->setAxisPoints(ap);
+	auto ap = datapicker.m_image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	datapicker.m_image->setAxisPoints(ap);
 
-	// DatapickerImageWidget w(nullptr);
-	// w.setImages({datapicker.m_image});
-	// w.ui.sbPositionX1->setValue(0);
-	// w.ui.sbPositionY1->setValue(10);
-	// w.ui.sbPositionZ1->setValue(0);
-	// w.ui.sbPositionX2->setValue(0);
-	// w.ui.sbPositionY2->setValue(0);
-	// w.ui.sbPositionZ2->setValue(0);
-	// w.ui.sbPositionX3->setValue(10);
-	// w.ui.sbPositionY3->setValue(0);
-	// w.ui.sbPositionZ3->setValue(0);
-	// w.logicalPositionChanged();
+	DatapickerImageWidget w(nullptr);
+	w.setImages({datapicker.m_image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
 
-	// auto* curve = new DatapickerCurve(i18n("Curve"));
-	// curve->addDatasheet(datapicker.m_image->axisPoints().type);
-	// datapicker.addChild(curve);
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	datapicker.addChild(curve);
 
-	// datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
-	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5);
-	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+	datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
 
-	// // Points are stored in the image
-	// auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	// QCOMPARE(points.count(), 3);
+	// Points are stored in the image
+	auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 3);
 
-	// points[0]->setPosition(QPointF(0.1, 1));
-	// points[0]->setPosition(QPointF(0.1, 0));
-	// points[0]->setPosition(QPointF(1.1, 0));
+	points[0]->setPosition(QPointF(0., 1));
+	points[1]->setPosition(QPointF(0.1, 0));
+	points[2]->setPosition(QPointF(1.1, 0));
 
-	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5/1.1);
-	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5/1.1);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
 }
+*/
 
-// ALEX uncomment and fix ;)
+/*!
+ * check the correctness of the data point after the point was moved on the scene.
+ */
 void DatapickerTest::curvePointMove() {
-	// // Curve point was moved after placement
-	// // Column data is changing respectivetly
-	//   // Reference points are moved after placement
-	//   // Column data is changing respectivetly
-	//   Datapicker datapicker(QStringLiteral("Test"));
-	//   // Set reference points
-	//   datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	//   datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	//   datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	Datapicker datapicker(QStringLiteral("Test"));
 
-	// auto ap = datapicker.m_image->axisPoints();
-	// ap.type = DatapickerImage::GraphType::Linear;
-	// datapicker.m_image->setAxisPoints(ap);
+	// add reference points
+	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
 
-	// DatapickerImageWidget w(nullptr);
-	// w.setImages({datapicker.m_image});
-	// w.ui.sbPositionX1->setValue(0);
-	// w.ui.sbPositionY1->setValue(10);
-	// w.ui.sbPositionZ1->setValue(0);
-	// w.ui.sbPositionX2->setValue(0);
-	// w.ui.sbPositionY2->setValue(0);
-	// w.ui.sbPositionZ2->setValue(0);
-	// w.ui.sbPositionX3->setValue(10);
-	// w.ui.sbPositionY3->setValue(0);
-	// w.ui.sbPositionZ3->setValue(0);
-	// w.logicalPositionChanged();
+	auto ap = datapicker.m_image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	datapicker.m_image->setAxisPoints(ap);
 
-	// auto* curve = new DatapickerCurve(i18n("Curve"));
-	// curve->addDatasheet(datapicker.m_image->axisPoints().type);
-	// datapicker.addChild(curve);
+	// set logical coordinates for the reference points
+	DatapickerImageWidget w(nullptr);
+	w.setImages({datapicker.m_image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
 
-	// datapicker.addNewPoint(QPointF(0.5, 0.6), curve); // updates the curve data
-	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 5);
-	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 6);
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	datapicker.addChild(curve);
 
-	// // Points are stored in the image
-	// auto points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	// QCOMPARE(points.count(), 1);
+	// add new curve point and check its logical coordinates
+	datapicker.addNewPoint(QPointF(0.5, 0.6), curve);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
 
-	// points[0]->setPosition(QPointF(0.2, 0.9)); // Changing the position of the point
-
-	// VALUES_EQUAL(curve->d_ptr->posXColumn->valueAt(0), 2);
-	// VALUES_EQUAL(curve->d_ptr->posYColumn->valueAt(0), 9);
+	// move the last added point to a new position and check its logical coordinates again
+	auto points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 1);
+	points[0]->setPosition(QPointF(0.2, 0.9)); // Changing the position of the point
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 9);
 }
 
 void DatapickerTest::selectReferencePoint() {

@@ -207,11 +207,11 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 
 	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
-	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
 	parentAspect->addChild(newPoint);
+	newPoint->setPosition(pos);
 	newPoint->retransform();
 
 	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
@@ -243,7 +243,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		// clear scene
-		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		const auto& points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
 
@@ -271,7 +271,7 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	qreal zVal = 0;
-	auto points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+	const auto& points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
