@@ -867,11 +867,17 @@ void DatapickerTest::curvePointMoveUndoRedo() {
 	// undo the move step and check the position again
 	auto* undoStack = project.undoStack();
 	undoStack->undo();
+	points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 1);
+	QCOMPARE(points[0]->position(), QPointF(0.5, 0.6));
 	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
 
 	// redo the last step and check the position again
 	undoStack->redo();
+	points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 1);
+	QCOMPARE(points[0]->position(), QPointF(0.2, 0.9));
 	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2);
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 9);
 }
