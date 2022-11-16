@@ -75,8 +75,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	void datapickerItemSelected(int);
 	void requestUpdateActions();
-
-	friend class DatapickerTest;
 };
 
 #endif

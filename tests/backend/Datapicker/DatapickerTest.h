@@ -4,6 +4,7 @@
 	Description          : Tests for Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -44,8 +45,9 @@ private Q_SLOTS:
 	void logarithmic10YMapping();
 	void logarithmic10XYMapping();
 
-	//void referenceMove();
+	// void referenceMove();
 	void curvePointMove();
+	void curvePointMoveUndoRedo();
 	void selectReferencePoint();
 };
 

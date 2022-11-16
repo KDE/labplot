@@ -4,12 +4,14 @@
 	Description          : Tests for Datapicker
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2022 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "DatapickerTest.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/datapicker/Datapicker.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datapicker/DatapickerCurvePrivate.h"
@@ -17,6 +19,8 @@
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Transform.h"
 #include "kdefrontend/widgets/DatapickerImageWidget.h"
+
+#include <QUndoStack>
 
 #define VECTOR3D_EQUAL(vec, ref)                                                                                                                               \
 	VALUES_EQUAL(vec.x(), ref.x());                                                                                                                            \
@@ -407,21 +411,22 @@ void DatapickerTest::mapCartesianToPolarInRadians() {
 
 // TODO: implement Ternary
 
+// Test if setting curve points on the image result in correct values for Linear mapping
 void DatapickerTest::linearMapping() {
-	// Test if setting curve points on the image result in correct values for Linear mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Linear;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(10);
 	w.ui.sbPositionZ1->setValue(0);
@@ -434,7 +439,7 @@ void DatapickerTest::linearMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(0.5, 0.5), curve); // updates the curve data
@@ -446,21 +451,22 @@ void DatapickerTest::linearMapping() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(1), 6.5);
 }
 
+// Test if setting curve points on the image result in correct values for lnX mapping
 void DatapickerTest::logarithmicNaturalXMapping() {
-	// Test if setting curve points on the image result in correct values for lnX mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::LnX;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -473,7 +479,7 @@ void DatapickerTest::logarithmicNaturalXMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -489,21 +495,22 @@ void DatapickerTest::logarithmicNaturalXMapping() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 60);
 }
 
+// Test if setting curve points on the image result in correct values for lnY mapping
 void DatapickerTest::logarithmicNaturalYMapping() {
-	// Test if setting curve points on the image result in correct values for lnY mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::LnY;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -516,7 +523,7 @@ void DatapickerTest::logarithmicNaturalYMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -532,21 +539,22 @@ void DatapickerTest::logarithmicNaturalYMapping() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
+// Test if setting curve points on the image result in correct values for lnXY mapping
 void DatapickerTest::logarithmicNaturalXYMapping() {
-	// Test if setting curve points on the image result in correct values for lnXY mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::LnXY;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -559,7 +567,7 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -577,21 +585,22 @@ void DatapickerTest::logarithmicNaturalXYMapping() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
+// Test if setting curve points on the image result in correct values for logX mapping
 void DatapickerTest::logarithmic10XMapping() {
-	// Test if setting curve points on the image result in correct values for logX mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Log10X;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -604,7 +613,7 @@ void DatapickerTest::logarithmic10XMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -614,28 +623,29 @@ void DatapickerTest::logarithmic10XMapping() {
 	QCOMPARE(w.ui.sbPositionX1->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionX2->setValue(1), true);
 	w.ui.sbPositionX2->valueChanged(1);
-	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10X);
+	QCOMPARE(image->axisPoints().type, DatapickerImage::GraphType::Log10X);
 
 	// Value validated manually, not reverse calculated
 	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2.51188635826); // TODO: correct?
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 60);
 }
 
+// Test if setting curve points on the image result in correct values for logY mapping
 void DatapickerTest::logarithmic10YMapping() {
-	// Test if setting curve points on the image result in correct values for logY mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Log10Y;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -648,7 +658,7 @@ void DatapickerTest::logarithmic10YMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -658,28 +668,29 @@ void DatapickerTest::logarithmic10YMapping() {
 	QCOMPARE(w.ui.sbPositionY2->setValue(1), true);
 	QCOMPARE(w.ui.sbPositionY3->setValue(1), true);
 	w.ui.sbPositionY3->valueChanged(1); // axisPointsChanged will call updatePoint()
-	QCOMPARE(datapicker.m_image->axisPoints().type, DatapickerImage::GraphType::Log10Y);
+	QCOMPARE(image->axisPoints().type, DatapickerImage::GraphType::Log10Y);
 
 	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 20);
 	// Value validated manually, not reverse calculated
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 15.8489322662);
 }
 
+// Test if setting curve points on the image result in correct values for logXY mapping
 void DatapickerTest::logarithmic10XYMapping() {
-	// Test if setting curve points on the image result in correct values for logXY mapping
-
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(3, 10), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(3, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(13, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(3, 10), image);
+	datapicker.addNewPoint(QPointF(3, 0), image);
+	datapicker.addNewPoint(QPointF(13, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Log10XY;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(100);
 	w.ui.sbPositionZ1->setValue(0);
@@ -692,7 +703,7 @@ void DatapickerTest::logarithmic10XYMapping() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	datapicker.addNewPoint(QPointF(5, 6), curve); // updates the curve data
@@ -763,19 +774,20 @@ void DatapickerTest::referenceMove() {
  */
 void DatapickerTest::curvePointMove() {
 	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
 
 	// add reference points
-	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
 
-	auto ap = datapicker.m_image->axisPoints();
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Linear;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	// set logical coordinates for the reference points
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 	w.ui.sbPositionX1->setValue(0);
 	w.ui.sbPositionY1->setValue(10);
 	w.ui.sbPositionZ1->setValue(0);
@@ -788,7 +800,7 @@ void DatapickerTest::curvePointMove() {
 	w.logicalPositionChanged();
 
 	auto* curve = new DatapickerCurve(i18n("Curve"));
-	curve->addDatasheet(datapicker.m_image->axisPoints().type);
+	curve->addDatasheet(image->axisPoints().type);
 	datapicker.addChild(curve);
 
 	// add new curve point and check its logical coordinates
@@ -804,25 +816,87 @@ void DatapickerTest::curvePointMove() {
 	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 9);
 }
 
+/*!
+ * check the correctness of the data point after the point was moved on the scene with undo and redo after this.
+ */
+void DatapickerTest::curvePointMoveUndoRedo() {
+	Project project;
+	auto* datapicker = new Datapicker(QStringLiteral("Test"));
+	project.addChild(datapicker);
+	auto* image = datapicker->image();
+
+	// add reference points
+	datapicker->addNewPoint(QPointF(0, 1), image);
+	datapicker->addNewPoint(QPointF(0, 0), image);
+	datapicker->addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
+	ap.type = DatapickerImage::GraphType::Linear;
+	image->setAxisPoints(ap);
+
+	// set logical coordinates for the reference points
+	DatapickerImageWidget w(nullptr);
+	w.setImages({image});
+	w.ui.sbPositionX1->setValue(0);
+	w.ui.sbPositionY1->setValue(10);
+	w.ui.sbPositionZ1->setValue(0);
+	w.ui.sbPositionX2->setValue(0);
+	w.ui.sbPositionY2->setValue(0);
+	w.ui.sbPositionZ2->setValue(0);
+	w.ui.sbPositionX3->setValue(10);
+	w.ui.sbPositionY3->setValue(0);
+	w.ui.sbPositionZ3->setValue(0);
+	w.logicalPositionChanged();
+
+	auto* curve = new DatapickerCurve(i18n("Curve"));
+	curve->addDatasheet(image->axisPoints().type);
+	datapicker->addChild(curve);
+
+	// add new curve point and check its logical coordinates
+	datapicker->addNewPoint(QPointF(0.5, 0.6), curve);
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
+
+	// move the last added point to a new position and check its logical coordinates again
+	auto points = curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	QCOMPARE(points.count(), 1);
+	points[0]->setPosition(QPointF(0.2, 0.9)); // Changing the position of the point
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 9);
+
+	// undo the move step and check the position again
+	auto* undoStack = project.undoStack();
+	undoStack->undo();
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 5);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 6);
+
+	// redo the last step and check the position again
+	undoStack->redo();
+	VALUES_EQUAL(curve->posXColumn()->valueAt(0), 2);
+	VALUES_EQUAL(curve->posYColumn()->valueAt(0), 9);
+}
+
 void DatapickerTest::selectReferencePoint() {
 	Datapicker datapicker(QStringLiteral("Test"));
-	// Set reference points
-	datapicker.addNewPoint(QPointF(0, 1), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(0, 0), datapicker.m_image);
-	datapicker.addNewPoint(QPointF(1, 0), datapicker.m_image);
+	auto* image = datapicker.image();
 
-	auto ap = datapicker.m_image->axisPoints();
+	// Set reference points
+	datapicker.addNewPoint(QPointF(0, 1), image);
+	datapicker.addNewPoint(QPointF(0, 0), image);
+	datapicker.addNewPoint(QPointF(1, 0), image);
+
+	auto ap = image->axisPoints();
 	ap.type = DatapickerImage::GraphType::Linear;
-	datapicker.m_image->setAxisPoints(ap);
+	image->setAxisPoints(ap);
 
 	DatapickerImageWidget w(nullptr);
-	w.setImages({datapicker.m_image});
+	w.setImages({image});
 
 	QCOMPARE(w.ui.rbRefPoint1->isChecked(), false);
 	QCOMPARE(w.ui.rbRefPoint2->isChecked(), false);
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), false);
 
-	auto points = datapicker.m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	auto points = image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	QCOMPARE(points.count(), 3);
 
 	// Change reference point selection
