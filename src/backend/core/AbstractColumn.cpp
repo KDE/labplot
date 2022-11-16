@@ -360,8 +360,10 @@ void AbstractColumn::clear() {
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Double:
-		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
+	case ColumnMode::Double: {
+		double value = valueAt(row);
+		return !(std::isnan(value) || std::isinf(value));
+	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
 		return true;

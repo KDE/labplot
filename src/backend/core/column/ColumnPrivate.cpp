@@ -2166,6 +2166,7 @@ void ColumnPrivate::updateProperties() {
 	// DEBUG(Q_FUNC_INFO);
 
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
+	int rows = rowCount();
 	if (rowCount() == 0) {
 		properties = AbstractColumn::Properties::No;
 		available.properties = true;
@@ -2199,7 +2200,7 @@ void ColumnPrivate::updateProperties() {
 	int valueInt;
 	qint64 valueBigInt;
 	qint64 valueDateTime;
-	for (int row = 1; row < rowCount(); row++) {
+	for (int row = 1; row < rows; row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
 			// if there is one invalid or masked value, the property is No, because
 			// otherwise it's difficult to find the correct index in indexForValue().
