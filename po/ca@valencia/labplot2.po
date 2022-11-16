@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-12 09:49+0100\n"
-"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
+"PO-Revision-Date: 2022-11-15 17:09+0100\n"
+"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
@@ -12344,17 +12344,15 @@ msgstr "%1 punts personalitzats: s'ha carregat la plantilla «%2»"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "Incertesa"
+msgstr "Barres d'incertesa"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Incertesa"
+msgstr "Incertesa X"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12424,10 +12422,9 @@ msgid "Probability Density"
 msgstr "Densitat de probabilitat"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "Incertesa"
+msgstr "Sense incertesa"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
@@ -12436,16 +12433,14 @@ msgid "Poisson variance, sqrt(N)"
 msgstr "Variància de Poisson, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, symmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr "Valors d'error personalitzats, simètrics"
+msgstr "Valors d'incertesa personalitzats, simètrics"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, asymmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr "Valors d'error personalitzats, asimètrics"
+msgstr "Valors d'incertesa personalitzats, asimètrics"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -12731,10 +12726,9 @@ msgid "Correlation status: %1"
 msgstr "Estat de la correlació: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Incertesa"
+msgstr "Incertesa Y"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -19016,17 +19010,15 @@ msgstr "Monòtona creixent de X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:680
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "S'ha produït un error"
+msgstr "Error Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:710
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "S'ha produït un error"
+msgstr "Error X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -20169,32 +20161,28 @@ msgstr "Visibilitat de la subfinestra:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Termes:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
-"<html><head/><body><p>Distribucions numèriques aleatòries segons es "
-"definixen a <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">documentació "
-"de la GSL</span></a></p></body></html>"
+"<html><head/><body><p>Utilitzeu termes que complisquen la <a href=\"http://"
+"www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style="
+"\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM) (Guia per a l'expressió d'incertesa en la "
+"mesura)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:264
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "Complix la GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -20576,9 +20564,9 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p>Distribucions numèriques aleatòries segons es "
-"definixen a <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">documentació "
-"de la GSL</span></a></p></body></html>"
+"definixen en la <a href=\"https://www.gnu.org/software/gsl/doc/html/randist."
+"html\"><span style=\" text-decoration: underline; color:#2980b9;"
+"\">documentació de la GSL</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lSeed)
 #: src/kdefrontend/ui/spreadsheet/randomvalueswidget.ui:156
@@ -20812,10 +20800,9 @@ msgid "Polar (x, y(rad))"
 msgstr "Polar (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "Logarítmic (ln(x), y)"
+msgstr "Logarítmic (ln(x), ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -20828,22 +20815,19 @@ msgid "Logarithmic (x, ln(y))"
 msgstr "Logarítmic (x, ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "Logarítmic (ln(x), y)"
+msgstr "Logarítmic (log(x), log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logarítmic (ln(x), y)"
+msgstr "Logarítmic (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic (x, ln(y))"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logarítmic (x, ln(y))"
+msgstr "Logarítmic (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
@@ -21439,39 +21423,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "%1: set vertical line style"
-#~ msgstr "%1: establix l'estil de la línia vertical"
-
-#~ msgid "%1: set vertical line opacity"
-#~ msgstr "%1: establix l'opacitat de la línia vertical"
-
-#~ msgid "%1: set connection line style"
-#~ msgstr "%1: establix l'estil de la línia de connexió"
-
-#~ msgid "%1: set connection line opacity"
-#~ msgstr "%1: establix l'opacitat de la línia de connexió"
-
-#~ msgid "Error bars"
-#~ msgstr "Barres d'errors"
-
-#~ msgid "Error type:"
-#~ msgstr "Tipus d'error:"
-
-#~ msgid "y-error"
-#~ msgstr "S'ha produït un error de Y"
-
-#~ msgid "x-error"
-#~ msgstr "S'ha produït un error de X"
-
-#~ msgid "%1: set major ticks style"
-#~ msgstr "%1: establix l'estil a les marques més grans"
-
-#~ msgid "%1: set major ticks opacity"
-#~ msgstr "%1: establix l'opacitat de les marques més grans"
-
-#~ msgid "%1: set minor ticks style"
-#~ msgstr "%1: establix l'estil a les marques més xicotetes"
-
-#~ msgid "%1: set minor ticks opacity"
-#~ msgstr "%1: establix l'opacitat de les marques més xicotetes"

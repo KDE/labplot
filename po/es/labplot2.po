@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-14 03:47+0100\n"
+"PO-Revision-Date: 2022-11-16 01:24+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12243,17 +12243,15 @@ msgstr "%1 puntos personalizados: plantilla «%2» cargada"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "Incertidumbre"
+msgstr "Barras de incertidumbre"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Incertidumbre"
+msgstr "Incertidumbre en X"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12335,16 +12333,14 @@ msgid "Poisson variance, sqrt(N)"
 msgstr "Varianza de Poisson, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, symmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr "Valores de error personalizados, simétricos"
+msgstr "Valores de incertidumbre personalizados, simétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, asymmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr "Valores de error personalizados, asimétricos"
+msgstr "Valores de incertidumbre personalizados, asimétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -12630,10 +12626,9 @@ msgid "Correlation status: %1"
 msgstr "Estado de la correlación: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Incertidumbre"
+msgstr "Incertidumbre en Y"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -18893,17 +18888,15 @@ msgstr "Incremento monótono X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:680
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "Error"
+msgstr "Error en Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:710
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "Error"
+msgstr "Error en X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75

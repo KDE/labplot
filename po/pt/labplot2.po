@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-07 15:59+0000\n"
+"PO-Revision-Date: 2022-11-15 18:19+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -78,6 +78,7 @@ msgstr ""
 "X-POFile-SpellExtra: MAT MATLAB Dims Excel Spice cantorpart dump ncdump\n"
 "X-POFile-SpellExtra: david XSLX RMSD preview sty latex DP whiskers Whisker\n"
 "X-POFile-IgnoreConsistency: Show\n"
+"X-POFile-SpellExtra: GUM\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -9758,38 +9759,34 @@ msgid "Memory used %1 MB, peak %2 MB"
 msgstr "Memória usada %1 MB, pico %2 MB"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:54
-#, fuzzy, kde-format
-#| msgid "Minimum tolerance:"
+#, kde-format
 msgid "Minimum allowed value: %1"
-msgstr "Tolerância mínima:"
+msgstr "Valor mínimo permitido: %1"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:56
-#, fuzzy, kde-format
-#| msgid "Maximum tolerance:"
+#, kde-format
 msgid "Maximum allowed value: %1"
-msgstr "Tolerância máxima:"
+msgstr "Valor máximo permitido: %1"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:58
 #, kde-format
 msgid "The value does not represent a valid number"
-msgstr ""
+msgstr "O valor não representa um número válido"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:60
-#, fuzzy, kde-format
-#| msgid "Random number generator"
+#, kde-format
 msgid "No number entered"
-msgstr "Gerador de números aleatórios"
+msgstr "Nenhum número introduzido"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:64
 #, kde-format
 msgid "Unhandled error"
-msgstr ""
+msgstr "Erro não reconhecido"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:407
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "Valor numérico inválido."
+msgstr "Valor numérico inválido. Valor válido: %1"
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -12304,17 +12301,15 @@ msgstr "%1 pontos personalizados: foi carregado o modelo \"%2\""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "Incerteza"
+msgstr "Barras de Incerteza"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Incerteza"
+msgstr "Incerteza em X"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12384,10 +12379,9 @@ msgid "Probability Density"
 msgstr "Densidade Probabilística"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "Incerteza"
+msgstr "Sem Incertezas"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
@@ -12396,16 +12390,14 @@ msgid "Poisson variance, sqrt(N)"
 msgstr "Variância de Poisson, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, symmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr "Valores de Erros Personalizados, simétricos"
+msgstr "Valores de Incerteza Personalizados, simétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, asymmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr "Valores de Erros Personalizados, assimétricos"
+msgstr "Valores de Incerteza Personalizados, assimétricos"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -12692,10 +12684,9 @@ msgid "Correlation status: %1"
 msgstr "Estado da correlação: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Incerteza"
+msgstr "Incerteza em Y"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -16143,10 +16134,9 @@ msgstr "Tamanho:"
 #: src/kdefrontend/ui/labelwidget.ui:706 src/kdefrontend/ui/labelwidget.ui:722
 #: src/kdefrontend/ui/labelwidget.ui:738 src/kdefrontend/ui/symbolwidget.ui:293
 #: src/kdefrontend/ui/symbolwidget.ui:309
-#, fuzzy, kde-format
-#| msgid "Binomial random numbers"
+#, kde-format
 msgid "Spinbox for numbers."
-msgstr "Números aleatórios binomiais"
+msgstr "Campo incremental para números."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -18953,17 +18943,15 @@ msgstr "Incr. monótono de X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:680
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "Erro"
+msgstr "Erro em Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:710
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "Erro"
+msgstr "Erro em X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -20100,32 +20088,27 @@ msgstr "Visibilidade da sub-janela:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Termos:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
-"<html><head/><body><p>As distribuições de números são aleatórias de acordo "
-"com a <a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">documentação "
-"do GSL</span></a></p></body></html>"
+"<html><head/><body><p>Usar termos compatíveis com o <a href=\"http://www."
+"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">Guia da Expressão de Incertezas "
+"em Medidas (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:264
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "Compatível com o GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -20743,10 +20726,9 @@ msgid "Polar (x, y(rad))"
 msgstr "Polar (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "Logarítmico (ln(x), y)"
+msgstr "Logarítmico (ln(x), ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -20759,22 +20741,19 @@ msgid "Logarithmic (x, ln(y))"
 msgstr "Logarítmico (x, ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "Logarítmico (ln(x), y)"
+msgstr "Logarítmico (log(x), log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logarítmico (ln(x), y)"
+msgstr "Logarítmico (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic (x, ln(y))"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logarítmico (x, ln(y))"
+msgstr "Logarítmico (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
@@ -21367,71 +21346,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "%1: set vertical line style"
-#~ msgstr "%1: mudar o estilo da linha vertical"
-
-#~ msgid "%1: set vertical line opacity"
-#~ msgstr "%1: mudar a opacidade da linha vertical"
-
-#~ msgid "%1: set connection line style"
-#~ msgstr "%1: mudar o estilo da linha de ligação"
-
-#~ msgid "%1: set connection line opacity"
-#~ msgstr "%1: mudar a opacidade da linha de ligação"
-
-#~ msgid "Error bars"
-#~ msgstr "Barras de erros"
-
-#~ msgid "Error type:"
-#~ msgstr "Tipo do erro:"
-
-#~ msgid "y-error"
-#~ msgstr "Erro em Y"
-
-#~ msgid "x-error"
-#~ msgstr "Erro em X"
-
-#~ msgid "%1: set major ticks style"
-#~ msgstr "%1: mudar o estilo dos traços maiores"
-
-#~ msgid "%1: set major ticks opacity"
-#~ msgstr "%1: mudar a opacidade dos traços maiores"
-
-#~ msgid "%1: set minor ticks style"
-#~ msgstr "%1: mudar o estilo dos traços menores"
-
-#~ msgid "%1: set minor ticks opacity"
-#~ msgstr "%1: mudar a opacidade dos traços menores"
-
-#~ msgid "%1: set line style"
-#~ msgstr "%1: mudar o estilo da linha"
-
-#~ msgid "%1: set plot area border"
-#~ msgstr "%1: mudar o contorno da área do gráfico"
-
-#~ msgid "%1: set plot area border opacity"
-#~ msgstr "%1: mudar a opacidade do contorno da área do gráfico"
-
-#~ msgid ""
-#~ "The axes lower limit has a non-positive value. Default minimal value will "
-#~ "be used."
-#~ msgstr ""
-#~ "O limite inferior dos eixos tem um valor não-positivo. Será usado o valor "
-#~ "mínimo por omissão."
-
-#~ msgid "Wrong lower limit value"
-#~ msgstr "Valor-limite inferior inválido"
-
-#~ msgid ""
-#~ "The axes lower limit has a negative value. Default minimal value will be "
-#~ "used."
-#~ msgstr ""
-#~ "O limite inferior dos eixos tem um valor negativo. Será usado o valor "
-#~ "mínimo por omissão."
-
-#~ msgid "spacing between major ticks"
-#~ msgstr "espaço entre os traços maiores"
-
-#~ msgid "cm"
-#~ msgstr "cm"

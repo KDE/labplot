@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-10-18 07:48+0200\n"
+"PO-Revision-Date: 2022-11-14 15:06+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2303,10 +2303,9 @@ msgid "Standard Mathematical Functions"
 msgstr "Funzioni matematiche standard"
 
 #: src/backend/gsl/ExpressionParser.cpp:43
-#, fuzzy, kde-format
-#| msgid "Column Statisti&cs"
+#, kde-format
 msgid "Column Statistics"
-msgstr "Statisti&che sulle colonne"
+msgstr "Statistiche sulle colonne"
 
 #: src/backend/gsl/ExpressionParser.cpp:44
 #, fuzzy, kde-format
@@ -2855,10 +2854,9 @@ msgid "Percentile"
 msgstr "Percentile"
 
 #: src/backend/gsl/ExpressionParser.cpp:194
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Moving Average"
-msgstr "media mobile"
+msgstr "Media mobile"
 
 #: src/backend/gsl/ExpressionParser.cpp:195
 #, fuzzy, kde-format
@@ -2879,10 +2877,9 @@ msgid "Simple Moving Maximum"
 msgstr "media mobile"
 
 #: src/backend/gsl/ExpressionParser.cpp:198
-#, fuzzy, kde-format
-#| msgid "sliding average"
+#, kde-format
 msgid "Simple Moving Average"
-msgstr "media mobile"
+msgstr "Media mobile semplice"
 
 #: src/backend/gsl/ExpressionParser.cpp:199
 #, fuzzy, kde-format
@@ -9329,10 +9326,9 @@ msgid "(x-Median)/IQR"
 msgstr "Mediana"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:396
-#, fuzzy, kde-format
-#| msgid "Interval [a, b]:"
+#, kde-format
 msgid "Rescale to [a, b]"
-msgstr "Intervallo [a, b]:"
+msgstr "Ridimensiona a [a, b]:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:426
 #, kde-format
@@ -9728,24 +9724,22 @@ msgstr "Tolleranza massima:"
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:58
 #, kde-format
 msgid "The value does not represent a valid number"
-msgstr ""
+msgstr "Il valore non rappresenta un numero valido"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:60
-#, fuzzy, kde-format
-#| msgid "Random number generator"
+#, kde-format
 msgid "No number entered"
-msgstr "Generatore di numeri casuali"
+msgstr "Nessun numero inserito"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:64
 #, kde-format
 msgid "Unhandled error"
-msgstr ""
+msgstr "Errore non gestito"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:407
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Invalid value entered. Valid value: %1"
-msgstr "Valore numerico non valido."
+msgstr "Valore inserito non valido. Valore valido: %1"
 
 #: src/commonfrontend/widgets/TreeViewComboBox.cpp:56
 #, kde-format
@@ -14340,7 +14334,7 @@ msgstr "Client MQTT %1"
 #: src/kdefrontend/MainWin.cpp:2641
 #, kde-format
 msgid "There already is a MQTTClient with this host!"
-msgstr ""
+msgstr "C'è già un MQTTClient con questo host."
 
 #: src/kdefrontend/MainWin.cpp:2645
 #, kde-format
@@ -16112,10 +16106,9 @@ msgstr "Dimensione:"
 #: src/kdefrontend/ui/labelwidget.ui:706 src/kdefrontend/ui/labelwidget.ui:722
 #: src/kdefrontend/ui/labelwidget.ui:738 src/kdefrontend/ui/symbolwidget.ui:293
 #: src/kdefrontend/ui/symbolwidget.ui:309
-#, fuzzy, kde-format
-#| msgid "Binomial random numbers"
+#, kde-format
 msgid "Spinbox for numbers."
-msgstr "Numeri casuali binomiali"
+msgstr "Casella numerica per i numeri."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
@@ -20718,10 +20711,9 @@ msgid "Polar (x, y(rad))"
 msgstr "Polare (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "Logaritmico (ln(x), y)"
+msgstr "Logaritmico (ln(x), ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -20734,22 +20726,19 @@ msgid "Logarithmic (x, ln(y))"
 msgstr "Logaritmico (x, ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "Logaritmico (ln(x), y)"
+msgstr "Logaritmico (log(x), log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logaritmico (ln(x), y)"
+msgstr "Logaritmico (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic (x, ln(y))"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logaritmico (x, ln(y))"
+msgstr "Logaritmico (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format

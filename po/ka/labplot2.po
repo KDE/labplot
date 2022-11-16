@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-13 07:23+0100\n"
+"PO-Revision-Date: 2022-11-15 07:06+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -5246,7 +5246,7 @@ msgstr ""
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
 msgid "circular"
-msgstr ""
+msgstr "წრიული"
 
 #: src/backend/nsl/nsl_conv.c:21
 #, kde-format
@@ -5268,7 +5268,7 @@ msgstr "FFT"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:283
 #, kde-format
 msgid "none"
-msgstr ""
+msgstr "არა"
 
 #: src/backend/nsl/nsl_conv.c:22
 #, kde-format
@@ -11987,17 +11987,15 @@ msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "გაურკვევლობა"
+msgstr "გაურკვევლობის ზოლები"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "გაურკვევლობა"
+msgstr "X გაურკვევლობა"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12054,7 +12052,7 @@ msgstr "რაოდენობა"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
 #, kde-format
 msgid "Probability"
-msgstr ""
+msgstr "ალბათობა"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
 #, kde-format
@@ -12067,10 +12065,9 @@ msgid "Probability Density"
 msgstr ""
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "გაურკვევლობა"
+msgstr "გაურკვევლობების გარეშე"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
@@ -12364,10 +12361,9 @@ msgid "Correlation status: %1"
 msgstr "კორელაციის სტატუსი: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "გაურკვევლობა"
+msgstr "Y გაურკვევლობა"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -18557,17 +18553,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:680
-#, fuzzy, kde-format
-#| msgid "No Error"
+#, kde-format
 msgid "Y Error"
-msgstr "შეცდომის გარეშე"
+msgstr "Y შეცდომა"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:710
-#, fuzzy, kde-format
-#| msgid "No Error"
+#, kde-format
 msgid "X Error"
-msgstr "შეცდომის გარეშე"
+msgstr "X შეცდომა"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -20335,16 +20329,14 @@ msgid "Logarithmic (log(x), log(y))"
 msgstr ""
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "ლოგარითმული"
+msgstr "ლოგარითმული (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "ლოგარითმული"
+msgstr "ლოგარითმული (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
