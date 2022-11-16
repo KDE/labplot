@@ -135,8 +135,8 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.twLabels->setEnabled(sameMode);
 	ui.frameLabels->setEnabled(sameMode);
 
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	// show the properties of the first column
 	updateTypeWidgets(m_column->columnMode());

@@ -240,8 +240,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 	const LiveDataSource::SourceType sourceType = source->sourceType();
 	const LiveDataSource::ReadingType readingType = source->readingType();
 	const LiveDataSource::UpdateType updateType = source->updateType();
@@ -376,8 +376,8 @@ void LiveDataDock::nameChanged(const QString& name) {
 		}
 	}
 #endif
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 }
 
 /*!

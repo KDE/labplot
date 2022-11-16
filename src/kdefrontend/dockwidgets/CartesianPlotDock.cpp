@@ -395,8 +395,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	symmetricPaddingChanged(m_plot->symmetricPadding());
 
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	// show the properties of the first plot
 	this->load();

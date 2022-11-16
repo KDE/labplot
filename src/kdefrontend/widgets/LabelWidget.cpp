@@ -315,8 +315,8 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 			ui.leName->setText(QString());
 			ui.teComment->setText(QString());
 		}
-		ui.leName->setStyleSheet(QStringLiteral(""));
-		ui.leName->setToolTip(QStringLiteral(""));
+		ui.leName->setStyleSheet(QString());
+		ui.leName->setToolTip(QString());
 	}
 
 	this->load();

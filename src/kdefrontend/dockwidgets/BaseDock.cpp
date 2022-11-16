@@ -150,8 +150,8 @@ void BaseDock::nameChanged() {
 		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
 	} else {
-		m_leName->setStyleSheet(QStringLiteral(""));
-		m_leName->setToolTip(QStringLiteral(""));
+		m_leName->setStyleSheet(QString());
+		m_leName->setToolTip(QString());
 	}
 }
 

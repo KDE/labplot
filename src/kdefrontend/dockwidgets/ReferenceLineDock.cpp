@@ -68,8 +68,8 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		ui.leName->setText(QString());
 		ui.teComment->setText(QString());
 	}
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	// show the properties of the first reference line
 	this->load();

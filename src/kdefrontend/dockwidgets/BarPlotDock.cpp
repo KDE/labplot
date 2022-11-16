@@ -155,8 +155,8 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 		ui.lDataColumn->setEnabled(false);
 	}
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	// backgrounds
 	QList<Background*> backgrounds;

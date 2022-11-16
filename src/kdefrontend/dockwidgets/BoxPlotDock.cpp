@@ -198,8 +198,8 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 		ui.lDataColumn->setEnabled(false);
 	}
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	QList<Background*> backgrounds;
 	QList<Line*> borderLines;

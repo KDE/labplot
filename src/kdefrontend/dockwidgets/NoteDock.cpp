@@ -44,8 +44,8 @@ void NoteDock::setNotesList(QList<Note*> list) {
 
 	m_initializing = true;
 	ui.leName->setText(m_notes->name());
-	ui.leName->setStyleSheet(QStringLiteral(""));
-	ui.leName->setToolTip(QStringLiteral(""));
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
