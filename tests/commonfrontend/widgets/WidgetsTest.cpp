@@ -701,11 +701,11 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 		valueChangedCounter++;
 	});
 
-	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+	QCOMPARE(sb.toolTip(), QString());
 	sb.lineEdit()->setCursorPosition(1);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_1, Qt::KeyboardModifier::NoModifier, QStringLiteral("1"));
 	sb.keyPressEvent(&event);
-	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+	QCOMPARE(sb.toolTip(), QString());
 	QCOMPARE(sb.value(), 51);
 	QCOMPARE(valueChangedCounter, 1);
 
@@ -717,7 +717,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(valueChangedCounter, 1);
 
 	// 51
-	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QStringLiteral(""));
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QString());
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
@@ -725,7 +725,7 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(valueChangedCounter, 1);
 
 	// 5
-	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QStringLiteral(""));
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QString());
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoError));
@@ -733,10 +733,10 @@ void WidgetsTest::numberSpinBoxEnterNumber() {
 	QCOMPARE(valueChangedCounter, 2);
 
 	// nothing
-	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QStringLiteral(""));
+	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Backspace, Qt::KeyboardModifier::NoModifier, QString());
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 0);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral(""));
+	QCOMPARE(sb.lineEdit()->text(), QString());
 	QCOMPARE(sb.toolTip(), sb.errorToString(NumberSpinBox::Errors::NoNumber));
 	QCOMPARE(sb.value(), 5);
 	QCOMPARE(valueChangedCounter, 2);
@@ -977,13 +977,13 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+	QCOMPARE(sb.toolTip(), QString());
 
 	sb.keyPressEvent(&event);
 	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1);
 	QCOMPARE(valueChangedCounter, 1);
-	QCOMPARE(sb.toolTip(), QStringLiteral(""));
+	QCOMPARE(sb.toolTip(), QString());
 }
 
 QTEST_MAIN(WidgetsTest)

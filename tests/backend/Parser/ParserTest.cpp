@@ -75,7 +75,7 @@ void ParserTest::testBasics() {
 void ParserTest::testErrors() {
 	gsl_set_error_handler_off(); // do not crash
 
-	const QVector<QString> testsNan{QStringLiteral(""),
+	const QVector<QString> testsNan{QString(),
 									QStringLiteral("a"),
 									QStringLiteral("1+"),
 									QStringLiteral("a+1"),

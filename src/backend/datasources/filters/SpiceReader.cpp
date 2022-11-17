@@ -19,7 +19,7 @@ void SpiceFileReader::init() {
 	bool ok;
 
 	mInitialized = true;
-	mInfoString = QStringLiteral("");
+	mInfoString = QString();
 
 	if (!mFile.isOpen() && !open())
 		return;

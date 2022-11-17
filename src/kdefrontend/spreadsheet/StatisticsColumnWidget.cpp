@@ -296,7 +296,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	yColumn->replaceValues(0, yData);
 
 	// add KDE curve
-	auto* curve = new XYCurve(QStringLiteral(""));
+	auto* curve = new XYCurve(QString());
 	curve->setSuppressRetransform(false);
 	plot->addChild(curve);
 	QPen pen = curve->line()->pen();
@@ -354,7 +354,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	xColumn->replaceValues(0, xData);
 
 	// add curve with the quantiles
-	auto* curve = new XYCurve(QStringLiteral(""));
+	auto* curve = new XYCurve(QString());
 	curve->setSuppressRetransform(true);
 	plot->addChild(curve);
 	curve->line()->setPen(Qt::NoPen);

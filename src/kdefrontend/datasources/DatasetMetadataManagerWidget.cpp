@@ -529,7 +529,7 @@ void DatasetMetadataManagerWidget::addColumnDescription() {
 		m_columnDescriptions[layoutIndex - 1] = text;
 	});
 
-	m_columnDescriptions.append(QStringLiteral(""));
+	m_columnDescriptions.append(QString());
 }
 
 /**

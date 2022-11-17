@@ -218,7 +218,7 @@ void XYAnalysisCurve::setXDataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::xDataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setXDataColumnPath(QStringLiteral(""));
+			setXDataColumnPath(QString());
 	}
 }
 
@@ -236,7 +236,7 @@ void XYAnalysisCurve::setYDataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::yDataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setYDataColumnPath(QStringLiteral(""));
+			setYDataColumnPath(QString());
 	}
 }
 
@@ -254,7 +254,7 @@ void XYAnalysisCurve::setY2DataColumn(const AbstractColumn* column) {
 			connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYAnalysisCurve::y2DataColumnNameChanged);
 			// TODO disconnect on undo
 		} else
-			setY2DataColumnPath(QStringLiteral(""));
+			setY2DataColumnPath(QString());
 	}
 }
 
