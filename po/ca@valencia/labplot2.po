@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-15 00:42+0000\n"
+"POT-Creation-Date: 2022-11-17 00:41+0000\n"
 "PO-Revision-Date: 2022-11-15 17:09+0100\n"
 "Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -369,7 +369,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: elimina 1 fila"
 msgstr[1] "%1: elimina %2 files"
 
-#: src/backend/core/AbstractColumn.cpp:836
+#: src/backend/core/AbstractColumn.cpp:838
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "falta la fila de començament o final, o no és vàlida"

@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-15 09:49+0100\n"
+"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"PO-Revision-Date: 2022-11-16 10:57+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
-"%100<=4 ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Generator: Poedit 3.1.1\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -369,7 +369,7 @@ msgstr[1] "%1: odstrani %2 vrstico"
 msgstr[2] "%1: odstrani %2 vrstici"
 msgstr[3] "%1: odstrani %2 vrstice"
 
-#: src/backend/core/AbstractColumn.cpp:836
+#: src/backend/core/AbstractColumn.cpp:838
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "neveljavna ali manjkajoča začetna ali končna vrstica"
@@ -12269,17 +12269,15 @@ msgstr "%1 točk po meri: predloga »%2« naložena"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "Negotovost"
+msgstr "Črte negotovosti"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Negotovost"
+msgstr "Negotovost X"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12349,10 +12347,9 @@ msgid "Probability Density"
 msgstr "Gostota verjetnosti"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "Negotovost"
+msgstr "Ni negotovosti"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
@@ -12361,16 +12358,14 @@ msgid "Poisson variance, sqrt(N)"
 msgstr "Poissonova varianca, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, symmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr "Vrednosti napake po meri, simetrične"
+msgstr "Vrednosti negotovosti po meri, simetrične"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, asymmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr "Vrednosti napake po meri, asimetrične"
+msgstr "Vrednosti negotovosti po meri, asimetrične"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -12654,10 +12649,9 @@ msgid "Correlation status: %1"
 msgstr "Stanje korelacije: %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Negotovost"
+msgstr "Negotovost Y"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -18907,17 +18901,15 @@ msgstr "Monoton incr. X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:680
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "Napaka"
+msgstr "Napaka Y"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:710
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "Napaka"
+msgstr "Napaka X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -20056,32 +20048,27 @@ msgstr "Vidnost podokna:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Termini:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
-"<html><head/><body><p>Porazdelitve naključnih števil, kot je opredeljeno v "
-"<a href=\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span "
-"style=\" text-decoration: underline; color:#2980b9;\">dokumentaciji GSL</"
-"span></a></p></body></html>"
+"<html><head/><body><p>Uporabi termine, ki so v skladu z <a href=\"http://www."
+"bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" "
+"text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:264
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "V skladu z GUM"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-15 00:42+0000\n"
-"PO-Revision-Date: 2022-11-13 20:06+0100\n"
+"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"PO-Revision-Date: 2022-11-15 18:03+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
 "Language: fr\n"
@@ -377,7 +377,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1 : supprimer une ligne"
 msgstr[1] "%1 : supprimer %2 lignes"
 
-#: src/backend/core/AbstractColumn.cpp:836
+#: src/backend/core/AbstractColumn.cpp:838
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "Dernière ligne non valable ou manquante"
@@ -20776,10 +20776,9 @@ msgid "Polar (x, y(rad))"
 msgstr "Polaire (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "Logarithmique (ln(x), y)"
+msgstr "Logarithmique (ln(x), ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -20792,22 +20791,19 @@ msgid "Logarithmic (x, ln(y))"
 msgstr "Logarithmique (x, ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "Logarithmique (ln(x), y)"
+msgstr "Logarithmique (log (x), log (y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logarithmique (ln(x), y)"
+msgstr "Logarithmique (log (x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic (x, ln(y))"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logarithmique (x, ln(y))"
+msgstr "Logarithmique (x, log (y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format

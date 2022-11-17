@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-15 00:42+0000\n"
+"POT-Creation-Date: 2022-11-17 00:41+0000\n"
 "PO-Revision-Date: 2014-03-19 20:12+0100\n"
 "Last-Translator: Manfred Wiese <m.j.wiese@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -358,7 +358,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/backend/core/AbstractColumn.cpp:836
+#: src/backend/core/AbstractColumn.cpp:838
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr ""

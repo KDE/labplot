@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-15 00:42+0000\n"
+"POT-Creation-Date: 2022-11-17 00:41+0000\n"
 "PO-Revision-Date: 2022-01-11 19:17+0100\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -363,7 +363,7 @@ msgstr[0] "%1: odstranit 1 řádek"
 msgstr[1] "%1: odstranit %2 řádky"
 msgstr[2] "%1: odstranit %2 řádků"
 
-#: src/backend/core/AbstractColumn.cpp:836
+#: src/backend/core/AbstractColumn.cpp:838
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr ""
