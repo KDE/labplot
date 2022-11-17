@@ -536,7 +536,8 @@ void BarPlotPrivate::recalc() {
 		}
 	}
 
-	// determine min and max values for x- and y-ranges
+	// determine min and max values for x- and y-ranges.
+	// the first group is placed between 0 and 1, the second one between 1 and 2, etc.
 	if (orientation == BarPlot::Orientation::Vertical) {
 		// min/max for x
 		if (xColumn) {
@@ -544,7 +545,7 @@ void BarPlotPrivate::recalc() {
 			xMax = xColumn->maximum() + 0.5;
 		} else {
 			xMin = 0.0;
-			xMax = barGroupsCount + 1.0;
+			xMax = barGroupsCount;
 		}
 
 		// min/max for y
@@ -611,11 +612,11 @@ void BarPlotPrivate::recalc() {
 
 		// min/max for y
 		if (xColumn) {
-			yMin = xColumn->minimum() - 1.0;
-			yMax = xColumn->maximum() + 1.0;
+			yMin = xColumn->minimum() - 0.5;
+			yMax = xColumn->maximum() + 0.5;
 		} else {
 			yMin = 0.0;
-			yMax = barGroupsCount + 1.0;
+			yMax = barGroupsCount;
 		}
 	}
 
@@ -624,7 +625,7 @@ void BarPlotPrivate::recalc() {
 	if (xColumn && newSize != 0)
 		m_groupWidth = (xColumn->maximum() - xColumn->minimum()) / newSize;
 
-	m_groupGap = m_groupWidth * 0.15 * widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
+	m_groupGap = m_groupWidth * 0.1 * widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
 	// the size of the bar plots changed because of the actual
 	// data changes or because of new bar plot settings.
@@ -657,9 +658,9 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
+				x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
-			x += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
+			x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 			lines.clear();
 			lines << QLineF(x, value, x + width, value);
@@ -691,13 +692,10 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
 			double x;
-
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
-
-			x += -0.5 * widthFactor + m_groupGap;
+				x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -736,9 +734,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = valueIndex + m_groupWidth;
-
-			x += -0.5 * widthFactor + m_groupGap;
+				x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -779,13 +775,12 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 			const double value = column->valueAt(i);
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
+				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
-			y += -m_groupWidth * 0.5 * widthFactor + m_groupGap + (width + barGap) * columnIndex;
+			y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
 			lines.clear();
 			lines << QLineF(value, y, value, y + width);
@@ -817,13 +812,10 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 				offset = m_stackedBarNegativeOffsets.at(valueIndex);
 
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
-
-			y += -0.5 * widthFactor + m_groupGap;
+				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -858,13 +850,10 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			double offset = m_stackedBarPositiveOffsets.at(valueIndex);
 
 			double y;
-
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = valueIndex + m_groupWidth;
-
-			y += -0.5 * widthFactor + m_groupGap;
+				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
