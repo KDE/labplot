@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"POT-Creation-Date: 2022-11-18 00:41+0000\n"
 "PO-Revision-Date: 2022-11-15 12:09+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -64,7 +64,7 @@ msgstr "Kon paneelplugins niet vinden. Controleer uw installatie."
 #: src/backend/worksheet/InfoElement.cpp:1159
 #: src/backend/worksheet/Line.cpp:202
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2881
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1384
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4615
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
@@ -110,7 +110,7 @@ msgstr "Attribuut '%1' ontbreekt of is leeg, standaard waarde gebruikt"
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3010
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1442
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:451
@@ -15262,42 +15262,42 @@ msgstr "Plotgebied %1"
 msgid "Fourier Filter of '%1'"
 msgstr "Fourier filteren van '%1'"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "nieuwe plot in een bestaand werkblad"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "nieuwe plot in een nieuw werkblad"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "nieuwe plots in een bestaand werkblad"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "nieuwe plots in een nieuw werkblad"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Geen te plotten gegevens geselecteerd."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Een reeds bestaande plot moet worden geselecteerd."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Een reeds bestaand werkblad moet worden geselecteerd."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Sluit de dialoog af, en plot de gegevens."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"POT-Creation-Date: 2022-11-18 00:41+0000\n"
 "PO-Revision-Date: 2022-11-16 10:57+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -68,7 +68,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/InfoElement.cpp:1159
 #: src/backend/worksheet/Line.cpp:202
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2881
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1384
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4615
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
@@ -114,7 +114,7 @@ msgstr "Atribut »%1« manjka ali je prazen, uporabljena je privzeta vrednost"
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3010
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1442
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:451
@@ -15321,42 +15321,42 @@ msgstr "Območje izrisa %1"
 msgid "Fourier Filter of '%1'"
 msgstr "Fourierjev filter »%1«"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "nov izris na obstoječem delovnem listu"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "nov izris na novem delovnem listu"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "nov izris na obstoječem delovnem listu"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "novi izrisi na novem delovnem listu"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
 #, kde-format
 msgid "No data selected to plot."
 msgstr "Za izris ni izbranih nobenih podatkov."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Izbrati je treba obstoječi izris."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Izbrati je treba obstoječi delovni list."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "Zapre pogovorno okno in izriše podatke."

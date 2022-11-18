@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"POT-Creation-Date: 2022-11-18 00:41+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -64,7 +64,7 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1159
 #: src/backend/worksheet/Line.cpp:202
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2881
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1384
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4615
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
@@ -112,7 +112,7 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3010
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1442
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:451
@@ -16307,47 +16307,47 @@ msgstr "Prostor za Crtanje"
 msgid "Fourier Filter of '%1'"
 msgstr "novi filter"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in an existing worksheet"
 msgstr "Kreiraj novi projekat sa radnim listom"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plot in a new worksheet"
 msgstr "Kreiraj novi projekat sa radnim listom"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in an existing worksheet"
 msgstr "Kreiraj novi projekat sa radnim listom"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
 #, fuzzy, kde-format
 #| msgid "Create new project with worksheet"
 msgid "new plots in a new worksheet"
 msgstr "Kreiraj novi projekat sa radnim listom"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data selected to plot."
 msgstr "&Normalizuj Selektovano"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr ""
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr ""

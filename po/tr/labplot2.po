@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-17 00:41+0000\n"
+"POT-Creation-Date: 2022-11-18 00:41+0000\n"
 "PO-Revision-Date: 2022-11-15 05:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -64,7 +64,7 @@ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 #: src/backend/worksheet/InfoElement.cpp:1159
 #: src/backend/worksheet/Line.cpp:202
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2881
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1384
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4615
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
@@ -110,7 +110,7 @@ msgstr "'%1' özniteliği eksik veya boş, öntanımlı değer kullanılacak"
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3010
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1442
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:451
@@ -15872,43 +15872,43 @@ msgstr "Çizim Alanı"
 msgid "Fourier Filter of '%1'"
 msgstr "'%1'in Fourier Filtresi"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:905
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
 #, kde-format
 msgid "new plot in an existing worksheet"
 msgstr "varolan bir çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:906
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:907
 #, kde-format
 msgid "new plot in a new worksheet"
 msgstr "yeni çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:911
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
 #, kde-format
 msgid "new plots in an existing worksheet"
 msgstr "var olan çalışma sayfasındaki yeni çizim"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:912
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:913
 #, kde-format
 msgid "new plots in a new worksheet"
 msgstr "yeni çalışma sayfasındaki yeni çizimler"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:936
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:937
 #, fuzzy, kde-format
 #| msgid "No data set selected"
 msgid "No data selected to plot."
 msgstr "Hiç veri kümesi seçilmedi"
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:941
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:942
 #, kde-format
 msgid "An already existing plot has to be selected."
 msgstr "Zaten var olan çizim seçilmeli."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:946
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:947
 #, kde-format
 msgid "An already existing worksheet has to be selected."
 msgstr "Zaten var olan çalışma dosyası seçilmeli."
 
-#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:952
+#: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:953
 #, kde-format
 msgid "Close the dialog and plot the data."
 msgstr "İletişim penceresini kapat ve veriyi çiz."
