@@ -59,9 +59,15 @@ void LiveDataWriteFileTest::testRefresh() {
 	});
 
 	qint64 startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-	while (counter < 100) {
-		QVERIFY(QDateTime::currentDateTime().toMSecsSinceEpoch() - startTime < (100 * SLEEP_TIME_MS) * 1.1); // timeout
+    bool timeout = false;
+    while (counter < 100 && !timeout) {
+        const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+        timeout = (currTime - startTime) > (100 * SLEEP_TIME_MS) * 1.1;
 	}
+
+    process.terminate();
+    QVERIFY(process.waitForFinished());
+    QCOMPARE(timeout, false);
 }
 
 QTEST_MAIN(LiveDataWriteFileTest)
