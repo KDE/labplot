@@ -14,6 +14,7 @@ add_subdirectory(spreadsheet)
 add_subdirectory(matrix)
 add_subdirectory(multirange)
 add_subdirectory(commonfrontend)
+add_subdirectory(livedata)
 
 IF (Cantor_FOUND)
 	add_subdirectory(notebook)

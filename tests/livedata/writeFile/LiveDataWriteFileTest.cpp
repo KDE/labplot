@@ -45,6 +45,7 @@ void LiveDataWriteFileTest::testRefresh() {
 	// dataSource->setUpdateInterval(1000); // Not relevant
 	dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
 	dataSource->setReadingType(LiveDataSource::ReadingType::WholeFile);
+	dataSource->setFileName(QStringLiteral(EXPORT_FILE));
 
 	qint64 lastUpdate = 0;
 	int counter = 0;
