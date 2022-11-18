@@ -129,7 +129,7 @@ LiveDataSource::SourceType ImportFileDialog::sourceType() const {
 */
 void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
 	DEBUG(Q_FUNC_INFO);
-	m_importFileWidget->saveSettings(source);
+	m_importFileWidget->applySettings(source);
 
 	// show a progress bar in the status bar
 	auto* progressBar = new QProgressBar();

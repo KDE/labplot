@@ -563,7 +563,7 @@ int ImportFileWidget::baudRate() const {
 /*!
 	saves the settings to the data source \c source.
 */
-void ImportFileWidget::saveSettings(LiveDataSource* source) const {
+void ImportFileWidget::applySettings(LiveDataSource* source) const {
 	auto fileType = currentFileType();
 	auto updateType = static_cast<LiveDataSource::UpdateType>(ui.cbUpdateType->currentIndex());
 	auto sourceType = currentSourceType();

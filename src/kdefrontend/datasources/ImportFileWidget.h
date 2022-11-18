@@ -52,7 +52,7 @@ public:
 	~ImportFileWidget() override;
 
 	void showOptions(bool);
-	void saveSettings(LiveDataSource*) const;
+	void applySettings(LiveDataSource*) const;
 	void loadSettings();
 	AbstractFileFilter::FileType currentFileType() const;
 	LiveDataSource::SourceType currentSourceType() const;

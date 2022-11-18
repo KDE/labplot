@@ -178,6 +178,9 @@ public Q_SLOTS:
 	void read();
 	void readOnUpdate();
 
+Q_SIGNALS:
+	void readOnUpdateCalled(bool paused);
+
 private Q_SLOTS:
 	void plotData();
 	void readyRead();

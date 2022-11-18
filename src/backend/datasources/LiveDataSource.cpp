@@ -449,6 +449,7 @@ QMenu* LiveDataSource::createContextMenu() {
  * presumably has finished. Also see LiveDataSource::setUpdateType().
  */
 void LiveDataSource::readOnUpdate() {
+	emit readOnUpdateCalled(m_paused);
 	if (!m_fileSystemWatcher->files().contains(m_fileName)) {
 		m_fileSystemWatcher->addPath(m_fileName);
 		QFileInfo file(m_fileName);
