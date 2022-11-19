@@ -877,7 +877,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
-	d->borderLine->save(writer);;
+	d->borderLine->save(writer);
 	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
