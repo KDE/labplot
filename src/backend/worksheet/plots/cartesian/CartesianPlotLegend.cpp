@@ -103,11 +103,20 @@ void CartesianPlotLegend::init() {
 	});
 
 	// Border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-						group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setCreateXmlElement(false);
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
+
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
-	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	// Layout
 	d->layoutTopMargin = group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
@@ -188,9 +197,12 @@ Background* CartesianPlotLegend::background() const {
 }
 
 // Border
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QPen, borderPen, borderPen)
+Line* CartesianPlotLegend::borderLine() const {
+	Q_D(const CartesianPlotLegend);
+	return d->borderLine;
+}
+
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderCornerRadius, borderCornerRadius)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, borderOpacity, borderOpacity)
 
 // Layout
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, layoutTopMargin, layoutTopMargin)
@@ -233,25 +245,11 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 }
 
 // Border
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderPen, QPen, borderPen, update)
-void CartesianPlotLegend::setBorderPen(const QPen& pen) {
-	Q_D(CartesianPlotLegend);
-	if (pen != d->borderPen)
-		exec(new CartesianPlotLegendSetBorderPenCmd(d, pen, ki18n("%1: set border style")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderCornerRadius, qreal, borderCornerRadius, update)
 void CartesianPlotLegend::setBorderCornerRadius(float radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
 		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetBorderOpacity, qreal, borderOpacity, update)
-void CartesianPlotLegend::setBorderOpacity(float opacity) {
-	Q_D(CartesianPlotLegend);
-	if (opacity != d->borderOpacity)
-		exec(new CartesianPlotLegendSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
 // Layout
@@ -591,10 +589,10 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	// draw the border
-	if (borderPen.style() != Qt::NoPen) {
-		painter->setPen(borderPen);
+	if (borderLine->style() != Qt::NoPen) {
+		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderOpacity);
+		painter->setOpacity(borderLine->opacity());
 		if (qFuzzyIsNull(borderCornerRadius))
 			painter->drawRect(rect);
 		else
@@ -879,8 +877,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	// border
 	writer->writeStartElement(QStringLiteral("border"));
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
+	d->borderLine->save(writer);;
 	writer->writeAttribute(QStringLiteral("borderCornerRadius"), QString::number(d->borderCornerRadius));
 	writer->writeEndElement();
 
@@ -979,9 +976,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			d->background->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("border")) {
 			attribs = reader->attributes();
-			READ_QPEN(d->borderPen);
+			d->borderLine->load(reader, preview);
 			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else if (!preview && reader->name() == QLatin1String("layout")) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
@@ -1016,13 +1012,8 @@ void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
 	background()->loadThemeConfig(group);
 
 	// border
-	QPen pen;
-	pen.setColor(group.readEntry("BorderColor", QColor(Qt::black)));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)Qt::SolidLine)));
-	pen.setWidthF(group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setBorderPen(pen);
+	borderLine()->loadThemeConfig(group);
 	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
 
 	title()->loadThemeConfig(config);
 }

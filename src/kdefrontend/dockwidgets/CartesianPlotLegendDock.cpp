@@ -15,6 +15,7 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/BackgroundWidget.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/widgets/LineWidget.h"
 
 #include <KLocalizedString>
 
@@ -44,6 +45,9 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBackground->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBackground);
 	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
+
+	borderLineWidget = new LineWidget(ui.tabBackground);
+	gridLayout->addWidget(borderLineWidget, 3, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -80,11 +84,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::rotationChanged);
 
 	// Border
-	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::borderStyleChanged);
-	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotLegendDock::borderColorChanged);
-	connect(ui.sbBorderWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderWidthChanged);
 	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
-	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotLegendDock::borderOpacityChanged);
 
 	// Layout
 	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &CartesianPlotLegendDock::layoutTopMarginChanged);
@@ -189,12 +189,12 @@ void CartesianPlotLegendDock::updateLocale() {
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbPositionXLogical->setLocale(numberLocale);
 	ui.sbPositionYLogical->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
 	ui.sbBorderCornerRadius->setLocale(numberLocale);
 	ui.sbLayoutTopMargin->setLocale(numberLocale);
 	ui.sbLayoutBottomMargin->setLocale(numberLocale);
 	ui.sbLayoutLeftMargin->setLocale(numberLocale);
 	ui.sbLayoutRightMargin->setLocale(numberLocale);
+	borderLineWidget->updateLocale();
 }
 
 void CartesianPlotLegendDock::updateUnits() {
@@ -275,8 +275,6 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbVerticalAlignment->addItem(i18n("Top"));
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
-
-	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
 	QString suffix;
 	if (m_units == Units::Metric)
@@ -453,61 +451,12 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 }
 
 // "Border"-tab
-void CartesianPlotLegendDock::borderStyleChanged(int index) {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* legend : m_legendList) {
-		pen = legend->borderPen();
-		pen.setStyle(penStyle);
-		legend->setBorderPen(pen);
-	}
-}
-
-void CartesianPlotLegendDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* legend : m_legendList) {
-		pen = legend->borderPen();
-		pen.setColor(color);
-		legend->setBorderPen(pen);
-	}
-
-	const Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-}
-
-void CartesianPlotLegendDock::borderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* legend : m_legendList) {
-		pen = legend->borderPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		legend->setBorderPen(pen);
-	}
-}
-
 void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
 	if (m_initializing)
 		return;
 
 	for (auto* legend : m_legendList)
 		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-}
-
-void CartesianPlotLegendDock::borderOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	double opacity = (double)value / 100.;
-	for (auto* legend : m_legendList)
-		legend->setBorderOpacity(opacity);
 }
 
 // Layout
@@ -637,27 +586,9 @@ void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 }
 
 // Border
-void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
-	if (m_initializing)
-		return;
-
-	const Lock lock(m_initializing);
-	if (ui.cbBorderStyle->currentIndex() != pen.style())
-		ui.cbBorderStyle->setCurrentIndex(pen.style());
-	if (ui.kcbBorderColor->color() != pen.color())
-		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-
 void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
 	const Lock lock(m_initializing);
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-}
-
-void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
-	const Lock lock(m_initializing);
-	ui.sbBorderOpacity->setValue(qRound(opacity * 100.0));
 }
 
 // Layout
@@ -770,26 +701,22 @@ void CartesianPlotLegendDock::load() {
 
 	ui.chkVisible->setChecked(m_legend->isVisible());
 
-	// legend title
+	// legend title, background and border line
+	QList<Background*> backgrounds;
 	QList<TextLabel*> labels;
-	for (auto* legend : m_legendList)
-		labels.append(legend->title());
+	QList<Line*> borderLines;
+	for (auto* legend : m_legendList) {
+		labels << legend->title();
+		backgrounds << legend->background();
+		borderLines << legend->borderLine();
+	}
 
 	labelWidget->setLabels(labels);
-
-	// Background-tab
-	QList<Background*> backgrounds;
-	for (auto* legend : m_legendList)
-		backgrounds << legend->background();
-
 	backgroundWidget->setBackgrounds(backgrounds);
+	borderLineWidget->setLines(borderLines);
 
 	// Border
-	ui.kcbBorderColor->setColor(m_legend->borderPen().color());
-	ui.cbBorderStyle->setCurrentIndex((int)m_legend->borderPen().style());
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Unit::Point));
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), m_worksheetUnit));
-	ui.sbBorderOpacity->setValue(qRound(m_legend->borderOpacity() * 100.0));
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit));
@@ -800,9 +727,6 @@ void CartesianPlotLegendDock::load() {
 	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit));
 
 	ui.sbLayoutColumnCount->setValue(m_legend->layoutColumnCount());
-
-	const Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 }
 
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
@@ -859,11 +783,8 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Border
-	ui.kcbBorderColor->setColor(group.readEntry("BorderColor", m_legend->borderPen().color()));
-	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)m_legend->borderPen().style()));
-	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Unit::Point));
+	borderLineWidget->loadConfig(group);
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), m_worksheetUnit));
-	ui.sbBorderOpacity->setValue(qRound(group.readEntry("BorderOpacity", m_legend->borderOpacity()) * 100.0));
 
 	// Layout
 	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)));
@@ -879,9 +800,6 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	// Title
 	group = config.group("PlotLegend");
 	labelWidget->loadConfig(group);
-
-	const Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 }
 
 void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
@@ -909,11 +827,8 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	backgroundWidget->saveConfig(group);
 
 	// Border
-	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
-	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
+	borderLineWidget->saveConfig(group);
 	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
-	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value() / 100.0);
 
 	// Layout
 	group.writeEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));

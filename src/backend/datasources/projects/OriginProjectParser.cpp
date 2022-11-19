@@ -1247,9 +1247,9 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 				// border line
 				if (originLegend.borderType == Origin::BorderType::None)
-					legend->setBorderPen(QPen(Qt::NoPen));
+					legend->borderLine()->setStyle(Qt::NoPen);
 				else
-					legend->setBorderPen(QPen(Qt::SolidLine));
+					legend->borderLine()->setStyle(Qt::SolidLine);
 
 				// background color, determine it with the help of the border type
 				if (originLegend.borderType == Origin::BorderType::DarkMarble)
