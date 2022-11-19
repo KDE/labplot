@@ -41,11 +41,11 @@ void LiveDataWriteFileTest::testRefresh() {
 	filter->setSeparatingCharacter(QStringLiteral(","));
 
 	dataSource->setFilter(filter);
-	dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
 	// dataSource->setUpdateInterval(1000); // Not relevant
 	dataSource->setSourceType(LiveDataSource::SourceType::FileOrPipe);
 	dataSource->setReadingType(LiveDataSource::ReadingType::WholeFile);
 	dataSource->setFileName(QStringLiteral(EXPORT_FILE));
+	dataSource->setUpdateType(LiveDataSource::UpdateType::NewData);
 
 	qint64 lastUpdate = 0;
 	int counter = 0;
@@ -60,15 +60,16 @@ void LiveDataWriteFileTest::testRefresh() {
 	});
 
 	qint64 startTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-    bool timeout = false;
-    while (counter < 100 && !timeout) {
-        const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
-        timeout = (currTime - startTime) > (100 * SLEEP_TIME_MS) * 1.1;
+	bool timeout = false;
+	while (counter < 100 && !timeout) {
+		const qint64 currTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+		timeout = (currTime - startTime) > (100 * SLEEP_TIME_MS) * 1.1;
+		QApplication::processEvents();
 	}
 
-    process.terminate();
-    QVERIFY(process.waitForFinished());
-    QCOMPARE(timeout, false);
+	process.terminate();
+	QVERIFY(process.waitForFinished());
+	QCOMPARE(timeout, false);
 }
 
 QTEST_MAIN(LiveDataWriteFileTest)

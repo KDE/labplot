@@ -15,5 +15,5 @@ target_compile_definitions(LiveDataWriteFile PRIVATE EXPORT_FILE="${EXPORT_FILE}
 target_compile_definitions(LiveDataWriteFileTest PRIVATE
     LIVEDATAWRITEFILE_EXEC="${CMAKE_CURRENT_BINARY_DIR}/LiveDataWriteFile"
     SLEEP_TIME_MS=${SLEEP_TIME_MS}
-    EXPORT_FILE=${EXPORT_FILE}
+    EXPORT_FILE="${EXPORT_FILE}"
 )
