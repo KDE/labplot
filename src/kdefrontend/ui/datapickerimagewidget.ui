@@ -819,12 +819,28 @@
  <tabstops>
   <tabstop>leName</tabstop>
   <tabstop>teComment</tabstop>
+  <tabstop>leFileName</tabstop>
+  <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>
+  <tabstop>sbRotation</tabstop>
+  <tabstop>rbRefPoint1</tabstop>
+  <tabstop>rbRefPoint2</tabstop>
+  <tabstop>rbRefPoint3</tabstop>
+  <tabstop>sbPositionX1</tabstop>
+  <tabstop>sbPositionY1</tabstop>
+  <tabstop>sbPositionZ1</tabstop>
+  <tabstop>sbPositionX2</tabstop>
+  <tabstop>sbPositionY2</tabstop>
+  <tabstop>sbPositionZ2</tabstop>
+  <tabstop>sbPositionX3</tabstop>
+  <tabstop>sbPositionY3</tabstop>
+  <tabstop>sbPositionZ3</tabstop>
+  <tabstop>sbTernaryScale</tabstop>
   <tabstop>sbMinSegmentLength</tabstop>
   <tabstop>sbPointSeparation</tabstop>
-  <tabstop>chbSymbolVisible</tabstop>
   <tabstop>cbPlotImageType</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>chbSymbolVisible</tabstop>
  </tabstops>
  <resources/>
  <connections/>
