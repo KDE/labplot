@@ -1460,8 +1460,7 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	// box filling
 	for (int i = 0; i < d->backgrounds.count(); ++i) {
 		auto* background = d->backgrounds.at(i);
-		background->loadThemeConfig(group);
-		background->setFirstColor(plot->themeColorPalette(i));
+		background->loadThemeConfig(group, plot->themeColorPalette(i));
 	}
 
 	// box border lines

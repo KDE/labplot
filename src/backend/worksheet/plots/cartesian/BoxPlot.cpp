@@ -1926,8 +1926,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	d->borderLine->loadThemeConfig(group, themeColor);
 
 	// box filling
-	d->background->loadThemeConfig(group);
-	d->background->setFirstColor(themeColor);
+	d->background->loadThemeConfig(group, themeColor);
 
 	// median line
 	d->medianLine->loadThemeConfig(group, themeColor);

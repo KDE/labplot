@@ -172,7 +172,6 @@ void LineWidget::updateLocale() {
 //******** SLOTs for changes triggered in LineWidget **********
 //*************************************************************
 void LineWidget::typeChanged(int index) {
-	Lock lock(m_initializing);
 	bool enabled = true;
 	if (m_line->histogramLineTypeAvailable()) {
 		const auto type = Histogram::LineType(index);
