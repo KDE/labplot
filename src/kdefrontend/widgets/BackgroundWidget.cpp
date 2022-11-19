@@ -19,7 +19,6 @@
 #include <QDirModel>
 #endif
 #include <QFile>
-#include <QTimer>
 
 /*!
 	\class BackgroundWidget
@@ -73,9 +72,7 @@ void BackgroundWidget::setBackgrounds(const QList<Background*>& backgrounds) {
 	connect(m_background, &Background::fileNameChanged, this, &BackgroundWidget::backgroundFileNameChanged);
 	connect(m_background, &Background::opacityChanged, this, &BackgroundWidget::backgroundOpacityChanged);
 
-	QTimer::singleShot(100, this, [=]() {
-		adjustLayout();
-	});
+	adjustLayout();
 }
 
 /*!

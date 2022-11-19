@@ -47,7 +47,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent)
 	gridLayout->addWidget(backgroundWidget, 1, 0, 1, 3);
 
 	borderLineWidget = new LineWidget(ui.tabBackground);
-	gridLayout->addWidget(borderLineWidget, 3, 0, 1, 3);
+	gridLayout->addWidget(borderLineWidget, 4, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {

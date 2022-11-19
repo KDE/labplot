@@ -124,9 +124,7 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 	connect(m_line, &Line::widthChanged, this, &LineWidget::lineWidthChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
 
-	QTimer::singleShot(100, this, [=]() {
-		adjustLayout();
-	});
+	adjustLayout();
 }
 
 /*!
@@ -348,12 +346,11 @@ void LineWidget::load() {
 	} else if (m_prefix == QLatin1String("DropLine"))
 		ui.cbType->setCurrentIndex(static_cast<int>(m_line->dropLineType()));
 
-	const QPen& pen = m_line->pen();
-	ui.kcbColor->setColor(pen.color());
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.kcbColor->setColor(m_line->color());
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_line->width(), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(m_line->opacity() * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
-	ui.cbStyle->setCurrentIndex(static_cast<int>(pen.style()));
+	ui.cbStyle->setCurrentIndex(static_cast<int>(m_line->style()));
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
@@ -369,10 +366,9 @@ void LineWidget::loadConfig(const KConfigGroup& group) {
 	} else if (m_prefix == QLatin1String("DropLine"))
 		ui.cbType->setCurrentIndex(group.readEntry("DropLineType", static_cast<int>(m_line->dropLineType())));
 
-	const QPen& pen = m_line->pen();
-	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(pen.style())));
-	ui.kcbColor->setColor(group.readEntry(m_prefix + QStringLiteral("Color"), pen.color()));
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), pen.widthF()), Worksheet::Unit::Point));
+	ui.cbStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Style"), static_cast<int>(m_line->style())));
+	ui.kcbColor->setColor(group.readEntry(m_prefix + QStringLiteral("Color"), m_line->color()));
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry(m_prefix + QStringLiteral("Width"), m_line->width()), Worksheet::Unit::Point));
 	ui.sbOpacity->setValue(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_line->opacity()) * 100);
 	GuiTools::updatePenStyles(ui.cbStyle, ui.kcbColor->color());
 }
