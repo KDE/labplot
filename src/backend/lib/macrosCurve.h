@@ -24,16 +24,16 @@
   \param column pointer to a AbstractColumn
   \param prefix columnnames should have always the same style. For example xColumn -> prefix = x, xErrorPlusColumn -> prefix = xErrorPlus
   */
-#define CURVE_COLUMN_CONNECT(class_name, Prefix, prefix, recalc_func)                                                                                      \
-	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                               \
-		connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                       \
-		/* When the column is reused with different name, the curve should be informed to disconnect */                                                    \
-		connect(column, &AbstractColumn::reset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                        \
-		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &class_name::prefix##ColumnNameChanged);                                          \
-		/* after the curve was updated, emit the signal to update the plot ranges */                                                                       \
-		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                     \
-		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged);                                                             \
-	}
+#define CURVE_COLUMN_CONNECT(class_name, Prefix, prefix, recalc_func)                                                                                          \
+	void class_name::connect##Prefix##Column(const AbstractColumn* column) {                                                                                   \
+		connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &class_name::prefix##ColumnAboutToBeRemoved);                           \
+		/* When the column is reused with different name, the curve should be informed to disconnect */                                                        \
+		connect(column, &AbstractColumn::reset, this, &class_name::prefix##ColumnAboutToBeRemoved);                                                            \
+		connect(column, &AbstractAspect::aspectDescriptionChanged, this, &class_name::prefix##ColumnNameChanged);                                              \
+		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
+		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
+		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged);                                                                 \
+ 	}
 
 #define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix) curve->connect##Prefix##Column(column);
 
