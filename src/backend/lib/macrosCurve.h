@@ -33,7 +33,7 @@
 		/* after the curve was updated, emit the signal to update the plot ranges */                                                                           \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::recalc_func); /* must be before DataChanged*/                                         \
 		connect(column, &AbstractColumn::dataChanged, this, &class_name::prefix##DataChanged);                                                                 \
- 	}
+	}
 
 #define CURVE_COLUMN_CONNECT_CALL(curve, column, Prefix) curve->connect##Prefix##Column(column);
 
