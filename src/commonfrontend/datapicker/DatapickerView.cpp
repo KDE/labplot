@@ -149,8 +149,12 @@ void DatapickerView::showTabContextMenu(QPoint point) {
 		menu->exec(m_tabWidget->mapToGlobal(point));
 }
 
+/*!
+ * handle the renames of child aspects to adjust the names of the tabs accordingly.
+ */
 void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
-	if (aspect == m_datapicker)
+	// nothing to do if the parent itself was renamed, we only need to handle curves and data spreadsheets.
+	if (aspect == m_datapicker || aspect == m_datapicker->image())
 		return;
 
 	// determine the child that was changed and adjust the name of the corresponding tab widget
