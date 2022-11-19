@@ -127,6 +127,9 @@ void XYFitCurveDock::setupGeneral() {
 	uiGeneralTab.tbFunctions->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-font")));
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
+	for (int i = 0; i < NSL_FIT_ALGORITHM_COUNT; i++)
+		uiGeneralTab.cbAlgorithm->addItem(QLatin1String(nsl_fit_algorithm_name[i]));
+
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.lData->palette();
 	// QWidget::palette().color(QWidget::backgroundRole())

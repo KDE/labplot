@@ -4,7 +4,7 @@
 	Description          : A xy-curve defined by a fit model
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -46,6 +46,7 @@ public:
 		QVector<double> paramLowerLimits;
 		QVector<double> paramUpperLimits;
 		QVector<bool> paramFixed;
+		nsl_fit_algorithm algorithm{nsl_fit_algorithm_lm};
 
 		int maxIterations{500};
 		double eps{1.e-4};

@@ -2438,6 +2438,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("degree"), QString::number(d->fitData.degree));
 	if (d->fitData.modelCategory == nsl_fit_model_custom)
 		writer->writeAttribute(QStringLiteral("model"), d->fitData.model);
+	writer->writeAttribute(QStringLiteral("algorithm"), QString::number(d->fitData.algorithm));
 	writer->writeAttribute(QStringLiteral("maxIterations"), QString::number(d->fitData.maxIterations));
 	writer->writeAttribute(QStringLiteral("eps"), QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute(QStringLiteral("evaluatedPoints"), QString::number(d->fitData.evaluatedPoints));
@@ -2585,6 +2586,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("model", fitData.model);
 			model = d->fitData.model;
 			DEBUG("got model = " << STDSTRING(model));
+			READ_INT_VALUE("algorithm", fitData.algorithm, nsl_fit_algorithm);
 
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
