@@ -23,7 +23,7 @@
 #include "backend/gsl/errors.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macrosXYCurve.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
@@ -50,13 +50,13 @@ extern "C" {
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-CURVE_COLUMN_CONNECT(XYCurve, x, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, y, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, xErrorPlus, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, xErrorMinus, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, yErrorPlus, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, yErrorMinus, recalcLogicalPoints)
-CURVE_COLUMN_CONNECT(XYCurve, values, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, X, x, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, Y, y, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, XErrorPlus, xErrorPlus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, XErrorMinus, xErrorMinus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, YErrorPlus, yErrorPlus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, YErrorMinus, yErrorMinus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalcLogicalPoints)
 
 XYCurve::XYCurve(const QString& name, AspectType type)
 	: WorksheetElement(name, new XYCurvePrivate(this), type) {

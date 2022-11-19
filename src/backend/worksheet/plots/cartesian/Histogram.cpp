@@ -22,7 +22,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/lib/macrosXYCurve.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
@@ -47,9 +47,9 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
-CURVE_COLUMN_CONNECT(Histogram, data, recalcHistogram)
-CURVE_COLUMN_CONNECT(Histogram, errorPlus, updateErrorBars)
-CURVE_COLUMN_CONNECT(Histogram, errorMinus, updateErrorBars)
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
+CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 
 Histogram::Histogram(const QString& name)
 	: WorksheetElement(name, new HistogramPrivate(this), AspectType::Histogram)

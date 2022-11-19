@@ -175,13 +175,13 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
-	void connectxColumn(const AbstractColumn*);
-	void connectyColumn(const AbstractColumn*);
-	void connectxErrorPlusColumn(const AbstractColumn*);
-	void connectxErrorMinusColumn(const AbstractColumn*);
-	void connectyErrorPlusColumn(const AbstractColumn*);
-	void connectyErrorMinusColumn(const AbstractColumn*);
-	void connectvaluesColumn(const AbstractColumn*);
+	void connectXColumn(const AbstractColumn*);
+	void connectYColumn(const AbstractColumn*);
+	void connectXErrorPlusColumn(const AbstractColumn*);
+	void connectXErrorMinusColumn(const AbstractColumn*);
+	void connectYErrorPlusColumn(const AbstractColumn*);
+	void connectYErrorMinusColumn(const AbstractColumn*);
+	void connectValuesColumn(const AbstractColumn*);
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};

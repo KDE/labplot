@@ -129,9 +129,9 @@ private:
 	Q_DECLARE_PRIVATE(Histogram)
 	void init();
 	void initActions();
-	void connectdataColumn(const AbstractColumn*);
-	void connecterrorPlusColumn(const AbstractColumn*);
-	void connecterrorMinusColumn(const AbstractColumn*);
+	void connectDataColumn(const AbstractColumn*);
+	void connectErrorPlusColumn(const AbstractColumn*);
+	void connectErrorMinusColumn(const AbstractColumn*);
 
 	QAction* visibilityAction{nullptr};
 
