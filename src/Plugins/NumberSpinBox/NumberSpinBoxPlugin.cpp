@@ -33,11 +33,11 @@ QIcon NumberSpinBoxPlugin::icon() const {
 }
 
 QString NumberSpinBoxPlugin::toolTip() const {
-    return QString();
+    return {};
 }
 
 QString NumberSpinBoxPlugin::whatsThis() const {
-    return QString();
+    return {};
 }
 
 bool NumberSpinBoxPlugin::isContainer() const {

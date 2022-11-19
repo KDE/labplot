@@ -1652,7 +1652,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values)
  */
 QString ColumnPrivate::textAt(int row) const {
 	if (!m_data || m_columnMode != AbstractColumn::ColumnMode::Text)
-		return QString();
+		return {};
 	return static_cast<QVector<QString>*>(m_data)->value(row);
 }
 

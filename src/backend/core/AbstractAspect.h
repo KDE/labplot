@@ -228,7 +228,7 @@ public:
 			return QStringLiteral("MQTTSubscription");
 		}
 
-		return QString();
+		return {};
 	}
 
 	QString name() const;

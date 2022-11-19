@@ -38,7 +38,7 @@ public:
 	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
 	virtual QString info() const {
-		return QString();
+		return {};
 	};
 
 	class LineClipResult {

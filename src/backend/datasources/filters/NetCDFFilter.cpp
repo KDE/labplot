@@ -660,7 +660,7 @@ QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QStrin
 	handleError(m_status, QStringLiteral("nc_open"));
 	if (m_status != NC_NOERR) {
 		DEBUG("	Giving up");
-		return QString();
+		return {};
 	}
 
 	// get varid
@@ -687,7 +687,7 @@ QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QStrin
 	Q_UNUSED(fileName)
 	Q_UNUSED(name)
 	Q_UNUSED(varName)
-	return QString();
+	return {};
 #endif
 }
 

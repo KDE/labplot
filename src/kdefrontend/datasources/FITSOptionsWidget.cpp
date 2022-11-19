@@ -158,5 +158,5 @@ const QString FITSOptionsWidget::extensionName(bool* ok) {
 		}
 	}
 
-	return QString();
+	return {};
 }
