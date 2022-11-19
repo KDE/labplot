@@ -36,6 +36,9 @@ public:
 	XYCurve::DropLineType dropLineType{XYCurve::DropLineType::NoDropLine};
 
 	// common parameters
+	Qt::PenStyle style{Qt::SolidLine};
+	double width;
+	QColor color;
 	QPen pen;
 	double opacity{1.0};
 

@@ -117,8 +117,9 @@ void CartesianPlot::init() {
 	d->cursorLine->setPrefix(QLatin1String("Cursor"));
 	d->cursorLine->setHidden(true);
 	addChild(d->cursorLine);
-	QPen pen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
-	d->cursorLine->setPen(pen); // TODO: use theme specific initial settings
+	d->cursorLine->setStyle(Qt::SolidLine);
+	d->cursorLine->setColor(Qt::red); // TODO: use theme specific initial settings
+	d->cursorLine->setWidth(Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point));
 	connect(d->cursorLine, &Line::updatePixmapRequested, [=] {
 		d->update();
 	});
@@ -173,12 +174,8 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		QPen pen = axis->majorGridLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		axis->majorGridLine()->setPen(pen);
-		pen = axis->minorGridLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		axis->minorGridLine()->setPen(pen);
+		axis->majorGridLine()->setStyle(Qt::NoPen);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
@@ -203,12 +200,8 @@ void CartesianPlot::setType(Type type) {
 		axis->setMajorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksDirection(Axis::ticksIn);
 		axis->setMinorTicksNumber(1);
-		pen = axis->majorGridLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		axis->majorGridLine()->setPen(pen);
-		pen = axis->minorGridLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		axis->minorGridLine()->setPen(pen);
+		axis->majorGridLine()->setStyle(Qt::NoPen);
+		axis->minorGridLine()->setStyle(Qt::NoPen);
 		axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 		axis->setSuppressRetransform(false);
 
@@ -248,9 +241,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		QPen pen = m_plotArea->borderLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		m_plotArea->borderLine()->setPen(pen);
+		m_plotArea->borderLine()->setStyle(Qt::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());
@@ -287,9 +278,7 @@ void CartesianPlot::setType(Type type) {
 		d->horizontalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 		d->verticalPadding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 
-		QPen pen = m_plotArea->borderLine()->pen();
-		pen.setStyle(Qt::NoPen);
-		m_plotArea->borderLine()->setPen(pen);
+		m_plotArea->borderLine()->setStyle(Qt::NoPen);
 
 		Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 		axis->title()->setText(QString());

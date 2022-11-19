@@ -463,9 +463,7 @@ void BarPlotPrivate::recalc() {
 			if (plot) {
 				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
 				background->setFirstColor(themeColor);
-				QPen p = line->pen();
-				p.setColor(themeColor);
-				line->setPen(p);
+				line->setColor(themeColor);
 			}
 		}
 	} else if (diff < 0) {

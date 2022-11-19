@@ -48,7 +48,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(XYCurve::DropLineType, dropLineType, DropLineType)
 
 	// common parameters
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
+	QPen pen() const;
+	BASIC_D_ACCESSOR_DECL(Qt::PenStyle, style, Style)
+	CLASS_D_ACCESSOR_DECL(QColor, color, Color)
+	BASIC_D_ACCESSOR_DECL(double, width, Width)
 	BASIC_D_ACCESSOR_DECL(double, opacity, Opacity)
 
 	typedef LinePrivate Private;
@@ -64,7 +67,10 @@ Q_SIGNALS:
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsCapSizeChanged(double);
 	void dropLineTypeChanged(XYCurve::DropLineType);
-	void penChanged(QPen&);
+
+	void styleChanged(Qt::PenStyle);
+	void widthChanged(double);
+	void colorChanged(const QColor&);
 	void opacityChanged(float);
 
 	void updateRequested();

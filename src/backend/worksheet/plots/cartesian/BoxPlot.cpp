@@ -1948,9 +1948,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	// So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill
 	// for all other themes, we add here a special handling for "Tufte".
 	if (plot->theme() == QLatin1String("Tufte")) {
-		p.setStyle(Qt::NoPen);
-		d->borderLine->setPen(p);
-		d->medianLine->setPen(p);
+		d->borderLine->setStyle(Qt::NoPen);
+		d->medianLine->setStyle(Qt::NoPen);
 		d->background->setEnabled(false);
 		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
 		d->symbolMedian->setStyle(Symbol::Style::Circle);

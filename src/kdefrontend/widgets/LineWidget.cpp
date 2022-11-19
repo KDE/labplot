@@ -119,7 +119,9 @@ void LineWidget::setLines(const QList<Line*>& lines) {
 	connect(m_line, &Line::errorBarsCapSizeChanged, this, &LineWidget::errorBarsCapSizeChanged);
 	connect(m_line, &Line::dropLineTypeChanged, this, &LineWidget::dropLineTypeChanged);
 
-	connect(m_line, &Line::penChanged, this, &LineWidget::linePenChanged);
+	connect(m_line, &Line::styleChanged, this, &LineWidget::lineStyleChanged);
+	connect(m_line, &Line::colorChanged, this, &LineWidget::lineColorChanged);
+	connect(m_line, &Line::widthChanged, this, &LineWidget::lineWidthChanged);
 	connect(m_line, &Line::opacityChanged, this, &LineWidget::lineOpacityChanged);
 
 	QTimer::singleShot(100, this, [=]() {
@@ -172,6 +174,7 @@ void LineWidget::updateLocale() {
 //******** SLOTs for changes triggered in LineWidget **********
 //*************************************************************
 void LineWidget::typeChanged(int index) {
+	Lock lock(m_initializing);
 	bool enabled = true;
 	if (m_line->histogramLineTypeAvailable()) {
 		const auto type = Histogram::LineType(index);
@@ -211,61 +214,52 @@ void LineWidget::typeChanged(int index) {
 	// backgroundWidget->setEnabled(fillingEnabled);
 }
 
-void LineWidget::capSizeChanged(double value) const {
+void LineWidget::capSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
+	Lock lock(m_initializing);
 	const double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* line : m_lines)
 		line->setErrorBarsCapSize(size);
 }
 
-void LineWidget::styleChanged(int index) const {
+void LineWidget::styleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* line : m_lines) {
-		pen = line->pen();
-		pen.setStyle(penStyle);
-		line->setPen(pen);
-	}
+	Lock lock(m_initializing);
+	auto style = Qt::PenStyle(index);
+	for (auto* line : m_lines)
+		line->setStyle(style);
 }
 
 void LineWidget::colorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QPen pen;
-	for (auto* line : m_lines) {
-		pen = line->pen();
-		pen.setColor(color);
-		line->setPen(pen);
-	}
+	Lock lock(m_initializing);
+	for (auto* line : m_lines)
+		line->setColor(color);
 
-	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbStyle, color);
-	m_initializing = false;
 }
 
 void LineWidget::widthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	QPen pen;
+	Lock lock(m_initializing);
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
-	for (auto* line : m_lines) {
-		pen = line->pen();
-		pen.setWidthF(width);
-		line->setPen(pen);
-	}
+	for (auto* line : m_lines)
+		line->setWidth(width);
 }
 
-void LineWidget::opacityChanged(int value) const {
+void LineWidget::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
+	Lock lock(m_initializing);
 	double opacity = static_cast<double>(value) / 100.;
 	for (auto* line : m_lines)
 		line->setOpacity(opacity);
@@ -275,40 +269,65 @@ void LineWidget::opacityChanged(int value) const {
 //*********** SLOTs for changes triggered in Line *************
 //*************************************************************
 void LineWidget::histogramLineTypeChanged(Histogram::LineType type) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void LineWidget::errorBarsTypeChanged(XYCurve::ErrorBarsType type) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void LineWidget::errorBarsCapSizeChanged(double size) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
 	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void LineWidget::dropLineTypeChanged(XYCurve::DropLineType type) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
-void LineWidget::linePenChanged(QPen& pen) {
+void LineWidget::lineStyleChanged(Qt::PenStyle style) {
+	if (m_initializing)
+		return;
+
 	Lock lock(m_initializing);
-	if (ui.cbStyle->currentIndex() != pen.style())
-		ui.cbStyle->setCurrentIndex(pen.style());
-	if (ui.kcbColor->color() != pen.color())
-		ui.kcbColor->setColor(pen.color());
-	// Feedback needed, so do not check if not equal
-	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.cbStyle->setCurrentIndex(static_cast<int>(style));
+}
+
+void LineWidget::lineColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
+	ui.kcbColor->setColor(color);
+}
+
+void LineWidget::lineWidthChanged(double width) {
+	if (m_initializing)
+		return;
+
+	Lock lock(m_initializing);
+	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, Worksheet::Unit::Point));
 }
 
 void LineWidget::lineOpacityChanged(double value) {
+	if (m_initializing)
+		return;
+
 	Lock lock(m_initializing);
 	double v = (double)value * 100.;
 	ui.sbOpacity->setValue(v);

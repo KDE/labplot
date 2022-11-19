@@ -392,9 +392,8 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 	else
 		ratio = qMin(horizontalRatio, verticalRatio);
 
-	QPen pen = d->line->pen();
-	pen.setWidthF(pen.widthF() * ratio);
-	d->line->setPen(pen);
+	double width = d->line->width() * ratio;
+	d->line->setWidth(width);
 
 	d->majorTicksLength *= ratio; // ticks are perpendicular to axis line -> verticalRatio relevant
 	d->minorTicksLength *= ratio;
@@ -1015,16 +1014,12 @@ void Axis::orientationChangedSlot(QAction* action) {
 
 void Axis::lineStyleChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->line->pen();
-	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));;
 }
 
 void Axis::lineColorChanged(QAction* action) {
 	Q_D(const Axis);
-	QPen pen = d->line->pen();
-	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
 void Axis::visibilityChangedSlot() {
@@ -3037,8 +3032,6 @@ void Axis::loadThemeConfig(const KConfig& config) {
 		}
 	}
 
-	QPen p;
-
 	// Tick label
 	this->setLabelsColor(group.readEntry("LabelsFontColor", QColor(Qt::black)));
 	this->setLabelsOpacity(group.readEntry("LabelsOpacity", 1.0));
@@ -3048,34 +3041,31 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setLabelsBackgroundColor(groupPlot.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 
 	// Line
+	d->line->setColor(group.readEntry("LineColor", QColor(Qt::black)));
+	d->line->setWidth(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	d->line->setOpacity(group.readEntry("LineOpacity", 1.0));
-
-	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
-	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	if (firstAxis && plot->theme() == QLatin1String("Tufte")) {
 		setRangeType(RangeType::AutoData);
-		p.setStyle(Qt::SolidLine);
+		d->line->setStyle(Qt::SolidLine);
 	} else {
 		// switch back to "Auto" range type when "AutoData" was selected (either because of Tufte or manually selected),
 		// don't do anything if "Custom" is selected
 		if (rangeType() == RangeType::AutoData)
 			setRangeType(RangeType::Auto);
 
-		p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+		d->line->setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
 	}
-
-	d->line->setPen(p);
 
 	// Major grid
 	if (firstAxis) {
-		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
-		p.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
-		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+		d->majorGridLine->setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
+		d->majorGridLine->setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
+		d->majorGridLine->setWidth(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	} else
-		p.setStyle(Qt::NoPen);
-	d->majorGridLine->setPen(p);
+		d->majorGridLine->setStyle(Qt::NoPen);
+
 	d->majorGridLine->setOpacity(group.readEntry("MajorGridOpacity", 1.0));
 
 	// Major ticks
@@ -3085,13 +3075,12 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	// Minor grid
 	if (firstAxis) {
-		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
-		p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
-		p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+		d->minorGridLine->setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
+		d->minorGridLine->setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+		d->minorGridLine->setWidth(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	} else
-		p.setStyle(Qt::NoPen);
+		d->minorGridLine->setStyle(Qt::NoPen);
 	d->minorGridLine->setOpacity(group.readEntry("MinorGridOpacity", 1.0));
-	d->minorGridLine->setPen(p);
 
 	// Minor ticks
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));

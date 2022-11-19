@@ -955,14 +955,14 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLine->pen().style() != Qt::NoPen && q->m_title->isVisible()) {
+	if (connectionLine->style() != Qt::NoPen && q->m_title->isVisible()) {
 		painter->setOpacity(connectionLine->opacity());
 		painter->setPen(connectionLine->pen());
 		painter->drawLine(m_connectionLine);
 	}
 
 	// draw vertical line, which connects all points together
-	if (verticalLine->pen().style() != Qt::NoPen) {
+	if (verticalLine->style() != Qt::NoPen) {
 		painter->setOpacity(verticalLine->opacity());
 		painter->setPen(verticalLine->pen());
 		painter->drawLine(xposLine);
@@ -971,7 +971,7 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
-		if (verticalLine->pen().style() != Qt::NoPen) {
+		if (verticalLine->style() != Qt::NoPen) {
 			const double width = verticalLine->pen().widthF();
 			if (abs(xposLine.x1() - event->pos().x()) < ((width < 3) ? 3 : width)) {
 				if (!isSelected())
@@ -1003,7 +1003,7 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		// DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
 
 		if (scalar_product > 0) {
-			const double width = connectionLine->pen().widthF();
+			const double width = connectionLine->width();
 			if (scalar_product < vecLenght && dist_segm < ((width < 3) ? 3 : width)) {
 				event->accept();
 				if (!isSelected())

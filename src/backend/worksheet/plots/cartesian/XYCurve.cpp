@@ -691,9 +691,8 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool /*
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
 	d->symbol->setPen(pen);
 
-	pen = d->line->pen();
-	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
-	d->line->setPen(pen);
+	double width = d->line->width() * (horizontalRatio + verticalRatio) / 2.;
+	d->line->setWidth(width);
 
 	// setValuesDistance(d->distance*);
 	QFont font = d->valuesFont;

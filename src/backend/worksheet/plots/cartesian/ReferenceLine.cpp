@@ -221,16 +221,12 @@ void ReferenceLine::orientationChangedSlot(QAction* action) {
 
 void ReferenceLine::lineStyleChanged(QAction* action) {
 	Q_D(const ReferenceLine);
-	QPen pen = d->line->pen();
-	pen.setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
 }
 
 void ReferenceLine::lineColorChanged(QAction* action) {
 	Q_D(const ReferenceLine);
-	QPen pen = d->line->pen();
-	pen.setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
-	d->line->setPen(pen);
+	d->line->setColor(GuiTools::colorFromAction(lineColorActionGroup, action));
 }
 
 void ReferenceLine::visibilityChangedSlot() {

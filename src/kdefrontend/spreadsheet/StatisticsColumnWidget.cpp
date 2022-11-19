@@ -229,7 +229,7 @@ void StatisticsColumnWidget::showHistogram() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
-			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setStyle(Qt::NoPen);
 		} else
 			axis->title()->setText(i18n("Frequency"));
 
@@ -299,9 +299,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	auto* curve = new XYCurve(QString());
 	curve->setSuppressRetransform(false);
 	plot->addChild(curve);
-	QPen pen = curve->line()->pen();
-	pen.setStyle(Qt::SolidLine);
-	curve->line()->setPen(pen);
+	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
@@ -357,7 +355,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* curve = new XYCurve(QString());
 	curve->setSuppressRetransform(true);
 	plot->addChild(curve);
-	curve->line()->setPen(Qt::NoPen);
+	curve->line()->setStyle(Qt::NoPen);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	curve->background()->setPosition(Background::Position::No);
 	curve->setXColumn(xColumn);
@@ -391,9 +389,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	auto* curve2 = new XYCurve(QStringLiteral("2"));
 	curve2->setSuppressRetransform(true);
 	plot->addChild(curve2);
-	QPen pen = curve2->line()->pen();
-	pen.setStyle(Qt::SolidLine);
-	curve2->line()->setPen(pen);
+	curve2->line()->setStyle(Qt::SolidLine);
 	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve2->background()->setPosition(Background::Position::No);
 	curve2->setXColumn(xColumn2);
@@ -414,8 +410,8 @@ void StatisticsColumnWidget::showBoxPlot() {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
-			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
-			axis->minorGridLine()->setPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setStyle(Qt::NoPen);
+			axis->minorGridLine()->setStyle(Qt::NoPen);
 			axis->title()->setText(QString());
 		} else
 			axis->title()->setText(m_column->name());
@@ -487,7 +483,7 @@ void StatisticsColumnWidget::showBarPlot() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
@@ -600,9 +596,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	curve->setCoordinateSystemIndex(1); // asign to the second y-range going from 0 to 100%
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
-	auto pen = curve->line()->pen();
-	pen.setStyle(Qt::SolidLine);
-	curve->line()->setPen(pen);
+	curve->line()->setStyle(Qt::SolidLine);
 	curve->symbol()->setStyle(Symbol::Style::Circle);
 	plot->addChild(curve);
 	curve->setValuesType(XYCurve::ValuesType::Y);
@@ -622,7 +616,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(QString());
-			axis->majorGridLine()->setPen(QPen(Qt::NoPen));
+			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
 			axis->setMajorTickStartOffset(1.0);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
@@ -664,10 +658,7 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	const double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
-
-	QPen pen = plot->plotArea()->borderLine()->pen();
-	pen.setStyle(Qt::NoPen);
-	plot->plotArea()->borderLine()->setPen(pen);
+	plot->plotArea()->borderLine()->setStyle(Qt::NoPen);
 
 	ws->addChild(plot);
 	plot->setSuppressRetransform(false);
