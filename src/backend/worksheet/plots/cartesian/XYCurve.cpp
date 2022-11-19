@@ -50,13 +50,13 @@ extern "C" {
 
 using Dimension = CartesianCoordinateSystem::Dimension;
 
-XYCURVE_COLUMN_CONNECT(x)
-XYCURVE_COLUMN_CONNECT(y)
-XYCURVE_COLUMN_CONNECT(xErrorPlus)
-XYCURVE_COLUMN_CONNECT(xErrorMinus)
-XYCURVE_COLUMN_CONNECT(yErrorPlus)
-XYCURVE_COLUMN_CONNECT(yErrorMinus)
-XYCURVE_COLUMN_CONNECT(values)
+CURVE_COLUMN_CONNECT(XYCurve, x, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, y, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, xErrorPlus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, xErrorMinus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, yErrorPlus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, yErrorMinus, recalcLogicalPoints)
+CURVE_COLUMN_CONNECT(XYCurve, values, recalcLogicalPoints)
 
 XYCurve::XYCurve(const QString& name, AspectType type)
 	: WorksheetElement(name, new XYCurvePrivate(this), type) {
@@ -371,14 +371,14 @@ bool XYCurve::isSourceDataChangedSinceLastRecalc() const {
 // 1) add XYCurveSetXColumnCmd as friend class to XYCurve
 // 2) add XYCURVE_COLUMN_CONNECT(x) as private method to XYCurve
 // 3) define all missing slots
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(X, x, recalcLogicalPoints)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, X, x, recalcLogicalPoints)
 void XYCurve::setXColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xColumn)
 		exec(new XYCurveSetXColumnCmd(d, column, ki18n("%1: x-data source changed")));
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Y, y, recalcLogicalPoints)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, Y, y, recalcLogicalPoints)
 void XYCurve::setYColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yColumn)
@@ -439,7 +439,7 @@ void XYCurve::setValuesType(XYCurve::ValuesType type) {
 		exec(new XYCurveSetValuesTypeCmd(d, type, ki18n("%1: set values type")));
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(Values, values, updateValues)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, Values, values, updateValues)
 void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->valuesColumn) {
@@ -543,7 +543,7 @@ void XYCurve::setXErrorType(ErrorType type) {
 		exec(new XYCurveSetXErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorPlus, xErrorPlus, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, XErrorPlus, xErrorPlus, updateErrorBars)
 void XYCurve::setXErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorPlusColumn) {
@@ -561,7 +561,7 @@ void XYCurve::setXErrorPlusColumnPath(const QString& path) {
 	d->xErrorPlusColumnPath = path;
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(XErrorMinus, xErrorMinus, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, XErrorMinus, xErrorMinus, updateErrorBars)
 void XYCurve::setXErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->xErrorMinusColumn) {
@@ -586,7 +586,7 @@ void XYCurve::setYErrorType(ErrorType type) {
 		exec(new XYCurveSetYErrorTypeCmd(d, type, ki18n("%1: y-error type changed")));
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorPlus, yErrorPlus, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, YErrorPlus, yErrorPlus, updateErrorBars)
 void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorPlusColumn) {
@@ -604,7 +604,7 @@ void XYCurve::setYErrorPlusColumnPath(const QString& path) {
 	d->yErrorPlusColumnPath = path;
 }
 
-XYCURVE_COLUMN_SETTER_CMD_IMPL_F_S(YErrorMinus, yErrorMinus, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(XYCurve, YErrorMinus, yErrorMinus, updateErrorBars)
 void XYCurve::setYErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->yErrorMinusColumn) {
