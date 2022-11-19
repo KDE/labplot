@@ -1014,7 +1014,7 @@ void Axis::orientationChangedSlot(QAction* action) {
 
 void Axis::lineStyleChanged(QAction* action) {
 	Q_D(const Axis);
-	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));;
+	d->line->setStyle(GuiTools::penStyleFromAction(lineStyleActionGroup, action));
 }
 
 void Axis::lineColorChanged(QAction* action) {
