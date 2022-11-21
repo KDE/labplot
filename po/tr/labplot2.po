@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:42+0000\n"
+"POT-Creation-Date: 2022-11-21 00:42+0000\n"
 "PO-Revision-Date: 2022-11-15 05:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -69,7 +69,7 @@ msgstr "Panel eklentileri bulunamadı. Lütfen kurulumunuzu denetleyin."
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1930
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:403
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:256
@@ -3716,10 +3716,9 @@ msgid "generalized Laguerre polynomials L_3"
 msgstr "genelleştirilmiş Laguerre polinomları L_3"
 
 #: src/backend/gsl/ExpressionParser.cpp:476
-#, fuzzy, kde-format
-#| msgid "generalized Laguerre polynomials L_1"
+#, kde-format
 msgid "generalized Laguerre polynomials L_n"
-msgstr "genelleştirilmiş Laguerre polinomları L_1"
+msgstr "genelleştirilmiş Laguerre polinomları L_n"
 
 #: src/backend/gsl/ExpressionParser.cpp:483
 #, kde-format
@@ -3840,32 +3839,32 @@ msgstr "Büyüklüğün logaritması"
 #: src/backend/gsl/ExpressionParser.cpp:527
 #, kde-format
 msgid "Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)"
-msgstr ""
+msgstr "Mathieu işlevleri ce_n(q,x)'in a_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/ExpressionParser.cpp:528
 #, kde-format
 msgid "Characteristic values b_n(q) of the Mathieu functions se_n(q,x)"
-msgstr ""
+msgstr "Mathieu işlevleri se_n(q,x)'in b_n(q) karakteristik değerleri"
 
 #: src/backend/gsl/ExpressionParser.cpp:529
 #, kde-format
 msgid "Angular Mathieu functions ce_n(q,x)"
-msgstr ""
+msgstr "Açısal Mathieu işlevleri ce_n(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:530
 #, kde-format
 msgid "Angular Mathieu functions se_n(q,x)"
-msgstr ""
+msgstr "Açısal Mathieu işlevleri se_n(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:531
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)"
-msgstr ""
+msgstr "Radyal j. tür Mathieu işlevleri Mc_n^{(j)}(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:532
 #, kde-format
 msgid "Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)"
-msgstr ""
+msgstr "Radyal j. tür Mathieu işlevleri Ms_n^{(j)}(q,x)"
 
 #: src/backend/gsl/ExpressionParser.cpp:540
 #, kde-format
@@ -3918,7 +3917,7 @@ msgstr "İkinci senkrotron işlevi"
 #: src/backend/gsl/ExpressionParser.cpp:568
 #, kde-format
 msgid "Transport function"
-msgstr "Taşınım işlevi"
+msgstr "Taşıma işlevi"
 
 #: src/backend/gsl/ExpressionParser.cpp:575
 #, kde-format
@@ -3973,7 +3972,7 @@ msgstr "Hiperbolik tanjant"
 #: src/backend/gsl/ExpressionParser.cpp:585
 #, kde-format
 msgid "Inverse hyperbolic cosine"
-msgstr "Ark hiperbolik cosinüs"
+msgstr "Ark hiperbolik kosinüs"
 
 #: src/backend/gsl/ExpressionParser.cpp:586
 #, kde-format
@@ -3993,7 +3992,7 @@ msgstr "Sekant"
 #: src/backend/gsl/ExpressionParser.cpp:589
 #, kde-format
 msgid "Cosecant"
-msgstr "Cosekant"
+msgstr "Kosekant"
 
 #: src/backend/gsl/ExpressionParser.cpp:590
 #, kde-format
@@ -4043,7 +4042,7 @@ msgstr "Ark hiperbolik kosekant"
 #: src/backend/gsl/ExpressionParser.cpp:599
 #, kde-format
 msgid "Inverse hyperbolic cotangent"
-msgstr "Ark hiperbolik cotanjant"
+msgstr "Ark hiperbolik kotanjant"
 
 #: src/backend/gsl/ExpressionParser.cpp:600
 #, kde-format
@@ -4106,10 +4105,9 @@ msgid "Eta function"
 msgstr "Eta işlevi"
 
 #: src/backend/gsl/ExpressionParser.cpp:628
-#, fuzzy, kde-format
-#| msgid "Gaussian (normal)"
+#, kde-format
 msgid "Gaussian random numbers"
-msgstr "Gaus (normal)"
+msgstr "Gauss rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:629
 #, kde-format
@@ -4119,88 +4117,82 @@ msgstr "Üstel rastgele sayılar"
 #: src/backend/gsl/ExpressionParser.cpp:630
 #, kde-format
 msgid "Laplacian random numbers"
-msgstr ""
+msgstr "Laplas rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:631
-#, fuzzy, kde-format
-#| msgid "Cauchy-Lorentz (Breit-Wigner)"
+#, kde-format
 msgid "Cauchy/Lorentz random numbers"
-msgstr "Cauchy-Lorentz (Breit-Wigner)"
+msgstr "Cauchy/Lorentz rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:632
 #, kde-format
 msgid "Rayleigh random numbers"
-msgstr ""
+msgstr "Rayleigh rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:633
 #, kde-format
 msgid "Landau random numbers"
-msgstr ""
+msgstr "Landau rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:634
-#, fuzzy, kde-format
-#| msgid "Levy alpha-stable"
+#, kde-format
 msgid "Levy alpha-stable random numbers"
-msgstr "Levy alfa-stabil"
+msgstr "Levy alfa kararlı rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:635
 #, kde-format
 msgid "Gamma random numbers"
-msgstr ""
+msgstr "Gama rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:636
 #, kde-format
 msgid "Flat random numbers"
-msgstr ""
+msgstr "Düz rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:637
-#, fuzzy, kde-format
-#| msgid "Uniform Random Values"
+#, kde-format
 msgid "Lognormal random numbers"
-msgstr "Tektip Rastgele Değerler"
+msgstr "Lognormal rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:639
-#, fuzzy, kde-format
-#| msgid "Chi-squared Distribution"
+#, kde-format
 msgid "Chi-squared random numbers"
-msgstr "Ki-kare Dağılımı"
+msgstr "Ki-kare rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:640
-#, fuzzy, kde-format
-#| msgid "t-distribution"
+#, kde-format
 msgid "t-distributed random numbers"
-msgstr "t-dağılımı"
+msgstr "t dağılımlı rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:641
-#, fuzzy, kde-format
-#| msgid "Logistic function"
+#, kde-format
 msgid "Logistic random numbers"
-msgstr "Lojistik işlevi"
+msgstr "Lojistik rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:642
 #, kde-format
 msgid "Poisson random numbers"
-msgstr ""
+msgstr "Poisson rastgele sayıları"
 
 #: src/backend/gsl/ExpressionParser.cpp:643
 #, kde-format
 msgid "Bernoulli random numbers"
-msgstr ""
+msgstr "Bernoulli rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:644
 #, kde-format
 msgid "Binomial random numbers"
-msgstr ""
+msgstr "İki terimli rastgele sayılar"
 
 #: src/backend/gsl/ExpressionParser.cpp:654
 #, kde-format
 msgid "Probability density for a Gaussian distribution"
-msgstr "Gaus dağılımı için olasılık derinliği"
+msgstr "Gauss dağılımı için olasılık derinliği"
 
 #: src/backend/gsl/ExpressionParser.cpp:655
 #, kde-format
 msgid "Probability density for a unit Gaussian distribution"
-msgstr "Birim Gaus dağılımı için olasılık derinliği"
+msgstr "Birim Gauss dağılımı için olasılık derinliği"
 
 #: src/backend/gsl/ExpressionParser.cpp:656
 #: src/backend/gsl/ExpressionParser.cpp:675
@@ -4342,7 +4334,7 @@ msgstr "Üstel dağılım için olasılık yoğunluğu"
 #: src/backend/gsl/ExpressionParser.cpp:685
 #, kde-format
 msgid "Probability density for a Laplace distribution"
-msgstr "Laplace dağılımı için olasılık yoğunluğu"
+msgstr "Laplas dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/ExpressionParser.cpp:696
 #, kde-format
@@ -4392,17 +4384,17 @@ msgstr "Lognormal dağılımı için olasılık yoğunluğu"
 #: src/backend/gsl/ExpressionParser.cpp:766
 #, kde-format
 msgid "Probability density for a chi squared distribution"
-msgstr "Ki kare dağılımı için olasılık yoğunluğu"
+msgstr "Ki-kare dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/ExpressionParser.cpp:777
 #, kde-format
 msgid "Probability density for a F-distribution"
-msgstr "F-dağılımı için olasılık yoğunluğu"
+msgstr "F dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/ExpressionParser.cpp:788
 #, kde-format
 msgid "Probability density for a t-distribution"
-msgstr "T-dağılımı için olasılık yoğunluğu"
+msgstr "T dağılımı için olasılık yoğunluğu"
 
 #: src/backend/gsl/ExpressionParser.cpp:799
 #, kde-format
@@ -4487,7 +4479,7 @@ msgstr "Temel sabitler"
 #: src/backend/gsl/ExpressionParser.cpp:925
 #, kde-format
 msgid "Astronomy and Astrophysics"
-msgstr "Astronomi veAstrofizik"
+msgstr "Astronomi ve Astrofizik"
 
 #: src/backend/gsl/ExpressionParser.cpp:926
 #, kde-format
@@ -4527,7 +4519,7 @@ msgstr "Kütle ve Ağırlık"
 #: src/backend/gsl/ExpressionParser.cpp:933
 #, kde-format
 msgid "Thermal Energy and Power"
-msgstr "Termal Enerji ve Güç"
+msgstr "Isıl Enerji ve Güç"
 
 #: src/backend/gsl/ExpressionParser.cpp:934
 #, kde-format
@@ -4555,10 +4547,9 @@ msgid "Force and Energy"
 msgstr "Güç ve Enerji"
 
 #: src/backend/gsl/ExpressionParser.cpp:941
-#, fuzzy, kde-format
-#| msgid "Inverse exponential"
+#, kde-format
 msgid "Base of exponentials"
-msgstr "Ters üstel"
+msgstr "Üstellerin tabanı"
 
 #: src/backend/gsl/ExpressionParser.cpp:944
 #, kde-format
@@ -4566,10 +4557,9 @@ msgid "Pi"
 msgstr "Pi"
 
 #: src/backend/gsl/ExpressionParser.cpp:947
-#, fuzzy, kde-format
-#| msgid "Euler constant"
+#, kde-format
 msgid "Euler's constant"
-msgstr "Euler sabiti"
+msgstr "Euler'in sabiti"
 
 #: src/backend/gsl/ExpressionParser.cpp:955
 #, kde-format
@@ -4831,7 +4821,7 @@ msgstr "1 yazıcı noktasının uzunluğu [1/72 inç]"
 #: src/backend/gsl/ExpressionParser.cpp:1138
 #, kde-format
 msgid "length of 1 TeX point [1/72.27 inch]"
-msgstr "1 TeX noktasının uzunluğu [1/72.27 inç]"
+msgstr "1 TeX noktasının uzunluğu [1/72,27 inç]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1146
 #, kde-format
@@ -4856,7 +4846,7 @@ msgstr "1 litrenin hacmi"
 #: src/backend/gsl/ExpressionParser.cpp:1158
 #, kde-format
 msgid "Volume of 1 US gallon"
-msgstr "1 US galonunun hacmi"
+msgstr "1 ABD galonunun hacmi"
 
 #: src/backend/gsl/ExpressionParser.cpp:1161
 #, kde-format
@@ -4896,7 +4886,7 @@ msgstr "1 tonun kütlesi"
 #: src/backend/gsl/ExpressionParser.cpp:1187
 #, kde-format
 msgid "Mass of 1 metric ton [1000 kg]"
-msgstr "1 metrik ton kütlesi [1000kg]"
+msgstr "1 metrik ton kütlesi [1000 kg]"
 
 #: src/backend/gsl/ExpressionParser.cpp:1190
 #, kde-format
@@ -5078,18 +5068,17 @@ msgstr "Doğrusal"
 #: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Log10"
-msgstr ""
+msgstr "Log10"
 
 #: src/backend/lib/Range.cpp:13
 #, kde-format
 msgid "Log2"
-msgstr ""
+msgstr "Log2"
 
 #: src/backend/lib/Range.cpp:13
-#, fuzzy, kde-format
-#| msgid "Lang"
+#, kde-format
 msgid "Ln"
-msgstr "Lang"
+msgstr "Ln"
 
 #: src/backend/lib/Range.cpp:13
 #, kde-format
@@ -5102,10 +5091,9 @@ msgid "Square"
 msgstr "Kare"
 
 #: src/backend/lib/Range.cpp:13
-#, fuzzy, kde-format
-#| msgid "Inverse sine"
+#, kde-format
 msgid "Inverse"
-msgstr "Ters sinüs"
+msgstr "Ters"
 
 #. i18n: ectx: property (text), widget (QLabel, lAnd)
 #. i18n: ectx: property (text), widget (QLabel, lAndDateTime)
@@ -5118,10 +5106,9 @@ msgstr "ve"
 
 #: src/backend/lib/XmlStreamReader.cpp:91
 #: src/backend/lib/XmlStreamReader.cpp:95
-#, fuzzy, kde-format
-#| msgid "line %1, column %2: "
+#, kde-format
 msgid "line %1, column %2: %3"
-msgstr "satır %1, sütun %2: "
+msgstr "%1. satır, %2.sütun: %3"
 
 #: src/backend/lib/XmlStreamReader.cpp:109
 #: src/backend/lib/XmlStreamReader.cpp:118
@@ -5129,7 +5116,7 @@ msgstr "satır %1, sütun %2: "
 #: src/backend/lib/XmlStreamReader.cpp:146
 #, kde-format
 msgid "unexpected end of document"
-msgstr "beklenmeyen belge sonu"
+msgstr "beklenmedik belge sonu"
 
 #: src/backend/matrix/Matrix.cpp:116
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3515
@@ -5147,101 +5134,101 @@ msgstr "FITS tablosu"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Matrix"
-msgstr "Yazdırma Matrixi"
+msgstr "Yazdırma Matrisi"
 
 #: src/backend/matrix/Matrix.cpp:224
 #, kde-format
 msgid "%1: x-start changed"
-msgstr "%1: x-başlangıç değişti"
+msgstr "%1: x başlangıcı değişti"
 
 #: src/backend/matrix/Matrix.cpp:230
 #, kde-format
 msgid "%1: x-end changed"
-msgstr "%1: x-bitiş değişti"
+msgstr "%1: x bitişi değişti"
 
 #: src/backend/matrix/Matrix.cpp:236
 #, kde-format
 msgid "%1: y-start changed"
-msgstr "%1: y-başlangıç değişti"
+msgstr "%1: y başlangıcı değişti"
 
 #: src/backend/matrix/Matrix.cpp:242
 #, kde-format
 msgid "%1: y-end changed"
-msgstr "%1: y-bitiş değişti"
+msgstr "%1: y bitişi değişti"
 
 #: src/backend/matrix/Matrix.cpp:248
 #, kde-format
 msgid "%1: numeric format changed"
-msgstr "%1: numerik biçem değişti"
+msgstr "%1: Sayısal biçim değişti"
 
 #: src/backend/matrix/Matrix.cpp:254
 #, kde-format
 msgid "%1: precision changed"
-msgstr "%1: hassaslık değişti"
+msgstr "%1: Hassaslık değişti"
 
 #: src/backend/matrix/Matrix.cpp:469
 #, kde-format
 msgid "%1: set matrix size to %2x%3"
-msgstr "%1: matris boyutunu %2x%3'a ayarla"
+msgstr "%1: Matris boyutunu %2 x %3 olarak ayarla"
 
 #: src/backend/matrix/Matrix.cpp:489
 #: src/backend/spreadsheet/Spreadsheet.cpp:356
 #, kde-format
 msgid "%1: copy %2"
-msgstr "%1: %2'yi kopyala"
+msgstr "%1: Kopyala: %2"
 
 #: src/backend/matrix/Matrix.cpp:553
 #, kde-format
 msgid "%1: add %2 rows"
 msgid_plural "%1: add %2 rows"
-msgstr[0] "%1: %2 satırları ekle"
-msgstr[1] "%1: %2 satırları ekle"
+msgstr[0] "%1: %2 satır ekle"
+msgstr[1] "%1: %2 satır ekle"
 
 #: src/backend/matrix/Matrix.cpp:564
 #, kde-format
 msgid "%1: add %2 column"
 msgid_plural "%1: add %2 columns"
-msgstr[0] "%1: %2 sütunu ekle"
-msgstr[1] "%1: %2 sütunları ekle"
+msgstr[0] "%1: %2 sütun ekle"
+msgstr[1] "%1: %2 sütun ekle"
 
 #: src/backend/matrix/Matrix.cpp:678 src/backend/matrix/matrixcommands.h:126
 #: src/backend/spreadsheet/Spreadsheet.cpp:312
 #, kde-format
 msgid "%1: clear"
-msgstr "%1: temizle"
+msgstr "%1: Temizle"
 
 #: src/backend/matrix/matrixcommands.cpp:21
 #, kde-format
 msgid "%1: insert %2 column"
 msgid_plural "%1: insert %2 columns"
 msgstr[0] "%1: %2 sütun ekle"
-msgstr[1] "%1: %2 sütunları ekle"
+msgstr[1] "%1: %2 sütun ekle"
 
 #: src/backend/matrix/matrixcommands.cpp:40
 #, kde-format
 msgid "%1: insert %2 row"
 msgid_plural "%1: insert %2 rows"
 msgstr[0] "%1: %2 satır ekle"
-msgstr[1] "%1: %2 satırları ekle"
+msgstr[1] "%1: %2 satır ekle"
 
 #: src/backend/matrix/matrixcommands.cpp:61
 #, kde-format
 msgid "%1: set matrix coordinates"
-msgstr "%1: küme matris koordinatları"
+msgstr "%1: Matris koordinatlarını ayarla"
 
 #: src/backend/matrix/matrixcommands.h:55
 #, kde-format
 msgid "%1: remove %2 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: %2 sütunu kaldır"
-msgstr[1] "%1: %2 sütunları kaldır"
+msgstr[1] "%1: %2 sütunu kaldır"
 
 #: src/backend/matrix/matrixcommands.h:93
 #, kde-format
 msgid "%1: remove %2 row"
 msgid_plural "%1: remove %2 rows"
-msgstr[0] "%1: %2 satırı sil"
-msgstr[1] "%1: %2 satırı sil"
+msgstr[0] "%1: %2 satırı kaldır"
+msgstr[1] "%1: %2 satırı kaldır"
 
 #: src/backend/matrix/matrixcommands.h:158
 #, kde-format
@@ -5251,34 +5238,34 @@ msgstr "%1: %2 sütunu temizle"
 #: src/backend/matrix/matrixcommands.h:188
 #, kde-format
 msgid "%1: set cell value"
-msgstr "%1: hücre değerini ayarla"
+msgstr "%1: Hücre değerini ayarla"
 
 #: src/backend/matrix/matrixcommands.h:248
 #: src/backend/matrix/matrixcommands.h:279
 #, kde-format
 msgid "%1: set cell values"
-msgstr "%1: hücre değerlerini ayarla"
+msgstr "%1: Hücre değerlerini ayarla"
 
 #: src/backend/matrix/matrixcommands.h:306
 #, kde-format
 msgid "%1: transpose"
-msgstr "%1: transpoz"
+msgstr "%1: Transpoze et"
 
 #: src/backend/matrix/matrixcommands.h:347
 #, kde-format
 msgid "%1: mirror horizontally"
-msgstr "%1: yatay olarak aynala"
+msgstr "%1: Yatay olarak yansıt"
 
 #: src/backend/matrix/matrixcommands.h:378
 #, kde-format
 msgid "%1: mirror vertically"
-msgstr "%1: dikey olarak yansıt"
+msgstr "%1: Dikey olarak yansıt"
 
 #: src/backend/note/Note.cpp:43 src/backend/worksheet/Worksheet.cpp:224
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
-msgstr "Çalışma sayfasını Yazdır"
+msgstr "Çalışma Sayfasını Yazdır"
 
 #: src/backend/note/Note.cpp:130
 #, kde-format
@@ -5286,20 +5273,19 @@ msgid "no note element found"
 msgstr "not elemanı bulunamadı"
 
 #: src/backend/nsl/nsl_conv.c:19
-#, fuzzy, kde-format
-#| msgid "xy-curve from an interpolation"
+#, kde-format
 msgid "forward (convolution)"
-msgstr "enterpolasyondan xy-eğrisi"
+msgstr "ileri (sarım)"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "backward (deconvolution)"
-msgstr ""
+msgstr "geri (silme)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
 msgid "linear (zero-padded)"
-msgstr ""
+msgstr "doğrusal (sıfır boşluklu)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
@@ -5336,7 +5322,7 @@ msgstr "toplam"
 #: src/backend/nsl/nsl_conv.c:22
 #, kde-format
 msgid "Euclidean"
-msgstr ""
+msgstr "Öklid"
 
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
@@ -5346,23 +5332,22 @@ msgstr "en yüksek değer"
 #: src/backend/nsl/nsl_conv.c:23
 #, kde-format
 msgid "center (acausal)"
-msgstr ""
+msgstr "merkez (nedensiz)"
 
 #: src/backend/nsl/nsl_conv.c:24
 #, kde-format
 msgid "sliding average"
-msgstr ""
+msgstr "kayan ortalama"
 
 #: src/backend/nsl/nsl_conv.c:25
-#, fuzzy, kde-format
-#| msgid "triangular"
+#, kde-format
 msgid "triangular smooth"
-msgstr "üçgen"
+msgstr "üçgensel pürüzsüz"
 
 #: src/backend/nsl/nsl_conv.c:26
 #, kde-format
 msgid "pseudo-Gaussian smooth"
-msgstr ""
+msgstr "sahte Gauss pürüzsüz"
 
 #: src/backend/nsl/nsl_conv.c:27
 #, kde-format
@@ -5370,10 +5355,9 @@ msgid "first derivative"
 msgstr "ilk türev"
 
 #: src/backend/nsl/nsl_conv.c:28
-#, fuzzy, kde-format
-#| msgid "second derivative"
+#, kde-format
 msgid "smooth first derivative"
-msgstr "ikinci türev"
+msgstr "pürüzsüz ilk türev"
 
 #: src/backend/nsl/nsl_conv.c:29 src/backend/nsl/nsl_interp.c:26
 #, kde-format
@@ -5393,27 +5377,27 @@ msgstr "dördüncü türev"
 #: src/backend/nsl/nsl_conv.c:32
 #, kde-format
 msgid "Gaussian"
-msgstr "Gaussian"
+msgstr "Gauss"
 
 #: src/backend/nsl/nsl_conv.c:33
 #, kde-format
 msgid "Lorentzian"
-msgstr ""
+msgstr "Lorentz"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "biased"
-msgstr ""
+msgstr "önyargılı"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "unbiased"
-msgstr ""
+msgstr "önyargısız"
 
 #: src/backend/nsl/nsl_corr.c:19
 #, kde-format
 msgid "coeff"
-msgstr ""
+msgstr "katsayı"
 
 #: src/backend/nsl/nsl_dft.c:18
 #, kde-format
@@ -5428,7 +5412,7 @@ msgstr "Genlik"
 #: src/backend/nsl/nsl_dft.c:20
 #, kde-format
 msgid "real part"
-msgstr "reel bölüm"
+msgstr "gerçek bölüm"
 
 #: src/backend/nsl/nsl_dft.c:21
 #, kde-format
@@ -5450,12 +5434,12 @@ msgstr "Faz"
 #: src/backend/nsl/nsl_dft.c:24
 #, kde-format
 msgid "Amplitude in dB"
-msgstr "dB cinsinde genlik"
+msgstr "dB türünden genlik"
 
 #: src/backend/nsl/nsl_dft.c:25
 #, kde-format
 msgid "normalized amplitude in dB"
-msgstr "normalize edilmiş dB cinsinden genlik"
+msgstr "normalize edilmiş dB türünden genlik"
 
 #: src/backend/nsl/nsl_dft.c:26
 #, kde-format
@@ -5491,7 +5475,7 @@ msgstr "Period"
 #: src/backend/nsl/nsl_diff.c:19
 #, kde-format
 msgid "first"
-msgstr "ilk"
+msgstr "birinci"
 
 #: src/backend/nsl/nsl_diff.c:19
 #, kde-format
@@ -5630,7 +5614,7 @@ msgstr "Fourier"
 #: src/backend/nsl/nsl_fit.c:30
 #, kde-format
 msgid "Gaussian (normal)"
-msgstr "Gaus (normal)"
+msgstr "Gauss (normal)"
 
 #: src/backend/nsl/nsl_fit.c:31
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:432
@@ -5652,7 +5636,7 @@ msgstr "Lojistik (sech karesi)"
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
-msgstr ""
+msgstr "Sahte-Voight (aynı genişlik)"
 
 #: src/backend/nsl/nsl_fit.c:46
 #, kde-format
@@ -5727,7 +5711,7 @@ msgstr "radyal mesafe"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:269
 #, kde-format
 msgid "Interpolation"
-msgstr "Enterpolasyon"
+msgstr "Aradeğerleme"
 
 #: src/backend/nsl/nsl_geom_linesim.c:24
 #, kde-format
@@ -5740,36 +5724,34 @@ msgid "Lang"
 msgstr "Lang"
 
 #: src/backend/nsl/nsl_hilbert.c:18 src/kdefrontend/widgets/LineWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "developer"
+#, kde-format
 msgid "Envelope"
-msgstr "geliştirici"
+msgstr "Zarf"
 
 #: src/backend/nsl/nsl_hilbert.c:18
-#, fuzzy, kde-format
-#| msgid "imaginary part"
+#, kde-format
 msgid "Imaginary part"
-msgstr "sanal bölüm"
+msgstr "Sanal kısım"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "rectangle (1-point)"
-msgstr "dikdörtgen (1-nokta)"
+msgstr "dikdörtgen (1 noktalı)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "trapezoid (2-point)"
-msgstr "yamuk (2-nokta)"
+msgstr "yamuk (2 noktalı)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Simpson's (3-point)"
-msgstr "Simpson (3-nokta)"
+msgstr "Simpson (3 noktalı)"
 
 #: src/backend/nsl/nsl_int.c:19
 #, kde-format
 msgid "Simpson's 3/8 (4-point)"
-msgstr "Simpson 3/8 (4-nokta)"
+msgstr "Simpson 3/8 (4 noktalı)"
 
 #: src/backend/nsl/nsl_interp.c:14
 #, kde-format
@@ -5779,7 +5761,7 @@ msgstr "doğrusal"
 #: src/backend/nsl/nsl_interp.c:15
 #, kde-format
 msgid "polynomial"
-msgstr "polinomik"
+msgstr "polinominal"
 
 #: src/backend/nsl/nsl_interp.c:16
 #, kde-format
@@ -5809,7 +5791,7 @@ msgstr "Steffen ekleme"
 #: src/backend/nsl/nsl_interp.c:21 src/backend/nsl/nsl_smooth.c:30
 #, kde-format
 msgid "cosine"
-msgstr "cosinüs"
+msgstr "kosinüs"
 
 #: src/backend/nsl/nsl_interp.c:22
 #, kde-format
@@ -5864,17 +5846,17 @@ msgstr "integral"
 #: src/backend/nsl/nsl_sf_stats.c:13
 #, kde-format
 msgid "Gaussian (Normal)"
-msgstr "Gaus (Normal)"
+msgstr "Gauss (Normal)"
 
 #: src/backend/nsl/nsl_sf_stats.c:14
 #, kde-format
 msgid "Gaussian Tail"
-msgstr "Gaus Kuyruğu"
+msgstr "Gauss Kuyruğu"
 
 #: src/backend/nsl/nsl_sf_stats.c:16
 #, kde-format
 msgid "Laplace"
-msgstr "Laplace"
+msgstr "Laplas"
 
 #: src/backend/nsl/nsl_sf_stats.c:17
 #, kde-format
@@ -5994,7 +5976,7 @@ msgstr "Negatif iki terimli"
 #: src/backend/nsl/nsl_sf_stats.c:40
 #, kde-format
 msgid "Pascal"
-msgstr "Pascal"
+msgstr "Paskal"
 
 #: src/backend/nsl/nsl_sf_stats.c:41
 #, kde-format
@@ -6176,149 +6158,143 @@ msgstr "üçlü küp"
 msgid "%1: remove 1 column"
 msgid_plural "%1: remove %2 columns"
 msgstr[0] "%1: 1 sütunu kaldır"
-msgstr[1] "%1: %2 sütunları kaldır"
+msgstr[1] "%1: %2 sütunu kaldır"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:269
 #, kde-format
 msgid "%1: insert 1 column"
 msgid_plural "%1: insert %2 columns"
-msgstr[0] "%1: 1 sütunu ekle"
-msgstr[1] "%1: %2 sütunları ekle"
+msgstr[0] "%1: 1 sütun ekle"
+msgstr[1] "%1: %2 sütun ekle"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:324
 #, kde-format
 msgid "%1: clear all masks"
-msgstr "%1: tüm maskeleri temizle"
+msgstr "%1: Tüm maskeleri temizle"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:348
 #, kde-format
 msgid "%1: move column %2 from position %3 to %4."
-msgstr "%1: %2 sütununu %3'ten %4'e taşı."
+msgstr "%1: %2 sütununu %3 konumundan %4 konumuna taşı."
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:473
 #, kde-format
 msgid "%1: sort columns"
-msgstr "%1: sütunları sırala"
+msgstr "%1: Sütunları sırala"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1133
-#, fuzzy, kde-format
-#| msgid "numerical data, %1 element"
-#| msgid_plural "numerical data, %1 elements"
+#, kde-format
 msgid "double precision data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] "sayısal veri, %1 öge"
-msgstr[1] "sayısal veri, %1 öge"
+msgstr[0] "çifte kesinlikli veri, %1 öge"
+msgstr[1] "sayasıl veri, %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1136
 #, kde-format
 msgid "integer data, %1 element"
 msgid_plural "integer data, %1 elements"
-msgstr[0] "tamsayı verisi, %1 eleman"
-msgstr[1] "tamsayı verisi, %1 elemanlar"
+msgstr[0] "tamsayı verisi, %1 öge"
+msgstr[1] "tamsayı verisi, %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1139
-#, fuzzy, kde-format
-#| msgid "integer data, %1 element"
-#| msgid_plural "integer data, %1 elements"
+#, kde-format
 msgid "big integer data, %1 element"
 msgid_plural "big integer data, %1 elements"
-msgstr[0] "tamsayı verisi, %1 eleman"
-msgstr[1] "tamsayı verisi, %1 elemanlar"
+msgstr[0] "büyük tamsayı verisi, %1 öge"
+msgstr[1] "büyük tamsayı verisi, %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1142
 #, kde-format
 msgid "text data, %1 element"
 msgid_plural "text data, %1 elements"
-msgstr[0] "metin verisi, %1 eleman"
-msgstr[1] "metin verisi, %1 elemanlar"
+msgstr[0] "metin verisi, %1 öge"
+msgstr[1] "metin verisi, %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1145
 #, kde-format
 msgid "month data, %1 element"
 msgid_plural "month data, %1 elements"
-msgstr[0] "ay verisi, %1 eleman"
-msgstr[1] "ay verisi, %1 elemanlar"
+msgstr[0] "ay verisi, %1 öge"
+msgstr[1] "ay verisi, %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1148
 #, kde-format
 msgid "day data, %1 element"
 msgid_plural "day data, %1 elements"
-msgstr[0] "gün verisi, %1 eleman"
-msgstr[1] "gün verisi %1 elemanlar"
+msgstr[0] "gün verisi, %1 öge"
+msgstr[1] "gün verisi %1 öge"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:1151
 #, kde-format
 msgid "date and time data, %1 element"
 msgid_plural "date and time data, %1 elements"
-msgstr[0] "tarih ve zaman verisi, %1 eleman"
-msgstr[1] "tarih ve zaman verisi, %1 elemanlar"
+msgstr[0] "tarih ve zaman verisi, %1 öge"
+msgstr[1] "tarih ve zaman verisi, %1 öge"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:116
 #, kde-format
 msgid "%1, masked (ignored in all operations)"
-msgstr "%1, maskeli (tüm işlemlerde görmezden gelindi)"
+msgstr "%1, maskeli (tüm işlemlerde yok sayıldı)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:121
 #, kde-format
 msgid "invalid cell, masked (ignored in all operations)"
-msgstr "geçersiz hücre, maskelendi (tüm işlemlerde görmezden gelindi)"
+msgstr "geçersiz hücre, maskelendi (tüm işlemlerde yok sayıldı)"
 
 #: src/backend/spreadsheet/SpreadsheetModel.cpp:123
 #, kde-format
 msgid "invalid cell (ignored in all operations)"
-msgstr "geçersiz hücre (tüm işlemlerde görmezden gelindi)"
+msgstr "geçersiz hücre (tüm işlemlerde yok sayıldı)"
 
 #: src/backend/worksheet/Background.cpp:103
-#, fuzzy, kde-format
-#| msgid "%1: filling type changed"
+#, kde-format
 msgid "%1: filling changed"
-msgstr "%1: dolgu türü değişti"
+msgstr "%1: Dolgu değişti"
 
 #: src/backend/worksheet/Background.cpp:110
 #, kde-format
 msgid "%1: filling position changed"
-msgstr "%1: dolgu konumu değişti"
+msgstr "%1: Dolgu konumu değişti"
 
 #: src/backend/worksheet/Background.cpp:117
 #, kde-format
 msgid "%1: background type changed"
-msgstr "%1: arkaplan türü değişti"
+msgstr "%1: Arka plan türü değişti"
 
 #: src/backend/worksheet/Background.cpp:124
 #, kde-format
 msgid "%1: background color style changed"
-msgstr "%1: arkaplan renk biçimi değişti"
+msgstr "%1: Arka plan renk biçemi değişti"
 
 #: src/backend/worksheet/Background.cpp:131
 #, kde-format
 msgid "%1: background image style changed"
-msgstr "%1: arkaplan görüntü biçimi değişti"
+msgstr "%1: Arka plan görüntü biçemi değişti"
 
 #: src/backend/worksheet/Background.cpp:138
 #, kde-format
 msgid "%1: background brush style changed"
-msgstr "%1: arkaplan fırça biçemi değişti"
+msgstr "%1: Arka plan fırça biçemi değişti"
 
 #: src/backend/worksheet/Background.cpp:145
 #, kde-format
 msgid "%1: set background first color"
-msgstr "%1: arkaplan ilk rengini ayarla"
+msgstr "%1: Arka plan ilk rengini ayarla"
 
 #: src/backend/worksheet/Background.cpp:152
 #, kde-format
 msgid "%1: set background second color"
-msgstr "%1: arkaplan ikinci rengini ayarla"
+msgstr "%1: Arka plan ikinci rengini ayarla"
 
 #: src/backend/worksheet/Background.cpp:159
 #, kde-format
 msgid "%1: set background image"
-msgstr "%1: arkaplan görüntü rengini ayarla"
+msgstr "%1: Arka plan görselini ayarla"
 
 #: src/backend/worksheet/Background.cpp:166
-#, fuzzy, kde-format
-#| msgid "%1: set background image"
+#, kde-format
 msgid "%1: set background opacity"
-msgstr "%1: arkaplan görüntü rengini ayarla"
+msgstr "%1: Arka plan matlığını ayarla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
@@ -6331,7 +6307,7 @@ msgstr "%1: arkaplan görüntü rengini ayarla"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:94
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
 #: src/backend/worksheet/TextLabel.cpp:257
@@ -6366,49 +6342,43 @@ msgstr "Görünür"
 #: src/backend/worksheet/Image.cpp:145
 #, kde-format
 msgid "%1: set image"
-msgstr "%1: görüntü ayarla"
+msgstr "%1: Görsel ayarla"
 
 #: src/backend/worksheet/Image.cpp:152
-#, fuzzy, kde-format
-#| msgid "%1: set image"
+#, kde-format
 msgid "%1: embed image"
-msgstr "%1: görüntü ayarla"
+msgstr "%1: Görseli göm"
 
 #: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
 #: src/backend/worksheet/TextLabel.cpp:373
 #, kde-format
 msgid "%1: set border opacity"
-msgstr "%1: kenarlık matlığını ayarla"
+msgstr "%1: Kenarlık matlığını ayarla"
 
 #: src/backend/worksheet/Image.cpp:166
-#, fuzzy, kde-format
-#| msgid "%1: set min x"
+#, kde-format
 msgid "%1: set width"
-msgstr "%1: en küçük x'i ayarla"
+msgstr "%1: Genişliği ayarla"
 
 #: src/backend/worksheet/Image.cpp:175
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set height"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Yüksekliği ayarla"
 
 #: src/backend/worksheet/Image.cpp:184
-#, fuzzy, kde-format
-#| msgid "%1: change geometry rect"
+#, kde-format
 msgid "%1: change keep ratio"
-msgstr "%1: geometri dikdörtgeni değiştir"
+msgstr "%1: Tutma oranını değiştir"
 
 #: src/backend/worksheet/Image.cpp:192 src/backend/worksheet/TextLabel.cpp:366
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set border"
-msgstr "%1: kenarlık biçemini ayarla"
+msgstr "%1: Kenarlık ayarla"
 
 #: src/backend/worksheet/Image.cpp:468
-#, fuzzy, kde-format
-#| msgid "Failed to read data."
+#, kde-format
 msgid "Failed to read image data"
-msgstr "Veri okunamadı."
+msgstr "Görsel verisi okunamadı"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
@@ -6430,85 +6400,78 @@ msgid "Symbol"
 msgstr "Sembol"
 
 #: src/backend/worksheet/InfoElement.cpp:807
-#, fuzzy, kde-format
-#| msgid "%1: set point's size"
+#, kde-format
 msgid "%1: set gluepoint index"
-msgstr "%1: noktanın büyüklüğünü ayarla"
+msgstr "%1: Yapışma noktası indeksini ayarla"
 
 #: src/backend/worksheet/InfoElement.cpp:814
-#, fuzzy, kde-format
-#| msgid "%1: set font color"
+#, kde-format
 msgid "%1: set connectionline curve name"
-msgstr "%1: yazı tipi rengini ayarla"
+msgstr "%1: Bağlantı çizgisi eğrisini ayarla"
 
 #: src/backend/worksheet/Line.cpp:107
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:410
 #, kde-format
 msgid "%1: line type changed"
-msgstr "%1: satır türü değişti"
+msgstr "%1: Satır türü değişti"
 
 #: src/backend/worksheet/Line.cpp:119
 #, kde-format
 msgid "%1: set error bar cap size"
-msgstr "%1: hata çubuğu kap boyutunu ayarla"
+msgstr "%1: Hata çubuğu kap boyutunu ayarla"
 
 #: src/backend/worksheet/Line.cpp:126
 #, kde-format
 msgid "%1: error bar type changed"
-msgstr "%1: hata çubuğu türü değişti"
+msgstr "%1: Hata çubuğu türü değişti"
 
 #: src/backend/worksheet/Line.cpp:133
 #, kde-format
 msgid "%1: drop line type changed"
-msgstr "%1: damla satır türü değişti"
+msgstr "%1: Damla satır türü değişti"
 
 #: src/backend/worksheet/Line.cpp:140
-#, fuzzy, kde-format
-#| msgid "%1: set line style"
+#, kde-format
 msgid "%1: set line style"
-msgstr "%1: çizgi stilini ayarla"
+msgstr "%1: Çizgi biçemini ayarla"
 
 #: src/backend/worksheet/Line.cpp:147
-#, fuzzy, kde-format
-#| msgid "%1: set min x"
+#, kde-format
 msgid "%1: set line width"
-msgstr "%1: en küçük x'i ayarla"
+msgstr "%1: Satır genişliğini ayarla"
 
 #: src/backend/worksheet/Line.cpp:154
-#, fuzzy, kde-format
-#| msgid "%1: set line style"
+#, kde-format
 msgid "%1: set line pen"
-msgstr "%1: çizgi stilini ayarla"
+msgstr "%1: Çizgi kalemini ayarla"
 
 #: src/backend/worksheet/Line.cpp:161
 #, kde-format
 msgid "%1: set line opacity"
-msgstr "%1: çizgi matlığını ayarla"
+msgstr "%1: Çizgi matlığını ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1326
 #, kde-format
 msgid "%1: set horizontal padding"
-msgstr "%1: yatay boşluğu ayarla"
+msgstr "%1: Yatay boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1353
 #, kde-format
 msgid "%1: set vertical padding"
-msgstr "%1: dikey boşluğu ayarla"
+msgstr "%1: Dikey boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:114
-#, fuzzy, kde-format
-#| msgid "%1: set horizontal padding"
+#, kde-format
 msgid "%1: set right padding"
-msgstr "%1: yatay boşluğu ayarla"
+msgstr "%1: Sağ boşluğu ayarla"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:121
-#, fuzzy, kde-format
-#| msgid "%1: set horizontal padding"
+#, kde-format
 msgid "%1: set bottom padding"
-msgstr "%1: yatay boşluğu ayarla"
+msgstr "%1: Alt boşluğu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
@@ -6548,7 +6511,7 @@ msgstr "Dikey"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
 #, kde-format
 msgid "Orientation"
-msgstr "Yönlendirme"
+msgstr "Yönelim"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, lLine)
@@ -6585,444 +6548,404 @@ msgid "Color"
 msgstr "Renk"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:515
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set axis range type"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Eksen erim türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:545
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:654
 #, kde-format
 msgid "%1: set axis orientation"
-msgstr "%1: eksen yönlendirmeyi ayarla"
+msgstr "%1: Eksen yönelimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:552
 #, kde-format
 msgid "%1: set axis position"
-msgstr "%1: eksen konumunu ayarla"
+msgstr "%1: Eksen konumunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:559
 #, kde-format
 msgid "%1: set axis scale"
-msgstr "%1: eksen ölçeğini ayarla"
+msgstr "%1: Eksen ölçeğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:567
 #, kde-format
 msgid "%1: set axis offset"
-msgstr "%1: eksen konumunu ayarla"
+msgstr "%1: Eksen ofsetini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:582
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set axis range"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Eksen erimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:622
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks type"
+#, kde-format
 msgid "%1: set major tick start type"
-msgstr "%1: ana imlerin türünü ayarla"
+msgstr "%1: Ana imlerin başlangıç türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:629
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks style"
+#, kde-format
 msgid "%1: set major tick start offset"
-msgstr "%1: ana imlerin biçimini ayarla"
+msgstr "%1: Ana imlerin başlangıç ofsetini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:638
-#, fuzzy, kde-format
-#| msgid "%1: set major ticks style"
+#, kde-format
 msgid "%1: set major tick start value"
-msgstr "%1: ana imlerin biçimini ayarla"
+msgstr "%1: Ana imlerin başlangıç değerini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:652
 #, kde-format
 msgid "%1: set axis scaling factor"
-msgstr "%1: eksenin ölçekleme çarpanını ayarla"
+msgstr "%1: Eksenin ölçekleme çarpanını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:659
 #, kde-format
 msgid "%1: set axis zero offset"
-msgstr "%1: eksenin sıfır konumunu ayarla"
+msgstr "%1: Eksenin sıfır ofsetini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:665
-#, fuzzy, kde-format
-#| msgid "%1: set axis offset"
+#, kde-format
 msgid "%1: show scale and offset"
-msgstr "%1: eksen konumunu ayarla"
+msgstr "%1: Ekseni ve ofseti göster"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:672
-#, fuzzy, kde-format
-#| msgid "%1: set labels position"
+#, kde-format
 msgid "%1: set axis logical position"
-msgstr "%1: etiketlerin yerlerini ayarla"
+msgstr "%1: Eksenin mantıksal konumunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:680
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:687
 #, kde-format
 msgid "%1: set title offset"
-msgstr "%1: başlık konumunu ayarla"
+msgstr "%1: Başlık ofsetini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:695
 #, kde-format
 msgid "%1: set arrow type"
-msgstr "%1: ok türünü ayarla"
+msgstr "%1: Ok türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:702
 #, kde-format
 msgid "%1: set arrow position"
-msgstr "%1: ok konumunu ayarla"
+msgstr "%1: Ok konumunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:709
 #, kde-format
 msgid "%1: set arrow size"
-msgstr "%1: ok boyutunu ayarla"
+msgstr "%1: Ok boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:717
 #, kde-format
 msgid "%1: set major ticks direction"
-msgstr "%1: ana imlerin yönünü ayarla"
+msgstr "%1: Ana imlerin yönünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:724
 #, kde-format
 msgid "%1: set major ticks type"
-msgstr "%1: ana imlerin türünü ayarla"
+msgstr "%1: Ana imlerin türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:732
 #, kde-format
 msgid "%1: enable/disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: Ana imlerin otomatik numaralandırmasını aç/kapat"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:734
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:745
 #, kde-format
 msgid "%1: set the total number of the major ticks"
-msgstr "%1: ana imlerin toplam sayısını ayarla"
+msgstr "%1: Ana imlerin toplam sayısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:747
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:815
 #, kde-format
 msgid "%1: disable major automatic tick numbers"
-msgstr ""
+msgstr "%1: Ana imlerin otomatik numaralandırmasını devre dışı bırak"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:756
-#, fuzzy, kde-format
-#| msgid "%1: set the total number of the major ticks"
+#, kde-format
 msgid "%1: set the spacing of the major ticks"
-msgstr "%1: ana imlerin toplam sayısını ayarla"
+msgstr "%1: Ana imlerin boşluklandırmasını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:763
 #, kde-format
 msgid "%1: assign major ticks' values"
-msgstr "%1: ana imlerin değerlerini ata"
+msgstr "%1: Ana imlerin değerlerini ata"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:777
 #, kde-format
 msgid "%1: set major ticks length"
-msgstr "%1: ana imlerin uzunluğunu ayarla"
+msgstr "%1: Ana imlerin uzunluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:785
 #, kde-format
 msgid "%1: set minor ticks direction"
-msgstr "%1: küçük imlerin yönünü ayarla"
+msgstr "%1: Küçük imlerin yönünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:792
 #, kde-format
 msgid "%1: set minor ticks type"
-msgstr "%1: küçük imlerin türünü ayarla"
+msgstr "%1: Küçük imlerin türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:800
 #, kde-format
 msgid "%1: enable/disable minor automatic tick numbers"
-msgstr ""
+msgstr "%1: Küçük imlerin otomatik numaralandırmasını aç/kapat"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:803
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:814
 #, kde-format
 msgid "%1: set the total number of the minor ticks"
-msgstr "%1: küçük imlerin toplam sayısını ayarla"
+msgstr "%1: Küçük imlerin toplam sayısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:824
-#, fuzzy, kde-format
-#| msgid "%1: set the total number of the minor ticks"
+#, kde-format
 msgid "%1: set the spacing of the minor ticks"
-msgstr "%1: küçük imlerin toplam sayısını ayarla"
+msgstr "%1: Küçük imlerin boşluklandırmasını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:831
 #, kde-format
 msgid "%1: assign minor ticks' values"
-msgstr "%1: küçük imlere değerler ata"
+msgstr "%1: Küçük imlerin değerlerini ata"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:845
 #, kde-format
 msgid "%1: set minor ticks length"
-msgstr "%1: küçük imlerin boyutunu ayarla"
+msgstr "%1: Küçük imlerin uzunluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:854
 #, kde-format
 msgid "%1: set labels format"
-msgstr "%1: etiketlerin biçemini ayarla"
+msgstr "%1: Etiketlerin biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:861
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels format automatic"
-msgstr "%1: etiketlerin biçemini ayarla"
+msgstr "%1: Etiketlerin otomatik biçimlendirmesini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:868
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:875
 #, kde-format
 msgid "%1: set labels precision"
-msgstr "%1: etiketlerin keskinliğini ayarla"
+msgstr "%1: Etiketlerin keskinliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:882
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set labels datetime format"
-msgstr "%1: etiketlerin biçemini ayarla"
+msgstr "%1: Etiketlerin tarih-zaman biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:889
 #, kde-format
 msgid "%1: set labels position"
-msgstr "%1: etiketlerin yerlerini ayarla"
+msgstr "%1: Etiketlerin konumunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:896
 #, kde-format
 msgid "%1: set label offset"
-msgstr "%1: etiketlerin konumlarını ayarla"
+msgstr "%1: Etiket ofsetini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:903
 #, kde-format
 msgid "%1: set label rotation angle"
-msgstr "%1: etiket döndürme açısını ayarla"
+msgstr "%1: Etiket döndürme açısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:910
-#, fuzzy, kde-format
-#| msgid "%1: set label text"
+#, kde-format
 msgid "%1: set labels text type"
-msgstr "%1: etiket metnini ayarla"
+msgstr "%1: Etiketlerin metin türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:917
-#, fuzzy, kde-format
-#| msgid "%1: set label text"
+#, kde-format
 msgid "%1: set labels text column"
-msgstr "%1: etiket metnini ayarla"
+msgstr "%1: Etiketlerin metin sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:931
 #, kde-format
 msgid "%1: set label color"
-msgstr "%1: etiket rengini ayarla"
+msgstr "%1: Etiket rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:938
 #, kde-format
 msgid "%1: set label font"
-msgstr "%1: etiket yazıtipini ayarla"
+msgstr "%1: Etiket yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:945
-#, fuzzy, kde-format
-#| msgid "%1: set background image"
+#, kde-format
 msgid "%1: set labels background type"
-msgstr "%1: arkaplan görüntü rengini ayarla"
+msgstr "%1: Etiketlerin arka plan türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:952
-#, fuzzy, kde-format
-#| msgid "%1: set TeX background color"
+#, kde-format
 msgid "%1: set label background color"
-msgstr "%1: TeX arkaplan rengini ayarla"
+msgstr "%1: Etiket arka plan rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:959
 #, kde-format
 msgid "%1: set label prefix"
-msgstr "%1: etiket önekini ayarla"
+msgstr "%1: Etiket önekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:966
 #, kde-format
 msgid "%1: set label suffix"
-msgstr "%1: etiket sonekini ayarla"
+msgstr "%1: Etiket sonekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:973
 #, kde-format
 msgid "%1: set labels opacity"
-msgstr "%1: etiketlerin matlığını ayarla"
+msgstr "%1: Etiketlerin matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:227
-#, fuzzy, kde-format
-#| msgid "%1: set +delta_X column"
+#, kde-format
 msgid "%1: set x column"
-msgstr "%1: +delta_X sütunu ayarla"
+msgstr "%1: x sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:471
-#, fuzzy, kde-format
-#| msgid "%1: set +delta_X column"
+#, kde-format
 msgid "%1: set data columns"
-msgstr "%1: +delta_X sütunu ayarla"
+msgstr "%1: Veri sütunlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1: set arrow type"
+#, kde-format
 msgid "%1: set type"
-msgstr "%1: ok türünü ayarla"
+msgstr "%1: Türü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:498
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
-#, fuzzy, kde-format
-#| msgid "%1: set axis orientation"
+#, kde-format
 msgid "%1: set orientation"
-msgstr "%1: eksen yönlendirmeyi ayarla"
+msgstr "%1: Yönelimi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
-#, fuzzy, kde-format
-#| msgid "%1: x-start changed"
+#, kde-format
 msgid "%1: width factor changed"
-msgstr "%1: x-başlangıç değişti"
+msgstr "%1: Genişlik çarpanı değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:337
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:187
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
-#, fuzzy, kde-format
-#| msgid "No Data"
+#, kde-format
 msgid "%1 - Data"
-msgstr "Veri Yok"
+msgstr "%1 - Veri"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:343
-#, fuzzy, kde-format
-#| msgid "derivative"
+#, kde-format
 msgid "1st quartile"
-msgstr "türev"
+msgstr "1. çeyrek"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:344
-#, fuzzy, kde-format
-#| msgid "derivative"
+#, kde-format
 msgid "3rd quartile"
-msgstr "türev"
+msgstr "3. çeyrek"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:345
-#, fuzzy, kde-format
-#| msgid "Median"
+#, kde-format
 msgid "median"
-msgstr "Orta"
+msgstr "orta"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:346
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "whiskers min"
-msgstr "%1: eksen bitişini ayarla"
+msgstr "flaman en düşük"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:347
 #, kde-format
 msgid "whiskers max"
-msgstr ""
+msgstr "flaman en yüksek"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:348
 #, kde-format
 msgid "data points count"
-msgstr ""
+msgstr "veri noktaları sayımı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:349
-#, fuzzy, kde-format
-#| msgid "Euler constant"
+#, kde-format
 msgid "outliers count"
-msgstr "Euler sabiti"
+msgstr "aykırı değerler sayımı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:350
 #, kde-format
 msgid "far out points count"
-msgstr ""
+msgstr "en uç noktalar sayımı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:491
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set ordering"
-msgstr "%1: kenarlık biçemini ayarla"
+msgstr "%1: Sıralamayı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
-#, fuzzy, kde-format
-#| msgid "%1: line type changed"
+#, kde-format
 msgid "%1: variable width changed"
-msgstr "%1: satır türü değişti"
+msgstr "%1: Değişken genişliği değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: changed notches"
-msgstr "%1: açıklamayı değiştir"
+msgstr "%1: Çentikler değiştirildi"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
-#, fuzzy, kde-format
-#| msgid "Histogram type:"
+#, kde-format
 msgid "%1: set whiskers type"
-msgstr "Histogram türü:"
+msgstr "%1: Flaman türü ayarlandı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:534
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "%1: set whiskers range parameter"
-msgstr "%1: eksen bitişini ayarla"
+msgstr "%1: Flamanların erim parametresi ayarlandı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "%1: set whiskers cap size"
-msgstr "%1: eksen bitişini ayarla"
+msgstr "%1: Flamanların kap boyutu ayarlandı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:548
-#, fuzzy, kde-format
-#| msgid "%1: set axis end"
+#, kde-format
 msgid "%1: set whiskers cap pen"
-msgstr "%1: eksen bitişini ayarla"
+msgstr "%1: Flamanların kap kalemi ayarlandı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
-#, fuzzy, kde-format
-#| msgid "%1: set line opacity"
+#, kde-format
 msgid "%1: set whiskers cap opacity"
-msgstr "%1: çizgi matlığını ayarla"
+msgstr "%1: Flamanların kap matlığı ayarlandı"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
-#, fuzzy, kde-format
-#| msgid "%1: filling type changed"
+#, kde-format
 msgid "%1: jitterring changed"
-msgstr "%1: dolgu türü değişti"
+msgstr "%1: Titremeler değişti"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:547
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:630
-#, fuzzy, kde-format
-#| msgid "%1: x-range breaking enabled"
+#, kde-format
 msgid "%1: change rug enabled"
-msgstr "%1: x-aralık kırma etkinleştir"
+msgstr "%1: Kilim aç/kapat"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:554
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:548
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:644
-#, fuzzy, kde-format
-#| msgid "%1: change line+symbol width"
+#, kde-format
 msgid "%1: change rug width"
-msgstr "%1: satır+sembol genişliğini değiştir"
+msgstr "%1: Kilim genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:561
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:555
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:651
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: change rug length"
-msgstr "%1: açıklamayı değiştir"
+msgstr "%1: Kilim genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:568
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:562
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:658
-#, fuzzy, kde-format
-#| msgid "%1: change comment"
+#, kde-format
 msgid "%1: change rug offset"
-msgstr "%1: açıklamayı değiştir"
+msgstr "%1: Kilim ofsetini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp:56
-#, fuzzy, kde-format
-#| msgid "No data points available."
+#, kde-format
 msgid "no info available"
-msgstr "Veri noktaları uygun değil."
+msgstr "kullanılabilir veri yok"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
@@ -7038,7 +6961,7 @@ msgstr "Başlık"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:342
 #, kde-format
 msgid "xy-curve"
-msgstr "xy-eğrisi"
+msgstr "xy eğrisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:343
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:449
@@ -7047,32 +6970,29 @@ msgstr "xy-eğrisi"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:123
 #, kde-format
 msgid "Histogram"
-msgstr "Çubuklu çizelge"
+msgstr "Histogram"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:344
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:453
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:531
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:129
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Bar Plot"
-msgstr "Çizim"
+msgstr "Çubuk Çizim"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:345
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:451
 #: src/commonfrontend/worksheet/WorksheetView.cpp:327
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:529
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:126
-#, fuzzy, kde-format
-#| msgid "Plot"
+#, kde-format
 msgid "Box Plot"
-msgstr "Çizim"
+msgstr "Kutu Çizim"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:346
-#, fuzzy, kde-format
-#| msgid "xy-curve from a fit to data"
+#, kde-format
 msgid "xy-curve from a Formula"
-msgstr "veriye bir uyumdan xy-eğrisi"
+msgstr "Bir Formülten xy Eğrisi"
 
 #. i18n("Data Operation"),
 #. cartesianPlotAddNewActionGroup);
@@ -7107,7 +7027,7 @@ msgstr "Türev Alma"
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:285
 #, kde-format
 msgid "Integration"
-msgstr "Entegrasyon"
+msgstr "Tümleştirme"
 
 #. i18n: ectx: property (text), widget (QLabel, lSmooth)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:352
@@ -7118,7 +7038,7 @@ msgstr "Entegrasyon"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:142
 #, kde-format
 msgid "Smooth"
-msgstr "Yumuşat"
+msgstr "Pürüzsüzleştir"
 
 #. i18n("Data Manipulation"));
 #. dataManipulationMenu->setIcon(QIcon::fromTheme(QStringLiteral("zoom-draw")));
@@ -7143,7 +7063,7 @@ msgstr "Sığdır"
 #: src/commonfrontend/worksheet/WorksheetView.cpp:394
 #, kde-format
 msgid "Fourier Filter"
-msgstr "Fourier Filtresi"
+msgstr "Fourier Süzgeci"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:355
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:453
@@ -7155,10 +7075,9 @@ msgstr "Fourier Dönüşümü"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
-#, fuzzy, kde-format
-#| msgid "Fourier Transform"
+#, kde-format
 msgid "Hilbert Transform"
-msgstr "Fourier Dönüşümü"
+msgstr "Hilbert Dönüşümü"
 
 #. i18n("Integration"),
 #. cartesianPlotAddNewActionGroup);
@@ -7166,10 +7085,9 @@ msgstr "Fourier Dönüşümü"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:357
 #: src/commonfrontend/worksheet/WorksheetView.cpp:343
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:344
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "(De-)Convolution"
-msgstr "Bağlantı"
+msgstr "Sarma/Geri Silme"
 
 #. i18n("Convolution/Deconvolution"),
 #. cartesianPlotAddNewActionGroup);
@@ -7177,10 +7095,9 @@ msgstr "Bağlantı"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
 #: src/commonfrontend/worksheet/WorksheetView.cpp:347
 #: src/commonfrontend/worksheet/WorksheetView.cpp:382
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Auto-/Cross-Correlation"
-msgstr "Bağlantı"
+msgstr "Otomatik/Çapraz Bağlılık"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLegendVisible)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:360
@@ -7188,7 +7105,7 @@ msgstr "Bağlantı"
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:147
 #, kde-format
 msgid "Legend"
-msgstr "Efsane"
+msgstr "Gösterge"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:364
 #: src/commonfrontend/worksheet/WorksheetView.cpp:359
@@ -7203,10 +7120,9 @@ msgid "Vertical Axis"
 msgstr "Dikey Eksen"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:368
-#, fuzzy, kde-format
-#| msgid "Increment"
+#, kde-format
 msgid "Info Element"
-msgstr "Arttır"
+msgstr "Bilgi Ögesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:369
 #: src/commonfrontend/worksheet/WorksheetView.cpp:363
@@ -7215,34 +7131,32 @@ msgid "Custom Point"
 msgstr "Özel Nokta"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:370
-#, fuzzy, kde-format
-#| msgid "Ref. Points:"
+#, kde-format
 msgid "Reference Line"
-msgstr "Ref. Noktalar:"
+msgstr "Başvuru Çizgisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:401
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:460
 #, kde-format
 msgid "Differentiate"
-msgstr "Türev al"
+msgstr "Türev Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:402
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:463
 #, kde-format
 msgid "Integrate"
-msgstr "Integral al"
+msgstr "Integral Al"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:403
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:466
 #, kde-format
 msgid "Interpolate"
-msgstr "Ara değer hesapla"
+msgstr "Aradeğerle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:405
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Convolute/Deconvolute"
-msgstr "Bağlantı"
+msgstr "Sar/Sarmayı Aç"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:416
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:479
@@ -7286,24 +7200,22 @@ msgstr "Yeni Ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:487
 #: src/commonfrontend/worksheet/WorksheetView.cpp:544
-#, fuzzy, kde-format
-#| msgid "Analysis"
+#, kde-format
 msgid "Analysis Curve"
-msgstr "Analiz"
+msgstr "Çözümleme Eğrisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, kde-format
 msgid "Analysis"
-msgstr "Analiz"
+msgstr "Çözümleme"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:564
 #: src/commonfrontend/worksheet/WorksheetView.cpp:622
 #: src/kdefrontend/ThemeHandler.cpp:49 src/kdefrontend/ThemeHandler.cpp:144
-#, fuzzy, kde-format
-#| msgid "Theme:"
+#, kde-format
 msgid "Theme"
-msgstr "Tema:"
+msgstr "Tema"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:907
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:941
@@ -7630,59 +7542,59 @@ msgstr "%1: yatay yerleşim boşlulamayı ayarla"
 msgid "%1: set layout column count"
 msgstr "%1: yerleşim sütun sayısını ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:184
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, fuzzy, kde-format
 #| msgid "Position:"
 msgid "bin positions"
 msgstr "Konum:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "bin values"
 msgstr "ikili değerler"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, fuzzy, kde-format
 #| msgid "Gaussian Distribution"
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Gauss Dağlımı"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Üstel Dağıtım Sığdır"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, fuzzy, kde-format
 #| msgid "Laplace Distribution"
 msgid "Fit Laplace Distribution"
 msgstr "Laplace Dağılımı"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:235
 #, fuzzy, kde-format
 #| msgid "Cauchy Distribution"
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Cauchy Dağılımı"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:241
 #, fuzzy, kde-format
 #| msgid "Lognormal Distribution"
 msgid "Fit Log-normal Distribution"
 msgstr "Lognormal Dağılım"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:238
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:247
 #, fuzzy, kde-format
 #| msgid "Poisson Distribution"
 msgid "Fit Poisson Distribution"
 msgstr "Poisson Dağılımı"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:244
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:253
 #, fuzzy, kde-format
 #| msgid "Binomial Distribution"
 msgid "Fit Binomial Distribution"
 msgstr "İki Terimli Dağılım"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:386
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
 #, fuzzy, kde-format
 #| msgid "%1: set +delta_X column"
 msgid "%1: set data column"
@@ -7749,13 +7661,13 @@ msgid "%1: x-error type changed"
 msgstr "%1: x-hata türü değişti"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #, fuzzy, kde-format
 #| msgid "%1: set x-error column"
 msgid "%1: set error column"
 msgstr "%1: x-hata sütununu ayarla"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:885
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:894
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger then "

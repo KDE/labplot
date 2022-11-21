@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:42+0000\n"
+"POT-Creation-Date: 2022-11-21 00:42+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1930
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:403
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:256
@@ -6622,7 +6622,7 @@ msgstr "%1: nastaviť obrázok pozadia"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:94
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
 #: src/backend/worksheet/TextLabel.cpp:257
@@ -7173,7 +7173,7 @@ msgid "%1: width factor changed"
 msgstr "%1    [zmenené]"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:337
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:187
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, fuzzy, kde-format
 #| msgid "No Data"
@@ -7281,7 +7281,7 @@ msgid "%1: jitterring changed"
 msgstr "%1: nastaviť obrázok pozadia"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:547
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:630
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -7289,7 +7289,7 @@ msgid "%1: change rug enabled"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:554
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:548
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:644
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -7297,7 +7297,7 @@ msgid "%1: change rug width"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:561
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:555
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:651
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -7305,7 +7305,7 @@ msgid "%1: change rug length"
 msgstr "%1: zmeniť komentár"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:568
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:562
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:658
 #, fuzzy, kde-format
 #| msgid "%1: change comment"
@@ -7598,7 +7598,7 @@ msgid "Analysis Curve"
 msgstr "Rozbor"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, kde-format
 msgid "Analysis"
 msgstr "Rozbor"
@@ -7963,61 +7963,61 @@ msgstr ""
 msgid "%1: set layout column count"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:184
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, fuzzy, kde-format
 #| msgid "Tab position:"
 msgid "bin positions"
 msgstr "Pozícia kariet:"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, fuzzy, kde-format
 #| msgid "Values"
 msgid "bin values"
 msgstr "Hodnoty"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, fuzzy, kde-format
 #| msgid "Gaussian Distribution"
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Gaussovo rozdelenie"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Exponential Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Laplace Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:235
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:241
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Log-normal Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:238
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:247
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Poisson Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:244
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:253
 #, fuzzy, kde-format
 #| msgid "Direction"
 msgid "Fit Binomial Distribution"
 msgstr "Smer"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:386
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set data column"
@@ -8084,13 +8084,13 @@ msgid "%1: x-error type changed"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #, fuzzy, kde-format
 #| msgid "%1: set font"
 msgid "%1: set error column"
 msgstr "Vložiť stĺpec"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:885
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:894
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger then "

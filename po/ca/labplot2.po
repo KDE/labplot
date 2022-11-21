@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-20 00:42+0000\n"
-"PO-Revision-Date: 2022-11-15 17:09+0100\n"
-"Last-Translator: Antoni Bella <antonibella5@yahoo.com>\n"
+"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"PO-Revision-Date: 2022-11-20 10:18+0100\n"
+"Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -77,7 +77,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1930
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:403
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:256
@@ -6395,7 +6395,7 @@ msgstr "%1: estableix l'opacitat del fons"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:165
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:94
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
 #: src/backend/worksheet/TextLabel.cpp:257
@@ -6524,10 +6524,9 @@ msgid "%1: set line style"
 msgstr "%1: estableix l'estil de la línia"
 
 #: src/backend/worksheet/Line.cpp:147
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set line width"
-msgstr "%1: estableix l'amplada del compartiment"
+msgstr "%1: estableix l'amplada de la línia"
 
 #: src/backend/worksheet/Line.cpp:154
 #, kde-format
@@ -6913,7 +6912,7 @@ msgid "%1: width factor changed"
 msgstr "%1: s'ha canviat el factor d'amplada"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:337
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:178
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:187
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, kde-format
 msgid "%1 - Data"
@@ -7012,28 +7011,28 @@ msgid "%1: jitterring changed"
 msgstr "%1: s'ha canviat el «jitter»"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:547
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:630
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: s'ha habilitat el canvi d'estora"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:554
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:548
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:644
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: canvia l'amplada d'estora"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:561
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:555
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:651
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: canvia la longitud d'estora"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:568
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:562
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:658
 #, kde-format
 msgid "%1: change rug offset"
@@ -7304,7 +7303,7 @@ msgid "Analysis Curve"
 msgstr "Corba d'anàlisi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:205
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
 #, kde-format
 msgid "Analysis"
 msgstr "Anàlisi"
@@ -7630,52 +7629,52 @@ msgstr "%1: estableix l'espaiat horitzontal de la disposició"
 msgid "%1: set layout column count"
 msgstr "%1: estableix el comptador de columnes de la disposició"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:184
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
 #, kde-format
 msgid "bin positions"
 msgstr "posicions dels compartiments"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:190
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "bin values"
 msgstr "valors dels compartiments"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:208
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Ajusta a la distribució gaussiana (normal)"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Ajusta a la distribució exponencial"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:220
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Ajusta a la distribució de Laplace"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:226
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:235
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Ajusta a la distribució de Cauchy-Lorentz"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:232
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:241
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Ajusta a la distribució log-normal"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:238
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:247
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Ajusta a la distribució de Poisson"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:244
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:253
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Ajusta a la distribució binomial"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:386
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: estableix la data de la columna"
@@ -7732,12 +7731,12 @@ msgid "%1: x-error type changed"
 msgstr "%1: s'ha canviat el tipus d'error X"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:531
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
 #, kde-format
 msgid "%1: set error column"
 msgstr "%1: estableix la columna d'error"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:885
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:894
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger then "
