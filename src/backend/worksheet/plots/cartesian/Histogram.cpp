@@ -22,6 +22,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
 #include "backend/lib/trace.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Background.h"
@@ -46,6 +47,10 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 }
 
+CURVE_COLUMN_CONNECT(Histogram, Data, data, recalcHistogram)
+CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
+CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
+
 Histogram::Histogram(const QString& name)
 	: WorksheetElement(name, new HistogramPrivate(this), AspectType::Histogram)
 	, Curve() {
@@ -57,6 +62,10 @@ Histogram::Histogram(const QString& name, HistogramPrivate* dd)
 	, Curve() {
 	init();
 }
+
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
+Histogram::~Histogram() = default;
 
 void Histogram::init() {
 	Q_D(Histogram);
@@ -289,11 +298,7 @@ BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
-
-QString& Histogram::dataColumnPath() const {
-	D(Histogram);
-	return d->dataColumnPath;
-}
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, dataColumnPath, dataColumnPath)
 
 // line
 Line* Histogram::line() const {
@@ -379,21 +384,16 @@ const AbstractColumn* Histogram::binPDValues() const {
 //##############################################################################
 
 // General
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetDataColumn, const AbstractColumn*, dataColumn, recalcHistogram)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, Data, data, recalcHistogram)
 void Histogram::setDataColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->dataColumn) {
+	if (column != d->dataColumn)
 		exec(new HistogramSetDataColumnCmd(d, column, ki18n("%1: set data column")));
+}
 
-		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::dataChanged);
-
-			// update the curve itself on changes
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::recalcHistogram);
-			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &Histogram::dataColumnAboutToBeRemoved);
-			// TODO: add disconnect in the undo-function
-		}
-	}
+void Histogram::setDataColumnPath(const QString& path) {
+	Q_D(Histogram);
+	d->dataColumnPath = path;
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
@@ -509,14 +509,11 @@ void Histogram::setErrorType(ErrorType type) {
 		exec(new HistogramSetErrorTypeCmd(d, type, ki18n("%1: x-error type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorPlusColumn, const AbstractColumn*, errorPlusColumn, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 void Histogram::setErrorPlusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->errorPlusColumn) {
+	if (column != d->errorPlusColumn)
 		exec(new HistogramSetErrorPlusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column)
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-	}
 }
 
 void Histogram::setErrorPlusColumnPath(const QString& path) {
@@ -524,14 +521,11 @@ void Histogram::setErrorPlusColumnPath(const QString& path) {
 	d->errorPlusColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetErrorMinusColumn, const AbstractColumn*, errorMinusColumn, updateErrorBars)
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 void Histogram::setErrorMinusColumn(const AbstractColumn* column) {
 	Q_D(Histogram);
-	if (column != d->errorMinusColumn) {
+	if (column != d->errorMinusColumn)
 		exec(new HistogramSetErrorMinusColumnCmd(d, column, ki18n("%1: set error column")));
-		if (column)
-			connect(column, &AbstractColumn::dataChanged, this, &Histogram::updateErrorBars);
-	}
 }
 
 void Histogram::setErrorMinusColumnPath(const QString& path) {
@@ -605,6 +599,11 @@ void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void Histogram::dataColumnNameChanged() {
+	Q_D(Histogram);
+	setDataColumnPath(d->dataColumn->path());
+}
+
 void Histogram::updateErrorBars() {
 	Q_D(Histogram);
 	d->updateErrorBars();
@@ -618,12 +617,22 @@ void Histogram::errorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+void Histogram::errorPlusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorPlusColumnPath(d->errorPlusColumn->path());
+}
+
 void Histogram::errorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(Histogram);
 	if (aspect == d->errorMinusColumn) {
 		d->errorMinusColumn = nullptr;
 		d->updateErrorBars();
 	}
+}
+
+void Histogram::errorMinusColumnNameChanged() {
+	Q_D(Histogram);
+	setErrorMinusColumnPath(d->errorMinusColumn->path());
 }
 
 //##############################################################################
@@ -2012,8 +2021,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	d->line->loadThemeConfig(group, themeColor);
 	d->symbol->loadThemeConfig(group, themeColor);
 	d->value->loadThemeConfig(group, themeColor);
-	d->background->loadThemeConfig(group);
-	d->background->setFirstColor(themeColor);
+	d->background->loadThemeConfig(group, themeColor);
 	d->errorBarsLine->loadThemeConfig(group, themeColor);
 
 	if (plot->theme() == QLatin1String("Tufte")) {

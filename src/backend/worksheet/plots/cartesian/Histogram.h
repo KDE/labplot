@@ -29,6 +29,10 @@ class Histogram : public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
+	friend class HistogramSetDataColumnCmd;
+	friend class HistogramSetErrorPlusColumnCmd;
+	friend class HistogramSetErrorMinusColumnCmd;
+
 	enum HistogramType { Ordinary, Cumulative, AvgShift };
 	enum HistogramOrientation { Vertical, Horizontal };
 	enum HistogramNormalization { Count, Probability, CountDensity, ProbabilityDensity };
@@ -39,6 +43,7 @@ public:
 	enum ErrorType { NoError, Poisson, CustomSymmetric, CustomAsymmetric };
 
 	explicit Histogram(const QString& name);
+	~Histogram() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -52,7 +57,7 @@ public:
 	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
-	QString& dataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
@@ -107,9 +112,15 @@ public Q_SLOTS:
 private Q_SLOTS:
 	void updateValues();
 	void updateErrorBars();
+
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
+	void dataColumnNameChanged();
+
 	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorPlusColumnNameChanged();
+
 	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorMinusColumnNameChanged();
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
@@ -118,11 +129,16 @@ private:
 	Q_DECLARE_PRIVATE(Histogram)
 	void init();
 	void initActions();
+	void connectDataColumn(const AbstractColumn*);
+	void connectErrorPlusColumn(const AbstractColumn*);
+	void connectErrorMinusColumn(const AbstractColumn*);
+
 	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	// General-Tab
 	void dataChanged();
+	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 
 	void typeChanged(Histogram::HistogramType);
@@ -137,7 +153,9 @@ Q_SIGNALS:
 
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);
+	void errorPlusDataChanged();
 	void errorPlusColumnChanged(const AbstractColumn*);
+	void errorMinusDataChanged();
 	void errorMinusColumnChanged(const AbstractColumn*);
 
 	// Margin Plots
