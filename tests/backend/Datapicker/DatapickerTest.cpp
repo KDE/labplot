@@ -922,4 +922,60 @@ void DatapickerTest::selectReferencePoint() {
 	QCOMPARE(w.ui.rbRefPoint3->isChecked(), true);
 }
 
+void DatapickerTest::imageAxisPointsChanged() {
+	DatapickerImageWidget w(nullptr);
+	Datapicker datapicker(QStringLiteral("Test"));
+	auto* image = datapicker.image();
+	w.setImages({image});
+
+	DatapickerImage::ReferencePoints points;
+	points.logicalPos[0] = QVector3D(-1, 2, 4);
+	points.logicalPos[1] = QVector3D(-5, -867, 236);
+	points.logicalPos[2] = QVector3D(43, -231.2, 234);
+	points.scenePos[0] = QPointF(-3, 2);
+	points.scenePos[1] = QPointF(-291, 3249);
+	points.scenePos[2] = QPointF(-239, 349);
+	points.ternaryScale = -23;
+
+	points.type = DatapickerImage::GraphType::Linear;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Linear);
+
+	points.type = DatapickerImage::GraphType::PolarInDegree;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::PolarInDegree);
+
+	points.type = DatapickerImage::GraphType::PolarInRadians;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::PolarInRadians);
+
+	points.type = DatapickerImage::GraphType::LnX;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::LnX);
+
+	points.type = DatapickerImage::GraphType::LnY;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::LnY);
+
+	points.type = DatapickerImage::GraphType::Ternary;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Ternary);
+
+	points.type = DatapickerImage::GraphType::LnXY;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::LnXY);
+
+	points.type = DatapickerImage::GraphType::Log10XY;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Log10XY);
+
+	points.type = DatapickerImage::GraphType::Log10X;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Log10X);
+
+	points.type = DatapickerImage::GraphType::Log10Y;
+	w.imageAxisPointsChanged(points);
+	QCOMPARE(static_cast<DatapickerImage::GraphType>(w.ui.cbGraphType->currentData().toInt()), DatapickerImage::GraphType::Log10Y);
+}
+
 QTEST_MAIN(DatapickerTest)
