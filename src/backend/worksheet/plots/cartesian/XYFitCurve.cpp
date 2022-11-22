@@ -1798,25 +1798,43 @@ void XYFitCurvePrivate::recalculate() {
 	QElapsedTimer timer;
 	timer.start();
 
+	// clear the previous result
+	fitResult = XYFitCurve::FitResult();
+
+	DEBUG("ALGORITHM: " << fitData.algorithm)
+	switch (fitData.algorithm) {
+	case nsl_fit_algorithm_lm:
+		runLevenbergMarquardt();
+		break;
+	case nsl_fit_algorithm_ml:
+		runMaximumLikelyhood();
+	}
+
+	fitResult.elapsedTime = timer.elapsed();
+}
+
+void XYFitCurvePrivate::runMaximumLikelyhood() {
+	// TODO
+}
+
+void XYFitCurvePrivate::runLevenbergMarquardt() {
 	// prepare source data columns
+	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG(Q_FUNC_INFO << ", SPREADSHEET columns as data source");
+	switch (dataSourceType) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
-	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
-		DEBUG(Q_FUNC_INFO << ", CURVE columns as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
-	} else {
-		DEBUG(Q_FUNC_INFO << ", HISTOGRAM columns as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		tmpXDataColumn = dataSourceHistogram->bins();
 		tmpYDataColumn = dataSourceHistogram->binPDValues();
 	}
-
-	// clear the previous result
-	fitResult = XYFitCurve::FitResult();
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
@@ -2307,7 +2325,6 @@ void XYFitCurvePrivate::recalculate() {
 
 	// calculate the fit function (vectors)
 	evaluate();
-	fitResult.elapsedTime = timer.elapsed();
 
 	sourceDataChangedSinceLastRecalc = false;
 }

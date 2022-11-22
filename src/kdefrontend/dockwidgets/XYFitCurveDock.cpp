@@ -204,6 +204,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.tbConstants, &QToolButton::clicked, this, &XYFitCurveDock::showConstants);
 	connect(uiGeneralTab.tbFunctions, &QToolButton::clicked, this, &XYFitCurveDock::showFunctions);
 	connect(uiGeneralTab.pbOptions, &QPushButton::clicked, this, &XYFitCurveDock::showOptions);
+	connect(uiGeneralTab.cbAlgorithm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::algorithmChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFitCurveDock::recalculateClicked);
 	connect(uiGeneralTab.lData, &QPushButton::clicked, this, &XYFitCurveDock::showDataOptions);
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
@@ -1004,6 +1005,10 @@ void XYFitCurveDock::showFunctions() {
 
 	QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions->width(), -menu.sizeHint().height());
 	menu.exec(uiGeneralTab.tbFunctions->mapToGlobal(pos));
+}
+
+void XYFitCurveDock::algorithmChanged(int index) {
+	m_fitData.algorithm = (nsl_fit_algorithm)index;
 }
 
 /*!

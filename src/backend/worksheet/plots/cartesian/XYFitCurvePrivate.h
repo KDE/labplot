@@ -27,6 +27,8 @@ public:
 	~XYFitCurvePrivate() override;
 
 	void recalculate();
+	void runLevenbergMarquardt();
+	void runMaximumLikelyhood();
 	void evaluate(bool preview = false);
 
 	const Histogram* dataSourceHistogram{nullptr};
