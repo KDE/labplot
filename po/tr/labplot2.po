@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-21 00:42+0000\n"
-"PO-Revision-Date: 2022-11-15 05:07+0300\n"
+"PO-Revision-Date: 2022-11-21 22:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5275,12 +5275,12 @@ msgstr "not elemanı bulunamadı"
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "forward (convolution)"
-msgstr "ileri (sarım)"
+msgstr "ileri (evrişim)"
 
 #: src/backend/nsl/nsl_conv.c:19
 #, kde-format
 msgid "backward (deconvolution)"
-msgstr "geri (silme)"
+msgstr "geri (ters evrişim)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
 #, kde-format
@@ -6887,27 +6887,27 @@ msgstr "%1: Çentikler değiştirildi"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
 #, kde-format
 msgid "%1: set whiskers type"
-msgstr "%1: Flaman türü ayarlandı"
+msgstr "%1: Flaman türü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:534
 #, kde-format
 msgid "%1: set whiskers range parameter"
-msgstr "%1: Flamanların erim parametresi ayarlandı"
+msgstr "%1: Flamanların erim parametresini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
 #, kde-format
 msgid "%1: set whiskers cap size"
-msgstr "%1: Flamanların kap boyutu ayarlandı"
+msgstr "%1: Flamanların kap boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:548
 #, kde-format
 msgid "%1: set whiskers cap pen"
-msgstr "%1: Flamanların kap kalemi ayarlandı"
+msgstr "%1: Flamanların kap kalemini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
 #, kde-format
 msgid "%1: set whiskers cap opacity"
-msgstr "%1: Flamanların kap matlığı ayarlandı"
+msgstr "%1: Flamanların kap matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
 #, kde-format
@@ -7087,7 +7087,7 @@ msgstr "Hilbert Dönüşümü"
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:344
 #, kde-format
 msgid "(De-)Convolution"
-msgstr "Sarma/Geri Silme"
+msgstr "(Ters) Evrişim"
 
 #. i18n("Convolution/Deconvolution"),
 #. cartesianPlotAddNewActionGroup);
@@ -7229,104 +7229,94 @@ msgid "%1: set range type"
 msgstr "%1: aralık türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:983
-#, fuzzy, kde-format
-#| msgid "%1: set line style"
+#, kde-format
 msgid "%1: set nice extend"
-msgstr "%1: çizgi stilini ayarla"
+msgstr "%1: Güzel genişletme ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:990
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:997
 #, kde-format
 msgid "%1: set range"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Erim ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1008
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: change %2-range %3 format"
-msgstr "%1: etiketlerin biçemini ayarla"
+msgstr "%1: %2 erimi %3 biçimi değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1099
-#, fuzzy, kde-format
-#| msgid "%1: change x-range auto scaling"
+#, kde-format
 msgid "%1: change %2-range %3 auto scaling"
-msgstr "%1: x-aralık otomatik ölçeklendirmeyi değiştir"
+msgstr "%1: %2 erimi %3 otomatik ölçeklemeyi değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1327
-#, fuzzy, kde-format
-#| msgid "%1: change x-range auto scaling"
+#, kde-format
 msgid "%1: change x-range %2 scale"
-msgstr "%1: x-aralık otomatik ölçeklendirmeyi değiştir"
+msgstr "%1: x aralığı %2 ölçeği değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1446
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set default plot range"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Öntanımlı çizim erimi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1459
 #, kde-format
 msgid "%1: x-range breaking enabled"
-msgstr "%1: x-aralık kırma etkinleştir"
+msgstr "%1: x aralığı kırma etkinleştirildi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1468
 #, kde-format
 msgid "%1: x-range breaks changed"
-msgstr "%1: x-aralık kesmeleri değişti"
+msgstr "%1: x aralığı kesmeleri değişti"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1477
 #, kde-format
 msgid "%1: y-range breaking enabled"
-msgstr "%1: y-aralık kesmesi aktifleştirildi"
+msgstr "%1: y aralığı kesmesi etkinleştirildi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1486
 #, kde-format
 msgid "%1: y-range breaks changed"
-msgstr "%1: y-aralık kesmesi değiştirildi"
+msgstr "%1: y aralığı kesmesi değiştirildi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1500
-#, fuzzy, kde-format
-#| msgid "%1: drop values"
+#, kde-format
 msgid "%1: Cursor0 enable"
-msgstr "%1: değerleri bırak"
+msgstr "%1: İmleç0 etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1512
-#, fuzzy, kde-format
-#| msgid "%1: drop values"
+#, kde-format
 msgid "%1: Cursor1 enable"
-msgstr "%1: değerleri bırak"
+msgstr "%1: İmleç1 etkinleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1523
 #: src/backend/worksheet/Worksheet.cpp:754
 #, kde-format
 msgid "%1: load theme %2"
-msgstr "%1: %2 temayı yükle"
+msgstr "%1: %2 temasını yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1525
 #: src/backend/worksheet/Worksheet.cpp:756
-#, fuzzy, kde-format
-#| msgid "%1: load theme %2"
+#, kde-format
 msgid "%1: load default theme"
-msgstr "%1: %2 temayı yükle"
+msgstr "%1: Öntanımlı temayı yükle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1527
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5220
 #: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set theme"
-msgstr "%1: temayı ayarla"
+msgstr "%1: Temayı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1598
-#, fuzzy, kde-format
-#| msgid "%1: fit to '%2'"
+#, kde-format
 msgid "%1: distribution fit to '%2'"
-msgstr "%1: '%2'ye sığdır"
+msgstr "%1: '%2' ögesine dağılımı sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1599
-#, fuzzy, kde-format
-#| msgid "F-distribution"
+#, kde-format
 msgid "Distribution Fit to '%1'"
-msgstr "F-dağılımı"
+msgstr "'%1' Ögesine Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1646
 #, kde-format
@@ -7337,7 +7327,7 @@ msgstr "%1: '%2' azalt"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:643
 #, kde-format
 msgid "Reduction of '%1'"
-msgstr "'%1'in indirgenmesi"
+msgstr "'%1' ögesinin indirgenmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1654
 #, kde-format
@@ -7353,109 +7343,108 @@ msgstr "%1: '%2' türevini al"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:646
 #, kde-format
 msgid "Derivative of '%1'"
-msgstr "'%1'in türevi"
+msgstr "'%1 türevi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1674
 #, kde-format
 msgid "%1: add differentiation curve"
-msgstr "%1: türev eğrisi ekle"
+msgstr "%1: Türev eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1686
 #, kde-format
 msgid "%1: integrate '%2'"
-msgstr "%1: '%2'yi entegre et"
+msgstr "%1: '%2' ögesini tümleştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1687
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:649
 #, kde-format
 msgid "Integral of '%1'"
-msgstr "'%1'in integrali"
+msgstr "'%1' ögesinin integrali"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1694
-#, fuzzy, kde-format
-#| msgid "%1: add interpolation curve"
+#, kde-format
 msgid "%1: add integration curve"
-msgstr "%1: aradeğerleme eğrisi ekle"
+msgstr "%1: Tümleştirme eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1706
 #, kde-format
 msgid "%1: interpolate '%2'"
-msgstr "%1: '%2' ara değerle"
+msgstr "%1: '%2' aradeğerle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1707
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:652
 #, kde-format
 msgid "Interpolation of '%1'"
-msgstr "'%1'in ara değerlendirilmesi"
+msgstr "'%1' ögesinin aradeğerlendirilmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1714
 #, kde-format
 msgid "%1: add interpolation curve"
-msgstr "%1: aradeğerleme eğrisi ekle"
+msgstr "%1: Aradeğerleme eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1726
 #, kde-format
 msgid "%1: smooth '%2'"
-msgstr "%1: '%2' yumuşatma"
+msgstr "%1: '%2' yumuşat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1727
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:655
 #, kde-format
 msgid "Smoothing of '%1'"
-msgstr "'%1'in yumuşatılması"
+msgstr "'%1' ögesinin yumuşatılması"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1734
 #, kde-format
 msgid "%1: add smoothing curve"
-msgstr "%1: yumuşatma eğrisi ekle"
+msgstr "%1: Yumuşatma eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1746
 #, kde-format
 msgid "%1: fit to '%2'"
-msgstr "%1: '%2'ye sığdır"
+msgstr "%1: '%2' ögesine sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1747
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:668
 #, kde-format
 msgid "Fit to '%1'"
-msgstr "'%1'e sığdır"
+msgstr "'%1' ögesine sığdır"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1776
 #, kde-format
 msgid "%1: add fit curve"
-msgstr "%1: sığdırma eğrisi ekle"
+msgstr "%1: Sığdırma eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1787
 #, kde-format
 msgid "%1: Fourier filtering of '%2'"
-msgstr "%1: '%2'nin Fourier filtresi"
+msgstr "%1: '%2' ögesinin Fourier süzmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1788
 #, kde-format
 msgid "Fourier filtering of '%1'"
-msgstr "'%1'in Fourier filtresi"
+msgstr "'%1' ögesinin Fourier süzmesi"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1792
 #, kde-format
 msgid "%1: add Fourier filter curve"
-msgstr "%1: Fourier filtre eğrisi ekle"
+msgstr "%1: Fourier süzgeci eğrisi ekle"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3703
 #, kde-format
 msgid "Not inside of the bounding rect"
-msgstr ""
+msgstr "Sınırlayıcı dörtgenin içinde değil"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3923
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3944
 #, kde-format
 msgid "from x=%1 to x=%2"
-msgstr ""
+msgstr "x=%1 konumundan x=%2 konumuna"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3931
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3957
 #, kde-format
 msgid "from y=%1 to y=%2"
-msgstr ""
+msgstr "y=%1 konumundan y=%2 konumuna"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3976
 #, kde-format
@@ -7470,202 +7459,184 @@ msgstr "bilinmeyen cartesianPlot elemanı '%1'"
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:223
 #, kde-format
 msgid "%1: set font"
-msgstr "%1: yazı tipini ayarla"
+msgstr "%1: Yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:230
 #: src/backend/worksheet/TextLabel.cpp:343
 #, kde-format
 msgid "%1: set font color"
-msgstr "%1: yazı tipi rengini ayarla"
+msgstr "%1: Yazıtipi rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:237
 #, kde-format
 msgid "%1: change column order"
-msgstr "%1: sütun sırasını değiştir"
+msgstr "%1: Sütun sırasını değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:244
 #, kde-format
 msgid "%1: change line+symbol width"
-msgstr "%1: satır+sembol genişliğini değiştir"
+msgstr "%1: Satır+sembol genişliğini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:252
 #, kde-format
 msgid "%1: set border corner radius"
-msgstr "%1: kenarlık köşeleri yarıçapını ayarla"
+msgstr "%1: Kenarlık köşeleri yarıçapını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:260
 #: src/backend/worksheet/Worksheet.cpp:640
 #: src/backend/worksheet/Worksheet.cpp:641
 #, kde-format
 msgid "%1: set layout top margin"
-msgstr "%1: hizalama üst boşluğunu ayarla"
+msgstr "%1: Yerleşim üst boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:267
 #: src/backend/worksheet/Worksheet.cpp:649
 #: src/backend/worksheet/Worksheet.cpp:650
 #, kde-format
 msgid "%1: set layout bottom margin"
-msgstr "%1: hizalama alt boşluğunu ayarla"
+msgstr "%1: Yerleşim alt boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:274
 #: src/backend/worksheet/Worksheet.cpp:658
 #: src/backend/worksheet/Worksheet.cpp:659
 #, kde-format
 msgid "%1: set layout left margin"
-msgstr "%1: hizalama sol boşluğunu ayarla"
+msgstr "%1: Yerleşim sol boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:281
 #: src/backend/worksheet/Worksheet.cpp:667
 #: src/backend/worksheet/Worksheet.cpp:668
 #, kde-format
 msgid "%1: set layout right margin"
-msgstr "%1: hizalama sağ boşluğunu ayarla"
+msgstr "%1: Yerleşim sağ boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:288
 #: src/backend/worksheet/Worksheet.cpp:676
 #: src/backend/worksheet/Worksheet.cpp:677
 #, kde-format
 msgid "%1: set layout vertical spacing"
-msgstr "%1: hizalama dikey boşluğunu ayarla"
+msgstr "%1: Yerleşim dikey boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:295
 #: src/backend/worksheet/Worksheet.cpp:685
 #: src/backend/worksheet/Worksheet.cpp:686
 #, kde-format
 msgid "%1: set layout horizontal spacing"
-msgstr "%1: yatay yerleşim boşlulamayı ayarla"
+msgstr "%1: Yerleşim yatay boşluğunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:302
 #: src/backend/worksheet/Worksheet.cpp:703
 #: src/backend/worksheet/Worksheet.cpp:704
 #, kde-format
 msgid "%1: set layout column count"
-msgstr "%1: yerleşim sütun sayısını ayarla"
+msgstr "%1: Yerleşim sütun sayısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
-#, fuzzy, kde-format
-#| msgid "Position:"
+#, kde-format
 msgid "bin positions"
-msgstr "Konum:"
+msgstr "kova konumları"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
 #, kde-format
 msgid "bin values"
-msgstr "ikili değerler"
+msgstr "kova değerleri"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
-#, fuzzy, kde-format
-#| msgid "Gaussian Distribution"
+#, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
-msgstr "Gauss Dağlımı"
+msgstr "(Normal) Gauss Dağılımını Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
 #, kde-format
 msgid "Fit Exponential Distribution"
-msgstr "Üstel Dağıtım Sığdır"
+msgstr "Üstel Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
-#, fuzzy, kde-format
-#| msgid "Laplace Distribution"
+#, kde-format
 msgid "Fit Laplace Distribution"
-msgstr "Laplace Dağılımı"
+msgstr "Laplace Dağılımını Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:235
-#, fuzzy, kde-format
-#| msgid "Cauchy Distribution"
+#, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
-msgstr "Cauchy Dağılımı"
+msgstr "Cauchy Dağılımını Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:241
-#, fuzzy, kde-format
-#| msgid "Lognormal Distribution"
+#, kde-format
 msgid "Fit Log-normal Distribution"
-msgstr "Lognormal Dağılım"
+msgstr "Log-normal Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:247
-#, fuzzy, kde-format
-#| msgid "Poisson Distribution"
+#, kde-format
 msgid "Fit Poisson Distribution"
-msgstr "Poisson Dağılımı"
+msgstr "Poisson Dağılımını Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:253
-#, fuzzy, kde-format
-#| msgid "Binomial Distribution"
+#, kde-format
 msgid "Fit Binomial Distribution"
-msgstr "İki Terimli Dağılım"
+msgstr "İki Terimli Dağılımı Sığdır"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
-#, fuzzy, kde-format
-#| msgid "%1: set +delta_X column"
+#, kde-format
 msgid "%1: set data column"
-msgstr "%1: +delta_X sütunu ayarla"
+msgstr "%1: +delta_X sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
-#, fuzzy, kde-format
-#| msgid "Histogram type:"
+#, kde-format
 msgid "%1: set histogram type"
-msgstr "Histogram türü:"
+msgstr "%1: Histogram türünü ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
-#, fuzzy, kde-format
-#| msgid "%1: set axis orientation"
+#, kde-format
 msgid "%1: set histogram orientation"
-msgstr "%1: eksen yönlendirmeyi ayarla"
+msgstr "%1: Histogram yönelimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
-#, fuzzy, kde-format
-#| msgid "%1: set axis orientation"
+#, kde-format
 msgid "%1: set histogram normalization"
-msgstr "%1: eksen yönlendirmeyi ayarla"
+msgstr "%1: Histogram normalleştirmesini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:424
-#, fuzzy, kde-format
-#| msgid "%1: set filling image"
+#, kde-format
 msgid "%1: set binning method"
-msgstr "%1: dolgu görselini ayarla"
+msgstr "%1: Kovalama yöntemini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:431
-#, fuzzy, kde-format
-#| msgid "%1: set font"
+#, kde-format
 msgid "%1: set bin count"
-msgstr "%1: yazı tipini ayarla"
+msgstr "%1: Kova sayısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:438
-#, fuzzy, kde-format
-#| msgid "%1: set min x"
+#, kde-format
 msgid "%1: set bin width"
-msgstr "%1: en küçük x'i ayarla"
+msgstr "%1: Kova genişliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:446
-#, fuzzy, kde-format
-#| msgid "%1: change x-range auto scaling"
+#, kde-format
 msgid "%1: change auto bin ranges"
-msgstr "%1: x-aralık otomatik ölçeklendirmeyi değiştir"
+msgstr "%1: Otomatik kova erimlerini değiştir"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:494
-#, fuzzy, kde-format
-#| msgid "%1: set axis start"
+#, kde-format
 msgid "%1: set bin ranges start"
-msgstr "%1: eksen başlangıcını ayarla"
+msgstr "%1: Kova erimleri başlangıcını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:501
-#, fuzzy, kde-format
-#| msgid "%1: set range type"
+#, kde-format
 msgid "%1: set bin ranges end"
-msgstr "%1: aralık türünü ayarla"
+msgstr "%1: Kova erimleri bitişini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:509
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: x-error type changed"
-msgstr "%1: x-hata türü değişti"
+msgstr "%1: x hatası türü değişti"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
-#, fuzzy, kde-format
-#| msgid "%1: set x-error column"
+#, kde-format
 msgid "%1: set error column"
-msgstr "%1: x-hata sütununu ayarla"
+msgstr "%1: Hata sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:894
 #, kde-format
@@ -7673,36 +7644,38 @@ msgid ""
 "Calculation of the histogram not possible. The max value must be bigger then "
 "the min value."
 msgstr ""
+"Histogramın hesaplanması olanaklı değil. En büyük değer, en küçük değerden "
+"daha büyük olmalı."
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:151
 #, kde-format
 msgid "%1: set symbol style"
-msgstr "%1: sembol biçemini ayarla"
+msgstr "%1: Sembol biçemini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:158
 #, kde-format
 msgid "%1: set symbol size"
-msgstr "%1: sembol boyutunu ayarla"
+msgstr "%1: Sembol boyutunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:165
 #, kde-format
 msgid "%1: rotate symbols"
-msgstr "%1: sembolü döndür"
+msgstr "%1: Sembolü döndür"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:172
 #, kde-format
 msgid "%1: set symbol filling"
-msgstr "%1: sembol dolgusunu ayarla"
+msgstr "%1: Sembol dolgusunu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:179
 #, kde-format
 msgid "%1: set symbol outline style"
-msgstr "%1: sembol sınırlarının biçemini ayarla"
+msgstr "%1: Sembol sınırlarının biçemini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:186
 #, kde-format
 msgid "%1: set symbols opacity"
-msgstr "%1: sembollerin matlığını ayarla"
+msgstr "%1: Sembollerin matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:285
 #, kde-format
@@ -7772,7 +7745,7 @@ msgstr "bumerang"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:311
 #, kde-format
 msgid "small boomerang"
-msgstr "küçük boomerang"
+msgstr "küçük bumerang"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:313
 #, kde-format
@@ -7797,355 +7770,320 @@ msgstr "çarpı"
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:321
 #, kde-format
 msgid "heart"
-msgstr ""
+msgstr "yürek"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:323
-#, fuzzy, kde-format
-#| msgid "light cyan"
+#, kde-format
 msgid "lightning"
-msgstr "açık cyan"
+msgstr "yıldırım"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:325
 #, kde-format
 msgid "character 'X'"
-msgstr ""
+msgstr "'X' karakteri"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:327
 #, kde-format
 msgid "asterisk"
-msgstr ""
+msgstr "yıldız"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:329
-#, fuzzy, kde-format
-#| msgid "tie"
+#, kde-format
 msgid "tri"
-msgstr "kravat"
+msgstr "üç"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:331
-#, fuzzy, kde-format
-#| msgid "plus"
+#, kde-format
 msgid "x plus"
-msgstr "artı"
+msgstr "x artı"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:333
-#, fuzzy, kde-format
-#| msgid "plus"
+#, kde-format
 msgid "tall plus"
-msgstr "artı"
+msgstr "uzun artı"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:335
-#, fuzzy, kde-format
-#| msgid "cross"
+#, kde-format
 msgid "latin cross"
-msgstr "çarpı"
+msgstr "latin haçı"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:337
-#, fuzzy, kde-format
-#| msgid "plus"
+#, kde-format
 msgid "dot plus"
-msgstr "artı"
+msgstr "nokta artı"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:339
 #, kde-format
 msgid "hash"
-msgstr ""
+msgstr "kare karakteri"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:341
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "square x"
-msgstr "kare"
+msgstr "kare x"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:343
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "square plus"
-msgstr "kare"
+msgstr "kare artı"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:345
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "half square"
-msgstr "kare"
+msgstr "yarım kare"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:347
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "square dot"
-msgstr "kare"
+msgstr "kare nokta"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:349
-#, fuzzy, kde-format
-#| msgid "square"
+#, kde-format
 msgid "diag square"
-msgstr "kare"
+msgstr "diyagram kare"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:351
-#, fuzzy, kde-format
-#| msgid "equilateral triangle"
+#, kde-format
 msgid "square triangle"
-msgstr "eşkenar üçgen"
+msgstr "kare üçgen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:353
-#, fuzzy, kde-format
-#| msgid "circle"
+#, kde-format
 msgid "circle half"
-msgstr "çember"
+msgstr "yarım çember"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:355
-#, fuzzy, kde-format
-#| msgid "circle"
+#, kde-format
 msgid "circle dot"
-msgstr "çember"
+msgstr "nokta çember"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:357
-#, fuzzy, kde-format
-#| msgid "circle"
+#, kde-format
 msgid "circle x"
-msgstr "çember"
+msgstr "çember x"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:359
-#, fuzzy, kde-format
-#| msgid "circle"
+#, kde-format
 msgid "circle tri"
-msgstr "çember"
+msgstr "çember üç"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:361
 #, kde-format
 msgid "peace"
-msgstr ""
+msgstr "barış"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:363
-#, fuzzy, kde-format
-#| msgid "triangular"
+#, kde-format
 msgid "triangle dot"
-msgstr "üçgen"
+msgstr "üçgen nokta"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:365
-#, fuzzy, kde-format
-#| msgid "triangular"
+#, kde-format
 msgid "triangle line"
-msgstr "üçgen"
+msgstr "üçgen çizgi"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:367
-#, fuzzy, kde-format
-#| msgid "right triangle"
+#, kde-format
 msgid "half triangle"
-msgstr "sağ üçgen"
+msgstr "yarım üçgen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:369
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "flower"
-msgstr "Güç"
+msgstr "çiçek"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:371
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "flower2"
-msgstr "Güç"
+msgstr "çiçek2"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:373
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "flower3"
-msgstr "Güç"
+msgstr "çiçek3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:375
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "flower5"
-msgstr "Güç"
+msgstr "çiçek5"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:377
-#, fuzzy, kde-format
-#| msgid "Power"
+#, kde-format
 msgid "flower6"
-msgstr "Güç"
+msgstr "çiçek6"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:379
-#, fuzzy, kde-format
-#| msgid "star4"
+#, kde-format
 msgid "star"
-msgstr "yıldız4"
+msgstr "yıldız"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:381
-#, fuzzy, kde-format
-#| msgid "star4"
+#, kde-format
 msgid "star3"
-msgstr "yıldız4"
+msgstr "yıldız3"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:383
-#, fuzzy, kde-format
-#| msgid "star4"
+#, kde-format
 msgid "star6"
-msgstr "yıldız4"
+msgstr "yıldız6"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:385
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "pentagon"
-msgstr "Yönlendirme"
+msgstr "beşgen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:387
 #, kde-format
 msgid "hexagon"
-msgstr ""
+msgstr "altıgen"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:389
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "latin"
-msgstr "Bağlantı"
+msgstr "latin"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:391
 #, kde-format
 msgid "david"
-msgstr ""
+msgstr "davut"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:393
 #, kde-format
 msgid "home"
-msgstr ""
+msgstr "ev"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:395
-#, fuzzy, kde-format
-#| msgid "in"
+#, kde-format
 msgid "pin"
-msgstr "içinde"
+msgstr "pim"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:397
 #, kde-format
 msgid "female"
-msgstr ""
+msgstr "kadın"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:399
 #, kde-format
 msgid "male"
-msgstr ""
+msgstr "erkek"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:401
 #, kde-format
 msgid "spade"
-msgstr ""
+msgstr "maça"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:403
 #, kde-format
 msgid "club"
-msgstr ""
+msgstr "sinek"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:107
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:439
 #, kde-format
 msgid "%1: set values type"
-msgstr "%1: değer türlerini ayarla"
+msgstr "%1: Değerler türlerini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:114
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:446
 #, kde-format
 msgid "%1: set values column"
-msgstr "%1: değer sütunlarını ayarla"
+msgstr "%1: Değerler sütunlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:126
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:465
 #, kde-format
 msgid "%1: set values position"
-msgstr "%1: değer konumlarını ayarla"
+msgstr "%1: Değerlerin konumlarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:133
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:472
 #, kde-format
 msgid "%1: set values distance"
-msgstr "%1: değer uzaklıklarını ayarla"
+msgstr "%1: Değerlerin uzaklıklarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:140
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:479
 #, kde-format
 msgid "%1: rotate values"
-msgstr "%1: değerleri döndür"
+msgstr "%1: Değerleri döndür"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:147
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:486
 #, kde-format
 msgid "%1: set values opacity"
-msgstr "%1: değerlerin matlığını ayarla"
+msgstr "%1: Değerlerin matlığını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:154
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:493
-#, fuzzy, kde-format
-#| msgid "%1: set values font"
+#, kde-format
 msgid "%1: set values numeric format"
-msgstr "%1: değerler yazıtipini ayarla"
+msgstr "%1: Değerlerin sayısal biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:161
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:500
-#, fuzzy, kde-format
-#| msgid "%1: set labels precision"
+#, kde-format
 msgid "%1: set values precision"
-msgstr "%1: etiketlerin keskinliğini ayarla"
+msgstr "%1: Değerlerin kesinliğini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:168
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:507
-#, fuzzy, kde-format
-#| msgid "%1: set labels format"
+#, kde-format
 msgid "%1: set values datetime format"
-msgstr "%1: etiketlerin biçemini ayarla"
+msgstr "%1: Değerlerin tarih-saat biçimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:175
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:514
 #, kde-format
 msgid "%1: set values prefix"
-msgstr "%1: değer önekini ayarla"
+msgstr "%1: Değerlerin önekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:182
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:521
 #, kde-format
 msgid "%1: set values suffix"
-msgstr "%1: değerlar sonekini ayarla"
+msgstr "%1: Değerlerin sonekini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:189
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:528
 #, kde-format
 msgid "%1: set values font"
-msgstr "%1: değerler yazıtipini ayarla"
+msgstr "%1: Değerlerin yazıtipini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/Value.cpp:196
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:535
 #, kde-format
 msgid "%1: set values color"
-msgstr "%1: değerler rengini ayarla"
+msgstr "%1: Değerlerin rengini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:184
 #, kde-format
 msgid "%1: data source type changed"
-msgstr "%1: veri kaynağı türü değişti"
+msgstr "%1: Veri kaynağı türü değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:191
 #, kde-format
 msgid "%1: data source curve changed"
-msgstr "%1: veri kaynağı eğrisi değişti"
+msgstr "%1: Veri kaynağı eğrisi değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:212
 #, kde-format
 msgid "%1: assign x-data"
-msgstr "%1: x-data ata"
+msgstr "%1: x verisi ata"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:230
 #, kde-format
 msgid "%1: assign y-data"
-msgstr "%1: y-data ata"
+msgstr "%1: y verisi ata"
 
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:248
-#, fuzzy, kde-format
-#| msgid "%1: assign y-data"
+#, kde-format
 msgid "%1: assign second y-data"
-msgstr "%1: y-data ata"
+msgstr "%1: y verisi ata"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:79
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the convolution"
-msgstr "%1: seçenekleri ayarla ve enterpolasyonu gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve evrişimi gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:196
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:187
@@ -14112,7 +14050,7 @@ msgstr "Not"
 #: src/kdefrontend/labplot2ui.rc:71
 #, kde-format
 msgid "&Edit"
-msgstr "Düz&enle"
+msgstr "Dü&zen"
 
 #. i18n: ectx: Menu (spreadsheet)
 #: src/kdefrontend/labplot2ui.rc:76
@@ -14136,7 +14074,7 @@ msgstr "&Çalışma sayfası"
 #: src/kdefrontend/labplot2ui.rc:80
 #, kde-format
 msgid "&Analysis"
-msgstr "&Analiz"
+msgstr "Ç&özümleme"
 
 #. i18n: ectx: Menu (datapicker)
 #: src/kdefrontend/labplot2ui.rc:81

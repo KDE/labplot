@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-21 00:42+0000\n"
-"PO-Revision-Date: 2022-11-15 07:06+0100\n"
+"PO-Revision-Date: 2022-11-21 07:25+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -127,6 +127,7 @@ msgstr "უცნობი ელემენტი %1"
 msgid ""
 "Intended name \"%1\" was changed to \"%2\" in order to avoid name collision."
 msgstr ""
+"სახელების კონფლიქტის თავიდან ასაცილებლად სახელი \"%1\" -ი \"%2\"-ით შეიცვალა."
 
 #: src/backend/core/AbstractAspect.cpp:225
 #, kde-format
@@ -527,7 +528,7 @@ msgstr "ტიპი: %1"
 #: src/backend/core/AspectTreeModel.cpp:227
 #, kde-format
 msgid "Plot Designation: %1"
-msgstr ""
+msgstr "გრაფიკის დანიშნულება: %1"
 
 #: src/backend/core/AspectTreeModel.cpp:232
 #, kde-format
@@ -622,7 +623,7 @@ msgstr "%1: უჯრედის მნიშვნელობის შეც
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:2650
 #, kde-format
 msgid "%1: set plot designation"
-msgstr ""
+msgstr "%1: გრაფიკის დანიშნულების დაყენება"
 
 #: src/backend/core/column/columncommands.cpp:683
 #: src/backend/matrix/matrixcommands.cpp:86
@@ -801,7 +802,7 @@ msgstr ""
 #: src/kdefrontend/ui/datapickerimagewidget.ui:145
 #, kde-format
 msgid "Plot"
-msgstr ""
+msgstr "გრაფიკი"
 
 #: src/backend/datapicker/Datapicker.cpp:135
 #, kde-format
@@ -942,7 +943,7 @@ msgstr "%1: გამოსახულების ატვირთვა"
 #: src/backend/worksheet/WorksheetElement.cpp:633
 #, kde-format
 msgid "%1: set rotation angle"
-msgstr ""
+msgstr "%1: მობრუნების კუთხის დაყენება"
 
 #: src/backend/datapicker/DatapickerImage.cpp:264
 #, kde-format
@@ -974,39 +975,39 @@ msgstr "%1: მდებარეობის დაყენება"
 #: src/backend/datapicker/DatapickerPoint.cpp:222
 #, kde-format
 msgid "%1: set +delta_X position"
-msgstr ""
+msgstr "%1: დააყენეთ +delta_X მდებარეობა"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:224
 #: src/backend/datapicker/DatapickerPoint.cpp:227
 #, kde-format
 msgid "%1: set +delta X position"
-msgstr ""
+msgstr "%1: დააყენეთ +delta X მდებარეობა"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:240
 #: src/backend/datapicker/DatapickerPoint.cpp:242
 #: src/backend/datapicker/DatapickerPoint.cpp:245
 #, kde-format
 msgid "%1: set -delta_X position"
-msgstr ""
+msgstr "%1: დააყენეთ -delta_X მდებარეობა"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:258
 #: src/backend/datapicker/DatapickerPoint.cpp:260
 #: src/backend/datapicker/DatapickerPoint.cpp:263
 #, kde-format
 msgid "%1: set +delta_Y position"
-msgstr ""
+msgstr "%1: დააყენეთ +delta_Y მდებარეობა"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:276
 #: src/backend/datapicker/DatapickerPoint.cpp:278
 #: src/backend/datapicker/DatapickerPoint.cpp:281
 #, kde-format
 msgid "%1: set -delta_Y position"
-msgstr ""
+msgstr "%1: დააყენეთ -delta_Y მდებარეობა"
 
 #: src/backend/datapicker/Segment.cpp:168
 #, kde-format
 msgid "%1: draw points over segment"
-msgstr ""
+msgstr "%1: სეგმენტზე წერტილების აგება"
 
 #: src/backend/datasources/DatasetHandler.cpp:68
 #: src/backend/datasources/DatasetHandler.cpp:156
@@ -1041,7 +1042,7 @@ msgstr "ასლი"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:99
 #, kde-format
 msgid "Hierarchical Data Format 5 (HDF5)"
-msgstr ""
+msgstr "იერარქიული მონაცემების ფორმატი 5 (HDF5)"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:204
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:126
@@ -1064,7 +1065,7 @@ msgstr "Excel"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:102
 #, kde-format
 msgid "Network Common Data Format (NetCDF)"
-msgstr ""
+msgstr "ქსელური ზოგადი მონაცემების ფორმატი (NetCDF)"
 
 #: src/backend/datasources/filters/AbstractFileFilter.cpp:205
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:105
@@ -2039,7 +2040,7 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:142
 #, kde-format
 msgid "Plot data"
-msgstr ""
+msgstr "გრაფიკის მონაცემები"
 
 #: src/backend/datasources/LiveDataSource.cpp:709
 #: src/backend/datasources/LiveDataSource.cpp:712
@@ -2097,7 +2098,7 @@ msgstr "აღმოჩენილია შემდეგი შეცდო�
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1056
 #, kde-format
 msgid "Plot%1"
-msgstr ""
+msgstr "გრაფიკი%1"
 
 #: src/backend/datasources/projects/OriginProjectParser.cpp:1202
 #, kde-format
@@ -2123,7 +2124,7 @@ msgstr "წარუმატებელი"
 #: src/backend/gsl/errors.h:24
 #, kde-format
 msgid "Iteration has not converged"
-msgstr ""
+msgstr "იტერაცია არ დაემთხვა"
 
 #: src/backend/gsl/errors.h:26
 #, kde-format
@@ -2133,7 +2134,7 @@ msgstr "შეყვანის დომენის შეცდომა. �
 #: src/backend/gsl/errors.h:28
 #, kde-format
 msgid "Output range error, e.g. exp(1e100)"
-msgstr ""
+msgstr "გამოტანის დიაპაზონის შეცდომა, მაგ. exp (1e100)"
 
 #: src/backend/gsl/errors.h:30
 #, kde-format
@@ -2173,7 +2174,7 @@ msgstr "იტერაციის პროცესი უკონტრო�
 #: src/backend/gsl/errors.h:44
 #, kde-format
 msgid "Exceeded max number of iterations"
-msgstr ""
+msgstr "იტერაციების მაქსიმალური რაოდენობა გადაჭარბებულია"
 
 #: src/backend/gsl/errors.h:46
 #, kde-format
@@ -2779,7 +2780,7 @@ msgstr "99-ე პროცენტულობა"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
 #, kde-format
 msgid "Trimean"
-msgstr ""
+msgstr "Trimean"
 
 #: src/backend/gsl/ExpressionParser.cpp:179
 #, kde-format
@@ -3388,7 +3389,7 @@ msgstr "ჰიპერბოლური ინტეგრალი ჩი"
 #: src/backend/gsl/ExpressionParser.cpp:371
 #, kde-format
 msgid "Third-order exponential integral"
-msgstr ""
+msgstr "მესამე რიგის ექსპონენციალური ინტეგრალი"
 
 #: src/backend/gsl/ExpressionParser.cpp:372
 #, kde-format
@@ -3480,17 +3481,17 @@ msgstr "ფაქტორიალი n!"
 #: src/backend/gsl/ExpressionParser.cpp:403
 #, kde-format
 msgid "Double factorial n!!"
-msgstr ""
+msgstr "ორმაგი ფაქტორიალი n!!"
 
 #: src/backend/gsl/ExpressionParser.cpp:404
 #, kde-format
 msgid "Logarithm of the factorial"
-msgstr ""
+msgstr "ფაქტორიალის ლოგარითმი"
 
 #: src/backend/gsl/ExpressionParser.cpp:405
 #, kde-format
 msgid "Logarithm of the double factorial"
-msgstr ""
+msgstr "ორმაგი ფაქტორიალის ლოგარითმი"
 
 #: src/backend/gsl/ExpressionParser.cpp:407
 #, kde-format
@@ -3745,12 +3746,12 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:503
 #, kde-format
 msgid "Conical function P^0"
-msgstr ""
+msgstr "კონუსური ფუნქცია P^0"
 
 #: src/backend/gsl/ExpressionParser.cpp:504
 #, kde-format
 msgid "Conical function P^1"
-msgstr ""
+msgstr "კონუსური ფუნქცია P^1"
 
 #: src/backend/gsl/ExpressionParser.cpp:505
 #, kde-format
@@ -4623,7 +4624,7 @@ msgstr "1 ელექტრონ-ვოლტის ენერგია"
 #: src/backend/gsl/ExpressionParser.cpp:1025
 #, kde-format
 msgid "Unified atomic mass"
-msgstr ""
+msgstr "მასის ატომური ერთეული"
 
 #: src/backend/gsl/ExpressionParser.cpp:1028
 #, kde-format
@@ -4703,22 +4704,22 @@ msgstr ""
 #: src/backend/gsl/ExpressionParser.cpp:1078
 #, kde-format
 msgid "Number of seconds in 1 minute"
-msgstr ""
+msgstr "წამების რაოდენობა 1 წუთში"
 
 #: src/backend/gsl/ExpressionParser.cpp:1081
 #, kde-format
 msgid "Number of seconds in 1 hour"
-msgstr ""
+msgstr "წამების რაოდენობა 1 საათში"
 
 #: src/backend/gsl/ExpressionParser.cpp:1084
 #, kde-format
 msgid "Number of seconds in 1 day"
-msgstr ""
+msgstr "წამების რაოდენობა 1 დღეში"
 
 #: src/backend/gsl/ExpressionParser.cpp:1087
 #, kde-format
 msgid "Number of seconds in 1 week"
-msgstr ""
+msgstr "წამების რაოდენობა 1 კვირაში"
 
 #: src/backend/gsl/ExpressionParser.cpp:1095
 #, kde-format
@@ -5918,17 +5919,17 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:37
 #, kde-format
 msgid "Bernoulli"
-msgstr ""
+msgstr "ბერნული"
 
 #: src/backend/nsl/nsl_sf_stats.c:38
 #, kde-format
 msgid "Binomial"
-msgstr ""
+msgstr "ბინომური"
 
 #: src/backend/nsl/nsl_sf_stats.c:39
 #, kde-format
 msgid "Negative binomial"
-msgstr ""
+msgstr "უარყოფითი ბინომური"
 
 #: src/backend/nsl/nsl_sf_stats.c:40
 #, kde-format
@@ -5943,7 +5944,7 @@ msgstr "გეომეტრიული"
 #: src/backend/nsl/nsl_sf_stats.c:42
 #, kde-format
 msgid "Hypergeometric"
-msgstr ""
+msgstr "ჰიპერგეომეტრიული"
 
 #: src/backend/nsl/nsl_sf_stats.c:43
 #, kde-format
@@ -5953,7 +5954,7 @@ msgstr "ლოგარითმული"
 #: src/backend/nsl/nsl_sf_stats.c:44
 #, kde-format
 msgid "Maxwell-Boltzmann"
-msgstr ""
+msgstr "მაქსველ-ბოლცმანი"
 
 #: src/backend/nsl/nsl_sf_stats.c:46
 #, kde-format
@@ -6063,7 +6064,7 @@ msgstr ""
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
 msgid "mirror"
-msgstr ""
+msgstr "სარკე"
 
 #: src/backend/nsl/nsl_smooth.c:22
 #, kde-format
@@ -6088,7 +6089,7 @@ msgstr ""
 #: src/backend/nsl/nsl_smooth.c:25
 #, kde-format
 msgid "binomial"
-msgstr ""
+msgstr "ბინომური"
 
 #: src/backend/nsl/nsl_smooth.c:26
 #, kde-format
@@ -6388,16 +6389,14 @@ msgid "%1: drop line type changed"
 msgstr ""
 
 #: src/backend/worksheet/Line.cpp:140
-#, fuzzy, kde-format
-#| msgid "%1: set invisible"
+#, kde-format
 msgid "%1: set line style"
-msgstr "%1: უხილავად დაყენება"
+msgstr "%1: ხაზის სტილის დაყენება"
 
 #: src/backend/worksheet/Line.cpp:147
-#, fuzzy, kde-format
-#| msgid "%1: set Axis points"
+#, kde-format
 msgid "%1: set line width"
-msgstr "%1: დააყენეთ ღერძის წერტილები"
+msgstr "%1: დააყენეთ ხაზის სისქე"
 
 #: src/backend/worksheet/Line.cpp:154
 #, kde-format
