@@ -553,7 +553,8 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 		return;
 	const Lock lock(m_initializing);
 	m_initializing = true;
-	ui.cbGraphType->setCurrentIndex((int)axisPoints.type);
+	int index = ui.cbGraphType->findData((int)axisPoints.type);
+	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
 	ui.sbPositionX1->setValue(axisPoints.logicalPos[0].x());
 	ui.sbPositionY1->setValue(axisPoints.logicalPos[0].y());

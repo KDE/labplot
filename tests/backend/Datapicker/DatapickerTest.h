@@ -49,6 +49,8 @@ private Q_SLOTS:
 	void curvePointMove();
 	void curvePointMoveUndoRedo();
 	void selectReferencePoint();
+
+	void imageAxisPointsChanged();
 };
 
 #endif // DATAPICKERTEST_H
