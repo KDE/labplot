@@ -1978,6 +1978,17 @@ double Column::maximum(int startIndex, int endIndex) const {
 	return max;
 }
 
+double Column::mean() const {
+	if (!d->available.statistics)
+		d->calculateStatistics();
+	return d->statistics.arithmeticMean;
+}
+double Column::var() const {
+	if (!d->available.statistics)
+		d->calculateStatistics();
+	return d->statistics.variance;
+}
+
 /*!
  * calculates log2(x)+1 for an integer value.
  * Used in y(double x) to calculate the maximum steps

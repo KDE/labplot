@@ -700,6 +700,13 @@ double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
 	return -qInf();
 }
 
+double AbstractColumn::mean() const {
+	return qQNaN();
+}
+double AbstractColumn::var() const {
+	return qQNaN();
+}
+
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {
 	return false;
 }

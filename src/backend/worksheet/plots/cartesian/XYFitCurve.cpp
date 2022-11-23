@@ -44,6 +44,7 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
+#include <QtMath>
 
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
@@ -1835,17 +1836,19 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_algorithm_ml:
 		// TODO: refactor
-		if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram)
+		if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram) {
 			tmpXDataColumn = dataSourceHistogram->dataColumn();
-		runMaximumLikelyhood(tmpXDataColumn, tmpYDataColumn);
+			tmpYDataColumn = dataSourceHistogram->bins();
+		}
+		runMaximumLikelyhood(tmpXDataColumn);
 	}
 
 	fitResult.elapsedTime = timer.elapsed();
 }
 
 // TODO: run estimation on dataColumn not on bins!
-void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
-	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn) {
+	// int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 
 	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
@@ -1858,7 +1861,7 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
 	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
-	// get valid data
+	/*// get valid data
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	for (int row = 0; row < rowCount; ++row) {
@@ -1900,34 +1903,30 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 			xdataVector.append(x);
 			ydataVector.append(y);
 		}
-	}
+	}*/
 
-	// number of data points to fit
-	const size_t n = xdataVector.size();
-	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
-	if (n == 0) {
-		fitResult.available = true;
-		fitResult.valid = false;
-		fitResult.status = i18n("No data points available.");
-		Q_EMIT q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
-	double* xdata = xdataVector.data();
-	double* ydata = ydataVector.data();
-
+	/*	// number of data points to fit
+		const size_t n = xdataVector.size();
+		DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
+		if (n == 0) {
+			fitResult.available = true;
+			fitResult.valid = false;
+			fitResult.status = i18n("No data points available.");
+			Q_EMIT q->dataChanged();
+			sourceDataChangedSinceLastRecalc = false;
+			return;
+		}
+	*/
 	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
 	fitResult.paramValues.resize(np);
 
-	// TODO: calculate parameter from xdata, ydata
-	DEBUG("X MIN = " << tmpXDataColumn->minimum())
-	DEBUG("X MAX = " << tmpXDataColumn->maximum())
-	// DEBUG("X MEAN = " << tmpXDataColumn->())
-
-	fitResult.paramValues[0] = 1.; // A
-	fitResult.paramValues[1] = 1.; // sigma
-	fitResult.paramValues[2] = 1.; // mu
+	const double binSize = xRange.size() / tmpXDataColumn->rowCount();
+	DEBUG("BIN SIZE = " << binSize)
+	const int binCount = 10;
+	// TODO: depends on histogram normalization
+	fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
+	fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
+	fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
 
 	fitResult.available = true;
 	fitResult.valid = true;
