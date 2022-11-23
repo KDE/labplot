@@ -64,15 +64,15 @@ public:
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramNormalization, normalization, Normalization)
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
-	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
+	BASIC_D_ACCESSOR_DECL(double, binWidth, BinWidth)
 	BASIC_D_ACCESSOR_DECL(bool, autoBinRanges, AutoBinRanges)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMin, BinRangesMin)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMax, BinRangesMax)
 
-	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
-	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
-	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
-	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
+	//	BASIC_D_ACCESSOR_DECL(double, xMin, XMin)
+	//	BASIC_D_ACCESSOR_DECL(double, xMax, XMax)
+	//	BASIC_D_ACCESSOR_DECL(double, yMin, YMin)
+	//	BASIC_D_ACCESSOR_DECL(double, yMax, YMax)
 
 	Line* line() const;
 	Background* background() const;
@@ -146,7 +146,7 @@ Q_SIGNALS:
 	void normalizationChanged(Histogram::HistogramNormalization);
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
-	void binWidthChanged(float);
+	void binWidthChanged(double);
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);

@@ -73,7 +73,7 @@ public:
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
 	int totalCount{0};
 	int binCount{10};
-	float binWidth{1.0f};
+	double binWidth{1.0};
 	bool autoBinRanges{true};
 	double binRangesMin{0.0};
 	double binRangesMax{1.0};

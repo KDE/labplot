@@ -362,7 +362,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		double value = valueAt(row);
-		return !(std::isnan(value) || std::isinf(value));
+		return !(qIsNaN(value) || qIsInf(value));
 	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
@@ -606,7 +606,7 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  * Use this only when columnMode() is Numeric
  */
 double AbstractColumn::valueAt(int /*row*/) const {
-	return NAN;
+	return qQNaN();
 }
 
 /**
@@ -685,19 +685,19 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return -INFINITY;
+	return qInf();
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return -INFINITY;
+	return qInf();
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return INFINITY;
+	return -qInf();
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return INFINITY;
+	return -qInf();
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {

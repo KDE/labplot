@@ -139,10 +139,7 @@ QLocale::Language JsonFilter::numberFormat() const {
 }
 
 void JsonFilter::setNaNValueToZero(bool b) {
-	if (b)
-		d->nanValue = 0;
-	else
-		d->nanValue = NAN;
+	d->nanValue = (b ? 0 : qQNaN());
 }
 bool JsonFilter::NaNValueToZeroEnabled() const {
 	if (d->nanValue == 0)

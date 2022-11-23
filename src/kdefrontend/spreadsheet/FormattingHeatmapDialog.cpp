@@ -96,8 +96,8 @@ FormattingHeatmapDialog::~FormattingHeatmapDialog() {
 void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
-	double min = INFINITY;
-	double max = -INFINITY;
+	double min = qInf();
+	double max = -qInf();
 	bool formatShown = false;
 	bool hasNumeric = false;
 	for (const auto* col : qAsConst(m_columns)) {
@@ -128,15 +128,8 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	ui.lColorMapPreview->setPixmap(pixmap);
 
 	if (hasNumeric) {
-		if (min != INFINITY)
-			ui.leMinimum->setText(QString::number(min));
-		else
-			ui.leMinimum->setText(QString());
-
-		if (max != -INFINITY)
-			ui.leMaximum->setText(QString::number(max));
-		else
-			ui.leMaximum->setText(QString());
+		ui.leMinimum->setText(qIsFinite(min) ? QString::number(min) : QString());
+		ui.leMaximum->setText(qIsFinite(max) ? QString::number(max) : QString());
 	}
 
 	ui.lLevelsTop->setVisible(hasNumeric);

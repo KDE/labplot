@@ -621,7 +621,7 @@ void ColumnClearCmd::redo() {
 			auto* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = NAN;
+				vec->operator[](i) = qQNaN();
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {

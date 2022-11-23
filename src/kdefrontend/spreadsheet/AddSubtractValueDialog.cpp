@@ -166,7 +166,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
-			if (!std::isnan(value)) {
+			if (!qIsNaN(value)) {
 				ui.leValue->setText(numberLocale.toString(column->valueAt(row), 'g', 16));
 				break;
 			}

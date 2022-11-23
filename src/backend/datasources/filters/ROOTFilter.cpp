@@ -19,6 +19,7 @@
 
 #include <QFileInfo>
 #include <QStack>
+#include <QtMath>
 
 #include <fstream>
 
@@ -261,7 +262,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				if (spreadsheet)
 					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
 				for (int i = first; i <= last; ++i)
-					container[i - first] = std::sqrt(bins[i].sumw2);
+					container[i - first] = qSqrt(bins[i].sumw2);
 			}
 			++c;
 		}

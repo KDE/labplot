@@ -484,19 +484,19 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
-				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
+				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
 				break;
 			}
 			case AbstractColumn::ColumnMode::Integer: {
 				bool isNumber;
 				const int value = numberFormat.toInt(valueString, &isNumber);
-				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
+				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
 				break;
 			}
 			case AbstractColumn::ColumnMode::BigInt: {
 				bool isNumber;
 				const qint64 value = numberFormat.toLongLong(valueString, &isNumber);
-				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
+				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
 				break;
 			}
 			case AbstractColumn::ColumnMode::DateTime: {

@@ -1834,12 +1834,16 @@ void XYFitCurvePrivate::recalculate() {
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
 		break;
 	case nsl_fit_algorithm_ml:
+		// TODO: refactor
+		if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram)
+			tmpXDataColumn = dataSourceHistogram->dataColumn();
 		runMaximumLikelyhood(tmpXDataColumn, tmpYDataColumn);
 	}
 
 	fitResult.elapsedTime = timer.elapsed();
 }
 
+// TODO: run estimation on dataColumn not on bins!
 void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 
@@ -1917,6 +1921,10 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 	fitResult.paramValues.resize(np);
 
 	// TODO: calculate parameter from xdata, ydata
+	DEBUG("X MIN = " << tmpXDataColumn->minimum())
+	DEBUG("X MAX = " << tmpXDataColumn->maximum())
+	// DEBUG("X MEAN = " << tmpXDataColumn->())
+
 	fitResult.paramValues[0] = 1.; // A
 	fitResult.paramValues[1] = 1.; // sigma
 	fitResult.paramValues[2] = 1.; // mu

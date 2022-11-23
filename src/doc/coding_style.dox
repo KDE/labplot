@@ -122,13 +122,13 @@ Very short classes can be bundled in one file which then is named using all lowe
 @endcode
 * Use Qt functions for user messages: qDebug(), qWarning(), qCritical(), qFatal(). Check conditions with Q_ASSERT(cond) or Q_ASSERT_X(cond, where, what) and pointers with Q_CHECK_PTR(ptr).
 * Numeric limits should be using Qt +/-qInf() and qQNaN() for floating point types and C++ +/-std::numeric_limits<T>::min() & +/-std::numeric_limits<T>::max() for all types
-* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ or Qt constructs (fabs() -> qAbs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound(), max() -> qMax()). Example:
+* Import C header (from GSL etc.) with extern statement. We use "std::" prefix (C++11) and try to avoid C header like cmath, cfloat etc. by using corresponding C++ or Qt constructs (fabs() -> qAbs(), DBL_MAX -> std::numeric_limits<double>::max(), round() -> qRound(), max() -> qMax(), finite()->qIsFinite(), isnan()->qIsNan(), isinf() -> qIsInf()). Example:
 @code
     extern "C" {
     #include <gsl/gsl_version.h>
     }
 
-    if (std::isnan(x)) {
+    if (qIsNaN(x)) {
         ...
     }
 @endcode

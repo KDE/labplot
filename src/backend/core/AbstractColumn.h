@@ -14,7 +14,6 @@
 
 #include "backend/core/AbstractAspect.h"
 #include <QColor>
-#include <cmath> // NAN
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;
@@ -88,32 +87,32 @@ public:
 	struct ColumnStatistics {
 		int size{0};
 		int unique{0}; // number of unique values, relevant for text columns only
-		double minimum{NAN};
-		double maximum{NAN};
-		double arithmeticMean{NAN};
-		double geometricMean{NAN};
-		double harmonicMean{NAN};
-		double contraharmonicMean{NAN};
-		double mode{NAN};
-		double firstQuartile{NAN};
-		double median{NAN};
-		double thirdQuartile{NAN};
-		double iqr{NAN};
-		double percentile_1{NAN};
-		double percentile_5{NAN};
-		double percentile_10{NAN};
-		double percentile_90{NAN};
-		double percentile_95{NAN};
-		double percentile_99{NAN};
-		double trimean{NAN};
-		double variance{NAN};
-		double standardDeviation{NAN};
-		double meanDeviation{NAN}; // mean absolute deviation around mean
-		double meanDeviationAroundMedian{NAN}; // mean absolute deviation around median
-		double medianDeviation{NAN}; // median absolute deviation
-		double skewness{NAN};
-		double kurtosis{NAN};
-		double entropy{NAN};
+		double minimum{qQNaN()};
+		double maximum{qQNaN()};
+		double arithmeticMean{qQNaN()};
+		double geometricMean{qQNaN()};
+		double harmonicMean{qQNaN()};
+		double contraharmonicMean{qQNaN()};
+		double mode{qQNaN()};
+		double firstQuartile{qQNaN()};
+		double median{qQNaN()};
+		double thirdQuartile{qQNaN()};
+		double iqr{qQNaN()};
+		double percentile_1{qQNaN()};
+		double percentile_5{qQNaN()};
+		double percentile_10{qQNaN()};
+		double percentile_90{qQNaN()};
+		double percentile_95{qQNaN()};
+		double percentile_99{qQNaN()};
+		double trimean{qQNaN()};
+		double variance{qQNaN()};
+		double standardDeviation{qQNaN()};
+		double meanDeviation{qQNaN()}; // mean absolute deviation around mean
+		double meanDeviationAroundMedian{qQNaN()}; // mean absolute deviation around median
+		double medianDeviation{qQNaN()}; // median absolute deviation
+		double skewness{qQNaN()};
+		double kurtosis{qQNaN()};
+		double entropy{qQNaN()};
 	};
 
 	AbstractColumn(const QString& name, AspectType type);

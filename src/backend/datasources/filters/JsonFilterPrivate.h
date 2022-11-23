@@ -46,7 +46,7 @@ public:
 
 	QString dateTimeFormat;
 	QLocale::Language numberFormat{QLocale::C};
-	double nanValue{NAN};
+	double nanValue{qQNaN()};
 	bool createIndexEnabled{false};
 	bool importObjectNames{false};
 	QStringList vectorNames;

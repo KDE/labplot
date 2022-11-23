@@ -80,7 +80,7 @@ void Histogram::init() {
 	d->normalization = (Histogram::HistogramNormalization)group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0f);
+	d->binWidth = group.readEntry("BinWidth", 1.0);
 	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
@@ -293,7 +293,7 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientati
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
-BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binWidth, binWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
@@ -350,7 +350,7 @@ double Histogram::minimum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMinimum();
 	}
-	return NAN;
+	return qQNaN();
 }
 
 double Histogram::maximum(const Dimension dim) const {
@@ -361,7 +361,7 @@ double Histogram::maximum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMaximum();
 	}
-	return NAN;
+	return qQNaN();
 }
 
 const AbstractColumn* Histogram::bins() const {
@@ -431,8 +431,8 @@ void Histogram::setBinCount(int count) {
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, recalcHistogram)
-void Histogram::setBinWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
 		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
@@ -742,7 +742,7 @@ double HistogramPrivate::yMaximum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return qInf();
+	return -qInf();
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
