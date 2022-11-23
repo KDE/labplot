@@ -169,8 +169,9 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
 	}
 
-	bool finished = latexProcess.waitForFinished();
+	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
 
+	bool finished = latexProcess.waitForFinished();
 	if (!finished || latexProcess.exitCode() != 0) {
 		QFile logFile(baseName + QStringLiteral(".log"));
 		QString errorLogs;
