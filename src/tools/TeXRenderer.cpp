@@ -189,6 +189,9 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 		} else
 			WARN(QStringLiteral("Unable to open logfile").toStdString());
 
+		WARN(latexProcess.readAllStandardOutput().toStdString());
+		WARN(latexProcess.readAllStandardError().toStdString());
+
 		QString err;
 		if (errorLogs.isEmpty()) {
 			if (!finished)
