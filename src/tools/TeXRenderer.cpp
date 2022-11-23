@@ -154,6 +154,8 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 		return {};
 	}
 
+	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
+
 	QProcess latexProcess;
 	// TODO: is this really needed
 	if (resultFileExtension == QStringLiteral("pdf")) {
