@@ -140,11 +140,20 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		return imageFromPDF(file, engine, res);
 }
 
-bool TeXRenderer::executeLatexProcess(const QString engineFullPath,
+bool TeXRenderer::executeLatexProcess(const QString engine,
 									  const QString& baseName,
 									  const QTemporaryFile& file,
 									  const QString& resultFileExtension,
 									  Result* res) {
+	// latex: produce the DVI file
+	const QString engineFullPath = QStandardPaths::findExecutable(engine);
+	if (engineFullPath.isEmpty()) {
+		res->successful = false;
+		res->errorMessage = i18n("%1 not found").arg(engine);
+		WARN(res->errorMessage.toStdString());
+		return {};
+	}
+
 	QProcess latexProcess;
 	// TODO: is this really needed
 	if (resultFileExtension == QStringLiteral("pdf")) {
@@ -195,14 +204,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// produce the PDF file with 'engine'
-	const QString engineFullPath = QStandardPaths::findExecutable(engine);
-	if (engineFullPath.isEmpty()) {
-		WARN("engine " << STDSTRING(engine) << " not found");
-		return {};
-	}
-
-    if (!executeLatexProcess(engineFullPath, baseName, file, QStringLiteral("pdf"), res))
+	if (!executeLatexProcess(engine, baseName, file, QStringLiteral("pdf"), res))
 		return {};
 
 	// Can we move this into executeLatexProcess?
@@ -230,16 +232,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// latex: produce the DVI file
-	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
-	if (latexFullPath.isEmpty()) {
-		res->successful = false;
-		res->errorMessage = i18n("latex not found");
-		WARN("latex not found");
-		return {};
-	}
-
-	if (!executeLatexProcess(latexFullPath, baseName, file, QStringLiteral("dvi"), res))
+	if (!executeLatexProcess(QLatin1String("latex"), baseName, file, QStringLiteral("dvi"), res))
 		return {};
 
 	// dvips: DVI -> PS
