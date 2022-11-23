@@ -1801,23 +1801,6 @@ void XYFitCurvePrivate::recalculate() {
 	// clear the previous result
 	fitResult = XYFitCurve::FitResult();
 
-	DEBUG("ALGORITHM: " << fitData.algorithm)
-	switch (fitData.algorithm) {
-	case nsl_fit_algorithm_lm:
-		runLevenbergMarquardt();
-		break;
-	case nsl_fit_algorithm_ml:
-		runMaximumLikelyhood();
-	}
-
-	fitResult.elapsedTime = timer.elapsed();
-}
-
-void XYFitCurvePrivate::runMaximumLikelyhood() {
-	// TODO
-}
-
-void XYFitCurvePrivate::runLevenbergMarquardt() {
 	// prepare source data columns
 	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	const AbstractColumn* tmpXDataColumn = nullptr;
@@ -1845,6 +1828,108 @@ void XYFitCurvePrivate::runLevenbergMarquardt() {
 
 	prepareResultColumns();
 
+	DEBUG("ALGORITHM: " << fitData.algorithm)
+	switch (fitData.algorithm) {
+	case nsl_fit_algorithm_lm:
+		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
+		break;
+	case nsl_fit_algorithm_ml:
+		runMaximumLikelyhood(tmpXDataColumn, tmpYDataColumn);
+	}
+
+	fitResult.elapsedTime = timer.elapsed();
+}
+
+void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+
+	// determine range of data
+	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
+	if (fitData.autoRange) { // auto x range of data to fit
+		fitData.fitRange = xRange;
+	} else { // custom x range of data to fit
+		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
+			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
+	}
+	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
+	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
+
+	// get valid data
+	QVector<double> xdataVector;
+	QVector<double> ydataVector;
+	for (int row = 0; row < rowCount; ++row) {
+		// omit invalid data
+		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) || !tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
+			continue;
+
+		double x = qQNaN();
+		switch (tmpXDataColumn->columnMode()) {
+		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			x = tmpXDataColumn->valueAt(row);
+			break;
+		case AbstractColumn::ColumnMode::Text: // not valid
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
+
+		double y = qQNaN();
+		switch (tmpYDataColumn->columnMode()) {
+		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			y = tmpYDataColumn->valueAt(row);
+			break;
+		case AbstractColumn::ColumnMode::Text: // not valid
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		}
+
+		if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
+			xdataVector.append(x);
+			ydataVector.append(y);
+		}
+	}
+
+	// number of data points to fit
+	const size_t n = xdataVector.size();
+	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
+	if (n == 0) {
+		fitResult.available = true;
+		fitResult.valid = false;
+		fitResult.status = i18n("No data points available.");
+		Q_EMIT q->dataChanged();
+		sourceDataChangedSinceLastRecalc = false;
+		return;
+	}
+
+	double* xdata = xdataVector.data();
+	double* ydata = ydataVector.data();
+
+	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	fitResult.paramValues.resize(np);
+
+	// TODO: calculate parameter from xdata, ydata
+	fitResult.paramValues[0] = 1.; // A
+	fitResult.paramValues[1] = 1.; // sigma
+	fitResult.paramValues[2] = 1.; // mu
+
+	fitResult.available = true;
+	fitResult.valid = true;
+
+	// TODO: residual vector
+
+	evaluate(); // calculate fit function
+}
+
+void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
 	// fit settings
 	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
 	const double delta = fitData.eps; // fit tolerance
@@ -1873,6 +1958,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt() {
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
+
+	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 	if (fitData.autoRange) { // auto x range of data to fit
 		fitData.fitRange = xRange;
@@ -2319,12 +2406,10 @@ void XYFitCurvePrivate::runLevenbergMarquardt() {
 	}
 	residualsColumn->setChanged();
 
-	// free resources
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
 
-	// calculate the fit function (vectors)
-	evaluate();
+	evaluate(); // calculate the fit function (vectors)
 
 	sourceDataChangedSinceLastRecalc = false;
 }
@@ -2334,22 +2419,23 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
 
 	// prepare source data columns
+	DEBUG(Q_FUNC_INFO << ", data source: " << ENUM_TO_STRING(XYAnalysisCurve, DataSourceType, dataSourceType))
 	const AbstractColumn* tmpXDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG(Q_FUNC_INFO << ", spreadsheet columns as data source");
+	switch (dataSourceType) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		tmpXDataColumn = xDataColumn;
-	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
-		DEBUG(Q_FUNC_INFO << ", curve columns as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Curve:
 		if (dataSourceCurve)
 			tmpXDataColumn = dataSourceCurve->xColumn();
-	} else {
-		DEBUG(Q_FUNC_INFO << ", histogram as data source");
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		if (dataSourceHistogram)
 			tmpXDataColumn = dataSourceHistogram->bins();
 	}
 
 	if (!tmpXDataColumn) {
-		DEBUG("	ERROR: Preparing source data column failed!");
+		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data column failed!");
 		recalcLogicalPoints();
 		Q_EMIT q->dataChanged();
 		return;
