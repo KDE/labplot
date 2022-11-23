@@ -166,7 +166,10 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	} else {
 		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
 	}
-	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
+
+	bool finished = latexProcess.waitForFinished();
+
+	if (!finished || latexProcess.exitCode() != 0) {
 		QFile logFile(baseName + QStringLiteral(".log"));
 		QString errorLogs;
 		WARN(QStringLiteral("executeLatexProcess: logfile: %1").arg(QFileInfo(logFile).absoluteFilePath()).toStdString());
@@ -182,9 +185,17 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 			logFile.close();
 		} else
 			WARN(QStringLiteral("Unable to open logfile").toStdString());
-		QString err = errorLogs.isEmpty() ? QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ")
-				+ QString::number(latexProcess.exitCode()) + QStringLiteral("\n")
-										  : errorLogs;
+
+		QString err;
+		if (errorLogs.isEmpty()) {
+			if (!finished)
+				err = i18n("Timeout: Unable to generate latex file");
+			else
+				err = QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ") + QString::number(latexProcess.exitCode())
+					+ QStringLiteral("\n");
+		} else
+			err = errorLogs;
+
 		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
