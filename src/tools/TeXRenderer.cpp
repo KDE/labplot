@@ -150,7 +150,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	if (engineFullPath.isEmpty()) {
 		res->successful = false;
 		res->errorMessage = i18n("%1 not found").arg(engine);
-		WARN(res->errorMessage.toStdString());
+		WARN(QStringLiteral("%1 not found").arg(engine).toStdString());
 		return {};
 	}
 
