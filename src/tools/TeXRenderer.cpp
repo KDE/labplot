@@ -169,7 +169,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
 		QFile logFile(baseName + QStringLiteral(".log"));
 		QString errorLogs;
-		WARN(QStringLiteral("executeLatexProcess: logfile: %1").arg(logFile.fileName()).toStdString());
+		WARN(QStringLiteral("executeLatexProcess: logfile: %1").arg(QFileInfo(logFile).absoluteFilePath()).toStdString());
 		if (logFile.open(QIODevice::ReadOnly)) {
 			// really slow, but texrenderer is running asynchronous so it is not a problem
 			while (!logFile.atEnd()) {
