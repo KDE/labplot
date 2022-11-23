@@ -35,6 +35,8 @@ public:
 	};
 
 	static QByteArray renderImageLaTeX(const QString&, Result*, const TeXRenderer::Formatting&);
+	static bool
+	executeLatexProcess(const QString latexFullPath, const QString& baseName, const QTemporaryFile& file, const QString& resultFileExtension, Result* res);
 	static QByteArray imageFromPDF(const QTemporaryFile&, const QString& engine, Result*);
 	static QByteArray imageFromDVI(const QTemporaryFile&, const int dpi, Result*);
 	static bool enabled();
