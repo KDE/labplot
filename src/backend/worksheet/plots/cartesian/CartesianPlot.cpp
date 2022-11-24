@@ -3252,22 +3252,10 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		const double deltaMin = rangep.range.start() - rangep.prev.start();
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
-		switch (dim) {
-		case Dimension::X: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->xMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->xMaxChanged(i, rangep.range.end());
-			break;
-		}
-		case Dimension::Y: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->yMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->yMaxChanged(i, rangep.range.end());
-			break;
-		}
-		}
+		if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
+			Q_EMIT q->minChanged(dim, i, rangep.range.start());
+		if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
+			Q_EMIT q->maxChanged(dim, i, rangep.range.end());
 
 		rangep.prev = rangep.range;
 

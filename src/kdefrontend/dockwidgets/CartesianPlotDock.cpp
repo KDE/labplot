@@ -429,13 +429,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeLastValuesChanged, this, &CartesianPlotDock::plotRangeLastValuesChanged);
 	// TODO: check if needed
 	connect(m_plot, &CartesianPlot::autoScaleChanged, this, &CartesianPlotDock::plotAutoScaleChanged);
-	connect(m_plot, &CartesianPlot::xMinChanged, this, &CartesianPlotDock::plotXMinChanged);
-	connect(m_plot, &CartesianPlot::xMaxChanged, this, &CartesianPlotDock::plotXMaxChanged);
+	connect(m_plot, &CartesianPlot::minChanged, this, &CartesianPlotDock::plotMinChanged);
+	connect(m_plot, &CartesianPlot::maxChanged, this, &CartesianPlotDock::plotMaxChanged);
 	connect(m_plot, &CartesianPlot::rangeChanged, this, &CartesianPlotDock::plotRangeChanged);
 	connect(m_plot, &CartesianPlot::scaleChanged, this, &CartesianPlotDock::plotScaleChanged);
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
-	connect(m_plot, &CartesianPlot::yMinChanged, this, &CartesianPlotDock::plotYMinChanged);
-	connect(m_plot, &CartesianPlot::yMaxChanged, this, &CartesianPlotDock::plotYMaxChanged);
 
 	connect(m_plot, &CartesianPlot::visibleChanged, this, &CartesianPlotDock::plotVisibleChanged);
 
@@ -1710,42 +1708,24 @@ void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, boo
 	CELLWIDGET(dim, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
-void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
+void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
 
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
-}
-void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
-void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
+void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
 
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
-}
-void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {

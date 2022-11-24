@@ -360,10 +360,8 @@ Q_SIGNALS:
 	void autoScaleChanged(const Dimension, int xRangeIndex, bool);
 	void rangeChanged(const Dimension, int, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);
-	void xMinChanged(int xRangeIndex, double);
-	void xMaxChanged(int xRangeIndex, double);
-	void yMinChanged(int yRangeIndex, double);
-	void yMaxChanged(int yRangeIndex, double);
+	void minChanged(const Dimension, int rangeIndex, double);
+	void maxChanged(const Dimension, int rangeIndex, double);
 	void scaleChanged(const Dimension, int rangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
