@@ -194,15 +194,19 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 
 		QString err;
 		if (errorLogs.isEmpty()) {
-			if (!finished)
+			if (!finished) {
 				err = i18n("Timeout: Unable to generate latex file");
-			else
+				WARN(QStringLiteral("Timeout: Unable to generate latex file").toStdString());
+			} else {
 				err = QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ") + QString::number(latexProcess.exitCode())
 					+ QStringLiteral("\n");
-		} else
+				WARN(QStringLiteral("latex process failed, exit code = %1").arg(latexProcess.exitCode()).toStdString());
+			}
+		} else {
 			err = errorLogs;
+			WARN(err.toStdString());
+		}
 
-		WARN(err.toStdString());
 		res->successful = false;
 		res->errorMessage = err;
 		QFile::remove(baseName + QStringLiteral(".aux"));
