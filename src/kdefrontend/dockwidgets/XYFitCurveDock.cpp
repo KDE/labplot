@@ -1009,6 +1009,8 @@ void XYFitCurveDock::showFunctions() {
 
 void XYFitCurveDock::algorithmChanged(int index) {
 	m_fitData.algorithm = (nsl_fit_algorithm)index;
+
+	enableRecalculate();
 }
 
 /*!

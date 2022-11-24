@@ -1816,11 +1816,17 @@ void XYFitCurvePrivate::recalculate() {
 		tmpYDataColumn = dataSourceCurve->yColumn();
 		break;
 	case XYAnalysisCurve::DataSourceType::Histogram:
-		tmpXDataColumn = dataSourceHistogram->bins();
-		tmpYDataColumn = dataSourceHistogram->binPDValues();
+		switch (fitData.algorithm) {
+		case nsl_fit_algorithm_lm:
+			tmpXDataColumn = dataSourceHistogram->bins();
+			tmpYDataColumn = dataSourceHistogram->binPDValues();
+			break;
+		case nsl_fit_algorithm_ml:
+			tmpXDataColumn = dataSourceHistogram->dataColumn();
+		}
 	}
 
-	if (!tmpXDataColumn || !tmpYDataColumn) {
+	if (!tmpXDataColumn || (!tmpYDataColumn && fitData.algorithm == nsl_fit_algorithm_lm)) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
 		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
@@ -1835,21 +1841,13 @@ void XYFitCurvePrivate::recalculate() {
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
 		break;
 	case nsl_fit_algorithm_ml:
-		// TODO: refactor
-		if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram) {
-			tmpXDataColumn = dataSourceHistogram->dataColumn();
-			tmpYDataColumn = dataSourceHistogram->bins();
-		}
 		runMaximumLikelyhood(tmpXDataColumn);
 	}
 
 	fitResult.elapsedTime = timer.elapsed();
 }
 
-// TODO: run estimation on dataColumn not on bins!
 void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn) {
-	// int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
-
 	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 	if (fitData.autoRange) { // auto x range of data to fit
@@ -1861,70 +1859,16 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
 	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
-	/*// get valid data
-	QVector<double> xdataVector;
-	QVector<double> ydataVector;
-	for (int row = 0; row < rowCount; ++row) {
-		// omit invalid data
-		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) || !tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
-			continue;
-
-		double x = qQNaN();
-		switch (tmpXDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			x = tmpXDataColumn->valueAt(row);
-			break;
-		case AbstractColumn::ColumnMode::Text: // not valid
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::Month:
-			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-		}
-
-		double y = qQNaN();
-		switch (tmpYDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Double:
-		case AbstractColumn::ColumnMode::Integer:
-		case AbstractColumn::ColumnMode::BigInt:
-			y = tmpYDataColumn->valueAt(row);
-			break;
-		case AbstractColumn::ColumnMode::Text: // not valid
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-		case AbstractColumn::ColumnMode::Day:
-		case AbstractColumn::ColumnMode::Month:
-			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-		}
-
-		if (x >= xRange.start() && x <= xRange.end()) { // only when inside given range
-			xdataVector.append(x);
-			ydataVector.append(y);
-		}
-	}*/
-
-	/*	// number of data points to fit
-		const size_t n = xdataVector.size();
-		DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
-		if (n == 0) {
-			fitResult.available = true;
-			fitResult.valid = false;
-			fitResult.status = i18n("No data points available.");
-			Q_EMIT q->dataChanged();
-			sourceDataChangedSinceLastRecalc = false;
-			return;
-		}
-	*/
 	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
 	fitResult.paramValues.resize(np);
 
-	const double binSize = xRange.size() / tmpXDataColumn->rowCount();
-	DEBUG("BIN SIZE = " << binSize)
-	const int binCount = 10;
-	// TODO: depends on histogram normalization
-	fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
+	// TODO: implement all distributions
+	// const double binSize = xRange.size() / tmpXDataColumn->rowCount();
+	// DEBUG("BIN SIZE = " << binSize)
+	// const int binCount = 10;
+	// TODO: first parameter depends on histogram normalization
+	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
+	fitResult.paramValues[0] = 1.; // A - probability density
 	fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
 	fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
 
@@ -1932,6 +1876,12 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 	fitResult.valid = true;
 
 	// TODO: residual vector
+
+	if (fitData.useResults) // set start values
+		for (unsigned int i = 0; i < np; i++)
+			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
+
+	// TODO: show results (parameter, etc.)
 
 	evaluate(); // calculate fit function
 }
@@ -2370,7 +2320,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.paramValues[i] = nsl_fit_map_bound(gsl_vector_get(s->x, i), x_min[i], x_max[i]);
 		// use results as start values if desired
 		if (fitData.useResults) {
-			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
+			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 			DEBUG("	saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
 		fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(covar, i, i));

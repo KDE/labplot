@@ -3020,6 +3020,9 @@ void FitTest::testHistogramFit() {
 	QCOMPARE(fitResult.available, true);
 	QCOMPARE(fitResult.valid, true);
 
+	// TODO: ML results
+
+	/* LM results
 	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
 	QCOMPARE(fitResult.paramValues.at(0), 0.999829585605626);
 	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));
@@ -3043,6 +3046,7 @@ void FitTest::testHistogramFit() {
 	QCOMPARE(fitResult.rsquare, 0.961753741845289);
 	DEBUG(std::setprecision(15) << fitResult.rsquareAdj); // result:
 	QCOMPARE(fitResult.rsquareAdj, 0.957504157605876);
+	*/
 }
 
 QTEST_MAIN(FitTest)

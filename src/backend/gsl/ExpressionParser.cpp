@@ -1362,8 +1362,8 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 	while (functionName != QLatin1String(_functions[index].name) && _functions[index].name != nullptr)
 		index++;
 
-	DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
-	DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	// DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+	// DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
 	return _functions[index].argc;
 }
 
