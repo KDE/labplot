@@ -8097,80 +8097,76 @@ msgid "Not enough data points available."
 msgstr "Yeterli veri noktası yok."
 
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:79
-#, fuzzy, kde-format
-#| msgid "%1: set options and perform the interpolation"
+#, kde-format
 msgid "%1: set options and perform the correlation"
-msgstr "%1: seçenekleri ayarla ve enterpolasyonu gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve bağıntıyı gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:221
 #, kde-format
 msgid "Navigate to \"%1\""
-msgstr "\"%1\"e rotayı ayarla"
+msgstr "\"%1\" konumuna rotayı ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:378
 #, kde-format
 msgid "%1: x-data source changed"
-msgstr "%1: x-veri kaynağı değişti"
+msgstr "%1: x verisi kaynağı değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:385
 #, kde-format
 msgid "%1: y-data source changed"
-msgstr "%1: y-veri kaynağı değişti"
+msgstr "%1: y verisi kaynağı değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:402
-#, fuzzy, kde-format
-#| msgid "%1 CustomPoints: visibility changed"
+#, kde-format
 msgid "%1: legend visibility changed"
-msgstr "%1 ÖzelNoktala: görünebilirlik değişti"
+msgstr "%1: Gösterge görünürlüğü değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:417
 #, kde-format
 msgid "%1: set skip line gaps"
-msgstr "%1: atlama satırı boşluklarını ayarla"
+msgstr "%1: Atlama satırı boşluklarını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:424
-#, fuzzy, kde-format
-#| msgid "%1: set range"
+#, kde-format
 msgid "%1: set increasing X"
-msgstr "%1: aralığı ayarla"
+msgstr "%1: Artan X'i ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:431
 #, kde-format
 msgid "%1: set the number of interpolation points"
-msgstr "%1: enterpolasyon noktalarının sayısını ayarla"
+msgstr "%1: Aradeğerleme noktalarının sayısını ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:550
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:568
 #, kde-format
 msgid "%1: set x-error column"
-msgstr "%1: x-hata sütununu ayarla"
+msgstr "%1: x hatası sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:586
 #, kde-format
 msgid "%1: y-error type changed"
-msgstr "%1: y-hata türü değişti"
+msgstr "%1: y hatası türü değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:593
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:611
 #, kde-format
 msgid "%1: set y-error column"
-msgstr "%1: y-hata sütununu ayarla"
+msgstr "%1: y hatası sütununu ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:637
-#, fuzzy, kde-format
-#| msgid "%1: set axis orientation"
+#, kde-format
 msgid "%1: set rug orientation"
-msgstr "%1: eksen yönlendirmeyi ayarla"
+msgstr "%1: Kilim yönelimini ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1529
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
-msgstr "Hata: Akima spline interpolasyonu minimum 5 puan gerektirir."
+msgstr "Hata: Akima spline aradeğerlemesi en az 5 puan gerektirir."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1531
 #, kde-format
 msgid "Error: Could not initialize the spline function."
-msgstr "Hata: Spline işlevi başlatılamadı."
+msgstr "Hata: Spline işlevi ilklendirilemedi."
 
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1544
 #, kde-format
@@ -8185,43 +8181,42 @@ msgstr "Hata: %1"
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:75
 #, kde-format
 msgid "%1: set options and perform the data reduction"
-msgstr "%1: seçenekleri ayarlayın ve veri azaltma işlemini yapın"
+msgstr "%1: Seçenekleri ayarla ve veri azaltma işlemini gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:79
 #, kde-format
 msgid "%1: set options and perform the differentiation"
-msgstr "%1: seçenekleri ayarla ve farklılaştırmayı gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve farklılaştırmayı gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:89
 #, kde-format
 msgid "%1: set equation"
-msgstr "%1: eşitliği ayarla"
+msgstr "%1: Denklemi ayarla"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:912
-#, fuzzy, kde-format
-#| msgid "%1: data source type changed"
+#, kde-format
 msgid "%1: data source histogram changed"
-msgstr "%1: veri kaynağı türü değişti"
+msgstr "%1: Veri kaynağı histogramı değişti"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:924
 #, kde-format
 msgid "%1: assign x-error"
-msgstr "%1: x-hata ata"
+msgstr "%1: x hatası ata"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:939
 #, kde-format
 msgid "%1: assign y-error"
-msgstr "%1: y-hata ata"
+msgstr "%1: y hatası ata"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:955
 #, kde-format
 msgid "%1: set fit options and perform the fit"
-msgstr "%1: uyum seçeneklerini ayarlayın ve uyumu sağlayın"
+msgstr "%1: Uyum seçeneklerini ayarla ve uyumu sağla"
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1838
 #, kde-format
 msgid "Model has no parameters."
-msgstr "Model parametreye sahip değil."
+msgstr "Modelde parametre yok ."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1847
 #, kde-format
@@ -8234,7 +8229,7 @@ msgstr "Verilen ağırlık veri noktaları yeterli değil."
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:165
 #, kde-format
 msgid "No data points available."
-msgstr "Veri noktaları uygun değil."
+msgstr "Kullanılabilir veri noktaları yok."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1944
 #, kde-format
@@ -8248,77 +8243,76 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1953
 #, kde-format
 msgid "Fit model not specified."
-msgstr ""
+msgstr "Sığdırma modeli belirtilmedi."
 
 #: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:86
 #, kde-format
 msgid "%1: set filter options and perform the Fourier filter"
-msgstr "%1: filtre seçeneklerini ayarla ve Fourier filtresini uygula"
+msgstr "%1: Süzgeç seçeneklerini ayarla ve Fourier süzgecini uygula"
 
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:82
 #, kde-format
 msgid "%1: set transform options and perform the Fourier transform"
-msgstr "%1: dönüşüm seçeneklerini ayarla ve Fourier dönüşümünü uygula"
+msgstr "%1: Dönüşüm seçeneklerini ayarla ve Fourier dönüşümünü uygula"
 
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:81
-#, fuzzy, kde-format
-#| msgid "%1: set transform options and perform the Fourier transform"
+#, kde-format
 msgid "%1: set transform options and perform the Hilbert transform"
-msgstr "%1: dönüşüm seçeneklerini ayarla ve Fourier dönüşümünü uygula"
+msgstr "%1: Dönüşüm seçeneklerini ayarla ve Hilbert dönüşümünü uygula"
 
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:80
 #, kde-format
 msgid "%1: set options and perform the integration"
-msgstr "%1: seçenekleri ayarla ve entegrasyonu uygula"
+msgstr "%1: Seçenekleri ayarla ve tümleştirmeyi gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:83
 #, kde-format
 msgid "%1: set options and perform the interpolation"
-msgstr "%1: seçenekleri ayarla ve enterpolasyonu gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve aradeğerlemeyi gerçekleştir"
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:148
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:165
 #, kde-format
 msgid "Number of x and y data points must be equal."
-msgstr "X ve y veri noktalarının sayısı eşit olmalıdır."
+msgstr "x ve y veri noktalarının sayısı eşit olmalıdır."
 
 #: src/backend/worksheet/plots/cartesian/XYInterpolationCurve.cpp:200
 #, kde-format
 msgid "interpolation failed since x data is not strictly monotonic increasing!"
 msgstr ""
+"Aradeğerleme başarısız; çünkü x verisi kesinlikle monoton bir biçimde "
+"artmıyor!"
 
 #: src/backend/worksheet/plots/cartesian/XYSmoothCurve.cpp:87
 #, kde-format
 msgid "%1: set options and perform the smooth"
-msgstr "%1: seçenekleri ayarla ve yumuşatmayı gerçekleştir"
+msgstr "%1: Seçenekleri ayarla ve pürüzsüzleştirmeyi gerçekleştir"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:144
 #, kde-format
 msgid "%1: toggle clipping"
-msgstr "%1: geçiş kırpma"
+msgstr "%1: Kırpmayı aç/kapat"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:160
-#, fuzzy, kde-format
-#| msgid "%1: line type changed"
+#, kde-format
 msgid "%1: border type changed"
-msgstr "%1: satır türü değişti"
+msgstr "%1: Kenarlık türü değişti"
 
 #: src/backend/worksheet/plots/PlotArea.cpp:167
 #, kde-format
 msgid "%1: set plot area corner radius"
-msgstr "%1: çizim alanı köşelerinin yarıçapını ayarla"
+msgstr "%1: Çizim alanı köşelerinin yarıçapını ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:311
 #: src/backend/worksheet/TextLabel.cpp:313
 #, kde-format
 msgid "%1: set label text"
-msgstr "%1: etiket metnini ayarla"
+msgstr "%1: Etiket metnini ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:329
-#, fuzzy, kde-format
-#| msgid "%1: set label text"
+#, kde-format
 msgid "%1: set label placeholdertext"
-msgstr "%1: etiket metnini ayarla"
+msgstr "%1: Etiket yer tutucu metnini ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:336
 #, kde-format
@@ -8326,45 +8320,42 @@ msgid "%1: set TeX main font"
 msgstr "%1: TeX ana yazıtipini ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:351
-#, fuzzy, kde-format
-#| msgid "%1: set TeX background color"
+#, kde-format
 msgid "%1: set background color"
-msgstr "%1: TeX arkaplan rengini ayarla"
+msgstr "%1: Arka plan rengini ayarla"
 
 #: src/backend/worksheet/TextLabel.cpp:359
-#, fuzzy, kde-format
-#| msgid "%1: set border style"
+#, kde-format
 msgid "%1: set border shape"
-msgstr "%1: kenarlık biçemini ayarla"
+msgstr "%1: Kenarlık şeklini ayarla"
 
 #: src/backend/worksheet/Worksheet.cpp:616
-#, fuzzy, kde-format
-#| msgid "%1: change column type"
+#, kde-format
 msgid "%1: change size type"
-msgstr "%1: sütun türünü değiştir"
+msgstr "%1: Boyut türünü değiştir"
 
 #: src/backend/worksheet/Worksheet.cpp:624
 #, kde-format
 msgid "%1: change \"rescale the content\" property"
-msgstr "%1: \"içeriği yeniden ölçeklendir özelliği\"ni değiştir"
+msgstr "%1: \"İçeriği yeniden ölçeklendir özelliği\"ni değiştir"
 
 #: src/backend/worksheet/Worksheet.cpp:631
 #: src/backend/worksheet/Worksheet.cpp:632
 #, kde-format
 msgid "%1: set layout"
-msgstr "%1: yerşeşimi ayarla"
+msgstr "%1: Yerleşimi ayarla"
 
 #: src/backend/worksheet/Worksheet.cpp:694
 #: src/backend/worksheet/Worksheet.cpp:695
 #, kde-format
 msgid "%1: set layout row count"
-msgstr "%1: yerleşim satır sayısını ayarla"
+msgstr "%1: Yerleşim satır sayısını ayarla"
 
 #: src/backend/worksheet/Worksheet.cpp:733
 #: src/backend/worksheet/Worksheet.cpp:734
 #, kde-format
 msgid "%1: set page size"
-msgstr "%1: sayfa boyutunu ayarla"
+msgstr "%1: Sayfa boyutunu ayarla"
 
 #: src/backend/worksheet/Worksheet.cpp:1382
 #, kde-format
@@ -8374,7 +8365,7 @@ msgstr "Eğriler"
 #: src/backend/worksheet/WorksheetElement.cpp:48
 #, kde-format
 msgid "Drawing &order"
-msgstr "Çizme sı&rası"
+msgstr "Çizim sı&rası"
 
 #: src/backend/worksheet/WorksheetElement.cpp:50
 #: src/backend/worksheet/WorksheetElement.cpp:218
@@ -8393,12 +8384,12 @@ msgstr "Ö&ne taşı"
 #: src/backend/worksheet/WorksheetElement.cpp:281
 #, kde-format
 msgid "%1: move behind %2."
-msgstr "%1: %2'nin arkasına taşı."
+msgstr "%1: %2 ögesinin arkasına taşı."
 
 #: src/backend/worksheet/WorksheetElement.cpp:295
 #, kde-format
 msgid "%1: move in front of %2."
-msgstr "%1: %2'nin önüne taşı."
+msgstr "%1: %2 ögesinin önüne taşı."
 
 #: src/backend/worksheet/WorksheetElement.cpp:582
 #, kde-format
