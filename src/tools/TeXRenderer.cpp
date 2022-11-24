@@ -140,59 +140,95 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, Result* res, 
 		return imageFromPDF(file, engine, res);
 }
 
+bool TeXRenderer::executeLatexProcess(const QString engine,
+									  const QString& baseName,
+									  const QTemporaryFile& file,
+									  const QString& resultFileExtension,
+									  Result* res) {
+	// latex: produce the DVI file
+	const QString engineFullPath = QStandardPaths::findExecutable(engine);
+	if (engineFullPath.isEmpty()) {
+		res->successful = false;
+		res->errorMessage = i18n("%1 not found").arg(engine);
+		WARN(QStringLiteral("%1 not found").arg(engine).toStdString());
+		return {};
+	}
+
+	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
+
+	QProcess latexProcess;
+	// TODO: is this really needed
+	if (resultFileExtension == QStringLiteral("pdf")) {
+#if defined(HAVE_WINDOWS)
+		latexProcess.setNativeArguments(QStringLiteral("-interaction=batchmode ") + file.fileName());
+		latexProcess.start(engineFullPath, QStringList() << QString());
+#else
+		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
+#endif
+	} else {
+		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
+	}
+
+	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
+
+	bool finished = latexProcess.waitForFinished();
+	if (!finished || latexProcess.exitCode() != 0) {
+		QFile logFile(baseName + QStringLiteral(".log"));
+		QString errorLogs;
+		WARN(QStringLiteral("executeLatexProcess: logfile: %1").arg(QFileInfo(logFile).absoluteFilePath()).toStdString());
+		if (logFile.open(QIODevice::ReadOnly)) {
+			// really slow, but texrenderer is running asynchronous so it is not a problem
+			while (!logFile.atEnd()) {
+				const auto line = logFile.readLine();
+				if (line.count() > 0 && line.at(0) == '!') {
+					errorLogs += QLatin1String(line);
+					break; // only first error message is enough
+				}
+			}
+			logFile.close();
+		} else
+			WARN(QStringLiteral("Unable to open logfile").toStdString());
+
+		WARN(latexProcess.readAllStandardOutput().toStdString());
+		WARN(latexProcess.readAllStandardError().toStdString());
+
+		QString err;
+		if (errorLogs.isEmpty()) {
+			if (!finished) {
+				err = i18n("Timeout: Unable to generate latex file");
+				WARN(QStringLiteral("Timeout: Unable to generate latex file").toStdString());
+			} else {
+				err = QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ") + QString::number(latexProcess.exitCode())
+					+ QStringLiteral("\n");
+				WARN(QStringLiteral("latex process failed, exit code = %1").arg(latexProcess.exitCode()).toStdString());
+			}
+		} else {
+			err = errorLogs;
+			WARN(err.toStdString());
+		}
+
+		res->successful = false;
+		res->errorMessage = err;
+		QFile::remove(baseName + QStringLiteral(".aux"));
+		QFile::remove(logFile.fileName());
+		QFile::remove(baseName + QStringLiteral(".%1").arg(resultFileExtension)); // in some cases the file was also created
+		return false;
+	}
+	res->successful = true;
+	res->errorMessage = QStringLiteral("");
+	return true;
+}
+
 // TEX -> PDF -> QImage
 QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const QString& engine, Result* res) {
 	// DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine))
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// produce the PDF file with 'engine'
-	const QString engineFullPath = QStandardPaths::findExecutable(engine);
-	if (engineFullPath.isEmpty()) {
-		WARN("engine " << STDSTRING(engine) << " not found");
+	if (!executeLatexProcess(engine, baseName, file, QStringLiteral("pdf"), res))
 		return {};
-	}
 
-	QProcess latexProcess;
-#if defined(HAVE_WINDOWS)
-	latexProcess.setNativeArguments(QStringLiteral("-interaction=batchmode ") + file.fileName());
-	latexProcess.start(engineFullPath, QStringList() << QString());
-#else
-	latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
-#endif
-
-	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QFile logFile(baseName + QStringLiteral(".log"));
-		QString errorLogs;
-		if (logFile.open(QIODevice::ReadOnly)) {
-			// really slow, but texrenderer is running asynchronous so it is not a problem
-			while (!logFile.atEnd()) {
-				const auto line = logFile.readLine();
-				// ! character as the first character means the line is part of the error output.
-				// determine the first line in this output having a non-empty content and forward it to the user
-				if (line.count() > 0 && line.at(0) == QLatin1Char('!')) {
-					QString errorMsg = QLatin1String(line);
-					errorMsg = errorMsg.remove(QLatin1Char('!')).simplified();
-					if (!errorMsg.isEmpty()) {
-						errorLogs += errorMsg;
-						break; // only first error message is enough
-					}
-				}
-			}
-			logFile.close();
-		}
-		QString err = errorLogs.isEmpty() ? engine + QStringLiteral(" ") + i18n("process failed, exit code =") + QStringLiteral(" ")
-				+ QString::number(latexProcess.exitCode()) + QStringLiteral("\n")
-										  : errorLogs;
-		WARN(err.toStdString());
-		res->successful = false;
-		res->errorMessage = err;
-		QFile::remove(baseName + QStringLiteral(".aux"));
-		QFile::remove(logFile.fileName());
-		QFile::remove(baseName + QStringLiteral(".pdf")); // in some cases the pdf was also created
-		return {};
-	}
-
+	// Can we move this into executeLatexProcess?
 	QFile::remove(baseName + QStringLiteral(".aux"));
 	QFile::remove(baseName + QStringLiteral(".log"));
 
@@ -217,41 +253,8 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// latex: produce the DVI file
-	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
-	if (latexFullPath.isEmpty()) {
-		res->successful = false;
-		res->errorMessage = i18n("latex not found");
-		WARN("latex not found");
+	if (!executeLatexProcess(QLatin1String("latex"), baseName, file, QStringLiteral("dvi"), res))
 		return {};
-	}
-	QProcess latexProcess;
-	latexProcess.start(latexFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
-	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		QFile logFile(baseName + QStringLiteral(".log"));
-		QString errorLogs;
-		if (logFile.open(QIODevice::ReadOnly)) {
-			// really slow, but texrenderer is running asynchronous so it is not a problem
-			while (!logFile.atEnd()) {
-				const auto line = logFile.readLine();
-				if (line.count() > 0 && line.at(0) == '!') {
-					errorLogs += QLatin1String(line);
-					break; // only first error message is enough
-				}
-			}
-			logFile.close();
-		}
-		QString err = errorLogs.isEmpty() ? QStringLiteral("latex ") + i18n("process failed, exit code =") + QStringLiteral(" ")
-				+ QString::number(latexProcess.exitCode()) + QStringLiteral("\n")
-										  : errorLogs;
-		WARN(err.toStdString());
-		res->successful = false;
-		res->errorMessage = err;
-		QFile::remove(baseName + QStringLiteral(".aux"));
-		QFile::remove(logFile.fileName());
-		QFile::remove(baseName + QStringLiteral(".dvi")); // in some cases the dvi was also created
-		return {};
-	}
 
 	// dvips: DVI -> PS
 	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
