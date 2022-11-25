@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-11-20 08:43+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -21327,40 +21327,50 @@ msgstr "Не вдалося знайти preview.sty."
 msgid "Couldn't open the file"
 msgstr "Не вдалося відкрити файл"
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "Файл не знайдено"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Unable to read the file"
+msgid "Timeout: Unable to generate latex file"
+msgstr "Не вдалося прочитати файл"
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "Не вдалося обробити, код виходу ="
 
-#: src/tools/TeXRenderer.cpp:224
-#, kde-format
-msgid "latex not found"
-msgstr "Не знайдено latex"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, kde-format
 msgid "dvips not found"
 msgstr "Не знайдено dvips"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "Не вдалося обробити dvips, код виходу ="
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, kde-format
 msgid "convert not found"
 msgstr "Не знайдено convert"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "Не вдалося обробити convert, код виходу ="
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
+
+#~ msgid "latex not found"
+#~ msgstr "Не знайдено latex"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: встановити стиль рамки"

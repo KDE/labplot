@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -21413,44 +21413,55 @@ msgstr ""
 msgid "Couldn't open the file"
 msgstr "Nie można zapisać pliku '%1'."
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "Nie znaleziono pliku"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Failed to open the file '%1'."
+msgid "Timeout: Unable to generate latex file"
+msgstr "Nie udało się otworzyć pliku '%1'."
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:224
-#, fuzzy, kde-format
-#| msgid "File not found"
-msgid "latex not found"
-msgstr "Nie znaleziono pliku"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "dvips not found"
 msgstr "Nie znaleziono pliku"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, fuzzy, kde-format
 #| msgid "File not found"
 msgid "convert not found"
 msgstr "Nie znaleziono pliku"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, fuzzy, kde-format
 #| msgid "Failed to open the file '%1'."
 msgid "Unable to open file:"
 msgstr "Nie udało się otworzyć pliku '%1'."
+
+#, fuzzy
+#~| msgid "File not found"
+#~ msgid "latex not found"
+#~ msgstr "Nie znaleziono pliku"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: ustaw styl obramowania"

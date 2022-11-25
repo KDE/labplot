@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-11-21 07:25+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -20884,40 +20884,49 @@ msgstr ""
 msgid "Couldn't open the file"
 msgstr "ფაილის გახსნის შეცდომა"
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "ფაილი ვერ მოიძებნა"
+
+#: src/tools/TeXRenderer.cpp:198
+#, kde-format
+msgid "Timeout: Unable to generate latex file"
+msgstr ""
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:224
-#, kde-format
-msgid "latex not found"
-msgstr "latex ვერ ვიპოვე"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips ვერ ვიპოვე"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, kde-format
 msgid "convert not found"
 msgstr "convert ვერ ვიპოვე"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, kde-format
 msgid "Unable to open file:"
 msgstr "ფაილის გახსნა შეუძლებელია:"
+
+#~ msgid "latex not found"
+#~ msgstr "latex ვერ ვიპოვე"
 
 #~ msgid "cm"
 #~ msgstr "სმ"

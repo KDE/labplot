@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -22310,44 +22310,55 @@ msgstr ""
 msgid "Couldn't open the file"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "Data options"
+msgid "%1 not found"
+msgstr "Datatilvalg"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Could not open file %1 for reading."
+msgid "Timeout: Unable to generate latex file"
+msgstr "Kunne ikke åbne filen \"%1\" til læsning."
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:224
-#, fuzzy, kde-format
-#| msgid "Data options"
-msgid "latex not found"
-msgstr "Datatilvalg"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, fuzzy, kde-format
 #| msgid "Data options"
 msgid "dvips not found"
 msgstr "Datatilvalg"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, fuzzy, kde-format
 #| msgid "Data options"
 msgid "convert not found"
 msgstr "Datatilvalg"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Unable to open file:"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
+
+#, fuzzy
+#~| msgid "Data options"
+#~ msgid "latex not found"
+#~ msgstr "Datatilvalg"
 
 #, fuzzy
 #~| msgid "&Insert Empty Rows"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-11-11 04:37+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -21035,40 +21035,50 @@ msgstr "Ezin izan du «preview.sty» aurkitu."
 msgid "Couldn't open the file"
 msgstr "Ezin izan du fitxategia ireki"
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "Fitxategia ez du aurkitu"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Unable to read the file"
+msgid "Timeout: Unable to generate latex file"
+msgstr "Ezin izan du fitxategia irakurri"
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "prozesuak huts egin du, irteerako kodea ="
 
-#: src/tools/TeXRenderer.cpp:224
-#, kde-format
-msgid "latex not found"
-msgstr "latex ez du aurkitu"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips ez du aurkitu"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "dvips prozesuak huts egin du, irteerako kodea ="
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, kde-format
 msgid "convert not found"
 msgstr "«convert» ez du aurkitu"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "«convert» prozesuak huts egin du, irteerako kodea ="
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ez da fitxategia irekitze gai:"
+
+#~ msgid "latex not found"
+#~ msgstr "latex ez du aurkitu"
 
 #, fuzzy
 #~ msgid "%1: set vertical line style"

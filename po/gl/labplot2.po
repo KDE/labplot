@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -21912,47 +21912,59 @@ msgstr ""
 msgid "Couldn't open the file"
 msgstr "Non se puido gardar o ficheiro «%1»."
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "File Information"
+msgid "%1 not found"
+msgstr "Información do ficheiro"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Failed to open the device."
+msgid "Timeout: Unable to generate latex file"
+msgstr "Non se puido abrir o dispositivo."
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:224
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "File Information"
-msgid "latex not found"
-msgstr "Información do ficheiro"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "dvips not found"
 msgstr "Información do ficheiro"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "File Information"
 msgid "convert not found"
 msgstr "Información do ficheiro"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr ""
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, fuzzy, kde-format
 #| msgid "Failed to open the device."
 msgid "Unable to open file:"
 msgstr "Non se puido abrir o dispositivo."
+
+#, fuzzy
+#~| msgctxt "@title:window"
+#~| msgid "File Information"
+#~ msgid "latex not found"
+#~ msgstr "Información do ficheiro"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: definir o estilo do bordo"
