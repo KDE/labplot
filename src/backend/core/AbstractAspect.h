@@ -52,6 +52,7 @@ enum class AspectType : quint64 {
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
 	BarPlot = 0x0210200,
+	QQPlot = 0x0210300,
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -186,6 +187,8 @@ public:
 			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
+		case AspectType::QQPlot:
+			return QStringLiteral("QQPlot");
 		case AspectType::AbstractPart:
 			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:

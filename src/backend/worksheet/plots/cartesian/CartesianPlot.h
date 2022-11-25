@@ -229,11 +229,18 @@ private:
 	QAction* visibilityAction;
 
 	//"add new" actions
+
+	// basic plots
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
 	QAction* addHistogramAction;
 	QAction* addBarPlotAction;
 	QAction* addBoxPlotAction;
+
+	// statistic plots
+	QAction* addQQPlotAction;
+
+	// analysis curves
 	QAction* addDataReductionCurveAction;
 	QAction* addDifferentiationCurveAction;
 	QAction* addIntegrationCurveAction;
@@ -293,6 +300,7 @@ public Q_SLOTS:
 	void addBarPlot();
 	void addBoxPlot();
 	void addEquationCurve();
+	void addQQPlot();
 	void addDataReductionCurve();
 	void addDifferentiationCurve();
 	void addIntegrationCurve();

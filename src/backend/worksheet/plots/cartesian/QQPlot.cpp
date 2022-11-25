@@ -1,0 +1,482 @@
+/*
+	File                 : QQPlot.cpp
+	Project              : LabPlot
+	Description          : QQPlot
+	--------------------------------------------------------------------
+	SPDX-FileCopyrightText: 2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+/*!
+  \class QQPlot
+  \brief
+
+  \ingroup worksheet
+  */
+#include "QQPlot.h"
+#include "QQPlotPrivate.h"
+//#include "backend/core/AbstractColumn.h"
+#include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosCurve.h"
+#include "backend/lib/trace.h"
+#include "backend/worksheet/Background.h"
+#include "backend/worksheet/Line.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
+
+extern "C" {
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_statistics.h>
+}
+
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QPainter>
+
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+
+CURVE_COLUMN_CONNECT(QQPlot, Data, data, recalc)
+
+QQPlot::QQPlot(const QString& name)
+	: WorksheetElement(name, new QQPlotPrivate(this), AspectType::QQPlot)
+	, Curve() {
+	init();
+}
+
+QQPlot::QQPlot(const QString& name, QQPlotPrivate* dd)
+	: WorksheetElement(name, dd, AspectType::QQPlot)
+	, Curve() {
+	init();
+}
+
+// no need to delete the d-pointer here - it inherits from QGraphicsItem
+// and is deleted during the cleanup in QGraphicsScene
+QQPlot::~QQPlot() = default;
+
+void QQPlot::init() {
+	Q_D(QQPlot);
+
+	//KConfig config;
+	//KConfigGroup group = config.group("QQPlot");
+	d->referenceCurve = new XYCurve(QStringLiteral("reference"));
+	d->referenceCurve->setHidden(true);
+	d->referenceCurve->line()->setStyle(Qt::SolidLine);
+	d->referenceCurve->symbol()->setStyle(Symbol::Style::NoSymbols);
+	d->referenceCurve->background()->setPosition(Background::Position::No);
+	d->xReferenceColumn = new Column(QStringLiteral("x"));
+	d->yReferenceColumn = new Column(QStringLiteral("y"));
+	d->referenceCurve->setXColumn(d->xReferenceColumn);
+	d->referenceCurve->setYColumn(d->yReferenceColumn);
+
+	d->percentilesCurve = new XYCurve(QStringLiteral("percentiles"));
+	d->percentilesCurve->setHidden(true);
+	d->percentilesCurve->line()->setStyle(Qt::NoPen);
+	d->percentilesCurve->symbol()->setStyle(Symbol::Style::Circle);
+	d->percentilesCurve->background()->setPosition(Background::Position::No);
+
+	d->xPercentilesColumn = new Column(QStringLiteral("x"));
+	d->yPercentilesColumn = new Column(QStringLiteral("y"));
+	d->percentilesCurve->setXColumn(d->xPercentilesColumn);
+	d->percentilesCurve->setYColumn(d->yPercentilesColumn);
+
+	// calculate x-values - the percentiles for the standard normal distribution
+	QVector<double> xData;
+	for (int i = 1; i < 100; ++i)
+		xData << gsl_cdf_gaussian_Pinv(double(i) / 100., 1.0);
+
+	d->xPercentilesColumn->replaceValues(0, xData);
+
+	this->initActions();
+}
+
+void QQPlot::finalizeAdd() {
+	Q_D(QQPlot);
+	WorksheetElement::finalizeAdd();
+	plot()->addChild(d->referenceCurve);
+	plot()->addChild(d->percentilesCurve);
+}
+
+void QQPlot::initActions() {
+	visibilityAction = new QAction(QIcon::fromTheme(QStringLiteral("view-visible")), i18n("Visible"), this);
+	visibilityAction->setCheckable(true);
+	connect(visibilityAction, &QAction::triggered, this, &QQPlot::changeVisibility);
+}
+
+QMenu* QQPlot::createContextMenu() {
+	QMenu* menu = WorksheetElement::createContextMenu();
+	QAction* firstAction = menu->actions().at(1); // skip the first action because of the "title-action"
+	visibilityAction->setChecked(isVisible());
+	menu->insertAction(firstAction, visibilityAction);
+
+	menu->insertSeparator(visibilityAction);
+	menu->insertSeparator(firstAction);
+
+	return menu;
+}
+
+/*!
+  Returns an icon to be used in the project explorer.
+  */
+QIcon QQPlot::icon() const {
+	return QIcon::fromTheme(QStringLiteral("view-object-histogram-linear"));
+}
+
+QGraphicsItem* QQPlot::graphicsItem() const {
+	return d_ptr;
+}
+
+bool QQPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_D(QQPlot);
+	return d->activateCurve(mouseScenePos, maxDist);
+}
+
+void QQPlot::setHover(bool on) {
+	Q_D(QQPlot);
+	d->setHover(on);
+}
+
+void QQPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+// TODO
+}
+
+//##############################################################################
+//##########################  getter methods  ##################################
+//##############################################################################
+// general
+BASIC_SHARED_D_READER_IMPL(QQPlot, const AbstractColumn*, dataColumn, dataColumn)
+BASIC_SHARED_D_READER_IMPL(QQPlot, QString, dataColumnPath, dataColumnPath)
+
+// line
+Line* QQPlot::line() const {
+	Q_D(const QQPlot);
+	return d->referenceCurve->line();
+}
+
+// symbols
+Symbol* QQPlot::symbol() const {
+	Q_D(const QQPlot);
+	return d->percentilesCurve->symbol();
+}
+
+//##############################################################################
+//#################  setter methods and undo commands ##########################
+//##############################################################################
+
+// General
+CURVE_COLUMN_SETTER_CMD_IMPL_F_S(QQPlot, Data, data, recalc)
+void QQPlot::setDataColumn(const AbstractColumn* column) {
+	Q_D(QQPlot);
+	if (column != d->dataColumn)
+		exec(new QQPlotSetDataColumnCmd(d, column, ki18n("%1: set data column")));
+}
+
+void QQPlot::setDataColumnPath(const QString& path) {
+	Q_D(QQPlot);
+	d->dataColumnPath = path;
+}
+
+//##############################################################################
+//#################################  SLOTS  ####################################
+//##############################################################################
+void QQPlot::retransform() {
+	d_ptr->retransform();
+}
+
+void QQPlot::recalc() {
+	D(QQPlot);
+	d->recalc();
+}
+
+void QQPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
+	Q_D(QQPlot);
+	if (aspect == d->dataColumn) {
+		d->dataColumn = nullptr;
+		d->retransform();
+	}
+}
+
+void QQPlot::dataColumnNameChanged() {
+	Q_D(QQPlot);
+	setDataColumnPath(d->dataColumn->path());
+}
+
+//##############################################################################
+//######################### Private implementation #############################
+//##############################################################################
+QQPlotPrivate::QQPlotPrivate(QQPlot* owner)
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setAcceptHoverEvents(false);
+}
+
+QQPlotPrivate::~QQPlotPrivate() {
+
+}
+
+QRectF QQPlotPrivate::boundingRect() const {
+	return boundingRectangle;
+}
+
+/*!
+  Returns the shape of the QQPlot as a QPainterPath in local coordinates
+  */
+QPainterPath QQPlotPrivate::shape() const {
+	return curveShape;
+}
+
+//void QQPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	//q->createContextMenu()->exec(event->screenPos());
+//}
+
+/*!
+  called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
+  recalculates the position of the scene points to be drawn.
+  triggers the update of lines, drop lines, symbols etc.
+*/
+void QQPlotPrivate::retransform() {
+	const bool suppressed = suppressRetransform || q->isLoading();
+	if (suppressed)
+		return;
+
+	if (!isVisible())
+		return;
+
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+	referenceCurve->retransform();
+	percentilesCurve->retransform();
+}
+
+/*!
+ * called when the data was changed. recalculates the histogram.
+ */
+void QQPlotPrivate::recalc() {
+	PERFTRACE(name() + QLatin1String(Q_FUNC_INFO));
+
+	if (!dataColumn)
+		return;
+
+	// copy the non-nan and not masked values into a new vector
+	QVector<double> rawData;
+	copyValidData(rawData);
+	size_t n = rawData.count();
+
+	// sort the data to calculate the percentiles
+	std::sort(rawData.begin(), rawData.end());
+
+	// calculate y-values - the percentiles for the column data
+	QVector<double> yData;
+	for (int i = 1; i < 100; ++i)
+		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i) / 100.);
+
+	yPercentilesColumn->replaceValues(0, yData);
+
+	// add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
+	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
+	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
+	double x1 = -0.6745;
+	double x2 = 0.6745;
+
+	// we only want do show the line starting from x = PInv(0.01) = -2.32635
+	// and going to x = PInv(0.99) = 2.32635;
+	double k = (y2 - y1) / (x2 - x1);
+	double b = y1 - k * x1;
+	double x1New = -2.32635;
+	double x2New = 2.32635;
+	double y1New = k * x1New + b;
+	double y2New = k * x2New + b;
+
+	xReferenceColumn->setValueAt(0, x1New);
+	xReferenceColumn->setValueAt(1, x2New);
+
+	yReferenceColumn->setValueAt(0, y1New);
+	yReferenceColumn->setValueAt(1, y2New);
+
+	//referenceCurve->recalcLogicalPoints();
+	//percentilesCurve->recalcLogicalPoints();
+
+	// histogram changed because of the actual data changes or because of new bin settings,
+	// Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	Q_EMIT q->dataChanged();
+}
+
+/*!
+ * copy the non-nan and not masked values of the current column
+ * into the vector \c data.
+ */
+void QQPlotPrivate::copyValidData(QVector<double>& data) const {
+	const int rowCount = dataColumn->rowCount();
+	data.reserve(rowCount);
+	double val;
+	if (dataColumn->columnMode() == AbstractColumn::ColumnMode::Double) {
+		auto* rowValues = reinterpret_cast<QVector<double>*>(reinterpret_cast<const Column*>(dataColumn)->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || dataColumn->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	} else if (dataColumn->columnMode() == AbstractColumn::ColumnMode::Integer) {
+		auto* rowValues = reinterpret_cast<QVector<int>*>(reinterpret_cast<const Column*>(dataColumn)->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || dataColumn->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	} else if (dataColumn->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		auto* rowValues = reinterpret_cast<QVector<qint64>*>(reinterpret_cast<const Column*>(dataColumn)->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || dataColumn->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	}
+
+	if (data.size() < rowCount)
+		data.squeeze();
+}
+
+/*!
+  recalculates the outer bounds and the shape of the curve.
+  */
+void QQPlotPrivate::recalcShapeAndBoundingRect() {
+	if (m_suppressRecalc)
+		return;
+
+	prepareGeometryChange();
+	curveShape = QPainterPath();
+	curveShape.addPath(referenceCurve->graphicsItem()->shape());
+	curveShape.addPath(percentilesCurve->graphicsItem()->shape());
+
+	boundingRectangle = curveShape.boundingRect();
+}
+
+/*!
+  Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
+  \sa QGraphicsItem::paint().
+  */
+void QQPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
+	if (!isVisible())
+		return;
+}
+
+bool QQPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+	if (!isVisible())
+		return false;
+
+	return curveShape.contains(mouseScenePos);
+}
+
+/*!
+ * Is called in CartesianPlot::hoverMoveEvent where it is determined which curve to hover.
+ * \p on
+ */
+void QQPlotPrivate::setHover(bool on) {
+	if (on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	on ? Q_EMIT q->hovered() : emit q->unhovered();
+	update();
+}
+
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void QQPlot::save(QXmlStreamWriter* writer) const {
+	Q_D(const QQPlot);
+
+	writer->writeStartElement(QStringLiteral("QQPlot"));
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
+
+	// general
+	writer->writeStartElement(QStringLiteral("general"));
+	WRITE_COLUMN(d->dataColumn, dataColumn);
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
+	writer->writeEndElement();
+
+	writer->writeEndElement(); // close "QQPlot" section
+}
+
+//! Load from XML
+bool QQPlot::load(XmlStreamReader* reader, bool preview) {
+	Q_D(QQPlot);
+
+	if (!readBasicAttributes(reader))
+		return false;
+
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QXmlStreamAttributes attribs;
+	QString str;
+
+	while (!reader->atEnd()) {
+		reader->readNext();
+		if (reader->isEndElement() && reader->name() == QLatin1String("QQPlot"))
+			break;
+
+		if (!reader->isStartElement())
+			continue;
+
+		if (reader->name() == QLatin1String("comment")) {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (!preview && reader->name() == QLatin1String("general")) {
+			attribs = reader->attributes();
+			READ_COLUMN(dataColumn);
+			str = attribs.value(QStringLiteral("visible")).toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs(QStringLiteral("visible")).toString());
+			else
+				d->setVisible(str.toInt());
+		}
+	}
+	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void QQPlot::loadThemeConfig(const KConfig& config) {
+	KConfigGroup group;
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group("XYCurve"); // when loading from the theme config, use the same properties as for XYCurve
+	else
+		group = config.group("QQPlot");
+
+	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	int index = plot->curveChildIndex(this);
+	const QColor themeColor = plot->themeColorPalette(index);
+
+	QPen p;
+
+	Q_D(QQPlot);
+	d->m_suppressRecalc = true;
+
+	// TODO: different colors have to be used
+	d->referenceCurve->line()->loadThemeConfig(group, themeColor);
+	d->percentilesCurve->symbol()->loadThemeConfig(group, themeColor);
+
+	d->m_suppressRecalc = false;
+	d->recalcShapeAndBoundingRect();
+}
+
+void QQPlot::saveThemeConfig(const KConfig& config) {
+	Q_D(const QQPlot);
+	KConfigGroup group = config.group("QQPlot");
+
+	// TODO:
+	//d->line->saveThemeConfig(group);
+	//d->symbol->saveThemeConfig(group);
+}

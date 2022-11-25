@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Main window of the application
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -45,6 +45,7 @@ class LiveDataDock;
 class MatrixDock;
 class ProjectDock;
 class SpreadsheetDock;
+class QQPlotDock;
 class XYCurveDock;
 class XYEquationCurveDock;
 class XYDataReductionCurveDock;
@@ -246,6 +247,7 @@ private:
 	HistogramDock* histogramDock{nullptr};
 	BarPlotDock* barPlotDock{nullptr};
 	BoxPlotDock* boxPlotDock{nullptr};
+	QQPlotDock* qqPlotDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};
 	ImageDock* imageDock{nullptr};

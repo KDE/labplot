@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description 	     : GUI observer
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
@@ -27,6 +27,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #ifdef HAVE_CANTOR_LIBS
@@ -59,6 +60,7 @@
 #include "kdefrontend/dockwidgets/MatrixDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/ProjectDock.h"
+#include "kdefrontend/dockwidgets/QQPlotDock.h"
 #include "kdefrontend/dockwidgets/ReferenceLineDock.h"
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/WorksheetDock.h"
@@ -351,6 +353,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Box Plot"));
 		raiseDock(m_mainWindow->boxPlotDock, m_mainWindow->stackedWidget);
 		m_mainWindow->boxPlotDock->setBoxPlots(castList<BoxPlot>(selectedAspects));
+		break;
+	case AspectType::QQPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Q-Q Plot"));
+		raiseDock(m_mainWindow->qqPlotDock, m_mainWindow->stackedWidget);
+		m_mainWindow->qqPlotDock->setPlots(castList<QQPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));

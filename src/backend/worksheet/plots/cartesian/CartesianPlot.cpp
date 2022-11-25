@@ -43,6 +43,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/QQPlot.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "kdefrontend/ThemeHandler.h"
@@ -344,6 +345,9 @@ void CartesianPlot::initActions() {
 	addBarPlotAction = new QAction(QIcon::fromTheme(QStringLiteral("office-chart-bar")), i18n("Bar Plot"), this);
 	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-equation-curve")), i18n("xy-curve from a Formula"), this);
+
+	addQQPlotAction = new QAction(i18n("Q-Q Plot"), this);
+
 	// no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Data Reduction"), this);
 	addDifferentiationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Differentiation"), this);
@@ -373,6 +377,9 @@ void CartesianPlot::initActions() {
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
 	connect(addBarPlotAction, &QAction::triggered, this, &CartesianPlot::addBarPlot);
 	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
+
+	connect(addQQPlotAction, &QAction::triggered, this, &CartesianPlot::addQQPlot);
+
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -482,6 +489,11 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addAction(addBoxPlotAction);
 	addNewMenu->addAction(addBarPlotAction);
 	addNewMenu->addAction(addEquationCurveAction);
+	addNewMenu->addSeparator();
+
+	auto* menu = new QMenu(i18n("Statistics Plots"));
+	menu->addAction(addQQPlotAction);
+	addNewMenu->addMenu(menu);
 	addNewMenu->addSeparator();
 
 	addNewAnalysisMenu = new QMenu(i18n("Analysis Curve"));
@@ -1626,6 +1638,13 @@ void CartesianPlot::addBoxPlot() {
 	addChild(new BoxPlot(QStringLiteral("Box Plot")));
 }
 
+void CartesianPlot::addQQPlot() {
+	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
+	auto* plot{new QQPlot(QStringLiteral("Q-Q Plot"))};
+	plot->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	addChild(plot);
+}
+
 /*!
  * returns the first selected XYCurve in the plot
  */
@@ -1947,6 +1966,7 @@ int CartesianPlot::curveTotalCount() const {
 	count += children<Histogram>().size();
 	count += children<BoxPlot>().size();
 	count += children<BarPlot>().size();
+	count += children<QQPlot>().size();
 	return count;
 }
 
