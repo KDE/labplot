@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-11-21 07:42+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -21265,40 +21265,50 @@ msgstr "Ni mogoče najti preview.sty."
 msgid "Couldn't open the file"
 msgstr "Ni bilo mogoče odpreti datoteke"
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "Datoteke ni mogoče najti"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Unable to read the file"
+msgid "Timeout: Unable to generate latex file"
+msgstr "Datoteke ni mogoče brati"
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "proces je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:224
-#, kde-format
-msgid "latex not found"
-msgstr "latex-a ni bilo mogoče najti"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "proces dvips je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, kde-format
 msgid "convert not found"
 msgstr "convert-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "proces convert je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"
+
+#~ msgid "latex not found"
+#~ msgstr "latex-a ni bilo mogoče najti"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: določite slog obrobe"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-21 00:42+0000\n"
+"POT-Creation-Date: 2022-11-25 00:42+0000\n"
 "PO-Revision-Date: 2022-11-20 23:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -21255,40 +21255,50 @@ msgstr "No se ha podido encontrar «preview.sty»."
 msgid "Couldn't open the file"
 msgstr "No se ha podido abrir el archivo"
 
-#: src/tools/TeXRenderer.cpp:184 src/tools/TeXRenderer.cpp:244
+#: src/tools/TeXRenderer.cpp:152
+#, fuzzy, kde-format
+#| msgid "File not found"
+msgid "%1 not found"
+msgstr "Archivo no encontrado"
+
+#: src/tools/TeXRenderer.cpp:198
+#, fuzzy, kde-format
+#| msgid "Unable to read the file"
+msgid "Timeout: Unable to generate latex file"
+msgstr "No se puede leer el archivo"
+
+#: src/tools/TeXRenderer.cpp:201
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "el proceso ha fallado, código de salida ="
 
-#: src/tools/TeXRenderer.cpp:224
-#, kde-format
-msgid "latex not found"
-msgstr "no se ha encontrado «latex»"
-
-#: src/tools/TeXRenderer.cpp:260
+#: src/tools/TeXRenderer.cpp:263
 #, kde-format
 msgid "dvips not found"
 msgstr "no se ha encontrado «dvips»"
 
-#: src/tools/TeXRenderer.cpp:267
+#: src/tools/TeXRenderer.cpp:270
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "el proceso «dvips» ha fallado, código de salida ="
 
-#: src/tools/TeXRenderer.cpp:289
+#: src/tools/TeXRenderer.cpp:292
 #, kde-format
 msgid "convert not found"
 msgstr "no se ha encontrado «convert»"
 
-#: src/tools/TeXRenderer.cpp:297
+#: src/tools/TeXRenderer.cpp:300
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "el proceso «convert» ha fallado, código de salida ="
 
-#: src/tools/TeXRenderer.cpp:319
+#: src/tools/TeXRenderer.cpp:322
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No se puede abrir el archivo:"
+
+#~ msgid "latex not found"
+#~ msgstr "no se ha encontrado «latex»"
 
 #~ msgid "%1: set border style"
 #~ msgstr "%1: definir estilo del borde"

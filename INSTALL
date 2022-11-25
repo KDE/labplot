@@ -9,7 +9,7 @@ To compile LabPlot from source following packages are required:
 optional packages
 	* LaTeX and Poppler version 0.62 or higher (including the devel-package, libpoppler-qt5-devel or similar) to enable LaTeX typesetting in LabPlot
 		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex is used, 'xltxtra'.
-		* On Windows you need a LaTeX installation (like MiKTeX) for LaTeX support.
+		* On Windows you need a LaTeX installation (like MiKTeX or TeX Live) for LaTeX support.
 		* On macOS you need a LaTeX installation (like MacTeX) for LaTeX support.
 	* FFTW version 3.3 or higher (including the devel-package, fftw3-devel or similar)
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)

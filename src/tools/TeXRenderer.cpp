@@ -157,17 +157,7 @@ bool TeXRenderer::executeLatexProcess(const QString engine,
 	WARN(QStringLiteral("Engine fullpath: %1").arg(engineFullPath).toStdString());
 
 	QProcess latexProcess;
-	// TODO: is this really needed
-	if (resultFileExtension == QStringLiteral("pdf")) {
-#if defined(HAVE_WINDOWS)
-		latexProcess.setNativeArguments(QStringLiteral("-interaction=batchmode ") + file.fileName());
-		latexProcess.start(engineFullPath, QStringList() << QString());
-#else
-		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
-#endif
-	} else {
-		latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
-	}
+	latexProcess.start(engineFullPath, QStringList() << QStringLiteral("-interaction=batchmode") << file.fileName());
 
 	WARN(QStringLiteral("Workdir: %1").arg(QDir::currentPath()).toStdString());
 
