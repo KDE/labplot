@@ -1844,7 +1844,11 @@ void XYFitCurvePrivate::recalculate() {
 		runMaximumLikelyhood(tmpXDataColumn);
 	}
 
+	evaluate(); // calculate the fit function (vectors)
+
 	fitResult.elapsedTime = timer.elapsed();
+
+	sourceDataChangedSinceLastRecalc = false;
 }
 
 void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn) {
@@ -1882,8 +1886,6 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 
 	// TODO: show results (parameter, etc.)
-
-	evaluate(); // calculate fit function
 }
 
 void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
@@ -2365,10 +2367,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
-
-	evaluate(); // calculate the fit function (vectors)
-
-	sourceDataChangedSinceLastRecalc = false;
 }
 
 /* evaluate fit function (preview == true: use start values, default: false) */
