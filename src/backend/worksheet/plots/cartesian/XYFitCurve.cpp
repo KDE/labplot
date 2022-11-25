@@ -1835,7 +1835,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	prepareResultColumns();
 
-	DEBUG("ALGORITHM: " << fitData.algorithm)
+	DEBUG("#######################################\nALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
 	switch (fitData.algorithm) {
 	case nsl_fit_algorithm_lm:
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
@@ -1867,19 +1867,34 @@ void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColum
 	fitResult.paramValues.resize(np);
 
 	// TODO: implement all distributions
+	DEBUG("DISTRIBUTION: " << fitData.modelType)
 	// const double binSize = xRange.size() / tmpXDataColumn->rowCount();
 	// DEBUG("BIN SIZE = " << binSize)
 	// const int binCount = 10;
 	// TODO: first parameter depends on histogram normalization
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
-	fitResult.paramValues[0] = 1.; // A - probability density
-	fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
-	fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
+	switch (fitData.modelType) {
+	case nsl_sf_stats_gaussian:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
+		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
+		break;
+	case nsl_sf_stats_exponential:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = 1./tmpXDataColumn->mean(); // lambda
+		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
+		break;
+	case nsl_sf_stats_poisson:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
+		break;
+	}
 
 	fitResult.available = true;
 	fitResult.valid = true;
 
 	// TODO: residual vector
+	fitResult.status = i18n("Success");
 
 	if (fitData.useResults) // set start values
 		for (unsigned int i = 0; i < np; i++)

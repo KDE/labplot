@@ -1605,16 +1605,23 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	XYFitCurve::FitData fitData = curve->fitData();
 	fitData.modelCategory = nsl_fit_model_distribution;
 	fitData.modelType = (int)type;
+	DEBUG("TYPE = " << type)
 	fitData.algorithm = nsl_fit_algorithm_ml; // ML distribution fit
+	DEBUG("INITFITDATA:")
 	XYFitCurve::initFitData(fitData);
+	DEBUG("SETFITDATA:")
 	curve->setFitData(fitData);
 
+	DEBUG("RECALCULATE:")
 	curve->recalculate();
 
 	// add the child after the fit was calculated so the dock widgets gets the fit results
 	// and call retransform() after this to calculate and to paint the data points of the fit-curve
+	DEBUG("ADDCHILD:")
 	this->addChild(curve);
+	DEBUG("RETRANSFORM:")
 	curve->retransform();
+	DEBUG("DONE:")
 
 	endMacro();
 }

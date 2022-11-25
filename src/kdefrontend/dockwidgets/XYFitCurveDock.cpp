@@ -245,12 +245,16 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Curve)
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Curve:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
-	else if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Histogram)
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
-	else
+		break;
+	case  XYAnalysisCurve::DataSourceType::Spreadsheet:
 		cbDataSourceCurve->setAspect(nullptr);
+	}
 
 	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
@@ -414,7 +418,7 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 			// TODO: why do we need to reset the model here and below again to get the combobox updated?
 			cbDataSourceCurve->setModel(m_dataSourceModel);
 		}
-	} else {
+	} else { // curve or histogram
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
 		uiGeneralTab.lXColumn->hide();
@@ -444,6 +448,9 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		} else { // histogram
 			uiGeneralTab.cbCategory->setEnabled(false);
 			uiGeneralTab.cbCategory->setCurrentIndex(3); // select "statistics (distributions);
+			DEBUG("DISTRIBUTION: " << uiGeneralTab.cbModel->currentIndex())
+			uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
+			DEBUG("DISTRIBUTION: " << uiGeneralTab.cbModel->currentIndex())
 			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram:"));
 
 			QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::Histogram};
@@ -1188,8 +1195,9 @@ void XYFitCurveDock::enableRecalculate() {
 
 	// no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	auto type = m_fitCurve->dataSourceType();
-	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+//	auto type = m_fitCurve->dataSourceType();
+	switch (m_fitCurve->dataSourceType()) {
+	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
@@ -1201,10 +1209,14 @@ void XYFitCurveDock::enableRecalculate() {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else if (type == XYAnalysisCurve::DataSourceType::Curve)
+		break;
+	}
+	case XYAnalysisCurve::DataSourceType::Curve:
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
-	else
+		break;
+	case XYAnalysisCurve::DataSourceType::Histogram:
 		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
+	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 
