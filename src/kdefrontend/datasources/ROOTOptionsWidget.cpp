@@ -4,6 +4,7 @@
 	Description          : widget providing options for the import of ROOT data
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -35,7 +36,7 @@ void ROOTOptionsWidget::clear() {
 
 void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 	node->setFlags(Qt::ItemIsEnabled);
-	for (const ROOTFilter::Directory& child : dir.children)
+	for (const auto& child : dir.children)
 		fillTree(new QTreeWidgetItem(node, QStringList(child.name)), child);
 	for (const auto& content : dir.content)
 		(new QTreeWidgetItem(node, QStringList(content.first)))->setData(0, Qt::UserRole, content.second);
@@ -43,18 +44,18 @@ void fillTree(QTreeWidgetItem* node, const ROOTFilter::Directory& dir) {
 
 QHash<QStringList, QVector<QStringList>>
 findLeaves(QTreeWidgetItem* node, ROOTFilter* filter, const QString& fileName, const QStringList& path = QStringList{}) {
-	QHash<QStringList, QVector<QStringList>> leaves;
+	QMultiHash<QStringList, QVector<QStringList>> leaves;
 	if (node->childCount() > 0) {
 		for (int i = 0; i < node->childCount(); ++i)
 			leaves.unite(findLeaves(node->child(i), filter, fileName, path + QStringList(node->child(i)->text(0))));
 	} else {
-		leaves[path] = filter->listLeaves(fileName, node->data(0, Qt::UserRole).toLongLong());
+		leaves.insert(path, filter->listLeaves(fileName, node->data(0, Qt::UserRole).toLongLong()));
 	}
 	return leaves;
 }
 
 void ROOTOptionsWidget::updateContent(ROOTFilter* filter, const QString& fileName) {
-	DEBUG("updateContent()");
+	DEBUG(Q_FUNC_INFO);
 
 	qDeleteAll(histItem->takeChildren());
 	qDeleteAll(treeItem->takeChildren());
