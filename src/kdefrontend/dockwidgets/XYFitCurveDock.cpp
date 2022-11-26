@@ -609,9 +609,8 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.cbModel->show();
 		uiGeneralTab.lEquation->show();
 
-		m_initializing = true; // do not change start parameter
+		const Lock lock(m_initializing); // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
-		m_initializing = false;
 	} else {
 		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
 		uiGeneralTab.lCategory->hide();
@@ -1458,59 +1457,51 @@ void XYFitCurveDock::showFitResult() {
 //*************************************************************
 // General-Tab
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(hist);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
-	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
-	m_initializing = false;
 }
 
 /*!
  * called when fit data of fit curve changes
  */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_fitData = fitData;
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
 		uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
 
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
-	m_initializing = false;
 }
 
 void XYFitCurveDock::dataChanged() {
@@ -1518,7 +1509,6 @@ void XYFitCurveDock::dataChanged() {
 }
 
 void XYFitCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

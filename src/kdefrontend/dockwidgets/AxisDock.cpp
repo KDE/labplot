@@ -1445,13 +1445,12 @@ void AxisDock::labelsOpacityChanged(int value) {
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
 }
 
 void AxisDock::axisPositionChanged(Axis::Position position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	// map from the enum Qt::Orientation to the index in the combo box
 	int index{static_cast<int>(position)};
@@ -1470,8 +1469,6 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 	case static_cast<int>(Axis::Position::Logical):
 		ui.cbPosition->setCurrentIndex(Logical);
 	}
-
-	m_initializing = false;
 }
 
 void AxisDock::axisPositionChanged(double value) {
@@ -2007,10 +2004,9 @@ void AxisDock::loadConfig(KConfig& config) {
 	majorGridLineWidget->loadConfig(group);
 	minorGridLineWidget->loadConfig(group);
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
-	m_initializing = false;
 }
 
 void AxisDock::saveConfigAsTemplate(KConfig& config) {

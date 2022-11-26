@@ -1111,9 +1111,8 @@ void LabelWidget::borderColorChanged(const QColor& color) {
 		label->setBorderPen(pen);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
 }
 
 void LabelWidget::borderWidthChanged(double value) {
@@ -1560,7 +1559,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	if (!m_label)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	// Text
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
@@ -1590,7 +1589,6 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbBorderStyle->setCurrentIndex(group.readEntry("BorderStyle", (int)m_label->borderPen().style()));
 	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Unit::Point));
 	ui.sbBorderOpacity->setValue(group.readEntry("BorderOpacity", m_label->borderOpacity()) * 100);
-	m_initializing = false;
 }
 
 void LabelWidget::saveConfig(KConfigGroup& group) {

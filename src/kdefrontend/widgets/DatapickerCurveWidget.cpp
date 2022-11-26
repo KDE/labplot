@@ -197,9 +197,8 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 		curve->setPointErrorBarBrush(brush);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color);
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::visibilityChanged(bool state) {
@@ -227,30 +226,26 @@ void DatapickerCurveWidget::updateSymbolWidgets() {
 //******** SLOTs for changes triggered in DatapickerCurve *****
 //*************************************************************
 void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbXErrorType->setCurrentIndex((int)errors.x);
 	ui.cbYErrorType->setCurrentIndex((int)errors.y);
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarSizeChanged(qreal size) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarBrushChanged(const QBrush& brush) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, brush.color());
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolVisibleChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -260,12 +255,11 @@ void DatapickerCurveWidget::load() {
 	if (!m_curve)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbXErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().x);
 	ui.cbYErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().y);
 	ui.chkVisible->setChecked(m_curve->pointVisibility());
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int)m_curve->pointErrorBarBrush().style());
 	ui.kcbErrorBarFillingColor->setColor(m_curve->pointErrorBarBrush().color());
 	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Unit::Point));
-	m_initializing = false;
 }

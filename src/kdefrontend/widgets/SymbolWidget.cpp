@@ -174,9 +174,8 @@ void SymbolWidget::fillingColorChanged(const QColor& color) {
 		symbol->setBrush(brush);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, color);
-	m_initializing = false;
 }
 
 void SymbolWidget::borderStyleChanged(int index) {
@@ -214,9 +213,8 @@ void SymbolWidget::borderColorChanged(const QColor& color) {
 		symbol->setPen(pen);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
 }
 
 void SymbolWidget::borderWidthChanged(double value) {

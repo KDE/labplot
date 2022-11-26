@@ -568,20 +568,18 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*************************************************************
 // General-Tab
 void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
@@ -598,19 +596,17 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 	if (column) {
 		DEBUG("Y2 Column available");
@@ -623,16 +619,14 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 		uiGeneralTab.cbKernel->setEnabled(true);
 		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_convolutionData = convolutionData;
 	this->directionChanged();
 
 	this->showConvolutionResult();
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::dataChanged() {
@@ -640,7 +634,6 @@ void XYConvolutionCurveDock::dataChanged() {
 }
 
 void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

@@ -703,37 +703,32 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 //*************************************************************
 // General-Tab
 void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_interpolationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_interpolationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& data) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_interpolationData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
 
 	this->showInterpolationResult();
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::dataChanged() {

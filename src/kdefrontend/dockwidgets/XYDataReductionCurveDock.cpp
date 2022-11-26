@@ -669,37 +669,32 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 //*************************************************************
 // General-Tab
 void XYDataReductionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_dataReductionCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_dataReductionCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData& dataReductionData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_dataReductionData = dataReductionData;
 	// uiGeneralTab.cbType->setCurrentIndex(m_dataReductionData.type);
 	// this->typeChanged();
 
 	this->showDataReductionResult();
-	m_initializing = false;
 }
 
 void XYDataReductionCurveDock::dataChanged() {
@@ -707,7 +702,6 @@ void XYDataReductionCurveDock::dataChanged() {
 }
 
 void XYDataReductionCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

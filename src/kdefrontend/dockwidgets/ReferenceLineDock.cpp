@@ -46,7 +46,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_linesList = list;
 	m_line = list.first();
 	setAspects(list);
@@ -199,15 +199,13 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
 }
 
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************

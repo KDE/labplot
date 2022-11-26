@@ -66,7 +66,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 }
 
 void MatrixDock::setMatrices(QList<Matrix*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_matrixList = list;
 	m_matrix = list.first();
 	setAspects(list);
@@ -105,8 +105,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	connect(m_matrix, &Matrix::numericFormatChanged, this, &MatrixDock::matrixNumericFormatChanged);
 	connect(m_matrix, &Matrix::precisionChanged, this, &MatrixDock::matrixPrecisionChanged);
 	connect(m_matrix, &Matrix::headerFormatChanged, this, &MatrixDock::matrixHeaderFormatChanged);
-
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -225,64 +223,55 @@ void MatrixDock::columnCountChanged(int columns) {
 //*************************************************************
 // matrix dimensions
 void MatrixDock::matrixRowCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRowCount->setValue(count);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixColumnCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbColumnCount->setValue(count);
-	m_initializing = false;
 }
 
 // mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leXStart->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leXEnd->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leYStart->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leYEnd->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 
 // format
 void MatrixDock::matrixNumericFormatChanged(char format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	int index = ui.cbFormat->findData((int)format);
 	ui.cbFormat->setCurrentIndex(index);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixPrecisionChanged(int precision) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPrecision->setValue(precision);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixHeaderFormatChanged(Matrix::HeaderFormat format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbHeader->setCurrentIndex((int)format);
-	m_initializing = false;
 }
 
 //*************************************************************

@@ -491,31 +491,27 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 //*************************************************************
 // General-Tab
 void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_integrationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_integrationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& integrationData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_integrationData = integrationData;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
 	this->methodChanged(m_integrationData.method);
@@ -523,7 +519,6 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::dataChanged() {
@@ -531,7 +526,6 @@ void XYIntegrationCurveDock::dataChanged() {
 }
 
 void XYIntegrationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

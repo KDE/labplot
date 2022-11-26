@@ -466,20 +466,18 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 //*************************************************************
 // General-Tab
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
@@ -496,29 +494,25 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::dataChanged() {
@@ -526,7 +520,6 @@ void XYCorrelationCurveDock::dataChanged() {
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

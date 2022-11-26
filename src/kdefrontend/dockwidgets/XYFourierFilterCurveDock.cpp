@@ -641,37 +641,32 @@ void XYFourierFilterCurveDock::showFilterResult() {
 //*************************************************************
 // General-Tab
 void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_filterCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_filterCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& filterData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_filterData = filterData;
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
 	this->typeChanged();
 
 	this->showFilterResult();
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::dataChanged() {
@@ -679,7 +674,6 @@ void XYFourierFilterCurveDock::dataChanged() {
 }
 
 void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

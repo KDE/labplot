@@ -567,31 +567,27 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 //*************************************************************
 // General-Tab
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXDataColumn->setColumn(column, m_differentiationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYDataColumn->setColumn(column, m_differentiationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged(m_differentiationData.derivOrder);
@@ -599,7 +595,6 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::dataChanged() {
@@ -607,7 +602,6 @@ void XYDifferentiationCurveDock::dataChanged() {
 }
 
 void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

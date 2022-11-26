@@ -52,7 +52,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	set the current spreadsheet(s)
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
 	setAspects(list);
@@ -100,8 +100,6 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	ui.lFormat->setVisible(!nonEditable);
 	ui.lShowComments->setVisible(!nonEditable);
 	ui.cbShowComments->setVisible(!nonEditable);
-
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -138,21 +136,18 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRowCount->setValue(count);
-	m_initializing = false;
 }
 
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbColumnCount->setValue(count);
-	m_initializing = false;
 }
 
 void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbShowComments->setChecked(checked);
-	m_initializing = false;
 }
 
 //*************************************************************
