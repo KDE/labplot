@@ -2006,15 +2006,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+	const auto* qqPlot = dynamic_cast<const QQPlot*>(child);
 
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
 
 	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
-	// TODO: why is child->type() == AspectType::XYCurve, etc. not working here?
-	if (elem
-		&& (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
-			|| child->type() == AspectType::BoxPlot)) {
+	if (elem && (curve || hist || boxPlot || barPlot || qqPlot)) {
 		auto* elem = static_cast<const WorksheetElement*>(child);
 		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
@@ -2118,6 +2116,15 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// update the legend on data column and formatting changes
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
 		connect(barPlot, &BarPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+	} else if (qqPlot) {
+		DEBUG(Q_FUNC_INFO << ", Q-Q PLOT")
+		connect(qqPlot, &QQPlot::dataChanged, [this, qqPlot] {
+			this->dataChanged(const_cast<QQPlot*>(qqPlot));
+		});
+
+		// update the legend on data column and formatting changes
+		//connect(barPlot, &QQPlot::dataColumnChanged, this, &CartesianPlot::updateLegend);
+		//connect(barPlot, &QQPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
