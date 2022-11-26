@@ -23,6 +23,7 @@ private Q_SLOTS:
 	void TestResizeWindows();
 	void TestZoomSelectionAutoscale();
 	void TestZoomAutoscaleSingleYRange();
+	void TestZoomAutoscaleSingleXRange();
 	void TestPadding();
 	void TestCopyPastePlot();
 	void TestAddCurve();
