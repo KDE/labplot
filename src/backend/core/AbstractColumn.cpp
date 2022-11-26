@@ -703,7 +703,16 @@ double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
 double AbstractColumn::mean() const {
 	return qQNaN();
 }
+double AbstractColumn::median() const {
+	return qQNaN();
+}
 double AbstractColumn::var() const {
+	return qQNaN();
+}
+double AbstractColumn::madmed() const {
+	return qQNaN();
+}
+double AbstractColumn::iqr() const {
 	return qQNaN();
 }
 

@@ -62,7 +62,7 @@ const char* nsl_fit_model_growth_pic_name[] = {"atan", "tanh", "alg_sigmoid", "l
 const char* nsl_fit_weight_type_name[] =
 	{"No", "Instrumental (1/col^2)", "Direct (col)", "Inverse (1/col)", "Statistical (1/data)", "Statistical (Fit)", "Relative (1/data^2)", "Relative (Fit)"};
 
-const char* nsl_fit_algorithm_name[] = {"Levenberg-Marquardt", "Maximum Likelyhood"};
+const char* nsl_fit_algorithm_name[] = {"Levenberg-Marquardt", "Maximum Likelihood"};
 
 /*
 	see https://seal.web.cern.ch/seal/documents/minuit/mnusersguide.pdf

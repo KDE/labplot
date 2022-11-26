@@ -1866,14 +1866,14 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
 	fitResult.paramValues.resize(np);
 
-	// TODO: implement all distributions
 	DEBUG("DISTRIBUTION: " << fitData.modelType)
 	// const double binSize = xRange.size() / tmpXDataColumn->rowCount();
 	// DEBUG("BIN SIZE = " << binSize)
 	// const int binCount = 10;
-	// TODO: first parameter depends on histogram normalization
+	// TODO: first parameter (normalization) depends on histogram normalization
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
-	switch (fitData.modelType) {
+	// TODO: implement all distributions
+	switch (fitData.modelType) {	// only these are supported
 	case nsl_sf_stats_gaussian:
 		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
@@ -1881,13 +1881,37 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	case nsl_sf_stats_exponential:
 		fitResult.paramValues[0] = 1.; // A - probability density
-		fitResult.paramValues[1] = 1./tmpXDataColumn->mean(); // lambda
-		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
+		fitResult.paramValues[1] = 1./(tmpXDataColumn->mean() -tmpXDataColumn->minimum()) ; // lambda 1/(<x>-\mu)
+		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
 		break;
 	case nsl_sf_stats_poisson:
 		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
 		break;
+	case nsl_sf_stats_laplace:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
+		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
+		break;
+	case nsl_sf_stats_cauchy_lorentz:	// see WP:en
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = tmpXDataColumn->iqr()/2.; // sigma
+		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
+		break;
+	case nsl_sf_stats_lognormal:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		// calculate mu and sigma
+		double n = tmpXDataColumn->rowCount();
+		double mu = 0.;
+		for (int i = 0; i < n; i++)
+			mu += qLn(tmpXDataColumn->valueAt(i));
+		mu /= n;
+		double var = 0.;
+		for (int i = 0; i < n; i++)
+			var += gsl_pow_2(qLn(tmpXDataColumn->valueAt(i)) - mu);
+		var /= (n-1);
+		fitResult.paramValues[1] = qSqrt(var); // sigma
+		fitResult.paramValues[2] = mu; // mu
 	}
 
 	fitResult.available = true;

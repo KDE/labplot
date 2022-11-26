@@ -1983,10 +1983,25 @@ double Column::mean() const {
 		d->calculateStatistics();
 	return d->statistics.arithmeticMean;
 }
+double Column::median() const {
+	if (!d->available.statistics)
+		d->calculateStatistics();
+	return d->statistics.median;
+}
 double Column::var() const {
 	if (!d->available.statistics)
 		d->calculateStatistics();
 	return d->statistics.variance;
+}
+double Column::madmed() const {
+	if (!d->available.statistics)
+		d->calculateStatistics();
+	return d->statistics.meanDeviationAroundMedian;
+}
+double Column::iqr() const {
+	if (!d->available.statistics)
+		d->calculateStatistics();
+	return d->statistics.iqr;
 }
 
 /*!
