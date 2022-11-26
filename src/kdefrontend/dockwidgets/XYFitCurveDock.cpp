@@ -765,10 +765,18 @@ void XYFitCurveDock::categoryChanged(int index) {
 		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
 
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
-			// unused distributions
-			if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
-				QStandardItem* item = model->item(i);
-				item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
+				// only a few are available for ML (TODO: add more when supported)
+				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_poisson && i != nsl_sf_stats_exponential) {
+					QStandardItem* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
+			} else {
+				// unused distributions
+				if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
+					QStandardItem* item = model->item(i);
+					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+				}
 			}
 		}
 		break;

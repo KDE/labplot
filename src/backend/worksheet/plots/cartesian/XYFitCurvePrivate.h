@@ -28,7 +28,7 @@ public:
 
 	void recalculate();
 	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol);
-	void runMaximumLikelyhood(const AbstractColumn* xcol);
+	void runMaximumLikelihood(const AbstractColumn* xcol);
 	void evaluate(bool preview = false);
 
 	const Histogram* dataSourceHistogram{nullptr};

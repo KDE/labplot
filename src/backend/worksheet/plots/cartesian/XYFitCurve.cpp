@@ -1841,7 +1841,7 @@ void XYFitCurvePrivate::recalculate() {
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
 		break;
 	case nsl_fit_algorithm_ml:
-		runMaximumLikelyhood(tmpXDataColumn);
+		runMaximumLikelihood(tmpXDataColumn);
 	}
 
 	evaluate(); // calculate the fit function (vectors)
@@ -1851,7 +1851,7 @@ void XYFitCurvePrivate::recalculate() {
 	sourceDataChangedSinceLastRecalc = false;
 }
 
-void XYFitCurvePrivate::runMaximumLikelyhood(const AbstractColumn* tmpXDataColumn) {
+void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn) {
 	// determine range of data
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 	if (fitData.autoRange) { // auto x range of data to fit
