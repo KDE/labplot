@@ -301,6 +301,104 @@ void RetransformTest::TestZoomSelectionAutoscale() {
 }
 
 /*!
+ * \brief RetransformTest::TestZoomAutoscaleSingleYRange
+ * Having two coordinatesystems cSystem1 and cSystem2 with a common x Range
+ * cSystem1 has automatic scaling of y Range turned on, cSystem2 not
+ * When zoom x Selection is done, the y Range of cSystem1 shall be autoscaled,
+ * but not the y Range of cSystem2
+ * Nice extends should not apply!
+ */
+void RetransformTest::TestZoomAutoscaleSingleYRange() {
+	Project project;
+
+	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
+	project.addChild(worksheet);
+
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet->addChild(plot);
+	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	plot->setNiceExtend(true); // Important must be on!
+
+	// Create new cSystem2
+	Range<double> yRange;
+	yRange.setFormat(RangeT::Format::Numeric);
+	plot->addYRange(yRange);
+	CartesianCoordinateSystem* cSystem2 = new CartesianCoordinateSystem(plot);
+	cSystem2->setIndex(Dimension::X, 0);
+	cSystem2->setIndex(Dimension::Y, 1);
+	plot->addCoordinateSystem(cSystem2);
+
+	// Generate data and
+	Spreadsheet* sheet = new Spreadsheet(QStringLiteral("Spreadsheet"), false);
+	project.addChild(sheet);
+	sheet->setColumnCount(3);
+	sheet->setRowCount(11);
+	sheet->column(0)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(1)->setColumnMode(AbstractColumn::ColumnMode::Double);
+	sheet->column(2)->setColumnMode(AbstractColumn::ColumnMode::Double);
+
+	for (int i = 0; i < sheet->rowCount(); i++) {
+		sheet->column(0)->setValueAt(i, i);
+		sheet->column(1)->setValueAt(i, i + 1000 + 0.3);
+		sheet->column(2)->setValueAt(i, -i + 0.1); // This 0.1 is important!
+	}
+
+	auto* curve1 = new XYCurve(QStringLiteral("curve1"));
+	plot->addChild(curve1);
+	curve1->setCoordinateSystemIndex(0);
+	curve1->setXColumn(sheet->column(0));
+	curve1->setYColumn(sheet->column(1));
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	auto* curve2 = new XYCurve(QStringLiteral("curve2"));
+	plot->addChild(curve2);
+	curve2->setCoordinateSystemIndex(1);
+	curve2->setXColumn(sheet->column(0));
+	curve2->setYColumn(sheet->column(2));
+	QCOMPARE(plot->rangeFormat(Dimension::X, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 0), RangeT::Format::Numeric);
+	QCOMPARE(plot->rangeFormat(Dimension::Y, 1), RangeT::Format::Numeric);
+
+	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011); // Nice extend applied
+	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -10, 1);
+
+	plot->enableAutoScale(Dimension::Y, 1, false); // disable autoscale for second y range
+
+	auto r = plot->range(Dimension::Y, 1);
+	r.setStart(-9.9);
+	r.setEnd(0.1);
+	plot->setRange(Dimension::Y, 1, r);
+
+	CHECK_RANGE(plot, curve1, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1000, 1011);
+	CHECK_RANGE(plot, curve2, Dimension::X, 0, 10);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1);
+
+	QAction a(nullptr);
+	a.setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
+	auto* view = static_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view);
+	view->initActions();
+	view->cartesianPlotMouseModeChanged(&a);
+
+	view->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+
+	// Zoom selection
+	emit plot->mousePressZoomSelectionModeSignal(QPointF(2, 0));
+	emit plot->mouseMoveZoomSelectionModeSignal(QPointF(3, 100));
+	emit plot->mouseReleaseZoomSelectionModeSignal();
+
+	CHECK_RANGE(plot, curve1, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve1, Dimension::Y, 1002.2, 1003.3); // Nice Extend applied
+	CHECK_RANGE(plot, curve2, Dimension::X, 2, 3);
+	CHECK_RANGE(plot, curve2, Dimension::Y, -9.9, 0.1); // Not changed, because autoscale is turned off
+}
+
+/*!
  * \brief RetransformTest::TestPadding
  * Check that during a padding change retransform and retransform scale is called
  */
