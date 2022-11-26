@@ -4028,21 +4028,26 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		// determine the new plot ranges
 		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		if (m_selectionEnd.x() > m_selectionStart.x())
-			range(Dimension::X, xIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
-		else
-			range(Dimension::X, xIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
 
-		if (niceExtend)
-			range(Dimension::X, xIndex).niceExtend();
+		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
+			if (m_selectionEnd.x() > m_selectionStart.x())
+				range(Dimension::X, xIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
+			else
+				range(Dimension::X, xIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
 
-		if (m_selectionEnd.y() > m_selectionStart.y())
-			range(Dimension::Y, yIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
-		else
-			range(Dimension::Y, yIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+			if (niceExtend)
+				range(Dimension::X, xIndex).niceExtend();
+		}
 
-		if (niceExtend)
-			range(Dimension::Y, yIndex).niceExtend();
+		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
+			if (m_selectionEnd.y() > m_selectionStart.y())
+				range(Dimension::Y, yIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
+			else
+				range(Dimension::Y, yIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+
+			if (niceExtend)
+				range(Dimension::Y, yIndex).niceExtend();
+		}
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
