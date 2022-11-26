@@ -275,11 +275,12 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.cbXWeight->setCurrentIndex(m_fitData.xWeightsType);
 	uiGeneralTab.cbYWeight->setCurrentIndex(m_fitData.yWeightsType);
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
+	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 
 	if (m_fitData.paramStartValues.size() > 0)
 		DEBUG(Q_FUNC_INFO << ", start value 1 = " << m_fitData.paramStartValues.at(0));
 
-	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
+	uiGeneralTab.cbAlgorithm->setCurrentIndex(m_fitData.algorithm);
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -396,6 +397,7 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
+	DEBUG("SOURCE TYPE: " << index)
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.cbCategory->setEnabled(true);
@@ -448,9 +450,6 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		} else { // histogram
 			uiGeneralTab.cbCategory->setEnabled(false);
 			uiGeneralTab.cbCategory->setCurrentIndex(3); // select "statistics (distributions);
-			DEBUG("DISTRIBUTION: " << uiGeneralTab.cbModel->currentIndex())
-			uiGeneralTab.cbModel->setCurrentIndex(m_fitData.modelType);
-			DEBUG("DISTRIBUTION: " << uiGeneralTab.cbModel->currentIndex())
 			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram:"));
 
 			QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot, AspectType::Histogram};
@@ -728,12 +727,12 @@ void XYFitCurveDock::categoryChanged(int index) {
 	if (m_fitData.modelCategory == (nsl_fit_model_category)index
 		|| (m_fitData.modelCategory == nsl_fit_model_custom && index == uiGeneralTab.cbCategory->count() - 1))
 		hasChanged = false;
+	DEBUG("HAS CHANGED: " << hasChanged)
 
 	if (uiGeneralTab.cbCategory->currentIndex() == uiGeneralTab.cbCategory->count() - 1)
 		m_fitData.modelCategory = nsl_fit_model_custom;
 	else
 		m_fitData.modelCategory = (nsl_fit_model_category)index;
-
 	uiGeneralTab.cbModel->clear();
 	uiGeneralTab.cbModel->show();
 	uiGeneralTab.lModel->show();
@@ -781,6 +780,7 @@ void XYFitCurveDock::categoryChanged(int index) {
 	}
 
 	if (hasChanged) {
+		DEBUG("HAS CHANGED! Resetting MODEL")
 		// show the fit-model for the currently selected default (first) fit-model
 		uiGeneralTab.cbModel->setCurrentIndex(0);
 		uiGeneralTab.sbDegree->setValue(1);
@@ -822,7 +822,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		// xColumn = dynamic_cast<AbstractColumn*>(aspect);
 		xColumn = m_fitCurve->xDataColumn();
 	} else {
-		DEBUG("	data source: Curve")
+		DEBUG("	data source: Curve or Histogram")
 		if (m_fitCurve->dataSourceCurve())
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
@@ -880,7 +880,8 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		uiGeneralTab.sbDegree->setVisible(false);
 	}
 
-	m_fitData.modelType = index;
+	if (!m_initializing)
+		m_fitData.modelType = index;
 
 	updateModelEquation();
 
