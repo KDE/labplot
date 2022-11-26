@@ -1473,7 +1473,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
