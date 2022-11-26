@@ -242,6 +242,8 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 	Q_D(CartesianPlotLegend);
 	if (width != d->lineSymbolWidth)
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
+	else
+		emit lineSymbolWidthChanged(width); // Feedback
 }
 
 // Border
@@ -250,6 +252,8 @@ void CartesianPlotLegend::setBorderCornerRadius(float radius) {
 	Q_D(CartesianPlotLegend);
 	if (radius != d->borderCornerRadius)
 		exec(new CartesianPlotLegendSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set border corner radius")));
+	else
+		emit borderCornerRadiusChanged(d->borderCornerRadius); // Feedback
 }
 
 // Layout
@@ -258,6 +262,8 @@ void CartesianPlotLegend::setLayoutTopMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutTopMargin)
 		exec(new CartesianPlotLegendSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
+	else
+		emit layoutTopMarginChanged(d->layoutTopMargin); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutBottomMargin, float, layoutBottomMargin, retransform)
@@ -265,6 +271,8 @@ void CartesianPlotLegend::setLayoutBottomMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutBottomMargin)
 		exec(new CartesianPlotLegendSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
+	else
+		emit layoutBottomMarginChanged(d->layoutBottomMargin); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutLeftMargin, float, layoutLeftMargin, retransform)
@@ -272,6 +280,8 @@ void CartesianPlotLegend::setLayoutLeftMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutLeftMargin)
 		exec(new CartesianPlotLegendSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
+	else
+		emit layoutLeftMarginChanged(d->layoutLeftMargin); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutRightMargin, float, layoutRightMargin, retransform)
@@ -279,6 +289,8 @@ void CartesianPlotLegend::setLayoutRightMargin(float margin) {
 	Q_D(CartesianPlotLegend);
 	if (margin != d->layoutRightMargin)
 		exec(new CartesianPlotLegendSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
+	else
+		emit layoutRightMarginChanged(d->layoutRightMargin); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, retransform)
@@ -286,6 +298,8 @@ void CartesianPlotLegend::setLayoutVerticalSpacing(float spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutVerticalSpacing)
 		exec(new CartesianPlotLegendSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
+	else
+		emit layoutVerticalSpacingChanged(d->layoutVerticalSpacing); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, retransform)
@@ -293,6 +307,8 @@ void CartesianPlotLegend::setLayoutHorizontalSpacing(float spacing) {
 	Q_D(CartesianPlotLegend);
 	if (spacing != d->layoutHorizontalSpacing)
 		exec(new CartesianPlotLegendSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
+	else
+		emit layoutHorizontalSpacingChanged(d->layoutHorizontalSpacing); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetLayoutColumnCount, int, layoutColumnCount, retransform)

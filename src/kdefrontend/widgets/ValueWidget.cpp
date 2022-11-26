@@ -320,70 +320,57 @@ void ValueWidget::colorChanged(const QColor& color) {
 //********* SLOTs for changes triggered in Value *********
 //*************************************************************
 void ValueWidget::valueTypeChanged(Value::Type type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbColumn->setColumn(column, m_value->columnPath());
-	m_initializing = false;
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbPosition->setCurrentIndex((int)position);
-	m_initializing = false;
 }
 void ValueWidget::valueDistanceChanged(qreal distance) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void ValueWidget::valueRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 void ValueWidget::valueOpacityChanged(qreal opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
 }
 void ValueWidget::valueNumericFormatChanged(char format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(format));
-	m_initializing = false;
 }
 void ValueWidget::valuePrecisionChanged(int precision) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPrecision->setValue(precision);
-	m_initializing = false;
 }
 void ValueWidget::valueDateTimeFormatChanged(const QString& format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbDateTimeFormat->setCurrentText(format);
-	m_initializing = false;
 }
 void ValueWidget::valuePrefixChanged(const QString& prefix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.lePrefix->setText(prefix);
-	m_initializing = false;
 }
 void ValueWidget::valueSuffixChanged(const QString& suffix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leSuffix->setText(suffix);
-	m_initializing = false;
 }
 void ValueWidget::valueFontChanged(QFont font) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(font);
-	m_initializing = false;
 }
 void ValueWidget::valueColorChanged(QColor color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbColor->setColor(color);
-	m_initializing = false;
 }
 
 //**********************************************************

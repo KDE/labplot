@@ -202,7 +202,6 @@ void InfoElementDock::positionChanged(double pos) {
 	if (m_initializing)
 		return;
 
-	const Lock lock(m_initializing);
 	for (auto* element : m_elements)
 		element->setPositionLogical(pos);
 }

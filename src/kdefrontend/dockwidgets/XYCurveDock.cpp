@@ -1127,185 +1127,152 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
 	else if (aspect->comment() != uiGeneralTab.teComment->text())
 		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
 }
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXColumn->setColumn(column, m_curve->xColumnPath());
 	updateValuesWidgets();
-	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYColumn->setColumn(column, m_curve->yColumnPath());
 	updateValuesWidgets();
-	m_initializing = false;
 }
 void XYCurveDock::curveLegendVisibleChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkLegendVisible->setChecked(on);
-	m_initializing = false;
 }
 void XYCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // Line-Tab
 void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLineType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineSkipGapsChanged(bool skip) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkLineSkipGaps->setChecked(skip);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineIncreasingXOnlyChanged(bool incr) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkLineIncreasingXOnly->setChecked(incr);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLineInterpolationPointsCount->setValue(count);
-	m_initializing = false;
 }
 
 // Values-Tab
 void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbValuesType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbValuesColumn->setColumn(column, m_curve->valuesColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbValuesPosition->setCurrentIndex((int)position);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbValuesRotation->setValue(angle);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesNumericFormatChanged(char format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(format));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPrecisionChanged(int precision) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbValuesPrecision->setValue(precision);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesDateTimeFormatChanged(const QString& format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbValuesDateTimeFormat->setCurrentText(format);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbValuesOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPrefixChanged(const QString& prefix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leValuesPrefix->setText(prefix);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leValuesSuffix->setText(suffix);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(font);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesColorChanged(QColor color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbValuesColor->setColor(color);
-	m_initializing = false;
 }
 
 //"Error bars"-Tab
 void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbXErrorType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXErrorPlusColumn->setColumn(column, m_curve->xErrorPlusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbXErrorMinusColumn->setColumn(column, m_curve->xErrorMinusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbYErrorType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYErrorPlusColumn->setColumn(column, m_curve->yErrorPlusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
-	m_initializing = false;
 }
 
 //"Margin Plot"-Tab
 void XYCurveDock::curveRugEnabledChanged(bool status) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void XYCurveDock::curveRugOrientationChanged(WorksheetElement::Orientation orientation) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbRugOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugLengthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugWidthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugOffsetChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //*************************************************************

@@ -931,6 +931,8 @@ void CartesianPlot::setRect(const QRectF& rect) {
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
 		exec(new CartesianPlotSetRectCmd(d, rect));
+	else
+		emit rectChanged(d->rect); // Feedback
 }
 
 class CartesianPlotSetPrevRectCmd : public QUndoCommand {

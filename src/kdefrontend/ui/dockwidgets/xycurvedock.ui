@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -118,7 +118,6 @@
         <widget class="QLabel" name="lDropLines">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -164,7 +163,6 @@
         <widget class="QLabel" name="lValuesGeneral_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -262,7 +260,6 @@
         <widget class="QLabel" name="lValuesText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -296,7 +293,6 @@
         <widget class="QLabel" name="lValuesGeneral">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -306,7 +302,7 @@
         </widget>
        </item>
        <item row="16" column="2">
-        <widget class="KFontRequester" name="kfrValuesFont"/>
+        <widget class="KFontRequester" name="kfrValuesFont" native="true"/>
        </item>
        <item row="17" column="2">
         <widget class="KColorButton" name="kcbValuesColor">
@@ -452,7 +448,6 @@
         <widget class="QLabel" name="lValuesFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -545,7 +540,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -672,7 +667,6 @@
         <widget class="QLabel" name="lErrorBarY">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -702,7 +696,6 @@
         <widget class="QLabel" name="lErrorBarX">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -715,7 +708,6 @@
         <widget class="QLabel" name="lErrorFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -822,7 +814,6 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -859,7 +850,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -875,7 +866,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -888,7 +879,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

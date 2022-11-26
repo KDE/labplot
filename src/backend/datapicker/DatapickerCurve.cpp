@@ -330,6 +330,8 @@ void DatapickerCurve::setPointErrorBarSize(qreal size) {
 	Q_D(DatapickerCurve);
 	if (size != d->pointErrorBarSize)
 		exec(new DatapickerCurveSetPointErrorBarSizeCmd(d, size, ki18n("%1: set error bar size")));
+	else
+		emit pointErrorBarSizeChanged(d->pointErrorBarSize); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointErrorBarBrush, QBrush, pointErrorBarBrush, retransform)

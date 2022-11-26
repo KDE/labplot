@@ -1270,15 +1270,13 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 }
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {

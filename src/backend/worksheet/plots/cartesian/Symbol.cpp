@@ -156,6 +156,8 @@ void Symbol::setSize(qreal size) {
 	Q_D(Symbol);
 	if (!qFuzzyCompare(1 + size, 1 + d->size))
 		exec(new SymbolSetSizeCmd(d, size, ki18n("%1: set symbol size")));
+	else
+		emit sizeChanged(d->size); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetRotationAngle, qreal, rotationAngle, updateSymbols)
@@ -177,6 +179,8 @@ void Symbol::setPen(const QPen& pen) {
 	Q_D(Symbol);
 	if (pen != d->pen)
 		exec(new SymbolSetPenCmd(d, pen, ki18n("%1: set symbol outline style")));
+	else
+		emit penChanged(d->pen); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Symbol, SetOpacity, qreal, opacity, updatePixmap)

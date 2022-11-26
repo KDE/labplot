@@ -217,7 +217,6 @@ void CustomPointDock::positionXLogicalChanged(double value) {
 	if (m_initializing)
 		return;
 
-	const Lock lock(m_initializing);
 	QPointF pos = m_point->positionLogical();
 	pos.setX(value);
 	for (auto* point : m_points)
@@ -239,7 +238,6 @@ void CustomPointDock::positionYLogicalChanged(double value) {
 	if (m_initializing)
 		return;
 
-	const Lock lock(m_initializing);
 	QPointF pos = m_point->positionLogical();
 	pos.setY(value);
 	for (auto* point : m_points)

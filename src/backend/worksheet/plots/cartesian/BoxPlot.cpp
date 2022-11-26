@@ -546,6 +546,8 @@ void BoxPlot::setWhiskersCapPen(const QPen& pen) {
 	Q_D(BoxPlot);
 	if (pen != d->whiskersCapPen)
 		exec(new BoxPlotSetWhiskersCapPenCmd(d, pen, ki18n("%1: set whiskers cap pen")));
+	else
+		emit whiskersCapPenChanged(d->whiskersCapPen); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapOpacity, qreal, whiskersCapOpacity, updatePixmap)
@@ -576,6 +578,8 @@ void BoxPlot::setRugWidth(double width) {
 	Q_D(BoxPlot);
 	if (width != d->rugWidth)
 		exec(new BoxPlotSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+	else
+		emit rugWidthChanged(d->rugWidth); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugLength, double, rugLength, updateRug)
@@ -583,6 +587,8 @@ void BoxPlot::setRugLength(double length) {
 	Q_D(BoxPlot);
 	if (length != d->rugLength)
 		exec(new BoxPlotSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+	else
+		emit rugLengthChanged(d->rugLength); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetRugOffset, double, rugOffset, updateRug)
@@ -590,6 +596,8 @@ void BoxPlot::setRugOffset(double offset) {
 	Q_D(BoxPlot);
 	if (offset != d->rugOffset)
 		exec(new BoxPlotSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+	else
+		emit rugOffsetChanged(d->rugOffset); // Feedback
 }
 
 //##############################################################################

@@ -215,7 +215,6 @@ void LineWidget::capSizeChanged(double value) {
 	if (m_initializing)
 		return;
 
-	Lock lock(m_initializing);
 	const double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* line : m_lines)
 		line->setErrorBarsCapSize(size);
@@ -225,7 +224,6 @@ void LineWidget::styleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	Lock lock(m_initializing);
 	auto style = Qt::PenStyle(index);
 	for (auto* line : m_lines)
 		line->setStyle(style);
@@ -235,7 +233,6 @@ void LineWidget::colorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	Lock lock(m_initializing);
 	for (auto* line : m_lines)
 		line->setColor(color);
 
@@ -246,7 +243,6 @@ void LineWidget::widthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	Lock lock(m_initializing);
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* line : m_lines)
 		line->setWidth(width);
@@ -256,7 +252,6 @@ void LineWidget::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	Lock lock(m_initializing);
 	double opacity = static_cast<double>(value) / 100.;
 	for (auto* line : m_lines)
 		line->setOpacity(opacity);
@@ -266,66 +261,42 @@ void LineWidget::opacityChanged(int value) {
 //*********** SLOTs for changes triggered in Line *************
 //*************************************************************
 void LineWidget::histogramLineTypeChanged(Histogram::LineType type) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
 }
 
 void LineWidget::errorBarsTypeChanged(XYCurve::ErrorBarsType type) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
 }
 
 void LineWidget::errorBarsCapSizeChanged(double size) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.sbErrorBarsCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void LineWidget::dropLineTypeChanged(XYCurve::DropLineType type) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
 }
 
 void LineWidget::lineStyleChanged(Qt::PenStyle style) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbStyle->setCurrentIndex(static_cast<int>(style));
 }
 
 void LineWidget::lineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.kcbColor->setColor(color);
 }
 
 void LineWidget::lineWidthChanged(double width) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, Worksheet::Unit::Point));
 }
 
 void LineWidget::lineOpacityChanged(double value) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	double v = (double)value * 100.;
 	ui.sbOpacity->setValue(v);
 }

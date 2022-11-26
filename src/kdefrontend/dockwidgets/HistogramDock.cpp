@@ -655,39 +655,33 @@ void HistogramDock::rugOffsetChanged(double value) const {
 //*************************************************************
 // General-Tab
 void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
-	m_initializing = false;
 }
 
 void HistogramDock::curveTypeChanged(Histogram::HistogramType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 
 void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orientation) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbOrientation->setCurrentIndex((int)orientation);
-	m_initializing = false;
 }
 
 void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization normalization) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbNormalization->setCurrentIndex((int)normalization);
-	m_initializing = false;
 }
 
 void HistogramDock::curveBinningMethodChanged(Histogram::BinningMethod method) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBinningMethod->setCurrentIndex((int)method);
-	m_initializing = false;
 }
 
 void HistogramDock::curveBinCountChanged(int count) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbBinCount->setValue(count);
-	m_initializing = false;
 }
 
 void HistogramDock::curveBinWidthChanged(double width) {
@@ -699,9 +693,8 @@ void HistogramDock::curveBinWidthChanged(double width) {
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkAutoBinRanges->setChecked(value);
-	m_initializing = false;
 }
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
@@ -723,48 +716,40 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 }
 
 void HistogramDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //"Error bars"-Tab
 void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbErrorType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbErrorPlusColumn->setColumn(column, m_curve->errorPlusColumnPath());
-	m_initializing = false;
 }
 void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
-	m_initializing = false;
 }
 
 //"Margin Plot"-Tab
 void HistogramDock::curveRugEnabledChanged(bool status) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void HistogramDock::curveRugLengthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void HistogramDock::curveRugWidthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void HistogramDock::curveRugOffsetChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //*************************************************************

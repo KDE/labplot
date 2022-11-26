@@ -166,12 +166,12 @@ Q_SIGNALS:
 	void pageRectChanged(const QRectF&);
 
 	void layoutChanged(Worksheet::Layout);
-	void layoutTopMarginChanged(float);
-	void layoutBottomMarginChanged(float);
-	void layoutLeftMarginChanged(float);
-	void layoutRightMarginChanged(float);
-	void layoutVerticalSpacingChanged(float);
-	void layoutHorizontalSpacingChanged(float);
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	void layoutHorizontalSpacingChanged(double);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 

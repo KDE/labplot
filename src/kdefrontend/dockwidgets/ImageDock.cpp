@@ -426,9 +426,8 @@ void ImageDock::borderColorChanged(const QColor& color) {
 		image->setBorderPen(pen);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
 }
 
 void ImageDock::borderWidthChanged(double value) {
@@ -456,93 +455,79 @@ void ImageDock::borderOpacityChanged(int value) {
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
 void ImageDock::imageFileNameChanged(const QString& name) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void ImageDock::imageEmbeddedChanged(bool keep) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbEmbedded->setChecked(keep);
-	m_initializing = false;
 }
 
 void ImageDock::imageOpacityChanged(float opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbOpacity->setValue(qRound(opacity * 100.0));
-	m_initializing = false;
 }
 
 // Size
 void ImageDock::imageWidthChanged(int width) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void ImageDock::imageHeightChanged(int height) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(height, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void ImageDock::imageKeepRatioChanged(bool keep) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbKeepRatio->setChecked(keep);
-	m_initializing = false;
 }
 
 // Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
 	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
-	m_initializing = false;
 }
 
 void ImageDock::imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void ImageDock::imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void ImageDock::imageRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void ImageDock::imageVisibleChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // Border
 void ImageDock::imageBorderPenChanged(const QPen& pen) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
 }
 
 void ImageDock::imageBorderOpacityChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	float v = (float)value * 100.;
 	ui.sbBorderOpacity->setValue(v);
-	m_initializing = false;
 }
 
 //*************************************************************

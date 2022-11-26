@@ -794,10 +794,8 @@ void InfoElement::setPositionLogical(double pos) {
 		m_setTextLabelText = false;
 		retransform();
 		positionLogicalChanged(d->positionLogical);
-	} else if (pos != d->positionLogical) {
-		// Value was not valid, give feedback to the dock
-		positionLogicalChanged(d->positionLogical);
-	}
+	} else
+		positionLogicalChanged(d->positionLogical); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform)

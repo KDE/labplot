@@ -596,7 +596,7 @@ void Axis::setStart(double min) {
 		range.setStart(min);
 		setRange(range);
 	}
-	emit startChanged(range.start()); // feedback
+	emit startChanged(range.start()); // Feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
@@ -607,7 +607,7 @@ void Axis::setEnd(double max) {
 		range.setEnd(max);
 		setRange(range);
 	}
-	emit endChanged(range.end()); // feedback
+	emit endChanged(range.end()); // Feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -630,16 +630,17 @@ void Axis::setMajorTickStartOffset(qreal offset) {
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
 	else
-		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // feedback
+		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
-void Axis::setMajorTickStartValue(qreal offset) {
+void Axis::setMajorTickStartValue(qreal value) {
 	Q_D(Axis);
-	if (offset != d->majorTickStartValue)
-		exec(new AxisSetMajorTickStartValueCmd(d, offset, ki18n("%1: set major tick start value")));
+	// TODO: check if value is invalid
+	if (value != d->majorTickStartValue)
+		exec(new AxisSetMajorTickStartValueCmd(d, value, ki18n("%1: set major tick start value")));
 	else
-		emit majorTickStartValueChanged(d->majorTickStartValue); // feedback
+		emit majorTickStartValueChanged(d->majorTickStartValue); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
@@ -763,9 +764,22 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
 void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
+	double range = this->range().length();
+	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
+	// fix spacing if incorrect (not set or > 100 ticks)
+	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
+		if (majorTicksSpacing == 0.)
+			majorTicksSpacing = range / (majorTicksNumber() - 1);
+
+		if (range / majorTicksSpacing > 100.)
+			majorTicksSpacing = range / 100.;
+	}
+
 	Q_D(Axis);
 	if (majorTicksSpacing != d->majorTicksSpacing)
 		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
+	else
+		emit majorTicksSpacingChanged(d->majorTicksSpacing); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
@@ -787,6 +801,8 @@ void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, ki18n("%1: set major ticks length")));
+	else
+		emit majorTicksLengthChanged(d->majorTicksLength); // Feedback
 }
 
 // Minor ticks
@@ -832,8 +848,28 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks)
 void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 	Q_D(Axis);
+	double range = this->range().length();
+	int numberTicks = 0;
+
+	int majorTicks = majorTicksNumber();
+	if (minorTicksSpacing > 0.)
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalc
+
+	// set if unset or > 100.
+	if (minorTicksSpacing == 0. || numberTicks > 100) {
+		if (minorTicksSpacing == 0.)
+			minorTicksSpacing = range / (majorTicks - 1) / (minorTicksNumber() + 1);
+
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalculate number of ticks
+
+		if (numberTicks > 100) // maximum 100 minor ticks
+			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
+	}
+
 	if (minorTicksSpacing != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
+	else
+		emit minorTicksIncrementChanged(d->minorTicksIncrement); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
@@ -855,6 +891,8 @@ void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, ki18n("%1: set minor ticks length")));
+	else
+		emit minorTicksLengthChanged(d->minorTicksLength); // Feedback
 }
 
 // Labels
@@ -906,6 +944,8 @@ void Axis::setLabelsOffset(double offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
 		exec(new AxisSetLabelsOffsetCmd(d, offset, ki18n("%1: set label offset")));
+	else
+		emit labelsOffsetChanged(offset); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabelPositions)

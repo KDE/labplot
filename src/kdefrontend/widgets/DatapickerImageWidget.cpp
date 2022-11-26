@@ -260,7 +260,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_imagesList = list;
 	m_image = list.first();
 	setAspects(list);
@@ -302,7 +302,6 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 
 	handleWidgetActions();
 	updateSymbolWidgets();
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
@@ -433,7 +432,6 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
 
-	const Lock lock(m_initializing);
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
@@ -537,22 +535,17 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
-	m_initializing = true;
 	int index = ui.cbGraphType->findData((int)axisPoints.type);
 	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -565,11 +558,10 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 	ui.sbPositionZ1->setValue(axisPoints.logicalPos[0].z());
 	ui.sbPositionZ2->setValue(axisPoints.logicalPos[1].z());
 	ui.sbPositionZ3->setValue(axisPoints.logicalPos[2].z());
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
@@ -580,13 +572,11 @@ void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::Ed
 	gvHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
 	gvSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
 	gvValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbMinSegmentLength->setValue(value);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::updateSymbolWidgets() {
@@ -598,9 +588,8 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 }
 
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbSymbolVisible->setChecked(on);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageReferencePointSelected(int index) {
@@ -616,7 +605,7 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found
@@ -651,5 +640,4 @@ void DatapickerImageWidget::load() {
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
 	ui.chbSymbolVisible->setChecked(m_image->pointVisibility());
-	m_initializing = false;
 }

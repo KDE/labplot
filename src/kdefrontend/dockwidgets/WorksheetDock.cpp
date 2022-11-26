@@ -512,87 +512,74 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_worksheet != aspect)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
 }
 
 void WorksheetDock::worksheetScaleContentChanged(bool scaled) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chScaleContent->setChecked(scaled);
-	m_initializing = false;
 }
 void WorksheetDock::worksheetUseViewSizeChanged(bool useViewSize) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (useViewSize)
 		ui.cbSizeType->setCurrentIndex(0);
 	else
 		updatePaperSize();
-	m_initializing = false;
 }
 void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
 	updatePaperSize();
-	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLayout->setCurrentIndex(static_cast<int>(layout));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutTopMarginChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutTopMarginChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutBottomMarginChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutBottomMarginChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutLeftMarginChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutLeftMarginChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutRightMarginChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutRightMarginChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutVerticalSpacingChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutVerticalSpacingChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
-void WorksheetDock::worksheetLayoutHorizontalSpacingChanged(float value) {
-	m_initializing = true;
+void WorksheetDock::worksheetLayoutHorizontalSpacingChanged(double value) {
+	const Lock lock(m_initializing);
 	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutRowCountChanged(int value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutRowCount->setValue(value);
-	m_initializing = false;
 }
 
 void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutColumnCount->setValue(value);
-	m_initializing = false;
 }
 
 //*************************************************************

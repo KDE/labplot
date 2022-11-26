@@ -631,103 +631,96 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_boxPlot != aspect)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
 }
 void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	loadDataColumns();
 }
 void BoxPlotDock::plotOrderingChanged(BoxPlot::Ordering ordering) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbOrdering->setCurrentIndex((int)ordering);
 }
 void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BoxPlotDock::plotVariableWidthChanged(bool on) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.chkVariableWidth->setChecked(on);
 }
 void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.chkNotches->setChecked(on);
 }
 void BoxPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	// 	float v = (float)value*100.;
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
 // symbols
 void BoxPlotDock::plotJitteringEnabledChanged(bool status) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.chkJitteringEnabled->setChecked(status);
 }
 
 // whiskers
 void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.cbWhiskersType->setCurrentIndex((int)type);
 }
 void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
 }
 
 // whiskers cap
 void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 void BoxPlotDock::plotWhiskersCapPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	if (ui.cbWhiskersCapStyle->currentIndex() != pen.style())
 		ui.cbWhiskersCapStyle->setCurrentIndex(pen.style());
 	if (ui.kcbWhiskersCapColor->color() != pen.color())
 		ui.kcbWhiskersCapColor->setColor(pen.color());
-	if (ui.sbWhiskersCapWidth->value() != pen.widthF())
-		ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
 }
 void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	float v = (float)value * 100.;
 	ui.sbWhiskersCapOpacity->setValue(v);
 }
 
 //"Margin Plot"-Tab
 void BoxPlotDock::plotRugEnabledChanged(bool status) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugLengthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugWidthChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugOffsetChanged(double value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //**********************************************************

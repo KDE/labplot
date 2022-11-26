@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>465</width>
+    <width>478</width>
     <height>748</height>
    </rect>
   </property>
@@ -59,7 +59,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -335,7 +335,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -358,7 +358,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -371,7 +371,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -384,7 +384,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -397,7 +397,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -420,7 +420,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -466,7 +466,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -499,7 +499,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -522,7 +522,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>

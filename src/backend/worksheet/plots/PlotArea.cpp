@@ -165,6 +165,8 @@ void PlotArea::setBorderCornerRadius(qreal radius) {
 	Q_D(PlotArea);
 	if (radius != d->borderCornerRadius)
 		exec(new PlotAreaSetBorderCornerRadiusCmd(d, radius, ki18n("%1: set plot area corner radius")));
+	else
+		emit borderCornerRadiusChanged(d->borderCornerRadius);
 }
 
 //#####################################################################

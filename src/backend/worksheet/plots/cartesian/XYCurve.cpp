@@ -470,6 +470,8 @@ void XYCurve::setValuesDistance(qreal distance) {
 	Q_D(XYCurve);
 	if (distance != d->valuesDistance)
 		exec(new XYCurveSetValuesDistanceCmd(d, distance, ki18n("%1: set values distance")));
+	else
+		emit valuesDistanceChanged(d->valuesDistance); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetValuesRotationAngle, qreal, valuesRotationAngle, updateValues)
@@ -642,6 +644,8 @@ void XYCurve::setRugWidth(double width) {
 	Q_D(XYCurve);
 	if (width != d->rugWidth)
 		exec(new XYCurveSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+	else
+		emit rugWidthChanged(d->rugWidth); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugLength, double, rugLength, updateRug)
@@ -649,6 +653,8 @@ void XYCurve::setRugLength(double length) {
 	Q_D(XYCurve);
 	if (length != d->rugLength)
 		exec(new XYCurveSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+	else
+		emit rugLengthChanged(d->rugLength); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugOffset, double, rugOffset, updateRug)
@@ -656,6 +662,8 @@ void XYCurve::setRugOffset(double offset) {
 	Q_D(XYCurve);
 	if (offset != d->rugOffset)
 		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+	else
+		emit rugOffsetChanged(d->rugOffset); // Feedback
 }
 
 //##############################################################################

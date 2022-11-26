@@ -759,7 +759,6 @@ void AxisDock::rangeTypeChanged(int index) {
 void AxisDock::startChanged(double value) {
 	if (m_initializing)
 		return;
-	// No lock!
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
@@ -767,7 +766,6 @@ void AxisDock::startChanged(double value) {
 void AxisDock::endChanged(double value) {
 	if (m_initializing)
 		return;
-	// No lock!
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
@@ -1004,31 +1002,6 @@ void AxisDock::majorTicksSpacingChanged() {
 
 	bool numeric = m_axis->isNumeric();
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
-	double range = m_axis->range().length();
-	DEBUG(Q_FUNC_INFO << ", major spacing = " << spacing << ", range = " << range)
-
-	// fix spacing if incorrect (not set or > 100 ticks)
-	if (spacing == 0. || range / spacing > 100.) {
-		if (spacing == 0.)
-			spacing = range / (ui.sbMajorTicksNumber->value() - 1);
-
-		if (range / spacing > 100.)
-			spacing = range / 100.;
-
-		DEBUG("new spacing = " << spacing)
-		// determine stepsize and number of decimals
-		m_initializing = true;
-		if (numeric) {
-			int decimals = nsl_math_rounded_decimals(spacing) + 1;
-			DEBUG("decimals = " << decimals << ", step = " << gsl_pow_int(10., -decimals))
-			ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
-			ui.sbMajorTicksSpacingNumeric->setMaximum(range);
-			ui.sbMajorTicksSpacingNumeric->setValue(spacing);
-		} else // TODO: check reversed axis
-			dtsbMajorTicksIncrement->setValue(spacing);
-		m_initializing = false;
-	}
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksSpacing(spacing);
@@ -1205,40 +1178,6 @@ void AxisDock::minorTicksSpacingChanged() {
 
 	bool numeric = m_axis->isNumeric();
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
-	double range = m_axis->range().length();
-	// DEBUG("minor spacing = " << spacing << ", range = " << range)
-	int numberTicks = 0;
-
-	int majorTicks = m_axis->majorTicksNumber();
-	if (spacing > 0.)
-		numberTicks = range / (majorTicks - 1) / spacing - 1; // recalc
-	// DEBUG("	nticks = " << numberTicks)
-
-	// set if unset or > 100.
-	if (spacing == 0. || numberTicks > 100) {
-		if (spacing == 0.)
-			spacing = range / (majorTicks - 1) / (ui.sbMinorTicksNumber->value() + 1);
-
-		numberTicks = range / (majorTicks - 1) / spacing - 1; // recalculate number of ticks
-
-		if (numberTicks > 100) // maximum 100 minor ticks
-			spacing = range / (majorTicks - 1) / (100 + 1);
-
-		DEBUG("new spacing = " << spacing)
-		DEBUG("new nticks = " << numberTicks)
-		// determine stepsize and number of decimals
-		m_initializing = true;
-		if (numeric) {
-			int decimals = nsl_math_rounded_decimals(spacing) + 1;
-			DEBUG("decimals = " << decimals << ", step = " << gsl_pow_int(10., -decimals))
-			ui.sbMinorTicksSpacingNumeric->setDecimals(decimals);
-			ui.sbMinorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
-			ui.sbMinorTicksSpacingNumeric->setMaximum(range);
-			ui.sbMinorTicksSpacingNumeric->setValue(spacing);
-		} else
-			dtsbMinorTicksIncrement->setValue(spacing);
-		m_initializing = false;
-	}
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksSpacing(spacing);
@@ -1607,47 +1546,40 @@ void AxisDock::axisShowScaleOffsetChanged(bool b) {
 
 // line
 void AxisDock::axisArrowTypeChanged(Axis::ArrowType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbArrowType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbArrowPosition->setCurrentIndex(static_cast<int>(position));
-	m_initializing = false;
 }
 
 void AxisDock::axisArrowSizeChanged(qreal size) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbArrowSize->setValue((int)Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 // major ticks
 void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMajorTicksDirection->setCurrentIndex(direction);
-	m_initializing = false;
 }
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMajorTicksType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMajorTicksAutoNumber->setChecked(automatic);
 	ui.sbMajorTicksNumber->setEnabled(!automatic);
-	m_initializing = false;
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbMajorTicksNumber->setValue(number);
-	m_initializing = false;
 }
 void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	if (m_axis->isNumeric())
 		ui.sbMajorTicksSpacingNumeric->setValue(increment);
 	else
@@ -1662,42 +1594,35 @@ void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
 	ui.sbMajorTickStartOffset->setValue(value);
 }
 void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
-	if (m_initializing)
-		return;
 	const Lock lock(m_initializing);
 	ui.sbMajorTickStartValue->setValue(value);
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+	const Lock lock(m_initializing);
 	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 // minor ticks
 void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMinorTicksDirection->setCurrentIndex(direction);
-	m_initializing = false;
 }
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbMinorTicksAutoNumber->setChecked(automatic);
 	ui.sbMinorTicksNumber->setEnabled(!automatic);
-	m_initializing = false;
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbMinorTicksNumber->setValue(number);
-	m_initializing = false;
 }
 void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 	Lock lock(m_initializing);
@@ -1711,100 +1636,82 @@ void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
 	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 // labels
 void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(format));
-	m_initializing = false;
 }
 void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkLabelsFormatAuto->setChecked(automatic);
 	ui.cbLabelsFormat->setEnabled(!automatic);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkLabelsAutoPrecision->setChecked(on);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsPrecisionChanged(int precision) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLabelsPrecision->setValue(precision);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsDateTimeFormatChanged(const QString& format) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLabelsDateTimeFormat->setCurrentText(format);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLabelsPosition->setCurrentIndex(static_cast<int>(position));
-	m_initializing = false;
 }
 void AxisDock::axisLabelsOffsetChanged(double offset) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLabelsRotation->setValue(rotation);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLabelsTextType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	cbLabelsTextColumn->setColumn(column, m_axis->labelsTextColumnPath());
-	m_initializing = false;
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	// we need to set the font size in points for KFontRequester
 	QFont newFont(font);
 	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(newFont);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbLabelsFontColor->setColor(color);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbLabelsBackgroundType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 void AxisDock::axisLabelsBackgroundColorChanged(const QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbLabelsBackgroundColor->setColor(color);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsPrefixChanged(const QString& prefix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leLabelsPrefix->setText(prefix);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsSuffixChanged(const QString& suffix) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leLabelsSuffix->setText(suffix);
-	m_initializing = false;
 }
 void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLabelsOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
 }
 
 void AxisDock::updateMajorTicksStartType(bool visible) {
@@ -1819,9 +1726,8 @@ void AxisDock::updateMajorTicksStartType(bool visible) {
 }
 
 void AxisDock::axisVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //*************************************************************

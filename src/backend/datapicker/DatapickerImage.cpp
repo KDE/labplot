@@ -256,12 +256,16 @@ STD_SETTER_CMD_IMPL_S(DatapickerImage, SetRotationAngle, float, rotationAngle)
 void DatapickerImage::setRotationAngle(float angle) {
 	if (angle != d->rotationAngle)
 		exec(new DatapickerImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
+	else
+		emit rotationAngleChanged(d->rotationAngle); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerImage, SetAxisPoints, DatapickerImage::ReferencePoints, axisPoints)
 void DatapickerImage::setAxisPoints(const DatapickerImage::ReferencePoints& points) {
 	if (memcmp(&points, &d->axisPoints, sizeof(points)) != 0)
 		exec(new DatapickerImageSetAxisPointsCmd(d, points, ki18n("%1: set Axis points")));
+	else
+		emit axisPointsChanged(d->axisPoints); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetSettings, DatapickerImage::EditorSettings, settings, discretize)
