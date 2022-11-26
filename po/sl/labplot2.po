@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-25 00:42+0000\n"
+"POT-Creation-Date: 2022-11-26 00:42+0000\n"
 "PO-Revision-Date: 2022-11-21 07:42+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -578,7 +578,7 @@ msgid "XY-Curves"
 msgstr "XY-krivulje"
 
 #: src/backend/core/column/Column.cpp:200
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:21
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
 msgstr "Histogrami"
@@ -10452,7 +10452,7 @@ msgid "Data regions"
 msgstr "Območja podatkov"
 
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:22
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:97
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:98
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:60
 #, kde-format
 msgid "Content"
@@ -11505,39 +11505,39 @@ msgstr "Na voljo"
 msgid "Values"
 msgstr "Vrednosti"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:23
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
 msgid "Trees and Tuples"
 msgstr "Drevesa in N-terice"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:88
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:89
 #, kde-format
 msgid "Histogram Data"
 msgstr "Podatki histograma"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:90
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
 msgstr "Središče spajanja"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:94
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
 msgid "Low Edge"
 msgstr "Nizek rob"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBar)
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:101
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:102
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:400
 #, kde-format
 msgid "Error"
 msgstr "Napaka"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:114
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Branch/Leaf"
 msgstr "Veja/list"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:114
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Array Size"
 msgstr "Velikost polja"
@@ -16071,11 +16071,11 @@ msgstr "Velikost:"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:213
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:477
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:493
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:509
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:525
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:541
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:557
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:496
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:515
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:534
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:553
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:572
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:425
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:386
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:539
@@ -18146,11 +18146,11 @@ msgstr "Razširi"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:480
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:496
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:512
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:528
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:544
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:560
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:499
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:518
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:537
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:556
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:575
 #, kde-format
 msgid " cm"
 msgstr " cm"
@@ -21271,38 +21271,38 @@ msgstr "Ni bilo mogoče odpreti datoteke"
 msgid "%1 not found"
 msgstr "Datoteke ni mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:198
+#: src/tools/TeXRenderer.cpp:188
 #, fuzzy, kde-format
 #| msgid "Unable to read the file"
 msgid "Timeout: Unable to generate latex file"
 msgstr "Datoteke ni mogoče brati"
 
-#: src/tools/TeXRenderer.cpp:201
+#: src/tools/TeXRenderer.cpp:191
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "proces je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:263
+#: src/tools/TeXRenderer.cpp:253
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:270
+#: src/tools/TeXRenderer.cpp:260
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "proces dvips je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:292
+#: src/tools/TeXRenderer.cpp:282
 #, kde-format
 msgid "convert not found"
 msgstr "convert-a ni bilo mogoče najti"
 
-#: src/tools/TeXRenderer.cpp:300
+#: src/tools/TeXRenderer.cpp:290
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "proces convert je izpadel, izhodna koda ="
 
-#: src/tools/TeXRenderer.cpp:322
+#: src/tools/TeXRenderer.cpp:312
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Ni mogoče odpreti datoteke:"

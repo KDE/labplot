@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-25 00:42+0000\n"
+"POT-Creation-Date: 2022-11-26 00:42+0000\n"
 "PO-Revision-Date: 2022-10-03 17:20+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -569,7 +569,7 @@ msgid "XY-Curves"
 msgstr "XY-kurvor"
 
 #: src/backend/core/column/Column.cpp:200
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:21
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:22
 #, kde-format
 msgid "Histograms"
 msgstr "Histogram"
@@ -10427,7 +10427,7 @@ msgid "Data regions"
 msgstr "Dataområden"
 
 #: src/kdefrontend/datasources/FITSOptionsWidget.cpp:22
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:97
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:98
 #: src/kdefrontend/widgets/FITSHeaderEditWidget.cpp:60
 #, kde-format
 msgid "Content"
@@ -11474,39 +11474,39 @@ msgstr "Tillgänglig"
 msgid "Values"
 msgstr "Värden"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:23
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
 msgid "Trees and Tuples"
 msgstr "Träd och tupler"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:88
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:89
 #, kde-format
 msgid "Histogram Data"
 msgstr "Histogramdata"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:90
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:91
 #, kde-format
 msgid "Bin Center"
 msgstr "Delcentrum"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:94
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
 msgid "Low Edge"
 msgstr "Nederkant"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBar)
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:101
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:102
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:400
 #, kde-format
 msgid "Error"
 msgstr "Fel"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:114
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Branch/Leaf"
 msgstr "Gren eller löv"
 
-#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:114
+#: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Array Size"
 msgstr "Fältstorlek"
@@ -16039,11 +16039,11 @@ msgstr "Storlek:"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:213
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:477
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:493
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:509
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:525
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:541
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:557
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:496
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:515
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:534
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:553
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:572
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:425
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:386
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:539
@@ -18116,11 +18116,11 @@ msgstr "Utöka"
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:480
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:496
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:512
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:528
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:544
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:560
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:499
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:518
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:537
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:556
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:575
 #, kde-format
 msgid " cm"
 msgstr " cm"
@@ -21255,38 +21255,38 @@ msgstr "Kunde inte öppna filen"
 msgid "%1 not found"
 msgstr "Filen hittades inte"
 
-#: src/tools/TeXRenderer.cpp:198
+#: src/tools/TeXRenderer.cpp:188
 #, fuzzy, kde-format
 #| msgid "Unable to read the file"
 msgid "Timeout: Unable to generate latex file"
 msgstr "Kan inte läsa filen"
 
-#: src/tools/TeXRenderer.cpp:201
+#: src/tools/TeXRenderer.cpp:191
 #, kde-format
 msgid "process failed, exit code ="
 msgstr "processen misslyckades, slutkod ="
 
-#: src/tools/TeXRenderer.cpp:263
+#: src/tools/TeXRenderer.cpp:253
 #, kde-format
 msgid "dvips not found"
 msgstr "dvips hittades inte"
 
-#: src/tools/TeXRenderer.cpp:270
+#: src/tools/TeXRenderer.cpp:260
 #, kde-format
 msgid "dvips process failed, exit code ="
 msgstr "dvips-processen misslyckades, slutkod ="
 
-#: src/tools/TeXRenderer.cpp:292
+#: src/tools/TeXRenderer.cpp:282
 #, kde-format
 msgid "convert not found"
 msgstr "convert hittades inte"
 
-#: src/tools/TeXRenderer.cpp:300
+#: src/tools/TeXRenderer.cpp:290
 #, kde-format
 msgid "convert process failed, exit code ="
 msgstr "convert-processen misslyckades, slutkod ="
 
-#: src/tools/TeXRenderer.cpp:322
+#: src/tools/TeXRenderer.cpp:312
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Kan inte öppna fil:"
