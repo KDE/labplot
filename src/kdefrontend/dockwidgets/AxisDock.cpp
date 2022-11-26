@@ -795,8 +795,6 @@ void AxisDock::zeroOffsetChanged(double offset) {
 	if (m_initializing)
 		return;
 
-	// TODO: check for negative values and log scales? (Move this check into the axis it self!)
-
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
 }

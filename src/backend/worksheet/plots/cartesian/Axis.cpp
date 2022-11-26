@@ -550,6 +550,8 @@ void Axis::setPosition(Position position) {
 	Q_D(Axis);
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
+	else
+		emit positionChanged(d->position); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, RangeT::Scale, scale, retransformTicks)
@@ -655,8 +657,12 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform)
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
+
+	// TODO: check for negative values and log scales?
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
+	else
+		emit zeroOffsetChanged(d->zeroOffset); // Feedback
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, ShowScaleOffset, bool, showScaleOffset, retransform)
 void Axis::setShowScaleOffset(bool b) {
@@ -670,6 +676,8 @@ void Axis::setLogicalPosition(double pos) {
 	Q_D(Axis);
 	if (pos != d->logicalPosition)
 		exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
+	else
+		emit logicalPositionChanged(d->logicalPosition); // Feedback
 }
 
 // Title
@@ -678,6 +686,8 @@ void Axis::setTitleOffsetX(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetX)
 		exec(new AxisSetTitleOffsetXCmd(d, offset, ki18n("%1: set title offset")));
+	else
+		emit titleOffsetXChanged(d->titleOffsetX); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, qreal, titleOffsetY, retransform)
@@ -685,6 +695,8 @@ void Axis::setTitleOffsetY(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetY)
 		exec(new AxisSetTitleOffsetYCmd(d, offset, ki18n("%1: set title offset")));
+	else
+		emit titleOffsetYChanged(d->titleOffsetY); // Feedback
 }
 
 // Line
