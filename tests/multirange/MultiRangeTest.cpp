@@ -207,14 +207,13 @@ void MultiRangeTest::zoomXSelection_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.2, 0.6); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 20., 60.); // zoom
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 10.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6); // No niceExtends() done!
 
 	QVector<double> ref = {-250, -150.0, -50, 50, 150, 250};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
 	ref = {-1, -0.5, 0.0, 0.5, 1.0};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	ref = {-10, -5, 0.0, 5, 10.0}; // Due to nice Extend it will be changed
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // on third axis there is no autoscale, because it uses a different range
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomXSelection_SingleRange() {
