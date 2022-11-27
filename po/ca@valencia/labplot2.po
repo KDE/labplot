@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:42+0000\n"
-"PO-Revision-Date: 2022-11-20 10:18+0100\n"
+"POT-Creation-Date: 2022-11-27 00:42+0000\n"
+"PO-Revision-Date: 2022-11-25 13:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -71,7 +71,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2876
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1372
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
@@ -779,7 +779,7 @@ msgstr ""
 #: src/backend/core/Project.cpp:688
 #, kde-format
 msgid "Missing Support for CAS"
-msgstr "Falta la implementació per al CAS"
+msgstr "Falta la implementació per a CAS"
 
 #: src/backend/core/Project.cpp:716
 #, kde-format
@@ -7043,7 +7043,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4952
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:415
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:435
@@ -7398,7 +7398,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1527
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5220
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
 #: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set theme"
@@ -7547,7 +7547,7 @@ msgstr "des de y=%1 a y=%2"
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5167
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "element de «diagramaCartesià» desconegut «%1»"
@@ -14248,7 +14248,7 @@ msgstr "Esquema de color"
 #: src/kdefrontend/MainWin.cpp:861
 #, kde-format
 msgid "Configure CAS..."
-msgstr "Configura el CAS..."
+msgstr "Configura CAS..."
 
 #: src/kdefrontend/MainWin.cpp:896
 #, kde-format
@@ -21388,16 +21388,14 @@ msgid "Couldn't open the file"
 msgstr "No s'ha pogut obrir el fitxer"
 
 #: src/tools/TeXRenderer.cpp:152
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "%1 not found"
-msgstr "No s'ha trobat el fitxer"
+msgstr "No s'ha trobat %1"
 
 #: src/tools/TeXRenderer.cpp:188
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "No s'ha pogut llegir el fitxer"
+msgstr "Temps límit excedit: No s'ha pogut generar el fitxer Latex"
 
 #: src/tools/TeXRenderer.cpp:191
 #, kde-format
@@ -21428,6 +21426,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "latex not found"
-#~ msgstr "No s'ha trobat «latex»"

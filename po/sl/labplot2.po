@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:42+0000\n"
-"PO-Revision-Date: 2022-11-21 07:42+0100\n"
+"POT-Creation-Date: 2022-11-27 00:42+0000\n"
+"PO-Revision-Date: 2022-11-26 07:59+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "X-Generator: Poedit 3.1.1\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -70,7 +70,7 @@ msgstr "Ni bilo mogoče najti vtičnike za ploščo. Preverite namestitev."
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2876
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1372
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
@@ -6993,7 +6993,7 @@ msgstr "informacije niso na voljo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4952
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:415
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:435
@@ -7346,7 +7346,7 @@ msgid "%1: load default theme"
 msgstr "%1: naložite privzeto temo"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1527
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5220
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
 #: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set theme"
@@ -7495,7 +7495,7 @@ msgstr "od y=%1 do y=%2"
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5167
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "neznani element kartezičnega grafa »%1«"
@@ -21266,16 +21266,14 @@ msgid "Couldn't open the file"
 msgstr "Ni bilo mogoče odpreti datoteke"
 
 #: src/tools/TeXRenderer.cpp:152
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "%1 not found"
-msgstr "Datoteke ni mogoče najti"
+msgstr "%1 ni mogoče najti"
 
 #: src/tools/TeXRenderer.cpp:188
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Datoteke ni mogoče brati"
+msgstr "Čas je potekel: Ni mogoče generirati datoteke latex"
 
 #: src/tools/TeXRenderer.cpp:191
 #, kde-format

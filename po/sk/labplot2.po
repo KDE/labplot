@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-26 00:42+0000\n"
+"POT-Creation-Date: 2022-11-27 00:42+0000\n"
 "PO-Revision-Date: 2019-07-11 18:46+0200\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2876
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1372
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4604
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
@@ -7320,7 +7320,7 @@ msgstr "Vymazať premennú"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4952
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:415
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:546
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:435
@@ -7710,7 +7710,7 @@ msgid "%1: load default theme"
 msgstr "%1: pridať %2."
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1527
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5220
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
 #: src/backend/worksheet/Worksheet.cpp:758
 #, fuzzy, kde-format
 #| msgid "%1: set layout"
@@ -7883,7 +7883,7 @@ msgstr ""
 msgid "x=%1"
 msgstr ""
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5167
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr ""
