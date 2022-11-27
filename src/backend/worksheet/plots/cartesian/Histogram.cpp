@@ -221,7 +221,7 @@ QMenu* Histogram::createContextMenu() {
 	});
 
 	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
-	analysisMenu->addAction(fitGaussianAction);
+	analysisMenu->addAction(fitExponentialAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});

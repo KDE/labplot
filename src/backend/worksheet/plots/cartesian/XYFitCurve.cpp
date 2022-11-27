@@ -1873,7 +1873,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// TODO: first parameter (normalization) depends on histogram normalization
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
 	// TODO: implement all distributions
-	switch (fitData.modelType) {	// only these are supported
+	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian:
 		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
@@ -1881,7 +1881,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	case nsl_sf_stats_exponential:
 		fitResult.paramValues[0] = 1.; // A - probability density
-		fitResult.paramValues[1] = 1./(tmpXDataColumn->mean() -tmpXDataColumn->minimum()) ; // lambda 1/(<x>-\mu)
+		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
 		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
 		break;
 	case nsl_sf_stats_poisson:
@@ -1893,9 +1893,9 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
 		break;
-	case nsl_sf_stats_cauchy_lorentz:	// see WP:en
+	case nsl_sf_stats_cauchy_lorentz: // see WP:en
 		fitResult.paramValues[0] = 1.; // A - probability density
-		fitResult.paramValues[1] = tmpXDataColumn->iqr()/2.; // sigma
+		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
 		break;
 	case nsl_sf_stats_lognormal:
@@ -1909,7 +1909,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		double var = 0.;
 		for (int i = 0; i < n; i++)
 			var += gsl_pow_2(qLn(tmpXDataColumn->valueAt(i)) - mu);
-		var /= (n-1);
+		var /= (n - 1);
 		fitResult.paramValues[1] = qSqrt(var); // sigma
 		fitResult.paramValues[2] = mu; // mu
 	}

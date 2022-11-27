@@ -74,5 +74,8 @@ private Q_SLOTS:
 
 	// histogram fit
 	void testHistogramFit();
+	void testHistogramGaussianML();
+	void testHistogramLognormalML();
+	void testHistogramPoissonML();
 };
 #endif

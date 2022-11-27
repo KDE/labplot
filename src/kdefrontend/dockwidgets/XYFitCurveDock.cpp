@@ -252,7 +252,7 @@ void XYFitCurveDock::initGeneralTab() {
 	case XYAnalysisCurve::DataSourceType::Histogram:
 		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
 		break;
-	case  XYAnalysisCurve::DataSourceType::Spreadsheet:
+	case XYAnalysisCurve::DataSourceType::Spreadsheet:
 		cbDataSourceCurve->setAspect(nullptr);
 	}
 
@@ -767,8 +767,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
 				// only these are available for ML (TODO: add more when supported)
-				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_poisson && i != nsl_sf_stats_exponential &&
-					i != nsl_sf_stats_laplace && i != nsl_sf_stats_cauchy_lorentz && i != nsl_sf_stats_lognormal) {
+				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_poisson && i != nsl_sf_stats_exponential && i != nsl_sf_stats_laplace
+					&& i != nsl_sf_stats_cauchy_lorentz && i != nsl_sf_stats_lognormal) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 				}
@@ -1205,7 +1205,7 @@ void XYFitCurveDock::enableRecalculate() {
 
 	// no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-//	auto type = m_fitCurve->dataSourceType();
+	//	auto type = m_fitCurve->dataSourceType();
 	switch (m_fitCurve->dataSourceType()) {
 	case XYAnalysisCurve::DataSourceType::Spreadsheet: {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
