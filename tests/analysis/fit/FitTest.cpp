@@ -3099,6 +3099,48 @@ void FitTest::testHistogramGaussianML() {
 	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
 }
 
+void FitTest::testHistogramExponentialML() {
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
+	AsciiFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/Exponential.dat"));
+
+	filter.setHeaderEnabled(false);
+	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
+
+	QCOMPARE(spreadsheet.rowCount(), 100);
+	QCOMPARE(spreadsheet.columnCount(), 1);
+
+	Worksheet worksheet(QStringLiteral("test"), false);
+	auto* plot = new CartesianPlot(QStringLiteral("plot"));
+	worksheet.addChild(plot);
+
+	plot->addHistogram();
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	hist->setDataColumn(spreadsheet.column(0));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_exponential);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+
+	QCOMPARE(fit->name(), QLatin1String("Distribution Fit to 'Histogram'"));
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 1.95884683568035);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), 5.01032231564491);
+}
+
 void FitTest::testHistogramLognormalML() {
 	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	AsciiFilter filter;
