@@ -141,11 +141,16 @@ void VariableParser::parseOctaveValues() {
 
 	QStringList valueStringList;
 	const QStringList tempStringList = m_string.split(QLatin1Char('\n'));
-	for (const QString& values : tempStringList) {
-		// TODO: in newer version of Cantor the rows with "Columns..." were removed already.
-		// we can stop looking for this substring in some point in time later.
-		if (!values.isEmpty() && !values.trimmed().startsWith(QStringLiteral("Columns")))
-			valueStringList << values.split(QLatin1Char(' '));
+	if (m_string.indexOf(QStringLiteral("; ")) != -1) { // parse column vectors
+		for (const QString& values : tempStringList)
+			valueStringList << values.split(QStringLiteral("; "));
+	} else {
+		for (const QString& values : tempStringList) { // parse row vectors
+			// TODO: in newer version of Cantor the rows with "Columns..." were removed already.
+			// we can stop looking for this substring in some point in time later.
+			if (!values.isEmpty() && !values.trimmed().startsWith(QStringLiteral("Columns")))
+				valueStringList << values.split(QLatin1Char(' '));
+		}
 	}
 
 	valueStringList.removeAll(QString());
