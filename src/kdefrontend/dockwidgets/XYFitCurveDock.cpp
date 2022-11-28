@@ -767,8 +767,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 		for (int i = 1; i < NSL_SF_STATS_DISTRIBUTION_COUNT; i++) {
 			if (m_fitData.algorithm == nsl_fit_algorithm_ml) {
 				// only these are available for ML (TODO: add more when supported)
-				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_poisson && i != nsl_sf_stats_exponential && i != nsl_sf_stats_laplace
-					&& i != nsl_sf_stats_cauchy_lorentz && i != nsl_sf_stats_lognormal) {
+				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_exponential && i != nsl_sf_stats_laplace && i != nsl_sf_stats_cauchy_lorentz
+					&& i != nsl_sf_stats_lognormal && i != nsl_sf_stats_poisson && i != nsl_sf_stats_binomial) {
 					QStandardItem* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 				}

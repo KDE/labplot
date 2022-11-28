@@ -1884,10 +1884,6 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
 		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
 		break;
-	case nsl_sf_stats_poisson:
-		fitResult.paramValues[0] = 1.; // A - probability density
-		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
-		break;
 	case nsl_sf_stats_laplace:
 		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
@@ -1898,7 +1894,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
 		break;
-	case nsl_sf_stats_lognormal:
+	case nsl_sf_stats_lognormal: {
 		fitResult.paramValues[0] = 1.; // A - probability density
 		// calculate mu and sigma
 		double n = tmpXDataColumn->rowCount();
@@ -1912,6 +1908,16 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		var /= (n - 1);
 		fitResult.paramValues[1] = qSqrt(var); // sigma
 		fitResult.paramValues[2] = mu; // mu
+		break;
+	}
+	case nsl_sf_stats_poisson:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
+		break;
+	case nsl_sf_stats_binomial:
+		fitResult.paramValues[0] = 1.; // A - probability density
+		fitResult.paramValues[1] = tmpXDataColumn->mean() / tmpXDataColumn->rowCount(); // k
+		fitResult.paramValues[2] = tmpXDataColumn->rowCount(); // n
 	}
 
 	fitResult.available = true;
