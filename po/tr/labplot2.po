@@ -10738,6 +10738,13 @@ msgid ""
 "li><li>Whole file - on every read the whole file is re-read completely and "
 "processed. Only available for \"File Or Named Pipe\" data sources.</li></ul>"
 msgstr ""
+"Her okumada veri kaynağının nasıl işlenmesi gerektiğini belirtin:"
+"<ul><li>Sürekli sabit - Yeni alınan verinin başından itibaren sabit miktarda "
+"örnekler işlenir.</li><li>Sondan - Yeni alınan verinin sonundan itibaren "
+"sabit miktarda örnekler işlenir.</li><li>Sonuna kadar - Tüm yeni alının veri "
+"işlenir.</li><li>Tüm dosya - Her okumada tüm dosya yeniden okunur ve "
+"işlenir. Yalnızca \"Dosya veya Adlı Veriyolu\" veri kaynakları için "
+"kullanılabilir.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:192
 #, kde-format
@@ -10746,6 +10753,9 @@ msgid ""
 "Only needs to be specified for the reading mode \"Continuously Fixed\" and "
 "\"From End\"."
 msgstr ""
+"Her okumada işlenecek örnekler (satırlar) sayısı.\n"
+"Yalnızca \"Sürekli Sabit\" ve \"Sondan\" okuma kipleri için belirtilmesi "
+"gerekir."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:198
 #, kde-format
@@ -10755,12 +10765,15 @@ msgid ""
 "specified time interval.</li><li>On New Data - the data source is read when "
 "new data arrives.</li></ul>"
 msgstr ""
+"Veri kaynağının ne zaman ve ne kadar sıklıkla okunması gerektiğini belirt:"
+"<ul><li>Periyodik olarak - Veri kaynağı, kullanıcı tarafından belirtilen "
+"aralığa göre periyodik olarak okunur.</li><li>Yeni Veride - Veri kaynağı, "
+"yeni veri geldiğinde okunur.</li></ul>"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:206
-#, fuzzy, kde-format
-#| msgid "Select a data container where the data has to be imported into."
+#, kde-format
 msgid "Specify how frequently the data source has to be read."
-msgstr "Verinin aktarılacağı veri kabını seç."
+msgstr "Veri kaynağının ne kadar sıklıkla okunması gerektiğini seçin."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:211
 #, kde-format
@@ -10768,6 +10781,8 @@ msgid ""
 "Specify how many samples need to be kept in memory after reading.\n"
 "Use \"All\" if all data has to be kept."
 msgstr ""
+"Okumadan sonra kaç tane örneğin bellekte tutulması gerektiğini belirtin.\n"
+"Tüm verinin tutulması gerekiyorsa \"Tümü\"nü seçin."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:216
 #, kde-format
@@ -10779,10 +10794,9 @@ msgstr ""
 "kullanmayı etkinleştirin."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:231
-#, fuzzy, kde-format
-#| msgid "New connection"
+#, kde-format
 msgid "Manage MQTT connections"
-msgstr "Yeni bağlantı"
+msgstr "MQTT bağlantılarını yönet"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:233
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:65
@@ -10791,18 +10805,19 @@ msgid ""
 "Specify the 'Last Will and Testament' message (LWT). At least one topic has "
 "to be subscribed."
 msgstr ""
+"'Son Vasiyet ve Ahit' iletisini (LWT) belirtin. En azından bir konuya abone "
+"olunmalıdır."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:823
-#, fuzzy, kde-format
-#| msgid "Select the File Data Source"
+#, kde-format
 msgctxt "@title:window"
 msgid "Select the File Data Source"
-msgstr "Dosya Veri Kaynağını Seçin"
+msgstr "Dosya Veri Kaynağını Seç"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:945
 #, kde-format
 msgid "Save Filter Settings as"
-msgstr "Filtre Ayarlarını Farklı Kaydet"
+msgstr "Süzgeç Ayarlarını Farklı Kaydet"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:945
 #, kde-format
@@ -10812,15 +10827,14 @@ msgstr "Süzgeç adı:"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:945
 #, kde-format
 msgid "new filter"
-msgstr "yeni filtre"
+msgstr "yeni süzgeç"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:978
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:414
-#, fuzzy, kde-format
-#| msgid "Data format"
+#, kde-format
 msgid "Data Format"
-msgstr "Veri biçemi"
+msgstr "Veri Biçimi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
@@ -10829,28 +10843,26 @@ msgstr "Veri biçemi"
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
 msgid "Preview"
-msgstr "Ön izleme"
+msgstr "Önizleme"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:981
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:540
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
-#, fuzzy, kde-format
-#| msgid "Data portion to read"
+#, kde-format
 msgid "Data Portion to Read"
-msgstr "Okunacak veri bölümü"
+msgstr "Okunacak Veri Porsiyonu"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1012
 #, kde-format
 msgid "Data format && preview"
-msgstr "Veri biçemi && önizleme"
+msgstr "Veri biçimi ve önizleme"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1255
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "file command not found"
-msgstr "Dosya bulunamadı"
+msgstr "dosya komutu bulunamadı"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1266
 #, kde-format
@@ -10894,18 +10906,17 @@ msgstr "Yazılabilir: %1"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1280
 #, kde-format
 msgid "Executable: %1"
-msgstr "Çalıştırılabilir: %1"
+msgstr "Yürütülebilir: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1283
 #, kde-format
 msgid "Birth time: %1"
-msgstr ""
+msgstr "Doğum zamanı: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1284
-#, fuzzy, kde-format
-#| msgid "Last read: %1"
+#, kde-format
 msgid "Last metadata changed: %1"
-msgstr "Son okuma: %1"
+msgstr "Son üst veri değişikliği: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1286
 #, kde-format
@@ -10953,28 +10964,27 @@ msgstr "İçerik:"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1345
 #, kde-format
 msgid "Could not open file %1 for reading."
-msgstr "%1 dosyası okumak için açılamadı."
+msgstr "%1 dosyası okuma için açılamadı."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
-#, fuzzy, kde-format
-#| msgid "No data set selected"
+#, kde-format
 msgid "No data arrived yet for the selected topic"
-msgstr "Hiç veri kümesi seçilmedi"
+msgstr "Seçili konu için henüz bir veri gelmedi."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1714
 #, kde-format
 msgid "Not a HDF5 file: %1"
-msgstr ""
+msgstr "Bir HDF5 dosyası değil: %1"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2142
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
-msgstr ""
+msgstr "Tüm kullanılabilir konulara abone olunamıyor."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2172
 #, kde-format
 msgid "Disconnected from '%1'."
-msgstr ""
+msgstr "Bağlantı kesildi: '%1'."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2241
 #, kde-format
@@ -10984,68 +10994,61 @@ msgstr "Kullanılabilir (%1)"
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2353
 #, kde-format
 msgid "Wrong username or password"
-msgstr ""
+msgstr "Yanlış kullanıcı adı veya parola"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2356
 #, kde-format
 msgid "The client ID wasn't accepted"
-msgstr ""
+msgstr "İstemci kimliği kabul edilmedi"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2360
 #, kde-format
 msgid "The broker %1 couldn't be reached."
-msgstr ""
+msgstr "%1 aracısına ulaşılamadı."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2363
-#, fuzzy, kde-format
-#| msgid "The remote host closed the connection."
+#, kde-format
 msgid "The client is not authorized to connect."
-msgstr "Uzak makine bağlantıyı kapattı."
+msgstr "İstemci, bağlanmak için yetkili değil."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2366
-#, fuzzy, kde-format
-#| msgid "The following error occurred: %1."
+#, kde-format
 msgid "An unknown error occurred."
-msgstr "Şu hata meydana geldi: %1."
+msgstr "Bilinmeyen bir hata oluştu."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2372
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2375
-#, fuzzy, kde-format
-#| msgid "The following error occurred: %1."
+#, kde-format
 msgid "An error occurred."
-msgstr "Şu hata meydana geldi: %1."
+msgstr "Bir hata oluştu."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:2389
-#, fuzzy, kde-format
-#| msgid "Connection to the database '%1' was successful."
+#, kde-format
 msgid "Connecting to '%1:%2' timed out."
-msgstr "'%1' veritabanına bağlantı başarılı."
+msgstr "'%1:%2' konumuna bağlantı zaman aşımına uğradı."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:81
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:434
 #, kde-format
 msgid "Add new folder"
-msgstr "Yeni dizin ekle"
+msgstr "Yeni klasör ekle"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:105
-#, fuzzy, kde-format
-#| msgid "Import LabPlot Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import LabPlot Project"
-msgstr "LabPlot Projesini İçe Aktar"
+msgstr "LabPlot Projesi İçe Aktar"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:110
-#, fuzzy, kde-format
-#| msgid "Import Origin Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Import Origin Project"
-msgstr "Kaynak Projeyi içe aktar"
+msgstr "Köken Proje İçe Aktar"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Select a data container where the data has to be imported into."
+#, kde-format
 msgid "Specify the file where the project content has to be imported from."
-msgstr "Verinin aktarılacağı veri kabını seç."
+msgstr "Proje içeriğinin içe aktarılması gereken dosyayı belirtin."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:124
 #, kde-format
@@ -11055,14 +11058,19 @@ msgid ""
 "objects will be automatically selected.\n"
 "To import the whole project, select the top-level project node."
 msgstr ""
+"Geçerli projeye içe aktarılacak bir veya birden çok nesne seçin.\n"
+"Not: Seçili nesnelerin tüm alt nesneleri ve bağımlı oldukları nesneler "
+"kendiliğinden seçilecektir.\n"
+"Tüm projeyi içe aktarmak için üst düzeydeki proje düğümünü seçin."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:129
-#, fuzzy, kde-format
-#| msgid "Select a data container where the data has to be imported into."
+#, kde-format
 msgid ""
 "Specify the target folder in the current project where the selected objects "
 "have to be imported into."
-msgstr "Verinin aktarılacağı veri kabını seç."
+msgstr ""
+"Geçerli projedeki seçili nesnelerin içe aktarılması gereken hedef klasörü "
+"belirtin."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:229
 #, kde-format
@@ -11073,59 +11081,58 @@ msgid_plural ""
 "The objects listed below already exist in target folder and will be "
 "overwritten:"
 msgstr[0] ""
-"Aşağıda listelenen nesne zaten hedef klasörde var ve üzerine yazılır:"
+"Aşağıda listelenen nesne zaten hedef klasörde var ve üzerine yazılacak:"
 msgstr[1] ""
-"Aşağıda listelenen nesneler zaten hedef klasörde var ve üzerine yazılır:"
+"Aşağıda listelenen nesneler zaten hedef klasörde var ve üzerine yazılacak:"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:235
 #, kde-format
 msgid "Do you want to proceed?"
-msgstr "Devam etmek istiyor musunuz?"
+msgstr "Sürdürmek istiyor musunuz?"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:237
 #, kde-format
 msgid "Override existing objects?"
-msgstr "Mevcut nesnelerin üzerine yaz?"
+msgstr "Var olan nesnelerin üzerine yazılsın mı?"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:264
 #, kde-format
 msgid "Project data imported in %1 seconds."
-msgstr "Proje verisi %1 saniyede içe aktarıldı."
+msgstr "Proje verisi, %1 saniyede içe aktarıldı."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:354
 #, kde-format
 msgid "Close the dialog and import the selected objects."
-msgstr "İletişim kutucuğunu kapat ve seçili nesneleri içe aktar."
+msgstr "İletişim kutusunu kapatın ve seçili nesneleri içe aktarın."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:356
 #, kde-format
 msgid "Select object(s) to be imported."
-msgstr "İçe aktarılacak nesneleri seç."
+msgstr "İçe aktarılacak nesneleri seçin."
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:371
-#, fuzzy, kde-format
-#| msgid "Open LabPlot Project"
+#, kde-format
 msgctxt "@title:window"
 msgid "Open LabPlot Project"
-msgstr "LabPlot Projesini Aç"
+msgstr "LabPlot Projesi Aç"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:373
 #: src/kdefrontend/MainWin.cpp:1341
 #, kde-format
 msgid "LabPlot Projects (%1)"
-msgstr ""
+msgstr "LabPlot Projeleri (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:377
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Origin Project"
-msgstr "Kaynak Projeyi Aç"
+msgstr "Köken Projeyi Aç"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:379
 #: src/kdefrontend/MainWin.cpp:1346
 #, kde-format
 msgid "Origin Projects (%1)"
-msgstr ""
+msgstr "Köken Projeler (%1)"
 
 #: src/kdefrontend/datasources/ImportProjectDialog.cpp:434
 #, kde-format
@@ -11135,7 +11142,7 @@ msgstr "Klasör adı:"
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:119
 #, kde-format
 msgid "Data imported in %1 seconds."
-msgstr "%1 saniyede veri içe aktarıldı."
+msgstr "Veri, %1 saniyede içe aktarıldı."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:143
 #, kde-format
@@ -11152,53 +11159,44 @@ msgid "Table"
 msgstr "Tablo"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:39
-#, fuzzy, kde-format
-#| msgid "Custom query"
+#, kde-format
 msgid "Custom Query"
-msgstr "Özel sorgu"
+msgstr "Özel Sorgu"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "New connection"
+#, kde-format
 msgid "Manage connections"
-msgstr "Yeni bağlantı"
+msgstr "Bağlantıları yönet"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:247
-#, fuzzy, kde-format
-#| msgid ""
-#| "Failed to connect to the database '%1'. Please check the connection "
-#| "settings."
+#, kde-format
 msgid ""
 "Couldn't find the database file '%1'. Please check the connection settings."
 msgstr ""
-"'%1' veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını kontrol "
-"edin."
+"%1 veritabanı dosyası bulunamadı. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:269
 #, kde-format
 msgid ""
 "Failed to connect to the database '%1'. Please check the connection settings."
 msgstr ""
-"'%1' veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını kontrol "
-"edin."
+"'%1' veritabanına bağlantı başarısız. Lütfen bağlantı ayarlarını denetleyin."
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:324
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:433
-#, fuzzy, kde-format
-#| msgid "Unable to execute query"
+#, kde-format
 msgid "Unable to Execute Query"
-msgstr "Sorgu çalıştırılamadı"
+msgstr "Sorgu Yürütülemedi"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:401
-#, fuzzy, kde-format
-#| msgid "Shows the content of a NetCDF file"
+#, kde-format
 msgid "Refresh the data preview of the selected table"
-msgstr "NetCDF dosyasının içeriğini gösterir"
+msgstr "Seçili dosyanın veri önizlemesini yenile"
 
 #: src/kdefrontend/datasources/ImportSQLDatabaseWidget.cpp:406
 #, kde-format
 msgid "Execute the query and preview its result"
-msgstr ""
+msgstr "Sorguyu yürüt ve sonucunu önizle"
 
 #: src/kdefrontend/datasources/JsonOptionsWidget.cpp:119
 #, kde-format
@@ -11290,65 +11288,61 @@ msgstr ""
 "td></tr><tr><td>'Gün' dddd</td><td>'Gün' Pazar</td></tr></table>"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerDialog.cpp:32
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections"
-msgstr "Bağlantı"
+msgstr "MQTT Bağlantıları"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerDialog.cpp:81
-#, fuzzy, kde-format
-#| msgid "SQL Database Connections  [Changed]"
+#, kde-format
 msgctxt "@title:window"
 msgid "MQTT Connections  [Changed]"
-msgstr "SQL Veritabanı Bağlantıları  [Değiştirilmiş]"
+msgstr "MQTT Bağlantıları [Değiştirildi]"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:41
-#, fuzzy, kde-format
-#| msgid "Add new database connection"
+#, kde-format
 msgid "Add new MQTT connection"
-msgstr "Yeni veritabanı bağlantısı ekle"
+msgstr "Yeni MQTT bağlantısı ekle"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:42
-#, fuzzy, kde-format
-#| msgid "Delete selected database connection"
+#, kde-format
 msgid "Remove selected MQTT connection"
-msgstr "Seçilen veritabanı bağlantısını sil"
+msgstr "Seçili MQTT bağlantısını kaldır"
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:62
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:354
 #, kde-format
 msgid "Please set a password."
-msgstr ""
+msgstr "Lütfen bir parola ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:65
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:333
 #, kde-format
 msgid "Please set a username."
-msgstr ""
+msgstr "Lütfen bir kullanıcı adı ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:68
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:375
 #, kde-format
 msgid "Please set a client ID."
-msgstr ""
+msgstr "Lütfen bir istemci kimliği ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:69
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:172
 #, kde-format
 msgid "Please set a valid host name."
-msgstr ""
+msgstr "Lütfen geçerli bir makine adı ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:70
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:135
 #, kde-format
 msgid "Please set a valid name."
-msgstr ""
+msgstr "Lütfen geçerli bir ad ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:160
 #, kde-format
 msgid "Please provide a unique name."
-msgstr ""
+msgstr "Lütfen benzersiz bir ad ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:190
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:191
@@ -11356,41 +11350,38 @@ msgstr ""
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:230
 #, kde-format
 msgid "Host name and port must be unique."
-msgstr ""
+msgstr "Makine adı ve kapı benzersiz olmalıdır."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:211
 #, kde-format
 msgid "Please set a valid port."
-msgstr ""
+msgstr "Lütfen geçerli bir kapı ayarlayın."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:651
-#, fuzzy, kde-format
-#| msgid "Connection to the database '%1' was successful."
+#, kde-format
 msgid "Connection to the broker '%1:%2' was successful."
-msgstr "'%1' veritabanına bağlantı başarılı."
+msgstr "'%1:%2' aracısına bağlantı başarılı."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:665
-#, fuzzy, kde-format
-#| msgid "Failed to connect to the database '%1'."
+#, kde-format
 msgid "Failed to connect to the broker '%1:%2'."
-msgstr "'%1' veritabanına bağlanırken hata oluştu."
+msgstr "'%1:%2' aracısına bağlanılamadı."
 
 #: src/kdefrontend/datasources/MQTTConnectionManagerWidget.cpp:679
-#, fuzzy, kde-format
-#| msgid "Connection to the database '%1' was successful."
+#, kde-format
 msgid ""
 "Disconnected from the broker '%1:%2' before the connection was successful."
-msgstr "'%1' veritabanına bağlantı başarılı."
+msgstr "Bağlantı başarılı olmadan önce '%1:%2' aracısı bağlantısı kesildi."
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:40
 #, kde-format
 msgid "Subscribe selected topics"
-msgstr ""
+msgstr "Seçili konulara abone ol"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:42
 #, kde-format
 msgid "Unsubscribe selected topics"
-msgstr ""
+msgstr "Seçili konulardan aboneliği kaldır"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:48
 #, kde-format
@@ -11400,7 +11391,7 @@ msgstr "Kendisine gidilecek konunun adını girin."
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:49
 #, kde-format
 msgid "Enter the name of the topic"
-msgstr "Konunun adını girin"
+msgstr "Konunun adını gir"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:58
 #, kde-format
@@ -11409,6 +11400,9 @@ msgid ""
 "guarantee of the message delivery:<ul><li>0 - deliver at most once</li><li>1 "
 "- deliver at least once</li><li>2 - deliver exactly once</li></ul>"
 msgstr ""
+"İleti tesliminin garantisini tanımlamak için abonelik Hizmet Kalitesini "
+"(QoS) seçin:<ul><li>0 - bir kerede olabildiğince çok teslim et</li><li>1 - "
+"en az bir kez teslim et</li><li>2 - yalnızca bir kez teslim et</li></ul>"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
@@ -11420,12 +11414,12 @@ msgstr "Uyarı"
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:856
 #, kde-format
 msgid "You already subscribed to a topic containing this one"
-msgstr ""
+msgstr "Bunu içeren bir konuya halihazırda abonesiniz"
 
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:858
 #, kde-format
 msgid "You already subscribed to this topic"
-msgstr ""
+msgstr "Bu konuya halihazırda abonesiniz"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, twTopics)
 #: src/kdefrontend/datasources/MQTTSubscriptionWidget.cpp:1014
@@ -11446,24 +11440,22 @@ msgstr "Değerler"
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:24
 #, kde-format
 msgid "Trees and Tuples"
-msgstr ""
+msgstr "Ağaçlar ve Çok Ögeliler"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:89
-#, fuzzy, kde-format
-#| msgid "Histogram"
+#, kde-format
 msgid "Histogram Data"
-msgstr "Çubuklu çizelge"
+msgstr "Histogram Verisi"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:91
-#, fuzzy, kde-format
-#| msgid "center"
+#, kde-format
 msgid "Bin Center"
-msgstr "merkez"
+msgstr "İkili Merkezi"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:95
 #, kde-format
 msgid "Low Edge"
-msgstr ""
+msgstr "Düşük Kenar"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBar)
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:102
@@ -11475,13 +11467,12 @@ msgstr "Hata"
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
 #, kde-format
 msgid "Branch/Leaf"
-msgstr ""
+msgstr "Dal/Yaprak"
 
 #: src/kdefrontend/datasources/ROOTOptionsWidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Original size"
+#, kde-format
 msgid "Array Size"
-msgstr "Özgün boyut"
+msgstr "Dizilim Boyutu"
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:229
@@ -11531,7 +11522,7 @@ msgstr "Merkez"
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:57
 #, kde-format
 msgid "Logical"
-msgstr ""
+msgstr "Mantıksal"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoRange)
 #. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
@@ -11574,10 +11565,9 @@ msgid "Auto"
 msgstr "Otomatik"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:236
-#, fuzzy, kde-format
-#| msgid "No Data"
+#, kde-format
 msgid "Auto Data"
-msgstr "Veri Yok"
+msgstr "Otomatik Veri"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:240
 #, kde-format
