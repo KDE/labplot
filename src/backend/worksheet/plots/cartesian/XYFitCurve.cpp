@@ -1853,6 +1853,7 @@ void XYFitCurvePrivate::recalculate() {
 
 void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn) {
 	// determine range of data
+	// TODO: use ranges
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 	if (fitData.autoRange) { // auto x range of data to fit
 		fitData.fitRange = xRange;
@@ -1863,8 +1864,20 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
 	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
+	const size_t n = tmpXDataColumn->rowCount();
+
+	fitResult.available = true;
+	fitResult.valid = true;
+	fitResult.status = i18n("Success"); // can it fail in any way?
+
 	const unsigned int np = fitData.paramNames.size(); // number of fit parameters
+	fitResult.dof = n - np;
 	fitResult.paramValues.resize(np);
+	fitResult.errorValues.resize(np);
+	fitResult.tdist_tValues.resize(np);
+	fitResult.tdist_pValues.resize(np);
+	fitResult.tdist_marginValues.resize(np);
+	fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
 	DEBUG("DISTRIBUTION: " << fitData.modelType)
 	// const double binSize = xRange.size() / tmpXDataColumn->rowCount();
@@ -1872,30 +1885,37 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// const int binCount = 10;
 	// TODO: first parameter (normalization) depends on histogram normalization
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
-	// TODO: implement all distributions
+	fitResult.paramValues[0] = 1.; // A - probability density
+	// TODO: parameter values (error, etc.)
 	switch (fitData.modelType) { // only these are supported
-	case nsl_sf_stats_gaussian:
-		fitResult.paramValues[0] = 1.; // A - probability density
+	case nsl_sf_stats_gaussian: {
 		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
+		DEBUG("mu = " << fitResult.paramValues[2] << ", sigma = " << fitResult.paramValues[1])
+
+		const double alpha = 1.0 - fitData.confidenceInterval / 100.;
+		fitResult.errorValues[2] = qSqrt(tmpXDataColumn->var() / n);
+		// nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
+		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
+		fitResult.tdist_marginValues[2] = margin;
+		// TODO:
+		// margin = nsl_stats_tdist_margin(alpha, fitResult.dof, 0.02234446);
+		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
 		break;
+	}
 	case nsl_sf_stats_exponential:
-		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
 		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
 		break;
 	case nsl_sf_stats_laplace:
-		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
 		break;
 	case nsl_sf_stats_cauchy_lorentz: // see WP:en
-		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
 		break;
 	case nsl_sf_stats_lognormal: {
-		fitResult.paramValues[0] = 1.; // A - probability density
 		// calculate mu and sigma
 		double n = tmpXDataColumn->rowCount();
 		double mu = 0.;
@@ -1911,26 +1931,20 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_poisson:
-		fitResult.paramValues[0] = 1.; // A - probability density
 		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
 		break;
 	case nsl_sf_stats_binomial:
-		fitResult.paramValues[0] = 1.; // A - probability density
-		fitResult.paramValues[1] = tmpXDataColumn->mean() / tmpXDataColumn->rowCount(); // k
-		fitResult.paramValues[2] = tmpXDataColumn->rowCount(); // n
+		fitResult.paramValues[1] = tmpXDataColumn->mean() / n; // k
+		fitResult.paramValues[2] = n; // n
 	}
 
-	fitResult.available = true;
-	fitResult.valid = true;
-
-	// TODO: residual vector
-	fitResult.status = i18n("Success");
+	fitResult.calculateResult(n, np);
 
 	if (fitData.useResults) // set start values
 		for (unsigned int i = 0; i < np; i++)
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
 
-	// TODO: show results (parameter, etc.)
+	// TODO: residual vector
 }
 
 void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {

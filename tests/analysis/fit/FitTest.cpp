@@ -3097,6 +3097,10 @@ void FitTest::testHistogramGaussianML() {
 	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
 	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(2));
+	QCOMPARE(fitResult.errorValues.at(2), 0.0316157202617);
+	WARN(std::setprecision(15) << fitResult.tdist_marginValues.at(2));
+	QCOMPARE(fitResult.tdist_marginValues.at(2), 0.0620409896568247);
 }
 
 void FitTest::testHistogramExponentialML() {

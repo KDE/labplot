@@ -181,8 +181,11 @@ double nsl_stats_tdist_p(double t, double dof) {
 		p = 0;
 	return p;
 }
+double nsl_stats_tdist_z(double alpha, double dof) {
+	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof);
+}
 double nsl_stats_tdist_margin(double alpha, double dof, double error) {
-	return gsl_cdf_tdist_Pinv(1. - alpha / 2., dof) * error;
+	return nsl_stats_tdist_z(alpha, dof) * error;
 }
 
 /* chi^2 distribution */
