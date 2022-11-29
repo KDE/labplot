@@ -2758,32 +2758,32 @@ msgstr "İnterçeyrek erim"
 #: src/backend/gsl/ExpressionParser.cpp:172
 #, kde-format
 msgid "1st percentile"
-msgstr "1. yüzde birlik"
+msgstr "1. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:173
 #, kde-format
 msgid "5th percentile"
-msgstr "5. yüzde birlik"
+msgstr "5. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:174
 #, kde-format
 msgid "10th percentile"
-msgstr "10. yüzde birlik"
+msgstr "10. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:175
 #, kde-format
 msgid "90th percentile"
-msgstr "90. yüzde birlik"
+msgstr "90. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:176
 #, kde-format
 msgid "95th percentile"
-msgstr "95. yüzde birlik"
+msgstr "95. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:177
 #, kde-format
 msgid "99th percentile"
-msgstr "99. yüzde birlik"
+msgstr "99. persantil"
 
 #: src/backend/gsl/ExpressionParser.cpp:178
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:72
@@ -10489,7 +10489,7 @@ msgstr "Veri kapsayıcısı:"
 #: src/kdefrontend/datasources/ImportDialog.cpp:81
 #, kde-format
 msgid "Data container where the data has to be imported into"
-msgstr "Verinin aktarılacağı veri kapsayıcısını seçin."
+msgstr "Verinin içe aktarılacağı veri kapsayıcısı"
 
 #: src/kdefrontend/datasources/ImportDialog.cpp:94
 #, kde-format
@@ -10969,7 +10969,7 @@ msgstr "%1 dosyası okuma için açılamadı."
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
 #, kde-format
 msgid "No data arrived yet for the selected topic"
-msgstr "Seçili konu için henüz bir veri gelmedi."
+msgstr "Seçili konu için henüz bir veri gelmedi"
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:1714
 #, kde-format
@@ -11578,11 +11578,16 @@ msgid ""
 "points, respectively</li><li>Custom - manually specify the start and end "
 "points of the axis</li></ul>"
 msgstr ""
+"Eksen erimi - Eksenin başlangıç ve bitiş noktalarını kendiliğinden geçerli "
+"çizim erimlerine ayarla</li><li>Otomatik Veri - Eksenin başlangıç ve bitiş "
+"noktalarını otomatik olarak en küçük ve en büyük çizilmiş veri noktalarına "
+"sırasıyla ayarla</li><li>Özel - Eksenin başlangıç ve bitiş noktalarını el "
+"ile ayarla</li></ul>"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:257
 #, kde-format
 msgid "No arrow"
-msgstr "Ok yok"
+msgstr "Oksuz"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #, kde-format
@@ -11605,16 +11610,14 @@ msgid "Filled, Big"
 msgstr "Dolu, Büyük"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:262
-#, fuzzy, kde-format
-#| msgid "semi-filled, small"
+#, kde-format
 msgid "Semi-filled, Small"
-msgstr "yarı-dolu, küçük"
+msgstr "Yarı Dolu, Küçük"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:263
-#, fuzzy, kde-format
-#| msgid "semi-filled, big"
+#, kde-format
 msgid "Semi-filled, Big"
-msgstr "yarı-dolu, büyük"
+msgstr "Yarı Dolu, Büyük"
 
 #. i18n("Original"));
 #. i18n("Custom"));
@@ -11662,29 +11665,25 @@ msgstr "Sağ"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:114
 #, kde-format
 msgid "Both"
-msgstr "Her ikisi de"
+msgstr "Her İkisi"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:353
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:365
-#, fuzzy, kde-format
-#| msgctxt "default labels of filter input ports"
-#| msgid "In%1"
+#, kde-format
 msgid "In"
-msgstr "%1de"
+msgstr "İçinde"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:354
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:366
-#, fuzzy, kde-format
-#| msgid "out"
+#, kde-format
 msgid "Out"
-msgstr "dışında"
+msgstr "Dışında"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:355
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:367
-#, fuzzy, kde-format
-#| msgid "in and out"
+#, kde-format
 msgid "In and Out"
-msgstr "içinde ve dışında"
+msgstr "İçinde ve Dışında"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:357
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:369
@@ -11698,10 +11697,9 @@ msgstr "Sayı"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:370
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:620
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
-#, fuzzy, kde-format
-#| msgid "Hor. spacing"
+#, kde-format
 msgid "Spacing"
-msgstr "Yat. aralama"
+msgstr "Boşluklandırma"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:359
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:371
@@ -11711,22 +11709,19 @@ msgid "Custom column"
 msgstr "Özel sütun"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:361
-#, fuzzy, kde-format
-#| msgid "Absolute value"
+#, kde-format
 msgid "Absolute Value"
-msgstr "Mutlak değer"
+msgstr "Mutlak Değer"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:362
-#, fuzzy, kde-format
-#| msgid "Offset X"
+#, kde-format
 msgid "Offset"
-msgstr "X konumu"
+msgstr "Ofset"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:374
-#, fuzzy, kde-format
-#| msgid "no labels"
+#, kde-format
 msgid "No labels"
-msgstr "etiket yok"
+msgstr "Etiketsiz"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:377
 #, kde-format
@@ -11741,13 +11736,12 @@ msgstr "Ondalık gösterim"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:382
 #, kde-format
 msgid "Scientific notation"
-msgstr "Belirli gösterim"
+msgstr "Bilimsel gösterim"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:383
-#, fuzzy, kde-format
-#| msgid "Scientific notation"
+#, kde-format
 msgid "Scientific E notation"
-msgstr "Belirli gösterim"
+msgstr "Bilimsel E gösterimi"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:384
 #, kde-format
@@ -11767,17 +11761,17 @@ msgstr "e'nin kuvveti"
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:387
 #, kde-format
 msgid "Multiples of π"
-msgstr ""
+msgstr "π'nin çarpanları"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:391
 #, kde-format
 msgid "Transparent"
-msgstr "Şeffaf"
+msgstr "Saydam"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2004
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
-msgstr "%1 eksenleri: şablon \"%2\" yüklendi"
+msgstr "%1 eksenleri: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:2006
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:541
@@ -11795,26 +11789,25 @@ msgid "%1: template \"%2\" loaded"
 msgstr "%1: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:52
-#, fuzzy, kde-format
-#| msgid "Group: %1"
+#, kde-format
 msgid "Grouped"
-msgstr "Grup: %1"
+msgstr "Gruplandırılmış"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:53
 #, kde-format
 msgid "Stacked"
-msgstr ""
+msgstr "Yığılmış"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:54
 #, kde-format
 msgid "Stacked 100%"
-msgstr ""
+msgstr "%​100 Yığılmış"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:60
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
-msgstr ""
+msgstr "Özelliklerin gösterilip düzenlenmesi gereken veri sütununu seç"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:64
 #, kde-format
@@ -11822,6 +11815,8 @@ msgid ""
 "Specify the factor in percent to control the width of the bar relative to "
 "its default value, applying to all bars"
 msgstr ""
+"Çubuğun genişliğini öntanımlı değerine göre denetlemek için çarpanı yüzde "
+"türünden belirt, tüm çubuklara uygula"
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:376
@@ -11859,56 +11854,49 @@ msgstr "Sütun:"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1363
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
-msgstr "%1 xy-eğrileri: \"%2\" şablonu yüklendi"
+msgstr "%1 xy eğrileri: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/BaseDock.cpp:151
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:366
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:374
 #, kde-format
 msgid "Please choose another name, because this is already in use."
-msgstr ""
+msgstr "Lütfen başka bir ad seçin; çünkü bu ad halihazırda kullanımda."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:49
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "10/90 percentiles"
-msgstr "persantil"
+msgstr "10/90 persantil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:50
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "5/95 percentiles"
-msgstr "persantil"
+msgstr "5/95 persantil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:51
-#, fuzzy, kde-format
-#| msgid "percentile"
+#, kde-format
 msgid "1/99 percentiles"
-msgstr "persantil"
+msgstr "1/99 persantil"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
-#, fuzzy, kde-format
-#| msgid "Ascending"
+#, kde-format
 msgid "By Median, Ascending"
-msgstr "Artan"
+msgstr "Ortayla, Artan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:58
-#, fuzzy, kde-format
-#| msgid "Descending"
+#, kde-format
 msgid "By Median, Descending"
-msgstr "Azalan"
+msgstr "Ortayla, Azalan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:59
-#, fuzzy, kde-format
-#| msgid "Ascending"
+#, kde-format
 msgid "By Mean, Ascending"
-msgstr "Artan"
+msgstr "Ortalamayla, Artan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:60
-#, fuzzy, kde-format
-#| msgid "Descending"
+#, kde-format
 msgid "By Mean, Descending"
-msgstr "Azalan"
+msgstr "Ortalamayla, Azalan"
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:62
 #, kde-format
@@ -11916,6 +11904,8 @@ msgid ""
 "If multiple data sets are provided, define how they should be ordered or use "
 "'None' to keep the original order."
 msgstr ""
+"Birden çok veri kümesi sağlanmışsa nice sıralanmaları gerektiğini tanımlayın "
+"veya özgün sırayı korumak için 'Hiçbiri'ni seçin."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:66
 #, kde-format
@@ -11923,11 +11913,12 @@ msgid ""
 "If checked, the box width is made proportional to the square root of the "
 "number of data points."
 msgstr ""
+"İşaretlenmişse kutu genişliği veri noktalarının kareköküne orantısal yapılır."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:70
 #, kde-format
 msgid "Parameter controlling the range of the inner fences of the box plot."
-msgstr ""
+msgstr "Kutu çiziminin iç çitlerinin erimini denetleyen parametre."
 
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:79
 #, kde-format
@@ -11935,46 +11926,43 @@ msgid ""
 "Specify the factor in percent to control the width of the box relative to "
 "its default value."
 msgstr ""
+"Kutunun genişliğini öntanımlı değerine göre denetlemek için çarpanı yüzde "
+"türünden belirtin."
 
 #: src/kdefrontend/dockwidgets/CantorWorksheetDock.cpp:65
 #, kde-format
 msgid "File Browser"
-msgstr ""
+msgstr "Dosya Tarayıcı"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:228
-#, fuzzy, kde-format
-#| msgid "Save current properties as a template"
+#, kde-format
 msgid "Save current plot definition as template"
-msgstr "Mevcut özellikleri bir şablondan kaydet"
+msgstr "Geçerli çizim tanımını şablon olarak kaydet"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:624
-#, fuzzy, kde-format
-#| msgid "x-Range:"
+#, kde-format
 msgid "%1-Ranges:"
-msgstr "x-Aralığı:"
+msgstr "%1 Erimleri:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:626
-#, fuzzy, kde-format
-#| msgid "x-Range:"
+#, kde-format
 msgid "%1-Range:"
-msgstr "x-Aralığı:"
+msgstr "%1 Erimi:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:649
 #, kde-format
 msgid "Numeric"
-msgstr "Numerik"
+msgstr "Sayısal"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:748
-#, fuzzy, kde-format
-#| msgid "Bin Settings:"
+#, kde-format
 msgid "Plot Ranges:"
-msgstr "Çöp kutusu Ayarları:"
+msgstr "Çizim Erimleri:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:750
-#, fuzzy, kde-format
-#| msgid "Bin Settings:"
+#, kde-format
 msgid "Plot Range:"
-msgstr "Çöp kutusu Ayarları:"
+msgstr "Çizim Erimi:"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:831
 #, kde-format
@@ -11982,16 +11970,14 @@ msgid "Free"
 msgstr "Boş"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:832
-#, fuzzy, kde-format
-#| msgid "Move Last Point"
+#, kde-format
 msgid "Last Points"
-msgstr "Son Noktayı Taşı"
+msgstr "Son Noktalar"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:833
-#, fuzzy, kde-format
-#| msgid "Set Axis Points"
+#, kde-format
 msgid "First Points"
-msgstr "Eksen Noktalarını Ayarla"
+msgstr "İlk Noktalar"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:836
 #, kde-format
@@ -12000,11 +11986,14 @@ msgid ""
 "specified number of last points is plotted</li><li>First Points - specified "
 "number of first points is plotted</li></ul>"
 msgstr ""
+"Veri Erimi:<ul><li>Boş - Tam veri erimi çizilir</li><li>Son Noktalar - "
+"Belirli sayıdaki son noktalar çizilir</li><li>İlk Noktalar - Belirli "
+"sayıdaki ilk noktalar çizilir</li></ul>"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:845
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
-msgstr ""
+msgstr "İşaretlenmişse çizim erimini kendiliğinden güzel değerlere genişlet"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:854
@@ -12021,18 +12010,18 @@ msgstr "Eğimli"
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1156
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
-msgstr ""
+msgstr "%1 erimi %2, %3 çizim eriminde kullanılıyor. "
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1157
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
 #, kde-format
 msgid "Really remove it?"
-msgstr ""
+msgstr "Gerçekten kaldırılsın mı?"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1205
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
-msgstr ""
+msgstr "%1 çizim erimi, \"%2\" ögesi tarafından kullanılıyor. "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
@@ -12078,12 +12067,12 @@ msgstr "Üst:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
-msgstr ""
+msgstr "Şablon Kayıt Dosyası Seç"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1654
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
-msgstr ""
+msgstr "Labplot Çizim Şablonları (*%1)"
 
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1878
 #, kde-format
@@ -12121,7 +12110,7 @@ msgstr "Merkez"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:743
 #, kde-format
 msgid "%1 cartesian plot legends: template \"%2\" loaded"
-msgstr "%1 kartezyen çizim efsaneleri: \"%2\" şablonu yüklendi"
+msgstr "%1 kartezyen çizim göstergeleri: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:42
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:32
@@ -12162,42 +12151,37 @@ msgid "Automatic (E)"
 msgstr "Otomatik (E)"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:322
-#, fuzzy, kde-format
-#| msgid "Add Value"
+#, kde-format
 msgid "Add a new value label"
-msgstr "Değer Ekle"
+msgstr "Yeni bir değer etiketi ekle"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
-#, fuzzy, kde-format
-#| msgid "Save the current filter settings"
+#, kde-format
 msgid "Remove the selected value label"
-msgstr "Mevcut filtre ayarlarını kaydet"
+msgstr "Seçili değer etiketini kaldır"
 
 #: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
-msgstr ""
+msgstr "Birden çok değer etiketini toplu iş kipinde değiştir"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:32
-#, fuzzy, kde-format
-#| msgid "collapse all"
+#, kde-format
 msgid "Collapse all curves"
-msgstr "tümünü daralt"
+msgstr "Tüm eğrileri daralt"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:33
-#, fuzzy, kde-format
-#| msgid "expand all"
+#, kde-format
 msgid "Expand all curves"
-msgstr "tümünü genişlet"
+msgstr "Tüm eğrileri genişlet"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:154
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1267
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1273
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1279
-#, fuzzy, kde-format
-#| msgid "Selection"
+#, kde-format
 msgid "Copy Selection"
-msgstr "Seçim"
+msgstr "Seçimi Kopyala"
 
 #: src/kdefrontend/dockwidgets/CursorDock.cpp:155
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1268
@@ -12210,7 +12194,7 @@ msgstr "Tümünü Kopyala"
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:264
 #, kde-format
 msgid "%1 CustomPoints: visibility changed"
-msgstr "%1 ÖzelNoktala: görünebilirlik değişti"
+msgstr "%1 ÖzelNoktalar: Görünebilirlik değişti"
 
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:425
 #, kde-format
@@ -12221,18 +12205,18 @@ msgstr "%1 özel noktalar: \"%2\" şablonu yüklendi"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
 #, kde-format
 msgid "Uncertainty Bars"
-msgstr ""
+msgstr "Belirsizlik Çubukları"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
 #, kde-format
 msgid "X Uncertainty"
-msgstr ""
+msgstr "X Belirsizliği"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
 msgid "By Number"
-msgstr ""
+msgstr "Sayıya Göre"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
 #, kde-format
@@ -12240,16 +12224,14 @@ msgid "By Width"
 msgstr "Genişliğe Göre"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
-#, fuzzy, kde-format
-#| msgid "Square-root rule"
+#, kde-format
 msgid "Square-root"
-msgstr "Kare kök kuralı"
+msgstr "Karekök"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
-#, fuzzy, kde-format
-#| msgid "Rice rule"
+#, kde-format
 msgid "Rice"
-msgstr "Pirinç kuralı"
+msgstr "Pirinç"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:173
 #, kde-format
@@ -12259,12 +12241,12 @@ msgstr "Sturgis"
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:174
 #, kde-format
 msgid "Doane"
-msgstr ""
+msgstr "Doane"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
 #, kde-format
 msgid "Scott"
-msgstr ""
+msgstr "Scott"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:178
 #, kde-format
@@ -12281,69 +12263,65 @@ msgstr "Kümülatif Histogram"
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #, kde-format
 msgid "Count"
-msgstr "Sayı"
+msgstr "Sayım"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
 #, kde-format
 msgid "Probability"
-msgstr ""
+msgstr "Olasılık"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgid "Count Density"
-msgstr "Yoğunluk"
+msgstr "Sayım Yoğunluğu"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
-#, fuzzy, kde-format
-#| msgid "Probability density for a F-distribution"
+#, kde-format
 msgid "Probability Density"
-msgstr "F-dağılımı için olasılık yoğunluğu"
+msgstr "Olasılık Yoğunluğu"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
 #, kde-format
 msgid "No Uncertainties"
-msgstr ""
+msgstr "Belirsizlik Yok"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
-msgstr ""
+msgstr "Poisson varyansı, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
 #, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr ""
+msgstr "Özel Belirsizlik Değerleri, simetrik"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
 #, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr ""
+msgstr "Özel Belirsizlik Değerleri, asimetrik"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
-#, fuzzy, kde-format
-#| msgid "No Error"
+#, kde-format
 msgid "No Errors"
-msgstr "Hata yok"
+msgstr "Hata Yok"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:202
 #, kde-format
 msgid "Custom Error Values, symmetric"
-msgstr ""
+msgstr "Özel Hata Değerleri, simetrik"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:203
 #, kde-format
 msgid "Custom Error Values, asymmetric"
-msgstr ""
+msgstr "Özel Hata Değerleri, asimetrik"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:572
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:974
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1032
-#, fuzzy, kde-format
-#| msgid "Data, +-"
+#, kde-format
 msgid "Data, +-:"
-msgstr "Veri, +-"
+msgstr "Veri, +-:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
@@ -12384,72 +12362,64 @@ msgstr "Nokta çizgi"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:87
 #: src/kdefrontend/widgets/LabelWidget.cpp:178
-#, fuzzy, kde-format
-#| msgid "dash-dot line"
+#, kde-format
 msgid "Dash dot line"
-msgstr "kesik çizgi çizgisi"
+msgstr "Tire nokta çizgisi"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:88
 #: src/kdefrontend/widgets/LabelWidget.cpp:179
-#, fuzzy, kde-format
-#| msgid "dash-dot-dot line"
+#, kde-format
 msgid "Dash dot dot line"
-msgstr "kesikli nokta çizgi çizgisi"
+msgstr "Tire nokta nokta çizgisi"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:254
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
-msgstr ""
+msgstr "%1 bilgi ögeleri: \"%2\" eğrisi kaldırıldı"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:256
-#, fuzzy, kde-format
-#| msgid "%1: remove %2 row"
-#| msgid_plural "%1: remove %2 rows"
+#, kde-format
 msgid "%1: curve \"%2\" removed"
-msgstr "%1: %2 satırı sil"
+msgstr "%1: \"%2\" eğrisi kaldırıldı"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:62
-#, fuzzy, kde-format
-#| msgid "New connection"
+#, kde-format
 msgid "Manage MQTT connection's will settings"
-msgstr "Yeni bağlantı"
+msgstr "MQTT bağlantılarının vasiyet ayarlarını yönet"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:108
-#, fuzzy, kde-format
-#| msgid "Continue reading"
+#, kde-format
 msgid "Continue reading"
-msgstr "Okumaya devam et"
+msgstr "Okumayı sürdür"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:111
-#, fuzzy, kde-format
-#| msgid "Pause reading"
+#, kde-format
 msgid "Pause reading"
-msgstr "Okumayı dondur"
+msgstr "Okumayı duraklat"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:281
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:534
 #, kde-format
 msgid "Continue Reading"
-msgstr "Okumaya Devam Et"
+msgstr "Okumayı Sürdür"
 
 #. i18n: ectx: property (text), widget (QPushButton, bPausePlayReading)
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:284
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:538
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:320
-#, fuzzy, kde-format
-#| msgid "Pause reading"
+#, kde-format
 msgid "Pause Reading"
-msgstr "Okumayı dondur"
+msgstr "Okumayı Duraklat"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:677
 #, kde-format
 msgid "Couldn't subscribe"
-msgstr ""
+msgstr "Abone olunamadı"
 
 #: src/kdefrontend/dockwidgets/LiveDataDock.cpp:677
 #, kde-format
 msgid "Couldn't subscribe to all available topics. Something went wrong"
-msgstr ""
+msgstr "Tüm kullanılabilir konulara üye olunamadı. Bir şeyler ters gitti"
 
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:35
 #, kde-format
@@ -12474,6 +12444,10 @@ msgid ""
 "Uncheck this option to reduce the size of the project file at costs of the "
 "longer project load times."
 msgstr ""
+"İşaretlenmişse çözümleme eğrilerindeki hesaplamaların sonucu proje dosyasına "
+"kaydedilecektir.\n"
+"Proje dosyasının boyutunu daha yavaş yükleme süresi bedeliyle küçültmek için "
+"bu seçeneğin işaretini kaldırın."
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:180
 #, kde-format
@@ -12481,28 +12455,23 @@ msgid "%1 spreadsheets: template \"%2\" loaded"
 msgstr "%1 hesap tabloları: \"%2\" yüklendi"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:43
-#, fuzzy, kde-format
-#| msgid ""
-#| "If checked, rescale the content of the worksheet on size changes. "
-#| "Otherwise resize the canvas only.\n"
-#| "Note, the content is automatically rescaled if a layout is active."
+#, kde-format
 msgid ""
 "If checked, rescale the content of the worksheet on size changes. Otherwise "
 "resize the canvas only."
 msgstr ""
-"İşaretleniyorsa, boyut değişiklikleri üzerine çalışma sayfasının içeriğini "
-"yeniden ölçeklendirin. Aksi takdirde tuvali yalnızca yeniden boyutlandırın.\n"
-"Bir düzen etkinse, içerik otomatik olarak yeniden ölçeklendirilir."
+"İşaretlenmişse boyut değişikliklerinde çalışma sayfasının içeriğini yeniden "
+"ölçekle. Aksi durumda yalnızca tuvali yeniden boyutlandır."
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:272
 #, kde-format
 msgid "Portrait"
-msgstr "Portre"
+msgstr "Dikey"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:273
 #, kde-format
 msgid "Landscape"
-msgstr "Enine"
+msgstr "Yatay"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:291
 #, kde-format
@@ -12510,10 +12479,9 @@ msgid "View Size"
 msgstr "Görünüm Boyutu"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:292
-#, fuzzy, kde-format
-#| msgid "StandardDev"
+#, kde-format
 msgid "Standard Page"
-msgstr "StandartSapma"
+msgstr "Standart Sayfa"
 
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:639
 #, kde-format
@@ -12531,45 +12499,41 @@ msgstr "%1 çalışma sayfaları: \"%2\" şablonu yüklendi"
 #: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:55
 #, kde-format
 msgid "XY-Curve"
-msgstr "XY-Eğrisi"
+msgstr "XY Eğrisi"
 
 #. i18n: ectx: property (text), widget (QLabel, lKernel)
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:274
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:30
 #, kde-format
 msgid "or Kernel/Size:"
-msgstr ""
+msgstr "veya Çekirdek/Boyut:"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:288
 #, kde-format
 msgid "with Kernel/Size:"
-msgstr ""
+msgstr "Çekirdek/Boyut ile:"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:467
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:472
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Convolution"
-msgstr "Bağlantı"
+msgstr "Evrişim"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:468
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:471
-#, fuzzy, kde-format
-#| msgid "Connection"
+#, kde-format
 msgid "Deconvolution"
-msgstr "Bağlantı"
+msgstr "Ters Evrişim"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:508
-#, fuzzy, kde-format
-#| msgid "Interpolation status: "
+#, kde-format
 msgid "Convolution status: %1"
-msgstr "Enterpolasyon durumu: "
+msgstr "Evrişim durumu: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:510
-#, fuzzy, kde-format
-#| msgid "Interpolation status: "
+#, kde-format
 msgid "Deconvolution status: %1"
-msgstr "Enterpolasyon durumu: "
+msgstr "Ters evrişim durumu: %1"
 
 #: src/kdefrontend/dockwidgets/XYConvolutionCurveDock.cpp:545
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:443
