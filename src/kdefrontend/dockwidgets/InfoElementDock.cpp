@@ -60,7 +60,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	m_elements = list;
 	m_element = list.first();
@@ -296,12 +296,12 @@ void InfoElementDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
 void InfoElementDock::elementVisibilityChanged(const bool visible) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui->chbVisible->setChecked(visible);
 }
 
 void InfoElementDock::elementGluePointIndexChanged(const int index) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	if (index < 0)
 		ui->cbConnectToAnchor->setCurrentIndex(0);
 	else
@@ -309,7 +309,7 @@ void InfoElementDock::elementGluePointIndexChanged(const int index) {
 }
 
 void InfoElementDock::elementConnectionLineCurveChanged(const QString& name) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	for (int i = 0; i < ui->cbConnectToCurve->count(); i++) {
 		if (ui->cbConnectToCurve->itemData(i).toString().compare(name) == 0) {
 			ui->cbConnectToCurve->setCurrentIndex(i);
@@ -319,7 +319,7 @@ void InfoElementDock::elementConnectionLineCurveChanged(const QString& name) {
 }
 
 void InfoElementDock::elementLabelBorderShapeChanged() {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui->cbConnectToAnchor->clear();
 	ui->cbConnectToAnchor->addItem(i18n("Auto"));
 	for (int i = 0; i < m_element->gluePointsCount(); i++)
@@ -327,13 +327,13 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui->sbPosition->setValue(pos);
 	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos, Qt::UTC));
 }
 
 void InfoElementDock::elementCurveRemoved(const QString& name) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	for (int i = 0; i < ui->lwCurves->count(); ++i) {
 		auto* item = ui->lwCurves->item(i);
 		auto* checkBox = static_cast<QCheckBox*>(ui->lwCurves->itemWidget(item));

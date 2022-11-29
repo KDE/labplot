@@ -466,18 +466,18 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 //*************************************************************
 // General-Tab
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
@@ -498,18 +498,18 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
@@ -520,6 +520,6 @@ void XYCorrelationCurveDock::dataChanged() {
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

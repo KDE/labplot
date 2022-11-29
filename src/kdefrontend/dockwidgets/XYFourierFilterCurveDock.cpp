@@ -641,27 +641,27 @@ void XYFourierFilterCurveDock::showFilterResult() {
 //*************************************************************
 // General-Tab
 void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYFourierFilterCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_filterCurve->xDataColumnPath());
 }
 
 void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_filterCurve->yDataColumnPath());
 }
 
 void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve::FilterData& filterData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_filterData = filterData;
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
 	this->typeChanged();
@@ -674,6 +674,6 @@ void XYFourierFilterCurveDock::dataChanged() {
 }
 
 void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

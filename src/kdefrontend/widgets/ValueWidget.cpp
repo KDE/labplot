@@ -320,56 +320,56 @@ void ValueWidget::colorChanged(const QColor& color) {
 //********* SLOTs for changes triggered in Value *********
 //*************************************************************
 void ValueWidget::valueTypeChanged(Value::Type type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbColumn->setColumn(column, m_value->columnPath());
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbPosition->setCurrentIndex((int)position);
 }
 void ValueWidget::valueDistanceChanged(qreal distance) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
 }
 void ValueWidget::valueRotationAngleChanged(qreal angle) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 void ValueWidget::valueOpacityChanged(qreal opacity) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(round(opacity * 100.0));
 }
 void ValueWidget::valueNumericFormatChanged(char format) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(format));
 }
 void ValueWidget::valuePrecisionChanged(int precision) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbPrecision->setValue(precision);
 }
 void ValueWidget::valueDateTimeFormatChanged(const QString& format) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbDateTimeFormat->setCurrentText(format);
 }
 void ValueWidget::valuePrefixChanged(const QString& prefix) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.lePrefix->setText(prefix);
 }
 void ValueWidget::valueSuffixChanged(const QString& suffix) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.leSuffix->setText(suffix);
 }
 void ValueWidget::valueFontChanged(QFont font) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(font);
 }
 void ValueWidget::valueColorChanged(QColor color) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
 }
 
@@ -377,7 +377,7 @@ void ValueWidget::valueColorChanged(QColor color) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void ValueWidget::load() {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	ui.cbType->setCurrentIndex((int)m_value->type());
 	ui.cbPosition->setCurrentIndex((int)m_value->position());
@@ -395,7 +395,7 @@ void ValueWidget::load() {
 }
 
 void ValueWidget::loadConfig(const KConfigGroup& group) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	ui.cbType->setCurrentIndex(group.readEntry("ValuesType", (int)m_value->type()));
 	ui.cbPosition->setCurrentIndex(group.readEntry("ValuesPosition", (int)m_value->position()));

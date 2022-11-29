@@ -46,7 +46,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_linesList = list;
 	m_line = list.first();
 	setAspects(list);
@@ -96,7 +96,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  */
 void ReferenceLineDock::updateLocale() {
 	SET_NUMBER_LOCALE
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
@@ -187,7 +187,7 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
 void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
@@ -199,12 +199,12 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 }
 
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
@@ -215,7 +215,7 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();

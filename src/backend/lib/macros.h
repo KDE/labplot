@@ -38,6 +38,15 @@
 	{ }
 #endif
 
+/*!
+ * Lock mechanism used in docks to prevent loops (dock -> element -> dock)
+ * dock (locking) -> element: No feedback to the dock
+ */
+#define CONDITONAL_LOCK_RETURN                                                                                                                                 \
+	if (m_initializing)                                                                                                                                        \
+		return;                                                                                                                                                \
+	const Lock lock(m_initializing);
+
 #if QT_VERSION < 0x050700
 template<class T>
 constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {

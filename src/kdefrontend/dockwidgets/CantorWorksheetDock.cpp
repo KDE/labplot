@@ -33,7 +33,7 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
 	setAspects(list);

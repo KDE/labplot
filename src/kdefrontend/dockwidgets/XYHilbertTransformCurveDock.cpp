@@ -307,17 +307,17 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 //*************************************************************
 // General-Tab
 void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
 }
 
 void XYHilbertTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
 }
 
 void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTransformCurve::TransformData& transformData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
@@ -330,6 +330,6 @@ void XYHilbertTransformCurveDock::dataChanged() {
 }
 
 void XYHilbertTransformCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

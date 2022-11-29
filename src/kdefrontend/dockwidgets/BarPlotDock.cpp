@@ -127,7 +127,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 }
 
 void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_barPlots = list;
 	m_barPlot = list.first();
 	setAspects(list);
@@ -479,29 +479,29 @@ void BarPlotDock::widthFactorChanged(int value) const {
 //*************************************************************
 // general
 void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
 }
 void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	loadDataColumns();
 }
 void BarPlotDock::plotTypeChanged(BarPlot::Type type) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BarPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	// 	float v = (float)value*100.;
 	ui.sbWidthFactor->setValue(factor * 100);
 }

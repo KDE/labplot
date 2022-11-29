@@ -359,17 +359,17 @@ void XYFourierTransformCurveDock::showTransformResult() {
 //*************************************************************
 // General-Tab
 void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
 }
 
 void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
 }
 
 void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& transformData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
@@ -382,6 +382,6 @@ void XYFourierTransformCurveDock::dataChanged() {
 }
 
 void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

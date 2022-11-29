@@ -81,7 +81,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 }
 
 void CustomPointDock::setPoints(QList<CustomPoint*> points) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_points = points;
 	m_point = m_points.first();
 	setAspects(points);
@@ -318,7 +318,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 //*********************************************************
 //"General"-tab
 void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper& position) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
 	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
@@ -326,12 +326,12 @@ void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapp
 }
 
 void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	bindingChanged(enabled);
 }
 
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x(), Qt::UTC));
@@ -340,7 +340,7 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 }
 
 void CustomPointDock::pointVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 

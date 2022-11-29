@@ -568,18 +568,18 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*************************************************************
 // General-Tab
 void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
@@ -600,13 +600,13 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 	if (column) {
 		DEBUG("Y2 Column available");
@@ -622,7 +622,7 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_convolutionData = convolutionData;
 	this->directionChanged();
 
@@ -634,6 +634,6 @@ void XYConvolutionCurveDock::dataChanged() {
 }
 
 void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

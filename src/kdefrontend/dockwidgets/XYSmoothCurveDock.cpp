@@ -596,27 +596,27 @@ void XYSmoothCurveDock::showSmoothResult() {
 //*************************************************************
 // General-Tab
 void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_smoothCurve->xDataColumnPath());
 }
 
 void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_smoothCurve->yDataColumnPath());
 }
 
 void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& smoothData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_smoothData = smoothData;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
@@ -628,6 +628,6 @@ void XYSmoothCurveDock::dataChanged() {
 }
 
 void XYSmoothCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

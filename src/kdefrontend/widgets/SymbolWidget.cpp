@@ -174,7 +174,7 @@ void SymbolWidget::fillingColorChanged(const QColor& color) {
 		symbol->setBrush(brush);
 	}
 
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, color);
 }
 
@@ -213,7 +213,7 @@ void SymbolWidget::borderColorChanged(const QColor& color) {
 		symbol->setPen(pen);
 	}
 
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN; // TODO: why lock here?
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
 }
 
@@ -233,35 +233,35 @@ void SymbolWidget::borderWidthChanged(double value) {
 //*********** SLOTs for changes triggered in Symbol ***********
 //*************************************************************
 void SymbolWidget::symbolStyleChanged(Symbol::Style style) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	int index = ui.cbStyle->findData((int)style);
 	ui.cbStyle->setCurrentIndex(index);
 }
 
 void SymbolWidget::symbolSizeChanged(qreal size) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void SymbolWidget::symbolRotationAngleChanged(qreal angle) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 
 void SymbolWidget::symbolOpacityChanged(qreal opacity) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(round(opacity * 100.0));
 }
 
 void SymbolWidget::symbolBrushChanged(const QBrush& brush) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, brush.color());
 }
 
 void SymbolWidget::symbolPenChanged(const QPen& pen) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbBorderStyle->setCurrentIndex((int)pen.style());
 	ui.kcbBorderColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, pen.color());
@@ -272,7 +272,7 @@ void SymbolWidget::symbolPenChanged(const QPen& pen) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void SymbolWidget::load() {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(index);
@@ -291,7 +291,7 @@ void SymbolWidget::load() {
 }
 
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	int index = ui.cbStyle->findData((int)m_symbol->style());
 	ui.cbStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));

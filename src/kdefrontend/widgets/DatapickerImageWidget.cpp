@@ -260,7 +260,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();
 	setAspects(list);
@@ -535,17 +535,17 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.leFileName->setText(name);
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	int index = ui.cbGraphType->findData((int)axisPoints.type);
 	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -561,7 +561,7 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 }
 
 void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
@@ -575,7 +575,7 @@ void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::Ed
 }
 
 void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbMinSegmentLength->setValue(value);
 }
 
@@ -588,7 +588,7 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 }
 
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chbSymbolVisible->setChecked(on);
 }
 
@@ -605,7 +605,7 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found

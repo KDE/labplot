@@ -609,7 +609,7 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.cbModel->show();
 		uiGeneralTab.lEquation->show();
 
-		const Lock lock(m_initializing); // do not change start parameter
+		CONDITONAL_LOCK_RETURN; // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 	} else {
 		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
@@ -1457,37 +1457,37 @@ void XYFitCurveDock::showFitResult() {
 //*************************************************************
 // General-Tab
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(hist);
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
 }
 
@@ -1495,7 +1495,7 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
  * called when fit data of fit curve changes
  */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_fitData = fitData;
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
@@ -1509,6 +1509,6 @@ void XYFitCurveDock::dataChanged() {
 }
 
 void XYFitCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

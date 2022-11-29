@@ -567,27 +567,27 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 //*************************************************************
 // General-Tab
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYDifferentiationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_differentiationCurve->xDataColumnPath());
 }
 
 void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_differentiationCurve->yDataColumnPath());
 }
 
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged(m_differentiationData.derivOrder);
@@ -602,6 +602,6 @@ void XYDifferentiationCurveDock::dataChanged() {
 }
 
 void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

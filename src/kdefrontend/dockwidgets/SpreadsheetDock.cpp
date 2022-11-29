@@ -52,7 +52,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	set the current spreadsheet(s)
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
 	setAspects(list);
@@ -136,17 +136,17 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRowCount->setValue(count);
 }
 
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
 }
 
 void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbShowComments->setChecked(checked);
 }
 

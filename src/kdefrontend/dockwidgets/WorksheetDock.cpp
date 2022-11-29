@@ -175,7 +175,7 @@ void WorksheetDock::updateUnits() {
 		return;
 
 	m_units = units;
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	QString suffix;
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
@@ -265,7 +265,7 @@ void WorksheetDock::updatePaperSize() {
 //****** SLOTs for changes triggered in WorksheetDock *********
 //*************************************************************
 void WorksheetDock::retranslateUi() {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	// Geometry
 	ui.cbOrientation->clear();
@@ -339,7 +339,7 @@ void WorksheetDock::sizeTypeChanged(int index) {
 		return;
 
 	if (index == 0) { // viewSize
-		Lock lock(m_initializing);
+		CONDITONAL_LOCK_RETURN;
 		for (auto* worksheet : m_worksheetList)
 			worksheet->setUseViewSize(true);
 	} else if (index == 1) { // standard page
@@ -354,10 +354,7 @@ void WorksheetDock::sizeTypeChanged(int index) {
 }
 
 void WorksheetDock::pageChanged(int i) {
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 
 	// determine the width and the height of the to be used predefined layout
 	const auto index = ui.cbPage->itemData(i).value<QPageSize::PageSizeId>();
@@ -512,7 +509,7 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_worksheet != aspect)
 		return;
 
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
@@ -520,65 +517,65 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void WorksheetDock::worksheetScaleContentChanged(bool scaled) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chScaleContent->setChecked(scaled);
 }
 void WorksheetDock::worksheetUseViewSizeChanged(bool useViewSize) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	if (useViewSize)
 		ui.cbSizeType->setCurrentIndex(0);
 	else
 		updatePaperSize();
 }
 void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
 	updatePaperSize();
 }
 
 void WorksheetDock::worksheetLayoutChanged(Worksheet::Layout layout) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbLayout->setCurrentIndex(static_cast<int>(layout));
 }
 
 void WorksheetDock::worksheetLayoutTopMarginChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutBottomMarginChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutLeftMarginChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutRightMarginChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutVerticalSpacingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutHorizontalSpacingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void WorksheetDock::worksheetLayoutRowCountChanged(int value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutRowCount->setValue(value);
 }
 
 void WorksheetDock::worksheetLayoutColumnCountChanged(int value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbLayoutColumnCount->setValue(value);
 }
 

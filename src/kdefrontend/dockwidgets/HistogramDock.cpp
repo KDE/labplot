@@ -483,10 +483,7 @@ void HistogramDock::binCountChanged(int value) {
 }
 
 void HistogramDock::binWidthChanged() {
-	if (m_initializing)
-		return;
-
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double width{numberLocale.toDouble(ui.leBinWidth->text(), &ok)};
@@ -510,10 +507,7 @@ void HistogramDock::autoBinRangesChanged(bool state) {
 }
 
 void HistogramDock::binRangesMinChanged(const QString& value) {
-	if (m_initializing)
-		return;
-
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double min{numberLocale.toDouble(value, &ok)};
@@ -524,10 +518,7 @@ void HistogramDock::binRangesMinChanged(const QString& value) {
 }
 
 void HistogramDock::binRangesMaxChanged(const QString& value) {
-	if (m_initializing)
-		return;
-
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double max{numberLocale.toDouble(value, &ok)};
@@ -655,100 +646,94 @@ void HistogramDock::rugOffsetChanged(double value) const {
 //*************************************************************
 // General-Tab
 void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
 }
 
 void HistogramDock::curveTypeChanged(Histogram::HistogramType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 
 void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orientation) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 
 void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization normalization) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbNormalization->setCurrentIndex((int)normalization);
 }
 
 void HistogramDock::curveBinningMethodChanged(Histogram::BinningMethod method) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbBinningMethod->setCurrentIndex((int)method);
 }
 
 void HistogramDock::curveBinCountChanged(int count) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbBinCount->setValue(count);
 }
 
 void HistogramDock::curveBinWidthChanged(double width) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leBinWidth->setText(numberLocale.toString(width));
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkAutoBinRanges->setChecked(value);
 }
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leBinRangesMin->setText(numberLocale.toString(value));
 	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leBinRangesMax->setText(numberLocale.toString(value));
 	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
 void HistogramDock::curveVisibilityChanged(bool on) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 //"Error bars"-Tab
 void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.cbErrorType->setCurrentIndex((int)type);
 }
 void HistogramDock::curveErrorPlusColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbErrorPlusColumn->setColumn(column, m_curve->errorPlusColumnPath());
 }
 void HistogramDock::curveErrorMinusColumnChanged(const AbstractColumn* column) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	cbErrorMinusColumn->setColumn(column, m_curve->errorMinusColumnPath());
 }
 
 //"Margin Plot"-Tab
 void HistogramDock::curveRugEnabledChanged(bool status) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkRugEnabled->setChecked(status);
 }
 void HistogramDock::curveRugLengthChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
 }
 void HistogramDock::curveRugWidthChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
 }
 void HistogramDock::curveRugOffsetChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
 }
 

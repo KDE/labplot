@@ -45,7 +45,7 @@ void ProjectDock::setProject(Project* project) {
 	m_project = project;
 	setAspects(QList<Project*>({project}));
 
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.leFileName->setText(project->fileName());
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
@@ -99,11 +99,11 @@ void ProjectDock::saveCalculationsChanged(bool state) {
 //******** SLOTs for changes triggered in Project   ***********
 //*************************************************************
 void ProjectDock::projectAuthorChanged(const QString& author) {
-	Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.leAuthor->setText(author);
 }
 
 void ProjectDock::projectSaveCalculationsChanged(bool b) {
-	const Lock lock(m_initializing);
+	CONDITONAL_LOCK_RETURN;
 	ui.chkSaveCalculations->setChecked(b);
 }
