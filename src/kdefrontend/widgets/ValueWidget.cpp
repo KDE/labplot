@@ -130,8 +130,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 void ValueWidget::typeChanged(int index) {
 	this->updateWidgets();
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto valuesType = Value::Type(index);
 	for (auto* value : m_values)
@@ -212,8 +211,7 @@ void ValueWidget::updateWidgets() {
   called when the custom column for the values was changed.
 */
 void ValueWidget::columnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	this->updateWidgets();
 
@@ -223,32 +221,28 @@ void ValueWidget::columnChanged(const QModelIndex& index) {
 }
 
 void ValueWidget::positionChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* value : m_values)
 		value->setPosition(Value::Position(index));
 }
 
 void ValueWidget::distanceChanged(double v) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* value : m_values)
 		value->setDistance(Worksheet::convertToSceneUnits(v, Worksheet::Unit::Point));
 }
 
 void ValueWidget::rotationChanged(int v) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* value : m_values)
 		value->setRotationAngle(v);
 }
 
 void ValueWidget::opacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity = static_cast<qreal>(value) / 100.;
 	for (auto* value : m_values)
@@ -256,8 +250,7 @@ void ValueWidget::opacityChanged(int value) {
 }
 
 void ValueWidget::numericFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
 	for (auto* value : m_values)
@@ -265,24 +258,20 @@ void ValueWidget::numericFormatChanged(int index) {
 }
 
 void ValueWidget::precisionChanged(int precision) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* value : m_values)
 		value->setPrecision(precision);
 }
 
 void ValueWidget::dateTimeFormatChanged(const QString& format) {
-	if (m_initializing)
-		return;
-
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* value : m_values)
 		value->setDateTimeFormat(format);
 }
 
 void ValueWidget::prefixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString prefix = ui.lePrefix->text();
 	for (auto* value : m_values)
@@ -290,8 +279,7 @@ void ValueWidget::prefixChanged() {
 }
 
 void ValueWidget::suffixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString suffix = ui.leSuffix->text();
 	for (auto* value : m_values)
@@ -299,8 +287,7 @@ void ValueWidget::suffixChanged() {
 }
 
 void ValueWidget::fontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QFont valuesFont = font;
 	valuesFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
@@ -309,8 +296,7 @@ void ValueWidget::fontChanged(const QFont& font) {
 }
 
 void ValueWidget::colorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* value : m_values)
 		value->setColor(color);
@@ -320,56 +306,56 @@ void ValueWidget::colorChanged(const QColor& color) {
 //********* SLOTs for changes triggered in Value *********
 //*************************************************************
 void ValueWidget::valueTypeChanged(Value::Type type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 void ValueWidget::valueColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbColumn->setColumn(column, m_value->columnPath());
 }
 void ValueWidget::valuePositionChanged(Value::Position position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbPosition->setCurrentIndex((int)position);
 }
 void ValueWidget::valueDistanceChanged(qreal distance) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
 }
 void ValueWidget::valueRotationAngleChanged(qreal angle) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 void ValueWidget::valueOpacityChanged(qreal opacity) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(round(opacity * 100.0));
 }
 void ValueWidget::valueNumericFormatChanged(char format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(format));
 }
 void ValueWidget::valuePrecisionChanged(int precision) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPrecision->setValue(precision);
 }
 void ValueWidget::valueDateTimeFormatChanged(const QString& format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbDateTimeFormat->setCurrentText(format);
 }
 void ValueWidget::valuePrefixChanged(const QString& prefix) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.lePrefix->setText(prefix);
 }
 void ValueWidget::valueSuffixChanged(const QString& suffix) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leSuffix->setText(suffix);
 }
 void ValueWidget::valueFontChanged(QFont font) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrFont->setFont(font);
 }
 void ValueWidget::valueColorChanged(QColor color) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbColor->setColor(color);
 }
 
@@ -377,7 +363,7 @@ void ValueWidget::valueColorChanged(QColor color) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void ValueWidget::load() {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.cbType->setCurrentIndex((int)m_value->type());
 	ui.cbPosition->setCurrentIndex((int)m_value->position());
@@ -395,7 +381,7 @@ void ValueWidget::load() {
 }
 
 void ValueWidget::loadConfig(const KConfigGroup& group) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.cbType->setCurrentIndex(group.readEntry("ValuesType", (int)m_value->type()));
 	ui.cbPosition->setCurrentIndex(group.readEntry("ValuesPosition", (int)m_value->position()));

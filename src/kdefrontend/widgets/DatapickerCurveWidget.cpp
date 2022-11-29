@@ -164,8 +164,7 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 }
 
 void DatapickerCurveWidget::errorBarSizeChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curveList)
 		curve->setPointErrorBarSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
@@ -175,8 +174,7 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* curve : m_curveList) {
@@ -187,8 +185,7 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 }
 
 void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* curve : m_curveList) {
@@ -196,14 +193,11 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 		brush.setColor(color);
 		curve->setPointErrorBarBrush(brush);
 	}
-
-	CONDITONAL_LOCK_RETURN;
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color);
 }
 
 void DatapickerCurveWidget::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curveList)
 		curve->setPointVisibility(state);
@@ -226,25 +220,25 @@ void DatapickerCurveWidget::updateSymbolWidgets() {
 //******** SLOTs for changes triggered in DatapickerCurve *****
 //*************************************************************
 void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbXErrorType->setCurrentIndex((int)errors.x);
 	ui.cbYErrorType->setCurrentIndex((int)errors.y);
 }
 
 void DatapickerCurveWidget::symbolErrorBarSizeChanged(qreal size) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 void DatapickerCurveWidget::symbolErrorBarBrushChanged(const QBrush& brush) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, brush.color());
 }
 
 void DatapickerCurveWidget::symbolVisibleChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
@@ -255,7 +249,7 @@ void DatapickerCurveWidget::load() {
 	if (!m_curve)
 		return;
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbXErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().x);
 	ui.cbYErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().y);
 	ui.chkVisible->setChecked(m_curve->pointVisibility());

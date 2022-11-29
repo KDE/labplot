@@ -52,7 +52,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	set the current spreadsheet(s)
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
 	setAspects(list);
@@ -106,16 +106,14 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 //****** SLOTs for changes triggered in SpreadsheetDock *******
 //*************************************************************
 void SpreadsheetDock::rowCountChanged(int rows) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		spreadsheet->setRowCount(rows);
 }
 
 void SpreadsheetDock::columnCountChanged(int columns) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		spreadsheet->setColumnCount(columns);
@@ -125,8 +123,7 @@ void SpreadsheetDock::columnCountChanged(int columns) {
   enable/disable the comment header in the views of the selected spreadsheets.
 */
 void SpreadsheetDock::commentsShownChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
@@ -136,17 +133,17 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRowCount->setValue(count);
 }
 
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
 }
 
 void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbShowComments->setChecked(checked);
 }
 

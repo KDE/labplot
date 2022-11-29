@@ -46,7 +46,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_linesList = list;
 	m_line = list.first();
 	setAspects(list);
@@ -96,7 +96,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  */
 void ReferenceLineDock::updateLocale() {
 	SET_NUMBER_LOCALE
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
@@ -136,8 +136,7 @@ void ReferenceLineDock::orientationChanged(int index) {
 	ui.lPositionDateTime->setVisible(!numeric);
 	ui.dtePosition->setVisible(!numeric);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setOrientation(orientation);
@@ -147,8 +146,7 @@ void ReferenceLineDock::orientationChanged(int index) {
 }
 
 void ReferenceLineDock::positionLogicalChanged(double pos) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
@@ -161,8 +159,7 @@ void ReferenceLineDock::positionLogicalChanged(double pos) {
 }
 
 void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
@@ -176,8 +173,7 @@ void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime
 }
 
 void ReferenceLineDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setVisible(state);
@@ -187,7 +183,7 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
 void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
@@ -199,12 +195,12 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 }
 
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
@@ -215,7 +211,7 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();

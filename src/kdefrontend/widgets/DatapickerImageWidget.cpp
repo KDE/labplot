@@ -260,7 +260,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();
 	setAspects(list);
@@ -353,8 +353,7 @@ void DatapickerImageWidget::selectFile() {
 }
 
 void DatapickerImageWidget::fileNameChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	handleWidgetActions();
 
@@ -367,6 +366,8 @@ void DatapickerImageWidget::fileNameChanged() {
 }
 
 void DatapickerImageWidget::graphTypeChanged(int index) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	auto points = m_image->axisPoints();
 	points.type = static_cast<DatapickerImage::GraphType>(ui.cbGraphType->itemData(index).toInt());
 
@@ -379,9 +380,6 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 	ui.sbPositionZ1->setVisible(ternary);
 	ui.sbPositionZ2->setVisible(ternary);
 	ui.sbPositionZ3->setVisible(ternary);
-
-	if (m_initializing)
-		return;
 
 	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX || points.type == DatapickerImage::GraphType::Log10XY
 		|| points.type == DatapickerImage::GraphType::Log10X) {
@@ -407,8 +405,7 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 }
 
 void DatapickerImageWidget::ternaryScaleChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
 	points.ternaryScale = value;
@@ -418,8 +415,7 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 }
 
 void DatapickerImageWidget::logicalPositionChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto points = m_image->axisPoints();
 	points.logicalPos[0].setX(ui.sbPositionX1->value());
@@ -437,16 +433,14 @@ void DatapickerImageWidget::logicalPositionChanged() {
 }
 
 void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointVisibility(state);
 }
 
 void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.intensityThresholdHigh = upperLimit;
@@ -456,8 +450,7 @@ void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit)
 }
 
 void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.foregroundThresholdHigh = upperLimit;
@@ -467,8 +460,7 @@ void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.hueThresholdHigh = upperLimit;
@@ -478,8 +470,7 @@ void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.saturationThresholdHigh = upperLimit;
@@ -489,8 +480,7 @@ void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.valueThresholdHigh = upperLimit;
@@ -500,32 +490,28 @@ void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::plotImageTypeChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
 void DatapickerImageWidget::rotationChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* image : m_imagesList)
 		image->setRotationAngle(value);
 }
 
 void DatapickerImageWidget::minSegmentLengthChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setminSegmentLength(value);
 }
 
 void DatapickerImageWidget::pointSeparationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointSeparation(value);
@@ -535,17 +521,17 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(name);
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbGraphType->findData((int)axisPoints.type);
 	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -561,7 +547,7 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 }
 
 void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
@@ -575,7 +561,7 @@ void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::Ed
 }
 
 void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMinSegmentLength->setValue(value);
 }
 
@@ -588,7 +574,7 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 }
 
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbSymbolVisible->setChecked(on);
 }
 
@@ -605,7 +591,7 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found

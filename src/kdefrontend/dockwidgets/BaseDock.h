@@ -22,19 +22,6 @@ class ResizableTextEdit;
 class QComboBox;
 class QDoubleSpinBox;
 
-struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
-	}
-
-	inline ~Lock() {
-		variable = false;
-	}
-
-private:
-	bool& variable;
-};
-
 class BaseDock : public QWidget {
 	Q_OBJECT
 

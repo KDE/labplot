@@ -42,7 +42,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in BackgroundWidget
-	void enabledChanged(bool) const;
+	void enabledChanged(bool);
 	void positionChanged(int);
 	void typeChanged(int);
 	void colorStyleChanged(int);

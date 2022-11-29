@@ -115,7 +115,7 @@ void BackgroundWidget::setEnabled(bool enabled) {
 }
 
 void BackgroundWidget::retranslateUi() {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.cbPosition->clear();
 	ui.cbPosition->addItem(i18n("None"));
@@ -151,7 +151,9 @@ void BackgroundWidget::retranslateUi() {
 //*************************************************************
 //******** SLOTs for changes triggered in BackgroundWidget ****
 //*************************************************************
-void BackgroundWidget::enabledChanged(bool state) const {
+void BackgroundWidget::enabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.cbType->setEnabled(state);
 	ui.cbColorStyle->setEnabled(state);
 	ui.cbBrushStyle->setEnabled(state);
@@ -162,9 +164,6 @@ void BackgroundWidget::enabledChanged(bool state) const {
 	ui.bOpen->setEnabled(state);
 	ui.sbOpacity->setEnabled(state);
 
-	if (m_initializing)
-		return;
-
 	for (auto* background : m_backgrounds)
 		background->setEnabled(state);
 }
@@ -173,12 +172,11 @@ void BackgroundWidget::positionChanged(int index) {
 	if (!m_background || !m_background->positionAvailable())
 		return;
 
+	CONDITIONAL_LOCK_RETURN;
+
 	const auto position{Background::Position(index)};
 	bool b = (position != Background::Position::No);
 	setEnabled(b); // call this to enable/disable the properties widget depending on the position value
-
-	if (m_initializing)
-		return;
 
 	for (auto* background : m_backgrounds)
 		background->setPosition(position);
@@ -187,6 +185,8 @@ void BackgroundWidget::positionChanged(int index) {
 void BackgroundWidget::typeChanged(int index) {
 	if (index == -1)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = (Background::Type)index;
 
@@ -248,9 +248,6 @@ void BackgroundWidget::typeChanged(int index) {
 		ui.bOpen->hide();
 	}
 
-	if (m_initializing)
-		return;
-
 	for (auto* background : m_backgrounds)
 		background->setType(type);
 }
@@ -258,6 +255,8 @@ void BackgroundWidget::typeChanged(int index) {
 void BackgroundWidget::colorStyleChanged(int index) {
 	if (index == -1)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto style = (Background::ColorStyle)index;
 
@@ -271,9 +270,6 @@ void BackgroundWidget::colorStyleChanged(int index) {
 		ui.kcbSecondColor->show();
 	}
 
-	if (m_initializing)
-		return;
-
 	int size = m_backgrounds.size();
 	if (size > 1) {
 		m_background->beginMacro(i18n("%1 elements: background color style changed", size));
@@ -285,8 +281,7 @@ void BackgroundWidget::colorStyleChanged(int index) {
 }
 
 void BackgroundWidget::imageStyleChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto style = (Background::ImageStyle)index;
 	for (auto* background : m_backgrounds)
@@ -294,8 +289,7 @@ void BackgroundWidget::imageStyleChanged(int index) {
 }
 
 void BackgroundWidget::brushStyleChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto style = (Qt::BrushStyle)index;
 	for (auto* background : m_backgrounds)
@@ -303,24 +297,21 @@ void BackgroundWidget::brushStyleChanged(int index) {
 }
 
 void BackgroundWidget::firstColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setFirstColor(c);
 }
 
 void BackgroundWidget::secondColorChanged(const QColor& c) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* background : m_backgrounds)
 		background->setSecondColor(c);
 }
 
 void BackgroundWidget::opacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	float opacity = (float)value / 100;
 	for (auto* background : m_backgrounds)
@@ -339,8 +330,7 @@ void BackgroundWidget::selectFile() {
 }
 
 void BackgroundWidget::fileNameChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const QString& fileName = ui.leFileName->text();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
@@ -354,52 +344,52 @@ void BackgroundWidget::fileNameChanged() {
 //********* SLOTs for changes triggered in Background *********
 //*************************************************************
 void BackgroundWidget::backgroundEnabledChanged(bool status) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkEnabled->setChecked(status);
 }
 
 void BackgroundWidget::backgroundPositionChanged(Background::Position position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbPosition->setCurrentIndex((int)position);
 }
 
 void BackgroundWidget::backgroundTypeChanged(Background::Type type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex(static_cast<int>(type));
 }
 
 void BackgroundWidget::backgroundColorStyleChanged(Background::ColorStyle style) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbColorStyle->setCurrentIndex(static_cast<int>(style));
 }
 
 void BackgroundWidget::backgroundImageStyleChanged(Background::ImageStyle style) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbImageStyle->setCurrentIndex(static_cast<int>(style));
 }
 
 void BackgroundWidget::backgroundBrushStyleChanged(Qt::BrushStyle style) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbBrushStyle->setCurrentIndex(style);
 }
 
 void BackgroundWidget::backgroundFirstColorChanged(const QColor& color) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbFirstColor->setColor(color);
 }
 
 void BackgroundWidget::backgroundSecondColorChanged(const QColor& color) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbSecondColor->setColor(color);
 }
 
 void BackgroundWidget::backgroundFileNameChanged(const QString& name) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(name);
 }
 
 void BackgroundWidget::backgroundOpacityChanged(float opacity) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(qRound(opacity * 100.0));
 }
 
@@ -407,7 +397,7 @@ void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 //******************** SETTINGS ****************************
 //**********************************************************
 void BackgroundWidget::load() {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)m_background->type());
 	ui.cbColorStyle->setCurrentIndex((int)m_background->colorStyle());
 	ui.cbImageStyle->setCurrentIndex((int)m_background->imageStyle());
@@ -439,7 +429,7 @@ void BackgroundWidget::load() {
 }
 
 void BackgroundWidget::loadConfig(const KConfigGroup& group) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), (int)m_background->type()));
 	ui.cbColorStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ColorStyle"), (int)m_background->colorStyle()));
 	ui.cbImageStyle->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("ImageStyle"), (int)m_background->imageStyle()));

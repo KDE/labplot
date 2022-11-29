@@ -60,31 +60,31 @@ private Q_SLOTS:
 	//"General"-tab
 	void addDataColumn();
 	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&) const;
-	void orderingChanged(int) const;
-	void orientationChanged(int) const;
-	void variableWidthChanged(bool) const;
-	void notchesEnabledChanged(bool) const;
-	void visibilityChanged(bool) const;
+	void dataColumnChanged(const QModelIndex&);
+	void orderingChanged(int);
+	void orientationChanged(int);
+	void variableWidthChanged(bool);
+	void notchesEnabledChanged(bool);
+	void visibilityChanged(bool);
 
 	//"Box"-tab
-	void widthFactorChanged(int) const;
+	void widthFactorChanged(int);
 
 	// symbols
 	void symbolCategoryChanged();
-	void jitteringEnabledChanged(bool) const;
+	void jitteringEnabledChanged(bool);
 
 	// whiskers
-	void whiskersTypeChanged(int) const;
-	void whiskersRangeParameterChanged(const QString&) const;
+	void whiskersTypeChanged(int);
+	void whiskersRangeParameterChanged(const QString&);
 	void whiskersCapSizeChanged(double) const;
-	void whiskersCapStyleChanged(int) const;
+	void whiskersCapStyleChanged(int);
 	void whiskersCapColorChanged(const QColor&);
 	void whiskersCapWidthChanged(double) const;
-	void whiskersCapOpacityChanged(int) const;
+	void whiskersCapOpacityChanged(int);
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
+	void rugEnabledChanged(bool);
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;
 	void rugOffsetChanged(double) const;

@@ -83,8 +83,7 @@ QString DatabaseManagerWidget::connection() const {
 	shows the settings of the currently selected connection
  */
 void DatabaseManagerWidget::connectionChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (index == -1) {
 		m_current_connection = nullptr;
@@ -200,8 +199,7 @@ void DatabaseManagerWidget::driverChanged() {
 		ui.teCustomConnection->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->driver = driver;
@@ -226,8 +224,7 @@ void DatabaseManagerWidget::selectFile() {
 }
 
 void DatabaseManagerWidget::hostChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->hostName = ui.leHost->text();
@@ -239,8 +236,7 @@ void DatabaseManagerWidget::hostChanged() {
 }
 
 void DatabaseManagerWidget::portChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->port = ui.sbPort->value();
@@ -270,8 +266,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	// don't allow to try to connect if no database name was provided
 	ui.bTestConnection->setEnabled(!dbName.isEmpty());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->dbName = dbName;
@@ -302,8 +297,7 @@ void DatabaseManagerWidget::customConnectionChanged() {
 }
 
 void DatabaseManagerWidget::userNameChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->userName = ui.leUserName->text();
@@ -311,8 +305,7 @@ void DatabaseManagerWidget::userNameChanged() {
 }
 
 void DatabaseManagerWidget::passwordChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_current_connection)
 		m_current_connection->password = ui.lePassword->text();

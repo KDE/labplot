@@ -271,16 +271,14 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 		uiGeneralTab.sbSamplingInterval->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
@@ -290,8 +288,7 @@ void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 
 void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	DEBUG("XYCorrelationCurveDock::xDataColumnChanged()");
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -309,8 +306,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -322,8 +318,7 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -406,8 +401,7 @@ void XYCorrelationCurveDock::recalculateClicked() {
 
 void XYCorrelationCurveDock::enableRecalculate() const {
 	DEBUG("XYCorrelationCurveDock::enableRecalculate()");
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	bool hasSourceData = false;
 	// no correlation possible without y-data and y2-data
@@ -466,18 +460,18 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 //*************************************************************
 // General-Tab
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
@@ -498,18 +492,18 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
@@ -520,6 +514,6 @@ void XYCorrelationCurveDock::dataChanged() {
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

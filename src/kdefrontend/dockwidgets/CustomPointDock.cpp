@@ -81,7 +81,7 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 }
 
 void CustomPointDock::setPoints(QList<CustomPoint*> points) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_points = points;
 	m_point = m_points.first();
 	setAspects(points);
@@ -162,8 +162,7 @@ void CustomPointDock::updatePlotRanges() {
 	called when label's current horizontal position relative to its parent (left, center, right ) is changed.
 */
 void CustomPointDock::positionXChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto horPos = WorksheetElement::HorizontalPosition(index);
 	for (auto* point : m_points) {
@@ -177,8 +176,7 @@ void CustomPointDock::positionXChanged(int index) {
 	called when label's current horizontal position relative to its parent (top, center, bottom) is changed.
 */
 void CustomPointDock::positionYChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto verPos = WorksheetElement::VerticalPosition(index);
 	for (auto* point : m_points) {
@@ -189,8 +187,7 @@ void CustomPointDock::positionYChanged(int index) {
 }
 
 void CustomPointDock::customPositionXChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* point : m_points) {
@@ -201,8 +198,7 @@ void CustomPointDock::customPositionXChanged(double value) {
 }
 
 void CustomPointDock::customPositionYChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* point : m_points) {
@@ -214,8 +210,7 @@ void CustomPointDock::customPositionYChanged(double value) {
 
 // positioning using logical plot coordinates
 void CustomPointDock::positionXLogicalChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_point->positionLogical();
 	pos.setX(value);
@@ -224,8 +219,7 @@ void CustomPointDock::positionXLogicalChanged(double value) {
 }
 
 void CustomPointDock::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_point->positionLogical();
@@ -235,8 +229,7 @@ void CustomPointDock::positionXLogicalDateTimeChanged(const QDateTime& dateTime)
 }
 
 void CustomPointDock::positionYLogicalChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPointF pos = m_point->positionLogical();
 	pos.setY(value);
@@ -245,8 +238,7 @@ void CustomPointDock::positionYLogicalChanged(double value) {
 }
 
 void CustomPointDock::positionYLogicalDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos = m_point->positionLogical();
@@ -256,8 +248,7 @@ void CustomPointDock::positionYLogicalDateTimeChanged(const QDateTime& dateTime)
 }
 
 void CustomPointDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_point->beginMacro(i18n("%1 CustomPoints: visibility changed", m_points.count()));
 	for (auto* point : m_points)
@@ -271,6 +262,8 @@ void CustomPointDock::visibilityChanged(bool state) {
  * \param checked
  */
 void CustomPointDock::bindingChanged(bool checked) {
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.chbBindLogicalPos->setChecked(checked);
 
 	// widgets for positioning using absolute plot distances
@@ -306,9 +299,6 @@ void CustomPointDock::bindingChanged(bool checked) {
 		}
 	}
 
-	if (m_initializing)
-		return;
-
 	for (auto* point : m_points)
 		point->setCoordinateBindingEnabled(checked);
 }
@@ -318,7 +308,7 @@ void CustomPointDock::bindingChanged(bool checked) {
 //*********************************************************
 //"General"-tab
 void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper& position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
 	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
@@ -326,12 +316,12 @@ void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapp
 }
 
 void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	bindingChanged(enabled);
 }
 
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x(), Qt::UTC));
@@ -340,7 +330,7 @@ void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 }
 
 void CustomPointDock::pointVisibilityChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 

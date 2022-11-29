@@ -20,6 +20,8 @@
 #include <QKeyEvent>
 #include <QMenu>
 
+struct Lock;
+
 CursorDock::CursorDock(QWidget* parent)
 	: QWidget(parent)
 	, ui(new Ui::CursorDock) {
@@ -94,16 +96,14 @@ void CursorDock::expandAll() {
 }
 
 void CursorDock::cursor0EnableChanged(bool enable) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setCursor0Enable(enable);
 }
 
 void CursorDock::cursor1EnableChanged(bool enable) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setCursor1Enable(enable);
@@ -113,6 +113,7 @@ void CursorDock::cursor1EnableChanged(bool enable) {
 // back from plot
 // #############################################################
 void CursorDock::plotCursor0EnableChanged(bool enable) {
+	// No condition, because other data than only enable will be changed
 	m_initializing = true;
 
 	ui->cbCursor0en->setChecked(enable);
@@ -126,6 +127,7 @@ void CursorDock::plotCursor0EnableChanged(bool enable) {
 }
 
 void CursorDock::plotCursor1EnableChanged(bool enable) {
+	// No condition, because other data than only enable will be changed
 	m_initializing = true;
 
 	ui->cbCursor1en->setChecked(enable);

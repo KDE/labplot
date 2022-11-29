@@ -223,7 +223,7 @@ AxisDock::~AxisDock() {
 }
 
 void AxisDock::init() {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	// TODO move this stuff to retranslateUI()
 	ui.cbPosition->addItem(i18n("Top")); // Left
@@ -411,7 +411,7 @@ void AxisDock::setModel() {
 */
 void AxisDock::setAxes(QList<Axis*> list) {
 	QDEBUG(Q_FUNC_INFO << ", Axis LIST =" << list)
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_axesList = list;
 	m_axis = list.first();
 	setAspects(list);
@@ -552,7 +552,7 @@ void AxisDock::updateLocale() {
 	ui.sbLabelsOffset->setLocale(numberLocale);
 
 	// update the QLineEdits, avoid the change events
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPosition->setLocale(numberLocale);
 	ui.sbStart->setLocale(numberLocale);
 	ui.sbEnd->setLocale(numberLocale);
@@ -605,8 +605,7 @@ void AxisDock::updateAutoScale() {
 //*************************************************************
 //"General"-tab
 void AxisDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setVisible(state);
@@ -616,6 +615,8 @@ void AxisDock::visibilityChanged(bool state) {
 	called if the orientation (horizontal or vertical) of the current axis is changed.
 */
 void AxisDock::orientationChanged(int item) {
+	CONDITIONAL_LOCK_RETURN;
+
 	auto orientation{Axis::Orientation(item)};
 	if (orientation == Axis::Orientation::Horizontal) {
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
@@ -630,9 +631,6 @@ void AxisDock::orientationChanged(int item) {
 		ui.cbLabelsPosition->setItemText(1, i18n("Right"));
 		ui.cbLabelsPosition->setItemText(2, i18n("Left"));
 	}
-
-	if (m_initializing)
-		return;
 
 	// depending on the current orientation we need to update axis position and labels position
 
@@ -667,8 +665,7 @@ void AxisDock::positionChanged(int index) {
 	if (index == -1)
 		return; // we occasionally get -1 here, nothing to do in this case
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	// map from the current index in the combo box to the enum value in Axis::Position,
 	// depends on the current orientation
@@ -714,8 +711,7 @@ void AxisDock::positionChanged(int index) {
 	called when the custom position of the axis in the corresponding LineEdit is changed.
 */
 void AxisDock::positionChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	double offset = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* axis : m_axesList)
@@ -723,16 +719,14 @@ void AxisDock::positionChanged(double value) {
 }
 
 void AxisDock::logicalPositionChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setLogicalPosition(value);
 }
 
 void AxisDock::scaleChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto scale = static_cast<RangeT::Scale>(index);
 	for (auto* axis : m_axesList)
@@ -740,15 +734,14 @@ void AxisDock::scaleChanged(int index) {
 }
 
 void AxisDock::rangeTypeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
 	auto rangeType = static_cast<Axis::RangeType>(index);
 	bool autoScale = (rangeType != Axis::RangeType::Custom);
 	ui.sbStart->setEnabled(!autoScale);
 	ui.sbEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
 	ui.dateTimeEditEnd->setEnabled(!autoScale);
-
-	if (m_initializing)
-		return;
 
 	for (auto* axis : m_axesList)
 		axis->setRangeType(rangeType);
@@ -757,22 +750,21 @@ void AxisDock::rangeTypeChanged(int index) {
 }
 
 void AxisDock::startChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	for (auto* axis : m_axesList)
 		axis->setStart(value);
 }
 
 void AxisDock::endChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
 }
 
 void AxisDock::startDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
@@ -780,8 +772,7 @@ void AxisDock::startDateTimeChanged(const QDateTime& dateTime) {
 }
 
 void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* axis : m_axesList)
@@ -790,8 +781,7 @@ void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
 
 void AxisDock::zeroOffsetChanged(double offset) {
 	DEBUG(Q_FUNC_INFO)
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
@@ -811,8 +801,7 @@ void AxisDock::setRightOffset() {
 }
 
 void AxisDock::scalingFactorChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setScalingFactor(value);
@@ -828,13 +817,15 @@ void AxisDock::setUnityRange() {
 
 void AxisDock::showScaleOffsetChanged(bool state) {
 	DEBUG(Q_FUNC_INFO)
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* axis : m_axesList)
 		axis->setShowScaleOffset(state);
 }
 
 // "Line"-tab
 void AxisDock::arrowTypeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
 	auto type = (Axis::ArrowType)index;
 	if (type == Axis::ArrowType::NoArrow) {
 		ui.cbArrowPosition->setEnabled(false);
@@ -844,16 +835,12 @@ void AxisDock::arrowTypeChanged(int index) {
 		ui.sbArrowSize->setEnabled(true);
 	}
 
-	if (m_initializing)
-		return;
-
 	for (auto* axis : m_axesList)
 		axis->setArrowType(type);
 }
 
 void AxisDock::arrowPositionChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto position = (Axis::ArrowPosition)index;
 	for (auto* axis : m_axesList)
@@ -861,8 +848,7 @@ void AxisDock::arrowPositionChanged(int index) {
 }
 
 void AxisDock::arrowSizeChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	double v = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* axis : m_axesList)
@@ -871,6 +857,8 @@ void AxisDock::arrowSizeChanged(int value) {
 
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
+
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
 	ui.lMajorTicksType->setEnabled(b);
@@ -886,9 +874,6 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	majorTicksLineWidget->setEnabled(b);
-
-	if (m_initializing)
-		return;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksDirection(direction);
@@ -969,16 +954,14 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		updateMajorTicksStartType(false);
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksType(type);
 }
 
 void AxisDock::majorTicksAutoNumberChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksAutoNumber(value);
@@ -986,27 +969,30 @@ void AxisDock::majorTicksAutoNumberChanged(int value) {
 
 void AxisDock::majorTicksNumberChanged(int value) {
 	DEBUG(Q_FUNC_INFO << ", number = " << value)
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksNumber(value);
 }
 
 void AxisDock::majorTicksSpacingChanged() {
-	if (m_initializing)
-		return;
-
 	bool numeric = m_axis->isNumeric();
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
+	if (numeric) {
+		CONDITIONAL_RETURN_NO_LOCK;
 
-	for (auto* axis : m_axesList)
-		axis->setMajorTicksSpacing(spacing);
+		for (auto* axis : m_axesList)
+			axis->setMajorTicksSpacing(spacing);
+	} else {
+		CONDITIONAL_LOCK_RETURN;
+
+		for (auto* axis : m_axesList)
+			axis->setMajorTicksSpacing(spacing);
+	}
 }
 
 void AxisDock::majorTicksStartTypeChanged(int state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	updateMajorTicksStartType(true);
 
@@ -1016,18 +1002,18 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 }
 
 void AxisDock::majorTicksStartOffsetChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
-	if (m_initializing)
-		return;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(value);
 }
 
 void AxisDock::majorTicksStartValueChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
-	if (m_initializing)
-		return;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartValue(value);
@@ -1050,8 +1036,7 @@ void AxisDock::setTickOffsetData(bool nice) {
 }
 
 void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
@@ -1065,8 +1050,7 @@ void AxisDock::majorTicksColumnChanged(const QModelIndex& index) {
 }
 
 void AxisDock::majorTicksLengthChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksLength(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
@@ -1089,8 +1073,7 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	ui.sbMinorTicksLength->setEnabled(b);
 	minorTicksLineWidget->setEnabled(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksDirection(direction);
@@ -1146,43 +1129,43 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		cbMinorTicksColumn->show();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksType(type);
 }
 
 void AxisDock::minorTicksAutoNumberChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksAutoNumber(value);
 }
 
 void AxisDock::minorTicksNumberChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksNumber(value);
 }
 
 void AxisDock::minorTicksSpacingChanged() {
-	if (m_initializing)
-		return;
-
 	bool numeric = m_axis->isNumeric();
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
+	if (numeric) {
+		CONDITIONAL_RETURN_NO_LOCK;
 
-	for (auto* axis : m_axesList)
-		axis->setMinorTicksSpacing(spacing);
+		for (auto* axis : m_axesList)
+			axis->setMinorTicksSpacing(spacing);
+	} else {
+		CONDITIONAL_LOCK_RETURN;
+		for (auto* axis : m_axesList)
+			axis->setMinorTicksSpacing(spacing);
+	}
 }
 
 void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1193,8 +1176,7 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 }
 
 void AxisDock::minorTicksLengthChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksLength(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
@@ -1202,42 +1184,37 @@ void AxisDock::minorTicksLengthChanged(double value) {
 
 //"Tick labels"-tab
 void AxisDock::labelsFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsFormat(Axis::indexToLabelsFormat(index));
 }
 
 void AxisDock::labelsFormatAutoChanged(bool automatic) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsFormatAuto(automatic);
 }
 
 void AxisDock::labelsPrecisionChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsPrecision(value);
 }
 
 void AxisDock::labelsAutoPrecisionChanged(bool state) {
-	ui.sbLabelsPrecision->setEnabled(!state);
+	CONDITIONAL_LOCK_RETURN;
 
-	if (m_initializing)
-		return;
+	ui.sbLabelsPrecision->setEnabled(!state);
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsAutoPrecision(state);
 }
 
 void AxisDock::labelsDateTimeFormatChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsDateTimeFormat(ui.cbLabelsDateTimeFormat->currentText());
@@ -1262,24 +1239,21 @@ void AxisDock::labelsPositionChanged(int index) {
 	ui.lLabelsOpacity->setEnabled(b);
 	ui.sbLabelsOpacity->setEnabled(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsPosition(position);
 }
 
 void AxisDock::labelsOffsetChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsOffset(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
 void AxisDock::labelsRotationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsRotationAngle(value);
@@ -1308,8 +1282,7 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsTextType(type);
@@ -1364,16 +1337,14 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		}
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsTextColumn(column);
 }
 
 void AxisDock::labelsPrefixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const QString& prefix = ui.leLabelsPrefix->text();
 	for (auto* axis : m_axesList)
@@ -1381,8 +1352,7 @@ void AxisDock::labelsPrefixChanged() {
 }
 
 void AxisDock::labelsSuffixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const QString& suffix = ui.leLabelsSuffix->text();
 	for (auto* axis : m_axesList)
@@ -1390,8 +1360,7 @@ void AxisDock::labelsSuffixChanged() {
 }
 
 void AxisDock::labelsFontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QFont labelsFont = font;
 	labelsFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
@@ -1400,8 +1369,7 @@ void AxisDock::labelsFontChanged(const QFont& font) {
 }
 
 void AxisDock::labelsFontColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsColor(color);
@@ -1414,24 +1382,21 @@ void AxisDock::labelsBackgroundTypeChanged(int index) {
 	ui.lLabelsBackgroundColor->setVisible(!transparent);
 	ui.kcbLabelsBackgroundColor->setVisible(!transparent);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsBackgroundType(type);
 }
 
 void AxisDock::labelsBackgroundColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsBackgroundColor(color);
 }
 
 void AxisDock::labelsOpacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity{value / 100.};
 	for (auto* axis : m_axesList)
@@ -1442,12 +1407,12 @@ void AxisDock::labelsOpacityChanged(int value) {
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 }
 
 void AxisDock::axisPositionChanged(Axis::Position position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 
 	// map from the enum Qt::Orientation to the index in the combo box
 	int index{static_cast<int>(position)};
@@ -1469,30 +1434,27 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 }
 
 void AxisDock::axisPositionChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void AxisDock::axisLogicalPositionChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionLogical->setValue(value);
 }
 
 void AxisDock::axisScaleChanged(RangeT::Scale scale) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
 }
 
 void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
 }
 
 void AxisDock::axisStartChanged(double value) {
-	//	if (m_initializing)
-	//		return;
-	// CONDITONAL_LOCK_RETURN;
-	const Lock lock(m_initializing); // TODO: check!
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.sbStart->setValue(value);
 	ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
@@ -1507,10 +1469,7 @@ void AxisDock::axisStartChanged(double value) {
 }
 
 void AxisDock::axisEndChanged(double value) {
-	//	if (m_initializing)
-	//		return;
-	// CONDITONAL_LOCK_RETURN;
-	const Lock lock(m_initializing); // TODO: check!
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.sbEnd->setValue(value);
 	ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
@@ -1526,185 +1485,185 @@ void AxisDock::axisEndChanged(double value) {
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
 	DEBUG(Q_FUNC_INFO)
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbZeroOffset->setValue(value);
 }
 void AxisDock::axisScalingFactorChanged(qreal value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbScalingFactor->setValue(value);
 }
 void AxisDock::axisShowScaleOffsetChanged(bool b) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkShowScaleOffset->setChecked(b);
 }
 
 // line
 void AxisDock::axisArrowTypeChanged(Axis::ArrowType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbArrowType->setCurrentIndex(static_cast<int>(type));
 }
 
 void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbArrowPosition->setCurrentIndex(static_cast<int>(position));
 }
 
 void AxisDock::axisArrowSizeChanged(qreal size) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbArrowSize->setValue((int)Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 
 // major ticks
 void AxisDock::axisMajorTicksDirectionChanged(Axis::TicksDirection direction) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksDirection->setCurrentIndex(direction);
 }
 void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksType->setCurrentIndex(static_cast<int>(type));
 }
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksAutoNumber->setChecked(automatic);
 	ui.sbMajorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTicksNumber->setValue(number);
 }
 void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	if (m_axis->isNumeric())
 		ui.sbMajorTicksSpacingNumeric->setValue(increment);
 	else
 		dtsbMajorTicksIncrement->setValue(increment);
 }
 void AxisDock::axisMajorTicksStartTypeChanged(Axis::TicksStartType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksStartType->setCurrentIndex(static_cast<int>(type));
 }
 void AxisDock::axisMajorTicksStartOffsetChanged(qreal value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartOffset->setValue(value);
 }
 void AxisDock::axisMajorTicksStartValueChanged(qreal value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTickStartValue->setValue(value);
 }
 void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksLengthChanged(qreal length) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMajorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
 }
 
 // minor ticks
 void AxisDock::axisMinorTicksDirectionChanged(Axis::TicksDirection direction) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMinorTicksDirection->setCurrentIndex(direction);
 }
 void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMinorTicksType->setCurrentIndex(static_cast<int>(type));
 }
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbMinorTicksAutoNumber->setChecked(automatic);
 	ui.sbMinorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMinorTicksNumber->setValue(number);
 }
 void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	if (m_axis->isNumeric())
 		ui.sbMinorTicksSpacingNumeric->setValue(increment);
 	else
 		dtsbMinorTicksIncrement->setValue(increment);
 }
 void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksLengthChanged(qreal length) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMinorTicksLength->setValue(Worksheet::convertFromSceneUnits(length, Worksheet::Unit::Point));
 }
 
 // labels
 void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsFormat->setCurrentIndex(Axis::labelsFormatToIndex(format));
 }
 void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkLabelsFormatAuto->setChecked(automatic);
 	ui.cbLabelsFormat->setEnabled(!automatic);
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkLabelsAutoPrecision->setChecked(on);
 }
 void AxisDock::axisLabelsPrecisionChanged(int precision) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLabelsPrecision->setValue(precision);
 }
 void AxisDock::axisLabelsDateTimeFormatChanged(const QString& format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsDateTimeFormat->setCurrentText(format);
 }
 void AxisDock::axisLabelsPositionChanged(Axis::LabelsPosition position) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsPosition->setCurrentIndex(static_cast<int>(position));
 }
 void AxisDock::axisLabelsOffsetChanged(double offset) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLabelsOffset->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 }
 void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLabelsRotation->setValue(rotation);
 }
 void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsTextType->setCurrentIndex(static_cast<int>(type));
 }
 void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbLabelsTextColumn->setColumn(column, m_axis->labelsTextColumnPath());
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	// we need to set the font size in points for KFontRequester
 	QFont newFont(font);
 	newFont.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrLabelsFont->setFont(newFont);
 }
 void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbLabelsFontColor->setColor(color);
 }
 void AxisDock::axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLabelsBackgroundType->setCurrentIndex(static_cast<int>(type));
 }
 void AxisDock::axisLabelsBackgroundColorChanged(const QColor& color) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbLabelsBackgroundColor->setColor(color);
 }
 void AxisDock::axisLabelsPrefixChanged(const QString& prefix) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leLabelsPrefix->setText(prefix);
 }
 void AxisDock::axisLabelsSuffixChanged(const QString& suffix) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leLabelsSuffix->setText(suffix);
 }
 void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLabelsOpacity->setValue(round(opacity * 100.0));
 }
 
@@ -1720,7 +1679,7 @@ void AxisDock::updateMajorTicksStartType(bool visible) {
 }
 
 void AxisDock::axisVisibilityChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
@@ -2001,7 +1960,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	majorGridLineWidget->loadConfig(group);
 	minorGridLineWidget->loadConfig(group);
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 }

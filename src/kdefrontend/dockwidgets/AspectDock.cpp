@@ -33,7 +33,7 @@ AspectDock::AspectDock(QWidget* parent)
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	BaseDock::setAspects(list);
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.teComment->setEnabled(true);

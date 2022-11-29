@@ -66,7 +66,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 }
 
 void MatrixDock::setMatrices(QList<Matrix*> list) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_matrixList = list;
 	m_matrix = list.first();
 	setAspects(list);
@@ -112,8 +112,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 //*************************************************************
 // mapping to the logical coordinates
 void MatrixDock::xStartChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
@@ -128,8 +127,7 @@ void MatrixDock::xStartChanged(const QString& text) {
 }
 
 void MatrixDock::xEndChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
@@ -144,8 +142,7 @@ void MatrixDock::xEndChanged(const QString& text) {
 }
 
 void MatrixDock::yStartChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
@@ -160,8 +157,7 @@ void MatrixDock::yStartChanged(const QString& text) {
 }
 
 void MatrixDock::yEndChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
@@ -177,8 +173,7 @@ void MatrixDock::yEndChanged(const QString& text) {
 
 // format
 void MatrixDock::numericFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbFormat->itemData(index).toChar().toLatin1();
 	for (auto* matrix : m_matrixList)
@@ -186,16 +181,14 @@ void MatrixDock::numericFormatChanged(int index) {
 }
 
 void MatrixDock::precisionChanged(int precision) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setPrecision(precision);
 }
 
 void MatrixDock::headerFormatChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto format = static_cast<Matrix::HeaderFormat>(value);
 	for (auto* matrix : m_matrixList)
@@ -203,16 +196,14 @@ void MatrixDock::headerFormatChanged(int value) {
 }
 
 void MatrixDock::rowCountChanged(int rows) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setRowCount(rows);
 }
 
 void MatrixDock::columnCountChanged(int columns) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setColumnCount(columns);
@@ -223,54 +214,54 @@ void MatrixDock::columnCountChanged(int columns) {
 //*************************************************************
 // matrix dimensions
 void MatrixDock::matrixRowCountChanged(int count) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRowCount->setValue(count);
 }
 
 void MatrixDock::matrixColumnCountChanged(int count) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
 }
 
 // mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leXStart->setText(numberLocale.toString(value));
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leXEnd->setText(numberLocale.toString(value));
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leYStart->setText(numberLocale.toString(value));
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leYEnd->setText(numberLocale.toString(value));
 }
 
 // format
 void MatrixDock::matrixNumericFormatChanged(char format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbFormat->findData((int)format);
 	ui.cbFormat->setCurrentIndex(index);
 }
 
 void MatrixDock::matrixPrecisionChanged(int precision) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPrecision->setValue(precision);
 }
 
 void MatrixDock::matrixHeaderFormatChanged(Matrix::HeaderFormat format) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbHeader->setCurrentIndex((int)format);
 }
 

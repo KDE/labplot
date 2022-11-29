@@ -454,16 +454,14 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		}
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFitCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 
@@ -480,8 +478,7 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -505,8 +502,7 @@ void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -527,8 +523,7 @@ void XYFitCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -541,8 +536,7 @@ void XYFitCurveDock::xErrorColumnChanged(const QModelIndex& index) {
 }
 
 void XYFitCurveDock::yErrorColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -609,7 +603,7 @@ void XYFitCurveDock::showFitOptions(bool checked) {
 		uiGeneralTab.cbModel->show();
 		uiGeneralTab.lEquation->show();
 
-		CONDITONAL_LOCK_RETURN; // do not change start parameter
+		CONDITIONAL_LOCK_RETURN; // do not change start parameter
 		modelTypeChanged(uiGeneralTab.cbModel->currentIndex());
 	} else {
 		uiGeneralTab.lFit->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
@@ -1050,8 +1044,7 @@ void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	vars << QStringLiteral("x"); // TODO: generalize when we support other XYEquationCurve::EquationType
 	uiGeneralTab.teEquation->setVariables(vars);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (updateParameterWidget)
 		fitParametersWidget->setFitData(&m_fitData);
@@ -1160,8 +1153,7 @@ void XYFitCurveDock::recalculateClicked() {
 
 void XYFitCurveDock::expressionChanged() {
 	DEBUG(Q_FUNC_INFO);
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// update parameter list for custom model
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -1457,37 +1449,37 @@ void XYFitCurveDock::showFitResult() {
 //*************************************************************
 // General-Tab
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 }
 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
 }
 
 void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(hist);
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
 }
 
@@ -1495,7 +1487,7 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
  * called when fit data of fit curve changes
  */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	m_fitData = fitData;
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom)
@@ -1509,6 +1501,6 @@ void XYFitCurveDock::dataChanged() {
 }
 
 void XYFitCurveDock::curveVisibilityChanged(bool on) {
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
 }

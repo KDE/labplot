@@ -82,12 +82,12 @@ private Q_SLOTS:
 	void binRangesMaxDateTimeChanged(const QDateTime&);
 
 	//"Error bars"-Tab
-	void errorTypeChanged(int) const;
-	void errorPlusColumnChanged(const QModelIndex&) const;
-	void errorMinusColumnChanged(const QModelIndex&) const;
+	void errorTypeChanged(int);
+	void errorPlusColumnChanged(const QModelIndex&);
+	void errorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
+	void rugEnabledChanged(bool);
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;
 	void rugOffsetChanged(double) const;

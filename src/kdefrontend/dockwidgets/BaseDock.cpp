@@ -166,7 +166,7 @@ void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_aspect != aspect)
 		return;
 
-	CONDITONAL_LOCK_RETURN;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != m_leName->text())
 		m_leName->setText(aspect->name());
 	else if (aspect->comment() != m_teComment->text())
