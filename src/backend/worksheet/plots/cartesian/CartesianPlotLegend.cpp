@@ -752,6 +752,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			for (auto* column : columns) {
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
+				painter->setOpacity(background->opacity());
 				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
@@ -766,6 +767,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
 				if (!translatePainter(painter, row, col, h))
