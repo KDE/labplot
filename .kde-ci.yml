@@ -6,7 +6,7 @@ Dependencies:
     'frameworks/kguiaddons': '@stable'
     'frameworks/ki18n': '@stable'
     'frameworks/kparts': '@stable'
-    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kdoctools': '@stable'
     'frameworks/karchive': '@stable'
     'frameworks/kconfig': '@stable'
@@ -17,7 +17,6 @@ Dependencies:
     'frameworks/knewstuff': '@stable'
     'libraries/kuserfeedback': '@stable'
     'education/cantor': '@stable'
-    'qt/qt/qtmqtt': '5.15.2'
 
 Environment:
   KDECI_BUILD: "TRUE"

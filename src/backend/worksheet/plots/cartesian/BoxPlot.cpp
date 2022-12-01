@@ -1920,7 +1920,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	QPen p;
 
 	Q_D(BoxPlot);
-	d->m_suppressRecalc = false;
+	d->m_suppressRecalc = true;
 
 	// box border
 	d->borderLine->loadThemeConfig(group, themeColor);

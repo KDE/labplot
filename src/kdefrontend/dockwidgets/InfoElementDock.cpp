@@ -164,7 +164,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->hide();
 	} else {
 		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->rangeDateTimeFormat(Dimension::X));
-		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical()));
+		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical(), Qt::UTC));
 		ui->lPosition->hide();
 		ui->sbPosition->hide();
 		ui->lPositionDateTime->show();
@@ -330,7 +330,7 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 void InfoElementDock::elementPositionChanged(double pos) {
 	const Lock lock(m_initializing);
 	ui->sbPosition->setValue(pos);
-	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos));
+	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos, Qt::UTC));
 }
 
 void InfoElementDock::elementCurveRemoved(const QString& name) {

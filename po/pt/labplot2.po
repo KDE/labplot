@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-27 00:42+0000\n"
-"PO-Revision-Date: 2022-11-15 18:19+0000\n"
+"POT-Creation-Date: 2022-12-01 00:42+0000\n"
+"PO-Revision-Date: 2022-11-28 18:11+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -130,10 +130,10 @@ msgstr ""
 #: src/backend/worksheet/InfoElement.cpp:1159
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2876
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1372
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
-#: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:905
+#: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:403
@@ -177,7 +177,7 @@ msgstr ""
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3005
-#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1430
+#: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:447
@@ -6511,16 +6511,14 @@ msgid "%1: drop line type changed"
 msgstr "%1: o tipo de linha foi modificado"
 
 #: src/backend/worksheet/Line.cpp:140
-#, fuzzy, kde-format
-#| msgid "%1: set line pen"
+#, kde-format
 msgid "%1: set line style"
-msgstr "%1: mudar o desenho da linha"
+msgstr "%1: mudar o estilo da linha"
 
 #: src/backend/worksheet/Line.cpp:147
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set line width"
-msgstr "%1: definir a largura do grupo"
+msgstr "%1: mudar a espessura da linha"
 
 #: src/backend/worksheet/Line.cpp:154
 #, kde-format
@@ -21313,16 +21311,14 @@ msgid "Couldn't open the file"
 msgstr "Não foi possível aceder ao ficheiro"
 
 #: src/tools/TeXRenderer.cpp:152
-#, fuzzy, kde-format
-#| msgid "File not found"
+#, kde-format
 msgid "%1 not found"
-msgstr "O ficheiro não foi encontrado"
+msgstr "O %1 não foi encontrado"
 
 #: src/tools/TeXRenderer.cpp:188
-#, fuzzy, kde-format
-#| msgid "Unable to read the file"
+#, kde-format
 msgid "Timeout: Unable to generate latex file"
-msgstr "Não foi possível ler o ficheiro"
+msgstr "Fim do tempo-limite: Não foi possível gerar o ficheiro em LaTeX"
 
 #: src/tools/TeXRenderer.cpp:191
 #, kde-format
@@ -21353,9 +21349,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "latex not found"
-#~ msgstr "O 'latex' não foi encontrado"
-
-#~ msgid "%1: set border style"
-#~ msgstr "%1: mudar o estilo do contorno"

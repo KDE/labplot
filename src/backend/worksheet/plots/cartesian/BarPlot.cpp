@@ -369,6 +369,7 @@ Line* BarPlotPrivate::addBorderLine(const KConfigGroup& group) {
 
 	q->connect(line, &Line::updateRequested, [=] {
 		recalcShapeAndBoundingRect();
+		Q_EMIT q->updateLegendRequested();
 	});
 
 	borderLines << line;
@@ -1452,10 +1453,8 @@ void BarPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(BarPlot);
-	d->m_suppressRecalc = false;
+	d->m_suppressRecalc = true;
 
 	// box filling
 	for (int i = 0; i < d->backgrounds.count(); ++i) {

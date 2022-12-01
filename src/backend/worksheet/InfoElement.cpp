@@ -431,7 +431,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		xValueStr = QString::number(d->positionLogical);
 	else if (columnMode == AbstractColumn::ColumnMode::Day || columnMode == AbstractColumn::ColumnMode::Month
 			 || columnMode == AbstractColumn::ColumnMode::DateTime) {
-		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical);
+		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical, Qt::UTC);
 		xValueStr = dateTime.toString(m_plot->rangeDateTimeFormat(Dimension::X));
 	}
 
