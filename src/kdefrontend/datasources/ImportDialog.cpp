@@ -116,7 +116,7 @@ void ImportDialog::setModel() {
 	vLayout->insertWidget(1, frameAddTo);
 
 	connect(tbNewDataContainer, &QToolButton::clicked, this, &ImportDialog::newDataContainerMenu);
-	connect(cbAddTo, &TreeViewComboBox::currentModelIndexChanged, this, &ImportDialog::checkOkButton);
+	connect(cbAddTo, &TreeViewComboBox::currentModelIndexChanged, this, &ImportDialog::currentModelIndexChanged);
 }
 
 void ImportDialog::setCurrentIndex(const QModelIndex& index) {
@@ -124,6 +124,11 @@ void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 	cbAddTo->setCurrentModelIndex(index);
 	QDEBUG("cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	checkOkButton();
+}
+
+void ImportDialog::currentModelIndexChanged(const QModelIndex& index) {
+	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	Q_EMIT dataContainerChanged(aspect);
 }
 
 void ImportDialog::newDataContainer(QAction* action) {
