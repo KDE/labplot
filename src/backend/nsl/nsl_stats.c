@@ -195,6 +195,12 @@ double nsl_stats_chisq_p(double t, double dof) {
 		p = 0;
 	return p;
 }
+double nsl_stats_chisq_low(double alpha, double n) {
+	return 0.5 * gsl_cdf_chisq_Pinv(alpha / 2., 2 * n);
+}
+double nsl_stats_chisq_high(double alpha, double n) {
+	return 0.5 * gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n + 2);
+}
 
 /* F distribution */
 double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof) {

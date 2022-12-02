@@ -94,7 +94,8 @@ public:
 		QVector<double> errorValues;
 		QVector<double> tdist_tValues;
 		QVector<double> tdist_pValues;
-		QVector<double> tdist_marginValues;
+		QVector<double> marginValues; // lower confidence
+		QVector<double> margin2Values; // upper confidence
 		QVector<double> correlationMatrix;
 		QString solverOutput;
 	};

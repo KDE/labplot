@@ -1442,13 +1442,16 @@ void XYFitCurveDock::showFitResult() {
 
 			// Conf. interval
 			if (!std::isnan(errorValue)) {
-				const double margin = fitResult.tdist_marginValues.at(i);
+				const double marginLow = fitResult.marginValues.at(i);
 				// TODO: if (fitResult.tdist_tValues.at(i) > 1.e6)
 				//	item = new QTableWidgetItem(i18n("too small"));
+				double marginHigh = marginLow;
+				if (fitResult.marginValues.size() >= i && fitResult.marginValues.at(i) != 0.)
+					marginHigh = fitResult.marginValues.at(i);
 
-				item = new QTableWidgetItem(numberLocale.toString(paramValue - margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue - marginLow));
 				uiGeneralTab.twParameters->setItem(i, 6, item);
-				item = new QTableWidgetItem(numberLocale.toString(paramValue + margin));
+				item = new QTableWidgetItem(numberLocale.toString(paramValue + marginHigh));
 				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}

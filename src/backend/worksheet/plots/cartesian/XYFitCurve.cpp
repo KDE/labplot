@@ -268,7 +268,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 			d->fitResult.errorValues.resize(np);
 			d->fitResult.tdist_tValues.resize(np);
 			d->fitResult.tdist_pValues.resize(np);
-			d->fitResult.tdist_marginValues.resize(np);
+			d->fitResult.marginValues.resize(np);
 
 			const double cerr = sqrt(d->fitResult.rms);
 			// CI = 100 * (1 - alpha)
@@ -280,7 +280,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 				d->fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(cov, i, i));
 				d->fitResult.tdist_tValues[i] = nsl_stats_tdist_t(d->fitResult.paramValues.at(i), d->fitResult.errorValues.at(i));
 				d->fitResult.tdist_pValues[i] = nsl_stats_tdist_p(d->fitResult.tdist_tValues.at(i), d->fitResult.dof);
-				d->fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, d->fitResult.dof, d->fitResult.errorValues.at(i));
+				d->fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, d->fitResult.dof, d->fitResult.errorValues.at(i));
 			}
 
 			// residuals
@@ -1876,7 +1876,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
-	fitResult.tdist_marginValues.resize(np);
+	fitResult.marginValues.resize(np);
 	fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
 	DEBUG("DISTRIBUTION: " << fitData.modelType)
@@ -1887,18 +1887,18 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
 	fitResult.paramValues[0] = 1.; // A - probability density
 	// TODO: parameter values (error, etc.)
+	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian: {
 		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
 		DEBUG("mu = " << fitResult.paramValues[2] << ", sigma = " << fitResult.paramValues[1])
 
-		const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 		fitResult.errorValues[2] = qSqrt(tmpXDataColumn->var() / n);
-		// nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
-		fitResult.tdist_marginValues[2] = margin;
-		// TODO:
+		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
+		fitResult.marginValues[2] = margin;
+		// TODO: CI
 		// margin = nsl_stats_tdist_margin(alpha, fitResult.dof, 0.02234446);
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
 		break;
@@ -1906,36 +1906,48 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_exponential:
 		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
 		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
+		// TODO: error + CI
 		break;
 	case nsl_sf_stats_laplace:
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
+		// TODO: error + CI
 		break;
 	case nsl_sf_stats_cauchy_lorentz: // see WP:en
 		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
+		// TODO: error + CI
 		break;
 	case nsl_sf_stats_lognormal: {
 		// calculate mu and sigma
-		double n = tmpXDataColumn->rowCount();
 		double mu = 0.;
-		for (int i = 0; i < n; i++)
+		for (size_t i = 0; i < n; i++)
 			mu += qLn(tmpXDataColumn->valueAt(i));
 		mu /= n;
 		double var = 0.;
-		for (int i = 0; i < n; i++)
+		for (size_t i = 0; i < n; i++)
 			var += gsl_pow_2(qLn(tmpXDataColumn->valueAt(i)) - mu);
 		var /= (n - 1);
 		fitResult.paramValues[1] = qSqrt(var); // sigma
 		fitResult.paramValues[2] = mu; // mu
+		// TODO: error + CI
 		break;
 	}
-	case nsl_sf_stats_poisson:
-		fitResult.paramValues[1] = tmpXDataColumn->mean(); // lambda
-		break;
+	case nsl_sf_stats_poisson: {
+		const double lambda = tmpXDataColumn->mean();
+		fitResult.paramValues[1] = lambda;
+		fitResult.errorValues[1] = qSqrt(lambda / n);
+
+		// double margin = 1.96 * fitResult.errorValues[1];	// normal approx.
+		// DEBUG("low / high = " << nsl_stats_chisq_low(alpha, n * lambda) << ", " << nsl_stats_chisq_high(alpha, n * lambda)) // exact formula
+		fitResult.marginValues[1] = lambda - nsl_stats_chisq_low(alpha, n * lambda) / n;
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = nsl_stats_chisq_high(alpha, n * lambda) / n - lambda;
+	} break;
 	case nsl_sf_stats_binomial:
 		fitResult.paramValues[1] = tmpXDataColumn->mean() / n; // k
 		fitResult.paramValues[2] = n; // n
+		// TODO: error + CI
 	}
 
 	fitResult.calculateResult(n, np);
@@ -2370,7 +2382,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
-	fitResult.tdist_marginValues.resize(np);
+	fitResult.marginValues.resize(np);
 	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
 	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
 	const double cerr = sqrt(fitResult.rms);
@@ -2387,7 +2399,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 		fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
-		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
+		fitResult.marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
 		for (unsigned int j = 0; j <= i; j++)
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
@@ -2643,8 +2655,12 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("tdist_marginValues"));
-	foreach (const double& value, d->fitResult.tdist_marginValues)
+	foreach (const double& value, d->fitResult.marginValues)
 		writer->writeTextElement(QStringLiteral("tdist_margin"), QString::number(value, 'g', 15));
+	writer->writeEndElement();
+	writer->writeStartElement(QStringLiteral("tdist_margin2Values"));
+	foreach (const double& value, d->fitResult.margin2Values)
+		writer->writeTextElement(QStringLiteral("tdist_margin2"), QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
 	writer->writeStartElement(QStringLiteral("correlationMatrix"));
@@ -2752,7 +2768,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == QLatin1String("tdist_p")) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("tdist_margin")) {
-			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
+			d->fitResult.marginValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == QLatin1String("tdist_margin2")) {
+			d->fitResult.margin2Values << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("correlation")) {
 			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == QLatin1String("fitResult")) {
@@ -2811,7 +2829,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.errorValues.resize(2);
 		d->fitResult.tdist_tValues.resize(2);
 		d->fitResult.tdist_pValues.resize(2);
-		d->fitResult.tdist_marginValues.resize(2);
+		d->fitResult.marginValues.resize(2);
+		d->fitResult.margin2Values.resize(2);
 	}
 
 	// older projects also save the param names for non-custom models: remove them
@@ -2835,8 +2854,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_tValues.resize(np);
 	if (d->fitResult.tdist_pValues.size() == 0)
 		d->fitResult.tdist_pValues.resize(np);
-	if (d->fitResult.tdist_marginValues.size() == 0)
-		d->fitResult.tdist_marginValues.resize(np);
+	if (d->fitResult.marginValues.size() == 0)
+		d->fitResult.marginValues.resize(np);
+	if (d->fitResult.margin2Values.size() == 0)
+		d->fitResult.margin2Values.resize(np);
 	if (d->fitResult.correlationMatrix.size() == 0)
 		d->fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
