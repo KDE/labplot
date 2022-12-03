@@ -96,6 +96,8 @@ public:
 	void setType(Type type);
 	Type type() const;
 
+	static int cSystemIndex(WorksheetElement* e);
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
@@ -128,6 +130,7 @@ public:
 	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
+	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
@@ -283,6 +286,7 @@ private:
 
 	friend CartesianPlotDock;
 	friend class CartesianPlotTest;
+	friend class MultiRangeTest;
 
 public Q_SLOTS:
 	void addHorizontalAxis();
@@ -378,6 +382,7 @@ Q_SIGNALS:
 	void mouseReleaseZoomSelectionModeSignal();
 	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
 	void mouseHoverOutsideDataRectSignal();
+	void wheelEventSignal(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
