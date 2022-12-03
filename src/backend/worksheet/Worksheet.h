@@ -113,6 +113,7 @@ public:
 
 public Q_SLOTS:
 	void setTheme(const QString&);
+	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
 	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);

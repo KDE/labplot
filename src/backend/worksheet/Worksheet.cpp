@@ -261,6 +261,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
+		connect(plot, &CartesianPlot::axisShiftSignal, this, &Worksheet::cartesianPlotAxisShift);
 		connect(plot, &CartesianPlot::wheelEventSignal, this, &Worksheet::cartesianPlotWheelEvent);
 		connect(plot, &CartesianPlot::mouseMoveCursorModeSignal, this, &Worksheet::cartesianPlotMouseMoveCursorMode);
 		connect(plot, &CartesianPlot::mouseMoveSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveSelectionMode);
@@ -890,6 +891,57 @@ void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 			plot->mouseHoverOutsideDataRect();
 	} else
 		senderPlot->mouseHoverOutsideDataRect();
+}
+
+void Worksheet::cartesianPlotAxisShift(int delta, Dimension dim, int index) {
+	const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto cursorMode = cartesianPlotActionMode();
+	bool leftOrDown = false;
+	if (delta < 0)
+		leftOrDown = true;
+
+	switch (cursorMode) {
+	case CartesianPlotActionMode::ApplyActionToAll: {
+		for (auto* plot : plots)
+			plot->shift(-1, dim, leftOrDown);
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToAllX: {
+		switch (dim) {
+		case Dimension::X: {
+			for (auto* plot : plots)
+				plot->shift(-1, dim, leftOrDown);
+			break;
+		}
+		case Dimension::Y: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->shift(index, dim, leftOrDown);
+			break;
+		}
+		}
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToAllY: {
+		switch (dim) {
+		case Dimension::X: {
+			for (auto* plot : plots)
+				plot->shift(index, dim, leftOrDown);
+			break;
+		}
+		case Dimension::Y: {
+			auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+			plot->shift(-1, dim, leftOrDown);
+			break;
+		}
+		}
+		break;
+	}
+	case CartesianPlotActionMode::ApplyActionToSelection: {
+		auto* plot = static_cast<CartesianPlot*>(QObject::sender());
+		plot->shift(index, dim, leftOrDown);
+		break;
+	}
+	}
 }
 
 void Worksheet::cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
