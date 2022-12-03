@@ -168,6 +168,8 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	void info(const QString&);
+
+	friend class MultiRangeTest;
 };
 
 #endif

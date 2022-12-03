@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 
 #include <QAction>
 #include <QComboBox>
@@ -908,11 +909,11 @@ void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
 	// checks directly the plot. In the basedock the element is used and not the plot, so do it here too
 	QVERIFY(sinCurve->coordinateSystemCount() == 3);
 
-	BaseDock dock(nullptr);
-	dock.setAspects(QList<XYCurve*>({sinCurve, tanCurve}));
+	XYCurveDock dock(nullptr);
+	dock.setupGeneral();
+	dock.setCurves(QList<XYCurve*>({sinCurve, tanCurve}));
 
-	QComboBox cb;
-	dock.updatePlotRangeList(&cb);
+	dock.updatePlotRanges();
 
 	// The coordinatesystem indices shall not change
 	QCOMPARE(sinCurveCSystemIndex, sinCurve->coordinateSystemIndex());
