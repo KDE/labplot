@@ -61,8 +61,8 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)
 		cb->addItem(QString::number(i + 1) + QStringLiteral(" : ") + element->coordinateSystemInfo(i));
-	m_suppressPlotRetransform = false;
 	cb->setCurrentIndex(cSystemIndex);
+	m_suppressPlotRetransform = false;
 	// disable when there is only on plot range
 	cb->setEnabled(cSystemCount == 1 ? false : true);
 }
