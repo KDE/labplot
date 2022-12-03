@@ -316,6 +316,7 @@ Q_SIGNALS:
 	void propertiesExplorerRequested();
 
 	friend RetransformTest;
+	friend class MultiRangeTest;
 };
 
 #endif

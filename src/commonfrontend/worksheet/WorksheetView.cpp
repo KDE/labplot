@@ -2681,7 +2681,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	auto op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	auto plotActionMode = m_worksheet->cartesianPlotActionMode();
 	if (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
-		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
+		int cSystemIndex = CartesianPlot::cSystemIndex(m_selectedElement);
 		const auto& plots = m_worksheet->children<CartesianPlot>();
 		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -2704,7 +2704,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 				   && (op == CartesianPlot::NavigationOperation::ScaleAutoY || op == CartesianPlot::NavigationOperation::ShiftUpY
 					   || op == CartesianPlot::NavigationOperation::ShiftDownY || op == CartesianPlot::NavigationOperation::ZoomInY
 					   || op == CartesianPlot::NavigationOperation::ZoomOutY))) {
-		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
+		int cSystemIndex = CartesianPlot::cSystemIndex(m_selectedElement);
 		if (m_selectedElement->type() == AspectType::CartesianPlot)
 			static_cast<CartesianPlot*>(m_selectedElement)->navigate(-1, op);
 		else {

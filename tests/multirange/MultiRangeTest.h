@@ -49,5 +49,9 @@ private Q_SLOTS:
 
 	void autoScaleYAfterZoomInX();
 	void autoScaleXAfterZoomInY();
+
+	void mouseWheelXAxisApplyToAllX();
+	void mouseWheelTanCurveApplyToAllX();
+	void mouseWheelXAxisApplyToSelected();
 };
 #endif
