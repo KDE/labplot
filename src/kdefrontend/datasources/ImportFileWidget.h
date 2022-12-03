@@ -4,7 +4,7 @@
 	Description          : import file data widget
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-	SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2018 Fabian Kristof <fkristofszabolcs@gmail.com>
 	SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -68,15 +68,13 @@ public:
 	const QStringList selectedROOTNames() const;
 	const QStringList selectedExcelRegionNames() const;
 
-	void showAsciiHeaderOptions(bool);
-	void showExcelFirstRowAsColumnOption(bool);
-	void showJsonModel(bool);
-	void enableExcelFirstRowAsColNames(bool enable);
-
 	QString host() const;
 	QString port() const;
 	QString serialPort() const;
 	int baudRate() const;
+
+public Q_SLOTS:
+	void dataContainerChanged(AbstractAspect*);
 
 private:
 	Ui::ImportFileWidget ui;
@@ -85,6 +83,9 @@ private:
 	void initOptionsWidget();
 	void initSlots();
 	QString fileInfoString(const QString&) const;
+	void showJsonModel(bool);
+	void enableExcelFirstRowAsColNames(bool enable);
+	void updateHeaderOptions();
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -99,6 +100,7 @@ private:
 
 	mutable std::unique_ptr<AbstractFileFilter> m_currentFilter;
 
+	AbstractAspect* m_targetContainer{nullptr};
 	QTableWidget* m_twPreview{nullptr};
 	KUrlComboBox* m_cbFileName{nullptr};
 	const QString& m_fileName;

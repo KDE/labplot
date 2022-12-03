@@ -257,7 +257,7 @@ void ImportFileWidget::loadSettings() {
 	ui.cbSourceType->setCurrentIndex(conf.readEntry("SourceType").toInt());
 
 	// general settings
-	AbstractFileFilter::FileType fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
+	auto fileType = static_cast<AbstractFileFilter::FileType>(conf.readEntry("Type", 0));
 	for (int i = 0; i < ui.cbFileType->count(); ++i) {
 		if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
 			if (ui.cbFileType->currentIndex() == i)
@@ -444,18 +444,37 @@ void ImportFileWidget::initSlots() {
 #endif
 }
 
-void ImportFileWidget::showAsciiHeaderOptions(bool b) {
-	if (m_asciiOptionsWidget)
-		m_asciiOptionsWidget->showAsciiHeaderOptions(b);
-}
-
-void ImportFileWidget::showExcelFirstRowAsColumnOption(bool show) {
-	ui.lExcelFirstRowAsColNames->setVisible(show);
-	ui.chbExcelFirstRowAsColName->setVisible(show);
+/*!
+ * \brief Called when the current target data containter was changed in ImportDilaog
+ */
+void ImportFileWidget::dataContainerChanged(AbstractAspect* aspect) {
+	m_targetContainer = aspect;
+	updateHeaderOptions();
 }
 
 void ImportFileWidget::enableExcelFirstRowAsColNames(bool enable) {
 	ui.chbExcelFirstRowAsColName->setEnabled(enable);
+}
+
+/*!
+ *  update header specific options that are available for some filter types (ASCII and Excel)
+ *  and for some target data containers (Spreadsheet) only
+ */
+void ImportFileWidget::updateHeaderOptions() {
+	auto fileType = currentFileType();
+	bool spreadsheet = true; // assume it's spreadsheet on default if no container is selected yet
+	if (m_targetContainer)
+		spreadsheet = m_targetContainer->type() == AspectType::Spreadsheet;
+
+	// handle ASCII
+	bool visible = (fileType == AbstractFileFilter::FileType::Ascii) && spreadsheet;
+	if (m_asciiOptionsWidget)
+		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+
+	// handle Excel
+	visible = (fileType == AbstractFileFilter::FileType::Excel) && spreadsheet;
+	ui.lExcelFirstRowAsColNames->setVisible(visible);
+	ui.chbExcelFirstRowAsColName->setVisible(visible);
 }
 
 void ImportFileWidget::showJsonModel(bool b) {
@@ -579,8 +598,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setSerialPort(ui.cbSerialPort->currentText());
 		break;
 	case LiveDataSource::SourceType::MQTT:
-		break;
-	default:
 		break;
 	}
 
@@ -906,7 +923,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	}
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		const AbstractFileFilter::FileType fileType = AbstractFileFilter::fileType(fileName);
+		const auto fileType = AbstractFileFilter::fileType(fileName);
 		for (int i = 0; i < ui.cbFileType->count(); ++i) {
 			if (static_cast<AbstractFileFilter::FileType>(ui.cbFileType->itemData(i).toInt()) == fileType) {
 				// automatically select a new file type
@@ -961,7 +978,7 @@ void ImportFileWidget::manageFilters() {
 	and populates the combobox with the available pre-defined filter settings for the selected type.
 */
 void ImportFileWidget::fileTypeChanged(int /*index*/) {
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget();
 
@@ -1040,17 +1057,11 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		break;
-	default:
-		DEBUG("unknown file type");
 	}
 
-	if (fileType == AbstractFileFilter::FileType::Excel) {
-		ui.lExcelFirstRowAsColNames->show();
-		ui.chbExcelFirstRowAsColName->show();
-	} else {
-		ui.lExcelFirstRowAsColNames->hide();
-		ui.chbExcelFirstRowAsColName->hide();
-	}
+	// update header specific options that are available for some filter types (ASCII and Excel)
+	// and for some target data containers (Spreadsheet) only
+	updateHeaderOptions();
 
 	int lastUsedFilterIndex = ui.cbFilter->currentIndex();
 	ui.cbFilter->clear();
@@ -1352,7 +1363,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 */
 void ImportFileWidget::filterChanged(int index) {
 	// ignore filter for these formats
-	AbstractFileFilter::FileType fileType = currentFileType();
+	auto fileType = currentFileType();
 	if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
 		ui.swOptions->setEnabled(true);
 		return;
@@ -1381,8 +1392,8 @@ void ImportFileWidget::refreshPreview() {
 	WAIT_CURSOR;
 
 	QString file = absolutePath(fileName());
-	AbstractFileFilter::FileType fileType = currentFileType();
-	LiveDataSource::SourceType sourceType = currentSourceType();
+	auto fileType = currentFileType();
+	auto sourceType = currentSourceType();
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)

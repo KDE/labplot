@@ -98,6 +98,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::showErrorMessage);
+	connect(this, &ImportDialog::dataContainerChanged, m_importFileWidget, &ImportFileWidget::dataContainerChanged);
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
@@ -366,12 +367,6 @@ void ImportFileDialog::checkOkButton() {
 		} else {
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
-
-			// when doing ASCII import to a matrix, hide the options for using the file header (first line)
-			// to name the columns since the column names are fixed in a matrix
-			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
-			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
-			m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
 		}
 	}
 
