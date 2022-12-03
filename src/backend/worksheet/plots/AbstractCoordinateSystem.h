@@ -25,6 +25,7 @@ public:
 		MarkGaps = 0x02,
 		Limit = 0x04, // set limits, when point crosses the limits
 		SuppressPageClippingY = 0x08,
+		SuppressPageClippingVisible = 0x10, // Do not clip mapping, but set visible flag to false if outside of the plot
 	};
 	Q_DECLARE_FLAGS(MappingFlags, MappingFlag)
 

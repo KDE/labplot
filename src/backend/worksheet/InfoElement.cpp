@@ -873,16 +873,20 @@ void InfoElementPrivate::retransform() {
 
 	// determine the position to connect the line to
 	QPointF pointPos;
+	bool visible = false;
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
-			bool visible;
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
-			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 			break;
 		}
 	}
+
+	insidePlot = visible;
+	if (!insidePlot)
+		return;
 
 	// use limit function like in the cursor! So the line will be drawn only till the border of the cartesian Plot
 	QPointF m_titlePos;
@@ -945,7 +949,7 @@ QRectF InfoElementPrivate::boundingRect() const {
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	if (!visible)
+	if (!visible || !insidePlot)
 		return;
 
 	if (q->markerpoints.isEmpty())

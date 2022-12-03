@@ -80,8 +80,8 @@ public:
 	Line* verticalLine() const;
 	Line* connectionLine() const;
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
+	virtual void setVisible(bool on) override;
+	virtual bool isVisible() const override;
 
 	typedef InfoElementPrivate Private;
 
