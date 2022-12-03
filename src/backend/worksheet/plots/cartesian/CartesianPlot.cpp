@@ -2011,6 +2011,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+	const auto* axis = dynamic_cast<const Axis*>(child);
 
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
@@ -2132,6 +2133,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+	}
+
+	if (axis) {
+		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	}
 
 	auto rangeChanged = false;
@@ -2945,6 +2950,9 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
  * "shift right" or "shift up" for \c false
  */
 void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
+	setUndoAware(false);
+	enableAutoScale(dim, index, false);
+	setUndoAware(true);
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -3014,94 +3022,47 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 		d->setRange(dim, index, range);
 
 	d->retransformScale(dim, index);
+
+	auto dim_other = Dimension::X;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
+		break;
+	case Dimension::Y:
+		dim_other = Dimension::X;
+		break;
+	}
+
+	bool retrans = false;
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+		if ((index == -1 || index == cs->index(dim))) {
+			if (autoScale(dim_other, cs->index(dim_other))) {
+				setRangeDirty(dim_other, cs->index(dim_other), true);
+				scaleAuto(dim_other, cs->index(dim_other), false);
+			}
+			retrans = true;
+		}
+	}
+
+	if (retrans)
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftLeftX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftRightX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftUpY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftDownY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::cursor() {

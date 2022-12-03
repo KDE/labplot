@@ -1075,4 +1075,64 @@ void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
 	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
 }
 
+void MultiRangeTest::axisMouseMoveApplyToAllX() {
+	LOAD_PROJECT
+
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	const int delta = -10; // delta > 0 --> right or up
+	horAxisP1->shiftSignal(delta, Dimension::X, p1->coordinateSystem(horAxisP1->coordinateSystemIndex())->index(Dimension::X));
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 10, 110); // shift
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
+void MultiRangeTest::axisMouseMoveApplyToSelection() {
+	LOAD_PROJECT
+
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	const int delta = -10; // delta > 0 --> right or up
+	horAxisP1->shiftSignal(delta, Dimension::X, p1->coordinateSystem(horAxisP1->coordinateSystemIndex())->index(Dimension::X));
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
 QTEST_MAIN(MultiRangeTest)

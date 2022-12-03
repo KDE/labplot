@@ -218,7 +218,6 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int index, const Dimension, bool leftOrDown);
 	void zoom(int index, const Dimension, bool in);
 	void checkAxisFormat(const int cSystemIndex, const AbstractColumn*, Axis::Orientation);
 	void calculateDataRange(const Dimension, const int index, bool completeRange = true);
@@ -331,6 +330,7 @@ public Q_SLOTS:
 	void shiftRightX(int index = -1);
 	void shiftUpY(int index = -1);
 	void shiftDownY(int index = -1);
+	void shift(int index, const Dimension, bool leftOrDown);
 
 	void cursor();
 
@@ -373,6 +373,7 @@ Q_SIGNALS:
 	void yRangeBreakingEnabledChanged(bool);
 	void yRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void themeChanged(const QString&);
+	void axisShiftSignal(int delta, Dimension dim, int index);
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);

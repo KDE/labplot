@@ -55,5 +55,8 @@ private Q_SLOTS:
 	void mouseWheelXAxisApplyToAllX();
 	void mouseWheelTanCurveApplyToAllX();
 	void mouseWheelXAxisApplyToSelected();
+
+	void axisMouseMoveApplyToAllX();
+	void axisMouseMoveApplyToSelection();
 };
 #endif
