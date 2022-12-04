@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-01 00:42+0000\n"
+"POT-Creation-Date: 2022-12-04 00:42+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -547,7 +547,7 @@ msgid "%1   (no values)"
 msgstr "nema vrijednosti"
 
 #: src/backend/core/AspectTreeModel.cpp:223
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1292
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1303
 #, kde-format
 msgid "Size: %1"
 msgstr "Veličina: %1"
@@ -1551,7 +1551,7 @@ msgstr "Info podatka"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:370
 #: src/backend/datasources/filters/NetCDFFilter.cpp:280
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1263
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1274
 #, fuzzy, kde-format
 #| msgid "creation of aspect from element '%1' failed"
 msgid "Reading from file %1 failed."
@@ -5910,7 +5910,7 @@ msgstr "Logistička Distribucija"
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:448
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:511
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:143
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1058
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1069
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:237
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:293
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:767
@@ -11278,13 +11278,13 @@ msgstr "Dodavanje"
 msgid "Prepend"
 msgstr "Dodaj na početak"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:139
+#: src/kdefrontend/datasources/ImportDialog.cpp:144
 #, fuzzy, kde-format
 #| msgid "Add new"
 msgid "Add %1"
 msgstr "Dodaj novo"
 
-#: src/kdefrontend/datasources/ImportDialog.cpp:139
+#: src/kdefrontend/datasources/ImportDialog.cpp:144
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgid "%1 name:"
@@ -11305,8 +11305,8 @@ msgctxt "@title:window"
 msgid "Add New Live Data Source"
 msgstr "Datoteka podatak izvor"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:328
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:329
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:123
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:329
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -11315,8 +11315,8 @@ msgstr "Datoteka podatak izvor"
 msgid "Hide Options"
 msgstr "Sakrij Opcije"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:106
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:328
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:107
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:329
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:123
 #: src/kdefrontend/spreadsheet/ExportSpreadsheetDialog.cpp:329
 #: src/kdefrontend/worksheet/ExportWorksheetDialog.cpp:110
@@ -11325,98 +11325,98 @@ msgstr "Sakrij Opcije"
 msgid "Show Options"
 msgstr "Prikaži opcije"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:146
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:147
 #, fuzzy, kde-format
 #| msgid "File data source created in %1 seconds."
 msgid "Live data source created in %1 seconds."
 msgstr "Izvor podataka datoteke kreiran u %1 sekundi"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:178
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:179
 #, kde-format
 msgid "No data to import."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:178
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:179
 #, fuzzy, kde-format
 #| msgid "Data:"
 msgid "No Data"
 msgstr "Podaci:"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:319
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:320
 #, kde-format
 msgid "File %1 imported in %2 seconds."
 msgstr "Datoteka %1 uvezena u %2 sekundi."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:347
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:389
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:416
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:440
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:465
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:498
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:521
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:348
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:384
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:411
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:435
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:460
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:493
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:516
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:157
 #, kde-format
 msgid "Close the dialog and import the data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:349
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:350
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:151
 #, kde-format
 msgid "Cannot import into a matrix since the data contains non-numerical data."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:361
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:362
 #: src/kdefrontend/datasources/ImportSQLDatabaseDialog.cpp:135
 #, kde-format
 msgid "Select a data container where the data has to be imported into."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:392
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:387
 #, fuzzy, kde-format
 #| msgid "The project file %1 is already opened."
 msgid "The provided file doesn't exist."
 msgstr "Projektna datoteka %1 je već otvorena."
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:420
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:415
 #, kde-format
 msgid "Could not connect to the provided local socket. Error: %1."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:426
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:421
 #, kde-format
 msgid ""
 "Could not connect to the provided local socket. The socket does not exist."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:445
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:440
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided TCP socket. Error: %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:451
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:477
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:446
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:472
 #, kde-format
 msgid "Either the host name or the port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:471
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:466
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Could not connect to the provided UDP socket. Error: %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:502
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:497
 #, kde-format
 msgid "Could not connect to the provided serial port."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:508
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:503
 #, kde-format
 msgid "Serial port number is missing."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileDialog.cpp:524
+#: src/kdefrontend/datasources/ImportFileDialog.cpp:519
 #, kde-format
 msgid ""
 "Either there is no connection, or no subscriptions were made, or the file "
@@ -11476,7 +11476,7 @@ msgstr ""
 "ali ne i njen sadržaj."
 
 #: src/kdefrontend/datasources/ImportFileWidget.cpp:143
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1057
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1068
 #: src/kdefrontend/SettingsGeneralPage.cpp:198
 #, kde-format
 msgid "Automatic"
@@ -11550,30 +11550,30 @@ msgid ""
 "to be subscribed."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:823
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:840
 #, fuzzy, kde-format
 #| msgid "Select the File Data Source"
 msgctxt "@title:window"
 msgid "Select the File Data Source"
 msgstr "Označi Izvor podataka"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:945
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
 #, kde-format
 msgid "Save Filter Settings as"
 msgstr "Sačuvaj podešavanja filtriranja kao"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:945
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
 #, kde-format
 msgid "Filter name:"
 msgstr "Ime filtera:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:945
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:962
 #, kde-format
 msgid "new filter"
 msgstr "novi filter"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataFormat)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:978
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:995
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:414
 #, fuzzy, kde-format
 #| msgid "Data format"
@@ -11582,7 +11582,7 @@ msgstr "Format podataka"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPreview)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:979
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:996
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:468
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:158
 #, kde-format
@@ -11591,7 +11591,7 @@ msgstr "Pregled"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabDataPortion)
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:981
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:998
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:540
 #: src/kdefrontend/ui/datasources/importsqldatabasewidget.ui:239
 #, fuzzy, kde-format
@@ -11599,100 +11599,100 @@ msgstr "Pregled"
 msgid "Data Portion to Read"
 msgstr "Dio podataka za čitanje"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1012
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1029
 #, fuzzy, kde-format
 #| msgid "Data format"
 msgid "Data format && preview"
 msgstr "Format podataka"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1255
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1266
 #, fuzzy, kde-format
 #| msgid "File info"
 msgid "file command not found"
 msgstr "Info podatka"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1266
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1277
 #, kde-format
 msgid "cannot open"
 msgstr "ne mogu da otvorim"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1271
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1282
 #, fuzzy, kde-format
 #| msgid "File type: %1"
 msgid "<b>File type:</b> %1"
 msgstr "Fajl tip: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1276
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1287
 #, kde-format
 msgid "General:"
 msgstr "Općenito:"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1278
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1279
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1280
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
 #, kde-format
 msgid "yes"
 msgstr "da"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1278
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1279
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1280
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
 #, kde-format
 msgid "no"
 msgstr "ne"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1278
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
 #, kde-format
 msgid "Readable: %1"
 msgstr "Čitljiv: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1279
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
 #, kde-format
 msgid "Writable: %1"
 msgstr "Upisljiv: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1280
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
 #, kde-format
 msgid "Executable: %1"
 msgstr "Izvršiv: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1283
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1294
 #, kde-format
 msgid "Birth time: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1284
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1295
 #, fuzzy, kde-format
 #| msgid "Last read: %1"
 msgid "Last metadata changed: %1"
 msgstr "Posljednje čitanje: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1286
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1297
 #, kde-format
 msgid "Created: %1"
 msgstr "Kreiran: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1288
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1299
 #, kde-format
 msgid "Last modified: %1"
 msgstr "Posljednja izmjena: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1289
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1300
 #, kde-format
 msgid "Last read: %1"
 msgstr "Posljednje čitanje: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1290
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1301
 #, kde-format
 msgid "Owner: %1"
 msgstr "Vlasnik: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1291
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1302
 #, kde-format
 msgid "Group: %1"
 msgstr "Grupa: %1"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1292
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1303
 #, kde-format
 msgid "%1 cByte"
 msgid_plural "%1 cBytes"
@@ -11700,83 +11700,83 @@ msgstr[0] "%1 cByte"
 msgstr[1] "%1 cByte"
 msgstr[2] "%1 cByte"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1295
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1306
 #, kde-format
 msgid "Summary:"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1315
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1320
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1326
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1331
 #, fuzzy, kde-format
 #| msgid "Density"
 msgid "Content:"
 msgstr "Gustina"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1345
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1356
 #, kde-format
 msgid "Could not open file %1 for reading."
 msgstr "Ne može se otvoriti fajl %1 za čitanje."
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1501
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1512
 #, fuzzy, kde-format
 #| msgid "&Normalize Selection"
 msgid "No data arrived yet for the selected topic"
 msgstr "&Normalizuj Selektovano"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:1714
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:1725
 #, kde-format
 msgid "Not a HDF5 file: %1"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2142
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2153
 #, kde-format
 msgid "Couldn't subscribe to all available topics."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2172
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2183
 #, kde-format
 msgid "Disconnected from '%1'."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2241
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2252
 #, fuzzy, kde-format
 #| msgid "Variance"
 msgid "Available (%1)"
 msgstr "Varijanca"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2353
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2364
 #, kde-format
 msgid "Wrong username or password"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2356
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2367
 #, kde-format
 msgid "The client ID wasn't accepted"
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2360
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2371
 #, kde-format
 msgid "The broker %1 couldn't be reached."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2363
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2374
 #, fuzzy, kde-format
 #| msgid "Select and edit"
 msgid "The client is not authorized to connect."
 msgstr "Označi i uredi"
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2366
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2377
 #, kde-format
 msgid "An unknown error occurred."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2372
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2375
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2383
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2386
 #, kde-format
 msgid "An error occurred."
 msgstr ""
 
-#: src/kdefrontend/datasources/ImportFileWidget.cpp:2389
+#: src/kdefrontend/datasources/ImportFileWidget.cpp:2400
 #, fuzzy, kde-format
 #| msgid "Connection:"
 msgid "Connecting to '%1:%2' timed out."
