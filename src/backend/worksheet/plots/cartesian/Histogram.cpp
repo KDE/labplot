@@ -546,8 +546,6 @@ void Histogram::setRugWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->rugWidth)
 		exec(new HistogramSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
-	else
-		emit rugWidthChanged(d->rugWidth); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugLength, double, rugLength, updateRug)
@@ -555,8 +553,6 @@ void Histogram::setRugLength(double length) {
 	Q_D(Histogram);
 	if (length != d->rugLength)
 		exec(new HistogramSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
-	else
-		emit rugLengthChanged(d->rugLength); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetRugOffset, double, rugOffset, updateRug)

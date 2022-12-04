@@ -165,8 +165,7 @@ void Image::setWidth(int width) {
 	if (width != d->width) {
 		exec(new ImageSetWidthCmd(d, width, ki18n("%1: set width")));
 		d->scaleImage();
-	} else
-		emit widthChanged(d->width); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetHeight, int, height, retransform)
@@ -175,8 +174,7 @@ void Image::setHeight(int height) {
 	if (height != d->height) {
 		exec(new ImageSetHeightCmd(d, height, ki18n("%1: set height")));
 		d->scaleImage();
-	} else
-		emit heightChanged(d->height); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_S(Image, SetKeepRatio, bool, keepRatio)
@@ -192,8 +190,6 @@ void Image::setBorderPen(const QPen& pen) {
 	Q_D(Image);
 	if (pen != d->borderPen)
 		exec(new ImageSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-	else
-		emit borderPenChanged(d->borderPen); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetBorderOpacity, qreal, borderOpacity, update)

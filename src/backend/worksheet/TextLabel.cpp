@@ -364,8 +364,6 @@ void TextLabel::setBorderPen(const QPen& pen) {
 	Q_D(TextLabel);
 	if (pen != d->borderPen)
 		exec(new TextLabelSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-	else
-		emit borderPenChanged(d->borderPen); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderOpacity, qreal, borderOpacity, update)

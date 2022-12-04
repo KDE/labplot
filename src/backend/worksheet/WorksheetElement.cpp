@@ -573,8 +573,6 @@ void WorksheetElement::setPosition(const PositionWrapper& pos) {
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition
 		|| pos.positionLimit != d->position.positionLimit)
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
-	else
-		emit positionChanged(d->position); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform)
@@ -603,8 +601,6 @@ void WorksheetElement::setPositionLogical(QPointF pos) {
 	Q_D(WorksheetElement);
 	if (pos != d->positionLogical)
 		exec(new WorksheetElementSetPositionLogicalCmd(d, pos, ki18n("%1: set logical position")));
-	else
-		emit positionLogicalChanged(d->positionLogical); // Feedback
 }
 
 /*!

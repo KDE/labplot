@@ -117,8 +117,6 @@ void Line::setErrorBarsCapSize(qreal size) {
 	Q_D(Line);
 	if (size != d->errorBarsCapSize)
 		exec(new LineSetErrorBarsCapSizeCmd(d, size, ki18n("%1: set error bar cap size")));
-	else
-		errorBarsCapSizeChanged(d->errorBarsCapSize); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_S(Line, SetErrorBarsType, XYCurve::ErrorBarsType, errorBarsType)
@@ -147,8 +145,6 @@ void Line::setWidth(double width) {
 	Q_D(Line);
 	if (width != d->width)
 		exec(new LineSetWidthCmd(d, width, ki18n("%1: set line width")));
-	else
-		emit widthChanged(d->width); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Line, SetColor, QColor, color, update)

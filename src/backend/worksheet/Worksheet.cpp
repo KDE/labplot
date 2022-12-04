@@ -640,8 +640,7 @@ void Worksheet::setLayoutTopMargin(double margin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
 		endMacro();
-	} else
-		emit layoutTopMarginChanged(d->layoutTopMargin); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, double, layoutBottomMargin, updateLayout)
@@ -650,8 +649,7 @@ void Worksheet::setLayoutBottomMargin(double margin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
 		endMacro();
-	} else
-		emit layoutBottomMarginChanged(d->layoutBottomMargin); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, double, layoutLeftMargin, updateLayout)
@@ -660,8 +658,7 @@ void Worksheet::setLayoutLeftMargin(double margin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
 		endMacro();
-	} else
-		emit layoutLeftMarginChanged(d->layoutLeftMargin); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, double, layoutRightMargin, updateLayout)
@@ -670,8 +667,7 @@ void Worksheet::setLayoutRightMargin(double margin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
 		endMacro();
-	} else
-		emit layoutRightMarginChanged(d->layoutRightMargin); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, updateLayout)
@@ -680,8 +676,7 @@ void Worksheet::setLayoutVerticalSpacing(double spacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
 		endMacro();
-	} else
-		emit layoutVerticalSpacingChanged(d->layoutVerticalSpacing); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, updateLayout)
@@ -690,8 +685,7 @@ void Worksheet::setLayoutHorizontalSpacing(double spacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
 		endMacro();
-	} else
-		emit layoutHorizontalSpacingChanged(d->layoutHorizontalSpacing); // Feedback
+	}
 }
 
 STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRowCount, int, layoutRowCount, updateLayout)
@@ -744,8 +738,7 @@ void Worksheet::setPageRect(const QRectF& rect) {
 			d->updatePageRect();
 			Q_EMIT pageRectChanged(d->pageRect);
 		}
-	} else
-		Q_EMIT pageRectChanged(d->pageRect); // Feedback
+	}
 }
 
 void Worksheet::setPrinting(bool on) const {

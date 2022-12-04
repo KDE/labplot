@@ -131,8 +131,6 @@ void Value::setDistance(double distance) {
 	Q_D(Value);
 	if (distance != d->distance)
 		exec(new ValueSetDistanceCmd(d, distance, ki18n("%1: set values distance")));
-	else
-		emit distanceChanged(d->distance); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Value, SetRotationAngle, double, rotationAngle, updateValue)

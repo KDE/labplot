@@ -550,8 +550,6 @@ void Axis::setPosition(Position position) {
 	Q_D(Axis);
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
-	else
-		emit positionChanged(d->position); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, RangeT::Scale, scale, retransformTicks)
@@ -629,8 +627,6 @@ void Axis::setMajorTickStartOffset(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
-	else
-		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
@@ -639,8 +635,6 @@ void Axis::setMajorTickStartValue(qreal value) {
 	// TODO: check if value is invalid
 	if (value != d->majorTickStartValue)
 		exec(new AxisSetMajorTickStartValueCmd(d, value, ki18n("%1: set major tick start value")));
-	else
-		emit majorTickStartValueChanged(d->majorTickStartValue); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
@@ -662,8 +656,6 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 	// TODO: check for negative values and log scales?
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
-	else
-		emit zeroOffsetChanged(d->zeroOffset); // Feedback
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, ShowScaleOffset, bool, showScaleOffset, retransform)
 void Axis::setShowScaleOffset(bool b) {
@@ -677,8 +669,6 @@ void Axis::setLogicalPosition(double pos) {
 	Q_D(Axis);
 	if (pos != d->logicalPosition)
 		exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
-	else
-		emit logicalPositionChanged(d->logicalPosition); // Feedback
 }
 
 // Title
@@ -687,8 +677,6 @@ void Axis::setTitleOffsetX(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetX)
 		exec(new AxisSetTitleOffsetXCmd(d, offset, ki18n("%1: set title offset")));
-	else
-		emit titleOffsetXChanged(d->titleOffsetX); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetTitleOffsetY, qreal, titleOffsetY, retransform)
@@ -696,8 +684,6 @@ void Axis::setTitleOffsetY(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->titleOffsetY)
 		exec(new AxisSetTitleOffsetYCmd(d, offset, ki18n("%1: set title offset")));
-	else
-		emit titleOffsetYChanged(d->titleOffsetY); // Feedback
 }
 
 // Line
@@ -778,8 +764,6 @@ void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 	Q_D(Axis);
 	if (majorTicksSpacing != d->majorTicksSpacing)
 		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
-	else
-		emit majorTicksSpacingChanged(d->majorTicksSpacing); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
@@ -801,8 +785,6 @@ void Axis::setMajorTicksLength(qreal majorTicksLength) {
 	Q_D(Axis);
 	if (majorTicksLength != d->majorTicksLength)
 		exec(new AxisSetMajorTicksLengthCmd(d, majorTicksLength, ki18n("%1: set major ticks length")));
-	else
-		emit majorTicksLengthChanged(d->majorTicksLength); // Feedback
 }
 
 // Minor ticks
@@ -868,8 +850,6 @@ void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 
 	if (minorTicksSpacing != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
-	else
-		emit minorTicksIncrementChanged(d->minorTicksIncrement); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
@@ -891,8 +871,6 @@ void Axis::setMinorTicksLength(qreal minorTicksLength) {
 	Q_D(Axis);
 	if (minorTicksLength != d->minorTicksLength)
 		exec(new AxisSetMinorTicksLengthCmd(d, minorTicksLength, ki18n("%1: set minor ticks length")));
-	else
-		emit minorTicksLengthChanged(d->minorTicksLength); // Feedback
 }
 
 // Labels
@@ -944,8 +922,6 @@ void Axis::setLabelsOffset(double offset) {
 	Q_D(Axis);
 	if (offset != d->labelsOffset)
 		exec(new AxisSetLabelsOffsetCmd(d, offset, ki18n("%1: set label offset")));
-	else
-		emit labelsOffsetChanged(offset); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsRotationAngle, qreal, labelsRotationAngle, retransformTickLabelPositions)

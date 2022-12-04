@@ -931,8 +931,6 @@ void CartesianPlot::setRect(const QRectF& rect) {
 	Q_D(CartesianPlot);
 	if (rect != d->rect)
 		exec(new CartesianPlotSetRectCmd(d, rect));
-	else
-		emit rectChanged(d->rect); // Feedback
 }
 
 class CartesianPlotSetPrevRectCmd : public QUndoCommand {
@@ -1219,8 +1217,7 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
-	} else
-		Q_EMIT rangeChanged(dim, index, d->rangeConst(dim, index)); // feedback
+	}
 
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }

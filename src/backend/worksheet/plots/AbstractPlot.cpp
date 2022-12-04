@@ -98,8 +98,6 @@ void AbstractPlot::setHorizontalPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->horizontalPadding)
 		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, ki18n("%1: set horizontal padding")));
-	else
-		emit horizontalPaddingChanged(d->horizontalPadding); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, double, verticalPadding, retransform)
@@ -107,8 +105,6 @@ void AbstractPlot::setVerticalPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
 		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, ki18n("%1: set vertical padding")));
-	else
-		emit verticalPaddingChanged(d->verticalPadding); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetRightPadding, double, rightPadding, retransform)
@@ -116,8 +112,6 @@ void AbstractPlot::setRightPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->rightPadding)
 		exec(new AbstractPlotSetRightPaddingCmd(d, padding, ki18n("%1: set right padding")));
-	else
-		emit rightPaddingChanged(d->rightPadding); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetBottomPadding, double, bottomPadding, retransform)
@@ -125,8 +119,6 @@ void AbstractPlot::setBottomPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->bottomPadding)
 		exec(new AbstractPlotSetBottomPaddingCmd(d, padding, ki18n("%1: set bottom padding")));
-	else
-		emit bottomPaddingChanged(d->bottomPadding); // Feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetSymmetricPadding, bool, symmetricPadding, retransform)
