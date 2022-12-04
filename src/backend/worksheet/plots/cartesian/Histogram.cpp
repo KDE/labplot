@@ -560,8 +560,6 @@ void Histogram::setRugOffset(double offset) {
 	Q_D(Histogram);
 	if (offset != d->rugOffset)
 		exec(new HistogramSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
-	else
-		emit rugOffsetChanged(d->rugOffset);
 }
 
 //##############################################################################
