@@ -868,18 +868,16 @@ void InfoElementPrivate::retransform() {
 
 	// determine the position to connect the line to
 	QPointF pointPos;
-	bool visible = false;
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
-			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 			break;
 		}
 	}
 
-	insidePlot = visible;
 	if (!insidePlot)
 		return;
 
