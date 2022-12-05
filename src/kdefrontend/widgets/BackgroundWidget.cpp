@@ -172,12 +172,12 @@ void BackgroundWidget::positionChanged(int index) {
 	if (!m_background || !m_background->positionAvailable())
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
-
 	const auto position{Background::Position(index)};
 	bool b = (position != Background::Position::No);
 	setEnabled(b); // call this to enable/disable the properties widget depending on the position value
+	ui.cbPosition->setEnabled(true); // and enable position only
 
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* background : m_backgrounds)
 		background->setPosition(position);
 }
@@ -185,8 +185,6 @@ void BackgroundWidget::positionChanged(int index) {
 void BackgroundWidget::typeChanged(int index) {
 	if (index == -1)
 		return;
-
-	CONDITIONAL_LOCK_RETURN;
 
 	auto type = (Background::Type)index;
 
@@ -248,6 +246,7 @@ void BackgroundWidget::typeChanged(int index) {
 		ui.bOpen->hide();
 	}
 
+	CONDITIONAL_LOCK_RETURN;
 	for (auto* background : m_backgrounds)
 		background->setType(type);
 }
@@ -256,10 +255,7 @@ void BackgroundWidget::colorStyleChanged(int index) {
 	if (index == -1)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
-
 	auto style = (Background::ColorStyle)index;
-
 	if (style == Background::ColorStyle::SingleColor) {
 		ui.lFirstColor->setText(i18n("Color:"));
 		ui.lSecondColor->hide();
@@ -269,6 +265,8 @@ void BackgroundWidget::colorStyleChanged(int index) {
 		ui.lSecondColor->show();
 		ui.kcbSecondColor->show();
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	int size = m_backgrounds.size();
 	if (size > 1) {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>888</height>
+    <width>405</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>5</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -437,6 +437,7 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -553,6 +554,7 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -588,6 +590,7 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -882,6 +885,7 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1118,6 +1122,7 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1176,7 +1181,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
+        <widget class="KFontRequester" name="kfrLabelsFont"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1301,6 +1306,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1313,6 +1319,7 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1405,6 +1412,7 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1512,6 +1520,7 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1540,6 +1549,7 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

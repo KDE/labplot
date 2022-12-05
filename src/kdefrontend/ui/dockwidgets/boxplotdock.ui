@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -62,6 +62,7 @@
         <widget class="QLabel" name="lData">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -239,6 +240,7 @@
         <widget class="QLabel" name="lFilling">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -328,6 +330,7 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -356,6 +359,7 @@
         <widget class="QLabel" name="lMedianLine">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -423,6 +427,7 @@
         <widget class="QLabel" name="lSymbolCategory">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -570,6 +575,7 @@
         <widget class="QLabel" name="lWhiskersCap">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -625,6 +631,7 @@
         <widget class="QLabel" name="lWhiskersFormat">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -779,6 +786,7 @@
         <widget class="QLabel" name="lRug">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

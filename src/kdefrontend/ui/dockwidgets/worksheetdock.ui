@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>589</height>
+    <width>396</width>
+    <height>583</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -51,6 +51,7 @@
         <widget class="QLabel" name="lGeometry">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -353,6 +354,7 @@
         <widget class="QLabel" name="lMargin">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -431,6 +433,7 @@
         <widget class="QLabel" name="lGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -443,6 +446,7 @@
         <widget class="QLabel" name="lSpacing">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -475,7 +479,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -494,7 +498,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -513,7 +517,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -532,7 +536,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -551,7 +555,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -570,7 +574,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
