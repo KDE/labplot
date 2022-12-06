@@ -1818,42 +1818,39 @@ void XYFitCurvePrivate::recalculate() {
 	case XYAnalysisCurve::DataSourceType::Histogram:
 		switch (fitData.algorithm) {
 		case nsl_fit_algorithm_lm:
-			tmpXDataColumn = dataSourceHistogram->bins();
-			tmpYDataColumn = dataSourceHistogram->binPDValues();
+			tmpXDataColumn = dataSourceHistogram->bins(); // bins
+			switch (dataSourceHistogram->normalization()) { // TODO: not exactly
+			case Histogram::HistogramNormalization::Count:
+			case Histogram::HistogramNormalization::CountDensity:
+				tmpYDataColumn = dataSourceHistogram->binValues(); // values
+				break;
+			case Histogram::HistogramNormalization::Probability:
+			case Histogram::HistogramNormalization::ProbabilityDensity:
+				tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
+			}
 			break;
 		case nsl_fit_algorithm_ml:
-			tmpXDataColumn = dataSourceHistogram->dataColumn();
+			tmpXDataColumn = dataSourceHistogram->dataColumn(); // data
+			tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 		}
+		// debug
+		/*for (int i = 0; i < dataSourceHistogram->bins()->rowCount(); i++)
+			DEBUG("BINS @ " << i << ": " << dataSourceHistogram->bins()->valueAt(i))
+		for (int i = 0; i < dataSourceHistogram->binValues()->rowCount(); i++)
+			DEBUG("BINValues @ " << i << ": " << dataSourceHistogram->binValues()->valueAt(i))
+		for (int i = 0; i < dataSourceHistogram->binPDValues()->rowCount(); i++)
+			DEBUG("BINPDValues @ " << i << ": " << dataSourceHistogram->binPDValues()->valueAt(i))
+		*/
 	}
 
-	if (!tmpXDataColumn || (!tmpYDataColumn && fitData.algorithm == nsl_fit_algorithm_lm)) {
+	if (!tmpXDataColumn || !tmpYDataColumn) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
 		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
 
-	prepareResultColumns();
-
-	DEBUG("#######################################\nALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
-	switch (fitData.algorithm) {
-	case nsl_fit_algorithm_lm:
-		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn);
-		break;
-	case nsl_fit_algorithm_ml:
-		runMaximumLikelihood(tmpXDataColumn);
-	}
-
-	evaluate(); // calculate the fit function (vectors)
-
-	fitResult.elapsedTime = timer.elapsed();
-
-	sourceDataChangedSinceLastRecalc = false;
-}
-
-void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn) {
 	// determine range of data
-	// TODO: use ranges
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
 	if (fitData.autoRange) { // auto x range of data to fit
 		fitData.fitRange = xRange;
@@ -1861,9 +1858,72 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
 			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 	}
-	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
-	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
+	DEBUG(Q_FUNC_INFO << ", fit data range = " << xRange.start() << " .. " << xRange.end());
 
+	prepareResultColumns();
+	const size_t rowCount = tmpXDataColumn->rowCount();
+
+	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
+	residualsVector->resize(rowCount);
+	// DEBUG("	Residual vector size: " << residualsVector->size())
+
+	DEBUG("#######################################\nALGORITHM: " << nsl_fit_algorithm_name[fitData.algorithm])
+	switch (fitData.algorithm) {
+	case nsl_fit_algorithm_lm:
+		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn, xRange);
+		break;
+	case nsl_fit_algorithm_ml:
+		runMaximumLikelihood(tmpXDataColumn);
+	}
+
+	evaluate(); // calculate the fit function (vectors)
+
+	// ML uses dataSourceHistogram->bins() as x for residuals
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Histogram && fitData.algorithm == nsl_fit_algorithm_ml)
+		tmpXDataColumn = dataSourceHistogram->bins();
+
+	if (fitData.autoRange || fitData.algorithm == nsl_fit_algorithm_ml) { // evaluate residuals
+		xVector->resize(rowCount);
+		for (size_t i = 0; i < rowCount; i++)
+			if (tmpXDataColumn->isNumeric())
+				(*xVector)[i] = tmpXDataColumn->valueAt(i);
+			else if (tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
+				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
+
+		auto* parser = ExpressionParser::getInstance();
+		// fill residualsVector with model values
+		// QDEBUG("xVector: " << *xVector)
+		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
+		// QDEBUG("residualsVector: " << *residualsVector)
+		if (rc) {
+			switch (fitData.algorithm) {
+			case nsl_fit_algorithm_lm:
+				for (size_t i = 0; i < rowCount; i++)
+					(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
+				break;
+			case nsl_fit_algorithm_ml:
+				for (size_t i = 0; i < rowCount; i++) {
+					// DEBUG("y data / column @" << i << ":" << tmpXDataColumn->valueAt(i))
+					if (xRange.contains(tmpXDataColumn->valueAt(i)))
+						(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector).at(i);
+					else
+						(*residualsVector)[i] = 0.;
+				}
+			}
+		} else {
+			WARN("	ERROR: Failed parsing residuals")
+			residualsVector->clear();
+		}
+	} // else: see LM method
+
+	residualsColumn->setChanged();
+
+	fitResult.elapsedTime = timer.elapsed();
+
+	sourceDataChangedSinceLastRecalc = false;
+}
+
+void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn) {
 	const size_t n = tmpXDataColumn->rowCount();
 
 	fitResult.available = true;
@@ -1955,11 +2015,9 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	if (fitData.useResults) // set start values
 		for (unsigned int i = 0; i < np; i++)
 			fitData.paramStartValues.data()[i] = fitResult.paramValues.at(i);
-
-	// TODO: residual vector
 }
 
-void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn) {
+void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColumn, const AbstractColumn* tmpYDataColumn, const Range<double> xRange) {
 	// fit settings
 	const unsigned int maxIters = fitData.maxIterations; // maximal number of iterations
 	const double delta = fitData.eps; // fit tolerance
@@ -1988,17 +2046,6 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
-
-	// determine range of data
-	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
-	if (fitData.autoRange) { // auto x range of data to fit
-		fitData.fitRange = xRange;
-	} else { // custom x range of data to fit
-		if (!fitData.fitRange.isZero()) // avoid problems with user specified zero range
-			xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
-	}
-	DEBUG(Q_FUNC_INFO << ", fit range = " << xRange.start() << " .. " << xRange.end());
-	DEBUG(Q_FUNC_INFO << ", fitData range = " << fitData.fitRange.start() << " .. " << fitData.fitRange.end());
 
 	// logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
 	// TODO: decide how to deal with non-numerical error columns
@@ -2404,37 +2451,15 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
-	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
-	residualsVector->resize(tmpXDataColumn->rowCount());
-	DEBUG("	Residual vector size: " << residualsVector->size())
-	if (fitData.autoRange) { // evaluate full range of residuals
-		xVector->resize(tmpXDataColumn->rowCount());
-		auto mode = tmpXDataColumn->columnMode();
-		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			if (mode == AbstractColumn::ColumnMode::Double || mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
-				(*xVector)[i] = tmpXDataColumn->valueAt(i);
-			else if (mode == AbstractColumn::ColumnMode::DateTime)
-				(*xVector)[i] = tmpXDataColumn->dateTimeAt(i).toMSecsSinceEpoch();
-
-		auto* parser = ExpressionParser::getInstance();
-		bool rc = parser->evaluateCartesian(fitData.model, xVector, residualsVector, fitData.paramNames, fitResult.paramValues);
-		if (rc) {
-			for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-				(*residualsVector)[i] = tmpYDataColumn->valueAt(i) - (*residualsVector)[i];
-		} else {
-			DEBUG("	ERROR: Failed parsing residuals")
-			residualsVector->clear();
-		}
-	} else { // only selected range
+	if (!fitData.autoRange) { // only selected range
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
-			if (tmpXDataColumn->valueAt(i) >= xRange.start() && tmpXDataColumn->valueAt(i) <= xRange.end())
+			if (xRange.contains(tmpXDataColumn->valueAt(i)))
 				residualsVector->data()[i] = -gsl_vector_get(s->f, j++);
 			else // outside range
 				residualsVector->data()[i] = 0;
 		}
 	}
-	residualsColumn->setChanged();
 
 	gsl_multifit_fdfsolver_free(s);
 	gsl_matrix_free(covar);
@@ -2488,11 +2513,12 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 
 	auto* parser = ExpressionParser::getInstance();
 	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()}; // full data range
-	if (!fitData.autoEvalRange) { // use given range for evaluation
+	if (!fitData.autoEvalRange) { // use custom range for evaluation
 		if (!fitData.evalRange.isZero()) // avoid zero range
 			xRange = fitData.evalRange;
 	}
 	DEBUG(Q_FUNC_INFO << ", eval range = " << xRange.toStdString());
+
 	xVector->resize((int)fitData.evaluatedPoints);
 	yVector->resize((int)fitData.evaluatedPoints);
 	DEBUG(Q_FUNC_INFO << ", vector size = " << xVector->size());
