@@ -75,9 +75,9 @@ void Histogram::init() {
 
 	d->dataColumn = nullptr;
 
-	d->type = (Histogram::HistogramType)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::HistogramOrientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::HistogramNormalization)group.readEntry("Normalization", (int)Histogram::Count);
+	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
 	d->binWidth = group.readEntry("BinWidth", 1.0);
@@ -288,9 +288,9 @@ void Histogram::setHover(bool on) {
 //##########################  getter methods  ##################################
 //##############################################################################
 // general
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Normalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binWidth, binWidth)
@@ -396,25 +396,25 @@ void Histogram::setDataColumnPath(const QString& path) {
 	d->dataColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
-void Histogram::setType(Histogram::HistogramType type) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetType, Histogram::Type, type, updateType)
+void Histogram::setType(Histogram::Type type) {
 	Q_D(Histogram);
 	if (type != d->type)
-		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
+		exec(new HistogramSetTypeCmd(d, type, ki18n("%1: set histogram type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
-void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetOrientation, Histogram::Orientation, orientation, updateOrientation)
+void Histogram::setOrientation(Histogram::Orientation orientation) {
 	Q_D(Histogram);
 	if (orientation != d->orientation)
-		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+		exec(new HistogramSetOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramNormalization, Histogram::HistogramNormalization, normalization, updateOrientation)
-void Histogram::setNormalization(Histogram::HistogramNormalization normalization) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetNormalization, Histogram::Normalization, normalization, updateOrientation)
+void Histogram::setNormalization(Histogram::Normalization normalization) {
 	Q_D(Histogram);
 	if (normalization != d->normalization)
-		exec(new HistogramSetHistogramNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
+		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
@@ -1955,9 +1955,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(dataColumn);
-			READ_INT_VALUE("type", type, Histogram::HistogramType);
-			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
-			READ_INT_VALUE("normalization", normalization, Histogram::HistogramNormalization);
+			READ_INT_VALUE("type", type, Histogram::Type);
+			READ_INT_VALUE("orientation", orientation, Histogram::Orientation);
+			READ_INT_VALUE("normalization", normalization, Histogram::Normalization);
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);

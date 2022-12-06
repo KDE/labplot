@@ -95,9 +95,9 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in Histogram
 	// General-Tab
 	void curveDataColumnChanged(const AbstractColumn*);
-	void curveTypeChanged(Histogram::HistogramType);
-	void curveOrientationChanged(Histogram::HistogramOrientation);
-	void curveNormalizationChanged(Histogram::HistogramNormalization);
+	void curveTypeChanged(Histogram::Type);
+	void curveOrientationChanged(Histogram::Orientation);
+	void curveNormalizationChanged(Histogram::Normalization);
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
 	void curveBinWidthChanged(double);

@@ -1820,12 +1820,12 @@ void XYFitCurvePrivate::recalculate() {
 		case nsl_fit_algorithm_lm:
 			tmpXDataColumn = dataSourceHistogram->bins(); // bins
 			switch (dataSourceHistogram->normalization()) { // TODO: not exactly
-			case Histogram::HistogramNormalization::Count:
-			case Histogram::HistogramNormalization::CountDensity:
+			case Histogram::Normalization::Count:
+			case Histogram::Normalization::CountDensity:
 				tmpYDataColumn = dataSourceHistogram->binValues(); // values
 				break;
-			case Histogram::HistogramNormalization::Probability:
-			case Histogram::HistogramNormalization::ProbabilityDensity:
+			case Histogram::Normalization::Probability:
+			case Histogram::Normalization::ProbabilityDensity:
 				tmpYDataColumn = dataSourceHistogram->binPDValues(); // normalized values
 			}
 			break;

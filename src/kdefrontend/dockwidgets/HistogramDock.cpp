@@ -408,7 +408,7 @@ void HistogramDock::visibilityChanged(bool state) {
 void HistogramDock::typeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto histogramType = Histogram::HistogramType(index);
+	auto histogramType = Histogram::Type(index);
 	for (auto* curve : m_curvesList)
 		curve->setType(histogramType);
 }
@@ -430,7 +430,7 @@ void HistogramDock::dataColumnChanged(const QModelIndex& index) {
 void HistogramDock::orientationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto orientation = Histogram::HistogramOrientation(index);
+	auto orientation = Histogram::Orientation(index);
 	for (auto* curve : m_curvesList)
 		curve->setOrientation(orientation);
 }
@@ -438,7 +438,7 @@ void HistogramDock::orientationChanged(int index) {
 void HistogramDock::normalizationChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	auto normalization = Histogram::HistogramNormalization(index);
+	auto normalization = Histogram::Normalization(index);
 	for (auto* curve : m_curvesList)
 		curve->setNormalization(normalization);
 }
@@ -636,17 +636,17 @@ void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
 	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
 }
 
-void HistogramDock::curveTypeChanged(Histogram::HistogramType type) {
+void HistogramDock::curveTypeChanged(Histogram::Type type) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 
-void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orientation) {
+void HistogramDock::curveOrientationChanged(Histogram::Orientation orientation) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 
-void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization normalization) {
+void HistogramDock::curveNormalizationChanged(Histogram::Normalization normalization) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbNormalization->setCurrentIndex((int)normalization);
 }
