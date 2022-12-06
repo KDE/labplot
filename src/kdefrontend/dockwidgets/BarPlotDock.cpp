@@ -11,6 +11,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -127,7 +128,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 }
 
 void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_barPlots = list;
 	m_barPlot = list.first();
 	setAspects(list);
@@ -320,8 +321,7 @@ void BarPlotDock::xColumnChanged(const QModelIndex& index) {
 
 	ui.bRemoveXColumn->setEnabled(column != nullptr);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* barPlot : m_barPlots)
 		barPlot->setXColumn(column);
@@ -408,34 +408,30 @@ void BarPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void BarPlotDock::dataColumnChanged(const QModelIndex&) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::dataColumnChanged(const QModelIndex&) {
+	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void BarPlotDock::typeChanged(int index) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::typeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = static_cast<BarPlot::Type>(index);
 	for (auto* barPlot : m_barPlots)
 		barPlot->setType(type);
 }
 
-void BarPlotDock::orientationChanged(int index) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::orientationChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = BarPlot::Orientation(index);
 	for (auto* barPlot : m_barPlots)
 		barPlot->setOrientation(orientation);
 }
 
-void BarPlotDock::visibilityChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::visibilityChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* barPlot : m_barPlots)
 		barPlot->setVisible(state);
@@ -445,9 +441,11 @@ void BarPlotDock::visibilityChanged(bool state) const {
 /*!
  * called when the current bar number was changed, shows the bar properties for the selected bar.
  */
-void BarPlotDock::currentBarChanged(int index) const {
+void BarPlotDock::currentBarChanged(int index) {
 	if (index == -1)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
 
 	QList<Background*> backgrounds;
 	QList<Line*> lines;
@@ -465,9 +463,8 @@ void BarPlotDock::currentBarChanged(int index) const {
 	lineWidget->setLines(lines);
 }
 
-void BarPlotDock::widthFactorChanged(int value) const {
-	if (m_initializing)
-		return;
+void BarPlotDock::widthFactorChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
 
 	double factor = (double)value / 100.;
 	for (auto* barPlot : m_barPlots)
@@ -479,29 +476,29 @@ void BarPlotDock::widthFactorChanged(int value) const {
 //*************************************************************
 // general
 void BarPlotDock::plotXColumnChanged(const AbstractColumn* column) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	cbXColumn->setColumn(column, m_barPlot->xColumnPath());
 }
 void BarPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
 void BarPlotDock::plotTypeChanged(BarPlot::Type type) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex((int)type);
 }
 void BarPlotDock::plotOrientationChanged(BarPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BarPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BarPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	// 	float v = (float)value*100.;
 	ui.sbWidthFactor->setValue(factor * 100);
 }

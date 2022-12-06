@@ -261,8 +261,7 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
@@ -274,24 +273,19 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
-
-	if (m_initializing)
-		return;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
@@ -301,8 +295,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -434,16 +427,14 @@ void XYDifferentiationCurveDock::xRangeMaxChanged() {
 }
 
 void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.first() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.last() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -507,8 +498,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 }
 
 void XYDifferentiationCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no differentiation possible without the x- and y-data
 	bool hasSourceData = false;
@@ -567,31 +557,27 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 //*************************************************************
 // General-Tab
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_differentiationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_differentiationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged(m_differentiationData.derivOrder);
@@ -599,7 +585,6 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::dataChanged() {
@@ -607,7 +592,6 @@ void XYDifferentiationCurveDock::dataChanged() {
 }
 
 void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

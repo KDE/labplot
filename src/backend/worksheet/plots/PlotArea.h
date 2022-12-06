@@ -61,8 +61,8 @@ private:
 
 Q_SIGNALS:
 	void borderTypeChanged(PlotArea::BorderType);
-	void borderCornerRadiusChanged(float);
-	void borderOpacityChanged(float);
+	void borderCornerRadiusChanged(qreal);
+	void borderOpacityChanged(qreal);
 
 private:
 	CartesianPlot* m_parent;

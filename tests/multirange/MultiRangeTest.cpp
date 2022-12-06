@@ -22,8 +22,11 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 
 #include <QAction>
+#include <QComboBox>
 
 //##############################################################################
 //#####################  import of LabPlot projects ############################
@@ -895,6 +898,26 @@ void MultiRangeTest::autoScaleXAfterZoomInY() {
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValues);
+}
+
+void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
+	LOAD_PROJECT
+
+	const int sinCurveCSystemIndex = sinCurve->coordinateSystemIndex();
+	const int tanCurveCSystemIndex = tanCurve->coordinateSystemIndex();
+	QVERIFY(sinCurveCSystemIndex != tanCurveCSystemIndex);
+	// checks directly the plot. In the basedock the element is used and not the plot, so do it here too
+	QVERIFY(sinCurve->coordinateSystemCount() == 3);
+
+	XYCurveDock dock(nullptr);
+	dock.setupGeneral();
+	dock.setCurves(QList<XYCurve*>({sinCurve, tanCurve}));
+
+	dock.updatePlotRanges();
+
+	// The coordinatesystem indices shall not change
+	QCOMPARE(sinCurveCSystemIndex, sinCurve->coordinateSystemIndex());
+	QCOMPARE(tanCurveCSystemIndex, tanCurve->coordinateSystemIndex());
 }
 
 QTEST_MAIN(MultiRangeTest)

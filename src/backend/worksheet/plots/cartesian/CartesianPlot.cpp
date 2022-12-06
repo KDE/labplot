@@ -1174,6 +1174,7 @@ public:
 		, m_otherValue(newValue) {
 	}
 	void redo() override {
+		m_target->setRangeDirty(m_dimension, m_index, true);
 		auto tmp = m_target->rangeConst(m_dimension, m_index);
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
@@ -1184,6 +1185,21 @@ public:
 	}
 	virtual void finalize() {
 		m_target->retransformScale(m_dimension, m_index, true);
+		Dimension dim_other = Dimension::Y;
+		if (m_dimension == Dimension::Y)
+			dim_other = Dimension::X;
+
+		QVector<int> scaledIndices;
+		for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
+			auto cs = m_target->q->coordinateSystem(i);
+			auto index_other = cs->index(dim_other);
+			if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
+				scaledIndices << index_other;
+				if (m_target->q->autoScale(dim_other, index_other) && m_target->q->scaleAuto(dim_other, index_other, false))
+					m_target->retransformScale(dim_other, index_other);
+			}
+		}
+		m_target->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_target->q->rangeChanged(m_dimension, m_index, m_target->rangeConst(m_dimension, m_index));
 	}
 
@@ -1198,26 +1214,11 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	Q_D(CartesianPlot);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 
-	Dimension dim_other = Dimension::Y;
-	if (dim == Dimension::Y)
-		dim_other = Dimension::X;
-
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
-		d->setRangeDirty(dim, index, true);
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
-		QVector<int> scaledIndices;
-		for (int i = 0; i < coordinateSystemCount(); i++) {
-			auto cs = coordinateSystem(i);
-			auto index_other = cs->index(dim_other);
-			if (cs->index(dim) == index && scaledIndices.indexOf(index_other) == -1) {
-				scaledIndices << index_other;
-				if (autoScale(dim_other, index_other) && scaleAuto(dim_other, index_other, false))
-					d->retransformScale(dim_other, index_other);
-			}
-		}
-		WorksheetElementContainer::retransform();
 	}
+
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
 
@@ -3260,22 +3261,10 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		const double deltaMin = rangep.range.start() - rangep.prev.start();
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
-		switch (dim) {
-		case Dimension::X: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->xMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->xMaxChanged(i, rangep.range.end());
-			break;
-		}
-		case Dimension::Y: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->yMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->yMaxChanged(i, rangep.range.end());
-			break;
-		}
-		}
+		if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
+			Q_EMIT q->minChanged(dim, i, rangep.range.start());
+		if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
+			Q_EMIT q->maxChanged(dim, i, rangep.range.end());
 
 		rangep.prev = rangep.range;
 
@@ -3473,7 +3462,10 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
 	} else if (end <= 0)
 		end = max;
 
-	return {start, end};
+	auto newRange = range;
+	newRange.setStart(start);
+	newRange.setEnd(end);
+	return newRange;
 }
 
 /*!

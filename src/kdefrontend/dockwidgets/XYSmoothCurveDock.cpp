@@ -284,16 +284,14 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
@@ -301,8 +299,7 @@ void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -349,8 +346,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -405,16 +401,14 @@ void XYSmoothCurveDock::xRangeMaxChanged() {
 }
 
 void XYSmoothCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.first() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYSmoothCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_smoothData.xRange.last() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -535,8 +529,8 @@ void XYSmoothCurveDock::recalculateClicked() {
 }
 
 void XYSmoothCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+	;
 
 	// no smoothing possible without the x- and y-data
 	bool hasSourceData = false;
@@ -596,36 +590,31 @@ void XYSmoothCurveDock::showSmoothResult() {
 //*************************************************************
 // General-Tab
 void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_smoothCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_smoothCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& smoothData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_smoothData = smoothData;
 	uiGeneralTab.cbType->setCurrentIndex(m_smoothData.type);
 
 	this->showSmoothResult();
-	m_initializing = false;
 }
 
 void XYSmoothCurveDock::dataChanged() {
@@ -633,7 +622,6 @@ void XYSmoothCurveDock::dataChanged() {
 }
 
 void XYSmoothCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

@@ -59,14 +59,14 @@ private Q_SLOTS:
 	void removeXColumn();
 	void addDataColumn();
 	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&) const;
-	void typeChanged(int) const;
-	void orientationChanged(int) const;
-	void visibilityChanged(bool) const;
+	void dataColumnChanged(const QModelIndex&);
+	void typeChanged(int);
+	void orientationChanged(int);
+	void visibilityChanged(bool);
 
 	//"Box"-tab
-	void currentBarChanged(int) const;
-	void widthFactorChanged(int) const;
+	void currentBarChanged(int);
+	void widthFactorChanged(int);
 
 	// SLOTs for changes triggered in BarPlot
 	// general

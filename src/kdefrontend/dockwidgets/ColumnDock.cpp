@@ -170,7 +170,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
   Called when the type (column mode) is changed.
 */
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(mode)));
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Double: {
@@ -295,7 +295,7 @@ void ColumnDock::showValueLabels() {
 //******** SLOTs for changes triggered in ColumnDock **********
 //*************************************************************
 void ColumnDock::retranslateUi() {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	ui.cbType->clear();
 	ui.cbType->addItem(AbstractColumn::columnModeString(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
@@ -329,8 +329,7 @@ void ColumnDock::retranslateUi() {
 */
 void ColumnDock::typeChanged(int index) {
 	DEBUG("ColumnDock::typeChanged()")
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK; // TODO: lock needed?
 
 	auto columnMode = static_cast<AbstractColumn::ColumnMode>(ui.cbType->itemData(index).toInt());
 	const auto& columns = m_columnsList;
@@ -389,8 +388,7 @@ void ColumnDock::typeChanged(int index) {
 }
 
 void ColumnDock::numericFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
 	for (auto* col : qAsConst(m_columnsList)) {
@@ -400,8 +398,7 @@ void ColumnDock::numericFormatChanged(int index) {
 }
 
 void ColumnDock::precisionChanged(int digits) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* col : qAsConst(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -410,8 +407,7 @@ void ColumnDock::precisionChanged(int digits) {
 }
 
 void ColumnDock::dateTimeFormatChanged(const QString& format) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* col : qAsConst(m_columnsList)) {
 		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
@@ -420,8 +416,7 @@ void ColumnDock::dateTimeFormatChanged(const QString& format) {
 }
 
 void ColumnDock::plotDesignationChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
 	for (auto* col : qAsConst(m_columnsList))
@@ -524,7 +519,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 
 void ColumnDock::columnFormatChanged() {
 	DEBUG("ColumnDock::columnFormatChanged()")
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
@@ -547,12 +542,12 @@ void ColumnDock::columnFormatChanged() {
 }
 
 void ColumnDock::columnPrecisionChanged() {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 	ui.sbPrecision->setValue(filter->numDigits());
 }
 
 void ColumnDock::columnPlotDesignationChanged(const AbstractColumn* col) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbPlotDesignation->setCurrentIndex(int(col->plotDesignation()));
 }

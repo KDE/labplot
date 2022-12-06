@@ -448,6 +448,7 @@ void NumberSpinBox::valueChanged() {
 		m_waitFeedback = true;
 	qDebug() << "Value: " << value();
 	emit valueChanged(value());
+	m_waitFeedback = false;
 }
 
 void NumberSpinBox::setInvalid(const QString& str) {

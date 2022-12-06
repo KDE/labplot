@@ -164,8 +164,7 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 }
 
 void DatapickerCurveWidget::errorBarSizeChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curveList)
 		curve->setPointErrorBarSize(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
@@ -175,8 +174,7 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 	auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbErrorBarFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* curve : m_curveList) {
@@ -187,8 +185,7 @@ void DatapickerCurveWidget::errorBarFillingStyleChanged(int index) {
 }
 
 void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QBrush brush;
 	for (auto* curve : m_curveList) {
@@ -196,15 +193,11 @@ void DatapickerCurveWidget::errorBarFillingColorChanged(const QColor& color) {
 		brush.setColor(color);
 		curve->setPointErrorBarBrush(brush);
 	}
-
-	m_initializing = true;
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, color);
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curveList)
 		curve->setPointVisibility(state);
@@ -227,30 +220,26 @@ void DatapickerCurveWidget::updateSymbolWidgets() {
 //******** SLOTs for changes triggered in DatapickerCurve *****
 //*************************************************************
 void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbXErrorType->setCurrentIndex((int)errors.x);
 	ui.cbYErrorType->setCurrentIndex((int)errors.y);
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarSizeChanged(qreal size) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolErrorBarBrushChanged(const QBrush& brush) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int)brush.style());
 	ui.kcbErrorBarFillingColor->setColor(brush.color());
 	GuiTools::updateBrushStyles(ui.cbErrorBarFillingStyle, brush.color());
-	m_initializing = false;
 }
 
 void DatapickerCurveWidget::symbolVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -260,12 +249,11 @@ void DatapickerCurveWidget::load() {
 	if (!m_curve)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbXErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().x);
 	ui.cbYErrorType->setCurrentIndex((int)m_curve->curveErrorTypes().y);
 	ui.chkVisible->setChecked(m_curve->pointVisibility());
 	ui.cbErrorBarFillingStyle->setCurrentIndex((int)m_curve->pointErrorBarBrush().style());
 	ui.kcbErrorBarFillingColor->setColor(m_curve->pointErrorBarBrush().color());
 	ui.sbErrorBarSize->setValue(Worksheet::convertFromSceneUnits(m_curve->pointErrorBarSize(), Worksheet::Unit::Point));
-	m_initializing = false;
 }

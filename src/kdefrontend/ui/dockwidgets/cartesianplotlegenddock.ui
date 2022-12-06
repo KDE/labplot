@@ -125,7 +125,6 @@
         <widget class="QLabel" name="lFormat">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -292,7 +291,6 @@
         <widget class="QLabel" name="lPosition">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -329,7 +327,7 @@
         </widget>
        </item>
        <item row="4" column="2" colspan="3">
-        <widget class="KFontRequester" name="kfrLabelFont"/>
+        <widget class="KFontRequester" name="kfrLabelFont" native="true"/>
        </item>
        <item row="9" column="0">
         <widget class="QLabel" name="lLineSymbolWidth">
@@ -366,7 +364,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -382,7 +380,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -395,7 +393,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -408,7 +406,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -424,7 +422,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -444,7 +442,6 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -471,7 +468,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -547,7 +544,6 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -599,7 +595,6 @@
         <widget class="QLabel" name="lMargin">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -612,7 +607,6 @@
         <widget class="QLabel" name="lSpacing">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -640,7 +634,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -656,7 +650,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -686,7 +680,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -732,7 +726,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -754,7 +748,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -790,7 +784,7 @@
           <string> cm</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

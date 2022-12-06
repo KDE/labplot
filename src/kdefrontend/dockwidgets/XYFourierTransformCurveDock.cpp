@@ -191,8 +191,7 @@ void XYFourierTransformCurveDock::updatePlotRanges() {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -212,8 +211,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -307,8 +305,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 }
 
 void XYFourierTransformCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -359,25 +356,22 @@ void XYFourierTransformCurveDock::showTransformResult() {
 //*************************************************************
 // General-Tab
 void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTransformCurve::TransformData& transformData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 
 	this->showTransformResult();
-	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::dataChanged() {
@@ -385,7 +379,6 @@ void XYFourierTransformCurveDock::dataChanged() {
 }
 
 void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

@@ -38,6 +38,35 @@
 	{ }
 #endif
 
+struct Lock {
+	inline explicit Lock(bool& variable)
+		: variable(variable = true) {
+	}
+
+	inline ~Lock() {
+		variable = false;
+	}
+
+private:
+	bool& variable;
+};
+
+/*!
+ * Used for example for connections with NumberSpinbox because those are using
+ * a feedback and so breaking the connection dock -> element -> dock is not desired
+ */
+#define CONDITIONAL_RETURN_NO_LOCK                                                                                                                             \
+	if (m_initializing)                                                                                                                                        \
+		return;
+
+/*!
+ * Lock mechanism used in docks to prevent loops (dock -> element -> dock)
+ * dock (locking) -> element: No feedback to the dock
+ */
+#define CONDITIONAL_LOCK_RETURN                                                                                                                                \
+	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
+	const Lock lock(m_initializing);
+
 #if QT_VERSION < 0x050700
 template<class T>
 constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>888</height>
+    <width>405</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -116,7 +116,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -222,7 +222,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -235,7 +235,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -693,7 +693,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -845,7 +845,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -958,7 +958,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1011,7 +1011,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1473,7 +1473,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

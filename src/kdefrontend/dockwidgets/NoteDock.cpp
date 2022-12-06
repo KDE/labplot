@@ -58,24 +58,21 @@ void NoteDock::setNotesList(QList<Note*> list) {
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
 void NoteDock::backgroundColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setBackgroundColor(color);
 }
 
 void NoteDock::textColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextColor(color);
 }
 
 void NoteDock::textFontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextFont(font);

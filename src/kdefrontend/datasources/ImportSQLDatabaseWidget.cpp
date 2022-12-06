@@ -212,8 +212,7 @@ void ImportSQLDatabaseWidget::readConnections() {
 }
 
 void ImportSQLDatabaseWidget::connectionChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QDEBUG(QStringLiteral("ImportSQLDatabaseWidget: connecting to ") + ui.cbConnection->currentText());
 

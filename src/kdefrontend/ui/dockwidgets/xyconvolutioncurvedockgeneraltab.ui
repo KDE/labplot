@@ -244,7 +244,6 @@
     <widget class="QLabel" name="lData">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -267,7 +266,6 @@
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -336,7 +334,6 @@
     <widget class="QLabel" name="lConvolution">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>

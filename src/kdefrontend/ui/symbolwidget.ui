@@ -30,7 +30,6 @@
     <widget class="QLabel" name="lGeneral">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -169,7 +168,6 @@
     <widget class="QLabel" name="lFilling">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -225,7 +223,6 @@
     <widget class="QLabel" name="lBorder">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -295,7 +292,7 @@
      <property name="suffix">
       <string> pt</string>
      </property>
-     <property name="feedback">
+     <property name="feedback" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
@@ -314,8 +311,8 @@
      <property name="minimum">
       <double>0.000000000000000</double>
      </property>
-     <property name="feedback">
-      <bool>false</bool>
+     <property name="feedback" stdset="0">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

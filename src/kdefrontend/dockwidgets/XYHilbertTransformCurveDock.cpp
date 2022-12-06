@@ -176,8 +176,7 @@ void XYHilbertTransformCurveDock::updatePlotRanges() {
 //**** SLOTs for changes triggered in XYFitCurveDock *****
 //*************************************************************
 void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -195,8 +194,7 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYHilbertTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -255,8 +253,7 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
 }
 
 void XYHilbertTransformCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no transforming possible without the x- and y-data
 	auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
@@ -307,25 +304,22 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 //*************************************************************
 // General-Tab
 void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYHilbertTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYHilbertTransformCurveDock::curveTransformDataChanged(const XYHilbertTransformCurve::TransformData& transformData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_transformData = transformData;
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
 	this->typeChanged();
 
 	this->showTransformResult();
-	m_initializing = false;
 }
 
 void XYHilbertTransformCurveDock::dataChanged() {
@@ -333,7 +327,6 @@ void XYHilbertTransformCurveDock::dataChanged() {
 }
 
 void XYHilbertTransformCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

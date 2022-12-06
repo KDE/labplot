@@ -260,7 +260,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent)
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_imagesList = list;
 	m_image = list.first();
 	setAspects(list);
@@ -302,7 +302,6 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 
 	handleWidgetActions();
 	updateSymbolWidgets();
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
@@ -354,8 +353,7 @@ void DatapickerImageWidget::selectFile() {
 }
 
 void DatapickerImageWidget::fileNameChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	handleWidgetActions();
 
@@ -368,6 +366,8 @@ void DatapickerImageWidget::fileNameChanged() {
 }
 
 void DatapickerImageWidget::graphTypeChanged(int index) {
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	auto points = m_image->axisPoints();
 	points.type = static_cast<DatapickerImage::GraphType>(ui.cbGraphType->itemData(index).toInt());
 
@@ -380,9 +380,6 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 	ui.sbPositionZ1->setVisible(ternary);
 	ui.sbPositionZ2->setVisible(ternary);
 	ui.sbPositionZ3->setVisible(ternary);
-
-	if (m_initializing)
-		return;
 
 	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX || points.type == DatapickerImage::GraphType::Log10XY
 		|| points.type == DatapickerImage::GraphType::Log10X) {
@@ -408,8 +405,7 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 }
 
 void DatapickerImageWidget::ternaryScaleChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	DatapickerImage::ReferencePoints points = m_image->axisPoints();
 	points.ternaryScale = value;
@@ -419,8 +415,7 @@ void DatapickerImageWidget::ternaryScaleChanged(double value) {
 }
 
 void DatapickerImageWidget::logicalPositionChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	auto points = m_image->axisPoints();
 	points.logicalPos[0].setX(ui.sbPositionX1->value());
@@ -433,22 +428,19 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	points.logicalPos[1].setZ(ui.sbPositionZ2->value());
 	points.logicalPos[2].setZ(ui.sbPositionZ3->value());
 
-	const Lock lock(m_initializing);
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
 }
 
 void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointVisibility(state);
 }
 
 void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.intensityThresholdHigh = upperLimit;
@@ -458,8 +450,7 @@ void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit)
 }
 
 void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.foregroundThresholdHigh = upperLimit;
@@ -469,8 +460,7 @@ void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.hueThresholdHigh = upperLimit;
@@ -480,8 +470,7 @@ void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.saturationThresholdHigh = upperLimit;
@@ -491,8 +480,7 @@ void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit
 }
 
 void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto settings = m_image->settings();
 	settings.valueThresholdHigh = upperLimit;
@@ -502,32 +490,28 @@ void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 }
 
 void DatapickerImageWidget::plotImageTypeChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPlotImageType(DatapickerImage::PlotImageType(index));
 }
 
 void DatapickerImageWidget::rotationChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* image : m_imagesList)
 		image->setRotationAngle(value);
 }
 
 void DatapickerImageWidget::minSegmentLengthChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setminSegmentLength(value);
 }
 
 void DatapickerImageWidget::pointSeparationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imagesList)
 		image->setPointSeparation(value);
@@ -537,22 +521,17 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageRotationAngleChanged(float angle) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::ReferencePoints& axisPoints) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbGraphType->findData((int)axisPoints.type);
 	ui.cbGraphType->setCurrentIndex(index);
 	ui.sbTernaryScale->setValue(axisPoints.ternaryScale);
@@ -565,11 +544,10 @@ void DatapickerImageWidget::imageAxisPointsChanged(const DatapickerImage::Refere
 	ui.sbPositionZ1->setValue(axisPoints.logicalPos[0].z());
 	ui.sbPositionZ2->setValue(axisPoints.logicalPos[1].z());
 	ui.sbPositionZ3->setValue(axisPoints.logicalPos[2].z());
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::EditorSettings& settings) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ssIntensity->setSpan(settings.intensityThresholdLow, settings.intensityThresholdHigh);
 	ssForeground->setSpan(settings.foregroundThresholdLow, settings.foregroundThresholdHigh);
 	ssHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
@@ -580,13 +558,11 @@ void DatapickerImageWidget::imageEditorSettingsChanged(const DatapickerImage::Ed
 	gvHue->setSpan(settings.hueThresholdLow, settings.hueThresholdHigh);
 	gvSaturation->setSpan(settings.saturationThresholdLow, settings.saturationThresholdHigh);
 	gvValue->setSpan(settings.valueThresholdLow, settings.valueThresholdHigh);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageMinSegmentLengthChanged(const int value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbMinSegmentLength->setValue(value);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::updateSymbolWidgets() {
@@ -598,9 +574,8 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 }
 
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbSymbolVisible->setChecked(on);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::imageReferencePointSelected(int index) {
@@ -616,7 +591,7 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found
@@ -651,5 +626,4 @@ void DatapickerImageWidget::load() {
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
 	ui.chbSymbolVisible->setChecked(m_image->pointVisibility());
-	m_initializing = false;
 }

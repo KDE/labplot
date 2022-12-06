@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>396</width>
-    <height>589</height>
+    <height>583</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -479,7 +479,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -498,7 +498,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -517,7 +517,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -536,7 +536,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -555,7 +555,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
@@ -574,7 +574,7 @@
          <property name="suffix">
           <string> cm</string>
          </property>
-		 <property name="minimum">
+         <property name="minimum">
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">

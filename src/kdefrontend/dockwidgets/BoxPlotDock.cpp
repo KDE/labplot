@@ -11,6 +11,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -170,7 +171,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 }
 
 void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_boxPlots = list;
 	m_boxPlot = list.first();
 	setAspects(list);
@@ -271,7 +272,7 @@ void BoxPlotDock::updateLocale() {
 	whiskersLineWidget->updateLocale();
 	ui.leWhiskersRangeParameter->setLocale(numberLocale);
 
-	// 	Lock lock(m_initializing);
+	// 	CONDITIONAL_LOCK_RETURN;
 	// 	ui.lePosition->setText(numberLocale.toString(m_boxPlot->position()));
 }
 
@@ -406,59 +407,52 @@ void BoxPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void BoxPlotDock::dataColumnChanged(const QModelIndex&) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::dataColumnChanged(const QModelIndex&) {
+	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void BoxPlotDock::orderingChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::orderingChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto ordering = static_cast<BoxPlot::Ordering>(index);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setOrdering(ordering);
 }
 
-void BoxPlotDock::orientationChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::orientationChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = BoxPlot::Orientation(index);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setOrientation(orientation);
 }
 
-void BoxPlotDock::variableWidthChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::variableWidthChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setVariableWidth(state);
 }
 
-void BoxPlotDock::notchesEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::notchesEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setNotchesEnabled(state);
 }
 
-void BoxPlotDock::visibilityChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::visibilityChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setVisible(state);
 }
 
 //"Box"-tab
-void BoxPlotDock::widthFactorChanged(int value) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::widthFactorChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
 
 	double factor = (double)value / 100.;
 	for (auto* boxPlot : m_boxPlots)
@@ -487,18 +481,16 @@ void BoxPlotDock::symbolCategoryChanged() {
 	symbolWidget->setSymbols(symbols);
 }
 
-void BoxPlotDock::jitteringEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::jitteringEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setJitteringEnabled(state);
 }
 
 // whiskers
-void BoxPlotDock::whiskersTypeChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::whiskersTypeChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = BoxPlot::WhiskersType(index);
 	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
@@ -513,9 +505,8 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 		boxPlot->setWhiskersType(type);
 }
 
-void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) {
+	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -529,17 +520,15 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
 
 // whiskers cap
 void BoxPlotDock::whiskersCapSizeChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersCapSize(size);
 }
 
-void BoxPlotDock::whiskersCapStyleChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::whiskersCapStyleChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
@@ -551,8 +540,7 @@ void BoxPlotDock::whiskersCapStyleChanged(int index) const {
 }
 
 void BoxPlotDock::whiskersCapColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
 	for (auto* boxPlot : m_boxPlots) {
@@ -561,14 +549,11 @@ void BoxPlotDock::whiskersCapColorChanged(const QColor& color) {
 		boxPlot->setWhiskersCapPen(pen);
 	}
 
-	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, color);
-	m_initializing = false;
 }
 
 void BoxPlotDock::whiskersCapWidthChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPen pen;
 	for (auto* boxPlot : m_boxPlots) {
@@ -578,9 +563,8 @@ void BoxPlotDock::whiskersCapWidthChanged(double value) const {
 	}
 }
 
-void BoxPlotDock::whiskersCapOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::whiskersCapOpacityChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity = static_cast<qreal>(value) / 100.;
 	for (auto* boxPlot : m_boxPlots)
@@ -588,17 +572,15 @@ void BoxPlotDock::whiskersCapOpacityChanged(int value) const {
 }
 
 //"Margin Plots"-Tab
-void BoxPlotDock::rugEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::rugEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : qAsConst(m_boxPlots))
 		curve->setRugEnabled(state);
 }
 
 void BoxPlotDock::rugLengthChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -606,8 +588,7 @@ void BoxPlotDock::rugLengthChanged(double value) const {
 }
 
 void BoxPlotDock::rugWidthChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -615,8 +596,7 @@ void BoxPlotDock::rugWidthChanged(double value) const {
 }
 
 void BoxPlotDock::rugOffsetChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -631,103 +611,96 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_boxPlot != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
 }
 void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
 void BoxPlotDock::plotOrderingChanged(BoxPlot::Ordering ordering) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrdering->setCurrentIndex((int)ordering);
 }
 void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BoxPlotDock::plotVariableWidthChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVariableWidth->setChecked(on);
 }
 void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkNotches->setChecked(on);
 }
 void BoxPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	// 	float v = (float)value*100.;
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
 // symbols
 void BoxPlotDock::plotJitteringEnabledChanged(bool status) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkJitteringEnabled->setChecked(status);
 }
 
 // whiskers
 void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbWhiskersType->setCurrentIndex((int)type);
 }
 void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	SET_NUMBER_LOCALE
 	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
 }
 
 // whiskers cap
 void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
 void BoxPlotDock::plotWhiskersCapPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	if (ui.cbWhiskersCapStyle->currentIndex() != pen.style())
 		ui.cbWhiskersCapStyle->setCurrentIndex(pen.style());
 	if (ui.kcbWhiskersCapColor->color() != pen.color())
 		ui.kcbWhiskersCapColor->setColor(pen.color());
-	if (ui.sbWhiskersCapWidth->value() != pen.widthF())
-		ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
 }
 void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	float v = (float)value * 100.;
 	ui.sbWhiskersCapOpacity->setValue(v);
 }
 
 //"Margin Plot"-Tab
 void BoxPlotDock::plotRugEnabledChanged(bool status) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugLengthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugWidthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugOffsetChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -772,7 +745,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
 
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, ui.kcbWhiskersCapColor->color());
 }
 

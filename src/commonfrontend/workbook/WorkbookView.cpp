@@ -87,8 +87,7 @@ int WorkbookView::currentIndex() const {
   or of a \c Matrix object to \c Workbook.
 */
 void WorkbookView::tabChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (index == -1)
 		return;
