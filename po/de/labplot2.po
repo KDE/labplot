@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-06 00:41+0000\n"
-"PO-Revision-Date: 2022-11-15 12:55+0100\n"
+"PO-Revision-Date: 2022-11-26 10:52+0100\n"
 "Last-Translator: Stefan Gerlach <stefan.gerlach@uni.kn>\n"
 "Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
@@ -6460,10 +6460,9 @@ msgid "%1: set line style"
 msgstr "%1: Linienstil festlegen"
 
 #: src/backend/worksheet/Line.cpp:147
-#, fuzzy, kde-format
-#| msgid "%1: set bin width"
+#, kde-format
 msgid "%1: set line width"
-msgstr "%1: Binbreite festlegen"
+msgstr "%1: Linienbreite festlegen"
 
 #: src/backend/worksheet/Line.cpp:154
 #, kde-format
@@ -12197,17 +12196,15 @@ msgstr "%1 Benutzerdefinierte Punkte: Die Vorlage \"%2\" wurde geladen."
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:83
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:89
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Uncertainty Bars"
-msgstr "Unsicherheit"
+msgstr "Unsicherheitsbalken"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:84
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:90
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "X Uncertainty"
-msgstr "Unsicherheit"
+msgstr "X Unsicherheit"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
 #, kde-format
@@ -12277,10 +12274,9 @@ msgid "Probability Density"
 msgstr "Wahrscheinlichkeitsdichte"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "No Uncertainties"
-msgstr "Unsicherheit"
+msgstr "Keine Unsicherheiten"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
@@ -12289,16 +12285,14 @@ msgid "Poisson variance, sqrt(N)"
 msgstr "Poissonvarianz, sqrt(N)"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, symmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, symmetric"
-msgstr "Eigener Fehlerwert, symmetrisch"
+msgstr "Eigene Unsicherkeiten, symmetrisch"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
-#, fuzzy, kde-format
-#| msgid "Custom Error Values, asymmetric"
+#, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
-msgstr "Eigener Fehlerwert, asymmetrisch"
+msgstr "Eigener Unsicherkeiten, asymmetrisch"
 
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
 #, kde-format
@@ -12584,10 +12578,9 @@ msgid "Correlation status: %1"
 msgstr "Korrelationsstatus:  %1"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:91
-#, fuzzy, kde-format
-#| msgid "Uncertainty"
+#, kde-format
 msgid "Y Uncertainty"
-msgstr "Unsicherheit"
+msgstr "Y Unsicherheit"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:227
 #, kde-format
@@ -17605,7 +17598,7 @@ msgstr "Präfix:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1407
 #, kde-format
 msgid "Font Color:"
-msgstr "Schrftfarbe:"
+msgstr "Schriftfarbe:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1528
@@ -18828,17 +18821,15 @@ msgstr "monton steigendes X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarY)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:677
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "Y Error"
-msgstr "Fehler"
+msgstr "Y Fehler"
 
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarX)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:707
-#, fuzzy, kde-format
-#| msgid "Error"
+#, kde-format
 msgid "X Error"
-msgstr "Fehler"
+msgstr "X Fehler"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
@@ -19609,7 +19600,7 @@ msgstr "Hauptschriftart:"
 #: src/kdefrontend/ui/labelwidget.ui:644
 #, kde-format
 msgid "Font color:"
-msgstr "Schrftfarbe:"
+msgstr "Schriftfarbe:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -19973,32 +19964,27 @@ msgstr "Sichtbarkeit der Unterfenster:"
 #: src/kdefrontend/ui/settingsgeneralpage.ui:254
 #, kde-format
 msgid "Terms:"
-msgstr ""
+msgstr "Begriffe:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:261
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Random number distributions as defined in <a href="
-#| "\"https://www.gnu.org/software/gsl/doc/html/randist.html\"><span style=\" "
-#| "text-decoration: underline; color:#2980b9;\">GSL documentation</span></"
-#| "a></p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Use terms compliant with the <a href=\"http://www.bipm."
 "org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style=\" text-"
 "decoration: underline; color:#2980b9;\">Guide to the Expression of "
 "Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 msgstr ""
-"<html><head/><body><p>Zufallszahlenverteilungen wie in <a href=\"https://www."
-"gnu.org/software/gsl/doc/html/randist.html\"><span style=\" text-decoration: "
-"underline; color:#2980b9;\">GSL documentation</span></a> definiert</p></"
-"body></html>"
+"<html><head/><body><p>Verwende Begriffe entsprechend des <a href=\"http://"
+"www.bipm.org/utils/common/documents/jcgm/JCGM_100_2008_E.pdf\"><span style="
+"\" text-decoration: underline; color:#2980b9;\">Guide to the Expression of "
+"Uncertainty in Measurement (GUM)</span></a></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGUMTerms)
 #: src/kdefrontend/ui/settingsgeneralpage.ui:264
 #, kde-format
 msgid "GUM compliant"
-msgstr ""
+msgstr "GUM konform"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, lPresenterMode_2)
@@ -20619,10 +20605,9 @@ msgid "Polar (x, y(rad))"
 msgstr "Polar (x, y(rad))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:169
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (ln(x), ln(y))"
-msgstr "Logarithmisch (ln(x), y)"
+msgstr "Logarithmisch (ln(x),  ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:170
 #, kde-format
@@ -20635,22 +20620,19 @@ msgid "Logarithmic (x, ln(y))"
 msgstr "Logarithmisch (x, ln(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:172
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), log(y))"
-msgstr "Logarithmisch (ln(x), y)"
+msgstr "Logarithmisch (log(x), log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:173
-#, fuzzy, kde-format
-#| msgid "Logarithmic (ln(x), y)"
+#, kde-format
 msgid "Logarithmic (log(x), y)"
-msgstr "Logarithmisch (ln(x), y)"
+msgstr "Logarithmisch (log(x), y)"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:174
-#, fuzzy, kde-format
-#| msgid "Logarithmic (x, ln(y))"
+#, kde-format
 msgid "Logarithmic (x, log(y))"
-msgstr "Logarithmisch (x, ln(y))"
+msgstr "Logarithmisch (x, log(y))"
 
 #: src/kdefrontend/widgets/DatapickerImageWidget.cpp:175
 #, kde-format
