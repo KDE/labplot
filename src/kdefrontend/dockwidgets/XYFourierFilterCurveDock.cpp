@@ -214,10 +214,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
 
-	SET_NUMBER_LOCALE
-	uiGeneralTab.sbCutoff->setLocale(numberLocale);
-	uiGeneralTab.sbCutoff2->setLocale(numberLocale);
-
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
@@ -427,9 +423,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(f);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01 * f);
 		uiGeneralTab.sbCutoff->setSuffix(QStringLiteral(" Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
@@ -443,9 +437,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 		}
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		uiGeneralTab.sbCutoff->setDecimals(6);
 		uiGeneralTab.sbCutoff->setMaximum(1.0);
-		uiGeneralTab.sbCutoff->setSingleStep(0.01);
 		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
@@ -459,8 +451,6 @@ void XYFourierFilterCurveDock::unitChanged() {
 		}
 		break;
 	case nsl_filter_cutoff_unit_index:
-		uiGeneralTab.sbCutoff->setDecimals(0);
-		uiGeneralTab.sbCutoff->setSingleStep(1);
 		uiGeneralTab.sbCutoff->setMaximum(n);
 		uiGeneralTab.sbCutoff->setSuffix(QString());
 		switch (oldUnit) {
@@ -504,9 +494,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
-		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(f);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01 * f);
 		uiGeneralTab.sbCutoff2->setSuffix(QStringLiteral(" Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
@@ -520,9 +508,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		}
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		uiGeneralTab.sbCutoff2->setDecimals(6);
 		uiGeneralTab.sbCutoff2->setMaximum(1.0);
-		uiGeneralTab.sbCutoff2->setSingleStep(0.01);
 		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
@@ -536,8 +522,6 @@ void XYFourierFilterCurveDock::unit2Changed() {
 		}
 		break;
 	case nsl_filter_cutoff_unit_index:
-		uiGeneralTab.sbCutoff2->setDecimals(0);
-		uiGeneralTab.sbCutoff2->setSingleStep(1);
 		uiGeneralTab.sbCutoff2->setMaximum(n);
 		uiGeneralTab.sbCutoff2->setSuffix(QString());
 		switch (oldUnit) {
