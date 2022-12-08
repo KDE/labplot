@@ -884,14 +884,17 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 	} else {
 		ui.lRangePoints->show();
 		ui.leRangePoints->show();
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+
+	if (type != CartesianPlot::RangeType::Free) {
 		SET_NUMBER_LOCALE;
 		if (type == CartesianPlot::RangeType::First)
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeFirstValues()));
 		else
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeLastValues()));
 	}
-
-	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
