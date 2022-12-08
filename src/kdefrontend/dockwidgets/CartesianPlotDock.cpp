@@ -363,7 +363,7 @@ void CartesianPlotDock::init() {
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	DEBUG(Q_FUNC_INFO)
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_plotList = list;
 	m_plot = list.first();
 	setAspects(list);
@@ -451,8 +451,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::symmetricPaddingChanged, this, &CartesianPlotDock::plotSymmetricPaddingChanged);
 
 	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
-
-	m_initializing = false;
 }
 
 void CartesianPlotDock::activateTitleTab() {
