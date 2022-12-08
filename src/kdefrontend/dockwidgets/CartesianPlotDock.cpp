@@ -637,7 +637,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
 		connect(chk, &QCheckBox::toggled, [this, chk, dim](bool checked) {
-			const bool rangeIndex = chk->property("row").toInt();
+			const int rangeIndex = chk->property("row").toInt();
 			this->autoScaleChanged(dim, rangeIndex, checked);
 		});
 
