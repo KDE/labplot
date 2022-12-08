@@ -48,7 +48,7 @@ CursorDock::CursorDock(QWidget* parent)
 }
 
 void CursorDock::setWorksheet(Worksheet* worksheet) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 
 	ui->tvCursorData->setModel(worksheet->cursorModel());
 	ui->tvCursorData->resizeColumnToContents(0);
@@ -79,8 +79,6 @@ void CursorDock::setWorksheet(Worksheet* worksheet) {
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
 		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
 	}
-
-	m_initializing = false;
 }
 
 CursorDock::~CursorDock() {
@@ -113,31 +111,25 @@ void CursorDock::cursor1EnableChanged(bool enable) {
 // back from plot
 // #############################################################
 void CursorDock::plotCursor0EnableChanged(bool enable) {
-	// No condition, because other data than only enable will be changed
-	m_initializing = true;
-
-	ui->cbCursor0en->setChecked(enable);
 	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !enable);
 	if (enable && ui->cbCursor1en->isChecked())
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui->cbCursor0en->setChecked(enable);
 }
 
 void CursorDock::plotCursor1EnableChanged(bool enable) {
-	// No condition, because other data than only enable will be changed
-	m_initializing = true;
-
-	ui->cbCursor1en->setChecked(enable);
 	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !enable);
 	if (enable && ui->cbCursor0en->isChecked())
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
 		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui->cbCursor1en->setChecked(enable);
 }
 
 bool CursorDock::eventFilter(QObject* obj, QEvent* event) {
