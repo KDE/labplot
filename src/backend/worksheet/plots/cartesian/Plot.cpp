@@ -17,11 +17,11 @@ Plot::Plot(const QString& name, PlotPrivate* dd, AspectType type)
 
 Plot::~Plot() = default;
 
-
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-PlotPrivate::PlotPrivate(Plot* owner) : WorksheetElementPrivate(owner),
+PlotPrivate::PlotPrivate(Plot* owner)
+	: WorksheetElementPrivate(owner),
 	q(owner) {
 }
 

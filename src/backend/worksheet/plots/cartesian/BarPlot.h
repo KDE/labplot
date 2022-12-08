@@ -108,4 +108,3 @@ Q_SIGNALS:
 };
 
 #endif
-
