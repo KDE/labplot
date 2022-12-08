@@ -570,6 +570,29 @@ void AxisDock::updateLocale() {
 	minorGridLineWidget->updateLocale();
 }
 
+void AxisDock::setPositionText(Axis::Orientation orientation) {
+	switch (orientation) {
+	case Axis::Orientation::Horizontal: {
+		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
+		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbLabelsPosition->setItemText(1, i18n("Top"));
+		ui.cbLabelsPosition->setItemText(2, i18n("Bottom"));
+		break;
+	}
+	case Axis::Orientation::Vertical: {
+		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
+		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbLabelsPosition->setItemText(1, i18n("Right"));
+		ui.cbLabelsPosition->setItemText(2, i18n("Left"));
+		break;
+	}
+	case Axis::Orientation::Both:
+		break;
+	}
+}
+
 void AxisDock::activateTitleTab() {
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
@@ -618,19 +641,7 @@ void AxisDock::orientationChanged(int item) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation{Axis::Orientation(item)};
-	if (orientation == Axis::Orientation::Horizontal) {
-		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
-		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
-		ui.cbLabelsPosition->setItemText(1, i18n("Top"));
-		ui.cbLabelsPosition->setItemText(2, i18n("Bottom"));
-	} else { // vertical
-		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
-		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
-		ui.cbLabelsPosition->setItemText(1, i18n("Right"));
-		ui.cbLabelsPosition->setItemText(2, i18n("Left"));
-	}
+	setPositionText(orientation);
 
 	// depending on the current orientation we need to update axis position and labels position
 
@@ -1698,17 +1709,11 @@ void AxisDock::load() {
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 
 	Range<double> logicalRange(0, 0);
-	if (orientation == Axis::Orientation::Horizontal) {
+	if (orientation == Axis::Orientation::Horizontal)
 		logicalRange = plot->range(Dimension::Y, yIndex);
-		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
-		ui.cbPosition->setItemText(Center, i18n("Centered"));
-	} else {
+	else
 		logicalRange = plot->range(Dimension::X, xIndex);
-		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
-		ui.cbPosition->setItemText(Center, i18n("Centered"));
-	}
+	setPositionText(orientation);
 
 	int index{static_cast<int>(m_axis->position())};
 	bool logical = false;
