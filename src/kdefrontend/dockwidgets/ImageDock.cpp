@@ -250,28 +250,27 @@ void ImageDock::selectFile() {
 }
 
 void ImageDock::embeddedChanged(int state) {
+	bool embedded = static_cast<bool>(state);
+	ui.leFileName->setEnabled(!embedded);
+
 	CONDITIONAL_LOCK_RETURN;
 
-	bool embedded = static_cast<bool>(state);
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
-		ui.leFileName->setEnabled(false);
-	} else {
+	} else
 		ui.leFileName->setText(m_image->fileName());
-		ui.leFileName->setEnabled(true);
-	}
 
 	for (auto* image : m_imageList)
 		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
-	CONDITIONAL_LOCK_RETURN;
-
 	const QString& fileName = ui.leFileName->text();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setFileName(fileName);
@@ -402,6 +401,8 @@ void ImageDock::borderStyleChanged(int index) {
 }
 
 void ImageDock::borderColorChanged(const QColor& color) {
+	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
@@ -410,8 +411,6 @@ void ImageDock::borderColorChanged(const QColor& color) {
 		pen.setColor(color);
 		image->setBorderPen(pen);
 	}
-
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
 }
 
 void ImageDock::borderWidthChanged(double value) {
