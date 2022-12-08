@@ -570,7 +570,7 @@ void AxisDock::updateLocale() {
 	minorGridLineWidget->updateLocale();
 }
 
-void AxisDock::setPositionText(Axis::Orientation orientation) {
+void AxisDock::updatePositionText(Axis::Orientation orientation) {
 	switch (orientation) {
 	case Axis::Orientation::Horizontal: {
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
@@ -641,7 +641,7 @@ void AxisDock::orientationChanged(int item) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation{Axis::Orientation(item)};
-	setPositionText(orientation);
+	updatePositionText(orientation);
 
 	// depending on the current orientation we need to update axis position and labels position
 
@@ -1713,7 +1713,7 @@ void AxisDock::load() {
 		logicalRange = plot->range(Dimension::Y, yIndex);
 	else
 		logicalRange = plot->range(Dimension::X, xIndex);
-	setPositionText(orientation);
+	updatePositionText(orientation);
 
 	int index{static_cast<int>(m_axis->position())};
 	bool logical = false;
@@ -1749,7 +1749,9 @@ void AxisDock::load() {
 	ui.sbEnd->setValue(m_axis->range().end());
 
 	// depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
+
+	updateLabelsPosition(m_axis->labelsPosition());
 
 	// ranges
 	ui.lStart->setVisible(numeric);

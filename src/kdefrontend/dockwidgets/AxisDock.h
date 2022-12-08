@@ -61,7 +61,7 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
-	void setPositionText(Axis::Orientation);
+	void updatePositionText(Axis::Orientation);
 
 	void setOffset(double);
 
