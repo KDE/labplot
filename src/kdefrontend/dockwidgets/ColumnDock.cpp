@@ -69,7 +69,7 @@ ColumnDock::ColumnDock(QWidget* parent)
 }
 
 void ColumnDock::setColumns(QList<Column*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_columnsList = list;
 	m_column = list.first();
 	setAspects(list);
@@ -160,8 +160,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	// don't allow to change the column type at least one non-editable column
 	if (sameMode)
 		ui.cbType->setEnabled(!nonEditable);
-
-	m_initializing = false;
 }
 
 /*!
@@ -170,7 +168,6 @@ void ColumnDock::setColumns(QList<Column*> list) {
   Called when the type (column mode) is changed.
 */
 void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
-	CONDITIONAL_LOCK_RETURN;
 	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(mode)));
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Double: {
@@ -511,6 +508,7 @@ void ColumnDock::batchEditLabels() {
 //********* SLOTs for changes triggered in Column *************
 //*************************************************************
 void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
+	CONDITIONAL_LOCK_RETURN;
 	if (m_column != aspect)
 		return;
 
