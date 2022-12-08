@@ -518,7 +518,7 @@ void ImageDock::load() {
 	if (!m_image)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
+	// No Lock!
 
 	ui.leFileName->setText(m_image->fileName());
 	ui.chbEmbedded->setChecked(m_image->embedded());

@@ -215,6 +215,8 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
+	// No lock!
+
 	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
