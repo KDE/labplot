@@ -403,8 +403,6 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
  * \param checked
  */
 void CartesianPlotLegendDock::bindingChanged(bool checked) {
-	CONDITIONAL_LOCK_RETURN;
-
 	// widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
@@ -432,6 +430,8 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 
 	ui.lPositionYLogical->setVisible(checked);
 	ui.sbPositionYLogical->setVisible(checked);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* legend : m_legendList)
 		legend->setCoordinateBindingEnabled(checked);
