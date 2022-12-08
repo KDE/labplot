@@ -471,8 +471,6 @@ void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -488,6 +486,8 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
