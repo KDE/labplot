@@ -113,12 +113,7 @@ void ReferenceLineDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 
-//**********************************************************
-//*** SLOTs for changes triggered in ReferenceLineDock *****
-//**********************************************************
-// Position
-void ReferenceLineDock::orientationChanged(int index) {
-	auto orientation{ReferenceLine::Orientation(index)};
+void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	bool numeric;
 	if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -135,6 +130,15 @@ void ReferenceLineDock::orientationChanged(int index) {
 	ui.sbPosition->setVisible(numeric);
 	ui.lPositionDateTime->setVisible(!numeric);
 	ui.dtePosition->setVisible(!numeric);
+}
+
+//**********************************************************
+//*** SLOTs for changes triggered in ReferenceLineDock *****
+//**********************************************************
+// Position
+void ReferenceLineDock::orientationChanged(int index) {
+	auto orientation{ReferenceLine::Orientation(index)};
+	updateWidgetsOrientation(orientation);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -211,12 +215,10 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
-
 	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	orientationChanged(ui.cbOrientation->currentIndex()); // call this to update the position widgets that depend on the orientation
+	updateWidgetsOrientation(orientation);
 
 	// position
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
