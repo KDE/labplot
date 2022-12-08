@@ -623,6 +623,24 @@ void AxisDock::updateAutoScale() {
 	m_axis->setRangeType(static_cast<Axis::RangeType>(ui.cbRangeType->currentIndex()));
 }
 
+void AxisDock::updateLabelsPosition(Axis::LabelsPosition position) {
+	bool b = (position != Axis::LabelsPosition::NoLabels);
+	ui.lLabelsOffset->setEnabled(b);
+	ui.sbLabelsOffset->setEnabled(b);
+	ui.lLabelsRotation->setEnabled(b);
+	ui.sbLabelsRotation->setEnabled(b);
+	ui.lLabelsFont->setEnabled(b);
+	ui.kfrLabelsFont->setEnabled(b);
+	ui.lLabelsColor->setEnabled(b);
+	ui.kcbLabelsFontColor->setEnabled(b);
+	ui.lLabelsPrefix->setEnabled(b);
+	ui.leLabelsPrefix->setEnabled(b);
+	ui.lLabelsSuffix->setEnabled(b);
+	ui.leLabelsSuffix->setEnabled(b);
+	ui.lLabelsOpacity->setEnabled(b);
+	ui.sbLabelsOpacity->setEnabled(b);
+}
+
 //*************************************************************
 //********** SLOTs for changes triggered in AxisDock **********
 //*************************************************************
@@ -1233,22 +1251,7 @@ void AxisDock::labelsDateTimeFormatChanged() {
 
 void AxisDock::labelsPositionChanged(int index) {
 	auto position = Axis::LabelsPosition(index);
-
-	bool b = (position != Axis::LabelsPosition::NoLabels);
-	ui.lLabelsOffset->setEnabled(b);
-	ui.sbLabelsOffset->setEnabled(b);
-	ui.lLabelsRotation->setEnabled(b);
-	ui.sbLabelsRotation->setEnabled(b);
-	ui.lLabelsFont->setEnabled(b);
-	ui.kfrLabelsFont->setEnabled(b);
-	ui.lLabelsColor->setEnabled(b);
-	ui.kcbLabelsFontColor->setEnabled(b);
-	ui.lLabelsPrefix->setEnabled(b);
-	ui.leLabelsPrefix->setEnabled(b);
-	ui.lLabelsSuffix->setEnabled(b);
-	ui.leLabelsSuffix->setEnabled(b);
-	ui.lLabelsOpacity->setEnabled(b);
-	ui.sbLabelsOpacity->setEnabled(b);
+	updateLabelsPosition(position);
 
 	CONDITIONAL_LOCK_RETURN;
 
