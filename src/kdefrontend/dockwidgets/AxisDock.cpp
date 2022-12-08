@@ -989,7 +989,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		axis->setMajorTicksType(type);
 }
 
-void AxisDock::majorTicksAutoNumberChanged(Qt::CheckState state) {
+void AxisDock::majorTicksAutoNumberChanged(int state) {
 	bool automatic;
 	switch (state) {
 	case Qt::CheckState::Checked:
@@ -1177,7 +1177,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		axis->setMinorTicksType(type);
 }
 
-void AxisDock::minorTicksAutoNumberChanged(Qt::CheckState state) {
+void AxisDock::minorTicksAutoNumberChanged(int state) {
 	bool automatic;
 	switch (state) {
 	case Qt::CheckState::Checked:
