@@ -490,8 +490,6 @@ void BoxPlotDock::jitteringEnabledChanged(bool state) {
 
 // whiskers
 void BoxPlotDock::whiskersTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	auto type = BoxPlot::WhiskersType(index);
 	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
 	ui.rbFarOut->setEnabled(type == BoxPlot::WhiskersType::IQR);
@@ -500,6 +498,8 @@ void BoxPlotDock::whiskersTypeChanged(int index) {
 	bool visible = (type == BoxPlot::WhiskersType::IQR) || (type == BoxPlot::WhiskersType::SD) || (type == BoxPlot::WhiskersType::MAD);
 	ui.lWhiskersRangeParameter->setVisible(visible);
 	ui.leWhiskersRangeParameter->setVisible(visible);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersType(type);
