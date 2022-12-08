@@ -530,7 +530,6 @@ void XYSmoothCurveDock::recalculateClicked() {
 
 void XYSmoothCurveDock::enableRecalculate() const {
 	CONDITIONAL_RETURN_NO_LOCK;
-	;
 
 	// no smoothing possible without the x- and y-data
 	bool hasSourceData = false;
