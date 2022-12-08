@@ -729,9 +729,9 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
 void XYCurveDock::valuesTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	this->updateValuesWidgets();
+
+	CONDITIONAL_LOCK_RETURN;
 
 	const auto type = XYCurve::ValuesType(index);
 	for (auto* curve : m_curvesList)
@@ -742,9 +742,9 @@ void XYCurveDock::valuesTypeChanged(int index) {
   called when the custom column for the values was changed.
 */
 void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	this->updateValuesWidgets();
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<Column*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
@@ -1103,15 +1103,15 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
+	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
 	cbXColumn->setColumn(column, m_curve->xColumnPath());
-	updateValuesWidgets();
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
+	updateValuesWidgets();
 	CONDITIONAL_LOCK_RETURN;
 	cbYColumn->setColumn(column, m_curve->yColumnPath());
-	updateValuesWidgets();
 }
 void XYCurveDock::curveLegendVisibleChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
