@@ -1028,6 +1028,8 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (delta == QPointF(0, 0))
 		return;
 
+	if (!q->cSystem->isValid())
+		return;
 	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 

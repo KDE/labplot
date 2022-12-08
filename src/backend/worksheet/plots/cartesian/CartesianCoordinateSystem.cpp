@@ -581,6 +581,22 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	return result;
 }
 
+bool CartesianCoordinateSystem::isValid() const {
+	if (d->xScales.isEmpty() || d->yScales.isEmpty())
+		return false;
+
+	for (const auto* scale : d->xScales) {
+		if (!scale)
+			return false;
+	}
+
+	for (const auto* scale : d->yScales) {
+		if (!scale)
+			return false;
+	}
+	return true;
+}
+
 /**************************************************************************************/
 
 /**

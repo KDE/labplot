@@ -937,6 +937,8 @@ void XYCurvePrivate::calculateScenePoints() {
 			int startIndex, endIndex;
 			if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 				DEBUG(Q_FUNC_INFO << ", column monotonic")
+				if (!q->cSystem->isValid())
+					return;
 				double xMin = q->cSystem->mapSceneToLogical(dataRect.topLeft()).x();
 				double xMax = q->cSystem->mapSceneToLogical(dataRect.bottomRight()).x();
 				DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
@@ -1216,6 +1218,8 @@ void XYCurvePrivate::updateLines() {
 		auto columnProperties = q->xColumn()->properties();
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing || columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
 			DEBUG(Q_FUNC_INFO << ", monotonic")
+			if (!q->cSystem->isValid())
+				return;
 			const double xMin = q->cSystem->mapSceneToLogical(pageRect.topLeft()).x();
 			const double xMax = q->cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
@@ -2921,9 +2925,11 @@ void XYCurvePrivate::updatePixmap() {
 
 QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant& value) {
 	// signalize, that the curve was selected. Will be used to create a new InfoElement (Marker)
-	if (change == QGraphicsItem::ItemSelectedChange)
-		if (value.toBool() && q->cSystem)
+	if (change == QGraphicsItem::ItemSelectedChange) {
+		if (value.toBool() && q->cSystem && q->cSystem->isValid()) {
 			Q_EMIT q->selected(q->cSystem->mapSceneToLogical(mousePos).x());
+		}
+	}
 	return QGraphicsItem::itemChange(change, value);
 }
 

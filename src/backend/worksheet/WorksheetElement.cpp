@@ -666,7 +666,7 @@ void WorksheetElementPrivate::updatePosition() {
 		p = q->relativePosToParentPos(position);
 
 		// the position in scene coordinates was changed, calculate the position in logical coordinates
-		if (q->cSystem) {
+		if (q->cSystem && q->cSystem->isValid()) {
 			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
@@ -684,6 +684,8 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 
 		WorksheetElement::PositionWrapper tempPosition = position;
 		if (coordinateBindingEnabled && q->cSystem) {
+			if (!q->cSystem->isValid())
+				return;
 			// the position in logical coordinates was changed, calculate the position in scene coordinates
 			bool visible;
 			QPointF p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -759,6 +761,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if (coordinateBindingEnabled) {
+			if (q->cSystem->isValid())
+				return QGraphicsItem::itemChange(change, value);
 			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);

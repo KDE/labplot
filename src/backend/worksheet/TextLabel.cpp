@@ -168,7 +168,7 @@ void TextLabel::init() {
 		d->position.verticalPosition = (VerticalPosition)group.readEntry("PositionY", (int)d->position.verticalPosition);
 		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment)group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
 		d->verticalAlignment = (WorksheetElement::VerticalAlignment)group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
-		if (cSystem)
+		if (cSystem && cSystem->isValid())
 			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
 	d->updatePosition();
