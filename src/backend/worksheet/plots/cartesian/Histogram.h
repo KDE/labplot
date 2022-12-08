@@ -11,7 +11,8 @@
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class AbstractColumn;
 class HistogramPrivate;
@@ -22,9 +23,9 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT Histogram : public WorksheetElement, public Curve {
+class LABPLOT_EXPORT Histogram : public Plot {
 #else
-class Histogram : public WorksheetElement, public Curve {
+class Histogram : public Plot {
 #endif
 	Q_OBJECT
 
@@ -53,7 +54,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)

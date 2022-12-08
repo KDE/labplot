@@ -12,7 +12,7 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
@@ -22,7 +22,7 @@ class CartesianCoordinateSystem;
 class Symbol;
 class XYCurve;
 
-class XYCurvePrivate : public WorksheetElementPrivate {
+class XYCurvePrivate : public PlotPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
@@ -58,8 +58,8 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;

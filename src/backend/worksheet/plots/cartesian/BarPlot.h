@@ -10,10 +10,8 @@
 #ifndef BARPLOT_H
 #define BARPLOT_H
 
-#include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/Curve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BarPlotPrivate;
 class AbstractColumn;
@@ -23,9 +21,9 @@ class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BarPlot : public WorksheetElement, Curve {
+class LABPLOT_EXPORT BarPlot : Plot {
 #else
-class BarPlot : public WorksheetElement, Curve {
+class BarPlot : public Plot {
 #endif
 	Q_OBJECT
 
@@ -43,8 +41,8 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	// reimplemented from Curve
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	// reimplemented from Plot
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	// general
@@ -94,18 +92,15 @@ private Q_SLOTS:
 	// SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void visibilityChangedSlot();
-
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
 Q_SIGNALS:
 	// General-Tab
-	void dataChanged();
 	void xColumnChanged(const AbstractColumn*);
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void typeChanged(BarPlot::Type);
 	void orientationChanged(BarPlot::Orientation);
 	void widthFactorChanged(double);
-	void updateLegendRequested();
 
 	// box border
 	void borderPenChanged(QPen&);
@@ -113,3 +108,4 @@ Q_SIGNALS:
 };
 
 #endif
+

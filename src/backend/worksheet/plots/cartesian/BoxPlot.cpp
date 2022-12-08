@@ -41,12 +41,12 @@
  */
 
 BoxPlot::BoxPlot(const QString& name)
-	: WorksheetElement(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
+	: Plot(name, new BoxPlotPrivate(this), AspectType::BoxPlot) {
 	init();
 }
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::BoxPlot) {
+	: Plot(name, dd, AspectType::BoxPlot) {
 	init();
 }
 
@@ -291,9 +291,9 @@ void BoxPlot::recalc() {
 void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-bool BoxPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool BoxPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(BoxPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void BoxPlot::setHover(bool on) {
@@ -610,13 +610,13 @@ void BoxPlot::visibilityChangedSlot() {
 //####################### Private implementation ###############################
 //##############################################################################
 BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
 }
 
-bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool BoxPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 

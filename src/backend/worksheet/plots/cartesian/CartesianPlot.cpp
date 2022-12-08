@@ -1944,11 +1944,7 @@ int CartesianPlot::curveCount() {
 }
 
 int CartesianPlot::curveTotalCount() const {
-	int count = children<XYCurve>().size();
-	count += children<Histogram>().size();
-	count += children<BoxPlot>().size();
-	count += children<BarPlot>().size();
-	return count;
+	return children<Plot>().size();
 }
 
 const XYCurve* CartesianPlot::getCurve(int index) {
@@ -1983,35 +1979,32 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
+	int cSystemIndex = -1;
+	bool checkRanges = false; // check/change ranges when adding new children like curves for example
+	auto* elem = static_cast<const WorksheetElement*>(child);
+	const auto* plot = dynamic_cast<const Plot*>(child);
+
+	if (plot) {
+		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
+		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+
+		connect(plot, &Plot::dataChanged, [this, elem] {
+			this->dataChanged(const_cast<WorksheetElement*>(elem));
+		});
+
+		updateLegend();
+		cSystemIndex = plot->coordinateSystemIndex();
+		checkRanges = true;
+	}
+
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
 
-	int cSystemIndex = -1;
-	bool checkRanges = false; // check/change ranges when adding new children like curves for example
-
-	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
-	// TODO: why is child->type() == AspectType::XYCurve, etc. not working here?
-	if (elem
-		&& (child->inherits(AspectType::XYCurve) || child->type() == AspectType::Histogram || child->type() == AspectType::BarPlot
-			|| child->type() == AspectType::BoxPlot)) {
-		auto* elem = static_cast<const WorksheetElement*>(child);
-		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-		updateLegend();
-		cSystemIndex = elem->coordinateSystemIndex();
-		checkRanges = true;
-	}
-
 	if (curve) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
-		// x and y data
-		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {
-			this->dataChanged(const_cast<XYCurve*>(curve));
-		});
-
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this, curve](const AbstractColumn* column) {
 			if (curveTotalCount() == 1) // first curve addded
@@ -2052,8 +2045,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
 		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
-		connect(curve->line(), &Line::updateRequested, this, &CartesianPlot::updateLegend);
-		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
@@ -2064,25 +2055,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		Q_EMIT curveAdded(curve);
 	} else if (hist) {
 		DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
-		// TODO: check if all ranges must be updated
-		connect(hist, &Histogram::dataChanged, [this, hist] {
-			this->dataChanged(const_cast<Histogram*>(hist));
-		});
-		connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-		connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-		updateLegend();
-		cSystemIndex = hist->coordinateSystemIndex();
-		checkRanges = true;
-
 		if (curveTotalCount() == 1)
 			checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
 	} else if (boxPlot) {
 		DEBUG(Q_FUNC_INFO << ", BOX PLOT")
-		connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
-			this->dataChanged(const_cast<BoxPlot*>(boxPlot));
-		});
-
 		if (curveTotalCount() == 1) {
 			connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
 			boxPlotOrientationChanged(boxPlot->orientation());
@@ -2091,14 +2067,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
-		// TODO: check if all ranges must be updated
-		connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
-			this->dataChanged(const_cast<BarPlot*>(barPlot));
-		});
 
-		// update the legend on data column and formatting changes
+		// update the legend on data columnchanges
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
-		connect(barPlot, &BarPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
@@ -4279,14 +4250,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			// hovering curves is implemented in the parent, because no ignoreEvent() exists
 			// for it. Checking all curves and hover the first
 			bool hovered = false;
-			const auto& curves = q->children<Curve>();
+			const auto& curves = q->children<Plot>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
 				auto* curve = curves[i];
 				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
 				}
-				if (curve->activateCurve(event->pos())) {
+				if (curve->activatePlot(event->pos())) {
 					curve->setHover(true);
 					hovered = true;
 					continue;
