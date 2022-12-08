@@ -886,8 +886,6 @@ void AxisDock::arrowSizeChanged(int value) {
 
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
 	ui.lMajorTicksType->setEnabled(b);
@@ -903,6 +901,8 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	majorTicksLineWidget->setEnabled(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksDirection(direction);
@@ -989,11 +989,24 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		axis->setMajorTicksType(type);
 }
 
-void AxisDock::majorTicksAutoNumberChanged(int value) {
+void AxisDock::majorTicksAutoNumberChanged(Qt::CheckState state) {
+	bool automatic;
+	switch (state) {
+	case Qt::CheckState::Checked:
+		automatic = true;
+		break;
+	case Qt::CheckState::PartiallyChecked:
+		// fall through
+	case Qt::CheckState::Unchecked:
+		automatic = false;
+		break;
+	}
+	ui.sbMajorTicksNumber->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTicksAutoNumber(value);
+		axis->setMajorTicksAutoNumber(automatic);
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
@@ -1021,9 +1034,9 @@ void AxisDock::majorTicksSpacingChanged() {
 }
 
 void AxisDock::majorTicksStartTypeChanged(int state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	updateMajorTicksStartType(true);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = static_cast<Axis::TicksStartType>(state);
 	for (auto* axis : m_axesList)
@@ -1031,18 +1044,18 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 }
 
 void AxisDock::majorTicksStartOffsetChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
 	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(value);
 }
 
 void AxisDock::majorTicksStartValueChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
 	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartValue(value);
@@ -1164,11 +1177,25 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		axis->setMinorTicksType(type);
 }
 
-void AxisDock::minorTicksAutoNumberChanged(int value) {
+void AxisDock::minorTicksAutoNumberChanged(Qt::CheckState state) {
+	bool automatic;
+	switch (state) {
+	case Qt::CheckState::Checked:
+		automatic = true;
+		break;
+	case Qt::CheckState::PartiallyChecked:
+		// fall through
+	case Qt::CheckState::Unchecked:
+		automatic = false;
+		break;
+	}
+
+	ui.sbMinorTicksNumber->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
-		axis->setMinorTicksAutoNumber(value);
+		axis->setMinorTicksAutoNumber(automatic);
 }
 
 void AxisDock::minorTicksNumberChanged(int value) {
@@ -1543,7 +1570,6 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksAutoNumber->setChecked(automatic);
-	ui.sbMajorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1589,7 +1615,6 @@ void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbMinorTicksAutoNumber->setChecked(automatic);
-	ui.sbMinorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
 	CONDITIONAL_LOCK_RETURN;

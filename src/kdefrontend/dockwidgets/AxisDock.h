@@ -107,7 +107,7 @@ private Q_SLOTS:
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
-	void majorTicksAutoNumberChanged(int);
+	void majorTicksAutoNumberChanged(Qt::CheckState state);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
@@ -123,7 +123,7 @@ private Q_SLOTS:
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
-	void minorTicksAutoNumberChanged(int);
+	void minorTicksAutoNumberChanged(Qt::CheckState state);
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
