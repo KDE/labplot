@@ -877,8 +877,6 @@ void CartesianPlotDock::visibilityChanged(bool state) {
 }
 
 void CartesianPlotDock::rangeTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN; // TODO: check if lock is needed, because if the start is 0 and range will be set to log, it would make sense to change the start
-
 	auto type = static_cast<CartesianPlot::RangeType>(index);
 	if (type == CartesianPlot::RangeType::Free) {
 		ui.lRangePoints->hide();
@@ -892,6 +890,8 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 		else
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeLastValues()));
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
@@ -1241,8 +1241,6 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
 }
 
 void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.lPaddingHorizontalRight->setVisible(!checked);
 	ui.sbPaddingRight->setVisible(!checked);
 	ui.lPaddingVerticalDown->setVisible(!checked);
@@ -1255,6 +1253,8 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 		ui.lPaddingHorizontal->setText(i18n("Left:"));
 		ui.lPaddingVertical->setText(i18n("Top:"));
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setSymmetricPadding(checked);
@@ -1324,13 +1324,13 @@ void CartesianPlotDock::bottomPaddingChanged(double value) {
 
 // x-range breaks
 void CartesianPlotDock::toggleXBreak(bool b) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.frameXBreakEdit->setEnabled(b);
 	ui.leXBreakStart->setEnabled(b);
 	ui.leXBreakEnd->setEnabled(b);
 	ui.sbXBreakPosition->setEnabled(b);
 	ui.cbXBreakStyle->setEnabled(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setXRangeBreakingEnabled(b);
@@ -1377,7 +1377,6 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	if (index == -1)
 		return;
 
-	m_initializing = true;
 	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
@@ -1386,7 +1385,6 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::xBreakStartChanged() {
@@ -1440,13 +1438,13 @@ void CartesianPlotDock::xBreakStyleChanged(int styleIndex) {
 
 // y-range breaks
 void CartesianPlotDock::toggleYBreak(bool b) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.frameYBreakEdit->setEnabled(b);
 	ui.leYBreakStart->setEnabled(b);
 	ui.leYBreakEnd->setEnabled(b);
 	ui.sbYBreakPosition->setEnabled(b);
 	ui.cbYBreakStyle->setEnabled(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setYRangeBreakingEnabled(b);
@@ -1493,7 +1491,6 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 	if (index == -1)
 		return;
 
-	m_initializing = true;
 	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
@@ -1502,7 +1499,6 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::yBreakStartChanged() {
