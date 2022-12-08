@@ -1220,6 +1220,10 @@ void AxisDock::labelsFormatChanged(int index) {
 }
 
 void AxisDock::labelsFormatAutoChanged(bool automatic) {
+	// Must be above the lock, because if the axis changes the value without interacting with the
+	// dock, this should also change
+	ui.cbLabelsFormat->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
@@ -1234,9 +1238,9 @@ void AxisDock::labelsPrecisionChanged(int value) {
 }
 
 void AxisDock::labelsAutoPrecisionChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.sbLabelsPrecision->setEnabled(!state);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsAutoPrecision(state);
@@ -1615,7 +1619,6 @@ void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkLabelsFormatAuto->setChecked(automatic);
-	ui.cbLabelsFormat->setEnabled(!automatic);
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
