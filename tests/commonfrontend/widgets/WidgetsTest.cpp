@@ -993,4 +993,20 @@ void WidgetsTest::numberSpinBoxMinimumFeedback() {
 	QCOMPARE(sb.toolTip(), QString());
 }
 
+/*!
+ * \brief WidgetsTest::numberSpinBoxDecimalsMinMax
+ * In the default implementation of QDoubleSpinbox the maximum and
+ * minimums are round to the decimals. The numberspinbox should not do
+ * this
+ */
+void WidgetsTest::numberSpinBoxDecimalsMinMax() {
+	NumberSpinBox sb;
+	sb.setDecimals(2);
+	sb.setMaximum(1.289343892e-10);
+	QCOMPARE(sb.maximum(), 1.289343892e-10); // not rounded!
+
+	sb.setMinimum(1.289343892e-15);
+	QCOMPARE(sb.minimum(), 1.289343892e-15); // not rounded!
+}
+
 QTEST_MAIN(WidgetsTest)
