@@ -245,7 +245,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// write the result
 	filterResult.available = true;
-	filterResult.valid = true;
+	filterResult.valid = (status == GSL_SUCCESS);
 	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
 
