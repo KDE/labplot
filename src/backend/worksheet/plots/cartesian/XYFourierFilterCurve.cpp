@@ -242,6 +242,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
 		cutindex = cutoff * (xmax - xmin);
+		if (xDateTime)
+			cutindex /= 1000;
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex = cutoff * (int)n;
@@ -252,6 +254,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
 		cutindex2 = cutoff2 * (xmax - xmin);
+		if (xDateTime)
+			cutindex2 /= 1000;
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex2 = cutoff2 * n;
