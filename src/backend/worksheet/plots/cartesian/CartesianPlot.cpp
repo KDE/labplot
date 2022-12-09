@@ -3915,8 +3915,9 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
 	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
 	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
-	bool valid;
-	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, valid, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	if (!cSystem->isValid())
+		return;
+	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		bool visible;
@@ -4031,11 +4032,10 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		yIndex = cSystem->index(Dimension::Y);
 
 		// determine the new plot ranges
-		bool valid;
-		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, valid, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, valid, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		if (!valid)
+		if (!cSystem->isValid())
 			return;
+		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			if (m_selectionEnd.x() > m_selectionStart.x())
