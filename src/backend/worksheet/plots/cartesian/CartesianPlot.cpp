@@ -1132,6 +1132,11 @@ private:
 void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool enable, bool fullRange) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(CartesianPlot);
+	if (index < -1 || index >= rangeCount(dim)) {
+		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: Invalid index: ").arg(index).toStdString());
+		return;
+	}
+
 	if (index == -1) { // all x ranges
 		for (int i = 0; i < rangeCount(dim); i++)
 			enableAutoScale(dim, i, enable, fullRange);
@@ -1217,7 +1222,8 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
-	}
+	} else if (index < 0 || index >= rangeCount(dim))
+		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: wrong index: %1").arg(index).toStdString());
 
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
@@ -1235,7 +1241,7 @@ const Range<double>& CartesianPlot::dataRange(const Dimension dim, int index) {
 
 bool CartesianPlot::rangeDirty(const Dimension dim, int index) const {
 	Q_D(const CartesianPlot);
-	if (index >= 0 && index < rangeCount(dim))
+	if (index >= 0)
 		return d->rangeDirty(dim, index);
 	else {
 		bool dirty = false;
@@ -1247,7 +1253,9 @@ bool CartesianPlot::rangeDirty(const Dimension dim, int index) const {
 
 void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < rangeCount(dim))
+	if (index >= rangeCount(dim))
+		return;
+	if (index >= 0)
 		d->setRangeDirty(dim, index, dirty);
 	else {
 		for (int i = 0; i < rangeCount(dim); i++)
@@ -1302,6 +1310,8 @@ void CartesianPlot::removeRange(const Dimension dim, int index) {
 
 void CartesianPlot::setMin(const Dimension dim, int index, double value) {
 	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << "value = " << value)
+	if (index >= rangeCount(dim))
+		return;
 	Range<double> r{range(dim, index)};
 	r.setStart(value);
 	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString())
@@ -1310,6 +1320,8 @@ void CartesianPlot::setMin(const Dimension dim, int index, double value) {
 
 void CartesianPlot::setMax(const Dimension dim, int index, double value) {
 	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << "value = " << value)
+	if (index >= rangeCount(dim))
+		return;
 	Range<double> r{range(dim, index)};
 	r.setEnd(value);
 
