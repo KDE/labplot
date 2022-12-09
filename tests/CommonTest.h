@@ -27,8 +27,38 @@ extern "C" {
 	VALUES_EQUAL(range.start(), start_);                                                                                                                       \
 	VALUES_EQUAL(range.end(), end_);
 
-#define CHECK_RANGE(plot, aspect, dim, start_, end_)                                                                                                           \
-	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(aspect->coordinateSystemIndex())->index(dim)), start_, end_)
+/*!
+ * Checks the range of dim \p dim from the coordinatesystem with index \p cSystemIndex
+ */
+#define CHECK_RANGE_CSYSTEMINDEX(plot, cSystemIndex, dim, start_, end_)                                                                                        \
+	RANGE_CORRECT(plot->range(dim, plot->coordinateSystem(cSystemIndex)->index(dim)), start_, end_)
+
+/*!
+ * Checks the range of dim \p dim from the coordinatesystem assigned to \p aspect
+ */
+#define CHECK_RANGE(plot, aspect, dim, start_, end_) CHECK_RANGE_CSYSTEMINDEX(plot, aspect->coordinateSystemIndex(), dim, start_, end_)
+
+#define CHECK_SCALE_PLOT(plot, coordinateSystemIndex, dimension, a_ref, b_ref, c_ref)                                                                          \
+	do {                                                                                                                                                       \
+		QVERIFY(plot);                                                                                                                                         \
+		QVERIFY(plot->coordinateSystemCount() > coordinateSystemIndex);                                                                                        \
+		const auto scales = plot->coordinateSystem(coordinateSystemIndex)->scales(dimension);                                                                  \
+		QCOMPARE(scales.length(), 1);                                                                                                                          \
+		QVERIFY(scales.at(0) != nullptr);                                                                                                                      \
+		CHECK_SCALE(scales.at(0), a_ref, b_ref, c_ref);                                                                                                        \
+	} while (false);
+
+#define CHECK_SCALE(scale, a_ref, b_ref, c_ref)                                                                                                                \
+	do {                                                                                                                                                       \
+		double a;                                                                                                                                              \
+		double b;                                                                                                                                              \
+		double c;                                                                                                                                              \
+		Range<double> r;                                                                                                                                       \
+		scale->getProperties(&r, &a, &b, &c);                                                                                                                  \
+		QVERIFY2(nsl_math_approximately_equal(a, a_ref), qPrintable(QStringLiteral("a: v1:%1, ref:%2").arg(a).arg(a_ref)));                                    \
+		QVERIFY2(nsl_math_approximately_equal(b, b_ref), qPrintable(QStringLiteral("b: v1:%1, ref:%2").arg(b).arg(b_ref)));                                    \
+		QVERIFY2(nsl_math_approximately_equal(c, c_ref), qPrintable(QStringLiteral("c: v1:%1, ref:%2").arg(c).arg(c_ref)));                                    \
+	} while (false);
 
 #define DEBUG_RANGE(plot, aspect)                                                                                                                              \
 	{                                                                                                                                                          \
