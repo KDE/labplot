@@ -156,6 +156,11 @@ void CartesianPlotTest::initTestCase() {
 	CHECK_RANGE(plot, curve1, Dimension::X, -4, 4);                                                                                                            \
 	CHECK_RANGE(plot, curve1, Dimension::Y, 0, 1);
 
+#define SET_CARTESIAN_MOUSE_MODE(mode)                                                                                                                         \
+	QAction a(nullptr);                                                                                                                                        \
+	a.setData(static_cast<int>(mode));                                                                                                                         \
+	view->cartesianPlotMouseModeChanged(&a);
+
 /*!
  * \brief CartesianPlotTest::changeData1: add data point
  *
@@ -756,10 +761,14 @@ void CartesianPlotTest::invalidcSystem() {
 
 	auto* worksheet = new Worksheet(QStringLiteral("Worksheet"));
 	project.addChild(worksheet);
+	auto* view = dynamic_cast<WorksheetView*>(worksheet->view());
+	QVERIFY(view != nullptr);
+	Q_EMIT worksheet->useViewSizeRequested(); /* To init the worksheet view actions */
 
 	auto* plot = new CartesianPlot(QStringLiteral("plot"));
 	worksheet->addChild(plot);
 	plot->setType(CartesianPlot::Type::TwoAxes); // Otherwise no axis are created
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection) // must be set after the plot was added
 
 	// Create new cSystem
 	Range<double> yRange;
@@ -822,10 +831,11 @@ void CartesianPlotTest::invalidcSystem() {
 		CHECK_SCALE_PLOT(plot, 0, Dimension::X, ax, bx, 0);
 		CHECK_SCALE_PLOT(plot, 0, Dimension::Y, ay, by, 0);
 		// Don't care what the second cSystem has, because it is invalid
-		//		CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
-		//		CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
 	}
 
+	QCOMPARE(plot->mouseMode(), CartesianPlot::MouseMode::ZoomXSelection);
 	plot->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
 	plot->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	plot->mouseReleaseZoomSelectionMode(-1);
@@ -849,8 +859,8 @@ void CartesianPlotTest::invalidcSystem() {
 		CHECK_SCALE_PLOT(plot, 0, Dimension::X, ax, bx, 0);
 		CHECK_SCALE_PLOT(plot, 0, Dimension::Y, ay, by, 0);
 		// Don't care what the second cSystem has, because it is invalid
-		//		CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
-		//		CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::X, ax, bx, 0);
+		// CHECK_SCALE_PLOT(plot, 1, Dimension::Y, ay, by, 0);
 	}
 }
 
