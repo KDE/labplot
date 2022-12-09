@@ -408,7 +408,10 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	setText(locale().toString(v, 'f', decimals()));
+	if (v < 1 / (pow(10, decimals())))
+		setText(locale().toString(v, 'g'));
+	else
+		setText(locale().toString(v, 'f', decimals()));
 	m_value = v;
 	return true;
 }
