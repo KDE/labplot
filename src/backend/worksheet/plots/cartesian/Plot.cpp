@@ -21,7 +21,7 @@ Plot::~Plot() = default;
 //####################### Private implementation ###############################
 //##############################################################################
 PlotPrivate::PlotPrivate(Plot* owner)
-	: WorksheetElementPrivate(owner),
-	q(owner) {
+	: WorksheetElementPrivate(owner)
+	, q(owner) {
 }
 

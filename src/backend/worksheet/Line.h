@@ -13,6 +13,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 
 class LinePrivate;
 class KConfigGroup;
