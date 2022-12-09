@@ -417,6 +417,10 @@ void XYFourierFilterCurveDock::unitChanged() {
 	if (xDataColumn) {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
+		if (xDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+			// data is in ms therefore they have to be converted to s
+			range /= 1000;
+		}
 		f = (n - 1) / range / 2.;
 		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
