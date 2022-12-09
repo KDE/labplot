@@ -1231,6 +1231,12 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	Q_D(CartesianPlot);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 
+	if (range.start() == range.end()) {
+		// User entered invalid range
+		emit rangeChanged(dim, index, this->range(dim, index)); // Feedback
+		return;
+	}
+
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
