@@ -398,12 +398,7 @@ void XYFourierFilterCurveDock::orderChanged() {
 	enableRecalculate();
 }
 
-void XYFourierFilterCurveDock::unitChanged() {
-	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
-	nsl_filter_cutoff_unit oldUnit = m_filterData.unit;
-	double oldValue = uiGeneralTab.sbCutoff->value();
-	m_filterData.unit = unit;
-
+void XYFourierFilterCurveDock::updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue) {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
@@ -425,122 +420,65 @@ void XYFourierFilterCurveDock::unitChanged() {
 		DEBUG(" n =" << n << " sample frequency =" << f);
 	}
 
-	switch (unit) {
+	switch (newUnit) {
 	case nsl_filter_cutoff_unit_frequency:
-		uiGeneralTab.sbCutoff->setMaximum(f);
-		uiGeneralTab.sbCutoff->setSuffix(QStringLiteral(" Hz"));
+		sb->setMaximum(f);
+		sb->setSuffix(QStringLiteral(" Hz"));
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff->setValue(oldValue * f);
+			sb->setValue(oldValue * f);
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff->setValue(oldValue * f / n);
+			sb->setValue(oldValue * f / n);
 			break;
 		}
 		break;
 	case nsl_filter_cutoff_unit_fraction:
-		uiGeneralTab.sbCutoff->setMaximum(1.0);
-		uiGeneralTab.sbCutoff->setSuffix(QString());
+		sb->setMaximum(1.0);
+		sb->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff->setValue(oldValue / f);
+			sb->setValue(oldValue / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
 			break;
 		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff->setValue(oldValue / n);
+			sb->setValue(oldValue / n);
 			break;
 		}
 		break;
 	case nsl_filter_cutoff_unit_index:
-		uiGeneralTab.sbCutoff->setMaximum(n);
-		uiGeneralTab.sbCutoff->setSuffix(QString());
+		sb->setMaximum(n);
+		sb->setSuffix(QString());
 		switch (oldUnit) {
 		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff->setValue(oldValue * n / f);
+			sb->setValue(oldValue * n / f);
 			break;
 		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff->setValue(oldValue * n);
+			sb->setValue(oldValue * n);
 			break;
 		case nsl_filter_cutoff_unit_index:
 			break;
 		}
 		break;
 	}
+}
 
+void XYFourierFilterCurveDock::unitChanged() {
+	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit->currentIndex();
+	m_filterData.unit = unit;
+
+	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff, unit, m_filterData.unit, uiGeneralTab.sbCutoff->value());
 	enableRecalculate();
 }
 
 void XYFourierFilterCurveDock::unit2Changed() {
 	auto unit = (nsl_filter_cutoff_unit)uiGeneralTab.cbUnit2->currentIndex();
-	nsl_filter_cutoff_unit oldUnit = m_filterData.unit2;
-	double oldValue = uiGeneralTab.sbCutoff2->value();
 	m_filterData.unit2 = unit;
 
-	int n = 100;
-	double f = 1.0; // sample frequency
-	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
-		xDataColumn = m_filterCurve->xDataColumn();
-	else {
-		if (m_filterCurve->dataSourceCurve())
-			xDataColumn = m_filterCurve->dataSourceCurve()->xColumn();
-	}
-
-	if (xDataColumn) {
-		n = xDataColumn->rowCount();
-		double range = xDataColumn->maximum() - xDataColumn->minimum();
-		f = (n - 1) / range / 2.;
-		DEBUG(" n =" << n << " sample frequency =" << f);
-	}
-
-	switch (unit) {
-	case nsl_filter_cutoff_unit_frequency:
-		uiGeneralTab.sbCutoff2->setMaximum(f);
-		uiGeneralTab.sbCutoff2->setSuffix(QStringLiteral(" Hz"));
-		switch (oldUnit) {
-		case nsl_filter_cutoff_unit_frequency:
-			break;
-		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff2->setValue(oldValue * f);
-			break;
-		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff2->setValue(oldValue * f / n);
-			break;
-		}
-		break;
-	case nsl_filter_cutoff_unit_fraction:
-		uiGeneralTab.sbCutoff2->setMaximum(1.0);
-		uiGeneralTab.sbCutoff2->setSuffix(QString());
-		switch (oldUnit) {
-		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff2->setValue(oldValue / f);
-			break;
-		case nsl_filter_cutoff_unit_fraction:
-			break;
-		case nsl_filter_cutoff_unit_index:
-			uiGeneralTab.sbCutoff2->setValue(oldValue / n);
-			break;
-		}
-		break;
-	case nsl_filter_cutoff_unit_index:
-		uiGeneralTab.sbCutoff2->setMaximum(n);
-		uiGeneralTab.sbCutoff2->setSuffix(QString());
-		switch (oldUnit) {
-		case nsl_filter_cutoff_unit_frequency:
-			uiGeneralTab.sbCutoff2->setValue(oldValue * n / f);
-			break;
-		case nsl_filter_cutoff_unit_fraction:
-			uiGeneralTab.sbCutoff2->setValue(oldValue * n);
-			break;
-		case nsl_filter_cutoff_unit_index:
-			break;
-		}
-		break;
-	}
-
+	updateCutoffSpinBoxes(uiGeneralTab.sbCutoff2, unit, m_filterData.unit2, uiGeneralTab.sbCutoff2->value());
 	enableRecalculate();
 }
 
