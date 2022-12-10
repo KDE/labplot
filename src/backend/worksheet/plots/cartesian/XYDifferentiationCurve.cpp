@@ -217,7 +217,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	// write the result
 	differentiationResult.available = true;
-	differentiationResult.valid = true;
+	differentiationResult.valid = (status == 0);
 	differentiationResult.status = QString::number(status);
 	differentiationResult.elapsedTime = timer.elapsed();
 

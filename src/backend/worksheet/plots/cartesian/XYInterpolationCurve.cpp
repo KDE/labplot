@@ -419,7 +419,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	// write the result
 	interpolationResult.available = true;
-	interpolationResult.valid = true;
+	interpolationResult.valid = (status == GSL_SUCCESS);
 	interpolationResult.status = gslErrorToString(status);
 	interpolationResult.elapsedTime = timer.elapsed();
 
