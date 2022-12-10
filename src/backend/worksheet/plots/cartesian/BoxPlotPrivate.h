@@ -79,8 +79,7 @@ public:
 	double whiskersRangeParameter; // Tukey's parameter k controlling the range of the whiskers, usually k=1.5
 	Line* whiskersLine{nullptr};
 	double whiskersCapSize;
-	QPen whiskersCapPen;
-	qreal whiskersCapOpacity;
+	Line* whiskersCapLine{nullptr};
 
 	// rug
 	bool rugEnabled{false};

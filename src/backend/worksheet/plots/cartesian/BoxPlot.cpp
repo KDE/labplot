@@ -196,10 +196,18 @@ void BoxPlot::init() {
 	});
 
 	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
-	d->whiskersCapPen = QPen(group.readEntry("WhiskersCapColor", QColor(Qt::black)),
-							 group.readEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
-							 (Qt::PenStyle)group.readEntry("WhiskersCapStyle", (int)Qt::SolidLine));
-	d->whiskersCapOpacity = group.readEntry("WhiskersCapOpacity", 1.0);
+	d->whiskersCapLine = new Line(QString());
+	d->whiskersCapLine->setPrefix(QLatin1String("WhiskersCap"));
+	d->whiskersCapLine->setCreateXmlElement(false); // whiskers cap element is created in BoxPlot::save()
+	d->whiskersCapLine->setHidden(true);
+	addChild(d->whiskersCapLine);
+	d->whiskersCapLine->init(group);
+	connect(d->whiskersCapLine, &Line::updatePixmapRequested, [=] {
+		d->updatePixmap();
+	});
+	connect(d->whiskersCapLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 
 	// marginal plots (rug, BoxPlot, boxplot)
 	d->rugEnabled = group.readEntry("RugEnabled", false);
@@ -420,12 +428,15 @@ Symbol* BoxPlot::symbolWhiskerEnd() const {
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersRangeParameter, whiskersRangeParameter)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
 
 Line* BoxPlot::whiskersLine() const {
 	Q_D(const BoxPlot);
 	return d->whiskersLine;
+}
+
+Line* BoxPlot::whiskersCapLine() const {
+	Q_D(const BoxPlot);
+	return d->whiskersCapLine;
 }
 
 // margin plots
@@ -539,20 +550,6 @@ void BoxPlot::setWhiskersCapSize(double size) {
 	Q_D(BoxPlot);
 	if (size != d->whiskersCapSize)
 		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapPen, QPen, whiskersCapPen, recalcShapeAndBoundingRect)
-void BoxPlot::setWhiskersCapPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->whiskersCapPen)
-		exec(new BoxPlotSetWhiskersCapPenCmd(d, pen, ki18n("%1: set whiskers cap pen")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapOpacity, qreal, whiskersCapOpacity, updatePixmap)
-void BoxPlot::setWhiskersCapOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->whiskersCapOpacity)
-		exec(new BoxPlotSetWhiskersCapOpacityCmd(d, opacity, ki18n("%1: set whiskers cap opacity")));
 }
 
 // Symbols
@@ -1378,7 +1375,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLine->pen()));
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLine->pen()));
 
@@ -1541,10 +1538,10 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		}
 
 		// draw the whiskers cap
-		if (whiskersCapPen.style() != Qt::NoPen && !m_whiskersCapPath.at(i).isEmpty()) {
-			painter->setPen(whiskersCapPen);
+		if (whiskersCapLine->pen().style() != Qt::NoPen && !m_whiskersCapPath.at(i).isEmpty()) {
+			painter->setPen(whiskersCapLine->pen());
 			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(whiskersCapOpacity);
+			painter->setOpacity(whiskersCapLine->opacity());
 			painter->drawPath(m_whiskersCapPath.at(i));
 		}
 
@@ -1795,8 +1792,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement(QStringLiteral("whiskersCap"));
 	writer->writeAttribute(QStringLiteral("size"), QString::number(d->whiskersCapSize));
-	WRITE_QPEN(d->whiskersCapPen);
-	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->whiskersCapOpacity));
+	d->whiskersCapLine->save(writer);
 	writer->writeEndElement();
 
 	// margin plots
@@ -1882,8 +1878,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_DOUBLE_VALUE("size", whiskersCapSize);
-			READ_QPEN(d->whiskersCapPen);
-			READ_DOUBLE_VALUE("opacity", whiskersCapOpacity);
+			d->whiskersCapLine->load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("margins")) {
 			attribs = reader->attributes();
 
@@ -1917,8 +1912,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	int index = plot->curveChildIndex(this);
 	const QColor themeColor = plot->themeColorPalette(index);
 
-	QPen p;
-
 	Q_D(BoxPlot);
 	d->m_suppressRecalc = true;
 
@@ -1933,8 +1926,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 
 	// whiskers
 	d->whiskersLine->loadThemeConfig(group, themeColor);
-	setWhiskersCapPen(p);
-	setWhiskersCapOpacity(group.readEntry("LineOpacity", 1.0));
+	d->whiskersCapLine->loadThemeConfig(group, themeColor);
 
 	// symbols
 	d->symbolMean->loadThemeConfig(group, themeColor);

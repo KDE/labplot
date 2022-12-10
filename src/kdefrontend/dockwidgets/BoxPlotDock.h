@@ -21,6 +21,7 @@ class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
 class TreeViewComboBox;
+class QPushButton;
 class KConfig;
 
 class BoxPlotDock : public BaseDock {
@@ -38,6 +39,7 @@ private:
 	LineWidget* borderLineWidget{nullptr};
 	LineWidget* medianLineWidget{nullptr};
 	LineWidget* whiskersLineWidget{nullptr};
+	LineWidget* whiskersCapLineWidget{nullptr};
 
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
@@ -78,10 +80,6 @@ private Q_SLOTS:
 	void whiskersTypeChanged(int);
 	void whiskersRangeParameterChanged(const QString&);
 	void whiskersCapSizeChanged(double) const;
-	void whiskersCapStyleChanged(int);
-	void whiskersCapColorChanged(const QColor&);
-	void whiskersCapWidthChanged(double) const;
-	void whiskersCapOpacityChanged(int);
 
 	//"Margin Plots"-Tab
 	void rugEnabledChanged(bool);
@@ -107,8 +105,6 @@ private Q_SLOTS:
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersRangeParameterChanged(double);
 	void plotWhiskersCapSizeChanged(double);
-	void plotWhiskersCapPenChanged(QPen&);
-	void plotWhiskersCapOpacityChanged(float);
 
 	//"Margin Plots"-Tab
 	void plotRugEnabledChanged(bool);

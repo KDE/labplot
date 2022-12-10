@@ -103,7 +103,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	whiskersLineWidget = new LineWidget(ui.tabBox);
 	gridLayout->addWidget(whiskersLineWidget, 1, 0, 1, 3);
 
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, Qt::black);
+	whiskersCapLineWidget = new LineWidget(ui.tabBox);
+	gridLayout->addWidget(whiskersCapLineWidget, 5, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -145,10 +146,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
 	connect(ui.leWhiskersRangeParameter, &QLineEdit::textChanged, this, &BoxPlotDock::whiskersRangeParameterChanged);
 	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
-	connect(ui.cbWhiskersCapStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersCapStyleChanged);
-	connect(ui.kcbWhiskersCapColor, &KColorButton::changed, this, &BoxPlotDock::whiskersCapColorChanged);
-	connect(ui.sbWhiskersCapWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapWidthChanged);
-	connect(ui.sbWhiskersCapOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapOpacityChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &BoxPlotDock::rugEnabledChanged);
@@ -206,16 +203,19 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	QList<Line*> borderLines;
 	QList<Line*> medianLines;
 	QList<Line*> whiskersLines;
+	QList<Line*> whiskersCapLines;
 	for (auto* plot : m_boxPlots) {
 		backgrounds << plot->background();
 		borderLines << plot->borderLine();
 		medianLines << plot->medianLine();
 		whiskersLines << plot->whiskersLine();
+		whiskersCapLines << plot->whiskersCapLine();
 	}
 	backgroundWidget->setBackgrounds(backgrounds);
 	borderLineWidget->setLines(borderLines);
 	medianLineWidget->setLines(medianLines);
 	whiskersLineWidget->setLines(whiskersLines);
+	whiskersCapLineWidget->setLines(whiskersCapLines);
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
@@ -234,7 +234,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
-
 	connect(m_boxPlot, &BoxPlot::widthFactorChanged, this, &BoxPlotDock::plotWidthFactorChanged);
 
 	// symbols
@@ -244,8 +243,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersRangeParameterChanged, this, &BoxPlotDock::plotWhiskersRangeParameterChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersCapPenChanged, this, &BoxPlotDock::plotWhiskersCapPenChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersCapOpacityChanged, this, &BoxPlotDock::plotWhiskersCapOpacityChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_boxPlot, &BoxPlot::rugEnabledChanged, this, &BoxPlotDock::plotRugEnabledChanged);
@@ -267,13 +264,11 @@ void BoxPlotDock::setModel() {
  */
 void BoxPlotDock::updateLocale() {
 	SET_NUMBER_LOCALE
+	ui.leWhiskersRangeParameter->setLocale(numberLocale);
 	borderLineWidget->updateLocale();
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
-	ui.leWhiskersRangeParameter->setLocale(numberLocale);
-
-	// 	CONDITIONAL_LOCK_RETURN;
-	// 	ui.lePosition->setText(numberLocale.toString(m_boxPlot->position()));
+	whiskersCapLineWidget->updateLocale();
 }
 
 void BoxPlotDock::loadDataColumns() {
@@ -527,50 +522,6 @@ void BoxPlotDock::whiskersCapSizeChanged(double value) const {
 		boxPlot->setWhiskersCapSize(size);
 }
 
-void BoxPlotDock::whiskersCapStyleChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setStyle(penStyle);
-		boxPlot->setWhiskersCapPen(pen);
-	}
-}
-
-void BoxPlotDock::whiskersCapColorChanged(const QColor& color) {
-	CONDITIONAL_LOCK_RETURN;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setColor(color);
-		boxPlot->setWhiskersCapPen(pen);
-	}
-
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, color);
-}
-
-void BoxPlotDock::whiskersCapWidthChanged(double value) const {
-	CONDITIONAL_RETURN_NO_LOCK;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		boxPlot->setWhiskersCapPen(pen);
-	}
-}
-
-void BoxPlotDock::whiskersCapOpacityChanged(int value) {
-	CONDITIONAL_LOCK_RETURN;
-
-	qreal opacity = static_cast<qreal>(value) / 100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setWhiskersCapOpacity(opacity);
-}
-
 //"Margin Plots"-Tab
 void BoxPlotDock::rugEnabledChanged(bool state) {
 	CONDITIONAL_LOCK_RETURN;
@@ -671,19 +622,6 @@ void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
 }
-void BoxPlotDock::plotWhiskersCapPenChanged(QPen& pen) {
-	CONDITIONAL_LOCK_RETURN;
-	if (ui.cbWhiskersCapStyle->currentIndex() != pen.style())
-		ui.cbWhiskersCapStyle->setCurrentIndex(pen.style());
-	if (ui.kcbWhiskersCapColor->color() != pen.color())
-		ui.kcbWhiskersCapColor->setColor(pen.color());
-	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
-}
-void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
-	CONDITIONAL_LOCK_RETURN;
-	float v = (float)value * 100.;
-	ui.sbWhiskersCapOpacity->setValue(v);
-}
 
 //"Margin Plot"-Tab
 void BoxPlotDock::plotRugEnabledChanged(bool status) {
@@ -732,21 +670,14 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
-	const QPen& penCap = m_boxPlot->whiskersCapPen();
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
-	ui.cbWhiskersCapStyle->setCurrentIndex(group.readEntry("WhiskersCapStyle", (int)penCap.style()));
-	ui.kcbWhiskersCapColor->setColor(group.readEntry("WhiskersCapColor", penCap.color()));
-	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapWidth", penCap.widthF()), Worksheet::Unit::Point));
-	ui.sbWhiskersCapOpacity->setValue(group.readEntry("WhiskersCapOpacity", m_boxPlot->whiskersCapOpacity()) * 100);
+	whiskersCapLineWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_boxPlot->rugEnabled());
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
-
-	CONDITIONAL_LOCK_RETURN;
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, ui.kcbWhiskersCapColor->color());
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
@@ -796,9 +727,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// whiskers cap
 	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
-	group.writeEntry("WhiskersCapStyle", ui.cbWhiskersCapStyle->currentIndex());
-	group.writeEntry("WhiskersCapColor", ui.kcbWhiskersCapColor->color());
-	group.writeEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersCapWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("WhiskersCapOpacity", ui.sbWhiskersCapOpacity->value() / 100.0);
+	whiskersCapLineWidget->saveConfig(group);
+
 	config.sync();
 }

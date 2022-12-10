@@ -77,8 +77,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
 	Line* whiskersLine() const;
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
-	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
+	Line* whiskersCapLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -136,8 +135,6 @@ Q_SIGNALS:
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void whiskersRangeParameterChanged(double);
 	void whiskersCapSizeChanged(double);
-	void whiskersCapPenChanged(QPen&);
-	void whiskersCapOpacityChanged(float);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);
