@@ -714,6 +714,10 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	auto mode = m_label->text().mode;
 	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
 		SETLABELTEXTPROPERTY(setTextColor, color);
+		if (!cursorHasSelection) {
+			for (auto* label : m_labelsList)
+				label->setFontColor(color);
+		}
 	} else { // LaTeX (enabled) or Markup mode
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);

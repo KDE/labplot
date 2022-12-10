@@ -144,6 +144,7 @@ private Q_SLOTS:
 	void labelModeChanged(TextLabel::Mode);
 
 	friend TextLabelTest;
+	friend class AxisDock;
 };
 
 #endif // LABELWIDGET_H

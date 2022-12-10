@@ -124,6 +124,8 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.teComment, &QTextEdit::textChanged, this, &AxisDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
+	connect(ui.kcbAxisColor, &KColorButton::changed, this, &AxisDock::colorChanged);
+
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&AxisDock::positionChanged));
 	connect(ui.sbPosition, QOverload<double>::of(&NumberSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
@@ -568,6 +570,34 @@ void AxisDock::visibilityChanged(bool state) {
 
 	for (auto* axis : m_axesList)
 		axis->setVisible(state);
+}
+
+/*!
+ * \brief AxisDock::colorChanged
+ * The general color of the axis changes (Title, line, ticks, labels, ...)
+ */
+void AxisDock::colorChanged(const QColor& color) {
+	CONDITIONAL_LOCK_RETURN;
+
+	// Set colors of all other ui elements
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
+
+	ui.kcbLabelsFontColor->setColor(color);
+
+	for (auto* axis : m_axesList) {
+		axis->beginMacro(i18n("%1: set axis color", axis->name()));
+		lineWidget->colorChanged(color);
+		labelWidget->fontColorChanged(color);
+		labelWidget->labelFontColorChanged(color);
+		majorTicksLineWidget->colorChanged(color);
+		minorTicksLineWidget->colorChanged(color);
+		axis->setLabelsColor(color);
+		axis->endMacro();
+	}
 }
 
 /*!
@@ -1730,6 +1760,20 @@ void AxisDock::axisVisibilityChanged(bool on) {
 void AxisDock::load() {
 	// General
 	ui.chkVisible->setChecked(m_axis->isVisible());
+
+	// Set colors of all other ui elements
+	// - Line widget color
+	// - Title color
+	// - Major tick color
+	// - Minor tick color
+	// - Tick label color
+	QColor color = m_axis->line()->color();
+	if (m_axis->title()->fontColor() == color && m_axis->majorTicksLine()->color() == color && m_axis->minorTicksLine()->color() == color
+		&& m_axis->labelsColor() == color) {
+		// All have same color
+		ui.kcbAxisColor->setColor(color);
+	} else
+		ui.kcbAxisColor->setColor(QColor(0, 0, 0, 0));
 
 	Axis::Orientation orientation = m_axis->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));

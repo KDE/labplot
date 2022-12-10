@@ -80,6 +80,7 @@ private Q_SLOTS:
 	// SLOTs for changes triggered in AxisDock
 	//"General"-tab
 	void visibilityChanged(bool);
+	void colorChanged(const QColor&);
 	void orientationChanged(int);
 	void positionChanged(int);
 	void positionChanged(double value);
