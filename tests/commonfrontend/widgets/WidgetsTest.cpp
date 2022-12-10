@@ -899,19 +899,19 @@ void WidgetsTest::numberSpinBoxScrollingNegToPos() {
 	NumberSpinBox sb;
 	sb.setMinimum(-10);
 	sb.setValue(-1);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Up, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("0"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 1); // cursor should not be at position of the comma but behind the 0
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1.00"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-1"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 2); // cursor should not be at position of the minus but behind the 1
 }
 
@@ -944,19 +944,19 @@ void WidgetsTest::numberSpinBoxScrollingNegativeValues() {
 	NumberSpinBox sb;
 	sb.setMinimum(-20);
 	sb.setValue(-9.80);
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-9.8"));
 
 	sb.lineEdit()->setCursorPosition(2);
 	QKeyEvent event(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-10.8"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 
 	event = QKeyEvent(QKeyEvent::Type::KeyPress, Qt::Key_Down, Qt::KeyboardModifier::NoModifier);
 	sb.keyPressEvent(&event);
 
-	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.80"));
+	QCOMPARE(sb.lineEdit()->text(), QStringLiteral("-11.8"));
 	QCOMPARE(sb.lineEdit()->cursorPosition(), 3);
 }
 
