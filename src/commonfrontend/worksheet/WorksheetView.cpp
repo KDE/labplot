@@ -305,12 +305,12 @@ void WorksheetView::initActions() {
 	cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
 	cartesianPlotZoomXSelectionModeAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-x")), i18n("Select x-Region and Zoom In"), plotMouseModeActionGroup);
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-x")), i18n("Select X-Region and Zoom In"), plotMouseModeActionGroup);
 	cartesianPlotZoomXSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	cartesianPlotZoomXSelectionModeAction->setCheckable(true);
 
 	cartesianPlotZoomYSelectionModeAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-y")), i18n("Select y-Region and Zoom In"), plotMouseModeActionGroup);
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-zoom-select-y")), i18n("Select Y-Region and Zoom In"), plotMouseModeActionGroup);
 	cartesianPlotZoomYSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
@@ -344,8 +344,8 @@ void WorksheetView::initActions() {
 	//	addConvolutionCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("(De-)Convolution"),
 	// cartesianPlotAddNewActionGroup);
 	addCorrelationCurveAction =
-		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Auto-/Cross-Correlation"),
+		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
+	//	addCorrelationCurveAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Auto/Cross Correlation"),
 	// cartesianPlotAddNewActionGroup);
 	addInterpolationCurveAction =
 		new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-interpolation-curve")), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
@@ -379,11 +379,11 @@ void WorksheetView::initActions() {
 	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
 	//	addConvolutionAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-convolution-curve")), i18n("Convolution/Deconvolution"),
 	// cartesianPlotAddNewActionGroup);
-	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
-	//	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-correlation-curve")), i18n("Auto-/Cross-Correlation"),
+	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Auto/Cross Correlation"), cartesianPlotAddNewActionGroup);
+	//	addCorrelationAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-correlation-curve")), i18n("Auto/Cross Correlation"),
 	// cartesianPlotAddNewActionGroup);
-	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
-	//	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-hilbert-curve")), i18n("Hilbert-Transform"),
+	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-curve")), i18n("Hilbert Transform"), cartesianPlotAddNewActionGroup);
+	//	addHilbertTransformAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-hilbert-curve")), i18n("Hilbert Transform"),
 	// cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction =
