@@ -81,7 +81,6 @@ public:
 	Line* connectionLine() const;
 
 	virtual void setVisible(bool on) override;
-	virtual bool isVisible() const override;
 
 	typedef InfoElementPrivate Private;
 

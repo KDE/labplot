@@ -35,11 +35,9 @@ public:
 	void retransform() override;
 	void updateVerticalLine();
 	void updateConnectionLine();
-	void changeVisibility();
+	bool changeVisibility(bool on);
 
 	virtual void recalcShapeAndBoundingRect() override{};
-
-	bool visible{true};
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
