@@ -108,7 +108,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
 
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
-	ui.lBindLogicalPos->setToolTip(msg);
 	ui.chbBindLogicalPos->setToolTip(msg);
 
 	ui.sbBorderWidth->setMinimum(0);
@@ -1389,7 +1388,6 @@ void LabelWidget::load() {
 	// widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_label->plot() != nullptr);
-	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
 	if (allowLogicalCoordinates) {

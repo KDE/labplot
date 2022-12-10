@@ -509,7 +509,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lNiceExtend">
          <property name="text">
-          <string>Extend</string>
+          <string>Extend:</string>
          </property>
         </widget>
        </item>
@@ -983,7 +983,7 @@
           </font>
          </property>
          <property name="text">
-          <string>y-Range</string>
+          <string>Y-Range</string>
          </property>
         </widget>
        </item>
@@ -1076,7 +1076,7 @@
           </font>
          </property>
          <property name="text">
-          <string>x-Range</string>
+          <string>X-Range</string>
          </property>
         </widget>
        </item>
@@ -1351,7 +1351,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lBorderCornerRadius">
          <property name="text">
-          <string>Corner radius:</string>
+          <string>Corner Radius:</string>
          </property>
         </widget>
        </item>
