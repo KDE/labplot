@@ -24,4 +24,3 @@ PlotPrivate::PlotPrivate(Plot* owner)
 	: WorksheetElementPrivate(owner)
 	, q(owner) {
 }
-
