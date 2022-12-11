@@ -632,7 +632,6 @@ void BoxPlotPrivate::setHover(bool on) {
 	update();
 }
 
-
 Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 	auto* background = new Background(QString());
 	background->setPrefix(QLatin1String("Filling"));
@@ -645,7 +644,7 @@ Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
 
 	q->connect(background, &Background::updateRequested, [=] {
 		updatePixmap();
-		//TODO: Q_EMIT q->updateLegendRequested();
+		// TODO: Q_EMIT q->updateLegendRequested();
 	});
 
 	backgrounds << background;
