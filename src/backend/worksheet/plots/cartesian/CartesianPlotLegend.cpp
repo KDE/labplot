@@ -762,7 +762,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 				painter->setPen(Qt::NoPen);
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawRect(QRectF(-h * 0.25, -0.2* h, 0.5 * h, 0.4 * h));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				auto* borderLine = boxPlot->borderLineAt(index);
@@ -770,7 +770,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				// painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 				painter->setPen(borderLine->pen());
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
-				painter->drawRect(QRectF(-h * 0.25, -0.2* h, 0.5 * h, 0.4 * h));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
