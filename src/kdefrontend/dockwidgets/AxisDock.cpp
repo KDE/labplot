@@ -990,17 +990,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 }
 
 void AxisDock::majorTicksAutoNumberChanged(int state) {
-	bool automatic;
-	switch (state) {
-	case Qt::CheckState::Checked:
-		automatic = true;
-		break;
-	case Qt::CheckState::PartiallyChecked:
-		// fall through
-	case Qt::CheckState::Unchecked:
-		automatic = false;
-		break;
-	}
+	bool automatic = (state == Qt::CheckState::Checked ? true : false);
 	ui.sbMajorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
@@ -1178,18 +1168,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 }
 
 void AxisDock::minorTicksAutoNumberChanged(int state) {
-	bool automatic;
-	switch (state) {
-	case Qt::CheckState::Checked:
-		automatic = true;
-		break;
-	case Qt::CheckState::PartiallyChecked:
-		// fall through
-	case Qt::CheckState::Unchecked:
-		automatic = false;
-		break;
-	}
-
+	bool automatic = (state == Qt::CheckState::Checked ? true : false);
 	ui.sbMinorTicksNumber->setEnabled(!automatic);
 
 	CONDITIONAL_LOCK_RETURN;
