@@ -11,6 +11,7 @@ New features:
 			* rug plots
 			* allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
 			* symbols for whisker end points
+			* allow to modify box properties (color, etc.) for every data set independently of each other
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns

@@ -70,6 +70,7 @@ private Q_SLOTS:
 	void visibilityChanged(bool);
 
 	//"Box"-tab
+	void currentBoxChanged(int);
 	void widthFactorChanged(int);
 
 	// symbols

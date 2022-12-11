@@ -40,6 +40,7 @@ public:
 	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
+	void finalizeAdd() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -59,9 +60,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
 	// box
-	Background* background() const;
-	Line* borderLine() const;
-	Line* medianLine() const;
+	Background* backgroundAt(int) const;
+	Line* borderLineAt(int) const;
+	Line* medianLineAt(int) const;
 
 	// symbols
 	Symbol* symbolMean() const;

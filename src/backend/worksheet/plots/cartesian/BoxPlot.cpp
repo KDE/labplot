@@ -69,42 +69,10 @@ void BoxPlot::init() {
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
-	// box border line
-	d->borderLine = new Line(QString());
-	d->borderLine->setPrefix(QLatin1String("Border"));
-	d->borderLine->setHidden(true);
-	addChild(d->borderLine);
-	d->borderLine->init(group);
-	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->borderLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
-
-	// box filling
-	d->background = new Background(QString());
-	d->background->setPrefix(QLatin1String("Filling"));
-	d->background->setEnabledAvailable(true);
-	addChild(d->background);
-	d->background->setHidden(true);
-	d->background->init(group);
-	connect(d->background, &Background::updateRequested, [=] {
-		d->updatePixmap();
-	});
-
-	// median line
-	d->medianLine = new Line(QString());
-	d->medianLine->setPrefix(QLatin1String("MedianLine"));
-	d->medianLine->setHidden(true);
-	addChild(d->medianLine);
-	d->medianLine->init(group);
-	connect(d->medianLine, &Line::updatePixmapRequested, [=] {
-		d->updatePixmap();
-	});
-	connect(d->medianLine, &Line::updateRequested, [=] {
-		d->recalcShapeAndBoundingRect();
-	});
+	// box
+	d->addBackground(group);
+	d->addBorderLine(group);
+	d->addMedianLine(group);
 
 	// markers
 	d->symbolMean = new Symbol(QStringLiteral("symbolMean"));
@@ -214,6 +182,16 @@ void BoxPlot::init() {
 	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rugWidth = group.readEntry("RugWidth", 0.0);
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
+}
+
+void BoxPlot::finalizeAdd() {
+	WorksheetElement::finalizeAdd();
+
+	// in case we're loading an older project where it was not possible to change the properties
+	// for each data column independently of each other and there was only one single Background, etc.
+	// add here additional elements to fit the current number of data columns after the project load.
+	Q_D(BoxPlot);
+	d->adjustPropertiesContainers();
 }
 
 /*!
@@ -374,21 +352,30 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
 
 // box filling
-Background* BoxPlot::background() const {
+Background* BoxPlot::backgroundAt(int index) const {
 	Q_D(const BoxPlot);
-	return d->background;
+	if (index < d->backgrounds.size())
+		return d->backgrounds.at(index);
+	else
+		return nullptr;
 }
 
 // box border line
-Line* BoxPlot::borderLine() const {
+Line* BoxPlot::borderLineAt(int index) const {
 	Q_D(const BoxPlot);
-	return d->borderLine;
+	if (index < d->borderLines.size())
+		return d->borderLines.at(index);
+	else
+		return nullptr;
 }
 
 // median line
-Line* BoxPlot::medianLine() const {
+Line* BoxPlot::medianLineAt(int index) const {
 	Q_D(const BoxPlot);
-	return d->medianLine;
+	if (index < d->medianLines.size())
+		return d->medianLines.at(index);
+	else
+		return nullptr;
 }
 
 // markers
@@ -645,6 +632,73 @@ void BoxPlotPrivate::setHover(bool on) {
 	update();
 }
 
+
+Background* BoxPlotPrivate::addBackground(const KConfigGroup& group) {
+	auto* background = new Background(QString());
+	background->setPrefix(QLatin1String("Filling"));
+	background->setEnabledAvailable(true);
+	background->setHidden(true);
+	q->addChild(background);
+
+	if (!q->isLoading())
+		background->init(group);
+
+	q->connect(background, &Background::updateRequested, [=] {
+		updatePixmap();
+		//TODO: Q_EMIT q->updateLegendRequested();
+	});
+
+	backgrounds << background;
+
+	return background;
+}
+
+Line* BoxPlotPrivate::addBorderLine(const KConfigGroup& group) {
+	auto* line = new Line(QString());
+	line->setPrefix(QLatin1String("Border"));
+	line->setHidden(true);
+	q->addChild(line);
+	if (!q->isLoading())
+		line->init(group);
+
+	q->connect(line, &Line::updatePixmapRequested, [=] {
+		updatePixmap();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	q->connect(line, &Line::updateRequested, [=] {
+		recalcShapeAndBoundingRect();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	borderLines << line;
+
+	return line;
+}
+
+Line* BoxPlotPrivate::addMedianLine(const KConfigGroup& group) {
+	auto* line = new Line(QString());
+	line->setPrefix(QLatin1String("MedianLine"));
+	line->setHidden(true);
+	q->addChild(line);
+	if (!q->isLoading())
+		line->init(group);
+
+	q->connect(line, &Line::updatePixmapRequested, [=] {
+		updatePixmap();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	q->connect(line, &Line::updateRequested, [=] {
+		recalcShapeAndBoundingRect();
+		// Q_EMIT q->updateLegendRequested();
+	});
+
+	medianLines << line;
+
+	return line;
+}
+
 void BoxPlotPrivate::fillDataSpreadsheet(Spreadsheet* spreadsheet) const {
 	// index
 	// 1st quartile
@@ -671,6 +725,35 @@ void BoxPlotPrivate::fillDataSpreadsheet(Spreadsheet* spreadsheet) const {
 		spreadsheet->column(8)->setValueAt(i, m_farOutPointsLogical.at(i).count());
 	}
 }
+
+/*!
+ * adds additional elements for background and line properties according to the current
+ * number of data columns to be plotted.
+ */
+void BoxPlotPrivate::adjustPropertiesContainers() {
+	int diff = dataColumns.size() - backgrounds.size();
+	if (diff > 0) {
+		// one more box needs to be added
+		KConfig config;
+		KConfigGroup group = config.group(QLatin1String("XYCurve"));
+		const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
+
+		for (int i = 0; i < diff; ++i) {
+			// box filling and border line
+			auto* background = addBackground(group);
+			auto* borderLine = addBorderLine(group);
+			auto* medianLine = addMedianLine(group);
+
+			if (plot) {
+				const auto& themeColor = plot->themeColorPalette(backgrounds.count() - 1);
+				background->setFirstColor(themeColor);
+				borderLine->setColor(themeColor);
+				medianLine->setColor(themeColor);
+			}
+		}
+	}
+}
+
 /*!
   called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
   recalculates the position of the scene points to be drawn.
@@ -754,6 +837,15 @@ void BoxPlotPrivate::recalc() {
 	m_medianPointLogical.resize(count);
 	m_medianPoint.resize(count);
 	m_medianPointVisible.resize(count);
+
+	// box properties
+	int diff = count - backgrounds.size();
+	if (diff > 0)
+		adjustPropertiesContainers();
+	else if (diff < 0) {
+		// the last box was deleted
+		// TODO:
+	}
 
 	// calculate the new min and max values of the box plot
 	// for the current sizes of the box and of the whiskers
@@ -1372,12 +1464,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 			boxPath.moveTo(line.p1());
 			boxPath.lineTo(line.p2());
 		}
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLine->pen()));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderLines.at(i)->pen()));
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersLine->pen()));
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapLine->pen()));
 
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLine->pen()));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_rugPath.at(i), borderLines.at(i)->pen()));
 
 		// add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1505,13 +1597,14 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 
 		if (!m_boxRect.at(i).isEmpty()) {
 			// draw the box filling
-			if (background->enabled()) {
-				painter->setOpacity(background->opacity());
+			if (backgrounds.at(i)->enabled()) {
+				painter->setOpacity(backgrounds.at(i)->opacity());
 				painter->setPen(Qt::NoPen);
 				drawFilling(painter, i);
 			}
 
 			// draw the border
+			const auto* borderLine = borderLines.at(i);
 			if (borderLine->pen().style() != Qt::NoPen) {
 				painter->setPen(borderLine->pen());
 				painter->setBrush(Qt::NoBrush);
@@ -1521,6 +1614,7 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 			}
 
 			// draw the median line
+			const auto* medianLine = medianLines.at(i);
 			if (medianLine->pen().style() != Qt::NoPen) {
 				painter->setPen(medianLine->pen());
 				painter->setBrush(Qt::NoBrush);
@@ -1548,10 +1642,10 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		// draw rug
 		if (rugEnabled && !m_rugPath.at(i).isEmpty()) {
 			QPen pen;
-			pen.setColor(borderLine->pen().color());
+			pen.setColor(borderLines.at(i)->pen().color());
 			pen.setWidthF(rugWidth);
 			painter->setPen(pen);
-			painter->setOpacity(borderLine->opacity());
+			painter->setOpacity(borderLines.at(i)->opacity());
 			painter->drawPath(m_rugPath.at(i));
 		}
 
@@ -1588,6 +1682,7 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	const QPolygonF& polygon = m_fillPolygon.at(index);
 	const QRectF& rect = polygon.boundingRect();
 
+	const auto* background = backgrounds.at(index);
 	if (background->type() == Background::Type::Color) {
 		switch (background->colorStyle()) {
 		case Background::ColorStyle::SingleColor: {
@@ -1771,9 +1866,14 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// box
-	d->background->save(writer);
-	d->borderLine->save(writer);
-	d->medianLine->save(writer);
+	for (auto* background : d->backgrounds)
+		background->save(writer);
+
+	for (auto* line : d->borderLines)
+		line->save(writer);
+
+	for (auto* line : d->medianLines)
+		line->save(writer);
 
 	// symbols for the outliers, mean, far out and jitter values
 	d->symbolMean->save(writer);
@@ -1816,6 +1916,9 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
+	bool firstBackgroundRead = false;
+	bool firstBorderLineRead = false;
+	bool firstMedianLineRead = false;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1851,11 +1954,32 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 				d->dataColumnPaths << str;
 			// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == QLatin1String("filling"))
-			d->background->load(reader, preview);
+			if (!firstBackgroundRead) {
+				auto* background = d->backgrounds.at(0);
+				background->load(reader, preview);
+				firstBackgroundRead = true;
+			} else {
+				auto* background = d->addBackground(KConfigGroup());
+				background->load(reader, preview);
+			}
 		else if (!preview && reader->name() == QLatin1String("border")) {
-			d->borderLine->load(reader, preview);
+			if (!firstBorderLineRead) {
+				auto* line = d->borderLines.at(0);
+				line->load(reader, preview);
+				firstBorderLineRead = true;
+			} else {
+				auto* line = d->addBorderLine(KConfigGroup());
+				line->load(reader, preview);
+			}
 		} else if (!preview && reader->name() == QLatin1String("medianLine")) {
-			d->medianLine->load(reader, preview);
+			if (!firstMedianLineRead) {
+				auto* line = d->medianLines.at(0);
+				line->load(reader, preview);
+				firstMedianLineRead = true;
+			} else {
+				auto* line = d->addMedianLine(KConfigGroup());
+				line->load(reader, preview);
+			}
 		} else if (!preview && reader->name() == QLatin1String("symbolMean"))
 			d->symbolMean->load(reader, preview);
 		else if (!preview && reader->name() == QLatin1String("symbolMedian"))
@@ -1915,14 +2039,23 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	Q_D(BoxPlot);
 	d->m_suppressRecalc = true;
 
-	// box border
-	d->borderLine->loadThemeConfig(group, themeColor);
+	// box fillings
+	for (int i = 0; i < d->backgrounds.count(); ++i) {
+		auto* background = d->backgrounds.at(i);
+		background->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
-	// box filling
-	d->background->loadThemeConfig(group, themeColor);
+	// box border lines
+	for (int i = 0; i < d->borderLines.count(); ++i) {
+		auto* line = d->borderLines.at(i);
+		line->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
-	// median line
-	d->medianLine->loadThemeConfig(group, themeColor);
+	// median lines
+	for (int i = 0; i < d->medianLines.count(); ++i) {
+		auto* line = d->medianLines.at(i);
+		line->loadThemeConfig(group, plot->themeColorPalette(i));
+	}
 
 	// whiskers
 	d->whiskersLine->loadThemeConfig(group, themeColor);
@@ -1939,9 +2072,15 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	// So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill
 	// for all other themes, we add here a special handling for "Tufte".
 	if (plot->theme() == QLatin1String("Tufte")) {
-		d->borderLine->setStyle(Qt::NoPen);
-		d->medianLine->setStyle(Qt::NoPen);
-		d->background->setEnabled(false);
+		for (auto* background : d->backgrounds)
+			background->setEnabled(false);
+
+		for (auto* line : d->borderLines)
+			line->setStyle(Qt::NoPen);
+
+		for (auto* line : d->medianLines)
+			line->setStyle(Qt::NoPen);
+
 		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
 		d->symbolMedian->setStyle(Symbol::Style::Circle);
 		d->symbolOutlier->setStyle(Symbol::Style::NoSymbols);

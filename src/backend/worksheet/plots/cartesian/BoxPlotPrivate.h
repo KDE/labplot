@@ -31,6 +31,11 @@ public:
 	void updatePixmap();
 	void fillDataSpreadsheet(Spreadsheet*) const;
 
+	Background* addBackground(const KConfigGroup&);
+	Line* addBorderLine(const KConfigGroup&);
+	Line* addMedianLine(const KConfigGroup&);
+	void adjustPropertiesContainers();
+
 	bool m_suppressRecalc{false};
 
 	// reimplemented from QGraphicsItem
@@ -58,12 +63,10 @@ public:
 	double yMin;
 	double yMax;
 
-	// box filling
-	Background* background{nullptr};
-
-	// lines
-	Line* borderLine{nullptr};
-	Line* medianLine{nullptr};
+	// box
+	QVector<Background*> backgrounds;
+	QVector<Line*> borderLines;
+	QVector<Line*> medianLines;
 
 	// markers
 	Symbol* symbolMean{nullptr};

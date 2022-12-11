@@ -73,25 +73,25 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	ui.leWhiskersRangeParameter->setToolTip(msg);
 
 	// Tab "Box"
-	QFont font;
-	font.setBold(true);
-	font.setWeight(75);
+	msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
 
 	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
 
-	// filling
+	// Tab "Box"
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
-	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
+	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 
 	// lines
 	borderLineWidget = new LineWidget(ui.tabBox);
-	gridLayout->addWidget(borderLineWidget, 6, 0, 1, 3);
+	gridLayout->addWidget(borderLineWidget, 8, 0, 1, 3);
 
 	medianLineWidget = new LineWidget(ui.tabBox);
-	gridLayout->addWidget(medianLineWidget, 9, 0, 1, 3);
+	gridLayout->addWidget(medianLineWidget, 11, 0, 1, 3);
 
 	// Tab "Markers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
@@ -131,6 +131,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
 
 	// Tab "Box"
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::widthFactorChanged);
 
 	// Tab "Markers"
@@ -205,9 +206,9 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	QList<Line*> whiskersLines;
 	QList<Line*> whiskersCapLines;
 	for (auto* plot : m_boxPlots) {
-		backgrounds << plot->background();
-		borderLines << plot->borderLine();
-		medianLines << plot->medianLine();
+		backgrounds << plot->backgroundAt(0);
+		borderLines << plot->borderLineAt(0);
+		medianLines << plot->medianLineAt(0);
 		whiskersLines << plot->whiskersLine();
 		whiskersCapLines << plot->whiskersCapLine();
 	}
@@ -277,6 +278,9 @@ void BoxPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_boxPlot->dataColumns().count();
+	const int currentBoxIndex = ui.cbNumber->currentIndex();
+	ui.cbNumber->clear();
+
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -291,6 +295,11 @@ void BoxPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i)
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+
+		// show columns names in the combobox for the selection of the box to be modified
+		for (int i = 0; i < count; ++i)
+			if (m_boxPlot->dataColumns().at(i))
+				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
@@ -305,6 +314,11 @@ void BoxPlotDock::loadDataColumns() {
 		cb->setEnabled(enabled);
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
+
+	if (currentBoxIndex != -1)
+		ui.cbNumber->setCurrentIndex(currentBoxIndex);
+	else
+		ui.cbNumber->setCurrentIndex(0);
 }
 
 void BoxPlotDock::setDataColumns() const {
@@ -446,6 +460,37 @@ void BoxPlotDock::visibilityChanged(bool state) {
 }
 
 //"Box"-tab
+/*!
+ * called when the current box number was changed, shows the box properties for the selected box.
+ */
+void BoxPlotDock::currentBoxChanged(int index) {
+	if (index == -1)
+		return;
+
+	CONDITIONAL_LOCK_RETURN;
+
+	QList<Background*> backgrounds;
+	QList<Line*> borderLines;
+	QList<Line*> medianLines;
+	for (auto* plot : m_boxPlots) {
+		auto* background = plot->backgroundAt(index);
+		if (background)
+			backgrounds << background;
+
+		auto* line = plot->borderLineAt(index);
+		if (line)
+			borderLines << line;
+
+		line = plot->medianLineAt(index);
+		if (line)
+			medianLines << line;
+	}
+
+	backgroundWidget->setBackgrounds(backgrounds);
+	borderLineWidget->setLines(borderLines);
+	medianLineWidget->setLines(medianLines);
+}
+
 void BoxPlotDock::widthFactorChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 
