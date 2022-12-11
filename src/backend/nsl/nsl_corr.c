@@ -15,8 +15,8 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_corr_type_name[] = {i18n("linear (zero-padded)"), i18n("circular")};
-const char* nsl_corr_norm_name[] = {i18n("none"), i18n("biased"), i18n("unbiased"), i18n("coeff")};
+const char* nsl_corr_type_name[] = {i18n("Linear (Zero-padded)"), i18n("Circular")};
+const char* nsl_corr_norm_name[] = {i18n("None"), i18n("Biased"), i18n("Unbiased"), i18n("Coeff")};
 
 int nsl_corr_correlation(double s[], size_t n, double r[], size_t m, nsl_corr_type_type type, nsl_corr_norm_type normalize, double out[]) {
 	return nsl_corr_fft_type(s, n, r, m, type, normalize, out);

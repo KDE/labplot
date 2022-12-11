@@ -16,7 +16,7 @@
 #include "nsl_common.h"
 #include "nsl_sf_poly.h"
 
-const char* nsl_int_method_name[] = {i18n("rectangle (1-point)"), i18n("trapezoid (2-point)"), i18n("Simpson's (3-point)"), i18n("Simpson's 3/8 (4-point)")};
+const char* nsl_int_method_name[] = {i18n("Rectangle (1-point)"), i18n("Trapezoid (2-point)"), i18n("Simpson's (3-point)"), i18n("Simpson's 3/8 (4-point)")};
 
 int nsl_int_rectangle(const double* x, double* y, const size_t n, int abs) {
 	if (n == 0)

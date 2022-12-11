@@ -164,7 +164,7 @@
    <item row="8" column="0">
     <widget class="QLabel" name="lXStart">
      <property name="text">
-      <string>x-Start:</string>
+      <string>X-Start:</string>
      </property>
     </widget>
    </item>
@@ -178,7 +178,7 @@
    <item row="9" column="0">
     <widget class="QLabel" name="lXMax">
      <property name="text">
-      <string>x-End:</string>
+      <string>X-End:</string>
      </property>
     </widget>
    </item>
@@ -208,7 +208,7 @@
    <item row="11" column="0">
     <widget class="QLabel" name="lYStart">
      <property name="text">
-      <string>y-Start:</string>
+      <string>Y-Start:</string>
      </property>
     </widget>
    </item>
@@ -222,7 +222,7 @@
    <item row="12" column="0">
     <widget class="QLabel" name="lYEnd">
      <property name="text">
-      <string>y-End:</string>
+      <string>Y-End:</string>
      </property>
     </widget>
    </item>

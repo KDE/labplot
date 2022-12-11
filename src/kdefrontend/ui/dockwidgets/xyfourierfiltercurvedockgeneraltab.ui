@@ -105,21 +105,21 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>x-Range:</string>
+      <string>X-Range:</string>
      </property>
     </widget>
    </item>
@@ -425,7 +425,7 @@
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>

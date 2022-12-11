@@ -13,13 +13,13 @@
 #include "nsl_sort.h"
 #include "nsl_stats.h"
 
-const char* nsl_geom_linesim_type_name[] = {i18n("Douglas-Peucker (number)"),
-											i18n("Douglas-Peucker (tolerance)"),
+const char* nsl_geom_linesim_type_name[] = {i18n("Douglas-Peucker (Number)"),
+											i18n("Douglas-Peucker (Tolerance)"),
 											i18n("Visvalingam-Whyatt"),
 											i18n("Reumann-Witkam"),
-											i18n("perpendicular distance"),
-											i18n("n-th point"),
-											i18n("radial distance"),
+											i18n("Perpendicular Distance"),
+											i18n("n-th Point"),
+											i18n("Radial Distance"),
 											i18n("Interpolation"),
 											i18n("Opheim"),
 											i18n("Lang")};
