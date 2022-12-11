@@ -120,8 +120,6 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
-
-	//	bool m_printing{false};
 	bool m_hovered{false};
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
