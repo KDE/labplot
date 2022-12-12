@@ -108,7 +108,6 @@ LabelWidget::LabelWidget(QWidget* parent)
 	m_dateTimeMenu->setSeparatorsCollapsible(false); // we don't want the first separator to be removed
 
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
-	ui.lBindLogicalPos->setToolTip(msg);
 	ui.chbBindLogicalPos->setToolTip(msg);
 
 	ui.sbBorderWidth->setMinimum(0);
@@ -700,7 +699,7 @@ void LabelWidget::modeChanged(int index) {
 
 	labelModeChanged(mode);
 
-	CONDITIONAL_RETURN_NO_LOCK; // No lock???? TODO
+	CONDITIONAL_RETURN_NO_LOCK; // No lock, because multiple things are set by the feedback
 
 	QString text = plain ? ui.teLabel->toPlainText() : ui.teLabel->toHtml();
 	TextLabel::TextWrapper wrapper(text, mode, !plain);
@@ -1036,8 +1035,6 @@ void LabelWidget::visibilityChanged(bool state) {
 
 // border
 void LabelWidget::borderShapeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	auto shape = (TextLabel::BorderShape)index;
 	bool b = (shape != TextLabel::BorderShape::NoBorder);
 	ui.lBorderStyle->setVisible(b);
@@ -1048,6 +1045,8 @@ void LabelWidget::borderShapeChanged(int index) {
 	ui.kcbBorderColor->setVisible(b);
 	ui.lBorderOpacity->setVisible(b);
 	ui.sbBorderOpacity->setVisible(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* label : m_labelsList)
 		label->setBorderShape(shape);
@@ -1102,10 +1101,6 @@ void LabelWidget::borderOpacityChanged(int value) {
  * \param checked
  */
 void LabelWidget::bindingChanged(bool checked) {
-	CONDITIONAL_LOCK_RETURN;
-
-	ui.chbBindLogicalPos->setChecked(checked);
-
 	// widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
@@ -1133,6 +1128,10 @@ void LabelWidget::bindingChanged(bool checked) {
 
 	ui.lPositionYLogical->setVisible(checked);
 	ui.sbPositionYLogical->setVisible(checked);
+
+	CONDITIONAL_LOCK_RETURN;
+
+	ui.chbBindLogicalPos->setChecked(checked);
 
 	for (auto* label : m_labelsList)
 		label->setCoordinateBindingEnabled(checked);
@@ -1389,7 +1388,6 @@ void LabelWidget::load() {
 	// widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_label->plot() != nullptr);
-	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
 	if (allowLogicalCoordinates) {

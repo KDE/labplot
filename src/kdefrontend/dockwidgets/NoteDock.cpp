@@ -42,14 +42,14 @@ void NoteDock::setNotesList(QList<Note*> list) {
 	m_notes = list.first();
 	setAspects(list);
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.leName->setText(m_notes->name());
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
-	m_initializing = false;
 
 	connect(m_notes, &Note::aspectDescriptionChanged, this, &NoteDock::aspectDescriptionChanged);
 }

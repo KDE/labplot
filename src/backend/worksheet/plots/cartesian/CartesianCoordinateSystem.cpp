@@ -257,9 +257,10 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool& visible, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (single point)")
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping) || (flags & MappingFlag::SuppressPageClippingVisible);
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const bool limit = flags & MappingFlag::Limit;
+	const bool visibleFlag = flags & MappingFlag::SuppressPageClippingVisible;
 
 	double x = logicalPoint.x(), y = logicalPoint.y();
 	const double xPage = pageRect.x(), yPage = pageRect.y();
@@ -290,8 +291,12 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 				y = pageRect.y() + h / 2.;
 
 			QPointF mappedPoint(x, y);
-			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
-				visible = true;
+			const bool containsPoint = rectContainsPoint(pageRect, mappedPoint);
+			if (noPageClipping || limit || containsPoint) {
+				if (visibleFlag)
+					visible = containsPoint;
+				else
+					visible = true;
 				return mappedPoint;
 			}
 		}
@@ -579,6 +584,22 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	}
 
 	return result;
+}
+
+bool CartesianCoordinateSystem::isValid() const {
+	if (d->xScales.isEmpty() || d->yScales.isEmpty())
+		return false;
+
+	for (const auto* scale : d->xScales) {
+		if (!scale)
+			return false;
+	}
+
+	for (const auto* scale : d->yScales) {
+		if (!scale)
+			return false;
+	}
+	return true;
 }
 
 /**************************************************************************************/

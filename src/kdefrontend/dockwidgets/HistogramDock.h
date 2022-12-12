@@ -17,8 +17,6 @@
 #include "ui_histogramdock.h"
 
 class AspectTreeModel;
-class Column;
-class Histogram;
 class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
@@ -35,15 +33,13 @@ public:
 	void setCurves(QList<Histogram*>);
 
 private:
-	QStringList dateStrings;
-	QStringList timeStrings;
-
 	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbErrorPlusColumn;
 	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
+	void updateLocale() override;
 	void loadConfig(KConfig&);
 
 protected:

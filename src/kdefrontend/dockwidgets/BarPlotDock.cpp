@@ -100,7 +100,6 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 
 	// SLOTS
 	// Tab "General"
-	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
 	connect(ui.leName, &QLineEdit::textChanged, this, &BarPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &BarPlotDock::commentChanged);
 	connect(cbXColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BarPlotDock::xColumnChanged);
@@ -111,6 +110,7 @@ BarPlotDock::BarPlotDock(QWidget* parent)
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BarPlotDock::visibilityChanged);
 
 	// Tab "Bars"
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BarPlotDock::currentBarChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BarPlotDock::widthFactorChanged);
 
 	// template handler
@@ -161,23 +161,16 @@ void BarPlotDock::setBarPlots(QList<BarPlot*> list) {
 
 	// backgrounds
 	QList<Background*> backgrounds;
-	for (auto* plot : m_barPlots)
+	QList<Line*> lines;
+	QList<Value*> values;
+	for (auto* plot : m_barPlots) {
 		backgrounds << plot->backgroundAt(0);
+		lines << plot->lineAt(0);
+		values << plot->value();
+	}
 
 	backgroundWidget->setBackgrounds(backgrounds);
-
-	// backgrounds
-	QList<Line*> lines;
-	for (auto* plot : m_barPlots)
-		lines << plot->lineAt(0);
-
 	lineWidget->setLines(lines);
-
-	// values
-	QList<Value*> values;
-	for (auto* plot : m_barPlots)
-		values << plot->value();
-
 	valueWidget->setValues(values);
 
 	// show the properties of the first box plot
@@ -261,6 +254,7 @@ void BarPlotDock::loadDataColumns() {
 		for (int i = 0; i < count; ++i)
 			m_dataComboBoxes.at(i)->setAspect(m_barPlot->dataColumns().at(i));
 
+		// show columns names in the combobox for the selection of the bar to be modified
 		for (int i = 0; i < count; ++i)
 			if (m_barPlot->dataColumns().at(i))
 				ui.cbNumber->addItem(m_barPlot->dataColumns().at(i)->name());

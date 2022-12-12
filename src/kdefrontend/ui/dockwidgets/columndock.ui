@@ -238,7 +238,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
-      <string>Data type:</string>
+      <string>Data Type:</string>
      </property>
     </widget>
    </item>
@@ -312,7 +312,7 @@
    <item row="9" column="0">
     <widget class="QLabel" name="lPlotDesignation">
      <property name="text">
-      <string>Plot designation:</string>
+      <string>Plot Designation:</string>
      </property>
     </widget>
    </item>

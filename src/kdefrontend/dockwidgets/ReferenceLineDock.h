@@ -37,6 +37,8 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
+	void updateWidgetsOrientation(ReferenceLine::Orientation);
+
 private Q_SLOTS:
 	// SLOTs for changes triggered in ReferenceLineDock
 	void visibilityChanged(bool);

@@ -255,7 +255,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 
 	// write the result
 	convolutionResult.available = true;
-	convolutionResult.valid = true;
+	convolutionResult.valid = (status == 0);
 	convolutionResult.status = QString::number(status);
 	convolutionResult.elapsedTime = timer.elapsed();
 

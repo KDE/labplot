@@ -137,7 +137,7 @@
        <item row="3" column="0">
         <widget class="QLabel" name="lLineSkipGaps">
          <property name="text">
-          <string>Ignore gaps:</string>
+          <string>Ignore Gaps:</string>
          </property>
         </widget>
        </item>

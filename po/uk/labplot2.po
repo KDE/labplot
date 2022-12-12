@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-06 00:41+0000\n"
-"PO-Revision-Date: 2022-11-25 09:34+0200\n"
+"POT-Creation-Date: 2022-12-12 00:42+0000\n"
+"PO-Revision-Date: 2022-12-11 08:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -67,27 +67,27 @@ msgstr ""
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1132
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
 #: src/backend/worksheet/Image.cpp:445
-#: src/backend/worksheet/InfoElement.cpp:1156
+#: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2910
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1820
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4601
-#: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:908
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4619
+#: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1939
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:1937
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:403
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:237
 #: src/backend/worksheet/plots/cartesian/Value.cpp:256
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:406
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:318
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:296
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3216
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3222
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:312
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:273
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:185
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:2552
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:305
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:343
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:295
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:258
 #: src/backend/worksheet/plots/cartesian/XYIntegrationCurve.cpp:262
@@ -119,7 +119,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:482
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3039
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1895
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:447
 #: src/backend/worksheet/plots/PlotArea.cpp:405
@@ -260,8 +260,9 @@ msgid "Invalid creation time for '%1'. Using current time."
 msgstr ""
 "Некоректне значення часу створення для «%1». Використовуємо поточний час."
 
-#: src/backend/core/AbstractColumn.cpp:131
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:352
+#: src/backend/core/AbstractColumn.cpp:134 src/backend/nsl/nsl_conv.c:22
+#: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
+#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:352
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:364
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
@@ -272,49 +273,91 @@ msgstr ""
 msgid "None"
 msgstr "Немає"
 
-#: src/backend/core/AbstractColumn.cpp:143
-#, kde-format
-msgid "X-error"
-msgstr "Похибка за x"
-
-#: src/backend/core/AbstractColumn.cpp:146
-#, kde-format
-msgid "X-error +"
-msgstr "Похибка за x +"
+#: src/backend/core/AbstractColumn.cpp:147
+#, fuzzy, kde-format
+#| msgid "X Uncertainty"
+msgid "X-Uncertainty"
+msgstr "Невизначеність за X"
 
 #: src/backend/core/AbstractColumn.cpp:149
-#, kde-format
-msgid "X-error -"
-msgstr "Похибка за x -"
+#, fuzzy, kde-format
+#| msgid "X Error"
+msgid "X-Error"
+msgstr "Похибка за X"
 
-#: src/backend/core/AbstractColumn.cpp:152
-#, kde-format
-msgid "Y-error"
-msgstr "Похибка за y"
+#: src/backend/core/AbstractColumn.cpp:153
+#, fuzzy, kde-format
+#| msgid "X Uncertainty"
+msgid "X-Uncertainty +"
+msgstr "Невизначеність за X"
 
 #: src/backend/core/AbstractColumn.cpp:155
-#, kde-format
-msgid "Y-error +"
+#, fuzzy, kde-format
+#| msgid "X-error +"
+msgid "X-Error +"
+msgstr "Похибка за x +"
+
+#: src/backend/core/AbstractColumn.cpp:159
+#, fuzzy, kde-format
+#| msgid "X Uncertainty"
+msgid "X-Uncertainty -"
+msgstr "Невизначеність за X"
+
+#: src/backend/core/AbstractColumn.cpp:161
+#, fuzzy, kde-format
+#| msgid "X-error -"
+msgid "X-Error -"
+msgstr "Похибка за x -"
+
+#: src/backend/core/AbstractColumn.cpp:165
+#, fuzzy, kde-format
+#| msgid "Y Uncertainty"
+msgid "Y-Uncertainty"
+msgstr "Невизначеність за Y"
+
+#: src/backend/core/AbstractColumn.cpp:167
+#, fuzzy, kde-format
+#| msgid "Y Error"
+msgid "Y-Error"
+msgstr "Похибка за Y"
+
+#: src/backend/core/AbstractColumn.cpp:171
+#, fuzzy, kde-format
+#| msgid "Y Uncertainty"
+msgid "Y-Uncertainty +"
+msgstr "Невизначеність за Y"
+
+#: src/backend/core/AbstractColumn.cpp:173
+#, fuzzy, kde-format
+#| msgid "Y-error +"
+msgid "Y-Error +"
 msgstr "Похибка за y +"
 
-#: src/backend/core/AbstractColumn.cpp:158
-#, kde-format
-msgid "Y-error -"
+#: src/backend/core/AbstractColumn.cpp:177
+#, fuzzy, kde-format
+#| msgid "Y Uncertainty"
+msgid "Y-Uncertainty -"
+msgstr "Невизначеність за Y"
+
+#: src/backend/core/AbstractColumn.cpp:179
+#, fuzzy, kde-format
+#| msgid "Y-error -"
+msgid "Y-Error -"
 msgstr "Похибка за y -"
 
-#: src/backend/core/AbstractColumn.cpp:177
+#: src/backend/core/AbstractColumn.cpp:198
 #: src/backend/datasources/filters/MatioFilter.cpp:394
 #: src/backend/datasources/filters/MatioFilter.cpp:440
 #, kde-format
 msgid "Double"
 msgstr "Подвійна точність"
 
-#: src/backend/core/AbstractColumn.cpp:179
+#: src/backend/core/AbstractColumn.cpp:200
 #, kde-format
 msgid "Integer"
 msgstr "Ціле число"
 
-#: src/backend/core/AbstractColumn.cpp:181
+#: src/backend/core/AbstractColumn.cpp:202
 #, kde-format
 msgid "Big Integer"
 msgstr "Велике ціле число"
@@ -322,40 +365,40 @@ msgstr "Велике ціле число"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsText)
 #. i18n: ectx: property (text), widget (QLabel, lText)
 #. i18n: ectx: property (text), widget (QLabel, lValuesText)
-#: src/backend/core/AbstractColumn.cpp:183
+#: src/backend/core/AbstractColumn.cpp:204
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:366
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:91
 #: src/commonfrontend/worksheet/WorksheetView.cpp:200
 #: src/commonfrontend/worksheet/WorksheetView.cpp:361
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1420
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1406
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:269
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:267
-#: src/kdefrontend/widgets/LabelWidget.cpp:189
+#: src/kdefrontend/widgets/LabelWidget.cpp:188
 #, kde-format
 msgid "Text"
 msgstr "Текст"
 
-#: src/backend/core/AbstractColumn.cpp:185
+#: src/backend/core/AbstractColumn.cpp:206
 #, kde-format
 msgid "Date & Time"
 msgstr "Дата і час"
 
-#: src/backend/core/AbstractColumn.cpp:187
+#: src/backend/core/AbstractColumn.cpp:208
 #, kde-format
 msgid "Month Names"
 msgstr "Назви місяців"
 
-#: src/backend/core/AbstractColumn.cpp:189
+#: src/backend/core/AbstractColumn.cpp:210
 #, kde-format
 msgid "Day Names"
 msgstr "Назви днів"
 
-#: src/backend/core/AbstractColumn.cpp:192
+#: src/backend/core/AbstractColumn.cpp:213
 #, kde-format
 msgid "UNDEFINED"
 msgstr "НЕ ВИЗНАЧЕНО"
 
-#: src/backend/core/AbstractColumn.cpp:277
+#: src/backend/core/AbstractColumn.cpp:298
 #: src/backend/spreadsheet/Spreadsheet.cpp:185
 #, kde-format
 msgid "%1: insert 1 row"
@@ -365,7 +408,7 @@ msgstr[1] "%1: вставити %2 рядки"
 msgstr[2] "%1: вставити %2 рядків"
 msgstr[3] "%1: вставити один рядок"
 
-#: src/backend/core/AbstractColumn.cpp:306
+#: src/backend/core/AbstractColumn.cpp:327
 #: src/backend/spreadsheet/Spreadsheet.cpp:174
 #, kde-format
 msgid "%1: remove 1 row"
@@ -375,7 +418,7 @@ msgstr[1] "%1: вилучити %2 рядки"
 msgstr[2] "%1: вилучити %2 рядків"
 msgstr[3] "%1: вилучити один рядок"
 
-#: src/backend/core/AbstractColumn.cpp:838
+#: src/backend/core/AbstractColumn.cpp:859
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "некоректний або пропущений початковий або кінцевий рядок"
@@ -488,13 +531,11 @@ msgstr "%1: пересунути %2 до %3."
 msgid "Name"
 msgstr "Назва"
 
-#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundType)
 #. i18n: ectx: property (text), widget (QTableWidget, twContent)
 #: src/backend/core/AspectTreeModel.cpp:154
 #: src/kdefrontend/datasources/HDF5OptionsWidget.cpp:27
 #: src/kdefrontend/datasources/NetCDFOptionsWidget.cpp:29
 #: src/kdefrontend/ui/datasources/matiooptionswidget.ui:47
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1393
 #, kde-format
 msgid "Type"
 msgstr "Тип"
@@ -600,9 +641,9 @@ msgstr "Обчислення"
 
 #: src/backend/core/column/Column.cpp:376
 #: src/backend/core/column/columncommands.cpp:86
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:341
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:365
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:376
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:338
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:362
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:373
 #, kde-format
 msgid "%1: change column type"
 msgstr "%1: змінити тип стовпчика"
@@ -848,14 +889,14 @@ msgstr "невідомий елемент вибору даних «%1»"
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:371
 #: src/kdefrontend/spreadsheet/PlotDataDialog.cpp:379
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:70
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:491
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:524
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:224
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:251
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:59
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:61
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:94
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:94
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:88
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:87
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:125
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:125
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:94
@@ -924,7 +965,7 @@ msgstr "%1: встановити стиль контурів позначок п
 
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
-#: src/backend/worksheet/InfoElement.cpp:818
+#: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:142
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
@@ -934,6 +975,7 @@ msgstr "%1: зробити видимим"
 
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
+#: src/backend/worksheet/InfoElement.cpp:813
 #: src/backend/worksheet/WorksheetElement.cpp:142
 #: src/backend/worksheet/WorksheetElement.cpp:596
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
@@ -985,7 +1027,7 @@ msgid "%1: remove all axis points"
 msgstr "%1: вилучити усі точки вісі"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
-#: src/backend/worksheet/InfoElement.cpp:788
+#: src/backend/worksheet/InfoElement.cpp:783
 #: src/backend/worksheet/WorksheetElement.cpp:575
 #, kde-format
 msgid "%1: set position"
@@ -1603,7 +1645,7 @@ msgid "Valid JSON document"
 msgstr "Коректний документ JSON"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:275
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:342
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:328
 #, kde-format
 msgid "index"
 msgstr "індекс"
@@ -1762,6 +1804,7 @@ msgstr "UInt64"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:414
 #: src/backend/datasources/filters/MatioFilter.cpp:464
+#: src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Function"
 msgstr "Функція"
@@ -2692,7 +2735,7 @@ msgid "Minimum"
 msgstr "Мінімум"
 
 #. i18n: ectx: property (text), item, widget (QListWidget, lwWillStatistics)
-#: src/backend/gsl/ExpressionParser.cpp:160
+#: src/backend/gsl/ExpressionParser.cpp:160 src/backend/nsl/nsl_conv.c:23
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:61
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:42
 #, kde-format
@@ -2711,7 +2754,7 @@ msgstr "Арифметичне середнє"
 #. i18n: ectx: property (text), widget (QRadioButton, rbMedian)
 #: src/backend/gsl/ExpressionParser.cpp:162
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:70
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:470
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:503
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:97
 #, kde-format
 msgid "Median"
@@ -2860,7 +2903,7 @@ msgstr "Ентропія"
 msgid "Quantile"
 msgstr "Квантиль"
 
-#: src/backend/gsl/ExpressionParser.cpp:186
+#: src/backend/gsl/ExpressionParser.cpp:186 src/backend/nsl/nsl_smooth.c:21
 #, kde-format
 msgid "Percentile"
 msgstr "Процентиль"
@@ -3401,7 +3444,7 @@ msgstr ""
 msgid "Dawson's integral D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 msgstr "Інтеграл Доусона D(z) = sqrt(pi)/2 * exp(-z^2) * erfi(z)"
 
-#: src/backend/gsl/ExpressionParser.cpp:342 src/backend/nsl/nsl_fit.c:34
+#: src/backend/gsl/ExpressionParser.cpp:342
 #, kde-format
 msgid "Voigt profile"
 msgstr "Профіль Фойгта"
@@ -3960,7 +4003,8 @@ msgstr "Транспортна функція"
 msgid "Sine"
 msgstr "Синус"
 
-#: src/backend/gsl/ExpressionParser.cpp:576 src/backend/nsl/nsl_sf_window.c:27
+#: src/backend/gsl/ExpressionParser.cpp:576 src/backend/nsl/nsl_interp.c:21
+#: src/backend/nsl/nsl_sf_window.c:27 src/backend/nsl/nsl_smooth.c:30
 #, kde-format
 msgid "Cosine"
 msgstr "Косинус"
@@ -3980,7 +4024,7 @@ msgstr "Арксинус"
 msgid "Inverse cosine"
 msgstr "Арккосинус"
 
-#: src/backend/gsl/ExpressionParser.cpp:580 src/backend/nsl/nsl_fit.c:44
+#: src/backend/gsl/ExpressionParser.cpp:580
 #, kde-format
 msgid "Inverse tangent"
 msgstr "Арктангенс"
@@ -4000,7 +4044,7 @@ msgstr "Гіперболічний синус"
 msgid "Hyperbolic cosine"
 msgstr "Гіперболічний косинус"
 
-#: src/backend/gsl/ExpressionParser.cpp:584 src/backend/nsl/nsl_fit.c:45
+#: src/backend/gsl/ExpressionParser.cpp:584
 #, kde-format
 msgid "Hyperbolic tangent"
 msgstr "Гіперболічний тангенс"
@@ -5103,7 +5147,7 @@ msgstr "Одиниця СІ для енергії"
 msgid "Energy 1 erg"
 msgstr "Енергія у один ерг"
 
-#: src/backend/lib/Range.cpp:13
+#: src/backend/lib/Range.cpp:13 src/backend/nsl/nsl_interp.c:14
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:408
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:471
 #, kde-format
@@ -5330,33 +5374,73 @@ msgid "no note element found"
 msgstr "не знайдено елемента нотатки"
 
 #: src/backend/nsl/nsl_conv.c:19
-#, kde-format
-msgid "forward (convolution)"
+#, fuzzy, kde-format
+#| msgid "forward (convolution)"
+msgid "Forward (Convolution)"
 msgstr "вперед (згортання)"
 
 #: src/backend/nsl/nsl_conv.c:19
-#, kde-format
-msgid "backward (deconvolution)"
+#, fuzzy, kde-format
+#| msgid "backward (deconvolution)"
+msgid "Backward (Deconvolution)"
 msgstr "назад (розгортання)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
-#, kde-format
-msgid "linear (zero-padded)"
+#, fuzzy, kde-format
+#| msgid "linear (zero-padded)"
+msgid "Linear (Zero-padded)"
 msgstr "лінійна (з доповненням нулями)"
 
 #: src/backend/nsl/nsl_conv.c:20 src/backend/nsl/nsl_corr.c:18
-#, kde-format
-msgid "circular"
+#, fuzzy, kde-format
+#| msgid "circular"
+msgid "Circular"
 msgstr "кругова"
 
-#: src/backend/nsl/nsl_conv.c:21
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoRange)
+#. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
+#. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
+#. i18n: ectx: property (text), widget (QCheckBox, cbNiceExtend)
+#. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
+#. i18n: ectx: property (text), widget (QCheckBox, cbMajorTicksAutoNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, cbMinorTicksAutoNumber)
+#. i18n: ectx: property (text), widget (QCheckBox, chkLabelsAutoPrecision)
+#. i18n: ectx: property (text), widget (QCheckBox, chkLabelsFormatAuto)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
+#: src/backend/nsl/nsl_conv.c:21 src/kdefrontend/dockwidgets/AxisDock.cpp:235
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:152
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:319
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:665
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:929
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1094
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1444
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:198
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:338
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:379
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:34
+#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:283
+#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:238
+#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:136
+#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:330
+#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:382
+#: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:136
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:129
+#: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:49
+#: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:49
+#: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:136
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:136
+#: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:545
+#: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:59
 #, kde-format
-msgid "auto"
-msgstr "авто"
+msgid "Auto"
+msgstr "Авто"
 
 #: src/backend/nsl/nsl_conv.c:21
-#, kde-format
-msgid "direct"
+#, fuzzy, kde-format
+#| msgid "direct"
+msgid "Direct"
 msgstr "безпосереднє"
 
 #: src/backend/nsl/nsl_conv.c:21
@@ -5364,16 +5448,10 @@ msgstr "безпосереднє"
 msgid "FFT"
 msgstr "ШПФ"
 
-#: src/backend/nsl/nsl_conv.c:22 src/backend/nsl/nsl_conv.c:23
-#: src/backend/nsl/nsl_corr.c:19 src/backend/nsl/nsl_smooth.c:22
-#: src/backend/worksheet/plots/cartesian/Symbol.cpp:283
-#, kde-format
-msgid "none"
-msgstr "немає"
-
 #: src/backend/nsl/nsl_conv.c:22
-#, kde-format
-msgid "sum"
+#, fuzzy, kde-format
+#| msgid "sum"
+msgid "Sum"
 msgstr "сума"
 
 #: src/backend/nsl/nsl_conv.c:22
@@ -5382,53 +5460,57 @@ msgid "Euclidean"
 msgstr "Евклідова"
 
 #: src/backend/nsl/nsl_conv.c:23
-#, kde-format
-msgid "maximum"
-msgstr "максимум"
-
-#: src/backend/nsl/nsl_conv.c:23
-#, kde-format
-msgid "center (acausal)"
+#, fuzzy, kde-format
+#| msgid "center (acausal)"
+msgid "Center (Acausal)"
 msgstr "центральна (acausal)"
 
 #: src/backend/nsl/nsl_conv.c:24
-#, kde-format
-msgid "sliding average"
+#, fuzzy, kde-format
+#| msgid "sliding average"
+msgid "Sliding Average"
 msgstr "рухоме середнє"
 
 #: src/backend/nsl/nsl_conv.c:25
-#, kde-format
-msgid "triangular smooth"
+#, fuzzy, kde-format
+#| msgid "triangular smooth"
+msgid "Triangular Smooth"
 msgstr "трикутне згладжування"
 
 #: src/backend/nsl/nsl_conv.c:26
-#, kde-format
-msgid "pseudo-Gaussian smooth"
+#, fuzzy, kde-format
+#| msgid "pseudo-Gaussian smooth"
+msgid "Pseudo-Gaussian Smooth"
 msgstr "псевдогаусове згладжування"
 
 #: src/backend/nsl/nsl_conv.c:27
-#, kde-format
-msgid "first derivative"
+#, fuzzy, kde-format
+#| msgid "first derivative"
+msgid "First Derivative"
 msgstr "перша похідна"
 
 #: src/backend/nsl/nsl_conv.c:28
-#, kde-format
-msgid "smooth first derivative"
+#, fuzzy, kde-format
+#| msgid "smooth first derivative"
+msgid "Smooth First Derivative"
 msgstr "згладжена перша похідна"
 
 #: src/backend/nsl/nsl_conv.c:29 src/backend/nsl/nsl_interp.c:26
-#, kde-format
-msgid "second derivative"
+#, fuzzy, kde-format
+#| msgid "second derivative"
+msgid "Second Derivative"
 msgstr "друга похідна"
 
 #: src/backend/nsl/nsl_conv.c:30
-#, kde-format
-msgid "third derivative"
+#, fuzzy, kde-format
+#| msgid "third derivative"
+msgid "Third Derivative"
 msgstr "третя похідна"
 
 #: src/backend/nsl/nsl_conv.c:31
-#, kde-format
-msgid "fourth derivative"
+#, fuzzy, kde-format
+#| msgid "fourth derivative"
+msgid "Fourth Derivative"
 msgstr "четверта похідна"
 
 #: src/backend/nsl/nsl_conv.c:32
@@ -5442,18 +5524,21 @@ msgid "Lorentzian"
 msgstr "Лоренца"
 
 #: src/backend/nsl/nsl_corr.c:19
-#, kde-format
-msgid "biased"
+#, fuzzy, kde-format
+#| msgid "biased"
+msgid "Biased"
 msgstr "зміщена"
 
 #: src/backend/nsl/nsl_corr.c:19
-#, kde-format
-msgid "unbiased"
+#, fuzzy, kde-format
+#| msgid "unbiased"
+msgid "Unbiased"
 msgstr "незміщена"
 
 #: src/backend/nsl/nsl_corr.c:19
-#, kde-format
-msgid "coeff"
+#, fuzzy, kde-format
+#| msgid "coeff"
+msgid "Coeff"
 msgstr "коефіцієнт"
 
 #: src/backend/nsl/nsl_dft.c:18
@@ -5467,13 +5552,15 @@ msgid "Amplitude"
 msgstr "Амплітуда"
 
 #: src/backend/nsl/nsl_dft.c:20
-#, kde-format
-msgid "real part"
+#, fuzzy, kde-format
+#| msgid "real part"
+msgid "Real Part"
 msgstr "Дійсна частина"
 
-#: src/backend/nsl/nsl_dft.c:21
-#, kde-format
-msgid "imaginary part"
+#: src/backend/nsl/nsl_dft.c:21 src/backend/nsl/nsl_hilbert.c:18
+#, fuzzy, kde-format
+#| msgid "Imaginary part"
+msgid "Imaginary Part"
 msgstr "Уявна частина"
 
 #: src/backend/nsl/nsl_dft.c:22 src/backend/nsl/nsl_fit.c:26
@@ -5494,23 +5581,27 @@ msgid "Amplitude in dB"
 msgstr "Амплітуда у дБ"
 
 #: src/backend/nsl/nsl_dft.c:25
-#, kde-format
-msgid "normalized amplitude in dB"
+#, fuzzy, kde-format
+#| msgid "normalized amplitude in dB"
+msgid "Normalized Amplitude in dB"
 msgstr "Нормалізована амплітуда у дБ"
 
 #: src/backend/nsl/nsl_dft.c:26
-#, kde-format
-msgid "Magnitude squared"
+#, fuzzy, kde-format
+#| msgid "Magnitude squared"
+msgid "Magnitude Squared"
 msgstr "Квадрат модуля"
 
 #: src/backend/nsl/nsl_dft.c:27
-#, kde-format
-msgid "Amplitude squared"
+#, fuzzy, kde-format
+#| msgid "Amplitude squared"
+msgid "Amplitude Squared"
 msgstr "Квадрат амплітуди"
 
 #: src/backend/nsl/nsl_dft.c:28
-#, kde-format
-msgid "raw"
+#, fuzzy, kde-format
+#| msgid "raw"
+msgid "Raw"
 msgstr "Без обробки"
 
 #: src/backend/nsl/nsl_dft.c:29 src/backend/nsl/nsl_filter.c:23
@@ -5530,53 +5621,63 @@ msgid "Period"
 msgstr "Період"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "first"
+#, fuzzy, kde-format
+#| msgid "first"
+msgid "First"
 msgstr "перша"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "second"
+#, fuzzy, kde-format
+#| msgid "second"
+msgid "Second"
 msgstr "друга"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "third"
+#, fuzzy, kde-format
+#| msgid "third"
+msgid "Third"
 msgstr "третя"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "fourth"
+#, fuzzy, kde-format
+#| msgid "fourth"
+msgid "Fourth"
 msgstr "четверта"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "fifth"
+#, fuzzy, kde-format
+#| msgid "fifth"
+msgid "Fifth"
 msgstr "п'ята"
 
 #: src/backend/nsl/nsl_diff.c:19
-#, kde-format
-msgid "sixth"
+#, fuzzy, kde-format
+#| msgid "sixth"
+msgid "Sixth"
 msgstr "шоста"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, kde-format
-msgid "Low pass"
+#, fuzzy, kde-format
+#| msgid "Low pass"
+msgid "Low Pass"
 msgstr "Нижні частоти"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, kde-format
-msgid "High pass"
+#, fuzzy, kde-format
+#| msgid "High pass"
+msgid "High Pass"
 msgstr "Верхні частоти"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, kde-format
-msgid "Band pass"
+#, fuzzy, kde-format
+#| msgid "Band pass"
+msgid "Band Pass"
 msgstr "Смуга пропускання"
 
 #: src/backend/nsl/nsl_filter.c:20
-#, kde-format
-msgid "Band reject"
+#, fuzzy, kde-format
+#| msgid "Band reject"
+msgid "Band Reject"
 msgstr "Смуга відкидання"
 
 #: src/backend/nsl/nsl_filter.c:22
@@ -5590,13 +5691,15 @@ msgid "Butterworth"
 msgstr "Баттерворт"
 
 #: src/backend/nsl/nsl_filter.c:22
-#, kde-format
-msgid "Chebyshev type I"
+#, fuzzy, kde-format
+#| msgid "Chebyshev type I"
+msgid "Chebyshev Type I"
 msgstr "Чебишев (тип I)"
 
 #: src/backend/nsl/nsl_filter.c:22
-#, kde-format
-msgid "Chebyshev type II"
+#, fuzzy, kde-format
+#| msgid "Chebyshev type II"
+msgid "Chebyshev Type II"
 msgstr "Чебишев (тип II)"
 
 #: src/backend/nsl/nsl_filter.c:22
@@ -5615,23 +5718,27 @@ msgid "Fraction"
 msgstr "Частка"
 
 #: src/backend/nsl/nsl_fit.c:20
-#, kde-format
-msgid "Basic functions"
+#, fuzzy, kde-format
+#| msgid "Basic functions"
+msgid "Basic Functions"
 msgstr "Основні функції"
 
 #: src/backend/nsl/nsl_fit.c:21
-#, kde-format
-msgid "Peak functions"
+#, fuzzy, kde-format
+#| msgid "Peak functions"
+msgid "Peak Functions"
 msgstr "Пікові функції"
 
 #: src/backend/nsl/nsl_fit.c:22
-#, kde-format
-msgid "Growth (sigmoidal)"
+#, fuzzy, kde-format
+#| msgid "Growth (sigmoidal)"
+msgid "Growth (Sigmoidal)"
 msgstr "Ріст (сигмоїдальний)"
 
 #: src/backend/nsl/nsl_fit.c:23
-#, kde-format
-msgid "Statistics (distributions)"
+#, fuzzy, kde-format
+#| msgid "Statistics (distributions)"
+msgid "Statistics (Distributions)"
 msgstr "Статистика (розподіли)"
 
 #: src/backend/nsl/nsl_fit.c:24
@@ -5648,17 +5755,18 @@ msgid "Custom"
 msgstr "Нетипове"
 
 #: src/backend/nsl/nsl_fit.c:26
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:487
 #, kde-format
-msgid "Inverse exponential"
-msgstr "обернене експоненційне"
+msgid "Inverse Exponential"
+msgstr "обернена експоненційна"
 
-#: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_sf_stats.c:15
+#: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:22
+#: src/backend/nsl/nsl_sf_stats.c:15
 #, kde-format
 msgid "Exponential"
 msgstr "експоненційне"
 
-#: src/backend/nsl/nsl_fit.c:26
+#: src/backend/nsl/nsl_fit.c:26 src/backend/nsl/nsl_interp.c:15
 #, kde-format
 msgid "Polynomial"
 msgstr "поліноміальне"
@@ -5681,8 +5789,9 @@ msgid "Cauchy-Lorentz"
 msgstr "Коші-Лоренца"
 
 #: src/backend/nsl/nsl_fit.c:32 src/backend/nsl/nsl_sf_stats.c:45
-#, kde-format
-msgid "Hyperbolic secant (sech)"
+#, fuzzy, kde-format
+#| msgid "Hyperbolic secant (sech)"
+msgid "Hyperbolic Secant (sech)"
 msgstr "Гіперболічний секанс (sech)"
 
 #: src/backend/nsl/nsl_fit.c:33
@@ -5690,24 +5799,46 @@ msgstr "Гіперболічний секанс (sech)"
 msgid "Logistic (sech squared)"
 msgstr "Логістичний (sech-квадрат)"
 
+#: src/backend/nsl/nsl_fit.c:34
+#, fuzzy, kde-format
+#| msgid "Voigt profile"
+msgid "Voigt Profile"
+msgstr "Профіль Фойгта"
+
 #: src/backend/nsl/nsl_fit.c:35
 #, kde-format
 msgid "Pseudo-Voigt (same width)"
 msgstr "Псевдо-Фойгт (однакова ширина)"
 
-#: src/backend/nsl/nsl_fit.c:46
+#: src/backend/nsl/nsl_fit.c:44
+#, fuzzy, kde-format
+#| msgid "Inverse tangent"
+msgid "Inverse Tangent"
+msgstr "Арктангенс"
+
+#: src/backend/nsl/nsl_fit.c:45
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:503
 #, kde-format
-msgid "Algebraic sigmoid"
+msgid "Hyperbolic Tangent"
+msgstr "гіперболічний тангенс"
+
+#: src/backend/nsl/nsl_fit.c:46
+#, fuzzy, kde-format
+#| msgid "Algebraic sigmoid"
+msgid "Algebraic Sigmoid"
 msgstr "Алгебраїчна сигмоїда"
 
 #: src/backend/nsl/nsl_fit.c:47
-#, kde-format
-msgid "Logistic function"
+#, fuzzy, kde-format
+#| msgid "Logistic function"
+msgid "Logistic Function"
 msgstr "Логістична функція"
 
 #: src/backend/nsl/nsl_fit.c:48
-#, kde-format
-msgid "Error function (erf)"
+#, fuzzy, kde-format
+#| msgid "Error function (erf)"
+msgid "Error Function (erf)"
 msgstr "Функція помилки (erf)"
 
 #: src/backend/nsl/nsl_fit.c:49
@@ -5726,13 +5857,15 @@ msgid "Gudermann (gd)"
 msgstr "Ґудермана (gd)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:16
-#, kde-format
-msgid "Douglas-Peucker (number)"
+#, fuzzy, kde-format
+#| msgid "Douglas-Peucker (number)"
+msgid "Douglas-Peucker (Number)"
 msgstr "Дуґласа-Пойкера (числова)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:17
-#, kde-format
-msgid "Douglas-Peucker (tolerance)"
+#, fuzzy, kde-format
+#| msgid "Douglas-Peucker (tolerance)"
+msgid "Douglas-Peucker (Tolerance)"
 msgstr "Дуґласа-Пойкера (допуск)"
 
 #: src/backend/nsl/nsl_geom_linesim.c:18
@@ -5746,18 +5879,21 @@ msgid "Reumann-Witkam"
 msgstr "Ройманна-Віткема"
 
 #: src/backend/nsl/nsl_geom_linesim.c:20
-#, kde-format
-msgid "perpendicular distance"
+#, fuzzy, kde-format
+#| msgid "perpendicular distance"
+msgid "Perpendicular Distance"
 msgstr "нормальна відстань"
 
 #: src/backend/nsl/nsl_geom_linesim.c:21
-#, kde-format
-msgid "n-th point"
+#, fuzzy, kde-format
+#| msgid "n-th point"
+msgid "n-th Point"
 msgstr "n-точкова"
 
 #: src/backend/nsl/nsl_geom_linesim.c:22
-#, kde-format
-msgid "radial distance"
+#, fuzzy, kde-format
+#| msgid "radial distance"
+msgid "Radial Distance"
 msgstr "радіальна відстань"
 
 #. i18n: ectx: property (text), widget (QLabel, lInterpolation)
@@ -5785,19 +5921,16 @@ msgstr "Ленґа"
 msgid "Envelope"
 msgstr "Обгортка"
 
-#: src/backend/nsl/nsl_hilbert.c:18
-#, kde-format
-msgid "Imaginary part"
-msgstr "Уявна частина"
-
 #: src/backend/nsl/nsl_int.c:19
-#, kde-format
-msgid "rectangle (1-point)"
+#, fuzzy, kde-format
+#| msgid "rectangle (1-point)"
+msgid "Rectangle (1-point)"
 msgstr "прямокутники (одноточкове)"
 
 #: src/backend/nsl/nsl_int.c:19
-#, kde-format
-msgid "trapezoid (2-point)"
+#, fuzzy, kde-format
+#| msgid "trapezoid (2-point)"
+msgid "Trapezoid (2-point)"
 msgstr "трапеції (двоточкове)"
 
 #: src/backend/nsl/nsl_int.c:19
@@ -5810,64 +5943,52 @@ msgstr "Сімпсона (триточкове)"
 msgid "Simpson's 3/8 (4-point)"
 msgstr "Сімпсона 3/8 (чотириточкове)"
 
-#: src/backend/nsl/nsl_interp.c:14
-#, kde-format
-msgid "linear"
-msgstr "лінійний"
-
-#: src/backend/nsl/nsl_interp.c:15
-#, kde-format
-msgid "polynomial"
-msgstr "поліноміальне"
-
 #: src/backend/nsl/nsl_interp.c:16
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:233
 #, kde-format
-msgid "cubic spline (natural)"
+msgid "Cubic Spline (Natural)"
 msgstr "кубічний сплайн (природний)"
 
 #: src/backend/nsl/nsl_interp.c:17
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:234
 #, kde-format
-msgid "cubic spline (periodic)"
+msgid "Cubic Spline (Periodic)"
 msgstr "кубічний сплайн (періодичний)"
 
 #: src/backend/nsl/nsl_interp.c:18
-#, kde-format
-msgid "Akima-spline (natural)"
+#, fuzzy, kde-format
+#| msgid "Akima-spline (Natural)"
+msgid "Akima-Spline (Natural)"
 msgstr "сплайн Акіма (природний)"
 
 #: src/backend/nsl/nsl_interp.c:19
-#, kde-format
-msgid "Akima-spline (periodic)"
+#, fuzzy, kde-format
+#| msgid "Akima-spline (Periodic)"
+msgid "Akima-Spline (Periodic)"
 msgstr "сплайн Акіма (періодичний)"
 
 #: src/backend/nsl/nsl_interp.c:20
-#, kde-format
-msgid "Steffen spline"
+#, fuzzy, kde-format
+#| msgid "Steffen spline"
+msgid "Steffen-Spline"
 msgstr "сплайн Штефена"
 
-#: src/backend/nsl/nsl_interp.c:21 src/backend/nsl/nsl_smooth.c:30
-#, kde-format
-msgid "cosine"
-msgstr "косинус"
-
-#: src/backend/nsl/nsl_interp.c:22
-#, kde-format
-msgid "exponential"
-msgstr "експоненційне"
-
 #: src/backend/nsl/nsl_interp.c:23
-#, kde-format
-msgid "piecewise cubic Hermite (PCH)"
+#, fuzzy, kde-format
+#| msgid "piecewise cubic Hermite (PCH)"
+msgid "Piecewise Cubic Hermite (PCH)"
 msgstr "кусково-кубічне Ерміта (PCH)"
 
 #: src/backend/nsl/nsl_interp.c:24
-#, kde-format
-msgid "rational functions"
+#, fuzzy, kde-format
+#| msgid "rational functions"
+msgid "Rational Functions"
 msgstr "раціональні функції"
 
 #: src/backend/nsl/nsl_interp.c:25
-#, kde-format
-msgid "finite differences"
+#, fuzzy, kde-format
+#| msgid "finite differences"
+msgid "Finite Differences"
 msgstr "скінченні різниці"
 
 #: src/backend/nsl/nsl_interp.c:25
@@ -5876,8 +5997,9 @@ msgid "Catmull-Rom"
 msgstr "Кетмула-Рома"
 
 #: src/backend/nsl/nsl_interp.c:25
-#, kde-format
-msgid "cardinal"
+#, fuzzy, kde-format
+#| msgid "cardinal"
+msgid "Cardinal"
 msgstr "кардинальне"
 
 #: src/backend/nsl/nsl_interp.c:25
@@ -5886,18 +6008,15 @@ msgid "Kochanek-Bartels (TCB)"
 msgstr "Кочанека-Бартельса (TCB)"
 
 #: src/backend/nsl/nsl_interp.c:26
-#, kde-format
-msgid "function"
-msgstr "функція"
+#, fuzzy, kde-format
+#| msgid "Derivative:"
+msgid "Derivative"
+msgstr "Похідна:"
 
 #: src/backend/nsl/nsl_interp.c:26
-#, kde-format
-msgid "derivative"
-msgstr "похідна"
-
-#: src/backend/nsl/nsl_interp.c:26
-#, kde-format
-msgid "integral"
+#, fuzzy, kde-format
+#| msgid "integral"
+msgid "Integral"
 msgstr "інтеграл"
 
 #: src/backend/nsl/nsl_sf_stats.c:13
@@ -5941,13 +6060,15 @@ msgid "Landau"
 msgstr "Ландау"
 
 #: src/backend/nsl/nsl_sf_stats.c:22
-#, kde-format
-msgid "Levy alpha-stable"
+#, fuzzy, kde-format
+#| msgid "Levy alpha-stable"
+msgid "Levy Alpha-stable"
 msgstr "α-стійкий Леві"
 
 #: src/backend/nsl/nsl_sf_stats.c:23
-#, kde-format
-msgid "Levy skew alpha-stable"
+#, fuzzy, kde-format
+#| msgid "Levy skew alpha-stable"
+msgid "Levy Skew Alpha-stable"
 msgstr "α-стійкий похилий Леві"
 
 #: src/backend/nsl/nsl_sf_stats.c:24
@@ -5956,18 +6077,21 @@ msgid "Gamma"
 msgstr "Γ"
 
 #: src/backend/nsl/nsl_sf_stats.c:25
-#, kde-format
-msgid "Flat (uniform)"
+#, fuzzy, kde-format
+#| msgid "Flat (uniform)"
+msgid "Flat (Uniform)"
 msgstr "Рівномірний"
 
 #: src/backend/nsl/nsl_sf_stats.c:26
-#, kde-format
-msgid "Log-normal (Galton)"
+#, fuzzy, kde-format
+#| msgid "Log-normal (Galton)"
+msgid "Log-Normal (Galton)"
 msgstr "Логнормальний (Ґалтона)"
 
 #: src/backend/nsl/nsl_sf_stats.c:27
-#, kde-format
-msgid "Chi-squared"
+#, fuzzy, kde-format
+#| msgid "Chi-squared"
+msgid "Chi-Squared"
 msgstr "χ²-розподіл"
 
 #: src/backend/nsl/nsl_sf_stats.c:28
@@ -5986,8 +6110,9 @@ msgid "Beta"
 msgstr "β"
 
 #: src/backend/nsl/nsl_sf_stats.c:31
-#, kde-format
-msgid "Logistic (sech-squared)"
+#, fuzzy, kde-format
+#| msgid "Logistic (sech-squared)"
+msgid "Logistic (Sech-Squared)"
 msgstr "Логістичний (sech-квадрат)"
 
 #: src/backend/nsl/nsl_sf_stats.c:32
@@ -6001,8 +6126,9 @@ msgid "Weibull"
 msgstr "Вейбула"
 
 #: src/backend/nsl/nsl_sf_stats.c:34
-#, kde-format
-msgid "Gumbel Type-1 (maximum value; log-Weibull)"
+#, fuzzy, kde-format
+#| msgid "Gumbel Type-1 (maximum value; log-Weibull)"
+msgid "Gumbel Type-1 (Maximum Value; log-Weibull)"
 msgstr "Ґумбеля першого типу (максимальне значення; лог-Вейбула)"
 
 #: src/backend/nsl/nsl_sf_stats.c:35
@@ -6020,14 +6146,15 @@ msgstr "Пуассонів"
 msgid "Bernoulli"
 msgstr "Бернуллі"
 
-#: src/backend/nsl/nsl_sf_stats.c:38
+#: src/backend/nsl/nsl_sf_stats.c:38 src/backend/nsl/nsl_smooth.c:25
 #, kde-format
 msgid "Binomial"
 msgstr "Біноміальний"
 
 #: src/backend/nsl/nsl_sf_stats.c:39
-#, kde-format
-msgid "Negative binomial"
+#, fuzzy, kde-format
+#| msgid "Negative binomial"
+msgid "Negative Binomial"
 msgstr "Від'ємний біноміальний"
 
 #: src/backend/nsl/nsl_sf_stats.c:40
@@ -6061,38 +6188,45 @@ msgid "Levy"
 msgstr "Леві"
 
 #: src/backend/nsl/nsl_sf_stats.c:47
-#, kde-format
-msgid "Frechet (inverse Weibull)"
+#, fuzzy, kde-format
+#| msgid "Frechet (inverse Weibull)"
+msgid "Frechet (Inverse Weibull)"
 msgstr "Фреше (обернений Вейбулла)"
 
 #: src/backend/nsl/nsl_sf_window.c:15
-#, kde-format
-msgid "rectangular (uniform)"
+#, fuzzy, kde-format
+#| msgid "rectangular (uniform)"
+msgid "Rectangular (Uniform)"
 msgstr "прямокутна (однорідна)"
 
 #: src/backend/nsl/nsl_sf_window.c:16 src/backend/nsl/nsl_smooth.c:24
-#, kde-format
-msgid "triangular"
+#, fuzzy, kde-format
+#| msgid "triangular"
+msgid "Triangular"
 msgstr "трикутна"
 
 #: src/backend/nsl/nsl_sf_window.c:17
-#, kde-format
-msgid "triangular II (Bartlett)"
+#, fuzzy, kde-format
+#| msgid "triangular II (Bartlett)"
+msgid "Triangular II (Bartlett)"
 msgstr "трикутна ІІ (Бартлетта)"
 
 #: src/backend/nsl/nsl_sf_window.c:18
-#, kde-format
-msgid "triangular III (Parzen)"
+#, fuzzy, kde-format
+#| msgid "triangular III (Parzen)"
+msgid "Triangular III (Parzen)"
 msgstr "трикутна ІІІ (Парзена)"
 
 #: src/backend/nsl/nsl_sf_window.c:19
-#, kde-format
-msgid "Welch (parabolic)"
+#, fuzzy, kde-format
+#| msgid "Welch (parabolic)"
+msgid "Welch (Parabolic)"
 msgstr "Велча (параболічна)"
 
 #: src/backend/nsl/nsl_sf_window.c:20
-#, kde-format
-msgid "Hann (raised cosine)"
+#, fuzzy, kde-format
+#| msgid "Hann (raised cosine)"
+msgid "Hann (Raised Cosine)"
 msgstr "Ганна (піднятого косинуса)"
 
 #: src/backend/nsl/nsl_sf_window.c:21
@@ -6121,8 +6255,9 @@ msgid "Blackman-Harris"
 msgstr "Блекмена-Гарріса"
 
 #: src/backend/nsl/nsl_sf_window.c:26
-#, kde-format
-msgid "Flat top"
+#, fuzzy, kde-format
+#| msgid "Flat top"
+msgid "Flat Top"
 msgstr "Плоска вершина"
 
 #: src/backend/nsl/nsl_sf_window.c:28
@@ -6136,19 +6271,16 @@ msgid "Lanczos"
 msgstr "Ланцоша"
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, kde-format
-msgid "moving average (central)"
+#, fuzzy, kde-format
+#| msgid "moving average (central)"
+msgid "Moving Average (Central)"
 msgstr "рухоме середнє (центральне)"
 
 #: src/backend/nsl/nsl_smooth.c:21
-#, kde-format
-msgid "moving average (lagged)"
+#, fuzzy, kde-format
+#| msgid "moving average (lagged)"
+msgid "Moving Average (Lagged)"
 msgstr "рухоме середнє (з відставанням)"
-
-#: src/backend/nsl/nsl_smooth.c:21
-#, kde-format
-msgid "percentile"
-msgstr "процентиль"
 
 #: src/backend/nsl/nsl_smooth.c:21
 #, kde-format
@@ -6156,58 +6288,63 @@ msgid "Savitzky-Golay"
 msgstr "Савіцького-Голея"
 
 #: src/backend/nsl/nsl_smooth.c:22
+#: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:45
 #, kde-format
-msgid "interpolating"
+msgid "Periodic"
+msgstr "Періодичний"
+
+#: src/backend/nsl/nsl_smooth.c:22
+#, fuzzy, kde-format
+#| msgid "interpolating"
+msgid "Interpolating"
 msgstr "інтерполяція"
 
 #: src/backend/nsl/nsl_smooth.c:22
-#, kde-format
-msgid "mirror"
+#, fuzzy, kde-format
+#| msgid "mirror"
+msgid "Mirror"
 msgstr "віддзеркалення"
 
 #: src/backend/nsl/nsl_smooth.c:22
-#, kde-format
-msgid "nearest"
+#, fuzzy, kde-format
+#| msgid "nearest"
+msgid "Nearest"
 msgstr "найближче"
 
 #: src/backend/nsl/nsl_smooth.c:22
-#, kde-format
-msgid "constant"
-msgstr "стала"
-
-#: src/backend/nsl/nsl_smooth.c:22
-#, kde-format
-msgid "periodic"
-msgstr "періодичне"
+#, fuzzy, kde-format
+#| msgid "Constants"
+msgid "Constant"
+msgstr "Сталі"
 
 #: src/backend/nsl/nsl_smooth.c:23
-#, kde-format
-msgid "uniform (rectangular)"
+#, fuzzy, kde-format
+#| msgid "uniform (rectangular)"
+msgid "Uniform (Rectangular)"
 msgstr "однорідна (прямокутна)"
 
-#: src/backend/nsl/nsl_smooth.c:25
-#, kde-format
-msgid "binomial"
-msgstr "біноміальна"
-
 #: src/backend/nsl/nsl_smooth.c:26
-#, kde-format
-msgid "parabolic (Epanechnikov)"
+#, fuzzy, kde-format
+#| msgid "parabolic (Epanechnikov)"
+msgid "Parabolic (Epanechnikov)"
 msgstr "параболічна (Єпанечніков)"
 
 #: src/backend/nsl/nsl_smooth.c:27
-#, kde-format
-msgid "quartic (biweight)"
+#, fuzzy, kde-format
+#| msgid "quartic (biweight)"
+msgid "Quartic (Biweight)"
 msgstr "квартова (бівага)"
 
 #: src/backend/nsl/nsl_smooth.c:28
-#, kde-format
-msgid "triweight"
+#, fuzzy, kde-format
+#| msgid "triweight"
+msgid "Triweight"
 msgstr "тривага"
 
 #: src/backend/nsl/nsl_smooth.c:29
-#, kde-format
-msgid "tricube"
+#, fuzzy, kde-format
+#| msgid "tricube"
+msgid "Tricube"
 msgstr "трикубічна"
 
 #: src/backend/spreadsheet/Spreadsheet.cpp:260
@@ -6378,11 +6515,11 @@ msgstr "%1: встановити непрозорість тла"
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:242
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:228
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:470
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:134
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:85
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:174
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:172
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:94
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:188
 #: src/backend/worksheet/TextLabel.cpp:257
@@ -6403,13 +6540,13 @@ msgstr "%1: встановити непрозорість тла"
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:408
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:57
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:767
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:418
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:421
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:212
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:212
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:359
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:534
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:337
-#: src/kdefrontend/ui/labelwidget.ui:163
+#: src/kdefrontend/ui/labelwidget.ui:264
 #, kde-format
 msgid "Visible"
 msgstr "Видиме"
@@ -6457,7 +6594,7 @@ msgstr "Не вдалося прочитати дані зображення"
 
 #. i18n: ectx: property (text), widget (QTableWidget, twLabels)
 #: src/backend/worksheet/InfoElement.cpp:132
-#: src/backend/worksheet/InfoElement.cpp:1192
+#: src/backend/worksheet/InfoElement.cpp:1194
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:187
 #, kde-format
 msgid "Label"
@@ -6474,12 +6611,12 @@ msgstr "Мітка"
 msgid "Symbol"
 msgstr "Позначення"
 
-#: src/backend/worksheet/InfoElement.cpp:804
+#: src/backend/worksheet/InfoElement.cpp:799
 #, kde-format
 msgid "%1: set gluepoint index"
 msgstr "%1: встановити індекс точки прилипання"
 
-#: src/backend/worksheet/InfoElement.cpp:811
+#: src/backend/worksheet/InfoElement.cpp:806
 #, kde-format
 msgid "%1: set connectionline curve name"
 msgstr "%1: встановити назву кривої лінії з'єднання"
@@ -6527,13 +6664,13 @@ msgstr "%1: встановити рівень непрозорості ліні�
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1280
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1281
 #, kde-format
 msgid "%1: set horizontal padding"
 msgstr "%1: встановити горизонтальну фаску"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:107
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1306
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1307
 #, kde-format
 msgid "%1: set vertical padding"
 msgstr "%1: встановити вертикальну фаску"
@@ -6550,12 +6687,12 @@ msgstr "%1: встановити нижню фаску"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:257
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:89
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:251
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:237
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:103
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:253
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:54
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:185
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:29
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:113
 #, kde-format
@@ -6566,14 +6703,14 @@ msgstr "Горизонтальне"
 #. Orientation
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:260
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:92
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:254
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:240
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:106
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:254
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:58
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:55
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:849
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:853
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:183
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:847
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:851
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:184
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:30
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:112
 #, kde-format
@@ -6582,7 +6719,7 @@ msgstr "Вертикальне"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:280
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:100
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:262
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:248
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:123
 #, kde-format
 msgid "Orientation"
@@ -6595,9 +6732,9 @@ msgstr "Орієнтація"
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:286
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:129
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:226
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:420
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:562
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:639
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:414
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:554
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:654
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1389
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:162
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
@@ -6612,11 +6749,9 @@ msgstr "Лінія"
 msgid "Style"
 msgstr "Стиль"
 
-#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:293
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:392
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1273
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #, kde-format
 msgid "Color"
@@ -6628,7 +6763,7 @@ msgid "%1: set axis range type"
 msgstr "%1: встановити тип діапазону вісі"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:545
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:652
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:681
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: встановити орієнтацію вісі"
@@ -6874,7 +7009,7 @@ msgid "%1: set x column"
 msgstr "%1: встановити стовпчик даних x"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:244
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:471
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
 #, kde-format
 msgid "%1: set data columns"
 msgstr "%1: встановити стовпчики даних"
@@ -6885,133 +7020,123 @@ msgid "%1: set type"
 msgstr "%1: встановити тип"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:271
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:498
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:496
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
 #, kde-format
 msgid "%1: set orientation"
 msgstr "%1: встановити орієнтацію"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:512
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:510
 #, kde-format
 msgid "%1: width factor changed"
 msgstr "%1: змінено коефіцієнт ширини"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:337
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:187
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:185
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:332
 #, kde-format
 msgid "%1 - Data"
 msgstr "%1 – дані"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:343
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:329
 #, kde-format
 msgid "1st quartile"
 msgstr "перший квартиль"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:344
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:330
 #, kde-format
 msgid "3rd quartile"
 msgstr "третій квартиль"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:345
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:331
 #, kde-format
 msgid "median"
 msgstr "медіана"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:346
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:332
 #, kde-format
 msgid "whiskers min"
 msgstr "мін. вусиків"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:347
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:333
 #, kde-format
 msgid "whiskers max"
 msgstr "макс. вусиків"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:348
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:334
 #, kde-format
 msgid "data points count"
 msgstr "кількість точок даних"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:349
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:335
 #, kde-format
 msgid "outliers count"
 msgstr "кількість викидів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:350
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:336
 #, kde-format
 msgid "far out points count"
 msgstr "кількість віддалених точок"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:491
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:489
 #, kde-format
 msgid "%1: set ordering"
 msgstr "%1: упорядковування наборів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:505
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
 #, kde-format
 msgid "%1: variable width changed"
 msgstr "%1: змінено змінну ширину"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:519
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:517
 #, kde-format
 msgid "%1: changed notches"
 msgstr "%1: змінено рівні"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:527
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:525
 #, kde-format
 msgid "%1: set whiskers type"
 msgstr "%1: встановити тип вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:534
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:532
 #, kde-format
 msgid "%1: set whiskers range parameter"
 msgstr "%1: встановити параметр діапазон для кінчиків вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:541
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:539
 #, kde-format
 msgid "%1: set whiskers cap size"
 msgstr "%1: встановити розмір кінчика для вусів"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:548
-#, kde-format
-msgid "%1: set whiskers cap pen"
-msgstr "%1: встановити перо для кінчиків вусів"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
-#, kde-format
-msgid "%1: set whiskers cap opacity"
-msgstr "%1: встановити рівень непрозорості кінчиків вусів"
-
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:563
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:547
 #, kde-format
 msgid "%1: jitterring changed"
 msgstr "%1: змінено тремтіння"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:571
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:541
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:555
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:539
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:630
 #, kde-format
 msgid "%1: change rug enabled"
 msgstr "%1: змінити стан вмикання килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:578
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:548
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:562
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:546
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:644
 #, kde-format
 msgid "%1: change rug width"
 msgstr "%1: змінити ширину килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:585
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:555
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:569
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:553
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:651
 #, kde-format
 msgid "%1: change rug length"
 msgstr "%1: змінити довжину килимка"
 
-#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:592
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:562
+#: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:576
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:560
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:658
 #, kde-format
 msgid "%1: change rug offset"
@@ -7024,8 +7149,8 @@ msgstr "немає доступних відомостей"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4949
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:415
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4967
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:433
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:218
@@ -7148,8 +7273,11 @@ msgstr "Фільтр Фур'є"
 msgid "Fourier Transform"
 msgstr "Перетворення Фур'є"
 
+#. i18n("Auto/Cross Correlation"),
+#. cartesianPlotAddNewActionGroup);
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:356
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:454
+#: src/commonfrontend/worksheet/WorksheetView.cpp:385
 #, kde-format
 msgid "Hilbert Transform"
 msgstr "Перетворення Гільберта"
@@ -7164,12 +7292,8 @@ msgstr "Перетворення Гільберта"
 msgid "(De-)Convolution"
 msgstr "Згортка (розгортка)"
 
-#. i18n("Convolution/Deconvolution"),
-#. cartesianPlotAddNewActionGroup);
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:358
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:406
-#: src/commonfrontend/worksheet/WorksheetView.cpp:347
-#: src/commonfrontend/worksheet/WorksheetView.cpp:382
 #, kde-format
 msgid "Auto-/Cross-Correlation"
 msgstr "Авто-/Перехресна кореляція"
@@ -7245,17 +7369,16 @@ msgstr "експоненційна (порядок 1)"
 msgid "Exponential (degree 2)"
 msgstr "експоненційна (порядок 2)"
 
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:424
+#, kde-format
+msgid "Inverse exponential"
+msgstr "обернене експоненційне"
+
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:436
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:499
 #, kde-format
 msgid "Arc Tangent"
 msgstr "арктангенс"
-
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:440
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:503
-#, kde-format
-msgid "Hyperbolic Tangent"
-msgstr "гіперболічний тангенс"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:444
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:507
@@ -7280,7 +7403,7 @@ msgid "Analysis Curve"
 msgstr "Аналітична крива"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:544
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:214
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:212
 #, kde-format
 msgid "Analysis"
 msgstr "Аналіз"
@@ -7377,7 +7500,7 @@ msgid "%1: load default theme"
 msgstr "%1: завантажити типову тему"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1528
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5217
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5235
 #: src/backend/worksheet/Worksheet.cpp:758
 #, kde-format
 msgid "%1: set theme"
@@ -7504,29 +7627,29 @@ msgstr "Фільтрування Фур'є «%1»"
 msgid "%1: add Fourier filter curve"
 msgstr "%1: додати криву фільтрування Фур'є"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3695
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3705
 #, kde-format
 msgid "Not inside of the bounding rect"
 msgstr "Поза межами обмежувального прямокутника"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3915
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3936
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3929
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3950
 #, kde-format
 msgid "from x=%1 to x=%2"
 msgstr "від x=%1 до x=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3923
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3949
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3937
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3963
 #, kde-format
 msgid "from y=%1 to y=%2"
 msgstr "від y=%1 до y=%2"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3968
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:3982
 #, kde-format
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5164
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5182
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "невідомий елемент cartesianPlot, «%1»"
@@ -7606,114 +7729,114 @@ msgstr "%1: встановити горизонтальний інтервал �
 msgid "%1: set layout column count"
 msgstr "%1: встановити кількість стовпчиків у компонуванні"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:193
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:191
 #, kde-format
 msgid "bin positions"
 msgstr "позиції дискретизації"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:199
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:197
 #, kde-format
 msgid "bin values"
 msgstr "значення позицій дискретизації"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:217
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:215
 #, kde-format
 msgid "Fit Gaussian (Normal) Distribution"
 msgstr "Відповідність гаусовому (нормальному) розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:223
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:221
 #, kde-format
 msgid "Fit Exponential Distribution"
 msgstr "Відповідність експоненційному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:229
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:227
 #, kde-format
 msgid "Fit Laplace Distribution"
 msgstr "Відповідність розподілу Лапласа"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:235
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:233
 #, kde-format
 msgid "Fit Cauchy-Lorentz Distribution"
 msgstr "Відповідність розподілу Коші-Лоренца"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:241
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:239
 #, kde-format
 msgid "Fit Log-normal Distribution"
 msgstr "Відповідність логнормальному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:247
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:245
 #, kde-format
 msgid "Fit Poisson Distribution"
 msgstr "Відповідність розподілу Пуассона"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:253
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:251
 #, kde-format
 msgid "Fit Binomial Distribution"
 msgstr "Відповідність біноміальному розподілу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:391
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:389
 #, kde-format
 msgid "%1: set data column"
 msgstr "%1: встановити стовпчик даних"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:403
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:401
 #, kde-format
 msgid "%1: set histogram type"
 msgstr "%1: встановити тип гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:410
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:408
 #, kde-format
 msgid "%1: set histogram orientation"
 msgstr "%1: встановити орієнтацію гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:417
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:415
 #, kde-format
 msgid "%1: set histogram normalization"
 msgstr "%1: встановити нормалізацію гістограми"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:424
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:422
 #, kde-format
 msgid "%1: set binning method"
 msgstr "%1: встановити спосіб поділу на інтервали"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:431
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:429
 #, kde-format
 msgid "%1: set bin count"
 msgstr "%1: встановити кількість інтервалів"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:438
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:436
 #, kde-format
 msgid "%1: set bin width"
 msgstr "%1: встановити ширину інтервалу"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:446
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:444
 #, kde-format
 msgid "%1: change auto bin ranges"
 msgstr "%1: змінити автоматичні діапазони позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:494
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:492
 #, kde-format
 msgid "%1: set bin ranges start"
 msgstr "%1: встановити початок діапазонів позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:501
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:499
 #, kde-format
 msgid "%1: set bin ranges end"
 msgstr "%1: встановити кінець діапазонів позначок"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:509
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:507
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:543
 #, kde-format
 msgid "%1: x-error type changed"
 msgstr "%1: змінено тип похибки за x"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:516
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:528
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:514
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:526
 #, kde-format
 msgid "%1: set error column"
 msgstr "%1: встановити стовпчик похибки"
 
-#: src/backend/worksheet/plots/cartesian/Histogram.cpp:894
+#: src/backend/worksheet/plots/cartesian/Histogram.cpp:892
 #, kde-format
 msgid ""
 "Calculation of the histogram not possible. The max value must be bigger then "
@@ -7751,6 +7874,11 @@ msgstr "%1: встановити стиль контуру позначок"
 #, kde-format
 msgid "%1: set symbols opacity"
 msgstr "%1: встановити рівень непрозорості позначок"
+
+#: src/backend/worksheet/plots/cartesian/Symbol.cpp:283
+#, kde-format
+msgid "none"
+msgstr "немає"
 
 #: src/backend/worksheet/plots/cartesian/Symbol.cpp:285
 #, kde-format
@@ -8233,22 +8361,22 @@ msgstr "%1: встановити стовпчик похибки за y"
 msgid "%1: set rug orientation"
 msgstr "%1: встановити орієнтацію килимка"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1529
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1533
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Помилка: для сплайнового наближення Акіми потрібно принаймні 5 точок."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1531
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1535
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Помилка: не вдалося ініціалізувати сплайнову функцію."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1544
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1548
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Значення x мають бути монотонно зростаючими."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1547
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1551
 #, kde-format
 msgid "Error: %1"
 msgstr "Помилка: %1"
@@ -8299,7 +8427,7 @@ msgid "Not sufficient weight data points provided."
 msgstr "Надано недостатню кількість точок даних для зважування."
 
 #: src/backend/worksheet/plots/cartesian/XYFitCurve.cpp:1935
-#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:182
+#: src/backend/worksheet/plots/cartesian/XYFourierFilterCurve.cpp:216
 #: src/backend/worksheet/plots/cartesian/XYFourierTransformCurve.cpp:156
 #: src/backend/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp:165
 #, kde-format
@@ -8550,7 +8678,7 @@ msgid "Command"
 msgstr "Команда"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:97
-#: src/kdefrontend/widgets/LabelWidget.cpp:192
+#: src/kdefrontend/widgets/LabelWidget.cpp:191
 #, kde-format
 msgid "Markdown"
 msgstr "Markdown"
@@ -8558,7 +8686,7 @@ msgstr "Markdown"
 #. i18n: ectx: property (text), widget (QLabel, lTex)
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:101
 #: src/kdefrontend/ui/settingsworksheetpage.ui:147
-#: src/kdefrontend/widgets/LabelWidget.cpp:190
+#: src/kdefrontend/widgets/LabelWidget.cpp:189
 #, kde-format
 msgid "LaTeX"
 msgstr "LaTeX"
@@ -9446,11 +9574,6 @@ msgstr "xy-крива"
 msgid "Reduce Data"
 msgstr "Спростити дані"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:487
-#, kde-format
-msgid "Inverse Exponential"
-msgstr "обернена експоненційна"
-
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:552
 #, kde-format
 msgid "Plot Data"
@@ -9767,32 +9890,32 @@ msgstr "Не вдалося вставити значення до таблиц�
 msgid "Memory used %1 MB, peak %2 MB"
 msgstr "Використано пам'яті — %1 МБ, максимум — %2 МБ"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:54
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:52
 #, kde-format
 msgid "Minimum allowed value: %1"
 msgstr "Мінімальне дозволене значення: %1"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:56
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:54
 #, kde-format
 msgid "Maximum allowed value: %1"
 msgstr "Максимальне дозволене значення: %1"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:58
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:56
 #, kde-format
 msgid "The value does not represent a valid number"
 msgstr "Значення не відповідає коректному числу"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:60
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:58
 #, kde-format
 msgid "No number entered"
 msgstr "Не введено числа"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:64
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:62
 #, kde-format
 msgid "Unhandled error"
 msgstr "Непридатна до обробки помилка"
 
-#: src/commonfrontend/widgets/NumberSpinBox.cpp:407
+#: src/commonfrontend/widgets/NumberSpinBox.cpp:405
 #, kde-format
 msgid "Invalid value entered. Valid value: %1"
 msgstr "Введено некоректне значення. Коректне значення: %1"
@@ -9987,13 +10110,13 @@ msgstr "Позначити і збільшити область"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:308
 #, kde-format
-msgid "Select x-Region and Zoom In"
+msgid "Select X-Region and Zoom In"
 msgstr "Позначити і збільшити область за x"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:313
 #, kde-format
-msgid "Select y-Region and Zoom In"
-msgstr "Позначити і збільшити область за y"
+msgid "Select Y-Region and Zoom In"
+msgstr "Позначити і збільшити область за x"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabCursor)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:318
@@ -10014,19 +10137,20 @@ msgstr "xy-крива на основі рівняння"
 msgid "Data Operation"
 msgstr "Дія з даними"
 
+#. i18n("Convolution/Deconvolution"),
+#. cartesianPlotAddNewActionGroup);
+#: src/commonfrontend/worksheet/WorksheetView.cpp:347
+#: src/commonfrontend/worksheet/WorksheetView.cpp:382
+#, kde-format
+msgid "Auto/Cross Correlation"
+msgstr "Авто-/Перехресна кореляція"
+
 #. i18n("Integration"),
 #. cartesianPlotAddNewActionGroup);
 #: src/commonfrontend/worksheet/WorksheetView.cpp:379
 #, kde-format
 msgid "Convolution/Deconvolution"
 msgstr "Згортка/Розгортка"
-
-#. i18n("Auto-/Cross-Correlation"),
-#. cartesianPlotAddNewActionGroup);
-#: src/commonfrontend/worksheet/WorksheetView.cpp:385
-#, kde-format
-msgid "Hilbert-Transform"
-msgstr "Перетворення Гільберта"
 
 #: src/commonfrontend/worksheet/WorksheetView.cpp:401
 #, kde-format
@@ -10106,7 +10230,7 @@ msgstr "Компонування"
 #. i18n: ectx: attribute (title), widget (QWidget, tabGrid)
 #. i18n: ectx: property (text), widget (QLabel, lGrid)
 #: src/commonfrontend/worksheet/WorksheetView.cpp:508
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1487
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1473
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:441
 #, kde-format
 msgid "Grid"
@@ -10603,8 +10727,8 @@ msgstr "Додати новий контейнер даних до проєкт�
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
 #: src/kdefrontend/datasources/ImportDialog.cpp:100
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:42
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:549
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1165
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:542
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1154
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:954
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1116
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:42
@@ -11586,41 +11710,37 @@ msgstr "Розмір масиву"
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:229
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:375
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:622
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:625
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1703
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:576
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:579
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:59
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:67
 #: src/kdefrontend/SettingsGeneralPage.cpp:187
-#: src/kdefrontend/widgets/LabelWidget.cpp:140
-#: src/kdefrontend/widgets/LabelWidget.cpp:157
+#: src/kdefrontend/widgets/LabelWidget.cpp:139
+#: src/kdefrontend/widgets/LabelWidget.cpp:156
 #, kde-format
 msgid "Top"
 msgstr "Згори"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:230
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:376
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:623
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:626
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1704
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:577
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:580
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:55
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:61
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/SettingsGeneralPage.cpp:188
-#: src/kdefrontend/widgets/LabelWidget.cpp:142
-#: src/kdefrontend/widgets/LabelWidget.cpp:159
+#: src/kdefrontend/widgets/LabelWidget.cpp:141
+#: src/kdefrontend/widgets/LabelWidget.cpp:158
 #, kde-format
 msgid "Bottom"
 msgstr "Низ"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:231
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1705
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1710
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:145
 #, kde-format
 msgid "Centered"
@@ -11632,46 +11752,6 @@ msgstr "За центром"
 #, kde-format
 msgid "Logical"
 msgstr "Логічний"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoRange)
-#. i18n: ectx: property (text), widget (QTableWidget, twYRanges)
-#. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
-#. i18n: ectx: property (text), widget (QCheckBox, cbNiceExtend)
-#. i18n: ectx: property (text), widget (QCheckBox, cbAutoRange)
-#. i18n: ectx: property (text), widget (QCheckBox, cbMajorTicksAutoNumber)
-#. i18n: ectx: property (text), widget (QCheckBox, cbMinorTicksAutoNumber)
-#. i18n: ectx: property (text), widget (QCheckBox, chkLabelsAutoPrecision)
-#. i18n: ectx: property (text), widget (QCheckBox, chkLabelsFormatAuto)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAutoBinRanges)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAuto)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAuto2)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:235
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:153
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:320
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:674
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:939
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1104
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1458
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:198
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:338
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:379
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:34
-#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:283
-#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:238
-#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:136
-#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:330
-#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:382
-#: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:136
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:130
-#: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:49
-#: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:49
-#: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:136
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:136
-#: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:545
-#: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:59
-#, kde-format
-msgid "Auto"
-msgstr "Авто"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:236
 #, kde-format
@@ -11732,9 +11812,8 @@ msgstr "напівзаповнена, велика"
 #. i18n("Custom"));
 #. Positioning and alignment
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:348
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:628
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:632
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1708
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:584
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:588
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
@@ -11743,8 +11822,8 @@ msgstr "напівзаповнена, велика"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:125
-#: src/kdefrontend/widgets/LabelWidget.cpp:136
-#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:135
+#: src/kdefrontend/widgets/LabelWidget.cpp:152
 #: src/kdefrontend/widgets/ValueWidget.cpp:37
 #, kde-format
 msgid "Left"
@@ -11752,9 +11831,8 @@ msgstr "Ліворуч"
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:349
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:629
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:631
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1709
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:585
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:587
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -11763,8 +11841,8 @@ msgstr "Ліворуч"
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
-#: src/kdefrontend/widgets/LabelWidget.cpp:138
-#: src/kdefrontend/widgets/LabelWidget.cpp:155
+#: src/kdefrontend/widgets/LabelWidget.cpp:137
+#: src/kdefrontend/widgets/LabelWidget.cpp:154
 #: src/kdefrontend/widgets/ValueWidget.cpp:38
 #, kde-format
 msgid "Right"
@@ -11877,18 +11955,18 @@ msgstr "Кратні до π"
 msgid "Transparent"
 msgstr "Прозорий"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1861
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1878
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "Вісі %1: завантажено шаблон «%2»"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1863
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:538
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:765
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1777
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1880
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:532
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:741
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1774
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:724
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:415
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:766
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:769
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:302
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:612
@@ -11913,6 +11991,7 @@ msgid "Stacked 100%"
 msgstr "Стосами до 100%"
 
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:61
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:76
 #, kde-format
 msgid ""
 "Select the data column for which the properties should be shown and edited"
@@ -11929,10 +12008,10 @@ msgstr ""
 "значення, який буде застосовано для усіх стовпців."
 
 #. i18n: ectx: property (text), widget (QLabel, lColumnCount)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:376
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:402
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:372
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:397
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:370
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:396
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:381
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:406
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:85
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:115
@@ -11946,11 +12025,11 @@ msgstr "Стовпчики:"
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksColumn)
 #. i18n: ectx: property (text), widget (QLabel, lColumn)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColumn)
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:404
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:401
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:398
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:410
 #: src/kdefrontend/spreadsheet/GoToDialog.cpp:48
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:792
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:975
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:783
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:965
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:37
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:81
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:218
@@ -11958,9 +12037,9 @@ msgstr "Стовпчики:"
 msgid "Column:"
 msgstr "Стовпчик:"
 
-#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:536
-#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:763
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:764
+#: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
+#: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:739
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:767
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1298
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
@@ -12050,47 +12129,67 @@ msgstr "Навігатор файловою системою"
 msgid "Save current plot definition as template"
 msgstr "Зберегти поточне визначення креслення як шаблон"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:622
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:620
 #, kde-format
 msgid "%1-Ranges:"
 msgstr "%1-діапазони:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:624
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:622
 #, kde-format
 msgid "%1-Range:"
 msgstr "%1-діапазон:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:647
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:645
 #, kde-format
 msgid "Numeric"
 msgstr "Число"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:746
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:744
 #, kde-format
 msgid "Plot Ranges:"
 msgstr "Діапазони графіка:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:748
+#. i18n: ectx: property (text), widget (QLabel, lPlotRange)
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:746
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:101
+#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
+#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:252
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:306
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:194
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:201
+#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:329
+#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:205
+#: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:114
+#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
+#: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
+#: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
+#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1128
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:428
+#: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
+#: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:306
+#: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
+#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:544
+#: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:555
 #, kde-format
 msgid "Plot Range:"
 msgstr "Діапазон графіка:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:827
 #, kde-format
 msgid "Free"
 msgstr "Довільний"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:830
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:828
 #, kde-format
 msgid "Last Points"
 msgstr "Останні точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:831
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:829
 #, kde-format
 msgid "First Points"
 msgstr "Перші точки"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:834
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:832
 #, kde-format
 msgid ""
 "Data Range:<ul><li>Free - full data range is plotted</li><li>Last Points - "
@@ -12102,44 +12201,44 @@ msgstr ""
 "кількості останніх точок</li><li>Перші точки — буде побудовано графік для "
 "вказаної кількості перших точок</li></ul>"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:843
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:841
 #, kde-format
 msgid "If checked, automatically extend the plot range to nice values"
 msgstr ""
 "Якщо позначено, автоматично розширювати діапазон графіка до оптимальних "
 "значень"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:852
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:846
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
 #, kde-format
 msgid "Simple"
 msgstr "простий"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:850
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:854
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:848
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:852
 #, kde-format
 msgid "Sloped"
 msgstr "нахилений"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1112
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
 #, kde-format
 msgid "%1 range %2 is used in plot range %3. "
 msgstr "%1-діапазон %2 використано на діапазоні %3 креслення. "
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1113
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1161
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1114
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1162
 #, kde-format
 msgid "Really remove it?"
 msgstr "Справді вилучити?"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1161
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1162
 #, kde-format
 msgid "Plot range %1 is used by element \"%2\". "
 msgstr "Діапазон креслення %1 використано елементом «%2». "
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingHorizontal)
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1254
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1253
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:561
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:706
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:342
@@ -12149,7 +12248,7 @@ msgstr "Горизонтальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPaddingVertical)
 #. i18n: ectx: property (text), widget (QLabel, lVerticalSpacing)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1255
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1254
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:820
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:667
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:428
@@ -12159,7 +12258,7 @@ msgstr "Вертикальне:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1257
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1256
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:767
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:660
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:414
@@ -12169,7 +12268,7 @@ msgstr "Ліворуч:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftMargin)
 #. i18n: ectx: property (text), widget (QLabel, lTopMargin)
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1258
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1257
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:774
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:621
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:407
@@ -12177,18 +12276,18 @@ msgstr "Ліворуч:"
 msgid "Top:"
 msgstr "Верх:"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1591
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1588
 #, kde-format
 msgctxt "@title:window"
 msgid "Choose Template Save File"
 msgstr "Виберіть шаблон для збереження файла"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1593
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1590
 #, kde-format
 msgid "Labplot Plot Templates (*%1)"
 msgstr "шаблони креслень Labplot (*%1)"
 
-#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1775
+#: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1772
 #, kde-format
 msgid "%1 cartesian plots: template \"%2\" loaded"
 msgstr "Креслення у декартовій системі %1: завантажено шаблон «%2»"
@@ -12213,10 +12312,10 @@ msgstr "основний рядка"
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:60
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:68
-#: src/kdefrontend/widgets/LabelWidget.cpp:137
-#: src/kdefrontend/widgets/LabelWidget.cpp:141
-#: src/kdefrontend/widgets/LabelWidget.cpp:154
-#: src/kdefrontend/widgets/LabelWidget.cpp:158
+#: src/kdefrontend/widgets/LabelWidget.cpp:136
+#: src/kdefrontend/widgets/LabelWidget.cpp:140
+#: src/kdefrontend/widgets/LabelWidget.cpp:153
+#: src/kdefrontend/widgets/LabelWidget.cpp:157
 #, kde-format
 msgid "Center"
 msgstr "за центром"
@@ -12264,17 +12363,17 @@ msgstr "Автоматично (e)"
 msgid "Automatic (E)"
 msgstr "Автоматично (E)"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:322
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:319
 #, kde-format
 msgid "Add a new value label"
 msgstr "Додати нову мітку значення"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:323
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:320
 #, kde-format
 msgid "Remove the selected value label"
 msgstr "Вилучити позначену мітку значень"
 
-#: src/kdefrontend/dockwidgets/ColumnDock.cpp:324
+#: src/kdefrontend/dockwidgets/ColumnDock.cpp:321
 #, kde-format
 msgid "Modify multiple values labels in a batch mode"
 msgstr "Змінити декілька міток значень у пакетному режимі"
@@ -12289,7 +12388,7 @@ msgstr "Згорнути всі криві"
 msgid "Expand all curves"
 msgstr "Розгорнути всі криві"
 
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:156
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:148
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1258
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1264
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1270
@@ -12297,7 +12396,7 @@ msgstr "Розгорнути всі криві"
 msgid "Copy Selection"
 msgstr "Копіювати позначене"
 
-#: src/kdefrontend/dockwidgets/CursorDock.cpp:157
+#: src/kdefrontend/dockwidgets/CursorDock.cpp:149
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1259
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1265
 #: src/kdefrontend/dockwidgets/XYFitCurveDock.cpp:1271
@@ -12327,110 +12426,110 @@ msgstr "Смуги невизначеності"
 msgid "X Uncertainty"
 msgstr "Невизначеність за X"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:169
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
 #, kde-format
 msgid "By Number"
 msgstr "За кількістю"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:170
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
 #, kde-format
 msgid "By Width"
 msgstr "За шириною"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:171
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
 #, kde-format
 msgid "Square-root"
 msgstr "Квадратний корінь"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:172
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:173
 #, kde-format
 msgid "Rice"
 msgstr "Райс"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:173
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:174
 #, kde-format
 msgid "Sturges"
 msgstr "Стерджес"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:174
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
 #, kde-format
 msgid "Doane"
 msgstr "Доан"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:175
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:176
 #, kde-format
 msgid "Scott"
 msgstr "Скотт"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:178
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
 #, kde-format
 msgid "Ordinary Histogram"
 msgstr "Звичайна гістограма"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:179
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:180
 #, kde-format
 msgid "Cumulative Histogram"
 msgstr "Накопичувальна гістограма"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:187
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:59
 #: src/kdefrontend/spreadsheet/StatisticsColumnWidget.cpp:92
 #, kde-format
 msgid "Count"
 msgstr "Кількість"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:188
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
 #, kde-format
 msgid "Probability"
 msgstr "Ймовірність"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:189
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
 #, kde-format
 msgid "Count Density"
 msgstr "Обчислити щільність"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:190
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:191
 #, kde-format
 msgid "Probability Density"
 msgstr "Щільність ймовірності"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:195
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
 #, kde-format
 msgid "No Uncertainties"
 msgstr "Немає невизначеності"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:196
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:202
 #, kde-format
 msgid "Poisson variance, sqrt(N)"
 msgstr "Дисперсія Пуассона, sqrt(N)"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:197
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
 #, kde-format
 msgid "Custom Uncertainty Values, symmetric"
 msgstr "Нетипові значення невизначеності, симетричний"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:198
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:199
 #, kde-format
 msgid "Custom Uncertainty Values, asymmetric"
 msgstr "Нетипові значення невизначеності, асиметричний"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:200
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:201
 #, kde-format
 msgid "No Errors"
 msgstr "Без помилок"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:202
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:203
 #, kde-format
 msgid "Custom Error Values, symmetric"
 msgstr "Нетипові значення похибки, симетричний"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:203
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:204
 #, kde-format
 msgid "Custom Error Values, asymmetric"
 msgstr "Нетипові значення похибки, асиметричний"
 
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:558
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:559
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:953
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1008
 #, kde-format
@@ -12440,7 +12539,7 @@ msgstr "Дані, +-:"
 #. i18n: ectx: property (text), widget (QLabel, lXErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lYErrorDataPlus)
 #. i18n: ectx: property (text), widget (QLabel, lErrorDataPlus)
-#: src/kdefrontend/dockwidgets/HistogramDock.cpp:565
+#: src/kdefrontend/dockwidgets/HistogramDock.cpp:566
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:960
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1015
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:407
@@ -12451,47 +12550,47 @@ msgid "Data, +:"
 msgstr "Дані, +:"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:83
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
 #, kde-format
 msgid "No line"
 msgstr "Без лінії"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:84
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
 #, kde-format
 msgid "Solid line"
 msgstr "Суцільна лінія"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:85
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
 #, kde-format
 msgid "Dash line"
 msgstr "Штрихова лінія"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:86
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
 #, kde-format
 msgid "Dot line"
 msgstr "Пунктир"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:87
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
 #, kde-format
 msgid "Dash dot line"
 msgstr "Штрих-пунктир"
 
 #: src/kdefrontend/dockwidgets/ImageDock.cpp:88
-#: src/kdefrontend/widgets/LabelWidget.cpp:179
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
 #, kde-format
 msgid "Dash dot dot line"
 msgstr "Штрих-подвійний пунктир"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:252
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:251
 #, kde-format
 msgid "%1 info elements: curve \"%2\" removed"
 msgstr "Інформаційні елементи %1: криву «%2» вилучено"
 
-#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:254
+#: src/kdefrontend/dockwidgets/InfoElementDock.cpp:253
 #, kde-format
 msgid "%1: curve \"%2\" removed"
 msgstr "%1: криву «%2» вилучено"
@@ -12653,12 +12752,12 @@ msgstr "Стан розгортки: %1"
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:437
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:638
 #: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:534
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:613
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:539
 #: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:336
 #: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:284
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:460
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:673
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:567
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:566
 #, kde-format
 msgid "status: %1"
 msgstr "стан: %1"
@@ -12667,12 +12766,12 @@ msgstr "стан: %1"
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:446
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:647
 #: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:543
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:622
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:548
 #: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:345
 #: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:293
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:469
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:682
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:576
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:575
 #, kde-format
 msgid "calculation time: %1 s"
 msgstr "тривалість обчислення: %1 с"
@@ -12681,12 +12780,12 @@ msgstr "тривалість обчислення: %1 с"
 #: src/kdefrontend/dockwidgets/XYCorrelationCurveDock.cpp:448
 #: src/kdefrontend/dockwidgets/XYDataReductionCurveDock.cpp:649
 #: src/kdefrontend/dockwidgets/XYDifferentiationCurveDock.cpp:545
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:624
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:550
 #: src/kdefrontend/dockwidgets/XYFourierTransformCurveDock.cpp:347
 #: src/kdefrontend/dockwidgets/XYHilbertTransformCurveDock.cpp:295
 #: src/kdefrontend/dockwidgets/XYIntegrationCurveDock.cpp:471
 #: src/kdefrontend/dockwidgets/XYInterpolationCurveDock.cpp:684
-#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:578
+#: src/kdefrontend/dockwidgets/XYSmoothCurveDock.cpp:577
 #, kde-format
 msgid "calculation time: %1 ms"
 msgstr "тривалість обчислення: %1 мс"
@@ -12730,16 +12829,6 @@ msgstr "двосегментні"
 #, kde-format
 msgid "3-segments"
 msgstr "трисегментні"
-
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:233
-#, kde-format
-msgid "Cubic Spline (Natural)"
-msgstr "кубічний сплайн (природний)"
-
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:234
-#, kde-format
-msgid "Cubic Spline (Periodic)"
-msgstr "кубічний сплайн (періодичний)"
 
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:235
 #, kde-format
@@ -12969,7 +13058,7 @@ msgstr "перевірка"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:108
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:108
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:821
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:102
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:108
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:108
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:92
@@ -13010,23 +13099,23 @@ msgid "%1 % upper confidence level"
 msgstr "%1 % верхній довірчий рівень"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff)
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:352
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:275
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:348
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:273
 #, kde-format
 msgid "Cutoff:"
 msgstr "Пропускання:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:360
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:356
 #, kde-format
 msgid "Lower cutoff:"
 msgstr "Нижня межа пропускання:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:361
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:357
 #, kde-format
 msgid "Upper cutoff:"
 msgstr "Верхня межа пропускання:"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:565
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:491
 #, kde-format
 msgid ""
 "The band width is <= 0 since lower cutoff value is not smaller than upper "
@@ -13035,12 +13124,12 @@ msgstr ""
 "Ширина смуги <= 0, оскільки нижчнє порогове значення не є меншим за верхнє. "
 "Будь ласка, виправте це."
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:566
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:492
 #, kde-format
 msgid "band width <= 0"
 msgstr "ширина смуги <= 0"
 
-#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:575
+#: src/kdefrontend/dockwidgets/XYFourierFilterCurveDock.cpp:501
 #, kde-format
 msgid "Fourier-Filter status: %1"
 msgstr "Стан фільтра Фур'є: %1"
@@ -13157,14 +13246,14 @@ msgstr "Вісь"
 #: src/kdefrontend/GuiObserver.cpp:265
 #, kde-format
 msgctxt "@title:window"
-msgid "xy-Curve"
-msgstr "xy-крива"
+msgid "XY-Curve"
+msgstr "XY-крива"
 
 #: src/kdefrontend/GuiObserver.cpp:270
 #, kde-format
 msgctxt "@title:window"
-msgid "xy-Equation"
-msgstr "xy-рівняння"
+msgid "XY-Equation"
+msgstr "XY-рівняння"
 
 #: src/kdefrontend/GuiObserver.cpp:275
 #, kde-format
@@ -13235,8 +13324,8 @@ msgstr "Авто-/Перехресна кореляція"
 #: src/kdefrontend/GuiObserver.cpp:341
 #, kde-format
 msgctxt "@title:window"
-msgid "Histogram Properties"
-msgstr "Властивості гістограми"
+msgid "Histogram"
+msgstr "Гістограма"
 
 #: src/kdefrontend/GuiObserver.cpp:346
 #, kde-format
@@ -15150,7 +15239,7 @@ msgstr "Спрощення %1"
 #. i18n: ectx: property (text), widget (QLabel, lCategory)
 #: src/kdefrontend/spreadsheet/FlattenColumnsDialog.cpp:182
 #: src/kdefrontend/ui/datasources/datasetmetadatamanagerwidget.ui:24
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:435
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:468
 #, kde-format
 msgid "Category"
 msgstr "Категорія"
@@ -15175,7 +15264,7 @@ msgstr "&Формат"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsBackground)
 #. i18n: ectx: attribute (title), widget (QWidget, tabBackground)
 #: src/kdefrontend/spreadsheet/FormattingHeatmapDialog.cpp:58
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1327
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1314
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1347
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:438
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:449
@@ -15477,11 +15566,6 @@ msgid ""
 msgstr ""
 "Вибрано декілька стовпчиків. Інтервал буде застосовано до <i>усіх</i> "
 "вибраних стовпчиків."
-
-#: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:45
-#, kde-format
-msgid "Periodic"
-msgstr "Періодичний"
 
 #: src/kdefrontend/spreadsheet/SampleValuesDialog.cpp:46
 #, kde-format
@@ -15841,7 +15925,7 @@ msgstr "Тип похибки за Y:"
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:59
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:46
 #: src/kdefrontend/ui/fitsheadereditnewkeywordwidget.ui:27
-#: src/kdefrontend/ui/labelwidget.ui:438
+#: src/kdefrontend/ui/labelwidget.ui:315
 #, kde-format
 msgid "Comment:"
 msgstr "Коментар:"
@@ -15855,7 +15939,7 @@ msgstr "Коментар:"
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:326
 #: src/kdefrontend/ui/datasources/mqttconnectionmanagerwidget.ui:116
 #: src/kdefrontend/ui/dockwidgets/aspectdock.ui:17
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:296
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:293
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:120
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:96
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:33
@@ -15886,7 +15970,7 @@ msgstr "Коментар:"
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:33
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:23
-#: src/kdefrontend/ui/labelwidget.ui:484
+#: src/kdefrontend/ui/labelwidget.ui:140
 #, kde-format
 msgid "Name:"
 msgstr "Назва:"
@@ -15927,17 +16011,15 @@ msgstr "Позначки похибок"
 #. i18n: ectx: property (text), widget (QLabel, lColorStyle)
 #. i18n: ectx: property (text), widget (QLabel, lImageStyle)
 #. i18n: ectx: property (text), widget (QLabel, lBrushStyle)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapStyle)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:200
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:125
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:135
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:616
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:964
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1089
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:465
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:61
-#: src/kdefrontend/ui/labelwidget.ui:464 src/kdefrontend/ui/symbolwidget.ui:44
+#: src/kdefrontend/ui/labelwidget.ui:558 src/kdefrontend/ui/symbolwidget.ui:44
 #: src/kdefrontend/ui/symbolwidget.ui:182
 #: src/kdefrontend/ui/symbolwidget.ui:237
 #: src/kdefrontend/worksheet/GridDialog.cpp:40
@@ -15948,18 +16030,18 @@ msgstr "Стиль:"
 #. i18n: ectx: property (text), widget (QLabel, lFillingColor)
 #. i18n: ectx: property (text), widget (QLabel, lBorderColor)
 #. i18n: ectx: property (text), widget (QLabel, lErrorBarFillingColor)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapColor)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, lColor)
 #. i18n: ectx: property (text), widget (QLabel, lValuesColor)
 #. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:236
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:669
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1262
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:37
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:388
-#: src/kdefrontend/ui/labelwidget.ui:180 src/kdefrontend/ui/symbolwidget.ui:192
+#: src/kdefrontend/ui/labelwidget.ui:147 src/kdefrontend/ui/symbolwidget.ui:192
 #: src/kdefrontend/ui/symbolwidget.ui:247
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:208
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:232
@@ -15976,10 +16058,10 @@ msgstr "Колір:"
 #. i18n: ectx: property (text), widget (QLabel, lArrowSize)
 #. i18n: ectx: property (text), widget (QLabel, lSizeType)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:253
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:472
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:570
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:465
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:661
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:181
-#: src/kdefrontend/ui/labelwidget.ui:262 src/kdefrontend/ui/symbolwidget.ui:77
+#: src/kdefrontend/ui/labelwidget.ui:207 src/kdefrontend/ui/symbolwidget.ui:77
 #, kde-format
 msgid "Size:"
 msgstr "Розмір:"
@@ -15987,12 +16069,12 @@ msgstr "Розмір:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbBorderWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbConfidenceInterval)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionX)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionXLogical)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionY)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionYLogical)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetY)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbOffsetX)
+#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPositionXLogical)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbErrorBarSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -16006,7 +16088,6 @@ msgstr "Розмір:"
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbPosition)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbCutoff)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbCutoff2)
-#. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbWhiskersCapWidth)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbWhiskersCapSize)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRugOffset)
 #. i18n: ectx: property (whatsThis), widget (NumberSpinBox, sbRugWidth)
@@ -16066,23 +16147,22 @@ msgstr "Розмір:"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:499
 #: src/kdefrontend/ui/datapickerimagewidget.ui:522
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:116
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:222
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:235
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:308
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:391
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:404
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:693
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:730
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:755
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:842
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:958
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1008
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1470
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:746
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:765
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:874
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:890
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:909
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:219
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:232
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:305
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:385
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:398
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:684
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:721
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:746
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:833
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:948
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:998
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1456
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:677
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:834
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:850
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:869
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:571
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:599
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:648
@@ -16137,8 +16217,8 @@ msgstr "Розмір:"
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:885
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:346
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:398
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:287
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:321
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:285
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:322
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:325
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:348
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:371
@@ -16146,10 +16226,10 @@ msgstr "Розмір:"
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:242
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:568
 #: src/kdefrontend/ui/fitoptionswidget.ui:248
-#: src/kdefrontend/ui/labelwidget.ui:120 src/kdefrontend/ui/labelwidget.ui:544
-#: src/kdefrontend/ui/labelwidget.ui:680 src/kdefrontend/ui/labelwidget.ui:693
-#: src/kdefrontend/ui/labelwidget.ui:706 src/kdefrontend/ui/labelwidget.ui:722
-#: src/kdefrontend/ui/labelwidget.ui:738 src/kdefrontend/ui/symbolwidget.ui:290
+#: src/kdefrontend/ui/labelwidget.ui:62 src/kdefrontend/ui/labelwidget.ui:93
+#: src/kdefrontend/ui/labelwidget.ui:239 src/kdefrontend/ui/labelwidget.ui:254
+#: src/kdefrontend/ui/labelwidget.ui:355 src/kdefrontend/ui/labelwidget.ui:651
+#: src/kdefrontend/ui/labelwidget.ui:667 src/kdefrontend/ui/symbolwidget.ui:290
 #: src/kdefrontend/ui/symbolwidget.ui:306
 #, kde-format
 msgid "Spinbox for numbers."
@@ -16157,10 +16237,9 @@ msgstr "Поле лічильника для чисел."
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbBorderWidth)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbOffsetX)
+#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbOffsetY)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbErrorBarSize)
-#. i18n: ectx: property (suffix), widget (NumberSpinBox, sbWhiskersCapWidth)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbWhiskersCapSize)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRugOffset)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRugWidth)
@@ -16174,15 +16253,14 @@ msgstr "Поле лічильника для чисел."
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbWidth)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbErrorBarsCapSize)
 #: src/kdefrontend/ui/datapickercurvewidget.ui:266
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:504
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:845
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1011
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1473
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:749
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:768
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:877
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:893
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:912
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:497
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:836
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1001
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1459
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:680
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:853
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:872
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:608
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:627
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:646
@@ -16191,8 +16269,8 @@ msgstr "Поле лічильника для чисел."
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:182
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:356
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:539
-#: src/kdefrontend/ui/labelwidget.ui:709 src/kdefrontend/ui/labelwidget.ui:725
-#: src/kdefrontend/ui/labelwidget.ui:741 src/kdefrontend/ui/symbolwidget.ui:293
+#: src/kdefrontend/ui/labelwidget.ui:65 src/kdefrontend/ui/labelwidget.ui:358
+#: src/kdefrontend/ui/labelwidget.ui:654 src/kdefrontend/ui/symbolwidget.ui:293
 #: src/kdefrontend/ui/symbolwidget.ui:309
 #, kde-format
 msgid " pt"
@@ -16223,9 +16301,9 @@ msgstr "x+y+z="
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksLength)
 #. i18n: ectx: property (text), widget (QLabel, lMinSegmentLength)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:108
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:832
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:998
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:837
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:823
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:988
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:797
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:519
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:793
 #, kde-format
@@ -16257,32 +16335,33 @@ msgstr "Вибрати файл зображення"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesRotation)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:218
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1146
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1135
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
-#: src/kdefrontend/ui/labelwidget.ui:448 src/kdefrontend/ui/symbolwidget.ui:100
+#: src/kdefrontend/ui/labelwidget.ui:124 src/kdefrontend/ui/symbolwidget.ui:100
 #, kde-format
 msgid "°"
 msgstr "°"
 
 #. i18n: ectx: property (text), widget (QLabel, lPointSeparation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:251
-#, kde-format
-msgid "Point separation:"
+#, fuzzy, kde-format
+#| msgid "Point separation:"
+msgid "Point Separation:"
 msgstr "Відстань між точками:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRotation)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsRotation)
 #. i18n: ectx: property (text), widget (QLabel, lValuesRotation)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:297
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1172
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1161
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:370
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:408
-#: src/kdefrontend/ui/labelwidget.ui:621 src/kdefrontend/ui/symbolwidget.ui:84
+#: src/kdefrontend/ui/labelwidget.ui:700 src/kdefrontend/ui/symbolwidget.ui:84
 #, kde-format
 msgid "Rotation:"
 msgstr "Обертання:"
@@ -16323,6 +16402,7 @@ msgstr "x="
 #. i18n: ectx: property (text), widget (QLabel, lArrowType)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksType)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksType)
+#. i18n: ectx: property (text), widget (QLabel, lLabelsBackgroundType)
 #. i18n: ectx: property (text), widget (QLabel, lLineType)
 #. i18n: ectx: property (text), widget (QLabel, lValuesType)
 #. i18n: ectx: property (text), widget (QLabel, lXErrorType)
@@ -16333,9 +16413,10 @@ msgstr "x="
 #. i18n: ectx: property (text), widget (QLabel, lPlotType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:554
 #: src/kdefrontend/ui/datasources/importfilewidget.ui:231
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:526
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:638
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:910
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:519
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:629
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:900
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1380
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:59
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:34
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1166
@@ -16354,7 +16435,7 @@ msgstr "x="
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:618
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:292
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:246
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:221
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:219
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:276
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:149
 #, kde-format
@@ -16411,7 +16492,7 @@ msgstr "Інтенсивність:"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:288
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:360
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:409
-#: src/kdefrontend/ui/labelwidget.ui:82 src/kdefrontend/ui/labelwidget.ui:110
+#: src/kdefrontend/ui/labelwidget.ui:168 src/kdefrontend/ui/labelwidget.ui:229
 #, kde-format
 msgid "Vertical position relative to label's parent"
 msgstr "Вертикальне розташування відносно батьківського об'єкта мітки"
@@ -16424,8 +16505,9 @@ msgstr "Відтінок:"
 
 #. i18n: ectx: property (text), widget (QLabel, lPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:758
-#, kde-format
-msgid "Current image:"
+#, fuzzy, kde-format
+#| msgid "Current image:"
+msgid "Current Image:"
 msgstr "Поточне зображення:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSaturation)
@@ -16537,10 +16619,8 @@ msgstr "Пропустити байтів:"
 msgid "The number of vectors in the file"
 msgstr "Кількість векторів у файлі"
 
-#. i18n: ectx: property (text), widget (QLabel, lType)
 #. i18n: ectx: property (text), widget (QLabel, lDataType)
 #: src/kdefrontend/ui/datasources/binaryoptionswidget.ui:50
-#: src/kdefrontend/ui/dockwidgets/columndock.ui:241
 #, kde-format
 msgid "Data type:"
 msgstr "Тип даних:"
@@ -16859,7 +16939,7 @@ msgstr "Показати дані щодо файла"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:233
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:95
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:94
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:101
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:85
@@ -17114,13 +17194,10 @@ msgid "Link the file"
 msgstr "Пов'язати файл"
 
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
-#. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:23
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:92
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:458
-#: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
 #, kde-format
 msgid "File name:"
 msgstr "Назва файла:"
@@ -17311,7 +17388,7 @@ msgstr "Останній рядок:"
 #. i18n: ectx: property (text), widget (QLabel, lEnd)
 #. i18n: ectx: property (text), widget (QLabel, lEndDateTime)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:59
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:276
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:273
 #, kde-format
 msgid "End:"
 msgstr "Кінець:"
@@ -17333,98 +17410,82 @@ msgstr "Початок:"
 #. i18n: ectx: property (text), widget (QLabel, lZeroOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:80
 #, kde-format
-msgid "Zero-offset:"
+msgid "Zero Offset:"
 msgstr "Нульовий відступ:"
 
-#. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:101
-#: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
-#: src/kdefrontend/ui/dockwidgets/custompointdock.ui:252
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:306
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:194
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:201
-#: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:114
-#: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:505
-#: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:397
-#: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:344
-#: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:306
-#, kde-format
-msgid "Plot range:"
-msgstr "Діапазон графіка:"
-
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetLeft)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:129
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:126
 #, kde-format
 msgid "Set offset to start at zero"
 msgstr "Встановити відлік відступу від нуля"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetCenter)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:143
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:140
 #, kde-format
 msgid "Set offset to center around zero"
 msgstr "Встановити центрування відступу навколо нуля"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbOffsetRight)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:157
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:154
 #, kde-format
 msgid "Set offset to end at zero"
 msgstr "Встановити кінець відступу у нуль"
 
 #. i18n: ectx: property (text), widget (QLabel, lAutoScale)
 #. i18n: ectx: property (text), widget (QLabel, lRangeType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:173
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:170
 #: src/kdefrontend/ui/spreadsheet/formattingheatmapwidget.ui:30
 #, kde-format
 msgid "Range:"
 msgstr "Діапазон:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowScaleOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:180
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:177
 #, kde-format
 msgid "Show scale and offset beside axis"
 msgstr "Показати шкалу і відступ вісі"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowScaleOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:183
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:180
 #, kde-format
 msgid "Show scale and offset"
 msgstr "Показати шкалу і відступ"
 
 #. i18n: ectx: property (text), widget (QLabel, lScalingFactor)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:207
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:204
 #, kde-format
-msgid "Scaling factor:"
+msgid "Scaling Factor:"
 msgstr "Коефіцієнт масштабування:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityScale)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:321
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:315
 #, kde-format
 msgid "Set factor to unity scale"
 msgstr "Встановити одиничний коефіцієнт"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbWillQoS)
 #. i18n: ectx: property (text), widget (QToolButton, tbUnityScale)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:324
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:318
 #: src/kdefrontend/ui/mqttwillsettingswidget.ui:211
 #, kde-format
 msgid "1"
 msgstr "1"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbUnityRange)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:331
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:325
 #, kde-format
 msgid "Set factor and offset to get 0 .. 1"
 msgstr "Встановити для коефіцієнта і відступу межі від 0 до 1"
 
 #. i18n: ectx: property (text), widget (QToolButton, tbUnityRange)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:334
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:328
 #, kde-format
 msgid "0 .. 1"
 msgstr "0 .. 1"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrientation)
 #. i18n: ectx: property (text), widget (QLabel, lRugOrientation)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:365
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:359
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:133
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:41
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:111
@@ -17435,27 +17496,25 @@ msgid "Orientation:"
 msgstr "Орієнтація:"
 
 #. i18n: ectx: property (text), widget (QLabel, lArrow)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:445
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:438
 #, kde-format
 msgid "Arrow"
 msgstr "Стрілка"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbBorderOpacity)
-#. i18n: ectx: property (toolTip), widget (QSpinBox, sbWhiskersCapOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbArrowSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsOpacity)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbValuesOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:501
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1286
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:494
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1275
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:682
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:327
-#: src/kdefrontend/ui/labelwidget.ui:36 src/kdefrontend/ui/symbolwidget.ui:132
+#: src/kdefrontend/ui/labelwidget.ui:516 src/kdefrontend/ui/symbolwidget.ui:132
 #, kde-format
 msgid ""
 "The opacity ranges from 0 to 100, where 0 is fully transparent and 100 is "
@@ -17465,15 +17524,15 @@ msgstr ""
 "непрозорість."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:586
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:578
 #, kde-format
 msgid "Ticks"
 msgstr "Позначки"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:598
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:589
 #, kde-format
-msgid "Major ticks"
+msgid "Major Ticks"
 msgstr "Основні позначки"
 
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
@@ -17481,8 +17540,8 @@ msgstr "Основні позначки"
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksDirection)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksDirection)
 #. i18n: ectx: property (text), widget (QLabel, lDirection)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:605
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:900
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:596
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:890
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:35
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:146
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:56
@@ -17493,8 +17552,8 @@ msgstr "Напрямок:"
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksNumber)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksNumber)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:655
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:920
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:646
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:910
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:27
 #, kde-format
 msgid "Number:"
@@ -17502,8 +17561,8 @@ msgstr "Число:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksSpacingNumeric)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksSpacingNumeric)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:683
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:948
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:674
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:938
 #, kde-format
 msgid "Spacing:"
 msgstr "Інтервал:"
@@ -17511,27 +17570,27 @@ msgstr "Інтервал:"
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksIncrementDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicksIncrementDateTime)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:703
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:968
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:694
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:958
 #: src/kdefrontend/ui/spreadsheet/equidistantvalueswidget.ui:37
 #, kde-format
 msgid "Increment:"
 msgstr "Приріст:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:710
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:701
 #, kde-format
-msgid "First Tick at"
-msgstr "Перша поділка у"
+msgid "1. Tick at:"
+msgstr "1. Поділка у:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:720
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:711
 #, kde-format
-msgid "First Tick Value:"
-msgstr "Значення першої поділки:"
+msgid "1. Tick Value:"
+msgstr "1. Значення поділки:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:740
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:731
 #, kde-format
 msgid ""
 "<html><head/><body><p>Offset of the first tick from the start of the axis</"
@@ -17541,13 +17600,13 @@ msgstr ""
 "html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:743
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:734
 #, kde-format
-msgid "First Tick Offset:"
-msgstr "Відступ першої поділки:"
+msgid "1. Tick Offset:"
+msgstr "1. Відступ поділки:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:765
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:756
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at first data point</p></"
@@ -17557,7 +17616,7 @@ msgstr ""
 "позначка першої точки даних</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickAuto)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:776
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:767
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set offset to start ticks at round value before first "
@@ -17567,33 +17626,33 @@ msgstr ""
 "позначка округленого значення до першої точки даних</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextType)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:799
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:790
 #, kde-format
 msgid "Label Type:"
 msgstr "Тип мітки:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLabelsTextColumn)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:809
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:800
 #, kde-format
 msgid "Label Column:"
 msgstr "Стовпчик мітки:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorTicks)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:893
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:883
 #, kde-format
-msgid "Minor ticks"
+msgid "Minor Ticks"
 msgstr "Допоміжні позначки"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLabels)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1051
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1041
 #, kde-format
 msgid "Labels"
 msgstr "Мітки"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, sbLabelsPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1057
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1094
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1047
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1084
 #, kde-format
 msgid "Number of digits after the decimal point"
 msgstr "Кількість значущих цифр після крапки"
@@ -17601,7 +17660,7 @@ msgstr "Кількість значущих цифр після крапки"
 #. i18n: ectx: property (text), widget (QLabel, lPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrecision)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1060
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1050
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:208
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:285
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:211
@@ -17611,7 +17670,7 @@ msgid "Precision:"
 msgstr "Точність:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkLabelsAutoPrecision)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1101
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1091
 #, kde-format
 msgid ""
 "Automatically determine the optimal number of digits after the decimal point"
@@ -17620,7 +17679,7 @@ msgstr "Автоматично визначати оптимальну кіль�
 #. i18n: ectx: property (text), widget (QLabel, lPosition_2)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1130
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:101
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:104
@@ -17630,13 +17689,15 @@ msgstr "Позиція"
 
 #. i18n: ectx: property (text), widget (QLabel, lFont)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFont)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lValuesFont)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1179
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1168
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1302
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:139
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:92
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:310
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:288
-#: src/kdefrontend/ui/labelwidget.ui:190
+#: src/kdefrontend/ui/labelwidget.ui:49
 #, kde-format
 msgid "Font:"
 msgstr "Шрифт:"
@@ -17644,7 +17705,7 @@ msgstr "Шрифт:"
 #. i18n: ectx: property (text), widget (QLabel, lLabelsSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lSuffix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesSuffix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1205
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1194
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:293
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:274
 #, kde-format
@@ -17653,8 +17714,8 @@ msgstr "Суфікс:"
 
 #. i18n: ectx: property (text), widget (QLabel, lRugOffset)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOffset)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1222
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:851
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1211
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:811
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:582
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:800
 #, kde-format
@@ -17663,18 +17724,16 @@ msgstr "Відступ:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lBorderOpacity)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsOpacity)
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1259
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1248
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:662
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:305
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:384
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:281
-#: src/kdefrontend/ui/labelwidget.ui:95 src/kdefrontend/ui/symbolwidget.ui:119
+#: src/kdefrontend/ui/labelwidget.ui:214 src/kdefrontend/ui/symbolwidget.ui:119
 #: src/kdefrontend/worksheet/GridDialog.cpp:72
 #, kde-format
 msgid "Opacity:"
@@ -17684,8 +17743,8 @@ msgstr "Непрозорість:"
 #. i18n: ectx: property (text), widget (QLabel, lFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsFormat)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1266
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1373
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1255
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1360
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:65
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:56
 #, kde-format
@@ -17696,12 +17755,10 @@ msgstr "Формат:"
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbBorderOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbYBreakPosition)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbXBreakPosition)
-#. i18n: ectx: property (suffix), widget (QSpinBox, sbWhiskersCapOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbLabelsOpacity)
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbValuesOpacity)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1289
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1278
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:685
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:971
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1106
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:91
@@ -17709,44 +17766,40 @@ msgstr "Формат:"
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:330
-#: src/kdefrontend/ui/labelwidget.ui:39 src/kdefrontend/ui/symbolwidget.ui:135
+#: src/kdefrontend/ui/labelwidget.ui:519 src/kdefrontend/ui/symbolwidget.ui:135
 #: src/kdefrontend/worksheet/GridDialog.cpp:80
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
 
-#. i18n: ectx: property (text), widget (QLabel, label_4)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1314
-#, kde-format
-msgid "Font"
-msgstr "Шрифт"
-
 #. i18n: ectx: property (text), widget (QLabel, lLabelsPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lPrefix)
 #. i18n: ectx: property (text), widget (QLabel, lValuesPrefix)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1400
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1387
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:276
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:415
 #, kde-format
 msgid "Prefix:"
 msgstr "Префікс:"
 
+#. i18n: ectx: property (text), widget (QLabel, lFontColor)
 #. i18n: ectx: property (text), widget (QLabel, lLabelsColor)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1407
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1394
+#: src/kdefrontend/ui/labelwidget.ui:335
 #, kde-format
 msgid "Font Color:"
 msgstr "Колір шрифту:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMinorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1528
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1513
 #, kde-format
-msgid "Minor grid"
+msgid "Minor Grid"
 msgstr "Допоміжна сітка"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid)
-#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1557
+#: src/kdefrontend/ui/dockwidgets/axisdock.ui:1541
 #, kde-format
-msgid "Major grid"
+msgid "Major Grid"
 msgstr "Основна сітка"
 
 #. i18n: ectx: property (text), widget (QLabel, lEnabled)
@@ -17754,7 +17807,7 @@ msgstr "Основна сітка"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, lRugEnabled)
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:42
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:801
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:761
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:993
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1000
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:555
@@ -17794,12 +17847,12 @@ msgstr "Дані:"
 msgid "visible"
 msgstr "видиме"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #. i18n: ectx: property (text), widget (QLabel, lPositionXLogicalDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lPositionX)
 #. i18n: ectx: property (text), widget (QLabel, lPosition)
 #. i18n: ectx: property (text), widget (QLabel, lPositionDateTime)
 #. i18n: ectx: property (text), widget (QLabel, lXData)
+#. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:87
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:44
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:266
@@ -17809,23 +17862,22 @@ msgstr "видиме"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:166
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:124
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:131
-#: src/kdefrontend/ui/labelwidget.ui:156 src/kdefrontend/ui/labelwidget.ui:210
-#: src/kdefrontend/ui/labelwidget.ui:255
+#: src/kdefrontend/ui/labelwidget.ui:200 src/kdefrontend/ui/labelwidget.ui:345
 #, kde-format
 msgid "x:"
 msgstr "x:"
 
-#. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #. i18n: ectx: property (text), widget (QLabel, lPositionY)
 #. i18n: ectx: property (text), widget (QLabel, lDataColumn)
 #. i18n: ectx: property (text), widget (QLabel, lPositionYLogicalDateTime)
+#. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:110
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:30
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:71
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:206
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:291
-#: src/kdefrontend/ui/labelwidget.ui:68 src/kdefrontend/ui/labelwidget.ui:85
+#: src/kdefrontend/ui/labelwidget.ui:171
 #, kde-format
 msgid "y:"
 msgstr "y:"
@@ -17840,11 +17892,11 @@ msgstr "риски"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorder)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:264
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:338
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:416
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1287
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:551
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
-#: src/kdefrontend/ui/labelwidget.ui:503 src/kdefrontend/ui/symbolwidget.ui:230
+#: src/kdefrontend/ui/labelwidget.ui:686 src/kdefrontend/ui/symbolwidget.ui:230
 #: src/kdefrontend/widgets/SymbolWidget.cpp:104
 #, kde-format
 msgid "Border"
@@ -17852,13 +17904,14 @@ msgstr "Рамка"
 
 #. i18n: ectx: property (text), widget (QLabel, lWidthFactor)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:271
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:255
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:365
 #, kde-format
 msgid "Width"
 msgstr "Ширина"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumber)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:278
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:345
 #, kde-format
 msgid "Column"
 msgstr "Стовпчик"
@@ -17866,7 +17919,7 @@ msgstr "Стовпчик"
 #. i18n: ectx: property (text), widget (QLabel, lFilling)
 #. i18n: ectx: attribute (title), widget (QWidget, tabAreaFilling)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:301
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:248
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:358
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:368
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:553
 #: src/kdefrontend/ui/symbolwidget.ui:175
@@ -17876,7 +17929,7 @@ msgstr "Заповнення"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, sbWidthFactor)
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:346
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:300
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:378
 #, no-c-format, kde-format
 msgid "%"
 msgstr "%"
@@ -17918,83 +17971,64 @@ msgid "Box"
 msgstr "Стовпчик"
 
 #. i18n: ectx: property (text), widget (QLabel, lMedianLine)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:367
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:315
 #, kde-format
 msgid "Median Line"
 msgstr "Лінія медіани"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSymbol)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:423
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:456
 #, kde-format
 msgid "Markers"
 msgstr "Позначки"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbMean)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:460
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:493
 #, kde-format
 msgid "Mean"
 msgstr "Середнє"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbOutlier)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:477
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:510
 #, kde-format
 msgid "Outlier"
 msgstr "Викид"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbFarOut)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:484
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:517
 #, kde-format
 msgid "Far Out"
 msgstr "Далеко назовні"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbWhiskerEnd)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:498
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:531
 #, kde-format
 msgid "Whisker End"
 msgstr "Кінчик вусика"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkJitteringEnabled)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:521
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:554
 #, kde-format
 msgid "Jitter"
 msgstr "Тремтіння"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabWhiskers)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:564
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:597
 #, kde-format
 msgid "Whiskers"
 msgstr "Вусики"
 
 #. i18n: ectx: property (text), widget (QLabel, lWhiskersCap)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:583
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:625
 #, kde-format
 msgid "Cap"
 msgstr "Кінчик"
-
-#. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
-#. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
-#. i18n: ectx: property (text), widget (QLabel, lWidth)
-#. i18n: ectx: property (text), widget (QLabel, lWhiskersCapWidth)
-#. i18n: ectx: property (text), widget (QLabel, lRugWidth)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:704
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:844
-#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
-#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:377
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
-#: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
-#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:807
-#: src/kdefrontend/ui/labelwidget.ui:269 src/kdefrontend/ui/symbolwidget.ui:264
-#, kde-format
-msgid "Width:"
-msgstr "Ширина:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabMargins)
 #. i18n: ectx: attribute (title), widget (QWidget, tabMarginalPlots)
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #. i18n: ectx: property (text), widget (QLabel, lMargin)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:782
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:742
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:602
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:513
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:362
@@ -18004,12 +18038,29 @@ msgid "Margins"
 msgstr "Поля"
 
 #. i18n: ectx: property (text), widget (QLabel, lRug)
-#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:794
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:754
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:575
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:827
 #, kde-format
 msgid "Rug Plot"
 msgstr "Килимове креслення"
+
+#. i18n: ectx: property (text), widget (QLabel, lBorderWidth)
+#. i18n: ectx: property (text), widget (QLabel, lBottomMargin)
+#. i18n: ectx: property (text), widget (QLabel, lWidth)
+#. i18n: ectx: property (text), widget (QLabel, lRugWidth)
+#: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:804
+#: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
+#: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:377
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
+#: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
+#: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:807
+#: src/kdefrontend/ui/labelwidget.ui:154 src/kdefrontend/ui/symbolwidget.ui:264
+#, kde-format
+msgid "Width:"
+msgstr "Ширина:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bEvaluate)
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:100
@@ -18157,8 +18208,8 @@ msgstr "вилучити поточний позначений діапазон 
 #. i18n: ectx: property (text), widget (QLabel, lNiceExtend)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:512
 #, kde-format
-msgid "Extend"
-msgstr "Розширення"
+msgid "Extend:"
+msgstr "Розширення:"
 
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbTop)
 #. i18n: ectx: property (suffix), widget (NumberSpinBox, sbPaddingHorizontal)
@@ -18218,7 +18269,7 @@ msgstr " см"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:589
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:298
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:59
-#: src/kdefrontend/ui/labelwidget.ui:285
+#: src/kdefrontend/ui/labelwidget.ui:631
 #, kde-format
 msgid "Geometry"
 msgstr "Геометрія"
@@ -18305,7 +18356,7 @@ msgstr "Поточний поділ шкали"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:986
 #, kde-format
-msgid "y-Range"
+msgid "Y-Range"
 msgstr "Діапазон за y"
 
 #. i18n: ectx: property (text), widget (QLabel, lFrom)
@@ -18321,7 +18372,7 @@ msgstr "Від:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1079
 #, kde-format
-msgid "x-Range"
+msgid "X-Range"
 msgstr "Діапазон за x"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPlotArea)
@@ -18332,16 +18383,14 @@ msgstr "Область"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1354
-#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:507
 #, kde-format
-msgid "Corner radius:"
+msgid "Corner Radius:"
 msgstr "Радіус кута:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:451
-#: src/kdefrontend/ui/labelwidget.ui:75
 #, kde-format
 msgid "Hor. align.:"
 msgstr "Гор. вирівн.:"
@@ -18349,7 +18398,6 @@ msgstr "Гор. вирівн.:"
 #. i18n: ectx: property (text), widget (QLabel, lBindLogicalPos)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:223
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:108
-#: src/kdefrontend/ui/labelwidget.ui:142
 #, kde-format
 msgid "Logical coordinates"
 msgstr "Логічні координати"
@@ -18363,7 +18411,7 @@ msgstr "Верт. вирівн.:"
 #. i18n: ectx: property (text), widget (QLabel, lOrdering)
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:283
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:250
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:248
 #: src/kdefrontend/ui/spreadsheet/sortdialogwidget.ui:23
 #, kde-format
 msgid "Order:"
@@ -18374,6 +18422,12 @@ msgstr "Порядок:"
 #, kde-format
 msgid "Line+Symbol Width:"
 msgstr "Ширина лінії+позначки:"
+
+#. i18n: ectx: property (text), widget (QLabel, lBorderCornerRadius)
+#: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:507
+#, kde-format
+msgid "Corner radius:"
+msgstr "Радіус кута:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDateTimeFormat)
 #. i18n: ectx: property (text), widget (QLabel, lValuesDateTimeFormat)
@@ -18399,10 +18453,16 @@ msgstr "Мітки:"
 msgid "Numeric:"
 msgstr "Число:"
 
+#. i18n: ectx: property (text), widget (QLabel, lType)
+#: src/kdefrontend/ui/dockwidgets/columndock.ui:241
+#, kde-format
+msgid "Data Type:"
+msgstr "Тип даних:"
+
 #. i18n: ectx: property (text), widget (QLabel, lPlotDesignation)
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:315
 #, kde-format
-msgid "Plot designation:"
+msgid "Plot Designation:"
 msgstr "Позначення на графіку:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbCursor0en)
@@ -18417,15 +18477,15 @@ msgstr "Курсор 1"
 msgid "Cursor 2"
 msgstr "Курсор 2"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
 #. i18n: ectx: property (toolTip), widget (KComboBox, cbPositionX)
+#. i18n: ectx: property (toolTip), widget (QLabel, lPositionX)
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:122
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:232
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:441
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:121
-#: src/kdefrontend/ui/labelwidget.ui:252 src/kdefrontend/ui/labelwidget.ui:534
+#: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:342
 #, kde-format
 msgid "Horizontal position relative to label's parent"
 msgstr "Горизонтальне розташування відносно батьківського об'єкта мітки"
@@ -18443,7 +18503,7 @@ msgstr "Горизонтальне розташування відносно б�
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:233
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:214
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:233
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:154
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:153
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:303
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:265
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:214
@@ -18488,7 +18548,7 @@ msgstr "Діапазони позицій"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:195
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:176
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:195
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:180
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:179
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:329
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:291
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:176
@@ -18541,7 +18601,6 @@ msgstr "Дані, -:"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:59
-#: src/kdefrontend/ui/labelwidget.ui:61
 #, kde-format
 msgid "Vert. align.:"
 msgstr "Верт. вирівн.:"
@@ -18673,27 +18732,31 @@ msgstr "Відповідність"
 
 #. i18n: ectx: property (text), widget (QLabel, lXStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:167
-#, kde-format
-msgid "x-Start:"
+#, fuzzy, kde-format
+#| msgid "x-Start:"
+msgid "X-Start:"
 msgstr "Початок за x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lXMax)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:181
-#, kde-format
-msgid "x-End:"
+#, fuzzy, kde-format
+#| msgid "x-End:"
+msgid "X-End:"
 msgstr "Кінець за x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYStart)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:211
-#, kde-format
-msgid "y-Start:"
-msgstr "Початок за y:"
+#, fuzzy, kde-format
+#| msgid "x-Start:"
+msgid "Y-Start:"
+msgstr "Початок за x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYEnd)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:225
-#, kde-format
-msgid "y-End:"
-msgstr "Кінець за y:"
+#, fuzzy, kde-format
+#| msgid "x-End:"
+msgid "Y-End:"
+msgstr "Кінець за x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lHeader)
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:305
@@ -18701,10 +18764,8 @@ msgstr "Кінець за y:"
 msgid "Header:"
 msgstr "Заголовок:"
 
-#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
 #. i18n: ectx: property (text), widget (QLabel, bgcolor)
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:72
-#: src/kdefrontend/ui/labelwidget.ui:667
 #, kde-format
 msgid "Background color:"
 msgstr "Колір тла:"
@@ -18733,6 +18794,14 @@ msgstr "Змінено:"
 msgid "Save Calculations:"
 msgstr "Збереження обчислень:"
 
+#. i18n: ectx: property (text), widget (QLabel, lFileName)
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: src/kdefrontend/ui/dockwidgets/projectdock.ui:174
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:49
+#, kde-format
+msgid "File Name:"
+msgstr "Назва файла:"
+
 #. i18n: ectx: property (text), widget (QLabel, lVersion_2)
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:201
 #, kde-format
@@ -18754,7 +18823,7 @@ msgstr "Створено:"
 #. i18n: ectx: property (text), widget (QLabel, lShowComments)
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:161
 #, kde-format
-msgid "Column comments:"
+msgid "Column Comments:"
 msgstr "Коментарі до стовпчика:"
 
 #. i18n: ectx: property (text), widget (QLabel, lDistance)
@@ -18796,20 +18865,22 @@ msgstr "Інтервал дискретизації:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:243
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:109
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:108
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:132
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:132
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:99
-#, kde-format
-msgid "x-Data:"
+#, fuzzy, kde-format
+#| msgid "x-Data:"
+msgid "X-Data:"
 msgstr "Дані x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:160
-#, kde-format
-msgid "y-Data Response:"
+#, fuzzy, kde-format
+#| msgid "y-Data Response:"
+msgid "Y-Data Response:"
 msgstr "Відповідь, дані y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lWrap)
@@ -18823,15 +18894,16 @@ msgstr "Загортання відповіді:"
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:120
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:129
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:129
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:123
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:59
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:59
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:129
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:129
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:113
-#, kde-format
-msgid "x-Range:"
-msgstr "Діапазон за x:"
+#, fuzzy, kde-format
+#| msgid "X-Range"
+msgid "X-Range:"
+msgstr "Діапазон за x"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:258
@@ -18839,7 +18911,7 @@ msgstr "Діапазон за x:"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:472
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:385
 #: src/kdefrontend/ui/dockwidgets/xyequationcurvedockgeneraltab.ui:43
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:395
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:398
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:189
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:189
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:366
@@ -18857,7 +18929,7 @@ msgstr "Переобчислити"
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:435
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:348
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:61
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:358
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:361
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:165
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:165
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:322
@@ -18874,23 +18946,11 @@ msgstr "Результати:"
 msgid "or"
 msgstr "або"
 
-#. i18n: ectx: property (text), widget (QLabel, lPlotRange)
-#: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:329
-#: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:205
-#: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:418
-#: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1128
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:425
-#: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:373
-#: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:544
-#: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:555
-#, kde-format
-msgid "Plot ranges:"
-msgstr "Діапазони графіка:"
-
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:364
-#, kde-format
-msgid "y-Data Signal:"
+#, fuzzy, kde-format
+#| msgid "y-Data Signal:"
+msgid "Y-Data Signal:"
 msgstr "Сигнал, дані y:"
 
 #. i18n: ectx: property (text), item, widget (QTableWidget, twLog)
@@ -18903,14 +18963,16 @@ msgstr "Кореляція"
 
 #. i18n: ectx: property (text), widget (QLabel, lY2Column)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:198
-#, kde-format
-msgid "y-Data Signal 2:"
+#, fuzzy, kde-format
+#| msgid "y-Data Signal 2:"
+msgid "Y-Data Signal 2:"
 msgstr "Сигнал 2, дані y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:291
-#, kde-format
-msgid "y-Data Signal 1:"
+#, fuzzy, kde-format
+#| msgid "y-Data Signal 1:"
+msgid "Y-Data Signal 1:"
 msgstr "Сигнал 1, дані y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNormalize)
@@ -18939,8 +19001,9 @@ msgstr "Проміжні точки:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineSkipGaps)
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:140
-#, kde-format
-msgid "Ignore gaps:"
+#, fuzzy, kde-format
+#| msgid "Ignore gaps:"
+msgid "Ignore Gaps:"
 msgstr "Ігнорувати прогалини:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
@@ -18969,29 +19032,32 @@ msgstr "Похибка за X"
 
 #. i18n: ectx: property (text), widget (QLabel, lXColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:75
+#: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
 #, kde-format
-msgid "x-data:"
+msgid "X-data:"
 msgstr "Дані x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:107
+#: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:114
 #, kde-format
-msgid "y-data:"
+msgid "Y-data:"
 msgstr "Дані y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lYColumn)
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:178
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:116
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:115
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:139
 #: src/kdefrontend/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui:139
 #: src/kdefrontend/ui/dockwidgets/xyintegrationcurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xyinterpolationcurvedockgeneraltab.ui:122
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:106
-#, kde-format
-msgid "y-Data:"
-msgstr "Дані y:"
+#, fuzzy, kde-format
+#| msgid "x-Data:"
+msgid "Y-Data:"
+msgstr "Дані x:"
 
 #. i18n: ectx: property (text), widget (QLabel, lSimplification)
 #: src/kdefrontend/ui/dockwidgets/xydatareductioncurvedockgeneraltab.ui:285
@@ -19015,8 +19081,9 @@ msgstr "Похідна:"
 
 #. i18n: ectx: property (text), widget (QLabel, lAccuracyOrder)
 #: src/kdefrontend/ui/dockwidgets/xydifferentiationcurvedockgeneraltab.ui:302
-#, kde-format
-msgid "Accuracy order:"
+#, fuzzy, kde-format
+#| msgid "Accuracy order:"
+msgid "Accuracy Order:"
 msgstr "Порядок точності:"
 
 #. i18n: ectx: property (text), widget (QLabel, lEquation)
@@ -19095,8 +19162,9 @@ msgstr "Вага даних x"
 
 #. i18n: ectx: property (text), widget (QLabel, lXWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:110
-#, kde-format
-msgid "x-Weight:"
+#, fuzzy, kde-format
+#| msgid "x-Weight:"
+msgid "X-Weight:"
 msgstr "X-вага:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, pbOptions)
@@ -19266,9 +19334,10 @@ msgstr "Вага даних y"
 
 #. i18n: ectx: property (text), widget (QLabel, lYWeight)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:597
-#, kde-format
-msgid "y-Weight:"
-msgstr "Y-вага:"
+#, fuzzy, kde-format
+#| msgid "x-Weight:"
+msgid "Y-Weight:"
+msgstr "X-вага:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lEquation)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:607
@@ -19385,19 +19454,19 @@ msgid "Run fit"
 msgstr "Виконати апроксимацію"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:214
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:212
 #, kde-format
 msgid "Filter"
 msgstr "Фільтрування"
 
 #. i18n: ectx: property (text), widget (QLabel, lForm)
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:238
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:236
 #, kde-format
 msgid "Form:"
 msgstr "Форма:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCutoff2)
-#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:309
+#: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:310
 #, kde-format
 msgid "Cutoff2:"
 msgstr "Пропускання2:"
@@ -19421,14 +19490,16 @@ msgstr "Додаткові параметри"
 
 #. i18n: ectx: property (text), widget (QLabel, lXScale)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:238
-#, kde-format
-msgid "X axis scale:"
+#, fuzzy, kde-format
+#| msgid "X axis scale:"
+msgid "X-Axis Scale:"
 msgstr "Масштабування вісі X:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbTwoSided)
 #: src/kdefrontend/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui:247
-#, kde-format
-msgid "Two sided"
+#, fuzzy, kde-format
+#| msgid "Two sided"
+msgid "Two Sided"
 msgstr "Двобічний"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbShifted)
@@ -19505,14 +19576,16 @@ msgstr "Відсоток:"
 
 #. i18n: ectx: property (text), widget (QLabel, lOrder)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:177
-#, kde-format
-msgid "Polynom order:"
+#, fuzzy, kde-format
+#| msgid "Polynom order:"
+msgid "Polynom Order:"
 msgstr "Порядок полінома:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMode)
 #: src/kdefrontend/ui/dockwidgets/xysmoothcurvedockgeneraltab.ui:184
-#, kde-format
-msgid "Padding mode:"
+#, fuzzy, kde-format
+#| msgid "Padding mode:"
+msgid "Padding Mode:"
 msgstr "Режим вирівнювання:"
 
 #. i18n: ectx: property (text), widget (QLabel, lLeftValue)
@@ -19693,54 +19766,84 @@ msgstr "Відкрити файл…"
 msgid "Close File"
 msgstr "Закрити файл"
 
-#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
-#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
-#: src/kdefrontend/ui/labelwidget.ui:200 src/kdefrontend/ui/labelwidget.ui:474
-#, kde-format
-msgid "Distance to the axis tick labels"
-msgstr "Відстань до міток позначок вісі"
-
-#. i18n: ectx: property (text), widget (QLabel, lOffsetY)
-#: src/kdefrontend/ui/labelwidget.ui:203
-#, kde-format
-msgid "Offset Y:"
-msgstr "Відступ за Y:"
-
 #. i18n: ectx: property (text), widget (QLabel, lText)
-#: src/kdefrontend/ui/labelwidget.ui:226
+#: src/kdefrontend/ui/labelwidget.ui:114
 #, kde-format
 msgid "Text:"
 msgstr "Текст:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
-#: src/kdefrontend/ui/labelwidget.ui:295
+#. i18n: ectx: property (text), widget (QLabel, lPositionXLogical)
+#: src/kdefrontend/ui/labelwidget.ui:161
 #, kde-format
-msgid "Show Placeholder Text (editable)"
-msgstr "Показувати замінник тексту (можна редагувати)"
+msgid "X:"
+msgstr "X:"
+
+#. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
+#: src/kdefrontend/ui/labelwidget.ui:278
+#, kde-format
+msgid "Hor. Alignment:"
+msgstr "Гор. вирівн.:"
+
+#. i18n: ectx: property (text), widget (QLabel, lBackgroundColor)
+#: src/kdefrontend/ui/labelwidget.ui:301
+#, kde-format
+msgid "Background Color:"
+msgstr "Колір тла:"
 
 #. i18n: ectx: property (text), widget (QLabel, lBorderShape)
-#: src/kdefrontend/ui/labelwidget.ui:431
+#: src/kdefrontend/ui/labelwidget.ui:308
 #, kde-format
 msgid "Shape:"
 msgstr "Форма:"
 
-#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
-#: src/kdefrontend/ui/labelwidget.ui:477
-#, kde-format
-msgid "Offset X:"
-msgstr "Відступ за X:"
-
 #. i18n: ectx: property (text), widget (QLabel, lFontTeX)
-#: src/kdefrontend/ui/labelwidget.ui:591
+#: src/kdefrontend/ui/labelwidget.ui:328
 #, kde-format
 msgid "Main font:"
 msgstr "Основний шрифт:"
 
-#. i18n: ectx: property (text), widget (QLabel, lFontColor)
-#: src/kdefrontend/ui/labelwidget.ui:644
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/kdefrontend/ui/labelwidget.ui:541
 #, kde-format
-msgid "Font color:"
-msgstr "Колір шрифту:"
+msgid "Vert. Alignment:"
+msgstr "Верт. вирівн.:"
+
+#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetX)
+#. i18n: ectx: property (toolTip), widget (QLabel, lOffsetY)
+#: src/kdefrontend/ui/labelwidget.ui:638 src/kdefrontend/ui/labelwidget.ui:727
+#, kde-format
+msgid "Distance to the axis tick labels"
+msgstr "Відстань до міток позначок вісі"
+
+#. i18n: ectx: property (text), widget (QLabel, lOffsetX)
+#: src/kdefrontend/ui/labelwidget.ui:641
+#, kde-format
+msgid "Offset X:"
+msgstr "Відступ за X:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionYLogical)
+#: src/kdefrontend/ui/labelwidget.ui:693
+#, kde-format
+msgid "Y:"
+msgstr "Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbShowPlaceholderText)
+#: src/kdefrontend/ui/labelwidget.ui:720
+#, kde-format
+msgid "Show Placeholder Text (editable)"
+msgstr "Показувати замінник тексту (можна редагувати)"
+
+#. i18n: ectx: property (text), widget (QLabel, lOffsetY)
+#: src/kdefrontend/ui/labelwidget.ui:730
+#, kde-format
+msgid "Offset Y:"
+msgstr "Відступ за Y:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chbBindLogicalPos)
+#: src/kdefrontend/ui/labelwidget.ui:743
+#, kde-format
+msgid "Logical Coordinates"
+msgstr "Логічні координати"
 
 #. i18n: ectx: property (text), widget (QLabel, lY)
 #: src/kdefrontend/ui/matrix/matrixfunctionwidget.ui:116
@@ -20347,7 +20450,6 @@ msgstr "Пропустити порожні рядки:"
 
 #. i18n: ectx: property (text), widget (QLabel, lExportArea)
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:227
-#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:99
 #, kde-format
 msgid "Area to export:"
 msgstr "Експортувати ділянку:"
@@ -20405,18 +20507,6 @@ msgstr "f(x) = "
 #, kde-format
 msgid "auto update"
 msgstr "автооновлення"
-
-#. i18n: ectx: property (text), widget (QLabel, lXColumn)
-#: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:74
-#, kde-format
-msgid "X-data:"
-msgstr "Дані x:"
-
-#. i18n: ectx: property (text), widget (QLabel, lYColumn)
-#: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:114
-#, kde-format
-msgid "Y-data:"
-msgstr "Дані y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbCurvePlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:154
@@ -20570,6 +20660,13 @@ msgstr "Основний стовпчик:"
 msgid "Target:"
 msgstr "Призначення:"
 
+#. i18n: ectx: property (text), widget (QLabel, lExportArea)
+#: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:99
+#, fuzzy, kde-format
+#| msgid "Area to export:"
+msgid "Area to Export:"
+msgstr "Експортувати ділянку:"
+
 #. i18n: ectx: property (toolTip), widget (QLabel, lExportBackground)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:116
@@ -20580,8 +20677,9 @@ msgstr "Позначте цей пункт, якщо слід експортув
 
 #. i18n: ectx: property (text), widget (QLabel, lExportBackground)
 #: src/kdefrontend/ui/worksheet/exportworksheetwidget.ui:119
-#, kde-format
-msgid "Export background:"
+#, fuzzy, kde-format
+#| msgid "Export background:"
+msgid "Export Background:"
 msgstr "Експортувати тло:"
 
 #. i18n: ectx: property (text), widget (QLabel, lResolution)
@@ -20977,107 +21075,107 @@ msgstr ""
 "Використовувати замість абсолютних координат для визначення позиції на "
 "кресленні логічні"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:126
+#: src/kdefrontend/widgets/LabelWidget.cpp:125
 #, kde-format
 msgid "Bold"
 msgstr "Напівжирний"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:127
+#: src/kdefrontend/widgets/LabelWidget.cpp:126
 #, kde-format
 msgid "Italic"
 msgstr "Курсив"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:128
+#: src/kdefrontend/widgets/LabelWidget.cpp:127
 #, kde-format
 msgid "Underline"
 msgstr "Підкреслений"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:129
+#: src/kdefrontend/widgets/LabelWidget.cpp:128
 #, kde-format
 msgid "Strike Out"
 msgstr "Перекреслений"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:130
+#: src/kdefrontend/widgets/LabelWidget.cpp:129
 #, kde-format
 msgid "Super Script"
 msgstr "Верхній індекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:131
+#: src/kdefrontend/widgets/LabelWidget.cpp:130
 #, kde-format
 msgid "Sub-Script"
 msgstr "Нижній індекс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:132
+#: src/kdefrontend/widgets/LabelWidget.cpp:131
 #, kde-format
 msgid "Insert Symbol"
 msgstr "Вставити символ"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:133
+#: src/kdefrontend/widgets/LabelWidget.cpp:132
 #, kde-format
 msgid "Insert Date/Time"
 msgstr "Вставити дату і час"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:161
+#: src/kdefrontend/widgets/LabelWidget.cpp:160
 #, kde-format
 msgid "No Border"
 msgstr "Без рамки"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:162
+#: src/kdefrontend/widgets/LabelWidget.cpp:161
 #, kde-format
 msgid "Rectangle"
 msgstr "Прямокутник"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:163
+#: src/kdefrontend/widgets/LabelWidget.cpp:162
 #, kde-format
 msgid "Ellipse"
 msgstr "Еліпс"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:164
+#: src/kdefrontend/widgets/LabelWidget.cpp:163
 #, kde-format
 msgid "Round sided rectangle"
 msgstr "Прямокутник зі скругленими сторонами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:165
+#: src/kdefrontend/widgets/LabelWidget.cpp:164
 #, kde-format
 msgid "Round corner rectangle"
 msgstr "Прямокутник зі скругленими кутами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:166
+#: src/kdefrontend/widgets/LabelWidget.cpp:165
 #, kde-format
 msgid "Inwards round corner rectangle"
 msgstr "Прямокутник із заокругленими всередину кутами"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:167
+#: src/kdefrontend/widgets/LabelWidget.cpp:166
 #, kde-format
 msgid "Dented border rectangle"
 msgstr "Вищерблений прямокутник"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:168
+#: src/kdefrontend/widgets/LabelWidget.cpp:167
 #, kde-format
 msgid "Cuboid"
 msgstr "Кубоїд"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:169
+#: src/kdefrontend/widgets/LabelWidget.cpp:168
 #, kde-format
 msgid "Up Pointing rectangle"
 msgstr "Прямокутник зі стрілкою вгору"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:170
+#: src/kdefrontend/widgets/LabelWidget.cpp:169
 #, kde-format
 msgid "Down Pointing rectangle"
 msgstr "Прямокутник зі стрілкою вниз"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:171
+#: src/kdefrontend/widgets/LabelWidget.cpp:170
 #, kde-format
 msgid "Left Pointing rectangle"
 msgstr "Прямокутник зі стрілкою ліворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:172
+#: src/kdefrontend/widgets/LabelWidget.cpp:171
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Прямокутник зі стрілкою праворуч"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:196
+#: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
 msgid ""
 "Text setting mode:<ul><li>Text - text setting using rich-text formatting</"
@@ -21088,14 +21186,14 @@ msgstr ""
 "li><li>LaTeX — режим з використанням LaTeX, має бути встановлено дистрибутив "
 "LaTeX</li><li>Markdown — режим мови розмітки Markdown</li></ul>"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:864
-#: src/kdefrontend/widgets/LabelWidget.cpp:890
+#: src/kdefrontend/widgets/LabelWidget.cpp:863
+#: src/kdefrontend/widgets/LabelWidget.cpp:889
 #, kde-format
 msgid "Date"
 msgstr "Дата"
 
-#: src/kdefrontend/widgets/LabelWidget.cpp:872
-#: src/kdefrontend/widgets/LabelWidget.cpp:898
+#: src/kdefrontend/widgets/LabelWidget.cpp:871
+#: src/kdefrontend/widgets/LabelWidget.cpp:897
 #, kde-format
 msgid "Date and Time"
 msgstr "Дата і час"
@@ -21367,6 +21465,123 @@ msgstr "Не вдалося обробити convert, код виходу ="
 msgid "Unable to open file:"
 msgstr "Не вдалося відкрити файл:"
 
+#~ msgid "X-error"
+#~ msgstr "Похибка за x"
+
+#~ msgid "Y-error"
+#~ msgstr "Похибка за y"
+
+#~ msgid "auto"
+#~ msgstr "авто"
+
+#~ msgid "maximum"
+#~ msgstr "максимум"
+
+#~ msgid "imaginary part"
+#~ msgstr "Уявна частина"
+
+#~ msgid "linear"
+#~ msgstr "лінійний"
+
+#~ msgid "polynomial"
+#~ msgstr "поліноміальне"
+
+#~ msgid "cubic spline (natural)"
+#~ msgstr "кубічний сплайн (природний)"
+
+#~ msgid "cubic spline (periodic)"
+#~ msgstr "кубічний сплайн (періодичний)"
+
+#~ msgid "Akima-spline (natural)"
+#~ msgstr "сплайн Акіма (природний)"
+
+#~ msgid "Akima-spline (periodic)"
+#~ msgstr "сплайн Акіма (періодичний)"
+
+#~ msgid "cosine"
+#~ msgstr "косинус"
+
+#~ msgid "exponential"
+#~ msgstr "експоненційне"
+
+#~ msgid "function"
+#~ msgstr "функція"
+
+#~ msgid "derivative"
+#~ msgstr "похідна"
+
+#~ msgid "percentile"
+#~ msgstr "процентиль"
+
+#~ msgid "constant"
+#~ msgstr "стала"
+
+#~ msgid "periodic"
+#~ msgstr "періодичне"
+
+#~ msgid "binomial"
+#~ msgstr "біноміальна"
+
+#~ msgid "Plot range:"
+#~ msgstr "Діапазон графіка:"
+
+#~ msgid "y-Start:"
+#~ msgstr "Початок за y:"
+
+#~ msgid "y-End:"
+#~ msgstr "Кінець за y:"
+
+#~ msgid "x-Range:"
+#~ msgstr "Діапазон за x:"
+
+#~ msgid "Plot ranges:"
+#~ msgstr "Діапазони графіка:"
+
+#~ msgid "x-data:"
+#~ msgstr "Дані x:"
+
+#~ msgid "y-data:"
+#~ msgstr "Дані y:"
+
+#~ msgid "y-Data:"
+#~ msgstr "Дані y:"
+
+#~ msgid "y-Weight:"
+#~ msgstr "Y-вага:"
+
+#~ msgid "%1: set whiskers cap pen"
+#~ msgstr "%1: встановити перо для кінчиків вусів"
+
+#~ msgid "%1: set whiskers cap opacity"
+#~ msgstr "%1: встановити рівень непрозорості кінчиків вусів"
+
+#~ msgid "Select y-Region and Zoom In"
+#~ msgstr "Позначити і збільшити область за y"
+
+#~ msgid "Hilbert-Transform"
+#~ msgstr "Перетворення Гільберта"
+
+#~ msgctxt "@title:window"
+#~ msgid "xy-Curve"
+#~ msgstr "xy-крива"
+
+#~ msgctxt "@title:window"
+#~ msgid "xy-Equation"
+#~ msgstr "xy-рівняння"
+
+#~ msgctxt "@title:window"
+#~ msgid "Histogram Properties"
+#~ msgstr "Властивості гістограми"
+
+#~ msgid "Font"
+#~ msgstr "Шрифт"
+
+#~ msgid "x-Range"
+#~ msgstr "Діапазон за x"
+
+#~ msgid "Font color:"
+#~ msgstr "Колір шрифту:"
+
 #~ msgid "latex not found"
 #~ msgstr "Не знайдено latex"
 
@@ -21602,9 +21817,6 @@ msgstr "Не вдалося відкрити файл:"
 #~ msgid "Y-Ranges:"
 #~ msgstr "Діапазони за y:"
 
-#~ msgid "Y-Range:"
-#~ msgstr "Діапазон за y:"
-
 #~ msgid "Y range %1 is used in plot range %2. "
 #~ msgstr "Діапазон за Y %1 використано у діапазоні креслення %2. "
 
@@ -21706,12 +21918,6 @@ msgstr "Не вдалося відкрити файл:"
 
 #~ msgid "Y-error plus"
 #~ msgstr "Похибка за y із плюсом"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#~ msgid "Y"
-#~ msgstr "Y"
 
 #~ msgid "Z"
 #~ msgstr "Z"

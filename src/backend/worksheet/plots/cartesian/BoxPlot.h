@@ -40,6 +40,7 @@ public:
 	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
+	void finalizeAdd() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -59,9 +60,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
 	// box
-	Background* background() const;
-	Line* borderLine() const;
-	Line* medianLine() const;
+	Background* backgroundAt(int) const;
+	Line* borderLineAt(int) const;
+	Line* medianLineAt(int) const;
 
 	// symbols
 	Symbol* symbolMean() const;
@@ -77,8 +78,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
 	Line* whiskersLine() const;
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
-	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
+	Line* whiskersCapLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -136,8 +136,6 @@ Q_SIGNALS:
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void whiskersRangeParameterChanged(double);
 	void whiskersCapSizeChanged(double);
-	void whiskersCapPenChanged(QPen&);
-	void whiskersCapOpacityChanged(float);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

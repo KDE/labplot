@@ -67,6 +67,8 @@ private:
 
 Q_SIGNALS:
 	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
+
+	friend class FourierTest;
 };
 
 #endif

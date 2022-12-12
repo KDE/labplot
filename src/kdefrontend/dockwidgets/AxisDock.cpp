@@ -570,6 +570,29 @@ void AxisDock::updateLocale() {
 	minorGridLineWidget->updateLocale();
 }
 
+void AxisDock::updatePositionText(Axis::Orientation orientation) {
+	switch (orientation) {
+	case Axis::Orientation::Horizontal: {
+		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
+		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbLabelsPosition->setItemText(1, i18n("Top"));
+		ui.cbLabelsPosition->setItemText(2, i18n("Bottom"));
+		break;
+	}
+	case Axis::Orientation::Vertical: {
+		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
+		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbLabelsPosition->setItemText(1, i18n("Right"));
+		ui.cbLabelsPosition->setItemText(2, i18n("Left"));
+		break;
+	}
+	case Axis::Orientation::Both:
+		break;
+	}
+}
+
 void AxisDock::activateTitleTab() {
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
@@ -600,6 +623,24 @@ void AxisDock::updateAutoScale() {
 	m_axis->setRangeType(static_cast<Axis::RangeType>(ui.cbRangeType->currentIndex()));
 }
 
+void AxisDock::updateLabelsPosition(Axis::LabelsPosition position) {
+	bool b = (position != Axis::LabelsPosition::NoLabels);
+	ui.lLabelsOffset->setEnabled(b);
+	ui.sbLabelsOffset->setEnabled(b);
+	ui.lLabelsRotation->setEnabled(b);
+	ui.sbLabelsRotation->setEnabled(b);
+	ui.lLabelsFont->setEnabled(b);
+	ui.kfrLabelsFont->setEnabled(b);
+	ui.lLabelsColor->setEnabled(b);
+	ui.kcbLabelsFontColor->setEnabled(b);
+	ui.lLabelsPrefix->setEnabled(b);
+	ui.leLabelsPrefix->setEnabled(b);
+	ui.lLabelsSuffix->setEnabled(b);
+	ui.leLabelsSuffix->setEnabled(b);
+	ui.lLabelsOpacity->setEnabled(b);
+	ui.sbLabelsOpacity->setEnabled(b);
+}
+
 //*************************************************************
 //********** SLOTs for changes triggered in AxisDock **********
 //*************************************************************
@@ -618,19 +659,7 @@ void AxisDock::orientationChanged(int item) {
 	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation{Axis::Orientation(item)};
-	if (orientation == Axis::Orientation::Horizontal) {
-		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
-		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
-		ui.cbLabelsPosition->setItemText(1, i18n("Top"));
-		ui.cbLabelsPosition->setItemText(2, i18n("Bottom"));
-	} else { // vertical
-		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
-		// ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
-		ui.cbLabelsPosition->setItemText(1, i18n("Right"));
-		ui.cbLabelsPosition->setItemText(2, i18n("Left"));
-	}
+	updatePositionText(orientation);
 
 	// depending on the current orientation we need to update axis position and labels position
 
@@ -857,8 +886,6 @@ void AxisDock::arrowSizeChanged(int value) {
 
 //"Major ticks" tab
 void AxisDock::majorTicksDirectionChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
 	ui.lMajorTicksType->setEnabled(b);
@@ -874,6 +901,8 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	majorTicksLineWidget->setEnabled(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksDirection(direction);
@@ -960,11 +989,14 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		axis->setMajorTicksType(type);
 }
 
-void AxisDock::majorTicksAutoNumberChanged(int value) {
+void AxisDock::majorTicksAutoNumberChanged(int state) {
+	bool automatic = (state == Qt::CheckState::Checked ? true : false);
+	ui.sbMajorTicksNumber->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
-		axis->setMajorTicksAutoNumber(value);
+		axis->setMajorTicksAutoNumber(automatic);
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
@@ -992,9 +1024,9 @@ void AxisDock::majorTicksSpacingChanged() {
 }
 
 void AxisDock::majorTicksStartTypeChanged(int state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	updateMajorTicksStartType(true);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = static_cast<Axis::TicksStartType>(state);
 	for (auto* axis : m_axesList)
@@ -1002,18 +1034,18 @@ void AxisDock::majorTicksStartTypeChanged(int state) {
 }
 
 void AxisDock::majorTicksStartOffsetChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
 	ui.sbMajorTickStartOffset->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(value);
 }
 
 void AxisDock::majorTicksStartValueChanged(double value) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
 	ui.sbMajorTickStartValue->setClearButtonEnabled(value != 0);
+
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartValue(value);
@@ -1135,11 +1167,14 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		axis->setMinorTicksType(type);
 }
 
-void AxisDock::minorTicksAutoNumberChanged(int value) {
+void AxisDock::minorTicksAutoNumberChanged(int state) {
+	bool automatic = (state == Qt::CheckState::Checked ? true : false);
+	ui.sbMinorTicksNumber->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
-		axis->setMinorTicksAutoNumber(value);
+		axis->setMinorTicksAutoNumber(automatic);
 }
 
 void AxisDock::minorTicksNumberChanged(int value) {
@@ -1191,6 +1226,10 @@ void AxisDock::labelsFormatChanged(int index) {
 }
 
 void AxisDock::labelsFormatAutoChanged(bool automatic) {
+	// Must be above the lock, because if the axis changes the value without interacting with the
+	// dock, this should also change
+	ui.cbLabelsFormat->setEnabled(!automatic);
+
 	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
@@ -1205,9 +1244,9 @@ void AxisDock::labelsPrecisionChanged(int value) {
 }
 
 void AxisDock::labelsAutoPrecisionChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.sbLabelsPrecision->setEnabled(!state);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* axis : m_axesList)
 		axis->setLabelsAutoPrecision(state);
@@ -1222,22 +1261,7 @@ void AxisDock::labelsDateTimeFormatChanged() {
 
 void AxisDock::labelsPositionChanged(int index) {
 	auto position = Axis::LabelsPosition(index);
-
-	bool b = (position != Axis::LabelsPosition::NoLabels);
-	ui.lLabelsOffset->setEnabled(b);
-	ui.sbLabelsOffset->setEnabled(b);
-	ui.lLabelsRotation->setEnabled(b);
-	ui.sbLabelsRotation->setEnabled(b);
-	ui.lLabelsFont->setEnabled(b);
-	ui.kfrLabelsFont->setEnabled(b);
-	ui.lLabelsColor->setEnabled(b);
-	ui.kcbLabelsFontColor->setEnabled(b);
-	ui.lLabelsPrefix->setEnabled(b);
-	ui.leLabelsPrefix->setEnabled(b);
-	ui.lLabelsSuffix->setEnabled(b);
-	ui.leLabelsSuffix->setEnabled(b);
-	ui.lLabelsOpacity->setEnabled(b);
-	ui.sbLabelsOpacity->setEnabled(b);
+	updateLabelsPosition(position);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1525,7 +1549,6 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 void AxisDock::axisMajorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbMajorTicksAutoNumber->setChecked(automatic);
-	ui.sbMajorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1571,7 +1594,6 @@ void AxisDock::axisMinorTicksTypeChanged(Axis::TicksType type) {
 void AxisDock::axisMinorTicksAutoNumberChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.cbMinorTicksAutoNumber->setChecked(automatic);
-	ui.sbMinorTicksNumber->setEnabled(!automatic);
 }
 void AxisDock::axisMinorTicksNumberChanged(int number) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1601,7 +1623,6 @@ void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 void AxisDock::axisLabelsFormatAutoChanged(bool automatic) {
 	CONDITIONAL_LOCK_RETURN;
 	ui.chkLabelsFormatAuto->setChecked(automatic);
-	ui.cbLabelsFormat->setEnabled(!automatic);
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
 	CONDITIONAL_LOCK_RETURN;
@@ -1698,17 +1719,11 @@ void AxisDock::load() {
 	const int xIndex{cSystem->index(Dimension::X)}, yIndex{cSystem->index(Dimension::Y)};
 
 	Range<double> logicalRange(0, 0);
-	if (orientation == Axis::Orientation::Horizontal) {
+	if (orientation == Axis::Orientation::Horizontal)
 		logicalRange = plot->range(Dimension::Y, yIndex);
-		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
-		ui.cbPosition->setItemText(Center, i18n("Centered"));
-	} else {
+	else
 		logicalRange = plot->range(Dimension::X, xIndex);
-		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
-		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
-		ui.cbPosition->setItemText(Center, i18n("Centered"));
-	}
+	updatePositionText(orientation);
 
 	int index{static_cast<int>(m_axis->position())};
 	bool logical = false;
@@ -1744,7 +1759,9 @@ void AxisDock::load() {
 	ui.sbEnd->setValue(m_axis->range().end());
 
 	// depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
-	bool numeric = m_axis->isNumeric();
+	const bool numeric = m_axis->isNumeric();
+
+	updateLabelsPosition(m_axis->labelsPosition());
 
 	// ranges
 	ui.lStart->setVisible(numeric);

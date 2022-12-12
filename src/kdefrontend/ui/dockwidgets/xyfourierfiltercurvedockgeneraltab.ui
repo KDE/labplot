@@ -80,7 +80,6 @@
     <widget class="QLabel" name="lData">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -106,21 +105,21 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>x-Range:</string>
+      <string>X-Range:</string>
      </property>
     </widget>
    </item>
@@ -206,7 +205,6 @@
     <widget class="QLabel" name="lFilter">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -286,6 +284,9 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
+       <property name="minimum">
+        <double>0.000000000000000</double>
+       </property>
        <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
@@ -320,6 +321,9 @@
        <property name="whatsThis">
         <string>Spinbox for numbers.</string>
        </property>
+       <property name="minimum">
+        <double>0.000000000000000</double>
+       </property>
        <property name="feedback" stdset="0">
         <bool>false</bool>
        </property>
@@ -350,7 +354,6 @@
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -422,7 +425,7 @@
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>

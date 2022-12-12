@@ -237,7 +237,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	// write the result
 	transformResult.available = true;
-	transformResult.valid = true;
+	transformResult.valid = (status == GSL_SUCCESS);
 	transformResult.status = gslErrorToString(status);
 	transformResult.elapsedTime = timer.elapsed();
 

@@ -175,7 +175,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbol->style() != Symbol::Style::NoSymbols) {
+	if (insidePlot && symbol->style() != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
@@ -194,7 +194,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 }
 
 void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	if (!m_visible)
+	if (!insidePlot)
 		return;
 
 	if (symbol->style() != Symbol::Style::NoSymbols) {

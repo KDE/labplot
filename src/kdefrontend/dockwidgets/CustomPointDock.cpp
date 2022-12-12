@@ -262,8 +262,6 @@ void CustomPointDock::visibilityChanged(bool state) {
  * \param checked
  */
 void CustomPointDock::bindingChanged(bool checked) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.chbBindLogicalPos->setChecked(checked);
 
 	// widgets for positioning using absolute plot distances
@@ -298,6 +296,8 @@ void CustomPointDock::bindingChanged(bool checked) {
 			ui.dtePositionYLogical->setVisible(checked);
 		}
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* point : m_points)
 		point->setCoordinateBindingEnabled(checked);

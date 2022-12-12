@@ -161,16 +161,50 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	}
 
 	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
-	for (int row = 0; row < rowCount; ++row) {
-		// only copy those data where _all_ values (for x and y, if given) are valid
-		if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
-			|| tmpYDataColumn->isMasked(row))
-			continue;
+	const bool xNumeric = tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::BigInt
+		|| tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::Double || tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::Integer;
+	const bool xDateTime = tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime;
+	const bool yNumeric = tmpYDataColumn->columnMode() == AbstractColumn::ColumnMode::BigInt
+		|| tmpYDataColumn->columnMode() == AbstractColumn::ColumnMode::Double || tmpYDataColumn->columnMode() == AbstractColumn::ColumnMode::Integer;
+	const bool yDateTime = tmpYDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime;
+	if (xNumeric && yNumeric) {
+		for (int row = 0; row < rowCount; ++row) {
+			// only copy those data where _all_ values (for x and y, if given) are valid
+			if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row)
+				|| tmpYDataColumn->isMasked(row))
+				continue;
 
-		// only when inside given range
-		if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-			xdataVector.append(tmpXDataColumn->valueAt(row));
-			ydataVector.append(tmpYDataColumn->valueAt(row));
+			// only when inside given range
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(tmpYDataColumn->valueAt(row));
+			}
+		}
+	} else if (xDateTime && yNumeric) {
+		for (int row = 0; row < rowCount; ++row) {
+			// only copy those data where _all_ values (for x and y, if given) are valid
+			const double xDT = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+			if (std::isnan(xDT) || std::isnan(tmpYDataColumn->valueAt(row)) || tmpXDataColumn->isMasked(row) || tmpYDataColumn->isMasked(row))
+				continue;
+
+			// only when inside given range
+			if (xDT >= xmin && xDT <= xmax) {
+				xdataVector.append(xDT);
+				ydataVector.append(tmpYDataColumn->valueAt(row));
+			}
+		}
+	} else if (yDateTime && xNumeric) {
+		for (int row = 0; row < rowCount; ++row) {
+			// only copy those data where _all_ values (for x and y, if given) are valid
+			const double yDT = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+			if (std::isnan(tmpXDataColumn->valueAt(row)) || std::isnan(yDT) || tmpXDataColumn->isMasked(row) || tmpYDataColumn->isMasked(row))
+				continue;
+
+			// only when inside given range
+			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
+				xdataVector.append(tmpXDataColumn->valueAt(row));
+				ydataVector.append(yDT);
+			}
 		}
 	}
 
@@ -208,6 +242,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	switch (unit) {
 	case nsl_filter_cutoff_unit_frequency:
 		cutindex = cutoff * (xmax - xmin);
+		if (xDateTime)
+			cutindex /= 1000;
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex = cutoff * (int)n;
@@ -218,6 +254,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 	switch (unit2) {
 	case nsl_filter_cutoff_unit_frequency:
 		cutindex2 = cutoff2 * (xmax - xmin);
+		if (xDateTime)
+			cutindex2 /= 1000;
 		break;
 	case nsl_filter_cutoff_unit_fraction:
 		cutindex2 = cutoff2 * n;
@@ -245,7 +283,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	// write the result
 	filterResult.available = true;
-	filterResult.valid = true;
+	filterResult.valid = (status == GSL_SUCCESS);
 	filterResult.status = gslErrorToString(status);
 	filterResult.elapsedTime = timer.elapsed();
 

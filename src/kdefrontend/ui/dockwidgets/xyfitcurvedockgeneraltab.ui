@@ -107,7 +107,7 @@
       <string>Weight for x data</string>
      </property>
      <property name="text">
-      <string>x-Weight:</string>
+      <string>X-Weight:</string>
      </property>
     </widget>
    </item>
@@ -175,7 +175,7 @@
       <string>Source of y data</string>
      </property>
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
@@ -240,7 +240,7 @@
       <string>Source of x data</string>
      </property>
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
@@ -594,7 +594,7 @@
       <string>Weight for y data</string>
      </property>
      <property name="text">
-      <string>y-Weight:</string>
+      <string>Y-Weight:</string>
      </property>
     </widget>
    </item>
@@ -1118,7 +1118,7 @@
    <item row="29" column="0" colspan="2">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>

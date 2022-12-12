@@ -11,6 +11,8 @@ New features:
 			* rug plots
 			* allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
 			* symbols for whisker end points
+			* allow to modify box properties (color, etc.) for every data set independently of each other
+			* draw a legend item for every dataset in the box plot
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
@@ -32,6 +34,7 @@ New features:
 	* [analysis]
 		* guess start values of fit parameter for polynomial models by linear regression
 		* allow to create a spreadsheet with the data steming from the result of the computation
+		* implement fourier filtering for datetimes
 	* [general]
 		* add settings option for GUM compliant terms
 

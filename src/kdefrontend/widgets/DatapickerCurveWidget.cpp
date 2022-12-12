@@ -137,8 +137,10 @@ void DatapickerCurveWidget::xErrorTypeChanged(int index) {
 	else
 		hideErrorBarWidgets(true);
 
-	if (m_initializing || m_suppressTypeChange)
+	if (m_suppressTypeChange)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
 
 	DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
 	errors.x = DatapickerCurve::ErrorType(index);
@@ -153,8 +155,10 @@ void DatapickerCurveWidget::yErrorTypeChanged(int index) {
 	else
 		hideErrorBarWidgets(true);
 
-	if (m_initializing || m_suppressTypeChange)
+	if (m_suppressTypeChange)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
 
 	DatapickerCurve::Errors errors = m_curve->curveErrorTypes();
 	errors.y = DatapickerCurve::ErrorType(index);

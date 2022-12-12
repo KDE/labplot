@@ -73,8 +73,6 @@ void Histogram::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Histogram");
 
-	d->dataColumn = nullptr;
-
 	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
 	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
 	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);

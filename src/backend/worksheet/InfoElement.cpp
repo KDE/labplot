@@ -456,11 +456,6 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	return wrapper;
 }
 
-bool InfoElement::isVisible() const {
-	Q_D(const InfoElement);
-	return d->visible;
-}
-
 TextLabel* InfoElement::title() {
 	return m_title;
 }
@@ -811,11 +806,11 @@ void InfoElement::setConnectionLineCurveName(const QString& name) {
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, changeVisibility)
-void InfoElement::setVisible(bool visible) {
+STD_SWAP_METHOD_SETTER_CMD_IMPL(InfoElement, SetVisible, bool, changeVisibility);
+void InfoElement::setVisible(bool on) {
 	Q_D(InfoElement);
-	if (visible != d->visible)
-		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
+	if (on != isVisible())
+		exec(new InfoElementSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
 //##############################################################################
@@ -876,13 +871,15 @@ void InfoElementPrivate::retransform() {
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
-			bool visible;
 			const auto& point = q->markerpoints.at(i).customPoint;
 			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
-			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(), insidePlot, AbstractCoordinateSystem::MappingFlag::SuppressPageClippingVisible);
 			break;
 		}
 	}
+
+	if (!insidePlot)
+		return;
 
 	// use limit function like in the cursor! So the line will be drawn only till the border of the cartesian Plot
 	QPointF m_titlePos;
@@ -928,15 +925,18 @@ void InfoElementPrivate::updateConnectionLine() {
 	update(boundingRect());
 }
 
-void InfoElementPrivate::changeVisibility() {
+bool InfoElementPrivate::changeVisibility(bool on) {
+	bool oldValue = isVisible();
+	setVisible(on);
 	for (auto& markerpoint : q->markerpoints)
-		markerpoint.customPoint->setVisible(visible);
+		markerpoint.customPoint->setVisible(on);
 	if (q->m_title) {
 		q->m_title->setUndoAware(false);
-		q->m_title->setVisible(visible);
+		q->m_title->setVisible(on);
 		q->m_title->setUndoAware(true);
 	}
 	update(boundingRect());
+	return oldValue;
 }
 
 // reimplemented from QGraphicsItem
@@ -945,7 +945,7 @@ QRectF InfoElementPrivate::boundingRect() const {
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
-	if (!visible)
+	if (!insidePlot)
 		return;
 
 	if (q->markerpoints.isEmpty())
@@ -1028,6 +1028,8 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (delta == QPointF(0, 0))
 		return;
 
+	if (!q->cSystem->isValid())
+		return;
 	QPointF eventLogicPos = q->cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	QPointF delta_logic = eventLogicPos - q->cSystem->mapSceneToLogical(oldMousePos);
 
@@ -1121,7 +1123,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute(QStringLiteral("gluePointIndex"), QString::number(d->gluePointIndex));
 	writer->writeAttribute(QStringLiteral("markerIndex"), QString::number(d->m_index));
 	writer->writeAttribute(QStringLiteral("plotRangeIndex"), QString::number(m_cSystemIndex));
-	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->visible));
+	writer->writeAttribute(QStringLiteral("visible"), QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	// lines

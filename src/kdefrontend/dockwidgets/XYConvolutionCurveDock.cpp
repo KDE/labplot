@@ -573,8 +573,6 @@ void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -590,6 +588,9 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
+
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
@@ -600,8 +601,6 @@ void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* colum
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
-	CONDITIONAL_LOCK_RETURN;
-	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 	if (column) {
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
@@ -613,6 +612,9 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 		uiGeneralTab.cbKernel->setEnabled(true);
 		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
+
+	CONDITIONAL_LOCK_RETURN;
+	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {

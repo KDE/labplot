@@ -61,6 +61,8 @@ private:
 
 	void load();
 	void loadConfig(KConfig&);
+	void updatePositionText(Axis::Orientation);
+	void updateLabelsPosition(Axis::LabelsPosition);
 
 	void setOffset(double);
 
@@ -105,7 +107,7 @@ private Q_SLOTS:
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
-	void majorTicksAutoNumberChanged(int);
+	void majorTicksAutoNumberChanged(int state);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
@@ -121,7 +123,7 @@ private Q_SLOTS:
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
-	void minorTicksAutoNumberChanged(int);
+	void minorTicksAutoNumberChanged(int state);
 	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);

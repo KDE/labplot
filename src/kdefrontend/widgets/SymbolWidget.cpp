@@ -175,8 +175,6 @@ void SymbolWidget::borderStyleChanged(int index) {
 	if (index == -1)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
-
 	const auto penStyle = Qt::PenStyle(index);
 	if (penStyle == Qt::NoPen) {
 		ui.kcbBorderColor->setEnabled(false);
@@ -185,6 +183,8 @@ void SymbolWidget::borderStyleChanged(int index) {
 		ui.kcbBorderColor->setEnabled(true);
 		ui.sbBorderWidth->setEnabled(true);
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
 	for (auto* symbol : m_symbols) {

@@ -59,10 +59,9 @@ void AspectDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	if (this->aspect() != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
 }

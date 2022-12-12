@@ -366,8 +366,6 @@ void DatapickerImageWidget::fileNameChanged() {
 }
 
 void DatapickerImageWidget::graphTypeChanged(int index) {
-	CONDITIONAL_RETURN_NO_LOCK;
-
 	auto points = m_image->axisPoints();
 	points.type = static_cast<DatapickerImage::GraphType>(ui.cbGraphType->itemData(index).toInt());
 
@@ -380,6 +378,8 @@ void DatapickerImageWidget::graphTypeChanged(int index) {
 	ui.sbPositionZ1->setVisible(ternary);
 	ui.sbPositionZ2->setVisible(ternary);
 	ui.sbPositionZ3->setVisible(ternary);
+
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (points.type == DatapickerImage::GraphType::LnXY || points.type == DatapickerImage::GraphType::LnX || points.type == DatapickerImage::GraphType::Log10XY
 		|| points.type == DatapickerImage::GraphType::Log10X) {

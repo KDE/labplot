@@ -204,7 +204,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	// write the result
 	integrationResult.available = true;
-	integrationResult.valid = true;
+	integrationResult.valid = (status == 0);
 	integrationResult.status = QString::number(status);
 	integrationResult.elapsedTime = timer.elapsed();
 	integrationResult.value = ydata[np - 1];

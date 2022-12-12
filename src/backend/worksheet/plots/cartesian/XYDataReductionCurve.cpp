@@ -242,7 +242,7 @@ void XYDataReductionCurvePrivate::recalculate() {
 
 	// write the result
 	dataReductionResult.available = true;
-	dataReductionResult.valid = true;
+	dataReductionResult.valid = npoints > 0;
 	if (npoints > 0)
 		dataReductionResult.status = QStringLiteral("OK");
 	else

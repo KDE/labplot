@@ -154,6 +154,7 @@ HistogramDock::HistogramDock(QWidget* parent)
 
 	ui.verticalLayout->addWidget(frame);
 
+	updateLocale();
 	retranslateUi();
 	init();
 }
@@ -261,11 +262,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	valueWidget->setValues(values);
 	errorBarsLineWidget->setLines(errorBarLines);
 
-	SET_NUMBER_LOCALE
-	lineWidget->updateLocale();
-	symbolWidget->updateLocale();
-	errorBarsLineWidget->updateLocale();
-
 	// if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -301,6 +297,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leName->setToolTip(QString());
 
 	// show the properties of the first curve
+	SET_NUMBER_LOCALE
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbNormalization->setCurrentIndex(m_curve->normalization());
@@ -393,6 +390,12 @@ void HistogramDock::updatePlotRanges() {
 	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
+void HistogramDock::updateLocale() {
+	lineWidget->updateLocale();
+	symbolWidget->updateLocale();
+	errorBarsLineWidget->updateLocale();
+}
+
 //*************************************************************
 //**** SLOTs for changes triggered in HistogramDock *****
 //*************************************************************
@@ -444,8 +447,6 @@ void HistogramDock::normalizationChanged(int index) {
 }
 
 void HistogramDock::binningMethodChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	const auto binningMethod = Histogram::BinningMethod(index);
 	if (binningMethod == Histogram::ByNumber) {
 		ui.lBinCount->show();
@@ -463,6 +464,8 @@ void HistogramDock::binningMethodChanged(int index) {
 		ui.lBinWidth->hide();
 		ui.leBinWidth->hide();
 	}
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setBinningMethod(binningMethod);
@@ -488,12 +491,12 @@ void HistogramDock::binWidthChanged() {
 }
 
 void HistogramDock::autoBinRangesChanged(bool state) {
-	CONDITIONAL_LOCK_RETURN;
-
 	ui.leBinRangesMin->setEnabled(!state);
 	ui.leBinRangesMax->setEnabled(!state);
 	ui.dteBinRangesMin->setEnabled(!state);
 	ui.dteBinRangesMax->setEnabled(!state);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* hist : m_curvesList)
 		hist->setAutoBinRanges(state);
@@ -541,8 +544,6 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 
 //"Error bars"-Tab
 void HistogramDock::errorTypeChanged(int index) {
-	CONDITIONAL_LOCK_RETURN;
-
 	if (index == 0 /* no errors */ || index == 1 /* Poisson */) {
 		// no error
 		ui.lErrorDataPlus->setVisible(false);
@@ -568,6 +569,8 @@ void HistogramDock::errorTypeChanged(int index) {
 	const bool b = (index != 0);
 	ui.lErrorFormat->setVisible(b);
 	errorBarsLineWidget->setVisible(b);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setErrorType(Histogram::ErrorType(index));

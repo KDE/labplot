@@ -123,17 +123,16 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		for (const auto* curve : curves) {
 			auto* item = new QListWidgetItem();
 			auto* checkBox = new QCheckBox(curve->name());
+			for (int i = 0; i < m_element->markerPointsCount(); i++) {
+				if (curve->path() == m_element->markerPointAt(i).curvePath) {
+					checkBox->setChecked(true);
+					ui->cbConnectToCurve->addItem(curve->name());
+					break;
+				}
+			}
 			connect(checkBox, &QCheckBox::toggled, this, &InfoElementDock::curveSelectionChanged);
 			ui->lwCurves->addItem(item);
 			ui->lwCurves->setItemWidget(item, checkBox);
-
-			for (int i = 0; i < m_element->markerPointsCount(); i++) {
-				auto* markerCurve = m_element->markerPointAt(i).curve;
-				if (markerCurve && markerCurve->name() == curve->name()) {
-					checkBox->setChecked(true);
-					ui->cbConnectToCurve->addItem(markerCurve->name());
-				}
-			}
 		}
 	} else {
 		ui->lwCurves->setEnabled(false);
