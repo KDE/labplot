@@ -305,16 +305,8 @@ void ColumnDock::retranslateUi() {
 					   QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
 	ui.cbPlotDesignation->clear();
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::X, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Y, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Z, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XError, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorPlus, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YError, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false));
-	ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorPlus, false));
+	for (int i = 0; i < ENUM_COUNT(AbstractColumn, PlotDesignation); i++)
+		ui.cbPlotDesignation->addItem(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation(i), false));
 
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
@@ -325,7 +317,7 @@ void ColumnDock::retranslateUi() {
   called when the type (column mode - numeric, text etc.) of the column was changed.
 */
 void ColumnDock::typeChanged(int index) {
-	DEBUG("ColumnDock::typeChanged()")
+	DEBUG(Q_FUNC_INFO)
 	CONDITIONAL_RETURN_NO_LOCK; // TODO: lock needed?
 
 	auto columnMode = static_cast<AbstractColumn::ColumnMode>(ui.cbType->itemData(index).toInt());
