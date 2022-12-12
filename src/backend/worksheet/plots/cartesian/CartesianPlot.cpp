@@ -1977,11 +1977,13 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 }
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
-	Q_D(CartesianPlot);
+	auto* elem = dynamic_cast<const WorksheetElement*>(child);
+	if (!elem)
+		return;
 
+	Q_D(CartesianPlot);
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
-	auto* elem = static_cast<const WorksheetElement*>(child);
 	const auto* plot = dynamic_cast<const Plot*>(child);
 
 	if (plot) {
@@ -2122,15 +2124,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
-		if (elem) {
-			// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-			if (!d->theme.isEmpty()) {
-				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-			} else {
-				KConfig config;
-				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-			}
+		// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+		if (!d->theme.isEmpty()) {
+			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+		} else {
+			KConfig config;
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
 	}
 }
