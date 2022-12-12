@@ -1639,6 +1639,9 @@ void XYCurvePrivate::updateDropLines() {
 		return;
 	}
 
+	// calculate the scene points to get the values for m_pointsVisible
+	calculateScenePoints();
+
 	// calculate drop lines
 	QVector<QLineF> dlines;
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
