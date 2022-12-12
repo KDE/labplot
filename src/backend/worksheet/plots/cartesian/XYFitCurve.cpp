@@ -2451,7 +2451,8 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j) / sqrt(gsl_matrix_get(covar, i, i)) / sqrt(gsl_matrix_get(covar, j, j));
 	}
 
-	if (!fitData.autoRange) { // only selected range
+	// residuals for selected range
+	if (!fitData.autoRange) {
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
 			if (xRange.contains(tmpXDataColumn->valueAt(i)))
