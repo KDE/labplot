@@ -2757,30 +2757,24 @@ void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_panningStarted) {
+		Dimension dim = Dimension::X;
+		int delta = 0;
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
-			const int deltaXScene = (m_panningStart.x() - event->pos().x());
-			if (std::abs(deltaXScene) < 5.)
+			delta = (m_panningStart.x() - event->pos().x());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaXScene > 0)
-				plot->shiftRightX(cs->index(Dimension::X));
-			else
-				plot->shiftLeftX(cs->index(Dimension::X));
+			dim = Dimension::X;
 		} else {
 			setCursor(Qt::SizeVerCursor);
-			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (std::abs(deltaYScene) < 5.)
+			delta = (m_panningStart.y() - event->pos().y());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaYScene > 0)
-				plot->shiftUpY(cs->index(Dimension::Y));
-			else
-				plot->shiftDownY(cs->index(Dimension::Y));
+			dim = Dimension::Y;
 		}
+
+		emit q->shiftSignal(delta, dim, cs->index(dim));
 
 		m_panningStart = event->pos();
 	}

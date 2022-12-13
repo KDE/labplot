@@ -320,20 +320,20 @@ void SpreadsheetView::initActions() {
 	action_set_as_xerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XError, false), this);
 	action_set_as_xerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::XError));
 
-	action_set_as_xerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
-	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
-
 	action_set_as_xerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorPlus, false), this);
 	action_set_as_xerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorPlus));
+
+	action_set_as_xerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
+	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
 
 	action_set_as_yerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YError, false), this);
 	action_set_as_yerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::YError));
 
-	action_set_as_yerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
-	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
-
 	action_set_as_yerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorPlus, false), this);
 	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
+
+	action_set_as_yerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
+	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
 	// data manipulation
 	action_add_value = new QAction(i18n("Add"), this);
@@ -604,12 +604,12 @@ void SpreadsheetView::initMenus() {
 	m_columnSetAsMenu->addAction(action_set_as_z);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_xerr);
-	m_columnSetAsMenu->addAction(action_set_as_xerr_minus);
 	m_columnSetAsMenu->addAction(action_set_as_xerr_plus);
+	m_columnSetAsMenu->addAction(action_set_as_xerr_minus);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_yerr);
-	m_columnSetAsMenu->addAction(action_set_as_yerr_minus);
 	m_columnSetAsMenu->addAction(action_set_as_yerr_plus);
+	m_columnSetAsMenu->addAction(action_set_as_yerr_minus);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_none);
 	m_columnMenu->addMenu(m_columnSetAsMenu);
@@ -819,11 +819,11 @@ void SpreadsheetView::connectActions() {
 	connect(action_set_as_y, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_z, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_xerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
-	connect(action_set_as_xerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_xerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_xerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_yerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
-	connect(action_set_as_yerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_yerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_yerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 
 	// data manipulation
 	connect(action_add_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);

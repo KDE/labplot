@@ -617,6 +617,18 @@ QMenu* CartesianPlot::analysisMenu() {
 	return dataAnalysisMenu;
 }
 
+int CartesianPlot::cSystemIndex(WorksheetElement* e) {
+	if (!e)
+		return -1;
+
+	auto type = e->type();
+	if (type == AspectType::CartesianPlot)
+		return -1;
+	else if (e->inherits(AspectType::XYCurve) || e->inherits(AspectType::XYAnalysisCurve) || type == AspectType::ReferenceLine || type == AspectType::Axis)
+		return e->coordinateSystemIndex();
+	return -1;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -2007,6 +2019,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
 	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
+	const auto* axis = dynamic_cast<const Axis*>(child);
 
 	int cSystemIndex = -1;
 	bool checkRanges = false; // check/change ranges when adding new children like curves for example
@@ -2128,6 +2141,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+	}
+
+	if (axis) {
+		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	}
 
 	auto rangeChanged = false;
@@ -2941,6 +2958,9 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
  * "shift right" or "shift up" for \c false
  */
 void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
+	setUndoAware(false);
+	enableAutoScale(dim, index, false);
+	setUndoAware(true);
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -3010,99 +3030,57 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 		d->setRange(dim, index, range);
 
 	d->retransformScale(dim, index);
+
+	auto dim_other = Dimension::X;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
+		break;
+	case Dimension::Y:
+		dim_other = Dimension::X;
+		break;
+	}
+
+	bool retrans = false;
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+		if ((index == -1 || index == cs->index(dim))) {
+			if (autoScale(dim_other, cs->index(dim_other))) {
+				setRangeDirty(dim_other, cs->index(dim_other), true);
+				scaleAuto(dim_other, cs->index(dim_other), false);
+			}
+			retrans = true;
+		}
+	}
+
+	if (retrans)
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftLeftX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftRightX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftUpY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftDownY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::cursor() {
 	Q_D(CartesianPlot);
 	d->retransformScales(-1, -1); // TODO: needed to retransform all scales?
+}
+
+void CartesianPlot::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	Q_D(CartesianPlot);
+	d->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex) {
@@ -3574,7 +3552,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
@@ -3687,7 +3665,7 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 
@@ -3873,7 +3851,7 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
 	const bool autoscaleRanges = true; // consumes a lot of power, maybe making an option to turn off/on!
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (!w || w->parent(AspectType::CartesianPlot) != q)
 		index = -1;
 
@@ -4108,49 +4086,49 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		return;
 
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int cSystemIndex = Worksheet::cSystemIndex(w);
+	int cSystemIndex = CartesianPlot::cSystemIndex(w);
 	int xIndex = -1, yIndex = -1;
 	if (w && w->parent(AspectType::CartesianPlot) == q) {
 		xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
 
-	bool zoomX = false;
-	bool zoomY = false;
-
-	// If an axis was selected, only the corresponding range
-	// should be changed
+	bool considerDimension = false;
+	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
-		auto axis = static_cast<Axis*>(w);
-
-		if (axis->orientation() == Axis::Orientation::Horizontal) {
-			zoomX = true;
-			xIndex = coordinateSystem(axis->coordinateSystemIndex())->index(Dimension::X);
-		} else {
-			zoomY = true;
-			yIndex = coordinateSystem(axis->coordinateSystemIndex())->index(Dimension::Y);
+		const auto axis = static_cast<Axis*>(w);
+		considerDimension = true;
+		switch (axis->orientation()) {
+		case Axis::Orientation::Horizontal:
+			dim = Dimension::X;
+			break;
+		case Axis::Orientation::Vertical:
+			dim = Dimension::Y;
+			break;
 		}
 	}
 
-	if (event->delta() > 0) {
-		if (!zoomX && !zoomY) {
-			q->zoomIn(xIndex, yIndex);
-		} else {
-			if (zoomX)
-				q->zoomInX(xIndex);
-			if (zoomY)
-				q->zoomInY(yIndex);
+	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);
+}
+
+void CartesianPlotPrivate::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	if (considerDimension) {
+		// Only one dimension
+		switch (dim) {
+		case Dimension::X:
+			q->zoomInOut(xIndex, dim, delta > 0);
+			break;
+		case Dimension::Y:
+			q->zoomInOut(yIndex, dim, delta > 0);
+			break;
 		}
-	} else {
-		if (!zoomX && !zoomY) {
-			q->zoomOut(xIndex, yIndex);
-		} else {
-			if (zoomX)
-				q->zoomOutX(xIndex);
-			if (zoomY)
-				q->zoomOutY(yIndex);
-		}
+		return;
 	}
+
+	if (delta > 0)
+		q->zoomIn(xIndex, yIndex);
+	else
+		q->zoomOut(xIndex, yIndex);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
@@ -4243,7 +4221,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	int xIndex = cSystem->index(Dimension::X), yIndex = cSystem->index(Dimension::Y);
 	if (!w || w->parent(AspectType::CartesianPlot) != q) {
 		xIndex = -1;
@@ -4366,7 +4344,7 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos, int cSy
 
 	const CartesianCoordinateSystem* cSystem;
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (w && w->parent(AspectType::CartesianPlot) == q && index != -1)
 		cSystem = coordinateSystem(index);
 	else if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())

@@ -15,6 +15,7 @@
 
 #include "backend/lib/Range.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 class CartesianPlot;
 class Line;
@@ -22,6 +23,8 @@ class TextLabel;
 class AxisPrivate;
 class AbstractColumn;
 class QActionGroup;
+
+using Dimension = CartesianCoordinateSystem::Dimension;
 
 class Axis : public WorksheetElement {
 	Q_OBJECT
@@ -235,6 +238,7 @@ Q_SIGNALS:
 	void scalingFactorChanged(qreal);
 	void showScaleOffsetChanged(bool);
 	void logicalPositionChanged(double);
+	void shiftSignal(int delta, Dimension dim, int index);
 
 	// title
 	void titleOffsetXChanged(qreal);

@@ -51,5 +51,12 @@ private Q_SLOTS:
 	void autoScaleXAfterZoomInY();
 
 	void baseDockSetAspects_NoPlotRangeChange();
+
+	void mouseWheelXAxisApplyToAllX();
+	void mouseWheelTanCurveApplyToAllX();
+	void mouseWheelXAxisApplyToSelected();
+
+	void axisMouseMoveApplyToAllX();
+	void axisMouseMoveApplyToSelection();
 };
 #endif
