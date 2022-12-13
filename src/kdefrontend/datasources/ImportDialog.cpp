@@ -129,6 +129,7 @@ void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 void ImportDialog::currentModelIndexChanged(const QModelIndex& index) {
 	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	Q_EMIT dataContainerChanged(aspect);
+	checkOkButton();
 }
 
 void ImportDialog::newDataContainer(QAction* action) {
