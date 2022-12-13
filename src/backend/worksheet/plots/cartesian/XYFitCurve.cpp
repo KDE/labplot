@@ -1947,6 +1947,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
 	fitResult.paramValues[0] = 1.; // A - probability density
 	// TODO: parameter values (error, etc.)
+	// TODO: currently all values are used (data range not changeable)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian: {

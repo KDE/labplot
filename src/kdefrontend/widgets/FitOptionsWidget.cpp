@@ -59,6 +59,9 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 		ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()));
 		ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()));
 	}
+	// changing data range not supported by ML
+	if (fitData->algorithm == nsl_fit_algorithm_ml)
+		ui.cbAutoRange->setEnabled(false);
 
 	ui.leMin->setVisible(!m_dateTimeRange);
 	ui.leMax->setVisible(!m_dateTimeRange);
