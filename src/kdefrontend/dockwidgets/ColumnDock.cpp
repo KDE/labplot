@@ -363,8 +363,9 @@ void ColumnDock::typeChanged(int index) {
 	case AbstractColumn::ColumnMode::DateTime:
 		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
-			// the format is the current text
-			const QString& format = ui.cbDateTimeFormat->currentText();
+			// use standard format
+			const QString& format(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
+			QDEBUG(Q_FUNC_INFO << ", format = " << format)
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -508,7 +509,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 }
 
 void ColumnDock::columnFormatChanged() {
-	DEBUG("ColumnDock::columnFormatChanged()")
+	DEBUG(Q_FUNC_INFO)
 	CONDITIONAL_LOCK_RETURN;
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
