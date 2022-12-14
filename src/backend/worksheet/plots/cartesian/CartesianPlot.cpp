@@ -4088,16 +4088,10 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	bool considerDimension = false;
 	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
-		const auto axis = static_cast<Axis*>(w);
+		const auto* axis = static_cast<Axis*>(w);
 		considerDimension = true;
-		switch (axis->orientation()) {
-		case Axis::Orientation::Horizontal:
-			dim = Dimension::X;
-			break;
-		case Axis::Orientation::Vertical:
+		if (axis->orientation() == Axis::Orientation::Vertical)
 			dim = Dimension::Y;
-			break;
-		}
 	}
 
 	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);

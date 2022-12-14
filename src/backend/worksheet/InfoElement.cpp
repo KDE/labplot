@@ -806,7 +806,7 @@ void InfoElement::setConnectionLineCurveName(const QString& name) {
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(InfoElement, SetVisible, bool, changeVisibility);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(InfoElement, SetVisible, bool, changeVisibility)
 void InfoElement::setVisible(bool on) {
 	Q_D(InfoElement);
 	if (on != isVisible())
