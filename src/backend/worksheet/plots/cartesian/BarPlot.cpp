@@ -624,7 +624,7 @@ void BarPlotPrivate::recalc() {
 	if (xColumn && newSize != 0)
 		m_groupWidth = (xColumn->maximum() - xColumn->minimum()) / newSize;
 
-	m_groupGap = m_groupWidth * 0.1 * widthFactor; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
+	m_groupGap = m_groupWidth * 0.1; // gap around a group - the gap between two neighbour groups is 2*m_groupGap
 
 	// the size of the bar plots changed because of the actual
 	// data changes or because of new bar plot settings.
@@ -642,7 +642,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
-		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
 		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
@@ -657,7 +657,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = m_groupGap
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
 					+ valueIndex * m_groupWidth; // translate to the beginning of the group - 1st group is placed between 0 and 1, 2nd between 1 and 2, etc.
 
 			x += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
@@ -678,7 +678,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -695,7 +695,8 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -716,7 +717,7 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 
 		for (int i = 0; i < column->rowCount(); ++i) {
@@ -734,7 +735,8 @@ void BarPlotPrivate::verticalBarPlot(int columnIndex) {
 			if (xColumn)
 				x = xColumn->valueAt(i);
 			else
-				x = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
+				x = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(x, value + offset, x + width, value + offset);
@@ -764,7 +766,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 
 	switch (type) {
 	case BarPlot::Type::Grouped: {
-		const double barGap = m_groupWidth * 0.1 * widthFactor; // gap between two bars within a group
+		const double barGap = m_groupWidth * 0.1; // gap between two bars within a group
 		const int barCount = dataColumns.size(); // number of bars within a group
 		const double width = (m_groupWidth * widthFactor - 2 * m_groupGap - (barCount - 1) * barGap) / barCount; // bar width
 
@@ -778,7 +780,8 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					 + valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			y += (width + barGap) * columnIndex; // translate to the beginning of the bar within the current group
 
@@ -798,7 +801,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -815,7 +818,8 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
@@ -836,7 +840,7 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 		break;
 	}
 	case BarPlot::Type::Stacked_100_Percent: {
-		const double width = 1 * widthFactor - 2 * m_groupGap; // bar width
+		const double width = m_groupWidth * widthFactor - 2 * m_groupGap; // bar width
 		int valueIndex = 0;
 		for (int i = 0; i < column->rowCount(); ++i) {
 			if (!column->isValid(i) || column->isMasked(i))
@@ -853,7 +857,8 @@ void BarPlotPrivate::horizontalBarPlot(int columnIndex) {
 			if (xColumn)
 				y = xColumn->valueAt(i);
 			else
-				y = m_groupGap + valueIndex * m_groupWidth; // translate to the beginning of the group
+				y = m_groupGap + m_groupWidth * (1 - widthFactor) / 2
+					+ valueIndex * m_groupWidth; // translate to the beginning of the group
 
 			lines.clear();
 			lines << QLineF(value + offset, y, value + offset, y + width);
