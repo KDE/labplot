@@ -5,6 +5,7 @@
 
 #include "qxtspanslider.h"
 
+#include "backend/lib/macros.h"
 #include "qxtspanslider_p.h"
 #include <QHBoxLayout>
 #include <QKeyEvent>
@@ -12,20 +13,6 @@
 #include <QSpinBox>
 #include <QStyleOptionSlider>
 #include <QStylePainter>
-
-// Copied from BaseDock
-struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
-	}
-
-	inline ~Lock() {
-		variable = false;
-	}
-
-private:
-	bool& variable;
-};
 
 SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent)
 	: QWidget(parent) {
@@ -59,10 +46,7 @@ SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent)
 }
 
 void SpanSlider::sliderSpanChanged(int min, int max) {
-	if (mInitializing)
-		return;
-
-	Lock lock(mInitializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	sbMin->setValue(min);
 	sbMax->setValue(max);
@@ -71,10 +55,7 @@ void SpanSlider::sliderSpanChanged(int min, int max) {
 }
 
 void SpanSlider::spinBoxMinChanged(int min) {
-	if (mInitializing)
-		return;
-
-	Lock lock(mInitializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	spanslider->setSpan(min, sbMax->value());
 
@@ -82,10 +63,7 @@ void SpanSlider::spinBoxMinChanged(int min) {
 }
 
 void SpanSlider::spinBoxMaxChanged(int max) {
-	if (mInitializing)
-		return;
-
-	Lock lock(mInitializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	spanslider->setSpan(sbMin->value(), max);
 
@@ -97,10 +75,7 @@ void SpanSlider::setToolTip(const QString& str) {
 }
 
 void SpanSlider::setRange(int min, int max) {
-	if (mInitializing)
-		return;
-
-	Lock lock(mInitializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	sbMin->setMinimum(min);
 	sbMin->setMaximum(max);
@@ -110,10 +85,7 @@ void SpanSlider::setRange(int min, int max) {
 }
 
 void SpanSlider::setSpan(int min, int max) {
-	if (mInitializing)
-		return;
-
-	Lock lock(mInitializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	spanslider->setSpan(min, max);
 	sbMin->setValue(min);
