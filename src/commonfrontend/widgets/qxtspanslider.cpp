@@ -40,7 +40,7 @@ SpanSlider::SpanSlider(Qt::Orientation orientation, QWidget* parent)
 
 	connect(sbMin, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpanSlider::spinBoxMinChanged);
 	connect(sbMax, QOverload<int>::of(&QSpinBox::valueChanged), this, &SpanSlider::spinBoxMaxChanged);
-	connect(spanslider, &QxtSpanSlider::spanChanged, this, &SpanSlider::spanChanged);
+	connect(spanslider, &QxtSpanSlider::spanChanged, this, &SpanSlider::sliderSpanChanged);
 
 	setLayout(l);
 }
