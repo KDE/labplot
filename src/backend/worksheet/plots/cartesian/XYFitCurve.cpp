@@ -1708,7 +1708,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		const unsigned int np = paramNames->size();
 		QString func{*(((struct data*)params)->func)};
 
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			assign_symbol("x", x);

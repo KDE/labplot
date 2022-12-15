@@ -544,7 +544,7 @@ void AxisDock::initConnections() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void AxisDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
 	ui.sbMajorTicksLength->setLocale(numberLocale);
 	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);

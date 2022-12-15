@@ -142,7 +142,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_correlationData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_correlationData.xRange.last()));
 	this->autoRangeChanged();
@@ -221,7 +221,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
 
 	initGeneralTab();
@@ -296,7 +296,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -355,7 +355,7 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
@@ -441,7 +441,7 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (correlationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

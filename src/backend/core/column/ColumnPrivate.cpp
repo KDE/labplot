@@ -82,7 +82,7 @@ void ColumnPrivate::initDataContainer() {
 }
 
 void ColumnPrivate::initIOFilters() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double:
 		m_inputFilter = new String2DoubleFilter();

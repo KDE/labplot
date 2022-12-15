@@ -56,7 +56,7 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent)
 	ui.teEquation->setFocus();
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height() * 2);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	QString info = QStringLiteral("[") + numberLocale.toString(m_matrix->xStart()) + QStringLiteral(", ") + numberLocale.toString(m_matrix->xEnd())
 		+ QStringLiteral("], ") + i18np("%1 value", "%1 values", m_matrix->columnCount());
 	ui.lXInfo->setText(info);

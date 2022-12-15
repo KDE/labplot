@@ -141,7 +141,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_smoothData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_smoothData.xRange.last()));
 	} else {
@@ -242,7 +242,7 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbPercentile->setLocale(numberLocale);
 	uiGeneralTab.sbLeftValue->setLocale(numberLocale);
 	uiGeneralTab.sbRightValue->setLocale(numberLocale);
@@ -309,7 +309,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	// disable types that need more data points
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
@@ -381,7 +381,7 @@ void XYSmoothCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
@@ -570,7 +570,7 @@ void XYSmoothCurveDock::showSmoothResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (smoothResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

@@ -10,7 +10,7 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "macros.h" //SET_NUMBER_LOCALE
+#include "macros.h" //const auto numberLocale = QLocale();
 
 extern "C" {
 #include "backend/gsl/parser.h"
@@ -64,7 +64,7 @@ public:
 	}
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// min
 		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) // if parsing fails, try default locale

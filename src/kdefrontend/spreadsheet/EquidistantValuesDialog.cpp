@@ -94,7 +94,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	conf.writeEntry("Type", ui.cbType->currentIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
 	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
 	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
@@ -125,7 +125,7 @@ void EquidistantValuesDialog::checkValues() {
 		return;
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (ui.cbType->currentIndex() == 0) { // INT
 		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
 			m_okButton->setEnabled(false);
@@ -148,7 +148,7 @@ void EquidistantValuesDialog::generate() {
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 	if (!ok) {

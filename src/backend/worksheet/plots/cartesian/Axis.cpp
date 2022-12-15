@@ -1829,7 +1829,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (numeric) {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
@@ -2673,7 +2673,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		// scale + offset label
 		if (showScaleOffset && tickLabelPoints.size() > 0) {
 			QString text;
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (scalingFactor != 1)
 				text += UTF8_QSTRING("×") + numberLocale.toString(1. / scalingFactor);
 			if (zeroOffset != 0) {

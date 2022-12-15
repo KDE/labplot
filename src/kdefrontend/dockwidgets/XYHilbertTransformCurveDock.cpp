@@ -102,7 +102,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_transformData.xRange.last()));
 	this->autoRangeChanged();
@@ -184,7 +184,7 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYHilbertTransformCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -216,7 +216,7 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(m_transformCurve->xDataColumn()->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(m_transformCurve->xDataColumn()->maximum()));
 		}
@@ -288,7 +288,7 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (transformResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

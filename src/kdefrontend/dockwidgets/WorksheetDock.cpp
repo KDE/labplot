@@ -157,7 +157,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 }
 
 void WorksheetDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbLayoutTopMargin->setLocale(numberLocale);

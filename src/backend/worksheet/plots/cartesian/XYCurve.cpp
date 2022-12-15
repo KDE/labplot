@@ -1810,7 +1810,7 @@ void XYCurvePrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {

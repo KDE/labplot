@@ -266,7 +266,7 @@ void MatrixDock::load() {
 	ui.sbColumnCount->setValue(m_matrix->columnCount());
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leXStart->setText(numberLocale.toString(m_matrix->xStart()));
 	ui.leXEnd->setText(numberLocale.toString(m_matrix->xEnd()));
 	ui.leYStart->setText(numberLocale.toString(m_matrix->yStart()));
@@ -309,7 +309,7 @@ void MatrixDock::loadConfig(KConfig& config) {
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leXStart->setText(numberLocale.toString(group.readEntry("XStart", m_matrix->xStart())));
 	ui.leXEnd->setText(numberLocale.toString(group.readEntry("XEnd", m_matrix->xEnd())));
 	ui.leYStart->setText(numberLocale.toString(group.readEntry("YStart", m_matrix->yStart())));
@@ -332,7 +332,7 @@ void MatrixDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	group.writeEntry("XStart", numberLocale.toDouble(ui.leXStart->text()));
 	group.writeEntry("XEnd", numberLocale.toDouble(ui.leXEnd->text()));
 	group.writeEntry("YStart", numberLocale.toDouble(ui.leYStart->text()));

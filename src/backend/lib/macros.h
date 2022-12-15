@@ -12,7 +12,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-// SET_NUMBER_LOCALE
 #include <KConfigGroup>
 #include <KSharedConfig>
 

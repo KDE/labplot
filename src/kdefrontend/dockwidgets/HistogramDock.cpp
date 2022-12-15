@@ -297,7 +297,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leName->setToolTip(QString());
 
 	// show the properties of the first curve
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbNormalization->setCurrentIndex(m_curve->normalization());

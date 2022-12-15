@@ -681,7 +681,7 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
 	if (std::isnan(value))
 		return QLatin1String("-");
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer:
 		return numberLocale.toString((int)value);

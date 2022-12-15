@@ -182,7 +182,7 @@ void ImageDock::setImages(QList<Image*> list) {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void ImageDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);

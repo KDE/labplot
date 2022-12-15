@@ -142,7 +142,7 @@ void CustomPointDock::initConnections() const {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void CustomPointDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbPositionXLogical->setLocale(numberLocale);

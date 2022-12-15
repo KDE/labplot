@@ -163,7 +163,7 @@ void LineWidget::setEnabled(bool enabled) {
 }
 
 void LineWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbWidth->setLocale(numberLocale);
 }

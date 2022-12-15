@@ -462,7 +462,7 @@ void CartesianPlotDock::activateTitleTab() {
  */
 void CartesianPlotDock::updateLocale() {
 	DEBUG(Q_FUNC_INFO)
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 
 	// update the QSpinBoxes
 	ui.sbLeft->setLocale(numberLocale);
@@ -889,7 +889,8 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
 	if (type != CartesianPlot::RangeType::Free) {
-		SET_NUMBER_LOCALE;
+		const auto numberLocale = QLocale();
+		;
 		if (type == CartesianPlot::RangeType::First)
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeFirstValues()));
 		else
@@ -1380,7 +1381,7 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	if (index == -1)
 		return;
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
@@ -1494,7 +1495,7 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 	if (index == -1)
 		return;
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);

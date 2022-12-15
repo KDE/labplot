@@ -109,7 +109,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_transformData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_transformData.xRange.last()));
 	this->autoRangeChanged();
@@ -200,7 +200,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
@@ -233,7 +233,7 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(m_transformCurve->xDataColumn()->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(m_transformCurve->xDataColumn()->maximum()));
 		}
@@ -340,7 +340,7 @@ void XYFourierTransformCurveDock::showTransformResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (transformResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

@@ -330,7 +330,7 @@ void DatapickerImageWidget::handleWidgetActions() {
 }
 
 void DatapickerImageWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbRotation->setLocale(numberLocale);
 	ui.sbPositionX1->setLocale(numberLocale);
 	ui.sbPositionX2->setLocale(numberLocale);

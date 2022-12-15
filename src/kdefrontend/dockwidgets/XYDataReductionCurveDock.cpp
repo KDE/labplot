@@ -134,7 +134,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_dataReductionData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_dataReductionData.xRange.last()));
 	} else {
@@ -235,7 +235,7 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbTolerance->setLocale(numberLocale);
 	uiGeneralTab.sbTolerance2->setLocale(numberLocale);
 
@@ -300,7 +300,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -409,7 +409,7 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
@@ -642,7 +642,7 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (dataReductionResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

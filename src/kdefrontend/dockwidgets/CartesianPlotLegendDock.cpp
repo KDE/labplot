@@ -183,7 +183,7 @@ void CartesianPlotLegendDock::activateTitleTab() const {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void CartesianPlotLegendDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbLineSymbolWidth->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);

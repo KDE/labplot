@@ -143,7 +143,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	// depending on the current column mode, activate/deactivate the corresponding widgets
 	// and show the first valid value in the first selected column as the value to add/subtract
 	const Column* column = m_columns.first();
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer: {
 		ui.lTimeValue->setVisible(false);
@@ -199,7 +199,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 void AddSubtractValueDialog::setMatrices() {
 	const auto mode = m_matrix->mode();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Integer:
 		ui.lTimeValue->setVisible(false);
@@ -268,7 +268,7 @@ void AddSubtractValueDialog::generateForColumns() {
 	QString msg = getMessage(m_spreadsheet->name());
 	m_spreadsheet->beginMacro(msg);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	const auto mode = m_columns.first()->columnMode();
 	const int rows = m_spreadsheet->rowCount();
@@ -435,7 +435,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 
 	auto mode = m_matrix->mode();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();

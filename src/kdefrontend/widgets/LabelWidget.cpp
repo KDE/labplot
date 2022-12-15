@@ -529,7 +529,7 @@ void LabelWidget::updateUnits() {
 }
 
 void LabelWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbOffsetX->setLocale(numberLocale);

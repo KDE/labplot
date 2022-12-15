@@ -56,7 +56,7 @@ void SettingsDatasetsPage::loadSettings() {
 				size += QFileInfo(dir, file).size();
 			}
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			QString sizeStr;
 			if (size > 1024 * 1024)
 				sizeStr = numberLocale.toString(size / 1024 / 1024) + QLatin1String("MB");
