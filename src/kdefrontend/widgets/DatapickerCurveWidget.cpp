@@ -123,8 +123,7 @@ void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
 }
 
 void DatapickerCurveWidget::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbErrorBarSize->setLocale(numberLocale);
+	ui.sbErrorBarSize->setLocale(QLocale());
 }
 
 //*************************************************************

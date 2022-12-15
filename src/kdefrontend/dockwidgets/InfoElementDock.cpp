@@ -41,8 +41,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	layout->addWidget(m_connectionLineWidget, 4, 0, 1, 3);
 
 	// set the current locale
-	SET_NUMBER_LOCALE
-	ui->sbPosition->setLocale(numberLocale);
+	ui->sbPosition->setLocale(QLocale());
 	m_labelWidget->updateLocale();
 	m_verticalLineWidget->updateLocale();
 	m_connectionLineWidget->updateLocale();
@@ -154,7 +153,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->cbConnectToAnchor->addItem(m_element->gluePoint(i).name);
 	ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex() + 1);
 
-	SET_NUMBER_LOCALE
 	if (m_element->plot()->xRangeFormatDefault() == RangeT::Format::Numeric) {
 		ui->sbPosition->setValue(m_element->positionLogical());
 		ui->lPosition->show();

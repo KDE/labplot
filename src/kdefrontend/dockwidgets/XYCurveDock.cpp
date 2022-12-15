@@ -593,8 +593,7 @@ void XYCurveDock::initTabs() {
 }
 
 void XYCurveDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbValuesDistance->setLocale(numberLocale);
+	ui.sbValuesDistance->setLocale(QLocale());
 	lineWidget->updateLocale();
 	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();

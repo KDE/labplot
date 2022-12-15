@@ -77,8 +77,7 @@ void ValueWidget::setValues(const QList<Value*>& values) {
 	m_values = values;
 	m_value = m_values.first();
 
-	SET_NUMBER_LOCALE
-	ui.sbDistance->setLocale(numberLocale);
+	ui.sbDistance->setLocale(QLocale());
 
 	auto* m_aspectTreeModel = new AspectTreeModel(m_value->project());
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);

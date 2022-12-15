@@ -1386,7 +1386,6 @@ void LabelWidget::load() {
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_label->verticalAlignment());
 
 	// widgets for positioning using logical plot coordinates
-	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_label->plot() != nullptr);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 

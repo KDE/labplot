@@ -97,25 +97,11 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
-// define number locale from setting (using system locale when QLocale::AnyLanguage)
-#define SET_NUMBER_LOCALE                                                                                                                                      \
-	QLocale::Language numberLocaleLanguage =                                                                                                                   \
-		static_cast<QLocale::Language>(KSharedConfig::openConfig()                                                                                             \
-										   ->group("Settings_General")                                                                                         \
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));             \
-	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(                                                                                \
-		KSharedConfig::openConfig()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));    \
-	QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);                                                     \
-	numberLocale.setNumberOptions(numberOptions);
-// if (numberLocale.language() == QLocale::Language::C)
-//	numberLocale.setNumberOptions(QLocale::DefaultNumberOptions);
-
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le)                                                                                                                               \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const int tmp = numberLocale.toInt((le)->text(), &ok);                                                                                                 \
+		const int tmp = QLocale().toInt((le)->text(), &ok);                                                                                                    \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -123,8 +109,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define SET_DOUBLE_FROM_LE(var, le)                                                                                                                            \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const double tmp = numberLocale.toDouble((le)->text(), &ok);                                                                                           \
+		const double tmp = QLocale().toDouble((le)->text(), &ok);                                                                                              \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -135,8 +120,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		QString str = (le)->text().trimmed();                                                                                                                  \
 		if (!str.isEmpty()) {                                                                                                                                  \
 			bool ok;                                                                                                                                           \
-			SET_NUMBER_LOCALE                                                                                                                                  \
-			const double tmp = numberLocale.toDouble(str, &ok);                                                                                                \
+			const double tmp = QLocale().toDouble(str, &ok);                                                                                                   \
 			if (ok) {                                                                                                                                          \
 				var = tmp;                                                                                                                                     \
 				enableRecalculate();                                                                                                                           \

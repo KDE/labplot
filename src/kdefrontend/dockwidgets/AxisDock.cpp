@@ -1747,7 +1747,6 @@ void AxisDock::load() {
 	ui.sbPositionLogical->setVisible(logical);
 	ui.sbPosition->setVisible(!logical);
 
-	SET_NUMBER_LOCALE
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
 
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
@@ -1896,7 +1895,6 @@ void AxisDock::loadConfig(KConfig& config) {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	SET_NUMBER_LOCALE
 	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex(group.readEntry("Scale", static_cast<int>(m_axis->scale())));
@@ -1999,7 +1997,6 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
 	}
 
-	SET_NUMBER_LOCALE
 	group.writeEntry("LogicalPosition", ui.sbPositionLogical->value());
 	group.writeEntry("PositionOffset", Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());

@@ -540,7 +540,6 @@ void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::Vertical
 
 void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
 	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
 	ui.sbPositionYLogical->setValue(pos.y());
@@ -641,7 +640,6 @@ void CartesianPlotLegendDock::load() {
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_legend->verticalAlignment());
 
 	// widgets for positioning using logical plot coordinates
-	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_legend->plot() != nullptr);
 	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);

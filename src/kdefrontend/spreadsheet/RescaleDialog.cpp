@@ -79,13 +79,11 @@ void RescaleDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 double RescaleDialog::min() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMin->text());
+	return QLocale().toDouble(ui.leMin->text());
 }
 
 double RescaleDialog::max() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMax->text());
+	return QLocale().toDouble(ui.leMax->text());
 }
 
 void RescaleDialog::validateOkButton() {

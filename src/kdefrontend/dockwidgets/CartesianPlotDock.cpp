@@ -1617,13 +1617,11 @@ void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 }
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leRangePoints->setText(numberLocale.toString(value));
+	ui.leRangePoints->setText(QLocale().toString(value));
 }
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leRangePoints->setText(numberLocale.toString(value));
+	ui.leRangePoints->setText(QLocale().toString(value));
 }
 
 // x & y ranges

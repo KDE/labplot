@@ -482,8 +482,7 @@ void HistogramDock::binWidthChanged() {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double width{numberLocale.toDouble(ui.leBinWidth->text(), &ok)};
+	const double width{QLocale().toDouble(ui.leBinWidth->text(), &ok)};
 	if (ok) {
 		for (auto* curve : m_curvesList)
 			curve->setBinWidth(width);
@@ -506,8 +505,7 @@ void HistogramDock::binRangesMinChanged(const QString& value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double min{numberLocale.toDouble(value, &ok)};
+	const double min{QLocale().toDouble(value, &ok)};
 	if (ok) {
 		for (auto* hist : m_curvesList)
 			hist->setBinRangesMin(min);
@@ -518,8 +516,7 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double max{numberLocale.toDouble(value, &ok)};
+	const double max{QLocale().toDouble(value, &ok)};
 	if (ok) {
 		for (auto* hist : m_curvesList)
 			hist->setBinRangesMax(max);
@@ -666,8 +663,7 @@ void HistogramDock::curveBinCountChanged(int count) {
 
 void HistogramDock::curveBinWidthChanged(double width) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leBinWidth->setText(numberLocale.toString(width));
+	ui.leBinWidth->setText(QLocale().toString(width));
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -677,15 +673,13 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leBinRangesMin->setText(numberLocale.toString(value));
+	ui.leBinRangesMin->setText(QLocale().toString(value));
 	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leBinRangesMax->setText(numberLocale.toString(value));
+	ui.leBinRangesMax->setText(QLocale().toString(value));
 	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 

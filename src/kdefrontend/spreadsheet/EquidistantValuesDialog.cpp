@@ -85,8 +85,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
 	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
-	SET_NUMBER_LOCALE
-	ui.leIncrement->setText(numberLocale.toString(conf.readEntry("Increment", 1.)));
+	ui.leIncrement->setText(QLocale().toString(conf.readEntry("Increment", 1.)));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
@@ -103,8 +102,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
-	SET_NUMBER_LOCALE
-	ui.leNumber->setText(numberLocale.toString(m_columns.first()->rowCount()));
+	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
@@ -169,11 +167,11 @@ void EquidistantValuesDialog::generate() {
 	int number{0};
 	double dist{0};
 	if (ui.cbType->currentIndex() == 0) { // fixed number
-		number = numberLocale.toInt(ui.leNumber->text(), &ok);
+		number = QLocale().toInt(ui.leNumber->text(), &ok);
 		if (ok && number != 1)
 			dist = (end - start) / (number - 1);
 	} else { // fixed increment
-		dist = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+		dist = QLocale().toDouble(ui.leIncrement->text(), &ok);
 		if (ok)
 			number = (end - start) / dist + 1;
 	}

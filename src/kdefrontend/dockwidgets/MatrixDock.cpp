@@ -118,8 +118,7 @@ void MatrixDock::xStartChanged(const QString& text) {
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setXStart(value);
@@ -133,8 +132,7 @@ void MatrixDock::xEndChanged(const QString& text) {
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setXEnd(value);
@@ -148,8 +146,7 @@ void MatrixDock::yStartChanged(const QString& text) {
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setYStart(value);
@@ -163,8 +160,7 @@ void MatrixDock::yEndChanged(const QString& text) {
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setYEnd(value);
@@ -226,26 +222,22 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 // mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leXStart->setText(numberLocale.toString(value));
+	ui.leXStart->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leXEnd->setText(numberLocale.toString(value));
+	ui.leXEnd->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leYStart->setText(numberLocale.toString(value));
+	ui.leYStart->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leYEnd->setText(numberLocale.toString(value));
+	ui.leYEnd->setText(QLocale().toString(value));
 }
 
 // format

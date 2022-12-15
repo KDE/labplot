@@ -264,8 +264,7 @@ void BoxPlotDock::setModel() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void BoxPlotDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.leWhiskersRangeParameter->setLocale(numberLocale);
+	ui.leWhiskersRangeParameter->setLocale(QLocale());
 	borderLineWidget->updateLocale();
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
@@ -549,8 +548,7 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) {
 	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	SET_NUMBER_LOCALE
-	double value{numberLocale.toDouble(text, &ok)};
+	double value{QLocale().toDouble(text, &ok)};
 	if (!ok)
 		return;
 
@@ -658,8 +656,7 @@ void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
 }
 void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
-	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(value));
 }
 
 // whiskers cap
@@ -710,8 +707,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 
 	// whiskers
 	ui.cbWhiskersType->setCurrentIndex(group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()));
-	SET_NUMBER_LOCALE
-	ui.leWhiskersRangeParameter->setText(numberLocale.toString(m_boxPlot->whiskersRangeParameter()));
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
@@ -766,8 +762,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
-	SET_NUMBER_LOCALE
-	group.writeEntry("WhiskersRangeParameter", numberLocale.toDouble(ui.leWhiskersRangeParameter->text()));
+	group.writeEntry("WhiskersRangeParameter", QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
 	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap

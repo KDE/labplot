@@ -224,8 +224,7 @@ public:
 	}
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString(bool round = true) const {
-		SET_NUMBER_LOCALE
-		return this->toString(round, numberLocale);
+		return this->toString(round, QLocale());
 	}
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
