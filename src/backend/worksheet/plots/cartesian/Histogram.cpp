@@ -1036,20 +1036,18 @@ void HistogramPrivate::updateLines() {
 
 void HistogramPrivate::histogramValue(double& value, int bin) const {
 	switch (normalization) {
-	case Histogram::Count: {
+	case Histogram::Count:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin);
 		else
 			value += gsl_histogram_get(m_histogram, bin);
 		break;
-	}
-	case Histogram::Probability: {
+	case Histogram::Probability:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin) / totalCount;
 		else
 			value += gsl_histogram_get(m_histogram, bin) / totalCount;
 		break;
-	}
 	case Histogram::CountDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)

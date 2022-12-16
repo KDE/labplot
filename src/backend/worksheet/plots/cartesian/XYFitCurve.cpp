@@ -1872,8 +1872,24 @@ void XYFitCurvePrivate::recalculate() {
 	case nsl_fit_algorithm_lm:
 		runLevenbergMarquardt(tmpXDataColumn, tmpYDataColumn, xRange);
 		break;
-	case nsl_fit_algorithm_ml:
-		runMaximumLikelihood(tmpXDataColumn);
+	case nsl_fit_algorithm_ml: {
+		double width = xRange.size() / tmpYDataColumn->rowCount();
+		double norm = 1.;
+		switch (dataSourceHistogram->normalization()) {
+		case Histogram::Normalization::Count:
+			norm = rowCount * width;
+			break;
+		case Histogram::Normalization::Probability:
+			norm = width;
+			break;
+		case Histogram::Normalization::CountDensity:
+			norm = rowCount;
+			break;
+		case Histogram::Normalization::ProbabilityDensity:
+			break;
+		}
+		runMaximumLikelihood(tmpXDataColumn, norm);
+	}
 	}
 
 	evaluate(); // calculate the fit function (vectors)
@@ -1923,7 +1939,7 @@ void XYFitCurvePrivate::recalculate() {
 	sourceDataChangedSinceLastRecalc = false;
 }
 
-void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn) {
+void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColumn, const double norm) {
 	const size_t n = tmpXDataColumn->rowCount();
 
 	fitResult.available = true;
@@ -1940,12 +1956,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
 	DEBUG("DISTRIBUTION: " << fitData.modelType)
-	// const double binSize = xRange.size() / tmpXDataColumn->rowCount();
-	// DEBUG("BIN SIZE = " << binSize)
-	// const int binCount = 10;
-	// TODO: first parameter (normalization) depends on histogram normalization
-	// fitResult.paramValues[0] = binSize * tmpXDataColumn->rowCount() * binCount; // A
-	fitResult.paramValues[0] = 1.; // A - probability density
+	fitResult.paramValues[0] = norm; // A - normalization
 	// TODO: parameter values (error, etc.)
 	// TODO: currently all values are used (data range not changeable)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
