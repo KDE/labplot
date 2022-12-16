@@ -325,7 +325,7 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 			n++;
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbDerivOrder->model());
-	QStandardItem* item = model->item(nsl_diff_deriv_order_first);
+	auto* item = model->item(nsl_diff_deriv_order_first);
 	if (n < 3)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else {

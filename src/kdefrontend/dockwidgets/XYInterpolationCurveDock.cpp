@@ -72,8 +72,8 @@ void XYInterpolationCurveDock::setupGeneral() {
 		uiGeneralTab.cbType->addItem(i18n(nsl_interp_type_name[i]));
 #if GSL_MAJOR_VERSION < 2
 	// disable Steffen spline item
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-	QStandardItem* item = model->item(nsl_interp_type_steffen);
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
+	auto* item = model->item(nsl_interp_type_steffen);
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 	for (int i = 0; i < NSL_INTERP_PCH_VARIANT_COUNT; i++)
@@ -352,7 +352,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 		pointsModeChanged(uiGeneralTab.cbPointsMode->currentIndex());
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
-	QStandardItem* item = model->item(nsl_interp_type_polynomial);
+	auto* item = model->item(nsl_interp_type_polynomial);
 	if (dataPoints < gsl_interp_type_min_size(gsl_interp_polynomial) || dataPoints > 100) { // not good for many points
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 		if (uiGeneralTab.cbType->currentIndex() == nsl_interp_type_polynomial)

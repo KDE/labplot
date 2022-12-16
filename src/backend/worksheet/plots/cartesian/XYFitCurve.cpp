@@ -1874,19 +1874,21 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_algorithm_ml: {
 		double width = xRange.size() / tmpYDataColumn->rowCount();
-		double norm = 1.;
-		switch (dataSourceHistogram->normalization()) {
-		case Histogram::Normalization::Count:
-			norm = rowCount * width;
-			break;
-		case Histogram::Normalization::Probability:
-			norm = width;
-			break;
-		case Histogram::Normalization::CountDensity:
-			norm = rowCount;
-			break;
-		case Histogram::Normalization::ProbabilityDensity:
-			break;
+		double norm = 1.; // TODO: integral of data for other sources
+		if (dataSourceHistogram) {
+			switch (dataSourceHistogram->normalization()) {
+			case Histogram::Normalization::Count:
+				norm = rowCount * width;
+				break;
+			case Histogram::Normalization::Probability:
+				norm = width;
+				break;
+			case Histogram::Normalization::CountDensity:
+				norm = rowCount;
+				break;
+			case Histogram::Normalization::ProbabilityDensity:
+				break;
+			}
 		}
 		runMaximumLikelihood(tmpXDataColumn, norm);
 	}

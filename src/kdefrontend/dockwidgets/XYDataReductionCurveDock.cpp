@@ -18,7 +18,6 @@
 
 #include <QMenu>
 #include <QProgressBar>
-#include <QStandardItemModel>
 #include <QStatusBar>
 #include <QWidgetAction>
 

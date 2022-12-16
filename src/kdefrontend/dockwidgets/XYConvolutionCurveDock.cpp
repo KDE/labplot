@@ -15,7 +15,6 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QMenu>
-#include <QStandardItemModel>
 #include <QWidgetAction>
 
 extern "C" {

@@ -129,6 +129,11 @@ void XYFitCurveDock::setupGeneral() {
 
 	for (int i = 0; i < NSL_FIT_ALGORITHM_COUNT; i++)
 		uiGeneralTab.cbAlgorithm->addItem(QLatin1String(nsl_fit_algorithm_name[i]));
+	if (m_fitData.modelCategory != nsl_fit_model_distribution) { // disable ML
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+	}
 
 	// TODO: setting checked background color to unchecked color
 	//	p = uiGeneralTab.lData->palette();
@@ -740,8 +745,8 @@ void XYFitCurveDock::categoryChanged(int index) {
 			uiGeneralTab.cbModel->addItem(QLatin1String(nsl_fit_model_peak_name[i]));
 #if defined(_MSC_VER)
 		// disable voigt model
-		const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
-		QStandardItem* item = model->item(nsl_fit_model_voigt);
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbModel->model());
+		auto* item = model->item(nsl_fit_model_voigt);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 #endif
 		break;
@@ -762,13 +767,13 @@ void XYFitCurveDock::categoryChanged(int index) {
 				// only these are available for ML (add more when supported)
 				if (i != nsl_sf_stats_gaussian && i != nsl_sf_stats_exponential && i != nsl_sf_stats_laplace && i != nsl_sf_stats_cauchy_lorentz
 					&& i != nsl_sf_stats_lognormal && i != nsl_sf_stats_poisson && i != nsl_sf_stats_binomial) {
-					QStandardItem* item = model->item(i);
+					auto* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 				}
 			} else {
 				// unused distributions
 				if (i == nsl_sf_stats_levy_alpha_stable || i == nsl_sf_stats_levy_skew_alpha_stable || i == nsl_sf_stats_bernoulli) {
-					QStandardItem* item = model->item(i);
+					auto* item = model->item(i);
 					item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 				}
 			}
@@ -788,6 +793,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		uiGeneralTab.sbDegree->setValue(1);
 		// when model type does not change, call it here
 		updateModelEquation();
+		// update algorithm
+		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+		auto* item = model->item(nsl_fit_algorithm_ml);
+		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+			// enable ML item
+			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+		} else {
+			uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+			// disable ML item
+			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
+		}
 	}
 
 	enableRecalculate();
