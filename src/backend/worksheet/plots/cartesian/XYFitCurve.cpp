@@ -35,6 +35,7 @@ extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multifit.h>
+#include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
@@ -1874,7 +1875,7 @@ void XYFitCurvePrivate::recalculate() {
 		break;
 	case nsl_fit_algorithm_ml: {
 		double width = xRange.size() / tmpYDataColumn->rowCount();
-		double norm = 1.; // TODO: integral of data for other sources
+		double norm = 1.;
 		if (dataSourceHistogram) {
 			switch (dataSourceHistogram->normalization()) {
 			case Histogram::Normalization::Count:
@@ -1889,6 +1890,8 @@ void XYFitCurvePrivate::recalculate() {
 			case Histogram::Normalization::ProbabilityDensity:
 				break;
 			}
+		} else { // spreadsheet or curve
+			norm = tmpYDataColumn->mean() * xRange.size(); // integral
 		}
 		runMaximumLikelihood(tmpXDataColumn, norm);
 	}
@@ -1964,14 +1967,19 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian: {
-		fitResult.paramValues[1] = qSqrt(tmpXDataColumn->var()); // sigma
-		fitResult.paramValues[2] = tmpXDataColumn->mean(); // mu
-		DEBUG("mu = " << fitResult.paramValues[2] << ", sigma = " << fitResult.paramValues[1])
+		const double sigma = qSqrt(tmpXDataColumn->var());
+		const double mu = tmpXDataColumn->mean();
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+		DEBUG("mu = " << mu << ", sigma = " << sigma)
 
 		fitResult.errorValues[2] = qSqrt(tmpXDataColumn->var() / n);
 		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
 		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
 		fitResult.marginValues[2] = margin;
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] *= gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma);
 		// TODO: CI
 		// margin = nsl_stats_tdist_margin(alpha, fitResult.dof, 0.02234446);
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
@@ -1980,16 +1988,19 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_exponential:
 		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
 		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
+		// TODO: normalization
 		// TODO: error + CI
 		break;
 	case nsl_sf_stats_laplace:
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
+		// TODO: normalization
 		// TODO: error + CI
 		break;
 	case nsl_sf_stats_cauchy_lorentz: // see WP:en
 		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
+		// TODO: normalization
 		// TODO: error + CI
 		break;
 	case nsl_sf_stats_lognormal: {
@@ -2004,6 +2015,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		var /= (n - 1);
 		fitResult.paramValues[1] = qSqrt(var); // sigma
 		fitResult.paramValues[2] = mu; // mu
+		// TODO: normalization
 		// TODO: error + CI
 		break;
 	}
@@ -2017,10 +2029,12 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.marginValues[1] = lambda - nsl_stats_chisq_low(alpha, n * lambda) / n;
 		fitResult.margin2Values.resize(2);
 		fitResult.margin2Values[1] = nsl_stats_chisq_high(alpha, n * lambda) / n - lambda;
+		// TODO: normalization
 	} break;
 	case nsl_sf_stats_binomial:
 		fitResult.paramValues[1] = tmpXDataColumn->mean() / n; // k
 		fitResult.paramValues[2] = n; // n
+		// TODO: normalization
 		// TODO: error + CI
 	}
 
