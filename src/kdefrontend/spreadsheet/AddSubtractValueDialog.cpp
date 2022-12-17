@@ -489,7 +489,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		}
 	} else { // datetime
-		qint64 value ;
+		qint64 value;
 		ok = setDateTimeValue(value);
 
 		if (!ok) {
@@ -717,7 +717,7 @@ bool AddSubtractValueDialog::setIntValue(int& value) const {
 
 bool AddSubtractValueDialog::setBigIntValue(qint64& value) const {
 	bool ok;
-		const auto numberLocale = QLocale();
+	const auto numberLocale = QLocale();
 	if (m_operation == Add || m_operation == Subtract) {
 		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
 			value = numberLocale.toLongLong(ui.leValue->text(), &ok);
@@ -745,7 +745,7 @@ bool AddSubtractValueDialog::setDoubleValue(double& value) const {
 
 bool AddSubtractValueDialog::setDateTimeValue(qint64& value) const {
 	if (m_operation == Add || m_operation == Subtract) {
-		if (ui.cbType->currentIndex() == 0) {// add/subtract an absolute value
+		if (ui.cbType->currentIndex() == 0) { // add/subtract an absolute value
 			const auto numberLocale = QLocale();
 			bool ok;
 			quint64 msecsValue = numberLocale.toLongLong(ui.leTimeValue->text(), &ok);
@@ -764,7 +764,7 @@ bool AddSubtractValueDialog::setDateTimeValue(qint64& value) const {
 
 			value = msecsValue;
 		} else // add/subtract a difference
-			value = ui.dteTimeValueEnd->dateTime().toMSecsSinceEpoch() -ui.dteTimeValueStart->dateTime().toMSecsSinceEpoch();
+			value = ui.dteTimeValueEnd->dateTime().toMSecsSinceEpoch() - ui.dteTimeValueStart->dateTime().toMSecsSinceEpoch();
 	}
 
 	return true;

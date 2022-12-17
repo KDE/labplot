@@ -22,9 +22,9 @@ class Integer2DateTimeFilter : public AbstractSimpleFilter {
 
 public:
 	QDateTime dateTimeAt(int row) const override {
-		QDateTime dt = QDateTime::fromMSecsSinceEpoch(0, Qt::UTC);
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
 		int inputValue = m_inputs.value(0)->integerAt(row);
-		return dt.addMSecs(inputValue);
+		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}
 
 	//! Return the data type of the column
