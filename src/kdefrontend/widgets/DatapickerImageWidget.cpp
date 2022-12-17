@@ -591,7 +591,7 @@ void DatapickerImageWidget::load() {
 	if (!m_image)
 		return;
 
-	CONDITIONAL_LOCK_RETURN;
+	// No lock, because it is done already in the caller function
 	ui.leFileName->setText(m_image->fileName());
 
 	// highlight the text field for the background image red if an image is used and cannot be found

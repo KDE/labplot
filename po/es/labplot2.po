@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:43+0000\n"
+"POT-Creation-Date: 2022-12-15 00:43+0000\n"
 "PO-Revision-Date: 2022-12-13 19:38+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -67,7 +67,7 @@ msgstr "No se han encontrado complementos del panel. Compruebe su instalación."
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2904
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4603
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1937
@@ -6982,7 +6982,7 @@ msgstr "no hay información disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4951
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:433
@@ -7333,7 +7333,7 @@ msgid "%1: load default theme"
 msgstr "%1: Cargar tema predeterminado"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1552
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5219
 #: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set theme"
@@ -7482,7 +7482,7 @@ msgstr "desde y=%1 hasta y=%2"
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5166
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "elemento cartesianPlot desconocido «%1»"

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:43+0000\n"
-"PO-Revision-Date: 2022-12-12 10:02+0100\n"
+"POT-Creation-Date: 2022-12-15 00:43+0000\n"
+"PO-Revision-Date: 2022-12-13 14:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -71,7 +71,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2904
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4603
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1937
@@ -7065,7 +7065,7 @@ msgstr "sense informació disponible"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4951
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:433
@@ -7418,7 +7418,7 @@ msgid "%1: load default theme"
 msgstr "%1: carrega el tema predeterminat"
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1552
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5219
 #: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set theme"
@@ -7567,7 +7567,7 @@ msgstr "des de y=%1 a y=%2"
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5166
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr "element de «diagramaCartesià» desconegut «%1»"
@@ -20438,50 +20438,43 @@ msgstr "Emplaçament"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "&All plots in one plot area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "Tots els di&agrames en una àrea del diagrama"
+msgstr "Tots els diagrames en una àrea del diagrama"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "One p&lot area per plot"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "U&na àrea de diagrama per diagrama"
+msgstr "Una àrea de diagrama per diagrama"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Add Plot to"
+#, kde-format
 msgid "Add Plots to"
-msgstr "Afig un diagrama a"
+msgstr "Afig diagrames a"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
-#, fuzzy, kde-format
-#| msgid "E&xisting plot area"
+#, kde-format
 msgid "Existing Plot Area"
-msgstr "Àrea del diagrama e&xistent"
+msgstr "Àrea del diagrama existent"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
-#, fuzzy, kde-format
-#| msgid "&New plot area in an existing worksheet"
+#, kde-format
 msgid "&New Plot Area in an existing Worksheet"
-msgstr "Àrea &nova del diagrama en un full de càlcul existent"
+msgstr "Àrea nova del diagrama en un full de càlcul existent"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
-#, fuzzy, kde-format
-#| msgid "New plot area in a new wor&ksheet"
+#, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr "Àrea nova del diagrama en un full de &càlcul nou"
+msgstr "Àrea nova del diagrama en un full de càlcul nou"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Create plot for original data"
+#, kde-format
 msgid "Create Plot for original Data"
 msgstr "Crea un diagrama per a les dades originals"
 
@@ -21395,12 +21388,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "X-data:"
-#~ msgstr "Dades de X:"
-
-#~ msgid "Y-data:"
-#~ msgstr "Dades de Y:"
-
-#~ msgid "Add plots to"
-#~ msgstr "Afig diagrames a"

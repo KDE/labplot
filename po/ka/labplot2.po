@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-14 00:43+0000\n"
-"PO-Revision-Date: 2022-12-12 07:01+0100\n"
+"POT-Creation-Date: 2022-12-15 00:43+0000\n"
+"PO-Revision-Date: 2022-12-14 07:38+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -67,7 +67,7 @@ msgstr "პანელის დამატებები ვერ ვიპ
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2904
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4609
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4603
 #: src/backend/worksheet/plots/cartesian/CartesianPlotLegend.cpp:943
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:275
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:1937
@@ -1407,22 +1407,22 @@ msgstr ""
 #: src/backend/datasources/filters/HDF5Filter.cpp:291
 #, kde-format
 msgid "Metadata cache hit rate: %1"
-msgstr ""
+msgstr "მეტამონაცემების ქეშის გამოყენების სიხშირე: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:298
 #, kde-format
 msgid "Current cache maximum size: %1 bytes"
-msgstr ""
+msgstr "მიმდინარე ქეშის მაქსიმალური ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:300
 #, kde-format
 msgid "Current cache minimum clean size: %1 bytes"
-msgstr ""
+msgstr "მიმდინარე ქეშის მაქსიმალური სუფთა ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:302
 #, kde-format
 msgid "Current cache size: %1 bytes"
-msgstr ""
+msgstr "მიმდინარე ქეშის ზომა: %1 ბაიტი"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:304
 #, kde-format
@@ -1582,8 +1582,8 @@ msgstr "XYRGB"
 #, kde-format
 msgid "numerical data, %1 element"
 msgid_plural "numerical data, %1 elements"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "რიცხვითი მონაცემები, %1 ელემენტი"
+msgstr[1] "რიცხვითი მონაცემები, %1 ელემენტი"
 
 #: src/backend/datasources/filters/JsonFilter.cpp:203
 #, kde-format
@@ -5255,7 +5255,7 @@ msgstr "%1: ვერტიკალური ანარეკლი"
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Worksheet"
-msgstr ""
+msgstr "სამუშაო ფურცლის დაბეჭდვა"
 
 #: src/backend/note/Note.cpp:130
 #, kde-format
@@ -5375,17 +5375,17 @@ msgstr ""
 #: src/backend/nsl/nsl_conv.c:29 src/backend/nsl/nsl_interp.c:26
 #, kde-format
 msgid "Second Derivative"
-msgstr ""
+msgstr "მეორე წარმოებული"
 
 #: src/backend/nsl/nsl_conv.c:30
 #, kde-format
 msgid "Third Derivative"
-msgstr ""
+msgstr "მესამე წარმოებული"
 
 #: src/backend/nsl/nsl_conv.c:31
 #, kde-format
 msgid "Fourth Derivative"
-msgstr ""
+msgstr "მეოთხე წარმოებული"
 
 #: src/backend/nsl/nsl_conv.c:32
 #, kde-format
@@ -5884,7 +5884,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:21
 #, kde-format
 msgid "Landau"
-msgstr ""
+msgstr "ლანდაუ"
 
 #: src/backend/nsl/nsl_sf_stats.c:22
 #, kde-format
@@ -5939,7 +5939,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:32
 #, kde-format
 msgid "Pareto"
-msgstr ""
+msgstr "პარეტო"
 
 #: src/backend/nsl/nsl_sf_stats.c:33
 #, kde-format
@@ -5959,7 +5959,7 @@ msgstr ""
 #: src/backend/nsl/nsl_sf_stats.c:36
 #, kde-format
 msgid "Poisson"
-msgstr ""
+msgstr "პუასონი"
 
 #: src/backend/nsl/nsl_sf_stats.c:37
 #, kde-format
@@ -6004,7 +6004,7 @@ msgstr "მაქსველ-ბოლცმანი"
 #: src/backend/nsl/nsl_sf_stats.c:46
 #, kde-format
 msgid "Levy"
-msgstr ""
+msgstr "ლევი"
 
 #: src/backend/nsl/nsl_sf_stats.c:47
 #, kde-format
@@ -6336,28 +6336,28 @@ msgstr "_ხილული"
 #: src/backend/worksheet/Image.cpp:145
 #, kde-format
 msgid "%1: set image"
-msgstr ""
+msgstr "%1: გამოსახულების დაყენება"
 
 #: src/backend/worksheet/Image.cpp:152
 #, kde-format
 msgid "%1: embed image"
-msgstr ""
+msgstr "%1: გამოსახულების ჩაშენება"
 
 #: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
 #: src/backend/worksheet/TextLabel.cpp:373
 #, kde-format
 msgid "%1: set border opacity"
-msgstr ""
+msgstr "%1: საზღვრის გაუმჭვირვალობის დაყენება"
 
 #: src/backend/worksheet/Image.cpp:166
 #, kde-format
 msgid "%1: set width"
-msgstr ""
+msgstr "%1: სიგანის დაყენება"
 
 #: src/backend/worksheet/Image.cpp:175
 #, kde-format
 msgid "%1: set height"
-msgstr ""
+msgstr "%1: სიმაღლის დაყენება"
 
 #: src/backend/worksheet/Image.cpp:184
 #, kde-format
@@ -6367,7 +6367,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:192 src/backend/worksheet/TextLabel.cpp:366
 #, kde-format
 msgid "%1: set border"
-msgstr ""
+msgstr "%1: საზღვრის დაყენება"
 
 #: src/backend/worksheet/Image.cpp:468
 #, kde-format
@@ -6407,7 +6407,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYCurve.cpp:410
 #, kde-format
 msgid "%1: line type changed"
-msgstr ""
+msgstr "%1: ხაზის ტიპი შეიცვალა"
 
 #: src/backend/worksheet/Line.cpp:119
 #, kde-format
@@ -6442,7 +6442,7 @@ msgstr ""
 #: src/backend/worksheet/Line.cpp:161
 #, kde-format
 msgid "%1: set line opacity"
-msgstr ""
+msgstr "%1: ხაზის გაუმჭვირვალობის დაყენება"
 
 #: src/backend/worksheet/plots/AbstractPlot.cpp:100
 #: src/backend/worksheet/plots/AbstractPlot.cpp:128
@@ -6707,7 +6707,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:888
 #, kde-format
 msgid "%1: set labels format"
-msgstr ""
+msgstr "%1: ჭდის ფორმატის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:895
 #, kde-format
@@ -6718,72 +6718,72 @@ msgstr "%1; უჯრედის ფორმულის დაყენებ
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:909
 #, kde-format
 msgid "%1: set labels precision"
-msgstr ""
+msgstr "%1: ჭდის სიზუსტის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:916
 #, kde-format
 msgid "%1: set labels datetime format"
-msgstr ""
+msgstr "%1: ჭდის თარიღისა და დროის ფორმატის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:923
 #, kde-format
 msgid "%1: set labels position"
-msgstr ""
+msgstr "%1: ჭდის მდებარეობის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:930
 #, kde-format
 msgid "%1: set label offset"
-msgstr ""
+msgstr "%1: ჭდის წანაცვლების დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:937
 #, kde-format
 msgid "%1: set label rotation angle"
-msgstr ""
+msgstr "%1: ჭდის მობრუნების კუთხის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:944
 #, kde-format
 msgid "%1: set labels text type"
-msgstr ""
+msgstr "%1: ჭდის ტექსტის ტიპის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:951
 #, kde-format
 msgid "%1: set labels text column"
-msgstr ""
+msgstr "%1: ჭდის ტექსტის სვეტის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:965
 #, kde-format
 msgid "%1: set label color"
-msgstr ""
+msgstr "%1: ჭდის ფერის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:972
 #, kde-format
 msgid "%1: set label font"
-msgstr ""
+msgstr "%1: ჭდის ფონტის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:979
 #, kde-format
 msgid "%1: set labels background type"
-msgstr ""
+msgstr "%1: ჭდის ფონის ტიპის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:986
 #, kde-format
 msgid "%1: set label background color"
-msgstr ""
+msgstr "%1: ჭდის ფონის ფერის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:993
 #, kde-format
 msgid "%1: set label prefix"
-msgstr ""
+msgstr "%1: ჭდის პრეფიქსის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1000
 #, kde-format
 msgid "%1: set label suffix"
-msgstr ""
+msgstr "%1: ჭდის სუფიქსის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:1007
 #, kde-format
 msgid "%1: set labels opacity"
-msgstr ""
+msgstr "%1: ჭდის გაუმჭვირვალობის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:227
 #, kde-format
@@ -6794,7 +6794,7 @@ msgstr "%1: x სვეტის დაყენება"
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:469
 #, kde-format
 msgid "%1: set data columns"
-msgstr ""
+msgstr "%1: მონაცემების სვეტების დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:264
 #, kde-format
@@ -6806,13 +6806,13 @@ msgstr "%1: ტიპის დაყენება"
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:197
 #, kde-format
 msgid "%1: set orientation"
-msgstr ""
+msgstr "%1: ორიენტაციის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:278
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:510
 #, kde-format
 msgid "%1: width factor changed"
-msgstr ""
+msgstr "%1: სიგანის ფაქტორი შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:323
 #: src/backend/worksheet/plots/cartesian/Histogram.cpp:185
@@ -6864,12 +6864,12 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:489
 #, kde-format
 msgid "%1: set ordering"
-msgstr ""
+msgstr "%1: მიმდევრობის დაყენება"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:503
 #, kde-format
 msgid "%1: variable width changed"
-msgstr ""
+msgstr "%1: ცვლადის სიგანე შეიცვალა"
 
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:517
 #, kde-format
@@ -6931,7 +6931,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTitle)
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:102
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4957
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4951
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:433
@@ -7282,7 +7282,7 @@ msgid "%1: load default theme"
 msgstr ""
 
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:1552
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5225
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5219
 #: src/backend/worksheet/Worksheet.cpp:760
 #, kde-format
 msgid "%1: set theme"
@@ -7431,7 +7431,7 @@ msgstr ""
 msgid "x=%1"
 msgstr "x=%1"
 
-#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5172
+#: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:5166
 #, kde-format
 msgid "unknown cartesianPlot element '%1'"
 msgstr ""
@@ -17063,7 +17063,7 @@ msgstr "რიცხვი:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:938
 #, kde-format
 msgid "Spacing:"
-msgstr ""
+msgstr "დაშორება:"
 
 #. i18n: ectx: property (text), widget (QLabel, lIncrement)
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksIncrementDateTime)
@@ -19973,24 +19973,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "Plot Area - %1"
+#, kde-format
 msgid "One Plot Area per Plot"
-msgstr "დასახაზი ადგილი - %1"
+msgstr "ერთი სახაზავი ადგილი თითოეული ნახაზისთვის"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Add Plot to"
+#, kde-format
 msgid "Add Plots to"
 msgstr "გრაფიკების დამატება"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
-#, fuzzy, kde-format
-#| msgid "Plot Area"
+#, kde-format
 msgid "Existing Plot Area"
-msgstr "დასახაზი ადგილი"
+msgstr "არსებული დასახაზი ადგილი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
