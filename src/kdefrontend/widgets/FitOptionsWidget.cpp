@@ -38,7 +38,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEps->setValidator(new QDoubleValidator(ui.leEps));
 	ui.leEvaluatedPoints->setValidator(new QIntValidator(ui.leEvaluatedPoints));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
 	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
@@ -134,7 +134,7 @@ void FitOptionsWidget::autoRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->fitRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leMin->setText(numberLocale.toString(xMin));
 				ui.leMax->setText(numberLocale.toString(xMax));
@@ -177,7 +177,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->evalRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leEvalMin->setText(numberLocale.toString(xMin));
 				ui.leEvalMax->setText(numberLocale.toString(xMax));

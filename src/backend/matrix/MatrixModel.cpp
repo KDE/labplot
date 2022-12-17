@@ -101,7 +101,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
 	auto headerFormat = m_matrix->headerFormat();
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (orientation) {
 	case Qt::Horizontal:
 		switch (role) {

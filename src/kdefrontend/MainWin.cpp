@@ -2382,6 +2382,19 @@ void MainWin::dropEvent(QDropEvent* event) {
 		event->ignore();
 }
 
+void MainWin::updateLocale() {
+	// Set default locale
+	QLocale::Language numberLocaleLanguage =
+		static_cast<QLocale::Language>(KSharedConfig::openConfig()
+										   ->group("Settings_General")
+										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));
+	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(
+		KSharedConfig::openConfig()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));
+	QLocale l(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
+	l.setNumberOptions(numberOptions);
+	QLocale::setDefault(l);
+}
+
 void MainWin::handleSettingsChanges() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
 
@@ -2441,6 +2454,7 @@ void MainWin::handleSettingsChanges() {
 		m_autoSaveTimer.setInterval(interval);
 
 	// update the locale and the units in the dock widgets
+	updateLocale();
 	if (stackedWidget) {
 		for (int i = 0; i < stackedWidget->count(); ++i) {
 			auto* widget = stackedWidget->widget(i);

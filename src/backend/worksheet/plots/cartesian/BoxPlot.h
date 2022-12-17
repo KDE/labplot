@@ -11,9 +11,8 @@
 #define BOXPLOT_H
 
 #include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/Curve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;
@@ -23,9 +22,9 @@ class Symbol;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BoxPlot : public WorksheetElement, Curve {
+class LABPLOT_EXPORT BoxPlot : Plot {
 #else
-class BoxPlot : public WorksheetElement, Curve {
+class BoxPlot : public Plot {
 #endif
 	Q_OBJECT
 
@@ -46,8 +45,8 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	// reimplemented from Curve
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	// reimplemented from Plot
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	// general
@@ -121,7 +120,6 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	// General-Tab
-	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);

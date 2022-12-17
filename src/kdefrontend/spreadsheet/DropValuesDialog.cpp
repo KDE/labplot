@@ -938,7 +938,7 @@ void DropValuesDialog::maskValues() const {
 
 	// settings for numeric columns
 	const auto op = static_cast<Operator>(ui.cbOperator->currentIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
 	if (!ok && m_hasNumeric) {
@@ -995,7 +995,7 @@ void DropValuesDialog::dropValues() const {
 
 	// settings for numeric columns
 	const auto op = static_cast<Operator>(ui.cbOperator->currentIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
 	if (!ok && m_hasNumeric) {

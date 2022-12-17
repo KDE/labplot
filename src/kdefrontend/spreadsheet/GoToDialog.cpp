@@ -76,16 +76,14 @@ GoToDialog::~GoToDialog() {
 }
 
 int GoToDialog::row() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int row = numberLocale.toInt(leRow->text(), &ok);
+	int row = QLocale().toInt(leRow->text(), &ok);
 
 	return ok ? row : 0;
 }
 
 int GoToDialog::column() {
-	SET_NUMBER_LOCALE
 	bool ok;
-	int col = numberLocale.toInt(leColumn->text(), &ok);
+	int col = QLocale().toInt(leColumn->text(), &ok);
 	return ok ? col : 0;
 }

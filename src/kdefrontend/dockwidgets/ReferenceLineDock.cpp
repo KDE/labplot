@@ -95,7 +95,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
-	SET_NUMBER_LOCALE
 	CONDITIONAL_LOCK_RETURN;
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
@@ -188,7 +187,6 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //*************************************************************
 void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
 		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
@@ -217,7 +215,6 @@ void ReferenceLineDock::load() {
 
 	// No lock!
 
-	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 	updateWidgetsOrientation(orientation);

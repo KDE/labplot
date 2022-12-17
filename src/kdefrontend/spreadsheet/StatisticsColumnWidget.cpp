@@ -674,15 +674,14 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 
 // helpers
 const QString StatisticsColumnWidget::isNanValue(const double value) const {
-	SET_NUMBER_LOCALE
-	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value, 'f'));
+	return (std::isnan(value) ? QLatin1String("-") : QLocale().toString(value, 'f'));
 }
 
 QString StatisticsColumnWidget::modeValue(const Column* column, double value) const {
 	if (std::isnan(value))
 		return QLatin1String("-");
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer:
 		return numberLocale.toString((int)value);

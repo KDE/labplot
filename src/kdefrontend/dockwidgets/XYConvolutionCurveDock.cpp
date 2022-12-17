@@ -151,7 +151,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_convolutionData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_convolutionData.xRange.last()));
 	this->autoRangeChanged();
@@ -234,7 +234,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
 
 	initGeneralTab();
@@ -315,7 +315,7 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -434,7 +434,7 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
@@ -542,7 +542,7 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (convolutionResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

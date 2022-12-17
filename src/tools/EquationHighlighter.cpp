@@ -110,8 +110,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		bool isFraction = (u >= 0xbc && u <= 0xbe) || (u >= 0x2153 && u <= 0x215e);
 		bool isPower = (u >= 0xb2 && u <= 0xb3) || (u == 0x2070) || (u >= 0x2074 && u <= 0x2079);
 		bool isDigit = text[i].isDigit();
-		SET_NUMBER_LOCALE
-		bool isDecimalPoint = text[i] == numberLocale.decimalPoint();
+		bool isDecimalPoint = text[i] == QLocale().decimalPoint();
 
 		if (isFraction || isPower || isDigit || isDecimalPoint)
 			setFormat(i, 1, number);

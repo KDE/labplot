@@ -11,9 +11,9 @@
 #ifndef HISTOGRAMPRIVATE_H
 #define HISTOGRAMPRIVATE_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+// #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <vector>
 
 class Column;
@@ -25,7 +25,7 @@ extern "C" {
 #include <gsl/gsl_histogram.h>
 }
 
-class HistogramPrivate : public WorksheetElementPrivate {
+class HistogramPrivate : public PlotPrivate {
 public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
@@ -48,8 +48,8 @@ public:
 	void updatePixmap();
 	void recalcShapeAndBoundingRect() override;
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
 	double xMinimum() const;
 	double xMaximum() const;

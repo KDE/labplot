@@ -1664,7 +1664,7 @@ void SpreadsheetView::copySelection() {
 		formats << outFilter->numericFormat();
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
 			const Column* col_ptr = columns.at(c);
@@ -1733,7 +1733,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
 		hasTabs = true;
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	// TEST ' ' as group separator:
 	// numberLocale = QLocale(QLocale::French, QLocale::France);
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
@@ -1741,7 +1741,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		if (hasTabs)
 			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
 		else if (numberLocale.groupSeparator().isSpace()
-				 && !(numberOptions & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
+				 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
 #else

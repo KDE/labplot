@@ -52,14 +52,12 @@ CURVE_COLUMN_CONNECT(Histogram, ErrorPlus, errorPlus, updateErrorBars)
 CURVE_COLUMN_CONNECT(Histogram, ErrorMinus, errorMinus, updateErrorBars)
 
 Histogram::Histogram(const QString& name)
-	: WorksheetElement(name, new HistogramPrivate(this), AspectType::Histogram)
-	, Curve() {
+	: Plot(name, new HistogramPrivate(this), AspectType::Histogram) {
 	init();
 }
 
 Histogram::Histogram(const QString& name, HistogramPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::Histogram)
-	, Curve() {
+	: Plot(name, dd, AspectType::Histogram) {
 	init();
 }
 
@@ -272,9 +270,9 @@ QGraphicsItem* Histogram::graphicsItem() const {
 	return d_ptr;
 }
 
-bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool Histogram::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(Histogram);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void Histogram::setHover(bool on) {
@@ -637,7 +635,7 @@ void Histogram::errorMinusColumnNameChanged() {
 //######################### Private implementation #############################
 //##############################################################################
 HistogramPrivate::HistogramPrivate(Histogram* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
@@ -1833,7 +1831,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool HistogramPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -1851,7 +1849,7 @@ void HistogramPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		return QGraphicsItem::mousePressEvent(event);
 	}
 
-	if (q->activateCurve(event->pos())) {
+	if (q->activatePlot(event->pos())) {
 		setSelected(true);
 		return;
 	}

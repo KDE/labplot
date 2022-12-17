@@ -37,12 +37,12 @@
  */
 
 BarPlot::BarPlot(const QString& name)
-	: WorksheetElement(name, new BarPlotPrivate(this), AspectType::BarPlot) {
+	: Plot(name, new BarPlotPrivate(this), AspectType::BarPlot) {
 	init();
 }
 
 BarPlot::BarPlot(const QString& name, BarPlotPrivate* dd)
-	: WorksheetElement(name, dd, AspectType::BarPlot) {
+	: Plot(name, dd, AspectType::BarPlot) {
 	init();
 }
 
@@ -143,9 +143,9 @@ void BarPlot::recalc() {
 void BarPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
-bool BarPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool BarPlot::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(BarPlot);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 void BarPlot::setHover(bool on) {
@@ -312,13 +312,13 @@ void BarPlot::visibilityChangedSlot() {
 //####################### Private implementation ###############################
 //##############################################################################
 BarPlotPrivate::BarPlotPrivate(BarPlot* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
 }
 
-bool BarPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
+bool BarPlotPrivate::activatePlot(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 

@@ -1951,7 +1951,7 @@ void XYCurveTest::hooverCurveIntegerEndingZeros() {
 	QPointF mouseLogicalPos(13, 29.1); // extracted from the spreadsheet
 	bool visible;
 	auto mouseScenePos = plot->coordinateSystem(integerNonMonotonic->coordinateSystemIndex())->mapLogicalToScene(mouseLogicalPos, visible);
-	QCOMPARE(integerNonMonotonic->activateCurve(mouseScenePos, -1), true);
+	QCOMPARE(integerNonMonotonic->activatePlot(mouseScenePos, -1), true);
 }
 
 QTEST_MAIN(XYCurveTest)

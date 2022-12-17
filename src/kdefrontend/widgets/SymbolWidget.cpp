@@ -62,7 +62,7 @@ void SymbolWidget::setSymbols(const QList<Symbol*>& symbols) {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void SymbolWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbSize->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
 }

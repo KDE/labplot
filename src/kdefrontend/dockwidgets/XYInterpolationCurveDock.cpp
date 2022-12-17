@@ -155,7 +155,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_interpolationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_interpolationData.xRange.last()));
 	} else {
@@ -257,7 +257,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbTension->setLocale(numberLocale);
 	uiGeneralTab.sbContinuity->setLocale(numberLocale);
 	uiGeneralTab.sbBias->setLocale(numberLocale);
@@ -337,7 +337,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 
 	// disable types that need more data points
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// TODO: this does not check if there are valid data points
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
@@ -440,7 +440,7 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				// TODO: this does not check if there are valid data points
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
@@ -677,7 +677,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (interpolationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

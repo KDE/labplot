@@ -5,7 +5,7 @@
 	the input numbers as Julian days.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs@gmx.net (use @ for *)>
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,14 +20,10 @@ class BigInt2DateTimeFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	QDate dateAt(int row) const override {
-		if (!m_inputs.value(0))
-			return QDate();
-		qint64 inputValue = m_inputs.value(0)->bigIntAt(row);
-		return QDate(1900, 1, 1 + inputValue);
-	}
 	QDateTime dateTimeAt(int row) const override {
-		return QDateTime(dateAt(row), QTime());
+		QDateTime dt = QDateTime::fromSecsSinceEpoch(0, Qt::UTC);
+		qint64 inputValue = m_inputs.value(0)->bigIntAt(row);
+		return dt.addMSecs(inputValue); // TODO: select unit (ms, s, min, hour, days)
 	}
 
 	//! Return the data type of the column

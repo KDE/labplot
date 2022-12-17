@@ -35,6 +35,12 @@ private:
 	void generateForColumns();
 	void generateForMatrices();
 	QString getMessage(const QString&);
+	void updateWidgetsVisiblity();
+
+	bool setIntValue(int& value) const;
+	bool setBigIntValue(qint64& value) const;
+	bool setDoubleValue(double& value) const;
+	bool setDateTimeValue(qint64& value) const;
 
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;
@@ -42,9 +48,11 @@ private:
 	Matrix* m_matrix = nullptr;
 	QPushButton* m_okButton;
 	Operation m_operation;
+	bool m_numeric{false};
 
 private Q_SLOTS:
 	void generate();
+	void typeChanged(int);
 };
 
 #endif

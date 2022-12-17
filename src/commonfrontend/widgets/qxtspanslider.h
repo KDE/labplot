@@ -40,7 +40,7 @@ private:
 	QSpinBox* sbMin{nullptr};
 	QSpinBox* sbMax{nullptr};
 	QxtSpanSlider* spanslider{nullptr};
-	bool mInitializing{false};
+	bool m_initializing{false};
 };
 
 class QxtSpanSlider : public QSlider {

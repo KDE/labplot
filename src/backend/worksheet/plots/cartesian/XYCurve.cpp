@@ -59,12 +59,12 @@ CURVE_COLUMN_CONNECT(XYCurve, YErrorMinus, yErrorMinus, recalcLogicalPoints)
 CURVE_COLUMN_CONNECT(XYCurve, Values, values, recalcLogicalPoints)
 
 XYCurve::XYCurve(const QString& name, AspectType type)
-	: WorksheetElement(name, new XYCurvePrivate(this), type) {
+	: Plot(name, new XYCurvePrivate(this), type) {
 	init();
 }
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
-	: WorksheetElement(name, dd, type) {
+	: Plot(name, dd, type) {
 	init();
 }
 
@@ -92,9 +92,11 @@ void XYCurve::init() {
 	d->line->init(group);
 	connect(d->line, &Line::updatePixmapRequested, [=] {
 		d->updatePixmap();
+		Q_EMIT updateLegendRequested();
 	});
 	connect(d->line, &Line::updateRequested, [=] {
 		d->recalcShapeAndBoundingRect();
+		Q_EMIT updateLegendRequested();
 	});
 
 	d->dropLine = new Line(QString());
@@ -119,9 +121,11 @@ void XYCurve::init() {
 	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=] {
 		d->updateSymbols();
+		Q_EMIT updateLegendRequested();
 	});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=] {
 		d->updatePixmap();
+		Q_EMIT updateLegendRequested();
 	});
 
 	// values
@@ -243,15 +247,15 @@ QGraphicsItem* XYCurve::graphicsItem() const {
 }
 
 /*!
- * \brief XYCurve::activateCurve
+ * \brief XYCurve::activatePlot
  * Checks if the mousepos distance to the curve is less than @p maxDist
  * \p mouseScenePos
  * \p maxDist Maximum distance the point lies away from the curve
  * \return Returns true if the distance is smaller than maxDist.
  */
-bool XYCurve::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool XYCurve::activatePlot(QPointF mouseScenePos, double maxDist) {
 	Q_D(XYCurve);
-	return d->activateCurve(mouseScenePos, maxDist);
+	return d->activatePlot(mouseScenePos, maxDist);
 }
 
 /*!
@@ -862,7 +866,7 @@ void XYCurve::navigateTo() {
 //######################### Private implementation #############################
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve* owner)
-	: WorksheetElementPrivate(owner)
+	: PlotPrivate(owner)
 	, q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -881,7 +885,7 @@ QPainterPath XYCurvePrivate::shape() const {
 }
 
 void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
-	if (q->activateCurve(event->pos())) {
+	if (q->activatePlot(event->pos())) {
 		q->createContextMenu()->exec(event->screenPos());
 		return;
 	}
@@ -1806,7 +1810,7 @@ void XYCurvePrivate::updateValues() {
 	// determine the value string for all points that are currently visible in the plot
 	int i{0};
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
@@ -2469,7 +2473,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 	return true;
 }
 
-bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
+bool XYCurvePrivate::activatePlot(QPointF mouseScenePos, double maxDist) {
 	if (!isVisible())
 		return false;
 
@@ -3102,7 +3106,7 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	}
 	mousePos = event->pos();
 
-	if (q->activateCurve(event->pos())) {
+	if (q->activatePlot(event->pos())) {
 		setSelected(true);
 		return;
 	}

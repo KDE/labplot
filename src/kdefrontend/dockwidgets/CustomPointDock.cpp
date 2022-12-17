@@ -142,7 +142,7 @@ void CustomPointDock::initConnections() const {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void CustomPointDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbPositionXLogical->setLocale(numberLocale);
@@ -322,7 +322,6 @@ void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
 
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
 	CONDITIONAL_LOCK_RETURN;
-	SET_NUMBER_LOCALE
 	ui.sbPositionXLogical->setValue(pos.x());
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x(), Qt::UTC));
 	ui.sbPositionYLogical->setValue(pos.y());
@@ -351,7 +350,6 @@ void CustomPointDock::load() {
 	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(m_point->position().point.y(), m_worksheetUnit));
 
 	// widgets for positioning using logical plot coordinates
-	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_point->plot() != nullptr);
 	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);

@@ -130,7 +130,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_integrationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_integrationData.xRange.last()));
 	} else {
@@ -288,7 +288,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
@@ -352,7 +352,7 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
@@ -463,7 +463,7 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (integrationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(integrationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else

@@ -128,12 +128,7 @@ void ImageDock::setImages(QList<Image*> list) {
 	m_image = list.first();
 	setAspects(list);
 
-	SET_NUMBER_LOCALE
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbPositionX->setLocale(numberLocale);
-	ui.sbPositionY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
+	updateLocale();
 
 	// if there are more then one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
@@ -187,7 +182,7 @@ void ImageDock::setImages(QList<Image*> list) {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void ImageDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);

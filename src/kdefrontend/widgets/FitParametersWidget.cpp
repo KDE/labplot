@@ -68,7 +68,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 	int np = m_fitData->paramNames.size();
 	DEBUG("# params = " << np);
 	DEBUG("# start values = " << m_fitData->paramStartValues.size());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (m_fitData->modelCategory != nsl_fit_model_custom) { // pre-defined models
 		ui.tableWidget->setRowCount(np);
 
@@ -297,7 +297,7 @@ void FitParametersWidget::apply() {
 		m_fitData->paramLowerLimits.clear();
 		m_fitData->paramUpperLimits.clear();
 
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		for (int i = 0; i < ui.tableWidget->rowCount(); ++i) {
 			// skip those rows where either the name or the value is empty
 			if (!ui.tableWidget->item(i, 0)->text().simplified().isEmpty() && !((QLineEdit*)ui.tableWidget->cellWidget(i, 1))->text().simplified().isEmpty()) {

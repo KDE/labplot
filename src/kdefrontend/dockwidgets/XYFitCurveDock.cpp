@@ -1348,7 +1348,7 @@ void XYFitCurveDock::showFitResult() {
 		return;
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	// used confidence interval
 	double confidenceInterval{m_fitData.confidenceInterval};
 	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 % lower confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));

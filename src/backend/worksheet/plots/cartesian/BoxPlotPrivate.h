@@ -11,7 +11,7 @@
 #ifndef BOXPLOTPRIVATE_H
 #define BOXPLOTPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
 #include <QPen>
 
 class Background;
@@ -20,7 +20,7 @@ class Spreadsheet;
 
 typedef QVector<QPointF> Points;
 
-class BoxPlotPrivate : public WorksheetElementPrivate {
+class BoxPlotPrivate : public PlotPrivate {
 public:
 	explicit BoxPlotPrivate(BoxPlot*);
 
@@ -42,7 +42,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
 
 	BoxPlot* const q;

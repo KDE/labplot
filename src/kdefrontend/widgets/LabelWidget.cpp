@@ -529,7 +529,7 @@ void LabelWidget::updateUnits() {
 }
 
 void LabelWidget::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
 	ui.sbOffsetX->setLocale(numberLocale);
@@ -1386,7 +1386,6 @@ void LabelWidget::load() {
 	ui.cbVerticalAlignment->setCurrentIndex((int)m_label->verticalAlignment());
 
 	// widgets for positioning using logical plot coordinates
-	SET_NUMBER_LOCALE
 	bool allowLogicalCoordinates = (m_label->plot() != nullptr);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
