@@ -23,6 +23,7 @@ New features:
 		* Data 'flattening' - convert pivoted data to column base format
 		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
 		* Function values dialog supports accessing arbitrary cells of columns with cell(f(index), g(column,..)) and other moving functions
+		* Allow to subtract and add a value by providing a difference between two values
 	* [matrix]
 		* Zooming in the image view
 	* [import]

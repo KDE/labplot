@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dialog for adding/subtracting a value from column values
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@
 #include <QWindow>
 
 #include <KLocalizedString>
+#include <KMessageBox>
 #include <KWindowConfig>
 
 /*!
@@ -96,7 +97,7 @@ void AddSubtractValueDialog::init() {
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	ui.gridLayout->addWidget(btnBox, 3, 0, 1, 2);
+	ui.gridLayout->addWidget(btnBox, 7, 0, 1, 3);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	switch (m_operation) {
@@ -114,10 +115,23 @@ void AddSubtractValueDialog::init() {
 		break;
 	}
 
+	if (m_operation == Add || m_operation == Subtract) {
+		ui.cbType->addItem(i18n("Absolute Value"));
+		ui.cbType->addItem(i18n("Difference"));
+		ui.cbTimeUnits->addItem(i18n("Milliseconds"));
+		ui.cbTimeUnits->addItem(i18n("Seconds"));
+		ui.cbTimeUnits->addItem(i18n("Minutes"));
+		ui.cbTimeUnits->addItem(i18n("Hours"));
+		ui.cbTimeUnits->addItem(i18n("Days"));
+	} else {
+		ui.lType->hide();
+		ui.cbType->hide();
+	}
+
 	connect(m_okButton, &QPushButton::clicked, this, &AddSubtractValueDialog::generate);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &AddSubtractValueDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &AddSubtractValueDialog::reject);
-
+	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AddSubtractValueDialog::typeChanged);
 	connect(ui.leValue, &QLineEdit::textChanged, this, [=]() {
 		m_okButton->setEnabled(!ui.leValue->text().isEmpty());
 	});
@@ -126,6 +140,7 @@ void AddSubtractValueDialog::init() {
 	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
 	if (conf.exists()) {
+		ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
@@ -135,6 +150,7 @@ void AddSubtractValueDialog::init() {
 AddSubtractValueDialog::~AddSubtractValueDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "AddSubtractValueDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+	conf.writeEntry("Type", ui.cbType->currentIndex());
 }
 
 void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
@@ -144,30 +160,44 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	// and show the first valid value in the first selected column as the value to add/subtract
 	const Column* column = m_columns.first();
 	const auto numberLocale = QLocale();
+
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer: {
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
+		const auto str = numberLocale.toString(column->integerAt(0));
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(column->integerAt(0)));
+		ui.leValue->setText(str);
+		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
+		ui.leValueStart->setText(str);
+		ui.leValueEnd->setValidator(new QIntValidator(ui.leValueEnd));
+		ui.leValueEnd->setText(str);
 		break;
+	}
 	case AbstractColumn::ColumnMode::BigInt: {
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
+		const auto str = numberLocale.toString(column->bigIntAt(0));
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(numberLocale.toString(column->bigIntAt(0)));
+		ui.leValue->setText(str);
+		ui.leValueStart->setValidator(new QIntValidator(ui.leValueStart));
+		ui.leValueStart->setText(str);
+		ui.leValueEnd->setValidator(new QIntValidator(ui.leValueEnd));
+		ui.leValueEnd->setText(str);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Double: {
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
+		ui.leValueStart->setValidator(new QDoubleValidator(ui.leValueStart));
+		ui.leValueEnd->setValidator(new QDoubleValidator(ui.leValueEnd));
 
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
 			if (!std::isnan(value)) {
-				ui.leValue->setText(numberLocale.toString(column->valueAt(row), 'g', 16));
+				const auto str = numberLocale.toString(column->valueAt(row), 'g', 16);
+				ui.leValue->setText(str);
+				ui.leValueStart->setText(str);
+				ui.leValueEnd->setText(str);
 				break;
 			}
 		}
@@ -176,24 +206,27 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::DateTime: {
-		ui.lValue->setVisible(false);
-		ui.leValue->setVisible(false);
+		m_numeric = false;
 		auto* filter = static_cast<DateTime2StringFilter*>(column->outputFilter());
-		ui.dateTimeEdit->setDisplayFormat(filter->format());
+		ui.dteTimeValueStart->setDisplayFormat(filter->format());
+		ui.dteTimeValueEnd->setDisplayFormat(filter->format());
 
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const QDateTime& value = column->dateTimeAt(row);
 			if (value.isValid()) {
-				ui.dateTimeEdit->setDateTime(value);
+				ui.dteTimeValueStart->setDateTime(value);
+				ui.dteTimeValueEnd->setDateTime(value);
 				break;
 			}
 		}
 	}
-	case AbstractColumn::ColumnMode::Text:
+	case AbstractColumn::ColumnMode::Text: {
 		// not supported
 		break;
 	}
 	}
+
+	updateWidgetsVisiblity();
 }
 
 void AddSubtractValueDialog::setMatrices() {
@@ -202,21 +235,18 @@ void AddSubtractValueDialog::setMatrices() {
 	const auto numberLocale = QLocale();
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Integer:
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
 		// TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0, 0)));
 		break;
 	case AbstractColumn::ColumnMode::Double:
-		ui.lTimeValue->setVisible(false);
-		ui.dateTimeEdit->setVisible(false);
+		m_numeric = true;
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0, 0)));
 		break;
@@ -224,8 +254,61 @@ void AddSubtractValueDialog::setMatrices() {
 	case AbstractColumn::ColumnMode::Day:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Text:
-		ui.lValue->setVisible(false);
-		ui.leValue->setVisible(false);
+		m_numeric = false;
+	}
+
+	updateWidgetsVisiblity();
+}
+
+void AddSubtractValueDialog::typeChanged(int index) {
+	bool diff = (index != 0);
+	if (m_numeric) {
+		ui.lValue->setVisible(!diff);
+		ui.leValue->setVisible(!diff);
+		ui.lValueStart->setVisible(diff);
+		ui.leValueStart->setVisible(diff);
+		ui.lValueEnd->setVisible(diff);
+		ui.leValueEnd->setVisible(diff);
+	} else {
+		ui.lTimeValue->setVisible(!diff);
+		ui.leTimeValue->setVisible(!diff);
+		ui.cbTimeUnits->setVisible(!diff);
+		ui.lTimeValueStart->setVisible(diff);
+		ui.dteTimeValueStart->setVisible(diff);
+		ui.lTimeValueEnd->setVisible(diff);
+		ui.dteTimeValueEnd->setVisible(diff);
+	}
+}
+
+void AddSubtractValueDialog::updateWidgetsVisiblity() {
+	ui.lValue->setVisible(m_numeric);
+	ui.leValue->setVisible(m_numeric);
+	ui.lTimeValue->setVisible(!m_numeric);
+	ui.leTimeValue->setVisible(!m_numeric);
+
+	if (m_operation == Add || m_operation == Subtract) {
+		ui.lValueStart->setVisible(m_numeric);
+		ui.leValueStart->setVisible(m_numeric);
+		ui.lValueEnd->setVisible(m_numeric);
+		ui.leValueEnd->setVisible(m_numeric);
+
+		ui.cbTimeUnits->setVisible(!m_numeric);
+		ui.lTimeValueStart->setVisible(!m_numeric);
+		ui.dteTimeValueStart->setVisible(!m_numeric);
+		ui.lTimeValueEnd->setVisible(!m_numeric);
+		ui.dteTimeValueEnd->setVisible(!m_numeric);
+
+		typeChanged(ui.cbType->currentIndex());
+	} else {
+		ui.lValueStart->hide();
+		ui.leValueStart->hide();
+		ui.lValueEnd->hide();
+		ui.leValueEnd->hide();
+		ui.cbTimeUnits->hide();
+		ui.lTimeValueStart->hide();
+		ui.dteTimeValueStart->hide();
+		ui.lTimeValueEnd->hide();
+		ui.dteTimeValueEnd->hide();
 	}
 }
 
@@ -265,21 +348,23 @@ void AddSubtractValueDialog::generateForColumns() {
 	Q_ASSERT(m_spreadsheet);
 
 	WAIT_CURSOR;
-	QString msg = getMessage(m_spreadsheet->name());
-	m_spreadsheet->beginMacro(msg);
 
-	const auto numberLocale = QLocale();
+	QString msg = getMessage(m_spreadsheet->name());
 	bool ok;
 	const auto mode = m_columns.first()->columnMode();
 	const int rows = m_spreadsheet->rowCount();
 	if (mode == AbstractColumn::ColumnMode::Integer) {
-		QVector<int> new_data(rows);
-		int value = numberLocale.toInt(ui.leValue->text(), &ok);
+		int value;
+		ok = setIntValue(value);
+
 		if (!ok) {
-			DEBUG("Integer value invalid!")
-			m_spreadsheet->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		QVector<int> new_data(rows);
+		m_spreadsheet->beginMacro(msg);
 
 		switch (m_operation) {
 		case Subtract:
@@ -314,13 +399,17 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
-		QVector<qint64> new_data(rows);
-		qint64 value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+		qint64 value;
+		ok = setBigIntValue(value);
+
 		if (!ok) {
-			DEBUG("BigInt value invalid!")
-			m_spreadsheet->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		QVector<qint64> new_data(rows);
+		m_spreadsheet->beginMacro(msg);
 
 		switch (m_operation) {
 		case Subtract:
@@ -355,13 +444,18 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
-		QVector<double> new_data(rows);
-		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
+		double value;
+		ok = setDoubleValue(value);
+
 		if (!ok) {
-			DEBUG("Double value invalid!")
-			m_spreadsheet->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		QVector<double> new_data(rows);
+		m_spreadsheet->beginMacro(msg);
+
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
@@ -395,10 +489,18 @@ void AddSubtractValueDialog::generateForColumns() {
 			break;
 		}
 	} else { // datetime
+		qint64 value ;
+		ok = setDateTimeValue(value);
+
+		if (!ok) {
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
+			return;
+		}
+
 		QVector<QDateTime> new_data(rows);
-		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
-		// QDEBUG(Q_FUNC_INFO << ", DT CHANGE:" << ui.dateTimeEdit->dateTime())
-		// QDEBUG(Q_FUNC_INFO << ", VALUE:" << value)
+		m_spreadsheet->beginMacro(msg);
+
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
@@ -430,23 +532,25 @@ void AddSubtractValueDialog::generateForMatrices() {
 	Q_ASSERT(m_matrix);
 
 	WAIT_CURSOR;
+
 	QString msg = getMessage(m_matrix->name());
-	m_matrix->beginMacro(msg);
-
 	auto mode = m_matrix->mode();
-
-	const auto numberLocale = QLocale();
 	bool ok;
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();
+
 	if (mode == AbstractColumn::ColumnMode::Integer) {
-		int new_data;
-		int value = numberLocale.toInt(ui.leValue->text(), &ok);
+		int value;
+		ok = setIntValue(value);
+
 		if (!ok) {
-			DEBUG("Integer value invalid!")
-			m_matrix->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		int new_data;
+		m_matrix->beginMacro(msg);
 
 		switch (m_operation) {
 		case Subtract:
@@ -478,13 +582,17 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
-		qint64 new_data;
-		qint64 value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+		qint64 value;
+		ok = setBigIntValue(value);
+
 		if (!ok) {
-			DEBUG("BigInt value invalid!")
-			m_matrix->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		qint64 new_data;
+		m_matrix->beginMacro(msg);
 
 		switch (m_operation) {
 		case Subtract:
@@ -516,13 +624,17 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		}
 	} else if (mode == AbstractColumn::ColumnMode::Double) {
-		double new_data;
-		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
+		double value;
+		ok = setDoubleValue(value);
+
 		if (!ok) {
-			DEBUG("Double value invalid!")
-			m_matrix->endMacro();
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
 			return;
 		}
+
+		double new_data;
+		m_matrix->beginMacro(msg);
 
 		switch (m_operation) {
 		case Subtract:
@@ -554,8 +666,18 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		}
 	} else { // datetime
+		qint64 value;
+		ok = setDateTimeValue(value);
+
+		if (!ok) {
+			RESET_CURSOR;
+			KMessageBox::error(this, i18n("Wrong numeric value provided."));
+			return;
+		}
+
 		QDateTime new_data;
-		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
+		m_matrix->beginMacro(msg);
+
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
@@ -577,4 +699,73 @@ void AddSubtractValueDialog::generateForMatrices() {
 	m_matrix->endMacro();
 
 	RESET_CURSOR;
+}
+
+bool AddSubtractValueDialog::setIntValue(int& value) const {
+	bool ok;
+	const auto numberLocale = QLocale();
+	if (m_operation == Add || m_operation == Subtract) {
+		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+			value = numberLocale.toInt(ui.leValue->text(), &ok);
+		else // add/subtract a difference
+			value = numberLocale.toInt(ui.leValueEnd->text(), &ok) - numberLocale.toInt(ui.leValueStart->text(), &ok);
+	} else
+		value = numberLocale.toInt(ui.leValue->text(), &ok);
+
+	return ok;
+}
+
+bool AddSubtractValueDialog::setBigIntValue(qint64& value) const {
+	bool ok;
+		const auto numberLocale = QLocale();
+	if (m_operation == Add || m_operation == Subtract) {
+		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+			value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+		else // add/subtract a difference
+			value = numberLocale.toLongLong(ui.leValueEnd->text(), &ok) - numberLocale.toLongLong(ui.leValueStart->text(), &ok);
+	} else
+		value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+
+	return ok;
+}
+
+bool AddSubtractValueDialog::setDoubleValue(double& value) const {
+	bool ok;
+	const auto numberLocale = QLocale();
+	if (m_operation == Add || m_operation == Subtract) {
+		if (ui.cbType->currentIndex() == 0) // add/subtract an absolute value
+			value = numberLocale.toDouble(ui.leValue->text(), &ok);
+		else // add/subtract a difference
+			value = numberLocale.toDouble(ui.leValueEnd->text(), &ok) - numberLocale.toDouble(ui.leValueStart->text(), &ok);
+	} else
+		value = numberLocale.toDouble(ui.leValue->text(), &ok);
+
+	return ok;
+}
+
+bool AddSubtractValueDialog::setDateTimeValue(qint64& value) const {
+	if (m_operation == Add || m_operation == Subtract) {
+		if (ui.cbType->currentIndex() == 0) {// add/subtract an absolute value
+			const auto numberLocale = QLocale();
+			bool ok;
+			quint64 msecsValue = numberLocale.toLongLong(ui.leTimeValue->text(), &ok);
+			if (!ok)
+				return false;
+
+			int unitIndex = ui.cbTimeUnits->currentIndex();
+			if (unitIndex == 1)
+				msecsValue *= 1000; // seconds
+			else if (unitIndex == 2)
+				msecsValue *= 60000; // minutes
+			else if (unitIndex == 3)
+				msecsValue *= 3600000; // hours
+			else if (unitIndex == 4)
+				msecsValue *= 8.64e+07; // days
+
+			value = msecsValue;
+		} else // add/subtract a difference
+			value = ui.dteTimeValueEnd->dateTime().toMSecsSinceEpoch() -ui.dteTimeValueStart->dateTime().toMSecsSinceEpoch();
+	}
+
+	return true;
 }
