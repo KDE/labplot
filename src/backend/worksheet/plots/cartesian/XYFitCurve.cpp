@@ -1974,7 +1974,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		DEBUG("mu = " << mu << ", sigma = " << sigma)
 
 		fitResult.errorValues[2] = qSqrt(tmpXDataColumn->var() / n);
-		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
+		const double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
 		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
 		fitResult.marginValues[2] = margin;
 		// normalization for spreadsheet or curve
@@ -1985,12 +1985,17 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
 		break;
 	}
-	case nsl_sf_stats_exponential:
-		fitResult.paramValues[1] = 1. / (tmpXDataColumn->mean() - tmpXDataColumn->minimum()); // lambda 1/(<x>-\mu)
-		fitResult.paramValues[2] = tmpXDataColumn->minimum(); // mu
-		// TODO: normalization
+	case nsl_sf_stats_exponential: {
+		const double mu = tmpXDataColumn->minimum();
+		const double lambda = 1. / (tmpXDataColumn->mean() - mu); // 1/(<x>-\mu)
+		fitResult.paramValues[1] = lambda;
+		fitResult.paramValues[2] = mu;
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= exp(-lambda * (tmpXDataColumn->minimum() - mu)) - exp(-lambda * (tmpXDataColumn->maximum() - mu));
 		// TODO: error + CI
 		break;
+	}
 	case nsl_sf_stats_laplace:
 		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
 		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
