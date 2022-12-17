@@ -105,7 +105,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent)
 		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
 		if (ui.cbDistribution->currentIndex() == 0) // if index=0 no signal is emitted above, call this slot directly
 			this->distributionChanged();
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// read parameter or set values for default dist
 		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
 		ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
@@ -126,7 +126,7 @@ RandomValuesDialog::~RandomValuesDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	// saving enum value to be consistent
 	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry("Parameter1", numberLocale.toDouble(ui.leParameter1->text()));
 	conf.writeEntry("Parameter2", numberLocale.toDouble(ui.leParameter2->text()));
 	conf.writeEntry("Parameter3", numberLocale.toDouble(ui.leParameter3->text()));
@@ -153,7 +153,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	ui.leParameter3->hide();
 	ui.lFunc->setText(QStringLiteral("p(x) ="));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
 		ui.lParameter1->setText(UTF8_QSTRING("μ ="));

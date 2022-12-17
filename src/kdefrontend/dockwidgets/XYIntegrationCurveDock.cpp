@@ -131,7 +131,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_integrationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_integrationData.xRange.last()));
 	} else {
@@ -261,8 +261,7 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
@@ -274,16 +273,14 @@ void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 	// disable integration orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -292,7 +289,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 		}
@@ -319,8 +316,7 @@ void XYIntegrationCurveDock::updateSettings(const AbstractColumn* column) {
 	// 			n++;
 }
 void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	cbYDataColumn->hidePopup();
 
@@ -357,7 +353,7 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
@@ -377,16 +373,14 @@ void XYIntegrationCurveDock::xRangeMaxChanged() {
 }
 
 void XYIntegrationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_integrationData.xRange.first() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYIntegrationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_integrationData.xRange.last() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -430,8 +424,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
 }
 
 void XYIntegrationCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no integration possible without the x- and y-data
 	bool hasSourceData = false;
@@ -471,7 +464,7 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (integrationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(integrationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
@@ -491,31 +484,27 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 //*************************************************************
 // General-Tab
 void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_integrationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_integrationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData& integrationData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_integrationData = integrationData;
 	uiGeneralTab.cbMethod->setCurrentIndex(m_integrationData.method);
 	this->methodChanged(m_integrationData.method);
@@ -523,7 +512,6 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 	this->absoluteChanged();
 
 	this->showIntegrationResult();
-	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::dataChanged() {
@@ -531,7 +519,6 @@ void XYIntegrationCurveDock::dataChanged() {
 }
 
 void XYIntegrationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

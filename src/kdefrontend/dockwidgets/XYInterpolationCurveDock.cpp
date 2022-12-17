@@ -155,7 +155,7 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_interpolationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_interpolationData.xRange.last()));
 	} else {
@@ -257,7 +257,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbTension->setLocale(numberLocale);
 	uiGeneralTab.sbContinuity->setLocale(numberLocale);
 	uiGeneralTab.sbBias->setLocale(numberLocale);
@@ -300,8 +300,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
@@ -313,8 +312,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 	// disable types that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
@@ -324,8 +322,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 	this->updateSettings(column);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
@@ -340,7 +337,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 
 	// disable types that need more data points
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// TODO: this does not check if there are valid data points
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
@@ -408,8 +405,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 }
 
 void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -444,7 +440,7 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				// TODO: this does not check if there are valid data points
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
@@ -465,16 +461,14 @@ void XYInterpolationCurveDock::xRangeMaxChanged() {
 }
 
 void XYInterpolationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.first() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_interpolationData.xRange.last() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -643,8 +637,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
 }
 
 void XYInterpolationCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no interpolation possible without the x- and y-data
 	bool hasSourceData = false;
@@ -684,7 +677,7 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (interpolationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
@@ -703,37 +696,32 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 //*************************************************************
 // General-Tab
 void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_interpolationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_interpolationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolationCurve::InterpolationData& data) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_interpolationData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
 	this->typeChanged(m_interpolationData.type);
 
 	this->showInterpolationResult();
-	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::dataChanged() {

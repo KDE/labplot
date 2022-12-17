@@ -390,10 +390,18 @@ void CartesianPlotLegendPrivate::retransform() {
 			continue;
 		}
 
-		if ((child->type() == AspectType::Histogram || child->type() == AspectType::BoxPlot) && child->isVisible()) {
+		if (child->type() == AspectType::Histogram && child->isVisible()) {
 			m_curves << child;
 			m_names << child->name();
 			continue;
+		}
+
+		auto* boxPlot = dynamic_cast<BoxPlot*>(child);
+		if (boxPlot && boxPlot->isVisible()) {
+			m_curves << boxPlot;
+			const auto& columns = boxPlot->dataColumns();
+			for (auto* column : columns)
+				m_names << column->name();
 		}
 
 		auto* barPlot = dynamic_cast<BarPlot*>(child);
@@ -738,20 +746,48 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 			if (!translatePainter(painter, row, col, h))
 				break;
-		} else if (boxPlot) { // draw the legend item for box plot (name only at the moment)
-			// curve's name
-			painter->setPen(QPen(labelColor));
-			painter->setOpacity(1.0);
-			painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), boxPlot->name());
+		} else if (boxPlot) { // draw a legend item for every dataset in the box plot
+			const auto& columns = boxPlot->dataColumns();
+			int index = 0;
+			for (auto* column : columns) {
+				// draw the whiskers
+				painter->setOpacity(boxPlot->whiskersLine()->opacity());
+				painter->setPen(boxPlot->whiskersLine()->pen());
+				painter->drawLine(lineSymbolWidth / 2, 0, lineSymbolWidth / 2, 0.3 * h);
+				painter->drawLine(lineSymbolWidth / 2, 0.7 * h, lineSymbolWidth / 2, h);
 
-			if (!translatePainter(painter, row, col, h))
-				break;
-		} else if (barPlot) { // draw the legend item for every dataset bar in the bar plot
+				// draw the box
+				auto* background = boxPlot->backgroundAt(index);
+				painter->setOpacity(background->opacity());
+				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				painter->setPen(Qt::NoPen);
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				auto* borderLine = boxPlot->borderLineAt(index);
+				painter->setOpacity(borderLine->opacity());
+				// painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
+				painter->setPen(borderLine->pen());
+				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
+				painter->drawRect(QRectF(-h * 0.25, -0.2 * h, 0.5 * h, 0.4 * h));
+				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
+
+				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
+				++index;
+				if (!translatePainter(painter, row, col, h))
+					break;
+			}
+		} else if (barPlot) { // draw a legend item for every dataset bar in the bar plot
 			const auto& columns = barPlot->dataColumns();
 			int index = 0;
 			for (auto* column : columns) {
 				// draw the bar
 				auto* background = barPlot->backgroundAt(index);
+				painter->setOpacity(background->opacity());
 				painter->setBrush(QBrush(background->firstColor(), background->brushStyle()));
 				painter->translate(QPointF(lineSymbolWidth / 2, h / 2));
 				painter->drawRect(QRectF(-h * 0.25, -h / 2, h * 0.5, h));
@@ -766,6 +802,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->translate(-QPointF(lineSymbolWidth / 2, h / 2));
 
 				// draw the name text
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
 				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), column->name());
 				++index;
 				if (!translatePainter(painter, row, col, h))

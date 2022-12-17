@@ -303,7 +303,7 @@
        <item row="26" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
-          <string>Plot range:</string>
+          <string>Plot Range:</string>
          </property>
         </widget>
        </item>
@@ -611,7 +611,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -630,7 +630,7 @@
           <double>0.000000000000000</double>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -646,7 +646,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

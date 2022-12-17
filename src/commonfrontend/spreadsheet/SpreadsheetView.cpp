@@ -320,20 +320,20 @@ void SpreadsheetView::initActions() {
 	action_set_as_xerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XError, false), this);
 	action_set_as_xerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::XError));
 
-	action_set_as_xerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
-	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
-
 	action_set_as_xerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorPlus, false), this);
 	action_set_as_xerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorPlus));
+
+	action_set_as_xerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
+	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
 
 	action_set_as_yerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YError, false), this);
 	action_set_as_yerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::YError));
 
-	action_set_as_yerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
-	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
-
 	action_set_as_yerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorPlus, false), this);
 	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
+
+	action_set_as_yerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
+	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
 	// data manipulation
 	action_add_value = new QAction(i18n("Add"), this);
@@ -604,12 +604,12 @@ void SpreadsheetView::initMenus() {
 	m_columnSetAsMenu->addAction(action_set_as_z);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_xerr);
-	m_columnSetAsMenu->addAction(action_set_as_xerr_minus);
 	m_columnSetAsMenu->addAction(action_set_as_xerr_plus);
+	m_columnSetAsMenu->addAction(action_set_as_xerr_minus);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_yerr);
-	m_columnSetAsMenu->addAction(action_set_as_yerr_minus);
 	m_columnSetAsMenu->addAction(action_set_as_yerr_plus);
+	m_columnSetAsMenu->addAction(action_set_as_yerr_minus);
 	m_columnSetAsMenu->addSeparator();
 	m_columnSetAsMenu->addAction(action_set_as_none);
 	m_columnMenu->addMenu(m_columnSetAsMenu);
@@ -819,11 +819,11 @@ void SpreadsheetView::connectActions() {
 	connect(action_set_as_y, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_z, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_xerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
-	connect(action_set_as_xerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_xerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_xerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_yerr, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
-	connect(action_set_as_yerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_yerr_plus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
+	connect(action_set_as_yerr_minus, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 
 	// data manipulation
 	connect(action_add_value, &QAction::triggered, this, &SpreadsheetView::modifyValues);
@@ -1664,7 +1664,7 @@ void SpreadsheetView::copySelection() {
 		formats << outFilter->numericFormat();
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
 			const Column* col_ptr = columns.at(c);
@@ -1733,7 +1733,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
 		hasTabs = true;
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	// TEST ' ' as group separator:
 	// numberLocale = QLocale(QLocale::French, QLocale::France);
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
@@ -1741,7 +1741,7 @@ void SpreadsheetView::pasteIntoSelection() {
 		if (hasTabs)
 			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
 		else if (numberLocale.groupSeparator().isSpace()
-				 && !(numberOptions & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
+				 && !(numberLocale.numberOptions() & QLocale::OmitGroupSeparator)) // locale with ' ' as group separator && omit group separator not set
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1)); // split with two spaces
 #else

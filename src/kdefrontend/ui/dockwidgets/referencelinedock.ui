@@ -97,7 +97,6 @@
         <widget class="QLabel" name="lPosition_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -156,7 +155,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -200,7 +198,7 @@
        <item row="11" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
-          <string>Plot range:</string>
+          <string>Plot Range:</string>
          </property>
         </widget>
        </item>
@@ -236,7 +234,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

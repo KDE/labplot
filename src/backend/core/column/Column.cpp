@@ -275,7 +275,7 @@ QMenu* Column::createContextMenu() {
 }
 
 void Column::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	d->inputFilter()->setNumberLocale(numberLocale);
 	d->outputFilter()->setNumberLocale(numberLocale);
 }
@@ -292,7 +292,7 @@ void Column::copyData() {
 	int rows = rowCount();
 
 	// TODO: use locale of filter?
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (columnMode() == ColumnMode::Double) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();

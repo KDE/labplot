@@ -629,6 +629,18 @@ QMenu* CartesianPlot::analysisMenu() {
 	return dataAnalysisMenu;
 }
 
+int CartesianPlot::cSystemIndex(WorksheetElement* e) {
+	if (!e)
+		return -1;
+
+	auto type = e->type();
+	if (type == AspectType::CartesianPlot)
+		return -1;
+	else if (e->inherits(AspectType::XYCurve) || e->inherits(AspectType::XYAnalysisCurve) || type == AspectType::ReferenceLine || type == AspectType::Axis)
+		return e->coordinateSystemIndex();
+	return -1;
+}
+
 /*!
 	Returns an icon to be used in the project explorer.
 */
@@ -1144,6 +1156,11 @@ private:
 void CartesianPlot::enableAutoScale(const Dimension dim, int index, const bool enable, bool fullRange) {
 	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	Q_D(CartesianPlot);
+	if (index < -1 || index >= rangeCount(dim)) {
+		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: Invalid index: ").arg(index).toStdString());
+		return;
+	}
+
 	if (index == -1) { // all x ranges
 		for (int i = 0; i < rangeCount(dim); i++)
 			enableAutoScale(dim, i, enable, fullRange);
@@ -1186,6 +1203,7 @@ public:
 		, m_otherValue(newValue) {
 	}
 	void redo() override {
+		m_target->setRangeDirty(m_dimension, m_index, true);
 		auto tmp = m_target->rangeConst(m_dimension, m_index);
 		m_target->setRange(m_dimension, m_index, m_otherValue);
 		m_otherValue = tmp;
@@ -1196,6 +1214,21 @@ public:
 	}
 	virtual void finalize() {
 		m_target->retransformScale(m_dimension, m_index, true);
+		Dimension dim_other = Dimension::Y;
+		if (m_dimension == Dimension::Y)
+			dim_other = Dimension::X;
+
+		QVector<int> scaledIndices;
+		for (int i = 0; i < m_target->q->coordinateSystemCount(); i++) {
+			auto cs = m_target->q->coordinateSystem(i);
+			auto index_other = cs->index(dim_other);
+			if (cs->index(m_dimension) == m_index && scaledIndices.indexOf(index_other) == -1) {
+				scaledIndices << index_other;
+				if (m_target->q->autoScale(dim_other, index_other) && m_target->q->scaleAuto(dim_other, index_other, false))
+					m_target->retransformScale(dim_other, index_other);
+			}
+		}
+		m_target->q->WorksheetElementContainer::retransform();
 		Q_EMIT m_target->q->rangeChanged(m_dimension, m_index, m_target->rangeConst(m_dimension, m_index));
 	}
 
@@ -1210,26 +1243,12 @@ void CartesianPlot::setRange(const Dimension dim, const int index, const Range<d
 	Q_D(CartesianPlot);
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 
-	Dimension dim_other = Dimension::Y;
-	if (dim == Dimension::Y)
-		dim_other = Dimension::X;
-
 	auto r = d->checkRange(range);
 	if (index >= 0 && index < rangeCount(dim) && r.finite() && r != d->rangeConst(dim, index)) {
-		d->setRangeDirty(dim, index, true);
 		exec(new CartesianPlotSetRangeIndexCmd(d, dim, r, index));
-		QVector<int> scaledIndices;
-		for (int i = 0; i < coordinateSystemCount(); i++) {
-			auto cs = coordinateSystem(i);
-			auto index_other = cs->index(dim_other);
-			if (cs->index(dim) == index && scaledIndices.indexOf(index_other) == -1) {
-				scaledIndices << index_other;
-				if (autoScale(dim_other, index_other) && scaleAuto(dim_other, index_other, false))
-					d->retransformScale(dim_other, index_other);
-			}
-		}
-		WorksheetElementContainer::retransform();
-	}
+	} else if (index < 0 || index >= rangeCount(dim))
+		DEBUG(Q_FUNC_INFO << QStringLiteral("Warning: wrong index: %1").arg(index).toStdString());
+
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
 
@@ -1246,7 +1265,7 @@ const Range<double>& CartesianPlot::dataRange(const Dimension dim, int index) {
 
 bool CartesianPlot::rangeDirty(const Dimension dim, int index) const {
 	Q_D(const CartesianPlot);
-	if (index >= 0 && index < rangeCount(dim))
+	if (index >= 0)
 		return d->rangeDirty(dim, index);
 	else {
 		bool dirty = false;
@@ -1258,7 +1277,9 @@ bool CartesianPlot::rangeDirty(const Dimension dim, int index) const {
 
 void CartesianPlot::setRangeDirty(const Dimension dim, int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0 && index < rangeCount(dim))
+	if (index >= rangeCount(dim))
+		return;
+	if (index >= 0)
 		d->setRangeDirty(dim, index, dirty);
 	else {
 		for (int i = 0; i < rangeCount(dim); i++)
@@ -1313,6 +1334,8 @@ void CartesianPlot::removeRange(const Dimension dim, int index) {
 
 void CartesianPlot::setMin(const Dimension dim, int index, double value) {
 	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << "value = " << value)
+	if (index >= rangeCount(dim))
+		return;
 	Range<double> r{range(dim, index)};
 	r.setStart(value);
 	DEBUG(Q_FUNC_INFO << ", new range = " << r.toStdString())
@@ -1321,6 +1344,8 @@ void CartesianPlot::setMin(const Dimension dim, int index, double value) {
 
 void CartesianPlot::setMax(const Dimension dim, int index, double value) {
 	DEBUG(Q_FUNC_INFO << ", direction: " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << "value = " << value)
+	if (index >= rangeCount(dim))
+		return;
 	Range<double> r{range(dim, index)};
 	r.setEnd(value);
 
@@ -1504,7 +1529,7 @@ void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursor0Enable, bool, cursor0Enable, updateCursor)
 void CartesianPlot::setCursor0Enable(const bool& enable) {
 	Q_D(CartesianPlot);
-	if (enable != d->cursor0Enable) {
+	if (enable != d->cursor0Enable && defaultCoordinateSystem()->isValid()) {
 		if (std::isnan(d->cursor0Pos.x())) { // if never set, set initial position
 			d->cursor0Pos.setX(defaultCoordinateSystem()->mapSceneToLogical(QPointF(0, 0)).x());
 			mousePressCursorModeSignal(0, d->cursor0Pos); // simulate mousePress to update values in the cursor dock
@@ -1516,7 +1541,7 @@ void CartesianPlot::setCursor0Enable(const bool& enable) {
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetCursor1Enable, bool, cursor1Enable, updateCursor)
 void CartesianPlot::setCursor1Enable(const bool& enable) {
 	Q_D(CartesianPlot);
-	if (enable != d->cursor1Enable) {
+	if (enable != d->cursor1Enable && defaultCoordinateSystem()->isValid()) {
 		if (std::isnan(d->cursor1Pos.x())) { // if never set, set initial position
 			d->cursor1Pos.setX(defaultCoordinateSystem()->mapSceneToLogical(QPointF(0, 0)).x());
 			mousePressCursorModeSignal(1, d->cursor1Pos); // simulate mousePress to update values in the cursor dock
@@ -1962,12 +1987,7 @@ int CartesianPlot::curveCount() {
 }
 
 int CartesianPlot::curveTotalCount() const {
-	int count = children<XYCurve>().size();
-	count += children<Histogram>().size();
-	count += children<BoxPlot>().size();
-	count += children<BarPlot>().size();
-	count += children<QQPlot>().size();
-	return count;
+	return children<Plot>().size();
 }
 
 const XYCurve* CartesianPlot::getCurve(int index) {
@@ -2000,35 +2020,37 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 }
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
+	auto* elem = dynamic_cast<const WorksheetElement*>(child);
+	if (!elem)
+		return;
+
 	Q_D(CartesianPlot);
+	int cSystemIndex = -1;
+	bool checkRanges = false; // check/change ranges when adding new children like curves for example
+	const auto* plot = dynamic_cast<const Plot*>(child);
+
+	if (plot) {
+		connect(plot, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
+		connect(plot, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
+		connect(plot, &Plot::updateLegendRequested, this, &CartesianPlot::updateLegend);
+
+		connect(plot, &Plot::dataChanged, [this, elem] {
+			this->dataChanged(const_cast<WorksheetElement*>(elem));
+		});
+
+		updateLegend();
+		cSystemIndex = plot->coordinateSystemIndex();
+		checkRanges = true;
+	}
 
 	const auto* curve = dynamic_cast<const XYCurve*>(child);
 	const auto* hist = dynamic_cast<const Histogram*>(child);
 	const auto* boxPlot = dynamic_cast<const BoxPlot*>(child);
-	const auto* barPlot = dynamic_cast<const BarPlot*>(child);
-	const auto* qqPlot = dynamic_cast<const QQPlot*>(child);
-
-	int cSystemIndex = -1;
-	bool checkRanges = false; // check/change ranges when adding new children like curves for example
-
-	const auto* elem = dynamic_cast<const WorksheetElement*>(child);
-	if (elem && (curve || hist || boxPlot || barPlot || qqPlot)) {
-		auto* elem = static_cast<const WorksheetElement*>(child);
-		connect(elem, &WorksheetElement::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-		connect(elem, &WorksheetElement::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-		updateLegend();
-		cSystemIndex = elem->coordinateSystemIndex();
-		checkRanges = true;
-	}
+	const auto* barPlot = dynamic_cast<const BarPlot*>(child)
+	const auto* axis = dynamic_cast<const Axis*>(child);
 
 	if (curve) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
-		// x and y data
-		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {
-			this->dataChanged(const_cast<XYCurve*>(curve));
-		});
-
 		// x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this, curve](const AbstractColumn* column) {
 			if (curveTotalCount() == 1) // first curve addded
@@ -2069,8 +2091,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
 		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
-		connect(curve->line(), &Line::updateRequested, this, &CartesianPlot::updateLegend);
-		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		// in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
@@ -2081,25 +2101,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		Q_EMIT curveAdded(curve);
 	} else if (hist) {
 		DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
-		// TODO: check if all ranges must be updated
-		connect(hist, &Histogram::dataChanged, [this, hist] {
-			this->dataChanged(const_cast<Histogram*>(hist));
-		});
-		connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
-		connect(hist, &Histogram::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
-
-		updateLegend();
-		cSystemIndex = hist->coordinateSystemIndex();
-		checkRanges = true;
-
 		if (curveTotalCount() == 1)
 			checkAxisFormat(hist->coordinateSystemIndex(), hist->dataColumn(), Axis::Orientation::Horizontal);
 	} else if (boxPlot) {
 		DEBUG(Q_FUNC_INFO << ", BOX PLOT")
-		connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {
-			this->dataChanged(const_cast<BoxPlot*>(boxPlot));
-		});
-
 		if (curveTotalCount() == 1) {
 			connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
 			boxPlotOrientationChanged(boxPlot->orientation());
@@ -2108,23 +2113,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 	} else if (barPlot) {
 		DEBUG(Q_FUNC_INFO << ", BAR PLOT")
-		// TODO: check if all ranges must be updated
-		connect(barPlot, &BarPlot::dataChanged, [this, barPlot] {
-			this->dataChanged(const_cast<BarPlot*>(barPlot));
-		});
 
-		// update the legend on data column and formatting changes
+		// update the legend on data columnchanges
 		connect(barPlot, &BarPlot::dataColumnsChanged, this, &CartesianPlot::updateLegend);
-		connect(barPlot, &BarPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
-	} else if (qqPlot) {
-		DEBUG(Q_FUNC_INFO << ", Q-Q PLOT")
-		connect(qqPlot, &QQPlot::dataChanged, [this, qqPlot] {
-			this->dataChanged(const_cast<QQPlot*>(qqPlot));
-		});
-
-		// update the legend on data column and formatting changes
-		//connect(barPlot, &QQPlot::dataColumnChanged, this, &CartesianPlot::updateLegend);
-		//connect(barPlot, &QQPlot::updateLegendRequested, this, &CartesianPlot::updateLegend);
 	} else {
 		const auto* infoElement = dynamic_cast<const InfoElement*>(child);
 		if (infoElement)
@@ -2134,6 +2125,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		if (elem)
 			connect(elem, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+	}
+
+	if (axis) {
+		connect(axis, &Axis::shiftSignal, this, &CartesianPlot::axisShiftSignal);
 	}
 
 	auto rangeChanged = false;
@@ -2177,15 +2172,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if a theme was selected, apply the theme settings for newly added children,
 		// load default theme settings otherwise.
-		if (elem) {
-			// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-			if (!d->theme.isEmpty()) {
-				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
-				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-			} else {
-				KConfig config;
-				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
-			}
+		// TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+		if (!d->theme.isEmpty()) {
+			KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+		} else {
+			KConfig config;
+			const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
 		}
 	}
 }
@@ -2947,6 +2940,9 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
  * "shift right" or "shift up" for \c false
  */
 void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
+	setUndoAware(false);
+	enableAutoScale(dim, index, false);
+	setUndoAware(true);
 	Q_D(CartesianPlot);
 
 	Range<double> range;
@@ -3016,99 +3012,57 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 		d->setRange(dim, index, range);
 
 	d->retransformScale(dim, index);
+
+	auto dim_other = Dimension::X;
+	switch (dim) {
+	case Dimension::X:
+		dim_other = Dimension::Y;
+		break;
+	case Dimension::Y:
+		dim_other = Dimension::X;
+		break;
+	}
+
+	bool retrans = false;
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+		if ((index == -1 || index == cs->index(dim))) {
+			if (autoScale(dim_other, cs->index(dim_other))) {
+				setRangeDirty(dim_other, cs->index(dim_other), true);
+				scaleAuto(dim_other, cs->index(dim_other), false);
+			}
+			retrans = true;
+		}
+	}
+
+	if (retrans)
+		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftLeftX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftRightX(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::X, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::X, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::X))) {
-			if (autoScale(Dimension::Y, cs->index(Dimension::Y))) {
-				setRangeDirty(Dimension::Y, cs->index(Dimension::Y), true);
-				scaleAuto(Dimension::Y, cs->index(Dimension::Y), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftUpY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, false);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::shiftDownY(int index) {
-	setUndoAware(false);
-	enableAutoScale(Dimension::Y, index, false);
-	setUndoAware(true);
 	shift(index, Dimension::Y, true);
-
-	bool retrans = false;
-	for (const auto cSystem : m_coordinateSystems) {
-		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if ((index == -1 || index == cs->index(Dimension::Y))) {
-			if (autoScale(Dimension::X, cs->index(Dimension::X))) {
-				setRangeDirty(Dimension::X, cs->index(Dimension::X), true);
-				scaleAuto(Dimension::X, cs->index(Dimension::X), false);
-			}
-			retrans = true;
-		}
-	}
-
-	if (retrans)
-		WorksheetElementContainer::retransform();
 }
 
 void CartesianPlot::cursor() {
 	Q_D(CartesianPlot);
 	d->retransformScales(-1, -1); // TODO: needed to retransform all scales?
+}
+
+void CartesianPlot::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	Q_D(CartesianPlot);
+	d->wheelEvent(delta, xIndex, yIndex, considerDimension, dim);
 }
 
 void CartesianPlot::mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex) {
@@ -3279,22 +3233,10 @@ void CartesianPlotPrivate::retransformScale(const Dimension dim, int index, bool
 		const double deltaMin = rangep.range.start() - rangep.prev.start();
 		const double deltaMax = rangep.range.end() - rangep.prev.end();
 
-		switch (dim) {
-		case Dimension::X: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->xMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->xMaxChanged(i, rangep.range.end());
-			break;
-		}
-		case Dimension::Y: {
-			if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
-				Q_EMIT q->yMinChanged(i, rangep.range.start());
-			if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
-				Q_EMIT q->yMaxChanged(i, rangep.range.end());
-			break;
-		}
-		}
+		if (!qFuzzyIsNull(deltaMin) && !suppressSignals)
+			Q_EMIT q->minChanged(dim, i, rangep.range.start());
+		if (!qFuzzyIsNull(deltaMax) && !suppressSignals)
+			Q_EMIT q->maxChanged(dim, i, rangep.range.end());
 
 		rangep.prev = rangep.range;
 
@@ -3492,7 +3434,10 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
 	} else if (end <= 0)
 		end = max;
 
-	return {start, end};
+	auto newRange = range;
+	newRange.setStart(start);
+	newRange.setEnd(end);
+	return newRange;
 }
 
 /*!
@@ -3568,6 +3513,8 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
 	scenePos = event->pos();
+	if (!cSystem->isValid())
+		return;
 	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
@@ -3587,7 +3534,7 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
@@ -3598,12 +3545,16 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		}
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			   || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
+		if (!cSystem->isValid())
+			return;
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		Q_EMIT q->mousePressZoomSelectionModeSignal(logicalPos);
 		return;
 	} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
-		setCursor(Qt::SizeHorCursor);
+		if (!cSystem->isValid())
+			return;
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+		setCursor(Qt::SizeHorCursor);
 		double cursorPenWidth2 = cursorLine->pen().width() / 2.;
 		if (cursorPenWidth2 < 10.)
 			cursorPenWidth2 = 10.;
@@ -3696,7 +3647,7 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 
@@ -3708,6 +3659,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			if (qAbs(deltaXScene) < 5 && qAbs(deltaYScene) < 5)
 				return;
 
+			if (!cSystem->isValid())
+				return;
 			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
 			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
 			m_panningStart = event->pos();
@@ -3721,6 +3674,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			q->info(QString());
 			return;
 		}
+		if (!cSystem->isValid())
+			return;
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		Q_EMIT q->mouseMoveZoomSelectionModeSignal(logicalPos);
 
@@ -3734,6 +3689,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		// updating treeview data and cursor position
 		// updating cursor position is done in Worksheet, because
 		// multiple plots must be updated
+		if (!cSystem->isValid())
+			return;
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		Q_EMIT q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
 	}
@@ -3876,7 +3833,7 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
 	const bool autoscaleRanges = true; // consumes a lot of power, maybe making an option to turn off/on!
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (!w || w->parent(AspectType::CartesianPlot) != q)
 		index = -1;
 
@@ -3938,6 +3895,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 	const auto xRangeFormat{range(Dimension::X, xIndex).format()};
 	const auto yRangeFormat{range(Dimension::Y, yIndex).format()};
 	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
+	if (!cSystem->isValid())
+		return;
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
@@ -4053,23 +4012,30 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		yIndex = cSystem->index(Dimension::Y);
 
 		// determine the new plot ranges
+		if (!cSystem->isValid())
+			return;
 		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		if (m_selectionEnd.x() > m_selectionStart.x())
-			range(Dimension::X, xIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
-		else
-			range(Dimension::X, xIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
 
-		if (niceExtend)
-			range(Dimension::X, xIndex).niceExtend();
+		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
+			if (m_selectionEnd.x() > m_selectionStart.x())
+				range(Dimension::X, xIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
+			else
+				range(Dimension::X, xIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
 
-		if (m_selectionEnd.y() > m_selectionStart.y())
-			range(Dimension::Y, yIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
-		else
-			range(Dimension::Y, yIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+			if (niceExtend)
+				range(Dimension::X, xIndex).niceExtend();
+		}
 
-		if (niceExtend)
-			range(Dimension::Y, yIndex).niceExtend();
+		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
+			if (m_selectionEnd.y() > m_selectionStart.y())
+				range(Dimension::Y, yIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
+			else
+				range(Dimension::Y, yIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+
+			if (niceExtend)
+				range(Dimension::Y, yIndex).niceExtend();
+		}
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setRangeDirty(Dimension::X, xIndex, true);
@@ -4102,49 +4068,43 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 		return;
 
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int cSystemIndex = Worksheet::cSystemIndex(w);
+	int cSystemIndex = CartesianPlot::cSystemIndex(w);
 	int xIndex = -1, yIndex = -1;
 	if (w && w->parent(AspectType::CartesianPlot) == q) {
 		xIndex = coordinateSystem(cSystemIndex)->index(Dimension::X);
 		yIndex = coordinateSystem(cSystemIndex)->index(Dimension::Y);
 	}
 
-	bool zoomX = false;
-	bool zoomY = false;
-
-	// If an axis was selected, only the corresponding range
-	// should be changed
+	bool considerDimension = false;
+	Dimension dim = Dimension::X;
 	if (w && w->type() == AspectType::Axis) {
-		auto axis = static_cast<Axis*>(w);
-
-		if (axis->orientation() == Axis::Orientation::Horizontal) {
-			zoomX = true;
-			xIndex = coordinateSystem(axis->coordinateSystemIndex())->index(Dimension::X);
-		} else {
-			zoomY = true;
-			yIndex = coordinateSystem(axis->coordinateSystemIndex())->index(Dimension::Y);
-		}
+		const auto* axis = static_cast<Axis*>(w);
+		considerDimension = true;
+		if (axis->orientation() == Axis::Orientation::Vertical)
+			dim = Dimension::Y;
 	}
 
-	if (event->delta() > 0) {
-		if (!zoomX && !zoomY) {
-			q->zoomIn(xIndex, yIndex);
-		} else {
-			if (zoomX)
-				q->zoomInX(xIndex);
-			if (zoomY)
-				q->zoomInY(yIndex);
+	emit q->wheelEventSignal(event->delta(), xIndex, yIndex, considerDimension, dim);
+}
+
+void CartesianPlotPrivate::wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+	if (considerDimension) {
+		// Only one dimension
+		switch (dim) {
+		case Dimension::X:
+			q->zoomInOut(xIndex, dim, delta > 0);
+			break;
+		case Dimension::Y:
+			q->zoomInOut(yIndex, dim, delta > 0);
+			break;
 		}
-	} else {
-		if (!zoomX && !zoomY) {
-			q->zoomOut(xIndex, yIndex);
-		} else {
-			if (zoomX)
-				q->zoomOutX(xIndex);
-			if (zoomY)
-				q->zoomOutY(yIndex);
-		}
+		return;
 	}
+
+	if (delta > 0)
+		q->zoomIn(xIndex, yIndex);
+	else
+		q->zoomOut(xIndex, yIndex);
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
@@ -4237,7 +4197,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QString info;
 	const auto* cSystem{defaultCoordinateSystem()};
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	int xIndex = cSystem->index(Dimension::X), yIndex = cSystem->index(Dimension::Y);
 	if (!w || w->parent(AspectType::CartesianPlot) != q) {
 		xIndex = -1;
@@ -4253,6 +4213,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	const auto xRangeDateTimeFormat{range(Dimension::X, xIndex).dateTimeFormat()};
 	const auto yRangeDateTimeFormat{range(Dimension::Y, yIndex).dateTimeFormat()};
 	if (dataRect.contains(point)) {
+		if (!cSystem->isValid())
+			return;
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
 		if ((mouseMode == CartesianPlot::MouseMode::ZoomSelection) || mouseMode == CartesianPlot::MouseMode::Selection
@@ -4291,14 +4253,14 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			// hovering curves is implemented in the parent, because no ignoreEvent() exists
 			// for it. Checking all curves and hover the first
 			bool hovered = false;
-			const auto& curves = q->children<Curve>();
+			const auto& curves = q->children<Plot>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
 				auto* curve = curves[i];
 				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
 				}
-				if (curve->activateCurve(event->pos())) {
+				if (curve->activatePlot(event->pos())) {
 					curve->setHover(true);
 					hovered = true;
 					continue;
@@ -4358,7 +4320,7 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos, int cSy
 
 	const CartesianCoordinateSystem* cSystem;
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
+	int index = CartesianPlot::cSystemIndex(w);
 	if (w && w->parent(AspectType::CartesianPlot) == q && index != -1)
 		cSystem = coordinateSystem(index);
 	else if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())

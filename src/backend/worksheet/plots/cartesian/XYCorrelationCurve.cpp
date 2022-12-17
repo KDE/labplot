@@ -238,7 +238,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 
 	// write the result
 	correlationResult.available = true;
-	correlationResult.valid = true;
+	correlationResult.valid = (status == 0);
 	correlationResult.status = QString::number(status);
 	correlationResult.elapsedTime = timer.elapsed();
 

@@ -6,34 +6,149 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
-    <height>120</height>
+    <width>295</width>
+    <height>234</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QLabel" name="lValue">
+    <widget class="QLabel" name="lType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>Value</string>
+      <string>Add:</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="leValue"/>
+   <item row="0" column="1" colspan="2">
+    <widget class="QComboBox" name="cbType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lTimeValue">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lValueEnd">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>End Value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2">
+    <widget class="QComboBox" name="cbTimeUnits"/>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="lTimeValue">
+    <widget class="QLabel" name="lValue">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>Time</string>
+      <string>Value:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QDateTimeEdit" name="dateTimeEdit">
+   <item row="1" column="1" colspan="2">
+    <widget class="QLineEdit" name="leValue"/>
+   </item>
+   <item row="6" column="1" colspan="2">
+    <widget class="QDateTimeEdit" name="dteTimeValueEnd">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lTimeValueStart">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Start Time:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="leTimeValue"/>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lTimeValueEnd">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>End Time:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" colspan="2">
+    <widget class="QDateTimeEdit" name="dteTimeValueStart">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="timeSpec">
       <enum>Qt::UTC</enum>
      </property>
     </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QLineEdit" name="leValueEnd"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lValueStart">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Start Value:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" colspan="2">
+    <widget class="QLineEdit" name="leValueStart"/>
    </item>
   </layout>
  </widget>

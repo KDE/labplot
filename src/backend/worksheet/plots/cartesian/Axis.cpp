@@ -594,7 +594,7 @@ void Axis::setStart(double min) {
 		range.setStart(min);
 		setRange(range);
 	}
-	emit startChanged(range.start()); // feedback
+	emit startChanged(range.start()); // Feedback
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
@@ -605,7 +605,7 @@ void Axis::setEnd(double max) {
 		range.setEnd(max);
 		setRange(range);
 	}
-	emit endChanged(range.end()); // feedback
+	emit endChanged(range.end()); // Feedback
 }
 void Axis::setRange(double min, double max) {
 	Q_D(Axis);
@@ -627,17 +627,14 @@ void Axis::setMajorTickStartOffset(qreal offset) {
 	Q_D(Axis);
 	if (offset != d->majorTickStartOffset)
 		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
-	else
-		emit majorTickStartOffsetChanged(d->majorTickStartOffset); // feedback
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartValue, qreal, majorTickStartValue, retransform)
-void Axis::setMajorTickStartValue(qreal offset) {
+void Axis::setMajorTickStartValue(qreal value) {
 	Q_D(Axis);
-	if (offset != d->majorTickStartValue)
-		exec(new AxisSetMajorTickStartValueCmd(d, offset, ki18n("%1: set major tick start value")));
-	else
-		emit majorTickStartValueChanged(d->majorTickStartValue); // feedback
+	// TODO: check if value is invalid
+	if (value != d->majorTickStartValue)
+		exec(new AxisSetMajorTickStartValueCmd(d, value, ki18n("%1: set major tick start value")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform)
@@ -655,6 +652,8 @@ void Axis::setScalingFactor(qreal scalingFactor) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform)
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
+
+	// TODO: check for negative values and log scales?
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
 }
@@ -751,6 +750,20 @@ void Axis::setMajorTicksNumber(int number, bool automatic) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks)
 void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
+	double range = this->range().length();
+	DEBUG(Q_FUNC_INFO << ", major spacing = " << majorTicksSpacing << ", range = " << range)
+	// fix spacing if incorrect (not set or > 100 ticks)
+	if (majorTicksSpacing == 0. || range / majorTicksSpacing > 100.) {
+		if (majorTicksSpacing == 0.)
+			majorTicksSpacing = range / (majorTicksNumber() - 1);
+
+		if (range / majorTicksSpacing > 100.)
+			majorTicksSpacing = range / 100.;
+
+		emit majorTicksSpacingChanged(majorTicksSpacing);
+		return;
+	}
+
 	Q_D(Axis);
 	if (majorTicksSpacing != d->majorTicksSpacing)
 		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
@@ -820,6 +833,27 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks)
 void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 	Q_D(Axis);
+	double range = this->range().length();
+	int numberTicks = 0;
+
+	int majorTicks = majorTicksNumber();
+	if (minorTicksSpacing > 0.)
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalc
+
+	// set if unset or > 100.
+	if (minorTicksSpacing == 0. || numberTicks > 100) {
+		if (minorTicksSpacing == 0.)
+			minorTicksSpacing = range / (majorTicks - 1) / (minorTicksNumber() + 1);
+
+		numberTicks = range / (majorTicks - 1) / minorTicksSpacing - 1; // recalculate number of ticks
+
+		if (numberTicks > 100) // maximum 100 minor ticks
+			minorTicksSpacing = range / (majorTicks - 1) / (100 + 1);
+
+		emit minorTicksIncrementChanged(minorTicksSpacing);
+		return;
+	}
+
 	if (minorTicksSpacing != d->minorTicksIncrement)
 		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
 }
@@ -1795,7 +1829,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (numeric) {
 		switch (labelsFormat) {
 		case Axis::LabelsFormat::Decimal: {
@@ -2639,7 +2673,7 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 		// scale + offset label
 		if (showScaleOffset && tickLabelPoints.size() > 0) {
 			QString text;
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (scalingFactor != 1)
 				text += UTF8_QSTRING("×") + numberLocale.toString(1. / scalingFactor);
 			if (zeroOffset != 0) {
@@ -2723,30 +2757,24 @@ void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (m_panningStarted) {
+		Dimension dim = Dimension::X;
+		int delta = 0;
 		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
-			const int deltaXScene = (m_panningStart.x() - event->pos().x());
-			if (std::abs(deltaXScene) < 5.)
+			delta = (m_panningStart.x() - event->pos().x());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaXScene > 0)
-				plot->shiftRightX(cs->index(Dimension::X));
-			else
-				plot->shiftLeftX(cs->index(Dimension::X));
+			dim = Dimension::X;
 		} else {
 			setCursor(Qt::SizeVerCursor);
-			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (std::abs(deltaYScene) < 5.)
+			delta = (m_panningStart.y() - event->pos().y());
+			if (std::abs(delta) < 5.)
 				return;
-
-			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
-			if (deltaYScene > 0)
-				plot->shiftUpY(cs->index(Dimension::Y));
-			else
-				plot->shiftDownY(cs->index(Dimension::Y));
+			dim = Dimension::Y;
 		}
+
+		emit q->shiftSignal(delta, dim, cs->index(dim));
 
 		m_panningStart = event->pos();
 	}

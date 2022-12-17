@@ -363,7 +363,7 @@ void CartesianPlotDock::init() {
 
 void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	DEBUG(Q_FUNC_INFO)
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_plotList = list;
 	m_plot = list.first();
 	setAspects(list);
@@ -429,13 +429,11 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeLastValuesChanged, this, &CartesianPlotDock::plotRangeLastValuesChanged);
 	// TODO: check if needed
 	connect(m_plot, &CartesianPlot::autoScaleChanged, this, &CartesianPlotDock::plotAutoScaleChanged);
-	connect(m_plot, &CartesianPlot::xMinChanged, this, &CartesianPlotDock::plotXMinChanged);
-	connect(m_plot, &CartesianPlot::xMaxChanged, this, &CartesianPlotDock::plotXMaxChanged);
+	connect(m_plot, &CartesianPlot::minChanged, this, &CartesianPlotDock::plotMinChanged);
+	connect(m_plot, &CartesianPlot::maxChanged, this, &CartesianPlotDock::plotMaxChanged);
 	connect(m_plot, &CartesianPlot::rangeChanged, this, &CartesianPlotDock::plotRangeChanged);
 	connect(m_plot, &CartesianPlot::scaleChanged, this, &CartesianPlotDock::plotScaleChanged);
 	connect(m_plot, &CartesianPlot::rangeFormatChanged, this, &CartesianPlotDock::plotRangeFormatChanged);
-	connect(m_plot, &CartesianPlot::yMinChanged, this, &CartesianPlotDock::plotYMinChanged);
-	connect(m_plot, &CartesianPlot::yMaxChanged, this, &CartesianPlotDock::plotYMaxChanged);
 
 	connect(m_plot, &CartesianPlot::visibleChanged, this, &CartesianPlotDock::plotVisibleChanged);
 
@@ -453,8 +451,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::symmetricPaddingChanged, this, &CartesianPlotDock::plotSymmetricPaddingChanged);
 
 	connect(m_plot, &CartesianPlot::themeChanged, m_themeHandler, &ThemeHandler::setCurrentTheme);
-
-	m_initializing = false;
 }
 
 void CartesianPlotDock::activateTitleTab() {
@@ -466,7 +462,7 @@ void CartesianPlotDock::activateTitleTab() {
  */
 void CartesianPlotDock::updateLocale() {
 	DEBUG(Q_FUNC_INFO)
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 
 	// update the QSpinBoxes
 	ui.sbLeft->setLocale(numberLocale);
@@ -552,7 +548,7 @@ void CartesianPlotDock::updateUnits() {
 		return;
 
 	m_units = units;
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	QString suffix;
 	if (m_units == Units::Metric) {
 		// convert from imperial to metric
@@ -639,7 +635,7 @@ void CartesianPlotDock::updateRangeList(const Dimension dim) {
 		//		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		tw->setCellWidget(i, TwRangesColumn::Automatic, chk);
 		connect(chk, &QCheckBox::toggled, [this, chk, dim](bool checked) {
-			const bool rangeIndex = chk->property("row").toInt();
+			const int rangeIndex = chk->property("row").toInt();
 			this->autoScaleChanged(dim, rangeIndex, checked);
 		});
 
@@ -824,7 +820,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 //**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************
 void CartesianPlotDock::retranslateUi() {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	// data range types
 	ui.cbRangeType->clear();
@@ -874,8 +870,7 @@ void CartesianPlotDock::retranslateUi() {
 
 // "General"-tab
 void CartesianPlotDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setVisible(state);
@@ -889,23 +884,25 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 	} else {
 		ui.lRangePoints->show();
 		ui.leRangePoints->show();
-		SET_NUMBER_LOCALE;
+	}
+
+	CONDITIONAL_LOCK_RETURN;
+
+	if (type != CartesianPlot::RangeType::Free) {
+		const auto numberLocale = QLocale();
+		;
 		if (type == CartesianPlot::RangeType::First)
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeFirstValues()));
 		else
 			ui.leRangePoints->setText(numberLocale.toString(m_plot->rangeLastValues()));
 	}
 
-	if (m_initializing)
-		return;
-
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
 }
 
 void CartesianPlotDock::niceExtendChanged(bool checked) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setNiceExtend(checked);
@@ -913,8 +910,7 @@ void CartesianPlotDock::niceExtendChanged(bool checked) {
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const int value = text.toInt();
 	auto type = static_cast<CartesianPlot::RangeType>(ui.cbRangeType->currentIndex());
@@ -929,11 +925,8 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 
 void CartesianPlotDock::autoScaleChanged(const Dimension dim, const int rangeIndex, bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
-	if (m_initializing)
-		return;
-
-	Lock lock(m_initializing);
 	DEBUG(Q_FUNC_INFO << ", range index: " << rangeIndex)
+	CONDITIONAL_LOCK_RETURN;
 
 	autoScaleRange(dim, rangeIndex, state);
 }
@@ -981,60 +974,28 @@ void CartesianPlotDock::autoScaleRange(const Dimension dim, const int index, boo
 
 void CartesianPlotDock::minChanged(const Dimension dim, const int index, double min) {
 	DEBUG(Q_FUNC_INFO << ", value = " << min);
-	if (m_initializing)
-		return;
-
-	/*Dimension dim_other = Dimension::Y;
-	switch (dim) {
-	case Dimension::X:
-		break;
-	case Dimension::Y:
-		dim_other = Dimension::X;
-		break;
-	}*/
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// selected x/y range
 	DEBUG(Q_FUNC_INFO << ", x range index: " << index)
-	// bool changed = false;
 	for (auto* plot : m_plotList)
-		if (!qFuzzyCompare(min, plot->range(dim, index).start())) {
+		if (!qFuzzyCompare(min, plot->range(dim, index).start()))
 			plot->setMin(dim, index, min);
-			// changed = true;
-		}
-
-	// if (changed)
-	//     updateRangeList(dim_other); // plot is auto scaled
 }
 
 void CartesianPlotDock::maxChanged(const Dimension dim, const int index, double max) {
 	DEBUG(Q_FUNC_INFO << ", value = " << max);
-	if (m_initializing)
-		return;
-
-	/*Dimension dim_other = Dimension::Y;
-	switch (dim) {
-	case Dimension::X:
-		break;
-	case Dimension::Y:
-		dim_other = Dimension::X;
-		break;
-	}*/
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// selected x/y range
-	// bool changed = false;
-	for (auto* plot : m_plotList)
-		if (!qFuzzyCompare(max, plot->range(dim, index).end())) {
+	for (auto* plot : m_plotList) {
+		if (!qFuzzyCompare(max, plot->range(dim, index).end()))
 			plot->setMax(dim, index, max);
-			// changed = true;
-		}
-
-	// if (changed)
-	//     updateRangeList(dim_other); // plot is auto scaled
+	}
 }
 
 void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
@@ -1046,8 +1007,7 @@ void CartesianPlotDock::minDateTimeChanged(const QObject* sender, const Dimensio
 }
 
 void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Dimension dim, const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
@@ -1062,8 +1022,7 @@ void CartesianPlotDock::maxDateTimeChanged(const QObject* sender, const Dimensio
  *  called on scale changes (linear, log) for the x-/y-axis
  */
 void CartesianPlotDock::scaleChanged(const QObject* sender, const Dimension dim, int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const int rangeIndex{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", range " << rangeIndex << " scale changed to " << ENUM_TO_STRING(RangeT, Scale, index))
@@ -1076,8 +1035,7 @@ void CartesianPlotDock::rangeFormatChanged(const QObject* sender, const Dimensio
 	const int rangeIndex{sender->property("row").toInt()};
 	DEBUG(Q_FUNC_INFO << ", x range " << rangeIndex + 1 << " format = " << index)
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const auto format{static_cast<RangeT::Format>(index)};
 	for (auto* plot : m_plotList) {
@@ -1262,8 +1220,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 
 // "Layout" tab
 void CartesianPlotDock::geometryChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
 	double y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
@@ -1301,8 +1258,7 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 		ui.lPaddingVertical->setText(i18n("Top:"));
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setSymmetricPadding(checked);
@@ -1314,8 +1270,8 @@ void CartesianPlotDock::symmetricPaddingChanged(bool checked) {
 }
 
 void CartesianPlotDock::horizontalPaddingChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList) {
 		// if symmetric padding is active we also adjust the right padding.
@@ -1335,16 +1291,15 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 }
 
 void CartesianPlotDock::rightPaddingChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setRightPadding(padding);
 }
 
 void CartesianPlotDock::verticalPaddingChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList) {
@@ -1362,8 +1317,8 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 }
 
 void CartesianPlotDock::bottomPaddingChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
+
 	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* plot : m_plotList)
 		plot->setBottomPadding(padding);
@@ -1379,8 +1334,7 @@ void CartesianPlotDock::toggleXBreak(bool b) {
 	ui.sbXBreakPosition->setEnabled(b);
 	ui.cbXBreakStyle->setEnabled(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setXRangeBreakingEnabled(b);
@@ -1422,14 +1376,12 @@ void CartesianPlotDock::removeXBreak() {
 }
 
 void CartesianPlotDock::currentXBreakChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (index == -1)
 		return;
 
-	m_initializing = true;
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
@@ -1437,12 +1389,10 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::xBreakStartChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
@@ -1454,8 +1404,7 @@ void CartesianPlotDock::xBreakStartChanged() {
 }
 
 void CartesianPlotDock::xBreakEndChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
@@ -1467,8 +1416,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 }
 
 void CartesianPlotDock::xBreakPositionChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
@@ -1480,8 +1428,7 @@ void CartesianPlotDock::xBreakPositionChanged(int value) {
 }
 
 void CartesianPlotDock::xBreakStyleChanged(int styleIndex) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbXBreak->currentIndex();
 	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
@@ -1501,8 +1448,7 @@ void CartesianPlotDock::toggleYBreak(bool b) {
 	ui.sbYBreakPosition->setEnabled(b);
 	ui.cbYBreakStyle->setEnabled(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* plot : m_plotList)
 		plot->setYRangeBreakingEnabled(b);
@@ -1544,14 +1490,12 @@ void CartesianPlotDock::removeYBreak() {
 }
 
 void CartesianPlotDock::currentYBreakChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (index == -1)
 		return;
 
-	m_initializing = true;
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
 	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);
@@ -1559,12 +1503,10 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::yBreakStartChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
@@ -1576,8 +1518,7 @@ void CartesianPlotDock::yBreakStartChanged() {
 }
 
 void CartesianPlotDock::yBreakEndChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
@@ -1589,8 +1530,7 @@ void CartesianPlotDock::yBreakEndChanged() {
 }
 
 void CartesianPlotDock::yBreakPositionChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
@@ -1602,8 +1542,7 @@ void CartesianPlotDock::yBreakPositionChanged(int value) {
 }
 
 void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	int index = ui.cbYBreak->currentIndex();
 	auto style = CartesianPlot::RangeBreakStyle(styleIndex);
@@ -1617,8 +1556,7 @@ void CartesianPlotDock::yBreakStyleChanged(int styleIndex) {
 
 // "Plot area"-tab
 void CartesianPlotDock::borderTypeChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto type = m_plot->plotArea()->borderType();
 	auto* tb = static_cast<QToolButton*>(QObject::sender());
@@ -1637,8 +1575,7 @@ void CartesianPlotDock::borderTypeChanged() {
 }
 
 void CartesianPlotDock::borderCornerRadiusChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* plot : m_plotList)
 		plot->plotArea()->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
@@ -1676,31 +1613,21 @@ void CartesianPlotDock::exportPlotTemplate() {
 //*************************************************************
 // general
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
 }
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leRangePoints->setText(numberLocale.toString(value));
+	CONDITIONAL_LOCK_RETURN;
+	ui.leRangePoints->setText(QLocale().toString(value));
 }
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leRangePoints->setText(numberLocale.toString(value));
+	CONDITIONAL_LOCK_RETURN;
+	ui.leRangePoints->setText(QLocale().toString(value));
 }
 
 // x & y ranges
 void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, bool checked) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 
 	CELLWIDGET(dim, index, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
@@ -1710,50 +1637,25 @@ void CartesianPlotDock::plotAutoScaleChanged(const Dimension dim, int index, boo
 	CELLWIDGET(dim, index, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
-void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
+void CartesianPlotDock::plotMinChanged(const Dimension dim, int xRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
-}
-void CartesianPlotDock::plotYMinChanged(int yRangeIndex, double value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
-void CartesianPlotDock::plotXMaxChanged(int xRangeIndex, double value) {
+void CartesianPlotDock::plotMaxChanged(const Dimension dim, int xRangeIndex, double value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::X, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
-}
-void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value)
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
-
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
-	CELLWIDGET(Dimension::Y, yRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, NumberSpinBox, setValue(value));
+	CELLWIDGET(dim, xRangeIndex, TwRangesColumn::Max, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(value, Qt::UTC)));
 }
 
 void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", " << CartesianCoordinateSystem::dimensionToString(dim).toStdString() << " range = " << range.toStdString())
-	if (m_initializing)
-		return;
-
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	CELLWIDGET(dim, index, TwRangesColumn::Min, NumberSpinBox, setValue(range.start()));
 	CELLWIDGET(dim, index, TwRangesColumn::Min, QDateTimeEdit, setDateTime(QDateTime::fromMSecsSinceEpoch(range.start(), Qt::UTC)));
@@ -1763,16 +1665,14 @@ void CartesianPlotDock::plotRangeChanged(const Dimension dim, int index, Range<d
 
 void CartesianPlotDock::plotScaleChanged(const Dimension dim, int rangeIndex, RangeT::Scale scale) {
 	DEBUG(Q_FUNC_INFO << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale))
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Scale, QComboBox, setCurrentIndex(static_cast<int>(scale)));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRangeFormatChanged(const Dimension dim, int rangeIndex, RangeT::Format format) {
 	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	CELLWIDGET(dim, rangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
-	m_initializing = false;
 }
 
 // plot range
@@ -1786,34 +1686,29 @@ void CartesianPlotDock::defaultPlotRangeChanged() {
 
 // range breaks
 void CartesianPlotDock::plotXRangeBreakingEnabledChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkXBreak->setChecked(on);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
 }
 
 void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkYBreak->setChecked(on);
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
 }
 
 void CartesianPlotDock::plotVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // layout
 void CartesianPlotDock::plotRectChanged(QRectF& rect) {
-	if (m_initializing)
-		return;
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), m_worksheetUnit));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
@@ -1821,34 +1716,33 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 }
 
 void CartesianPlotDock::plotHorizontalPaddingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotDock::plotVerticalPaddingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotDock::plotRightPaddingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotDock::plotBottomPaddingChanged(double value) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPaddingBottom->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotDock::plotSymmetricPaddingChanged(bool symmetric) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbPaddingSymmetric->setChecked(symmetric);
-	m_initializing = false;
 }
 
 // border
 void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
 	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
 	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
@@ -1856,9 +1750,8 @@ void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
 }
 
 void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 //*************************************************************

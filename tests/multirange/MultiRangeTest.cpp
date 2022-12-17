@@ -20,10 +20,15 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotPrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
+#include "kdefrontend/dockwidgets/XYCurveDock.h"
 
 #include <QAction>
+#include <QComboBox>
+#include <QGraphicsSceneWheelEvent>
 
 //##############################################################################
 //#####################  import of LabPlot projects ############################
@@ -92,7 +97,11 @@
 	auto vertAxis3P1 = static_cast<Axis*>(p1->child<Axis>(3));                                                                                                 \
 	QVERIFY(vertAxis3P1 != nullptr);                                                                                                                           \
 	QCOMPARE(vertAxis3P1->orientation() == Axis::Orientation::Vertical, true);                                                                                 \
-	QCOMPARE(vertAxis3P1->name(), QStringLiteral("y-axis 1"));
+	QCOMPARE(vertAxis3P1->name(), QStringLiteral("y-axis 1"));                                                                                                 \
+                                                                                                                                                               \
+	auto horAxisP2 = static_cast<Axis*>(p2->child<Axis>(0));                                                                                                   \
+	QVERIFY(horAxisP2 != nullptr);                                                                                                                             \
+	QCOMPARE(horAxisP2->orientation() == Axis::Orientation::Horizontal, true);
 
 #define SET_CARTESIAN_MOUSE_MODE(mode)                                                                                                                         \
 	QAction a(nullptr);                                                                                                                                        \
@@ -207,14 +216,13 @@ void MultiRangeTest::zoomXSelection_AllRanges() {
 	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.2, 0.6); // zoom
 	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
 	CHECK_RANGE(p1, logCurve, Dimension::X, 20., 60.); // zoom
-	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 10.);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10., 6); // No niceExtends() done!
 
 	QVector<double> ref = {-250, -150.0, -50, 50, 150, 250};
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), ref);
 	ref = {-1, -0.5, 0.0, 0.5, 1.0};
 	COMPARE_DOUBLE_VECTORS(vertAxis2P1->tickLabelValues(), refValuesAxis2);
-	ref = {-10, -5, 0.0, 5, 10.0}; // Due to nice Extend it will be changed
-	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), ref); // on third axis there is no autoscale, because it uses a different range
+	COMPARE_DOUBLE_VECTORS(vertAxis3P1->tickLabelValues(), refValuesAxis3); // on third axis there is no autoscale, because it uses a different range
 }
 
 void MultiRangeTest::zoomXSelection_SingleRange() {
@@ -896,6 +904,235 @@ void MultiRangeTest::autoScaleXAfterZoomInY() {
 
 	// retransform of vertAxisP1 is done, so the tickLabelValues change back
 	COMPARE_DOUBLE_VECTORS(vertAxisP1->tickLabelValues(), refValues);
+}
+
+void MultiRangeTest::baseDockSetAspects_NoPlotRangeChange() {
+	LOAD_PROJECT
+
+	const int sinCurveCSystemIndex = sinCurve->coordinateSystemIndex();
+	const int tanCurveCSystemIndex = tanCurve->coordinateSystemIndex();
+	QVERIFY(sinCurveCSystemIndex != tanCurveCSystemIndex);
+	// checks directly the plot. In the basedock the element is used and not the plot, so do it here too
+	QVERIFY(sinCurve->coordinateSystemCount() == 3);
+
+	XYCurveDock dock(nullptr);
+	dock.setupGeneral();
+	dock.setCurves(QList<XYCurve*>({sinCurve, tanCurve}));
+
+	dock.updatePlotRanges();
+
+	// The coordinatesystem indices shall not change
+	QCOMPARE(sinCurveCSystemIndex, sinCurve->coordinateSystemIndex());
+	QCOMPARE(tanCurveCSystemIndex, tanCurve->coordinateSystemIndex());
+}
+
+/*!
+ * \brief MultiRangeTest::mouseWheelXAxisApplyToAllX
+ * If applied to all x is activated, using the mousewheel on a
+ * selected axis should also execute the mousewheel on other plots
+ */
+void MultiRangeTest::mouseWheelXAxisApplyToAllX() {
+	LOAD_PROJECT
+
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	horAxisP1->setSelected(true); // seems not to work
+	view->m_selectedElement = horAxisP1;
+
+	int counter = 0;
+	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+		QCOMPARE(delta, 10);
+		QCOMPARE(xIndex, 0); // x Range of horAxisP1
+		QCOMPARE(considerDimension, true);
+		QCOMPARE(dim, Dimension::X);
+		counter++;
+	});
+
+	QGraphicsSceneWheelEvent event;
+	event.setDelta(10);
+	p1->d_func()->wheelEvent(&event);
+
+	QCOMPARE(counter, 1);
+
+	// All x ranges are zoomed, for plot 1 and plot 2
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 0.9); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 0.9); // zoom
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 10, 90); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0.1, 0.9);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0.1, 0.9);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
+/*!
+ * \brief MultiRangeTest::mouseWheelXAxisApplyToAllX
+ * If applied to all x is activated, using the mousewheel on a
+ * selected axis should also execute the mousewheel on other plots
+ * This time the second x axis is used. In the second plot no second x axis is used
+ * so check that application does not crash
+ */
+void MultiRangeTest::mouseWheelTanCurveApplyToAllX() {
+	LOAD_PROJECT
+
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	tanCurve->setSelected(true); // seems not to work
+	view->m_selectedElement = tanCurve;
+
+	int counter = 0;
+	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+		Q_UNUSED(yIndex);
+		Q_UNUSED(dim);
+		QCOMPARE(delta, 10);
+		QCOMPARE(xIndex, 0); // tan curve has xIndex 0
+		QCOMPARE(considerDimension, false);
+		counter++;
+	});
+
+	QGraphicsSceneWheelEvent event;
+	event.setDelta(10);
+	p1->d_func()->wheelEvent(&event);
+
+	QCOMPARE(counter, 1);
+
+	// All x ranges are zoomed, for plot 1 and plot 2
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 0.9); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 0.9); // zoom
+	// zoomed in, because with scrolling both axes are scrolled
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -200, 200);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 10, 90); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0.1, 0.9);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0.1, 0.9);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
+void MultiRangeTest::mouseWheelXAxisApplyToSelected() {
+	LOAD_PROJECT
+
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250); // zoom
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	horAxisP1->setSelected(true); // seems not to work
+	view->m_selectedElement = horAxisP1;
+
+	int counter = 0;
+	connect(p1, &CartesianPlot::wheelEventSignal, [&counter](int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim) {
+		QCOMPARE(delta, 10);
+		QCOMPARE(xIndex, 0); // x Range of horAxisP1
+		QCOMPARE(considerDimension, true);
+		QCOMPARE(dim, Dimension::X);
+		counter++;
+	});
+
+	QGraphicsSceneWheelEvent event;
+	event.setDelta(10);
+	p1->d_func()->wheelEvent(&event);
+
+	QCOMPARE(counter, 1);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 0.9); // zoom
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 0.9); // zoom
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100); // Not zoomed
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1); // Not zoomed
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1); // Not zoomed
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
+void MultiRangeTest::axisMouseMoveApplyToAllX() {
+	LOAD_PROJECT
+
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	const int delta = -10; // delta > 0 --> right or up
+	horAxisP1->shiftSignal(delta, Dimension::X, p1->coordinateSystem(horAxisP1->coordinateSystemIndex())->index(Dimension::X));
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 10, 110); // shift
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+}
+
+void MultiRangeTest::axisMouseMoveApplyToSelection() {
+	LOAD_PROJECT
+
+	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	QCOMPARE(w->cartesianPlotActionMode(), Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
+
+	const int delta = -10; // delta > 0 --> right or up
+	horAxisP1->shiftSignal(delta, Dimension::X, p1->coordinateSystem(horAxisP1->coordinateSystemIndex())->index(Dimension::X));
+
+	CHECK_RANGE(p1, sinCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, sinCurve, Dimension::Y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, Dimension::X, 0.1, 1.1); // shift
+	CHECK_RANGE(p1, tanCurve, Dimension::Y, -250, 250);
+	CHECK_RANGE(p1, logCurve, Dimension::X, 0, 100);
+	CHECK_RANGE(p1, logCurve, Dimension::Y, -10, 6);
+	CHECK_RANGE(p2, horAxisP1, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::X, 0, 1);
+	CHECK_RANGE(p2, cosCurve, Dimension::Y, -1, 1);
 }
 
 QTEST_MAIN(MultiRangeTest)

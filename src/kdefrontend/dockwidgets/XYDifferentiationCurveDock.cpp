@@ -131,7 +131,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(m_differentiationData.xRange.first()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(m_differentiationData.xRange.last()));
 	} else {
@@ -261,8 +261,7 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 		cbYDataColumn->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
@@ -274,24 +273,19 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
-
-	if (m_initializing)
-		return;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
@@ -301,8 +295,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -321,7 +314,7 @@ void XYDifferentiationCurveDock::updateSettings(const AbstractColumn* column) {
 		return;
 
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -414,7 +407,7 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				SET_NUMBER_LOCALE
+				const auto numberLocale = QLocale();
 				uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 				uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 			} else {
@@ -434,16 +427,14 @@ void XYDifferentiationCurveDock::xRangeMaxChanged() {
 }
 
 void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.first() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
 void XYDifferentiationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	m_differentiationData.xRange.last() = dateTime.toMSecsSinceEpoch();
 	uiGeneralTab.pbRecalculate->setEnabled(true);
@@ -507,8 +498,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 }
 
 void XYDifferentiationCurveDock::enableRecalculate() const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// no differentiation possible without the x- and y-data
 	bool hasSourceData = false;
@@ -548,7 +538,7 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (differentiationResult.elapsedTime > 1000)
 		str += i18n("calculation time: %1 s", numberLocale.toString(differentiationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
@@ -567,31 +557,27 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 //*************************************************************
 // General-Tab
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXDataColumn->setColumn(column, m_differentiationCurve->xDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_differentiationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData& differentiationData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_differentiationData = differentiationData;
 	uiGeneralTab.cbDerivOrder->setCurrentIndex(m_differentiationData.derivOrder);
 	this->derivOrderChanged(m_differentiationData.derivOrder);
@@ -599,7 +585,6 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 	this->accOrderChanged(m_differentiationData.accOrder);
 
 	this->showDifferentiationResult();
-	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::dataChanged() {
@@ -607,7 +592,6 @@ void XYDifferentiationCurveDock::dataChanged() {
 }
 
 void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

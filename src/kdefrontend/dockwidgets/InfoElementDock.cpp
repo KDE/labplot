@@ -41,8 +41,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 	layout->addWidget(m_connectionLineWidget, 4, 0, 1, 3);
 
 	// set the current locale
-	SET_NUMBER_LOCALE
-	ui->sbPosition->setLocale(numberLocale);
+	ui->sbPosition->setLocale(QLocale());
 	m_labelWidget->updateLocale();
 	m_verticalLineWidget->updateLocale();
 	m_connectionLineWidget->updateLocale();
@@ -60,7 +59,7 @@ InfoElementDock::InfoElementDock(QWidget* parent)
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 
 	m_elements = list;
 	m_element = list.first();
@@ -123,17 +122,16 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		for (const auto* curve : curves) {
 			auto* item = new QListWidgetItem();
 			auto* checkBox = new QCheckBox(curve->name());
+			for (int i = 0; i < m_element->markerPointsCount(); i++) {
+				if (curve->path() == m_element->markerPointAt(i).curvePath) {
+					checkBox->setChecked(true);
+					ui->cbConnectToCurve->addItem(curve->name());
+					break;
+				}
+			}
 			connect(checkBox, &QCheckBox::toggled, this, &InfoElementDock::curveSelectionChanged);
 			ui->lwCurves->addItem(item);
 			ui->lwCurves->setItemWidget(item, checkBox);
-
-			for (int i = 0; i < m_element->markerPointsCount(); i++) {
-				auto* markerCurve = m_element->markerPointAt(i).curve;
-				if (markerCurve && markerCurve->name() == curve->name()) {
-					checkBox->setChecked(true);
-					ui->cbConnectToCurve->addItem(markerCurve->name());
-				}
-			}
 		}
 	} else {
 		ui->lwCurves->setEnabled(false);
@@ -155,7 +153,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->cbConnectToAnchor->addItem(m_element->gluePoint(i).name);
 	ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex() + 1);
 
-	SET_NUMBER_LOCALE
 	if (m_element->plot()->xRangeFormatDefault() == RangeT::Format::Numeric) {
 		ui->sbPosition->setValue(m_element->positionLogical());
 		ui->lPosition->show();
@@ -164,7 +161,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->dateTimeEditPosition->hide();
 	} else {
 		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->rangeDateTimeFormat(Dimension::X));
-		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical()));
+		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical(), Qt::UTC));
 		ui->lPosition->hide();
 		ui->sbPosition->hide();
 		ui->lPositionDateTime->show();
@@ -199,17 +196,14 @@ InfoElementDock::~InfoElementDock() {
 
 // general tab
 void InfoElementDock::positionChanged(double pos) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
-	const Lock lock(m_initializing);
 	for (auto* element : m_elements)
 		element->setPositionLogical(pos);
 }
 
 void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* element : m_elements)
@@ -217,7 +211,8 @@ void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
 }
 
 void InfoElementDock::curveSelectionChanged(bool state) {
-	if (m_initializing || !m_sameParent)
+	CONDITIONAL_LOCK_RETURN;
+	if (!m_sameParent)
 		return;
 
 	// determine the curve for which the selection was changed
@@ -269,8 +264,7 @@ void InfoElementDock::curveSelectionChanged(bool state) {
 }
 
 void InfoElementDock::curveChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	const QString& name = ui->cbConnectToCurve->currentText();
 	for (auto* infoElement : m_elements)
@@ -278,16 +272,14 @@ void InfoElementDock::curveChanged() {
 }
 
 void InfoElementDock::gluePointChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* infoElement : m_elements)
 		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
 }
 
 void InfoElementDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* infoElement : m_elements)
 		infoElement->setVisible(state);
@@ -297,12 +289,12 @@ void InfoElementDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
 void InfoElementDock::elementVisibilityChanged(const bool visible) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui->chbVisible->setChecked(visible);
 }
 
 void InfoElementDock::elementGluePointIndexChanged(const int index) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	if (index < 0)
 		ui->cbConnectToAnchor->setCurrentIndex(0);
 	else
@@ -310,7 +302,7 @@ void InfoElementDock::elementGluePointIndexChanged(const int index) {
 }
 
 void InfoElementDock::elementConnectionLineCurveChanged(const QString& name) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	for (int i = 0; i < ui->cbConnectToCurve->count(); i++) {
 		if (ui->cbConnectToCurve->itemData(i).toString().compare(name) == 0) {
 			ui->cbConnectToCurve->setCurrentIndex(i);
@@ -320,7 +312,7 @@ void InfoElementDock::elementConnectionLineCurveChanged(const QString& name) {
 }
 
 void InfoElementDock::elementLabelBorderShapeChanged() {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui->cbConnectToAnchor->clear();
 	ui->cbConnectToAnchor->addItem(i18n("Auto"));
 	for (int i = 0; i < m_element->gluePointsCount(); i++)
@@ -328,13 +320,13 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui->sbPosition->setValue(pos);
-	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos));
+	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos, Qt::UTC));
 }
 
 void InfoElementDock::elementCurveRemoved(const QString& name) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	for (int i = 0; i < ui->lwCurves->count(); ++i) {
 		auto* item = ui->lwCurves->item(i);
 		auto* checkBox = static_cast<QCheckBox*>(ui->lwCurves->itemWidget(item));

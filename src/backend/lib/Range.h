@@ -10,7 +10,7 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "macros.h" //SET_NUMBER_LOCALE
+#include "macros.h" //const auto numberLocale = QLocale();
 
 extern "C" {
 #include "backend/gsl/parser.h"
@@ -64,7 +64,7 @@ public:
 	}
 	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// min
 		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) // if parsing fails, try default locale
@@ -224,8 +224,7 @@ public:
 	}
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString(bool round = true) const {
-		SET_NUMBER_LOCALE
-		return this->toString(round, numberLocale);
+		return this->toString(round, QLocale());
 	}
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)

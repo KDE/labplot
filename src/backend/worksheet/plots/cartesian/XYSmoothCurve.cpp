@@ -249,7 +249,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	// write the result
 	smoothResult.available = true;
-	smoothResult.valid = true;
+	smoothResult.valid = (status == 0);
 	smoothResult.status = QString::number(status);
 	smoothResult.elapsedTime = timer.elapsed();
 

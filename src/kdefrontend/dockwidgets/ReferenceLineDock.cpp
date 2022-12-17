@@ -46,7 +46,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_linesList = list;
 	m_line = list.first();
 	setAspects(list);
@@ -95,8 +95,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
  * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		if (plot->yRangeFormatDefault() == RangeT::Format::Numeric)
@@ -113,12 +112,7 @@ void ReferenceLineDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 
-//**********************************************************
-//*** SLOTs for changes triggered in ReferenceLineDock *****
-//**********************************************************
-// Position
-void ReferenceLineDock::orientationChanged(int index) {
-	auto orientation{ReferenceLine::Orientation(index)};
+void ReferenceLineDock::updateWidgetsOrientation(ReferenceLine::Orientation orientation) {
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 	bool numeric;
 	if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -135,9 +129,17 @@ void ReferenceLineDock::orientationChanged(int index) {
 	ui.sbPosition->setVisible(numeric);
 	ui.lPositionDateTime->setVisible(!numeric);
 	ui.dtePosition->setVisible(!numeric);
+}
 
-	if (m_initializing)
-		return;
+//**********************************************************
+//*** SLOTs for changes triggered in ReferenceLineDock *****
+//**********************************************************
+// Position
+void ReferenceLineDock::orientationChanged(int index) {
+	auto orientation{ReferenceLine::Orientation(index)};
+	updateWidgetsOrientation(orientation);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setOrientation(orientation);
@@ -147,8 +149,7 @@ void ReferenceLineDock::orientationChanged(int index) {
 }
 
 void ReferenceLineDock::positionLogicalChanged(double pos) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* line : m_linesList) {
 		auto positionLogical = line->positionLogical();
@@ -161,8 +162,7 @@ void ReferenceLineDock::positionLogicalChanged(double pos) {
 }
 
 void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
@@ -176,8 +176,7 @@ void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime
 }
 
 void ReferenceLineDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* line : m_linesList)
 		line->setVisible(state);
@@ -187,8 +186,7 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
 void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
-	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
+	CONDITIONAL_LOCK_RETURN;
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal) {
 		ui.sbPosition->setValue(positionLogical.y());
 		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.y()));
@@ -199,15 +197,13 @@ void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogica
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
 }
 
 void ReferenceLineDock::lineVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -217,12 +213,11 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	const Lock lock(m_initializing);
+	// No lock!
 
-	SET_NUMBER_LOCALE
 	auto orientation = m_line->orientation();
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
-	orientationChanged(ui.cbOrientation->currentIndex()); // call this to update the position widgets that depend on the orientation
+	updateWidgetsOrientation(orientation);
 
 	// position
 	const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());

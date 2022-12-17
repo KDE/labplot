@@ -42,14 +42,14 @@ void NoteDock::setNotesList(QList<Note*> list) {
 	m_notes = list.first();
 	setAspects(list);
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
+
 	ui.leName->setText(m_notes->name());
 	ui.leName->setStyleSheet(QString());
 	ui.leName->setToolTip(QString());
 	ui.kcbBgColor->setColor(m_notes->backgroundColor());
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
-	m_initializing = false;
 
 	connect(m_notes, &Note::aspectDescriptionChanged, this, &NoteDock::aspectDescriptionChanged);
 }
@@ -58,24 +58,21 @@ void NoteDock::setNotesList(QList<Note*> list) {
 //********** SLOTs for changes triggered in NoteDock **********
 //*************************************************************
 void NoteDock::backgroundColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setBackgroundColor(color);
 }
 
 void NoteDock::textColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextColor(color);
 }
 
 void NoteDock::textFontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* note : m_notesList)
 		note->setTextFont(font);

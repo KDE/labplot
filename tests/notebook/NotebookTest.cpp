@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -210,6 +210,7 @@ void NotebookTest::testParserPython09() {
 	QVERIFY2(res.at(2).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2018-03-26T02:00:00.000"),
 			 qPrintable(res.at(2).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz"))));
 }
+
 void NotebookTest::testParserPython10() {
 	// Testing datetime day
 	QString input = QStringLiteral("array(['2016-03-26', '2017-03-26', '2018-03-26'], dtype=datetime64[D])");
@@ -226,6 +227,37 @@ void NotebookTest::testParserPython10() {
 	QTEST_ASSERT(res.at(0).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2016-03-26T00:00:00.000"));
 	QTEST_ASSERT(res.at(1).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2017-03-26T00:00:00.000"));
 	QTEST_ASSERT(res.at(2).toString(QStringLiteral("yyyy-MM-ddThh:mm:ss.zzz")) == QStringLiteral("2018-03-26T00:00:00.000"));
+}
+
+//**********************************************************
+//************************* Octave *************************
+//**********************************************************
+void NotebookTest::testParserOctaveRowVector() {
+	QString input = QStringLiteral("1.0 2.0 3.0");
+	VariableParser parser(QStringLiteral("octave"), input);
+
+	QCOMPARE(parser.isParsed(), true);
+	QCOMPARE(parser.dataType(), AbstractColumn::ColumnMode::Double);
+
+	const auto values = parser.doublePrecision();
+	QCOMPARE(values.size(), 3);
+	QCOMPARE(values.at(0), 1.0);
+	QCOMPARE(values.at(1), 2.0);
+	QCOMPARE(values.at(2), 3.0);
+}
+
+void NotebookTest::testParserOctaveColumnVector() {
+	QString input = QStringLiteral("1.0; 2.0; 3.0");
+	VariableParser parser(QStringLiteral("octave"), input);
+
+	QCOMPARE(parser.isParsed(), true);
+	QCOMPARE(parser.dataType(), AbstractColumn::ColumnMode::Double);
+
+	const auto values = parser.doublePrecision();
+	QCOMPARE(values.size(), 3);
+	QCOMPARE(values.at(0), 1.0);
+	QCOMPARE(values.at(1), 2.0);
+	QCOMPARE(values.at(2), 3.0);
 }
 
 QTEST_MAIN(NotebookTest)

@@ -146,7 +146,7 @@ void XYEquationCurveDock::initGeneralTab() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
@@ -157,7 +157,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 	setSymbols(list);
-	m_initializing = false;
 
 	updatePlotRanges();
 
@@ -310,8 +309,7 @@ void XYEquationCurveDock::insertConstant2(const QString& constantsName) {
 }
 
 void XYEquationCurveDock::enableRecalculate() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	// check whether the formula expressions are correct
 	bool valid = false;
@@ -332,7 +330,7 @@ void XYEquationCurveDock::enableRecalculate() {
 //*************************************************************
 // General-Tab
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);

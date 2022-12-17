@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>888</height>
+    <width>434</width>
+    <height>908</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -77,7 +77,7 @@
        <item row="15" column="0">
         <widget class="QLabel" name="lZeroOffset">
          <property name="text">
-          <string>Zero-offset:</string>
+          <string>Zero Offset:</string>
          </property>
         </widget>
        </item>
@@ -98,7 +98,7 @@
        <item row="19" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
-          <string>Plot range:</string>
+          <string>Plot Range:</string>
          </property>
         </widget>
        </item>
@@ -116,12 +116,9 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="KLineEdit" name="leZeroOffset"/>
          </item>
          <item>
           <widget class="QToolButton" name="tbOffsetLeft">
@@ -204,7 +201,7 @@
        <item row="17" column="0">
         <widget class="QLabel" name="lScalingFactor">
          <property name="text">
-          <string>Scaling factor:</string>
+          <string>Scaling Factor:</string>
          </property>
         </widget>
        </item>
@@ -222,7 +219,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -235,7 +232,7 @@
             <string>Spinbox for numbers.</string>
            </property>
            <property name="feedback" stdset="0">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -311,9 +308,6 @@
             <bool>true</bool>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="KLineEdit" name="leScalingFactor"/>
          </item>
          <item>
           <widget class="QToolButton" name="tbUnityScale">
@@ -437,7 +431,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -554,7 +547,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -590,12 +582,11 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Major ticks</string>
+          <string>Major Ticks</string>
          </property>
         </widget>
        </item>
@@ -693,7 +684,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -707,7 +698,7 @@
        <item row="6" column="0">
         <widget class="QLabel" name="lMajorTicksStartType">
          <property name="text">
-          <string>First Tick at</string>
+          <string>1. Tick at:</string>
          </property>
         </widget>
        </item>
@@ -717,7 +708,7 @@
        <item row="7" column="0">
         <widget class="QLabel" name="lMajorTickStartValue">
          <property name="text">
-          <string>First Tick Value:</string>
+          <string>1. Tick Value:</string>
          </property>
         </widget>
        </item>
@@ -740,7 +731,7 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Offset of the first tick from the start of the axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="text">
-          <string>First Tick Offset:</string>
+          <string>1. Tick Offset:</string>
          </property>
         </widget>
        </item>
@@ -845,7 +836,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -885,12 +876,11 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Minor ticks</string>
+          <string>Minor Ticks</string>
          </property>
         </widget>
        </item>
@@ -958,7 +948,7 @@
           <string>Spinbox for numbers.</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1011,7 +1001,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1122,7 +1112,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1181,7 +1170,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1270,7 +1259,7 @@
        <item row="19" column="0">
         <widget class="QLabel" name="lLabelsBackgroundColor">
          <property name="text">
-          <string>Color</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
@@ -1306,12 +1295,11 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Font</string>
+          <string>Font:</string>
          </property>
         </widget>
        </item>
@@ -1319,7 +1307,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1390,7 +1377,7 @@
        <item row="18" column="0">
         <widget class="QLabel" name="lLabelsBackgroundType">
          <property name="text">
-          <string>Type</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
@@ -1412,7 +1399,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1473,7 +1459,7 @@
           <string> pt</string>
          </property>
          <property name="feedback" stdset="0">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1520,12 +1506,11 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Minor grid</string>
+          <string>Minor Grid</string>
          </property>
         </widget>
        </item>
@@ -1549,12 +1534,11 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
          <property name="text">
-          <string>Major grid</string>
+          <string>Major Grid</string>
          </property>
         </widget>
        </item>
@@ -1585,11 +1569,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KColorButton</class>

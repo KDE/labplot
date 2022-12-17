@@ -1009,7 +1009,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 						   << ' ' << QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
-	SET_NUMBER_LOCALE
 	QString func{*(((struct data*)params)->func)};
 	for (size_t i = 0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
@@ -1024,7 +1023,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_symbol("x", x[i]);
 		// DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
-		double Yi = parse(qPrintable(func), qPrintable(numberLocale.name()));
+		double Yi = parse(qPrintable(func), qPrintable(QLocale().name()));
 		if (parse_errors() > 0) // fallback to default locale
 			Yi = parse(qPrintable(func), "en_US");
 		// DEBUG("	f(x["<< i <<"]) = " << Yi);
@@ -1709,7 +1708,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		const unsigned int np = paramNames->size();
 		QString func{*(((struct data*)params)->func)};
 
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
 			assign_symbol("x", x);

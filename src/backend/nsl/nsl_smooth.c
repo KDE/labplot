@@ -18,16 +18,16 @@
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sf_gamma.h> /* gsl_sf_choose */
 
-const char* nsl_smooth_type_name[] = {i18n("moving average (central)"), i18n("moving average (lagged)"), i18n("percentile"), i18n("Savitzky-Golay")};
-const char* nsl_smooth_pad_mode_name[] = {i18n("none"), i18n("interpolating"), i18n("mirror"), i18n("nearest"), i18n("constant"), i18n("periodic")};
-const char* nsl_smooth_weight_type_name[] = {i18n("uniform (rectangular)"),
-											 i18n("triangular"),
-											 i18n("binomial"),
-											 i18n("parabolic (Epanechnikov)"),
-											 i18n("quartic (biweight)"),
-											 i18n("triweight"),
-											 i18n("tricube"),
-											 i18n("cosine")};
+const char* nsl_smooth_type_name[] = {i18n("Moving Average (Central)"), i18n("Moving Average (Lagged)"), i18n("Percentile"), i18n("Savitzky-Golay")};
+const char* nsl_smooth_pad_mode_name[] = {i18n("None"), i18n("Interpolating"), i18n("Mirror"), i18n("Nearest"), i18n("Constant"), i18n("Periodic")};
+const char* nsl_smooth_weight_type_name[] = {i18n("Uniform (Rectangular)"),
+											 i18n("Triangular"),
+											 i18n("Binomial"),
+											 i18n("Parabolic (Epanechnikov)"),
+											 i18n("Quartic (Biweight)"),
+											 i18n("Triweight"),
+											 i18n("Tricube"),
+											 i18n("Cosine")};
 double nsl_smooth_pad_constant_lvalue = 0.0, nsl_smooth_pad_constant_rvalue = 0.0;
 
 int nsl_smooth_moving_average(double* data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {

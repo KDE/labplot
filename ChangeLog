@@ -11,6 +11,8 @@ New features:
 			* rug plots
 			* allow to create a data spreadsheet with the box plot metrics (quartiles, median, etc.)
 			* symbols for whisker end points
+			* allow to modify box properties (color, etc.) for every data set independently of each other
+			* draw a legend item for every dataset in the box plot
 	* [spreadsheet]
 		* use a different icon for calculated columns, also show the definition of the formula and parameters in the tooltip text in the project explorer
 		* Heatmap formatting for categorical data in text columns
@@ -21,6 +23,7 @@ New features:
 		* Data 'flattening' - convert pivoted data to column base format
 		* Column statistics (size, mean, stddev, etc.) are available in the function dialog
 		* Function values dialog supports accessing arbitrary cells of columns with cell(f(index), g(column,..)) and other moving functions
+		* Allow to subtract and add a value by providing a difference between two values
 	* [matrix]
 		* Zooming in the image view
 	* [import]
@@ -32,6 +35,7 @@ New features:
 	* [analysis]
 		* guess start values of fit parameter for polynomial models by linear regression
 		* allow to create a spreadsheet with the data steming from the result of the computation
+		* implement fourier filtering for datetimes
 	* [general]
 		* add settings option for GUM compliant terms
 
@@ -51,7 +55,7 @@ Bug fixes:
 		* fix using custom value label with invalid data points in xy-curve (BUG 455214)
 		* don't crash when deleting a text label that was added after worksheet objects (plots and curves) were created via the plot data dialog (BUG 455096)
 		* fix displayed end value of date time plot range
-		* fix shifts in date time values due to locale settings (BUG 455579)
+		* fix shifts in date time values due to locale settings (BUG 455579 & 462370)
 	* [spreadsheet] properly paste the data in the format 'yyyy-MM-dd hh:mm:ss' and similar
 	* [fit] fix locale usage in evaluation range
 	* [fit] correctly invalidate fit result when model changes

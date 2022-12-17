@@ -24,7 +24,6 @@ public:
 	void updateData();
 
 	bool m_hovered{false};
-	bool m_visible{true}; // point inside the plot (visible) or not
 
 	QRectF boundingRectangle;
 	QPainterPath lineShape;

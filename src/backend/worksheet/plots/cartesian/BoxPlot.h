@@ -11,9 +11,8 @@
 #define BOXPLOT_H
 
 #include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/Curve.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;
@@ -23,9 +22,9 @@ class Symbol;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT BoxPlot : public WorksheetElement, Curve {
+class LABPLOT_EXPORT BoxPlot : Plot {
 #else
-class BoxPlot : public WorksheetElement, Curve {
+class BoxPlot : public Plot {
 #endif
 	Q_OBJECT
 
@@ -40,13 +39,14 @@ public:
 	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
+	void finalizeAdd() override;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	// reimplemented from Curve
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	// reimplemented from Plot
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	// general
@@ -59,9 +59,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
 	// box
-	Background* background() const;
-	Line* borderLine() const;
-	Line* medianLine() const;
+	Background* backgroundAt(int) const;
+	Line* borderLineAt(int) const;
+	Line* medianLineAt(int) const;
 
 	// symbols
 	Symbol* symbolMean() const;
@@ -77,8 +77,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
 	Line* whiskersLine() const;
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
-	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
+	Line* whiskersCapLine() const;
 
 	// margin plots
 	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
@@ -121,7 +120,6 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 	// General-Tab
-	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);
@@ -136,8 +134,6 @@ Q_SIGNALS:
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void whiskersRangeParameterChanged(double);
 	void whiskersCapSizeChanged(double);
-	void whiskersCapPenChanged(QPen&);
-	void whiskersCapOpacityChanged(float);
 
 	// Margin Plots
 	void rugEnabledChanged(bool);

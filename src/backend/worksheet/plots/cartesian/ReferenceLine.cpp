@@ -271,7 +271,7 @@ void ReferenceLinePrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", scene list = " << listScene)
 
 	if (!listScene.isEmpty()) {
-		m_visible = true;
+		insidePlot = true;
 
 		// determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
@@ -289,7 +289,7 @@ void ReferenceLinePrivate::retransform() {
 				length = pointsScene.at(0).x() - pointsScene.at(1).x();
 		}
 	} else
-		m_visible = false;
+		insidePlot = false;
 	QDEBUG(Q_FUNC_INFO << ", scene list after = " << listScene)
 
 	recalcShapeAndBoundingRect();
@@ -316,7 +316,7 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	lineShape = QPainterPath();
-	if (m_visible) {
+	if (insidePlot) {
 		QPainterPath path;
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
 			path.moveTo(-length / 2, 0);
@@ -331,7 +331,7 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 }
 
 void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	if (!m_visible)
+	if (!insidePlot)
 		return;
 
 	painter->setOpacity(line->opacity());

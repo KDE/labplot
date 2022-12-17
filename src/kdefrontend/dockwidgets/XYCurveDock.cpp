@@ -166,8 +166,8 @@ XYCurveDock::XYCurveDock(QWidget* parent)
 
 	// template handler
 	auto* frame = new QFrame(this);
-	hboxLayout = new QHBoxLayout(frame);
-	hboxLayout->setContentsMargins(0, 11, 0, 11);
+	layout = new QHBoxLayout(frame);
+	layout->setContentsMargins(0, 11, 0, 11);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::XYCurve);
 	layout->addWidget(templateHandler);
@@ -463,7 +463,7 @@ void XYCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYCurveDock::setCurves(QList<XYCurve*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_curvesList = list;
 	m_curve = list.first();
 	setAspects(list);
@@ -593,8 +593,7 @@ void XYCurveDock::initTabs() {
 }
 
 void XYCurveDock::updateLocale() {
-	SET_NUMBER_LOCALE
-	ui.sbValuesDistance->setLocale(numberLocale);
+	ui.sbValuesDistance->setLocale(QLocale());
 	lineWidget->updateLocale();
 	dropLineWidget->updateLocale();
 	symbolWidget->updateLocale();
@@ -626,8 +625,7 @@ void XYCurveDock::retranslateUi() {
 void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 	updateValuesWidgets();
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
@@ -643,8 +641,7 @@ void XYCurveDock::xColumnChanged(const QModelIndex& index) {
 void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 	updateValuesWidgets();
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	AbstractColumn* column = nullptr;
@@ -658,16 +655,14 @@ void XYCurveDock::yColumnChanged(const QModelIndex& index) {
 }
 
 void XYCurveDock::legendVisibleChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setLegendVisible(state);
 }
 
 void XYCurveDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setVisible(state);
@@ -700,32 +695,28 @@ void XYCurveDock::lineTypeChanged(int index) {
 		}
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setLineType(lineType);
 }
 
 void XYCurveDock::lineSkipGapsChanged(bool skip) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setLineSkipGaps(skip);
 }
 
 void XYCurveDock::lineIncreasingXOnlyChanged(bool incr) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setLineIncreasingXOnly(incr);
 }
 
 void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setLineInterpolationPointsCount(count);
@@ -737,10 +728,9 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
   called when the type of the values (none, x, y, (x,y) etc.) was changed.
 */
 void XYCurveDock::valuesTypeChanged(int index) {
-	if (m_initializing)
-		return;
-
 	this->updateValuesWidgets();
+
+	CONDITIONAL_LOCK_RETURN;
 
 	const auto type = XYCurve::ValuesType(index);
 	for (auto* curve : m_curvesList)
@@ -751,10 +741,9 @@ void XYCurveDock::valuesTypeChanged(int index) {
   called when the custom column for the values was changed.
 */
 void XYCurveDock::valuesColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
-
 	this->updateValuesWidgets();
+
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<Column*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
@@ -864,32 +853,28 @@ void XYCurveDock::updateValuesWidgets() {
 }
 
 void XYCurveDock::valuesPositionChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesPosition(XYCurve::ValuesPosition(index));
 }
 
 void XYCurveDock::valuesDistanceChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesDistance(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
 }
 
 void XYCurveDock::valuesRotationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesRotationAngle(value);
 }
 
 void XYCurveDock::valuesOpacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity = (float)value / 100.;
 	for (auto* curve : m_curvesList)
@@ -897,8 +882,7 @@ void XYCurveDock::valuesOpacityChanged(int value) {
 }
 
 void XYCurveDock::valuesNumericFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbValuesNumericFormat->itemData(index).toChar().toLatin1();
 	for (auto* curve : m_curvesList)
@@ -906,24 +890,21 @@ void XYCurveDock::valuesNumericFormatChanged(int index) {
 }
 
 void XYCurveDock::valuesDateTimeFormatChanged(const QString& format) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesDateTimeFormat(format);
 }
 
 void XYCurveDock::valuesPrecisionChanged(int precision) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesPrecision(precision);
 }
 
 void XYCurveDock::valuesPrefixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString prefix = ui.leValuesPrefix->text();
 	for (auto* curve : m_curvesList)
@@ -931,8 +912,7 @@ void XYCurveDock::valuesPrefixChanged() {
 }
 
 void XYCurveDock::valuesSuffixChanged() {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString suffix = ui.leValuesSuffix->text();
 	for (auto* curve : m_curvesList)
@@ -940,8 +920,7 @@ void XYCurveDock::valuesSuffixChanged() {
 }
 
 void XYCurveDock::valuesFontChanged(const QFont& font) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QFont valuesFont = font;
 	valuesFont.setPixelSize(Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point));
@@ -950,15 +929,14 @@ void XYCurveDock::valuesFontChanged(const QFont& font) {
 }
 
 void XYCurveDock::valuesColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setValuesColor(color);
 }
 
 //"Error bars"-Tab
-void XYCurveDock::xErrorTypeChanged(int index) const {
+void XYCurveDock::xErrorTypeChanged(int index) {
 	if (index == 0) {
 		// no error
 		ui.lXErrorDataPlus->setVisible(false);
@@ -985,16 +963,14 @@ void XYCurveDock::xErrorTypeChanged(int index) const {
 	ui.lErrorFormat->setVisible(b);
 	errorBarsLineWidget->setVisible(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setXErrorType(XYCurve::ErrorType(index));
 }
 
-void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1004,9 +980,8 @@ void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
 		curve->setXErrorPlusColumn(column);
 }
 
-void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1016,7 +991,7 @@ void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
 		curve->setXErrorMinusColumn(column);
 }
 
-void XYCurveDock::yErrorTypeChanged(int index) const {
+void XYCurveDock::yErrorTypeChanged(int index) {
 	if (index == 0) {
 		// no error
 		ui.lYErrorDataPlus->setVisible(false);
@@ -1043,16 +1018,14 @@ void XYCurveDock::yErrorTypeChanged(int index) const {
 	ui.lErrorFormat->setVisible(b);
 	errorBarsLineWidget->setVisible(b);
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		curve->setYErrorType(XYCurve::ErrorType(index));
 }
 
-void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1062,9 +1035,8 @@ void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
 		curve->setYErrorPlusColumn(column);
 }
 
-void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -1075,44 +1047,39 @@ void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
 }
 
 //"Margin Plots"-Tab
-void XYCurveDock::rugEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::rugEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugEnabled(state);
 }
 
-void XYCurveDock::rugOrientationChanged(int index) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::rugOrientationChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = static_cast<WorksheetElement::Orientation>(index);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugOrientation(orientation);
 }
 
-void XYCurveDock::rugLengthChanged(double value) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::rugLengthChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugLength(length);
 }
 
-void XYCurveDock::rugWidthChanged(double value) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::rugWidthChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
 		curve->setRugWidth(width);
 }
 
-void XYCurveDock::rugOffsetChanged(double value) const {
-	if (m_initializing)
-		return;
+void XYCurveDock::rugOffsetChanged(double value) {
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_curvesList))
@@ -1127,185 +1094,152 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_curve != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
 	else if (aspect->comment() != uiGeneralTab.teComment->text())
 		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
 }
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	cbXColumn->setColumn(column, m_curve->xColumnPath());
 	updateValuesWidgets();
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbXColumn->setColumn(column, m_curve->xColumnPath());
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
-	cbYColumn->setColumn(column, m_curve->yColumnPath());
 	updateValuesWidgets();
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbYColumn->setColumn(column, m_curve->yColumnPath());
 }
 void XYCurveDock::curveLegendVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkLegendVisible->setChecked(on);
-	m_initializing = false;
 }
 void XYCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // Line-Tab
 void XYCurveDock::curveLineTypeChanged(XYCurve::LineType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbLineType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineSkipGapsChanged(bool skip) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkLineSkipGaps->setChecked(skip);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineIncreasingXOnlyChanged(bool incr) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkLineIncreasingXOnly->setChecked(incr);
-	m_initializing = false;
 }
 void XYCurveDock::curveLineInterpolationPointsCountChanged(int count) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbLineInterpolationPointsCount->setValue(count);
-	m_initializing = false;
 }
 
 // Values-Tab
 void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbValuesType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbValuesColumn->setColumn(column, m_curve->valuesColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbValuesPosition->setCurrentIndex((int)position);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesDistanceChanged(qreal distance) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbValuesDistance->setValue(Worksheet::convertFromSceneUnits(distance, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbValuesRotation->setValue(angle);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesNumericFormatChanged(char format) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbValuesNumericFormat->setCurrentIndex(ui.cbValuesNumericFormat->findData(format));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPrecisionChanged(int precision) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbValuesPrecision->setValue(precision);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesDateTimeFormatChanged(const QString& format) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbValuesDateTimeFormat->setCurrentText(format);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesOpacityChanged(qreal opacity) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbValuesOpacity->setValue(round(opacity * 100.0));
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesPrefixChanged(const QString& prefix) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leValuesPrefix->setText(prefix);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesSuffixChanged(const QString& suffix) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leValuesSuffix->setText(suffix);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesFontChanged(QFont font) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	font.setPointSizeF(round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)));
 	ui.kfrValuesFont->setFont(font);
-	m_initializing = false;
 }
 void XYCurveDock::curveValuesColorChanged(QColor color) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.kcbValuesColor->setColor(color);
-	m_initializing = false;
 }
 
 //"Error bars"-Tab
 void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbXErrorType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXErrorPlusColumn->setColumn(column, m_curve->xErrorPlusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbXErrorMinusColumn->setColumn(column, m_curve->xErrorMinusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbYErrorType->setCurrentIndex((int)type);
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYErrorPlusColumn->setColumn(column, m_curve->yErrorPlusColumnPath());
-	m_initializing = false;
 }
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
-	m_initializing = false;
 }
 
 //"Margin Plot"-Tab
 void XYCurveDock::curveRugEnabledChanged(bool status) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void XYCurveDock::curveRugOrientationChanged(WorksheetElement::Orientation orientation) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbRugOrientation->setCurrentIndex(static_cast<int>(orientation));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugLengthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugWidthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void XYCurveDock::curveRugOffsetChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //*************************************************************

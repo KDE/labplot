@@ -82,7 +82,7 @@ void ColumnPrivate::initDataContainer() {
 }
 
 void ColumnPrivate::initIOFilters() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double:
 		m_inputFilter = new String2DoubleFilter();
@@ -178,7 +178,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	Q_EMIT m_owner->modeAboutToChange(m_owner);
 
 	// determine the conversion filter and allocate the new data vector
-	SET_NUMBER_LOCALE
 	switch (m_columnMode) { // old mode
 	case AbstractColumn::ColumnMode::Double: {
 		disconnect(static_cast<Double2StringFilter*>(m_outputFilter), &Double2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
@@ -357,7 +356,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Double:
 			filter = new String2DoubleFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -366,7 +365,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			filter = new String2IntegerFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -375,7 +374,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
 			filter = new String2BigIntFilter();
-			filter->setNumberLocale(numberLocale);
+			filter->setNumberLocale(QLocale());
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<QString>*>(old_data)));
@@ -476,23 +475,23 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	switch (mode) { // new mode
 	case AbstractColumn::ColumnMode::Double:
 		new_in_filter = new String2DoubleFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new Double2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<Double2StringFilter*>(new_out_filter), &Double2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		new_in_filter = new String2IntegerFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new Integer2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<Integer2StringFilter*>(new_out_filter), &Integer2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		new_in_filter = new String2BigIntFilter();
-		new_in_filter->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(QLocale());
 		new_out_filter = new BigInt2StringFilter();
-		new_out_filter->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(QLocale());
 		connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged, m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -1121,25 +1120,24 @@ void ColumnPrivate::removeValueLabel(const QString& key) {
 	if (!hasValueLabels())
 		return;
 
-	SET_NUMBER_LOCALE
 	bool ok;
 	switch (m_columnMode) {
 	case AbstractColumn::ColumnMode::Double: {
-		double value = numberLocale.toDouble(key, &ok);
+		double value = QLocale().toDouble(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
-		int value = numberLocale.toInt(key, &ok);
+		int value = QLocale().toInt(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
-		qint64 value = numberLocale.toLongLong(key, &ok);
+		qint64 value = QLocale().toLongLong(key, &ok);
 		if (!ok)
 			return;
 		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
@@ -1378,9 +1376,8 @@ void ColumnPrivate::updateFormula() {
 													  {QStringLiteral("kurt"), column->statistics().kurtosis},
 													  {QStringLiteral("entropy"), column->statistics().entropy}};
 
-		SET_NUMBER_LOCALE
 		for (auto m : methodList)
-			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), numberLocale.toString(m.second));
+			formula.replace(m.first + QStringLiteral("(%1)").arg(varName), QLocale().toString(m.second));
 
 		// B) methods with options like method(p, x): get option p and calculate value to replace method
 		QStringList optionMethodList = {QLatin1String("quantile\\((\\d+[\\.\\,]?\\d+).*%1\\)"), // quantile(p, x)
@@ -1393,7 +1390,7 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				double p = numberLocale.toDouble(rx.cap(1)); // option
+				double p = QLocale().toDouble(rx.cap(1)); // option
 				DEBUG("p = " << p)
 
 				// scale (quantile: p=0..1, percentile: p=0..100)
@@ -1434,7 +1431,7 @@ void ColumnPrivate::updateFormula() {
 					break;
 				}
 
-				formula.replace(rx.cap(0), numberLocale.toString(value));
+				formula.replace(rx.cap(0), QLocale().toString(value));
 			}
 		}
 
@@ -1453,10 +1450,10 @@ void ColumnPrivate::updateFormula() {
 			int pos = 0;
 			while ((pos = rx.indexIn(formula, pos)) != -1) { // all method calls
 				QDEBUG("method call:" << rx.cap(0))
-				const int N = numberLocale.toInt(rx.cap(1));
+				const int N = QLocale().toInt(rx.cap(1));
 				DEBUG("N = " << N)
 
-				formula.replace(rx.cap(0), m.second.arg(numberLocale.toString(N)).arg(varName));
+				formula.replace(rx.cap(0), m.second.arg(QLocale().toString(N)).arg(varName));
 			}
 		}
 

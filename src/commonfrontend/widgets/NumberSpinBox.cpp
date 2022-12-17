@@ -43,8 +43,6 @@ void NumberSpinBox::init(double initValue, bool feedback) {
 	setValue(initValue);
 	m_feedback = feedback; // must be after setValue()!
 	setInvalid(Errors::NoError);
-	setMinimum(std::numeric_limits<double>::lowest());
-	setMaximum(std::numeric_limits<double>::max());
 	setDecimals(2);
 }
 
@@ -410,9 +408,28 @@ bool NumberSpinBox::setValue(double v) {
 		return true;
 	}
 
-	setText(locale().toString(v, 'f', decimals()));
+	if (decimals() == 0 || abs(v) < 1 / (pow(10, decimals())))
+		setText(locale().toString(v, 'g'));
+	else
+		setText(locale().toString(v, 'f', decimals()));
 	m_value = v;
 	return true;
+}
+
+double NumberSpinBox::minimum() const {
+	return m_minimum;
+}
+
+void NumberSpinBox::setMinimum(double min) {
+	m_minimum = min;
+}
+
+double NumberSpinBox::maximum() const {
+	return m_maximum;
+}
+
+void NumberSpinBox::setMaximum(double max) {
+	m_maximum = max;
 }
 
 void NumberSpinBox::setFeedback(bool enable) {
@@ -448,6 +465,7 @@ void NumberSpinBox::valueChanged() {
 		m_waitFeedback = true;
 	qDebug() << "Value: " << value();
 	emit valueChanged(value());
+	m_waitFeedback = false;
 }
 
 void NumberSpinBox::setInvalid(const QString& str) {

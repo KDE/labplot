@@ -66,7 +66,7 @@ MatrixDock::MatrixDock(QWidget* parent)
 }
 
 void MatrixDock::setMatrices(QList<Matrix*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_matrixList = list;
 	m_matrix = list.first();
 	setAspects(list);
@@ -105,8 +105,6 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	connect(m_matrix, &Matrix::numericFormatChanged, this, &MatrixDock::matrixNumericFormatChanged);
 	connect(m_matrix, &Matrix::precisionChanged, this, &MatrixDock::matrixPrecisionChanged);
 	connect(m_matrix, &Matrix::headerFormatChanged, this, &MatrixDock::matrixHeaderFormatChanged);
-
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -114,15 +112,13 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 //*************************************************************
 // mapping to the logical coordinates
 void MatrixDock::xStartChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setXStart(value);
@@ -130,15 +126,13 @@ void MatrixDock::xStartChanged(const QString& text) {
 }
 
 void MatrixDock::xEndChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setXEnd(value);
@@ -146,15 +140,13 @@ void MatrixDock::xEndChanged(const QString& text) {
 }
 
 void MatrixDock::yStartChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setYStart(value);
@@ -162,15 +154,13 @@ void MatrixDock::yStartChanged(const QString& text) {
 }
 
 void MatrixDock::yEndChanged(const QString& text) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	QString str = text.trimmed();
 	if (str.isEmpty())
 		return;
 	bool ok;
-	SET_NUMBER_LOCALE
-	const double value{numberLocale.toDouble(str, &ok)};
+	const double value{QLocale().toDouble(str, &ok)};
 	if (ok) {
 		for (auto* matrix : m_matrixList)
 			matrix->setYEnd(value);
@@ -179,8 +169,7 @@ void MatrixDock::yEndChanged(const QString& text) {
 
 // format
 void MatrixDock::numericFormatChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	char format = ui.cbFormat->itemData(index).toChar().toLatin1();
 	for (auto* matrix : m_matrixList)
@@ -188,16 +177,14 @@ void MatrixDock::numericFormatChanged(int index) {
 }
 
 void MatrixDock::precisionChanged(int precision) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setPrecision(precision);
 }
 
 void MatrixDock::headerFormatChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto format = static_cast<Matrix::HeaderFormat>(value);
 	for (auto* matrix : m_matrixList)
@@ -205,16 +192,14 @@ void MatrixDock::headerFormatChanged(int value) {
 }
 
 void MatrixDock::rowCountChanged(int rows) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setRowCount(rows);
 }
 
 void MatrixDock::columnCountChanged(int columns) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* matrix : m_matrixList)
 		matrix->setColumnCount(columns);
@@ -225,64 +210,51 @@ void MatrixDock::columnCountChanged(int columns) {
 //*************************************************************
 // matrix dimensions
 void MatrixDock::matrixRowCountChanged(int count) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRowCount->setValue(count);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixColumnCountChanged(int count) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
-	m_initializing = false;
 }
 
 // mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
-	m_initializing = true;
-	SET_NUMBER_LOCALE
-	ui.leXStart->setText(numberLocale.toString(value));
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui.leXStart->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
-	m_initializing = true;
-	SET_NUMBER_LOCALE
-	ui.leXEnd->setText(numberLocale.toString(value));
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui.leXEnd->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
-	m_initializing = true;
-	SET_NUMBER_LOCALE
-	ui.leYStart->setText(numberLocale.toString(value));
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui.leYStart->setText(QLocale().toString(value));
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
-	m_initializing = true;
-	SET_NUMBER_LOCALE
-	ui.leYEnd->setText(numberLocale.toString(value));
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	ui.leYEnd->setText(QLocale().toString(value));
 }
 
 // format
 void MatrixDock::matrixNumericFormatChanged(char format) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	int index = ui.cbFormat->findData((int)format);
 	ui.cbFormat->setCurrentIndex(index);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixPrecisionChanged(int precision) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPrecision->setValue(precision);
-	m_initializing = false;
 }
 
 void MatrixDock::matrixHeaderFormatChanged(Matrix::HeaderFormat format) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbHeader->setCurrentIndex((int)format);
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -294,7 +266,7 @@ void MatrixDock::load() {
 	ui.sbColumnCount->setValue(m_matrix->columnCount());
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leXStart->setText(numberLocale.toString(m_matrix->xStart()));
 	ui.leXEnd->setText(numberLocale.toString(m_matrix->xEnd()));
 	ui.leYStart->setText(numberLocale.toString(m_matrix->yStart()));
@@ -337,7 +309,7 @@ void MatrixDock::loadConfig(KConfig& config) {
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leXStart->setText(numberLocale.toString(group.readEntry("XStart", m_matrix->xStart())));
 	ui.leXEnd->setText(numberLocale.toString(group.readEntry("XEnd", m_matrix->xEnd())));
 	ui.leYStart->setText(numberLocale.toString(group.readEntry("YStart", m_matrix->yStart())));
@@ -360,7 +332,7 @@ void MatrixDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 
 	// mapping to the logical coordinates
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	group.writeEntry("XStart", numberLocale.toDouble(ui.leXStart->text()));
 	group.writeEntry("XEnd", numberLocale.toDouble(ui.leXEnd->text()));
 	group.writeEntry("YStart", numberLocale.toDouble(ui.leYStart->text()));

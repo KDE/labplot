@@ -17,8 +17,6 @@
 #include "ui_histogramdock.h"
 
 class AspectTreeModel;
-class Column;
-class Histogram;
 class BackgroundWidget;
 class LineWidget;
 class SymbolWidget;
@@ -35,15 +33,13 @@ public:
 	void setCurves(QList<Histogram*>);
 
 private:
-	QStringList dateStrings;
-	QStringList timeStrings;
-
 	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbErrorPlusColumn;
 	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
+	void updateLocale() override;
 	void loadConfig(KConfig&);
 
 protected:
@@ -82,12 +78,12 @@ private Q_SLOTS:
 	void binRangesMaxDateTimeChanged(const QDateTime&);
 
 	//"Error bars"-Tab
-	void errorTypeChanged(int) const;
-	void errorPlusColumnChanged(const QModelIndex&) const;
-	void errorMinusColumnChanged(const QModelIndex&) const;
+	void errorTypeChanged(int);
+	void errorPlusColumnChanged(const QModelIndex&);
+	void errorMinusColumnChanged(const QModelIndex&);
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(bool) const;
+	void rugEnabledChanged(bool);
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;
 	void rugOffsetChanged(double) const;

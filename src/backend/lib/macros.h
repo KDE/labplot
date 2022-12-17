@@ -12,7 +12,6 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-// SET_NUMBER_LOCALE
 #include <KConfigGroup>
 #include <KSharedConfig>
 
@@ -37,6 +36,35 @@
 #define DEBUG(x)                                                                                                                                               \
 	{ }
 #endif
+
+struct Lock {
+	inline explicit Lock(bool& variable)
+		: variable(variable = true) {
+	}
+
+	inline ~Lock() {
+		variable = false;
+	}
+
+private:
+	bool& variable;
+};
+
+/*!
+ * Used for example for connections with NumberSpinbox because those are using
+ * a feedback and so breaking the connection dock -> element -> dock is not desired
+ */
+#define CONDITIONAL_RETURN_NO_LOCK                                                                                                                             \
+	if (m_initializing)                                                                                                                                        \
+		return;
+
+/*!
+ * Lock mechanism used in docks to prevent loops (dock -> element -> dock)
+ * dock (locking) -> element: No feedback to the dock
+ */
+#define CONDITIONAL_LOCK_RETURN                                                                                                                                \
+	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
+	const Lock lock(m_initializing);
 
 #if QT_VERSION < 0x050700
 template<class T>
@@ -68,25 +96,11 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
-// define number locale from setting (using system locale when QLocale::AnyLanguage)
-#define SET_NUMBER_LOCALE                                                                                                                                      \
-	QLocale::Language numberLocaleLanguage =                                                                                                                   \
-		static_cast<QLocale::Language>(KSharedConfig::openConfig()                                                                                             \
-										   ->group("Settings_General")                                                                                         \
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));             \
-	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(                                                                                \
-		KSharedConfig::openConfig()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));    \
-	QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);                                                     \
-	numberLocale.setNumberOptions(numberOptions);
-// if (numberLocale.language() == QLocale::Language::C)
-//	numberLocale.setNumberOptions(QLocale::DefaultNumberOptions);
-
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le)                                                                                                                               \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const int tmp = numberLocale.toInt((le)->text(), &ok);                                                                                                 \
+		const int tmp = QLocale().toInt((le)->text(), &ok);                                                                                                    \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -94,8 +108,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define SET_DOUBLE_FROM_LE(var, le)                                                                                                                            \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const double tmp = numberLocale.toDouble((le)->text(), &ok);                                                                                           \
+		const double tmp = QLocale().toDouble((le)->text(), &ok);                                                                                              \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -106,8 +119,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		QString str = (le)->text().trimmed();                                                                                                                  \
 		if (!str.isEmpty()) {                                                                                                                                  \
 			bool ok;                                                                                                                                           \
-			SET_NUMBER_LOCALE                                                                                                                                  \
-			const double tmp = numberLocale.toDouble(str, &ok);                                                                                                \
+			const double tmp = QLocale().toDouble(str, &ok);                                                                                                   \
 			if (ok) {                                                                                                                                          \
 				var = tmp;                                                                                                                                     \
 				enableRecalculate();                                                                                                                           \

@@ -264,12 +264,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->axisDock->setAxes(castList<Axis>(selectedAspects));
 		break;
 	case AspectType::XYCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Curve"));
 		raiseDockSetupConnect(m_mainWindow->xyCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYEquationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Equation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Equation"));
 		raiseDockSetupConnect(m_mainWindow->xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
@@ -340,7 +340,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyCorrelationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::Histogram:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram"));
 		raiseDockConnect(m_mainWindow->histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->histogramDock->setCurves(castList<Histogram>(selectedAspects));
 		break;

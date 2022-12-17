@@ -28,20 +28,6 @@
 
 namespace {
 const QLatin1String lastDirConfigEntry = QLatin1String("LastPlotTemplateDir");
-
-// Copied from BaseDock
-struct Lock {
-	inline explicit Lock(bool& variable)
-		: variable(variable = true) {
-	}
-
-	inline ~Lock() {
-		variable = false;
-	}
-
-private:
-	bool& variable;
-};
 }
 
 const QString PlotTemplateDialog::format = QLatin1String(".labplot_template");

@@ -52,7 +52,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent)
 	set the current spreadsheet(s)
 */
 void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_spreadsheetList = list;
 	m_spreadsheet = list.first();
 	setAspects(list);
@@ -100,24 +100,20 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	ui.lFormat->setVisible(!nonEditable);
 	ui.lShowComments->setVisible(!nonEditable);
 	ui.cbShowComments->setVisible(!nonEditable);
-
-	m_initializing = false;
 }
 
 //*************************************************************
 //****** SLOTs for changes triggered in SpreadsheetDock *******
 //*************************************************************
 void SpreadsheetDock::rowCountChanged(int rows) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		spreadsheet->setRowCount(rows);
 }
 
 void SpreadsheetDock::columnCountChanged(int columns) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		spreadsheet->setColumnCount(columns);
@@ -127,8 +123,7 @@ void SpreadsheetDock::columnCountChanged(int columns) {
   enable/disable the comment header in the views of the selected spreadsheets.
 */
 void SpreadsheetDock::commentsShownChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* spreadsheet : m_spreadsheetList)
 		static_cast<SpreadsheetView*>(spreadsheet->view())->showComments(state);
@@ -138,21 +133,18 @@ void SpreadsheetDock::commentsShownChanged(bool state) {
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRowCount->setValue(count);
-	m_initializing = false;
 }
 
 void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbColumnCount->setValue(count);
-	m_initializing = false;
 }
 
 void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbShowComments->setChecked(checked);
-	m_initializing = false;
 }
 
 //*************************************************************

@@ -11,6 +11,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
@@ -72,25 +73,25 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	ui.leWhiskersRangeParameter->setToolTip(msg);
 
 	// Tab "Box"
-	QFont font;
-	font.setBold(true);
-	font.setWeight(75);
+	msg = i18n("Select the data column for which the properties should be shown and edited");
+	ui.lNumber->setToolTip(msg);
+	ui.cbNumber->setToolTip(msg);
 
 	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
 	ui.lWidthFactor->setToolTip(msg);
 	ui.sbWidthFactor->setToolTip(msg);
 
-	// filling
+	// Tab "Box"
 	auto* gridLayout = static_cast<QGridLayout*>(ui.tabBox->layout());
 	backgroundWidget = new BackgroundWidget(ui.tabBox);
-	gridLayout->addWidget(backgroundWidget, 3, 0, 1, 3);
+	gridLayout->addWidget(backgroundWidget, 5, 0, 1, 3);
 
 	// lines
 	borderLineWidget = new LineWidget(ui.tabBox);
-	gridLayout->addWidget(borderLineWidget, 6, 0, 1, 3);
+	gridLayout->addWidget(borderLineWidget, 8, 0, 1, 3);
 
 	medianLineWidget = new LineWidget(ui.tabBox);
-	gridLayout->addWidget(medianLineWidget, 9, 0, 1, 3);
+	gridLayout->addWidget(medianLineWidget, 11, 0, 1, 3);
 
 	// Tab "Markers"
 	gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
@@ -102,7 +103,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	whiskersLineWidget = new LineWidget(ui.tabBox);
 	gridLayout->addWidget(whiskersLineWidget, 1, 0, 1, 3);
 
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, Qt::black);
+	whiskersCapLineWidget = new LineWidget(ui.tabBox);
+	gridLayout->addWidget(whiskersCapLineWidget, 5, 0, 1, 3);
 
 	// adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -129,6 +131,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
 
 	// Tab "Box"
+	connect(ui.cbNumber, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::currentBoxChanged);
 	connect(ui.sbWidthFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::widthFactorChanged);
 
 	// Tab "Markers"
@@ -144,10 +147,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
 	connect(ui.leWhiskersRangeParameter, &QLineEdit::textChanged, this, &BoxPlotDock::whiskersRangeParameterChanged);
 	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
-	connect(ui.cbWhiskersCapStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersCapStyleChanged);
-	connect(ui.kcbWhiskersCapColor, &KColorButton::changed, this, &BoxPlotDock::whiskersCapColorChanged);
-	connect(ui.sbWhiskersCapWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapWidthChanged);
-	connect(ui.sbWhiskersCapOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapOpacityChanged);
 
 	// Margin Plots
 	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &BoxPlotDock::rugEnabledChanged);
@@ -170,7 +169,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent)
 }
 
 void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_boxPlots = list;
 	m_boxPlot = list.first();
 	setAspects(list);
@@ -205,16 +204,19 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	QList<Line*> borderLines;
 	QList<Line*> medianLines;
 	QList<Line*> whiskersLines;
+	QList<Line*> whiskersCapLines;
 	for (auto* plot : m_boxPlots) {
-		backgrounds << plot->background();
-		borderLines << plot->borderLine();
-		medianLines << plot->medianLine();
+		backgrounds << plot->backgroundAt(0);
+		borderLines << plot->borderLineAt(0);
+		medianLines << plot->medianLineAt(0);
 		whiskersLines << plot->whiskersLine();
+		whiskersCapLines << plot->whiskersCapLine();
 	}
 	backgroundWidget->setBackgrounds(backgrounds);
 	borderLineWidget->setLines(borderLines);
 	medianLineWidget->setLines(medianLines);
 	whiskersLineWidget->setLines(whiskersLines);
+	whiskersCapLineWidget->setLines(whiskersCapLines);
 
 	// show the properties of the first box plot
 	ui.chkVisible->setChecked(m_boxPlot->isVisible());
@@ -233,7 +235,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
-
 	connect(m_boxPlot, &BoxPlot::widthFactorChanged, this, &BoxPlotDock::plotWidthFactorChanged);
 
 	// symbols
@@ -243,8 +244,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersRangeParameterChanged, this, &BoxPlotDock::plotWhiskersRangeParameterChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersCapPenChanged, this, &BoxPlotDock::plotWhiskersCapPenChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersCapOpacityChanged, this, &BoxPlotDock::plotWhiskersCapOpacityChanged);
 
 	//"Margin Plots"-Tab
 	connect(m_boxPlot, &BoxPlot::rugEnabledChanged, this, &BoxPlotDock::plotRugEnabledChanged);
@@ -265,14 +264,11 @@ void BoxPlotDock::setModel() {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void BoxPlotDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	ui.leWhiskersRangeParameter->setLocale(QLocale());
 	borderLineWidget->updateLocale();
 	medianLineWidget->updateLocale();
 	whiskersLineWidget->updateLocale();
-	ui.leWhiskersRangeParameter->setLocale(numberLocale);
-
-	// 	Lock lock(m_initializing);
-	// 	ui.lePosition->setText(numberLocale.toString(m_boxPlot->position()));
+	whiskersCapLineWidget->updateLocale();
 }
 
 void BoxPlotDock::loadDataColumns() {
@@ -281,6 +277,9 @@ void BoxPlotDock::loadDataColumns() {
 		addDataColumn();
 
 	int count = m_boxPlot->dataColumns().count();
+	const int currentBoxIndex = ui.cbNumber->currentIndex();
+	ui.cbNumber->clear();
+
 	if (count != 0) {
 		// box plot has already data columns, make sure we have the proper number of comboboxes
 		int diff = count - m_dataComboBoxes.count();
@@ -295,6 +294,11 @@ void BoxPlotDock::loadDataColumns() {
 		// show the columns in the comboboxes
 		for (int i = 0; i < count; ++i)
 			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+
+		// show columns names in the combobox for the selection of the box to be modified
+		for (int i = 0; i < count; ++i)
+			if (m_boxPlot->dataColumns().at(i))
+				ui.cbNumber->addItem(m_boxPlot->dataColumns().at(i)->name());
 	} else {
 		// no data columns set in the box plot yet, we show the first combo box only
 		m_dataComboBoxes.first()->setAspect(nullptr);
@@ -309,6 +313,11 @@ void BoxPlotDock::loadDataColumns() {
 		cb->setEnabled(enabled);
 	for (auto* b : m_removeButtons)
 		b->setVisible(enabled);
+
+	if (currentBoxIndex != -1)
+		ui.cbNumber->setCurrentIndex(currentBoxIndex);
+	else
+		ui.cbNumber->setCurrentIndex(0);
 }
 
 void BoxPlotDock::setDataColumns() const {
@@ -406,59 +415,83 @@ void BoxPlotDock::removeDataColumn() {
 		setDataColumns();
 }
 
-void BoxPlotDock::dataColumnChanged(const QModelIndex&) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::dataColumnChanged(const QModelIndex&) {
+	CONDITIONAL_LOCK_RETURN;
 
 	setDataColumns();
 }
 
-void BoxPlotDock::orderingChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::orderingChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto ordering = static_cast<BoxPlot::Ordering>(index);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setOrdering(ordering);
 }
 
-void BoxPlotDock::orientationChanged(int index) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::orientationChanged(int index) {
+	CONDITIONAL_LOCK_RETURN;
 
 	auto orientation = BoxPlot::Orientation(index);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setOrientation(orientation);
 }
 
-void BoxPlotDock::variableWidthChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::variableWidthChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setVariableWidth(state);
 }
 
-void BoxPlotDock::notchesEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::notchesEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setNotchesEnabled(state);
 }
 
-void BoxPlotDock::visibilityChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::visibilityChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setVisible(state);
 }
 
 //"Box"-tab
-void BoxPlotDock::widthFactorChanged(int value) const {
-	if (m_initializing)
+/*!
+ * called when the current box number was changed, shows the box properties for the selected box.
+ */
+void BoxPlotDock::currentBoxChanged(int index) {
+	if (index == -1)
 		return;
+
+	CONDITIONAL_LOCK_RETURN;
+
+	QList<Background*> backgrounds;
+	QList<Line*> borderLines;
+	QList<Line*> medianLines;
+	for (auto* plot : m_boxPlots) {
+		auto* background = plot->backgroundAt(index);
+		if (background)
+			backgrounds << background;
+
+		auto* line = plot->borderLineAt(index);
+		if (line)
+			borderLines << line;
+
+		line = plot->medianLineAt(index);
+		if (line)
+			medianLines << line;
+	}
+
+	backgroundWidget->setBackgrounds(backgrounds);
+	borderLineWidget->setLines(borderLines);
+	medianLineWidget->setLines(medianLines);
+}
+
+void BoxPlotDock::widthFactorChanged(int value) {
+	CONDITIONAL_LOCK_RETURN;
 
 	double factor = (double)value / 100.;
 	for (auto* boxPlot : m_boxPlots)
@@ -487,19 +520,15 @@ void BoxPlotDock::symbolCategoryChanged() {
 	symbolWidget->setSymbols(symbols);
 }
 
-void BoxPlotDock::jitteringEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::jitteringEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setJitteringEnabled(state);
 }
 
 // whiskers
-void BoxPlotDock::whiskersTypeChanged(int index) const {
-	if (m_initializing)
-		return;
-
+void BoxPlotDock::whiskersTypeChanged(int index) {
 	auto type = BoxPlot::WhiskersType(index);
 	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
 	ui.rbFarOut->setEnabled(type == BoxPlot::WhiskersType::IQR);
@@ -509,17 +538,17 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 	ui.lWhiskersRangeParameter->setVisible(visible);
 	ui.leWhiskersRangeParameter->setVisible(visible);
 
+	CONDITIONAL_LOCK_RETURN;
+
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersType(type);
 }
 
-void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) {
+	CONDITIONAL_LOCK_RETURN;
 
 	bool ok;
-	SET_NUMBER_LOCALE
-	double value{numberLocale.toDouble(text, &ok)};
+	double value{QLocale().toDouble(text, &ok)};
 	if (!ok)
 		return;
 
@@ -529,76 +558,23 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
 
 // whiskers cap
 void BoxPlotDock::whiskersCapSizeChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersCapSize(size);
 }
 
-void BoxPlotDock::whiskersCapStyleChanged(int index) const {
-	if (m_initializing)
-		return;
-
-	auto penStyle = Qt::PenStyle(index);
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setStyle(penStyle);
-		boxPlot->setWhiskersCapPen(pen);
-	}
-}
-
-void BoxPlotDock::whiskersCapColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setColor(color);
-		boxPlot->setWhiskersCapPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, color);
-	m_initializing = false;
-}
-
-void BoxPlotDock::whiskersCapWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->whiskersCapPen();
-		pen.setWidthF(Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point));
-		boxPlot->setWhiskersCapPen(pen);
-	}
-}
-
-void BoxPlotDock::whiskersCapOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = static_cast<qreal>(value) / 100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setWhiskersCapOpacity(opacity);
-}
-
 //"Margin Plots"-Tab
-void BoxPlotDock::rugEnabledChanged(bool state) const {
-	if (m_initializing)
-		return;
+void BoxPlotDock::rugEnabledChanged(bool state) {
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : qAsConst(m_boxPlots))
 		curve->setRugEnabled(state);
 }
 
 void BoxPlotDock::rugLengthChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -606,8 +582,7 @@ void BoxPlotDock::rugLengthChanged(double value) const {
 }
 
 void BoxPlotDock::rugWidthChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -615,8 +590,7 @@ void BoxPlotDock::rugWidthChanged(double value) const {
 }
 
 void BoxPlotDock::rugOffsetChanged(double value) const {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : qAsConst(m_boxPlots))
@@ -631,103 +605,82 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_boxPlot != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
 }
 void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	loadDataColumns();
 }
 void BoxPlotDock::plotOrderingChanged(BoxPlot::Ordering ordering) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrdering->setCurrentIndex((int)ordering);
 }
 void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
 void BoxPlotDock::plotVariableWidthChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVariableWidth->setChecked(on);
 }
 void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkNotches->setChecked(on);
 }
 void BoxPlotDock::plotVisibilityChanged(bool on) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkVisible->setChecked(on);
 }
 
 // box
 void BoxPlotDock::plotWidthFactorChanged(double factor) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	// 	float v = (float)value*100.;
 	ui.sbWidthFactor->setValue(factor * 100);
 }
 
 // symbols
 void BoxPlotDock::plotJitteringEnabledChanged(bool status) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkJitteringEnabled->setChecked(status);
 }
 
 // whiskers
 void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbWhiskersType->setCurrentIndex((int)type);
 }
 void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
-	Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
+	CONDITIONAL_LOCK_RETURN;
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(value));
 }
 
 // whiskers cap
 void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
-}
-void BoxPlotDock::plotWhiskersCapPenChanged(QPen& pen) {
-	Lock lock(m_initializing);
-	if (ui.cbWhiskersCapStyle->currentIndex() != pen.style())
-		ui.cbWhiskersCapStyle->setCurrentIndex(pen.style());
-	if (ui.kcbWhiskersCapColor->color() != pen.color())
-		ui.kcbWhiskersCapColor->setColor(pen.color());
-	if (ui.sbWhiskersCapWidth->value() != pen.widthF())
-		ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
-void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
-	Lock lock(m_initializing);
-	float v = (float)value * 100.;
-	ui.sbWhiskersCapOpacity->setValue(v);
 }
 
 //"Margin Plot"-Tab
 void BoxPlotDock::plotRugEnabledChanged(bool status) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chkRugEnabled->setChecked(status);
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugLengthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugWidthChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 void BoxPlotDock::plotRugOffsetChanged(double value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -754,26 +707,18 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 
 	// whiskers
 	ui.cbWhiskersType->setCurrentIndex(group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()));
-	SET_NUMBER_LOCALE
-	ui.leWhiskersRangeParameter->setText(numberLocale.toString(m_boxPlot->whiskersRangeParameter()));
+	ui.leWhiskersRangeParameter->setText(QLocale().toString(m_boxPlot->whiskersRangeParameter()));
 	whiskersLineWidget->loadConfig(group);
 
 	// whiskers cap
-	const QPen& penCap = m_boxPlot->whiskersCapPen();
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point));
-	ui.cbWhiskersCapStyle->setCurrentIndex(group.readEntry("WhiskersCapStyle", (int)penCap.style()));
-	ui.kcbWhiskersCapColor->setColor(group.readEntry("WhiskersCapColor", penCap.color()));
-	ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapWidth", penCap.widthF()), Worksheet::Unit::Point));
-	ui.sbWhiskersCapOpacity->setValue(group.readEntry("WhiskersCapOpacity", m_boxPlot->whiskersCapOpacity()) * 100);
+	whiskersCapLineWidget->loadConfig(group);
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_boxPlot->rugEnabled());
 	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugWidth(), Worksheet::Unit::Point));
 	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugLength(), Worksheet::Unit::Point));
 	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_boxPlot->rugOffset(), Worksheet::Unit::Point));
-
-	Lock lock(m_initializing);
-	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, ui.kcbWhiskersCapColor->color());
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
@@ -817,15 +762,12 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	// whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
-	SET_NUMBER_LOCALE
-	group.writeEntry("WhiskersRangeParameter", numberLocale.toDouble(ui.leWhiskersRangeParameter->text()));
+	group.writeEntry("WhiskersRangeParameter", QLocale().toDouble(ui.leWhiskersRangeParameter->text()));
 	whiskersLineWidget->saveConfig(group);
 
 	// whiskers cap
 	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
-	group.writeEntry("WhiskersCapStyle", ui.cbWhiskersCapStyle->currentIndex());
-	group.writeEntry("WhiskersCapColor", ui.kcbWhiskersCapColor->color());
-	group.writeEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersCapWidth->value(), Worksheet::Unit::Point));
-	group.writeEntry("WhiskersCapOpacity", ui.sbWhiskersCapOpacity->value() / 100.0);
+	whiskersCapLineWidget->saveConfig(group);
+
 	config.sync();
 }

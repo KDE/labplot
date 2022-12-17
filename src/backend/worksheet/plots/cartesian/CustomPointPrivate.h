@@ -27,7 +27,6 @@ public:
 	void updateData();
 
 	bool m_hovered{false};
-	bool m_visible{true}; // point inside the plot (visible) or not
 
 	QPainterPath pointShape;
 

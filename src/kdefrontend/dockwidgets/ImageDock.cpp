@@ -123,17 +123,12 @@ ImageDock::ImageDock(QWidget* parent)
 }
 
 void ImageDock::setImages(QList<Image*> list) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_imageList = list;
 	m_image = list.first();
 	setAspects(list);
 
-	SET_NUMBER_LOCALE
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbPositionX->setLocale(numberLocale);
-	ui.sbPositionY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
+	updateLocale();
 
 	// if there are more then one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
@@ -187,7 +182,7 @@ void ImageDock::setImages(QList<Image*> list) {
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void ImageDock::updateLocale() {
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
@@ -202,7 +197,7 @@ void ImageDock::updateUnits() {
 		return;
 
 	m_units = units;
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric) {
 		// convert from imperial to metric
@@ -245,43 +240,39 @@ void ImageDock::selectFile() {
 	// of it in Image and loading of the image. Call embeddedChanged()
 	// to update the text field and to show the actual file name only
 	// and not the whole path if the image is being embedded.
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	embeddedChanged(ui.chbEmbedded->checkState());
 }
 
 void ImageDock::embeddedChanged(int state) {
 	bool embedded = static_cast<bool>(state);
+	ui.leFileName->setEnabled(!embedded);
+
+	CONDITIONAL_LOCK_RETURN;
+
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
-		ui.leFileName->setEnabled(false);
-	} else {
+	} else
 		ui.leFileName->setText(m_image->fileName());
-		ui.leFileName->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
 
 	for (auto* image : m_imageList)
 		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
-	if (m_initializing)
-		return;
-
 	const QString& fileName = ui.leFileName->text();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leFileName, invalid);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setFileName(fileName);
 }
 
 void ImageDock::opacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	float opacity = (float)value / 100;
 	for (auto* image : m_imageList)
@@ -290,11 +281,11 @@ void ImageDock::opacityChanged(int value) {
 
 // Size
 void ImageDock::sizeChanged(int /*index*/) {
+	CONDITIONAL_LOCK_RETURN;
 }
 
 void ImageDock::widthChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	int width = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList)
@@ -302,8 +293,7 @@ void ImageDock::widthChanged(double value) {
 }
 
 void ImageDock::heightChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	int height = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList)
@@ -311,8 +301,7 @@ void ImageDock::heightChanged(double value) {
 }
 
 void ImageDock::keepRatioChanged(int state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setKeepRatio(state);
@@ -323,8 +312,7 @@ void ImageDock::keepRatioChanged(int state) {
 	called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void ImageDock::positionXChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	WorksheetElement::PositionWrapper position = m_image->position();
 	position.horizontalPosition = WorksheetElement::HorizontalPosition(index);
@@ -336,8 +324,7 @@ void ImageDock::positionXChanged(int index) {
 	called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void ImageDock::positionYChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto position = m_image->position();
 	position.verticalPosition = WorksheetElement::VerticalPosition(index);
@@ -346,8 +333,7 @@ void ImageDock::positionYChanged(int index) {
 }
 
 void ImageDock::customPositionXChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList) {
@@ -358,8 +344,7 @@ void ImageDock::customPositionXChanged(double value) {
 }
 
 void ImageDock::customPositionYChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* image : m_imageList) {
@@ -370,32 +355,28 @@ void ImageDock::customPositionYChanged(double value) {
 }
 
 void ImageDock::horizontalAlignmentChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setHorizontalAlignment(WorksheetElement::HorizontalAlignment(index));
 }
 
 void ImageDock::verticalAlignmentChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setVerticalAlignment(WorksheetElement::VerticalAlignment(index));
 }
 
 void ImageDock::rotationChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setRotationAngle(value);
 }
 
 void ImageDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* image : m_imageList)
 		image->setVisible(state);
@@ -403,8 +384,7 @@ void ImageDock::visibilityChanged(bool state) {
 
 // border
 void ImageDock::borderStyleChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto penStyle = Qt::PenStyle(index);
 	QPen pen;
@@ -416,8 +396,9 @@ void ImageDock::borderStyleChanged(int index) {
 }
 
 void ImageDock::borderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
+	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
+
+	CONDITIONAL_LOCK_RETURN;
 
 	QPen pen;
 	for (auto* image : m_imageList) {
@@ -425,15 +406,10 @@ void ImageDock::borderColorChanged(const QColor& color) {
 		pen.setColor(color);
 		image->setBorderPen(pen);
 	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
 }
 
 void ImageDock::borderWidthChanged(double value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	QPen pen;
 	for (auto* image : m_imageList) {
@@ -444,8 +420,7 @@ void ImageDock::borderWidthChanged(double value) {
 }
 
 void ImageDock::borderOpacityChanged(int value) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	qreal opacity = (float)value / 100.;
 	for (auto* image : m_imageList)
@@ -456,93 +431,79 @@ void ImageDock::borderOpacityChanged(int value) {
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
 void ImageDock::imageFileNameChanged(const QString& name) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.leFileName->setText(name);
-	m_initializing = false;
 }
 
 void ImageDock::imageEmbeddedChanged(bool keep) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbEmbedded->setChecked(keep);
-	m_initializing = false;
 }
 
 void ImageDock::imageOpacityChanged(float opacity) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbOpacity->setValue(qRound(opacity * 100.0));
-	m_initializing = false;
 }
 
 // Size
 void ImageDock::imageWidthChanged(int width) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(width, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void ImageDock::imageHeightChanged(int height) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(height, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void ImageDock::imageKeepRatioChanged(bool keep) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbKeepRatio->setChecked(keep);
-	m_initializing = false;
 }
 
 // Position
 void ImageDock::imagePositionChanged(const WorksheetElement::PositionWrapper& position) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbPositionX->setValue(Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit));
 	ui.sbPositionY->setValue(Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit));
 	ui.cbPositionX->setCurrentIndex(static_cast<int>(position.horizontalPosition));
 	ui.cbPositionY->setCurrentIndex(static_cast<int>(position.verticalPosition));
-	m_initializing = false;
 }
 
 void ImageDock::imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment index) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void ImageDock::imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment index) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void ImageDock::imageRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void ImageDock::imageVisibleChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	ui.chbVisible->setChecked(on);
-	m_initializing = false;
 }
 
 // Border
 void ImageDock::imageBorderPenChanged(const QPen& pen) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
-	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
+	ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point)); // No if!
 }
 
 void ImageDock::imageBorderOpacityChanged(float value) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	float v = (float)value * 100.;
 	ui.sbBorderOpacity->setValue(v);
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -552,7 +513,7 @@ void ImageDock::load() {
 	if (!m_image)
 		return;
 
-	Lock lock(m_initializing);
+	// No Lock!
 
 	ui.leFileName->setText(m_image->fileName());
 	ui.chbEmbedded->setChecked(m_image->embedded());
