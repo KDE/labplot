@@ -915,7 +915,7 @@ void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
 		handleSourceDataChanged();
 
 		connect(histogram, &Histogram::dataChanged, this, &XYFitCurve::handleSourceDataChanged);
-		// 		//TODO: add disconnect in the undo-function
+		// TODO: add disconnect in the undo-function
 	}
 }
 
@@ -929,7 +929,7 @@ void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=]() {
 				handleSourceDataChanged();
 			});
-			// TODO disconnect on undo
+			// TODO: disconnect on undo
 		}
 	}
 }
@@ -944,7 +944,7 @@ void XYFitCurve::setYErrorColumn(const AbstractColumn* column) {
 			connect(column, &AbstractColumn::dataChanged, this, [=]() {
 				handleSourceDataChanged();
 			});
-			// TODO disconnect on undo
+			// TODO: disconnect on undo
 		}
 	}
 }
