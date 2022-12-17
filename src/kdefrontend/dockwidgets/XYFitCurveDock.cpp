@@ -129,6 +129,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	for (int i = 0; i < NSL_FIT_ALGORITHM_COUNT; i++)
 		uiGeneralTab.cbAlgorithm->addItem(QLatin1String(nsl_fit_algorithm_name[i]));
+
 	if (m_fitData.modelCategory != nsl_fit_model_distribution) { // disable ML
 		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
 		auto* item = model->item(nsl_fit_algorithm_ml);
@@ -793,17 +794,17 @@ void XYFitCurveDock::categoryChanged(int index) {
 		uiGeneralTab.sbDegree->setValue(1);
 		// when model type does not change, call it here
 		updateModelEquation();
-		// update algorithm
-		const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
-		auto* item = model->item(nsl_fit_algorithm_ml);
-		if (m_fitData.modelCategory == nsl_fit_model_distribution) {
-			// enable ML item
-			item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		} else {
-			uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
-			// disable ML item
-			item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-		}
+	}
+
+	// update algorithm list
+	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbAlgorithm->model());
+	auto* item = model->item(nsl_fit_algorithm_ml);
+	// enable ML item only for distributions
+	if (m_fitData.modelCategory == nsl_fit_model_distribution) {
+		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	} else {
+		uiGeneralTab.cbAlgorithm->setCurrentIndex(nsl_fit_algorithm_lm);
+		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
 	enableRecalculate();
