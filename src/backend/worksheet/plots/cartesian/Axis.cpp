@@ -2590,12 +2590,13 @@ void AxisPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*opt
 	if (line->pen().style() != Qt::NoPen) {
 		painter->setOpacity(line->opacity());
 		painter->setPen(line->pen());
-		painter->setBrush(Qt::SolidPattern);
 		painter->drawPath(linePath);
 
 		// draw the arrow
-		if (arrowType != Axis::ArrowType::NoArrow)
+		if (arrowType != Axis::ArrowType::NoArrow) {
+			painter->setBrush(QBrush(line->color(), Qt::SolidPattern));
 			painter->drawPath(arrowPath);
+		}
 	}
 
 	// draw the major ticks

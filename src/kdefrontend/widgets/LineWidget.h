@@ -43,7 +43,7 @@ private Q_SLOTS:
 	void capSizeChanged(double);
 
 	void styleChanged(int);
-	void colorChanged(const QColor&);
+	void colorChangedSlot(const QColor&);
 	void widthChanged(double);
 	void opacityChanged(int);
 
@@ -57,6 +57,9 @@ private Q_SLOTS:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(double);
+
+Q_SIGNALS:
+	void colorChanged(const QColor&);
 };
 
 #endif // LINEWIDGET_H
