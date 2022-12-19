@@ -36,6 +36,7 @@ extern "C" {
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_multifit.h>
 #include <gsl/gsl_sf_erf.h>
+#include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_version.h>
@@ -1976,12 +1977,15 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		const double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
 		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
 		fitResult.marginValues[2] = margin;
-		// normalization for spreadsheet or curve
-		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
-			fitResult.paramValues[0] *= gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma);
+
 		// TODO: CI
 		// margin = nsl_stats_tdist_margin(alpha, fitResult.dof, 0.02234446);
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /=
+				(gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma)) / (2. * qSqrt(2.));
 		break;
 	}
 	case nsl_sf_stats_exponential: {
@@ -1989,24 +1993,52 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		const double lambda = 1. / (tmpXDataColumn->mean() - mu); // 1/(<x>-\mu)
 		fitResult.paramValues[1] = lambda;
 		fitResult.paramValues[2] = mu;
+
+		// TODO: error + CI
+
 		// normalization for spreadsheet or curve
 		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
 			fitResult.paramValues[0] /= exp(-lambda * (tmpXDataColumn->minimum() - mu)) - exp(-lambda * (tmpXDataColumn->maximum() - mu));
-		// TODO: error + CI
 		break;
 	}
-	case nsl_sf_stats_laplace:
-		fitResult.paramValues[1] = tmpXDataColumn->madmed(); // sigma
-		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu
-		// TODO: normalization
+	case nsl_sf_stats_laplace: {
+		const double sigma = tmpXDataColumn->madmed();
+		const double mu = tmpXDataColumn->median();
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+
 		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram) {
+			double Fmin, Fmax;
+			const double xmin = tmpXDataColumn->minimum(), xmax = tmpXDataColumn->maximum();
+			if (xmin < mu)
+				Fmin = .5 * exp((xmin - mu) / sigma);
+			else
+				Fmin = 1. - .5 * exp(-(xmin - mu) / sigma);
+			if (xmax < mu)
+				Fmax = .5 * exp((xmax - mu) / sigma);
+			else
+				Fmax = 1. - .5 * exp(-(xmax - mu) / sigma);
+
+			fitResult.paramValues[0] /= Fmax - Fmin;
+		}
 		break;
-	case nsl_sf_stats_cauchy_lorentz: // see WP:en
-		fitResult.paramValues[1] = tmpXDataColumn->iqr() / 2.; // sigma
-		fitResult.paramValues[2] = tmpXDataColumn->median(); // mu (better truncated mean of middle 24%)
-		// TODO: normalization
+	}
+	case nsl_sf_stats_cauchy_lorentz: { // see WP:en
+		const double gamma = tmpXDataColumn->iqr() / 2.;
+		const double mu = tmpXDataColumn->median(); // better truncated mean of middle 24%
+		fitResult.paramValues[1] = gamma;
+		fitResult.paramValues[2] = mu;
+
 		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= 1. / M_PI * (atan((tmpXDataColumn->maximum() - mu) / gamma) - atan((tmpXDataColumn->minimum() - mu) / gamma));
 		break;
+	}
 	case nsl_sf_stats_lognormal: {
 		// calculate mu and sigma
 		double mu = 0.;
@@ -2017,10 +2049,16 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		for (size_t i = 0; i < n; i++)
 			var += gsl_pow_2(qLn(tmpXDataColumn->valueAt(i)) - mu);
 		var /= (n - 1);
-		fitResult.paramValues[1] = qSqrt(var); // sigma
-		fitResult.paramValues[2] = mu; // mu
-		// TODO: normalization
+		const double sigma = qSqrt(var);
+		fitResult.paramValues[1] = sigma;
+		fitResult.paramValues[2] = mu;
+
 		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /=
+				gsl_sf_erf((qLn(tmpXDataColumn->maximum()) - mu) / sigma) - gsl_sf_erf((qLn(tmpXDataColumn->minimum()) - mu) / sigma) / (2. * qSqrt(2.));
 		break;
 	}
 	case nsl_sf_stats_poisson: {
@@ -2033,13 +2071,25 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.marginValues[1] = lambda - nsl_stats_chisq_low(alpha, n * lambda) / n;
 		fitResult.margin2Values.resize(2);
 		fitResult.margin2Values[1] = nsl_stats_chisq_high(alpha, n * lambda) / n - lambda;
-		// TODO: normalization
-	} break;
-	case nsl_sf_stats_binomial:
-		fitResult.paramValues[1] = tmpXDataColumn->mean() / n; // k
-		fitResult.paramValues[2] = n; // n
-		// TODO: normalization
+
+		// normalization for spreadsheet or curve
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /=
+				gsl_sf_gamma_inc_Q(floor(tmpXDataColumn->maximum() + 1), lambda) - gsl_sf_gamma_inc_Q(floor(tmpXDataColumn->minimum() + 1), lambda);
+		break;
+	}
+	case nsl_sf_stats_binomial: {
+		const double p = tmpXDataColumn->mean() / n;
+		fitResult.paramValues[1] = p;
+		fitResult.paramValues[2] = n;
+
 		// TODO: error + CI
+
+		// normalization for spreadsheet or curve
+		const double kmin = tmpXDataColumn->minimum(), kmax = tmpXDataColumn->maximum();
+		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
+			fitResult.paramValues[0] /= gsl_sf_beta_inc(n - kmax, kmax + 1, 1 - p) - gsl_sf_beta_inc(n - kmin, kmin + 1, 1 - p);
+	}
 	}
 
 	fitResult.calculateResult(n, np);
