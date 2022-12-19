@@ -20,19 +20,20 @@
 #include <QPen>
 #include <QStaticText>
 
+using Dimension = CartesianCoordinateSystem::Dimension;
+
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformYScale(int index);
-	void retransformXScale(int index);
+	void retransformScale(const Dimension, int index, bool suppressSignals = false);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void niceExtendChanged();
-	void xRangeFormatChanged();
-	void yRangeFormatChanged();
+	void rangeFormatChanged(const Dimension dim);
+	void wheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
@@ -51,64 +52,208 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	Range<double>& xRange(int index = -1) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		return xRanges[index].range;
+	struct RichRange {
+		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
+			: range(r)
+			, dirty(d) {
+		}
+		Range<double> range; // current range
+		Range<double> prev{Range<double>(NAN, NAN)};
+		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
+		bool dirty{false}; // recalculate the range before displaying, because data range or display range changed
+	};
+
+	QVector<RichRange>& ranges(const Dimension dim) {
+		switch (dim) {
+		case Dimension::X:
+			return xRanges;
+		case Dimension::Y:
+			return yRanges;
+		}
+		return yRanges;
 	}
-	Range<double>& yRange(int index = -1) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
+
+	bool rangeDirty(const Dimension dim, int index) const {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			return false;
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			return xRanges.at(index).dirty;
+		case Dimension::Y:
+			return yRanges.at(index).dirty;
+		}
+		return false;
+	}
+
+	void setRangeDirty(const Dimension dim, int index, const bool dirty) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			return;
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			xRanges[index].dirty = dirty;
+			break;
+		case Dimension::Y:
+			yRanges[index].dirty = dirty;
+			break;
+		}
+	}
+
+	void setRange(const Dimension dim, int index, const Range<double>& range) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			return;
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			xRanges[index].range = range;
+			break;
+		case Dimension::Y:
+			yRanges[index].range = range;
+			break;
+		}
+	}
+
+	void setFormat(const Dimension dim, int index, RangeT::Format format) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			return;
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			xRanges[index].range.setFormat(format);
+			break;
+		case Dimension::Y:
+			yRanges[index].range.setFormat(format);
+			break;
+		}
+	}
+
+	void setScale(const Dimension dim, int index, RangeT::Scale scale) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			index = defaultCoordinateSystem()->index(dim);
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			xRanges[index].range.setScale(scale);
+			break;
+		case Dimension::Y:
+			yRanges[index].range.setScale(scale);
+			break;
+		}
+	}
+
+	Range<double>& range(const Dimension dim, int index = -1) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			index = defaultCoordinateSystem()->index(dim);
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			return xRanges[index].range;
+		case Dimension::Y:
+			return yRanges[index].range;
+		}
 		return yRanges[index].range;
 	}
-	Range<double>& dataXRange(int index = -1) { // get x range of data
-		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		return xRanges[index].dataRange;
+
+	const Range<double>& rangeConst(const Dimension dim, int index = -1) const {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			index = defaultCoordinateSystem()->index(dim);
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+		switch (dim) {
+		case Dimension::X:
+			return xRanges[index].range;
+		case Dimension::Y:
+			return yRanges[index].range;
+		}
+		return yRanges[index].range;
 	}
-	Range<double>& dataYRange(int index = -1) { // get y range of data
-		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
+
+	Range<double>& dataRange(const Dimension dim, int index = -1) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			index = defaultCoordinateSystem()->index(dim);
+		} else if (index == -1)
+			index = defaultCoordinateSystem()->index(dim);
+
+		switch (dim) {
+		case Dimension::X:
+			return xRanges[index].dataRange;
+		case Dimension::Y:
+			return yRanges[index].dataRange;
+		}
 		return yRanges[index].dataRange;
 	}
 
-	bool autoScaleX(int index = -1) {
+	bool autoScale(const Dimension dim, int index = -1) const {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
+			return false;
+		}
 		if (index == -1) {
-			for (int i = 0; i < q->xRangeCount(); i++)
-				if (!autoScaleX(i))
+			for (int i = 0; i < rangeCount(dim); i++)
+				if (!autoScale(dim, i))
 					return false;
 			return true;
 		}
-		return xRanges[index].range.autoScale();
-	}
-	bool autoScaleY(int index = -1) {
-		if (index == -1) {
-			for (int i = 0; i < q->yRangeCount(); i++)
-				if (!autoScaleY(i))
-					return false;
-			return true;
+
+		switch (dim) {
+		case Dimension::X:
+			return xRanges[index].range.autoScale();
+		case Dimension::Y:
+			return yRanges[index].range.autoScale();
 		}
 		return yRanges[index].range.autoScale();
 	}
-	void enableAutoScaleX(int index = -1, bool b = true) {
-		if (index == -1) {
-			for (int i = 0; i < q->xRangeCount(); i++)
-				enableAutoScaleX(i, b);
+
+	int rangeCount(const Dimension dim) const {
+		switch (dim) {
+		case Dimension::X:
+			return xRanges.size();
+		case Dimension::Y:
+			return yRanges.size();
+		}
+		return 0;
+	}
+
+	void enableAutoScale(const Dimension dim, int index = -1, bool b = true) {
+		if (index < -1 || index >= rangeCount(dim)) {
+			DEBUG(Q_FUNC_INFO << QStringLiteral("WARNING: wrong index: %1").arg(index).toStdString());
 			return;
 		}
-		xRanges[index].range.setAutoScale(b);
-	}
-	void enableAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->yRangeCount(); i++)
-				enableAutoScaleY(i, b);
+			for (int i = 0; i < rangeCount(dim); i++)
+				enableAutoScale(dim, i, b);
 			return;
 		}
-		yRanges[index].range.setAutoScale(b);
+
+		switch (dim) {
+		case Dimension::X:
+			xRanges[index].range.setAutoScale(b);
+			break;
+		case Dimension::Y:
+			yRanges[index].range.setAutoScale(b);
+			break;
+		}
 	}
-	void checkXRange(int index);
-	void checkYRange(int index);
+
+	void checkRange(Dimension, int index);
 	Range<double> checkRange(const Range<double>&);
+	CartesianPlot::RangeBreaks rangeBreaks(Dimension);
+	bool rangeBreakingEnabled(Dimension);
 
 	// the following factor determines the size of the offset between the min/max points of the curves
 	// and the coordinate system ranges, when doing auto scaling
@@ -125,17 +270,6 @@ public:
 
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
-
-	struct RichRange {
-		RichRange(const Range<double>& r = Range<double>(), const bool d = false)
-			: range(r)
-			, dirty(d) {
-		}
-		Range<double> range; // current range
-		Range<double> prev;
-		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
-		bool dirty{false};
-	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
 	bool niceExtend{true};
@@ -158,7 +292,7 @@ public:
 	QPointF cursor0Pos{QPointF(qQNaN(), qQNaN())};
 	bool cursor1Enable{false};
 	QPointF cursor1Pos{QPointF(qQNaN(), qQNaN())};
-	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
+	Line* cursorLine{nullptr};
 
 	// other mouse cursor modes
 	QPen zoomSelectPen{Qt::black, 3, Qt::SolidLine};
@@ -193,8 +327,10 @@ private:
 	QPointF m_panningStart;
 	QPointF m_crosshairPos; // current position of the mouse cursor in scene coordinates
 
-	QStaticText m_cursor0Text{"1"};
-	QStaticText m_cursor1Text{"2"};
+	QStaticText m_cursor0Text{QStringLiteral("1")};
+	QStaticText m_cursor1Text{QStringLiteral("2")};
+
+	friend class MultiRangeTest;
 };
 
 #endif

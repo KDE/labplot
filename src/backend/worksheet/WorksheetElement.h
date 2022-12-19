@@ -4,7 +4,7 @@
 	Description          : Base class for all Worksheet children.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -31,6 +31,7 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	WorksheetElement(const QString& name, AspectType type);
 	~WorksheetElement() override;
 
 	enum class Orientation { Horizontal, Vertical, Both };
@@ -39,17 +40,6 @@ public:
 
 	enum class HorizontalAlignment { Left, Center, Right };
 	enum class VerticalAlignment { Top, Center, Bottom };
-
-	enum class BackgroundType { Color, Image, Pattern };
-	enum class BackgroundColorStyle {
-		SingleColor,
-		HorizontalLinearGradient,
-		VerticalLinearGradient,
-		TopLeftDiagonalLinearGradient,
-		BottomLeftDiagonalLinearGradient,
-		RadialGradient
-	};
-	enum class BackgroundImageStyle { ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled };
 
 	enum class PositionLimit { None, X, Y };
 
@@ -88,6 +78,7 @@ public:
 	virtual void setVisible(bool on);
 	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
+	void setSuppressRetransform(bool);
 
 	virtual void setPrinting(bool);
 	bool isPrinting() const;

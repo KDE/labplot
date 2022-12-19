@@ -14,7 +14,7 @@
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellrange.h"
+#include "3rdparty/QXlsx/header/xlsxcellrange.h"
 #endif
 
 #include <QAbstractItemModel>
@@ -33,7 +33,7 @@ ExcelOptionsWidget::ExcelOptionsWidget(QWidget* parent, ImportFileWidget* fileWi
 	ui.twDataRegions->setAlternatingRowColors(true);
 	ui.twDataRegions->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
 	connect(ui.twDataRegions, &QTreeWidget::itemSelectionChanged, this, &ExcelOptionsWidget::dataRegionSelectionChanged);

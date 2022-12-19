@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget providing options for the import of HDF5 data
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,7 +34,7 @@ HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -45,15 +45,19 @@ void HDF5OptionsWidget::clear() {
 	ui.twPreview->clear();
 }
 
-void HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileName) {
+int HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileName) {
 	ui.twContent->clear();
 	QTreeWidgetItem* rootItem = ui.twContent->invisibleRootItem();
-	filter->parse(fileName, rootItem);
+	int status = filter->parse(fileName, rootItem);
+	if (status != 0) // parsing failed
+		return status;
 
 	ui.twContent->insertTopLevelItem(0, rootItem);
 	ui.twContent->expandAll();
 	ui.twContent->resizeColumnToContents(0);
 	ui.twContent->resizeColumnToContents(3);
+
+	return 0;
 }
 
 /*!

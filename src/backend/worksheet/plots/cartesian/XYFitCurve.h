@@ -64,6 +64,7 @@ public:
 	struct FitResult {
 		FitResult() {
 		}
+		void calculateResult(size_t n, unsigned int np); // calculate depending results (uses dof, sse, sst)
 
 		bool available{false};
 		bool valid{false};
@@ -105,15 +106,18 @@ public:
 
 	void recalculate() override;
 	void evaluate(bool preview);
+	bool resultAvailable() const override;
+	void initStartValues(const XYCurve*);
+	void initStartValues(XYFitCurve::FitData&, const XYCurve*);
 	void initFitData(XYAnalysisCurve::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
-	void initStartValues(const XYCurve*);
-	static void initStartValues(XYFitCurve::FitData&, const XYCurve*);
+	void clearFitResult();
 
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
+	const AbstractColumn* residualsColumn() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorColumn, XErrorColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorColumn, YErrorColumn)
 	const QString& xErrorColumnPath() const;

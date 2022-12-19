@@ -52,8 +52,8 @@ bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-			Q_EMIT commitData((QWidget*)editor);
-			Q_EMIT closeEditor((QWidget*)editor, QAbstractItemDelegate::NoHint);
+			Q_EMIT commitData(static_cast<QWidget*>(editor));
+			Q_EMIT closeEditor(static_cast<QWidget*>(editor), QAbstractItemDelegate::NoHint);
 			Q_EMIT returnPressed();
 			return true;
 		}

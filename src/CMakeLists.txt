@@ -13,8 +13,9 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
-    ${KDEFRONTEND_DIR}/DatasetModel.cpp
+	${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
+	${KDEFRONTEND_DIR}/PlotTemplateDialog.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
@@ -40,7 +41,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
-        ${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
@@ -66,6 +67,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/HistogramDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/BarPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BoxPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CustomPointDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ColumnDock.cpp
@@ -97,11 +99,13 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/FlattenColumnsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/SampleValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
@@ -110,6 +114,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/SlidingPanel.cpp
+	${KDEFRONTEND_DIR}/widgets/BackgroundWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ConstantsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesComboBox.cpp
 	${KDEFRONTEND_DIR}/widgets/ThemesWidget.cpp
@@ -118,7 +123,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FitParametersWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FunctionsWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/LabelWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/LineWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/SymbolWidget.cpp
+	${KDEFRONTEND_DIR}/widgets/ValueWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerImageWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/DatapickerCurveWidget.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditWidget.cpp
@@ -145,6 +152,7 @@ endif()
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
+	${KDEFRONTEND_DIR}/ui/PlotTemplateDialog.ui
 	${KDEFRONTEND_DIR}/ui/exampleswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
@@ -176,15 +184,18 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/backgroundwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/barplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/boxplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/columndock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/linewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
@@ -206,6 +217,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/valuewidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/worksheetdock.ui
 	${KDEFRONTEND_DIR}/ui/matrix/matrixfunctionwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/plotdatawidget.ui
@@ -213,10 +225,12 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/exportspreadsheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/addsubtractvaluewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/flattencolumnswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/formattingheatmapwidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/samplevalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
@@ -301,7 +315,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
-        ${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
+	${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
@@ -324,7 +338,9 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
+	${BACKEND_DIR}/worksheet/Background.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/worksheet/Line.cpp
 	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
@@ -337,14 +353,15 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/BarPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/BoxPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
-	${BACKEND_DIR}/worksheet/plots/cartesian/Curve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Plot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceRange.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
@@ -362,6 +379,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Value.cpp
 )
 
 if (Qt5Mqtt_FOUND)
@@ -426,6 +444,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/widgets/qxtspanslider.cpp
 	${COMMONFRONTEND_DIR}/widgets/MemoryWidget.cpp
 	${COMMONFRONTEND_DIR}/widgets/DateTimeSpinBox.cpp
+        ${COMMONFRONTEND_DIR}/widgets/NumberSpinBox.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerView.cpp
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
@@ -462,12 +481,18 @@ set(GENERATED_SOURCES
 INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
 set( LABPLOT_SRCS ${GUI_SOURCES} )
 ki18n_wrap_ui( LABPLOT_SRCS ${UI_SOURCES} )
-# see also QT_MINIMUM_VERSION
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
+# see also QT_MINIMUM_VERSION in CMakeLists.txt
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50700)
+#IF (QT_VERSION_MAJOR MATCHES 5 AND QT_VERSION_MINOR MATCHES 15)
+#	add_definitions(-DQT_NO_DEPRECATED_WARNINGS)
+#ENDIF ()
+# check for Qt6 compatability
+#add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
 
 # static library
 add_library( labplot2lib STATIC ${LABPLOT_SRCS} ${BACKEND_SOURCES} ${NSL_SOURCES} ${CANTOR_SOURCES} ${DATASOURCES_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS} )
 # set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(labplot2lib PUBLIC ${COMMONFRONTEND_DIR}/widgets) # so that the MOC finds numberSpinbox.h
 
 target_link_libraries( labplot2lib
 	KF5::Archive
@@ -532,9 +557,11 @@ IF (ENABLE_READSTAT)
 		add_dependencies( labplot2lib 3rdparty_readstat )
 	ENDIF ()
 	# link system readstat with iconv
-	IF (READSTAT_FOUND AND (WIN32 OR APPLE))
+	IF (READSTAT_FOUND)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
-		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
+		IF (ICONV_LIBRARIES)
+			target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
+		ENDIF ()
 	ENDIF ()
         target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} ${ZLIB_LIBRARIES} )
 ENDIF ()
@@ -542,10 +569,12 @@ ENDIF ()
 IF (ENABLE_EXCEL)
         # build before use
         IF (BUILD_EXCEL)
-                add_dependencies( labplot2lib 3rdparty_QXlsx )
+                add_dependencies( labplot2lib QXlsx )
         ENDIF ()
 
-	target_link_libraries( labplot2lib ${QXLSX_LIBRARIES} )
+	IF (QXLSX_FOUND OR BUILD_EXCEL)
+		target_link_libraries( labplot2lib QXlsx )
+        ENDIF ()
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
@@ -610,9 +639,9 @@ target_link_libraries( labplot2 labplot2lib )
 install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
-install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES org.kde.labplot2.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
-# if (${ECM_VERSION} STRGREATER "5.58.0")
+# if (${ECM_VERSION} VERSION_GREATER "5.58.0")
 # 	install( FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
 # 	install( FILES labplot2_datasets.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
 # else ()

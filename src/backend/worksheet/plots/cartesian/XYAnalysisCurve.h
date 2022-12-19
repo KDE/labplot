@@ -40,7 +40,7 @@ public:
 		FourierFilter
 	};
 
-	XYAnalysisCurve(const QString&, AspectType type);
+	XYAnalysisCurve(const QString&, AspectType);
 	~XYAnalysisCurve() override;
 
 	static void copyData(QVector<double>& xData,
@@ -52,6 +52,8 @@ public:
 						 bool avgUniqueX = false);
 
 	virtual void recalculate() = 0;
+	virtual bool resultAvailable() const = 0;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
@@ -71,7 +73,7 @@ public:
 	typedef XYAnalysisCurvePrivate Private;
 
 protected:
-	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate* dd, AspectType type);
+	XYAnalysisCurve(const QString& name, XYAnalysisCurvePrivate*, AspectType);
 
 private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)
@@ -79,6 +81,8 @@ private:
 
 public Q_SLOTS:
 	void handleSourceDataChanged();
+	void createDataSpreadsheet();
+
 private Q_SLOTS:
 	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
 	void yDataColumnAboutToBeRemoved(const AbstractAspect*);

@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : HDF5 I/O-filter
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef HDF5FILTER_H
@@ -25,7 +25,7 @@ public:
 	static QString fileInfoString(const QString&);
 	static QString fileDDLString(const QString&);
 
-	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
+	int parse(const QString& fileName, QTreeWidgetItem* rootItem);
 	void
 	readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	QVector<QStringList> readCurrentDataSet(const QString& fileName,

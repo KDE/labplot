@@ -37,5 +37,17 @@ private Q_SLOTS:
 	void equationCurveEquationChangedNoAutoScale();
 
 	void undoInfoElement();
+
+	void axisFormat();
+	void shiftLeftAutoScale();
+	void shiftRightAutoScale();
+	void shiftUpAutoScale();
+	void shiftDownAutoScale();
+
+	void rangeFormatYDataChanged();
+	void rangeFormatXDataChanged();
+	void rangeFormatNonDefaultRange();
+
+	void invalidcSystem();
 };
 #endif

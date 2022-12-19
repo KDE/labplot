@@ -20,12 +20,12 @@ extern "C" {
 void ROOTFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/advanced_zlib.root"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ROOTFilter filter;
 	filter.setStartRow(1);
 	// filter.setEndRow(100);
-	filter.setCurrentObject("Hist:variableBinHist;2");
-	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
+	filter.setCurrentObject(QStringLiteral("Hist:variableBinHist;2"));
+	QVector<QStringList> columns{{QStringLiteral("center")}, {QStringLiteral("content")}, {QStringLiteral("error")}};
 	filter.setColumns(columns);
 	filter.readDataFromFile(fileName, &spreadsheet);
 
@@ -49,8 +49,8 @@ void ROOTFilterTest::importFile1() {
 	ROOTFilter filter2;
 	filter2.setStartRow(0);
 	filter2.setEndRow(9); // TODO: automatic?
-	filter2.setCurrentObject("Tree:tree");
-	QVector<QStringList> columns2{{"doubleTest"}, {"structTest", "double"}};
+	filter2.setCurrentObject(QStringLiteral("Tree:tree"));
+	QVector<QStringList> columns2{{QStringLiteral("doubleTest")}, {QStringLiteral("structTest"), QStringLiteral("double")}};
 	filter2.setColumns(columns2);
 	filter2.readDataFromFile(fileName, &spreadsheet);
 
@@ -70,12 +70,12 @@ void ROOTFilterTest::importFile1() {
 void ROOTFilterTest::importFile2() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/basic_lz4.root"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	ROOTFilter filter;
 	filter.setStartRow(1);
 	// filter.setEndRow(100);
-	filter.setCurrentObject("Hist:doubleHist;1");
-	QVector<QStringList> columns{{"center"}, {"content"}, {"error"}};
+	filter.setCurrentObject(QStringLiteral("Hist:doubleHist;1"));
+	QVector<QStringList> columns{{QStringLiteral("center")}, {QStringLiteral("content")}, {QStringLiteral("error")}};
 	filter.setColumns(columns);
 	filter.readDataFromFile(fileName, &spreadsheet);
 

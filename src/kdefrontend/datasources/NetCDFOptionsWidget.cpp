@@ -35,7 +35,7 @@ NetCDFOptionsWidget::NetCDFOptionsWidget(QWidget* parent, ImportFileWidget* file
 	ui.twContent->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
@@ -67,25 +67,25 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 		return;
 
 	QTreeWidgetItem* item = ui.twContent->selectedItems().first();
-	if (item->data(1, Qt::DisplayRole).toString() == "variable")
+	if (item->data(1, Qt::DisplayRole).toString() == QLatin1String("variable"))
 		m_fileWidget->refreshPreview();
-	else if (item->data(1, Qt::DisplayRole).toString().contains("attribute")) {
+	else if (item->data(1, Qt::DisplayRole).toString().contains(QLatin1String("attribute"))) {
 		// reads attributes (only for preview)
 		auto filter = static_cast<NetCDFFilter*>(m_fileWidget->currentFileFilter());
 		QString fileName = m_fileWidget->m_cbFileName->currentText();
 		QString name = item->data(0, Qt::DisplayRole).toString();
-		QString varName = item->data(1, Qt::DisplayRole).toString().split(' ')[0];
+		QString varName = item->data(1, Qt::DisplayRole).toString().split(QLatin1Char(' '))[0];
 		QDEBUG("name =" << name << "varName =" << varName);
 
 		QString importedText = filter->readAttribute(fileName, name, varName);
 		DEBUG("importedText =" << STDSTRING(importedText));
 
-		QStringList lineStrings = importedText.split('\n');
+		QStringList lineStrings = importedText.split(QLatin1Char('\n'));
 		int rows = lineStrings.size();
 		ui.twPreview->setRowCount(rows);
 		ui.twPreview->setColumnCount(0);
 		for (int i = 0; i < rows; ++i) {
-			QStringList lineString = lineStrings[i].split(' ');
+			QStringList lineString = lineStrings[i].split(QLatin1Char(' '));
 			int cols = lineString.size();
 			if (ui.twPreview->columnCount() < cols)
 				ui.twPreview->setColumnCount(cols);

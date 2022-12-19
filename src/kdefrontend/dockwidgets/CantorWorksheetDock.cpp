@@ -33,10 +33,10 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent)
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
-	Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
-	m_aspect = list.first();
+	setAspects(list);
 
 	// remove the available panel plugins first
 	int k = 0;
@@ -46,8 +46,8 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		++k;
 	}
 
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
+	ui.leName->setStyleSheet(QString());
+	ui.leName->setToolTip(QString());
 
 	if (m_cantorworksheetlist.size() == 1) {
 		// show name/comment

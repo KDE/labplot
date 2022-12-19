@@ -28,7 +28,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	m_okButton->setText(i18n("&Add"));
 
 	setWindowTitle(i18nc("@title:window", "Add New Unit"));
-	setWindowIcon(QIcon::fromTheme("document-new"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-new")));
 	m_okButton->setEnabled(false);
 
 	auto* keyCompleter = new QCompleter(FITSFilter::units(), this);

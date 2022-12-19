@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Tests for the Notebook
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -34,6 +34,10 @@ private Q_SLOTS:
 	void testParserPython08();
 	void testParserPython09();
 	void testParserPython10();
+
+	// Octave
+	void testParserOctaveColumnVector();
+	void testParserOctaveRowVector();
 };
 
 #endif

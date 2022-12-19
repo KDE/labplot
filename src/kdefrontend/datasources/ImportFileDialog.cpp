@@ -73,7 +73,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	else
 		setWindowTitle(i18nc("@title:window", "Add New Live Data Source"));
 
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import-database")));
 
 	// restore saved settings if available
 	create(); // ensure there's a window created
@@ -98,6 +98,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::error, this, &ImportFileDialog::showErrorMessage);
+	connect(this, &ImportDialog::dataContainerChanged, m_importFileWidget, &ImportFileWidget::dataContainerChanged);
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
@@ -252,7 +253,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					// HDF5 variable names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
 					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+						sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
@@ -266,7 +267,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				// HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
 				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
+					sheetName = names.at(i).mid(names.at(i).lastIndexOf(QLatin1Char('/')) + 1);
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
@@ -366,12 +367,6 @@ void ImportFileDialog::checkOkButton() {
 		} else {
 			lPosition->setEnabled(true);
 			cbPosition->setEnabled(true);
-
-			// when doing ASCII import to a matrix, hide the options for using the file header (first line)
-			// to name the columns since the column names are fixed in a matrix
-			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
-			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
-			m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
 		}
 	}
 
@@ -430,7 +425,7 @@ void ImportFileDialog::checkOkButton() {
 
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkTcpSocket: {
+	case LiveDataSource::SourceType::NetworkTCPSocket: {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QTcpSocket socket(this);
@@ -454,7 +449,7 @@ void ImportFileDialog::checkOkButton() {
 		}
 		break;
 	}
-	case LiveDataSource::SourceType::NetworkUdpSocket: {
+	case LiveDataSource::SourceType::NetworkUDPSocket: {
 		const bool enable = !m_importFileWidget->host().isEmpty() && !m_importFileWidget->port().isEmpty();
 		if (enable) {
 			QUdpSocket socket(this);

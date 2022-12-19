@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2015 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -52,6 +52,7 @@ enum class AspectType : quint64 {
 	ReferenceRange = 0x0210060,
 	InfoElement = 0x0210080,
 	BoxPlot = 0x0210100,
+	BarPlot = 0x0210200,
 	WorksheetElementContainer = 0x0220000,
 	AbstractPlot = 0x0221000,
 	CartesianPlot = 0x0221001,
@@ -184,6 +185,8 @@ public:
 			return QStringLiteral("XYSmoothCurve");
 		case AspectType::XYHilbertTransformCurve:
 			return QStringLiteral("XYHilbertTransformCurve");
+		case AspectType::BarPlot:
+			return QStringLiteral("BarPlot");
 		case AspectType::BoxPlot:
 			return QStringLiteral("BoxPlot");
 		case AspectType::AbstractPart:
@@ -228,7 +231,7 @@ public:
 			return QStringLiteral("MQTTSubscription");
 		}
 
-		return QString();
+		return {};
 	}
 
 	QString name() const;
@@ -368,6 +371,7 @@ public:
 	bool pasted() const;
 
 	static AspectType clipboardAspectType(QString&);
+	static QString uniqueNameFor(const QString& name, const QStringList& names);
 
 protected:
 	void info(const QString& text) {
@@ -416,6 +420,7 @@ Q_SIGNALS:
 	void aspectHiddenChanged(const AbstractAspect*);
 	void statusInfo(const QString&);
 	void renameRequested();
+	void contextMenuRequested(AspectType, QMenu*);
 
 	// selection/deselection in model (project explorer)
 	void selected(const AbstractAspect*);
@@ -424,6 +429,24 @@ Q_SIGNALS:
 	// selection/deselection in view
 	void childAspectSelectedInView(const AbstractAspect*);
 	void childAspectDeselectedInView(const AbstractAspect*);
+
+	// Used by the retransformTests
+Q_SIGNALS:
+	void retransformCalledSignal(const AbstractAspect* sender, bool suppressed);
+
+public:
+	void resetRetransformCalled() {
+		mRetransformCalled = 0;
+	}
+	int retransformCalled() const {
+		return mRetransformCalled;
+	}
+	int mRetransformCalled{0};
+
+#define trackRetransformCalled(suppressed)                                                                                                                     \
+	emit q->retransformCalledSignal(q, suppressed);                                                                                                            \
+	if (!suppressed)                                                                                                                                           \
+		q->mRetransformCalled += 1;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractAspect::ChildIndexFlags)

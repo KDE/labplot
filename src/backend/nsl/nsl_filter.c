@@ -17,9 +17,9 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_filter_type_name[] = {i18n("Low pass"), i18n("High pass"), i18n("Band pass"), i18n("Band reject")};
+const char* nsl_filter_type_name[] = {i18n("Low Pass"), i18n("High Pass"), i18n("Band Pass"), i18n("Band Reject")};
 const char* nsl_filter_form_name[] =
-	{i18n("Ideal"), i18n("Butterworth"), i18n("Chebyshev type I"), i18n("Chebyshev type II"), i18n("Legendre (Optimum L)"), i18n("Bessel (Thomson)")};
+	{i18n("Ideal"), i18n("Butterworth"), i18n("Chebyshev Type I"), i18n("Chebyshev Type II"), i18n("Legendre (Optimum L)"), i18n("Bessel (Thomson)")};
 const char* nsl_filter_cutoff_unit_name[] = {i18n("Frequency"), i18n("Fraction"), i18n("Index")};
 
 /* n - order, x = w/w0 */

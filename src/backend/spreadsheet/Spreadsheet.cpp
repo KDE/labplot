@@ -17,6 +17,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -266,10 +267,11 @@ void Spreadsheet::removeColumns(int first, int count) {
 void Spreadsheet::insertColumns(int before, int count) {
 	WAIT_CURSOR;
 	beginMacro(i18np("%1: insert 1 column", "%1: insert %2 columns", name(), count));
-	Column* before_col = column(before);
-	int rows = rowCount();
+	auto* before_col = column(before);
+	const int cols = columnCount();
+	const int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		Column* new_col = new Column(QString::number(i + 1), AbstractColumn::ColumnMode::Double);
+		auto* new_col = new Column(QString::number(cols + i + 1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
@@ -277,6 +279,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	endMacro();
 	RESET_CURSOR;
 }
+
 /*!
   Sets the number of columns to \c new_size
 */
@@ -285,10 +288,20 @@ void Spreadsheet::setColumnCount(int new_size) {
 	if (old_size == new_size || new_size < 0)
 		return;
 
+	// suppress handling of child add and remove signals when adding/removing multiple columns
+	// TODO: undo/redo of this step is still very slow for a big number of columns
+	disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+	if (m_model)
+		m_model->suppressSignals(true);
+
 	if (new_size < old_size)
 		removeColumns(new_size, old_size - new_size);
 	else
 		insertColumns(old_size, new_size - old_size);
+
+	connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
+	if (m_model)
+		m_model->suppressSignals(false);
 }
 
 /*!
@@ -323,6 +336,11 @@ QMenu* Spreadsheet::createContextMenu() {
 	Q_ASSERT(menu);
 	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
+}
+
+void Spreadsheet::fillColumnContextMenu(QMenu* menu, Column* column) {
+	if (m_view)
+		m_view->fillColumnContextMenu(menu, column);
 }
 
 void Spreadsheet::moveColumn(int from, int to) {
@@ -458,7 +476,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		DEBUG("	sort separately")
 		for (auto* col : cols) {
 			int rows = col->rowCount();
-			std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+			std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 
 			switch (col->columnMode()) {
 			case AbstractColumn::ColumnMode::Double: {
@@ -597,7 +615,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 
 			for (auto* col : cols) {
 				auto columnMode = col->columnMode();
-				std::unique_ptr<Column> tempCol(new Column("temp", columnMode));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), columnMode));
 				// put the values in correct order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -610,7 +628,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
@@ -636,7 +654,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::integerGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < rows; i++) {
 					int idx = map.at(i).second;
@@ -661,7 +679,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::bigIntGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < rows; i++) {
 					int idx = map.at(i).second;
@@ -693,7 +711,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::QStringGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -706,7 +724,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempEmptyCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempEmptyCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < emptyRows; i++) {
 						const int idx = emptyIndex.at(i);
 						// too slow: tempEmptyCol->copy(col, idx, i, 1);
@@ -739,7 +757,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				std::stable_sort(map.begin(), map.end(), CompareFunctions::QDateTimeGreater);
 
 			for (auto* col : cols) {
-				std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
+				std::unique_ptr<Column> tempCol(new Column(QStringLiteral("temp"), col->columnMode()));
 				// put the values in the right order into tempCol
 				for (int i = 0; i < filledRows; i++) {
 					int idx = map.at(i).second;
@@ -751,7 +769,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 				if (col == leading) // update all rows
 					col->copy(tempCol.get(), 0, 0, rows);
 				else { // do not overwrite unused cols
-					std::unique_ptr<Column> tempInvalidCol(new Column("temp2", col->columnMode()));
+					std::unique_ptr<Column> tempInvalidCol(new Column(QStringLiteral("temp2"), col->columnMode()));
 					for (int i = 0; i < invalidRows; i++) {
 						const int idx = invalidIndex.at(i);
 						// too slow: tempInvalidCol->copy(col, idx, i, 1);
@@ -775,7 +793,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
   Returns an icon to be used for decorating my views.
   */
 QIcon Spreadsheet::icon() const {
-	return QIcon::fromTheme("labplot-spreadsheet");
+	return QIcon::fromTheme(QStringLiteral("labplot-spreadsheet"));
 }
 
 /*!
@@ -853,7 +871,7 @@ QVector<AspectType> Spreadsheet::dropableOn() const {
   Saves as XML.
  */
 void Spreadsheet::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("spreadsheet");
+	writer->writeStartElement(QStringLiteral("spreadsheet"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -880,10 +898,10 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 			break;
 
 		if (reader->isStartElement()) {
-			if (reader->name() == "comment") {
+			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
-			} else if (reader->name() == "column") {
+			} else if (reader->name() == QLatin1String("column")) {
 				Column* column = new Column(QString());
 				column->setIsLoading(true);
 				if (!column->load(reader, preview)) {
@@ -912,7 +930,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 							   int actualCols,
 							   QStringList colNameList,
 							   QVector<AbstractColumn::ColumnMode> columnMode) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
 	int columnOffset = 0;
@@ -998,13 +1016,26 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer,
 	resize data source to cols columns
 	returns column offset depending on import mode
 */
-int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
+int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList names, int cols) {
 	//	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
 	// QDEBUG("	column name list = " << colNameList)
 	//  name additional columns
-	for (int k = colNameList.size(); k < cols; k++)
-		colNameList.append("Column " + QString::number(k + 1));
+	emit aboutToResize();
+
+	// make sure the column names provided by the user don't have any duplicates
+	QStringList uniqueNames;
+	if (names.count() > 1) {
+		uniqueNames << names.at(0);
+		for (int i = 1; i < names.count(); ++i)
+			uniqueNames << AbstractAspect::uniqueNameFor(names.at(i), uniqueNames);
+	} else
+		uniqueNames = names;
+
+	// if the number of provided column names is smaller than the number of columns to be created,
+	// create standard names
+	for (int k = uniqueNames.size(); k < cols; k++)
+		uniqueNames.append(QStringLiteral("Column ") + QString::number(k + 1));
 
 	int columnOffset = 0; // indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
 
@@ -1013,7 +1044,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1022,7 +1053,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
+			newColumn = new Column(uniqueNames.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->resizeTo(rows);
 			newColumn->setUndoAware(false);
 			newColumn->resizeTo(rows);
@@ -1038,27 +1069,32 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 				removeChild(child<Column>(0));
 		} else {
 			// create additional columns if needed
+			// disconnect from the handleAspectAdded slot in the view, no need to handle it when adding new columns during the import
+			disconnect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 			for (int i = columns; i < cols; i++) {
-				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
+				newColumn = new Column(uniqueNames.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->resizeTo(rows);
 				newColumn->setUndoAware(false);
 				newColumn->resizeTo(rows);
 				addChildFast(newColumn); // in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
+			connect(this, &Spreadsheet::aspectAdded, m_view, &SpreadsheetView::handleAspectAdded);
 		}
 
-		// 1. rename the columns that were already available
-		// 2. suppress the dataChanged signal for all columns
-		// 3. send aspectDescriptionChanged because otherwise the column
+		// 1. suppressretransform for all WorksheetElements
+		// 2. rename the columns that were already available
+		// 3. suppress the dataChanged signal for all columns
+		// 4. send aspectDescriptionChanged because otherwise the column
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
+		// 5. Enable retransform for all WorksheetElements
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
 			Q_EMIT child<Column>(i)->reset(child<Column>(i));
-			child<Column>(i)->setName(colNameList.at(i));
+			child<Column>(i)->setName(uniqueNames.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}
 	}
-
+	emit resizeFinished();
 	return columnOffset;
 }
 
@@ -1067,7 +1103,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset,
 								 size_t endColumn,
 								 const QString& dateTimeFormat,
 								 AbstractFileFilter::ImportMode importMode) {
-	PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(QLatin1String(Q_FUNC_INFO));
 	// DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	// determine the dependent plots

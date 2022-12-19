@@ -11,21 +11,21 @@
 #include "nsl_interp.h"
 #include "nsl_common.h"
 
-const char* nsl_interp_type_name[] = {i18n("linear"),
-									  i18n("polynomial"),
-									  i18n("cubic spline (natural)"),
-									  i18n("cubic spline (periodic)"),
-									  i18n("Akima-spline (natural)"),
-									  i18n("Akima-spline (periodic)"),
-									  i18n("Steffen spline"),
-									  i18n("cosine"),
-									  i18n("exponential"),
-									  i18n("piecewise cubic Hermite (PCH)"),
-									  i18n("rational functions")};
-const char* nsl_interp_pch_variant_name[] = {i18n("finite differences"), i18n("Catmull-Rom"), i18n("cardinal"), i18n("Kochanek-Bartels (TCB)")};
-const char* nsl_interp_evaluate_name[] = {i18n("function"), i18n("derivative"), i18n("second derivative"), i18n("integral")};
+const char* nsl_interp_type_name[] = {i18n("Linear"),
+									  i18n("Polynomial"),
+									  i18n("Cubic Spline (Natural)"),
+									  i18n("Cubic Spline (Periodic)"),
+									  i18n("Akima-Spline (Natural)"),
+									  i18n("Akima-Spline (Periodic)"),
+									  i18n("Steffen-Spline"),
+									  i18n("Cosine"),
+									  i18n("Exponential"),
+									  i18n("Piecewise Cubic Hermite (PCH)"),
+									  i18n("Rational Functions")};
+const char* nsl_interp_pch_variant_name[] = {i18n("Finite Differences"), i18n("Catmull-Rom"), i18n("Cardinal"), i18n("Kochanek-Bartels (TCB)")};
+const char* nsl_interp_evaluate_name[] = {i18n("Function"), i18n("Derivative"), i18n("Second Derivative"), i18n("Integral")};
 
-int nsl_interp_ratint(double* x, double* y, int n, double xn, double* v, double* dv) {
+int nsl_interp_ratint(const double* x, const double* y, int n, double xn, double* v, double* dv) {
 	int i, a = 0, b = n - 1;
 	while (b - a > 1) { /* find interval using bisection */
 		int j = (int)floor((a + b) / 2.);

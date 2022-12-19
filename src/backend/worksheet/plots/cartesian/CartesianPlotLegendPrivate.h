@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of CartesianPlotLegend
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,11 +13,13 @@
 
 #include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QFont>
-#include <QPen>
+
+class Background;
+class CartesianPlotLegend;
+class Line;
+class XYCurve;
 
 class QBrush;
-class CartesianPlotLegend;
-class XYCurve;
 class QGraphicsSceneContextMenuEvent;
 class QKeyEvent;
 
@@ -38,7 +40,6 @@ public:
 
 	bool m_hovered{false};
 
-	QList<WorksheetElement*> curvesList; // list containing all visible curves
 	QRectF rect;
 	QFont labelFont;
 	QColor labelColor;
@@ -51,21 +52,11 @@ public:
 	const CartesianPlot* plot{nullptr};
 
 	TextLabel* title{nullptr};
-
-	// Background
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
-	QString backgroundFileName;
-	float backgroundOpacity;
+	Background* background{nullptr};
 
 	// Border
-	QPen borderPen;
+	Line* borderLine{nullptr};
 	qreal borderCornerRadius;
-	qreal borderOpacity;
 
 	// Layout
 	float layoutTopMargin;
@@ -77,6 +68,11 @@ public:
 	int layoutColumnCount;
 
 private:
+	QList<WorksheetElement*> m_curves; // list containing all visible curves
+	QStringList m_names;
+
+	bool translatePainter(QPainter*, int& row, int& col, int height);
+
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

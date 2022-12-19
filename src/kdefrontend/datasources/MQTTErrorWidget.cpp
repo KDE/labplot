@@ -27,31 +27,31 @@ MQTTErrorWidget::MQTTErrorWidget(QMqttClient::ClientError error, MQTTClient* cli
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("The client ID is malformed. This might be related to its length.\nSet new ID!");
+		ui.lErrorType->setText(QStringLiteral("The client ID is malformed. This might be related to its length.\nSet new ID!"));
 		break;
 	case QMqttClient::ClientError::BadUsernameOrPassword:
 		ui.lId->hide();
 		ui.leId->hide();
-		ui.lErrorType->setText("The data in the username or password is malformed.\nSet new username and password!");
+		ui.lErrorType->setText(QStringLiteral("The data in the username or password is malformed.\nSet new username and password!"));
 		break;
 	case QMqttClient::ClientError::NotAuthorized:
 		ui.lId->hide();
 		ui.leId->hide();
-		ui.lErrorType->setText("The client is not authorized to connect.");
+		ui.lErrorType->setText(QStringLiteral("The client is not authorized to connect."));
 		break;
 	case QMqttClient::ClientError::ServerUnavailable:
 		ui.lePassword->hide();
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("The network connection has been established, but the service is unavailable on the broker side.");
+		ui.lErrorType->setText(QStringLiteral("The network connection has been established, but the service is unavailable on the broker side."));
 		break;
 	case QMqttClient::ClientError::UnknownError:
 		ui.lePassword->hide();
 		ui.lPassword->hide();
 		ui.leUserName->hide();
 		ui.lUserName->hide();
-		ui.lErrorType->setText("An unknown error occurred.");
+		ui.lErrorType->setText(QStringLiteral("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:

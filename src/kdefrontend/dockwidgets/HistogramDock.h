@@ -4,6 +4,7 @@
 	Description          : widget for histogram plot properties
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,9 +17,10 @@
 #include "ui_histogramdock.h"
 
 class AspectTreeModel;
-class Column;
-class Histogram;
+class BackgroundWidget;
+class LineWidget;
 class SymbolWidget;
+class ValueWidget;
 class TreeViewComboBox;
 
 class HistogramDock : public BaseDock {
@@ -31,22 +33,26 @@ public:
 	void setCurves(QList<Histogram*>);
 
 private:
-	QStringList dateStrings;
-	QStringList timeStrings;
-
 	TreeViewComboBox* cbDataColumn;
-	TreeViewComboBox* cbValuesColumn;
+	TreeViewComboBox* cbErrorPlusColumn;
+	TreeViewComboBox* cbErrorMinusColumn;
 
 	void updateValuesWidgets();
 	void updatePlotRanges() override;
+	void updateLocale() override;
 	void loadConfig(KConfig&);
 
 protected:
 	Ui::HistogramDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
+	ValueWidget* valueWidget{nullptr};
+	LineWidget* errorBarsLineWidget{nullptr};
+
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	SymbolWidget* symbolWidget{nullptr};
 
 	virtual void setModel();
 
@@ -70,50 +76,17 @@ private Q_SLOTS:
 	void binRangesMaxChanged(const QString&);
 	void binRangesMinDateTimeChanged(const QDateTime&);
 	void binRangesMaxDateTimeChanged(const QDateTime&);
-	void plotRangeChanged(int);
-
-	// Lines-Tab
-	void lineTypeChanged(int);
-	void lineStyleChanged(int);
-	void lineColorChanged(const QColor&);
-	void lineWidthChanged(double);
-	void lineOpacityChanged(int);
-
-	// Values-Tab
-	void valuesTypeChanged(int);
-	void valuesColumnChanged(const QModelIndex&);
-	void valuesPositionChanged(int);
-	void valuesDistanceChanged(double);
-	void valuesRotationChanged(int);
-	void valuesOpacityChanged(int);
-	void valuesNumericFormatChanged(int);
-	void valuesPrecisionChanged(int);
-	void valuesDateTimeFormatChanged(const QString&);
-	void valuesPrefixChanged();
-	void valuesSuffixChanged();
-	void valuesFontChanged(const QFont&);
-	void valuesColorChanged(const QColor&);
-
-	// Filling-tab
-	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(int);
-	void fillingColorStyleChanged(int);
-	void fillingImageStyleChanged(int);
-	void fillingBrushStyleChanged(int);
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void fillingOpacityChanged(int);
 
 	//"Error bars"-Tab
-	void errorTypeChanged(int) const;
-	void errorBarsTypeChanged(int) const;
-	void errorBarsCapSizeChanged(double) const;
-	void errorBarsStyleChanged(int) const;
-	void errorBarsColorChanged(const QColor&);
-	void errorBarsWidthChanged(double) const;
-	void errorBarsOpacityChanged(int) const;
+	void errorTypeChanged(int);
+	void errorPlusColumnChanged(const QModelIndex&);
+	void errorMinusColumnChanged(const QModelIndex&);
+
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double) const;
+	void rugWidthChanged(double) const;
+	void rugOffsetChanged(double) const;
 
 	// SLOTs for changes triggered in Histogram
 	// General-Tab
@@ -129,43 +102,16 @@ private Q_SLOTS:
 	void curveBinRangesMaxChanged(double);
 	void curveVisibilityChanged(bool);
 
-	// Line-tab
-	void curveLineTypeChanged(Histogram::LineType);
-	void curveLinePenChanged(const QPen&);
-	void curveLineOpacityChanged(qreal);
-
-	// Values-Tab
-	void curveValuesTypeChanged(Histogram::ValuesType);
-	void curveValuesColumnChanged(const AbstractColumn*);
-	void curveValuesPositionChanged(Histogram::ValuesPosition);
-	void curveValuesDistanceChanged(qreal);
-	void curveValuesOpacityChanged(qreal);
-	void curveValuesRotationAngleChanged(qreal);
-	void curveValuesNumericFormatChanged(char);
-	void curveValuesPrecisionChanged(int);
-	void curveValuesDateTimeFormatChanged(const QString&);
-	void curveValuesPrefixChanged(const QString&);
-	void curveValuesSuffixChanged(const QString&);
-	void curveValuesFontChanged(QFont);
-	void curveValuesColorChanged(QColor);
-
-	// Filling-Tab
-	void curveFillingEnabledChanged(bool);
-	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
-	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void curveFillingBrushStyleChanged(Qt::BrushStyle);
-	void curveFillingFirstColorChanged(QColor&);
-	void curveFillingSecondColorChanged(QColor&);
-	void curveFillingFileNameChanged(QString&);
-	void curveFillingOpacityChanged(double);
-
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);
-	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void curveErrorBarsPenChanged(const QPen&);
-	void curveErrorBarsCapSizeChanged(qreal);
-	void curveErrorBarsOpacityChanged(qreal);
+	void curveErrorPlusColumnChanged(const AbstractColumn*);
+	void curveErrorMinusColumnChanged(const AbstractColumn*);
+
+	//"Margin Plots"-Tab
+	void curveRugEnabledChanged(bool);
+	void curveRugLengthChanged(double);
+	void curveRugWidthChanged(double);
+	void curveRugOffsetChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

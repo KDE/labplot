@@ -40,7 +40,7 @@ ImportSQLDatabaseDialog::ImportSQLDatabaseDialog(MainWin* parent)
 	vLayout->addWidget(importSQLDatabaseWidget);
 
 	setWindowTitle(i18nc("@title:window", "Import Data to Spreadsheet or Matrix"));
-	setWindowIcon(QIcon::fromTheme("document-import-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-import-database")));
 	setModel();
 
 	// dialog buttons

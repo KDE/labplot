@@ -26,8 +26,11 @@ class SyntaxHighlighter;
 class Label;
 class Axis;
 class QMenu;
+class KMessageWidget;
 
-class LabelWidget : public QWidget {
+class TextLabelTest;
+
+class LabelWidget : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -35,8 +38,8 @@ public:
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
-	void updateUnits();
-	void updateLocale();
+	void updateUnits() override;
+	void updateLocale() override;
 
 	void load();
 	void loadConfig(KConfigGroup&);
@@ -60,8 +63,11 @@ private:
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
 #endif
+	KMessageWidget* m_messageWidget;
 
-	void initConnections() const;
+	QVector<QMetaObject::Connection> m_connections;
+
+	void initConnections();
 
 Q_SIGNALS:
 	void dataChanged(bool);
@@ -96,9 +102,9 @@ private Q_SLOTS:
 	void horizontalAlignmentChanged(int);
 	void verticalAlignmentChanged(int);
 
-	void positionXLogicalChanged(const QString&);
+	void positionXLogicalChanged(double);
 	void positionXLogicalDateTimeChanged(const QDateTime&);
-	void positionYLogicalChanged(const QString&);
+	void positionYLogicalChanged(double);
 
 	void rotationChanged(int);
 	void offsetXChanged(double);
@@ -116,7 +122,7 @@ private Q_SLOTS:
 
 	// SLOTs for changes triggered in TextLabel
 	void labelTextWrapperChanged(const TextLabel::TextWrapper&);
-	void labelTeXImageUpdated(bool);
+	void labelTeXImageUpdated(const TeXRenderer::Result&);
 	void labelTeXFontChanged(const QFont&);
 	void labelFontColorChanged(const QColor&);
 	void labelBackgroundColorChanged(const QColor&);
@@ -136,6 +142,8 @@ private Q_SLOTS:
 	void labelVisibleChanged(bool);
 	void labelCartesianPlotParent(bool on);
 	void labelModeChanged(TextLabel::Mode);
+
+	friend TextLabelTest;
 };
 
 #endif // LABELWIDGET_H

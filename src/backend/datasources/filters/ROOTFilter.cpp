@@ -101,14 +101,14 @@ QVector<QStringList> ROOTFilter::columns() const {
 }
 
 void ROOTFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("rootFilter");
-	writer->writeAttribute("object", d->currentObject);
-	writer->writeAttribute("startRow", QString::number(d->startRow));
-	writer->writeAttribute("endRow", QString::number(d->endRow));
+	writer->writeStartElement(QStringLiteral("rootFilter"));
+	writer->writeAttribute(QStringLiteral("object"), d->currentObject);
+	writer->writeAttribute(QStringLiteral("startRow"), QString::number(d->startRow));
+	writer->writeAttribute(QStringLiteral("endRow"), QString::number(d->endRow));
 	for (const auto& c : d->columns) {
-		writer->writeStartElement("column");
+		writer->writeStartElement(QStringLiteral("column"));
 		for (const auto& s : c)
-			writer->writeTextElement("id", s);
+			writer->writeTextElement(QStringLiteral("id"), s);
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -119,28 +119,28 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 	QXmlStreamAttributes attribs = reader->attributes();
 
 	// read attributes
-	d->currentObject = attribs.value("object").toString();
+	d->currentObject = attribs.value(QStringLiteral("object")).toString();
 	if (d->currentObject.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("object"));
+		reader->raiseWarning(attributeWarning.arg(QStringLiteral("object")));
 
-	QString str = attribs.value("startRow").toString();
+	QString str = attribs.value(QStringLiteral("startRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("startRow"));
+		reader->raiseWarning(attributeWarning.arg(QStringLiteral("startRow")));
 	else
 		d->startRow = str.toInt();
 
-	str = attribs.value("endRow").toString();
+	str = attribs.value(QStringLiteral("endRow")).toString();
 	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("endRow"));
+		reader->raiseWarning(attributeWarning.arg(QStringLiteral("endRow")));
 	else
 		d->endRow = str.toInt();
 
 	d->columns.clear();
 	while (reader->readNextStartElement()) {
-		if (reader->name() == "column") {
+		if (reader->name() == QLatin1String("column")) {
 			QStringList c;
 			while (reader->readNextStartElement()) {
-				if (reader->name() == "id")
+				if (reader->name() == QLatin1String("id"))
 					c << reader->readElementText();
 				else
 					reader->skipCurrentElement();
@@ -161,7 +161,7 @@ bool ROOTFilter::load(XmlStreamReader* reader) {
 ROOTFilterPrivate::ROOTFilterPrivate() = default;
 
 ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QString& fileName, long int& pos) {
-	QStringList typeobject = currentObject.split(':');
+	QStringList typeobject = currentObject.split(QLatin1Char(':'));
 	if (typeobject.size() < 2)
 		return FileType::Invalid;
 
@@ -174,7 +174,7 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 		return FileType::Invalid;
 
 	typeobject.removeFirst();
-	QStringList path = typeobject.join(':').split('/');
+	QStringList path = typeobject.join(QLatin1Char(':')).split(QLatin1Char('/'));
 	ROOTFilter::Directory dir = type == FileType::Hist ? listHistograms(fileName) : listTrees(fileName);
 	const ROOTFilter::Directory* node = &dir;
 	while (path.size() > 1) {
@@ -279,13 +279,13 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		for (const auto& l : columns) {
 			QString lastelement = l.back();
 			bool isArray = false;
-			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
+			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
 				lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 			}
 			if (!isArray || l.count() == 2)
-				headers << l.join(isArray ? QString() : QString(':'));
+				headers << l.join(isArray ? QString() : QLatin1String(":"));
 			else
-				headers << l.first() + QChar(':') + l.at(1) + l.back();
+				headers << l.first() + QLatin1Char(':') + l.at(1) + l.back();
 		}
 
 		std::vector<void*> dataContainer;
@@ -302,7 +302,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
-			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
+			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
 				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
@@ -389,7 +389,7 @@ QVector<QStringList> ROOTFilterPrivate::listLeaves(const QString& fileName, quin
 			if (leaf.branch != leaf.leaf)
 				leafList.last() << QString::fromStdString(leaf.leaf);
 			if (leaf.elements > 1)
-				leafList.last() << QString("[%1]").arg(leaf.elements);
+				leafList.last() << QStringLiteral("[%1]").arg(leaf.elements);
 		}
 	}
 
@@ -449,7 +449,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			unsigned int element = 0;
 			QString lastelement = l.back(), leaf = l.front();
 			bool isArray = false;
-			if (lastelement.at(0) == '[' && lastelement.at(lastelement.size() - 1) == ']') {
+			if (lastelement.at(0) == QLatin1Char('[') && lastelement.at(lastelement.size() - 1) == QLatin1Char(']')) {
 				element = lastelement.midRef(1, lastelement.length() - 2).toUInt(&isArray);
 				if (!isArray)
 					element = 0;
@@ -462,9 +462,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 			for (int i = first; i <= last; ++i)
 				preview[i - first] << QString::number(data[i]);
 			if (!isArray || l.count() == 2)
-				preview.last() << l.join(isArray ? QString() : QString(':'));
+				preview.last() << l.join(isArray ? QString() : QLatin1String(":"));
 			else
-				preview.last() << l.first() + QChar(':') + l.at(1) + l.back();
+				preview.last() << l.first() + QLatin1Char(':') + l.at(1) + l.back();
 		}
 
 		return preview;

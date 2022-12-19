@@ -4,7 +4,7 @@
 	Description          : Worksheet (2D visualization) part
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,12 +13,14 @@
 #define WORKSHEET_H
 
 #include "backend/core/AbstractPart.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
 class QGraphicsScene;
 class QRectF;
 
+class Background;
 class WorksheetPrivate;
 class WorksheetView;
 class TreeModel;
@@ -61,6 +63,7 @@ public:
 	QRectF pageRect() const;
 	void setPageRect(const QRectF&);
 	QGraphicsScene* scene() const;
+	double zoomFactor() const;
 	void update();
 	void setPrinting(bool) const;
 	void setThemeName(const QString&);
@@ -85,15 +88,7 @@ public:
 	void cursorModelPlotAdded(const QString& name);
 	void cursorModelPlotRemoved(const QString& name);
 
-	BASIC_D_ACCESSOR_DECL(double, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-
+	Background* background() const;
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
@@ -114,12 +109,12 @@ public:
 	void registerShortcuts() override;
 	void unregisterShortcuts() override;
 
-	static int cSystemIndex(WorksheetElement* e);
-
 	typedef WorksheetPrivate Private;
 
 public Q_SLOTS:
 	void setTheme(const QString&);
+	void cartesianPlotAxisShift(int delta, Dimension dim, int index);
+	void cartesianPlotWheelEvent(int delta, int xIndex, int yIndex, bool considerDimension, Dimension dim);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
@@ -164,27 +159,19 @@ Q_SIGNALS:
 	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
-
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void backgroundFileNameChanged(const QString&);
-	void backgroundOpacityChanged(float);
+	void childContextMenuRequested(AspectType, QMenu*);
 
 	void scaleContentChanged(bool);
 	void useViewSizeChanged(bool);
 	void pageRectChanged(const QRectF&);
 
 	void layoutChanged(Worksheet::Layout);
-	void layoutTopMarginChanged(float);
-	void layoutBottomMarginChanged(float);
-	void layoutLeftMarginChanged(float);
-	void layoutRightMarginChanged(float);
-	void layoutVerticalSpacingChanged(float);
-	void layoutHorizontalSpacingChanged(float);
+	void layoutTopMarginChanged(double);
+	void layoutBottomMarginChanged(double);
+	void layoutLeftMarginChanged(double);
+	void layoutRightMarginChanged(double);
+	void layoutVerticalSpacingChanged(double);
+	void layoutHorizontalSpacingChanged(double);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 

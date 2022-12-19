@@ -1,5 +1,5 @@
 /*
-	File                 : FitOptionsWidget.cc
+	File                 : FitOptionsWidget.cpp
 	Project              : LabPlot
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------
@@ -24,8 +24,8 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	, m_fitData(fitData)
 	, m_fitCurve(fitCurve) {
 	ui.setupUi(this);
-	ui.pbApply->setIcon(QIcon::fromTheme("dialog-ok-apply"));
-	ui.pbCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.pbApply->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
+	ui.pbCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 
 	// TODO: show "robust" option when robust fitting is possible
 	// 	ui.cbRobust->addItem(i18n("on"));
@@ -37,7 +37,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEps->setValidator(new QDoubleValidator(ui.leEps));
 	ui.leEvaluatedPoints->setValidator(new QIntValidator(ui.leEvaluatedPoints));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
 	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
@@ -45,7 +45,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 
 	// range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
-	const int xIndex = plot->coordinateSystem(m_fitCurve->coordinateSystemIndex())->xIndex();
+	const int xIndex = plot->coordinateSystem(m_fitCurve->coordinateSystemIndex())->index(CartesianCoordinateSystem::Dimension::X);
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		ui.leMin->setText(numberLocale.toString(m_fitData->fitRange.start()));
@@ -90,7 +90,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	connect(ui.cbUseDataErrors, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbUseResults, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
 	connect(ui.cbPreview, &QCheckBox::clicked, this, &FitOptionsWidget::changed);
-	connect(ui.sbConfidenceInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &FitOptionsWidget::changed);
+	connect(ui.sbConfidenceInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &FitOptionsWidget::changed);
 	connect(ui.pbApply, &QPushButton::clicked, this, &FitOptionsWidget::applyClicked);
 	connect(ui.pbCancel, &QPushButton::clicked, this, &FitOptionsWidget::finished);
 	connect(ui.cbAutoRange, &QCheckBox::clicked, this, &FitOptionsWidget::autoRangeChanged);
@@ -130,7 +130,7 @@ void FitOptionsWidget::autoRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->fitRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leMin->setText(numberLocale.toString(xMin));
 				ui.leMax->setText(numberLocale.toString(xMax));
@@ -167,7 +167,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->evalRange.setRange(xMin, xMax);
 
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			if (!m_dateTimeRange) {
 				ui.leEvalMin->setText(numberLocale.toString(xMin));
 				ui.leEvalMax->setText(numberLocale.toString(xMax));

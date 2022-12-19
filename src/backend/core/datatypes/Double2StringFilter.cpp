@@ -40,8 +40,8 @@ private:
 };
 
 void Double2StringFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {
-	writer->writeAttribute("format", QString(QChar(numericFormat())));
-	writer->writeAttribute("digits", QString::number(numDigits()));
+	writer->writeAttribute(QStringLiteral("format"), QChar::fromLatin1(numericFormat()));
+	writer->writeAttribute(QStringLiteral("digits"), QString::number(numDigits()));
 }
 
 bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
@@ -49,8 +49,8 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString format_str = attribs.value(reader->namespaceUri().toString(), "format").toString();
-	QString digits_str = attribs.value(reader->namespaceUri().toString(), "digits").toString();
+	QString format_str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("format")).toString();
+	QString digits_str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("digits")).toString();
 
 	if (AbstractSimpleFilter::load(reader, preview)) {
 		bool ok;
@@ -58,7 +58,7 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 		if (ok && m_digits != digits)
 			setNumDigits(digits);
 
-		if (format_str.size() >= 1 && m_format != format_str)
+		if (format_str.size() >= 1 && QLatin1Char(m_format) != format_str)
 			setNumericFormat(format_str.at(0).toLatin1());
 	} else
 		return false;

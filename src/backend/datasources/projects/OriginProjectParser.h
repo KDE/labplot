@@ -13,7 +13,7 @@
 
 #include "3rdparty/liborigin/OriginFile.h"
 #include "backend/datasources/projects/ProjectParser.h"
-#include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/Background.h"
 
 class Axis;
 class Column;
@@ -35,6 +35,9 @@ public:
 	static QString supportedExtensions();
 	void setImportUnusedObjects(bool);
 	bool hasUnusedObjects();
+
+protected:
+	bool load(Project*, bool) override;
 
 private:
 	bool loadFolder(Folder*, tree<Origin::ProjectNode>::iterator, bool preview);
@@ -58,7 +61,7 @@ private:
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
 	QColor color(Origin::Color) const;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
+	Background::ColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
 
 	QList<QPair<QString, QString>> charReplacementList() const;
 	QString replaceSpecialChars(const QString&) const;
@@ -72,9 +75,6 @@ private:
 	bool m_importUnusedObjects{false};
 
 	friend class ProjectImportTest;
-
-protected:
-	bool load(Project*, bool) override;
 };
 
 #endif // ORIGINPROJECTPARSER_H

@@ -15,7 +15,7 @@ extern "C" {
 }
 
 void NSLFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
+	const QString currentDir = QLatin1String(__FILE__);
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 }
 

@@ -17,15 +17,15 @@
 
 const char* nsl_dft_result_type_name[] = {i18n("Magnitude"),
 										  i18n("Amplitude"),
-										  i18n("real part"),
-										  i18n("imaginary part"),
+										  i18n("Real Part"),
+										  i18n("Imaginary Part"),
 										  i18n("Power"),
 										  i18n("Phase"),
 										  i18n("Amplitude in dB"),
-										  i18n("normalized amplitude in dB"),
-										  i18n("Magnitude squared"),
-										  i18n("Amplitude squared"),
-										  i18n("raw")};
+										  i18n("Normalized Amplitude in dB"),
+										  i18n("Magnitude Squared"),
+										  i18n("Amplitude Squared"),
+										  i18n("Raw")};
 const char* nsl_dft_xscale_name[] = {i18n("Frequency"), i18n("Index"), i18n("Period")};
 
 int nsl_dft_transform_window(double data[], size_t stride, size_t n, int two_sided, nsl_dft_result_type type, nsl_sf_window_type window_type) {

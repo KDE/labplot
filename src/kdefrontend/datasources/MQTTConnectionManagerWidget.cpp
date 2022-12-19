@@ -91,8 +91,7 @@ QString MQTTConnectionManagerWidget::connection() const {
  * \param index the index of the new connection
  */
 void MQTTConnectionManagerWidget::connectionChanged(int index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (index == -1) {
 		m_currentConnection = nullptr;
@@ -311,8 +310,7 @@ void MQTTConnectionManagerWidget::idChecked(bool state) {
  * \param state the state of the checkbox
  */
 void MQTTConnectionManagerWidget::retainChecked(bool state) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_currentConnection) {
 		if (state)
@@ -336,8 +334,7 @@ void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
 		ui.leUserName->setToolTip(QString());
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_currentConnection)
 		m_currentConnection->userName = userName;
@@ -357,8 +354,7 @@ void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
 		ui.lePassword->setToolTip(QString());
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_currentConnection)
 		m_currentConnection->password = password;
@@ -378,8 +374,7 @@ void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 		ui.leID->setToolTip(QString());
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	if (m_currentConnection)
 		m_currentConnection->clientID = clientID;
@@ -594,7 +589,7 @@ QString MQTTConnectionManagerWidget::uniqueName() {
 		base.chop(1);
 
 	if (lastNonDigit >= 0 && base[lastNonDigit].category() != QChar::Separator_Space)
-		base.append(' ');
+		base.append(QLatin1Char(' '));
 
 	int newNr = name.rightRef(name.size() - base.size()).toInt();
 	QString newName;

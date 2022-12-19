@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2013-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -16,6 +16,8 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/IntervalAttribute.h"
 
+#include <QMap>
+
 class Column;
 class ColumnSetGlobalFormulaCmd;
 
@@ -26,7 +28,9 @@ public:
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
-	void init();
+
+	void initDataContainer();
+	void initIOFilters();
 
 	AbstractColumn::ColumnMode columnMode() const;
 	void setColumnMode(AbstractColumn::ColumnMode);
@@ -87,6 +91,8 @@ public:
 	void setTextAt(int row, const QString&);
 	void replaceValues(int first, const QVector<QString>&);
 	void replaceTexts(int first, const QVector<QString>&);
+	int dictionaryIndex(int row) const;
+	const QMap<QString, int>& frequencies() const;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
 
@@ -125,6 +131,7 @@ public:
 	const QMap<qint64, QString>& bigIntValueLabels();
 
 	void updateProperties();
+	void calculateStatistics();
 	void invalidate();
 	void finalizeLoad();
 
@@ -134,6 +141,7 @@ public:
 			min = false;
 			max = false;
 			hasValues = false;
+			dictionary = false;
 			properties = false;
 		}
 		bool statistics{false}; // is 'statistics' already available or needs to be (re-)calculated?
@@ -144,6 +152,7 @@ public:
 		bool min{false};
 		bool max{false};
 		bool hasValues{false}; // is 'hasValues' already available or needs to be (re-)calculated?
+		bool dictionary{false}; // dictionary of text values, relevant for text columns only, available?
 		bool properties{false}; // is 'properties' already available (true) or needs to be (re-)calculated (false)?
 	};
 
@@ -156,6 +165,9 @@ public:
 private:
 	AbstractColumn::ColumnMode m_columnMode; // type of column data
 	void* m_data{nullptr}; // pointer to the data container (QVector<T>)
+	int m_rowCount{0};
+	QVector<QString> m_dictionary; // dictionary for string columns
+	QMap<QString, int> m_dictionaryFrequencies; // dictionary for elements frequencies in string columns
 	void* m_labels{nullptr}; // pointer to the container for the value labels(QMap<T, QString>)
 	AbstractSimpleFilter* m_inputFilter{nullptr}; // input filter for string -> data type conversion
 	AbstractSimpleFilter* m_outputFilter{nullptr}; // output filter for data type -> string conversion
@@ -169,7 +181,9 @@ private:
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
 	void initLabels();
-	void connectFormulaColumn(const AbstractColumn* column);
+	void initDictionary();
+	void calculateTextStatistics();
+	void connectFormulaColumn(const AbstractColumn*);
 
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);

@@ -76,9 +76,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 		if (curve) {
 			// making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
 			// this should be avoided by supressing the retransformation in the curves.
-			curve->suppressRetransform(true);
+			curve->setSuppressRetransform(true);
 			elem->setVisible(on);
-			curve->suppressRetransform(false);
+			curve->setSuppressRetransform(false);
 		} else if (elem)
 			elem->setVisible(on);
 	}
@@ -119,7 +119,7 @@ void WorksheetElementContainer::retransform() {
 	if (isLoading())
 		return;
 
-	PERFTRACE("WorksheetElementContainer::retransform()");
+	PERFTRACE(QStringLiteral("WorksheetElementContainer::retransform()"));
 	Q_D(WorksheetElementContainer);
 
 	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);

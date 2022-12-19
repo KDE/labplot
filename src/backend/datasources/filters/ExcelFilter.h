@@ -16,9 +16,9 @@
 #include <QObject>
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellrange.h"
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellreference.h"
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxdocument.h"
+#include "3rdparty/QXlsx/header/xlsxcellrange.h"
+#include "3rdparty/QXlsx/header/xlsxcellreference.h"
+#include "3rdparty/QXlsx/header/xlsxdocument.h"
 #endif
 
 class ExcelFilterPrivate;

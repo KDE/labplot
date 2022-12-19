@@ -185,15 +185,15 @@ bool MQTTSubscriptionWidget::checkTopicContains(const QString& superior, const Q
 	if (superior == inferior)
 		return true;
 
-	if (!superior.contains('/'))
+	if (!superior.contains(QLatin1Char('/')))
 		return false;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	const QStringList& superiorList = superior.split('/', Qt::SkipEmptyParts);
-	const QStringList& inferiorList = inferior.split('/', Qt::SkipEmptyParts);
+	const QStringList& superiorList = superior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+	const QStringList& inferiorList = inferior.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	const QStringList& superiorList = superior.split('/', QString::SkipEmptyParts);
-	const QStringList& inferiorList = inferior.split('/', QString::SkipEmptyParts);
+	const QStringList& superiorList = superior.split(QLatin1Char('/'), QString::SkipEmptyParts);
+	const QStringList& inferiorList = inferior.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 
 	// a longer topic can't contain a shorter one
@@ -203,12 +203,12 @@ bool MQTTSubscriptionWidget::checkTopicContains(const QString& superior, const Q
 	bool ok = true;
 	for (int i = 0; i < superiorList.size(); ++i) {
 		if (superiorList.at(i) != inferiorList.at(i)) {
-			if ((superiorList.at(i) != "+") && !(superiorList.at(i) == "#" && i == superiorList.size() - 1)) {
+			if ((superiorList.at(i) != QLatin1Char('+')) && !(superiorList.at(i) == QLatin1Char('#') && i == superiorList.size() - 1)) {
 				// if the two topics differ, and the superior's current level isn't + or #(which can be only in the last position)
 				// then superior can't contain inferior
 				ok = false;
 				break;
-			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == "+" && inferiorList.at(i) == "#")) {
+			} else if (i == superiorList.size() - 1 && (superiorList.at(i) == QLatin1Char('+') && inferiorList.at(i) == QLatin1Char('#'))) {
 				// if the two topics differ at the last level
 				// and the superior's current level is + while the inferior's is #(which can be only in the last position)
 				// then superior can't contain inferior
@@ -253,7 +253,6 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 	do {
 		foundEqual = false;
 		QMap<QString, QVector<QString>> equalTopicsMap;
-		QVector<QString> equalTopics;
 
 		// compare the subscriptions present in the TreeWidget
 		for (int i = 0; i < ui.twSubscriptions->topLevelItemCount() - 1; ++i) {
@@ -283,9 +282,9 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 
 				int level = commonLevelIndex(topics.value().last(), topics.value().first());
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-				QStringList commonList = topics.value().first().split('/', Qt::SkipEmptyParts);
+				QStringList commonList = topics.value().first().split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-				QStringList commonList = topics.value().first().split('/', QString::SkipEmptyParts);
+				QStringList commonList = topics.value().first().split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 				QTreeWidgetItem* currentItem = nullptr;
 
@@ -323,9 +322,12 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 						lowestLevel = level;
 					}
 				}
-				QDEBUG("Manage: " << commonTopics[topicIdx]);
-				if (topicIdx != -1)
+
+				QVector<QString> equalTopics;
+				if (topicIdx != -1) {
+					QDEBUG("Manage: " << commonTopics[topicIdx]);
 					equalTopics.append(equalTopicsMap[commonTopics[topicIdx]]);
+				}
 
 				// Add the common topic ("merging")
 				QString commonTopic;
@@ -398,9 +400,9 @@ void MQTTSubscriptionWidget::updateSubscriptionTree(const QVector<QString>& mqtt
 			ui.twSubscriptions->addTopLevelItem(newItem);
 			name.clear();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-			name = sub.split('/', Qt::SkipEmptyParts);
+			name = sub.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-			name = sub.split('/', QString::SkipEmptyParts);
+			name = sub.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 
 			// find the corresponding "root" item in twTopics
@@ -437,10 +439,10 @@ void MQTTSubscriptionWidget::addSubscriptionChildren(QTreeWidgetItem* topic, QTr
 		QString name;
 		// if it has children, then we add it as a # wildcrad containing topic
 		if (topic->child(i)->childCount() > 0) {
-			name.append(temp->text(0) + "/#");
+			name.append(temp->text(0) + QStringLiteral("/#"));
 			while (temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + '/');
+				name.prepend(temp->text(0) + QLatin1Char('/'));
 			}
 		}
 
@@ -449,7 +451,7 @@ void MQTTSubscriptionWidget::addSubscriptionChildren(QTreeWidgetItem* topic, QTr
 			name.append(temp->text(0));
 			while (temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + '/');
+				name.prepend(temp->text(0) + QLatin1Char('/'));
 			}
 		}
 
@@ -471,7 +473,7 @@ void MQTTSubscriptionWidget::addSubscriptionChildren(QTreeWidgetItem* topic, QTr
  * \param level the level's number which is being investigated
  */
 void MQTTSubscriptionWidget::restoreSubscriptionChildren(QTreeWidgetItem* topic, QTreeWidgetItem* subscription, const QStringList& list, int level) {
-	if (list[level] != "+" && list[level] != "#" && level < list.size() - 1) {
+	if (list[level] != QLatin1Char('+') && list[level] != QLatin1Char('#') && level < list.size() - 1) {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			// if the current level isn't + or # wildcard we recursively continue with the next level
 			if (topic->child(i)->text(0) == list[level]) {
@@ -479,18 +481,18 @@ void MQTTSubscriptionWidget::restoreSubscriptionChildren(QTreeWidgetItem* topic,
 				break;
 			}
 		}
-	} else if (list[level] == "+") {
+	} else if (list[level] == QLatin1Char('+')) {
 		for (int i = 0; i < topic->childCount(); ++i) {
 			// determine the name of the topic, contained by the subscription
 			QString name;
 			name.append(topic->child(i)->text(0));
 			for (int j = level + 1; j < list.size(); ++j)
-				name.append('/' + list[j]);
+				name.append(QLatin1Char('/') + list[j]);
 
 			QTreeWidgetItem* temp = topic->child(i);
 			while (temp->parent() != nullptr) {
 				temp = temp->parent();
-				name.prepend(temp->text(0) + '/');
+				name.prepend(temp->text(0) + QLatin1Char('/'));
 			}
 
 			// Add the topic as child of the subscription
@@ -501,7 +503,7 @@ void MQTTSubscriptionWidget::restoreSubscriptionChildren(QTreeWidgetItem* topic,
 			// Continue adding children recursively to the new item
 			restoreSubscriptionChildren(topic->child(i), newItem, list, level + 1);
 		}
-	} else if (list[level] == "#") {
+	} else if (list[level] == QLatin1Char('#')) {
 		// add the children of the # wildcard containing subscription
 		addSubscriptionChildren(topic, subscription);
 	}
@@ -521,7 +523,7 @@ void MQTTSubscriptionWidget::restoreSubscriptionChildren(QTreeWidgetItem* topic,
 int MQTTSubscriptionWidget::checkCommonChildCount(int levelIdx, int level, QStringList& commonList, QTreeWidgetItem* currentItem) {
 	// we recursively check the number of children, until we get to level-1
 	if (levelIdx < level - 1) {
-		if (commonList[levelIdx] != "+") {
+		if (commonList[levelIdx] != QLatin1Char('+')) {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					// if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item, recursively
@@ -549,7 +551,7 @@ int MQTTSubscriptionWidget::checkCommonChildCount(int levelIdx, int level, QStri
 				return -1;
 		}
 	} else if (levelIdx == level - 1) {
-		if (commonList[levelIdx] != "+") {
+		if (commonList[levelIdx] != QLatin1Char('+')) {
 			for (int j = 0; j < currentItem->childCount(); ++j) {
 				if (currentItem->child(j)->text(0) == commonList[levelIdx]) {
 					// if the level isn't represented by + wildcard we simply return the amount of children of the corresponding item
@@ -591,11 +593,11 @@ int MQTTSubscriptionWidget::checkCommonChildCount(int levelIdx, int level, QStri
  */
 int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString& second) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	QStringList firstList = first.split('/', Qt::SkipEmptyParts);
-	QStringList secondtList = second.split('/', Qt::SkipEmptyParts);
+	QStringList firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	QStringList firstList = first.split('/', QString::SkipEmptyParts);
-	QStringList secondtList = second.split('/', QString::SkipEmptyParts);
+	QStringList firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
+	QStringList secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 	QString commonTopic;
 	int differIndex = -1;
@@ -628,10 +630,10 @@ int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString
 					if (i != differIndex)
 						commonTopic.append(firstList.at(i));
 					else
-						commonTopic.append('+');
+						commonTopic.append(QLatin1Char('+'));
 
 					if (i != firstList.size() - 1)
-						commonTopic.append('/');
+						commonTopic.append(QLatin1Char('/'));
 				}
 			}
 		}
@@ -653,17 +655,17 @@ int MQTTSubscriptionWidget::commonLevelIndex(const QString& first, const QString
  */
 QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QString& second) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	const QStringList& firstList = first.split('/', Qt::SkipEmptyParts);
+	const QStringList& firstList = first.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	const QStringList& firstList = first.split('/', QString::SkipEmptyParts);
+	const QStringList& firstList = first.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 	if (firstList.isEmpty())
 		return {};
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-	const QStringList& secondtList = second.split('/', Qt::SkipEmptyParts);
+	const QStringList& secondtList = second.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-	const QStringList& secondtList = second.split('/', QString::SkipEmptyParts);
+	const QStringList& secondtList = second.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 	QString commonTopic;
 
@@ -696,11 +698,11 @@ QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QSt
 					commonTopic.append(firstList.at(i));
 				else {
 					// we put '+' wildcard at the level where they differ
-					commonTopic.append('+');
+					commonTopic.append(QLatin1Char('+'));
 				}
 
 				if (i != firstList.size() - 1)
-					commonTopic.append('/');
+					commonTopic.append(QLatin1Char('/'));
 			}
 		}
 	}
@@ -742,11 +744,11 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 	QTreeWidgetItem* tempItem = item;
 	QString name = item->text(0);
 	if (item->childCount() != 0)
-		name.append("/#");
+		name.append(QStringLiteral("/#"));
 
 	while (tempItem->parent()) {
 		tempItem = tempItem->parent();
-		name.prepend(tempItem->text(0) + '/');
+		name.prepend(tempItem->text(0) + QLatin1Char('/'));
 	}
 
 	// check if the subscription already exists
@@ -783,21 +785,21 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 			auto* newTopLevelItem = new QTreeWidgetItem(toplevelName);
 			ui.twSubscriptions->addTopLevelItem(newTopLevelItem);
 
-			if (name.endsWith('#')) {
+			if (name.endsWith(QLatin1Char('#'))) {
 				// adding every topic that the subscription contains to twSubscriptions
 				addSubscriptionChildren(item, newTopLevelItem);
 			}
 
 			Q_EMIT makeSubscription(name, static_cast<quint8>(ui.cbQos->currentText().toUInt()));
 
-			if (name.endsWith('#')) {
+			if (name.endsWith(QLatin1Char('#'))) {
 				// if an already existing subscription contains a topic that the new subscription also contains
 				// we decompose the already existing subscription
 				// by unsubscribing from its topics, that are present in the new subscription as well
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-				const QStringList nameList = name.split('/', Qt::SkipEmptyParts);
+				const QStringList nameList = name.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-				const QStringList nameList = name.split('/', QString::SkipEmptyParts);
+				const QStringList nameList = name.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 				const QString& root = nameList.first();
 				QVector<QTreeWidgetItem*> children;
@@ -938,9 +940,9 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
 void MQTTSubscriptionWidget::setTopicCompleter(const QString& topic) {
 	if (!m_searching) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		const QStringList& list = topic.split('/', Qt::SkipEmptyParts);
+		const QStringList& list = topic.split(QLatin1Char('/'), Qt::SkipEmptyParts);
 #else
-		const QStringList& list = topic.split('/', QString::SkipEmptyParts);
+		const QStringList& list = topic.split(QLatin1Char('/'), QString::SkipEmptyParts);
 #endif
 		QString tempTopic;
 		if (!list.isEmpty())

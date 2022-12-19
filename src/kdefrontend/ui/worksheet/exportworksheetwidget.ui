@@ -46,7 +46,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lFileName">
         <property name="text">
-         <string>File name:</string>
+         <string>File Name:</string>
         </property>
        </widget>
       </item>
@@ -96,7 +96,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lExportArea">
         <property name="text">
-         <string>Area to export:</string>
+         <string>Area to Export:</string>
         </property>
        </widget>
       </item>
@@ -116,7 +116,7 @@
          <string>Check this option if the worksheet background should be exported.</string>
         </property>
         <property name="text">
-         <string>Export background:</string>
+         <string>Export Background:</string>
         </property>
        </widget>
       </item>

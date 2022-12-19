@@ -29,6 +29,7 @@ private:
 	void initGeneralTab() override;
 	void updatePlotRanges() override;
 	void showFilterResult();
+	void updateCutoffSpinBoxes(NumberSpinBox* sb, nsl_filter_cutoff_unit newUnit, nsl_filter_cutoff_unit oldUnit, double oldValue);
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

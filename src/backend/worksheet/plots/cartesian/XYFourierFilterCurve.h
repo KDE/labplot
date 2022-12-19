@@ -49,6 +49,7 @@ public:
 	~XYFourierFilterCurve() override;
 
 	void recalculate() override;
+	bool resultAvailable() const override;
 	QIcon icon() const override;
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -66,6 +67,8 @@ private:
 
 Q_SIGNALS:
 	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
+
+	friend class FourierTest;
 };
 
 #endif

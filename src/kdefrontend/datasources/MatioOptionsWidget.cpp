@@ -29,7 +29,7 @@ MatioOptionsWidget::MatioOptionsWidget(QWidget* parent, ImportFileWidget* fileWi
 	ui.twContent->setAlternatingRowColors(true);
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.bRefreshPreview->setIcon(QIcon::fromTheme("view-refresh"));
+	ui.bRefreshPreview->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
 
 	connect(ui.twContent, &QTableWidget::itemSelectionChanged, this, &MatioOptionsWidget::selectionChanged);
 	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);

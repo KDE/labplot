@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of XYCurve
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,15 +12,17 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementPrivate.h"
+#include "backend/worksheet/plots/cartesian/PlotPrivate.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include <vector>
 
+class Background;
 class CartesianPlot;
 class CartesianCoordinateSystem;
 class Symbol;
 class XYCurve;
 
-class XYCurvePrivate : public WorksheetElementPrivate {
+class XYCurvePrivate : public PlotPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
@@ -55,10 +57,9 @@ public:
 	void updateErrorBars();
 	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
-	void suppressRetransform(bool);
 
+	bool activatePlot(QPointF mouseScenePos, double maxDist);
 	void setHover(bool on);
-	bool activateCurve(QPointF mouseScenePos, double maxDist);
 	bool pointLiesNearLine(const QPointF p1, const QPointF p2, const QPointF pos, const double maxDist) const;
 	bool
 	pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
@@ -78,13 +79,8 @@ public:
 	bool lineSkipGaps;
 	bool lineIncreasingXOnly;
 	int lineInterpolationPointsCount;
-	QPen linePen;
-	qreal lineOpacity;
-
-	// drop lines
-	XYCurve::DropLineType dropLineType;
-	QPen dropLinePen;
-	qreal dropLineOpacity;
+	Line* line{nullptr};
+	Line* dropLine{nullptr};
 
 	// symbols
 	Symbol* symbol{nullptr};
@@ -114,15 +110,7 @@ public:
 	QColor valuesColor;
 
 	// filling
-	XYCurve::FillingPosition fillingPosition;
-	WorksheetElement::BackgroundType fillingType;
-	WorksheetElement::BackgroundColorStyle fillingColorStyle;
-	WorksheetElement::BackgroundImageStyle fillingImageStyle;
-	Qt::BrushStyle fillingBrushStyle;
-	QColor fillingFirstColor;
-	QColor fillingSecondColor;
-	QString fillingFileName;
-	qreal fillingOpacity;
+	Background* background{nullptr};
 
 	// error bars
 	XYCurve::ErrorType xErrorType;
@@ -137,10 +125,7 @@ public:
 	const AbstractColumn* yErrorMinusColumn{nullptr};
 	QString yErrorMinusColumnPath;
 
-	XYCurve::ErrorBarsType errorBarsType;
-	double errorBarsCapSize;
-	QPen errorBarsPen;
-	qreal errorBarsOpacity;
+	Line* errorBarsLine{nullptr};
 
 	XYCurve* const q;
 	friend class XYCurve;
@@ -157,10 +142,10 @@ private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
+	void calculateScenePoints();
 
 	// TODO: add m_
 	QPainterPath linePath;
@@ -170,11 +155,9 @@ private:
 	QPainterPath symbolsPath;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
-#ifdef XYCurveTest_EN
-	QVector<QLineF> m_lines_test;
-#endif
 	QVector<QPointF> m_logicalPoints; // points in logical coordinates
 	QVector<QPointF> m_scenePoints; // points in scene coordinates
+	bool m_scenePointsDirty{true}; // true whenever the scenepoints have to be recalculated before using
 	std::vector<bool> m_pointVisible; // if point is currently visible in plot (size of m_logicalPoints)
 	QVector<QPointF> m_valuePoints; // points for showing value
 	QVector<QString> m_valueStrings; // strings for showing value
@@ -190,8 +173,10 @@ private:
 	bool m_selectionEffectImageIsDirty{false};
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
-	bool m_suppressRetransform{false};
 	QPointF mousePos;
+
+	friend class RetransformTest;
+	friend class XYCurveTest;
 };
 
 #endif

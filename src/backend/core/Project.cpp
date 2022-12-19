@@ -4,7 +4,7 @@
 	Description          : Represents a LabPlot project.
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
 
@@ -18,12 +18,17 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/Value.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+
+#ifdef HAVE_LIBORIGIN
+#include "backend/datasources/projects/OriginProjectParser.h"
+#endif
 
 #ifndef SDK
 #include "backend/datapicker/DatapickerCurve.h"
@@ -36,6 +41,7 @@
 #include <QBuffer>
 #include <QDateTime>
 #include <QFile>
+#include <QFileInfo>
 #include <QMenu>
 #include <QMimeData>
 #include <QThreadPool>
@@ -86,7 +92,7 @@ public:
 	explicit Private(Project* owner)
 		: modificationTime(QDateTime::currentDateTime())
 		, q(owner) {
-		setVersion(LVERSION);
+		setVersion(QStringLiteral(LVERSION));
 	}
 	QString name() const {
 		return q->name();
@@ -94,7 +100,7 @@ public:
 
 	bool setVersion(const QString& v) const {
 		versionString = v;
-		auto l = v.split(".");
+		auto l = v.split(QLatin1Char('.'));
 		const int count = l.count();
 		int major = 0;
 		int minor = 0;
@@ -152,8 +158,8 @@ public:
 };
 
 int Project::Private::m_versionNumber = 0;
-QString Project::Private::versionString = "";
-int Project::Private::mXmlVersion = 0;
+QString Project::Private::versionString = QString();
+int Project::Private::mXmlVersion = buildXmlVersion;
 
 Project::Project()
 	: Folder(i18n("Project"), AspectType::Project)
@@ -220,6 +226,14 @@ int Project::versionNumber() {
 
 int Project::xmlVersion() {
 	return Private::xmlVersion();
+}
+
+void Project::setXmlVersion(int version) {
+	Private::mXmlVersion = version;
+}
+
+int Project::currentBuildXmlVersion() {
+	return buildXmlVersion;
 }
 
 QUndoStack* Project::undoStack() const {
@@ -330,33 +344,45 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	if (isLoading())
 		return;
 
-	// check whether new columns were added and if yes,
-	// update the dependencies in the project
-	QVector<const AbstractColumn*> columns;
-	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
-	if (column)
-		columns.append(column);
-	else {
-		for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
-			columns.append(static_cast<const AbstractColumn*>(child));
+	if (aspect->inherits(AspectType::AbstractColumn)) {
+		// check whether new columns were added and if yes,
+		// update the dependencies in the project
+		QVector<const AbstractColumn*> columns;
+		const auto* column = static_cast<const AbstractColumn*>(aspect);
+		if (column)
+			columns.append(column);
+		else {
+			for (auto* child : aspect->children<Column>(ChildIndexFlag::Recursive))
+				columns.append(static_cast<const AbstractColumn*>(child));
+		}
+
+		if (!columns.isEmpty()) {
+			// if a new column was addded, check whether the column names match the missing
+			// names in the curves, etc. and update the dependencies
+			const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(curves, column);
+
+			const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(histograms, column);
+
+			const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
+			for (auto column : columns)
+				updateColumnDependencies(boxPlots, column);
+		}
+	} else if (aspect->inherits(AspectType::Spreadsheet)) {
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::aboutToResize, [this]() {
+			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* we : wes)
+				we->setSuppressRetransform(true);
+		});
+		connect(static_cast<const Spreadsheet*>(aspect), &Spreadsheet::resizeFinished, [this]() {
+			const auto& wes = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* we : wes)
+				we->setSuppressRetransform(false);
+		});
 	}
-
-	if (columns.isEmpty())
-		return;
-
-	// if a new column was addded, check whether the column names match the missing
-	// names in the curves, etc. and update the dependencies
-	const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(curves, column);
-
-	const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(histograms, column);
-
-	const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
-	for (auto column : columns)
-		updateColumnDependencies(boxPlots, column);
 }
 
 // TODO: move this update*() functions into the classes, Project shouldn't be aware of the details
@@ -426,9 +452,9 @@ void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, co
 			histogram->setUndoAware(true);
 		}
 
-		if (histogram->valuesColumnPath() == columnPath) {
+		if (histogram->value()->columnPath() == columnPath) {
 			histogram->setUndoAware(false);
-			histogram->setValuesColumn(column);
+			histogram->value()->setColumn(column);
 			histogram->setUndoAware(true);
 		}
 	}
@@ -461,13 +487,34 @@ void Project::navigateTo(const QString& path) {
 	Q_EMIT requestNavigateTo(path);
 }
 
+/*!
+ * returns \c true if the project file \fileName has a supported format and can be openned in LabPlot directly,
+ * returns \c false otherwise.
+ */
+bool Project::isSupportedProject(const QString& fileName) {
+	bool open = Project::isLabPlotProject(fileName);
+#ifdef HAVE_LIBORIGIN
+	if (!open)
+		open = OriginProjectParser::isOriginProject(fileName);
+#endif
+
+#ifdef HAVE_CANTOR_LIBS
+	if (!open) {
+		QFileInfo fi(fileName);
+		open = (fi.completeSuffix() == QLatin1String("cws")) || (fi.completeSuffix() == QLatin1String("ipynb"));
+	}
+#endif
+
+	return open;
+}
+
 bool Project::isLabPlotProject(const QString& fileName) {
 	return fileName.endsWith(QStringLiteral(".lml"), Qt::CaseInsensitive) || fileName.endsWith(QStringLiteral(".lml.gz"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QStringLiteral(".lml.bz2"), Qt::CaseInsensitive) || fileName.endsWith(QStringLiteral(".lml.xz"), Qt::CaseInsensitive);
 }
 
 QString Project::supportedExtensions() {
-	static const QString extensions = "*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ";
+	static const QString extensions = QStringLiteral("*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ");
 	return extensions;
 }
 
@@ -492,19 +539,19 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	// set the version and the modification time to the current values
-	d->setVersion(LVERSION);
+	d->setVersion(QStringLiteral(LVERSION));
 	d->modificationTime = QDateTime::currentDateTime();
 
 	writer->setAutoFormatting(true);
 	writer->writeStartDocument();
-	writer->writeDTD("<!DOCTYPE LabPlotXML>");
+	writer->writeDTD(QStringLiteral("<!DOCTYPE LabPlotXML>"));
 
-	writer->writeStartElement("project");
-	writer->writeAttribute("version", version());
-	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
-	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
-	writer->writeAttribute("author", author());
-	writer->writeAttribute("saveCalculations", QString::number(d->saveCalculations));
+	writer->writeStartElement(QStringLiteral("project"));
+	writer->writeAttribute(QStringLiteral("version"), version());
+	writer->writeAttribute(QStringLiteral("xmlVersion"), QString::number(buildXmlVersion));
+	writer->writeAttribute(QStringLiteral("modificationTime"), modificationTime().toString(QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz")));
+	writer->writeAttribute(QStringLiteral("author"), author());
+	writer->writeAttribute(QStringLiteral("saveCalculations"), QString::number(d->saveCalculations));
 
 	QString image;
 	if (!thumbnail.isNull()) {
@@ -516,7 +563,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 		image = QString::fromLatin1(bArray.toBase64().data());
 	}
 
-	writer->writeAttribute("thumbnail", image);
+	writer->writeAttribute(QStringLiteral("thumbnail"), image);
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 	save(writer);
@@ -529,7 +576,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	// save all children
 	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 	for (auto* child : children) {
-		writer->writeStartElement("child_aspect");
+		writer->writeStartElement(QStringLiteral("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement();
 	}
@@ -602,7 +649,10 @@ bool Project::load(const QString& filename, bool preview) {
 	// parse XML
 	XmlStreamReader reader(file);
 	setIsLoading(true);
+	Private::mXmlVersion =
+		0; // set the version temporarily to 0, the actual project version will be read in the file, if available, and used in load() functions
 	rc = this->load(&reader, preview);
+	Private::mXmlVersion = buildXmlVersion; // set the version back to the current XML version
 	setIsLoading(false);
 	if (rc == false) {
 		RESET_CURSOR;
@@ -660,14 +710,14 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->skipToNextTag())
 			return false;
 
-		if (reader->name() == "project") {
-			QString version = reader->attributes().value("version").toString();
+		if (reader->name() == QLatin1String("project")) {
+			QString version = reader->attributes().value(QStringLiteral("version")).toString();
 			if (version.isEmpty())
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
 			else
 				d->setVersion(version);
 
-			QString c = reader->attributes().value("xmlVersion").toString();
+			QString c = reader->attributes().value(QStringLiteral("xmlVersion")).toString();
 			if (c.isEmpty())
 				d->mXmlVersion = 0;
 			else
@@ -685,19 +735,17 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					break;
 
 				if (reader->isStartElement()) {
-					if (reader->name() == "comment") {
+					if (reader->name() == QLatin1String("comment")) {
 						if (!readCommentElement(reader))
 							return false;
-					} else if (reader->name() == "child_aspect") {
+					} else if (reader->name() == QLatin1String("child_aspect")) {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (!preview && reader->name() == "state") {
+					} else if (!preview && reader->name() == QLatin1String("state")) {
 						// load the state of the views (visible, maximized/minimized/geometry)
 						// and the state of the project explorer (expanded items, currently selected item).
 						//"state" is read at the very end of XML, restore the pointers here so the current index
 						// can be properly selected in ProjectExplorer after requestLoadState() is called.
-						restorePointers(this, preview);
-						retransformElements(this);
 						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -712,6 +760,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
+	restorePointers(this, preview);
+	retransformElements(this);
 	return !reader->hasError();
 }
 
@@ -734,22 +784,16 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	// all data was read:
 	// call retransform() to every element
 	if (hasChildren && aspect->type() == AspectType::Worksheet) {
-		for (auto* e : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
-			if (e->type() == AspectType::CartesianPlot)
-				static_cast<CartesianPlot*>(e)->retransformAll();
-			else
-				e->retransform();
-		}
+		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* e : elements)
+			e->retransform();
 	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
 		for (const auto* w : aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 			// retransform all elements in the worksheet (labels, images, plots)
 			// the plots will then recursive retransform the childs of them
-			for (auto* e : w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
-				if (e->type() == AspectType::CartesianPlot)
-					static_cast<CartesianPlot*>(e)->retransformAll();
-				else
-					e->retransform();
-			}
+			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+			for (auto* e : elements)
+				e->retransform();
 		}
 	} else {
 		QVector<CartesianPlot*> plots;
@@ -838,14 +882,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	for (auto* curve : qAsConst(curves)) {
 		if (!curve)
 			continue;
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 
-		auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
 		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (equationCurve) {
-			// curves defined by a mathematical equations recalculate their own columns on load again.
-			equationCurve->recalculate();
-		} else if (analysisCurve) {
+		if (analysisCurve) {
 			RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
@@ -868,7 +908,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (analysisCurve)
 			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 	}
 
 	// assign to all markers the curves they need
@@ -907,7 +947,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!hist)
 			continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-		RESTORE_COLUMN_POINTER(hist, valuesColumn, ValuesColumn);
+		auto* value = hist->value();
+		RESTORE_COLUMN_POINTER(value, column, Column);
+		RESTORE_COLUMN_POINTER(hist, errorPlusColumn, ErrorPlusColumn);
+		RESTORE_COLUMN_POINTER(hist, errorMinusColumn, ErrorMinusColumn);
 	}
 
 	// box plots
@@ -943,6 +986,41 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		boxPlot->setDataColumns(dataColumns);
 	}
 
+	// bar plots
+	QVector<BarPlot*> barPlots;
+	if (hasChildren)
+		barPlots = aspect->children<BarPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		barPlots << static_cast<BarPlot*>(aspect);
+
+	for (auto* barPlot : barPlots) {
+		if (!barPlot)
+			continue;
+
+		// initialize the array for the column pointers
+		int count = barPlot->dataColumnPaths().count();
+		QVector<const AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		// restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = barPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column)
+					continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		barPlot->setDataColumns(dataColumns);
+
+		RESTORE_COLUMN_POINTER(barPlot, xColumn, XColumn);
+	}
+
 	// data picker curves
 #ifndef SDK
 	QVector<DatapickerCurve*> dataPickerCurves;
@@ -976,16 +1054,16 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	const auto& attribs = reader->attributes();
-	auto str = attribs.value("modificationTime").toString();
-	auto modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+	auto str = attribs.value(QStringLiteral("modificationTime")).toString();
+	auto modificationTime = QDateTime::fromString(str, QStringLiteral("yyyy-dd-MM hh:mm:ss:zzz"));
 	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else
 		d->modificationTime = modificationTime;
 
-	d->author = attribs.value("author").toString();
-	d->saveCalculations = attribs.value("saveCalculations").toInt();
+	d->author = attribs.value(QStringLiteral("author")).toString();
+	d->saveCalculations = attribs.value(QStringLiteral("saveCalculations")).toInt();
 
 	return true;
 }

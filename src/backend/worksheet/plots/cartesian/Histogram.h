@@ -4,28 +4,36 @@
 	Description          : Histogram
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-	SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2018-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Plot.h"
 
 class AbstractColumn;
 class HistogramPrivate;
+class Background;
+class Line;
 class Symbol;
+class Value;
 
 #ifdef SDK
 #include "labplot_export.h"
-class LABPLOT_EXPORT Histogram : public WorksheetElement, public Curve {
+class LABPLOT_EXPORT Histogram : public Plot {
 #else
-class Histogram : public WorksheetElement, public Curve {
+class Histogram : public Plot {
 #endif
 	Q_OBJECT
 
 public:
+	friend class HistogramSetDataColumnCmd;
+	friend class HistogramSetErrorPlusColumnCmd;
+	friend class HistogramSetErrorMinusColumnCmd;
+
 	enum HistogramType { Ordinary, Cumulative, AvgShift };
 	enum HistogramOrientation { Vertical, Horizontal };
 	enum HistogramNormalization { Count, Probability, CountDensity, ProbabilityDensity };
@@ -33,9 +41,10 @@ public:
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
 	enum ValuesPosition { ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight };
-	enum ErrorType { NoError };
+	enum ErrorType { NoError, Poisson, CustomSymmetric, CustomAsymmetric };
 
 	explicit Histogram(const QString& name);
+	~Histogram() override;
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -45,11 +54,11 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	bool activatePlot(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
-	QString& dataColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
@@ -66,52 +75,31 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
 	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
 
-	BASIC_D_ACCESSOR_DECL(LineType, lineType, LineType)
-	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
-	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
-
+	Line* line() const;
+	Background* background() const;
 	Symbol* symbol() const;
+	Value* value() const;
 
-	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
-	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-	QString& valuesColumnPath() const;
-	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
-	BASIC_D_ACCESSOR_DECL(char, valuesNumericFormat, ValuesNumericFormat)
-	BASIC_D_ACCESSOR_DECL(int, valuesPrecision, ValuesPrecision)
-	CLASS_D_ACCESSOR_DECL(QString, valuesDateTimeFormat, ValuesDateTimeFormat)
-	CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
-	CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
-	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
-	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
-
-	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, fillingFileName, FillingFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, fillingOpacity, FillingOpacity)
-
+	// error bars
 	BASIC_D_ACCESSOR_DECL(ErrorType, errorType, ErrorType)
-	BASIC_D_ACCESSOR_DECL(XYCurve::ErrorBarsType, errorBarsType, ErrorBarsType)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
-	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
-	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorPlusColumn, ErrorPlusColumn)
+	CLASS_D_ACCESSOR_DECL(QString, errorPlusColumnPath, ErrorPlusColumnPath)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, errorMinusColumn, ErrorMinusColumn)
+	CLASS_D_ACCESSOR_DECL(QString, errorMinusColumnPath, ErrorMinusColumnPath)
+	Line* errorBarsLine() const;
 
-	void suppressRetransform(bool);
+	// margin plots
+	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
+	BASIC_D_ACCESSOR_DECL(double, rugOffset, RugOffset)
+	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
+	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	double xMinimum() const;
-	double xMaximum() const;
-	double yMinimum() const;
-	double yMaximum() const;
+	double minimum(CartesianCoordinateSystem::Dimension dim) const;
+	double maximum(CartesianCoordinateSystem::Dimension dim) const;
 
 	const AbstractColumn* bins() const;
 	const AbstractColumn* binValues() const;
+	const AbstractColumn* binPDValues() const;
 
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
@@ -120,11 +108,20 @@ public Q_SLOTS:
 	void retransform() override;
 	void recalcHistogram();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	void createDataSpreadsheet();
 
 private Q_SLOTS:
 	void updateValues();
+	void updateErrorBars();
+
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
-	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
+	void dataColumnNameChanged();
+
+	void errorPlusColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorPlusColumnNameChanged();
+
+	void errorMinusColumnAboutToBeRemoved(const AbstractAspect*);
+	void errorMinusColumnNameChanged();
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
@@ -133,11 +130,16 @@ private:
 	Q_DECLARE_PRIVATE(Histogram)
 	void init();
 	void initActions();
+	void connectDataColumn(const AbstractColumn*);
+	void connectErrorPlusColumn(const AbstractColumn*);
+	void connectErrorMinusColumn(const AbstractColumn*);
+
 	QAction* visibilityAction{nullptr};
 
 Q_SIGNALS:
 	// General-Tab
 	void dataChanged();
+	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 
 	void typeChanged(Histogram::HistogramType);
@@ -150,43 +152,18 @@ Q_SIGNALS:
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
 
-	// Line-Tab
-	void lineTypeChanged(Histogram::LineType);
-	void linePenChanged(const QPen&);
-	void lineOpacityChanged(qreal);
-
-	// Values-Tab
-	void valuesTypeChanged(Histogram::ValuesType);
-	void valuesColumnChanged(const AbstractColumn*);
-	void valuesPositionChanged(Histogram::ValuesPosition);
-	void valuesDistanceChanged(qreal);
-	void valuesRotationAngleChanged(qreal);
-	void valuesOpacityChanged(qreal);
-	void valuesNumericFormatChanged(char);
-	void valuesPrecisionChanged(int);
-	void valuesDateTimeFormatChanged(QString);
-	void valuesPrefixChanged(QString);
-	void valuesSuffixChanged(QString);
-	void valuesFontChanged(QFont);
-	void valuesColorChanged(QColor);
-
-	// Filling
-	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(WorksheetElement::BackgroundType);
-	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void fillingBrushStyleChanged(Qt::BrushStyle);
-	void fillingFirstColorChanged(QColor&);
-	void fillingSecondColorChanged(QColor&);
-	void fillingFileNameChanged(QString&);
-	void fillingOpacityChanged(float);
-
 	// Error bars
 	void errorTypeChanged(Histogram::ErrorType);
-	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
-	void errorBarsPenChanged(QPen);
-	void errorBarsCapSizeChanged(qreal);
-	void errorBarsOpacityChanged(qreal);
+	void errorPlusDataChanged();
+	void errorPlusColumnChanged(const AbstractColumn*);
+	void errorMinusDataChanged();
+	void errorMinusColumnChanged(const AbstractColumn*);
+
+	// Margin Plots
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 };
 
 #endif

@@ -111,7 +111,7 @@
  * \brief Ctor
  */
 AbstractSimpleFilter::AbstractSimpleFilter()
-	: AbstractFilter("SimpleFilter")
+	: AbstractFilter(QStringLiteral("SimpleFilter"))
 	, m_output_column(new SimpleFilterColumn(this)) {
 	addChildFast(m_output_column);
 }
@@ -315,10 +315,10 @@ const AbstractColumn* AbstractSimpleFilter::output(int port) const {
  * \brief Save to XML
  */
 void AbstractSimpleFilter::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("simple_filter");
+	writer->writeStartElement(QStringLiteral("simple_filter"));
 	writeBasicAttributes(writer);
 	writeExtraAttributes(writer);
-	writer->writeAttribute("filter_name", metaObject()->className());
+	writer->writeAttribute(QStringLiteral("filter_name"), QLatin1String(metaObject()->className()));
 	writeCommentElement(writer);
 	writer->writeEndElement();
 }
@@ -341,8 +341,8 @@ bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool /*preview*/) {
 		return false;
 
 	QXmlStreamAttributes attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "filter_name").toString();
-	if (str != metaObject()->className()) {
+	QString str = attribs.value(reader->namespaceUri().toString(), QStringLiteral("filter_name")).toString();
+	if (str != QLatin1String(metaObject()->className())) {
 		reader->raiseError(i18n("incompatible filter type"));
 		return false;
 	}
@@ -355,7 +355,7 @@ bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool /*preview*/) {
 			break;
 
 		if (reader->isStartElement()) {
-			if (reader->name() == "comment") {
+			if (reader->name() == QLatin1String("comment")) {
 				if (!readCommentElement(reader))
 					return false;
 			} else { // unknown element

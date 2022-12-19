@@ -51,10 +51,10 @@ public:
 	void showComments(bool on = true);
 	bool areCommentsShown() const;
 
-	int selectedColumnCount(bool full = false) const;
+	int selectedColumnCount(bool full = true) const;
 	int selectedColumnCount(AbstractColumn::PlotDesignation) const;
 	bool isColumnSelected(int col, bool full = false) const;
-	QVector<Column*> selectedColumns(bool full = false) const;
+	QVector<Column*> selectedColumns(bool full = true) const;
 	int firstSelectedColumn(bool full = false) const;
 	int lastSelectedColumn(bool full = false) const;
 
@@ -114,7 +114,7 @@ private:
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
 	void checkSpreadsheetSelectionMenu();
-	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
+	void checkColumnMenus(bool numeric, bool datetime, bool text, bool hasValues);
 
 	// selection related actions
 	QAction* action_cut_selection;
@@ -169,6 +169,8 @@ private:
 	QAction* action_divide_value;
 	QAction* action_drop_values;
 	QAction* action_mask_values;
+	QAction* action_sample_values;
+	QAction* action_flatten_columns;
 	QAction* action_join_columns;
 	QActionGroup* normalizeColumnActionGroup;
 	QActionGroup* ladderOfPowersActionGroup;
@@ -191,6 +193,7 @@ private:
 	QAction* action_plot_data_xycurve;
 	QAction* action_plot_data_histogram;
 	QAction* action_plot_data_boxplot;
+	QAction* action_plot_data_barplot;
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
@@ -216,16 +219,22 @@ private:
 	QMenu* m_analyzePlotMenu{nullptr};
 
 public Q_SLOTS:
+	void handleAspectAdded(const AbstractAspect*);
 	void createContextMenu(QMenu*);
+	void fillColumnContextMenu(QMenu*, Column*);
 	void fillToolBar(QToolBar*);
 #ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
+
 	void pasteIntoSelection();
 
+	void fillWithRowNumbers();
+	void selectColumn(int);
+	void deselectColumn(int);
+
 private Q_SLOTS:
-	void createColumnContextMenu(QMenu*);
 	void goToCell(int row, int col);
 	void showSearch();
 	void toggleComments();
@@ -250,7 +259,6 @@ private Q_SLOTS:
 	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
-	void fillWithRowNumbers();
 	void fillSelectedCellsWithRandomNumbers();
 	void fillWithRandomValues();
 	void fillWithEquidistantValues();
@@ -276,6 +284,8 @@ private Q_SLOTS:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
+	void sampleColumnValues();
+	void flattenColumns();
 	// 	void joinColumns();
 	void normalizeSelectedColumns(QAction*);
 	void powerTransformSelectedColumns(QAction*);
@@ -297,12 +307,9 @@ private Q_SLOTS:
 	void handleHorizontalHeaderDoubleClicked(int index);
 	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
 	void currentColumnChanged(const QModelIndex& current, const QModelIndex& previous);
-	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
-	void selectColumn(int);
-	void deselectColumn(int);
 	void columnClicked(int);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 	void advanceCell();

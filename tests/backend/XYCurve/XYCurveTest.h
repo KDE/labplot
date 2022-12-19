@@ -57,6 +57,9 @@ private Q_SLOTS:
 	void updateLinesWithGapSegments2();
 	void updateLinesWithGapSegments3();
 
+	// Nonlinear
+	void updateLinesLog10();
+
 	// Hover XYCurve
 	void hooverCurveIntegerEndingZeros();
 };

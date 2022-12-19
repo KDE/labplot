@@ -10,6 +10,7 @@
 
 #include "NetCDFFilterTest.h"
 #include "backend/datasources/filters/NetCDFFilter.h"
+#include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 extern "C" {
@@ -28,7 +29,7 @@ extern "C" {
 void NetCDFFilterTest::importFile1() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/madis-hydro.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("lastRecord"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -59,7 +60,7 @@ void NetCDFFilterTest::importFile1() {
 void NetCDFFilterTest::importFile2() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/OMI-Aura_L2-example.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("CovarianceMatrix"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -97,7 +98,7 @@ void NetCDFFilterTest::importFile2() {
 void NetCDFFilterTest::importFile3() {
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testrh.nc"));
 
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("var1"));
 	filter.readDataFromFile(fileName, &spreadsheet, AbstractFileFilter::ImportMode::Replace);
@@ -124,11 +125,11 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 	file.close(); // only file name is used
 
 	benchDataFileName = file.fileName();
-	benchDataFileName.append(".nc4");
+	benchDataFileName.append(QStringLiteral(".nc4"));
 
 	QString testName(QString::number(paths) + QLatin1String(" random double paths"));
 
-	QTest::newRow(testName.toLatin1()) << lines;
+	QTest::newRow(qPrintable(testName)) << lines;
 	DEBUG("CREATE DATA FILE " << STDSTRING(benchDataFileName) << ", lines = " << lines)
 
 	gsl_rng_env_setup();
@@ -137,7 +138,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 
 	// define parameter
 	int status, ncid;
-	if ((status = nc_create(benchDataFileName.toLatin1(), NC_NETCDF4, &ncid)))
+	if ((status = nc_create(qPrintable(benchDataFileName), NC_NETCDF4, &ncid)))
 		ERR(status);
 
 	int xdimid, ydimid;
@@ -187,7 +188,7 @@ void NetCDFFilterTest::benchDoubleImport_data() {
 }
 
 void NetCDFFilterTest::benchDoubleImport() {
-	Spreadsheet spreadsheet("test", false);
+	Spreadsheet spreadsheet(QStringLiteral("test"), false);
 	NetCDFFilter filter;
 	filter.setCurrentVarName(QLatin1String("paths"));
 

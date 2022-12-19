@@ -27,7 +27,7 @@
  */
 RescaleDialog::RescaleDialog(QWidget* parent)
 	: QDialog(parent) {
-	setWindowIcon(QIcon::fromTheme("view-sort-ascending"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("view-sort-ascending")));
 	setWindowTitle(i18nc("@title:window", "Rescale Interval"));
 	setSizeGripEnabled(true);
 
@@ -56,7 +56,7 @@ RescaleDialog::RescaleDialog(QWidget* parent)
 
 	double min = conf.readEntry(QLatin1String("Min"), 0.0);
 	double max = conf.readEntry(QLatin1String("Max"), 1.0);
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	ui.leMin->setText(numberLocale.toString(min));
 	ui.leMax->setText(numberLocale.toString(max));
 
@@ -69,7 +69,7 @@ RescaleDialog::~RescaleDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry(QLatin1String("Min"), numberLocale.toDouble(ui.leMin->text()));
 	conf.writeEntry(QLatin1String("Max"), numberLocale.toDouble(ui.leMax->text()));
 }
@@ -79,13 +79,11 @@ void RescaleDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 double RescaleDialog::min() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMin->text());
+	return QLocale().toDouble(ui.leMin->text());
 }
 
 double RescaleDialog::max() const {
-	SET_NUMBER_LOCALE
-	return numberLocale.toDouble(ui.leMax->text());
+	return QLocale().toDouble(ui.leMax->text());
 }
 
 void RescaleDialog::validateOkButton() {

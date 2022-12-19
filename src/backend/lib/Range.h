@@ -10,7 +10,7 @@
 #ifndef RANGE_H
 #define RANGE_H
 
-#include "macros.h" //SET_NUMBER_LOCALE
+#include "macros.h" //const auto numberLocale = QLocale();
 
 extern "C" {
 #include "backend/gsl/parser.h"
@@ -44,25 +44,27 @@ public:
 	// TODO: InverseOffset, Prob, Probit, Logit, Weibull
 	enum class Scale { Linear, Log10, Log2, Ln, Sqrt, Square, Inverse };
 	Q_ENUM(Scale)
-	const static QStringList scaleNames; // see Range.cpp
+	static const QStringList& scaleNames(); // see Range.cpp
 	// TODO: when we have C++17: use inline initialization
 	//	const static inline QStringList scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
+	static bool isLogScale(Scale scale) {
+		if (scale == Scale::Log10 || scale == Scale::Log2 || scale == Scale::Ln)
+			return true;
+		return false;
+	}
 };
 
 template<class T>
 class Range : RangeT {
 public:
-	Range()
-		: m_start(0)
-		, m_end(1)
-		, m_format(Format::Numeric)
-		, m_scale(Scale::Linear) {
+	Range() {
 	}
 	Range(T start, T end, Format format = Format::Numeric, Scale scale = Scale::Linear) {
 		this->setRange(start, end, format, scale);
 	}
+	// start and end as localized strings like "pi + 1.5" (will be parsed)
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric, const Scale scale = Scale::Linear) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		// min
 		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0) // if parsing fails, try default locale
@@ -137,7 +139,7 @@ public:
 	void setScale(Scale scale) {
 		m_scale = scale;
 	}
-	void setDateTimeFormat(QString format) {
+	void setDateTimeFormat(const QString& format) {
 		m_dateTimeFormat = format;
 	}
 	void setAutoScale(bool b) {
@@ -212,18 +214,17 @@ public:
 	QString toString(bool round = true, QLocale locale = QLocale()) const {
 		Q_UNUSED(round)
 		if (m_format == Format::Numeric)
-			return locale.toString(m_start) + " .. " + locale.toString(m_end);
+			return locale.toString(m_start) + QStringLiteral(" .. ") + locale.toString(m_end);
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
-				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QStringLiteral(" .. ")
+				+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
 	}
-	std::string toStdString() const {
-		return STDSTRING(toString());
+	std::string toStdString(bool round = true) const {
+		return STDSTRING(toString(round));
 	}
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString(bool round = true) const {
-		SET_NUMBER_LOCALE
-		return this->toString(round, numberLocale);
+		return this->toString(round, QLocale());
 	}
 	// extend/shrink range to nice numbers (used in auto scaling)
 	//  get nice size to extend to (see Glassner: Graphic Gems)
@@ -418,8 +419,8 @@ public:
 	// TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:
-	T m_start; // start value
-	T m_end; // end value
+	T m_start{0}; // start value
+	T m_end{1}; // end value
 	Format m_format{Format::Numeric}; // format (Numeric or DateTime)
 	QString m_dateTimeFormat{QLatin1String("yyyy-MM-dd hh:mm:ss")}; // only used for DateTime
 	Scale m_scale{Scale::Linear}; // scale (Linear, Log , ...)
@@ -438,8 +439,8 @@ inline QString Range<double>::toString(bool round, QLocale locale) const {
 		} else
 			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + QLatin1String(" .. ")
-			+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start, Qt::UTC).toString(m_dateTimeFormat) + QLatin1String(" .. ")
+			+ QDateTime::fromMSecsSinceEpoch(m_end, Qt::UTC).toString(m_dateTimeFormat);
 }
 
 #endif

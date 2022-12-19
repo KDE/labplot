@@ -29,6 +29,7 @@ public:
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
+	void fillColumnContextMenu(QMenu*, Column*);
 	QWidget* view() const override;
 
 	bool exportView() const override;
@@ -119,6 +120,8 @@ Q_SIGNALS:
 	// for spreadsheet dock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
+	void aboutToResize();
+	void resizeFinished();
 };
 
 #endif

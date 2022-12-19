@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Dock widget for the box plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2021-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,8 +17,11 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BoxPlot;
+class BackgroundWidget;
+class LineWidget;
 class SymbolWidget;
 class TreeViewComboBox;
+class QPushButton;
 class KConfig;
 
 class BoxPlotDock : public BaseDock {
@@ -31,10 +34,16 @@ public:
 
 private:
 	Ui::BoxPlotDock ui;
+	BackgroundWidget* backgroundWidget{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
+	LineWidget* borderLineWidget{nullptr};
+	LineWidget* medianLineWidget{nullptr};
+	LineWidget* whiskersLineWidget{nullptr};
+	LineWidget* whiskersCapLineWidget{nullptr};
+
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	SymbolWidget* symbolWidget{nullptr};
 
 	QGridLayout* m_gridLayout;
 	QPushButton* m_buttonNew;
@@ -53,56 +62,31 @@ private Q_SLOTS:
 	//"General"-tab
 	void addDataColumn();
 	void removeDataColumn();
-	void dataColumnChanged(const QModelIndex&) const;
-	void orderingChanged(int) const;
-	void orientationChanged(int) const;
-	void variableWidthChanged(bool) const;
-	void notchesEnabledChanged(bool) const;
-	void visibilityChanged(bool) const;
+	void dataColumnChanged(const QModelIndex&);
+	void orderingChanged(int);
+	void orientationChanged(int);
+	void variableWidthChanged(bool);
+	void notchesEnabledChanged(bool);
+	void visibilityChanged(bool);
 
 	//"Box"-tab
-	void widthFactorChanged(int) const;
-
-	// box filling
-	void fillingEnabledChanged(bool) const;
-	void fillingTypeChanged(int) const;
-	void fillingColorStyleChanged(int) const;
-	void fillingImageStyleChanged(int) const;
-	void fillingBrushStyleChanged(int) const;
-	void fillingFirstColorChanged(const QColor&);
-	void fillingSecondColorChanged(const QColor&) const;
-	void selectFile();
-	void fileNameChanged() const;
-	void fillingOpacityChanged(int) const;
-
-	// box border
-	void borderStyleChanged(int) const;
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double) const;
-	void borderOpacityChanged(int) const;
-
-	// median line
-	void medianLineStyleChanged(int) const;
-	void medianLineColorChanged(const QColor&);
-	void medianLineWidthChanged(double) const;
-	void medianLineOpacityChanged(int) const;
+	void currentBoxChanged(int);
+	void widthFactorChanged(int);
 
 	// symbols
 	void symbolCategoryChanged();
-	void jitteringEnabledChanged(bool) const;
+	void jitteringEnabledChanged(bool);
 
 	// whiskers
-	void whiskersTypeChanged(int) const;
-	void whiskersRangeParameterChanged(const QString&) const;
-	void whiskersStyleChanged(int) const;
-	void whiskersColorChanged(const QColor&);
-	void whiskersWidthChanged(double) const;
-	void whiskersOpacityChanged(int) const;
+	void whiskersTypeChanged(int);
+	void whiskersRangeParameterChanged(const QString&);
 	void whiskersCapSizeChanged(double) const;
-	void whiskersCapStyleChanged(int) const;
-	void whiskersCapColorChanged(const QColor&);
-	void whiskersCapWidthChanged(double) const;
-	void whiskersCapOpacityChanged(int) const;
+
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(bool);
+	void rugLengthChanged(double) const;
+	void rugWidthChanged(double) const;
+	void rugOffsetChanged(double) const;
 
 	// SLOTs for changes triggered in BoxPlot
 	// general
@@ -115,36 +99,19 @@ private Q_SLOTS:
 	void plotNotchesEnabledChanged(bool);
 	void plotVisibilityChanged(bool);
 
-	// box filling
-	void plotFillingEnabledChanged(bool);
-	void plotFillingTypeChanged(WorksheetElement::BackgroundType);
-	void plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void plotFillingBrushStyleChanged(Qt::BrushStyle);
-	void plotFillingFirstColorChanged(QColor&);
-	void plotFillingSecondColorChanged(QColor&);
-	void plotFillingFileNameChanged(QString&);
-	void plotFillingOpacityChanged(double);
-
-	// box border
-	void plotBorderPenChanged(QPen&);
-	void plotBorderOpacityChanged(float);
-
-	// median line
-	void plotMedianLinePenChanged(QPen&);
-	void plotMedianLineOpacityChanged(float);
-
 	// symbols
 	void plotJitteringEnabledChanged(bool);
 
 	// whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersRangeParameterChanged(double);
-	void plotWhiskersPenChanged(QPen&);
-	void plotWhiskersOpacityChanged(float);
 	void plotWhiskersCapSizeChanged(double);
-	void plotWhiskersCapPenChanged(QPen&);
-	void plotWhiskersCapOpacityChanged(float);
+
+	//"Margin Plots"-Tab
+	void plotRugEnabledChanged(bool);
+	void plotRugLengthChanged(double);
+	void plotRugWidthChanged(double);
+	void plotRugOffsetChanged(double);
 
 	// load and save
 	void loadConfigFromTemplate(KConfig&);

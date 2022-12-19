@@ -59,12 +59,12 @@ QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
 	// load the collection if not done yet
 	if (!m_colorMaps.contains(collectionName)) {
 		// color maps of the currently selected collection not loaded yet -> load them
-		QString path = m_jsonDir + QLatin1Char('/') + collectionName + ".json";
+		QString path = m_jsonDir + QLatin1Char('/') + collectionName + QStringLiteral(".json");
 		QFile collectionFile(path);
 		if (collectionFile.open(QIODevice::ReadOnly)) {
 			QJsonDocument doc = QJsonDocument::fromJson(collectionFile.readAll());
 			if (!doc.isObject()) {
-				QDEBUG("Invalid definition of " + path)
+				QDEBUG("Invalid definition of " << path)
 				return {};
 			}
 
@@ -137,7 +137,7 @@ void ColorMapsManager::loadCollections() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + fileName)
+			QDEBUG("Invalid definition of " << fileName)
 			return;
 		}
 

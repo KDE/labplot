@@ -85,7 +85,7 @@ QString gslErrorToString(int status) {
 	case GSL_EOF:
 		return i18n("End of file");
 	default:
-		return QString(gsl_strerror(status));
+		return QLatin1String(gsl_strerror(status));
 	}
 }
 }

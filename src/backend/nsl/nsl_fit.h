@@ -76,7 +76,7 @@ double nsl_fit_map_unbound(double x, double min, double max);
 double nsl_fit_model_polynomial_param_deriv(double x, int j, double weight);
 double nsl_fit_model_power1_param_deriv(unsigned int param, double x, double a, double b, double weight);
 double nsl_fit_model_power2_param_deriv(unsigned int param, double x, double b, double c, double weight);
-double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, double* p, double weight);
+double nsl_fit_model_exponentialn_param_deriv(unsigned int param, double x, const double* p, double weight);
 double nsl_fit_model_inverse_exponential_param_deriv(unsigned int param, double x, double a, double b, double weight);
 double nsl_fit_model_fourier_param_deriv(unsigned int param, unsigned int degree, double x, double w, double weight);
 /* peak */

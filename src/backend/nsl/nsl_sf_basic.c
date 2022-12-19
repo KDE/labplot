@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL special basic functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -18,6 +18,14 @@
 #elif !defined(_MSC_VER)
 #include "Faddeeva.h"
 #endif
+
+double nsl_sf_dummy(double x) {
+	return 0 * x; // "use" parameter
+}
+
+double nsl_sf_dummy2(double p, double x) {
+	return 0 * p * x; // "use" parameter
+}
 
 /* stdlib.h */
 double nsl_sf_rand(void) {

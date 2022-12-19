@@ -20,13 +20,13 @@ void HilbertTransformTest::test1() {
 	QVector<double> yData = {1., 2., 3., 4.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYHilbertTransformCurve curve("Hilbert Trafo");
+	XYHilbertTransformCurve curve(QStringLiteral("Hilbert Trafo"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
@@ -64,13 +64,13 @@ void HilbertTransformTest::test2() {
 	QVector<double> yData = {1., 2., 3., 4., 3., 2., 1.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYHilbertTransformCurve curve("Hilbert Trafo");
+	XYHilbertTransformCurve curve(QStringLiteral("Hilbert Trafo"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
@@ -111,13 +111,13 @@ void HilbertTransformTest::test3() {
 	QVector<double> yData = {1, 2, 3, 4, 5, 6, 7, 8};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYHilbertTransformCurve curve("Hilbert trafo");
+	XYHilbertTransformCurve curve(QStringLiteral("Hilbert trafo"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
@@ -160,13 +160,13 @@ void HilbertTransformTest::test4() {
 	QVector<double> yData = {1., -1., 2., -2., 3., -3., 4., -4., 5.};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYHilbertTransformCurve curve("Hilbert trafo");
+	XYHilbertTransformCurve curve(QStringLiteral("Hilbert trafo"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 
@@ -219,13 +219,13 @@ void HilbertTransformTest::testPerformance() {
 	}
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYHilbertTransformCurve curve("Hilbert trafo");
+	XYHilbertTransformCurve curve(QStringLiteral("Hilbert trafo"));
 	curve.setXDataColumn(&xDataColumn);
 	curve.setYDataColumn(&yDataColumn);
 

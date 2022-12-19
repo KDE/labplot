@@ -34,7 +34,7 @@ public:
 
 	// calling redo transfers ownership of m_child to the undo command
 	void redo() override {
-		QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
+		// QDEBUG(Q_FUNC_INFO << ", TARGET = " << m_target->q << " CHILD = " << m_child << ", PARENT = " << m_child->parentAspect())
 		AbstractAspect* nextSibling;
 		if (m_child == m_target->m_children.last())
 			nextSibling = nullptr;
@@ -50,10 +50,23 @@ public:
 				emit col->parentAspect()->aspectAboutToBeRemoved(col);
 		}
 
-		emit m_target->q->aspectAboutToBeRemoved(m_child);
+		// no need to emit signals if the aspect is hidden, the only exceptions is it's a datapicker point
+		// and we need to react on its removal in order to update the data spreadsheet.
+		// TODO: the check for hidden was added originally to avoid crashes in the debug build of Qt because
+		// of asserts for negative values in the model. It also helps wrt. the performance since we don't need
+		// to react on such events in the model for hidden aspects. Adding here the exception for the datapicker
+		// will most probably trigger again crashes in the debug build of Qt if the datapicker is involved but we
+		// rather accept this "edge case" than having no undo/redo for position changes for datapicker points until
+		// we have a better solution.
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->aspectAboutToBeRemoved(m_child);
+
 		m_index = m_target->removeChild(m_child);
-		emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
-		QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
+
+		if (!m_child->hidden() || m_child->type() == AspectType::DatapickerPoint)
+			emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
+
+		// QDEBUG(Q_FUNC_INFO << ", DONE. CHILD = " << m_child)
 		//		m_removed = true;
 	}
 

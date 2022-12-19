@@ -74,7 +74,7 @@ ProjectExplorer::ProjectExplorer(QWidget* parent)
 	layoutFilter->addWidget(m_leFilter);
 
 	bFilterOptions = new QPushButton(m_frameFilter);
-	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
+	bFilterOptions->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
 	bFilterOptions->setCheckable(true);
 	bFilterOptions->setFlat(true);
 	layoutFilter->addWidget(bFilterOptions);
@@ -127,7 +127,7 @@ void ProjectExplorer::createActions() {
 	collapseSelectedTreeAction = new QAction(QIcon::fromTheme(QLatin1String("collapse-all")), i18n("Collapse Selected"), this);
 	connect(collapseSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::collapseSelected);
 
-	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Selected"), this);
+	deleteSelectedTreeAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete Selected"), this);
 	connect(deleteSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::deleteSelected);
 
 	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Search/Filter Options"), this);
@@ -314,6 +314,10 @@ void ProjectExplorer::setProject(Project* project) {
 	// for projects loaded from a file, this function will be called laterto fit the sizes
 	// of the content once the project is loaded
 	resizeHeader();
+
+	// remove all error messages from the previous project, if any are visible
+	if (m_messageWidget && m_messageWidget->isVisible())
+		m_messageWidget->close();
 }
 
 QModelIndex ProjectExplorer::currentIndex() const {
@@ -386,7 +390,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				stream << (quintptr)m_project; // serialize the project pointer first, will be used as the unique identifier
 				stream << vec;
 
-				mimeData->setData("labplot-dnd", data);
+				mimeData->setData(QStringLiteral("labplot-dnd"), data);
 				drag->setMimeData(mimeData);
 				drag->exec();
 			}
@@ -481,31 +485,30 @@ void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 	} else if (event->matches(QKeySequence::Paste)) {
 		// paste
 		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
 		if (!name.isEmpty()) {
-			auto t = AbstractAspect::clipboardAspectType(name);
 			if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1) {
 				aspect->paste();
 				showErrorMessage(QString());
 			} else {
-				QString msg = i18n("The data cannot be pasted into %2.", name, aspect->name());
+				QString msg = i18n("'%1' cannot be pasted into '%2'.", name, aspect->name());
 				showErrorMessage(msg);
 			}
 		} else {
 			// no name is available, we are copy&pasting the content of a columm ("the data") and not the column itself
-			const QMimeData* mimeData = QApplication::clipboard()->mimeData();
-			if (!mimeData->hasFormat("text/plain"))
+			const auto* mimeData = QApplication::clipboard()->mimeData();
+			if (!mimeData->hasFormat(QStringLiteral("text/plain")))
 				return;
 
 			// pasting is allowed into spreadsheet columns only
-			if (aspect->type() == AspectType::Column || aspect->parentAspect()->type() == AspectType::Spreadsheet) {
+			if (aspect->type() == AspectType::Column && aspect->parentAspect()->type() == AspectType::Spreadsheet) {
 				auto* column = static_cast<Column*>(aspect);
 				column->pasteData();
 			} else {
-				QString msg = i18n("Data cannot be pasted into %2 directly. Select a spreadsheet column for this.", name, aspect->name());
+				QString msg = i18n("Data cannot be pasted into '%1' directly. Select a spreadsheet column for this.", aspect->name());
 				showErrorMessage(msg);
 			}
 		}
-
 	} else if ((event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
 		// duplicate
 		if (aspect != m_project) {
@@ -650,14 +653,16 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 		caseSensitiveAction->setCheckable(true);
 		caseSensitiveAction->setChecked(false);
 		connect(caseSensitiveAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 		matchCompleteWordAction->setCheckable(true);
 		matchCompleteWordAction->setChecked(false);
 		connect(matchCompleteWordAction, &QAction::triggered, this, [=]() {
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 
 #if HAS_FUZZY_MATCHER
@@ -668,7 +673,8 @@ void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 			bool enabled = !fuzzyMatchingAction->isChecked();
 			caseSensitiveAction->setEnabled(enabled);
 			matchCompleteWordAction->setEnabled(enabled);
-			filterTextChanged(m_leFilter->text());
+			if (!m_leFilter->text().isEmpty())
+				filterTextChanged(m_leFilter->text());
 		});
 		caseSensitiveAction->setEnabled(false);
 		matchCompleteWordAction->setEnabled(false);
@@ -702,6 +708,20 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+	const auto* model = index.model();
+	const int rows = model->rowCount(index);
+
+	// if the filter string is empty, just traverse the whole model and make every index visible
+	if (text.isEmpty()) {
+		for (int i = 0; i < rows; ++i) {
+			m_treeView->setRowHidden(i, index, false);
+			const auto& child = model->index(i, 0, index);
+			if (model->hasChildren(child))
+				filter(child, text);
+		}
+		return true;
+	}
+
 #if HAS_FUZZY_MATCHER
 	bool fuzzyFiltering = true;
 	if (fuzzyMatchingAction && !fuzzyMatchingAction->isChecked())
@@ -709,42 +729,34 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 #endif
 
 	bool childVisible = false;
-	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		const auto& child = index.model()->index(i, 0, index);
+		const auto& child = model->index(i, 0, index);
 		auto* aspect = static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
-		if (text.isEmpty())
-			visible = true;
-		else {
 #if HAS_FUZZY_MATCHER
-			if (fuzzyFiltering)
-				visible = KFuzzyMatcher::matchSimple(text, aspect->name());
-			else
+		if (fuzzyFiltering)
+			visible = KFuzzyMatcher::matchSimple(text, aspect->name());
+		else
 #endif
-			{
-				bool matchCompleteWord = false;
-				if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
-					matchCompleteWord = true;
+		{
+			bool matchCompleteWord = false;
+			if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
+				matchCompleteWord = true;
 
-				Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
-				if (caseSensitiveAction && caseSensitiveAction->isChecked())
-					sensitivity = Qt::CaseSensitive;
+			Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+			if (caseSensitiveAction && caseSensitiveAction->isChecked())
+				sensitivity = Qt::CaseSensitive;
 
-				if (matchCompleteWord)
-					visible = aspect->name().startsWith(text, sensitivity);
-				else
-					visible = aspect->name().contains(text, sensitivity);
-			}
+			if (matchCompleteWord)
+				visible = aspect->name().startsWith(text, sensitivity);
+			else
+				visible = aspect->name().contains(text, sensitivity);
 		}
 
 		if (visible) {
 			// current item is visible -> make all its children visible without applying the filter
-			for (int j = 0; j < child.model()->rowCount(child); ++j) {
+			for (int j = 0; j < model->rowCount(child); ++j)
 				m_treeView->setRowHidden(j, child, false);
-				if (text.isEmpty())
-					filter(child, text);
-			}
 
 			childVisible = true;
 		} else {
@@ -918,25 +930,25 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	const auto* model = static_cast<AspectTreeModel*>(m_treeView->model());
 	const auto& selectedRows = m_treeView->selectionModel()->selectedRows();
 
-	writer->writeStartElement("state");
+	writer->writeStartElement(QStringLiteral("state"));
 
 	// check whether the project node itself is expanded or selected or current
 	const auto& index = m_treeView->model()->index(0, 0);
 	if (m_treeView->isExpanded(index)) {
-		writer->writeStartElement("expanded");
-		writer->writeAttribute("path", m_project->path());
+		writer->writeStartElement(QStringLiteral("expanded"));
+		writer->writeAttribute(QStringLiteral("path"), m_project->path());
 		writer->writeEndElement();
 	}
 
 	if (selectedRows.indexOf(index) != -1) {
-		writer->writeStartElement("selected");
-		writer->writeAttribute("path", m_project->path());
+		writer->writeStartElement(QStringLiteral("selected"));
+		writer->writeAttribute(QStringLiteral("path"), m_project->path());
 		writer->writeEndElement();
 	}
 
 	if (index == m_treeView->currentIndex()) {
-		writer->writeStartElement("current");
-		writer->writeAttribute("path", m_project->path());
+		writer->writeStartElement(QStringLiteral("current"));
+		writer->writeAttribute(QStringLiteral("path"), m_project->path());
 		writer->writeEndElement();
 	}
 
@@ -947,33 +959,33 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 
 		if (part && part->hasMdiSubWindow()) {
-			writer->writeStartElement("view");
+			writer->writeStartElement(QStringLiteral("view"));
 			const auto& geometry = part->mdiSubWindow()->geometry();
-			writer->writeAttribute("path", path);
-			writer->writeAttribute("state", QString::number(part->view()->windowState()));
-			writer->writeAttribute("x", QString::number(geometry.x()));
-			writer->writeAttribute("y", QString::number(geometry.y()));
-			writer->writeAttribute("width", QString::number(geometry.width()));
-			writer->writeAttribute("height", QString::number(geometry.height()));
+			writer->writeAttribute(QStringLiteral("path"), path);
+			writer->writeAttribute(QStringLiteral("state"), QString::number(part->view()->windowState()));
+			writer->writeAttribute(QStringLiteral("x"), QString::number(geometry.x()));
+			writer->writeAttribute(QStringLiteral("y"), QString::number(geometry.y()));
+			writer->writeAttribute(QStringLiteral("width"), QString::number(geometry.width()));
+			writer->writeAttribute(QStringLiteral("height"), QString::number(geometry.height()));
 			writer->writeEndElement();
 		}
 
 		const auto& index = model->modelIndexOfAspect(aspect);
 		if (model->rowCount(index) > 0 && m_treeView->isExpanded(index)) {
-			writer->writeStartElement("expanded");
-			writer->writeAttribute("path", path);
+			writer->writeStartElement(QStringLiteral("expanded"));
+			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
 		if (selectedRows.indexOf(index) != -1) {
-			writer->writeStartElement("selected");
-			writer->writeAttribute("path", path);
+			writer->writeStartElement(QStringLiteral("selected"));
+			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 
 		if (index == m_treeView->currentIndex()) {
-			writer->writeStartElement("current");
-			writer->writeAttribute("path", path);
+			writer->writeStartElement(QStringLiteral("current"));
+			writer->writeAttribute(QStringLiteral("path"), path);
 			writer->writeEndElement();
 		}
 	}
@@ -1006,33 +1018,33 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 		while (!reader->atEnd()) {
 			reader->readNext();
-			if (reader->isEndElement() && reader->name() == "state")
+			if (reader->isEndElement() && reader->name() == QLatin1String("state"))
 				break;
 
 			if (!reader->isStartElement())
 				continue;
 
-			if (reader->name() == "expanded") {
+			if (reader->name() == QLatin1String("expanded")) {
 				expandedItem = true;
 				selectedItem = false;
 				viewItem = false;
 				currentItem = false;
-			} else if (reader->name() == "selected") {
+			} else if (reader->name() == QLatin1String("selected")) {
 				expandedItem = false;
 				selectedItem = true;
 				viewItem = false;
 				currentItem = false;
-			} else if (reader->name() == "view") {
+			} else if (reader->name() == QLatin1String("view")) {
 				expandedItem = false;
 				selectedItem = false;
 				viewItem = true;
 				currentItem = false;
-			} else if (reader->name() == "current") {
+			} else if (reader->name() == QLatin1String("current")) {
 				expandedItem = false;
 				selectedItem = false;
 				viewItem = false;
 				currentItem = true;
-			} else if (reader->name() == "row") {
+			} else if (reader->name() == QLatin1String("row")) {
 				// we need to read the attributes first and before readElementText() otherwise they are empty
 				attribs = reader->attributes();
 				row = reader->readElementText().toInt();
@@ -1061,39 +1073,39 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 					Q_EMIT activateView(part); // request to show the view in MainWin
 
-					str = attribs.value("state").toString();
+					str = attribs.value(QStringLiteral("state")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs("state").toString());
+						reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 					else {
 						part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 						part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
 					}
 
-					if (str != "0")
+					if (str != QLatin1String("0"))
 						continue; // no geometry settings required for maximized/minimized windows
 
 					QRect geometry;
-					str = attribs.value("x").toString();
+					str = attribs.value(QStringLiteral("x")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs("x").toString());
+						reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 					else
 						geometry.setX(str.toInt());
 
-					str = attribs.value("y").toString();
+					str = attribs.value(QStringLiteral("y")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs("y").toString());
+						reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
 					else
 						geometry.setY(str.toInt());
 
-					str = attribs.value("width").toString();
+					str = attribs.value(QStringLiteral("width")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs("width").toString());
+						reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 					else
 						geometry.setWidth(str.toInt());
 
-					str = attribs.value("height").toString();
+					str = attribs.value(QStringLiteral("height")).toString();
 					if (str.isEmpty())
-						reader->raiseWarning(attributeWarning.subs("height").toString());
+						reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
 					else
 						geometry.setHeight(str.toInt());
 
@@ -1105,23 +1117,23 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	} else {
 		while (!reader->atEnd()) {
 			reader->readNext();
-			if (reader->isEndElement() && reader->name() == "state")
+			if (reader->isEndElement() && reader->name() == QLatin1String("state"))
 				break;
 
 			if (!reader->isStartElement())
 				continue;
 
 			const auto& attribs = reader->attributes();
-			const auto& path = attribs.value("path").toString();
+			const auto& path = attribs.value(QStringLiteral("path")).toString();
 			const auto& index = model->modelIndexOfAspect(path);
 
-			if (reader->name() == "expanded")
+			if (reader->name() == QLatin1String("expanded"))
 				expanded << index;
-			else if (reader->name() == "selected")
+			else if (reader->name() == QLatin1String("selected"))
 				selected << index;
-			else if (reader->name() == "current")
+			else if (reader->name() == QLatin1String("current"))
 				currentIndex = index;
-			else if (reader->name() == "view") {
+			else if (reader->name() == QLatin1String("view")) {
 				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 				auto* part = dynamic_cast<AbstractPart*>(aspect);
 				if (!part)
@@ -1129,39 +1141,39 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 				Q_EMIT activateView(part); // request to show the view in MainWin
 
-				str = attribs.value("state").toString();
+				str = attribs.value(QStringLiteral("state")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("state").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("state")).toString());
 				else {
 					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
 					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
 				}
 
-				if (str != "0")
+				if (str != QLatin1String("0"))
 					continue; // no geometry settings required for maximized/minimized windows
 
 				QRect geometry;
-				str = attribs.value("x").toString();
+				str = attribs.value(QStringLiteral("x")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("x").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("x")).toString());
 				else
 					geometry.setX(str.toInt());
 
-				str = attribs.value("y").toString();
+				str = attribs.value(QStringLiteral("y")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("y").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("y")).toString());
 				else
 					geometry.setY(str.toInt());
 
-				str = attribs.value("width").toString();
+				str = attribs.value(QStringLiteral("width")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("width").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());
 				else
 					geometry.setWidth(str.toInt());
 
-				str = attribs.value("height").toString();
+				str = attribs.value(QStringLiteral("height")).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("height").toString());
+					reader->raiseWarning(attributeWarning.subs(QStringLiteral("height")).toString());
 				else
 					geometry.setHeight(str.toInt());
 

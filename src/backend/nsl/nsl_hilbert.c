@@ -15,7 +15,7 @@
 #include <fftw3.h>
 #endif
 
-const char* nsl_hilbert_result_type_name[] = {i18n("Imaginary part"), i18n("Envelope")};
+const char* nsl_hilbert_result_type_name[] = {i18n("Imaginary Part"), i18n("Envelope")};
 
 /* algorithm from https://de.wikipedia.org/wiki/Hilbert-Transformation#Berechnung_%C3%BCber_Fouriertransformation */
 int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_result_type type) {

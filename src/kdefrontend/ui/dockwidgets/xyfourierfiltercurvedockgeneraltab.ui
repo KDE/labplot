@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>390</width>
-    <height>882</height>
+    <width>435</width>
+    <height>915</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -38,7 +38,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>13</width>
+       <width>10</width>
        <height>23</height>
       </size>
      </property>
@@ -80,7 +80,6 @@
     <widget class="QLabel" name="lData">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -106,21 +105,21 @@
    <item row="6" column="0">
     <widget class="QLabel" name="lXColumn">
      <property name="text">
-      <string>x-Data:</string>
+      <string>X-Data:</string>
      </property>
     </widget>
    </item>
    <item row="7" column="0">
     <widget class="QLabel" name="lYColumn">
      <property name="text">
-      <string>y-Data:</string>
+      <string>Y-Data:</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lXRange">
      <property name="text">
-      <string>x-Range:</string>
+      <string>X-Range:</string>
      </property>
     </widget>
    </item>
@@ -206,7 +205,6 @@
     <widget class="QLabel" name="lFilter">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -279,9 +277,18 @@
    <item row="15" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QDoubleSpinBox" name="sbCutoff">
-       <property name="decimals">
-        <number>2</number>
+      <widget class="NumberSpinBox" name="sbCutoff">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
+       </property>
+       <property name="minimum">
+        <double>0.000000000000000</double>
+       </property>
+       <property name="feedback" stdset="0">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -307,7 +314,20 @@
    <item row="16" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QDoubleSpinBox" name="sbCutoff2"/>
+      <widget class="NumberSpinBox" name="sbCutoff2">
+       <property name="toolTip">
+        <string/>
+       </property>
+       <property name="whatsThis">
+        <string>Spinbox for numbers.</string>
+       </property>
+       <property name="minimum">
+        <double>0.000000000000000</double>
+       </property>
+       <property name="feedback" stdset="0">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="cbUnit2"/>
@@ -334,7 +354,6 @@
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -406,7 +425,7 @@
    <item row="21" column="0">
     <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Plot ranges:</string>
+      <string>Plot Range:</string>
      </property>
     </widget>
    </item>
@@ -420,6 +439,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NumberSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>NumberSpinBox.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

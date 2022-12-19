@@ -10,6 +10,7 @@
 
 #include "RangeTest.h"
 #include "backend/lib/Range.h"
+#include "backend/lib/macros.h"
 
 //**********************************************************
 //****************** Function tests ************************

@@ -10,7 +10,11 @@
 #ifndef DATAPICKERPOINTPRIVATE_H
 #define DATAPICKERPOINTPRIVATE_H
 
-class QGraphicsItem;
+#include <QBrush>
+#include <QGraphicsItem>
+#include <QPen>
+
+class DatapickerPoint;
 
 class DatapickerPointPrivate : public QGraphicsItem {
 public:
@@ -57,6 +61,7 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value) override;
 };
 
 #endif

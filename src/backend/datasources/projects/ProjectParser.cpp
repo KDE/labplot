@@ -48,7 +48,7 @@ QList<AspectType> ProjectParser::topLevelClasses() const {
 
 QAbstractItemModel* ProjectParser::model() {
 	WAIT_CURSOR;
-	PERFTRACE("project model for preview created");
+	PERFTRACE(QStringLiteral("project model for preview created"));
 	if (!m_project)
 		m_project = new Project();
 

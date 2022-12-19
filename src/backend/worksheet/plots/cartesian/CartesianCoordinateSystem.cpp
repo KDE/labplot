@@ -17,6 +17,8 @@ extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
 
+using Dimension = CartesianCoordinateSystem::Dimension;
+
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
@@ -35,10 +37,21 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
+QString CartesianCoordinateSystem::dimensionToString(Dimension dim) {
+	switch (dim) {
+	case Dimension::X:
+		return QLatin1String("x");
+	case Dimension::Y:
+		return QLatin1String("y");
+	}
+	return {};
+}
+
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
 	if (d->plot)
-		return QString(QLatin1String("x = ") + d->plot->xRange(d->xIndex).toString() + QLatin1String(", y = ") + d->plot->yRange(d->yIndex).toString());
+		return QString(QLatin1String("x = ") + d->plot->range(Dimension::X, d->xIndex).toString() + QLatin1String(", y = ")
+					   + d->plot->range(Dimension::Y, d->yIndex).toString());
 
 	return i18n("no info available");
 }
@@ -244,9 +257,10 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool& visible, MappingFlags flags) const {
 	// DEBUG(Q_FUNC_INFO << ", (single point)")
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping) || (flags & MappingFlag::SuppressPageClippingVisible);
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const bool limit = flags & MappingFlag::Limit;
+	const bool visibleFlag = flags & MappingFlag::SuppressPageClippingVisible;
 
 	double x = logicalPoint.x(), y = logicalPoint.y();
 	const double xPage = pageRect.x(), yPage = pageRect.y();
@@ -277,8 +291,12 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool&
 				y = pageRect.y() + h / 2.;
 
 			QPointF mappedPoint(x, y);
-			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
-				visible = true;
+			const bool containsPoint = rectContainsPoint(pageRect, mappedPoint);
+			if (noPageClipping || limit || containsPoint) {
+				if (visibleFlag)
+					visible = containsPoint;
+				else
+					visible = true;
 				return mappedPoint;
 			}
 		}
@@ -568,79 +586,104 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	return result;
 }
 
+bool CartesianCoordinateSystem::isValid() const {
+	if (d->xScales.isEmpty() || d->yScales.isEmpty())
+		return false;
+
+	for (const auto* scale : d->xScales) {
+		if (!scale)
+			return false;
+	}
+
+	for (const auto* scale : d->yScales) {
+		if (!scale)
+			return false;
+	}
+	return true;
+}
+
 /**************************************************************************************/
 
 /**
- * \brief Determine the horizontal direction relative to the page.
+ * \brief Determine the direction relative to the page in different directions
  *
  * This function is needed for untransformed lengths such as axis tick length.
  * \return 1 or -1
  */
-int CartesianCoordinateSystem::xDirection() const {
-	if (d->xScales.isEmpty() || !d->xScales.at(0)) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
-		return 1;
+int CartesianCoordinateSystem::direction(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X: {
+		if (d->xScales.isEmpty() || !d->xScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+			return 1;
+		}
+
+		return d->xScales.at(0)->direction();
 	}
+	case Dimension::Y: {
+		if (d->yScales.isEmpty() || !d->yScales.at(0)) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
+			return 1;
+		}
 
-	return d->xScales.at(0)->direction();
-}
-
-/**
- * \brief Determine the vertical direction relative to the page.
- *
- * This function is needed for untransformed lengths such as axis tick length.
- * \return 1 or -1
- */
-int CartesianCoordinateSystem::yDirection() const {
-	if (d->yScales.isEmpty() || !d->yScales.at(0)) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
-		return 1;
+		return d->yScales.at(0)->direction();
 	}
-
-	return d->yScales.at(0)->direction();
+	}
+	return 1;
 }
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
-bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale*>& scales) {
+bool CartesianCoordinateSystem::setScales(const Dimension dim, const QVector<CartesianScale*>& scales) {
 	DEBUG(Q_FUNC_INFO)
-	while (!d->xScales.isEmpty())
-		delete d->xScales.takeFirst();
+	switch (dim) {
+	case Dimension::X: {
+		while (!d->xScales.isEmpty())
+			delete d->xScales.takeFirst();
 
-	d->xScales = scales;
-	return true; // TODO: check scales validity
+		d->xScales = scales;
+		return true; // TODO: check scales validity
+	}
+	case Dimension::Y: {
+		while (!d->yScales.isEmpty())
+			delete d->yScales.takeFirst();
+
+		d->yScales = scales;
+		return true; // TODO: check scales validity
+	}
+	}
+	return 1;
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::xScales() const {
+QVector<CartesianScale*> CartesianCoordinateSystem::scales(const Dimension dim) const {
 	DEBUG(Q_FUNC_INFO)
-	return d->xScales; // TODO: should rather return a copy of the scales here
+	switch (dim) {
+	case Dimension::X:
+		return d->xScales; // TODO: should rather return a copy of the scales here
+	case Dimension::Y:
+		return d->yScales; // TODO: should rather return a copy of the scales here
+	}
+	return QVector<CartesianScale*>();
 }
 
-bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*>& scales) {
-	DEBUG(Q_FUNC_INFO)
-	while (!d->yScales.isEmpty())
-		delete d->yScales.takeFirst();
-
-	d->yScales = scales;
-	return true; // TODO: check scales validity
+int CartesianCoordinateSystem::index(const Dimension dim) const {
+	switch (dim) {
+	case Dimension::X:
+		return d->xIndex;
+	case Dimension::Y:
+		return d->yIndex;
+	}
+	return 0;
 }
 
-QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
-	DEBUG(Q_FUNC_INFO)
-	return d->yScales; // TODO: should rather return a copy of the scales here
-}
-
-int CartesianCoordinateSystem::xIndex() const {
-	return d->xIndex;
-}
-void CartesianCoordinateSystem::setXIndex(int index) {
-	d->xIndex = index;
-}
-
-int CartesianCoordinateSystem::yIndex() const {
-	return d->yIndex;
-}
-void CartesianCoordinateSystem::setYIndex(int index) {
-	d->yIndex = index;
+void CartesianCoordinateSystem::setIndex(const Dimension dim, const int index) {
+	switch (dim) {
+	case Dimension::X:
+		d->xIndex = index;
+		break;
+	case Dimension::Y:
+		d->yIndex = index;
+		break;
+	}
 }
 
 /*!

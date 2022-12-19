@@ -8,12 +8,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(QT_MINIMUM_VERSION 5.6.0)
+# see also -DQT_DISABLE_DEPRECATED_BEFORE in src/CMakeLists.txt
+set(QT_MINIMUM_VERSION 5.7.0)
 set(KF5_MIN_VERSION "5.16.0")
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
@@ -94,16 +95,20 @@ find_package(BISON REQUIRED)
 
 ### compiler flags ######################################
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
+set (GENERIC_GNU_FLAGS "-O0 -Wcast-align -Wswitch-enum -fvisibility=default -pedantic")
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
 
 if ("${CMAKE_C_COMPILER_ID}" MATCHES "GNU")
-	message(STATUS "GNU C compiler detected, adding compile flags")
+	message(STATUS "GNU C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
+	if (CMAKE_C_COMPILER_VERSION VERSION_GREATER 10.99 AND CMAKE_C_COMPILER_VERSION VERSION_LESS 12)	# GCC 11 fails building readstat 1.1.8
+		message(STATUS "Building ReadStat disabled due to GNU C compiler version 11")
+		set(DONT_BUILD_READSTAT TRUE)
+	endif ()
 elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-	message(STATUS "Clang C compiler detected, adding compile flags")
+	message(STATUS "Clang C compiler ${CMAKE_C_COMPILER_VERSION} detected, adding compile flags")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_GNU_SOURCE ${GENERIC_C_FLAGS} ${GENERIC_GNU_FLAGS}")
 elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "Intel")
 	message(STATUS "Intel C compiler detected, adding compile flags")
@@ -114,11 +119,11 @@ elseif ("${CMAKE_C_COMPILER_ID}" MATCHES "PGI")
 # " x" postfix to work around a bug in CMake that causes "MSVC" to translate to something completely different
 elseif (("${CMAKE_C_COMPILER_ID} x" MATCHES "MSVC") OR MSVC)
 	message(STATUS "MSVC C compiler detected, adding compile flags")
-	if(CMAKE_BUILD_TYPE STREQUAL Debug)
+	if (CMAKE_BUILD_TYPE STREQUAL Debug)
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Od -W3")
-	else()
+	else ()
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -W3")
-	endif()
+	endif ()
 	set(MSVC_FOUND TRUE)
 else ()
 	message(STATUS "UNKNOWN C compiler, adding compile flags")
@@ -126,10 +131,10 @@ else ()
 endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
-	message(STATUS "GNU C++ compiler detected, adding compile flags")
+	message(STATUS "GNU C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-	message(STATUS "Clang C++ compiler detected, adding compile flags")
+	message(STATUS "Clang C++ compiler ${CMAKE_CXX_COMPILER_VERSION} detected, adding compile flags")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GNU_SOURCE ${GENERIC_CXX_FLAGS} ${GENERIC_GNU_FLAGS} -Wzero-as-null-pointer-constant") # -Wzero-as-null-pointer-constant since version 5
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Intel")
 	message(STATUS "Intel C++ compiler detected, adding compile flags")
@@ -156,12 +161,14 @@ endif ()
 
 ##########################################################
 
+# see also https://wiki.qt.io/Using_QString_Effectively
 add_definitions(
     -DQT_NO_CAST_TO_ASCII
-# TODO: enable and fix problems
-#    -DQT_NO_CAST_FROM_ASCII
-#    -DQT_NO_CAST_FROM_BYTEARRAY
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_USE_FAST_CONCATENATION
+    -DQT_USE_FAST_OPERATOR_PLUS
     -DQT_USE_QSTRINGBUILDER
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
@@ -449,7 +456,7 @@ ENDIF ()
 ### ReadStat (optional) #############################
 IF (ENABLE_READSTAT)
 	FIND_PACKAGE (ReadStat)
-	IF (NOT READSTAT_FOUND AND NOT WIN32)	# own version not on Windows
+	IF (NOT READSTAT_FOUND AND NOT WIN32 AND NOT DONT_BUILD_READSTAT)	# own version not on Windows and not when forbidden
 		MESSAGE (STATUS "ReadStat library NOT FOUND. Building own version")
 		set(BUILD_READSTAT TRUE)
 
@@ -464,7 +471,7 @@ IF (ENABLE_READSTAT)
 		ENDIF ()
 		include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/install/include)
 	ENDIF ()
-	IF (READSTAT_FOUND OR NOT WIN32)
+	IF (READSTAT_FOUND OR BUILD_READSTAT)	# found or build
 		add_definitions (-DHAVE_READSTAT)
 	ELSE ()
 		SET(READSTAT_LIBRARIES "")
@@ -485,8 +492,6 @@ IF (ENABLE_EXCEL)
 
 			MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
 			add_definitions (-DHAVE_EXCEL)
-			set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/${CMAKE_STATIC_LIBRARY_PREFIX}QXlsx${CMAKE_STATIC_LIBRARY_SUFFIX})
-			#include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/include)
 		ELSE ()
 			MESSAGE (STATUS "Missing Qt5::GuiPrivate to build own QXlsx.")
 		ENDIF ()

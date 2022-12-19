@@ -3,7 +3,8 @@
 	Project              : LabPlot
 	Description          : Tests for the Spreadsheet
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,14 +12,12 @@
 #ifndef SPREADSHEETTEST_H
 #define SPREADSHEETTEST_H
 
-#include <QtTest>
+#include "../CommonTest.h"
 
-class SpreadsheetTest : public QObject {
+class SpreadsheetTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
 	// copy and paste
 
 	// handling of different column modes
@@ -59,6 +58,11 @@ private Q_SLOTS:
 
 	void testSortPerformanceNumeric1();
 	void testSortPerformanceNumeric2();
+
+	void testFlatten00();
+	void testFlatten01();
+	void testFlatten02();
+	void testFlatten03();
 };
 
 #endif

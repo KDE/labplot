@@ -18,7 +18,7 @@ MajorGridOpacity=0.5
 MajorGridStyle=1
 MajorGridWidth=1.76389
 MajorTicksColor=128,128,128
-MajorTicksLineStyle=1
+MajorTicksStyle=1
 MajorTicksOpacity=1
 MajorTicksWidth=3.52778
 MinorGridColor=128,128,128
@@ -26,7 +26,7 @@ MinorGridOpacity=0.5
 MinorGridStyle=2
 MinorGridWidth=1.76389
 MinorTicksColor=128,128,128
-MinorTicksLineStyle=1
+MinorTicksStyle=1
 MinorTicksOpacity=1
 MinorTicksWidth=3.52778
 

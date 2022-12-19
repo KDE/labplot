@@ -35,6 +35,7 @@ class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
+class BarPlotDock;
 class BoxPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
@@ -110,6 +111,7 @@ public:
 	AspectTreeModel* model() const;
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
+	static void updateLocale();
 
 	enum class LoadOnStart { Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen };
 	enum class TitleBarMode { ShowFilePath, ShowFileName, ShowProjectName };
@@ -244,6 +246,7 @@ private:
 	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
 	HistogramDock* histogramDock{nullptr};
+	BarPlotDock* barPlotDock{nullptr};
 	BoxPlotDock* boxPlotDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};

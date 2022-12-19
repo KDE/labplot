@@ -12,12 +12,13 @@
 #ifndef MACROS_H
 #define MACROS_H
 
-// SET_NUMBER_LOCALE
 #include <KConfigGroup>
 #include <KSharedConfig>
 
 #include <QApplication>
 #include <QMetaEnum>
+
+#include "macrosWarningStyle.h"
 
 // C++ style warning (works on Windows)
 #include <iomanip>
@@ -35,6 +36,35 @@
 #define DEBUG(x)                                                                                                                                               \
 	{ }
 #endif
+
+struct Lock {
+	inline explicit Lock(bool& variable)
+		: variable(variable = true) {
+	}
+
+	inline ~Lock() {
+		variable = false;
+	}
+
+private:
+	bool& variable;
+};
+
+/*!
+ * Used for example for connections with NumberSpinbox because those are using
+ * a feedback and so breaking the connection dock -> element -> dock is not desired
+ */
+#define CONDITIONAL_RETURN_NO_LOCK                                                                                                                             \
+	if (m_initializing)                                                                                                                                        \
+		return;
+
+/*!
+ * Lock mechanism used in docks to prevent loops (dock -> element -> dock)
+ * dock (locking) -> element: No feedback to the dock
+ */
+#define CONDITIONAL_LOCK_RETURN                                                                                                                                \
+	CONDITIONAL_RETURN_NO_LOCK                                                                                                                                 \
+	const Lock lock(m_initializing);
 
 #if QT_VERSION < 0x050700
 template<class T>
@@ -66,53 +96,11 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 	(class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) (class ::staticMetaObject.enumerator(class ::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
-// define number locale from setting (using system locale when QLocale::AnyLanguage)
-#define SET_NUMBER_LOCALE                                                                                                                                      \
-	QLocale::Language numberLocaleLanguage =                                                                                                                   \
-		static_cast<QLocale::Language>(KSharedConfig::openConfig()                                                                                             \
-										   ->group("Settings_General")                                                                                         \
-										   .readEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage)));             \
-	QLocale::NumberOptions numberOptions = static_cast<QLocale::NumberOptions>(                                                                                \
-		KSharedConfig::openConfig()->group("Settings_General").readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions)));    \
-	QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);                                                     \
-	numberLocale.setNumberOptions(numberOptions);
-// if (numberLocale.language() == QLocale::Language::C)
-//	numberLocale.setNumberOptions(QLocale::DefaultNumberOptions);
-
-// "red" warning color in formula inputs, etc.
-#define SET_WARNING_STYLE(elem)                                                                                                                                \
-	{                                                                                                                                                          \
-		QPalette p;                                                                                                                                            \
-		if (qGray(p.color(QPalette::Base).rgb()) > 160) /* light */                                                                                            \
-			elem->setStyleSheet(QLatin1String("background: rgb(255, 200, 200);"));                                                                             \
-		else /* dark */                                                                                                                                        \
-			elem->setStyleSheet(QLatin1String("background: rgb(128, 0, 0);"));                                                                                 \
-	}
-
-#define SET_WARNING_PALETTE                                                                                                                                    \
-	{                                                                                                                                                          \
-		QPalette p = palette();                                                                                                                                \
-		if (qGray(p.color(QPalette::Base).rgb()) > 160) /* light */                                                                                            \
-			p.setColor(QPalette::Text, QColor(255, 200, 200));                                                                                                 \
-		else /* dark */                                                                                                                                        \
-			p.setColor(QPalette::Text, QColor(128, 0, 0));                                                                                                     \
-		setPalette(p);                                                                                                                                         \
-	}
-
-#define SET_WARNING_BACKGROUND(elem)                                                                                                                           \
-	{                                                                                                                                                          \
-		QPalette p = palette();                                                                                                                                \
-		if (qGray(p.color(QPalette::Base).rgb()) > 160) /* light */                                                                                            \
-			elem->setBackground(QColor(255, 200, 200));                                                                                                        \
-		else /* dark */                                                                                                                                        \
-			elem->setBackground(QColor(128, 0, 0));                                                                                                            \
-	}
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le)                                                                                                                               \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const int tmp = numberLocale.toInt((le)->text(), &ok);                                                                                                 \
+		const int tmp = QLocale().toInt((le)->text(), &ok);                                                                                                    \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -120,8 +108,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define SET_DOUBLE_FROM_LE(var, le)                                                                                                                            \
 	{                                                                                                                                                          \
 		bool ok;                                                                                                                                               \
-		SET_NUMBER_LOCALE                                                                                                                                      \
-		const double tmp = numberLocale.toDouble((le)->text(), &ok);                                                                                           \
+		const double tmp = QLocale().toDouble((le)->text(), &ok);                                                                                              \
 		if (ok)                                                                                                                                                \
 			var = tmp;                                                                                                                                         \
 	}
@@ -132,8 +119,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		QString str = (le)->text().trimmed();                                                                                                                  \
 		if (!str.isEmpty()) {                                                                                                                                  \
 			bool ok;                                                                                                                                           \
-			SET_NUMBER_LOCALE                                                                                                                                  \
-			const double tmp = numberLocale.toDouble(str, &ok);                                                                                                \
+			const double tmp = QLocale().toDouble(str, &ok);                                                                                                   \
 			if (ok) {                                                                                                                                          \
 				var = tmp;                                                                                                                                     \
 				enableRecalculate();                                                                                                                           \
@@ -244,6 +230,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
+// setter class with finalize()
 #define STD_SETTER_CMD_IMPL_F(class_name, cmd_name, value_type, field_name, finalize_method)                                                                   \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
@@ -255,38 +242,27 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		}                                                                                                                                                      \
 	};
 
-// setter class with finalize() and signal emitting.
+// setter class with signal emitting.
 #define STD_SETTER_CMD_IMPL_S(class_name, cmd_name, value_type, field_name)                                                                                    \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
 
+// setter class with finalize() and signal emitting.
 #define STD_SETTER_CMD_IMPL_F_S(class_name, cmd_name, value_type, field_name, finalize_method)                                                                 \
 	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
 	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
+		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description, QUndoCommand* parent = nullptr)       \
+			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description, parent) {                    \
 		}                                                                                                                                                      \
 		virtual void finalize() override {                                                                                                                     \
 			m_target->finalize_method();                                                                                                                       \
-			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
-		}                                                                                                                                                      \
-	};
-
-#define STD_SETTER_CMD_IMPL_F_S_Arguments(class_name, cmd_name, value_type, field_name, finalize_method)                                                       \
-	class class_name##cmd_name##Cmd : public StandardSetterCmd<class_name::Private, value_type> {                                                              \
-	public:                                                                                                                                                    \
-		class_name##cmd_name##Cmd(class_name::Private* target, value_type newValue, const KLocalizedString& description)                                       \
-			: StandardSetterCmd<class_name::Private, value_type>(target, &class_name::Private::field_name, newValue, description) {                            \
-		}                                                                                                                                                      \
-		virtual void finalize() override {                                                                                                                     \
-			m_target->finalize_method;                                                                                                                         \
 			emit m_target->q->field_name##Changed(m_target->*m_field);                                                                                         \
 		}                                                                                                                                                      \
 	};
@@ -383,101 +359,101 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // QColor
 #define WRITE_QCOLOR(color)                                                                                                                                    \
 	{                                                                                                                                                          \
-		writer->writeAttribute("color_r", QString::number(color.red()));                                                                                       \
-		writer->writeAttribute("color_g", QString::number(color.green()));                                                                                     \
-		writer->writeAttribute("color_b", QString::number(color.blue()));                                                                                      \
+		writer->writeAttribute(QStringLiteral("color_r"), QString::number(color.red()));                                                                       \
+		writer->writeAttribute(QStringLiteral("color_g"), QString::number(color.green()));                                                                     \
+		writer->writeAttribute(QStringLiteral("color_b"), QString::number(color.blue()));                                                                      \
 	}
 
 #define WRITE_QCOLOR2(color, label)                                                                                                                            \
 	{                                                                                                                                                          \
-		writer->writeAttribute(label "_r", QString::number(color.red()));                                                                                      \
-		writer->writeAttribute(label "_g", QString::number(color.green()));                                                                                    \
-		writer->writeAttribute(label "_b", QString::number(color.blue()));                                                                                     \
+		writer->writeAttribute(QStringLiteral(label "_r"), QString::number(color.red()));                                                                      \
+		writer->writeAttribute(QStringLiteral(label "_g"), QString::number(color.green()));                                                                    \
+		writer->writeAttribute(QStringLiteral(label "_b"), QString::number(color.blue()));                                                                     \
 	}
 
 #define READ_QCOLOR(color)                                                                                                                                     \
 	{                                                                                                                                                          \
-		str = attribs.value("color_r").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_r")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_r").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
-		str = attribs.value("color_g").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_g")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_g").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value("color_b").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_b")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_b").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
 
 #define READ_QCOLOR2(color, label)                                                                                                                             \
 	{                                                                                                                                                          \
-		str = attribs.value(label "_r").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_r")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_r").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_r")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
-		str = attribs.value(label "_g").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_g")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_g").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_g")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value(label "_b").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral(label "_b")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(label "_b").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(label "_b")).toString());                                                                \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
 	}
 // QPen
 #define WRITE_QPEN(pen)                                                                                                                                        \
 	{                                                                                                                                                          \
-		writer->writeAttribute("style", QString::number(pen.style()));                                                                                         \
-		writer->writeAttribute("color_r", QString::number(pen.color().red()));                                                                                 \
-		writer->writeAttribute("color_g", QString::number(pen.color().green()));                                                                               \
-		writer->writeAttribute("color_b", QString::number(pen.color().blue()));                                                                                \
-		writer->writeAttribute("width", QString::number(pen.widthF()));                                                                                        \
+		writer->writeAttribute(QStringLiteral("style"), QString::number(pen.style()));                                                                         \
+		writer->writeAttribute(QStringLiteral("color_r"), QString::number(pen.color().red()));                                                                 \
+		writer->writeAttribute(QStringLiteral("color_g"), QString::number(pen.color().green()));                                                               \
+		writer->writeAttribute(QStringLiteral("color_b"), QString::number(pen.color().blue()));                                                                \
+		writer->writeAttribute(QStringLiteral("width"), QString::number(pen.widthF()));                                                                        \
 	}
 
 #define READ_QPEN(pen)                                                                                                                                         \
 	{                                                                                                                                                          \
-		str = attribs.value("style").toString();                                                                                                               \
+		str = attribs.value(QStringLiteral("style")).toString();                                                                                               \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("style").toString());                                                                                   \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("style")).toString());                                                                   \
 		else                                                                                                                                                   \
 			pen.setStyle(static_cast<Qt::PenStyle>(str.toInt()));                                                                                              \
                                                                                                                                                                \
 		QColor color;                                                                                                                                          \
-		str = attribs.value("color_r").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_r")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_r").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_r")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
-		str = attribs.value("color_g").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_g")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_g").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_g")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value("color_b").toString();                                                                                                             \
+		str = attribs.value(QStringLiteral("color_b")).toString();                                                                                             \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("color_b").toString());                                                                                 \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("color_b")).toString());                                                                 \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
                                                                                                                                                                \
 		pen.setColor(color);                                                                                                                                   \
                                                                                                                                                                \
-		str = attribs.value("width").toString();                                                                                                               \
+		str = attribs.value(QStringLiteral("width")).toString();                                                                                               \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("width").toString());                                                                                   \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("width")).toString());                                                                   \
 		else                                                                                                                                                   \
 			pen.setWidthF(str.toDouble());                                                                                                                     \
 	}
@@ -485,48 +461,48 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // QFont
 #define WRITE_QFONT(font)                                                                                                                                      \
 	{                                                                                                                                                          \
-		writer->writeAttribute("fontFamily", font.family());                                                                                                   \
-		writer->writeAttribute("fontSize", QString::number(font.pixelSize()));                                                                                 \
-		writer->writeAttribute("fontPointSize", QString::number(font.pointSize()));                                                                            \
-		writer->writeAttribute("fontWeight", QString::number(font.weight()));                                                                                  \
-		writer->writeAttribute("fontItalic", QString::number(font.italic()));                                                                                  \
+		writer->writeAttribute(QStringLiteral("fontFamily"), font.family());                                                                                   \
+		writer->writeAttribute(QStringLiteral("fontSize"), QString::number(font.pixelSize()));                                                                 \
+		writer->writeAttribute(QStringLiteral("fontPointSize"), QString::number(font.pointSize()));                                                            \
+		writer->writeAttribute(QStringLiteral("fontWeight"), QString::number(font.weight()));                                                                  \
+		writer->writeAttribute(QStringLiteral("fontItalic"), QString::number(font.italic()));                                                                  \
 	}
 
 #define READ_QFONT(font)                                                                                                                                       \
 	{                                                                                                                                                          \
-		str = attribs.value("fontFamily").toString();                                                                                                          \
+		str = attribs.value(QStringLiteral("fontFamily")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("fontFamily").toString());                                                                              \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontFamily")).toString());                                                              \
 		else                                                                                                                                                   \
 			font.setFamily(str);                                                                                                                               \
                                                                                                                                                                \
-		str = attribs.value("fontSize").toString();                                                                                                            \
+		str = attribs.value(QStringLiteral("fontSize")).toString();                                                                                            \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("fontSize").toString());                                                                                \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontSize")).toString());                                                                \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
 			if (size != -1)                                                                                                                                    \
 				font.setPixelSize(size);                                                                                                                       \
 		}                                                                                                                                                      \
                                                                                                                                                                \
-		str = attribs.value("fontPointSize").toString();                                                                                                       \
+		str = attribs.value(QStringLiteral("fontPointSize")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("fontPointSize").toString());                                                                           \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontPointSize")).toString());                                                           \
 		else {                                                                                                                                                 \
 			int size = str.toInt();                                                                                                                            \
 			if (size != -1)                                                                                                                                    \
 				font.setPointSize(size);                                                                                                                       \
 		}                                                                                                                                                      \
                                                                                                                                                                \
-		str = attribs.value("fontWeight").toString();                                                                                                          \
+		str = attribs.value(QStringLiteral("fontWeight")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("fontWeight").toString());                                                                              \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontWeight")).toString());                                                              \
 		else                                                                                                                                                   \
 			font.setWeight(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value("fontItalic").toString();                                                                                                          \
+		str = attribs.value(QStringLiteral("fontItalic")).toString();                                                                                          \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("fontItalic").toString());                                                                              \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("fontItalic")).toString());                                                              \
 		else                                                                                                                                                   \
 			font.setItalic(str.toInt());                                                                                                                       \
 	}
@@ -534,36 +510,36 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // QBrush
 #define WRITE_QBRUSH(brush)                                                                                                                                    \
 	{                                                                                                                                                          \
-		writer->writeAttribute("brush_style", QString::number(brush.style()));                                                                                 \
-		writer->writeAttribute("brush_color_r", QString::number(brush.color().red()));                                                                         \
-		writer->writeAttribute("brush_color_g", QString::number(brush.color().green()));                                                                       \
-		writer->writeAttribute("brush_color_b", QString::number(brush.color().blue()));                                                                        \
+		writer->writeAttribute(QStringLiteral("brush_style"), QString::number(brush.style()));                                                                 \
+		writer->writeAttribute(QStringLiteral("brush_color_r"), QString::number(brush.color().red()));                                                         \
+		writer->writeAttribute(QStringLiteral("brush_color_g"), QString::number(brush.color().green()));                                                       \
+		writer->writeAttribute(QStringLiteral("brush_color_b"), QString::number(brush.color().blue()));                                                        \
 	}
 
 #define READ_QBRUSH(brush)                                                                                                                                     \
 	{                                                                                                                                                          \
-		str = attribs.value("brush_style").toString();                                                                                                         \
+		str = attribs.value(QStringLiteral("brush_style")).toString();                                                                                         \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("brush_style").toString());                                                                             \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_style")).toString());                                                             \
 		else                                                                                                                                                   \
 			brush.setStyle(static_cast<Qt::BrushStyle>(str.toInt()));                                                                                          \
                                                                                                                                                                \
 		QColor color;                                                                                                                                          \
-		str = attribs.value("brush_color_r").toString();                                                                                                       \
+		str = attribs.value(QStringLiteral("brush_color_r")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());                                                                           \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_r")).toString());                                                           \
 		else                                                                                                                                                   \
 			color.setRed(str.toInt());                                                                                                                         \
                                                                                                                                                                \
-		str = attribs.value("brush_color_g").toString();                                                                                                       \
+		str = attribs.value(QStringLiteral("brush_color_g")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());                                                                           \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_g")).toString());                                                           \
 		else                                                                                                                                                   \
 			color.setGreen(str.toInt());                                                                                                                       \
                                                                                                                                                                \
-		str = attribs.value("brush_color_b").toString();                                                                                                       \
+		str = attribs.value(QStringLiteral("brush_color_b")).toString();                                                                                       \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());                                                                           \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral("brush_color_b")).toString());                                                           \
 		else                                                                                                                                                   \
 			color.setBlue(str.toInt());                                                                                                                        \
                                                                                                                                                                \
@@ -573,24 +549,24 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 // Column
 #define WRITE_COLUMN(column, columnName)                                                                                                                       \
 	if (column) {                                                                                                                                              \
-		writer->writeAttribute(#columnName, column->path());                                                                                                   \
+		writer->writeAttribute(QStringLiteral(#columnName), column->path());                                                                                   \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(#columnName, QString());                                                                                                        \
+		writer->writeAttribute(QStringLiteral(#columnName), QString());                                                                                        \
 	}
 
 // column names can be empty in case no columns were used before save
 // the actual pointers to the x- and y-columns are restored in Project::load()
 #define READ_COLUMN(columnName)                                                                                                                                \
 	{                                                                                                                                                          \
-		str = attribs.value(#columnName).toString();                                                                                                           \
+		str = attribs.value(QStringLiteral(#columnName)).toString();                                                                                           \
 		d->columnName##Path = str;                                                                                                                             \
 	}
 
 #define READ_INT_VALUE_DIRECT(name, var, type)                                                                                                                 \
 	{                                                                                                                                                          \
-		str = attribs.value(name).toString();                                                                                                                  \
+		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(name).toString());                                                                                      \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
 		else                                                                                                                                                   \
 			var = static_cast<type>(str.toInt());                                                                                                              \
 	}
@@ -599,15 +575,15 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define READ_DOUBLE_VALUE(name, var)                                                                                                                           \
 	{                                                                                                                                                          \
-		str = attribs.value(name).toString();                                                                                                                  \
+		str = attribs.value(QStringLiteral(name)).toString();                                                                                                  \
 		if (str.isEmpty())                                                                                                                                     \
-			reader->raiseWarning(attributeWarning.subs(name).toString());                                                                                      \
+			reader->raiseWarning(attributeWarning.subs(QStringLiteral(name)).toString());                                                                      \
 		else                                                                                                                                                   \
 			d->var = str.toDouble();                                                                                                                           \
 	}
 
 #define READ_STRING_VALUE(name, var)                                                                                                                           \
-	{ d->var = attribs.value(name).toString(); }
+	{ d->var = attribs.value(QLatin1String(name)).toString(); }
 
 // used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col)                                                                                                                  \
@@ -624,14 +600,14 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 #define WRITE_PATH(obj, name)                                                                                                                                  \
 	if (obj) {                                                                                                                                                 \
-		writer->writeAttribute(#name, obj->path());                                                                                                            \
+		writer->writeAttribute(QLatin1String(#name), obj->path());                                                                                             \
 	} else {                                                                                                                                                   \
-		writer->writeAttribute(#name, QString());                                                                                                              \
+		writer->writeAttribute(QLatin1String(#name), QString());                                                                                               \
 	}
 
 #define READ_PATH(name)                                                                                                                                        \
 	{                                                                                                                                                          \
-		str = attribs.value(#name).toString();                                                                                                                 \
+		str = attribs.value(QLatin1String(#name)).toString();                                                                                                  \
 		d->name##Path = str;                                                                                                                                   \
 	}
 

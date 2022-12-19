@@ -15,7 +15,12 @@
 
 #include <QCompleter>
 #include <QDialogButtonBox>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QFileDialog>
 #include <QSqlDatabase>
 #include <QStandardItemModel>
@@ -40,28 +45,29 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	ui->gbOptions->hide();
 
-	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-	m_showOptionsButton = new QPushButton;
-
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel);
 	connect(btnBox, &QDialogButtonBox::clicked, this, &ExportSpreadsheetDialog::slotButtonClicked);
-
-	btnBox->addButton(m_showOptionsButton, QDialogButtonBox::ActionRole);
 	ui->verticalLayout->addWidget(btnBox);
 
+	m_showOptionsButton = btnBox->button(QDialogButtonBox::Reset);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
-	ui->cbFormat->addItem("ASCII", static_cast<int>(Format::ASCII));
-	ui->cbFormat->addItem("LaTeX", static_cast<int>(Format::LaTeX));
+	ui->cbFormat->addItem(QStringLiteral("ASCII"), static_cast<int>(Format::ASCII));
+	ui->cbFormat->addItem(QStringLiteral("LaTeX"), static_cast<int>(Format::LaTeX));
 #ifdef HAVE_FITS
-	ui->cbFormat->addItem("FITS", static_cast<int>(Format::FITS));
+	ui->cbFormat->addItem(QStringLiteral("FITS"), static_cast<int>(Format::FITS));
 #endif
 
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
-		ui->cbFormat->addItem("SQLite", static_cast<int>(Format::SQLite));
+		ui->cbFormat->addItem(QStringLiteral("SQLite"), static_cast<int>(Format::SQLite));
 
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); // remove the first entry "auto"
@@ -74,7 +80,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
 
-	ui->bOpen->setIcon(QIcon::fromTheme("document-open"));
+	ui->bOpen->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
 
 	ui->leFileName->setFocus();
 
@@ -89,7 +95,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 	connect(ui->cbExportToFITS, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ExportSpreadsheetDialog::fitsExportToChanged);
 
 	setWindowTitle(i18nc("@title:window", "Export Spreadsheet"));
-	setWindowIcon(QIcon::fromTheme("document-export-database"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-export-database")));
 
 	// restore saved settings if available
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
@@ -100,7 +106,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent)
 
 	// TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
-	int index = (decimalSeparator == '.') ? 0 : 1;
+	int index = (decimalSeparator == QLatin1Char('.')) ? 0 : 1;
 	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
 	ui->chkHeaders->setChecked(conf.readEntry("LaTeXHeaders", true));
@@ -145,16 +151,33 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/*!
+ * sets the current project file name. If not empty, the path of the project file
+ * is determined that is then used as the default location for the exported file.
+ */
+void ExportSpreadsheetDialog::setProjectFileName(const QString& name) {
+	if (name.isEmpty())
+		return;
+
+	QFileInfo fi(name);
+	m_projectPath = fi.dir().canonicalPath();
+}
+
 void ExportSpreadsheetDialog::setFileName(const QString& name) {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
-	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty()) { // use project dir as fallback
-		KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
-		dir = conf2.readEntry("LastOpenDir", "");
-		if (dir.isEmpty())
-			dir = QDir::homePath();
-	}
-	ui->leFileName->setText(dir + QLatin1Char('/') + name);
+	if (m_projectPath.isEmpty()) {
+		// no project folder is available (yet), use the last used directory in this dialog
+		KConfigGroup conf(KSharedConfig::openConfig(), "ExportSpreadsheetDialog");
+		QString dir = conf.readEntry("LastDir", "");
+		if (dir.isEmpty()) { // use project dir as fallback
+			KConfigGroup conf2(KSharedConfig::openConfig(), "MainWin");
+			dir = conf2.readEntry("LastOpenDir", "");
+			if (dir.isEmpty())
+				dir = QDir::homePath();
+		}
+		ui->leFileName->setText(dir + QLatin1Char('/') + name);
+	} else
+		ui->leFileName->setText(m_projectPath + QLatin1String("/") + name);
+
 	this->formatChanged(ui->cbFormat->currentIndex());
 }
 
@@ -357,14 +380,13 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions << ".txt"
-			   << ".tex";
+	extensions << QStringLiteral(".txt") << QStringLiteral(".tex");
 #ifdef HAVE_FITS
-	extensions << ".fits";
+	extensions << QStringLiteral(".fits");
 #endif
-	extensions << ".db";
+	extensions << QStringLiteral(".db");
 	QString path = ui->leFileName->text();
-	int i = path.indexOf(".");
+	int i = path.indexOf(QLatin1Char('.'));
 	if (index != -1) {
 		if (i == -1)
 			path = path + extensions.at(index);
@@ -515,7 +537,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 void ExportSpreadsheetDialog::setExportSelection(bool enable) {
 	if (!enable) {
 		const auto* areaToExportModel = qobject_cast<const QStandardItemModel*>(ui->cbLaTeXExport->model());
-		QStandardItem* item = areaToExportModel->item(1);
+		auto* item = areaToExportModel->item(1);
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 }

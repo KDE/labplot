@@ -16,7 +16,7 @@ double nsl_kde_gauss_kernel(double x) {
 	return exp(-(gsl_pow_2(x) / 2)) / (M_SQRT2 * sqrt(M_PI));
 }
 
-double nsl_kde(double* data, double x, double h, size_t n) {
+double nsl_kde(const double* data, double x, double h, size_t n) {
 	double density = 0;
 	for (size_t i = 0; i < n; i++)
 		density += gsl_ran_gaussian_pdf((data[i] - x) / h, 1.) / (n * h);

@@ -79,7 +79,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CORR_NORM_COUNT; i++)
 		uiGeneralTab.cbNorm->addItem(i18n(nsl_corr_norm_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -92,7 +92,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
-	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
+	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYCorrelationCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMinChanged);
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMaxChanged);
@@ -142,7 +142,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_correlationData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_correlationData.xRange.last()));
 	this->autoRangeChanged();
@@ -215,13 +215,13 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
 
 	initGeneralTab();
@@ -271,16 +271,14 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 		uiGeneralTab.sbSamplingInterval->hide();
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
@@ -290,8 +288,7 @@ void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 
 void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	DEBUG("XYCorrelationCurveDock::xDataColumnChanged()");
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -299,7 +296,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -309,8 +306,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -322,8 +318,7 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -360,7 +355,7 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
@@ -406,8 +401,7 @@ void XYCorrelationCurveDock::recalculateClicked() {
 
 void XYCorrelationCurveDock::enableRecalculate() const {
 	DEBUG("XYCorrelationCurveDock::enableRecalculate()");
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	bool hasSourceData = false;
 	// no correlation possible without y-data and y2-data
@@ -440,20 +434,20 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", correlationResult.status) + "<br>";
+	QString str = i18n("status: %1", correlationResult.status) + QStringLiteral("<br>");
 
 	if (!correlationResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 
@@ -466,21 +460,17 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 //*************************************************************
 // General-Tab
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
-	m_initializing = true;
-	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -496,29 +486,27 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
-	m_initializing = false;
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
 }
 
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData& correlationData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_correlationData = correlationData;
 
 	this->showCorrelationResult();
-	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::dataChanged() {
@@ -526,7 +514,6 @@ void XYCorrelationCurveDock::dataChanged() {
 }
 
 void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

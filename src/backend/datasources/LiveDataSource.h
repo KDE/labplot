@@ -38,8 +38,8 @@ class LiveDataSource : public Spreadsheet {
 public:
 	enum class SourceType {
 		FileOrPipe = 0, // regular file or pipe
-		NetworkTcpSocket, // TCP socket
-		NetworkUdpSocket, // UDP socket
+		NetworkTCPSocket, // TCP socket
+		NetworkUDPSocket, // UDP socket
 		LocalSocket, // local socket
 		SerialPort, // serial port
 		MQTT

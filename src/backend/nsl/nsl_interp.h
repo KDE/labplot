@@ -45,6 +45,6 @@ typedef enum {
 extern const char* nsl_interp_evaluate_name[];
 
 /* calculates rational interpolation of n points of xy-data at xn using Burlisch-Stoer method. result in v (error dv) */
-int nsl_interp_ratint(double* x, double* y, int n, double xn, double* v, double* dv);
+int nsl_interp_ratint(const double* x, const double* y, int n, double xn, double* v, double* dv);
 
 #endif /* NSL_INTERP_H */

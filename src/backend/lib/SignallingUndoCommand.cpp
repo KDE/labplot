@@ -109,12 +109,12 @@ QGenericArgument SignallingUndoCommand::arg(int index) {
 
 void SignallingUndoCommand::redo() {
 	const QMetaObject* mo = m_receiver->metaObject();
-	if (!mo->invokeMethod(m_receiver, m_redo, arg(0), arg(1), arg(2), arg(3)))
+	if (!mo->invokeMethod(m_receiver, m_redo.constData(), arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_redo.constData(), mo->className());
 }
 
 void SignallingUndoCommand::undo() {
 	const QMetaObject* mo = m_receiver->metaObject();
-	if (!mo->invokeMethod(m_receiver, m_undo, arg(0), arg(1), arg(2), arg(3)))
+	if (!mo->invokeMethod(m_receiver, m_undo.constData(), arg(0), arg(1), arg(2), arg(3)))
 		qWarning("FAILED to invoke %s on %s\n", m_undo.constData(), mo->className());
 }

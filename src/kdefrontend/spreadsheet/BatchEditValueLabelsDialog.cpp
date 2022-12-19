@@ -64,7 +64,7 @@ BatchEditValueLabelsDialog::~BatchEditValueLabelsDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void BatchEditValueLabelsDialog::setColumns(QList<Column*> columns) {
+void BatchEditValueLabelsDialog::setColumns(const QList<Column*>& columns) {
 	m_columns = columns;
 
 	if (m_columns.isEmpty())
@@ -153,7 +153,7 @@ void BatchEditValueLabelsDialog::save() const {
 		column->clearValueLabels();
 
 	// add new labels
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	QString label;
 	QString valueStr;
 	bool ok;

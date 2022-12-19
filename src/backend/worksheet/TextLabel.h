@@ -74,7 +74,6 @@ public:
 				return text;
 
 			QTextEdit te(text);
-			te.setFont(QFont("Arial", 12)); // default font
 			// the html does not contain any colors!
 			return te.toHtml();
 		}
@@ -163,7 +162,7 @@ Q_SIGNALS:
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
 
-	void teXImageUpdated(bool);
+	void teXImageUpdated(const TeXRenderer::Result&);
 };
 
 #endif

@@ -21,6 +21,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
@@ -44,6 +45,7 @@
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AspectDock.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/BarPlotDock.h"
 #include "kdefrontend/dockwidgets/BoxPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotLegendDock.h"
@@ -245,7 +247,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		break;
 	}
 	case AspectType::CartesianPlot: {
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Cartesian Plot"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Plot Area"));
 		raiseDockConnect(m_mainWindow->cartesianPlotDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->cartesianPlotDock->setPlots(castList<CartesianPlot>(selectedAspects));
 		break;
@@ -261,12 +263,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->axisDock->setAxes(castList<Axis>(selectedAspects));
 		break;
 	case AspectType::XYCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Curve"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Curve"));
 		raiseDockSetupConnect(m_mainWindow->xyCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYEquationCurve:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "xy-Equation"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "XY-Equation"));
 		raiseDockSetupConnect(m_mainWindow->xyEquationCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyEquationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
@@ -337,9 +339,14 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->xyCorrelationCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::Histogram:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram"));
 		raiseDockConnect(m_mainWindow->histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->histogramDock->setCurves(castList<Histogram>(selectedAspects));
+		break;
+	case AspectType::BarPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Bar Plot"));
+		raiseDock(m_mainWindow->barPlotDock, m_mainWindow->stackedWidget);
+		m_mainWindow->barPlotDock->setBarPlots(castList<BarPlot>(selectedAspects));
 		break;
 	case AspectType::BoxPlot:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Box Plot"));

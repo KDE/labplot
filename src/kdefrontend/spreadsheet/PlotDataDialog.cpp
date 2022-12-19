@@ -17,6 +17,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BarPlot.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
@@ -61,7 +62,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent)
 	, m_plotType(type) {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
-	setWindowIcon(QIcon::fromTheme("office-chart-line"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("office-chart-line")));
 
 	auto* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);
@@ -197,7 +198,7 @@ void PlotDataDialog::setAnalysisAction(XYAnalysisCurve::AnalysisAction action) {
 void PlotDataDialog::processColumns() {
 	// columns to plot
 	auto* view = reinterpret_cast<SpreadsheetView*>(m_spreadsheet->view());
-	QVector<Column*> selectedColumns = view->selectedColumns(true);
+	auto selectedColumns = view->selectedColumns(true);
 
 	// use all spreadsheet columns if no columns are selected
 	if (selectedColumns.isEmpty())
@@ -233,7 +234,7 @@ void PlotDataDialog::processColumns() {
 		const int index = m_spreadsheet->indexOfChild<Column>(selectedColumns.first()) - 1;
 		if (index >= 0) {
 			for (int i = index; i >= 0; --i) {
-				Column* column = m_spreadsheet->column(i);
+				auto* column = m_spreadsheet->column(i);
 				if (column->plotDesignation() == AbstractColumn::PlotDesignation::X && column->isPlottable()) {
 					xColumnName = column->name();
 					m_columns.prepend(column);
@@ -250,6 +251,7 @@ void PlotDataDialog::processColumns() {
 		break;
 	case PlotType::Histogram:
 	case PlotType::BoxPlot:
+	case PlotType::BarPlot:
 		processColumnsForHistogram(columnNames);
 		break;
 	}
@@ -284,7 +286,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 		// two columns provided, only one curve is possible -> hide the curve placement options
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
-		ui->gbPlotPlacement->setTitle(i18n("Add Curve to"));
+		ui->gbPlotPlacement->setTitle(i18n("Add Plot to"));
 	}
 
 	// show all selected/available column names in the data comboboxes
@@ -322,11 +324,6 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
  * is required per "plot" (histogram, boxplot, etc.)
  * */
 void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) {
-	if (m_plotType == PlotType::Histogram)
-		ui->gbData->setTitle(i18n("Histogram Data"));
-	else
-		ui->gbData->setTitle(i18n("Box Plot Data"));
-
 	ui->line->hide();
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
@@ -347,22 +344,27 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 
 		if (m_plotType == PlotType::Histogram)
 			ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
-		else
+		else if (m_plotType == PlotType::BoxPlot)
 			ui->gbPlotPlacement->setTitle(i18n("Add Box Plot to"));
+		else
+			ui->gbPlotPlacement->setTitle(i18n("Add Bar Plot to"));
 
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
 		if (m_plotType == PlotType::Histogram) {
-			ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
-			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
-			ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
+			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per histogram"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
-		} else {
-			ui->gbCurvePlacement->setTitle(i18n("Box Plot Placement"));
-			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot"));
-			ui->rbCurvePlacement2->setText(i18n("One plot per box plot"));
+		} else if (m_plotType == PlotType::BoxPlot) {
+			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per box plot"));
 			ui->gbPlotPlacement->setTitle(i18n("Add Box Plots to"));
+		} else {
+			ui->rbCurvePlacement1->setText(i18n("All bar plots in one plot area"));
+			ui->rbCurvePlacement2->setText(i18n("One plot area per bar plot"));
+			ui->gbPlotPlacement->setTitle(i18n("Add Bar Plots to"));
 		}
+
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 		// use the already available cbYColumn combo box
@@ -394,7 +396,7 @@ void PlotDataDialog::plot() {
 		// add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		auto* plot = static_cast<CartesianPlot*>(aspect);
-		plot->beginMacro(i18n("Plot - %1", m_spreadsheet->name()));
+		plot->beginMacro(i18n("Plot Area - %1", m_spreadsheet->name()));
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacement2->isChecked()) {
@@ -405,7 +407,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -432,7 +434,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			// all curves in one plot
-			auto* plot = new CartesianPlot(i18n("Plot - %1", m_spreadsheet->name()));
+			auto* plot = new CartesianPlot(i18n("Plot Area - %1", m_spreadsheet->name()));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -495,8 +497,13 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 
 			// if only one column was selected, allow to use this column for x and for y.
 			// otherwise, don't assign xColumn to y
-			if (m_columns.size() > 1 && yColumn == xColumn)
-				continue;
+			if (yColumn == xColumn) {
+				if (m_columns.size() == 1) {
+					addCurve(name, xColumn, yColumn, plot);
+					break;
+				} else
+					continue;
+			}
 
 			addCurve(name, xColumn, yColumn, plot);
 		}
@@ -510,17 +517,26 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		}
 		break;
 	}
-	case PlotType::BoxPlot: {
+	case PlotType::BoxPlot:
+	case PlotType::BarPlot: {
 		QVector<const AbstractColumn*> columns;
 		for (auto* comboBox : m_columnComboBoxes)
 			columns << columnFromName(comboBox->currentText());
 
 		QString name;
-		if (columns.size() > 1)
-			name = i18n("Box Plot");
-		else
+		if (columns.size() > 1) {
+			if (m_plotType == PlotType::BoxPlot)
+				name = i18n("Box Plot");
+			else
+				name = i18n("Bar Plot");
+		} else
 			name = columns.constFirst()->name();
-		addBoxPlot(name, columns, plot);
+
+		if (m_plotType == PlotType::BoxPlot)
+			addBoxPlot(name, columns, plot);
+		else
+			addBarPlot(name, columns, plot);
+
 		break;
 	}
 	}
@@ -546,7 +562,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			if (yColumn == xColumn)
 				continue;
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
@@ -561,7 +577,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
@@ -571,15 +587,19 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 		}
 		break;
 	}
-	case PlotType::BoxPlot: {
+	case PlotType::BoxPlot:
+	case PlotType::BarPlot: {
 		for (auto* comboBox : m_columnComboBoxes) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			auto* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot Area %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
-			addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);
+			if (m_plotType == PlotType::BoxPlot)
+				addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);
+			else
+				addBarPlot(name, QVector<const AbstractColumn*>{column}, plot);
 			plot->scaleAuto(-1, -1);
 			plot->retransform();
 			setAxesTitles(plot, name);
@@ -598,10 +618,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) {
 	if (!m_analysisMode) {
 		auto* curve = new XYCurve(name);
-		curve->suppressRetransform(true);
+		curve->setSuppressRetransform(true);
 		curve->setXColumn(xColumn);
 		curve->setYColumn(yColumn);
-		curve->suppressRetransform(false);
+		curve->setSuppressRetransform(false);
 		plot->addChild(curve);
 		m_lastAddedCurve = curve;
 	} else {
@@ -609,10 +629,10 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		XYCurve* curve = nullptr;
 		if (createDataCurve) {
 			curve = new XYCurve(name);
-			curve->suppressRetransform(true);
+			curve->setSuppressRetransform(true);
 			curve->setXColumn(xColumn);
 			curve->setYColumn(yColumn);
-			curve->suppressRetransform(false);
+			curve->setSuppressRetransform(false);
 			plot->addChild(curve);
 			m_lastAddedCurve = curve;
 		}
@@ -655,12 +675,12 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 		}
 
 		if (analysisCurve != nullptr) {
-			analysisCurve->suppressRetransform(true);
+			analysisCurve->setSuppressRetransform(true);
 			analysisCurve->setXDataColumn(xColumn);
 			analysisCurve->setYDataColumn(yColumn);
 			if (m_analysisAction != XYAnalysisCurve::AnalysisAction::FitCustom) // no custom fit-model set yet, no need to recalculate
 				analysisCurve->recalculate();
-			analysisCurve->suppressRetransform(false);
+			analysisCurve->setSuppressRetransform(false);
 			plot->addChild(analysisCurve);
 			m_lastAddedCurve = analysisCurve;
 		}
@@ -669,9 +689,9 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) {
 	auto* hist = new Histogram(name);
-	// 	hist->suppressRetransform(true);
+	// 	hist->setSuppressRetransform(true);
 	hist->setDataColumn(column);
-	// 	hist->suppressRetransform(false);
+	// 	hist->setSuppressRetransform(false);
 	plot->addChild(hist);
 	m_lastAddedCurve = hist;
 }
@@ -682,6 +702,14 @@ void PlotDataDialog::addBoxPlot(const QString& name, const QVector<const Abstrac
 	boxPlot->setDataColumns(columns);
 	plot->addChild(boxPlot);
 	m_lastAddedCurve = boxPlot;
+}
+
+void PlotDataDialog::addBarPlot(const QString& name, const QVector<const AbstractColumn*>& columns, CartesianPlot* plot) {
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
+	auto* barPlot = new BarPlot(name);
+	barPlot->setDataColumns(columns);
+	plot->addChild(barPlot);
+	m_lastAddedCurve = barPlot;
 }
 
 void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
@@ -816,11 +844,13 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		// the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
 		// manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
 		// to make sure we have every tick precisely under the middle of the box plot
+		const auto xIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::X);
+		const auto yIndex = plot->coordinateSystem(boxPlot->coordinateSystemIndex())->index(Dimension::Y);
 		Range<double> range(0.5, count + 0.5);
 		if (orientation == WorksheetElement::Orientation::Vertical)
-			plot->setXRange(range);
+			plot->setRange(Dimension::X, xIndex, range);
 		else
-			plot->setYRange(range);
+			plot->setRange(Dimension::Y, yIndex, range);
 
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {
@@ -845,6 +875,23 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				}
 				break;
 			}
+		}
+		break;
+	}
+	case PlotType::BarPlot: {
+		auto* barPlot = static_cast<BarPlot*>(m_lastAddedCurve);
+		auto orientation = barPlot->orientation();
+		plot->setNiceExtend(false);
+
+		for (auto* axis : axes) {
+			if (axis->orientation() != orientation) {
+				axis->setMajorTicksType(Axis::TicksType::Spacing);
+				axis->setMajorTickStartOffset(0.5);
+				axis->setMajorTicksSpacing(1.);
+				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+				axis->setMinorTicksDirection(Axis::noTicks);
+			}
+			axis->title()->setText(QString()); // no title
 		}
 	}
 	}

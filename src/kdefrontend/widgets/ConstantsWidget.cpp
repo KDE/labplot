@@ -21,8 +21,8 @@
 ConstantsWidget::ConstantsWidget(QWidget* parent)
 	: QWidget(parent) {
 	ui.setupUi(this);
-	ui.bInsert->setIcon(QIcon::fromTheme("edit-paste"));
-	ui.bCancel->setIcon(QIcon::fromTheme("dialog-cancel"));
+	ui.bInsert->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
+	ui.bCancel->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
 	m_expressionParser = ExpressionParser::getInstance();
 	ui.cbGroup->addItems(m_expressionParser->constantsGroups());
 
@@ -52,7 +52,7 @@ void ConstantsWidget::groupChanged(int index) {
 	ui.lwConstants->clear();
 	for (int i = 0; i < names.size(); ++i) {
 		if (indices.at(i) == index)
-			ui.lwConstants->addItem(names.at(i) + " (" + constants.at(i) + ')');
+			ui.lwConstants->addItem(names.at(i) + QStringLiteral(" (") + constants.at(i) + QStringLiteral(")"));
 	}
 	ui.lwConstants->setCurrentRow(0);
 }
@@ -66,7 +66,7 @@ void ConstantsWidget::filterChanged(const QString& filter) {
 		ui.lwConstants->clear();
 		for (int i = 0; i < names.size(); ++i) {
 			if (names.at(i).contains(filter, Qt::CaseInsensitive) || constants.at(i).contains(filter, Qt::CaseInsensitive))
-				ui.lwConstants->addItem(names.at(i) + " (" + constants.at(i) + ')');
+				ui.lwConstants->addItem(names.at(i) + QStringLiteral(" (") + constants.at(i) + QStringLiteral(")"));
 		}
 
 		if (ui.lwConstants->count()) {
@@ -88,7 +88,7 @@ void ConstantsWidget::constantChanged(const QString& text) {
 	static const QStringList& values = m_expressionParser->constantsValues();
 	static const QStringList& units = m_expressionParser->constantsUnits();
 
-	QString name = text.left(text.indexOf(" ("));
+	QString name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
 	if (index != -1) {
 		ui.leValue->setText(values.at(index));
@@ -103,7 +103,7 @@ void ConstantsWidget::insertClicked() {
 
 	// determine the currently selected constant
 	const QString& text = ui.lwConstants->currentItem()->text();
-	const QString& name = text.left(text.indexOf(" ("));
+	const QString& name = text.left(text.indexOf(QStringLiteral(" (")));
 	int index = names.indexOf(name);
 	const QString& constant = constants.at(index);
 

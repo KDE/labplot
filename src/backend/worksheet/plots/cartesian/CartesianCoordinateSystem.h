@@ -10,17 +10,22 @@
 #ifndef CARTESIANCOORDINATESYSTEM_H
 #define CARTESIANCOORDINATESYSTEM_H
 
-#include "CartesianPlot.h"
 #include "CartesianScale.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
+class CartesianPlot;
 
 class CartesianCoordinateSystem : public AbstractCoordinateSystem {
+	Q_ENUMS(Dimension)
 public:
+	enum class Dimension { X, Y };
+
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
+
+	static QString dimensionToString(Dimension);
 
 	// TODO: document the 5 versions
 	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
@@ -38,17 +43,13 @@ public:
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	virtual bool isValid() const override;
 
-	int xDirection() const;
-	int yDirection() const;
-	bool setXScales(const QVector<CartesianScale*>&);
-	QVector<CartesianScale*> xScales() const;
-	bool setYScales(const QVector<CartesianScale*>&);
-	QVector<CartesianScale*> yScales() const;
-	int xIndex() const;
-	void setXIndex(int);
-	int yIndex() const;
-	void setYIndex(int);
+	int direction(const Dimension) const;
+	bool setScales(const Dimension, const QVector<CartesianScale*>&);
+	QVector<CartesianScale*> scales(const Dimension) const;
+	int index(const Dimension) const;
+	void setIndex(const Dimension, const int);
 
 	QString info() const override;
 

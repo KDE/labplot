@@ -68,7 +68,8 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		for (const QString& var : m_variables) {
 			if (remaining.startsWith(var)) {
 				QString nextChar = remaining.mid(var.length(), 1);
-				if (nextChar == " " || nextChar == ")" || nextChar == "+" || nextChar == "-" || nextChar == "*" || nextChar == "/" || nextChar == "^") {
+				if (nextChar == QLatin1Char(' ') || nextChar == QLatin1Char(')') || nextChar == QLatin1Char('+') || nextChar == QLatin1Char('-')
+					|| nextChar == QLatin1Char('*') || nextChar == QLatin1Char('/') || nextChar == QLatin1Char('^')) {
 					setFormat(i, var.length(), variable);
 					i += var.length() - 1;
 					found = true;
@@ -109,8 +110,7 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 		bool isFraction = (u >= 0xbc && u <= 0xbe) || (u >= 0x2153 && u <= 0x215e);
 		bool isPower = (u >= 0xb2 && u <= 0xb3) || (u == 0x2070) || (u >= 0x2074 && u <= 0x2079);
 		bool isDigit = text[i].isDigit();
-		SET_NUMBER_LOCALE
-		bool isDecimalPoint = text[i] == numberLocale.decimalPoint();
+		bool isDecimalPoint = text[i] == QLocale().decimalPoint();
 
 		if (isFraction || isPower || isDigit || isDecimalPoint)
 			setFormat(i, 1, number);
@@ -127,11 +127,11 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	// Adjust cursorpos to allow for a bracket before the cursor position
 	if (cursorPos >= text.size())
 		cursorPos = text.size() - 1;
-	else if (cursorPos > 0 && (text[cursorPos - 1] == '(' || text[cursorPos - 1] == ')'))
+	else if (cursorPos > 0 && (text[cursorPos - 1] == QLatin1Char('(') || text[cursorPos - 1] == QLatin1Char(')')))
 		cursorPos--;
 
-	bool haveOpen = text[cursorPos] == '(';
-	bool haveClose = text[cursorPos] == ')';
+	bool haveOpen = text[cursorPos] == QLatin1Char('(');
+	bool haveClose = text[cursorPos] == QLatin1Char(')');
 
 	if ((haveOpen || haveClose) && m_parent->hasFocus()) {
 		// Search for the other bracket
@@ -140,9 +140,9 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 
 		int level = 0;
 		for (int i = cursorPos; i >= 0 && i < text.size(); i += inc) {
-			if (text[i] == ')')
+			if (text[i] == QLatin1Char(')'))
 				level--;
-			else if (text[i] == '(')
+			else if (text[i] == QLatin1Char('('))
 				level++;
 
 			if (level == 0) {

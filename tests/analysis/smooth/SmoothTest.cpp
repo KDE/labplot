@@ -26,13 +26,13 @@ void SmoothTest::testPercentile() {
 	QVector<double> result50_5{47.7, 44, 44.96, 44, 43.73, 44.96, 44, 43.73, 44, 38.3};
 
 	// data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
+	Column xDataColumn(QStringLiteral("x"), AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
+	Column yDataColumn(QStringLiteral("y"), AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	XYSmoothCurve smoothCurve("smooth");
+	XYSmoothCurve smoothCurve(QStringLiteral("smooth"));
 	smoothCurve.setXDataColumn(&xDataColumn);
 	smoothCurve.setYDataColumn(&yDataColumn);
 

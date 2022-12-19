@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,7 +15,12 @@
 
 #include <QCompleter>
 #include <QDesktopWidget>
+// see https://gitlab.kitware.com/cmake/cmake/-/issues/21609
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+#include <QFileSystemModel>
+#else
 #include <QDirModel>
+#endif
 #include <QFileDialog>
 #include <QWindow>
 
@@ -50,7 +55,11 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent)
 
 	m_cancelButton->setToolTip(i18n("Close this dialog without exporting."));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	ui->leFileName->setCompleter(new QCompleter(new QFileSystemModel, this));
+#else
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
+#endif
 
 	ui->bOpen->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
 
@@ -122,12 +131,28 @@ ExportWorksheetDialog::~ExportWorksheetDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+/*!
+ * sets the current project file name. If not empty, the path of the project file
+ * is determined that is then used as the default location for the exported file.
+ */
+void ExportWorksheetDialog::setProjectFileName(const QString& name) {
+	if (name.isEmpty())
+		return;
+
+	QFileInfo fi(name);
+	m_projectPath = fi.dir().canonicalPath();
+}
+
 void ExportWorksheetDialog::setFileName(const QString& name) {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	QString dir = conf.readEntry("LastDir", "");
-	if (dir.isEmpty())
-		dir = QDir::homePath();
-	ui->leFileName->setText(dir + QLatin1String("/") + name);
+	if (m_projectPath.isEmpty()) {
+		// no project folder is available (yet), use the last used directory in this dialog
+		KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
+		QString dir = conf.readEntry("LastDir", "");
+		if (dir.isEmpty())
+			dir = QDir::homePath();
+		ui->leFileName->setText(dir + QLatin1String("/") + name);
+	} else
+		ui->leFileName->setText(m_projectPath + QLatin1String("/") + name);
 
 	formatChanged(ui->cbFormat->currentIndex());
 	exportToChanged(ui->cbExportTo->currentIndex());
@@ -314,8 +339,7 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	if (name.simplified().isEmpty()) {
 		m_okButton->setEnabled(false);

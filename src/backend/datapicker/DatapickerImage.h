@@ -21,6 +21,7 @@
 
 class DatapickerImagePrivate;
 class DatapickerImageView;
+class DatapickerPoint;
 class Segments;
 
 class QGraphicsScene;
@@ -33,13 +34,13 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum class GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary };
+	enum class GraphType { Linear, PolarInDegree, PolarInRadians, LnX, LnY, Ternary, LnXY, Log10XY, Log10X, Log10Y };
 	enum class ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
 	enum class PlotImageType { NoImage, OriginalImage, ProcessedImage };
 	enum class PointsType { AxisPoints, CurvePoints, SegmentPoints };
 
 	struct ReferencePoints {
-		GraphType type{GraphType::Cartesian};
+		GraphType type{GraphType::Linear};
 		QPointF scenePos[3];
 		QVector3D logicalPos[3];
 		double ternaryScale{1.0};
@@ -76,9 +77,13 @@ public:
 	void setPrinting(bool) const;
 	void setSelectedInView(const bool);
 	void setSegmentsHoverEvent(const bool);
+	int currentSelectedReferencePoint();
 
 	void setPlotImageType(const DatapickerImage::PlotImageType);
 	DatapickerImage::PlotImageType plotImageType();
+
+	static QString graphTypeToString(const GraphType);
+	static GraphType stringToGraphType(const QString&);
 
 	bool isLoaded{false};
 	QImage originalPlotImage;
@@ -105,6 +110,9 @@ public:
 
 	typedef DatapickerImagePrivate Private;
 
+public Q_SLOTS:
+	void referencePointSelected(const DatapickerPoint*);
+
 private:
 	void init();
 
@@ -112,6 +120,7 @@ private:
 	mutable DatapickerImageView* m_view{nullptr};
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
+	int m_currentRefPoint{-1};
 
 Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
@@ -130,5 +139,6 @@ Q_SIGNALS:
 	void pointBrushChanged(QBrush);
 	void pointPenChanged(const QPen&);
 	void pointVisibilityChanged(bool);
+	void referencePointSelected(int index);
 };
 #endif

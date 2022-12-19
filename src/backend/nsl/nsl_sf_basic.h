@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : NSL special basic functions
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,6 +13,10 @@
 #include "nsl_complex.h"
 #include <gsl/gsl_version.h>
 #include <stdint.h> /* fixed size int types */
+
+/* dummy function for parsing statistical methods */
+double nsl_sf_dummy(double x);
+double nsl_sf_dummy2(double p, double x);
 
 /* random functions */
 double nsl_sf_rand(void);

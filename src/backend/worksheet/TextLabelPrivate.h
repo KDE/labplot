@@ -13,8 +13,10 @@
 
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "tools/TeXRenderer.h"
 #include <QDesktopWidget>
 #include <QFutureWatcher>
+#include <QStaticText>
 
 extern "C" {
 #include <gsl/gsl_const_cgs.h>
@@ -31,7 +33,7 @@ class TextLabelPrivate : public WorksheetElementPrivate {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
-	double zoomFactor{1.0};
+	double zoomFactor{-1.0};
 	// scaling:
 	// we need to scale from the font size specified in points to scene units.
 	// furhermore, we create the tex-image in a higher resolution then usual desktop resolution
@@ -41,13 +43,13 @@ public:
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH / QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
-	QFont teXFont{"Computer Modern", 20}; // reasonable default font and size
+	QFont teXFont{QStringLiteral("Computer Modern"), 12}; // reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;
-	bool teXRenderSuccessful{false};
+	TeXRenderer::Result teXRenderResult;
 
 	// see TextLabel::init() for type specific default settings
 

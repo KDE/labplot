@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Private members of Axis.
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -20,6 +20,7 @@
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
+class Line;
 class TextLabel;
 
 class AxisPrivate : public WorksheetElementPrivate {
@@ -42,6 +43,7 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect() override;
 	bool isHovered() const;
+	static QString createScientificRepresentation(const QString& mantissa, const QString& exponent);
 
 	bool isDefault{false};
 
@@ -52,7 +54,9 @@ public:
 	RangeT::Scale scale;
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
 	Range<double> range; //!< coordinate range of the axis line
+	Axis::TicksStartType majorTicksStartType{Axis::TicksStartType::Offset};
 	qreal majorTickStartOffset{0};
+	qreal majorTickStartValue{0};
 	qreal scalingFactor{1};
 	qreal zeroOffset{0};
 	bool showScaleOffset{true};
@@ -60,8 +64,7 @@ public:
 
 	// line
 	QVector<QLineF> lines;
-	QPen linePen;
-	qreal lineOpacity;
+	Line* line{nullptr};
 	Axis::ArrowType arrowType;
 	Axis::ArrowPosition arrowPosition;
 	qreal arrowSize;
@@ -74,26 +77,27 @@ public:
 	// Ticks
 	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
+	bool majorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
 	int majorTicksNumber; //!< number of major ticks
 	qreal majorTicksSpacing; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)
-	QPen majorTicksPen;
-	qreal majorTicksOpacity;
+	Line* majorTicksLine{nullptr};
 
 	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 	Axis::TicksType minorTicksType; //!< the way how the number of minor ticks is specified  - either as a total number or an increment
+	bool minorTicksAutoNumber{true}; //!< If the number of ticks should be adjusted automatically or not
 	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
 	qreal minorTicksIncrement; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
 	qreal minorTicksLength; //!< minor tick length (in page units!)
-	QPen minorTicksPen;
-	qreal minorTicksOpacity;
+	Line* minorTicksLine{nullptr};
 
 	// Tick Label
 	Axis::LabelsFormat labelsFormat;
+	bool labelsFormatAuto{true};
 	int labelsPrecision;
 	bool labelsAutoPrecision;
 	QString labelsDateTimeFormat;
@@ -113,18 +117,14 @@ public:
 
 	// Grid
 	AxisGrid* gridItem{nullptr};
-	QPen majorGridPen;
-	qreal majorGridOpacity;
-	QPen minorGridPen;
-	qreal minorGridOpacity;
+	Line* majorGridLine{nullptr};
+	Line* minorGridLine{nullptr};
 
 	Axis* const q{nullptr};
 
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool labelsFormatOverruled{false};
-	bool labelsFormatAutoChanged{false};
 
 	QVector<QPointF> majorTickPoints; //!< position of the major ticks  on the axis.
 	QVector<QPointF> minorTickPoints; //!< position of the major ticks  on the axis.

@@ -136,7 +136,7 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 
 	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
 
-	if (engine == "latex") {
+	if (engine == QLatin1String("latex")) {
 		// need convert to convert to PNG
 		if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
 			ui.lLatexWarning->show();

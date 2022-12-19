@@ -1,9 +1,9 @@
 namespace ac_binary {
-const QString filename = "ac_binary.raw";
+const QString filename = QStringLiteral("ac_binary.raw");
 const int refDataRowCount = 201;
 const int numberPreviewData = 100;
 
-QString refFileInfoString = R"(Title: * simulation de rc2
+QString refFileInfoString = QLatin1String(R"(Title: * simulation de rc2
 <br>Date: Sat Jun 16 23:11:45  2018
 <br>Plotname: AC Analysis
 <br>Flags: complex
@@ -18,22 +18,22 @@ QString refFileInfoString = R"(Title: * simulation de rc2
 <br>	5	n4	voltage
 <br>	6	n5	voltage
 <br>	7	i(v1)	current
-)"; // last \n is important
+)"); // last \n is important
 
-QStringList columnNames = {"frequency, frequency grid=3 REAL",
-						   "frequency, frequency grid=3 IMAGINARY",
-						   "n0, voltage REAL",
-						   "n0, voltage IMAGINARY",
-						   "n1, voltage REAL",
-						   "n1, voltage IMAGINARY",
-						   "n2, voltage REAL",
-						   "n2, voltage IMAGINARY",
-						   "n3, voltage REAL",
-						   "n3, voltage IMAGINARY",
-						   "n4, voltage REAL",
-						   "n4, voltage IMAGINARY",
-						   "n5, voltage REAL",
-						   "n5, voltage IMAGINARY",
-						   "i(v1), current REAL",
-						   "i(v1), current IMAGINARY"};
+QStringList columnNames = {QStringLiteral("frequency, frequency grid=3 REAL"),
+						   QStringLiteral("frequency, frequency grid=3 IMAGINARY"),
+						   QStringLiteral("n0, voltage REAL"),
+						   QStringLiteral("n0, voltage IMAGINARY"),
+						   QStringLiteral("n1, voltage REAL"),
+						   QStringLiteral("n1, voltage IMAGINARY"),
+						   QStringLiteral("n2, voltage REAL"),
+						   QStringLiteral("n2, voltage IMAGINARY"),
+						   QStringLiteral("n3, voltage REAL"),
+						   QStringLiteral("n3, voltage IMAGINARY"),
+						   QStringLiteral("n4, voltage REAL"),
+						   QStringLiteral("n4, voltage IMAGINARY"),
+						   QStringLiteral("n5, voltage REAL"),
+						   QStringLiteral("n5, voltage IMAGINARY"),
+						   QStringLiteral("i(v1), current REAL"),
+						   QStringLiteral("i(v1), current IMAGINARY")};
 } // namespace ac_binary

@@ -207,11 +207,11 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 
 	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
-	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
 
 	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
 	parentAspect->addChild(newPoint);
+	newPoint->setPosition(pos);
 	newPoint->retransform();
 
 	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
@@ -221,6 +221,7 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 		axisPoints.scenePos[points.count()].setY(pos.y());
 		m_image->setAxisPoints(axisPoints);
 		newPoint->setIsReferencePoint(true);
+		connect(newPoint, &DatapickerPoint::pointSelected, m_image, QOverload<const DatapickerPoint*>::of(&DatapickerImage::referencePointSelected));
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
 		datapickerCurve->updatePoint(newPoint);
@@ -242,7 +243,7 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		// clear scene
-		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		const auto& points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
 
@@ -270,7 +271,7 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	qreal zVal = 0;
-	auto points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+	const auto& points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
@@ -308,7 +309,7 @@ void Datapicker::handleChildAspectAdded(const AbstractAspect* aspect) {
 
 //! Save as XML
 void Datapicker::save(QXmlStreamWriter* writer) const {
-	writer->writeStartElement("datapicker");
+	writer->writeStartElement(QStringLiteral("datapicker"));
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
@@ -326,16 +327,16 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		if (reader->isEndElement() && reader->name() == "datapicker")
+		if (reader->isEndElement() && reader->name() == QLatin1String("datapicker"))
 			break;
 
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "comment") {
+		if (reader->name() == QLatin1String("comment")) {
 			if (!readCommentElement(reader))
 				return false;
-		} else if (reader->name() == "datapickerImage") {
+		} else if (reader->name() == QLatin1String("datapickerImage")) {
 			auto* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
@@ -345,7 +346,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 				addChild(plot);
 				m_image = plot;
 			}
-		} else if (reader->name() == "datapickerCurve") {
+		} else if (reader->name() == QLatin1String("datapickerCurve")) {
 			auto* curve = new DatapickerCurve(QString());
 			if (!curve->load(reader, preview)) {
 				delete curve;

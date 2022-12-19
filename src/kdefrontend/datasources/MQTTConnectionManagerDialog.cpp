@@ -28,7 +28,7 @@ MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const 
 	, mainWidget(new MQTTConnectionManagerWidget(this, conn))
 	, m_initialConnectionChanged(changed)
 	, m_initialConnection(conn) {
-	setWindowIcon(QIcon::fromTheme("labplot-MQTT"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("labplot-MQTT")));
 	setWindowTitle(i18nc("@title:window", "MQTT Connections"));
 
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

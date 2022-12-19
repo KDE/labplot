@@ -194,15 +194,18 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 				return {};
 		}
 		case 1:
-			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
+			if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CantorWorksheet"))
 				return QLatin1String("Notebook");
-			if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("Datapicker"))
 				return QLatin1String("DataExtractor");
-			return aspect->metaObject()->className();
+			else if (QLatin1String(aspect->metaObject()->className()) == QLatin1String("CartesianPlot"))
+				return QLatin1String("Plot Area");
+			else
+				return QLatin1String(aspect->metaObject()->className());
 		case 2:
 			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:
-			return aspect->comment().replace('\n', ' ').simplified();
+			return aspect->comment().replace(QLatin1Char('\n'), QLatin1Char(' ')).simplified();
 		default:
 			return {};
 		}
@@ -222,6 +225,36 @@ QVariant AspectTreeModel::data(const QModelIndex& index, int role) const {
 			// toolTip += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
 			toolTip += QLatin1String("<br>") + i18n("Type: %1", col->columnModeString());
 			toolTip += QLatin1String("<br>") + i18n("Plot Designation: %1", col->plotDesignationString());
+
+			// in case it's a calculated column, add additional information
+			// about the formula and parameters
+			if (!col->formula().isEmpty()) {
+				toolTip += QLatin1String("<br><br>") + i18n("Formula:");
+				QString f(QStringLiteral("f("));
+				QString parameters;
+				for (int i = 0; i < col->formulaData().size(); ++i) {
+					auto& data = col->formulaData().at(i);
+
+					// string for the function definition like f(x,y), etc.
+					f += data.variableName();
+					if (i != col->formulaData().size() - 1)
+						f += QStringLiteral(", ");
+
+					// string for the parameters and the references to the used columns for them
+					if (!parameters.isEmpty())
+						parameters += QLatin1String("<br>");
+					parameters += data.variableName();
+					if (data.column())
+						parameters += QStringLiteral(" = ") + data.column()->path();
+				}
+
+				toolTip += QStringLiteral("<br>") + f + QStringLiteral(") = ") + col->formula();
+				toolTip += QStringLiteral("<br>") + parameters;
+				if (col->formulaAutoUpdate())
+					toolTip += QStringLiteral("<br>") + i18n("auto update: true");
+				else
+					toolTip += QStringLiteral("<br>") + i18n("auto update: false");
+			}
 		}
 
 		return toolTip;

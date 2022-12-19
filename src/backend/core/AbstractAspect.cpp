@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
 	SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
-	SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -342,6 +342,34 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
+	// action to create data spreadsheet based on the results of the calculations for analysis curves and histograms and box plots
+	QAction* actionDataSpreadsheet{nullptr};
+
+	// handle analysis curves
+	const auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(this);
+	if (analysisCurve && analysisCurve->resultAvailable()) {
+		actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+		connect(actionDataSpreadsheet, &QAction::triggered, static_cast<XYAnalysisCurve*>(this), &XYAnalysisCurve::createDataSpreadsheet);
+	} else {
+		// handle histograms and box plots
+		const auto* histogram = dynamic_cast<Histogram*>(this);
+		if (histogram && histogram->bins()) {
+			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<Histogram*>(this), &Histogram::createDataSpreadsheet);
+		}
+
+		const auto* boxPlot = dynamic_cast<BoxPlot*>(this);
+		if (boxPlot && !boxPlot->dataColumns().isEmpty()) {
+			actionDataSpreadsheet = new QAction(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")), i18n("Create Data Spreadsheet"), this);
+			connect(actionDataSpreadsheet, &QAction::triggered, static_cast<BoxPlot*>(this), &BoxPlot::createDataSpreadsheet);
+		}
+	}
+
+	if (actionDataSpreadsheet) {
+		menu->addAction(actionDataSpreadsheet);
+		menu->addSeparator();
+	}
+
 	// don't allow to rename and delete fixed objects and
 	//  - columns in live-data source
 	//  - Mqtt subscriptions
@@ -370,12 +398,12 @@ QMenu* AbstractAspect::createContextMenu() {
 		int count = parent->childCount<AbstractAspect>();
 		if (count > 1) {
 			auto* moveMenu = new QMenu(i18n("Move"));
-			moveMenu->setIcon(QIcon::fromTheme("layer-bottom"));
+			moveMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
 			if (parent->indexOfChild<AbstractAspect>(this) != 0)
-				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
 
 			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
-				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+				moveMenu->addAction(QIcon::fromTheme(QStringLiteral("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}
@@ -536,8 +564,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  * \sa reparent()
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
-	QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
-	Q_ASSERT(child->parentAspect() == this);
+	// QDEBUG(Q_FUNC_INFO << ", CHILD =" << child << ", PARENT =" << child->parentAspect())
 
 	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
@@ -686,11 +713,11 @@ void AbstractAspect::copy() const {
 
 	// add LabPlot's copy&paste "identifier"
 	writer.writeDTD(QLatin1String("<!DOCTYPE LabPlotCopyPasteXML>"));
-	writer.writeStartElement("copy_content"); // root element
+	writer.writeStartElement(QStringLiteral("copy_content")); // root element
 
 	// write the type of the copied aspect
-	writer.writeStartElement(QLatin1String("type"));
-	writer.writeAttribute(QLatin1String("value"), QString::number(static_cast<int>(m_type)));
+	writer.writeStartElement(QStringLiteral("type"));
+	writer.writeAttribute(QStringLiteral("value"), QString::number(static_cast<int>(m_type)));
 	writer.writeEndElement();
 
 	// write the aspect itself
@@ -1044,15 +1071,23 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 /**
  * \brief Make the specified name unique among my children by incrementing a trailing number.
  */
-QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
-	QStringList child_names;
+QString AbstractAspect::uniqueNameFor(const QString& name) const {
+	QStringList names;
 	for (auto* child : children())
-		child_names << child->name();
+		names << child->name();
 
-	if (!child_names.contains(current_name))
-		return current_name;
+	return uniqueNameFor(name, names);
+}
 
-	QString base = current_name;
+/*!
+ * static helper function that makes the string \c name unique and avoids duplicates
+ * in the list of strings \c names.
+ */
+QString AbstractAspect::uniqueNameFor(const QString& name, const QStringList& names) {
+	if (!names.contains(name))
+		return name;
+
+	QString base = name;
 	int last_non_digit;
 	for (last_non_digit = base.size() - 1; last_non_digit >= 0; --last_non_digit) {
 		if (base[last_non_digit].category() == QChar::Number_DecimalDigit) {
@@ -1066,20 +1101,20 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 				// the form "data_2020.06". In this case we don't use anything
 				// from the original name to increment the number
 				last_non_digit = 0;
-				base = current_name;
+				base = name;
 				break;
 			}
 		}
 	}
 
 	if (last_non_digit >= 0 && base[last_non_digit].category() != QChar::Separator_Space)
-		base.append(" ");
+		base.append(QLatin1Char(' '));
 
-	int new_nr = current_name.rightRef(current_name.size() - base.size()).toInt();
+	int new_nr = name.rightRef(name.size() - base.size()).toInt();
 	QString new_name;
 	do
 		new_name = base + QString::number(++new_nr);
-	while (child_names.contains(new_name));
+	while (names.contains(new_name));
 
 	return new_name;
 }
@@ -1132,12 +1167,12 @@ int AbstractAspectPrivate::indexOfChild(const AbstractAspect* child) const {
 }
 
 int AbstractAspectPrivate::removeChild(AbstractAspect* child) {
-	QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
+	// QDEBUG(Q_FUNC_INFO << " CHILD = " << child << ", PARENT =" << child->parentAspect())
 	int index = indexOfChild(child);
 	Q_ASSERT(index != -1);
 	m_children.removeAll(child);
 	QObject::disconnect(child, nullptr, q, nullptr);
 	child->setParentAspect(nullptr);
-	QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
+	// QDEBUG(Q_FUNC_INFO << " DONE. CHILD = " << child)
 	return index;
 }

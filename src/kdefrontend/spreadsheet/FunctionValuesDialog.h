@@ -13,16 +13,12 @@
 #include "ui_functionvalueswidget.h"
 #include <QDialog>
 
-#include <memory>
-
 class Column;
 class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 class QPushButton;
 class QLineEdit;
-
-enum class AspectType : quint64;
 
 class FunctionValuesDialog : public QDialog {
 	Q_OBJECT

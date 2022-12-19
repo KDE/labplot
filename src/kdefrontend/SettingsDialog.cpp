@@ -44,7 +44,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 	: KPageDialog(parent) {
 	setFaceType(List);
 	setWindowTitle(i18nc("@title:window", "Preferences"));
-	setWindowIcon(QIcon::fromTheme("preferences-other"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("preferences-other")));
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	buttonBox()->addButton(QDialogButtonBox::Apply)->setEnabled(false);
@@ -53,7 +53,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
 	m_generalPage = new SettingsGeneralPage(this);
 	KPageWidgetItem* generalFrame = addPage(m_generalPage, i18n("General"));
-	generalFrame->setIcon(QIcon::fromTheme("system-run"));
+	generalFrame->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
 	connect(m_generalPage, &SettingsGeneralPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_worksheetPage = new SettingsWorksheetPage(this);

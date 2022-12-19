@@ -22,7 +22,7 @@ public:
 	explicit BatchEditValueLabelsDialog(QWidget* parent = nullptr);
 	~BatchEditValueLabelsDialog() override;
 
-	void setColumns(QList<Column*>);
+	void setColumns(const QList<Column*>&);
 
 private:
 	QTextEdit* teValueLabels;

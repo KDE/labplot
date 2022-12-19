@@ -3,20 +3,19 @@
 	Project              : LabPlot
 	Description          : Reference line on the plot
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef REFERENCELINE_H
 #define REFERENCELINE_H
 
-#include <QPen>
-
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class ReferenceLinePrivate;
 class CartesianPlot;
+class Line;
+class ReferenceLinePrivate;
 class QActionGroup;
 
 class ReferenceLine : public WorksheetElement {
@@ -35,8 +34,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
-	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
+	Line* line() const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -74,8 +72,6 @@ private Q_SLOTS:
 Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
-	void penChanged(const QPen&);
-	void opacityChanged(qreal);
 };
 
 #endif

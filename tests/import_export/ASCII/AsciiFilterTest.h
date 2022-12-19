@@ -39,6 +39,8 @@ private Q_SLOTS:
 	void testHeader07();
 	void testHeader07a();
 	void testHeader08();
+	void testHeader09();
+	void testHeader10();
 
 	// read ranges
 	void testColumnRange00();
@@ -62,6 +64,8 @@ private Q_SLOTS:
 	void testQuotedStrings01();
 	void testQuotedStrings02();
 	void testQuotedStrings03();
+	void testQuotedStrings04();
+	void testQuotedStrings05();
 
 	// different locales
 

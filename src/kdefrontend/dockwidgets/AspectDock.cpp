@@ -31,15 +31,15 @@ AspectDock::AspectDock(QWidget* parent)
 }
 
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
-	m_aspect = list.first();
+	BaseDock::setAspects(list);
 
-	const Lock lock(m_initializing);
+	CONDITIONAL_LOCK_RETURN;
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
 		ui.teComment->setEnabled(true);
 
-		ui.leName->setText(m_aspect->name());
-		ui.teComment->setText(m_aspect->comment());
+		ui.leName->setText(aspect()->name());
+		ui.teComment->setText(aspect()->comment());
 	} else {
 		ui.leName->setEnabled(false);
 		ui.teComment->setEnabled(false);
@@ -49,20 +49,19 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	}
 
 	// slots
-	connect(m_aspect, &AbstractColumn::aspectDescriptionChanged, this, &AspectDock::aspectDescriptionChanged);
+	connect(aspect(), &AbstractColumn::aspectDescriptionChanged, this, &AspectDock::aspectDescriptionChanged);
 }
 
 //*************************************************************
 //********* SLOTs for changes triggered in Column *************
 //*************************************************************
 void AspectDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_aspect != aspect)
+	if (this->aspect() != aspect)
 		return;
 
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
 }

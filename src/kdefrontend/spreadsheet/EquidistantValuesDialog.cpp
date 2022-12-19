@@ -85,8 +85,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
 	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
 	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
-	SET_NUMBER_LOCALE
-	ui.leIncrement->setText(numberLocale.toString(conf.readEntry("Increment", 1.)));
+	ui.leIncrement->setText(QLocale().toString(conf.readEntry("Increment", 1.)));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
@@ -95,7 +94,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	conf.writeEntry("Type", ui.cbType->currentIndex());
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
 	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
 	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
@@ -103,8 +102,7 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
-	SET_NUMBER_LOCALE
-	ui.leNumber->setText(numberLocale.toString(m_columns.first()->rowCount()));
+	ui.leNumber->setText(QLocale().toString(m_columns.first()->rowCount()));
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
@@ -127,7 +125,7 @@ void EquidistantValuesDialog::checkValues() {
 		return;
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (ui.cbType->currentIndex() == 0) { // INT
 		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
 			m_okButton->setEnabled(false);
@@ -150,7 +148,7 @@ void EquidistantValuesDialog::generate() {
 	m_spreadsheet->beginMacro(
 		i18np("%1: fill column with equidistant numbers", "%1: fill columns with equidistant numbers", m_spreadsheet->name(), m_columns.size()));
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	bool ok;
 	double start = numberLocale.toDouble(ui.leFrom->text(), &ok);
 	if (!ok) {
@@ -169,11 +167,11 @@ void EquidistantValuesDialog::generate() {
 	int number{0};
 	double dist{0};
 	if (ui.cbType->currentIndex() == 0) { // fixed number
-		number = numberLocale.toInt(ui.leNumber->text(), &ok);
+		number = QLocale().toInt(ui.leNumber->text(), &ok);
 		if (ok && number != 1)
 			dist = (end - start) / (number - 1);
 	} else { // fixed increment
-		dist = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+		dist = QLocale().toDouble(ui.leIncrement->text(), &ok);
 		if (ok)
 			number = (end - start) / dist + 1;
 	}

@@ -24,6 +24,7 @@
 #include <KLocalizedString>
 
 #include <QFont>
+#include <QPainter>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -212,16 +213,16 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 	Q_D(const Symbol);
 
 	if (parentAspect()->type() == AspectType::CustomPoint)
-		writer->writeStartElement("symbol");
+		writer->writeStartElement(QStringLiteral("symbol"));
 	else if (parentAspect()->type() == AspectType::BoxPlot)
 		writer->writeStartElement(name()); // BoxPlot has multiple symbols, differentiated by their names
 	else
-		writer->writeStartElement("symbols"); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
+		writer->writeStartElement(QStringLiteral("symbols")); // keep the backward compatibility for "symbols" used in XYCurve and Histogram
 
-	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->style)));
-	writer->writeAttribute("opacity", QString::number(d->opacity));
-	writer->writeAttribute("rotation", QString::number(d->rotationAngle));
-	writer->writeAttribute("size", QString::number(d->size));
+	writer->writeAttribute(QStringLiteral("symbolsStyle"), QString::number(static_cast<int>(d->style)));
+	writer->writeAttribute(QStringLiteral("opacity"), QString::number(d->opacity));
+	writer->writeAttribute(QStringLiteral("rotation"), QString::number(d->rotationAngle));
+	writer->writeAttribute(QStringLiteral("size"), QString::number(d->size));
 	WRITE_QBRUSH(d->brush);
 	WRITE_QPEN(d->pen);
 	writer->writeEndElement(); // close "Symbol" section
@@ -874,15 +875,59 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(.5, -.35);
 		break;
 	case Style::Spade: {
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♠"));
 		break;
 	}
 	case Style::Club:
-		QFont font("Times", 1);
+		QFont font(QStringLiteral("Times"), 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♣"));
 		break;
 	}
 
 	return path;
+}
+
+void Symbol::draw(QPainter* painter, QPointF point) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols)
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	QPainterPath path = Symbol::stylePath(d->style);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	trafo.reset();
+	trafo.translate(point.x(), point.y());
+	painter->drawPath(trafo.map(path));
+}
+
+void Symbol::draw(QPainter* painter, const QVector<QPointF>& points) {
+	Q_D(const Symbol);
+	if (d->style == Symbol::Style::NoSymbols || points.isEmpty())
+		return;
+
+	painter->setOpacity(d->opacity);
+	painter->setPen(d->pen);
+	painter->setBrush(d->brush);
+	QPainterPath path = Symbol::stylePath(d->style);
+	QTransform trafo;
+	trafo.scale(d->size, d->size);
+	if (d->rotationAngle != 0)
+		trafo.rotate(-d->rotationAngle);
+
+	path = trafo.map(path);
+
+	for (const auto& point : points) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
 }

@@ -37,7 +37,7 @@ BinaryOptionsWidget::BinaryOptionsWidget(QWidget* parent)
 	ui.cbDataType->setWhatsThis(textDataTypeShort);
 
 	const QString textByteOrderShort = i18n("This option determines the byte order of the imported data when converting to numbers.");
-	const QString textByteOrder = textByteOrderShort + "<br><br>"
+	const QString textByteOrder = textByteOrderShort + QStringLiteral("<br><br>")
 		+ i18n("<table>"
 			   "<tr><td>little endian</td><td>typical byte order (endianness) on Intel x86 processors.</td></tr>"
 			   "<tr><td>big endian</td><td>typical byte order on Mainframes (IBM) and SPARC/PowerPC/Motorola processors.</td></tr>"

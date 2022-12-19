@@ -19,12 +19,12 @@ extern "C" {
 //##############################################################################
 
 const int N = 5;
-double xdata[] = {1, 2, 3, 5, 7};
+double rxdata[] = {1, 2, 3, 5, 7};
 
 void NSLIntTest::testRectangle_integral() {
 	double ydata[] = {2, 2, 2, -2, -2};
 
-	int status = nsl_int_rectangle(xdata, ydata, N, 0);
+	int status = nsl_int_rectangle(rxdata, ydata, N, 0);
 	QCOMPARE(status, 0);
 	QCOMPARE(ydata[N - 1], 4.);
 }
@@ -32,7 +32,7 @@ void NSLIntTest::testRectangle_integral() {
 void NSLIntTest::testRectangle_area() {
 	double ydata[] = {2, 2, 2, -2, -2};
 
-	int status = nsl_int_rectangle(xdata, ydata, N, 1);
+	int status = nsl_int_rectangle(rxdata, ydata, N, 1);
 	QCOMPARE(status, 0);
 	QCOMPARE(ydata[N - 1], 12.);
 }
@@ -40,7 +40,7 @@ void NSLIntTest::testRectangle_area() {
 void NSLIntTest::testTrapezoid_integral() {
 	double ydata[] = {1, 2, 3, -1, -3};
 
-	int status = nsl_int_trapezoid(xdata, ydata, N, 0);
+	int status = nsl_int_trapezoid(rxdata, ydata, N, 0);
 	QCOMPARE(status, 0);
 	QCOMPARE(ydata[N - 1], 2.);
 }
@@ -48,7 +48,7 @@ void NSLIntTest::testTrapezoid_integral() {
 void NSLIntTest::testTrapezoid_area() {
 	double ydata[] = {1, 2, 3, -1, -3};
 
-	int status = nsl_int_trapezoid(xdata, ydata, N, 1);
+	int status = nsl_int_trapezoid(rxdata, ydata, N, 1);
 	QCOMPARE(status, 0);
 	QCOMPARE(ydata[N - 1], 10.5);
 }
@@ -56,7 +56,7 @@ void NSLIntTest::testTrapezoid_area() {
 void NSLIntTest::test3Point_integral() {
 	double ydata[] = {1, 2, 3, -1, -3};
 
-	int np = (int)nsl_int_simpson(xdata, ydata, N, 0);
+	int np = (int)nsl_int_simpson(rxdata, ydata, N, 0);
 	QCOMPARE(np, 3);
 	QCOMPARE(ydata[np - 1], 4 / 3.);
 }

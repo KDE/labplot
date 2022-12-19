@@ -47,21 +47,21 @@ ThemesWidget::ThemesWidget(QWidget* parent)
 	// show preview pixmaps
 	auto* mContentItemModel = new QStandardItemModel(this);
 	QStringList themeList = ThemeHandler::themes();
-	QStringList themeImgPathList = QStandardPaths::locateAll(QStandardPaths::DataLocation, "themes/screenshots/", QStandardPaths::LocateDirectory);
+	QStringList themeImgPathList =
+		QStandardPaths::locateAll(QStandardPaths::AppDataLocation, QStringLiteral("themes/screenshots/"), QStandardPaths::LocateDirectory);
 	if (themeImgPathList.isEmpty()) {
 		delete mContentItemModel;
 		return;
 	}
 
 	const QString& themeImgPath = themeImgPathList.first();
-	QString tempPath;
 
 	for (int i = 0; i < themeList.size(); ++i) {
 		auto* listItem = new QStandardItem();
 
-		tempPath = themeImgPath + themeList.at(i) + ".png";
+		QString tempPath = themeImgPath + themeList.at(i) + QStringLiteral(".png");
 		if (!QFile::exists(tempPath))
-			tempPath = themeImgPath + "Unavailable.png";
+			tempPath = themeImgPath + QStringLiteral("Unavailable.png");
 
 		listItem->setIcon(QIcon(QPixmap(tempPath)));
 		if (themeList.at(i) == QLatin1String("Default")) {

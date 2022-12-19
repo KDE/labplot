@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : export worksheet dialog
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2011-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,6 +28,7 @@ public:
 	~ExportWorksheetDialog() override;
 
 	QString path() const;
+	void setProjectFileName(const QString&);
 	void setFileName(const QString&);
 	WorksheetView::ExportFormat exportFormat() const;
 	WorksheetView::ExportArea exportArea() const;
@@ -39,6 +40,7 @@ private:
 	bool m_showOptions{true};
 	bool m_askOverwrite{true};
 	bool m_initializing{false};
+	QString m_projectPath;
 	QPushButton* m_showOptionsButton;
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;

@@ -83,7 +83,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_WRAP_COUNT; i++)
 		uiGeneralTab.cbWrap->addItem(i18n(nsl_conv_wrap_name[i]));
 
-	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
+	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -97,7 +97,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	// TODO	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::plotRangeChanged );
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYConvolutionCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::dataSourceTypeChanged);
-	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::samplingIntervalChanged);
+	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &XYConvolutionCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbKernel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::kernelChanged);
 	connect(uiGeneralTab.sbKernelSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYConvolutionCurveDock::kernelSizeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYConvolutionCurveDock::autoRangeChanged);
@@ -152,7 +152,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.leMin->setText(numberLocale.toString(m_convolutionData.xRange.first()));
 	uiGeneralTab.leMax->setText(numberLocale.toString(m_convolutionData.xRange.last()));
 	this->autoRangeChanged();
@@ -229,13 +229,13 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_aspect = m_curve;
+	setAspects(list);
 	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
 
 	initGeneralTab();
@@ -290,8 +290,7 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
 
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setDataSourceType(type);
@@ -300,8 +299,7 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
@@ -310,8 +308,7 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 }
 
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -319,7 +316,7 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
-		SET_NUMBER_LOCALE
+		const auto numberLocale = QLocale();
 		uiGeneralTab.leMin->setText(numberLocale.toString(column->minimum()));
 		uiGeneralTab.leMax->setText(numberLocale.toString(column->maximum()));
 	}
@@ -329,8 +326,7 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -342,8 +338,7 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 }
 
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
-	if (m_initializing)
-		return;
+	CONDITIONAL_LOCK_RETURN;
 
 	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
@@ -440,7 +435,7 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			SET_NUMBER_LOCALE
+			const auto numberLocale = QLocale();
 			uiGeneralTab.leMin->setText(numberLocale.toString(xDataColumn->minimum()));
 			uiGeneralTab.leMax->setText(numberLocale.toString(xDataColumn->maximum()));
 		}
@@ -513,8 +508,7 @@ void XYConvolutionCurveDock::recalculateClicked() {
 
 void XYConvolutionCurveDock::enableRecalculate() const {
 	DEBUG("XYConvolutionCurveDock::enableRecalculate()");
-	if (m_initializing)
-		return;
+	CONDITIONAL_RETURN_NO_LOCK;
 
 	bool hasSourceData = false;
 	// no convolution possible without the y-data
@@ -542,20 +536,20 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 		return;
 	}
 
-	QString str = i18n("status: %1", convolutionResult.status) + "<br>";
+	QString str = i18n("status: %1", convolutionResult.status) + QStringLiteral("<br>");
 
 	if (!convolutionResult.valid) {
 		uiGeneralTab.teResult->setText(str);
 		return; // result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	SET_NUMBER_LOCALE
+	const auto numberLocale = QLocale();
 	if (convolutionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime / 1000)) + QStringLiteral("<br>");
 	else
-		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + QStringLiteral("<br>");
 
-	str += "<br><br>";
+	str += QStringLiteral("<br><br>");
 
 	uiGeneralTab.teResult->setText(str);
 
@@ -568,21 +562,17 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*************************************************************
 // General-Tab
 void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbDataSourceCurve->setAspect(curve);
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
-	m_initializing = true;
-	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
@@ -598,20 +588,19 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 		uiGeneralTab.l2SamplingInterval->setEnabled(true);
 		uiGeneralTab.sbSamplingInterval->setEnabled(true);
 	}
-	m_initializing = false;
+
+	CONDITIONAL_LOCK_RETURN;
+	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
-	m_initializing = true;
-	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 	if (column) {
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
@@ -623,16 +612,17 @@ void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* colu
 		uiGeneralTab.cbKernel->setEnabled(true);
 		uiGeneralTab.sbKernelSize->setEnabled(true);
 	}
-	m_initializing = false;
+
+	CONDITIONAL_LOCK_RETURN;
+	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
 }
 
 void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurve::ConvolutionData& convolutionData) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	m_convolutionData = convolutionData;
 	this->directionChanged();
 
 	this->showConvolutionResult();
-	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::dataChanged() {
@@ -640,7 +630,6 @@ void XYConvolutionCurveDock::dataChanged() {
 }
 
 void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
-	m_initializing = true;
+	CONDITIONAL_LOCK_RETURN;
 	uiGeneralTab.chkVisible->setChecked(on);
-	m_initializing = false;
 }

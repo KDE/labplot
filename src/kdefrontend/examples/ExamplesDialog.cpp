@@ -39,7 +39,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent)
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Example Projects"));
-	setWindowIcon(QIcon::fromTheme("folder-documents"));
+	setWindowIcon(QIcon::fromTheme(QLatin1String("folder-documents")));
 	create();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);

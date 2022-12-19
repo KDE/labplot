@@ -43,7 +43,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget* parent)
 	connect(btnBox, &QDialogButtonBox::clicked, this, &FITSHeaderEditNewKeywordDialog::slotButtonClicked);
 
 	setWindowTitle(i18nc("@title:window", "Specify the New Keyword"));
-	setWindowIcon(QIcon::fromTheme("document-new"));
+	setWindowIcon(QIcon::fromTheme(QStringLiteral("document-new")));
 
 	auto* keyCompleter = new QCompleter(FITSFilter::standardKeywords(), this);
 	keyCompleter->setCaseSensitivity(Qt::CaseInsensitive);
