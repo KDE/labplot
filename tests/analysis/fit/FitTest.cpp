@@ -3092,15 +3092,24 @@ void FitTest::testHistogramGaussianML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 210.380459328);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 0.999776858937);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0223507017166885);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.955917043549699);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.marginValues.at(1), 1.0436366743251);
+
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
 	QCOMPARE(fitResult.paramValues.at(2), -0.0294045302042);
 	WARN(std::setprecision(15) << fitResult.errorValues.at(2));
 	QCOMPARE(fitResult.errorValues.at(2), 0.0316157202617);
-	WARN(std::setprecision(15) << fitResult.marginValues.at(2));
-	QCOMPARE(fitResult.marginValues.at(2), 0.0620409896568247);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) - fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) - fitResult.marginValues.at(2), -0.0914455198610062);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(2) + fitResult.marginValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2) + fitResult.marginValues.at(2), 0.0326364594526431);
 }
 
 void FitTest::testHistogramExponentialML() {
@@ -3138,7 +3147,7 @@ void FitTest::testHistogramExponentialML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 41.6543778722);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 1.95884683568035);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
@@ -3180,7 +3189,7 @@ void FitTest::testHistogramLaplaceML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 145.64147805241);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 1.9554805850952);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
@@ -3222,7 +3231,7 @@ void FitTest::testHistogramCauchyML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 34973.659700564);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 1.87876026823743);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
@@ -3264,7 +3273,7 @@ void FitTest::testHistogramLognormalML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 4714813.91602);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 2.07876791650682);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
@@ -3306,13 +3315,15 @@ void FitTest::testHistogramPoissonML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 150.);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 9.55);
-	WARN(std::setprecision(15) << fitResult.marginValues.at(1));
-	QCOMPARE(fitResult.marginValues.at(1), 0.596162676091767);
-	WARN(std::setprecision(15) << fitResult.margin2Values.at(1));
-	QCOMPARE(fitResult.margin2Values.at(1), 0.6254213697868);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.309030742807249);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 8.95383732390823);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 10.1754213697868);
 }
 
 void FitTest::testHistogramBinomialML() {
@@ -3350,9 +3361,16 @@ void FitTest::testHistogramBinomialML() {
 	QCOMPARE(fitResult.valid, true);
 
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
-	QCOMPARE(fitResult.paramValues.at(0), 1.);
+	QCOMPARE(fitResult.paramValues.at(0), 270.);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 0.4931);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	// QCOMPARE(fitResult.errorValues.at(1), 0.01);
+	// WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	// QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.483254);
+	// WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	// QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.50295);
+
 	QCOMPARE(fitResult.paramValues.at(2), spreadsheet.rowCount());
 }
 
