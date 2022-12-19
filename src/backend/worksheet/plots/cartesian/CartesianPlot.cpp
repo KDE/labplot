@@ -369,7 +369,7 @@ void CartesianPlot::initActions() {
 	addInfoElementAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-text")), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-cross")), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-line")), i18n("Reference Line"), this);
-	addReferenceRangeAction = new QAction(QIcon::fromTheme("draw-rectangle"), i18n("Reference Range"), this);
+	addReferenceRangeAction = new QAction(QIcon::fromTheme(QStringLiteral("draw-rectangle")), i18n("Reference Range"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
@@ -1983,7 +1983,7 @@ void CartesianPlot::addReferenceLine() {
 
 void CartesianPlot::addReferenceRange() {
 	Q_D(CartesianPlot);
-	auto* range = new ReferenceRange(this, "reference range");
+	auto* range = new ReferenceRange(this, QStringLiteral("reference range"));
 	range->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
 	// 	if (d->calledFromContextMenu) {

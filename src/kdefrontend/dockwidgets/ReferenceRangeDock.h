@@ -15,6 +15,8 @@
 #include "ui_referencerangedock.h"
 
 class AbstractAspect;
+class BackgroundWidget;
+class LineWidget;
 class ReferenceRange;
 class KConfig;
 
@@ -30,6 +32,8 @@ private:
 	Ui::ReferenceRangeDock ui;
 	QList<ReferenceRange*> m_rangeList;
 	ReferenceRange* m_range{nullptr};
+	BackgroundWidget* backgroundWidget{nullptr};
+	LineWidget* lineWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -45,23 +49,6 @@ private Q_SLOTS:
 	void positionLogicalDateTimeStartChanged(const QDateTime&);
 	void positionLogicalDateTimeEndChanged(const QDateTime&);
 
-	// Background
-	void backgroundTypeChanged(int);
-	void backgroundColorStyleChanged(int);
-	void backgroundImageStyleChanged(int);
-	void backgroundBrushStyleChanged(int);
-	void backgroundFirstColorChanged(const QColor&);
-	void backgroundSecondColorChanged(const QColor&);
-	void selectFile();
-	void fileNameChanged();
-	void backgroundOpacityChanged(int);
-
-	// Border
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
-	void borderOpacityChanged(int);
-
 	// SLOTs for changes triggered in ReferenceRange
 	void updatePlotRanges() override;
 	void rangeVisibilityChanged(bool);
@@ -70,20 +57,6 @@ private Q_SLOTS:
 	void rangePositionLogicalStartChanged(const QPointF&);
 	void rangePositionLogicalEndChanged(const QPointF&);
 	void rangeOrientationChanged(ReferenceRange::Orientation);
-
-	// Background
-	void rangeBackgroundTypeChanged(WorksheetElement::BackgroundType);
-	void rangeBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void rangeBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void rangeBackgroundBrushStyleChanged(Qt::BrushStyle);
-	void rangeBackgroundFirstColorChanged(QColor&);
-	void rangeBackgroundSecondColorChanged(QColor&);
-	void rangeBackgroundFileNameChanged(QString&);
-	void rangeBackgroundOpacityChanged(float);
-
-	// Border
-	void rangeBorderPenChanged(QPen&);
-	void rangeBorderOpacityChanged(double);
 };
 
 #endif
