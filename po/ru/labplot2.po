@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-18 00:46+0000\n"
+"POT-Creation-Date: 2022-12-19 00:42+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -69,7 +69,7 @@ msgstr ""
 #: src/backend/worksheet/Image.cpp:445
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:225
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:2904
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:2905
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1373
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:1915
 #: src/backend/worksheet/plots/cartesian/CartesianPlot.cpp:4574
@@ -115,7 +115,7 @@ msgstr "Атрибут «%1» отсутствует или пуст, испол
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
 #: src/backend/worksheet/Image.cpp:482
-#: src/backend/worksheet/plots/cartesian/Axis.cpp:3033
+#: src/backend/worksheet/plots/cartesian/Axis.cpp:3034
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
 #: src/backend/worksheet/plots/cartesian/CustomPoint.cpp:301
@@ -260,8 +260,8 @@ msgstr "Недопустимое время создания для «%1». Ис
 
 #: src/backend/core/AbstractColumn.cpp:134 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
-#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:352
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:364
+#: src/backend/nsl/nsl_smooth.c:22 src/kdefrontend/dockwidgets/AxisDock.cpp:270
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:282
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:57
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:225
 #: src/kdefrontend/GuiTools.cpp:145
@@ -6611,8 +6611,8 @@ msgstr "%1: задание фонового изображения"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:64
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:275
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:52
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:76
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:224
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:77
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:263
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:63
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:93
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:68
@@ -6820,7 +6820,7 @@ msgstr "Ориентация"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:554
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:654
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1389
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:162
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:218
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:26
 #: src/kdefrontend/widgets/SymbolWidget.cpp:108
 #, kde-format
@@ -6835,7 +6835,7 @@ msgstr "Стиль"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:293
 #: src/backend/worksheet/plots/cartesian/ReferenceLine.cpp:136
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:392
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:310
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:129
 #, kde-format
 msgid "Color"
@@ -6847,7 +6847,7 @@ msgid "%1: set axis range type"
 msgstr "%1: задание типа интервала оси"
 
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:545
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:681
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:599
 #, kde-format
 msgid "%1: set axis orientation"
 msgstr "%1: задание ориентации оси"
@@ -7243,7 +7243,7 @@ msgstr "информация недоступна"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:409
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:543
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:433
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:218
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:219
 #, kde-format
 msgid "Title"
 msgstr "Заголовок"
@@ -10902,8 +10902,8 @@ msgstr "Добавление нового контейнера данных в �
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1154
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:954
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1116
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:42
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:180
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:43
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:181
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:88
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:486
 #, kde-format
@@ -11897,9 +11897,9 @@ msgstr "Размер массива"
 
 #. i18n("Center") ); // must not updated
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:229
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:375
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:576
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:579
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:293
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:494
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:497
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
@@ -11913,9 +11913,9 @@ msgid "Top"
 msgstr "Вверху"
 
 #: src/kdefrontend/dockwidgets/AxisDock.cpp:230
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:376
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:577
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:580
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:294
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:495
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:498
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:55
@@ -11962,37 +11962,37 @@ msgstr ""
 "автоматически по минимальным и максимальным точкам данных графика </"
 "li><li>Другое — начальные и конечные точки оси задаются вручную</li></ul>"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:257
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:258
 #, kde-format
 msgid "No arrow"
 msgstr "Без стрелки"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:258
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:259
 #, kde-format
 msgid "Simple, Small"
 msgstr "Простая, маленькая"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:259
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:260
 #, kde-format
 msgid "Simple, Big"
 msgstr "Простая, большая"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:260
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:261
 #, kde-format
 msgid "Filled, Small"
 msgstr "Заполненная, маленькая"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:261
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:262
 #, kde-format
 msgid "Filled, Big"
 msgstr "Заполненная, большая"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:262
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:263
 #, kde-format
 msgid "Semi-filled, Small"
 msgstr "Полузаполненная, маленькая"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:263
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:264
 #, kde-format
 msgid "Semi-filled, Big"
 msgstr "Полузаполненная, большая"
@@ -12000,9 +12000,9 @@ msgstr "Полузаполненная, большая"
 #. i18n("Original"));
 #. i18n("Custom"));
 #. Positioning and alignment
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:348
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:584
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:588
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:266
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:502
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:506
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
@@ -12019,9 +12019,9 @@ msgid "Left"
 msgstr "Слева"
 
 #. i18n("Center") ); // must not updated
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:349
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:585
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:587
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:267
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:503
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:505
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
@@ -12037,122 +12037,122 @@ msgstr "Слева"
 msgid "Right"
 msgstr "Справа"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:350
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:268
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:114
 #, kde-format
 msgid "Both"
 msgstr "В обоих плоскостях"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:353
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:365
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:271
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:283
 #, kde-format
 msgid "In"
 msgstr "Внутрь"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:354
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:366
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:272
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:284
 #, kde-format
 msgid "Out"
 msgstr "Наружу"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:355
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:367
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:273
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:285
 #, kde-format
 msgid "In and Out"
 msgstr "Внутрь и наружу"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:357
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:369
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:275
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:287
 #: src/kdefrontend/spreadsheet/EquidistantValuesDialog.cpp:53
 #, kde-format
 msgid "Number"
 msgstr "Количество"
 
 #. i18n: ectx: property (text), widget (QLabel, lSpacing)
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:358
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:370
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:276
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:288
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:614
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:454
 #, kde-format
 msgid "Spacing"
 msgstr "Интервал"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:359
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:371
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:378
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:277
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:289
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:296
 #, kde-format
 msgid "Custom column"
 msgstr "Другой столбец"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:361
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:279
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:119
 #, fuzzy, kde-format
 msgid "Absolute Value"
 msgstr "Абсолютная величина (модуль)"
 
 # BUGME: please add colon --aspotashev
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:362
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:280
 #, fuzzy, kde-format
 msgid "Offset"
 msgstr "Смещение:"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:374
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:292
 #, kde-format
 msgid "No labels"
 msgstr "Без подписей"
 
 # BUGME: please add semantic ctxt --aspotashev
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:377
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:295
 #, kde-format
 msgid "Position values"
 msgstr "Значения координат"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:381
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:299
 #, kde-format
 msgid "Decimal notation"
 msgstr "Десятичная запись"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:382
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:300
 #, kde-format
 msgid "Scientific notation"
 msgstr "Научная запись"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:383
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:301
 #, kde-format
 msgid "Scientific E notation"
 msgstr "Экспоненциальная запись"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:384
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:302
 #, kde-format
 msgid "Powers of 10"
 msgstr "Степени числа 10"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:385
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:303
 #, kde-format
 msgid "Powers of 2"
 msgstr "Степени числа 2"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:386
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:304
 #, kde-format
 msgid "Powers of e"
 msgstr "Степени числа e"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:387
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:305
 #, kde-format
 msgid "Multiples of π"
 msgstr "Кратно числу π"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:391
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:309
 #, kde-format
 msgid "Transparent"
 msgstr "Прозрачный"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1877
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1885
 #, kde-format
 msgid "%1 axes: template \"%2\" loaded"
 msgstr "Оси (%1): загрузка шаблона «%2»"
 
-#: src/kdefrontend/dockwidgets/AxisDock.cpp:1879
+#: src/kdefrontend/dockwidgets/AxisDock.cpp:1887
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:532
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:737
 #: src/kdefrontend/dockwidgets/CartesianPlotDock.cpp:1773
@@ -12347,8 +12347,8 @@ msgstr "Диапазоны графика:"
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:57
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:252
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:306
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:194
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:201
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:195
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:170
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:329
 #: src/kdefrontend/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui:205
 #: src/kdefrontend/ui/dockwidgets/xycurvedockgeneraltab.ui:114
@@ -16234,11 +16234,11 @@ msgstr "Тип пределов погрешностей по Y:"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:223
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:263
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:83
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:84
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:228
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:63
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:69
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:151
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:17
@@ -16279,12 +16279,12 @@ msgstr "Комментарий:"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:243
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:353
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:147
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:148
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:357
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:17
 #: src/kdefrontend/ui/dockwidgets/projectdock.ui:194
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:30
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:36
 #: src/kdefrontend/ui/dockwidgets/spreadsheetdock.ui:17
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:46
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:133
@@ -16528,10 +16528,10 @@ msgstr "Размер:"
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:519
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:538
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:557
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:207
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:208
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:160
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:179
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:234
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:196
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:353
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:194
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:213
@@ -17849,7 +17849,7 @@ msgstr "0 .. 1"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:359
 #: src/kdefrontend/ui/dockwidgets/barplotdock.ui:133
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:41
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:111
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:118
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:814
 #, kde-format
@@ -18051,7 +18051,7 @@ msgstr ""
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:101
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:104
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:111
 #, kde-format
 msgid "Position"
 msgstr "Положение"
@@ -18236,8 +18236,8 @@ msgstr "Показывать"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:125
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:152
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:166
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:124
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:131
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:138
 #: src/kdefrontend/ui/labelwidget.ui:200 src/kdefrontend/ui/labelwidget.ui:345
 #, kde-format
 msgid "x:"
@@ -18880,7 +18880,7 @@ msgstr "Курсор 2"
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:122
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:232
 #: src/kdefrontend/ui/dockwidgets/imagedock.ui:441
-#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:121
+#: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:128
 #: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:342
 #, kde-format
 msgid "Horizontal position relative to label's parent"
@@ -19041,42 +19041,42 @@ msgstr "Укажите имя файла изображения"
 
 # BUGME: please add ctxt --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:32
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:33
 #, kde-format
 msgid "Curves:"
 msgstr "Кривые:"
 
 # BUGME: please add context --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lConnectToCurve)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:62
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:63
 #, kde-format
 msgid "Connect To:"
 msgstr "Соединить с:"
 
 # BUGME: please add colon (:) --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lConnectToAnchor)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:69
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:70
 #, kde-format
 msgid "Anchor:"
 msgstr "Привязка:"
 
 # BUGME: please split --aspotashev
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:223
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:224
 #: src/kdefrontend/worksheet/GridDialog.cpp:44
 #, kde-format
 msgid "Lines"
 msgstr "Линии"
 
 #. i18n: ectx: property (text), widget (QLabel, lVerticalLine)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:282
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:242
 #, kde-format
 msgid "Vertical Line"
 msgstr "Вертикальная линия"
 
 # BUGME: please add semantic ctxt --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lConnectionLines)
-#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:310
+#: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:261
 #, kde-format
 msgid "Connection Line"
 msgstr "Соединительная линия"
