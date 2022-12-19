@@ -17,6 +17,8 @@
 
 class ReferenceRangePrivate;
 class CartesianPlot;
+class Background;
+class Line;
 class QActionGroup;
 
 class ReferenceRange : public WorksheetElement {
@@ -39,19 +41,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogicalEnd, PositionLogicalEnd)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 
-	// background
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
-	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
-	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
-	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
-	BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
-
-	// border
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	// background and border
+	Background* background() const;
+	Line* line() const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -93,18 +85,6 @@ Q_SIGNALS:
 	void positionLogicalStartChanged(QPointF);
 	void positionLogicalEndChanged(QPointF);
 	void orientationChanged(Orientation);
-
-	void backgroundTypeChanged(WorksheetElement::BackgroundType);
-	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
-	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
-	void backgroundBrushStyleChanged(Qt::BrushStyle);
-	void backgroundFirstColorChanged(QColor&);
-	void backgroundSecondColorChanged(QColor&);
-	void backgroundFileNameChanged(QString&);
-	void backgroundOpacityChanged(float);
-
-	void borderPenChanged(QPen&);
-	void borderOpacityChanged(float);
 };
 
 #endif

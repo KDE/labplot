@@ -35,19 +35,8 @@ public:
 	QPointF prevPositionLogical;
 	QRectF rect;
 
-	// background
-	WorksheetElement::BackgroundType backgroundType;
-	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
-	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
-	Qt::BrushStyle backgroundBrushStyle;
-	QColor backgroundFirstColor;
-	QColor backgroundSecondColor;
-	QString backgroundFileName;
-	qreal backgroundOpacity;
-
-	// border
-	QPen borderPen;
-	qreal borderOpacity;
+	Line* line{nullptr};
+	Background* background{nullptr};
 
 	// reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
