@@ -3365,11 +3365,11 @@ void FitTest::testHistogramBinomialML() {
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
 	QCOMPARE(fitResult.paramValues.at(1), 0.4931);
 	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
-	// QCOMPARE(fitResult.errorValues.at(1), 0.01);
-	// WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
-	// QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.483254);
-	// WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
-	// QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.50295);
+	QCOMPARE(fitResult.errorValues.at(1), 0.0499952387733072);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 0.482953993308348);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 0.503287947118723);
 
 	QCOMPARE(fitResult.paramValues.at(2), spreadsheet.rowCount());
 }

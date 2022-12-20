@@ -2084,10 +2084,13 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		const double p = tmpXDataColumn->mean() / n;
 		fitResult.paramValues[1] = p;
 		fitResult.paramValues[2] = n;
-
-		// TODO: correct formula
 		fitResult.errorValues[1] = qSqrt(p * (1 - p) / n);
-		fitResult.marginValues[1] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(1));
+
+		// Clopper-Pearson exact method
+		const double k = p * n;
+		fitResult.marginValues[1] = (p - gsl_cdf_beta_Pinv(alpha / 2., k, n - k + 1)) / qSqrt(n);
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = (gsl_cdf_beta_Pinv(1. - alpha / 2., k + 1, n - k) - p) / qSqrt(n);
 
 		// normalization for spreadsheet or curve
 		const double kmin = tmpXDataColumn->minimum(), kmax = tmpXDataColumn->maximum();
