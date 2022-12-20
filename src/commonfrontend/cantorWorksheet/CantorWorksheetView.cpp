@@ -246,7 +246,7 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	// assistants, if available
 	if (m_linearAlgebraMenu || m_calculateMenu) {
 		menu->insertSeparator(firstAction);
-		auto* menuAssistants = new QMenu(i18n("Assistants"));
+		auto* menuAssistants = new QMenu(i18n("Assistants"), m_part->widget());
 		menuAssistants->setIcon(QIcon::fromTheme(QLatin1String("quickwizard")));
 		if (m_linearAlgebraMenu)
 			menuAssistants->addMenu(m_linearAlgebraMenu);

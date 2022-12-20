@@ -144,7 +144,7 @@ bool CursorDock::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void CursorDock::contextMenuRequested(QPoint pos) {
-	auto* menu = new QMenu;
+	auto* menu = new QMenu(this);
 	menu->addAction(i18n("Copy Selection"), this, &CursorDock::resultCopy, QKeySequence::Copy);
 	menu->addAction(i18n("Copy All"), this, &CursorDock::resultCopyAll);
 	menu->exec(ui->tvCursorData->mapToGlobal(pos));
