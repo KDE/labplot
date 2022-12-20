@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-19 00:42+0000\n"
+"POT-Creation-Date: 2022-12-20 00:42+0000\n"
 "PO-Revision-Date: 2017-04-20 14:04+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -20919,21 +20919,21 @@ msgid "End Value:"
 msgstr "%1 τιμή"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:101
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
 #, fuzzy, kde-format
 #| msgid "Start"
 msgid "Start Time:"
 msgstr "Έναρξη"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:117
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
 #, fuzzy, kde-format
 #| msgid "End column:"
 msgid "End Time:"
 msgstr "Στήλη τέλους:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, fuzzy, kde-format
 #| msgid "Function values"
 msgid "Start Value:"

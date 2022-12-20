@@ -8,17 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-19 00:42+0000\n"
-"PO-Revision-Date: 2022-12-16 08:59+0100\n"
+"POT-Creation-Date: 2022-12-20 00:42+0000\n"
+"PO-Revision-Date: 2022-12-19 07:13+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
-"X-Generator: Lokalize 22.08.3\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
+"X-Generator: Poedit 3.2.2\n"
 "X-Accelerator-Marker: ~\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -14785,36 +14785,34 @@ msgid "&Divide"
 msgstr "&Deli"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Difference"
-msgstr "Diferenciraj"
+msgstr "Diferenca"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgid "Milliseconds"
-msgstr ""
+msgstr "Milisekund"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "Second"
+#, kde-format
 msgid "Seconds"
-msgstr "Drugo"
+msgstr "Sekund"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:123
 #, kde-format
 msgid "Minutes"
-msgstr ""
+msgstr "Minut"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
 #, kde-format
 msgid "Hours"
-msgstr ""
+msgstr "Ur"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
 #, kde-format
 msgid "Days"
-msgstr ""
+msgstr "Dni"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:325
 #, kde-format
@@ -14844,10 +14842,9 @@ msgstr "%1: delite vrednosti stolpcev z %2"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:590
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:632
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "Neveljavna številska vrednost."
+msgstr "Vnesena neveljavna številska vrednost."
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:36
 #, kde-format
@@ -17468,7 +17465,7 @@ msgstr "Prirastek:"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:701
 #, kde-format
 msgid "1. Tick at:"
-msgstr "Prva črtica pri"
+msgstr "Prva črtica pri:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:711
@@ -20212,35 +20209,31 @@ msgstr "Pogon za stavljenje:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, kde-format
 msgid "Add:"
-msgstr ""
+msgstr "Dodaj:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "End Value:"
-msgstr "Vrednost:"
+msgstr "Končna vrednost:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:101
-#, fuzzy, kde-format
-#| msgid "Start:"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
+#, kde-format
 msgid "Start Time:"
-msgstr "Začetek:"
+msgstr "Začetni čas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:117
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
+#, kde-format
 msgid "End Time:"
-msgstr "Datum in čas"
+msgstr "Končni čas:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
-#, fuzzy, kde-format
-#| msgid "Start value"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
+#, kde-format
 msgid "Start Value:"
-msgstr "Začetna vrednost"
+msgstr "Začetna vrednost:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47

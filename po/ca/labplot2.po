@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-19 00:42+0000\n"
+"POT-Creation-Date: 2022-12-20 00:42+0000\n"
 "PO-Revision-Date: 2022-12-18 10:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -20331,19 +20331,19 @@ msgid "End Value:"
 msgstr "Valor final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:101
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
 #, kde-format
 msgid "Start Time:"
 msgstr "Hora d'inici:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:117
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
 #, kde-format
 msgid "End Time:"
 msgstr "Hora final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
 #, kde-format
 msgid "Start Value:"
 msgstr "Valor inicial:"

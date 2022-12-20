@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-19 00:42+0000\n"
-"PO-Revision-Date: 2022-12-13 14:20+0100\n"
+"POT-Creation-Date: 2022-12-20 00:42+0000\n"
+"PO-Revision-Date: 2022-12-18 10:20+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -14872,36 +14872,34 @@ msgid "&Divide"
 msgstr "&Dividix"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Difference"
-msgstr "Diferenciació"
+msgstr "Diferència"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:121
 #, kde-format
 msgid "Milliseconds"
-msgstr ""
+msgstr "Mil·lisegons"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "Second"
+#, kde-format
 msgid "Seconds"
-msgstr "Segon"
+msgstr "Segons"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:123
 #, kde-format
 msgid "Minutes"
-msgstr ""
+msgstr "Minuts"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:124
 #, kde-format
 msgid "Hours"
-msgstr ""
+msgstr "Hores"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:125
 #, kde-format
 msgid "Days"
-msgstr ""
+msgstr "Dies"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:325
 #, kde-format
@@ -14931,10 +14929,9 @@ msgstr "%1: dividix els valors de la columna per %2"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:590
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:632
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:674
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "Valor numèric no vàlid."
+msgstr "S'ha proporcionat un valor numèric no vàlid."
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:36
 #, kde-format
@@ -20324,35 +20321,31 @@ msgstr "Motor de la composició tipogràfica:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, kde-format
 msgid "Add:"
-msgstr ""
+msgstr "Suma:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "End Value:"
-msgstr "Valor:"
+msgstr "Valor final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:101
-#, fuzzy, kde-format
-#| msgid "Start:"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
+#, kde-format
 msgid "Start Time:"
-msgstr "Inici:"
+msgstr "Hora d'inici:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:117
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
+#, kde-format
 msgid "End Time:"
-msgstr "Data i hora"
+msgstr "Hora final:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
-#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:146
-#, fuzzy, kde-format
-#| msgid "Start value"
+#: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
+#, kde-format
 msgid "Start Value:"
-msgstr "Valor inicial"
+msgstr "Valor inicial:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -21463,6 +21456,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Time"
-#~ msgstr "Temps"
