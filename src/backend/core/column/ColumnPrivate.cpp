@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1690,6 +1690,13 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 			&& m_columnMode != AbstractColumn::ColumnMode::Day))
 		return QDateTime();
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
+}
+
+double ColumnPrivate::doubleAt(int index) const {
+	if (!m_data)
+		return NAN;
+
+	return static_cast<QVector<double>*>(m_data)->value(index, NAN);
 }
 
 /**

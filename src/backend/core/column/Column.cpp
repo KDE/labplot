@@ -939,6 +939,10 @@ QDateTime Column::dateTimeAt(int row) const {
 	return d->dateTimeAt(row);
 }
 
+double Column::doubleAt(int row) const {
+	return d->doubleAt(row);
+}
+
 /**
  * \brief Return the double value in row 'row'
  */
