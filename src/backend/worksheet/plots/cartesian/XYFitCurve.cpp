@@ -1890,7 +1890,7 @@ void XYFitCurvePrivate::recalculate() {
 				break;
 			}
 		} else { // spreadsheet or curve
-			norm = tmpYDataColumn->mean() * xRange.size(); // integral
+			norm = ((Column*)tmpYDataColumn)->statistics().arithmeticMean * xRange.size(); // integral
 		}
 		runMaximumLikelihood(tmpXDataColumn, norm);
 	}
@@ -1964,10 +1964,16 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	// TODO: parameter values (error, etc.)
 	// TODO: currently all values are used (data range not changeable)
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
+	const auto statistics = ((Column*)tmpXDataColumn)->statistics();
+	const double mean = statistics.arithmeticMean;
+	const double var = statistics.variance;
+	const double median = statistics.median;
+	const double madmed = statistics.meanDeviationAroundMedian;
+	const double iqr = statistics.iqr;
 	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian: {
-		const double sigma = std::sqrt(tmpXDataColumn->var());
-		const double mu = tmpXDataColumn->mean();
+		const double sigma = std::sqrt(var);
+		const double mu = mean;
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 		DEBUG("mu = " << mu << ", sigma = " << sigma)
@@ -1990,7 +1996,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	}
 	case nsl_sf_stats_exponential: {
 		const double mu = tmpXDataColumn->minimum();
-		const double lambda = 1. / (tmpXDataColumn->mean() - mu); // 1/(<x>-\mu)
+		const double lambda = 1. / (mean - mu); // 1/(<x>-\mu)
 		fitResult.paramValues[1] = lambda * (1 - 1. / (n - 1)); // unbiased
 		fitResult.paramValues[2] = mu;
 
@@ -2015,10 +2021,10 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		double sigma = tmpXDataColumn->madmed();
+		double sigma = madmed;
 		if (n > 2) // bias correction
 			sigma *= n / (n - 2.);
-		const double mu = tmpXDataColumn->median();
+		const double mu = median;
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 
@@ -2042,8 +2048,8 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_cauchy_lorentz: {
-		const double gamma = tmpXDataColumn->iqr() / 2.;
-		const double mu = tmpXDataColumn->median(); // better truncated mean of middle 24%
+		const double gamma = iqr / 2.;
+		const double mu = median; // better truncated mean of middle 24%
 		fitResult.paramValues[1] = gamma;
 		fitResult.paramValues[2] = mu;
 
@@ -2077,7 +2083,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_poisson: {
-		const double lambda = tmpXDataColumn->mean();
+		const double lambda = mean;
 		fitResult.paramValues[1] = lambda;
 		fitResult.errorValues[1] = std::sqrt(lambda / n);
 
@@ -2094,7 +2100,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_binomial: {
-		const double p = tmpXDataColumn->mean() / n;
+		const double p = mean / n;
 		fitResult.paramValues[1] = p;
 		fitResult.paramValues[2] = n;
 		fitResult.errorValues[1] = std::sqrt(p * (1 - p) / n);

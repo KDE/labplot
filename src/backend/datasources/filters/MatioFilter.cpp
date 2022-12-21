@@ -79,7 +79,7 @@
 			if (i + startRow - 1 < cellsize)                                                                                                                   \
 				static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[i + startRow - 1];                                                        \
 			else                                                                                                                                               \
-				static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = NAN;                                                                           \
+				static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = qQNaN();                                                                       \
 		} else { /* preview */                                                                                                                                 \
 			if (i + startRow - 1 < cellsize)                                                                                                                   \
 				row << QString::number(data[i + startRow - 1]);                                                                                                \

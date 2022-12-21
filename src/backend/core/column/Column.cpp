@@ -1982,32 +1982,6 @@ double Column::maximum(int startIndex, int endIndex) const {
 	return max;
 }
 
-double Column::mean() const {
-	if (!d->available.statistics)
-		d->calculateStatistics();
-	return d->statistics.arithmeticMean;
-}
-double Column::median() const {
-	if (!d->available.statistics)
-		d->calculateStatistics();
-	return d->statistics.median;
-}
-double Column::var() const {
-	if (!d->available.statistics)
-		d->calculateStatistics();
-	return d->statistics.variance;
-}
-double Column::madmed() const {
-	if (!d->available.statistics)
-		d->calculateStatistics();
-	return d->statistics.meanDeviationAroundMedian;
-}
-double Column::iqr() const {
-	if (!d->available.statistics)
-		d->calculateStatistics();
-	return d->statistics.iqr;
-}
-
 /*!
  * calculates log2(x)+1 for an integer value.
  * Used in y(double x) to calculate the maximum steps

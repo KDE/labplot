@@ -148,11 +148,6 @@ public:
 	virtual double maximum(int startIndex, int endIndex) const;
 	virtual double minimum(int count = 0) const;
 	virtual double minimum(int startIndex, int endIndex) const;
-	virtual double mean() const;
-	virtual double median() const;
-	virtual double var() const;
-	virtual double madmed() const;
-	virtual double iqr() const;
 	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
 	virtual int indexForValue(double x) const;
 

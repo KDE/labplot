@@ -732,22 +732,6 @@ double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
 	return -INFINITY;
 }
 
-double AbstractColumn::mean() const {
-	return NAN;
-}
-double AbstractColumn::median() const {
-	return NAN;
-}
-double AbstractColumn::var() const {
-	return NAN;
-}
-double AbstractColumn::madmed() const {
-	return NAN;
-}
-double AbstractColumn::iqr() const {
-	return NAN;
-}
-
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {
 	return false;
 }
