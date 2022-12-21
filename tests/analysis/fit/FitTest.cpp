@@ -3197,7 +3197,7 @@ void FitTest::testHistogramLaplaceML() {
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
 	QCOMPARE(fitResult.paramValues.at(0), 145.64147805241);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
-	QCOMPARE(fitResult.paramValues.at(1), 1.9554805850952);
+	QCOMPARE(fitResult.paramValues.at(1), 1.99538835213796);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
 	QCOMPARE(fitResult.paramValues.at(2), 4.95890340967321);
 }
