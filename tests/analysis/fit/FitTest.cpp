@@ -3149,7 +3149,13 @@ void FitTest::testHistogramExponentialML() {
 	WARN(std::setprecision(15) << fitResult.paramValues.at(0));
 	QCOMPARE(fitResult.paramValues.at(0), 41.6543778722);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(1));
-	QCOMPARE(fitResult.paramValues.at(1), 1.95884683568035);
+	QCOMPARE(fitResult.paramValues.at(1), 1.93906050400681);
+	WARN(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.195884683568035);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) - fitResult.marginValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) - fitResult.marginValues.at(1), 1.5740096363284);
+	WARN(std::setprecision(15) << fitResult.paramValues.at(1) + fitResult.margin2Values.at(1));
+	QCOMPARE(fitResult.paramValues.at(1) + fitResult.margin2Values.at(1), 2.34119114746796);
 	WARN(std::setprecision(15) << fitResult.paramValues.at(2));
 	QCOMPARE(fitResult.paramValues.at(2), 5.01032231564491);
 }

@@ -1979,7 +1979,6 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.marginValues[2] = margin;
 
 		fitResult.errorValues[1] = sigma * sigma / qSqrt(2 * n);
-		// TODO: check
 		margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(1));
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
 		fitResult.marginValues[1] = margin;
@@ -1993,10 +1992,23 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	case nsl_sf_stats_exponential: {
 		const double mu = tmpXDataColumn->minimum();
 		const double lambda = 1. / (tmpXDataColumn->mean() - mu); // 1/(<x>-\mu)
-		fitResult.paramValues[1] = lambda;
+		fitResult.paramValues[1] = lambda * (1 - 1. / (n - 1)); // unbiased
 		fitResult.paramValues[2] = mu;
 
-		// TODO: error + CI
+		fitResult.errorValues[1] = lambda / qSqrt(n);
+		// exact method
+		double margin = lambda * (1. - gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n));
+		fitResult.marginValues[1] = margin;
+		margin = lambda * (gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / (2. * n) - 1.);
+		fitResult.margin2Values.resize(2);
+		fitResult.margin2Values[1] = margin;
+
+		DEBUG("error = " << fitResult.errorValues.at(1))
+		DEBUG("CI: " << gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n) * lambda << " .. " << gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / (2. * n) * lambda)
+		DEBUG("normal approx.: " << lambda * (1. - 1.96 / qSqrt(n)) << " .. " << lambda * (1. + 1.96 / qSqrt(n)))
+		DEBUG("1/l = " << 1. / fitResult.paramValues.t(1))
+		DEBUG("1/l CI: " << 2. * n / gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / lambda << " .. " << 2. * n / gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / lambda)
+		DEBUG("1/l normal approx.: " << 1. / lambda / (1. + 1.96 / qSqrt(n)) << " .. " << 1. / lambda / (1. - 1.96 / qSqrt(n)))
 
 		// normalization for spreadsheet or curve
 		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
@@ -2004,7 +2016,9 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		break;
 	}
 	case nsl_sf_stats_laplace: {
-		const double sigma = tmpXDataColumn->madmed();
+		double sigma = tmpXDataColumn->madmed();
+		if (n > 2) // bias correction
+			sigma *= n / (n - 2.);
 		const double mu = tmpXDataColumn->median();
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
@@ -2028,7 +2042,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		}
 		break;
 	}
-	case nsl_sf_stats_cauchy_lorentz: { // see WP:en
+	case nsl_sf_stats_cauchy_lorentz: {
 		const double gamma = tmpXDataColumn->iqr() / 2.;
 		const double mu = tmpXDataColumn->median(); // better truncated mean of middle 24%
 		fitResult.paramValues[1] = gamma;
