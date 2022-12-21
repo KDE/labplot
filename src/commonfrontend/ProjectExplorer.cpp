@@ -166,7 +166,7 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent* event) {
 			menu->insertAction(firstAction, collapseTreeAction);
 		}
 	} else {
-		menu = new QMenu();
+		menu = new QMenu(this);
 
 		if (items.size() / 4 > 1) {
 			// add "expand/collapse" entries if the selected indices have children

@@ -1250,9 +1250,12 @@ void XYCurveDock::load() {
 	// This data is read in XYCurveDock::setCurves().
 
 	// Line
-	ui.cbLineType->setCurrentIndex((int)m_curve->lineType());
-	ui.chkLineSkipGaps->setChecked(m_curve->lineSkipGaps());
-	ui.sbLineInterpolationPointsCount->setValue(m_curve->lineInterpolationPointsCount());
+	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
+	if (xyCurve) { // options available for XYCurve only and not for analysis curves
+		ui.cbLineType->setCurrentIndex((int)m_curve->lineType());
+		ui.chkLineSkipGaps->setChecked(m_curve->lineSkipGaps());
+		ui.sbLineInterpolationPointsCount->setValue(m_curve->lineInterpolationPointsCount());
+	}
 
 	// Values
 	ui.cbValuesType->setCurrentIndex((int)m_curve->valuesType());
@@ -1272,8 +1275,10 @@ void XYCurveDock::load() {
 	this->updateValuesWidgets();
 
 	// Error bars
-	ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorType());
-	ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorType());
+	if (xyCurve) {
+		ui.cbXErrorType->setCurrentIndex((int)m_curve->xErrorType());
+		ui.cbYErrorType->setCurrentIndex((int)m_curve->yErrorType());
+	}
 
 	// Margin plots
 	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
@@ -1312,9 +1317,12 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	// This data is read in XYCurveDock::setCurves().
 
 	// Line
-	ui.cbLineType->setCurrentIndex(group.readEntry("LineType", (int)m_curve->lineType()));
-	ui.chkLineSkipGaps->setChecked(group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()));
-	ui.sbLineInterpolationPointsCount->setValue(group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()));
+	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
+	if (xyCurve) {
+		ui.cbLineType->setCurrentIndex(group.readEntry("LineType", (int)m_curve->lineType()));
+		ui.chkLineSkipGaps->setChecked(group.readEntry("LineSkipGaps", m_curve->lineSkipGaps()));
+		ui.sbLineInterpolationPointsCount->setValue(group.readEntry("LineInterpolationPointsCount", m_curve->lineInterpolationPointsCount()));
+	}
 	lineWidget->loadConfig(group);
 	dropLineWidget->loadConfig(group);
 
@@ -1338,9 +1346,11 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	backgroundWidget->loadConfig(group);
 
 	// Error bars
-	ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
-	ui.cbYErrorType->setCurrentIndex(group.readEntry("YErrorType", (int)m_curve->yErrorType()));
-	errorBarsLineWidget->loadConfig(group);
+	if (xyCurve) {
+		ui.cbXErrorType->setCurrentIndex(group.readEntry("XErrorType", (int)m_curve->xErrorType()));
+		ui.cbYErrorType->setCurrentIndex(group.readEntry("YErrorType", (int)m_curve->yErrorType()));
+		errorBarsLineWidget->loadConfig(group);
+	}
 }
 
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
@@ -1350,9 +1360,13 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	// we don't load/save the settings in the general-tab, since they are not style related.
 	// It doesn't make sense to load/save them in the template.
 
-	group.writeEntry("LineType", ui.cbLineType->currentIndex());
-	group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
-	group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value());
+	bool xyCurve = (m_curve->type() == AspectType::XYCurve);
+	if (xyCurve) {
+		group.writeEntry("LineType", ui.cbLineType->currentIndex());
+		group.writeEntry("LineSkipGaps", ui.chkLineSkipGaps->isChecked());
+		group.writeEntry("LineInterpolationPointsCount", ui.sbLineInterpolationPointsCount->value());
+	}
+
 	lineWidget->saveConfig(group);
 	dropLineWidget->saveConfig(group);
 
@@ -1377,9 +1391,11 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	backgroundWidget->saveConfig(group);
 
 	// Error bars
-	group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
-	group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
-	errorBarsLineWidget->saveConfig(group);
+	if (xyCurve) {
+		group.writeEntry("XErrorType", ui.cbXErrorType->currentIndex());
+		group.writeEntry("YErrorType", ui.cbYErrorType->currentIndex());
+		errorBarsLineWidget->saveConfig(group);
+	}
 
 	config.sync();
 }

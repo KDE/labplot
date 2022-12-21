@@ -31,7 +31,7 @@ LineWidget::LineWidget(QWidget* parent)
 	connect(ui.sbErrorBarsCapSize, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LineWidget::capSizeChanged);
 
 	connect(ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LineWidget::styleChanged);
-	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChanged);
+	connect(ui.kcbColor, &KColorButton::changed, this, &LineWidget::colorChangedSlot);
 	connect(ui.sbWidth, QOverload<double>::of(&NumberSpinBox::valueChanged), this, &LineWidget::widthChanged);
 	connect(ui.sbOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LineWidget::opacityChanged);
 }
@@ -226,12 +226,13 @@ void LineWidget::styleChanged(int index) {
 		line->setStyle(style);
 }
 
-void LineWidget::colorChanged(const QColor& color) {
+void LineWidget::colorChangedSlot(const QColor& color) {
 	CONDITIONAL_LOCK_RETURN;
 	for (auto* line : m_lines)
 		line->setColor(color);
 
 	GuiTools::updatePenStyles(ui.cbStyle, color);
+	Q_EMIT colorChanged(color);
 }
 
 void LineWidget::widthChanged(double value) {

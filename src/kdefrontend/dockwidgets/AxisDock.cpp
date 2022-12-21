@@ -149,7 +149,7 @@ AxisDock::AxisDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
-
+	connect(lineWidget, &LineWidget::colorChanged, this, &AxisDock::updateArrowLineColor);
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowPositionChanged);
 	connect(ui.cbArrowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::arrowTypeChanged);
 	connect(ui.sbArrowSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &AxisDock::arrowSizeChanged);
@@ -254,6 +254,7 @@ void AxisDock::init() {
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
 	// Arrows
+	ui.cbArrowType->setIconSize(QSize(20, 20));
 	ui.cbArrowType->addItem(i18n("No arrow"));
 	ui.cbArrowType->addItem(i18n("Simple, Small"));
 	ui.cbArrowType->addItem(i18n("Simple, Big"));
@@ -261,89 +262,6 @@ void AxisDock::init() {
 	ui.cbArrowType->addItem(i18n("Filled, Big"));
 	ui.cbArrowType->addItem(i18n("Semi-filled, Small"));
 	ui.cbArrowType->addItem(i18n("Semi-filled, Big"));
-
-	QPainter pa;
-	pa.setPen(QPen(Qt::SolidPattern, 0));
-	QPixmap pm(20, 20);
-	ui.cbArrowType->setIconSize(QSize(20, 20));
-
-	// no arrow
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10);
-	pa.end();
-	ui.cbArrowType->setItemIcon(0, pm);
-
-	// simple, small
-	double cos_phi = cos(M_PI / 6.);
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3, 10, 17, 10);
-	pa.drawLine(17, 10, 10, 10 - 5 * cos_phi);
-	pa.drawLine(17, 10, 10, 10 + 5 * cos_phi);
-	pa.end();
-	ui.cbArrowType->setItemIcon(1, pm);
-
-	// simple, big
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.drawLine(3, 10, 17, 10);
-	pa.drawLine(17, 10, 10, 10 - 10 * cos_phi);
-	pa.drawLine(17, 10, 10, 10 + 10 * cos_phi);
-	pa.end();
-	ui.cbArrowType->setItemIcon(2, pm);
-
-	// filled, small
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10);
-	QPolygonF points3;
-	points3 << QPointF(17, 10) << QPointF(10, 10 - 4 * cos_phi) << QPointF(10, 10 + 4 * cos_phi);
-	pa.drawPolygon(points3);
-	pa.end();
-	ui.cbArrowType->setItemIcon(3, pm);
-
-	// filled, big
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10);
-	QPolygonF points4;
-	points4 << QPointF(17, 10) << QPointF(10, 10 - 10 * cos_phi) << QPointF(10, 10 + 10 * cos_phi);
-	pa.drawPolygon(points4);
-	pa.end();
-	ui.cbArrowType->setItemIcon(4, pm);
-
-	// semi-filled, small
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10);
-	QPolygonF points5;
-	points5 << QPointF(17, 10) << QPointF(10, 10 - 4 * cos_phi) << QPointF(13, 10) << QPointF(10, 10 + 4 * cos_phi);
-	pa.drawPolygon(points5);
-	pa.end();
-	ui.cbArrowType->setItemIcon(5, pm);
-
-	// semi-filled, big
-	pm.fill(Qt::transparent);
-	pa.begin(&pm);
-	pa.setRenderHint(QPainter::Antialiasing);
-	pa.setBrush(Qt::SolidPattern);
-	pa.drawLine(3, 10, 17, 10);
-	QPolygonF points6;
-	points6 << QPointF(17, 10) << QPointF(10, 10 - 10 * cos_phi) << QPointF(13, 10) << QPointF(10, 10 + 10 * cos_phi);
-	pa.drawPolygon(points6);
-	pa.end();
-	ui.cbArrowType->setItemIcon(6, pm);
 
 	ui.cbArrowPosition->addItem(i18n("Left"));
 	ui.cbArrowPosition->addItem(i18n("Right"));
@@ -852,6 +770,95 @@ void AxisDock::showScaleOffsetChanged(bool state) {
 }
 
 // "Line"-tab
+void AxisDock::updateArrowLineColor(const QColor& color) {
+	QPainter pa;
+	QPixmap pm(20, 20);
+
+	// no arrow
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.drawLine(3, 10, 17, 10);
+	pa.end();
+	ui.cbArrowType->setItemIcon(0, pm);
+
+	// simple, small
+	const double cos_phi = cos(M_PI / 6.);
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.drawLine(3, 10, 17, 10);
+	pa.drawLine(17, 10, 10, 10 - 5 * cos_phi);
+	pa.drawLine(17, 10, 10, 10 + 5 * cos_phi);
+	pa.end();
+	ui.cbArrowType->setItemIcon(1, pm);
+
+	// simple, big
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.drawLine(3, 10, 17, 10);
+	pa.drawLine(17, 10, 10, 10 - 10 * cos_phi);
+	pa.drawLine(17, 10, 10, 10 + 10 * cos_phi);
+	pa.end();
+	ui.cbArrowType->setItemIcon(2, pm);
+
+	// filled, small
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.setBrush(QBrush(color, Qt::SolidPattern));
+	pa.drawLine(3, 10, 17, 10);
+	QPolygonF points3;
+	points3 << QPointF(17, 10) << QPointF(10, 10 - 4 * cos_phi) << QPointF(10, 10 + 4 * cos_phi);
+	pa.drawPolygon(points3);
+	pa.end();
+	ui.cbArrowType->setItemIcon(3, pm);
+
+	// filled, big
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.setBrush(QBrush(color, Qt::SolidPattern));
+	pa.drawLine(3, 10, 17, 10);
+	QPolygonF points4;
+	points4 << QPointF(17, 10) << QPointF(10, 10 - 10 * cos_phi) << QPointF(10, 10 + 10 * cos_phi);
+	pa.drawPolygon(points4);
+	pa.end();
+	ui.cbArrowType->setItemIcon(4, pm);
+
+	// semi-filled, small
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.setBrush(QBrush(color, Qt::SolidPattern));
+	pa.drawLine(3, 10, 17, 10);
+	QPolygonF points5;
+	points5 << QPointF(17, 10) << QPointF(10, 10 - 4 * cos_phi) << QPointF(13, 10) << QPointF(10, 10 + 4 * cos_phi);
+	pa.drawPolygon(points5);
+	pa.end();
+	ui.cbArrowType->setItemIcon(5, pm);
+
+	// semi-filled, big
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setRenderHint(QPainter::Antialiasing);
+	pa.setPen(QPen(color));
+	pa.setBrush(QBrush(color, Qt::SolidPattern));
+	pa.drawLine(3, 10, 17, 10);
+	QPolygonF points6;
+	points6 << QPointF(17, 10) << QPointF(10, 10 - 10 * cos_phi) << QPointF(13, 10) << QPointF(10, 10 + 10 * cos_phi);
+	pa.drawPolygon(points6);
+	pa.end();
+	ui.cbArrowType->setItemIcon(6, pm);
+}
+
 void AxisDock::arrowTypeChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
@@ -1803,6 +1810,7 @@ void AxisDock::load() {
 	ui.cbArrowType->setCurrentIndex((int)m_axis->arrowType());
 	ui.cbArrowPosition->setCurrentIndex((int)m_axis->arrowPosition());
 	ui.sbArrowSize->setValue((int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Unit::Point));
+	updateArrowLineColor(m_axis->line()->color());
 
 	// Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex((int)m_axis->majorTicksDirection());
@@ -1914,6 +1922,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbArrowType->setCurrentIndex(group.readEntry("ArrowType", (int)m_axis->arrowType()));
 	ui.cbArrowPosition->setCurrentIndex(group.readEntry("ArrowPosition", (int)m_axis->arrowPosition()));
 	ui.sbArrowSize->setValue(Worksheet::convertFromSceneUnits(group.readEntry("ArrowSize", m_axis->arrowSize()), Worksheet::Unit::Point));
+	updateArrowLineColor(m_axis->line()->color());
 
 	// Major ticks
 	ui.cbMajorTicksDirection->setCurrentIndex(group.readEntry("MajorTicksDirection", (int)m_axis->majorTicksDirection()));

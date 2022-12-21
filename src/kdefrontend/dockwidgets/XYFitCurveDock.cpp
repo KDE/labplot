@@ -1303,19 +1303,19 @@ void XYFitCurveDock::resultCopyAll() {
 }
 
 void XYFitCurveDock::resultParametersContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twParameters->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultGoodnessContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twGoodness->mapToGlobal(pos));
 }
 void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
-	auto* contextMenu = new QMenu;
+	auto* contextMenu = new QMenu(this);
 	contextMenu->addAction(i18n("Copy Selection"), this, &XYFitCurveDock::resultCopy, QKeySequence::Copy);
 	contextMenu->addAction(i18n("Copy All"), this, &XYFitCurveDock::resultCopyAll);
 	contextMenu->exec(uiGeneralTab.twLog->mapToGlobal(pos));

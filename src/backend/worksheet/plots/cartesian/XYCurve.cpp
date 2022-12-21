@@ -1046,9 +1046,13 @@ void XYCurvePrivate::recalcLogicalPoints() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:
+				tempPoint.setX(xColumn->doubleAt(row));
+				break;
 			case AbstractColumn::ColumnMode::Integer:
+				tempPoint.setX(xColumn->integerAt(row));
+				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setX(xColumn->valueAt(row));
+				tempPoint.setX(xColumn->bigIntAt(row));
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setX(xColumn->dateTimeAt(row).toMSecsSinceEpoch());
@@ -1061,9 +1065,13 @@ void XYCurvePrivate::recalcLogicalPoints() {
 
 			switch (yColMode) {
 			case AbstractColumn::ColumnMode::Double:
+				tempPoint.setY(yColumn->doubleAt(row));
+				break;
 			case AbstractColumn::ColumnMode::Integer:
+				tempPoint.setY(yColumn->integerAt(row));
+				break;
 			case AbstractColumn::ColumnMode::BigInt:
-				tempPoint.setY(yColumn->valueAt(row));
+				tempPoint.setY(yColumn->bigIntAt(row));
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 				tempPoint.setY(yColumn->dateTimeAt(row).toMSecsSinceEpoch());

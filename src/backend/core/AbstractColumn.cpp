@@ -626,6 +626,15 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is Numeric
  */
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
 double AbstractColumn::valueAt(int /*row*/) const {
 	return qQNaN();
 }
