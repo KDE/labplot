@@ -156,7 +156,7 @@ void SpreadsheetFormulaTest::formulaCellip1() {
 		if (i < rows - 1)
 			QCOMPARE(sheet.column(1)->valueAt(i), i + 2);
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -174,7 +174,7 @@ void SpreadsheetFormulaTest::formulaCellim1() {
 		if (i > 0)
 			QCOMPARE(sheet.column(1)->valueAt(i), i);
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -192,7 +192,7 @@ void SpreadsheetFormulaTest::formulaCell2i() {
 		if (i < rows / 2)
 			QCOMPARE(sheet.column(1)->valueAt(i), 2 * (i + 1));
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -210,7 +210,7 @@ void SpreadsheetFormulaTest::formulaCellip1im1() {
 		if (i > 0 && i < rows - 1)
 			QCOMPARE(sheet.column(1)->valueAt(i), 2);
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -228,7 +228,7 @@ void SpreadsheetFormulaTest::formulaCellsqrtip1() {
 		if (i < rows - 1)
 			QCOMPARE(sheet.column(1)->valueAt(i), std::sqrt(i + 2));
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 
@@ -340,7 +340,7 @@ void SpreadsheetFormulaTest::formulaCell2i_xpy() {
 		if (i < rows / 2)
 			QCOMPARE(sheet.column(2)->valueAt(i), sheet.column(0)->valueAt(2 * i + 1) + sheet.column(1)->valueAt(2 * i + 1));
 		else
-			QCOMPARE(sheet.column(2)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(2)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -377,7 +377,7 @@ void SpreadsheetFormulaTest::formulama() {
 		if (i > 0)
 			QCOMPARE(sheet.column(1)->valueAt(i), i + .5);
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -395,7 +395,7 @@ void SpreadsheetFormulaTest::formulamr() {
 		if (i > 0)
 			QCOMPARE(sheet.column(1)->valueAt(i), 1);
 		else
-			QCOMPARE(sheet.column(1)->valueAt(i), qQNaN());
+			QCOMPARE(sheet.column(1)->valueAt(i), NAN);
 	}
 }
 /*!
@@ -412,7 +412,7 @@ void SpreadsheetFormulaTest::formulasma() {
 	for (int i = 0; i < rows; i++) {
 		QCOMPARE(sheet.column(0)->valueAt(i), i + 1);
 		double value = 0.;
-		for (int index = qMax(0, i - N + 1); index <= i; index++)
+		for (int index = std::max(0, i - N + 1); index <= i; index++)
 			value += sheet.column(0)->valueAt(index);
 		QCOMPARE(sheet.column(1)->valueAt(i), value / N);
 	}

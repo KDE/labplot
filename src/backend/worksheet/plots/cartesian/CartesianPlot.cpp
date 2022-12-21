@@ -2560,12 +2560,12 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 
 	DEBUG(Q_FUNC_INFO << ", range " << index << " = " << r.toStdString() << "., data range = " << d->dataRange(dim, index).toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(dataRange.start(), r.start()) && !qIsInf(dataRange.start())) {
+	if (!qFuzzyCompare(dataRange.start(), r.start()) && std::isfinite(dataRange.start())) {
 		r.start() = dataRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(dataRange.end(), r.end()) && !qIsInf(dataRange.end())) {
+	if (!qFuzzyCompare(dataRange.end(), r.end()) && std::isfinite(dataRange.end())) {
 		r.end() = dataRange.end();
 		update = true;
 	}
@@ -2628,7 +2628,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 					  << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
-	d->dataRange(dim, index).setRange(qInf(), -qInf());
+	d->dataRange(dim, index).setRange(INFINITY, -INFINITY);
 	auto range{d->range(dim, index)}; // get reference to range from private
 
 	// loop over all xy-curves and determine the maximum and minimum dir-values
@@ -2899,12 +2899,12 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	}
 	case RangeT::Scale::Square: {
 		const double diff = (end * end - start * start) * (factor - 1.);
-		range.extend(sqrt(qAbs(diff / 2.)));
+		range.extend(sqrt(std::abs(diff / 2.)));
 		break;
 	}
 	case RangeT::Scale::Inverse: {
 		const double diff = (1. / start - 1. / end) * (factor - 1.);
-		range.extend(1. / qAbs(diff / 2.));
+		range.extend(1. / std::abs(diff / 2.));
 		break;
 	}
 	}
@@ -2989,11 +2989,11 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 		break;
 	case RangeT::Scale::Square:
 		offset = (end * end - start * start) * factor;
-		range += sqrt(qAbs(offset));
+		range += sqrt(std::abs(offset));
 		break;
 	case RangeT::Scale::Inverse:
 		offset = (1. / start - 1. / end) * factor;
-		range += 1. / qAbs(offset);
+		range += 1. / std::abs(offset);
 		break;
 	}
 
@@ -3550,10 +3550,10 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 		bool visible;
 		if (cursor0Enable
-			&& qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x()) < cursorPenWidth2) {
+			&& std::abs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
 		} else if (cursor1Enable
-				   && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
+				   && std::abs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
 					   < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
@@ -3645,7 +3645,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			// don't retransform on small mouse movement deltas
 			const int deltaXScene = (m_panningStart.x() - event->pos().x());
 			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (qAbs(deltaXScene) < 5 && qAbs(deltaYScene) < 5)
+			if (std::abs(deltaXScene) < 5 && std::abs(deltaYScene) < 5)
 				return;
 
 			if (!cSystem->isValid())
@@ -3988,7 +3988,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
 	m_selectionBandIsShown = false;
 	// don't zoom if very small region was selected, avoid occasional/unwanted zooming
-	if (qAbs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && qAbs(m_selectionEnd.y() - m_selectionStart.y()) < 20)
+	if (std::abs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && std::abs(m_selectionEnd.y() - m_selectionStart.y()) < 20)
 		return;
 
 	int xIndex = -1, yIndex = -1;
@@ -4272,10 +4272,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			bool visible;
 			if ((cursor0Enable
-				 && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x())
+				 && std::abs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x())
 					 < cursorPenWidth2)
 				|| (cursor1Enable
-					&& qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
+					&& std::abs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
 						< cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
 			else

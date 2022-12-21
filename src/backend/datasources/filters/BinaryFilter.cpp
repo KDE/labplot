@@ -24,7 +24,7 @@
 	{                                                                                                                                                          \
 		DATATYPE value;                                                                                                                                        \
 		for (int n = startColumn; n < m_actualCols; ++n) {                                                                                                     \
-			for (size_t l = 0; l < qMin(readLines, mNumberLines); l++) {                                                                                       \
+			for (size_t l = 0; l < std::min(readLines, mNumberLines); l++) {                                                                                   \
 				const size_t lineNumber = l * lineBytes;                                                                                                       \
 				const size_t index = lineNumber + (n - startColumn) * typeSize;                                                                                \
 				if (byteOrder == QDataStream::BigEndian)                                                                                                       \
@@ -306,7 +306,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 		lines = m_actualRows;
 
 	// read data
-	lines = qMin(lines, m_actualRows);
+	lines = std::min(lines, m_actualRows);
 	DEBUG(Q_FUNC_INFO << ", generating preview for " << lines << " lines")
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
@@ -459,7 +459,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 		startColumn++;
 
 	// read data
-	lines = qMin(lines, m_actualRows);
+	lines = std::min(lines, m_actualRows);
 	DEBUG(Q_FUNC_INFO << ", Reading " << lines << " lines");
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only

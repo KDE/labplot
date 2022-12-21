@@ -484,7 +484,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		bool isDateTime = false;
-		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->rangeCount(Dimension::X)); row++) {
+		for (int row = 0; row < std::min(ui.twXRanges->rowCount(), m_plot->rangeCount(Dimension::X)); row++) {
 			const auto xRange{m_plot->range(Dimension::X, row)};
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
@@ -511,7 +511,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// y ranges
 		isDateTime = false;
-		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->rangeCount(Dimension::Y)); row++) {
+		for (int row = 0; row < std::min(ui.twYRanges->rowCount(), m_plot->rangeCount(Dimension::Y)); row++) {
 			const auto yRange{m_plot->range(Dimension::Y, row)};
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
@@ -1383,7 +1383,7 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 
 	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
+	QString str = std::isnan(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leXBreakEnd->setText(str);
@@ -1497,7 +1497,7 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 
 	const auto numberLocale = QLocale();
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
+	QString str = std::isnan(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);
 	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leYBreakEnd->setText(str);

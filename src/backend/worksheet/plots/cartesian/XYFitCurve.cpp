@@ -46,7 +46,6 @@ extern "C" {
 #include <QElapsedTimer>
 #include <QIcon>
 #include <QThreadPool>
-#include <QtMath>
 
 XYFitCurve::XYFitCurve(const QString& name)
 	: XYAnalysisCurve(name, new XYFitCurvePrivate(this), AspectType::XYFitCurve) {
@@ -138,13 +137,13 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 					xRange.setRange(fitData.fitRange.start(), fitData.fitRange.end());
 			}
 
-			const int rowCount = qMin(xColumn->rowCount(), yColumn->rowCount());
+			const int rowCount = std::min(xColumn->rowCount(), yColumn->rowCount());
 			for (int row = 0; row < rowCount; ++row) {
 				// omit invalid data
 				if (!xColumn->isValid(row) || xColumn->isMasked(row) || !yColumn->isValid(row) || yColumn->isMasked(row))
 					continue;
 
-				double x = qQNaN();
+				double x = NAN;
 				switch (xColumn->columnMode()) {
 				case AbstractColumn::ColumnMode::Double:
 				case AbstractColumn::ColumnMode::Integer:
@@ -159,7 +158,7 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 					x = xColumn->dateTimeAt(row).toMSecsSinceEpoch();
 				}
 
-				double y = qQNaN();
+				double y = NAN;
 				switch (yColumn->columnMode()) {
 				case AbstractColumn::ColumnMode::Double:
 				case AbstractColumn::ColumnMode::Integer:
@@ -218,19 +217,19 @@ void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* cu
 						gsl_vector_set(w, i, 1.);
 						break;
 					case nsl_fit_weight_instrumental: // yerror are sigmas
-						gsl_vector_set(w, i, 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), std::abs(yi) * 1.e-15))));
+						gsl_vector_set(w, i, 1. / gsl_pow_2(std::max(yerror[i], std::max(sqrt(minError), std::abs(yi) * 1.e-15))));
 						break;
 					case nsl_fit_weight_direct: // yerror are weights
 						gsl_vector_set(w, i, yerror[i]);
 						break;
 					case nsl_fit_weight_inverse: // yerror are inverse weights
-						gsl_vector_set(w, i, 1. / qMax(yerror[i], qMax(minError, std::abs(yi) * 1.e-15)));
+						gsl_vector_set(w, i, 1. / std::max(yerror[i], std::max(minError, std::abs(yi) * 1.e-15)));
 						break;
 					case nsl_fit_weight_statistical:
-						gsl_vector_set(w, i, 1. / qMax(yi, minError));
+						gsl_vector_set(w, i, 1. / std::max(yi, minError));
 						break;
 					case nsl_fit_weight_relative:
-						gsl_vector_set(w, i, 1. / qMax(gsl_pow_2(yi), minError));
+						gsl_vector_set(w, i, 1. / std::max(gsl_pow_2(yi), minError));
 						break;
 					}
 				} else
@@ -1967,18 +1966,18 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 	const double alpha = 1.0 - fitData.confidenceInterval / 100.;
 	switch (fitData.modelType) { // only these are supported
 	case nsl_sf_stats_gaussian: {
-		const double sigma = qSqrt(tmpXDataColumn->var());
+		const double sigma = std::sqrt(tmpXDataColumn->var());
 		const double mu = tmpXDataColumn->mean();
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 		DEBUG("mu = " << mu << ", sigma = " << sigma)
 
-		fitResult.errorValues[2] = sigma / qSqrt(n);
+		fitResult.errorValues[2] = sigma / std::sqrt(n);
 		double margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(2));
 		// DEBUG("z = " << nsl_stats_tdist_z(alpha, fitResult.dof))
 		fitResult.marginValues[2] = margin;
 
-		fitResult.errorValues[1] = sigma * sigma / qSqrt(2 * n);
+		fitResult.errorValues[1] = sigma * sigma / std::sqrt(2 * n);
 		margin = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(1));
 		// WARN("sigma CONFIDENCE INTERVAL: " << fitResult.paramValues[1] - margin << " .. " << fitResult.paramValues[1] + margin)
 		fitResult.marginValues[1] = margin;
@@ -1986,7 +1985,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		// normalization for spreadsheet or curve
 		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
 			fitResult.paramValues[0] /=
-				(gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma)) / (2. * qSqrt(2.));
+				(gsl_sf_erf((tmpXDataColumn->maximum() - mu) / sigma) - gsl_sf_erf((tmpXDataColumn->minimum() - mu) / sigma)) / (2. * std::sqrt(2.));
 		break;
 	}
 	case nsl_sf_stats_exponential: {
@@ -1995,7 +1994,7 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		fitResult.paramValues[1] = lambda * (1 - 1. / (n - 1)); // unbiased
 		fitResult.paramValues[2] = mu;
 
-		fitResult.errorValues[1] = lambda / qSqrt(n);
+		fitResult.errorValues[1] = lambda / std::sqrt(n);
 		// exact method
 		double margin = lambda * (1. - gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n));
 		fitResult.marginValues[1] = margin;
@@ -2005,14 +2004,14 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 
 		DEBUG("error = " << fitResult.errorValues.at(1))
 		DEBUG("CI: " << gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / (2. * n) * lambda << " .. " << gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / (2. * n) * lambda)
-		DEBUG("normal approx.: " << lambda * (1. - 1.96 / qSqrt(n)) << " .. " << lambda * (1. + 1.96 / qSqrt(n)))
-		DEBUG("1/l = " << 1. / fitResult.paramValues.t(1))
+		DEBUG("normal approx.: " << lambda * (1. - 1.96 / std::sqrt(n)) << " .. " << lambda * (1. + 1.96 / std::sqrt(n)))
+		DEBUG("1/l = " << 1. / fitResult.paramValues.at(1))
 		DEBUG("1/l CI: " << 2. * n / gsl_cdf_chisq_Pinv(1. - alpha / 2., 2 * n) / lambda << " .. " << 2. * n / gsl_cdf_chisq_Pinv(alpha / 2., 2 * n) / lambda)
-		DEBUG("1/l normal approx.: " << 1. / lambda / (1. + 1.96 / qSqrt(n)) << " .. " << 1. / lambda / (1. - 1.96 / qSqrt(n)))
+		DEBUG("1/l normal approx.: " << 1. / lambda / (1. + 1.96 / std::sqrt(n)) << " .. " << 1. / lambda / (1. - 1.96 / std::sqrt(n)))
 
 		// normalization for spreadsheet or curve
 		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
-			fitResult.paramValues[0] /= exp(-lambda * (tmpXDataColumn->minimum() - mu)) - exp(-lambda * (tmpXDataColumn->maximum() - mu));
+			fitResult.paramValues[0] /= std::exp(-lambda * (tmpXDataColumn->minimum() - mu)) - std::exp(-lambda * (tmpXDataColumn->maximum() - mu));
 		break;
 	}
 	case nsl_sf_stats_laplace: {
@@ -2030,13 +2029,13 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 			double Fmin, Fmax;
 			const double xmin = tmpXDataColumn->minimum(), xmax = tmpXDataColumn->maximum();
 			if (xmin < mu)
-				Fmin = .5 * exp((xmin - mu) / sigma);
+				Fmin = .5 * std::exp((xmin - mu) / sigma);
 			else
-				Fmin = 1. - .5 * exp(-(xmin - mu) / sigma);
+				Fmin = 1. - .5 * std::exp(-(xmin - mu) / sigma);
 			if (xmax < mu)
-				Fmax = .5 * exp((xmax - mu) / sigma);
+				Fmax = .5 * std::exp((xmax - mu) / sigma);
 			else
-				Fmax = 1. - .5 * exp(-(xmax - mu) / sigma);
+				Fmax = 1. - .5 * std::exp(-(xmax - mu) / sigma);
 
 			fitResult.paramValues[0] /= Fmax - Fmin;
 		}
@@ -2059,13 +2058,13 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		// calculate mu and sigma
 		double mu = 0.;
 		for (size_t i = 0; i < n; i++)
-			mu += qLn(tmpXDataColumn->valueAt(i));
+			mu += std::log(tmpXDataColumn->valueAt(i));
 		mu /= n;
 		double var = 0.;
 		for (size_t i = 0; i < n; i++)
-			var += gsl_pow_2(qLn(tmpXDataColumn->valueAt(i)) - mu);
+			var += gsl_pow_2(std::log(tmpXDataColumn->valueAt(i)) - mu);
 		var /= (n - 1);
-		const double sigma = qSqrt(var);
+		const double sigma = std::sqrt(var);
 		fitResult.paramValues[1] = sigma;
 		fitResult.paramValues[2] = mu;
 
@@ -2073,14 +2072,14 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 
 		// normalization for spreadsheet or curve
 		if (dataSourceType != XYAnalysisCurve::DataSourceType::Histogram)
-			fitResult.paramValues[0] /=
-				gsl_sf_erf((qLn(tmpXDataColumn->maximum()) - mu) / sigma) - gsl_sf_erf((qLn(tmpXDataColumn->minimum()) - mu) / sigma) / (2. * qSqrt(2.));
+			fitResult.paramValues[0] /= gsl_sf_erf((std::log(tmpXDataColumn->maximum()) - mu) / sigma)
+				- gsl_sf_erf((std::log(tmpXDataColumn->minimum()) - mu) / sigma) / (2. * std::sqrt(2.));
 		break;
 	}
 	case nsl_sf_stats_poisson: {
 		const double lambda = tmpXDataColumn->mean();
 		fitResult.paramValues[1] = lambda;
-		fitResult.errorValues[1] = qSqrt(lambda / n);
+		fitResult.errorValues[1] = std::sqrt(lambda / n);
 
 		// double margin = 1.96 * fitResult.errorValues[1];	// normal approx.
 		// DEBUG("low / high = " << nsl_stats_chisq_low(alpha, n * lambda) << ", " << nsl_stats_chisq_high(alpha, n * lambda)) // exact formula
@@ -2098,13 +2097,13 @@ void XYFitCurvePrivate::runMaximumLikelihood(const AbstractColumn* tmpXDataColum
 		const double p = tmpXDataColumn->mean() / n;
 		fitResult.paramValues[1] = p;
 		fitResult.paramValues[2] = n;
-		fitResult.errorValues[1] = qSqrt(p * (1 - p) / n);
+		fitResult.errorValues[1] = std::sqrt(p * (1 - p) / n);
 
 		// Clopper-Pearson exact method
 		const double k = p * n;
-		fitResult.marginValues[1] = (p - gsl_cdf_beta_Pinv(alpha / 2., k, n - k + 1)) / qSqrt(n);
+		fitResult.marginValues[1] = (p - gsl_cdf_beta_Pinv(alpha / 2., k, n - k + 1)) / std::sqrt(n);
 		fitResult.margin2Values.resize(2);
-		fitResult.margin2Values[1] = (gsl_cdf_beta_Pinv(1. - alpha / 2., k + 1, n - k) - p) / qSqrt(n);
+		fitResult.margin2Values[1] = (gsl_cdf_beta_Pinv(1. - alpha / 2., k + 1, n - k) - p) / std::sqrt(n);
 
 		// normalization for spreadsheet or curve
 		const double kmin = tmpXDataColumn->minimum(), kmax = tmpXDataColumn->maximum();
@@ -2152,13 +2151,13 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 
 	// logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
 	// TODO: decide how to deal with non-numerical error columns
-	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// omit invalid data
 		if (!tmpXDataColumn->isValid(row) || tmpXDataColumn->isMasked(row) || !tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
 			continue;
 
-		double x = qQNaN();
+		double x = NAN;
 		switch (tmpXDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
@@ -2173,7 +2172,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		double y = qQNaN();
+		double y = NAN;
 		switch (tmpYDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
@@ -2262,7 +2261,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	case nsl_fit_weight_instrumental: // yerror are sigmas
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1. / gsl_pow_2(qMax(yerror[i], qMax(sqrt(minError), std::abs(ydata[i]) * 1.e-15)));
+				weight[i] = 1. / gsl_pow_2(std::max(yerror[i], std::max(sqrt(minError), std::abs(ydata[i]) * 1.e-15)));
 		break;
 	case nsl_fit_weight_direct: // yerror are weights
 		for (int i = 0; i < (int)n; i++)
@@ -2272,15 +2271,15 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 	case nsl_fit_weight_inverse: // yerror are inverse weights
 		for (int i = 0; i < (int)n; i++)
 			if (i < yerrorVector.size())
-				weight[i] = 1. / qMax(yerror[i], qMax(minError, std::abs(ydata[i]) * 1.e-15));
+				weight[i] = 1. / std::max(yerror[i], std::max(minError, std::abs(ydata[i]) * 1.e-15));
 		break;
 	case nsl_fit_weight_statistical:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1. / qMax(ydata[i], minError);
+			weight[i] = 1. / std::max(ydata[i], minError);
 		break;
 	case nsl_fit_weight_relative:
 		for (int i = 0; i < (int)n; i++)
-			weight[i] = 1. / qMax(gsl_pow_2(ydata[i]), minError);
+			weight[i] = 1. / std::max(gsl_pow_2(ydata[i]), minError);
 		break;
 	}
 
@@ -2408,7 +2407,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 				case nsl_fit_weight_no:
 					break;
 				case nsl_fit_weight_direct: // xerror = w_x
-					sigmasq = df * df / qMax(xerror[i], minError);
+					sigmasq = df * df / std::max(xerror[i], minError);
 					break;
 				case nsl_fit_weight_instrumental: // xerror = s_x
 					sigmasq = df * df * xerror[i] * xerror[i];
@@ -2432,7 +2431,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 					case nsl_fit_weight_no:
 						break;
 					case nsl_fit_weight_direct: // yerror = w_y
-						sigmasq += 1. / qMax(yerror[i], minError);
+						sigmasq += 1. / std::max(yerror[i], minError);
 						break;
 					case nsl_fit_weight_instrumental: // yerror = s_y
 						sigmasq += yerror[i] * yerror[i];
@@ -2453,7 +2452,7 @@ void XYFitCurvePrivate::runLevenbergMarquardt(const AbstractColumn* tmpXDataColu
 				}
 
 				// printf ("sigma[%d] = %g\n", i, sqrt(sigmasq));
-				weight[i] = 1. / qMax(sigmasq, minError);
+				weight[i] = 1. / std::max(sigmasq, minError);
 			}
 
 			// update weights

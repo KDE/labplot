@@ -14,7 +14,10 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include "backend/lib/macros.h"
+
 #include <KLocalizedString>
+
+#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd
@@ -621,7 +624,7 @@ void ColumnClearCmd::redo() {
 			auto* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)
-				vec->operator[](i) = qQNaN();
+				vec->operator[](i) = NAN;
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {

@@ -20,6 +20,8 @@
 #include <QDateTime>
 #include <QIcon>
 
+#include <cmath>
+
 /**
  * \class AbstractColumn
  * \brief Interface definition for data with column logic
@@ -383,7 +385,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		double value = valueAt(row);
-		return !(qIsNaN(value) || qIsInf(value));
+		return std::isfinite(value);
 	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
@@ -636,7 +638,7 @@ double AbstractColumn::doubleAt(int /*row*/) const {
  * Integer and big integer values are converted to double, NAN is returned for other modes.
  */
 double AbstractColumn::valueAt(int /*row*/) const {
-	return qQNaN();
+	return NAN;
 }
 
 /**
@@ -715,35 +717,35 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return qInf();
+	return INFINITY;
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return qInf();
+	return INFINITY;
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return -qInf();
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return -qInf();
+	return -INFINITY;
 }
 
 double AbstractColumn::mean() const {
-	return qQNaN();
+	return NAN;
 }
 double AbstractColumn::median() const {
-	return qQNaN();
+	return NAN;
 }
 double AbstractColumn::var() const {
-	return qQNaN();
+	return NAN;
 }
 double AbstractColumn::madmed() const {
-	return qQNaN();
+	return NAN;
 }
 double AbstractColumn::iqr() const {
-	return qQNaN();
+	return NAN;
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {

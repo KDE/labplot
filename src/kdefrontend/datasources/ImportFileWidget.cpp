@@ -1595,7 +1595,7 @@ void ImportFileWidget::refreshPreview() {
 		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(file));
 		importedStrings = filter->previewCurrentObject(file,
 													   m_rootOptionsWidget->startRow(),
-													   qMin(m_rootOptionsWidget->startRow() + lines - 1, m_rootOptionsWidget->endRow()));
+													   std::min(m_rootOptionsWidget->startRow() + lines - 1, m_rootOptionsWidget->endRow()));
 		tmpTableWidget = m_rootOptionsWidget->previewWidget();
 		// the last vector element contains the column names
 		vectorNameList = importedStrings.last();
@@ -1662,7 +1662,7 @@ void ImportFileWidget::refreshPreview() {
 			item->setText(importedStrings[0][0]);
 			tmpTableWidget->setItem(0, 0, item);
 		} else {
-			const int rows = qMax(importedStrings.size(), 1);
+			const int rows = std::max(importedStrings.size(), 1);
 			const int maxColumns = 300;
 			tmpTableWidget->setRowCount(rows);
 
@@ -1680,7 +1680,7 @@ void ImportFileWidget::refreshPreview() {
 			// Excel has special h/vheader, don't overwrite the preview table
 			if (fileType != AbstractFileFilter::FileType::Excel) {
 				// set header if columnMode available
-				for (int i = 0; i < qMin(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
+				for (int i = 0; i < std::min(tmpTableWidget->columnCount(), columnModes.size()); ++i) {
 					QString columnName = QString::number(i + 1);
 					if (i < vectorNameList.size())
 						columnName = vectorNameList[i];

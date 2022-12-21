@@ -856,7 +856,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		case nsl_fit_model_polynomial:
 			uiGeneralTab.lDegree->setVisible(true);
 			uiGeneralTab.sbDegree->setVisible(true);
-			uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount - 1, 10));
+			uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount - 1, 10));
 			break;
 		case nsl_fit_model_fourier:
 			if (availableRowCount < 4) { // too few data points
@@ -866,7 +866,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 			} else {
 				uiGeneralTab.lDegree->setVisible(true);
 				uiGeneralTab.sbDegree->setVisible(true);
-				uiGeneralTab.sbDegree->setMaximum(qMin(availableRowCount / 2 - 1, 10));
+				uiGeneralTab.sbDegree->setMaximum(std::min(availableRowCount / 2 - 1, 10));
 			}
 			break;
 		case nsl_fit_model_power:

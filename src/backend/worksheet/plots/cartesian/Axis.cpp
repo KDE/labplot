@@ -388,9 +388,9 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-		ratio = qMax(horizontalRatio, verticalRatio);
+		ratio = std::max(horizontalRatio, verticalRatio);
 	else
-		ratio = qMin(horizontalRatio, verticalRatio);
+		ratio = std::min(horizontalRatio, verticalRatio);
 
 	double width = d->line->width() * ratio;
 	d->line->setWidth(width);
@@ -1189,10 +1189,10 @@ void AxisPrivate::retransformLine() {
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 
 			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
+				// std::max/std::min: stay inside rect()
 				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(qMax(sceneRange.at(0).x1(), rect.x()), pos.y());
-				endPoint = QPointF(qMin(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
+				startPoint = QPointF(std::max(sceneRange.at(0).x1(), rect.x()), pos.y());
+				endPoint = QPointF(std::min(sceneRange.at(0).x2(), rect.x() + rect.width()), pos.y());
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
@@ -1222,10 +1222,10 @@ void AxisPrivate::retransformLine() {
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
-				// qMax/qMin: stay inside rect()
+				// std::max/std::min: stay inside rect()
 				QRectF rect = q->m_plot->dataRect();
-				startPoint = QPointF(pos.x(), qMin(sceneRange.at(0).y1(), rect.y() + rect.height()));
-				endPoint = QPointF(pos.x(), qMax(sceneRange.at(0).y2(), rect.y()));
+				startPoint = QPointF(pos.x(), std::min(sceneRange.at(0).y1(), rect.y() + rect.height()));
+				endPoint = QPointF(pos.x(), std::max(sceneRange.at(0).y2(), rect.y()));
 
 				lines.append(QLineF(startPoint, endPoint));
 				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
@@ -1435,7 +1435,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				majorTicksIncrement = qSqrt(end) - qSqrt(start);
+				majorTicksIncrement = std::sqrt(end) - std::sqrt(start);
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end * end - start * start;
@@ -1455,30 +1455,30 @@ void AxisPrivate::retransformTicks() {
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
 		switch (scale) {
 		case RangeT::Scale::Linear:
-			tmpMajorTicksNumber = qRound(range.size() / majorTicksIncrement + 1);
+			tmpMajorTicksNumber = std::round(range.size() / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Log10:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(log10(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(log10(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Log2:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(log2(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(log2(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Ln:
 			if (start != 0. && end / start > 0.)
-				tmpMajorTicksNumber = qRound(qLn(end / start) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round(std::log(end / start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = qRound((qSqrt(end) - qSqrt(start)) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((std::sqrt(end) - std::sqrt(start)) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Square:
-			tmpMajorTicksNumber = qRound((end * end - start * start) / majorTicksIncrement + 1);
+			tmpMajorTicksNumber = std::round((end * end - start * start) / majorTicksIncrement + 1);
 			break;
 		case RangeT::Scale::Inverse:
 			if (start != 0. && end != 0.)
-				tmpMajorTicksNumber = qRound((1. / start - 1. / end) / majorTicksIncrement + 1);
+				tmpMajorTicksNumber = std::round((1. / start - 1. / end) / majorTicksIncrement + 1);
 			break;
 		}
 		break;
@@ -1546,29 +1546,29 @@ void AxisPrivate::retransformTicks() {
 			case RangeT::Scale::Linear:
 				//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
-				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
+				if (std::abs(majorTickPos) < 1.e-15 * majorTicksIncrement) // avoid rounding errors when close to zero
 					majorTickPos = 0;
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
-				majorTickPos = start * qPow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * qPow(10, majorTicksIncrement);
+				majorTickPos = start * std::pow(10, majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * std::pow(10, majorTicksIncrement);
 				break;
 			case RangeT::Scale::Log2:
-				majorTickPos = start * exp2(majorTicksIncrement * iMajor);
+				majorTickPos = start * std::exp2(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Ln:
-				majorTickPos = start * qExp(majorTicksIncrement * iMajor);
+				majorTickPos = start * std::exp(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Sqrt:
-				majorTickPos = qPow(qSqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = qPow(qSqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
+				majorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = std::pow(std::sqrt(start) + majorTicksIncrement * (iMajor + 1), 2);
 				break;
 			case RangeT::Scale::Square:
-				majorTickPos = qSqrt(start * start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = qSqrt(start * start + majorTicksIncrement * (iMajor + 1));
+				majorTickPos = std::sqrt(start * start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = std::sqrt(start * start + majorTicksIncrement * (iMajor + 1));
 				break;
 			case RangeT::Scale::Inverse:
 				majorTickPos = 1. / (1. / start + majorTicksIncrement * iMajor);
@@ -1768,7 +1768,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		bool largeValue = false;
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values if at least one is
-			if (qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4)) {
+			if (std::abs(value) > 1.e4 || (std::abs(value) > 1.e-16 && std::abs(value) < 1e-4)) {
 				largeValue = true;
 				break;
 			}
@@ -1837,7 +1837,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : qAsConst(tickLabelValues)) {
 				// toString() does not round: use NSL function
 				if (RangeT::isLogScale(scale)) // don't use same precision for all label on log scales
-					str = numberLocale.toString(value, 'f', qMax(labelsPrecision, nsl_math_decimal_places(value) + 1));
+					str = numberLocale.toString(value, 'f', std::max(labelsPrecision, nsl_math_decimal_places(value) + 1));
 				else
 					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == QLatin1String("-") + nullStr)
@@ -1870,7 +1870,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0) // just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = QStringLiteral("10<sup>") + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+					str = QStringLiteral("10<sup>")
+						+ numberLocale.toString(nsl_math_round_places(log10(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
 						+ QStringLiteral("</sup>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -1886,7 +1887,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("2<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision)
+						+ numberLocale.toString(nsl_math_round_places(log2(std::abs(value)), labelsPrecision), 'f', labelsPrecision)
 						+ QStringLiteral("</spanlabelsPrecision)>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
@@ -1902,7 +1903,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 					str = numberLocale.toString(value, 'f', 0);
 				else {
 					str = QStringLiteral("e<span style=\"vertical-align:super\">")
-						+ numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
+						+ numberLocale.toString(nsl_math_round_places(log(std::abs(value)), labelsPrecision), 'f', labelsPrecision) + QStringLiteral("</span>");
 					if (value < 0)
 						str.prepend(QLatin1Char('-'));
 				}
@@ -1933,8 +1934,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				else {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
-					if (qAbs(value) < 100. && qAbs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', qMax(labelsPrecision - e, 0));
+					if (std::abs(value) < 100. && std::abs(value) > .01) // use normal notation for values near 1, precision reduced by exponent but >= 0
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', std::max(labelsPrecision - e, 0));
 					else {
 						// DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						//  only round fraction
@@ -2016,8 +2017,8 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log10(DBL_MIN));
 			else {
-				// DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(qAbs(value)), precision))
-				tempValues.append(nsl_math_round_places(log10(qAbs(value)), precision));
+				// DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(std::abs(value)), precision))
+				tempValues.append(nsl_math_round_places(log10(std::abs(value)), precision));
 			}
 		}
 		break;
@@ -2026,7 +2027,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log2(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log2(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log2(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::PowersE:
@@ -2034,12 +2035,12 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log(std::abs(value)), precision));
 		}
 	}
 	// QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
-	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 	DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
@@ -2049,19 +2050,19 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -2122,7 +2123,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log10(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log10(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log10(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::Powers2:
@@ -2130,7 +2131,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log2(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log2(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log2(std::abs(value)), precision));
 		}
 		break;
 	case Axis::LabelsFormat::PowersE:
@@ -2138,14 +2139,14 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log(DBL_MIN));
 			else
-				tempValues.append(nsl_math_round_places(log(qAbs(value)), precision));
+				tempValues.append(nsl_math_round_places(log(std::abs(value)), precision));
 		}
 	}
 	// QDEBUG(Q_FUNC_INFO << ", rounded values = " << tempValues)
 
 	// check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the previous value
-	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 	// DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// return if rounded value differs too much
@@ -2154,19 +2155,19 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		case Axis::LabelsFormat::Decimal:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
-			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::MultipliesPi:
-			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
-			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::PowersE:
-			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = std::abs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 		}
 		// DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 
@@ -2217,10 +2218,10 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	const double cosine = qCos(qDegreesToRadians(labelsRotationAngle)); // calculate only once
-	const double sine = qSin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
+	const double cosine = std::cos(qDegreesToRadians(labelsRotationAngle)); // calculate only once
+	const double sine = std::sin(qDegreesToRadians(labelsRotationAngle)); // calculate only once
 
-	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
+	int size = std::min(majorTickPoints.size(), tickLabelStrings.size());
 	auto xRangeFormat{plot()->range(Dimension::X, cs->index(Dimension::X)).format()};
 	auto yRangeFormat{plot()->range(Dimension::Y, cs->index(Dimension::Y)).format()};
 	for (int i = 0; i < size; i++) {
@@ -2259,7 +2260,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			if (std::abs(std::abs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + width / 2);
 					pos.setY(endPoint.y() + labelsOffset);
@@ -2301,7 +2302,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
 			}
 
-			if (qAbs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
+			if (std::abs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width / 2);
@@ -2309,7 +2310,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + width / 2);
 				}
-			} else if (qAbs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
+			} else if (std::abs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width / 2);
@@ -2317,7 +2318,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() - width / 2);
 				}
-			} else if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			} else if (std::abs(std::abs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height / 2);
@@ -2325,7 +2326,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + width);
 					pos.setY(startPoint.y() - height / 2);
 				}
-			} else if (qAbs(labelsRotationAngle) >= 0.01 && qAbs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
+			} else if (std::abs(labelsRotationAngle) >= 0.01 && std::abs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height / 2);
@@ -2334,7 +2335,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + sine * height / 2);
 					pos.setY(startPoint.y() + cosine * height / 2);
 				}
-			} else if (qAbs(labelsRotationAngle) >= 90.01 && qAbs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
+			} else if (std::abs(labelsRotationAngle) >= 90.01 && std::abs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset + sine * height / 2);

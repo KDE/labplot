@@ -346,7 +346,7 @@ double Histogram::minimum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMinimum();
 	}
-	return qQNaN();
+	return NAN;
 }
 
 double Histogram::maximum(const Dimension dim) const {
@@ -357,7 +357,7 @@ double Histogram::maximum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMaximum();
 	}
-	return qQNaN();
+	return NAN;
 }
 
 const AbstractColumn* Histogram::bins() const {
@@ -652,7 +652,7 @@ QRectF HistogramPrivate::boundingRect() const {
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
-		double yMaxRange = -qInf();
+		double yMaxRange = -INFINITY;
 		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
@@ -698,7 +698,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 		return yMaxRange;
 	}
 
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::xMinimum() const {
@@ -708,7 +708,7 @@ double HistogramPrivate::xMinimum() const {
 	case Histogram::Horizontal:
 		return 0;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::xMaximum() const {
@@ -718,7 +718,7 @@ double HistogramPrivate::xMaximum() const {
 	case Histogram::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::yMinimum() const {
@@ -728,7 +728,7 @@ double HistogramPrivate::yMinimum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::yMaximum() const {
@@ -738,7 +738,7 @@ double HistogramPrivate::yMaximum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return -qInf();
+	return -INFINITY;
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
@@ -1257,7 +1257,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))

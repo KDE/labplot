@@ -160,7 +160,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		xmax = filterData.xRange.last();
 	}
 
-	int rowCount = qMin(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
+	int rowCount = std::min(tmpXDataColumn->rowCount(), tmpYDataColumn->rowCount());
 	const bool xNumeric = tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::BigInt
 		|| tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::Double || tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::Integer;
 	const bool xDateTime = tmpXDataColumn->columnMode() == AbstractColumn::ColumnMode::DateTime;

@@ -2376,8 +2376,8 @@ void ColumnPrivate::calculateStatistics() {
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
 	double columnSumSquare = 0.0;
-	statistics.minimum = qInf();
-	statistics.maximum = -qInf();
+	statistics.minimum = INFINITY;
+	statistics.maximum = -INFINITY;
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
 	rowData.reserve(rowValuesSize);
@@ -2419,7 +2419,7 @@ void ColumnPrivate::calculateStatistics() {
 
 	// geometric mean
 	if (statistics.minimum <= -100.) // invalid
-		statistics.geometricMean = qQNaN();
+		statistics.geometricMean = NAN;
 	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
 		columnProduct = 1.; // recalculate
 		for (auto val : rowData)

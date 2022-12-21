@@ -15,13 +15,15 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KWindowConfig>
+
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KWindowConfig>
+#include <cmath>
 
 /*!
 	\class AddSubtractValueDialog
@@ -193,7 +195,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
-			if (!qIsNaN(value)) {
+			if (std::isfinite(value)) {
 				const auto str = numberLocale.toString(column->valueAt(row), 'g', 16);
 				ui.leValue->setText(str);
 				ui.leValueStart->setText(str);

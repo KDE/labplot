@@ -2414,7 +2414,7 @@ void WorksheetView::print(QPrinter* printer) {
 	// draw background
 	const auto& page_rect = printer->pageLayout().paintRectPixels(printer->resolution());
 	const auto& scene_rect = scene()->sceneRect();
-	float scale = qMax(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
+	float scale = std::max(scene_rect.width() / page_rect.width(), scene_rect.height() / page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0, 0, scene_rect.width() / scale, scene_rect.height() / scale));
 
 	// draw scene
@@ -2746,7 +2746,7 @@ void WorksheetView::presenterMode() {
 	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
-		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
+		const double ratio = std::min(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());
 		targetRect.setWidth(targetRect.width() * ratio);
 		targetRect.setHeight(targetRect.height() * ratio);
 	}

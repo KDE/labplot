@@ -13,14 +13,16 @@
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
 #include "tools/ColorMapsManager.h"
 
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
+
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QPushButton>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KWindowConfig>
+#include <cmath>
 
 /*!
 	\class FormattingHeatmapDialog
@@ -96,8 +98,8 @@ FormattingHeatmapDialog::~FormattingHeatmapDialog() {
 void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
-	double min = qInf();
-	double max = -qInf();
+	double min = INFINITY;
+	double max = -INFINITY;
 	bool formatShown = false;
 	bool hasNumeric = false;
 	for (const auto* col : qAsConst(m_columns)) {

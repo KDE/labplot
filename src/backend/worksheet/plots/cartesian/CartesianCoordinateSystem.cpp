@@ -235,8 +235,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex,
 				// DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					// TODO: check
-					const int indexX = qRound((x - xPage) / minLogicalDiffX);
-					const int indexY = qRound((y - yPage) / minLogicalDiffY);
+					const int indexX = std::round((x - xPage) / minLogicalDiffX);
+					const int indexY = std::round((y - yPage) / minLogicalDiffY);
 					if (scenePointsUsed.at(indexX).at(indexY))
 						continue;
 
@@ -312,9 +312,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
 	double xGapBefore;
-	double xGapAfter = qQNaN();
+	double xGapAfter = NAN;
 	double yGapBefore;
-	double yGapAfter = qQNaN();
+	double yGapAfter = NAN;
 
 	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
@@ -341,9 +341,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 			if (valid)
 				xGapAfter = x2 - x1;
 			else
-				xGapAfter = qQNaN();
+				xGapAfter = NAN;
 		} else
-			xGapAfter = qQNaN();
+			xGapAfter = NAN;
 
 		QVectorIterator<CartesianScale*> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
@@ -366,9 +366,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				if (valid)
 					yGapAfter = y2 - y1;
 				else
-					yGapAfter = qQNaN();
+					yGapAfter = NAN;
 			} else
-				yGapAfter = qQNaN();
+				yGapAfter = NAN;
 
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(), xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 

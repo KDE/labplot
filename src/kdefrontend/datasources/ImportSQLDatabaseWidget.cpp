@@ -14,12 +14,6 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/lib/macros.h"
 
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QStandardItem>
-#include <QTimer>
-
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -30,6 +24,14 @@
 #include <KSyntaxHighlighting/SyntaxHighlighter>
 #include <KSyntaxHighlighting/Theme>
 #endif
+
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QStandardItem>
+#include <QTimer>
+
+#include <cmath>
 
 ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent)
 	: QWidget(parent) {
@@ -483,19 +485,19 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
-				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
+				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
 			case AbstractColumn::ColumnMode::Integer: {
 				bool isNumber;
 				const int value = numberFormat.toInt(valueString, &isNumber);
-				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
+				static_cast<QVector<int>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
 			case AbstractColumn::ColumnMode::BigInt: {
 				bool isNumber;
 				const qint64 value = numberFormat.toLongLong(valueString, &isNumber);
-				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = (isNumber ? value : qQNaN());
+				static_cast<QVector<qint64>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);
 				break;
 			}
 			case AbstractColumn::ColumnMode::DateTime: {

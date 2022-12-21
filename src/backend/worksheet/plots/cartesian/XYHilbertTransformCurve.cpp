@@ -142,7 +142,7 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 		xmax = transformData.xRange.last();
 	}
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
 	DEBUG(Q_FUNC_INFO << ", row count = " << rowCount)
 	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << xmin << '/' << xmax)
 	for (int row = 0; row < rowCount; ++row) {

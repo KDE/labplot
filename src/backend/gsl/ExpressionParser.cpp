@@ -1725,7 +1725,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					tmpExpr.replace(rxcell.cap(0), replace);
 					pos++; // avoid endless loop
 				} else
-					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(qQNaN()));
+					tmpExpr.replace(rxcell.cap(0), numberLocale.toString(NAN));
 			}
 
 			// if expr contains smmin(N, x)
@@ -1741,8 +1741,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				if (N < 1)
 					continue;
 				// calculate min of last n points
-				double min = qInf();
-				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+				double min = INFINITY;
+				for (int index = std::max(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
 					if (v < min)
 						min = v;
@@ -1763,8 +1763,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 				if (N < 1)
 					continue;
 				// calculate max of last n points
-				double max = -qInf();
-				for (int index = qMax(0, i - N + 1); index <= i; index++) {
+				double max = -INFINITY;
+				for (int index = std::max(0, i - N + 1); index <= i; index++) {
 					const double v = xVectors.at(n)->at(index);
 					if (v > max)
 						max = v;
@@ -1786,7 +1786,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 					continue;
 				// calculate avg of last n points
 				double sum = 0.;
-				for (int index = qMax(0, i - N + 1); index <= i; index++)
+				for (int index = std::max(0, i - N + 1); index <= i; index++)
 					sum += xVectors.at(n)->at(index);
 
 				tmpExpr.replace(rxsma.cap(0), numberLocale.toString(sum / N));
@@ -1819,7 +1819,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 	// if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = qQNaN();
+		(*yVector)[i] = NAN;
 
 	return true;
 }

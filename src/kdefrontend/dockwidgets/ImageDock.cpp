@@ -422,7 +422,7 @@ void ImageDock::borderWidthChanged(double value) {
 void ImageDock::borderOpacityChanged(int value) {
 	CONDITIONAL_LOCK_RETURN;
 
-	qreal opacity = (float)value / 100.;
+	qreal opacity = value / 100.;
 	for (auto* image : m_imageList)
 		image->setBorderOpacity(opacity);
 }
@@ -442,7 +442,7 @@ void ImageDock::imageEmbeddedChanged(bool keep) {
 
 void ImageDock::imageOpacityChanged(float opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(qRound(opacity * 100.0));
+	ui.sbOpacity->setValue(std::round(opacity * 100));
 }
 
 // Size

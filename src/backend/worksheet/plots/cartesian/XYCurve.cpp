@@ -1119,10 +1119,10 @@ void XYCurvePrivate::addLine(QPointF p,
 							 RangeT::Scale scale,
 							 bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = (qRound64(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
+		pixelDiff = (std::round(p.x() / minDiffX) - x) != 0; // only relevant if greater zero or not
 		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 		if (pixelDiff > 0) // set x to next pixel
-			x = qRound64(p.x() / minDiffX);
+			x = std::round(p.x() / minDiffX);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point
 		static const double preCalc = (double)plot()->dataRect().width() / numberOfPixelX;
@@ -1135,13 +1135,13 @@ void XYCurvePrivate::addLine(QPointF p,
 
 		// using only the difference between the points is not sufficient, because
 		// p0 is updated always independent if new line added or not
-		const int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+		const int p1Pixel = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
 		pixelDiff = p1Pixel - x;
 
 		addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines, prevPixelDiffZero);
 
 		if (pixelDiff > 0) // set x to next pixel
-			x = qRound((pScene.x() - plot()->dataRect().x()) / preCalc);
+			x = std::round((pScene.x() - plot()->dataRect().x()) / preCalc);
 	}
 }
 
@@ -1156,8 +1156,8 @@ void XYCurvePrivate::addLine(QPointF p,
  */
 void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines, bool& prevPixelDiffZero) {
 	if (pixelDiff == 0) {
-		maxY = qMax(p.y(), maxY);
-		minY = qMin(p.y(), minY);
+		maxY = std::max(p.y(), maxY);
+		minY = std::min(p.y(), minY);
 		prevPixelDiffZero = true;
 	} else {
 		if (prevPixelDiffZero) {
@@ -1266,7 +1266,7 @@ void XYCurvePrivate::updateLines() {
 			tempPoint2 = QPointF(xRange.start(), yRange.end());
 			m_lines.append(QLineF(tempPoint1, tempPoint2));
 		} else {
-			QPointF lastPoint{qQNaN(), qQNaN()}; // last x value
+			QPointF lastPoint{NAN, NAN}; // last x value
 			int pixelDiff = 0;
 			bool prevPixelDiffZero = false;
 			double minY{INFINITY}, maxY{-INFINITY};
@@ -1296,7 +1296,7 @@ void XYCurvePrivate::updateLines() {
 				if (lineType != XYCurve::LineType::SplineCubicNatural && lineType != XYCurve::LineType::SplineCubicPeriodic
 					&& lineType != XYCurve::LineType::SplineAkimaNatural && lineType != XYCurve::LineType::SplineAkimaPeriodic) {
 					if (scale == RangeT::Scale::Linear) {
-						xPos = qRound64(p0.x() / minDiffX);
+						xPos = std::round(p0.x() / minDiffX);
 						lastPoint = p0;
 						minY = p0.y();
 						maxY = p0.y();
@@ -1305,7 +1305,7 @@ void XYCurvePrivate::updateLines() {
 						QPointF pScene = q->cSystem->mapLogicalToScene(p0, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 						if (!visible)
 							continue;
-						xPos = qRound((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
+						xPos = std::round((pScene.x() - plot()->dataRect().x()) / ((double)plot()->dataRect().width() * numberOfPixelX));
 						lastPoint = p0;
 					}
 				}
@@ -1897,7 +1897,7 @@ void XYCurvePrivate::updateValues() {
 			return;
 		}
 
-		const int endRow{qMin(qMin(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
+		const int endRow{std::min(std::min(xColumn->rowCount(), yColumn->rowCount()), valuesColumn->rowCount())};
 		auto xColMode{xColumn->columnMode()};
 		auto vColMode{valuesColumn->columnMode()};
 
@@ -2281,13 +2281,13 @@ void XYCurvePrivate::updateFilling() {
 double XYCurve::y(double x, bool& valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	valueFound = true;
@@ -2295,7 +2295,7 @@ double XYCurve::y(double x, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 }
 
@@ -2309,7 +2309,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
@@ -2321,7 +2321,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 
 	valueFound = true;
@@ -2329,7 +2329,7 @@ double XYCurve::y(double x, double& x_new, bool& valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return qQNaN();
+		return NAN;
 	}
 }
 
@@ -2414,7 +2414,7 @@ bool XYCurve::minMax(const AbstractColumn* column1,
 	if (column1->rowCount() == 0)
 		return false;
 
-	range.setRange(qInf(), -qInf());
+	range.setRange(INFINITY, -INFINITY);
 	// DEBUG(Q_FUNC_INFO << ", calculate range for index range " << indexRange.start() << " .. " << indexRange.end())
 
 	for (int i = indexRange.start(); i <= indexRange.end(); ++i) {

@@ -97,9 +97,9 @@ void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, b
 
 	// 	double ratio = 0;
 	// 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-	// 		ratio = qMax(horizontalRatio, verticalRatio);
+	// 		ratio = std::max(horizontalRatio, verticalRatio);
 	// 	else
-	// 		ratio = qMin(horizontalRatio, verticalRatio);
+	// 		ratio = std::min(horizontalRatio, verticalRatio);
 }
 
 /*!

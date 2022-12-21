@@ -19,8 +19,8 @@
 
 #include <QFileInfo>
 #include <QStack>
-#include <QtMath>
 
+#include <cmath>
 #include <fstream>
 
 #ifdef HAVE_ZIP
@@ -215,8 +215,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		const int nbins = static_cast<int>(bins.size());
 
 		// skip underflow and overflow bins by default
-		int first = qMax(qAbs(startRow), 0);
-		int last = endRow < 0 ? nbins - 1 : qMax(first - 1, qMin(endRow, nbins - 1));
+		int first = std::max(std::abs(startRow), 0);
+		int last = endRow < 0 ? nbins - 1 : std::max(first - 1, std::min(endRow, nbins - 1));
 
 		DEBUG("first/last = " << first << " " << last)
 
@@ -262,7 +262,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 				if (spreadsheet)
 					spreadsheet->column(columnOffset + c)->setPlotDesignation(AbstractColumn::PlotDesignation::YError);
 				for (int i = first; i <= last; ++i)
-					container[i - first] = qSqrt(bins[i].sumw2);
+					container[i - first] = std::sqrt(bins[i].sumw2);
 			}
 			++c;
 		}
@@ -271,8 +271,8 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	} else if (type == FileType::Tree) {
 		const int nentries = static_cast<int>(currentROOTData->treeEntries(pos));
 
-		int first = qMax(qAbs(startRow), 0);
-		int last = qMax(first - 1, qMin(endRow, nentries - 1));
+		int first = std::max(std::abs(startRow), 0);
+		int last = std::max(first - 1, std::min(endRow, nentries - 1));
 
 		DEBUG("first/last = " << first << " " << last << ", nentries = " << nentries)
 
@@ -409,9 +409,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 		auto bins = readHistogram(pos);
 		const int nbins = static_cast<int>(bins.size());
 
-		last = qMin(nbins - 1, last);
+		last = std::min(nbins - 1, last);
 
-		QVector<QStringList> preview(qMax(last - first + 2, 1));
+		QVector<QStringList> preview(std::max(last - first + 2, 1));
 		DEBUG("	reading " << preview.size() - 1 << " lines");
 
 		// set headers
@@ -440,9 +440,9 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 
 		return preview;
 	} else if (type == FileType::Tree) {
-		last = qMin(last, currentROOTData->treeEntries(pos) - 1);
+		last = std::min(last, currentROOTData->treeEntries(pos) - 1);
 
-		QVector<QStringList> preview(qMax(last - first + 2, 1));
+		QVector<QStringList> preview(std::max(last - first + 2, 1));
 		DEBUG("	reading " << preview.size() - 1 << " lines");
 
 		// read data leaf by leaf and set headers

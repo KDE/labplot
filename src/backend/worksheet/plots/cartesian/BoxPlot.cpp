@@ -861,7 +861,7 @@ void BoxPlotPrivate::recalc() {
 	}
 
 	if (variableWidth) {
-		m_widthScaleFactor = -qInf();
+		m_widthScaleFactor = -INFINITY;
 		for (const auto* col : dataColumns) {
 			auto* column = static_cast<const Column*>(col);
 			if (column->statistics().size > m_widthScaleFactor)
@@ -1025,8 +1025,8 @@ void BoxPlotPrivate::recalc(int index) {
 			xMin = m_whiskerMin[index];
 	}
 
-	double whiskerMax = -qInf(); // upper adjacent value
-	double whiskerMin = qInf(); // lower adjacent value
+	double whiskerMax = -INFINITY; // upper adjacent value
+	double whiskerMin = INFINITY; // lower adjacent value
 	const double outerFenceMax = statistics.thirdQuartile + 3.0 * statistics.iqr;
 	const double outerFenceMin = statistics.firstQuartile - 3.0 * statistics.iqr;
 
@@ -1078,9 +1078,9 @@ void BoxPlotPrivate::recalc(int index) {
 
 	// set the whisker ends at the upper and lower adjacent values
 	if (whiskersType == BoxPlot::WhiskersType::IQR) {
-		if (whiskerMax != -qInf())
+		if (whiskerMax != -INFINITY)
 			m_whiskerMax[index] = whiskerMax;
-		if (whiskerMin != qInf())
+		if (whiskerMin != INFINITY)
 			m_whiskerMin[index] = whiskerMin;
 	}
 }

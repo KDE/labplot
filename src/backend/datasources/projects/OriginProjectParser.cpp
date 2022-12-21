@@ -741,7 +741,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		}
 		case Origin::Text:
 			col->setColumnMode(AbstractColumn::ColumnMode::Text);
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setTextAt(i, QLatin1String(column.data[i].as_string()));
 			break;
 		case Origin::Time: {
@@ -781,7 +781,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -842,7 +842,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				format = QStringLiteral("dd.MM.yyyy");
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
@@ -863,7 +863,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
@@ -884,7 +884,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				break;
 			}
 
-			for (int i = 0; i < qMin((int)column.data.size(), rows); ++i)
+			for (int i = 0; i < std::min((int)column.data.size(), rows); ++i)
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
