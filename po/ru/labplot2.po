@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-20 00:42+0000\n"
+"POT-Creation-Date: 2022-12-21 00:43+0000\n"
 "PO-Revision-Date: 2022-09-26 17:25+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -54,7 +54,7 @@ msgstr ""
 "установки."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:379
-#: src/backend/core/column/Column.cpp:1255
+#: src/backend/core/column/Column.cpp:1259
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
@@ -82,7 +82,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:406
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:318
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:296
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3229
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3237
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:312
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:273
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:185
@@ -96,7 +96,7 @@ msgstr ""
 #: src/backend/worksheet/plots/PlotArea.cpp:376
 #: src/backend/worksheet/TextLabel.cpp:1121
 #: src/backend/worksheet/Worksheet.cpp:1684
-#: src/backend/worksheet/WorksheetElement.cpp:455
+#: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1005
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
@@ -104,7 +104,7 @@ msgstr "Атрибут «%1» отсутствует или пуст, испол
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:430
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1385 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1389 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:659
 #: src/backend/datapicker/DatapickerImage.cpp:753
@@ -416,7 +416,7 @@ msgstr[1] "%1: удаление %2 строк"
 msgstr[2] "%1: удаление %2 строк"
 msgstr[3] "%1: удаление 1 строки"
 
-#: src/backend/core/AbstractColumn.cpp:859
+#: src/backend/core/AbstractColumn.cpp:868
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "недопустимая или отсутствующая начальная или конечная строка"
@@ -659,14 +659,14 @@ msgstr "%1: изменение типа столбца"
 msgid "%1: clear column"
 msgstr "%1: очистка содержимого столбца"
 
-#: src/backend/core/column/Column.cpp:1529
+#: src/backend/core/column/Column.cpp:1533
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "недопустимый или отсутствующий индекс строки"
 
-#: src/backend/core/column/Column.cpp:1538
-#: src/backend/core/column/Column.cpp:1547
-#: src/backend/core/column/Column.cpp:1556
+#: src/backend/core/column/Column.cpp:1542
+#: src/backend/core/column/Column.cpp:1551
+#: src/backend/core/column/Column.cpp:1560
 #, kde-format
 msgid "invalid row value"
 msgstr "недопустимое значение строки"
@@ -972,7 +972,7 @@ msgstr "%1: задание стиля контура планки погрешн
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
-#: src/backend/worksheet/WorksheetElement.cpp:142
+#: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
 #, kde-format
@@ -982,8 +982,8 @@ msgstr "%1: включение видимости"
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
-#: src/backend/worksheet/WorksheetElement.cpp:142
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:130
+#: src/backend/worksheet/WorksheetElement.cpp:601
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -1007,7 +1007,7 @@ msgid "%1: upload image"
 msgstr "%1: отправка изображения"
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:633
+#: src/backend/worksheet/WorksheetElement.cpp:638
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: задание угла поворота"
@@ -1034,7 +1034,7 @@ msgstr "%1: удаление всех точек оси"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:575
+#: src/backend/worksheet/WorksheetElement.cpp:580
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: задание положения"
@@ -8482,22 +8482,22 @@ msgstr "%1: задание столбца пределов погрешност�
 msgid "%1: set rug orientation"
 msgstr "%1: задание ориентации rug-графика"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1537
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1545
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr "Ошибка: Для интерполяции сплайнами Акима необходимо не менее 5 точек."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1539
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1547
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Ошибка: Не удалось инициализировать сплайн-функцию"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1560
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "Значения по X должны монотонно увеличиваться."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1555
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1563
 #, kde-format
 msgid "Error: %1"
 msgstr "Ошибка: %1"
@@ -8688,51 +8688,51 @@ msgstr "%1: задание размера страницы"
 msgid "Curves"
 msgstr "Кривые"
 
-#: src/backend/worksheet/WorksheetElement.cpp:48
+#: src/backend/worksheet/WorksheetElement.cpp:187
 #, kde-format
 msgid "Drawing &order"
 msgstr "Порядок &отображения"
 
-#: src/backend/worksheet/WorksheetElement.cpp:50
-#: src/backend/worksheet/WorksheetElement.cpp:218
-#: src/backend/worksheet/WorksheetElement.cpp:221
+#: src/backend/worksheet/WorksheetElement.cpp:190
+#: src/backend/worksheet/WorksheetElement.cpp:223
+#: src/backend/worksheet/WorksheetElement.cpp:226
 #, kde-format
 msgid "Move &behind"
 msgstr "Переместить &назад"
 
-#: src/backend/worksheet/WorksheetElement.cpp:52
-#: src/backend/worksheet/WorksheetElement.cpp:216
-#: src/backend/worksheet/WorksheetElement.cpp:223
+#: src/backend/worksheet/WorksheetElement.cpp:194
+#: src/backend/worksheet/WorksheetElement.cpp:221
+#: src/backend/worksheet/WorksheetElement.cpp:228
 #, kde-format
 msgid "Move in &front of"
 msgstr "Переместить &вперёд"
 
-#: src/backend/worksheet/WorksheetElement.cpp:281
+#: src/backend/worksheet/WorksheetElement.cpp:286
 #, kde-format
 msgid "%1: move behind %2."
 msgstr "%1: перемещение назад %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:295
+#: src/backend/worksheet/WorksheetElement.cpp:300
 #, kde-format
 msgid "%1: move in front of %2."
 msgstr "%1: перемещение вперёд %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:582
+#: src/backend/worksheet/WorksheetElement.cpp:587
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: задание выравнивания по горизонтали"
 
-#: src/backend/worksheet/WorksheetElement.cpp:589
+#: src/backend/worksheet/WorksheetElement.cpp:594
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: задание выравнивания по вертикали"
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:601
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: использование логических координат"
 
-#: src/backend/worksheet/WorksheetElement.cpp:603
+#: src/backend/worksheet/WorksheetElement.cpp:608
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: задание логической позиции"
@@ -12162,7 +12162,7 @@ msgstr "Оси (%1): загрузка шаблона «%2»"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:612
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1299
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1304
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: загрузка шаблона «%2»"
@@ -12232,7 +12232,7 @@ msgstr "Столбец:"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:735
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1297
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1302
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "Кривые XY (%1): загрузка шаблона «%2»"
@@ -19439,13 +19439,13 @@ msgstr "Игнорировать разрывы:"
 
 # BUGME: please add context --aspotashev
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:169
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:153
 #, kde-format
 msgid "Connection"
 msgstr "Соединение"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineIncreasingXOnly)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:176
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:160
 #, kde-format
 msgid "Monoton incr. X:"
 msgstr "Монотонное увеличение по X:"

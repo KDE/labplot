@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-20 00:42+0000\n"
+"POT-Creation-Date: 2022-12-21 00:43+0000\n"
 "PO-Revision-Date: 2022-12-13 08:40+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Impossibile trovare il pannello delle estensioni. Controlla l'installazione."
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:379
-#: src/backend/core/column/Column.cpp:1255
+#: src/backend/core/column/Column.cpp:1259
 #: src/backend/datapicker/DatapickerCurve.cpp:501
 #: src/backend/datapicker/DatapickerImage.cpp:511
 #: src/backend/datapicker/DatapickerPoint.cpp:498
@@ -77,7 +77,7 @@ msgstr ""
 #: src/backend/worksheet/plots/cartesian/XYAnalysisCurve.cpp:406
 #: src/backend/worksheet/plots/cartesian/XYConvolutionCurve.cpp:318
 #: src/backend/worksheet/plots/cartesian/XYCorrelationCurve.cpp:296
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3229
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:3237
 #: src/backend/worksheet/plots/cartesian/XYDataReductionCurve.cpp:312
 #: src/backend/worksheet/plots/cartesian/XYDifferentiationCurve.cpp:273
 #: src/backend/worksheet/plots/cartesian/XYEquationCurve.cpp:185
@@ -91,7 +91,7 @@ msgstr ""
 #: src/backend/worksheet/plots/PlotArea.cpp:376
 #: src/backend/worksheet/TextLabel.cpp:1121
 #: src/backend/worksheet/Worksheet.cpp:1684
-#: src/backend/worksheet/WorksheetElement.cpp:455
+#: src/backend/worksheet/WorksheetElement.cpp:460
 #: src/commonfrontend/ProjectExplorer.cpp:1005
 #, kde-format
 msgid "Attribute '%1' missing or empty, default value is used"
@@ -99,7 +99,7 @@ msgstr "L'attributo «%1» è mancate o vuoto, uso il valore predefinito"
 
 #: src/backend/cantorWorksheet/CantorWorksheet.cpp:430
 #: src/backend/core/AbstractSimpleFilter.cpp:362
-#: src/backend/core/column/Column.cpp:1385 src/backend/core/Folder.cpp:151
+#: src/backend/core/column/Column.cpp:1389 src/backend/core/Folder.cpp:151
 #: src/backend/core/Project.cpp:752
 #: src/backend/datapicker/DatapickerCurve.cpp:659
 #: src/backend/datapicker/DatapickerImage.cpp:753
@@ -400,7 +400,7 @@ msgid_plural "%1: remove %2 rows"
 msgstr[0] "%1: elimina una riga"
 msgstr[1] "%1: elimina %2 righe"
 
-#: src/backend/core/AbstractColumn.cpp:859
+#: src/backend/core/AbstractColumn.cpp:868
 #, kde-format
 msgid "invalid or missing start or end row"
 msgstr "Inizio o fine riga non valido o mancante"
@@ -636,14 +636,14 @@ msgstr "%1: cambia il tipo di colonna"
 msgid "%1: clear column"
 msgstr "%1: cancella la colonna"
 
-#: src/backend/core/column/Column.cpp:1529
+#: src/backend/core/column/Column.cpp:1533
 #, kde-format
 msgid "invalid or missing row index"
 msgstr "indice di riga non valido o mancante"
 
-#: src/backend/core/column/Column.cpp:1538
-#: src/backend/core/column/Column.cpp:1547
-#: src/backend/core/column/Column.cpp:1556
+#: src/backend/core/column/Column.cpp:1542
+#: src/backend/core/column/Column.cpp:1551
+#: src/backend/core/column/Column.cpp:1560
 #, kde-format
 msgid "invalid row value"
 msgstr "valore di riga non valido"
@@ -948,7 +948,7 @@ msgstr "%1: imposta lo stile della bordatura della barra di errore"
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
-#: src/backend/worksheet/WorksheetElement.cpp:142
+#: src/backend/worksheet/WorksheetElement.cpp:130
 #: src/backend/worksheet/WorksheetElementContainer.cpp:67
 #: src/backend/worksheet/WorksheetElementContainer.cpp:68
 #, kde-format
@@ -958,8 +958,8 @@ msgstr "%1: imposta visibile"
 #: src/backend/datapicker/DatapickerCurve.cpp:353
 #: src/backend/datapicker/DatapickerImage.cpp:283
 #: src/backend/worksheet/InfoElement.cpp:813
-#: src/backend/worksheet/WorksheetElement.cpp:142
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:130
+#: src/backend/worksheet/WorksheetElement.cpp:601
 #: src/backend/worksheet/WorksheetElementContainer.cpp:70
 #: src/backend/worksheet/WorksheetElementContainer.cpp:88
 #, kde-format
@@ -983,7 +983,7 @@ msgid "%1: upload image"
 msgstr "%1: carica un'immagine"
 
 #: src/backend/datapicker/DatapickerImage.cpp:258
-#: src/backend/worksheet/WorksheetElement.cpp:633
+#: src/backend/worksheet/WorksheetElement.cpp:638
 #, kde-format
 msgid "%1: set rotation angle"
 msgstr "%1: imposta l'angolo di rotazione"
@@ -1010,7 +1010,7 @@ msgstr "%1: rimuovi tutti i punti degli assi"
 
 #: src/backend/datapicker/DatapickerPoint.cpp:211
 #: src/backend/worksheet/InfoElement.cpp:783
-#: src/backend/worksheet/WorksheetElement.cpp:575
+#: src/backend/worksheet/WorksheetElement.cpp:580
 #, kde-format
 msgid "%1: set position"
 msgstr "%1: imposta la posizione"
@@ -8216,24 +8216,24 @@ msgstr "%1: imposta la colonna dell'errore y"
 msgid "%1: set rug orientation"
 msgstr "%1: imposta l'orientamento del tappeto"
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1537
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1545
 #, kde-format
 msgid "Error: Akima spline interpolation requires a minimum of 5 points."
 msgstr ""
 "Errore: l'interpolazione con lo spline di Akima richiede un minimo di 5 "
 "punti."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1539
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1547
 #, kde-format
 msgid "Error: Could not initialize the spline function."
 msgstr "Errore: impossibile inizializzare la funzione spline."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1552
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1560
 #, kde-format
 msgid "x values must be monotonically increasing."
 msgstr "i valori di x devono essere monotoni crescenti."
 
-#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1555
+#: src/backend/worksheet/plots/cartesian/XYCurve.cpp:1563
 #, kde-format
 msgid "Error: %1"
 msgstr "Errore: %1"
@@ -8424,51 +8424,51 @@ msgstr "%1: imposta la dimensione della pagina"
 msgid "Curves"
 msgstr "Curve"
 
-#: src/backend/worksheet/WorksheetElement.cpp:48
+#: src/backend/worksheet/WorksheetElement.cpp:187
 #, kde-format
 msgid "Drawing &order"
 msgstr "&Ordine di disegno"
 
-#: src/backend/worksheet/WorksheetElement.cpp:50
-#: src/backend/worksheet/WorksheetElement.cpp:218
-#: src/backend/worksheet/WorksheetElement.cpp:221
+#: src/backend/worksheet/WorksheetElement.cpp:190
+#: src/backend/worksheet/WorksheetElement.cpp:223
+#: src/backend/worksheet/WorksheetElement.cpp:226
 #, kde-format
 msgid "Move &behind"
 msgstr "Sposta &dietro a"
 
-#: src/backend/worksheet/WorksheetElement.cpp:52
-#: src/backend/worksheet/WorksheetElement.cpp:216
-#: src/backend/worksheet/WorksheetElement.cpp:223
+#: src/backend/worksheet/WorksheetElement.cpp:194
+#: src/backend/worksheet/WorksheetElement.cpp:221
+#: src/backend/worksheet/WorksheetElement.cpp:228
 #, kde-format
 msgid "Move in &front of"
 msgstr "Sposta di &fronte a"
 
-#: src/backend/worksheet/WorksheetElement.cpp:281
+#: src/backend/worksheet/WorksheetElement.cpp:286
 #, kde-format
 msgid "%1: move behind %2."
 msgstr "%1: sposta dietro a %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:295
+#: src/backend/worksheet/WorksheetElement.cpp:300
 #, kde-format
 msgid "%1: move in front of %2."
 msgstr "%1: sposta di fronte a %2."
 
-#: src/backend/worksheet/WorksheetElement.cpp:582
+#: src/backend/worksheet/WorksheetElement.cpp:587
 #, kde-format
 msgid "%1: set horizontal alignment"
 msgstr "%1: imposta l'allineamento orizzontale"
 
-#: src/backend/worksheet/WorksheetElement.cpp:589
+#: src/backend/worksheet/WorksheetElement.cpp:594
 #, kde-format
 msgid "%1: set vertical alignment"
 msgstr "%1: imposta l'allineamento verticale"
 
-#: src/backend/worksheet/WorksheetElement.cpp:596
+#: src/backend/worksheet/WorksheetElement.cpp:601
 #, kde-format
 msgid "%1: use logical coordinates"
 msgstr "%1: usa le coordinate logiche"
 
-#: src/backend/worksheet/WorksheetElement.cpp:603
+#: src/backend/worksheet/WorksheetElement.cpp:608
 #, kde-format
 msgid "%1: set logical position"
 msgstr "%1: imposta la posizione logica"
@@ -11823,7 +11823,7 @@ msgstr "%1 assi: modello «%2» caricato"
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:294
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:174
 #: src/kdefrontend/dockwidgets/WorksheetDock.cpp:612
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1299
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1304
 #, kde-format
 msgid "%1: template \"%2\" loaded"
 msgstr "%1: modello «%2» caricato"
@@ -11894,7 +11894,7 @@ msgstr "Colonna:"
 #: src/kdefrontend/dockwidgets/BarPlotDock.cpp:530
 #: src/kdefrontend/dockwidgets/BoxPlotDock.cpp:735
 #: src/kdefrontend/dockwidgets/HistogramDock.cpp:761
-#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1297
+#: src/kdefrontend/dockwidgets/XYCurveDock.cpp:1302
 #, kde-format
 msgid "%1 xy-curves: template \"%2\" loaded"
 msgstr "%1 curve xy: modello «%2» caricato"
@@ -18894,13 +18894,13 @@ msgid "Ignore Gaps:"
 msgstr "Ignora gli spazi vuoti:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValuesGeneral_2)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:169
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:153
 #, kde-format
 msgid "Connection"
 msgstr "Connessione"
 
 #. i18n: ectx: property (text), widget (QLabel, lLineIncreasingXOnly)
-#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:176
+#: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:160
 #, kde-format
 msgid "Monoton incr. X:"
 msgstr "X monotona cresc.:"
