@@ -170,7 +170,7 @@ void XYCurveTest::addUniqueLineTest01() {
 	//			PERFTRACE(QString(Q_FUNC_INFO) + "01_XYCurve::addUniqueLine use @access");
 	//			for (int i = 0; i < count; i++) {
 	//				pixelDiff = llabs(std::round(points.at(i).x() / minLogicalDiffX) - std::round(x / minLogicalDiffX)) > 0; // only relevant if greater zero or
-	//not 				XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
+	// not 				XYCurvePrivate::addUniqueLine(points.at(i), minY, maxY, lastPoint, pixelDiff, lines, prevPixelDiffZero);
 	// 				if (pixelDiff > 0) // set x to next pixel
 	// 					x += minLogicalDiffX;
 	//			}
