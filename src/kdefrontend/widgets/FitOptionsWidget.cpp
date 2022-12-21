@@ -4,7 +4,7 @@
 	Description          : widget for editing advanced fit options
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -12,6 +12,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 
 /*!
 	\class FitOptionsWidget
@@ -58,6 +59,9 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 		ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.start()));
 		ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.end()));
 	}
+	// changing data range not supported by ML
+	if (fitData->algorithm == nsl_fit_algorithm_ml)
+		ui.cbAutoRange->setEnabled(false);
 
 	ui.leMin->setVisible(!m_dateTimeRange);
 	ui.leMax->setVisible(!m_dateTimeRange);
@@ -155,11 +159,17 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 
 	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
+		switch (m_fitCurve->dataSourceType()) {
+		case XYAnalysisCurve::DataSourceType::Spreadsheet:
 			xDataColumn = m_fitCurve->xDataColumn();
-		else {
+			break;
+		case XYAnalysisCurve::DataSourceType::Curve:
 			if (m_fitCurve->dataSourceCurve())
 				xDataColumn = m_fitCurve->dataSourceCurve()->xColumn();
+			break;
+		case XYAnalysisCurve::DataSourceType::Histogram:
+			if (m_fitCurve->dataSourceHistogram())
+				xDataColumn = m_fitCurve->dataSourceHistogram()->bins();
 		}
 
 		if (xDataColumn) {

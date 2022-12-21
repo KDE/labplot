@@ -20,6 +20,8 @@
 #include <QDateTime>
 #include <QIcon>
 
+#include <cmath>
+
 /**
  * \class AbstractColumn
  * \brief Interface definition for data with column logic
@@ -383,7 +385,7 @@ bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
 	case ColumnMode::Double: {
 		double value = valueAt(row);
-		return !(std::isnan(value) || std::isinf(value));
+		return std::isfinite(value);
 	}
 	case ColumnMode::Integer: // there is no invalid integer
 	case ColumnMode::BigInt:
@@ -626,6 +628,15 @@ void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) 
  *
  * Use this only when columnMode() is Numeric
  */
+double AbstractColumn::doubleAt(int /*row*/) const {
+	return NAN;
+}
+
+/**
+ * \brief Return the double value in row 'row' independent of the column mode.
+ *
+ * Integer and big integer values are converted to double, NAN is returned for other modes.
+ */
 double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
@@ -706,19 +717,19 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 
 /**********************************************************************/
 double AbstractColumn::minimum(int /*count*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
-	return -INFINITY;
+	return INFINITY;
 }
 
 double AbstractColumn::maximum(int /*count*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
-	return INFINITY;
+	return -INFINITY;
 }
 
 bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {

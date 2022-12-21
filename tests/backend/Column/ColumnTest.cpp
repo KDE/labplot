@@ -166,7 +166,7 @@ void ColumnTest::statisticsDoubleNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -197,11 +197,11 @@ void ColumnTest::statisticsDoubleBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -236,7 +236,7 @@ void ColumnTest::statisticsDoubleZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -307,7 +307,7 @@ void ColumnTest::statisticsIntNegative() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 5.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -.25);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -338,11 +338,11 @@ void ColumnTest::statisticsIntBigNegative() {
 	QCOMPARE(stats.minimum, -100.);
 	QCOMPARE(stats.maximum, 5.);
 	QCOMPARE(stats.arithmeticMean, -23.25);
-	QCOMPARE(stats.geometricMean, qQNaN()); // special case
+	QCOMPARE(stats.geometricMean, NAN); // special case
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, -3343. / 31.);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, -25.);
 	QCOMPARE(stats.median, 1.);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -377,7 +377,7 @@ void ColumnTest::statisticsIntZero() {
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 3.75);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 0.75);
 	QCOMPARE(stats.median, 1.5);
 	QCOMPARE(stats.thirdQuartile, 2.75);
@@ -412,7 +412,7 @@ void ColumnTest::statisticsIntOverflow() {
 	QCOMPARE(stats.harmonicMean, 1139064055.75838);
 	QCOMPARE(stats.contraharmonicMean, 1160869565.21739);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 	QCOMPARE(stats.firstQuartile, 1075000000);
 	QCOMPARE(stats.median, 1150000000);
 	QCOMPARE(stats.thirdQuartile, 1225000000);
@@ -443,11 +443,11 @@ void ColumnTest::statisticsBigInt() {
 	QCOMPARE(stats.minimum, -10000000000);
 	QCOMPARE(stats.maximum, 10000000000);
 	QCOMPARE(stats.arithmeticMean, 250000000);
-	QCOMPARE(stats.geometricMean, qQNaN());
+	QCOMPARE(stats.geometricMean, NAN);
 	QCOMPARE(stats.harmonicMean, 0.);
 	QCOMPARE(stats.contraharmonicMean, 201000000000);
 
-	QCOMPARE(stats.mode, qQNaN());
+	QCOMPARE(stats.mode, NAN);
 // Windows CI fails here
 #ifndef HAVE_WINDOWS
 	QCOMPARE(stats.firstQuartile, -2500000000);

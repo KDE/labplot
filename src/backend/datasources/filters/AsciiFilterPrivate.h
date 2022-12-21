@@ -68,7 +68,7 @@ public:
 	int headerLine{0}; // 0: no header line
 	bool skipEmptyParts{false};
 	bool simplifyWhitespacesEnabled{false};
-	double nanValue{NAN};
+	double nanValue{qQNaN()};
 	bool removeQuotesEnabled{false};
 	bool createIndexEnabled{false};
 	bool createTimestampEnabled{false};

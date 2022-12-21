@@ -17,6 +17,7 @@ class XYAnalysisCurvePrivate;
 
 class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
+	Q_ENUMS(DataSourceType)
 
 public:
 	enum class DataSourceType { Spreadsheet, Curve, Histogram };

@@ -14,7 +14,6 @@
 #include <QMessageBox>
 #include <QMqttClient>
 #include <QTimer>
-#include <QtMath>
 
 #include <chrono>
 #include <iostream>
@@ -38,7 +37,7 @@ MainWindow::MainWindow(QWidget* parent)
 	m_timer->setInterval(m_interval);
 
 	m_generator = new std::default_random_engine(m_seed);
-	m_distribution = new std::normal_distribution<double>(0.0, (qPow(m_delta, 2.0) * m_dt));
+	m_distribution = new std::normal_distribution<double>(0.0, (std::pow(m_delta, 2.0) * m_dt));
 
 	m_x.fill(0.0, m_pathes);
 

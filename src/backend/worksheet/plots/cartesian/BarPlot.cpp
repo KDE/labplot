@@ -197,7 +197,7 @@ double BarPlot::minimum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMin;
 	}
-	return qQNaN();
+	return NAN;
 }
 
 double BarPlot::maximum(const Dimension dim) const {
@@ -208,7 +208,7 @@ double BarPlot::maximum(const Dimension dim) const {
 	case Dimension::Y:
 		return d->yMax;
 	}
-	return qQNaN();
+	return NAN;
 }
 
 // values
@@ -961,7 +961,7 @@ void BarPlotPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(m_valuesPointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(m_valuesPointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!valuesColumn->isValid(i) || valuesColumn->isMasked(i))

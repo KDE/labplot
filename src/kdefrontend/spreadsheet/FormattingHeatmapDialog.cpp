@@ -13,14 +13,16 @@
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
 #include "tools/ColorMapsManager.h"
 
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
+
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QPushButton>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KWindowConfig>
+#include <cmath>
 
 /*!
 	\class FormattingHeatmapDialog
@@ -128,15 +130,8 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	ui.lColorMapPreview->setPixmap(pixmap);
 
 	if (hasNumeric) {
-		if (min != INFINITY)
-			ui.leMinimum->setText(QString::number(min));
-		else
-			ui.leMinimum->setText(QString());
-
-		if (max != -INFINITY)
-			ui.leMaximum->setText(QString::number(max));
-		else
-			ui.leMaximum->setText(QString());
+		ui.leMinimum->setText(qIsFinite(min) ? QString::number(min) : QString());
+		ui.leMaximum->setText(qIsFinite(max) ? QString::number(max) : QString());
 	}
 
 	ui.lLevelsTop->setVisible(hasNumeric);

@@ -411,22 +411,22 @@ void DatapickerCurve::updatePoint(const DatapickerPoint* point) {
 
 	if (d->plusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->plusDeltaXPos().x(), 0));
-		d->plusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->plusDeltaXColumn->setValueAt(row, std::abs(data.x()));
 	}
 
 	if (d->minusDeltaXColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(point->minusDeltaXPos().x(), 0));
-		d->minusDeltaXColumn->setValueAt(row, qAbs(data.x()));
+		d->minusDeltaXColumn->setValueAt(row, std::abs(data.x()));
 	}
 
 	if (d->plusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->plusDeltaYPos().y()));
-		d->plusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->plusDeltaYColumn->setValueAt(row, std::abs(data.y()));
 	}
 
 	if (d->minusDeltaYColumn) {
 		data = datapicker->mapSceneLengthToLogical(QPointF(0, point->minusDeltaYPos().y()));
-		d->minusDeltaYColumn->setValueAt(row, qAbs(data.y()));
+		d->minusDeltaYColumn->setValueAt(row, std::abs(data.y()));
 	}
 }
 

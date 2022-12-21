@@ -211,9 +211,9 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
-		ratio = qMax(horizontalRatio, verticalRatio);
+		ratio = std::max(horizontalRatio, verticalRatio);
 	else
-		ratio = qMin(horizontalRatio, verticalRatio);
+		ratio = std::min(horizontalRatio, verticalRatio);
 
 	Q_D(TextLabel);
 	d->teXFont.setPointSizeF(d->teXFont.pointSizeF() * ratio);

@@ -4,7 +4,7 @@
 	Description          : Private data class of Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-	SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2012-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
@@ -1692,6 +1692,13 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 	return static_cast<QVector<QDateTime>*>(m_data)->value(row);
 }
 
+double ColumnPrivate::doubleAt(int index) const {
+	if (!m_data)
+		return NAN;
+
+	return static_cast<QVector<double>*>(m_data)->value(index, NAN);
+}
+
 /**
  * \brief Return the double value at index 'index' for columns with type Numeric, Integer or BigInt.
  * This function has to be used everywhere where the exact type (double, int or qint64) is not relevant for numerical calculations.
@@ -2369,8 +2376,8 @@ void ColumnPrivate::calculateStatistics() {
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
 	double columnSumSquare = 0.0;
-	statistics.minimum = qInf();
-	statistics.maximum = -qInf();
+	statistics.minimum = INFINITY;
+	statistics.maximum = -INFINITY;
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
 	rowData.reserve(rowValuesSize);
@@ -2412,7 +2419,7 @@ void ColumnPrivate::calculateStatistics() {
 
 	// geometric mean
 	if (statistics.minimum <= -100.) // invalid
-		statistics.geometricMean = qQNaN();
+		statistics.geometricMean = NAN;
 	else if (statistics.minimum < 0) { // interpret as percentage (/100) and add 1
 		columnProduct = 1.; // recalculate
 		for (auto val : rowData)

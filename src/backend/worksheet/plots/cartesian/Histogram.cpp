@@ -71,12 +71,12 @@ void Histogram::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Histogram");
 
-	d->type = (Histogram::HistogramType)group.readEntry("Type", (int)Histogram::Ordinary);
-	d->orientation = (Histogram::HistogramOrientation)group.readEntry("Orientation", (int)Histogram::Vertical);
-	d->normalization = (Histogram::HistogramNormalization)group.readEntry("Normalization", (int)Histogram::Count);
+	d->type = (Histogram::Type)group.readEntry("Type", (int)Histogram::Ordinary);
+	d->orientation = (Histogram::Orientation)group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->normalization = (Histogram::Normalization)group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod)group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
-	d->binWidth = group.readEntry("BinWidth", 1.0f);
+	d->binWidth = group.readEntry("BinWidth", 1.0);
 	d->autoBinRanges = group.readEntry("AutoBinRanges", true);
 	d->binRangesMin = 0.0;
 	d->binRangesMax = 1.0;
@@ -217,7 +217,7 @@ QMenu* Histogram::createContextMenu() {
 	});
 
 	auto* fitExponentialAction = new QAction(QIcon::fromTheme(QStringLiteral("labplot-xy-fit-curve")), i18n("Fit Exponential Distribution"));
-	analysisMenu->addAction(fitGaussianAction);
+	analysisMenu->addAction(fitExponentialAction);
 	connect(fitExponentialAction, &QAction::triggered, this, [=]() {
 		m_plot->addHistogramFit(this, nsl_sf_stats_exponential);
 	});
@@ -284,12 +284,12 @@ void Histogram::setHover(bool on) {
 //##########################  getter methods  ##################################
 //##############################################################################
 // general
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Type, type, type)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::Normalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
-BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
+BASIC_SHARED_D_READER_IMPL(Histogram, double, binWidth, binWidth)
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, autoBinRanges, autoBinRanges)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMin, binRangesMin)
 BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
@@ -392,25 +392,25 @@ void Histogram::setDataColumnPath(const QString& path) {
 	d->dataColumnPath = path;
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramType, Histogram::HistogramType, type, updateType)
-void Histogram::setType(Histogram::HistogramType type) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetType, Histogram::Type, type, updateType)
+void Histogram::setType(Histogram::Type type) {
 	Q_D(Histogram);
 	if (type != d->type)
-		exec(new HistogramSetHistogramTypeCmd(d, type, ki18n("%1: set histogram type")));
+		exec(new HistogramSetTypeCmd(d, type, ki18n("%1: set histogram type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramOrientation, Histogram::HistogramOrientation, orientation, updateOrientation)
-void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetOrientation, Histogram::Orientation, orientation, updateOrientation)
+void Histogram::setOrientation(Histogram::Orientation orientation) {
 	Q_D(Histogram);
 	if (orientation != d->orientation)
-		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+		exec(new HistogramSetOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramNormalization, Histogram::HistogramNormalization, normalization, updateOrientation)
-void Histogram::setNormalization(Histogram::HistogramNormalization normalization) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetNormalization, Histogram::Normalization, normalization, updateOrientation)
+void Histogram::setNormalization(Histogram::Normalization normalization) {
 	Q_D(Histogram);
 	if (normalization != d->normalization)
-		exec(new HistogramSetHistogramNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
+		exec(new HistogramSetNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
@@ -427,8 +427,8 @@ void Histogram::setBinCount(int count) {
 		exec(new HistogramSetBinCountCmd(d, count, ki18n("%1: set bin count")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, float, binWidth, recalcHistogram)
-void Histogram::setBinWidth(float width) {
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinWidth, double, binWidth, recalcHistogram)
+void Histogram::setBinWidth(double width) {
 	Q_D(Histogram);
 	if (width != d->binWidth)
 		exec(new HistogramSetBinWidthCmd(d, width, ki18n("%1: set bin width")));
@@ -652,7 +652,7 @@ QRectF HistogramPrivate::boundingRect() const {
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
-		double yMaxRange = -qInf();
+		double yMaxRange = -INFINITY;
 		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
@@ -698,7 +698,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 		return yMaxRange;
 	}
 
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::xMinimum() const {
@@ -708,7 +708,7 @@ double HistogramPrivate::xMinimum() const {
 	case Histogram::Horizontal:
 		return 0;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::xMaximum() const {
@@ -718,7 +718,7 @@ double HistogramPrivate::xMaximum() const {
 	case Histogram::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
-	return -qInf();
+	return -INFINITY;
 }
 
 double HistogramPrivate::yMinimum() const {
@@ -728,7 +728,7 @@ double HistogramPrivate::yMinimum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
-	return qInf();
+	return INFINITY;
 }
 
 double HistogramPrivate::yMaximum() const {
@@ -738,7 +738,7 @@ double HistogramPrivate::yMaximum() const {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return qInf();
+	return -INFINITY;
 }
 
 const AbstractColumn* HistogramPrivate::bins() {
@@ -1034,20 +1034,18 @@ void HistogramPrivate::updateLines() {
 
 void HistogramPrivate::histogramValue(double& value, int bin) const {
 	switch (normalization) {
-	case Histogram::Count: {
+	case Histogram::Count:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin);
 		else
 			value += gsl_histogram_get(m_histogram, bin);
 		break;
-	}
-	case Histogram::Probability: {
+	case Histogram::Probability:
 		if (type == Histogram::Ordinary)
 			value = gsl_histogram_get(m_histogram, bin) / totalCount;
 		else
 			value += gsl_histogram_get(m_histogram, bin) / totalCount;
 		break;
-	}
 	case Histogram::CountDensity: {
 		const double width = (binRangesMax - binRangesMin) / m_bins;
 		if (type == Histogram::Ordinary)
@@ -1259,7 +1257,7 @@ void HistogramPrivate::updateValues() {
 			return;
 		}
 
-		const int endRow = qMin(pointsLogical.size(), valuesColumn->rowCount());
+		const int endRow = std::min(pointsLogical.size(), valuesColumn->rowCount());
 		const auto xColMode = valuesColumn->columnMode();
 		for (int i = 0; i < endRow; ++i) {
 			if (!visiblePoints.at(i))
@@ -1951,9 +1949,9 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_COLUMN(dataColumn);
-			READ_INT_VALUE("type", type, Histogram::HistogramType);
-			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
-			READ_INT_VALUE("normalization", normalization, Histogram::HistogramNormalization);
+			READ_INT_VALUE("type", type, Histogram::Type);
+			READ_INT_VALUE("orientation", orientation, Histogram::Orientation);
+			READ_INT_VALUE("normalization", normalization, Histogram::Normalization);
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);

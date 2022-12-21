@@ -108,6 +108,7 @@ public:
 	void addValueLabel(const QDateTime&, const QString&);
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
+	double doubleAt(int row) const;
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);

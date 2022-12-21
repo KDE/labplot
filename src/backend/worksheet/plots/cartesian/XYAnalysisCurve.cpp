@@ -60,13 +60,13 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 							   double xMin,
 							   double xMax,
 							   bool avgUniqueX) {
-	const int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	const int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
 	bool uniqueX = true;
 	for (int row = 0; row < rowCount; ++row) {
 		if (!xDataColumn->isValid(row) || xDataColumn->isMasked(row) || !yDataColumn->isValid(row) || yDataColumn->isMasked(row))
 			continue;
 
-		double x = qQNaN();
+		double x = NAN;
 		switch (xDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			x = xDataColumn->valueAt(row);
@@ -85,7 +85,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 			x = xDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		double y = qQNaN();
+		double y = NAN;
 		switch (yDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Double:
 			y = yDataColumn->valueAt(row);
@@ -120,7 +120,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData,
 	//	WARN( xData.at(i) << " " << yData.at(i))
 
 	// average values for consecutive same x value
-	double oldX = qQNaN(), sum = 0.;
+	double oldX = NAN, sum = 0.;
 	int count = 1;
 	for (int i = 0; i < xData.size(); i++) {
 		// WARN(" i = " << i)

@@ -18,7 +18,6 @@
 #include <KSharedConfig>
 
 #include <QMenu>
-#include <QStandardItemModel>
 #include <QWidgetAction>
 
 extern "C" {

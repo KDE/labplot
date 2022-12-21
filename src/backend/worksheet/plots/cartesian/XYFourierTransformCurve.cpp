@@ -135,7 +135,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	int rowCount = std::min(xDataColumn->rowCount(), yDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		// only copy those data where _all_ values (for x and y, if given) are valid
 		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row)) || xDataColumn->isMasked(row) || yDataColumn->isMasked(row))

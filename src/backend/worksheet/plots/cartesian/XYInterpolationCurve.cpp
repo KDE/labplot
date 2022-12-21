@@ -174,8 +174,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 		xmin = validXMin;
 		xmax = validXMax;
 	} else {
-		xmin = qMax(xmin, validXMin);
-		xmax = qMin(xmax, validXMax);
+		xmin = std::max(xmin, validXMin);
+		xmax = std::min(xmax, validXMax);
 	}
 	DEBUG(Q_FUNC_INFO << ", x range = " << xmin << " .. " << xmax)
 

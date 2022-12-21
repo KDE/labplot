@@ -535,7 +535,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device, const size_t maxL
 			endColumn = firstLineStringList.size(); // last column
 		else
 			// number of column names provided in the import dialog (not more than the maximal number of columns in the file)
-			endColumn = qMin(columnNames.size(), firstLineStringList.size());
+			endColumn = std::min(columnNames.size(), firstLineStringList.size());
 	}
 
 	if (endColumn < startColumn)
@@ -979,7 +979,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		if (keepNValues == 0) {
 			DEBUG("	keep All values");
 			if (readingType != LiveDataSource::ReadingType::TillEnd)
-				m_actualRows += qMin(newData.size(), spreadsheet->sampleSize());
+				m_actualRows += std::min(newData.size(), spreadsheet->sampleSize());
 			else {
 				// we don't increase it if we reread the whole file, we reset it
 				if (!(spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile))
@@ -1006,7 +1006,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else {
 				// we read max sample size number of lines when the reading mode
 				// is ContinuouslyFixed or FromEnd, WholeFile is disabled
-				linesToRead = qMin(spreadsheet->sampleSize(), newLinesTillEnd);
+				linesToRead = std::min(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
 
@@ -1055,7 +1055,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			if (spreadsheet->readingType() == LiveDataSource::ReadingType::WholeFile)
 				currentRow = 0;
 			else
-				currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
+				currentRow = m_actualRows - std::min(newLinesTillEnd, m_actualRows);
 		} else {
 			if (readingType == LiveDataSource::ReadingType::TillEnd) {
 				if (newLinesTillEnd > m_actualRows) {
@@ -1069,7 +1069,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			} else {
 				// we read max sample size number of lines when the reading mode
 				// is ContinuouslyFixed or FromEnd
-				currentRow = m_actualRows - qMin(spreadsheet->sampleSize(), newLinesTillEnd);
+				currentRow = m_actualRows - std::min(spreadsheet->sampleSize(), newLinesTillEnd);
 			}
 		}
 
@@ -1305,16 +1305,16 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
-	DEBUG("	Reading " << qMin(lines, m_actualRows) << " lines, " << m_actualCols << " columns");
+	DEBUG("	Reading " << std::min(lines, m_actualRows) << " lines, " << m_actualCols << " columns");
 
-	if (qMin(lines, m_actualRows) == 0 || m_actualCols == 0)
+	if (std::min(lines, m_actualRows) == 0 || m_actualCols == 0)
 		return;
 
 	QString line;
 	// Don't put the definition QStringList lineStringList outside of the for-loop,
 	// the compiler doesn't seem to optimize the destructor of QList well enough in this case.
 
-	lines = qMin(lines, m_actualRows);
+	lines = std::min(lines, m_actualRows);
 	int progressIndex = 0;
 	const qreal progressInterval = 0.01 * lines; // update on every 1% only
 
@@ -1624,11 +1624,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
-	DEBUG("	Generating preview for " << qMin(lines, m_actualRows) << " lines");
+	DEBUG("	Generating preview for " << std::min(lines, m_actualRows) << " lines");
 	QString line;
 
 	// loop over the preview lines in the file and parse the available columns
-	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
+	for (int i = 0; i < std::min(lines, m_actualRows); ++i) {
 		line = QLatin1String(device.readLine());
 
 		// remove any newline
@@ -2437,7 +2437,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// but only after the preparation step
 		if (keepNValues == 0) {
 			if (readingType != MQTTClient::ReadingType::TillEnd)
-				m_actualRows += qMin(newData.size(), spreadsheet->mqttClient()->sampleSize());
+				m_actualRows += std::min(newData.size(), spreadsheet->mqttClient()->sampleSize());
 			else {
 				m_actualRows += newData.size();
 			}
@@ -2455,9 +2455,9 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				// we read max sample size number of lines when the reading mode
 				// is ContinuouslyFixed or FromEnd
 				if (spreadsheet->mqttClient()->sampleSize() <= spreadsheet->mqttClient()->keepNValues())
-					linesToRead = qMin(spreadsheet->mqttClient()->sampleSize(), newLinesTillEnd);
+					linesToRead = std::min(spreadsheet->mqttClient()->sampleSize(), newLinesTillEnd);
 				else
-					linesToRead = qMin(spreadsheet->mqttClient()->keepNValues(), newLinesTillEnd);
+					linesToRead = std::min(spreadsheet->mqttClient()->keepNValues(), newLinesTillEnd);
 			}
 		} else
 			linesToRead = m_actualRows - spreadsheetRowCountBeforeResize;
@@ -2495,7 +2495,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// when we have a fixed size we have to pop sampleSize number of lines if specified
 		// here popping, setting currentRow
 		if (!m_prepared)
-			currentRow = m_actualRows - qMin(newLinesTillEnd, m_actualRows);
+			currentRow = m_actualRows - std::min(newLinesTillEnd, m_actualRows);
 		else {
 			if (readingType == MQTTClient::ReadingType::TillEnd) {
 				if (newLinesTillEnd > m_actualRows)

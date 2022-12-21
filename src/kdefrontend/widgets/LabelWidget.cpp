@@ -208,7 +208,7 @@ LabelWidget::LabelWidget(QWidget* parent)
 	// in the combobox in load() and the user still can switch to the non-latex mode.
 	m_teXEnabled = TeXRenderer::enabled();
 	if (!m_teXEnabled) {
-		auto* model = qobject_cast<QStandardItemModel*>(ui.cbMode->model());
+		const auto* model = qobject_cast<QStandardItemModel*>(ui.cbMode->model());
 		model->item(1)->setEnabled(false);
 	}
 

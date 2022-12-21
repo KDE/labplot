@@ -45,18 +45,6 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 
 void WorksheetElement::init() {
 	d_ptr->setData(0, static_cast<quint64>(type()));
-	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
-	m_drawingOrderMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
-	m_moveBehindMenu = new QMenu(i18n("Move &behind"));
-	m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
-	m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
-	m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
-	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
-	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
-
-	connect(m_drawingOrderMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareDrawingOrderMenu);
-	connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
-	connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
 }
 
 WorksheetElement::~WorksheetElement() {
@@ -195,6 +183,23 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath& path, const QPe
 }
 
 QMenu* WorksheetElement::createContextMenu() {
+	if (!m_drawingOrderMenu) {
+		m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
+		m_drawingOrderMenu->setIcon(QIcon::fromTheme(QStringLiteral("layer-bottom")));
+
+		m_moveBehindMenu = new QMenu(i18n("Move &behind"));
+		m_moveBehindMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-down")));
+		m_drawingOrderMenu->addMenu(m_moveBehindMenu);
+
+		m_moveInFrontOfMenu = new QMenu(i18n("Move in &front of"));
+		m_moveInFrontOfMenu->setIcon(QIcon::fromTheme(QStringLiteral("draw-arrow-up")));
+		m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
+
+		connect(m_drawingOrderMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareDrawingOrderMenu);
+		connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
+		connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
+	}
+
 	QMenu* menu = AbstractAspect::createContextMenu();
 
 	// add the sub-menu for the drawing order

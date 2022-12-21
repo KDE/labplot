@@ -34,9 +34,9 @@ public:
 	friend class HistogramSetErrorPlusColumnCmd;
 	friend class HistogramSetErrorMinusColumnCmd;
 
-	enum HistogramType { Ordinary, Cumulative, AvgShift };
-	enum HistogramOrientation { Vertical, Horizontal };
-	enum HistogramNormalization { Count, Probability, CountDensity, ProbabilityDensity };
+	enum Type { Ordinary, Cumulative, AvgShift };
+	enum Orientation { Vertical, Horizontal };
+	enum Normalization { Count, Probability, CountDensity, ProbabilityDensity };
 	enum BinningMethod { ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott };
 	enum LineType { NoLine, Bars, Envelope, DropLines, HalfBars };
 	enum ValuesType { NoValues, ValuesBinEntries, ValuesCustomColumn };
@@ -60,20 +60,20 @@ public:
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	CLASS_D_ACCESSOR_DECL(QString, dataColumnPath, DataColumnPath)
 
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(Histogram::HistogramNormalization, normalization, Normalization)
+	BASIC_D_ACCESSOR_DECL(Histogram::Type, type, Type)
+	BASIC_D_ACCESSOR_DECL(Histogram::Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Histogram::Normalization, normalization, Normalization)
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
-	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
+	BASIC_D_ACCESSOR_DECL(double, binWidth, BinWidth)
 	BASIC_D_ACCESSOR_DECL(bool, autoBinRanges, AutoBinRanges)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMin, BinRangesMin)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMax, BinRangesMax)
 
-	BASIC_D_ACCESSOR_DECL(float, xMin, XMin)
-	BASIC_D_ACCESSOR_DECL(float, xMax, XMax)
-	BASIC_D_ACCESSOR_DECL(float, yMin, YMin)
-	BASIC_D_ACCESSOR_DECL(float, yMax, YMax)
+	//	BASIC_D_ACCESSOR_DECL(double, xMin, XMin)
+	//	BASIC_D_ACCESSOR_DECL(double, xMax, XMax)
+	//	BASIC_D_ACCESSOR_DECL(double, yMin, YMin)
+	//	BASIC_D_ACCESSOR_DECL(double, yMax, YMax)
 
 	Line* line() const;
 	Background* background() const;
@@ -142,12 +142,12 @@ Q_SIGNALS:
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 
-	void typeChanged(Histogram::HistogramType);
-	void orientationChanged(Histogram::HistogramOrientation);
-	void normalizationChanged(Histogram::HistogramNormalization);
+	void typeChanged(Histogram::Type);
+	void orientationChanged(Histogram::Orientation);
+	void normalizationChanged(Histogram::Normalization);
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
-	void binWidthChanged(float);
+	void binWidthChanged(double);
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);

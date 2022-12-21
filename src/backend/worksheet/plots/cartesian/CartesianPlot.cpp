@@ -1601,21 +1601,21 @@ void CartesianPlot::addVerticalAxis() {
 
 void CartesianPlot::addCurve() {
 	DEBUG(Q_FUNC_INFO)
-	auto* curve{new XYCurve(QStringLiteral("xy-curve"))};
+	auto* curve = new XYCurve(QStringLiteral("xy-curve"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	addChild(curve);
 }
 
 void CartesianPlot::addEquationCurve() {
 	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* curve{new XYEquationCurve(QStringLiteral("f(x)"))};
+	auto* curve = new XYEquationCurve(QStringLiteral("f(x)"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	addChild(curve);
 }
 
 void CartesianPlot::addHistogram() {
 	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
-	auto* hist{new Histogram(QStringLiteral("Histogram"))};
+	auto* hist = new Histogram(i18n("Histogram"));
 	hist->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	addChild(hist);
 }
@@ -1634,25 +1634,33 @@ void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution t
 	XYFitCurve::FitData fitData = curve->fitData();
 	fitData.modelCategory = nsl_fit_model_distribution;
 	fitData.modelType = (int)type;
+	DEBUG("TYPE = " << type)
+	fitData.algorithm = nsl_fit_algorithm_ml; // ML distribution fit
+	DEBUG("INITFITDATA:")
 	XYFitCurve::initFitData(fitData);
+	DEBUG("SETFITDATA:")
 	curve->setFitData(fitData);
 
+	DEBUG("RECALCULATE:")
 	curve->recalculate();
 
 	// add the child after the fit was calculated so the dock widgets gets the fit results
 	// and call retransform() after this to calculate and to paint the data points of the fit-curve
+	DEBUG("ADDCHILD:")
 	this->addChild(curve);
+	DEBUG("RETRANSFORM:")
 	curve->retransform();
+	DEBUG("DONE:")
 
 	endMacro();
 }
 
 void CartesianPlot::addBarPlot() {
-	addChild(new BarPlot(QStringLiteral("Bar Plot")));
+	addChild(new BarPlot(i18n("Bar Plot")));
 }
 
 void CartesianPlot::addBoxPlot() {
-	addChild(new BoxPlot(QStringLiteral("Box Plot")));
+	addChild(new BoxPlot(i18n("Box Plot")));
 }
 
 /*!
@@ -1668,7 +1676,7 @@ const XYCurve* CartesianPlot::currentCurve() const {
 }
 
 void CartesianPlot::addDataReductionCurve() {
-	auto* curve = new XYDataReductionCurve(QStringLiteral("Data reduction"));
+	auto* curve = new XYDataReductionCurve(i18n("Data Reduction"));
 	const XYCurve* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1688,7 +1696,7 @@ void CartesianPlot::addDataReductionCurve() {
 }
 
 void CartesianPlot::addDifferentiationCurve() {
-	auto* curve = new XYDifferentiationCurve(QStringLiteral("Differentiation"));
+	auto* curve = new XYDifferentiationCurve(i18n("Differentiation"));
 	const XYCurve* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1708,7 +1716,7 @@ void CartesianPlot::addDifferentiationCurve() {
 }
 
 void CartesianPlot::addIntegrationCurve() {
-	auto* curve = new XYIntegrationCurve(QStringLiteral("Integration"));
+	auto* curve = new XYIntegrationCurve(i18n("Integration"));
 	const XYCurve* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1728,7 +1736,7 @@ void CartesianPlot::addIntegrationCurve() {
 }
 
 void CartesianPlot::addInterpolationCurve() {
-	auto* curve = new XYInterpolationCurve(QStringLiteral("Interpolation"));
+	auto* curve = new XYInterpolationCurve(i18n("Interpolation"));
 	const XYCurve* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1748,7 +1756,7 @@ void CartesianPlot::addInterpolationCurve() {
 }
 
 void CartesianPlot::addSmoothCurve() {
-	auto* curve = new XYSmoothCurve(QStringLiteral("Smooth"));
+	auto* curve = new XYSmoothCurve(i18n("Smooth"));
 	const XYCurve* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1768,7 +1776,7 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	auto* curve = new XYFitCurve(QStringLiteral("fit"));
+	auto* curve = new XYFitCurve(i18n("Fit"));
 	const auto* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
@@ -1810,7 +1818,7 @@ void CartesianPlot::addFitCurve() {
 }
 
 void CartesianPlot::addFourierFilterCurve() {
-	auto* curve = new XYFourierFilterCurve(QStringLiteral("Fourier filter"));
+	auto* curve = new XYFourierFilterCurve(i18n("Fourier Filter"));
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro(i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()));
@@ -1827,25 +1835,25 @@ void CartesianPlot::addFourierFilterCurve() {
 }
 
 void CartesianPlot::addFourierTransformCurve() {
-	auto* curve = new XYFourierTransformCurve(QStringLiteral("Fourier transform"));
+	auto* curve = new XYFourierTransformCurve(i18n("Fourier Transform"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 }
 
 void CartesianPlot::addHilbertTransformCurve() {
-	auto* curve = new XYHilbertTransformCurve(QStringLiteral("Hilbert transform"));
+	auto* curve = new XYHilbertTransformCurve(i18n("Hilbert Transform"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 }
 
 void CartesianPlot::addConvolutionCurve() {
-	auto* curve = new XYConvolutionCurve(QStringLiteral("Convolution"));
+	auto* curve = new XYConvolutionCurve(i18n("Convolution"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 }
 
 void CartesianPlot::addCorrelationCurve() {
-	auto* curve = new XYCorrelationCurve(QStringLiteral("Auto-/Cross-Correlation"));
+	auto* curve = new XYCorrelationCurve(i18n("Auto-/Cross-Correlation"));
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 }
@@ -1863,7 +1871,7 @@ void CartesianPlot::addLegend() {
 	if (m_legend)
 		return;
 
-	m_legend = new CartesianPlotLegend(QStringLiteral("legend"));
+	m_legend = new CartesianPlotLegend(i18n("Legend"));
 	this->addChild(m_legend);
 	m_legend->retransform();
 
@@ -1886,14 +1894,14 @@ void CartesianPlot::addInfoElement() {
 	} else
 		pos = range(Dimension::X).center();
 
-	auto* element = new InfoElement(QStringLiteral("Info Element"), this, curve, pos);
+	auto* element = new InfoElement(i18n("Info Element"), this, curve, pos);
 	this->addChild(element);
 	element->setParentGraphicsItem(graphicsItem());
 	element->retransform(); // must be done, because the element must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
 }
 
 void CartesianPlot::addTextLabel() {
-	auto* label = new TextLabel(QStringLiteral("text label"), this);
+	auto* label = new TextLabel(i18n("Text Label"), this);
 
 	Q_D(CartesianPlot);
 	if (d->calledFromContextMenu) {
@@ -1910,7 +1918,7 @@ void CartesianPlot::addTextLabel() {
 }
 
 void CartesianPlot::addImage() {
-	auto* image = new Image(QStringLiteral("image"));
+	auto* image = new Image(i18n("Image"));
 
 	Q_D(CartesianPlot);
 	if (d->calledFromContextMenu) {
@@ -1930,7 +1938,7 @@ void CartesianPlot::addImage() {
 
 void CartesianPlot::addCustomPoint() {
 	Q_D(CartesianPlot);
-	auto* point = new CustomPoint(this, QStringLiteral("custom point"));
+	auto* point = new CustomPoint(this, i18n("Custom Point"));
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
 	beginMacro(i18n("%1: add %2", name(), point->name()));
@@ -1955,7 +1963,7 @@ void CartesianPlot::addCustomPoint() {
 
 void CartesianPlot::addReferenceLine() {
 	Q_D(CartesianPlot);
-	auto* line = new ReferenceLine(this, QStringLiteral("reference line"));
+	auto* line = new ReferenceLine(this, i18n("Reference Line"));
 	line->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
 	if (d->calledFromContextMenu) {
@@ -2570,12 +2578,12 @@ bool CartesianPlot::scaleAuto(const Dimension dim, int index, bool fullRange, bo
 
 	DEBUG(Q_FUNC_INFO << ", range " << index << " = " << r.toStdString() << "., data range = " << d->dataRange(dim, index).toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(dataRange.start(), r.start()) && !qIsInf(dataRange.start())) {
+	if (!qFuzzyCompare(dataRange.start(), r.start()) && std::isfinite(dataRange.start())) {
 		r.start() = dataRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(dataRange.end(), r.end()) && !qIsInf(dataRange.end())) {
+	if (!qFuzzyCompare(dataRange.end(), r.end()) && std::isfinite(dataRange.end())) {
 		r.end() = dataRange.end();
 		update = true;
 	}
@@ -2638,7 +2646,7 @@ void CartesianPlot::calculateDataRange(const Dimension dim, const int index, boo
 					  << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
-	d->dataRange(dim, index).setRange(qInf(), -qInf());
+	d->dataRange(dim, index).setRange(INFINITY, -INFINITY);
 	auto range{d->range(dim, index)}; // get reference to range from private
 
 	// loop over all xy-curves and determine the maximum and minimum dir-values
@@ -2909,12 +2917,12 @@ void CartesianPlot::zoom(int index, const Dimension dim, bool zoom_in) {
 	}
 	case RangeT::Scale::Square: {
 		const double diff = (end * end - start * start) * (factor - 1.);
-		range.extend(sqrt(qAbs(diff / 2.)));
+		range.extend(sqrt(std::abs(diff / 2.)));
 		break;
 	}
 	case RangeT::Scale::Inverse: {
 		const double diff = (1. / start - 1. / end) * (factor - 1.);
-		range.extend(1. / qAbs(diff / 2.));
+		range.extend(1. / std::abs(diff / 2.));
 		break;
 	}
 	}
@@ -2999,11 +3007,11 @@ void CartesianPlot::shift(int index, const Dimension dim, bool leftOrDown) {
 		break;
 	case RangeT::Scale::Square:
 		offset = (end * end - start * start) * factor;
-		range += sqrt(qAbs(offset));
+		range += sqrt(std::abs(offset));
 		break;
 	case RangeT::Scale::Inverse:
 		offset = (1. / start - 1. / end) * factor;
-		range += 1. / qAbs(offset);
+		range += 1. / std::abs(offset);
 		break;
 	}
 
@@ -3560,10 +3568,10 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 		bool visible;
 		if (cursor0Enable
-			&& qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x()) < cursorPenWidth2) {
+			&& std::abs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
 		} else if (cursor1Enable
-				   && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
+				   && std::abs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
 					   < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
@@ -3655,7 +3663,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			// don't retransform on small mouse movement deltas
 			const int deltaXScene = (m_panningStart.x() - event->pos().x());
 			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (qAbs(deltaXScene) < 5 && qAbs(deltaYScene) < 5)
+			if (std::abs(deltaXScene) < 5 && std::abs(deltaYScene) < 5)
 				return;
 
 			if (!cSystem->isValid())
@@ -3998,7 +4006,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
 	m_selectionBandIsShown = false;
 	// don't zoom if very small region was selected, avoid occasional/unwanted zooming
-	if (qAbs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && qAbs(m_selectionEnd.y() - m_selectionStart.y()) < 20)
+	if (std::abs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && std::abs(m_selectionEnd.y() - m_selectionStart.y()) < 20)
 		return;
 
 	int xIndex = -1, yIndex = -1;
@@ -4282,10 +4290,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 
 			bool visible;
 			if ((cursor0Enable
-				 && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x())
+				 && std::abs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), range(Dimension::Y).start()), visible).x())
 					 < cursorPenWidth2)
 				|| (cursor1Enable
-					&& qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
+					&& std::abs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), range(Dimension::Y).start()), visible).x())
 						< cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
 			else

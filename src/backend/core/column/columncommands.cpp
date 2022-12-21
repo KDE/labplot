@@ -14,7 +14,10 @@
 #include "columncommands.h"
 #include "ColumnPrivate.h"
 #include "backend/lib/macros.h"
+
 #include <KLocalizedString>
+
+#include <cmath>
 
 /** ***************************************************************************
  * \class ColumnSetModeCmd

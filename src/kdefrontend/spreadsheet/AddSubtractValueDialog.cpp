@@ -15,13 +15,15 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KWindowConfig>
+
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QWindow>
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KWindowConfig>
+#include <cmath>
 
 /*!
 	\class AddSubtractValueDialog
@@ -193,7 +195,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
-			if (!std::isnan(value)) {
+			if (std::isfinite(value)) {
 				const auto str = numberLocale.toString(column->valueAt(row), 'g', 16);
 				ui.leValue->setText(str);
 				ui.leValueStart->setText(str);
@@ -511,9 +513,9 @@ void AddSubtractValueDialog::generateForColumns() {
 				// QDEBUG(Q_FUNC_INFO << ", DT OLD:" << data->operator[](0))
 				// QDEBUG(Q_FUNC_INFO << ", OLD VALUE:" << data->operator[](0).toMSecsSinceEpoch())
 				// QDEBUG(Q_FUNC_INFO << ", NEW VALUE:" << data->operator[](0).toMSecsSinceEpoch() + value)
-				// QDEBUG(Q_FUNC_INFO << ", DT NEW:" << QDateTime::fromMSecsSinceEpoch(data->operator[](0).toMSecsSinceEpoch() + value, timeSpec))
+				// QDEBUG(Q_FUNC_INFO << ", DT NEW:" << QDateTime::fromMSecsSinceEpoch(data->operator[](0).toMSecsSinceEpoch() + value, Qt::UTC))
 				for (int i = 0; i < rows; ++i)
-					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, data->operator[](i).timeSpec());
+					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, Qt::UTC);
 
 				col->replaceDateTimes(0, new_data);
 			}
@@ -686,7 +688,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			for (int i = 0; i < rows; ++i)
 				for (int j = 0; j < cols; ++j) {
 					auto dateTime = m_matrix->cell<QDateTime>(i, j);
-					new_data = QDateTime::fromMSecsSinceEpoch(dateTime.toMSecsSinceEpoch() + value, dateTime.timeSpec());
+					new_data = QDateTime::fromMSecsSinceEpoch(dateTime.toMSecsSinceEpoch() + value, dateTime.timeSpec(), Qt::UTC);
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;

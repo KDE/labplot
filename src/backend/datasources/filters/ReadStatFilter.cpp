@@ -330,7 +330,7 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t* variable, rea
 	if (value.is_system_missing) { // empty
 		if (value.type == READSTAT_TYPE_FLOAT || value.type == READSTAT_TYPE_DOUBLE) {
 			QVector<double>& container = *static_cast<QVector<double>*>(m_dataContainer[colIndex]);
-			container[rowIndex] = qQNaN();
+			container[rowIndex] = NAN;
 		}
 	} else {
 		switch (value.type) {

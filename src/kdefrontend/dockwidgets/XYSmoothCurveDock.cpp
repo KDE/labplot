@@ -419,7 +419,7 @@ void XYSmoothCurveDock::typeChanged(int index) {
 	m_smoothData.type = type;
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbMode->model());
-	QStandardItem* pad_interp_item = model->item(nsl_smooth_pad_interp);
+	auto* pad_interp_item = model->item(nsl_smooth_pad_interp);
 	if (type == nsl_smooth_type_moving_average || type == nsl_smooth_type_moving_average_lagged) {
 		uiGeneralTab.lWeight->show();
 		uiGeneralTab.cbWeight->show();

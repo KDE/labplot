@@ -162,6 +162,7 @@ public:
 	void addValueLabel(const QDateTime&, const QString&);
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
+	double doubleAt(int) const override;
 	double valueAt(int) const override;
 	void setValues(const QVector<double>&);
 	void setValueAt(int, double) override;

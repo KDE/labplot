@@ -388,7 +388,7 @@ void BackgroundWidget::backgroundFileNameChanged(const QString& name) {
 
 void BackgroundWidget::backgroundOpacityChanged(float opacity) {
 	CONDITIONAL_LOCK_RETURN;
-	ui.sbOpacity->setValue(qRound(opacity * 100.0));
+	ui.sbOpacity->setValue(std::round(opacity * 100));
 }
 
 //**********************************************************
@@ -403,7 +403,7 @@ void BackgroundWidget::load() {
 	ui.leFileName->setText(m_background->fileName());
 	ui.kcbFirstColor->setColor(m_background->firstColor());
 	ui.kcbSecondColor->setColor(m_background->secondColor());
-	ui.sbOpacity->setValue(qRound(m_background->opacity() * 100));
+	ui.sbOpacity->setValue(std::round(m_background->opacity() * 100));
 
 	// optional parameters
 	bool visible = m_background->enabledAvailable();
@@ -435,7 +435,7 @@ void BackgroundWidget::loadConfig(const KConfigGroup& group) {
 	ui.leFileName->setText(group.readEntry(m_prefix + QStringLiteral("FileName"), m_background->fileName()));
 	ui.kcbFirstColor->setColor(group.readEntry(m_prefix + QStringLiteral("FirstColor"), m_background->firstColor()));
 	ui.kcbSecondColor->setColor(group.readEntry(m_prefix + QStringLiteral("SecondColor"), m_background->secondColor()));
-	ui.sbOpacity->setValue(qRound(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_background->opacity()) * 100));
+	ui.sbOpacity->setValue(std::round(group.readEntry(m_prefix + QStringLiteral("Opacity"), m_background->opacity()) * 100));
 
 	// optional parameters
 	if (m_background->enabledAvailable())

@@ -4,6 +4,7 @@
 	Description          : Private members of XYFitCurve
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -27,6 +28,8 @@ public:
 	~XYFitCurvePrivate() override;
 
 	void recalculate();
+	void runLevenbergMarquardt(const AbstractColumn* xcol, const AbstractColumn* ycol, Range<double> xRange);
+	void runMaximumLikelihood(const AbstractColumn* xcol, double normalization);
 	void evaluate(bool preview = false);
 
 	const Histogram* dataSourceHistogram{nullptr};

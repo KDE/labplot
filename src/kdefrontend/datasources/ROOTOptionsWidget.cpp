@@ -200,14 +200,14 @@ void ROOTOptionsWidget::setNRows(int nrows) {
 	//   else set it to one after underflow
 	// - if nrows didn't change, keep end row,
 	//   else set it to one before overflow
-	const int max = qMax(nrows - 1, 0);
+	const int max = std::max(nrows - 1, 0);
 	int firstval = ui.sbFirst->value();
 	if (ui.sbFirst->maximum() == 0)
-		firstval = qMin(nrows - 1, histselected ? 1 : 0);
+		firstval = std::min(nrows - 1, histselected ? 1 : 0);
 	ui.sbFirst->setMaximum(max);
 	ui.sbFirst->setValue(firstval);
 
-	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value() : qMax(max - (histselected ? 1 : 0), 0);
+	int lastval = max == ui.sbLast->maximum() ? ui.sbLast->value() : std::max(max - (histselected ? 1 : 0), 0);
 	ui.sbLast->setMaximum(max);
 	ui.sbLast->setValue(lastval);
 }
