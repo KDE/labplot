@@ -366,29 +366,16 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 /**
  * \brief Set the column mode
  *
- * This sets the column mode and, if
- * necessary, converts it to another datatype.
+ * This sets the column mode and, if necessary, converts it to another datatype.
  */
 void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
+	DEBUG(Q_FUNC_INFO)
 	if (mode == columnMode())
 		return;
 
 	beginMacro(i18n("%1: change column type", name()));
 
-	auto* old_input_filter = d->inputFilter();
-	auto* old_output_filter = d->outputFilter();
-	exec(new ColumnSetModeCmd(d, mode));
-
-	if (d->inputFilter() != old_input_filter) {
-		removeChild(old_input_filter);
-		addChild(d->inputFilter());
-		d->inputFilter()->input(0, m_string_io);
-	}
-	if (d->outputFilter() != old_output_filter) {
-		removeChild(old_output_filter);
-		addChild(d->outputFilter());
-		d->outputFilter()->input(0, this);
-	}
+	setColumnModeFast(mode);
 
 	endMacro();
 }
