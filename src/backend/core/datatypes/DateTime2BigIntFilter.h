@@ -19,13 +19,14 @@ class DateTime2BigIntFilter : public AbstractSimpleFilter {
 
 public:
 	qint64 bigIntAt(int row) const override {
+		DEBUG(Q_FUNC_INFO)
 		if (!m_inputs.value(0))
 			return 0;
 		const auto dt = m_inputs.value(0)->dateTimeAt(row);
 		if (!dt.isValid())
 			return 0;
 
-		return dt.toMSecsSinceEpoch(); // TODO: ask unit (see other DateTime filter)
+		return dt.toMSecsSinceEpoch(); // TODO: select unit (see other DateTime filter)
 	}
 
 	//! Return the data type of the column
