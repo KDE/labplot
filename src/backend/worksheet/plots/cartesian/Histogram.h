@@ -70,11 +70,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, binRangesMin, BinRangesMin)
 	BASIC_D_ACCESSOR_DECL(double, binRangesMax, BinRangesMax)
 
-	//	BASIC_D_ACCESSOR_DECL(double, xMin, XMin)
-	//	BASIC_D_ACCESSOR_DECL(double, xMax, XMax)
-	//	BASIC_D_ACCESSOR_DECL(double, yMin, YMin)
-	//	BASIC_D_ACCESSOR_DECL(double, yMax, YMax)
-
 	Line* line() const;
 	Background* background() const;
 	Symbol* symbol() const;
