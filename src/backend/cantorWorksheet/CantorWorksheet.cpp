@@ -30,9 +30,9 @@
 #endif
 
 #include <KLocalizedString>
+#include <KParts/ReadWritePart>
 #include <KPluginFactory>
 #include <KPluginMetaData>
-#include <KParts/ReadWritePart>
 #include <kcoreaddons_version.h>
 
 #include <QAction>
