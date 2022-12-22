@@ -3,7 +3,7 @@
 	Project              : AbstractColumn
 	Description          : Conversion filter QDateTime -> bigint (using Julian day).
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+	SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,24 +13,19 @@
 #include "../AbstractSimpleFilter.h"
 #include <QDateTime>
 
-//! Conversion filter QDateTime -> bigint (using Julian day).
+//! Conversion filter QDateTime -> BigInt (using Julian day).
 class DateTime2BigIntFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
 	qint64 bigIntAt(int row) const override {
-		// DEBUG("bigIntAt()");
 		if (!m_inputs.value(0))
 			return 0;
-		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
-		if (!inputDate.isValid())
+		const auto dt = m_inputs.value(0)->dateTimeAt(row);
+		if (!dt.isValid())
 			return 0;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-		QDateTime start(QDate(1900, 1, 1).startOfDay());
-#else
-		QDateTime start(QDate(1900, 1, 1));
-#endif
-		return qint64(start.daysTo(inputDate));
+
+		return dt.toMSecsSinceEpoch(); // TODO: ask unit (see other DateTime filter)
 	}
 
 	//! Return the data type of the column
