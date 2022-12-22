@@ -5,6 +5,7 @@
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
 	SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -28,12 +29,13 @@
 #include "3rdparty/cantor/panelpluginhandler.h"
 #endif
 
+#include <KLocalizedString>
+#include <KParts/ReadWritePart>
+#include <kcoreaddons_version.h>
+
 #include <QAction>
 #include <QFileInfo>
 #include <QModelIndex>
-
-#include <KLocalizedString>
-#include <KParts/ReadWritePart>
 
 CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 	: AbstractPart(name, AspectType::CantorWorksheet)
@@ -47,6 +49,8 @@ CantorWorksheet::CantorWorksheet(const QString& name, bool loading)
 */
 bool CantorWorksheet::init(QByteArray* content) {
 	DEBUG(Q_FUNC_INFO)
+
+#if KCOREADDONS_VERSION < QT_VERSION_CHECK(5, 86, 0)
 	KPluginLoader loader(QLatin1String("kf5/parts/cantorpart"));
 	KPluginLoader oldLoader(QLatin1String("cantorpart")); // old path
 	KPluginFactory* factory = loader.factory();
@@ -56,7 +60,6 @@ bool CantorWorksheet::init(QByteArray* content) {
 		WARN("Error message: " << STDSTRING(loader.errorString()))
 		factory = oldLoader.factory();
 	}
-
 	if (!factory) {
 		// we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		// return false here, a proper error message will be created in load() and propagated further.
@@ -66,11 +69,24 @@ bool CantorWorksheet::init(QByteArray* content) {
 		return false;
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+#else
+	const auto result = KPluginFactory::instantiatePlugin<KParts::ReadWritePart>(KPluginMetaData(QStringLiteral("kf5/parts/cantorpart")),
+																				 this,
+																				 QVariantList() << m_backendName << QLatin1String("--noprogress"));
+
+	if (!result) {
+		WARN("Could not find cantorpart part");
+		return false;
+	} else {
+		m_part = result.plugin;
+#endif
 		if (!m_part) {
 			WARN("Could not create the Cantor Part for backend " << STDSTRING(m_backendName))
 			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);
 			return false;
 		}
+
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
 		if (!m_worksheetAccess)
 			return false;
