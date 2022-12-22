@@ -30,6 +30,8 @@
 #endif
 
 #include <KLocalizedString>
+#include <KPluginFactory>
+#include <KPluginMetaData>
 #include <KParts/ReadWritePart>
 #include <kcoreaddons_version.h>
 
