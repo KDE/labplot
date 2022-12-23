@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet element to draw images
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,9 +15,10 @@
 
 #include <QPen>
 
+class Line;
+class ImagePrivate;
 class QBrush;
 class QFont;
-class ImagePrivate;
 
 class Image : public WorksheetElement {
 	Q_OBJECT
@@ -43,8 +44,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, height, Height)
 	BASIC_D_ACCESSOR_DECL(bool, keepRatio, KeepRatio)
 
-	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
-	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
+	Line* borderLine() const;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
