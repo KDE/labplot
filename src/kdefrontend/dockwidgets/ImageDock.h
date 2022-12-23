@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for image properties
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -11,12 +11,12 @@
 #ifndef IMAGEDOCK_H
 #define IMAGEDOCK_H
 
-#include "backend/worksheet/TextLabel.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_imagedock.h"
 
 class AbstractAspect;
 class Image;
+class LineWidget;
 class KConfig;
 
 class ImageDock : public BaseDock {
@@ -32,6 +32,7 @@ private:
 	Ui::ImageDock ui;
 	QList<Image*> m_imageList;
 	Image* m_image{nullptr};
+	LineWidget* borderLineWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
@@ -56,12 +57,6 @@ private Q_SLOTS:
 	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 
-	// border
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
-	void borderOpacityChanged(int);
-
 	void visibilityChanged(bool);
 
 	// SLOTs for changes triggered in Image
@@ -76,9 +71,6 @@ private Q_SLOTS:
 	void imageHorizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void imageVerticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void imageRotationAngleChanged(qreal);
-
-	void imageBorderPenChanged(const QPen&);
-	void imageBorderOpacityChanged(float);
 
 	void imageVisibleChanged(bool);
 

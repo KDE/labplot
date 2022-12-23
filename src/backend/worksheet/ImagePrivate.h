@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet element to draw images
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -26,10 +26,7 @@ public:
 	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter);
 	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Centimeter);
 	bool keepRatio{true}; // keep aspect ratio when scaling the image
-
-	// border
-	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
-	qreal borderOpacity{1.0};
+	Line* borderLine{nullptr};
 
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;

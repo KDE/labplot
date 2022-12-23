@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : Worksheet element to draw images
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2019-2022 Alexander Semke <alexander.semke@web.de>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,7 +13,7 @@
 #include "Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
-#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/Line.h"
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -66,10 +66,17 @@ void Image::init() {
 	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
 
 	// border
-	d->borderPen = QPen(group.readEntry("BorderColor", d->borderPen.color()),
-						group.readEntry("BorderWidth", d->borderPen.widthF()),
-						(Qt::PenStyle)group.readEntry("BorderStyle", (int)(d->borderPen.style())));
-	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
+	d->borderLine = new Line(QString());
+	d->borderLine->setPrefix(QLatin1String("Border"));
+	d->borderLine->setHidden(true);
+	addChild(d->borderLine);
+	d->borderLine->init(group);
+	connect(d->borderLine, &Line::updatePixmapRequested, [=] {
+		d->update();
+	});
+	connect(d->borderLine, &Line::updateRequested, [=] {
+		d->recalcShapeAndBoundingRect();
+	});
 }
 
 // no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -134,8 +141,10 @@ BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
 BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
 BASIC_SHARED_D_READER_IMPL(Image, bool, keepRatio, keepRatio)
 
-BASIC_SHARED_D_READER_IMPL(Image, QPen, borderPen, borderPen)
-BASIC_SHARED_D_READER_IMPL(Image, qreal, borderOpacity, borderOpacity)
+Line* Image::borderLine() const {
+	Q_D(const Image);
+	return d->borderLine;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(Image, SetFileName, QString, fileName, updateImage)
@@ -184,20 +193,6 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-// Border
-STD_SETTER_CMD_IMPL_F_S(Image, SetBorderPen, QPen, borderPen, update)
-void Image::setBorderPen(const QPen& pen) {
-	Q_D(Image);
-	if (pen != d->borderPen)
-		exec(new ImageSetBorderPenCmd(d, pen, ki18n("%1: set border")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetBorderOpacity, qreal, borderOpacity, update)
-void Image::setBorderOpacity(qreal opacity) {
-	Q_D(Image);
-	if (opacity != d->borderOpacity)
-		exec(new ImageSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
-}
 
 //##############################################################################
 //####################### Private implementation ###############################
@@ -314,8 +309,8 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 	QMatrix matrix;
 	matrix.rotate(-rotationAngle);
 	imageShape = QPainterPath();
-	if (borderPen.style() != Qt::NoPen) {
-		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderPen));
+	if (borderLine->pen().style() != Qt::NoPen) {
+		imageShape.addPath(WorksheetElement::shapeFromPath(borderShapePath, borderLine->pen()));
 		transformedBoundingRectangle = matrix.mapRect(imageShape.boundingRect());
 	} else {
 		imageShape.addRect(boundingRectangle);
@@ -337,12 +332,12 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	painter->restore();
 
 	// draw the border
-	if (borderPen.style() != Qt::NoPen) {
+	if (borderLine->style() != Qt::NoPen) {
 		painter->save();
 		painter->rotate(-rotationAngle);
-		painter->setPen(borderPen);
+		painter->setPen(borderLine->pen());
 		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderOpacity);
+		painter->setOpacity(borderLine->opacity());
 		painter->drawPath(borderShapePath);
 		painter->restore();
 	}
@@ -428,10 +423,7 @@ void Image::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	// border
-	writer->writeStartElement(QStringLiteral("border"));
-	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute(QStringLiteral("borderOpacity"), QString::number(d->borderOpacity));
-	writer->writeEndElement();
+	d->borderLine->save(writer);
 
 	writer->writeEndElement(); // close "image" section
 }
@@ -475,9 +467,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 
 			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == QLatin1String("border")) {
-			attribs = reader->attributes();
-			READ_QPEN(d->borderPen);
-			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
+			d->borderLine->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement())
@@ -497,8 +487,14 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void Image::loadThemeConfig(const KConfig&) {
+void Image::loadThemeConfig(const KConfig& config) {
+	Q_D(Image);
+	const auto& group = config.group("CartesianPlot");
+	d->borderLine->loadThemeConfig(group);
 }
 
-void Image::saveThemeConfig(const KConfig&) {
+void Image::saveThemeConfig(const KConfig& config) {
+	Q_D(Image);
+	KConfigGroup group = config.group("Image");
+	d->borderLine->saveThemeConfig(group);
 }
