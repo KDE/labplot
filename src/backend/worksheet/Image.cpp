@@ -193,7 +193,6 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
