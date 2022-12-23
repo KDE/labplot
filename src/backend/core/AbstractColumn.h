@@ -34,6 +34,8 @@ class AbstractColumn : public AbstractAspect {
 
 public:
 	enum class PlotDesignation { NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorPlus, YErrorMinus };
+	// how to convert numeric <-> datetime
+	enum class TimeUnit { Milliseconds, Seconds, Minutes, Hours, Days };
 	enum class ColumnMode {
 		// BASIC FORMATS
 		Double = 0, // double
@@ -121,6 +123,7 @@ public:
 	static QStringList dateFormats(); // supported date formats
 	static QStringList timeFormats(); // supported time formats
 	static QStringList dateTimeFormats(); // supported datetime formats
+	static QString timeUnitString(TimeUnit);
 	static QString plotDesignationString(PlotDesignation, bool withBrackets = true);
 	static QString columnModeString(ColumnMode);
 	static QIcon modeIcon(ColumnMode);

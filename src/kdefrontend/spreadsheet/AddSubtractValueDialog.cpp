@@ -120,11 +120,8 @@ void AddSubtractValueDialog::init() {
 	if (m_operation == Add || m_operation == Subtract) {
 		ui.cbType->addItem(i18n("Absolute Value"));
 		ui.cbType->addItem(i18n("Difference"));
-		ui.cbTimeUnits->addItem(i18n("Milliseconds"));
-		ui.cbTimeUnits->addItem(i18n("Seconds"));
-		ui.cbTimeUnits->addItem(i18n("Minutes"));
-		ui.cbTimeUnits->addItem(i18n("Hours"));
-		ui.cbTimeUnits->addItem(i18n("Days"));
+		for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
+			ui.cbTimeUnits->addItem(AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i));
 	} else {
 		ui.lType->hide();
 		ui.cbType->hide();
@@ -754,15 +751,22 @@ bool AddSubtractValueDialog::setDateTimeValue(qint64& value) const {
 			if (!ok)
 				return false;
 
-			int unitIndex = ui.cbTimeUnits->currentIndex();
-			if (unitIndex == 1)
-				msecsValue *= 1000; // seconds
-			else if (unitIndex == 2)
-				msecsValue *= 60000; // minutes
-			else if (unitIndex == 3)
-				msecsValue *= 3600000; // hours
-			else if (unitIndex == 4)
-				msecsValue *= 8.64e+07; // days
+			auto unit = (AbstractColumn::TimeUnit)ui.cbTimeUnits->currentIndex();
+			switch (unit) {
+			case AbstractColumn::TimeUnit::Milliseconds:
+				break;
+			case AbstractColumn::TimeUnit::Seconds:
+				msecsValue *= 1000;
+				break;
+			case AbstractColumn::TimeUnit::Minutes:
+				msecsValue *= 60 * 1000;
+				break;
+			case AbstractColumn::TimeUnit::Hours:
+				msecsValue *= 60 * 60 * 1000;
+				break;
+			case AbstractColumn::TimeUnit::Days:
+				msecsValue *= 24 * 60 * 60 * 1000;
+			}
 
 			value = msecsValue;
 		} else // add/subtract a difference

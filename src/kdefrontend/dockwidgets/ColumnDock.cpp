@@ -360,12 +360,28 @@ void ColumnDock::typeChanged(int index) {
 			col->endMacro();
 		}
 		break;
-	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::DateTime: // -> DateTime
 		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// use standard format
 			const QString& format(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
 			QDEBUG(Q_FUNC_INFO << ", format = " << format)
+			// TODO: ask how to interpret numeric input value
+			// if (col->isNumeric())
+
+			/* QStringList items;
+			items << i18n("Spring") << i18n("Summer") << i18n("Fall") << i18n("Winter");
+			// TODO: list of units, fill items
+
+			bool ok;
+			QString item = QInputDialog::getItem(this, i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
+			if (ok && !item.isEmpty()) {
+				int index = items.indexOf(item);
+
+				itemLabel->setText(item);
+			}
+			*/
+
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
