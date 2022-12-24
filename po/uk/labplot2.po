@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-23 00:42+0000\n"
+"POT-Creation-Date: 2022-12-24 00:45+0000\n"
 "PO-Revision-Date: 2022-12-22 05:27+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -66,7 +66,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
-#: src/backend/worksheet/Image.cpp:445
+#: src/backend/worksheet/Image.cpp:436
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
@@ -116,7 +116,7 @@ msgstr ""
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
-#: src/backend/worksheet/Image.cpp:482
+#: src/backend/worksheet/Image.cpp:471
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3035
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
@@ -2709,7 +2709,7 @@ msgstr "Округлення до найближчого цілого значе
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/ExpressionParser.cpp:158
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:150
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
 #, kde-format
 msgid "Size"
 msgstr "Розмір"
@@ -6411,7 +6411,7 @@ msgstr "%1: встановити непрозорість тла"
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
-#: src/backend/worksheet/Image.cpp:117
+#: src/backend/worksheet/Image.cpp:124
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
@@ -6430,7 +6430,7 @@ msgstr "%1: встановити непрозорість тла"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:64
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:275
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:52
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:487
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:77
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:263
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:63
@@ -6451,43 +6451,37 @@ msgstr "%1: встановити непрозорість тла"
 msgid "Visible"
 msgstr "Видиме"
 
-#: src/backend/worksheet/Image.cpp:145
+#: src/backend/worksheet/Image.cpp:154
 #, kde-format
 msgid "%1: set image"
 msgstr "%1: встановити зображення"
 
-#: src/backend/worksheet/Image.cpp:152
+#: src/backend/worksheet/Image.cpp:161
 #, kde-format
 msgid "%1: embed image"
 msgstr "%1: вбудувати зображення"
 
-#: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
-#: src/backend/worksheet/TextLabel.cpp:373
+#: src/backend/worksheet/Image.cpp:168 src/backend/worksheet/TextLabel.cpp:373
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1: встановити рівень непрозорості рамки"
 
-#: src/backend/worksheet/Image.cpp:166
+#: src/backend/worksheet/Image.cpp:175
 #, kde-format
 msgid "%1: set width"
 msgstr "%1: встановити ширину"
 
-#: src/backend/worksheet/Image.cpp:175
+#: src/backend/worksheet/Image.cpp:184
 #, kde-format
 msgid "%1: set height"
 msgstr "%1: встановити висоту"
 
-#: src/backend/worksheet/Image.cpp:184
+#: src/backend/worksheet/Image.cpp:193
 #, kde-format
 msgid "%1: change keep ratio"
 msgstr "%1: змінити співвідношення розмірів"
 
-#: src/backend/worksheet/Image.cpp:192 src/backend/worksheet/TextLabel.cpp:366
-#, kde-format
-msgid "%1: set border"
-msgstr "%1: встановити рамку"
-
-#: src/backend/worksheet/Image.cpp:468
+#: src/backend/worksheet/Image.cpp:459
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Не вдалося прочитати дані зображення"
@@ -8460,6 +8454,11 @@ msgstr "%1: встановити колір тла"
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1: встановити форму рамки"
+
+#: src/backend/worksheet/TextLabel.cpp:366
+#, kde-format
+msgid "%1: set border"
+msgstr "%1: встановити рамку"
 
 #: src/backend/worksheet/Worksheet.cpp:618
 #, kde-format
@@ -11632,8 +11631,8 @@ msgstr "Розмір масиву"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/SettingsGeneralPage.cpp:187
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
@@ -11648,8 +11647,8 @@ msgstr "Згори"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:55
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
 #: src/kdefrontend/SettingsGeneralPage.cpp:188
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
@@ -11734,8 +11733,8 @@ msgstr "напівзаповнена, велика"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:55
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:125
@@ -11753,8 +11752,8 @@ msgstr "Ліворуч"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
@@ -12226,10 +12225,10 @@ msgstr "основний рядка"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:54
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/widgets/LabelWidget.cpp:136
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:153
@@ -12466,42 +12465,6 @@ msgstr "Дані, +-:"
 #, kde-format
 msgid "Data, +:"
 msgstr "Дані, +:"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:83
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
-#, kde-format
-msgid "No line"
-msgstr "Без лінії"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:84
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
-#, kde-format
-msgid "Solid line"
-msgstr "Суцільна лінія"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:85
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
-#, kde-format
-msgid "Dash line"
-msgstr "Штрихова лінія"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:86
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "Dot line"
-msgstr "Пунктир"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:87
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Dash dot line"
-msgstr "Штрих-пунктир"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:88
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Штрих-подвійний пунктир"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:249
 #, kde-format
@@ -15860,7 +15823,7 @@ msgstr "Тип похибки за Y:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:223
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:263
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:55
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:84
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
@@ -15905,7 +15868,7 @@ msgstr "Коментар:"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:243
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:353
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:23
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:148
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:357
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
@@ -15974,7 +15937,6 @@ msgstr "Позначки похибок"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:964
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1089
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:465
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:61
 #: src/kdefrontend/ui/labelwidget.ui:558 src/kdefrontend/ui/symbolwidget.ui:44
 #: src/kdefrontend/ui/symbolwidget.ui:182
@@ -15994,7 +15956,6 @@ msgstr "Стиль:"
 #: src/kdefrontend/ui/datapickercurvewidget.ui:236
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1262
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:37
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:388
@@ -16148,11 +16109,10 @@ msgstr "Розмір:"
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:605
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:624
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:643
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:242
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:419
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:519
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:538
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:557
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:209
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:235
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:325
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:368
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:208
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:160
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:179
@@ -16221,7 +16181,6 @@ msgstr "Поле лічильника для чисел."
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:608
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:627
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:646
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:560
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:163
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:182
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:356
@@ -16282,7 +16241,7 @@ msgstr "Вкажіть назву файла зображення."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:170
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:504
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:109
 #, kde-format
 msgid " Select the image file"
 msgstr "Вибрати файл зображення"
@@ -16294,7 +16253,7 @@ msgstr "Вибрати файл зображення"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:218
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1135
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:410
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
 #: src/kdefrontend/ui/labelwidget.ui:124 src/kdefrontend/ui/symbolwidget.ui:100
@@ -16314,7 +16273,7 @@ msgstr "Відстань між точками:"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:297
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1161
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:370
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:403
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:408
 #: src/kdefrontend/ui/labelwidget.ui:700 src/kdefrontend/ui/symbolwidget.ui:84
@@ -16446,8 +16405,8 @@ msgstr "Інтенсивність:"
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:705
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:288
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:360
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:409
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:358
 #: src/kdefrontend/ui/labelwidget.ui:168 src/kdefrontend/ui/labelwidget.ui:229
 #, kde-format
 msgid "Vertical position relative to label's parent"
@@ -17151,7 +17110,7 @@ msgstr "Пов'язати файл"
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:23
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:92
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:458
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:84
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
 #, kde-format
 msgid "File name:"
@@ -17464,8 +17423,7 @@ msgstr "Стрілка"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:494
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1275
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:148
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:327
@@ -17636,7 +17594,7 @@ msgstr "Автоматично визначати оптимальну кіль�
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:101
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:290
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:111
 #, kde-format
 msgid "Position"
@@ -17683,8 +17641,7 @@ msgstr "Відступ:"
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1248
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:305
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:384
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:135
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:281
@@ -17716,8 +17673,7 @@ msgstr "Формат:"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:971
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1106
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:91
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:151
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:330
@@ -17850,7 +17806,7 @@ msgstr "риски"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:416
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1287
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:551
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:451
 #: src/kdefrontend/ui/labelwidget.ui:686 src/kdefrontend/ui/symbolwidget.ui:230
 #: src/kdefrontend/widgets/SymbolWidget.cpp:104
 #, kde-format
@@ -18007,8 +17963,7 @@ msgstr "Килимове креслення"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:377
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:199
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:807
@@ -18203,10 +18158,10 @@ msgstr "Розширення:"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:726
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:748
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:784
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:245
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:422
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:522
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:541
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:212
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:238
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:328
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:371
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:480
@@ -18253,7 +18208,7 @@ msgstr "Низ:"
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:722
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:17
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:225
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
 msgid "Height:"
@@ -18345,7 +18300,7 @@ msgstr "Радіус кута:"
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:451
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:383
 #, kde-format
 msgid "Hor. align.:"
 msgstr "Гор. вирівн.:"
@@ -18437,8 +18392,8 @@ msgstr "Курсор 2"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:122
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:232
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:441
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:297
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:315
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:128
 #: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:342
 #, kde-format
@@ -18554,41 +18509,41 @@ msgstr "Форма"
 msgid "Data, -:"
 msgstr "Дані, -:"
 
-#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:59
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:93
 #, kde-format
-msgid "Vert. align.:"
-msgstr "Верт. вирівн.:"
-
-#. i18n: ectx: property (text), widget (QLabel, lRatio)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:328
-#, kde-format
-msgid "Keep Ratio:"
-msgstr "Зберігати співвідношення:"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionY)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:363
-#, kde-format
-msgid "Position Y:"
-msgstr "Розташування за Y:"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:444
-#, kde-format
-msgid "Position X:"
-msgstr "Розташування за X:"
+msgid "Specify the name of the image file"
+msgstr "Вкажіть назву файла зображення"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:472
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:121
 #, kde-format
 msgid "Embedded:"
 msgstr "Вбудовано:"
 
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:488
+#. i18n: ectx: property (text), widget (QLabel, lRatio)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:251
 #, kde-format
-msgid "Specify the name of the image file"
-msgstr "Вкажіть назву файла зображення"
+msgid "Keep Ratio:"
+msgstr "Зберігати співвідношення:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionX)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:300
+#, kde-format
+msgid "Position X:"
+msgstr "Розташування за X:"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionY)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:343
+#, kde-format
+msgid "Position Y:"
+msgstr "Розташування за Y:"
+
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:393
+#, kde-format
+msgid "Vert. align.:"
+msgstr "Верт. вирівн.:"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:33
@@ -21130,6 +21085,36 @@ msgstr "Прямокутник зі стрілкою ліворуч"
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Прямокутник зі стрілкою праворуч"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#, kde-format
+msgid "No line"
+msgstr "Без лінії"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#, kde-format
+msgid "Solid line"
+msgstr "Суцільна лінія"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#, kde-format
+msgid "Dash line"
+msgstr "Штрихова лінія"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#, kde-format
+msgid "Dot line"
+msgstr "Пунктир"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#, kde-format
+msgid "Dash dot line"
+msgstr "Штрих-пунктир"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "Штрих-подвійний пунктир"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format

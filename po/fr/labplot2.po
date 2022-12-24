@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-23 00:42+0000\n"
+"POT-Creation-Date: 2022-12-24 00:45+0000\n"
 "PO-Revision-Date: 2022-12-04 07:45+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -74,7 +74,7 @@ msgstr ""
 #: src/backend/datasources/MQTTClient.cpp:1200
 #: src/backend/datasources/MQTTTopic.cpp:218 src/backend/matrix/Matrix.cpp:1130
 #: src/backend/note/Note.cpp:137 src/backend/worksheet/Background.cpp:223
-#: src/backend/worksheet/Image.cpp:445
+#: src/backend/worksheet/Image.cpp:436
 #: src/backend/worksheet/InfoElement.cpp:1158
 #: src/backend/worksheet/Line.cpp:225
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:2906
@@ -123,7 +123,7 @@ msgstr ""
 #: src/backend/datasources/MQTTSubscription.cpp:168
 #: src/backend/datasources/MQTTTopic.cpp:283 src/backend/matrix/Matrix.cpp:1283
 #: src/backend/spreadsheet/Spreadsheet.cpp:914
-#: src/backend/worksheet/Image.cpp:482
+#: src/backend/worksheet/Image.cpp:471
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:3035
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:1431
 #: src/backend/worksheet/plots/cartesian/BoxPlot.cpp:2013
@@ -2730,7 +2730,7 @@ msgstr "Arrondir à l'entier le plus proche"
 
 #. i18n: ectx: property (text), widget (QLabel, lSize)
 #: src/backend/gsl/ExpressionParser.cpp:158
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:150
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
 #, kde-format
 msgid "Size"
 msgstr "Taille"
@@ -6488,7 +6488,7 @@ msgstr "%1 : définir l'opacité de l'arrière-plan"
 #. i18n: ectx: property (text), widget (QCheckBox, chbVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chkVisible)
 #. i18n: ectx: property (text), widget (QCheckBox, chbSymbolVisible)
-#: src/backend/worksheet/Image.cpp:117
+#: src/backend/worksheet/Image.cpp:124
 #: src/backend/worksheet/InfoElement.cpp:173
 #: src/backend/worksheet/plots/cartesian/Axis.cpp:248
 #: src/backend/worksheet/plots/cartesian/BarPlot.cpp:80
@@ -6507,7 +6507,7 @@ msgstr "%1 : définir l'opacité de l'arrière-plan"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:535
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:64
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:275
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:52
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:487
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:77
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:263
 #: src/kdefrontend/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui:63
@@ -6528,43 +6528,37 @@ msgstr "%1 : définir l'opacité de l'arrière-plan"
 msgid "Visible"
 msgstr "Visible"
 
-#: src/backend/worksheet/Image.cpp:145
+#: src/backend/worksheet/Image.cpp:154
 #, kde-format
 msgid "%1: set image"
 msgstr "%1 : définir une image"
 
-#: src/backend/worksheet/Image.cpp:152
+#: src/backend/worksheet/Image.cpp:161
 #, kde-format
 msgid "%1: embed image"
 msgstr "%1 : intégrer une image"
 
-#: src/backend/worksheet/Image.cpp:159 src/backend/worksheet/Image.cpp:199
-#: src/backend/worksheet/TextLabel.cpp:373
+#: src/backend/worksheet/Image.cpp:168 src/backend/worksheet/TextLabel.cpp:373
 #, kde-format
 msgid "%1: set border opacity"
 msgstr "%1 : définir l'opacité de bordure"
 
-#: src/backend/worksheet/Image.cpp:166
+#: src/backend/worksheet/Image.cpp:175
 #, kde-format
 msgid "%1: set width"
 msgstr "%1 : définir la largeur "
 
-#: src/backend/worksheet/Image.cpp:175
+#: src/backend/worksheet/Image.cpp:184
 #, kde-format
 msgid "%1: set height"
 msgstr "%1 : définir la hauteur"
 
-#: src/backend/worksheet/Image.cpp:184
+#: src/backend/worksheet/Image.cpp:193
 #, kde-format
 msgid "%1: change keep ratio"
 msgstr "%1 : modifier le ratio de maintien"
 
-#: src/backend/worksheet/Image.cpp:192 src/backend/worksheet/TextLabel.cpp:366
-#, kde-format
-msgid "%1: set border"
-msgstr "%1 : définir la bordure"
-
-#: src/backend/worksheet/Image.cpp:468
+#: src/backend/worksheet/Image.cpp:459
 #, kde-format
 msgid "Failed to read image data"
 msgstr "Impossible de lire les données de l'image."
@@ -8545,6 +8539,11 @@ msgstr "%1 : définir la couleur de l'arrière-plan"
 #, kde-format
 msgid "%1: set border shape"
 msgstr "%1 : définir le style de bordure"
+
+#: src/backend/worksheet/TextLabel.cpp:366
+#, kde-format
+msgid "%1: set border"
+msgstr "%1 : définir la bordure"
 
 #: src/backend/worksheet/Worksheet.cpp:618
 #, kde-format
@@ -11722,8 +11721,8 @@ msgstr "Taille du tableau"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:267
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:275
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:53
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:59
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:67
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
 #: src/kdefrontend/SettingsGeneralPage.cpp:187
 #: src/kdefrontend/widgets/LabelWidget.cpp:139
 #: src/kdefrontend/widgets/LabelWidget.cpp:156
@@ -11738,8 +11737,8 @@ msgstr "En haut"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:269
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:277
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:55
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:62
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:70
 #: src/kdefrontend/SettingsGeneralPage.cpp:188
 #: src/kdefrontend/widgets/LabelWidget.cpp:141
 #: src/kdefrontend/widgets/LabelWidget.cpp:158
@@ -11825,8 +11824,8 @@ msgstr "semi-rempli, grand"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:263
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:271
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:49
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:55
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:63
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:370
 #: src/kdefrontend/SettingsGeneralPage.cpp:189
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:125
@@ -11844,8 +11843,8 @@ msgstr "À gauche"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:265
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:273
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:51
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:58
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:66
 #: src/kdefrontend/dockwidgets/XYCurveDock.cpp:371
 #: src/kdefrontend/SettingsGeneralPage.cpp:190
 #: src/kdefrontend/widgets/BackgroundWidget.cpp:126
@@ -12321,10 +12320,10 @@ msgstr "Ligne principale"
 #: src/kdefrontend/dockwidgets/CartesianPlotLegendDock.cpp:276
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:50
 #: src/kdefrontend/dockwidgets/CustomPointDock.cpp:54
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:56
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:60
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:64
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:68
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:57
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:61
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:65
+#: src/kdefrontend/dockwidgets/ImageDock.cpp:69
 #: src/kdefrontend/widgets/LabelWidget.cpp:136
 #: src/kdefrontend/widgets/LabelWidget.cpp:140
 #: src/kdefrontend/widgets/LabelWidget.cpp:153
@@ -12563,42 +12562,6 @@ msgstr "Données, + / - :"
 #, kde-format
 msgid "Data, +:"
 msgstr "Données, +:"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:83
-#: src/kdefrontend/widgets/LabelWidget.cpp:173
-#, kde-format
-msgid "No line"
-msgstr "Aucune ligne"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:84
-#: src/kdefrontend/widgets/LabelWidget.cpp:174
-#, kde-format
-msgid "Solid line"
-msgstr "Ligne pleine"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:85
-#: src/kdefrontend/widgets/LabelWidget.cpp:175
-#, kde-format
-msgid "Dash line"
-msgstr "Ligne en tirets"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:86
-#: src/kdefrontend/widgets/LabelWidget.cpp:176
-#, kde-format
-msgid "Dot line"
-msgstr "Ligne pointillée"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:87
-#: src/kdefrontend/widgets/LabelWidget.cpp:177
-#, kde-format
-msgid "Dash dot line"
-msgstr "Ligne tiret-point"
-
-#: src/kdefrontend/dockwidgets/ImageDock.cpp:88
-#: src/kdefrontend/widgets/LabelWidget.cpp:178
-#, kde-format
-msgid "Dash dot dot line"
-msgstr "Ligne tiret-point-point"
 
 #: src/kdefrontend/dockwidgets/InfoElementDock.cpp:249
 #, kde-format
@@ -15973,7 +15936,7 @@ msgstr "Type d'erreur en Y :"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:17
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:60
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:223
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:263
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:55
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:84
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:43
 #: src/kdefrontend/ui/dockwidgets/notedock.ui:43
@@ -16018,7 +15981,7 @@ msgstr "Commentaire :"
 #: src/kdefrontend/ui/dockwidgets/columndock.ui:50
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:27
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:243
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:353
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:23
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:148
 #: src/kdefrontend/ui/dockwidgets/livedatadock.ui:357
 #: src/kdefrontend/ui/dockwidgets/matrixdock.ui:17
@@ -16087,7 +16050,6 @@ msgstr "Barres d'erreurs"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:145
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:964
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1089
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:465
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:61
 #: src/kdefrontend/ui/labelwidget.ui:558 src/kdefrontend/ui/symbolwidget.ui:44
 #: src/kdefrontend/ui/symbolwidget.ui:182
@@ -16107,7 +16069,6 @@ msgstr "Style : "
 #: src/kdefrontend/ui/datapickercurvewidget.ui:236
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1262
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:37
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:211
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:120
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:320
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:388
@@ -16261,11 +16222,10 @@ msgstr "Taille : "
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:605
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:624
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:643
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:242
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:419
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:519
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:538
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:557
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:209
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:235
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:325
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:368
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:208
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:160
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:179
@@ -16334,7 +16294,6 @@ msgstr "Boîte à cocher pour les nombres."
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:608
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:627
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:646
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:560
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:163
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:182
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:356
@@ -16395,7 +16354,7 @@ msgstr "Spécifier le nom du fichier image."
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bOpen)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:170
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:504
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:109
 #, kde-format
 msgid " Select the image file"
 msgstr "Sélectionner le fichier image"
@@ -16407,7 +16366,7 @@ msgstr "Sélectionner le fichier image"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:218
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1135
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:108
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:113
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:410
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:121
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:470
 #: src/kdefrontend/ui/labelwidget.ui:124 src/kdefrontend/ui/symbolwidget.ui:100
@@ -16428,7 +16387,7 @@ msgstr "Séparation des points :"
 #: src/kdefrontend/ui/datapickerimagewidget.ui:297
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1161
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:325
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:370
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:403
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:108
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:408
 #: src/kdefrontend/ui/labelwidget.ui:700 src/kdefrontend/ui/symbolwidget.ui:84
@@ -16560,8 +16519,8 @@ msgstr "Intensité :"
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPlotImageType)
 #: src/kdefrontend/ui/datapickerimagewidget.ui:705
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:288
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:360
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:409
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:358
 #: src/kdefrontend/ui/labelwidget.ui:168 src/kdefrontend/ui/labelwidget.ui:229
 #, kde-format
 msgid "Vertical position relative to label's parent"
@@ -17264,7 +17223,7 @@ msgstr "Lier le fichier"
 #. i18n: ectx: property (text), widget (QLabel, lFileName)
 #: src/kdefrontend/ui/datasources/importprojectwidget.ui:23
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:92
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:458
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:84
 #: src/kdefrontend/ui/spreadsheet/exportspreadsheetwidget.ui:29
 #, kde-format
 msgid "File name:"
@@ -17580,8 +17539,7 @@ msgstr "Flèche"
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:494
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1275
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:181
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:88
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:189
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:148
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:84
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:150
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:327
@@ -17759,7 +17717,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lMajorGrid_2)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1119
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:101
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:340
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:290
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:111
 #, kde-format
 msgid "Position"
@@ -17806,8 +17764,7 @@ msgstr "Décalage : "
 #. i18n: ectx: property (text), widget (QLabel, lValuesOpacity)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:1248
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:168
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:305
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:384
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:135
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:137
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:281
@@ -17839,8 +17796,7 @@ msgstr "Format :"
 #: src/kdefrontend/ui/dockwidgets/backgroundwidget.ui:184
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:971
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1106
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:91
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:192
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:151
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:87
 #: src/kdefrontend/ui/dockwidgets/valuewidget.ui:153
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:330
@@ -17975,7 +17931,7 @@ msgstr "Barres"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:416
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:1287
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:551
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:45
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:451
 #: src/kdefrontend/ui/labelwidget.ui:686 src/kdefrontend/ui/symbolwidget.ui:230
 #: src/kdefrontend/widgets/SymbolWidget.cpp:104
 #, kde-format
@@ -18132,8 +18088,7 @@ msgstr "Tracé de la couverture"
 #: src/kdefrontend/ui/dockwidgets/boxplotdock.ui:804
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:554
 #: src/kdefrontend/ui/dockwidgets/histogramdock.ui:562
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:377
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:434
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:199
 #: src/kdefrontend/ui/dockwidgets/linewidget.ui:113
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:115
 #: src/kdefrontend/ui/dockwidgets/xycurvedock.ui:807
@@ -18329,10 +18284,10 @@ msgstr "Étendre"
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:726
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:748
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:784
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:245
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:422
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:522
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:541
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:212
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:238
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:328
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:371
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:197
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:216
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:480
@@ -18379,7 +18334,7 @@ msgstr "En bas :"
 #. i18n: ectx: property (text), widget (QLabel, lRightMargin)
 #. i18n: ectx: property (text), widget (QLabel, lHeight)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:722
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:17
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:225
 #: src/kdefrontend/ui/dockwidgets/worksheetdock.ui:33
 #, kde-format
 msgid "Height:"
@@ -18475,7 +18430,7 @@ msgstr "Rayon de coin :"
 #. i18n: ectx: property (text), widget (QLabel, lHorizontalAlignment)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotlegenddock.ui:78
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:451
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:383
 #, kde-format
 msgid "Hor. align.:"
 msgstr "Alignement horizontal :"
@@ -18569,8 +18524,8 @@ msgstr "Curseur 2"
 #. i18n: ectx: property (toolTip), widget (QLabel, lPosition)
 #. i18n: ectx: property (toolTip), widget (QComboBox, cbPositionX)
 #: src/kdefrontend/ui/dockwidgets/custompointdock.ui:122
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:232
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:441
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:297
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:315
 #: src/kdefrontend/ui/dockwidgets/referencelinedock.ui:128
 #: src/kdefrontend/ui/labelwidget.ui:83 src/kdefrontend/ui/labelwidget.ui:342
 #, kde-format
@@ -18686,41 +18641,41 @@ msgstr "Forme"
 msgid "Data, -:"
 msgstr "Données, -:"
 
-#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:59
+#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:93
 #, kde-format
-msgid "Vert. align.:"
-msgstr "Alignement vertical :"
-
-#. i18n: ectx: property (text), widget (QLabel, lRatio)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:328
-#, kde-format
-msgid "Keep Ratio:"
-msgstr "Conserver le ration :"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionY)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:363
-#, kde-format
-msgid "Position Y:"
-msgstr "Position Y :"
-
-#. i18n: ectx: property (text), widget (QLabel, lPositionX)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:444
-#, kde-format
-msgid "Position X:"
-msgstr "Position X :"
+msgid "Specify the name of the image file"
+msgstr "Spécifier le nom du fichier image"
 
 #. i18n: ectx: property (text), widget (QLabel, lEmbedded)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:472
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:121
 #, kde-format
 msgid "Embedded:"
 msgstr "Intégré :"
 
-#. i18n: ectx: property (toolTip), widget (QLineEdit, leFileName)
-#: src/kdefrontend/ui/dockwidgets/imagedock.ui:488
+#. i18n: ectx: property (text), widget (QLabel, lRatio)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:251
 #, kde-format
-msgid "Specify the name of the image file"
-msgstr "Spécifier le nom du fichier image"
+msgid "Keep Ratio:"
+msgstr "Conserver le ration :"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionX)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:300
+#, kde-format
+msgid "Position X:"
+msgstr "Position X :"
+
+#. i18n: ectx: property (text), widget (QLabel, lPositionY)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:343
+#, kde-format
+msgid "Position Y:"
+msgstr "Position Y :"
+
+#. i18n: ectx: property (text), widget (QLabel, lVerticalAlignment)
+#: src/kdefrontend/ui/dockwidgets/imagedock.ui:393
+#, kde-format
+msgid "Vert. align.:"
+msgstr "Alignement vertical :"
 
 #. i18n: ectx: property (text), widget (QLabel, lCurves)
 #: src/kdefrontend/ui/dockwidgets/infoelementdock.ui:33
@@ -21316,6 +21271,36 @@ msgstr "Rectangle avec flèche vers la gauche"
 #, kde-format
 msgid "Right Pointing rectangle"
 msgstr "Rectangle avec flèche vers la droite"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:173
+#, kde-format
+msgid "No line"
+msgstr "Aucune ligne"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:174
+#, kde-format
+msgid "Solid line"
+msgstr "Ligne pleine"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:175
+#, kde-format
+msgid "Dash line"
+msgstr "Ligne en tirets"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:176
+#, kde-format
+msgid "Dot line"
+msgstr "Ligne pointillée"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:177
+#, kde-format
+msgid "Dash dot line"
+msgstr "Ligne tiret-point"
+
+#: src/kdefrontend/widgets/LabelWidget.cpp:178
+#, kde-format
+msgid "Dash dot dot line"
+msgstr "Ligne tiret-point-point"
 
 #: src/kdefrontend/widgets/LabelWidget.cpp:195
 #, kde-format
