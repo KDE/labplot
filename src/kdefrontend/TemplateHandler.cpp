@@ -110,7 +110,7 @@ TemplateHandler::TemplateHandler(QWidget* parent, ClassName name)
 	enum ClassName { Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint };
 	m_subDirNames << QLatin1String("spreadsheet") << QLatin1String("matrix") << QLatin1String("worksheet") << QLatin1String("cartesianplot")
 				  << QLatin1String("cartesianplotlegend") << QLatin1String("histogram") << QLatin1String("xycurve") << QLatin1String("axis")
-				  << QLatin1String("custompoint");
+				  << QLatin1String("custompoint") << QLatin1String("referenceline");
 
 	this->retranslateUi();
 

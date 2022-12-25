@@ -43,6 +43,14 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
+
+
+	// Template handler
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
+	ui.verticalLayout->addWidget(templateHandler);
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &ReferenceLineDock::info);
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
@@ -236,4 +244,31 @@ void ReferenceLineDock::load() {
 			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
 		}
 	}
+
+	ui.chkVisible->setChecked(m_line->isVisible());
+}
+
+void ReferenceLineDock::loadConfigFromTemplate(KConfig& config) {
+	// extract the name of the template from the file name
+	QString name;
+	int index = config.name().lastIndexOf(QLatin1String("/"));
+	if (index != -1)
+		name = config.name().right(config.name().size() - index - 1);
+	else
+		name = config.name();
+
+	int size = m_linesList.size();
+	if (size > 1)
+		m_line->beginMacro(i18n("%1 reference lines: template \"%2\" loaded", size, name));
+	else
+		m_line->beginMacro(i18n("%1: template \"%2\" loaded", m_line->name(), name));
+
+	lineWidget->loadConfig(config.group("ReferenceLine"));
+
+	m_line->endMacro();
+}
+
+void ReferenceLineDock::saveConfigAsTemplate(KConfig& config) {
+	KConfigGroup group = config.group(QStringLiteral("ReferenceLine"));
+	lineWidget->saveConfig(group);
 }
