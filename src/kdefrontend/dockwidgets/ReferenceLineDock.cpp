@@ -26,9 +26,9 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	lineWidget = new LineWidget(ui.tabGeneral);
-	gridLayout->addWidget(lineWidget, 9, 0, 1, 3);
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabLine->layout());
+	lineWidget = new LineWidget(ui.tabLine);
+	layout->insertWidget(0, lineWidget);
 
 	// SLOTS
 	// General

@@ -69,9 +69,9 @@ ImageDock::ImageDock(QWidget* parent)
 	ui.cbVerticalAlignment->addItem(i18n("Center"));
 	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
-	auto* layout = static_cast<QGridLayout*>(this->layout());
-	borderLineWidget = new LineWidget(this);
-	layout->addWidget(borderLineWidget, 20, 0, 1, 3);
+	auto* layout = static_cast<QHBoxLayout*>(ui.tabBorder->layout());
+	borderLineWidget = new LineWidget(ui.tabBorder);
+	layout->insertWidget(0, borderLineWidget);
 
 	QString suffix;
 	if (m_units == BaseDock::Units::Metric)
