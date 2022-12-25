@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-18 10:20+0100\n"
+"PO-Revision-Date: 2022-12-22 16:05+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17536,17 +17536,15 @@ msgstr "Incrementa:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:701
-#, fuzzy, kde-format
-#| msgid "1. Tick at:"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "1. Marca a:"
+msgstr "1a marca a:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:711
-#, fuzzy, kde-format
-#| msgid "1. Tick Value:"
+#, kde-format
 msgid "1st Tick Value:"
-msgstr "1. Valor de la marca:"
+msgstr "1r valor de la marca:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:731
@@ -17560,10 +17558,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:734
-#, fuzzy, kde-format
-#| msgid "1. Tick Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
-msgstr "1. Desplaçament de la marca:"
+msgstr "1r desplaçament de la marca:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:756
@@ -19400,18 +19397,16 @@ msgstr "Executa l'ajust"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1114
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run"
-msgstr "Executa l'ajust"
+msgstr "Executa"
 
 # Nota: o funció de Spence
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
-#, fuzzy, kde-format
-#| msgid "Dilogarithm"
+#, kde-format
 msgid "Algorithm:"
-msgstr "Dilogaritme"
+msgstr "Algorisme:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:212
@@ -21469,9 +21464,3 @@ msgstr "El procés «convert» ha fallat, codi d'eixida ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "No s'ha pogut obrir el fitxer:"
-
-#~ msgid "Created: %1"
-#~ msgstr "Creat: %1"
-
-#~ msgid "Advanced"
-#~ msgstr "Avançat"

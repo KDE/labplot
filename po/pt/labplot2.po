@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LabPlot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-24 00:45+0000\n"
-"PO-Revision-Date: 2022-12-18 12:09+0000\n"
+"PO-Revision-Date: 2022-12-23 22:38+0000\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -17475,17 +17475,15 @@ msgstr "Incremento:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:701
-#, fuzzy, kde-format
-#| msgid "1. Tick at:"
+#, kde-format
 msgid "1st Tick at:"
-msgstr "Primeiro Traço em:"
+msgstr "1º Traço em:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:711
-#, fuzzy, kde-format
-#| msgid "1. Tick Value:"
+#, kde-format
 msgid "1st Tick Value:"
-msgstr "Valor do Primeiro Traço:"
+msgstr "Valor do 1º Traço:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:731
@@ -17499,10 +17497,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:734
-#, fuzzy, kde-format
-#| msgid "1. Tick Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
-msgstr "Deslocamento do Primeiro Traço:"
+msgstr "Deslocamento do 1º Traço:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, tbFirstTickData)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:756
@@ -21391,9 +21388,3 @@ msgstr "o processo de conversão falhou com o código de saída ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Não foi possível aceder ao ficheiro:"
-
-#~ msgid "Created: %1"
-#~ msgstr "Criado: %1"
-
-#~ msgid "Advanced"
-#~ msgstr "Avançado"
