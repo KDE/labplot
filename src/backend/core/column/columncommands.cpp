@@ -142,6 +142,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
  * \brief Execute the command
  */
 void ColumnSetModeCmd::redo() {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_executed) {
 		// save old values
 		m_old_mode = m_col->columnMode();

@@ -19,7 +19,7 @@ class DateTime2IntegerFilter : public AbstractSimpleFilter {
 
 public:
 	int integerAt(int row) const override {
-		DEBUG(Q_FUNC_INFO);
+		DEBUG(Q_FUNC_INFO)
 		if (!m_inputs.value(0))
 			return 0;
 		const auto dt = m_inputs.value(0)->dateTimeAt(row);

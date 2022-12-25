@@ -30,6 +30,7 @@ class Interval;
 class AbstractColumn : public AbstractAspect {
 	Q_OBJECT
 	Q_ENUMS(PlotDesignation)
+	Q_ENUMS(TimeUnit)
 	Q_ENUMS(ColumnMode)
 
 public:

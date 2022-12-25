@@ -375,7 +375,22 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 
 	beginMacro(i18n("%1: change column type", name()));
 
-	setColumnModeFast(mode);
+	auto* old_input_filter = d->inputFilter();
+	auto* old_output_filter = d->outputFilter();
+	exec(new ColumnSetModeCmd(d, mode));
+
+	if (d->inputFilter() != old_input_filter) {
+		DEBUG(Q_FUNC_INFO << ", INPUT")
+		removeChild(old_input_filter);
+		addChild(d->inputFilter());
+		d->inputFilter()->input(0, m_string_io);
+	}
+	if (d->outputFilter() != old_output_filter) {
+		DEBUG(Q_FUNC_INFO << ", OUTPUT")
+		removeChild(old_output_filter);
+		addChild(d->outputFilter());
+		d->outputFilter()->input(0, this);
+	}
 
 	endMacro();
 }

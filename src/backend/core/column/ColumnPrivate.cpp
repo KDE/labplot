@@ -163,8 +163,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * initial value) is not supported.
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
-	//	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
-	//		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
+	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_columnMode) << " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_columnMode)
 		return;
 
@@ -266,12 +265,14 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			}
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
+			DEBUG(Q_FUNC_INFO << ", int -> datetime")
 			filter = new Integer2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
 				temp_col = new Column(QStringLiteral("temp_col"), *(static_cast<QVector<int>*>(old_data)));
 				m_data = new QVector<QDateTime>();
 			}
+			DEBUG(Q_FUNC_INFO << ", int -> datetime done")
 			break;
 		case AbstractColumn::ColumnMode::Month:
 			filter = new Integer2MonthFilter();
@@ -298,7 +299,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		switch (mode) {
 		case AbstractColumn::ColumnMode::BigInt:
 			break;
-		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::Integer: // TODO: timeUnit
 			filter = new BigInt2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -306,7 +307,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				m_data = new QVector<int>();
 			}
 			break;
-		case AbstractColumn::ColumnMode::Double:
+		case AbstractColumn::ColumnMode::Double: // TODO: timeUnit
 			filter = new BigInt2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -322,7 +323,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				m_data = new QVector<QString>();
 			}
 			break;
-		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::DateTime: // TODO: timeUnit
 			filter = new BigInt2DateTimeFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -431,7 +432,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2DoubleFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2DoubleFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2DoubleFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -444,7 +445,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2IntegerFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2IntegerFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2IntegerFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -457,7 +458,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 				filter = new Month2BigIntFilter();
 			else if (m_columnMode == AbstractColumn::ColumnMode::Day)
 				filter = new DayOfWeek2BigIntFilter();
-			else
+			else // TODO: timeUnit
 				filter = new DateTime2BigIntFilter();
 			filter_is_temporary = true;
 			if (m_data) {
@@ -470,6 +471,8 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	}
 	}
+
+	DEBUG(Q_FUNC_INFO << ", here")
 
 	// determine the new input and output filters
 	switch (mode) { // new mode
@@ -518,6 +521,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 		break;
 	} // switch(mode)
 
+	DEBUG(Q_FUNC_INFO << ", here 2")
 	m_columnMode = mode;
 
 	m_inputFilter = new_in_filter;
@@ -527,15 +531,18 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	m_inputFilter->setHidden(true);
 	m_outputFilter->setHidden(true);
 
+	DEBUG(Q_FUNC_INFO << ", here 3")
 	if (temp_col) { // if temp_col == 0, only the input/output filters need to be changed
 		// copy the filtered, i.e. converted, column (mode is orig mode)
-		//		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
+		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
 		filter->input(0, temp_col);
-		//		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
+		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
 		copy(filter->output(0));
+		DEBUG(" DONE")
 		delete temp_col;
 	}
 
+	DEBUG(Q_FUNC_INFO << ", here 4")
 	if (filter_is_temporary)
 		delete filter;
 
@@ -620,6 +627,7 @@ void ColumnPrivate::replaceData(void* data) {
  * Use a filter to convert a column to another type.
  */
 bool ColumnPrivate::copy(const AbstractColumn* other) {
+	DEBUG(Q_FUNC_INFO)
 	if (other->columnMode() != columnMode())
 		return false;
 	// 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
@@ -671,6 +679,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
 
+	DEBUG(Q_FUNC_INFO << ", done")
 	return true;
 }
 

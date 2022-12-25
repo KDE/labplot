@@ -24,6 +24,8 @@
 
 #include <KLocalizedString>
 
+#include <QInputDialog>
+
 /*!
   \class ColumnDock
   \brief Provides a widget for editing the properties of the spreadsheet columns currently selected in the project explorer.
@@ -362,27 +364,32 @@ void ColumnDock::typeChanged(int index) {
 		break;
 	case AbstractColumn::ColumnMode::DateTime: // -> DateTime
 		for (auto* col : columns) {
-			col->beginMacro(i18n("%1: change column type", col->name()));
 			// use standard format
 			const QString& format(QStringLiteral("yyyy-MM-dd hh:mm:ss"));
 			QDEBUG(Q_FUNC_INFO << ", format = " << format)
-			// TODO: ask how to interpret numeric input value
-			// if (col->isNumeric())
 
-			/* QStringList items;
-			items << i18n("Spring") << i18n("Summer") << i18n("Fall") << i18n("Winter");
-			// TODO: list of units, fill items
+			// enable if unit cat be used
+			/*if (col->isNumeric()) {	// ask how to interpret numeric input value
 
-			bool ok;
-			QString item = QInputDialog::getItem(this, i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
-			if (ok && !item.isEmpty()) {
-				int index = items.indexOf(item);
+				QStringList items;
+				for (int i = 0; i < ENUM_COUNT(AbstractColumn, TimeUnit); i++)
+					items << AbstractColumn::timeUnitString((AbstractColumn::TimeUnit)i);
+				QDEBUG("ITEMS: " << items)
 
-				itemLabel->setText(item);
-			}
-			*/
+				bool ok;
+				QString item = QInputDialog::getItem(this, i18n("DateTime Filter"), i18n("Unit:"), items, 0, false, &ok);
+				if (ok) {
+					int index = items.indexOf(item);
 
-			col->setColumnMode(columnMode);
+					DEBUG("Selected index: " << index)
+					//TODO: use index
+				}
+				else	// Cancel
+					return;
+			}*/
+
+			col->beginMacro(i18n("%1: change column type", col->name()));
+			col->setColumnMode(columnMode); // TODO: timeUnit
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			col->endMacro();
