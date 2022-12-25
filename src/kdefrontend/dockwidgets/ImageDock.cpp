@@ -243,20 +243,26 @@ void ImageDock::embeddedChanged(int state) {
 
 	CONDITIONAL_LOCK_RETURN;
 
+	for (auto* image : m_imageList)
+		image->setEmbedded(embedded);
+
+	// embedded property was set, update the file name LineEdit after this
 	if (embedded) {
 		QFileInfo fi(m_image->fileName());
 		ui.leFileName->setText(fi.fileName());
 	} else
 		ui.leFileName->setText(m_image->fileName());
-
-	for (auto* image : m_imageList)
-		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
 	const QString& fileName = ui.leFileName->text();
-	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
-	GuiTools::highlight(ui.leFileName, invalid);
+
+	if (!m_image->embedded()) {
+		bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+		GuiTools::highlight(ui.leFileName, invalid);
+		ui.chbEmbedded->setEnabled(!invalid);
+	} else
+		GuiTools::highlight(ui.leFileName, false);
 
 	CONDITIONAL_LOCK_RETURN;
 
@@ -273,10 +279,6 @@ void ImageDock::opacityChanged(int value) {
 }
 
 // Size
-void ImageDock::sizeChanged(int /*index*/) {
-	CONDITIONAL_LOCK_RETURN;
-}
-
 void ImageDock::widthChanged(double value) {
 	CONDITIONAL_RETURN_NO_LOCK;
 
@@ -307,7 +309,7 @@ void ImageDock::keepRatioChanged(int state) {
 void ImageDock::positionXChanged(int index) {
 	CONDITIONAL_LOCK_RETURN;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.horizontalPosition = WorksheetElement::HorizontalPosition(index);
 	for (auto* image : m_imageList)
 		image->setPosition(position);
