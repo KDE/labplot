@@ -35,8 +35,6 @@ private:
 	LineWidget* lineWidget{nullptr};
 
 	void load();
-	void loadConfig(KConfig&);
-
 	void updateWidgetsOrientation(ReferenceLine::Orientation);
 
 private Q_SLOTS:
@@ -55,6 +53,13 @@ private Q_SLOTS:
 	// Position
 	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
+
+	// load and save
+	void loadConfigFromTemplate(KConfig&);
+	void saveConfigAsTemplate(KConfig&);
+
+Q_SIGNALS:
+	void info(const QString&);
 };
 
 #endif

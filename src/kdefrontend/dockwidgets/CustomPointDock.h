@@ -35,7 +35,6 @@ private:
 
 	void load();
 	void initConnections() const;
-	void loadConfig(KConfig&);
 
 private Q_SLOTS:
 	// SLOTs for changes triggered in CustomPointDock

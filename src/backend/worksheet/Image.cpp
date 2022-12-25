@@ -207,7 +207,7 @@ ImagePrivate::ImagePrivate(Image* owner)
 
 	// initial placeholder image
 	image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
-	m_image = image;
+	imageScaled = image;
 }
 
 /*!
@@ -219,8 +219,8 @@ void ImagePrivate::retransform() {
 	if (suppress)
 		return;
 
-	int w = m_image.width();
-	int h = m_image.height();
+	int w = imageScaled.width();
+	int h = imageScaled.height();
 	boundingRectangle.setX(-w / 2);
 	boundingRectangle.setY(-h / 2);
 	boundingRectangle.setWidth(w);
@@ -243,7 +243,7 @@ void ImagePrivate::updateImage() {
 		image = QIcon::fromTheme(QStringLiteral("viewimage")).pixmap(width, height).toImage();
 	}
 
-	m_image = image;
+	imageScaled = image;
 
 	Q_EMIT q->widthChanged(width);
 	Q_EMIT q->heightChanged(height);
@@ -252,21 +252,18 @@ void ImagePrivate::updateImage() {
 }
 
 void ImagePrivate::scaleImage() {
-	if (m_image.isNull())
-		m_image = image; // initial call from load(), m_image not initialized yet
-
 	if (keepRatio) {
-		if (width != m_image.width()) {
+		if (width != imageScaled.width()) {
 			// width was changed -> rescale the height to keep the ratio
-			if (m_image.width() != 0)
-				height = m_image.height() * width / m_image.width();
+			if (imageScaled.width() != 0)
+				height = imageScaled.height() * width / imageScaled.width();
 			else
 				height = 0;
 			Q_EMIT q->heightChanged(height);
-		} else if (height != m_image.height()) {
+		} else if (height != imageScaled.height()) {
 			// height was changed -> rescale the width to keep the ratio
-			if (m_image.height() != 0)
-				width = m_image.width() * height / m_image.height();
+			if (imageScaled.height() != 0)
+				width = imageScaled.width() * height / imageScaled.height();
 			else
 				width = 0;
 			Q_EMIT q->widthChanged(width);
@@ -274,7 +271,7 @@ void ImagePrivate::scaleImage() {
 	}
 
 	if (width != 0 && height != 0)
-		m_image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		imageScaled = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
 	retransform();
 }
@@ -327,7 +324,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	// draw the image
 	painter->rotate(-rotationAngle);
 	painter->setOpacity(opacity);
-	painter->drawImage(boundingRectangle.topLeft(), m_image, m_image.rect());
+	painter->drawImage(boundingRectangle.topLeft(), imageScaled, imageScaled.rect());
 	painter->restore();
 
 	// draw the border
@@ -477,7 +474,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 	if (!preview) {
 		if (!d->embedded)
 			d->image = QImage(d->fileName);
-		d->scaleImage();
+		d->imageScaled = d->image.scaled(d->width, d->height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 	}
 
 	return true;

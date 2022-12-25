@@ -45,7 +45,6 @@ private Q_SLOTS:
 	void opacityChanged(int);
 
 	// geometry
-	void sizeChanged(int);
 	void widthChanged(double);
 	void heightChanged(double);
 	void keepRatioChanged(int);

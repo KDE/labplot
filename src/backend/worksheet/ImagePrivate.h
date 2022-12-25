@@ -19,7 +19,8 @@ class ImagePrivate : public WorksheetElementPrivate {
 public:
 	explicit ImagePrivate(Image*);
 
-	QImage image;
+	QImage image; // original image
+	QImage imageScaled; // scaled and the actual version of the original image that is used for drawing
 	QString fileName;
 	bool embedded{true};
 	qreal opacity{1.0};
@@ -52,8 +53,6 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
-	QImage m_image; // scaled and the actual version of the original image that is used for drawing
 };
 
 #endif

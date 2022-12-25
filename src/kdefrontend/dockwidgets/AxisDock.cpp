@@ -895,17 +895,28 @@ void AxisDock::arrowSizeChanged(int value) {
 void AxisDock::majorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
-	ui.lMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
-	ui.lMajorTicksType->setEnabled(b);
 	ui.cbMajorTicksType->setEnabled(b);
-	ui.lMajorTicksNumber->setEnabled(b);
-	ui.sbMajorTicksNumber->setEnabled(b);
-	ui.lMajorTicksSpacingNumeric->setEnabled(b);
+	ui.cbMajorTicksAutoNumber->setEnabled(b);
+
+	if (b) {
+		if (ui.cbMajorTicksAutoNumber->isChecked())
+			ui.sbMajorTicksNumber->setEnabled(false);
+		else
+			ui.sbMajorTicksNumber->setEnabled(true);
+	} else
+		ui.sbMajorTicksNumber->setEnabled(false);
+
 	ui.sbMajorTicksSpacingNumeric->setEnabled(b);
-	ui.lMajorTicksIncrementDateTime->setEnabled(b);
 	dtsbMajorTicksIncrement->setEnabled(b);
-	dtsbMinorTicksIncrement->setEnabled(b);
+	ui.cbMajorTicksStartType->setEnabled(b);
+	ui.sbMajorTickStartValue->setEnabled(b);
+	ui.sbMajorTickStartOffset->setEnabled(b);
+	ui.tbFirstTickData->setEnabled(b);
+	ui.tbFirstTickAuto->setEnabled(b);
+	cbMajorTicksColumn->setEnabled(b);
+	ui.cbLabelsTextType->setEnabled(b);
+	cbLabelsTextColumn->setEnabled(b);
 	ui.sbMajorTicksLength->setEnabled(b);
 	majorTicksLineWidget->setEnabled(b);
 
@@ -1099,15 +1110,18 @@ void AxisDock::majorTicksLengthChanged(double value) {
 void AxisDock::minorTicksDirectionChanged(int index) {
 	const auto direction = Axis::TicksDirection(index);
 	const bool b = (direction != Axis::noTicks);
-	ui.lMinorTicksType->setEnabled(b);
 	ui.cbMinorTicksType->setEnabled(b);
-	ui.lMinorTicksType->setEnabled(b);
 	ui.cbMinorTicksType->setEnabled(b);
-	ui.lMinorTicksNumber->setEnabled(b);
-	ui.sbMinorTicksNumber->setEnabled(b);
-	ui.lMinorTicksSpacingNumeric->setEnabled(b);
+
+	if (b) {
+		if (ui.cbMinorTicksAutoNumber->isChecked())
+			ui.sbMinorTicksNumber->setEnabled(false);
+		else
+			ui.sbMinorTicksNumber->setEnabled(true);
+	} else
+		ui.sbMinorTicksNumber->setEnabled(false);
+
 	ui.sbMinorTicksSpacingNumeric->setEnabled(b);
-	ui.lMinorTicksIncrementDateTime->setEnabled(b);
 	dtsbMinorTicksIncrement->setEnabled(b);
 	ui.sbMinorTicksLength->setEnabled(b);
 	minorTicksLineWidget->setEnabled(b);
@@ -1301,10 +1315,9 @@ void AxisDock::labelsTextTypeChanged(int index) {
 
 		bool numeric = m_axis->isNumeric();
 		ui.lLabelsFormat->setVisible(numeric);
-		ui.cbLabelsFormat->setVisible(numeric);
-		ui.chkLabelsAutoPrecision->setVisible(numeric);
+		ui.frameLabelsFormat->setVisible(numeric);
 		ui.lLabelsPrecision->setVisible(numeric);
-		ui.sbLabelsPrecision->setVisible(numeric);
+		ui.frameLabelsPrecision->setVisible(numeric);
 		ui.lLabelsDateTimeFormat->setVisible(!numeric);
 		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
 	} else {
@@ -1331,17 +1344,17 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
 			ui.lLabelsFormat->show();
-			ui.cbLabelsFormat->show();
+			ui.frameLabelsFormat->show();
 			ui.lLabelsPrecision->show();
-			ui.framePrecision->show();
+			ui.frameLabelsPrecision->show();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
@@ -1349,9 +1362,9 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->show();
 			ui.cbLabelsDateTimeFormat->show();
 			break;
@@ -1360,9 +1373,9 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		auto type = Axis::LabelsTextType(ui.cbLabelsTextType->currentIndex());
 		if (type == Axis::LabelsTextType::CustomValues) {
 			ui.lLabelsFormat->hide();
-			ui.cbLabelsFormat->hide();
+			ui.frameLabelsFormat->hide();
 			ui.lLabelsPrecision->hide();
-			ui.framePrecision->hide();
+			ui.frameLabelsPrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 		}

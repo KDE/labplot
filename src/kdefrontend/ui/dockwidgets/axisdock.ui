@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>434</width>
+    <width>415</width>
     <height>908</height>
    </rect>
   </property>
@@ -431,6 +431,7 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -547,6 +548,7 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -582,6 +584,7 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -876,6 +879,7 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1052,7 +1056,7 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="QFrame" name="framePrecision">
+        <widget class="QFrame" name="frameLabelsPrecision">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -1112,6 +1116,7 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1170,7 +1175,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
+        <widget class="KFontRequester" name="kfrLabelsFont"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1295,6 +1300,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1307,6 +1313,7 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1399,6 +1406,7 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1426,27 +1434,6 @@
          </property>
         </spacer>
        </item>
-       <item row="6" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="KComboBox" name="cbLabelsFormat">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="chkLabelsFormatAuto">
-           <property name="text">
-            <string>Auto</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
        <item row="2" column="2">
         <widget class="NumberSpinBox" name="sbLabelsOffset">
          <property name="toolTip">
@@ -1461,6 +1448,50 @@
          <property name="feedback" stdset="0">
           <bool>true</bool>
          </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="QFrame" name="frameLabelsFormat">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KComboBox" name="cbLabelsFormat">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkLabelsFormatAuto">
+            <property name="text">
+             <string>Auto</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -1506,6 +1537,7 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1534,6 +1566,7 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
