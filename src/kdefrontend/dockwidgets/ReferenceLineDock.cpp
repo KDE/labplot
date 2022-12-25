@@ -9,10 +9,7 @@
 */
 
 #include "ReferenceLineDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-
-#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/LineWidget.h"
 
@@ -44,13 +41,18 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent)
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
-
 	// Template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
+
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::ReferenceLine);
-	ui.verticalLayout->addWidget(templateHandler);
+	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ReferenceLineDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ReferenceLineDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &ReferenceLineDock::info);
+
+	ui.verticalLayout->addWidget(frame);
 }
 
 void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {

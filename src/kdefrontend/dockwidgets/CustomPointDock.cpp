@@ -9,9 +9,7 @@
 */
 
 #include "CustomPointDock.h"
-#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/widgets/SymbolWidget.h"
 
@@ -73,11 +71,17 @@ CustomPointDock::CustomPointDock(QWidget* parent)
 	connect(ui.dtePositionYLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionYLogicalDateTimeChanged);
 
 	// Template handler
+	auto* frame = new QFrame(this);
+	auto* hlayout = new QHBoxLayout(frame);
+	hlayout->setContentsMargins(0, 11, 0, 11);
+
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
-	ui.verticalLayout->addWidget(templateHandler);
+	hlayout->addWidget(templateHandler);
 	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
 	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CustomPointDock::saveConfigAsTemplate);
 	connect(templateHandler, &TemplateHandler::info, this, &CustomPointDock::info);
+
+	ui.verticalLayout->addWidget(frame);
 }
 
 void CustomPointDock::setPoints(QList<CustomPoint*> points) {
