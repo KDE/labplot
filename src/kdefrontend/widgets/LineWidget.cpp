@@ -317,8 +317,6 @@ void LineWidget::load() {
 }
 
 void LineWidget::loadConfig(const KConfigGroup& group) {
-	CONDITIONAL_LOCK_RETURN;
-
 	if (m_line->histogramLineTypeAvailable())
 		ui.cbType->setCurrentIndex(group.readEntry(m_prefix + QStringLiteral("Type"), static_cast<int>(m_line->histogramLineType())));
 	else if (m_line->errorBarsTypeAvailable()) {
