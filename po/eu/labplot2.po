@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
 "PO-Revision-Date: 2022-11-11 04:37+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -15482,12 +15482,12 @@ msgstr "\"%1\" txantiloia zamatu da."
 msgid "Save As Template"
 msgstr "Gorde txantiloi gisa"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Berria:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "\"%1\" txantiloi berria gorde da."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot 2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
 "PO-Revision-Date: 2022-12-23 07:40+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -15679,12 +15679,12 @@ msgstr "Predloga »%1« je bila naložena."
 msgid "Save As Template"
 msgstr "Shrani kot predlogo"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Nov:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "Shranjena je bila nova predloga »%1«."

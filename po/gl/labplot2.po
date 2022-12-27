@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
 "PO-Revision-Date: 2020-01-12 12:23+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -16275,12 +16275,12 @@ msgstr "Cargouse o modelo «%1»."
 msgid "Save As Template"
 msgstr "Gardar como modelo"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Novo:s"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "Gardouse o novo modelo «%1»."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
 "PO-Revision-Date: 2022-08-06 09:40+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -15901,12 +15901,12 @@ msgstr "Szablon \"%1\" został wczytany."
 msgid "Save As Template"
 msgstr "Zapisz jako szablon"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Nowy:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "Nowy szablon \"%1\" został zapisany."

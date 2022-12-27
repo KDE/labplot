@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
 "PO-Revision-Date: 2022-07-14 10:06-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -16480,12 +16480,12 @@ msgstr "O modelo \"%1\" foi carregado."
 msgid "Save As Template"
 msgstr "Salvar como"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr ""
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "O novo modelo \"%1\" foi salvo."

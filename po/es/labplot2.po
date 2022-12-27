@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
-"PO-Revision-Date: 2022-12-22 22:50+0100\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"PO-Revision-Date: 2022-12-26 11:38+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12512,10 +12512,9 @@ msgstr ""
 "costa de un mayor tiempo de carga del proyecto."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1 matrices: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr "%1 matrices: plantilla «%2» cargada"
+msgstr "%1 líneas de referencia: plantilla «%2» cargada"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
 #, kde-format
@@ -15662,12 +15661,12 @@ msgstr "La plantilla «%1» ha sido cargada."
 msgid "Save As Template"
 msgstr "Guardar como plantilla"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Nuevo:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "La nueva plantilla «%1» se ha guardado."

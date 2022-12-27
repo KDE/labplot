@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
-"PO-Revision-Date: 2022-12-22 05:27+0200\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"PO-Revision-Date: 2022-12-26 11:23+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -12580,10 +12580,9 @@ msgstr ""
 "рахунок довшого завантаження проєкту."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1 matrices: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr "Матриці %1: завантажено шаблон «%2»"
+msgstr "Лінія відліку %1: завантажено шаблон «%2»"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
 #, kde-format
@@ -15732,12 +15731,12 @@ msgstr "Завантажено шаблон «%1»."
 msgid "Save As Template"
 msgstr "Зберегти як шаблон"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Новий:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "Новий шаблон «%1» збережено."

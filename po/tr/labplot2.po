@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-26 00:49+0000\n"
-"PO-Revision-Date: 2022-12-23 20:34+0300\n"
+"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"PO-Revision-Date: 2022-12-26 21:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12466,10 +12466,9 @@ msgstr ""
 "bu seçeneğin işaretini kaldırın."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1 matrices: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr "%1 matrisler: \"%2\" şablonu yüklendi"
+msgstr "%1 başvuru satırı: \"%2\" şablonu yüklendi"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
 #, kde-format
@@ -15597,12 +15596,12 @@ msgstr "\"%1\" şablonu yüklendi."
 msgid "Save As Template"
 msgstr "Şablon Olarak Kaydet"
 
-#: src/kdefrontend/TemplateHandler.cpp:261
+#: src/kdefrontend/TemplateHandler.cpp:260
 #, kde-format
 msgid "New:"
 msgstr "Yeni:"
 
-#: src/kdefrontend/TemplateHandler.cpp:289
+#: src/kdefrontend/TemplateHandler.cpp:288
 #, kde-format
 msgid "New template \"%1\" was saved."
 msgstr "\"%1\" yeni şablonu kaydedildi."
