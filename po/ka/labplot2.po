@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-27 00:44+0000\n"
-"PO-Revision-Date: 2022-12-23 06:34+0100\n"
+"PO-Revision-Date: 2022-12-27 07:37+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1471,7 +1471,7 @@ msgstr "ჟურნალი ჩართულია: %1"
 #: src/backend/datasources/filters/HDF5Filter.cpp:321
 #, kde-format
 msgid "Events are currently logged: %1"
-msgstr ""
+msgstr "ჟურნალში ჩაწერილი მოვლენები: %1"
 
 #: src/backend/datasources/filters/HDF5Filter.cpp:329
 #, kde-format
@@ -1885,7 +1885,7 @@ msgstr "ცვლადი მონაცემებს არ შეიცა
 #: src/backend/datasources/filters/MatioFilter.cpp:805
 #, kde-format
 msgid "Struct contains no fields"
-msgstr ""
+msgstr "სტრუქტურა ველებს არ შეიცავს"
 
 #: src/backend/datasources/filters/MatioFilter.cpp:883
 #: src/backend/datasources/filters/MatioFilter.cpp:889
@@ -2079,7 +2079,7 @@ msgstr ""
 #: src/backend/datasources/filters/ROOTFilter.cpp:1475
 #, kde-format
 msgid "Number of free data records: %1"
-msgstr ""
+msgstr "თავისუფალი მონაცემის ჩანაწერების რაოდენობა: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1477
 #, kde-format
@@ -8858,13 +8858,13 @@ msgstr ""
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:38
 #, kde-format
 msgid "Rows and Columns"
-msgstr ""
+msgstr "მწკრივები და სვეტები"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:161
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:39
 #, kde-format
 msgid "xy-Values"
-msgstr ""
+msgstr "xy-მნიშვნელობები"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:163
 #: src/kdefrontend/dockwidgets/MatrixDock.cpp:40
@@ -8875,22 +8875,22 @@ msgstr ""
 #: src/commonfrontend/matrix/MatrixView.cpp:175
 #, kde-format
 msgid "&Add Columns"
-msgstr ""
+msgstr "&სვეტების დამატება"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:176
 #, kde-format
 msgid "&Insert Empty Columns"
-msgstr ""
+msgstr "&ცარიელი სვეტების დამატება"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:177
 #, kde-format
 msgid "Remo&ve Columns"
-msgstr ""
+msgstr "&სვეტების წაშლა"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:178
 #, kde-format
 msgid "Clea&r Columns"
-msgstr ""
+msgstr "სვეტების &გასუფთავება"
 
 #: src/commonfrontend/matrix/MatrixView.cpp:179
 #: src/commonfrontend/matrix/MatrixView.cpp:186
@@ -9133,7 +9133,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:441
 #, kde-format
 msgid "Clea&r Content"
-msgstr ""
+msgstr "&შემცველობის გასუფავება"
 
 #. i18n("Assign &Formula"), this);
 #. action_recalculate = new QAction(QIcon::fromTheme(QString()), i18n("Recalculate"), this);
@@ -9141,7 +9141,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:276
 #, kde-format
 msgid "Row Numbers"
-msgstr ""
+msgstr "მწკრივის ნომრები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:277
 #, kde-format
@@ -9151,7 +9151,7 @@ msgstr ""
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:278
 #, kde-format
 msgid "Random Values"
-msgstr ""
+msgstr "შემთხვევითი მნიშვნელობები"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:279
 #, kde-format
@@ -9197,7 +9197,7 @@ msgstr "&ძებნა"
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
 #, kde-format
 msgid "Statisti&cs..."
-msgstr "&სტატისტიკა"
+msgstr "&სტატისტიკა..."
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
