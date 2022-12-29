@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-27 00:44+0000\n"
-"PO-Revision-Date: 2022-12-27 07:37+0100\n"
+"PO-Revision-Date: 2022-12-28 09:37+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8492,7 +8492,7 @@ msgstr "_გამოცვლა"
 #: src/kdefrontend/ui/dockwidgets/cantorworksheetdock.ui:111
 #, kde-format
 msgid "Restart Backend"
-msgstr ""
+msgstr "უკანაბოლოს გადატვირთვა"
 
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:67
 #: src/commonfrontend/cantorWorksheet/CantorWorksheetView.cpp:306
@@ -9735,7 +9735,7 @@ msgstr "რიცხვები არ შეგიყვანიათ"
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:62
 #, kde-format
 msgid "Unhandled error"
-msgstr ""
+msgstr "დაუმუშავებელი შეცდომა"
 
 #: src/commonfrontend/widgets/NumberSpinBox.cpp:405
 #, kde-format
@@ -9784,7 +9784,7 @@ msgstr ""
 #: src/commonfrontend/worksheet/WorksheetView.cpp:293
 #, kde-format
 msgid "Select and Edit"
-msgstr ""
+msgstr "მონიშვნა და ჩასწორება"
 
 #. i18n("Selection"), mouseModeActionGroup);
 #. selectionModeAction->setCheckable(true);
@@ -15069,7 +15069,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Random Values"
-msgstr ""
+msgstr "შემთხვევითი მნიშვნელობები"
 
 #: src/kdefrontend/spreadsheet/RandomValuesDialog.cpp:53
 #, kde-format
