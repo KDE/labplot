@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
+    <width>437</width>
     <height>908</height>
    </rect>
   </property>
@@ -36,10 +36,139 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="22" column="0">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lPosition">
          <property name="text">
           <string>Position:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lStartDateTime">
+         <property name="text">
+          <string>Start:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="2">
+        <widget class="QCheckBox" name="chkShowScaleOffset">
+         <property name="toolTip">
+          <string>Show scale and offset beside axis</string>
+         </property>
+         <property name="text">
+          <string>Show scale and offset</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="KComboBox" name="cbScale"/>
+       </item>
+       <item row="21" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>75</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="11" column="2">
+        <widget class="QComboBox" name="cbRangeType"/>
+       </item>
+       <item row="18" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="NumberSpinBox" name="sbScalingFactor">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityScale">
+           <property name="toolTip">
+            <string>Set factor to unity scale</string>
+           </property>
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityRange">
+           <property name="toolTip">
+            <string>Set factor and offset to get 0 .. 1</string>
+           </property>
+           <property name="text">
+            <string>0 .. 1</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="20" column="2">
+        <widget class="QComboBox" name="cbPlotRanges"/>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lScale">
+         <property name="text">
+          <string>Scale:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="lZeroOffset">
+         <property name="text">
+          <string>Zero Offset:</string>
          </property>
         </widget>
        </item>
@@ -53,59 +182,83 @@
          </property>
         </widget>
        </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lEnd">
+       <item row="15" column="0">
+        <widget class="QLabel" name="lEndDateTime">
          <property name="text">
           <string>End:</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lScale">
-         <property name="text">
-          <string>Scale:</string>
-         </property>
-        </widget>
+       <item row="4" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="KComboBox" name="cbPosition"/>
+         </item>
+         <item>
+          <widget class="NumberSpinBox" name="sbPosition">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="NumberSpinBox" name="sbPositionLogical">
+           <property name="toolTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string>Spinbox for numbers.</string>
+           </property>
+           <property name="feedback" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lStart">
-         <property name="text">
-          <string>Start:</string>
+       <item row="10" column="0">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lZeroOffset">
-         <property name="text">
-          <string>Zero Offset:</string>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
-        </widget>
-       </item>
-       <item row="21" column="0">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
          </property>
-        </widget>
+        </spacer>
        </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lStartDateTime">
-         <property name="text">
-          <string>Start:</string>
-         </property>
-        </widget>
+       <item row="3" column="2">
+        <widget class="KComboBox" name="cbOrientation"/>
        </item>
-       <item row="19" column="0">
+       <item row="20" column="0">
         <widget class="QLabel" name="lPlotRange">
          <property name="text">
           <string>Plot Range:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="KComboBox" name="cbOrientation"/>
+       <item row="12" column="0">
+        <widget class="QLabel" name="lStart">
+         <property name="text">
+          <string>Start:</string>
+         </property>
+        </widget>
        </item>
-       <item row="15" column="2">
+       <item row="1" column="2">
+        <widget class="ResizableTextEdit" name="teComment"/>
+       </item>
+       <item row="16" column="2">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="NumberSpinBox" name="sbZeroOffset">
@@ -164,98 +317,26 @@
          </item>
         </layout>
        </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lRangeType">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
          <property name="text">
-          <string>Range:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="2">
-        <widget class="QCheckBox" name="chkShowScaleOffset">
-         <property name="toolTip">
-          <string>Show scale and offset beside axis</string>
-         </property>
-         <property name="text">
-          <string>Show scale and offset</string>
+          <string>Name:</string>
          </property>
         </widget>
        </item>
        <item row="14" column="2">
-        <widget class="QDateTimeEdit" name="dateTimeEditEnd">
-         <property name="calendarPopup">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="2">
         <widget class="QDateTimeEdit" name="dateTimeEditStart">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="KComboBox" name="cbScale"/>
-       </item>
-       <item row="17" column="0">
-        <widget class="QLabel" name="lScalingFactor">
-         <property name="text">
-          <string>Scaling Factor:</string>
+       <item row="15" column="2">
+        <widget class="QDateTimeEdit" name="dateTimeEditEnd">
+         <property name="calendarPopup">
+          <bool>true</bool>
          </property>
         </widget>
-       </item>
-       <item row="4" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="KComboBox" name="cbPosition"/>
-         </item>
-         <item>
-          <widget class="NumberSpinBox" name="sbPosition">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string>Spinbox for numbers.</string>
-           </property>
-           <property name="feedback" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="NumberSpinBox" name="sbPositionLogical">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string>Spinbox for numbers.</string>
-           </property>
-           <property name="feedback" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="19" column="2">
-        <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
        <item row="0" column="2">
         <widget class="QLineEdit" name="leName">
@@ -267,91 +348,19 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lEndDateTime">
+       <item row="18" column="0">
+        <widget class="QLabel" name="lScalingFactor">
          <property name="text">
-          <string>End:</string>
+          <string>Scaling Factor:</string>
          </property>
         </widget>
        </item>
-       <item row="20" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>75</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
+       <item row="11" column="0">
+        <widget class="QLabel" name="lRangeType">
          <property name="text">
-          <string>Name:</string>
+          <string>Range:</string>
          </property>
         </widget>
-       </item>
-       <item row="17" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <widget class="NumberSpinBox" name="sbScalingFactor">
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string>Spinbox for numbers.</string>
-           </property>
-           <property name="feedback" stdset="0">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="tbUnityScale">
-           <property name="toolTip">
-            <string>Set factor to unity scale</string>
-           </property>
-           <property name="text">
-            <string>1</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="tbUnityRange">
-           <property name="toolTip">
-            <string>Set factor and offset to get 0 .. 1</string>
-           </property>
-           <property name="text">
-            <string>0 .. 1</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="9" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
-       </item>
-       <item row="10" column="2">
-        <widget class="QComboBox" name="cbRangeType"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lOrientation">
@@ -360,23 +369,27 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lEnd">
+         <property name="text">
+          <string>End:</string>
          </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item row="12" column="2">
+        <widget class="NumberSpinBox" name="sbStart">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="whatsThis">
+          <string>Spinbox for numbers.</string>
+         </property>
+         <property name="feedback" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
         <widget class="NumberSpinBox" name="sbEnd">
          <property name="toolTip">
           <string/>
@@ -389,16 +402,20 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="2">
-        <widget class="NumberSpinBox" name="sbStart">
-         <property name="toolTip">
-          <string/>
+       <item row="9" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Color:</string>
          </property>
-         <property name="whatsThis">
-          <string>Spinbox for numbers.</string>
-         </property>
-         <property name="feedback" stdset="0">
-          <bool>true</bool>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="KColorButton" name="kcbAxisColor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -431,7 +448,6 @@
         <widget class="QLabel" name="lArrow">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -548,7 +564,6 @@
         <widget class="QLabel" name="lLine">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -584,7 +599,6 @@
         <widget class="QLabel" name="lMajorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -879,7 +893,6 @@
         <widget class="QLabel" name="lMinorTicks">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1116,7 +1129,6 @@
         <widget class="QLabel" name="lMajorGrid_2">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1175,7 +1187,7 @@
         </widget>
        </item>
        <item row="13" column="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+        <widget class="KFontRequester" name="kfrLabelsFont" native="true"/>
        </item>
        <item row="4" column="0">
         <spacer name="verticalSpacer_7">
@@ -1300,7 +1312,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1313,7 +1324,6 @@
         <widget class="QLabel" name="lLabelsBackground">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1406,7 +1416,6 @@
         <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1540,7 +1549,6 @@
         <widget class="QLabel" name="lMinorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1553,7 +1561,6 @@
         <widget class="QLabel" name="lMajorGrid">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
