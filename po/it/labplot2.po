@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: labplot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-27 00:44+0000\n"
-"PO-Revision-Date: 2022-12-13 08:40+0100\n"
+"PO-Revision-Date: 2022-12-28 17:31+0100\n"
 "Last-Translator: Paolo Zamponi <zapaolo@email.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -256,28 +256,27 @@ msgstr "L'ora di creazione di «%1» non è valida: uso quella attuale."
 #: src/backend/core/AbstractColumn.cpp:133
 #, kde-format
 msgid "Milliseconds"
-msgstr ""
+msgstr "Millisecondi"
 
 #: src/backend/core/AbstractColumn.cpp:135
-#, fuzzy, kde-format
-#| msgid "Second"
+#, kde-format
 msgid "Seconds"
-msgstr "Secondo"
+msgstr "Secondi"
 
 #: src/backend/core/AbstractColumn.cpp:137
 #, kde-format
 msgid "Minutes"
-msgstr ""
+msgstr "Minuti"
 
 #: src/backend/core/AbstractColumn.cpp:139
 #, kde-format
 msgid "Hours"
-msgstr ""
+msgstr "Ore"
 
 #: src/backend/core/AbstractColumn.cpp:141
 #, kde-format
 msgid "Days"
-msgstr ""
+msgstr "Giorni"
 
 #: src/backend/core/AbstractColumn.cpp:157 src/backend/nsl/nsl_conv.c:22
 #: src/backend/nsl/nsl_conv.c:23 src/backend/nsl/nsl_corr.c:19
@@ -12540,10 +12539,9 @@ msgstr ""
 "tuttavia dei tempi di caricamento più lunghi."
 
 #: src/kdefrontend/dockwidgets/ReferenceLineDock.cpp:264
-#, fuzzy, kde-format
-#| msgid "%1 matrices: template \"%2\" loaded"
+#, kde-format
 msgid "%1 reference lines: template \"%2\" loaded"
-msgstr "%1 matrici: modello «%2» caricato"
+msgstr "%1 linee di riferimento: modello «%2» caricato"
 
 #: src/kdefrontend/dockwidgets/SpreadsheetDock.cpp:172
 #, kde-format
@@ -14817,10 +14815,9 @@ msgid "&Divide"
 msgstr "&Dividi"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "Differentiate"
+#, kde-format
 msgid "Difference"
-msgstr "Deriva"
+msgstr "Differenza"
 
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:324
 #, kde-format
@@ -14850,10 +14847,9 @@ msgstr "%1: dividi i valori della colonna per %2"
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:589
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:631
 #: src/kdefrontend/spreadsheet/AddSubtractValueDialog.cpp:673
-#, fuzzy, kde-format
-#| msgid "Invalid numeric value."
+#, kde-format
 msgid "Wrong numeric value provided."
-msgstr "Valore numerico non valido."
+msgstr "Valore numerico fornito non valido."
 
 #: src/kdefrontend/spreadsheet/AddValueLabelDialog.cpp:36
 #, kde-format
@@ -17464,15 +17460,13 @@ msgstr "Incremento:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTicksStartType)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:704
-#, fuzzy, kde-format
-#| msgid "1. Tick at:"
+#, kde-format
 msgid "1st Tick at:"
 msgstr "Prima tacca a:"
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartValue)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:714
-#, fuzzy, kde-format
-#| msgid "1. Tick Value:"
+#, kde-format
 msgid "1st Tick Value:"
 msgstr "Valore della prima tacca:"
 
@@ -17488,8 +17482,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lMajorTickStartOffset)
 #: src/kdefrontend/ui/dockwidgets/axisdock.ui:737
-#, fuzzy, kde-format
-#| msgid "1. Tick Offset:"
+#, kde-format
 msgid "1st Tick Offset:"
 msgstr "Scostamento della prima tacca:"
 
@@ -19323,17 +19316,15 @@ msgstr "Esegui l'adattamento"
 
 #. i18n: ectx: property (text), widget (QPushButton, pbRecalculate)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1114
-#, fuzzy, kde-format
-#| msgid "Run fit"
+#, kde-format
 msgid "Run"
-msgstr "Esegui l'adattamento"
+msgstr "Esegui"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: src/kdefrontend/ui/dockwidgets/xyfitcurvedockgeneraltab.ui:1131
-#, fuzzy, kde-format
-#| msgid "Dilogarithm"
+#, kde-format
 msgid "Algorithm:"
-msgstr "Dilogaritmo"
+msgstr "Algoritmo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lFilter)
 #: src/kdefrontend/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui:212
@@ -20226,35 +20217,31 @@ msgstr "Motore di composizione:"
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:23
 #, kde-format
 msgid "Add:"
-msgstr ""
+msgstr "Aggiungi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:59
-#, fuzzy, kde-format
-#| msgid "Value:"
+#, kde-format
 msgid "End Value:"
-msgstr "Valore:"
+msgstr "Valore finale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:104
-#, fuzzy, kde-format
-#| msgid "Start:"
+#, kde-format
 msgid "Start Time:"
-msgstr "Inizio:"
+msgstr "Ora d'inizio:"
 
 #. i18n: ectx: property (text), widget (QLabel, lTimeValueEnd)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:120
-#, fuzzy, kde-format
-#| msgid "Date and Time"
+#, kde-format
 msgid "End Time:"
-msgstr "Data e ora"
+msgstr "Ora di fine:"
 
 #. i18n: ectx: property (text), widget (QLabel, lValueStart)
 #: src/kdefrontend/ui/spreadsheet/addsubtractvaluewidget.ui:149
-#, fuzzy, kde-format
-#| msgid "Start value"
+#, kde-format
 msgid "Start Value:"
-msgstr "Valore iniziale"
+msgstr "Valore iniziale:"
 
 #. i18n: ectx: property (text), widget (QLabel, lNumeric)
 #: src/kdefrontend/ui/spreadsheet/dropvalueswidget.ui:47
@@ -20415,50 +20402,43 @@ msgstr "Posizionamento"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:160
-#, fuzzy, kde-format
-#| msgid "&All plots in one plot area"
+#, kde-format
 msgid "All Plots in one Plot Area"
-msgstr "Tutti i gr&afici in un'area del grafico"
+msgstr "Tutti i grafici in un'area del grafico"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbCurvePlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:170
-#, fuzzy, kde-format
-#| msgid "One p&lot area per plot"
+#, kde-format
 msgid "One Plot Area per Plot"
 msgstr "Un'area del grafico per grafico"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPlotPlacement)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:180
-#, fuzzy, kde-format
-#| msgid "Add Plot to"
+#, kde-format
 msgid "Add Plots to"
-msgstr "Aggiungi grafico a"
+msgstr "Aggiungi grafici a"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement1)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:186
-#, fuzzy, kde-format
-#| msgid "E&xisting plot area"
+#, kde-format
 msgid "Existing Plot Area"
-msgstr "Area del grafico e&sistente"
+msgstr "Area del grafico esistente"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement2)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:196
-#, fuzzy, kde-format
-#| msgid "&New plot area in an existing worksheet"
+#, kde-format
 msgid "&New Plot Area in an existing Worksheet"
 msgstr "&Nuova area del grafico in un foglio di lavoro esistente"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPlotPlacement3)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:203
-#, fuzzy, kde-format
-#| msgid "New plot area in a new wor&ksheet"
+#, kde-format
 msgid "New Plot Area in a new Worksheet"
-msgstr "Nuovo area del grafico in un nuovo foglio di &lavoro"
+msgstr "Nuovo area del grafico in un nuovo foglio di lavoro"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateDataCurve)
 #: src/kdefrontend/ui/spreadsheet/plotdatawidget.ui:226
-#, fuzzy, kde-format
-#| msgid "Create plot for original data"
+#, kde-format
 msgid "Create Plot for original Data"
 msgstr "Crea un grafico per i dati originali"
 
