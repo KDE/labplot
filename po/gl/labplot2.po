@@ -17349,7 +17349,8 @@ msgstr "Conexión"
 #: src/kdefrontend/ui/settingsnotebookpage.ui:14
 #: src/kdefrontend/ui/spreadsheet/flattencolumnswidget.ui:14
 #: src/kdefrontend/ui/spreadsheet/samplevalueswidget.ui:14
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Form"
 msgid "Form"
 msgstr "Formulario"
 
@@ -18653,7 +18654,8 @@ msgstr "Inicio:"
 #. i18n: ectx: property (text), widget (QTableWidget, twXRanges)
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:213
 #: src/kdefrontend/ui/dockwidgets/cartesianplotdock.ui:353
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "End"
 msgid "End"
 msgstr "Fin"
 
