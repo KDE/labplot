@@ -2109,7 +2109,7 @@ msgstr "Mida de la gravació de les dades LLIURES: %1 bytes"
 #: src/backend/datasources/filters/ROOTFilter.cpp:1475
 #, kde-format
 msgid "Number of free data records: %1"
-msgstr "Nombre dels enregistraments de dades lliures: %1"
+msgstr "Nombre de gravacions de dades lliures: %1"
 
 #: src/backend/datasources/filters/ROOTFilter.cpp:1477
 #, kde-format
@@ -4004,7 +4004,7 @@ msgstr "Funció digamma"
 #: src/backend/gsl/ExpressionParser.cpp:547
 #, kde-format
 msgid "Real part of the digamma function on the line 1+i y"
-msgstr "Part real de la funció digamma a la línia 1+i y"
+msgstr "Part real de la funció digamma en la línia 1+i y"
 
 # skip-rule: t-apo_fin
 #: src/backend/gsl/ExpressionParser.cpp:548
