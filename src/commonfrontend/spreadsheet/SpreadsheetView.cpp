@@ -291,7 +291,7 @@ void SpreadsheetView::initActions() {
 	action_go_to_cell = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("&Go to Cell..."), this);
 	action_search = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Search"), this);
 	action_search->setShortcut(QKeySequence::Find);
-	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Statisti&cs..."), this);
+	action_statistics_all_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// column related actions
 	action_insert_column_left = new QAction(QIcon::fromTheme(QStringLiteral("edit-table-insert-column-left")), i18n("Insert Column Left"), this);
@@ -424,7 +424,7 @@ void SpreadsheetView::initActions() {
 	action_sort_columns = new QAction(QIcon::fromTheme(QString()), i18n("&Selected Columns"), this);
 	action_sort_asc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), i18n("&Ascending"), this);
 	action_sort_desc_column = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-descending")), i18n("&Descending"), this);
-	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statisti&cs"), this);
+	action_statistics_columns = new QAction(QIcon::fromTheme(QStringLiteral("view-statistics")), i18n("Column Statistics..."), this);
 
 	// conditional formatting
 	action_formatting_heatmap = new QAction(QIcon::fromTheme(QStringLiteral("color-management")), i18n("Heatmap"), this);
@@ -756,7 +756,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
-	m_spreadsheetMenu->addAction(action_statistics_all_columns);
+	m_spreadsheetMenu->addAction(action_statistics_columns);
 
 	// Row menu
 	m_rowMenu = new QMenu(this);
@@ -3102,13 +3102,65 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(i18n("%1: column statistics", m_spreadsheet->name()));
 	QVector<Column*> columns;
 
-	if (!forAll)
-		columns = selectedColumns();
-	else {
+	// Column statistics can be shown for:
+	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection, the user just clicked on the spreadsheet).
+	// * all selected columns in the speadsheet - called via the context menu of the header
+	// * selected column cells - called via the context menu in the spreadsheet with multiple selected cells
+	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
+	if (forAll || indexes.size() <= 1) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
 			if ((column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues())
 				columns << column;
+		}
+	} else {
+		columns = selectedColumns(true);
+
+		// if no columns are fully selected, copy the selected cells into new Columns which will be processes in the statistics dialog
+		if (columns.isEmpty()) {
+			const auto& children = m_spreadsheet->children<Column>();
+			Column* sourceColumn{nullptr};
+			Column* targetColumn{nullptr};
+			QMap<int, int> columnMappings; // key = child column index in the spreadsheet, value = column index in the vector of new colums
+			QMap<int, int> rowMappings; // key = child column index in the spreadsheet, value = last row index
+			for (const auto& index : indexes) {
+				int col = index.column();
+				int row = index.row();
+				sourceColumn = children.at(col);
+
+				if (columnMappings.contains(col))
+					targetColumn = columns.at(columnMappings[col]);
+				else {
+					targetColumn = new Column(i18n("Selection in %1", sourceColumn->name()), sourceColumn->columnMode());
+					columns << targetColumn;
+					columnMappings[col] = columns.count() - 1;
+					rowMappings[col] = 0;
+				}
+
+				int targetRow = rowMappings[col];
+
+				switch (targetColumn->columnMode()) {
+				case AbstractColumn::ColumnMode::Double:
+					targetColumn->setValueAt(targetRow, sourceColumn->valueAt(row));
+					break;
+				case AbstractColumn::ColumnMode::Integer:
+					targetColumn->setIntegerAt(targetRow, sourceColumn->integerAt(row));
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					targetColumn->setBigIntAt(targetRow, sourceColumn->bigIntAt(row));
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					targetColumn->setTextAt(targetRow, sourceColumn->textAt(row));
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+					targetColumn->setDateTimeAt(targetRow, sourceColumn->dateTimeAt(row));
+					break;
+				}
+
+				rowMappings[col] = targetRow + 1;
+			}
 		}
 	}
 
