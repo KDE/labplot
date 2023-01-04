@@ -3107,7 +3107,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	else {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
-			if ( (column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues())
+			if ((column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues())
 				columns << column;
 		}
 	}
