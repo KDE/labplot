@@ -3103,7 +3103,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QVector<Column*> columns;
 
 	// Column statistics can be shown for:
-	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection, the user just clicked on the spreadsheet).
+	// * all columns in the spreadsheet - called via the action_statistics_all_columns or when one single cell is selected (=no selection)
 	// * all selected columns in the speadsheet - called via the context menu of the header
 	// * selected column cells - called via the context menu in the spreadsheet with multiple selected cells
 	const auto& indexes = m_tableView->selectionModel()->selectedIndexes();
