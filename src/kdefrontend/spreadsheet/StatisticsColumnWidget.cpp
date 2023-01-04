@@ -485,7 +485,7 @@ void StatisticsColumnWidget::showBarPlot() {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
-			axis->setMajorTickStartOffset(1.0);
+			axis->setMajorTickStartOffset(0.5);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {
@@ -539,8 +539,8 @@ void StatisticsColumnWidget::showParetoPlot() {
 	dataColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
 
 	auto* xColumn = new Column(QStringLiteral("x"));
-	xColumn->setColumnMode(AbstractColumn::ColumnMode::Integer);
-	QVector<int> xData(count);
+	xColumn->setColumnMode(AbstractColumn::ColumnMode::Double);
+	QVector<double> xData(count);
 
 	auto* yColumn = new Column(QStringLiteral("y"));
 	QVector<double> yData(count);
@@ -556,7 +556,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 	int totalSumOfFrequencies = 0;
 	while (i != frequencies.constEnd()) {
 		pairs << QPair<QString, int>(i.key(), i.value());
-		xData[row] = 1 + row;
+		xData[row] = 0.5 + row;
 		totalSumOfFrequencies += i.value();
 		++row;
 		++i;
@@ -584,7 +584,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 
 	dataColumn->replaceInteger(0, data);
 	labelsColumn->replaceTexts(0, labels);
-	xColumn->replaceInteger(0, xData);
+	xColumn->replaceValues(0, xData);
 	yColumn->replaceValues(0, yData);
 
 	QVector<const AbstractColumn*> columns;
@@ -618,7 +618,7 @@ void StatisticsColumnWidget::showParetoPlot() {
 			axis->title()->setText(QString());
 			axis->majorGridLine()->setStyle(Qt::NoPen);
 			axis->setMajorTicksStartType(Axis::TicksStartType::Offset);
-			axis->setMajorTickStartOffset(1.0);
+			axis->setMajorTickStartOffset(0.5);
 			axis->setLabelsTextType(Axis::LabelsTextType::CustomValues);
 			axis->setLabelsTextColumn(labelsColumn);
 		} else {

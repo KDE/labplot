@@ -1480,16 +1480,16 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 
 	const auto& columns = m_spreadsheet->children<Column>();
 
-	// deactivate "Statistics" action if no numeric data is available
-	bool hasNumericValues = false;
+	// deactivate "Statistics" action if no numeric or text data is available
+	bool hasNumericTextValues = false;
 	for (auto* column : columns) {
-		if (column->isNumeric() && column->hasValues()) {
-			hasNumericValues = true;
+		if ((column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues()) {
+			hasNumericTextValues = true;
 			break;
 		}
 	}
 
-	action_statistics_all_columns->setEnabled(hasNumericValues);
+	action_statistics_all_columns->setEnabled(hasNumericTextValues);
 
 	// deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
@@ -3107,7 +3107,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 	else {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			auto* column = m_spreadsheet->column(col);
-			if (column->isNumeric() && column->hasValues())
+			if ( (column->isNumeric() || column->columnMode() == AbstractColumn::ColumnMode::Text) && column->hasValues())
 				columns << column;
 		}
 	}
