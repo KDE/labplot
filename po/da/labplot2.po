@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"POT-Creation-Date: 2023-01-05 00:43+0000\n"
 "PO-Revision-Date: 2014-02-10 21:28+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -5435,14 +5435,14 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "FITS image"
 msgstr "Billeder"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -9314,8 +9314,8 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
@@ -9323,8 +9323,8 @@ msgid "Failed to export"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9798,9 +9798,10 @@ msgid "&Search"
 msgstr "Datatilvalg"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
 #, fuzzy, kde-format
 #| msgid "Statistics"
-msgid "Statisti&cs..."
+msgid "Column Statistics..."
 msgstr "Statistik"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
@@ -9983,12 +9984,6 @@ msgstr "Stigende"
 #| msgid "Descending"
 msgid "&Descending"
 msgstr "Faldende"
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "Column Statisti&cs"
-msgstr "Statistik"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
@@ -10280,33 +10275,39 @@ msgstr "%1: Tilføj %2 kolonner"
 msgid "%1: column statistics"
 msgstr "Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#, fuzzy, kde-format
+#| msgid "Clea&r Columns"
+msgid "Selection in %1"
+msgstr "&Ryd kolonner"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Statistik"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3135
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3199
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Indsæt tomme rækker"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3200
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
 #, fuzzy, kde-format
 #| msgid "File name"
 msgid "Enter the number of rows to insert"
 msgstr "Filnavn"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3219
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "%1: insert empty row"
@@ -10314,25 +10315,25 @@ msgid_plural "%1: insert empty rows"
 msgstr[0] "&Indsæt tomme rækker"
 msgstr[1] "&Indsæt tomme rækker"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: remove selected rows"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected rows"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
 #, fuzzy, kde-format
 #| msgid "%1: cut selected cell(s)"
 msgid "%1: clear selected cells"
 msgstr "%1: Klip markerede celler"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3358
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10340,31 +10341,31 @@ msgstr "%1: Klip markerede celler"
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #, fuzzy, kde-format
 #| msgid "Data options"
 msgid "End Search"
 msgstr "Datatilvalg"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Udskriv regneark"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4169
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4222
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
 #, fuzzy, kde-format
 #| msgid "Could not open file %1 for reading."
 msgid "Failed to insert values into the table."
@@ -22445,6 +22446,16 @@ msgid "Unable to open file:"
 msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 
 #, fuzzy
+#~| msgid "Statistics"
+#~ msgid "Statisti&cs..."
+#~ msgstr "Statistik"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgid "Column Statisti&cs"
+#~ msgstr "Statistik"
+
+#, fuzzy
 #~| msgid "Created"
 #~ msgid "Created: %1"
 #~ msgstr "Oprettet"
@@ -23112,11 +23123,6 @@ msgstr "Kunne ikke åbne filen \"%1\" til læsning."
 #~| msgid "Close Project"
 #~ msgid "Debug version"
 #~ msgstr "Luk projekt"
-
-#, fuzzy
-#~| msgid "Clea&r Columns"
-#~ msgid "Fi&ll Selection With"
-#~ msgstr "&Ryd kolonner"
 
 #, fuzzy
 #~| msgid "Statistics"

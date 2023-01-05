@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: labplot2\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"POT-Creation-Date: 2023-01-05 00:43+0000\n"
 "PO-Revision-Date: 2022-12-26 21:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -5186,13 +5186,13 @@ msgid "unexpected end of document"
 msgstr "beklenmedik belge sonu"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS image"
 msgstr "FITS görseli"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS table"
 msgstr "FITS tablosu"
@@ -8799,16 +8799,16 @@ msgid "Curve"
 msgstr "Eğri"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to export"
 msgstr "Dışa aktarılamadı"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9246,9 +9246,11 @@ msgid "&Search"
 msgstr "&Ara"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
-#, kde-format
-msgid "Statisti&cs..."
-msgstr "İstatisti&kler..."
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
+#, fuzzy, kde-format
+#| msgid "Column Statistics"
+msgid "Column Statistics..."
+msgstr "Sütun İstatistikleri"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, kde-format
@@ -9405,11 +9407,6 @@ msgstr "&Artan"
 #, kde-format
 msgid "&Descending"
 msgstr "A&zalan"
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, kde-format
-msgid "Column Statisti&cs"
-msgstr "Sütun İstatisti&kleri"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
@@ -9680,52 +9677,58 @@ msgstr "%1: Sütunları üs dönüştür"
 msgid "%1: column statistics"
 msgstr "%1: Sütun istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Selection in %1"
+msgstr "Seçim"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, kde-format
 msgid "%1: row statistics"
 msgstr "%1: Satır istatistikleri"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3135
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
 #, kde-format
 msgid "Row %1"
 msgstr "%1. Satır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3199
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, kde-format
 msgid "Insert multiple rows"
 msgstr "Birden çok satır ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3200
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
 #, kde-format
 msgid "Enter the number of rows to insert"
 msgstr "Eklenecek satır sayısını gir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3219
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] "%1: Boş satır ekle"
 msgstr[1] "%1: Boş satırlar ekle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: Seçili satırları kaldır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: Seçili satırları temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: Seçili hücreleri temizle"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3358
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9733,28 +9736,28 @@ msgstr "%1: Seçili hücreleri temizle"
 msgid "Search..."
 msgstr "Ara..."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #, kde-format
 msgid "End Search"
 msgstr "Aramayı Bitir"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Hesap Tablosunu Yazdır"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr "%1 SQLite veritabanı oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4169
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr "%1 SQLite veritabanında tablo oluşturulamadı.."
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4222
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr "Tabloya veriler eklenemedi."
@@ -21284,6 +21287,12 @@ msgstr "dönüştürme süreci başarısız, çıkış kodu ="
 #, kde-format
 msgid "Unable to open file:"
 msgstr "Dosya açılamadı:"
+
+#~ msgid "Statisti&cs..."
+#~ msgstr "İstatisti&kler..."
+
+#~ msgid "Column Statisti&cs"
+#~ msgstr "Sütun İstatisti&kleri"
 
 #~ msgid "Created: %1"
 #~ msgstr "Oluşturulma: %1"

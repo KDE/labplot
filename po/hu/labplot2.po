@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"POT-Creation-Date: 2023-01-05 00:43+0000\n"
 "PO-Revision-Date: 2014-02-09 10:11+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -5156,13 +5156,13 @@ msgid "unexpected end of document"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS image"
 msgstr ""
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -8772,16 +8772,16 @@ msgid "Curve"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to export"
 msgstr ""
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9218,9 +9218,10 @@ msgid "&Search"
 msgstr ""
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
 #, fuzzy, kde-format
 #| msgid "Statistics"
-msgid "Statisti&cs..."
+msgid "Column Statistics..."
 msgstr "Statisztikák"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
@@ -9380,12 +9381,6 @@ msgstr ""
 #, kde-format
 msgid "&Descending"
 msgstr ""
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "Column Statisti&cs"
-msgstr "Statisztikák"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
@@ -9661,55 +9656,61 @@ msgstr ""
 msgid "%1: column statistics"
 msgstr "Statisztikák"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#, fuzzy, kde-format
+#| msgid "Statistics"
+msgid "Selection in %1"
+msgstr "Statisztikák"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, fuzzy, kde-format
 #| msgid "Statistics"
 msgid "%1: row statistics"
 msgstr "Statisztikák"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3135
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3199
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, kde-format
 msgid "Insert multiple rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3200
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
 #, fuzzy, kde-format
 #| msgctxt "NAME OF TRANSLATORS"
 #| msgid "Your names"
 msgid "Enter the number of rows to insert"
 msgstr "Úr Balázs"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3219
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
 #, kde-format
 msgid "%1: insert empty row"
 msgid_plural "%1: insert empty rows"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3358
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -9717,28 +9718,28 @@ msgstr ""
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #, kde-format
 msgid "End Search"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
 #, kde-format
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4169
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
 #, kde-format
 msgid "Failed to create table in the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4222
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
 #, kde-format
 msgid "Failed to insert values into the table."
 msgstr ""
@@ -21095,6 +21096,16 @@ msgstr ""
 #, kde-format
 msgid "Unable to open file:"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgid "Statisti&cs..."
+#~ msgstr "Statisztikák"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgid "Column Statisti&cs"
+#~ msgstr "Statisztikák"
 
 #, fuzzy
 #~| msgid "Statistics"

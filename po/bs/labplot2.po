@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LabPlot\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-27 00:44+0000\n"
+"POT-Creation-Date: 2023-01-05 00:43+0000\n"
 "PO-Revision-Date: 2015-02-25 20:16+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <kde-i18n-doc@kde.org>\n"
@@ -5486,14 +5486,14 @@ msgid "unexpected end of document"
 msgstr "neočekivan kraj dokumenta"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, fuzzy, kde-format
 #| msgid "image"
 msgid "FITS image"
 msgstr "slika"
 
 #: src/backend/matrix/Matrix.cpp:116
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3488
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3540
 #, kde-format
 msgid "FITS table"
 msgstr ""
@@ -9452,8 +9452,8 @@ msgid "Curve"
 msgstr "xy-kriva"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, fuzzy, kde-format
 #| msgid "Failed to open"
@@ -9461,8 +9461,8 @@ msgid "Failed to export"
 msgstr "Otvaranje neuspješno"
 
 #: src/commonfrontend/datapicker/DatapickerImageView.cpp:841
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3725
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3779
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3777
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3831
 #: src/commonfrontend/worksheet/WorksheetView.cpp:2327
 #, kde-format
 msgid "Failed to write to '%1'. Please check the path."
@@ -9932,10 +9932,11 @@ msgid "&Search"
 msgstr "Traži/Filtriraj:"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:294
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
 #, fuzzy, kde-format
-#| msgid "Statistics"
-msgid "Statisti&cs..."
-msgstr "Statistike"
+#| msgid "Column Statisti&cs"
+msgid "Column Statistics..."
+msgstr "Statisti&ka Kolone"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:297
 #, fuzzy, kde-format
@@ -10114,11 +10115,6 @@ msgstr "&Rastući"
 #, kde-format
 msgid "&Descending"
 msgstr "&Opadajući"
-
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:427
-#, kde-format
-msgid "Column Statisti&cs"
-msgstr "Statisti&ka Kolone"
 
 #: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:430
 #, kde-format
@@ -10413,33 +10409,39 @@ msgstr "%1: sortiraj kolone"
 msgid "%1: column statistics"
 msgstr "Statisti&ka Kolone"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3125
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3134
+#, fuzzy, kde-format
+#| msgid "Selection"
+msgid "Selection in %1"
+msgstr "Odabiranje"
+
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3177
 #, fuzzy, kde-format
 #| msgid "Row Statisti&cs"
 msgid "%1: row statistics"
 msgstr "Statisti&ka Reda"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3135
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3187
 #, kde-format
 msgid "Row %1"
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3160
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3199
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3212
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3251
 #, fuzzy, kde-format
 #| msgid "&Insert Empty Rows"
 msgid "Insert multiple rows"
 msgstr "&Umetni prazne redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3161
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3200
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3213
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3252
 #, fuzzy, kde-format
 #| msgid "Enter number of rows"
 msgid "Enter the number of rows to insert"
 msgstr "Unesi broj redova"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3180
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3219
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3232
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3271
 #, fuzzy, kde-format
 #| msgid "%1: insert empty rows"
 msgid "%1: insert empty row"
@@ -10448,22 +10450,22 @@ msgstr[0] "%1: umetni prazne redov"
 msgstr[1] "%1: umetni prazne redov"
 msgstr[2] "%1: umetni prazne redov"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3235
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3287
 #, kde-format
 msgid "%1: remove selected rows"
 msgstr "%1: ukloni selektovane redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3248
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3300
 #, kde-format
 msgid "%1: clear selected rows"
 msgstr "%1: očisti selektovane redove"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3299
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3351
 #, kde-format
 msgid "%1: clear selected cells"
 msgstr "%1: očisti selektovane ćelije"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3358
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3410
 #: src/kdefrontend/colormaps/ColorMapsWidget.cpp:51
 #: src/kdefrontend/datasources/ImportDatasetWidget.cpp:56
 #: src/kdefrontend/examples/ExamplesWidget.cpp:53
@@ -10471,31 +10473,31 @@ msgstr "%1: očisti selektovane ćelije"
 msgid "Search..."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3368
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3420
 #, fuzzy, kde-format
 #| msgid "Search/Filter:"
 msgid "End Search"
 msgstr "Traži/Filtriraj:"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3542
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:3594
 #, fuzzy, kde-format
 #| msgid "Print spreadsheet"
 msgctxt "@title:window"
 msgid "Print Spreadsheet"
 msgstr "Ispiši tabelarni prikaz"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4137
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4189
 #, kde-format
 msgid "Couldn't create the SQLite database %1."
 msgstr ""
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4169
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4221
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to create table in the SQLite database %1."
 msgstr "Otvaranje neuspješno"
 
-#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4222
+#: src/commonfrontend/spreadsheet/SpreadsheetView.cpp:4274
 #, fuzzy, kde-format
 #| msgid "Failed to open"
 msgid "Failed to insert values into the table."
@@ -22835,6 +22837,14 @@ msgstr ""
 #| msgid "Failed to open"
 msgid "Unable to open file:"
 msgstr "Otvaranje neuspješno"
+
+#, fuzzy
+#~| msgid "Statistics"
+#~ msgid "Statisti&cs..."
+#~ msgstr "Statistike"
+
+#~ msgid "Column Statisti&cs"
+#~ msgstr "Statisti&ka Kolone"
 
 #~ msgid "Created: %1"
 #~ msgstr "Kreiran: %1"
