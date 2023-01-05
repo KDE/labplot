@@ -133,7 +133,6 @@ private:
 
 Q_SIGNALS:
 	// General-Tab
-	void dataChanged();
 	void dataDataChanged();
 	void dataColumnChanged(const AbstractColumn*);
 
