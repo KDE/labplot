@@ -13,6 +13,14 @@
 #include <stdlib.h>
 
 /* remove mimimum base line from data */
-void nsl_baseline_remove_minimum(double *data, size_t n);
+void nsl_baseline_remove_minimum(double* data, size_t n);
+/* remove maximum base line from data */
+void nsl_baseline_remove_maximum(double* data, size_t n);
+/* remove mean base line from data */
+void nsl_baseline_remove_mean(double* data, size_t n);
+/* remove median base line from data */
+void nsl_baseline_remove_median(double* data, size_t n);
+
+/* TODO: end points, lin. regression */
 
 #endif

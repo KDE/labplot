@@ -17,6 +17,13 @@ class NSLBaselineTest : public NSLTest {
 
 private Q_SLOTS:
 	void testBaselineMinimum();
+	void testBaselineMinimum2();
+	void testBaselineMaximum();
+	void testBaselineMaximum2();
+	void testBaselineMean();
+	void testBaselineMean2();
+	void testBaselineMedian();
+	void testBaselineMedian2();
 	// performance
 	// void testPerformance();
 };
